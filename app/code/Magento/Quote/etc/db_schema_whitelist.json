@@ -212,6 +212,7 @@
             "product_id": true,
             "super_product_id": true,
             "parent_product_id": true,
+            "store_id": true,
             "sku": true,
             "image": true,
             "name": true,
@@ -233,7 +234,8 @@
         "index": {
             "QUOTE_ADDRESS_ITEM_QUOTE_ADDRESS_ID": true,
             "QUOTE_ADDRESS_ITEM_PARENT_ITEM_ID": true,
-            "QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID": true
+            "QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID": true,
+            "QUOTE_ADDRESS_ITEM_STORE_ID": true
         },
         "constraint": {
             "PRIMARY": true,

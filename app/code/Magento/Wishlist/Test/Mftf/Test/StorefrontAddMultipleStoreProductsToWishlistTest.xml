@@ -15,8 +15,9 @@
             <description value="All products added to wishlist should be visible on any store. Even if product visibility was set to 'Not Visible Individually' for this store"/>
             <group value="wishlist"/>
             <severity value="AVERAGE"/>
+            <testCaseId value="MAGETWO-95678"/>
             <skip>
-                <issueId value="MAGETWO-93980"/>
+                <issueId value="MC-13867"/>
             </skip>
         </annotations>
         <before>

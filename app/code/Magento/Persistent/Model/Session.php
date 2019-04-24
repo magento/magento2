@@ -197,6 +197,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Serialize info for Resource Model to save
+     *
      * For new model check and set available cookie key
      *
      * @return $this
@@ -354,7 +355,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
         $lifetime = $this->_coreConfig->getValue(
             \Magento\Persistent\Helper\Data::XML_PATH_LIFE_TIME,
             'website',
-            intval($websiteId)
+            (int)$websiteId
         );
 
         if ($lifetime) {

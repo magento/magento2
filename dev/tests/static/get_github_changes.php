@@ -147,6 +147,8 @@ function getRepo($options, $mainline)
 }
 
 /**
+ * Combine list of changed files based on comparison between forks.
+ *
  * @param string $mainline
  * @param GitRepo $repo
  * @param string $branchName
@@ -158,6 +160,8 @@ function retrieveChangesAcrossForks($mainline, GitRepo $repo, $branchName)
 }
 
 /**
+ * Combine list of new files based on comparison between forks.
+ *
  * @param string $mainline
  * @param GitRepo $repo
  * @param string $branchName
@@ -172,7 +176,7 @@ function retrieveNewFilesAcrossForks($mainline, GitRepo $repo, $branchName)
  * Deletes temporary "base" repo
  *
  * @param GitRepo $repo
- * @param string $repo
+ * @param string $mainline
  */
 function cleanup($repo, $mainline)
 {
@@ -392,6 +396,7 @@ class GitRepo
 
     /**
      * Find one of the allowed modification mask returned by git diff.
+     *
      * Example of change record: "A path/to/added_file"
      *
      * @param string $changeRecord
@@ -427,7 +432,7 @@ class GitRepo
                 'diff HEAD %s/%s -- %s',
                 $remoteAlias,
                 $remoteBranch,
-                $this->workTree . '/' . $fileName
+                $fileName
             )
         );
 

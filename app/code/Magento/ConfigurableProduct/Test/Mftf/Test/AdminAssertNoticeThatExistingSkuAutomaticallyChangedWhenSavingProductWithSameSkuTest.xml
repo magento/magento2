@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAssertNoticeThatExistingSkuAutomaticallyChangedWhenSavingProductWithSameSkuTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create configurable product"/>
+            <title value="Assert notice that existing sku automatically changed when saving product with same sku"/>
+            <description value="Admin should not be able to create configurable product and two new options with the same sku"/>
+            <testCaseId value="MC-13693"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete configurable product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+
+            <!-- Delete product attribute -->
+            <actionGroup ref="deleteProductAttributeByLabel" stepKey="deleteProductAttribute">
+                <argument name="ProductAttribute" value="colorProductAttribute"/>
+            </actionGroup>
+
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Create configurable product -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="createConfigurableProduct">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Fill configurable product values -->
+        <actionGroup ref="fillMainProductForm" stepKey="fillConfigurableProductValues">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+        <!--Create product configurations-->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations" after="fillConfigurableProductValues"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" time="30" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
+
+        <!--Create new attribute with two option -->
+        <actionGroup ref="addNewProductConfigurationAttribute" stepKey="createProductConfigurationAttribute">
+            <argument name="attribute" value="colorProductAttribute"/>
+            <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
+            <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
+        </actionGroup>
+
+        <!-- Change products sku configurations in grid -->
+        <fillField userInput="{{ApiConfigurableProduct.sku}}" selector="{{AdminProductFormConfigurationsSection.confProductSkuCell(colorConfigurableProductAttribute1.name)}}" stepKey="fillFieldSkuForFirstAttributeOption"/>
+        <fillField userInput="{{ApiConfigurableProduct.sku}}" selector="{{AdminProductFormConfigurationsSection.confProductSkuCell(colorConfigurableProductAttribute2.name)}}" stepKey="fillFieldSkuForSecondAttributeOption"/>
+
+        <!-- Save product -->
+        <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveBtnVisible"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductAgain"/>
+        <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="waitPopUpVisible"/>
+        <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmPopup"/>
+
+        <!-- Assert product auto incremented sku notice message; see success message -->
+        <see selector="{{AdminMessagesSection.noticeMessage}}" stepKey="seeNoticeMessage" userInput="SKU for product {{ApiConfigurableProduct.name}} has been changed to {{ApiConfigurableProduct.sku}}-2."/>
+        <see selector="{{AdminMessagesSection.successMessage}}" stepKey="seeSuccessMessage" userInput="You saved the product."/>
+    </test>
+</tests>

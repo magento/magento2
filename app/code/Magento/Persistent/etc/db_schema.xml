@@ -18,22 +18,22 @@
         <column xsi:type="text" name="info" nullable="true" comment="Session Data"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="persistent_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="PERSISTENT_SESSION_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID"
+        <constraint xsi:type="foreign" referenceId="PERSISTENT_SESSION_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID"
                     table="persistent_session" column="customer_id" referenceTable="customer_entity"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="PERSISTENT_SESSION_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
+        <constraint xsi:type="foreign" referenceId="PERSISTENT_SESSION_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
                     table="persistent_session" column="website_id" referenceTable="store_website"
                     referenceColumn="website_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="PERSISTENT_SESSION_KEY">
+        <constraint xsi:type="unique" referenceId="PERSISTENT_SESSION_KEY">
             <column name="key"/>
         </constraint>
-        <constraint xsi:type="unique" name="PERSISTENT_SESSION_CUSTOMER_ID">
+        <constraint xsi:type="unique" referenceId="PERSISTENT_SESSION_CUSTOMER_ID">
             <column name="customer_id"/>
         </constraint>
-        <index name="PERSISTENT_SESSION_UPDATED_AT" indexType="btree">
+        <index referenceId="PERSISTENT_SESSION_UPDATED_AT" indexType="btree">
             <column name="updated_at"/>
         </index>
     </table>

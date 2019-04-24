@@ -12,16 +12,24 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Payment\Model\Method\Logger;
 
 /**
  * Class Review
  */
-class Review extends AbstractAction
+class Review extends AbstractAction implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var QuoteUpdater
      */
     private $quoteUpdater;
+
+    /**
+     * @var Logger
+     */
+    private $logger;
 
     /**
      * @var string
@@ -35,15 +43,18 @@ class Review extends AbstractAction
      * @param Config $config
      * @param Session $checkoutSession
      * @param QuoteUpdater $quoteUpdater
+     * @param Logger $logger
      */
     public function __construct(
         Context $context,
         Config $config,
         Session $checkoutSession,
-        QuoteUpdater $quoteUpdater
+        QuoteUpdater $quoteUpdater,
+        Logger $logger
     ) {
         parent::__construct($context, $config, $checkoutSession);
         $this->quoteUpdater = $quoteUpdater;
+        $this->logger = $logger;
     }
 
     /**
@@ -55,12 +66,13 @@ class Review extends AbstractAction
             $this->getRequest()->getPostValue('result', '{}'),
             true
         );
+        $this->logger->debug($requestData);
         $quote = $this->checkoutSession->getQuote();
 
         try {
             $this->validateQuote($quote);
 
-            if ($this->validateRequestData($requestData)) {
+            if ($requestData && $this->validateRequestData($requestData)) {
                 $this->quoteUpdater->execute(
                     $requestData['nonce'],
                     $requestData['details'],
@@ -91,6 +103,8 @@ class Review extends AbstractAction
     }
 
     /**
+     * Validate request data
+     *
      * @param array $requestData
      * @return boolean
      */

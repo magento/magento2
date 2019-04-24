@@ -7,6 +7,7 @@ namespace Magento\Cms\Model;
 
 use Magento\Cms\Model\ResourceModel\Block;
 use Magento\Cms\Model\BlockFactory;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\Timezone;
@@ -82,23 +83,26 @@ class BlockTest extends TestCase
      */
     public function testUpdateTime(array $blockData)
     {
+        /**
+         * @var $db \Magento\Framework\DB\Adapter\AdapterInterface
+         */
+        $db = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class)
+            ->getConnection(ResourceConnection::DEFAULT_CONNECTION);
 
         # Prepare and save the temporary block
-        $beforeTimestamp = $this->objectManager->get(DateTime::class)->timestamp();
         $tempBlock       = $this->blockFactory->create();
         $tempBlock->setData($blockData);
+        $beforeTimestamp = $db->fetchCol('SELECT UNIX_TIMESTAMP()')[0];
         $this->blockResource->save($tempBlock);
+        $afterTimestamp = $db->fetchCol('SELECT UNIX_TIMESTAMP()')[0];
 
         # Load previously created block and compare identifiers
         $storeId        = reset($blockData['stores']);
         $block          = $this->blockIdentifier->execute($blockData['identifier'], $storeId);
-        $afterTimestamp = $this->objectManager->get(DateTime::class)->timestamp();
         $blockTimestamp = strtotime($block->getUpdateTime());
 
         /*
-         * This test used to fail due to a race condition @see MAGETWO-87353
-         * The DB time would be one second older than the check time. The new check allows the DB time
-         * to be between the test start time and right before the assertion.
+         * These checks prevent a race condition MAGETWO-87353
          */
         $this->assertGreaterThanOrEqual($beforeTimestamp, $blockTimestamp);
         $this->assertLessThanOrEqual($afterTimestamp, $blockTimestamp);

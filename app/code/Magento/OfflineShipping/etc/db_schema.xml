@@ -18,17 +18,17 @@
                 default="0" comment="Destination Region Id"/>
         <column xsi:type="varchar" name="dest_zip" nullable="false" length="10" default="*"
                 comment="Destination Post Code (Zip)"/>
-        <column xsi:type="varchar" name="condition_name" nullable="false" length="20" comment="Rate Condition name"/>
+        <column xsi:type="varchar" name="condition_name" nullable="false" length="30" comment="Rate Condition name"/>
         <column xsi:type="decimal" name="condition_value" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Rate condition value"/>
         <column xsi:type="decimal" name="price" scale="4" precision="12" unsigned="false" nullable="false" default="0"
                 comment="Price"/>
         <column xsi:type="decimal" name="cost" scale="4" precision="12" unsigned="false" nullable="false" default="0"
                 comment="Cost"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="pk"/>
         </constraint>
-        <constraint xsi:type="unique" name="UNQ_D60821CDB2AFACEE1566CFC02D0D4CAA">
+        <constraint xsi:type="unique" referenceId="UNQ_D60821CDB2AFACEE1566CFC02D0D4CAA">
             <column name="website_id"/>
             <column name="dest_country_id"/>
             <column name="dest_region_id"/>

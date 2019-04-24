@@ -60,7 +60,7 @@ define([
         pattern = pattern.indexOf('{sign}') < 0 ? s + pattern : pattern.replace('{sign}', s);
 
         // we're avoiding the usage of to fixed, and using round instead with the e representation to address
-        // numbers like 1.005 = 1.01. Using ToFixed to only provide trailig zeroes in case we have a whole number
+        // numbers like 1.005 = 1.01. Using ToFixed to only provide trailing zeroes in case we have a whole number
         i = parseInt(
                 amount = Number(Math.round(Math.abs(+amount || 0) + 'e+' + precision) + ('e-' + precision)),
                 10
