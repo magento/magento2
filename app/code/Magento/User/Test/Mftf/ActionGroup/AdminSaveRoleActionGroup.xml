@@ -7,7 +7,7 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertSaveRoleActionGroup">
+    <actionGroup name="AdminSaveRoleActionGroup">
         <click selector="{{AdminCreateRoleSection.save}}" stepKey="saveRole"/>
         <waitForPageLoad stepKey="waitForSaveResultLoad"/>
     </actionGroup>
