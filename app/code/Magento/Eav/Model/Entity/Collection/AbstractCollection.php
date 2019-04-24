@@ -16,6 +16,7 @@ use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 /**
  * Entity/Attribute/Model - collection abstract
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -188,6 +189,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Initialize collection
      *
      * @return void
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function _construct()
     {
@@ -264,7 +266,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $this->_entity = $this->_eavEntityFactory->create()->setType($entity);
         } else {
             throw new LocalizedException(
-                __('The "%1" entity supplied is invalid. Verify the entity and try again.', print_r($entity, 1))
+                __('The entity supplied to collection is invalid. Verify the entity and try again.')
             );
         }
         return $this;
@@ -298,7 +300,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Set template object for the collection
      *
-     * @param   \Magento\Framework\DataObject $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
     public function setObject($object = null)
@@ -395,7 +397,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
         if (!empty($conditionSql)) {
             $this->getSelect()->where($conditionSql, null, \Magento\Framework\DB\Select::TYPE_CONDITION);
-            $this->invalidateSize();
+            $this->_totalRecords = null;
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Invalid attribute identifier for filter (%1)', get_class($attribute))
@@ -1061,6 +1063,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                 $this->_items[$entityId]->addData($row);
             }
         }
+        $this->_setIsLoaded();
         return $this;
     }
 
@@ -1164,7 +1167,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
-     * @throws LocalizedException
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -1371,8 +1373,8 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Add attribute value table to the join if it wasn't added previously
      *
-     * @param   string $attributeCode
-     * @param   string $joinType inner|left
+     * @param string $attributeCode
+     * @param string $joinType inner|left
      * @return $this
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -1466,12 +1468,12 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Adding join statement to collection select instance
      *
-     * @param   string $method
-     * @param   object $attribute
-     * @param   string $tableAlias
-     * @param   array $condition
-     * @param   string $fieldCode
-     * @param   string $fieldAlias
+     * @param string $method
+     * @param object $attribute
+     * @param string $tableAlias
+     * @param array $condition
+     * @param string $fieldCode
+     * @param string $fieldAlias
      * @return $this
      */
     protected function _joinAttributeToSelect($method, $attribute, $tableAlias, $condition, $fieldCode, $fieldAlias)
@@ -1718,17 +1720,5 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     public function removeAllFieldsFromSelect()
     {
         return $this->removeAttributeToSelect();
-    }
-
-    /**
-     * Invalidates "Total Records Count".
-     * Invalidates saved "Total Records Count" attribute with last counting,
-     * so a next calling of method getSize() will query new total records count.
-     *
-     * @return void
-     */
-    private function invalidateSize(): void
-    {
-        $this->_totalRecords = null;
     }
 }
