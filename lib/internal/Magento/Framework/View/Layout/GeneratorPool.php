@@ -35,9 +35,9 @@ class GeneratorPool
 
     /**
      * @param ScheduledStructure\Helper $helper
-     * @param ConditionFactory          $conditionFactory
-     * @param \Psr\Log\LoggerInterface  $logger
-     * @param array                     $generators
+     * @param ConditionFactory $conditionFactory
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param array|null $generators
      */
     public function __construct(
         ScheduledStructure\Helper $helper,
@@ -67,11 +67,10 @@ class GeneratorPool
     }
 
     /**
-     * Traverse through all generators and generate all scheduled elements
+     * Traverse through all generators and generate all scheduled elements.
      *
-     * @param Reader\Context    $readerContext
+     * @param Reader\Context $readerContext
      * @param Generator\Context $generatorContext
-     *
      * @return $this
      */
     public function process(Reader\Context $readerContext, Generator\Context $generatorContext)
@@ -138,9 +137,9 @@ class GeneratorPool
     }
 
     /**
-     * Reorder a child of a specified element
+     * Reorder a child of a specified element.
      *
-     * @param ScheduledStructure $scheduledStructure,
+     * @param ScheduledStructure $scheduledStructure
      * @param Data\Structure $structure
      * @param string $elementName
      * @return void
@@ -234,6 +233,8 @@ class GeneratorPool
     }
 
     /**
+     * Check visibility conditions exists in data.
+     *
      * @param array $data
      *
      * @return bool
