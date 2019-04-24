@@ -310,6 +310,10 @@ define([
 
                     if (response.success) {
                         callback.call(this, elem, response);
+                        var currentURL = window.location.pathname;
+                        if (url.includes("/checkout/cart/")) {
+                            location.reload();
+                        }
                     } else {
                         msg = response['error_message'];
 
