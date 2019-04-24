@@ -8,12 +8,13 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertAdminNotSuccessLoginActionGroup">
+    <actionGroup name="AssertAdminLoginErrorMessageActionGroup">
         <arguments>
             <argument name="message" type="string" defaultValue="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later"/>
+            <argument name="messageType" type="string" defaultValue="error" />
         </arguments>
         <waitForPageLoad stepKey="waitForPageReload"/>
-        <see selector="{{AdminLoginFormSection.error}}" userInput="{{message}}"
+        <see selector="{{AdminLoginMessagesSection.messageByType(messageType)}}" userInput="{{message}}"
              stepKey="seeLoginAdminError"/>
     </actionGroup>
 </actionGroups>

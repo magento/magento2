@@ -33,44 +33,44 @@
         <actionGroup ref="AdminFillIntegrationRequiredFieldsActionGroup" stepKey="fillFieldFirstAttempt">
             <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
         </actionGroup>
-        <actionGroup ref="AssertSaveIntegrationActionGroup" stepKey="saveIntegrationFirstAttempt"/>
-        <actionGroup ref="AssertMessageOnBackendActionGroup" stepKey="checkFirstSaveIntegrationError"/>
+        <actionGroup ref="AdminSaveIntegrationActionGroup" stepKey="saveIntegrationFirstAttempt"/>
+        <actionGroup ref="AssertMessageOnAdminActionGroup" stepKey="checkFirstSaveIntegrationError"/>
 
         <actionGroup ref="AdminFillIntegrationRequiredFieldsActionGroup" stepKey="fillFieldSecondAttempt">
             <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
         </actionGroup>
-        <actionGroup ref="AssertSaveIntegrationActionGroup" stepKey="saveIntegrationSecondAttempt"/>
-        <actionGroup ref="AssertMessageOnBackendActionGroup" stepKey="checkSecondSaveIntegrationError"/>
+        <actionGroup ref="AdminSaveIntegrationActionGroup" stepKey="saveIntegrationSecondAttempt"/>
+        <actionGroup ref="AssertMessageOnAdminActionGroup" stepKey="checkSecondSaveIntegrationError"/>
 
         <actionGroup ref="AdminFillIntegrationRequiredFieldsActionGroup" stepKey="fillFieldThirdAttempt">
             <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
         </actionGroup>
-        <actionGroup ref="AssertSaveIntegrationActionGroup" stepKey="saveIntegrationThirdAttempt"/>
-        <actionGroup ref="AssertMessageOnBackendActionGroup" stepKey="checkThirdSaveIntegrationError"/>
+        <actionGroup ref="AdminSaveIntegrationActionGroup" stepKey="saveIntegrationThirdAttempt"/>
+        <actionGroup ref="AssertMessageOnAdminActionGroup" stepKey="checkThirdSaveIntegrationError"/>
 
         <actionGroup ref="AdminFillIntegrationRequiredFieldsActionGroup" stepKey="fillFieldFourthAttempt">
             <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
         </actionGroup>
-        <actionGroup ref="AssertSaveIntegrationActionGroup" stepKey="saveIntegrationFourthAttempt"/>
-        <actionGroup ref="AssertMessageOnBackendActionGroup" stepKey="checkFourthSaveIntegrationError"/>
+        <actionGroup ref="AdminSaveIntegrationActionGroup" stepKey="saveIntegrationFourthAttempt"/>
+        <actionGroup ref="AssertMessageOnAdminActionGroup" stepKey="checkFourthSaveIntegrationError"/>
 
         <actionGroup ref="AdminFillIntegrationRequiredFieldsActionGroup" stepKey="fillFieldFifthAttempt">
             <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
         </actionGroup>
-        <actionGroup ref="AssertSaveIntegrationActionGroup" stepKey="saveIntegrationFifthAttempt"/>
-        <actionGroup ref="AssertMessageOnBackendActionGroup" stepKey="checkFifthSaveIntegrationError"/>
+        <actionGroup ref="AdminSaveIntegrationActionGroup" stepKey="saveIntegrationFifthAttempt"/>
+        <actionGroup ref="AssertMessageOnAdminActionGroup" stepKey="checkFifthSaveIntegrationError"/>
 
         <!-- Last invalid current password save integration attempt and check logout error -->
         <actionGroup ref="AdminFillIntegrationRequiredFieldsActionGroup" stepKey="fillFieldLastAttempt">
             <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
         </actionGroup>
-        <actionGroup ref="AssertSaveIntegrationActionGroup" stepKey="saveIntegrationLastAttempt"/>
-        <actionGroup ref="AssertAdminNotSuccessLoginActionGroup" stepKey="checkFifthError">
+        <actionGroup ref="AdminSaveIntegrationActionGroup" stepKey="saveIntegrationLastAttempt"/>
+        <actionGroup ref="AssertAdminLoginErrorMessageActionGroup" stepKey="checkFifthError">
             <argument name="message" value="Your account is temporarily disabled. Please try again later."/>
         </actionGroup>
 
         <!-- Try to login as admin and check error -->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsLockedAdmin"/>
-        <actionGroup ref="AssertAdminNotSuccessLoginActionGroup" stepKey="checkLoginError"/>
+        <actionGroup ref="AssertAdminLoginErrorMessageActionGroup" stepKey="checkLoginError"/>
     </test>
 </tests>

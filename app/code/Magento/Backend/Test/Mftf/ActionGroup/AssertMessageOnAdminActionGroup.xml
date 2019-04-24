@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertMessageOnBackendActionGroup">
+    <actionGroup name="AssertMessageOnAdminActionGroup">
         <arguments>
             <argument name="message" type="string" defaultValue="The password entered for the current user is invalid. Verify the password and try again." />
             <argument name="messageType" type="string" defaultValue="error" />
