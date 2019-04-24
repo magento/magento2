@@ -53,6 +53,8 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Theme\Model\Theme\Source\Theme;
 
 /**
+ * Setup category with default entities.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategorySetup extends EavSetup
