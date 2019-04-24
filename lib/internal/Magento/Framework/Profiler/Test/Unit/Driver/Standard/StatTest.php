@@ -395,7 +395,7 @@ class StatTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedMessage Timer "foo" doesn't exist.
+     * @expectedExceptionMessage Timer "foo" doesn't exist.
      */
     public function testFetchInvalidTimer()
     {
@@ -404,7 +404,7 @@ class StatTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedMessage Timer "foo" doesn't have value for "bar".
+     * @expectedExceptionMessage Timer "foo" doesn't have value for "bar".
      */
     public function testFetchInvalidKey()
     {

@@ -45,7 +45,7 @@ $_rates = ($_newRates) ? $_newRates : $_oldRates;
                                            class="admin__control-text"
                                             <?= ($_currencyCode == $_rate) ? ' disabled' : '' ?> />
                                     <?php if (isset($_newRates) && $_currencyCode != $_rate && isset($_oldRates[$_currencyCode][$_rate])): ?>
-                                    <div class="admin__field-note"><?= /* @escapeNotVerified */ __('Old rate:') ?> <b><?= /* @escapeNotVerified */ $_oldRates[$_currencyCode][$_rate] ?></b></div>
+                                    <div class="admin__field-note"><?= /* @escapeNotVerified */ __('Old rate:') ?> <strong><?= /* @escapeNotVerified */ $_oldRates[$_currencyCode][$_rate] ?></strong></div>
                                     <?php endif; ?>
                                 </td>
                             <?php else: ?>
@@ -56,7 +56,7 @@ $_rates = ($_newRates) ? $_newRates : $_oldRates;
                                            class="admin__control-text"
                                            <?= ($_currencyCode == $_rate) ? ' disabled' : '' ?> />
                                     <?php if (isset($_newRates)  && $_currencyCode != $_rate && isset($_oldRates[$_currencyCode][$_rate])): ?>
-                                    <div class="admin__field-note"><?= /* @escapeNotVerified */ __('Old rate:') ?> <b><?= /* @escapeNotVerified */ $_oldRates[$_currencyCode][$_rate] ?></b></div>
+                                    <div class="admin__field-note"><?= /* @escapeNotVerified */ __('Old rate:') ?> <strong><?= /* @escapeNotVerified */ $_oldRates[$_currencyCode][$_rate] ?></strong></div>
                                     <?php endif; ?>
                                 </td>
                             <?php endif; ?>

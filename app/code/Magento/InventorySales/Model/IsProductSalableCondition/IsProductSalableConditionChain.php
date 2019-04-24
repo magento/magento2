@@ -76,7 +76,7 @@ class IsProductSalableConditionChain implements IsProductSalableInterface
 
             if (!$condition['object'] instanceof IsProductSalableInterface) {
                 throw new LocalizedException(
-                    __('Condition have to implement IsProductSalableInterface.')
+                    __('Condition has to implement IsProductSalableInterface.')
                 );
             }
         }

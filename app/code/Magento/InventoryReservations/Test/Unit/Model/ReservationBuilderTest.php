@@ -54,7 +54,7 @@ class ReservationBuilderTest extends TestCase
         $this->validationResult = $this->getMockBuilder(ValidationResult::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->validationResultFactory = $this->getMockBuilder(ValidationResultFactory::class)->getMock();
+        $this->validationResultFactory = $this->createMock(ValidationResultFactory::class);
 
         $this->reservationBuilder = (new ObjectManager($this))->getObject(
             ReservationBuilder::class,

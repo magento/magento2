@@ -18,5 +18,6 @@
         <element name="ship" type="button" selector="#order_ship" timeout="30"/>
         <element name="reorder" type="button" selector="#order_reorder" timeout="30"/>
         <element name="edit" type="button" selector="#order_edit" timeout="30"/>
+        <element name="modalOk" type="button" selector=".action-accept"/>
     </section>
 </sections>

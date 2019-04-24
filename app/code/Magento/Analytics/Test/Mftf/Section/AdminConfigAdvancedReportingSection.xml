@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminConfigAdvancedReportingSection">
+        <element name="advancedReportingMenuItem" type="text" selector="//*[@class='admin__page-nav-link item-nav']//span[text()='Advanced Reporting']"/>
+        <element name="advancedReportingService" type="select" selector="#analytics_general_enabled"/>
+        <element name="advancedReportingServiceLabel" type="text" selector="#row_analytics_general_enabled>td.label>label>span"/>
+        <element name="advancedReportingServiceStatus" type="text" selector="#row_analytics_general_enabled>td.value>p>span"/>
+        <element name="advancedReportingIndustry" type="select" selector="#analytics_general_vertical"/>
+        <element name="advancedReportingIndustryLabel" type="text" selector=".config-vertical-label>label>span"/>
+        <element name="advancedReportingHour" type="select" selector="#row_analytics_general_collection_time>td:nth-child(2)>select:nth-child(2)"/>
+        <element name="advancedReportingMinute" type="select" selector="#row_analytics_general_collection_time>td:nth-child(2)>select:nth-child(3)"/>
+        <element name="advancedReportingSeconds" type="select" selector="#row_analytics_general_collection_time>td:nth-child(2)>select:nth-child(4)"/>
+        <element name="advancedReportingBlankIndustryError" type="text" selector=".message-error>div"/>
+    </section>
+</sections>

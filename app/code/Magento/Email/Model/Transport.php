@@ -32,6 +32,23 @@ class Transport implements TransportInterface
     const XML_PATH_SENDING_RETURN_PATH_EMAIL = 'system/smtp/return_path_email';
 
     /**
+     * Whether return path should be set or no.
+     *
+     * Possible values are:
+     * 0 - no
+     * 1 - yes (set value as FROM address)
+     * 2 - use custom value
+     *
+     * @var int
+     */
+    private $isSetReturnPath;
+
+    /**
+     * @var string|null
+     */
+    private $returnPathValue;
+
+    /**
      * @var Sendmail
      */
     private $zendTransport;
@@ -51,24 +68,14 @@ class Transport implements TransportInterface
         ScopeConfigInterface $scopeConfig,
         $parameters = null
     ) {
-        /* configuration of whether return path should be set or no. Possible values are:
-             * 0 - no
-             * 1 - yes (set value as FROM address)
-             * 2 - use custom value
-             * @see Magento\Config\Model\Config\Source\Yesnocustom
-             */
-        $isSetReturnPath = $scopeConfig->getValue(
+        $this->isSetReturnPath = (int) $scopeConfig->getValue(
             self::XML_PATH_SENDING_SET_RETURN_PATH,
             ScopeInterface::SCOPE_STORE
         );
-        $returnPathValue = $scopeConfig->getValue(
+        $this->returnPathValue = $scopeConfig->getValue(
             self::XML_PATH_SENDING_RETURN_PATH_EMAIL,
             ScopeInterface::SCOPE_STORE
         );
-
-        if ($isSetReturnPath == '2' && $returnPathValue !== null) {
-            $parameters .= ' -f' . \escapeshellarg($returnPathValue);
-        }
 
         $this->zendTransport = new Sendmail($parameters);
         $this->message = $message;
@@ -80,9 +87,16 @@ class Transport implements TransportInterface
     public function sendMessage()
     {
         try {
-            $this->zendTransport->send(
-                Message::fromString($this->message->getRawMessage())
-            );
+            $zendMessage = Message::fromString($this->message->getRawMessage())->setEncoding('utf-8');
+            if (2 === $this->isSetReturnPath && $this->returnPathValue) {
+                $zendMessage->setSender($this->returnPathValue);
+            } elseif (1 === $this->isSetReturnPath && $zendMessage->getFrom()->count()) {
+                $fromAddressList = $zendMessage->getFrom();
+                $fromAddressList->rewind();
+                $zendMessage->setSender($fromAddressList->current()->getEmail());
+            }
+
+            $this->zendTransport->send($zendMessage);
         } catch (\Exception $e) {
             throw new MailException(new Phrase($e->getMessage()), $e);
         }

@@ -15,9 +15,6 @@
             <description value="Admin should be able to set/edit all the basic product attributes when creating/editing a bundle product"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-222"/>
-            <skip>
-                <issueId value="MQE-1214"/>
-            </skip>
             <group value="Bundle"/>
         </annotations>
         <before>

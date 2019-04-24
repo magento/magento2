@@ -62,13 +62,13 @@ class RssFeedTest extends TestCase
         $this->storeManager->setCurrentStore(Store::ADMIN_CODE);
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @codingStandardsIgnoreLine
      * @magentoDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
      * @magentoConfigFixture default_store cataloginventory/item_options/notify_stock_qty 7
      *
@@ -80,6 +80,7 @@ class RssFeedTest extends TestCase
      *
      * @dataProvider getRssDataDataProvider
      */
+    // @codingStandardsIgnoreEnd
     public function testGetRssData(
         string $sku,
         string $sourceCode,
@@ -96,15 +97,14 @@ class RssFeedTest extends TestCase
         $this->assertEquals($expectedCount, count($data['entries']));
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @codingStandardsIgnoreLine
      * @magentoDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
-     * @codingStandardsIgnoreLine
      * @magentoDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/enable_manage_stock_for_products.php
      * @magentoConfigFixture default_store cataloginventory/item_options/notify_stock_qty 7
      * @magentoConfigFixture default_store cataloginventory/item_options/manage_stock 0
@@ -117,6 +117,7 @@ class RssFeedTest extends TestCase
      *
      * @dataProvider getRssDataDataProvider
      */
+    // @codingStandardsIgnoreEnd
     public function testGetRssDataDisabledManageStock(
         string $sku,
         string $sourceCode,

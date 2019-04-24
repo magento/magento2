@@ -188,6 +188,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                 'setCustomerGroupId',
                 'assignCustomer',
                 'getPayment',
+                'collectTotals'
             ]);
 
         $this->quoteAddressFactory = $this->createPartialMock(
@@ -644,7 +645,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
         $addressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['getEmail']);
         $addressMock->expects($this->once())->method('getEmail')->willReturn($email);
-        $this->quoteMock->expects($this->once())->method('getBillingAddress')->with()->willReturn($addressMock);
+        $this->quoteMock->expects($this->any())->method('getBillingAddress')->with()->willReturn($addressMock);
 
         $this->quoteMock->expects($this->once())->method('setCustomerIsGuest')->with(true)->willReturnSelf();
         $this->quoteMock->expects($this->once())
@@ -687,6 +688,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $service->expects($this->once())->method('submit')->willReturn($orderMock);
 
         $this->quoteMock->expects($this->atLeastOnce())->method('getId')->willReturn($cartId);
+        $this->quoteMock->expects($this->once())->method('collectTotals')->willReturnSelf();
 
         $orderMock->expects($this->atLeastOnce())->method('getId')->willReturn($orderId);
         $orderMock->expects($this->atLeastOnce())->method('getIncrementId')->willReturn($orderIncrementId);
