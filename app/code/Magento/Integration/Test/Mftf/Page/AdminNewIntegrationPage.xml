@@ -9,6 +9,6 @@
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="AdminNewIntegrationPage" url="admin/integration/new/" area="admin" module="Magento_Integration">
-            <section name="AdminNewIntegrationSection"/>
+        <section name="AdminNewIntegrationSection"/>
     </page>
 </pages>

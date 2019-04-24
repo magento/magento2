@@ -9,8 +9,8 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminNewIntegrationSection">
-        <element name="integrationName" type="input" selector="#integration_properties_name"/>
-        <element name="currentPassword" type="input" selector="#integration_properties_current_password"/>
+        <element name="integrationName" type="input" selector="#edit_form input[name='name']"/>
+        <element name="currentPassword" type="input" selector="#edit_form input[name='current_password']"/>
         <element name="save" type="button" selector="#save-split-button-button"/>
     </section>
 </sections>
