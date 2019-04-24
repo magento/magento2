@@ -57,12 +57,13 @@
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
         <waitForPageLoad stepKey="waitForProceedToCheckout"/>
 
+
+        <!-- Login as customer on checkout page -->
+        <actionGroup ref="LoginAsCustomerOnCheckoutPageActionGroup" stepKey="customerLogin">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+
         <!-- Fill customer address data -->
-        <fillField selector="{{CheckoutShippingSection.email}}" userInput="$$createCustomer.email$$" stepKey="fillEmailField"/>
-        <waitForElementVisible selector="{{CheckoutShippingSection.password}}" stepKey="waitForElementVisible"/>
-        <fillField selector="{{CheckoutShippingSection.password}}" userInput="$$createCustomer.password$$" stepKey="fillPasswordField"/>
-        <click selector="{{CheckoutShippingSection.loginButton}}" stepKey="clickLoginBtn"/>
-        <waitForPageLoad stepKey="waitForShippingPageLoad"/>
         <waitForElementVisible selector="{{CheckoutShippingSection.shipHereButton(UK_Not_Default_Address.street[0])}}" stepKey="waitForShipHereVisible"/>
         <!-- Change address -->
         <click selector="{{CheckoutShippingSection.shipHereButton(UK_Not_Default_Address.street[0])}}" stepKey="clickShipHere"/>
