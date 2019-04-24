@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
+namespace Magento\InventoryReservationCli\Model\SalableQuantityInconsistency;
 
 use Magento\InventoryReservationCli\Model\GetOrdersInFinalState;
 

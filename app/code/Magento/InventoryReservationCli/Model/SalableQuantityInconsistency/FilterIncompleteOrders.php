@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
+namespace Magento\InventoryReservationCli\Model\SalableQuantityInconsistency;
 
 use Magento\InventoryReservationCli\Model\GetCompleteOrderStatusList;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency;
 
 /**
- * Remove all reservations with complete state
+ * Remove all reservations with incomplete state
  */
-class FilterCompleteOrders
+class FilterIncompleteOrders
 {
     /**
      * @var GetCompleteOrderStatusList
@@ -30,17 +30,17 @@ class FilterCompleteOrders
     }
 
     /**
-     * Remove all reservations with complete state
+     * Remove all reservations with incomplete state
      *
-     * @param SaleableQuantityInconsistency[] $inconsistencies
-     * @return SaleableQuantityInconsistency[]
+     * @param SalableQuantityInconsistency[] $inconsistencies
+     * @return SalableQuantityInconsistency[]
      */
     public function execute(array $inconsistencies): array
     {
         return array_filter(
             $inconsistencies,
-            function (SaleableQuantityInconsistency $inconsistency) {
-                return in_array($inconsistency->getOrder()->getStatus(), $this->getCompleteOrderStatusList->execute());
+            function (SalableQuantityInconsistency $inconsistency) {
+                return !in_array($inconsistency->getOrder()->getStatus(), $this->getCompleteOrderStatusList->execute());
             }
         );
     }

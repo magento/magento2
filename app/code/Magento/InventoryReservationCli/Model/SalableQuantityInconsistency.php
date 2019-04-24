@@ -12,7 +12,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 /**
  * Filter orders for missing initial reservation
  */
-class SaleableQuantityInconsistency
+class SalableQuantityInconsistency
 {
     /**
      * @var OrderInterface

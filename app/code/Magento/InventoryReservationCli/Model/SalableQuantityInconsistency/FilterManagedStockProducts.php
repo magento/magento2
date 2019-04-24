@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
+namespace Magento\InventoryReservationCli\Model\SalableQuantityInconsistency;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Model\IsProductAssignedToStockInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Exception\SkuIsNotAssignedToStockException;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency;
 
 /**
  * Remove all reservations with incomplete state
@@ -43,8 +43,8 @@ class FilterManagedStockProducts
     /**
      * Remove all reservations with incomplete state
      *
-     * @param SaleableQuantityInconsistency[] $inconsistencies
-     * @return SaleableQuantityInconsistency[]
+     * @param SalableQuantityInconsistency[] $inconsistencies
+     * @return SalableQuantityInconsistency[]
      * @throws LocalizedException
      * @throws SkuIsNotAssignedToStockException
      */

@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
+namespace Magento\InventoryReservationCli\Model\SalableQuantityInconsistency;
 
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency;
 
 /**
  * Remove all compensated reservations
@@ -16,8 +16,8 @@ class FilterUnresolvedReservations
 {
     /**
      * Remove all compensated reservations
-     * @param SaleableQuantityInconsistency[] $inconsistencies
-     * @return SaleableQuantityInconsistency[]
+     * @param SalableQuantityInconsistency[] $inconsistencies
+     * @return SalableQuantityInconsistency[]
      */
     public function execute(array $inconsistencies): array
     {
@@ -27,7 +27,7 @@ class FilterUnresolvedReservations
 
         return array_filter(
             $inconsistencies,
-            function (SaleableQuantityInconsistency $inconsistency) {
+            function (SalableQuantityInconsistency $inconsistency) {
                 return count($inconsistency->getItems()) > 0;
             }
         );

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
+namespace Magento\InventoryReservationCli\Model\SalableQuantityInconsistency;
 
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Validation\ValidationException;
