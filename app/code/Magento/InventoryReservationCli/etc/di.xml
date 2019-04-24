@@ -9,10 +9,10 @@
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="inventory_saleable_quantity_inconsistency" xsi:type="object">
+                <item name="inventory_salable_quantity_inconsistency" xsi:type="object">
                     Magento\InventoryReservationCli\Command\ShowInconsistencies
                 </item>
-                <item name="inventory_saleable_quantity_compensations" xsi:type="object">
+                <item name="inventory_salable_quantity_compensations" xsi:type="object">
                     Magento\InventoryReservationCli\Command\CreateCompensations
                 </item>
             </argument>
@@ -20,7 +20,7 @@
     </type>
     <type name="Magento\InventoryReservationCli\Command\ShowInconsistencies">
         <arguments>
-            <argument name="getSaleableQuantityInconsistencies" xsi:type="object">
+            <argument name="getSalableQuantityInconsistencies" xsi:type="object">
                 Magento\InventoryReservationCli\Model\GetSalableQuantityInconsistencies\Proxy
             </argument>
             <argument name="filterCompleteOrders" xsi:type="object">
