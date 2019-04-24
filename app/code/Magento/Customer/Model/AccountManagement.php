@@ -1532,7 +1532,7 @@ class AccountManagement implements AccountManagementInterface
      */
     public function getPasswordHash($password)
     {
-        return $this->encryptor->getHash($password);
+        return $this->encryptor->getHash($password, true);
     }
 
     /**
