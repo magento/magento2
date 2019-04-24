@@ -47,7 +47,6 @@ class CmsBlockTest extends GraphQlAbstract
 {
   cmsBlocks(identifiers: "enabled_block") {
     items {
-      block_id
       identifier
       title
       content
@@ -60,7 +59,6 @@ QUERY;
         self::assertArrayHasKey('cmsBlocks', $response);
         self::assertArrayHasKey('items', $response['cmsBlocks']);
 
-        self::assertEquals($cmsBlockData['block_id'], $response['cmsBlocks']['items'][0]['block_id']);
         self::assertEquals($cmsBlockData['identifier'], $response['cmsBlocks']['items'][0]['identifier']);
         self::assertEquals($cmsBlockData['title'], $response['cmsBlocks']['items'][0]['title']);
         self::assertEquals($renderedContent, $response['cmsBlocks']['items'][0]['content']);
@@ -83,7 +81,6 @@ QUERY;
 {
   cmsBlocks(identifiers: "$blockId") {
     items {
-      block_id
       identifier
       title
       content
@@ -95,8 +92,6 @@ QUERY;
 
         self::assertArrayHasKey('cmsBlocks', $response);
         self::assertArrayHasKey('items', $response['cmsBlocks']);
-
-        self::assertEquals($blockId, $response['cmsBlocks']['items'][0]['block_id']);
         self::assertEquals($cmsBlockData['identifier'], $response['cmsBlocks']['items'][0]['identifier']);
         self::assertEquals($cmsBlockData['title'], $response['cmsBlocks']['items'][0]['title']);
         self::assertEquals($renderedContent, $response['cmsBlocks']['items'][0]['content']);

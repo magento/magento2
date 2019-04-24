@@ -58,22 +58,18 @@ QUERY;
     public function testGetCmsPageByIdentifier()
     {
         $cmsPageIdentifier = 'page100';
-        $storeId = 0;
-
-        $cmsPage = ObjectManager::getInstance()->get(GetPageByIdentifier::class)->execute($cmsPageIdentifier, $storeId);
-        $pageId = $cmsPage->getPageId();
 
         $query =
             <<<QUERY
 {
   cmsPage(identifier: "$cmsPageIdentifier") {
-    page_id
+    identifier
   }
 }
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals($pageId, $response['cmsPage']['page_id']);
+        $this->assertEquals($cmsPageIdentifier, $response['cmsPage']['identifier']);
     }
 
     /**
