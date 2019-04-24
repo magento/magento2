@@ -203,7 +203,7 @@ class Encryptor implements EncryptorInterface
         }
 
         if ($salt === false) {
-            $version = $version === self::HASH_VERSION_LATEST ? self::HASH_VERSION_SHA256 : $version;
+            $version = $version === self::HASH_VERSION_ARGON2ID13 ? self::HASH_VERSION_SHA256 : $version;
             return $this->hash($password, $version);
         }
         if ($salt === true) {
