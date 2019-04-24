@@ -21,6 +21,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
  * File Backend
@@ -40,6 +41,11 @@ class File extends BackendFile
     private $mime;
 
     /**
+     * @var Database
+     */
+    private $databaseHelper;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param ScopeConfigInterface $config
@@ -48,6 +54,7 @@ class File extends BackendFile
      * @param RequestDataInterface $requestData
      * @param Filesystem $filesystem
      * @param UrlInterface $urlBuilder
+     * @param Database $databaseHelper
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
@@ -62,6 +69,7 @@ class File extends BackendFile
         RequestDataInterface $requestData,
         Filesystem $filesystem,
         UrlInterface $urlBuilder,
+        Database $databaseHelper,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
@@ -79,6 +87,7 @@ class File extends BackendFile
             $data
         );
         $this->urlBuilder = $urlBuilder;
+        $this->databaseHelper = $databaseHelper;
     }
 
     /**
@@ -255,6 +264,10 @@ class File extends BackendFile
         $result = $mediaPath === $destinationMediaPath;
         if (!$result) {
             $result = $this->_mediaDirectory->copyFile(
+                $mediaPath,
+                $destinationMediaPath
+            );
+            $this->databaseHelper->renameFile(
                 $mediaPath,
                 $destinationMediaPath
             );
