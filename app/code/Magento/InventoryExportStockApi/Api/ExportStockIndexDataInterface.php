@@ -17,7 +17,7 @@ interface ExportStockIndexDataInterface
      * Provides stock index export from inventory_stock_% table
      *
      * @param string $websiteCode
-     * @return array
+     * @return string[]
      */
     public function execute(string $websiteCode): array;
 }

@@ -16,9 +16,7 @@ use Magento\Framework\Api\SearchResultsInterface;
 interface ExportStockSalableQtySearchResultInterface extends SearchResultsInterface
 {
     /**
-     * Get stock data array
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getItems();
 
