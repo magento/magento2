@@ -79,12 +79,6 @@ class CategoryTree implements ResolverInterface
         }
 
         $result = $this->extractDataFromCategoryTree->execute($categoriesTree);
-
-        $category = current($result);
-        if ($category['is_active'] == false) {
-            throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
-        }
-
-        return $category;
+        return current($result);
     }
 }
