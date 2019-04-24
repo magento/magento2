@@ -311,7 +311,7 @@ define([
                     if (response.success) {
                         callback.call(this, elem, response);
                         var currentURL = window.location.pathname;
-                        if (url.includes("/checkout/cart/")) {
+                        if (currentURL.includes("/checkout/cart/")) {
                             location.reload();
                         }
                     } else {
