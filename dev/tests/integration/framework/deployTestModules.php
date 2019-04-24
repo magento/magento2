@@ -37,6 +37,7 @@ if ($files === false) {
     throw new \RuntimeException('glob() returned error while searching in \'' . $pathPattern . '\'');
 }
 foreach ($files as $file) {
+    // phpcs:ignore Magento2.Security.IncludeFile
     include $file;
 }
 
