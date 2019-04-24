@@ -10,6 +10,8 @@ namespace Magento\GroupedProduct\Model\Product\Type;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
+ * Grouped product type model
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -208,7 +210,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             $collection = $this->getAssociatedProductCollection(
                 $product
             )->addAttributeToSelect(
-                ['name', 'price', 'special_price', 'special_from_date', 'special_to_date', 'tax_class_id']
+                ['name', 'price', 'special_price', 'special_from_date', 'special_to_date', 'tax_class_id', 'image']
             )->addFilterByRequiredOptions()->setPositionOrder()->addStoreFilter(
                 $this->getStoreFilter($product)
             )->addAttributeToFilter(
@@ -226,13 +228,15 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Flush Associated Products Cache
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
      * @since 100.1.0
      */
     public function flushAssociatedProductsCache($product)
     {
-        return $product->unsData($this->_keyAssociatedProducts);
+        return $product->unsetData($this->_keyAssociatedProducts);
     }
 
     /**
@@ -323,6 +327,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Returns product info
+     *
      * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param bool $isStrictProcessMode
@@ -341,7 +347,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                 if ($isStrictProcessMode && !$subProduct->getQty()) {
                     return __('Please specify the quantity of product(s).')->render();
                 }
-                $productsInfo[$subProduct->getId()] = intval($subProduct->getQty());
+                $productsInfo[$subProduct->getId()] = $subProduct->isSalable() ? (float)$subProduct->getQty() : 0;
             }
         }
 
@@ -350,6 +356,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Prepare product and its configuration to be added to some products list.
+     *
      * Perform standard preparation process and add logic specific to Grouped product type.
      *
      * @param \Magento\Framework\DataObject $buyRequest
@@ -423,6 +430,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Retrieve products divided into groups required to purchase
+     *
      * At least one product in each group has to be purchased
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -436,8 +444,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Prepare selected qty for grouped product's options
      *
-     * @param  \Magento\Catalog\Model\Product $product
-     * @param  \Magento\Framework\DataObject $buyRequest
+     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Framework\DataObject $buyRequest
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -467,25 +475,30 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)
     {
     }
+    //phpcs:enable
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function beforeSave($product)
     {
         //clear cached associated links
         $product->unsetData($this->_keyAssociatedProducts);
         if ($product->hasData('product_options') && !empty($product->getData('product_options'))) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Custom options for grouped product type are not supported');
         }
         return parent::beforeSave($product);
     }
 
     /**
+     * Returns msrp for children products
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return int
      */

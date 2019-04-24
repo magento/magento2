@@ -6,7 +6,7 @@
  */
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
-    <group id="paypal_payflowpro_with_express_checkout" translate="label comment" extends="payment_all_paypal/paypal_payflowpro">
+    <group id="paypal_payflowpro_with_express_checkout" translate="label" extends="payment_all_paypal/paypal_payflowpro">
         <label>Payflow Pro</label>
         <attribute type="paypal_ec_separate">0</attribute>
         <group id="paypal_payflow_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
@@ -30,7 +30,7 @@
                     <field id="enable_paypal_payflow"/>
                 </requires>
             </field>
-            <field id="enable_express_checkout_bml_payflow" translate="label" type="select" sortOrder="21" showInWebsite="1" showInDefault="1">
+            <field id="enable_express_checkout_bml_payflow" translate="label comment" type="select" sortOrder="21" showInWebsite="1" showInDefault="1">
                 <label>Enable PayPal Credit</label>
                 <comment><![CDATA[PayPal Express Checkout Payflow Edition lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                             You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
@@ -43,7 +43,7 @@
                     <field id="enable_paypal_payflow"/>
                 </requires>
             </field>
-            <field id="express_checkout_bml_sort_order" sortOrder="30" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order">
+            <field id="express_checkout_bml_sort_order" sortOrder="30" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order" showInDefault="1" showInWebsite="1">
                 <config_path>payment/payflow_express_bml/sort_order</config_path>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\BmlSortOrder</frontend_model>
                 <depends>

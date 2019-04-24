@@ -9,6 +9,9 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
+/**
+ * Theme grid filter
+ */
 class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
@@ -54,7 +57,8 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     }
 
     /**
-     * Retrieve options setted in column.
+     * Retrieve options set in column.
+     *
      * Or load if options was not set.
      *
      * @return array

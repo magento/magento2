@@ -17,6 +17,7 @@
         <element name="Switcher" type="button" selector="#cms_wysiwyg_editor" />
         <element name="StaticURL" type="button" selector="#cms_wysiwyg_use_static_urls_in_catalog" />
         <element name="Save" type="button" selector="#save" timeout="30"/>
+        <element name="StoreConfigurationPageSuccessMessage" type="text" selector="#messages [data-ui-id='messages-message-success']"/>
     </section>
     <section name="WebSection">
         <element name="DefaultLayoutsTab" type="button" selector="#web_default_layouts-head"/>
@@ -37,5 +38,10 @@
         <element name="countryOptions" type="button" selector="#general_country-head"/>
         <element name="countryOptionsOpen" type="button" selector="#general_country-head.open"/>
         <element name="topDestinations" type="select" selector="#general_country_destinations"/>
+    </section>
+    <section name="StateOptionsSection">
+        <element name="stateOptions" type="button" selector="#general_region-head"/>
+        <element name="countriesWithRequiredRegions" type="select" selector="#general_region_state_required"/>
+        <element name="allowToChooseState" type="select" selector="general_region_display_all"/>
     </section>
 </sections>

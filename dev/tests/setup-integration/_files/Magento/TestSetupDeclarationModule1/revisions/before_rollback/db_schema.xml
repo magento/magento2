@@ -20,7 +20,7 @@
     <table name="store_owner" comment="Store owner information" engine="innodb" resource="default">
         <column name="owner_id" xsi:type="smallint" nullable="false" unsigned="false" identity="true" />
         <column name="store_owner_name" onCreate="migrateDataFrom(label)" xsi:type="varchar" length="255" comment="Store Owner Name" />
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="owner_id" />
         </constraint>
     </table>

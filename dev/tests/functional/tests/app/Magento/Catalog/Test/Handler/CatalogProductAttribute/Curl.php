@@ -91,15 +91,18 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
         $data['frontend_label'] = [0 => $data['frontend_label']];
 
         if (isset($data['options'])) {
+            $optionsData = [];
             foreach ($data['options'] as $key => $values) {
+                $optionRowData = [];
                 $index = 'option_' . $key;
                 if ($values['is_default'] == 'Yes') {
-                    $data['default'][] = $index;
+                    $optionRowData['default'][] = $index;
                 }
-                $data['option']['value'][$index] = [$values['admin'], $values['view']];
-                $data['option']['order'][$index] = $key;
+                $optionRowData['option']['value'][$index] = [$values['admin'], $values['view']];
+                $optionRowData['option']['order'][$index] = $key;
+                $optionsData[] = $optionRowData;
             }
-            unset($data['options']);
+            $data['options'] = $optionsData;
         }
 
         $data = $this->changeStructureOfTheData($data);
@@ -139,12 +142,16 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
      * @param array $data
      * @return array
      */
-    protected function changeStructureOfTheData(array $data)
+    protected function changeStructureOfTheData(array $data): array
     {
-        $serializedOptions = $this->getSerializeOptions($data, ['option']);
+        if (!isset($data['options'])) {
+            return $data;
+        }
+
+        $serializedOptions = $this->getSerializeOptions($data['options']);
         if ($serializedOptions) {
             $data['serialized_options'] = $serializedOptions;
-            unset($data['option']);
+            unset($data['options']);
         }
 
         return $data;
@@ -154,52 +161,15 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
      * Provides serialized product attribute options.
      *
      * @param array $data
-     * @param array $optionKeys
-     * @return array
+     * @return string
      */
-    protected function getSerializeOptions(array $data, array $optionKeys): string
+    protected function getSerializeOptions(array $data): string
     {
         $options = [];
-        foreach ($optionKeys as $optionKey) {
-            if (!empty($data[$optionKey])) {
-                $options = array_merge(
-                    $options,
-                    $this->getEncodedOptions([$optionKey => $data[$optionKey]])
-                );
-            }
+        foreach ($data as $optionRowData) {
+            $options[] = http_build_query($optionRowData);
         }
 
         return json_encode($options);
-    }
-
-    /**
-     * Provides encoded attribute values.
-     *
-     * @param array $data
-     * @return array
-     */
-    private function getEncodedOptions(array $data): array
-    {
-        $optionsData = [];
-        $iterator = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($data));
-        foreach ($iterator as $value) {
-            $depth = $iterator->getDepth();
-            $option = '';
-
-            $level = 0;
-            $option .= $iterator->getSubIterator($level)->key();
-            $level++;
-
-            while ($level <= $depth) {
-                $option .= '[' . $iterator->getSubIterator($level)->key() . ']';
-                $level++;
-            }
-
-            $option .= '=' . $value;
-
-            $optionsData[] = $option;
-        }
-
-        return $optionsData;
     }
 }

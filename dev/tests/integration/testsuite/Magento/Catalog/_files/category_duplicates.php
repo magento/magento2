@@ -15,7 +15,7 @@ $category->setId(
 )->setParentId(
     2
 )->setPath(
-    '1/2'
+    '1/2/444'
 )->setLevel(
     '2'
 )->setDefaultSortBy(

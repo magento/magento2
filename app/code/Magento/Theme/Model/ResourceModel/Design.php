@@ -46,7 +46,7 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Perform actions before object save
      *
      * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
+     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
@@ -152,7 +152,6 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $dateConditions = [];
         }
 
-        $condition = '';
         if (!empty($dateConditions)) {
             $condition = '(' . implode(') OR (', $dateConditions) . ')';
             $select->where($condition);

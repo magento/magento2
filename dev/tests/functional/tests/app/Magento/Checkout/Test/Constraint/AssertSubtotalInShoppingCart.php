@@ -7,6 +7,7 @@
 namespace Magento\Checkout\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Checkout\Test\Constraint\Utils\CartPageLoadTrait;
 use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Checkout\Test\Fixture\Cart\Items;
 use Magento\Checkout\Test\Page\CheckoutCart;
@@ -19,6 +20,8 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertSubtotalInShoppingCart extends AbstractAssertForm
 {
+    use CartPageLoadTrait;
+
     /**
      * Assert that subtotal total in the shopping cart is equals to expected total from data set
      *
@@ -31,6 +34,7 @@ class AssertSubtotalInShoppingCart extends AbstractAssertForm
     {
         if ($requireReload) {
             $checkoutCart->open();
+            $this->waitForCartPageLoaded($checkoutCart);
         }
 
         /** @var Items $sourceProducts */

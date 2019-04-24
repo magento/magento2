@@ -5,6 +5,9 @@
  */
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
+/**
+ * Subselect conditions for product.
+ */
 class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
 {
     /**
@@ -161,7 +164,9 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
                 }
             }
             if ($hasValidChild || parent::validate($item)) {
-                $total += (($hasValidChild && $useChildrenTotal) ? $childrenAttrTotal : $item->getData($attr));
+                $total += ($hasValidChild && $useChildrenTotal)
+                    ? $childrenAttrTotal * $item->getQty()
+                    : $item->getData($attr);
             }
         }
         return $this->validateAttribute($total);
