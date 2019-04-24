@@ -33,7 +33,8 @@ class DbStorage extends BaseDbStorage
         ]);
         $select->joinLeft(
             ['relation' => $this->resource->getTableName(Product::TABLE_NAME)],
-            'url_rewrite.url_rewrite_id = relation.url_rewrite_id'
+            'url_rewrite.url_rewrite_id = relation.url_rewrite_id',
+            ['relation.category_id', 'relation.product_id']
         );
 
         foreach ($data as $column => $value) {
