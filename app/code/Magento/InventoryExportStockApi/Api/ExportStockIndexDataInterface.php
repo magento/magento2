@@ -17,7 +17,7 @@ interface ExportStockIndexDataInterface
      * Provides stock index export from inventory_stock_% table
      *
      * @param string $websiteCode
-     * @return string[]
+     * @return \Magento\InventoryExportStockApi\Api\Data\ProductStockIndexDataInterface[]
      */
     public function execute(string $websiteCode): array;
 }

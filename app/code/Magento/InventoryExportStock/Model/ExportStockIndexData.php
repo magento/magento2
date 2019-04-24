@@ -9,6 +9,8 @@ namespace Magento\InventoryExportStock\Model;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryExportStock\Model\ResourceModel\StockIndexDumpProcessor;
+use Magento\InventoryExportStockApi\Api\Data\ProductStockIndexDataInterface;
+use Magento\InventoryExportStockApi\Api\Data\ProductStockIndexDataInterfaceFactory;
 use Magento\InventoryExportStockApi\Api\ExportStockIndexDataInterface;
 use Magento\InventorySales\Model\ResourceModel\GetWebsiteIdByWebsiteCode;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
@@ -28,10 +30,16 @@ class ExportStockIndexData implements ExportStockIndexDataInterface
      * @var GetWebsiteIdByWebsiteCode
      */
     private $getWebsiteIdByWebsiteCode;
+
     /**
      * @var StockResolverInterface
      */
     private $stockResolver;
+
+    /**
+     * @var ProductStockIndexDataMapper
+     */
+    private $productStockIndexDataMapper;
 
     /**
      * ExportStockIndexData constructor
@@ -39,22 +47,25 @@ class ExportStockIndexData implements ExportStockIndexDataInterface
      * @param StockIndexDumpProcessor $stockIndexDumpProcessor
      * @param GetWebsiteIdByWebsiteCode $getWebsiteIdByWebsiteCode
      * @param StockResolverInterface $stockResolver
+     * @param ProductStockIndexDataMapper $productStockIndexDataMapper
      */
     public function __construct(
         StockIndexDumpProcessor $stockIndexDumpProcessor,
         GetWebsiteIdByWebsiteCode $getWebsiteIdByWebsiteCode,
-        StockResolverInterface $stockResolver
+        StockResolverInterface $stockResolver,
+        ProductStockIndexDataMapper $productStockIndexDataMapper
     ) {
         $this->stockIndexDumpProcessor = $stockIndexDumpProcessor;
         $this->getWebsiteIdByWebsiteCode = $getWebsiteIdByWebsiteCode;
         $this->stockResolver = $stockResolver;
+        $this->productStockIndexDataMapper = $productStockIndexDataMapper;
     }
 
     /**
      * Provides stock index export from inventory_stock_% table
      *
      * @param string $websiteCode
-     * @return array
+     * @return ProductStockIndexDataInterface[]
      * @throws LocalizedException
      */
     public function execute(string $websiteCode): array
@@ -62,7 +73,12 @@ class ExportStockIndexData implements ExportStockIndexDataInterface
         $websiteId = $this->getWebsiteIdByWebsiteCode->execute($websiteCode);
         $stockId = $this->stockResolver
             ->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
+        $items = $this->stockIndexDumpProcessor->execute($websiteId, $stockId);
+        $productsData = [];
+        foreach ($items as $item) {
+            $productsData[] = $this->productStockIndexDataMapper->execute($item);
+        }
 
-        return $this->stockIndexDumpProcessor->execute($websiteId, $stockId);
+        return $productsData;
     }
 }
