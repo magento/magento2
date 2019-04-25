@@ -230,7 +230,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      * @param Category $category
      * @return string
      */
-    private function getPageType(Category $category)
+    private function getPageType(Category $category) : string
     {
         $hasChildren = $category->hasChildren();
         if ($category->getIsAnchor()) {
