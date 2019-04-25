@@ -9,6 +9,8 @@ namespace Magento\InventoryExportStockApi\Api\Data;
 
 /**
  * Class ExportStockIndexDataResultInterface for result Inventory stock index dump export
+ *
+ * @api
  */
 interface ProductStockIndexDataInterface
 {
