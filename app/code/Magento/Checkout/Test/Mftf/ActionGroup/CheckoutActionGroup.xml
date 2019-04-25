@@ -110,7 +110,7 @@
             <argument name="paymentMethod" type="string"/>
         </arguments>
         <remove keyForRemoval="checkMessage"/>
-        <dontsee selector="{{CheckoutPaymentSection.paymentMethodByName(paymentMethod)}}" parametrized="true" stepKey="paymentMethodDoesNotAvailable"/>
+        <dontSee selector="{{CheckoutPaymentSection.paymentMethodByName(paymentMethod)}}" stepKey="paymentMethodDoesNotAvailable"/>
     </actionGroup>
     <!-- Logged in user checkout filling shipping section -->
     <actionGroup name="LoggedInUserCheckoutFillingShippingSectionActionGroup">
@@ -241,6 +241,21 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
     </actionGroup>
 
+    <!-- Check selected shipping address information on shipping information step -->
+    <actionGroup name="CheckSelectedShippingAddressInCheckoutActionGroup">
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+        <waitForElement selector="{{CheckoutShippingSection.shippingTab}}" time="30" stepKey="waitForShippingSectionLoaded"/>
+        <see stepKey="VerifyFirstNameInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerVar.firstname}}" />
+        <see stepKey="VerifyLastNameInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerVar.lastname}}" />
+        <see stepKey="VerifyStreetInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.street[0]}}" />
+        <see stepKey="VerifyCityInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.city}}" />
+        <see stepKey="VerifyZipInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.postcode}}" />
+        <see stepKey="VerifyPhoneInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.telephone}}" />
+    </actionGroup>
+
     <!-- Check billing address in checkout -->
     <actionGroup name="CheckBillingAddressInCheckoutActionGroup">
         <arguments>
@@ -257,13 +272,29 @@
         <see userInput="{{customerAddressVar.telephone}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressTelephone"/>
     </actionGroup>
 
+    <!-- Check billing address in checkout with billing address on payment page -->
+    <actionGroup name="CheckBillingAddressInCheckoutWithBillingAddressOnPaymentPageActionGroup">
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <see userInput="{{customerVar.firstName}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsFirstName"/>
+        <see userInput="{{customerVar.lastName}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsLastName"/>
+        <see userInput="{{customerAddressVar.street[0]}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsStreet"/>
+        <see userInput="{{customerAddressVar.city}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsCity"/>
+        <see userInput="{{customerAddressVar.state}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsState"/>
+        <see userInput="{{customerAddressVar.postcode}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsPostcode"/>
+        <see userInput="{{customerAddressVar.telephone}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsTelephone"/>
+    </actionGroup>
+
     <!-- Checkout place order -->
     <actionGroup name="CheckoutPlaceOrderActionGroup">
         <arguments>
             <argument name="orderNumberMessage"/>
             <argument name="emailYouMessage"/>
         </arguments>
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{orderNumberMessage}}" stepKey="seeOrderNumber"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{emailYouMessage}}" stepKey="seeEmailYou"/>
