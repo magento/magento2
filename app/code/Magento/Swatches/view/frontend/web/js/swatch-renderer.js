@@ -753,7 +753,12 @@ define([
                     $widget.options.jsonConfig.optionPrices
                 ]);
 
-            $widget._loadMedia();
+            const checkAdditionalData = JSON.parse(this.options.jsonSwatchConfig[attributeId].additional_data);
+
+            if (checkAdditionalData.update_product_preview_image == 1) {
+                $widget._loadMedia();
+            }
+
             $input.trigger('change');
         },
 
