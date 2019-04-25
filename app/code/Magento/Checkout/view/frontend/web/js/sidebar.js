@@ -306,13 +306,13 @@ define([
                 }
             })
                 .done(function (response) {
-                    var msg;
+                    var msg, currentURL;
 
                     if (response.success) {
                         callback.call(this, elem, response);
-                        var currentURL = window.location.pathname;
+                        currentURL = window.location.pathname;
                         if (currentURL.includes("/checkout/cart/")) {
-                            location.reload();
+                            $("#shopping-cart-table").trigger('contentUpdated');
                         }
                     } else {
                         msg = response['error_message'];
