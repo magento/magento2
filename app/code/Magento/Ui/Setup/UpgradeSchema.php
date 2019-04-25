@@ -25,21 +25,21 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $setup->startSetup();
         if (version_compare($context->getVersion(), '2.0.2') < 0) {
             $setup->getConnection()->modifyColumn(
-                $setup->getTable('ui_bookmark'), 
-                'created_at', 
+                $setup->getTable('ui_bookmark'),
+                'created_at',
                 [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
-                'nullable' => false, 
+                'nullable' => false,
                 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE
                 ],
                 'Bookmark created at'
             );
             $setup->getConnection()->modifyColumn(
-                $setup->getTable('ui_bookmark'), 
-                'updated_at', 
+                $setup->getTable('ui_bookmark'),
+                'updated_at',
                 [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
-                'nullable' => false, 
+                'nullable' => false,
                 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE
                 ],
                 'Bookmark updated at'
@@ -47,5 +47,4 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
         $setup->endSetup();
     }
-
 }
