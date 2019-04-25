@@ -37,15 +37,15 @@ class JsFooterPlugin
      */
     public function beforeSendResponse(Http $subject)
     {
-        if (
-            $this->scopeConfig->isSetFlag(
-            self::XML_PATH_DEV_MOVE_JS_TO_BOTTOM,
-            ScopeInterface::SCOPE_STORE
-            )
-        ) {
-            $content = $subject->getContent();
-            $script = [];
-            if (strpos($content, '</body') !== false) {
+        $content = $subject->getContent();
+        $script = [];
+        if (strpos($content, '</body') !== false) {
+            if (
+                $this->scopeConfig->isSetFlag(
+                self::XML_PATH_DEV_MOVE_JS_TO_BOTTOM,
+                ScopeInterface::SCOPE_STORE
+                )
+            ) {
                 $pattern = '#<script[^>]*+(?<!text/x-magento-template.)>.*?</script>#is';
                 $content = preg_replace_callback(
                     $pattern,
