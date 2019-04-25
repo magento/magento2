@@ -650,6 +650,7 @@ class Eav extends AbstractModifier
             'scopeLabel' => $this->getScopeLabel($attribute),
             'globalScope' => $this->isScopeGlobal($attribute),
             'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER,
+            '__disableTmpl' => ['label' => true, 'code' => true]
         ]);
 
         // TODO: Refactor to $attribute->getOptions() when MAGETWO-48289 is done
@@ -772,6 +773,7 @@ class Eav extends AbstractModifier
                 'breakLine' => false,
                 'label' => $attribute->getDefaultFrontendLabel(),
                 'required' => $attribute->getIsRequired(),
+                '__disableTmpl' => ['label' => true]
             ]
         );
 

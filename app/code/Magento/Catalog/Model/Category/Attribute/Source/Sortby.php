@@ -50,6 +50,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
                 $this->_options[] = [
                     'label' => __($attribute['frontend_label']),
                     'value' => $attribute['attribute_code'],
+                    '__disableTmpl' => true
                 ];
             }
         }
