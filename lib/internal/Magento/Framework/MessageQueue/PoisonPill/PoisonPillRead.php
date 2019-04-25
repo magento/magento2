@@ -13,7 +13,7 @@ namespace Magento\Framework\MessageQueue\PoisonPill;
 class PoisonPillRead implements PoisonPillReadInterface
 {
     /**
-     * Returns get latest version of poison pill.
+     * Stub implementation.
      *
      * @todo Will use cache storage after @MC-15997
      *

@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\MessageQueue\PoisonPill;
 
-use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
-
 /**
  * Command interface describes how to create new version on poison pill.
  */
@@ -22,7 +20,7 @@ class PoisonPillPut implements PoisonPillPutInterface
     private $firstVersion = '';
 
     /**
-     * Dumb framework implementation.
+     * Stub implementation.
      *
      * @todo Will use cache storage after @MC-15997
      *

@@ -8,8 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\MessageQueue\PoisonPill;
 
 /**
- * Interface describes how to describes how to compare poison pill with latest in DB.
- *
+ * Interface describes how to compare given version of poison pill with latest in DB.
  */
 interface PoisonPillCompareInterface
 {
