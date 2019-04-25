@@ -44,7 +44,7 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
 
         $cartItems = $response['addConfigurableProductsToCart']['cart']['items'];
-        self::assertEquals($qty, $cartItems[0]['qty']);
+        self::assertEquals($qty, $cartItems[0]['quantity']);
         self::assertEquals($variantSku, $cartItems[0]['product']['sku']);
     }
 
@@ -97,7 +97,7 @@ mutation {
         {
           variant_sku: "{$variantSku}"
           data: {
-            qty: {$qty}
+            quantity: {$qty}
             sku: "{$variantSku}"
           }
         }
@@ -107,7 +107,7 @@ mutation {
     cart {
       items {
         id
-        qty
+        quantity
         product {
           name
           sku

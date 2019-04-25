@@ -121,9 +121,9 @@ class AddSimpleProductToCart
      */
     private function extractQty(array $cartItemData): float
     {
-        $qty = $this->arrayManager->get('data/qty', $cartItemData);
+        $qty = $this->arrayManager->get('data/quantity', $cartItemData);
         if (!isset($qty)) {
-            throw new GraphQlInputException(__('Missing key "qty" in cart item data'));
+            throw new GraphQlInputException(__('Missing key "quantity" in cart item data'));
         }
         return (float)$qty;
     }

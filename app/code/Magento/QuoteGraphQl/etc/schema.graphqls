@@ -31,7 +31,7 @@ input AddSimpleProductsToCartInput {
 }
 
 input SimpleProductCartItemInput {
-    data: CartItemInput!
+    data: CartItemQuantityInput!
     customizable_options:[CustomizableOptionInput!]
 }
 
@@ -41,13 +41,13 @@ input AddVirtualProductsToCartInput {
 }
 
 input VirtualProductCartItemInput {
-    data: CartItemInput!
+    data: CartItemQuantityInput!
     customizable_options:[CustomizableOptionInput!]
 }
 
-input CartItemInput {
+input CartItemQuantityInput {
     sku: String!
-    qty: Float!
+    quantity: Float!
 }
 
 input CustomizableOptionInput {
@@ -62,10 +62,10 @@ input ApplyCouponToCartInput {
 
 input UpdateCartItemsInput {
     cart_id: String!
-    cart_items: [CartItemQuantityInput!]!
+    cart_items: [CartItemUpdateQuantityInput!]!
 }
 
-input CartItemQuantityInput {
+input CartItemUpdateQuantityInput {
     cart_item_id: Int!
     quantity: Float!
 }
@@ -297,7 +297,7 @@ type VirtualCartItem implements CartItemInterface @doc(description: "Virtual Car
 
 interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemTypeResolver") {
     id: String!
-    qty: Float!
+    quantity: Float!
     product: ProductInterface!
 }
 

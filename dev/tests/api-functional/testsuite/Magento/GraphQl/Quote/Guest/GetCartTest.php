@@ -46,11 +46,11 @@ class GetCartTest extends GraphQlAbstract
         self::assertCount(2, $response['cart']['items']);
 
         self::assertNotEmpty($response['cart']['items'][0]['id']);
-        self::assertEquals(2, $response['cart']['items'][0]['qty']);
+        self::assertEquals(2, $response['cart']['items'][0]['quantity']);
         self::assertEquals('simple_product', $response['cart']['items'][0]['product']['sku']);
 
         self::assertNotEmpty($response['cart']['items'][1]['id']);
-        self::assertEquals(2, $response['cart']['items'][1]['qty']);
+        self::assertEquals(2, $response['cart']['items'][1]['quantity']);
         self::assertEquals('virtual-product', $response['cart']['items'][1]['product']['sku']);
     }
 
@@ -156,7 +156,7 @@ class GetCartTest extends GraphQlAbstract
   cart(cart_id: "{$maskedQuoteId}") {
     items {
       id
-      qty
+      quantity
       product {
         sku
       }

@@ -176,7 +176,7 @@ mutation {
       cartItems: [
         {
           data: {
-            qty: {$qty}
+            quantity: {$qty}
             sku: "{$sku}"
           }
         }
@@ -185,7 +185,7 @@ mutation {
   ) {
     cart {
       items {
-        qty
+        quantity
         product {
           sku
         }
