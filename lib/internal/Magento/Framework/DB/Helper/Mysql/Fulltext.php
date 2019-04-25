@@ -15,13 +15,6 @@ use Magento\Framework\App\ResourceConnection;
 class Fulltext
 {
     /**
-     * Characters that have special meaning in fulltext match syntax
-     *
-     * @var string
-     */
-    const SPECIAL_CHARACTERS = '-+<>*()~';
-
-    /**
      * FULLTEXT search in MySQL search mode "natural language"
      */
     const FULLTEXT_MODE_NATURAL = 'IN NATURAL LANGUAGE MODE';
@@ -105,16 +98,5 @@ class Fulltext
         }
 
         return $select;
-    }
-
-    /**
-     * Remove special characters from fulltext query expression
-     *
-     * @param string $expression
-     * @return string
-     */
-    public function removeSpecialCharacters(string $expression): string
-    {
-        return str_replace(str_split(static::SPECIAL_CHARACTERS), '', $expression);
     }
 }
