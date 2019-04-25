@@ -123,8 +123,8 @@ class QuoteUpdater extends AbstractHelper
     {
         $shippingAddress = $quote->getShippingAddress();
 
-        $shippingAddress->setLastname($details['lastName']);
-        $shippingAddress->setFirstname($details['firstName']);
+        $shippingAddress->setLastname($this->getShippingRecipientLastName($details));
+        $shippingAddress->setFirstname($this->getShippingRecipientFirstName($details));
         $shippingAddress->setEmail($details['email']);
 
         $shippingAddress->setCollectShippingRates(true);
@@ -187,5 +187,31 @@ class QuoteUpdater extends AbstractHelper
         $address->setSaveInAddressBook(false);
         $address->setSameAsBilling(false);
         $address->setCustomerAddressId(null);
+    }
+
+    /**
+     * Returns shipping recipient first name.
+     *
+     * @param array $details
+     * @return string
+     */
+    private function getShippingRecipientFirstName(array $details)
+    {
+        return isset($details['shippingAddress']['recipientName'])
+            ? explode(' ', $details['shippingAddress']['recipientName'], 2)[0]
+            : $details['firstName'];
+    }
+
+    /**
+     * Returns shipping recipient last name.
+     *
+     * @param array $details
+     * @return string
+     */
+    private function getShippingRecipientLastName(array $details)
+    {
+        return isset($details['shippingAddress']['recipientName'])
+            ? explode(' ', $details['shippingAddress']['recipientName'], 2)[1]
+            : $details['lastName'];
     }
 }
