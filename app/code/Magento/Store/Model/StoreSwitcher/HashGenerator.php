@@ -9,7 +9,6 @@ namespace Magento\Store\Model\StoreSwitcher;
 
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreSwitcherInterface;
-use Magento\Customer\Model\Session as CustomerSession;
 use \Magento\Framework\App\DeploymentConfig as DeploymentConfig;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
 use Magento\Framework\Config\ConfigOptionsListConstants;
@@ -20,12 +19,6 @@ use Magento\Authorization\Model\UserContextInterface;
  */
 class HashGenerator implements StoreSwitcherInterface
 {
-
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    private $customerSession;
-
     /**
      * @var \Magento\Framework\App\DeploymentConfig
      */
@@ -42,18 +35,15 @@ class HashGenerator implements StoreSwitcherInterface
     private $currentUser;
 
     /**
-     * @param CustomerSession $customerSession
      * @param DeploymentConfig $deploymentConfig
      * @param UrlHelper $urlHelper
      * @param UserContextInterface $currentUser
      */
     public function __construct(
-        CustomerSession $customerSession,
         DeploymentConfig $deploymentConfig,
         UrlHelper $urlHelper,
         UserContextInterface $currentUser
     ) {
-        $this->customerSession = $customerSession;
         $this->deploymentConfig = $deploymentConfig;
         $this->urlHelper = $urlHelper;
         $this->currentUser = $currentUser;
