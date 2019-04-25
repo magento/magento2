@@ -40,11 +40,10 @@ class JsFooterPlugin
         $content = $subject->getContent();
         $script = [];
         if (strpos($content, '</body') !== false) {
-            if (
-                $this->scopeConfig->isSetFlag(
+            if ($this->scopeConfig->isSetFlag(
                 self::XML_PATH_DEV_MOVE_JS_TO_BOTTOM,
                 ScopeInterface::SCOPE_STORE
-                )
+            )
             ) {
                 $pattern = '#<script[^>]*+(?<!text/x-magento-template.)>.*?</script>#is';
                 $content = preg_replace_callback(

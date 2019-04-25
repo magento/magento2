@@ -9,7 +9,6 @@ namespace Magento\MessageQueue\Model\ResourceModel;
 
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillReadInterface;
-use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
@@ -21,19 +20,6 @@ class PoisonPill extends AbstractDb implements PoisonPillPutInterface, PoisonPil
      * Table name.
      */
     const QUEUE_POISON_PILL_TABLE = 'queue_poison_pill';
-
-    /**
-     * PoisonPill constructor.
-     *
-     * @param Context $context
-     * @param string|null $connectionName
-     */
-    public function __construct(
-        Context $context,
-        string $connectionName = null
-    ) {
-        parent::__construct($context, $connectionName);
-    }
 
     /**
      * @inheritdoc
