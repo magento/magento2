@@ -130,6 +130,12 @@ sub vcl_hash {
     }
     /* {{ design_exceptions_code }} */
 
+    if (req.url ~ "graphql") {
+        call process_graphql_headers;
+    }
+}
+
+sub process_graphql_headers {
     if (req.http.Store) {
         hash_data(req.http.Store);
     }
