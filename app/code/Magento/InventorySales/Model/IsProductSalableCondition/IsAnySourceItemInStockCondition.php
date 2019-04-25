@@ -85,14 +85,19 @@ class IsAnySourceItemInStockCondition implements IsProductSalableInterface
      * Provides source codes for certain stock
      *
      * @param int $stockId
+     *
      * @return array
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getSourceCodesAssignedToStock(int $stockId): array
     {
         $sources = $this->getSourcesAssignedToStockOrderedByPriority->execute($stockId);
         $sourceCodes = [];
         foreach ($sources as $source) {
-            $sourceCodes[] = $source->getSourceCode();
+            if ($source->isEnabled()) {
+                $sourceCodes[] = $source->getSourceCode();
+            }
         }
 
         return $sourceCodes;
