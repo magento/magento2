@@ -8,6 +8,9 @@ namespace Magento\Framework;
 use Zend\Stdlib\Parameters;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * Test class for \Magento\Framework\Url
+ */
 class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
