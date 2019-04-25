@@ -9,15 +9,15 @@ namespace Magento\GraphQlCache\Controller\Plugin;
 
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\ResponseInterface;
 use Magento\GraphQlCache\Model\CacheableQuery;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\PageCache\Model\Config;
 use Magento\GraphQl\Controller\HttpRequestProcessor;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 
 /**
- * Class Plugin
+ * Plugin for handling controller after controller tags and pre-controller validation.
  */
 class GraphQl
 {
@@ -76,24 +76,19 @@ class GraphQl
     }
 
     /**
-     * Plugin for GraphQL after dispatch to set tag and cache headers
+     * Plugin for GraphQL after render from dispatch to set tag and cache headers
      *
-     * The $response doesn't have a set type because it's alternating between ResponseInterface and ResultInterface
-     * depending if it comes from builtin cache or the dispatch.
+     * @param ResultInterface $subject
+     * @param ResultInterface $result
+     * @param ResponseHttp $response
+     * @return ResultInterface
      *
-     * @param FrontControllerInterface $subject
-     * @param ResponseInterface|ResultInterface $response
-     * @param RequestInterface $request
-     * @return ResponseInterface|ResultInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDispatch(
-        FrontControllerInterface $subject,
-        $response,
-        RequestInterface $request
-    ) {
+    public function afterRenderResult(ResultInterface $subject, ResultInterface $result, ResponseHttp $response)
+    {
         $sendNoCacheHeaders = false;
-        if ($this->config->isEnabled() && $request->isGet()) {
+        if ($this->config->isEnabled()) {
             if ($this->cacheableQuery->shouldPopulateCacheHeadersWithTags()) {
                 $this->response->setPublicHeaders($this->config->getTtl());
                 $this->response->setHeader('X-Magento-Tags', implode(',', $this->cacheableQuery->getCacheTags()), true);
@@ -108,6 +103,6 @@ class GraphQl
             $this->response->setNoCacheHeaders();
         }
 
-        return $response;
+        return $result;
     }
 }

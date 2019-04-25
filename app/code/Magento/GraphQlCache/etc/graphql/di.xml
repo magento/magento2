@@ -19,6 +19,7 @@
                 type="Magento\GraphQlCache\Model\Plugin\App\PageCache\Identifier" sortOrder="1"/>
     </type>
     <type name="Magento\Framework\Controller\ResultInterface">
+        <plugin name="graphql-result-plugin" type="Magento\GraphQlCache\Controller\Plugin\GraphQl"/>
         <plugin name="result-builtin-cache" type="Magento\PageCache\Model\Controller\Result\BuiltinPlugin"/>
         <plugin name="result-varnish-cache" type="Magento\PageCache\Model\Controller\Result\VarnishPlugin"/>
     </type>

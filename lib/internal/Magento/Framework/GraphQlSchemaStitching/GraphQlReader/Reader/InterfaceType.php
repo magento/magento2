@@ -44,13 +44,8 @@ class InterfaceType implements TypeMetaReaderInterface
     ) {
         $this->fieldMetaReader = $fieldMetaReader;
         $this->docReader = $docReader;
-        if ($cacheTagReader) {
-            $this->cacheTagReader = $cacheTagReader;
-        } else {
-            $this->cacheTagReader = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                CacheTagReader::class
-            );
-        }
+        $this->cacheTagReader = $cacheTagReader ?? \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(CacheTagReader::class);
     }
 
     /**

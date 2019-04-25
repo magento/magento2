@@ -18,7 +18,7 @@ class CategoriesIdentity implements IdentityInterface
      * Get category IDs from resolved data
      *
      * @param array $resolvedData
-     * @return array
+     * @return string[]
      */
     public function getIdentities(array $resolvedData): array
     {
