@@ -36,7 +36,6 @@ return [
     'Magento_Reports',
     'Magento_Sales',
     'Magento_Search',
-    'Magento_Shipping',
     'Magento_Store',
     'Magento_Swagger',
     'Magento_Swatches',
