@@ -110,7 +110,7 @@
             <argument name="paymentMethod" type="string"/>
         </arguments>
         <remove keyForRemoval="checkMessage"/>
-        <dontsee selector="{{CheckoutPaymentSection.paymentMethodByName(paymentMethod)}}" parametrized="true" stepKey="paymentMethodDoesNotAvailable"/>
+        <dontSee selector="{{CheckoutPaymentSection.paymentMethodByName(paymentMethod)}}" stepKey="paymentMethodDoesNotAvailable"/>
     </actionGroup>
     <!-- Logged in user checkout filling shipping section -->
     <actionGroup name="LoggedInUserCheckoutFillingShippingSectionActionGroup">
