@@ -14,7 +14,7 @@
 //  ---------------------------------------------
 
 @import 'actions-bar/_store-switcher.less';
-@page-action_back_button_position : 348.5px;
+@page-action_back_button_position : 0;
 
 .page-main-actions:not(._hidden),
 .page-actions._fixed {
@@ -44,7 +44,7 @@
         }
         > button#back {
             float: left;
-            position: absolute;
+            position: relative;
             right: @page-action_back_button_position;
         }
     }
