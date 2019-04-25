@@ -86,9 +86,6 @@ class Product
         $collection->load();
 
         // Methods that perform extra fetches post-load
-        if (in_array('media_gallery_entries', $attributes)) {
-            $collection->addMediaGalleryData();
-        }
         if (in_array('options', $attributes)) {
             $collection->addOptionsToResult();
         }
