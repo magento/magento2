@@ -7,7 +7,6 @@
 namespace Magento\Mtf\Util\Command\File;
 
 use Magento\Mtf\Util\Protocol\CurlTransport;
-use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 
 /**
  * Get content of log file in var/log folder.
@@ -17,7 +16,7 @@ class Log
     /**
      * Url to log.php.
      */
-    const URL = '/dev/tests/functional/utils/log.php';
+    const URL = 'dev/tests/functional/utils/log.php';
 
     /**
      * Curl transport protocol.
@@ -27,20 +26,11 @@ class Log
     private $transport;
 
     /**
-     * Webapi handler.
-     *
-     * @var WebapiDecorator
-     */
-    private $webapiHandler;
-
-    /**
      * @param CurlTransport $transport
-     * @param WebapiDecorator $webapiHandler
      */
-    public function __construct(CurlTransport $transport, WebapiDecorator $webapiHandler)
+    public function __construct(CurlTransport $transport)
     {
         $this->transport = $transport;
-        $this->webapiHandler = $webapiHandler;
     }
 
     /**
@@ -51,28 +41,22 @@ class Log
      */
     public function getFileContent($name)
     {
-        $this->transport->write(
-            rtrim(str_replace('index.php', '', $_ENV['app_frontend_url']), '/') . self::URL,
-            $this->prepareParamArray($name),
-            CurlInterface::POST,
-            []
-        );
-        $data = $this->transport->read();
-        $this->transport->close();
+        $curl = $this->transport;
+        $curl->write($this->prepareUrl($name), [], CurlTransport::GET);
+        $data = $curl->read();
+        $curl->close();
+        // phpcs:ignore Magento2.Security.InsecureFunction
         return unserialize($data);
     }
 
     /**
-     * Prepare parameter array.
+     * Prepare url.
      *
      * @param string $name
-     * @return array
+     * @return string
      */
-    private function prepareParamArray($name)
+    private function prepareUrl($name)
     {
-        return [
-            'token' => urlencode($this->webapiHandler->getWebapiToken()),
-            'name' => urlencode($name)
-        ];
+        return $_ENV['app_frontend_url'] . self::URL . '?name=' . urlencode($name);
     }
 }
