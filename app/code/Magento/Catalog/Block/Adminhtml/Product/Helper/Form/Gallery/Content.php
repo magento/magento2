@@ -13,10 +13,12 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Backend\Block\Media\Uploader;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Backend\Block\DataProviders\ImageUploadConfig as ImageUploadConfigDataProvider;
 
 /**
  * Block for gallery content.
@@ -44,20 +46,29 @@ class Content extends \Magento\Backend\Block\Widget
     private $imageHelper;
 
     /**
+     * @var ImageUploadConfigDataProvider
+     */
+    private $imageUploadConfigDataProvider;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param array $data
+     * @param ImageUploadConfigDataProvider $imageUploadConfigDataProvider
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
-        array $data = []
+        array $data = [],
+        ImageUploadConfigDataProvider $imageUploadConfigDataProvider = null
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_mediaConfig = $mediaConfig;
         parent::__construct($context, $data);
+        $this->imageUploadConfigDataProvider = $imageUploadConfigDataProvider
+            ?: ObjectManager::getInstance()->get(ImageUploadConfigDataProvider::class);
     }
 
     /**
@@ -67,7 +78,11 @@ class Content extends \Magento\Backend\Block\Widget
      */
     protected function _prepareLayout()
     {
-        $this->addChild('uploader', \Magento\Backend\Block\Media\Uploader::class);
+        $this->addChild(
+            'uploader',
+            \Magento\Backend\Block\Media\Uploader::class,
+            ['image_upload_config_data' => $this->imageUploadConfigDataProvider]
+        );
 
         $this->getUploader()->getConfig()->setUrl(
             $this->_urlBuilder->addSessionParam()->getUrl('catalog/product_gallery/upload')

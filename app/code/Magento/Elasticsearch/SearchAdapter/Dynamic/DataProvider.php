@@ -9,7 +9,7 @@ use Magento\Elasticsearch\SearchAdapter\QueryAwareInterface;
 use Magento\Elasticsearch\SearchAdapter\QueryContainer;
 
 /**
- * Provides data for search using ElasticSearch
+ * Elastic search data provider
  *
  * @api
  * @since 100.1.0
@@ -212,6 +212,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
                 'histogram' => [
                     'field' => $fieldName,
                     'interval' => (float)$range,
+                    'min_doc_count' => 1,
                 ],
             ],
         ];
@@ -219,7 +220,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         $queryResult = $this->connectionManager->getConnection()
             ->query($query);
         foreach ($queryResult['aggregations']['prices']['buckets'] as $bucket) {
-            $key = intval($bucket['key'] / $range + 1);
+            $key = (int)($bucket['key'] / $range + 1);
             $result[$key] = $bucket['doc_count'];
         }
 

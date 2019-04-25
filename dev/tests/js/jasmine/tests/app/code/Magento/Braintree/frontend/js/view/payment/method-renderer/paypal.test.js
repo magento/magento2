@@ -14,6 +14,18 @@ define([
 
         var injector = new Squire(),
             mocks = {
+                'Magento_Checkout/js/model/checkout-data-resolver': {
+
+                    /** Stub */
+                    applyBillingAddress: function () {
+                        return true;
+                    },
+
+                    /** Stub */
+                    resolveBillingAddress: function () {
+                        return true;
+                    }
+                },
                 'Magento_Checkout/js/model/quote': {
                     billingAddress: ko.observable(),
                     shippingAddress: ko.observable({
@@ -24,7 +36,12 @@ define([
                     paymentMethod: ko.observable(),
                     totals: ko.observable({
                         'base_grand_total': 0
-                    })
+                    }),
+
+                    /** Stub */
+                    isVirtual: function () {
+                        return false;
+                    }
                 },
                 'Magento_Braintree/js/view/payment/adapter': {
                     config: {},

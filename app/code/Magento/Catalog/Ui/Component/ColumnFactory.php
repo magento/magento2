@@ -5,7 +5,11 @@
  */
 namespace Magento\Catalog\Ui\Component;
 
+use Magento\Ui\Component\Filters\FilterModifier;
+
 /**
+ * Column Factory
+ *
  * @api
  * @since 100.0.2
  */
@@ -47,20 +51,26 @@ class ColumnFactory
     }
 
     /**
+     * Create Factory
+     *
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param array $config
+     *
      * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function create($attribute, $context, array $config = [])
     {
+        $filterModifiers = $context->getRequestParam(FilterModifier::FILTER_MODIFIER, []);
+
         $columnName = $attribute->getAttributeCode();
         $config = array_merge([
             'label' => __($attribute->getDefaultFrontendLabel()),
             'dataType' => $this->getDataType($attribute),
             'add_field' => true,
             'visible' => $attribute->getIsVisibleInGrid(),
-            'filter' => ($attribute->getIsFilterableInGrid())
+            'filter' => ($attribute->getIsFilterableInGrid() || array_key_exists($columnName, $filterModifiers))
                 ? $this->getFilterType($attribute->getFrontendInput())
                 : null,
         ], $config);
@@ -82,7 +92,10 @@ class ColumnFactory
     }
 
     /**
+     * Get Js Component
+     *
      * @param string $dataType
+     *
      * @return string
      */
     protected function getJsComponent($dataType)
@@ -91,14 +104,15 @@ class ColumnFactory
     }
 
     /**
+     * Get Data Type
+     *
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     *
      * @return string
      */
     protected function getDataType($attribute)
     {
-        return isset($this->dataTypeMap[$attribute->getFrontendInput()])
-            ? $this->dataTypeMap[$attribute->getFrontendInput()]
-            : $this->dataTypeMap['default'];
+        return $this->dataTypeMap[$attribute->getFrontendInput()] ?? $this->dataTypeMap['default'];
     }
 
     /**
@@ -111,6 +125,6 @@ class ColumnFactory
     {
         $filtersMap = ['date' => 'dateRange'];
         $result = array_replace_recursive($this->dataTypeMap, $filtersMap);
-        return isset($result[$frontendInput]) ? $result[$frontendInput] : $result['default'];
+        return $result[$frontendInput] ?? $result['default'];
     }
 }

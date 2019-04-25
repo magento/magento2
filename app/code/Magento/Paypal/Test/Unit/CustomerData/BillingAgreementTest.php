@@ -11,6 +11,7 @@ use Magento\Paypal\Helper\Data;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Escaper;
 
 class BillingAgreementTest extends \PHPUnit\Framework\TestCase
 {
@@ -35,9 +36,16 @@ class BillingAgreementTest extends \PHPUnit\Framework\TestCase
      */
     private $billingAgreement;
 
+    /**
+     * @var Escaper
+     */
+    private $escaperMock;
+
     protected function setUp()
     {
+        $helper = new ObjectManager($this);
         $this->paypalConfig = $this->createMock(Config::class);
+        $this->escaperMock = $helper->getObject(Escaper::class);
         $this->paypalConfig
             ->expects($this->once())
             ->method('setMethod')
@@ -59,14 +67,13 @@ class BillingAgreementTest extends \PHPUnit\Framework\TestCase
             ->willReturn($customerId);
 
         $this->paypalData = $this->createMock(Data::class);
-
-        $helper = new ObjectManager($this);
         $this->billingAgreement = $helper->getObject(
             BillingAgreement::class,
             [
                 'paypalConfigFactory' => $paypalConfigFactory,
                 'paypalData' => $this->paypalData,
-                'currentCustomer' => $this->currentCustomer
+                'currentCustomer' => $this->currentCustomer,
+                'escaper' => $this->escaperMock
             ]
         );
     }
@@ -83,6 +90,10 @@ class BillingAgreementTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('askToCreate', $result);
         $this->assertArrayHasKey('confirmUrl', $result);
         $this->assertArrayHasKey('confirmMessage', $result);
+        $this->assertEquals(
+            'Would you like to sign a billing agreement to streamline further purchases with PayPal?',
+            $result['confirmMessage']
+        );
         $this->assertTrue($result['askToCreate']);
     }
 

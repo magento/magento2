@@ -11,16 +11,18 @@ case $TEST_SUITE in
     integration)
         cd dev/tests/integration
 
-        tests_directory=$(find testsuite/* -maxdepth 1 -mindepth 1 -type d | sort)
-        module_directories=$(find ../../../app/code/*/*/Test/Integration -maxdepth 0 -mindepth 0 -type d | sort)
-        test_set_list=("${tests_directory[@]}" "${module_directories[@]}")
+        tests_directory=($(find testsuite/* -mindepth 1 -name "*Test.php" -type f | sort))
+        module_directories=($(find ../../../app/code/*/*/Test/Integration -mindepth 0 -type f -name "*Test.php" | sort))
+        test_set_list=(${tests_directory[@]} ${module_directories[@]})
 
-        test_set_count=$(printf "$test_set_list" | wc -l)
-        test_set_size[1]=$(printf "%.0f" $(echo "$test_set_count*0.17" | bc))
-        test_set_size[2]=$(printf "%.0f" $(echo "$test_set_count*0.32" | bc))
-        test_set_size[3]=$(printf "%.0f" $(echo "$test_set_count*0.50" | bc))
-        test_set_size[4]=$((test_set_count-test_set_size[1]-test_set_size[2]-test_set_size[3]))
-        echo "Total = ${test_set_count}; Batch #1 = ${test_set_size[1]}; Batch #2 = ${test_set_size[2]}; Batch #3 = ${test_set_size[3]}; Batch #4 = ${test_set_size[4]};";
+        test_set_count=${#test_set_list[@]}
+        test_set_size[1]=$(printf "%.0f" $(echo "$test_set_count*0.15" | bc))
+        test_set_size[2]=$(printf "%.0f" $(echo "$test_set_count*0.14" | bc))
+        test_set_size[3]=$(printf "%.0f" $(echo "$test_set_count*0.16" | bc))
+        test_set_size[4]=$(printf "%.0f" $(echo "$test_set_count*0.24" | bc))
+        test_set_size[5]=$(printf "%.0f" $(echo "$test_set_count*0.25" | bc))
+        test_set_size[6]=$((test_set_count-test_set_size[1]-test_set_size[2]-test_set_size[3]-test_set_size[4]-test_set_size[5]))
+        echo "Total = ${test_set_count}; Batch #1 = ${test_set_size[1]}; Batch #2 = ${test_set_size[2]}; Batch #3 = ${test_set_size[3]}; Batch #4 = ${test_set_size[4]}; Batch #5 = ${test_set_size[5]}; Batch #6 = ${test_set_size[6]};";
 
         echo "==> preparing integration testsuite on index $INTEGRATION_INDEX with set size of ${test_set_size[$INTEGRATION_INDEX]}"
         cp phpunit.xml.dist phpunit.xml
@@ -34,7 +36,7 @@ case $TEST_SUITE in
         # divide test sets up by indexed testsuites
         i=0; j=1; dirIndex=1; testIndex=1;
         for test_set in ${test_set_list[@]}; do
-            test_xml[j]+="            <directory suffix=\"Test.php\">$test_set</directory>\n"
+            test_xml[j]+="            <file>$test_set</file>\n"
 
             if [[ $j -eq $INTEGRATION_INDEX ]]; then
                 echo "$dirIndex: Batch #$j($testIndex of ${test_set_size[$j]}): + including $test_set"
@@ -141,6 +143,7 @@ case $TEST_SUITE in
 
         cd ../../..
         ;;
+
     msi-api-functional)
         echo "Installing Magento"
         mysql -uroot -e 'CREATE DATABASE magento2;'
@@ -164,5 +167,36 @@ case $TEST_SUITE in
         cp ./phpunit_msi.xml.dist ./phpunit.xml
         sed -e "s?magento.url?${MAGENTO_HOST_NAME}?g" --in-place ./phpunit.xml
 
+        ;;
+
+    graphql-api-functional)
+        echo "Installing Magento"
+        mysql -uroot -e 'CREATE DATABASE magento2;'
+        php bin/magento setup:install -q \
+            --language="en_US" \
+            --timezone="UTC" \
+            --currency="USD" \
+            --base-url="http://${MAGENTO_HOST_NAME}/" \
+            --admin-firstname="John" \
+            --admin-lastname="Doe" \
+            --backend-frontname="backend" \
+            --admin-email="admin@example.com" \
+            --admin-user="admin" \
+            --use-rewrites=1 \
+            --admin-use-security-key=0 \
+            --admin-password="123123q"
+
+        echo "Prepare api-functional tests for running"
+        cd dev/tests/api-functional
+        cp -r _files/Magento/TestModuleGraphQl* ../../../app/code/Magento # Deploy and enable test modules before running tests
+
+        cp ./phpunit_graphql.xml.dist ./phpunit.xml
+        sed -e "s?magento.url?${MAGENTO_HOST_NAME}?g" --in-place ./phpunit.xml
+
+        cd ../../..
+        php bin/magento setup:upgrade
+
+        echo "Enabling production mode"
+        php bin/magento deploy:mode:set production
         ;;
 esac

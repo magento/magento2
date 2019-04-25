@@ -56,9 +56,9 @@ class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
         $errorFile = 'test_file';
         $errorLine = 'test_error_line';
 
-        $exceptedExceptionMessage = sprintf('%s: %s in %s on line %s', $errorPhrase, $errorStr, $errorFile, $errorLine);
+        $expectedExceptionMessage = sprintf('%s: %s in %s on line %s', $errorPhrase, $errorStr, $errorFile, $errorLine);
         $this->expectException('Exception');
-        $this->expectExceptionMessage($exceptedExceptionMessage);
+        $this->expectExceptionMessage($expectedExceptionMessage);
 
         $this->object->handler($errorNo, $errorStr, $errorFile, $errorLine);
     }

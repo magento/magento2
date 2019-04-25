@@ -112,7 +112,7 @@ class InputParamsResolver
     }
 
     /**
-     * Detect route by input parameters
+     * Returns route.
      *
      * @return \Magento\Webapi\Controller\Rest\Router\Route
      */
@@ -126,6 +126,7 @@ class InputParamsResolver
      *
      * Convert the input array from key-value format to a list of parameters
      * suitable for the specified class / method.
+     *
      * Instead of \Magento\Webapi\Controller\Rest\InputParamsResolver
      * we don't need to merge body params with url params and use only body params
      *
