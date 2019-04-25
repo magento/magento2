@@ -11,6 +11,7 @@ use Magento\Framework\App\State;
 
 /**
  * Class SidResolver
+ * @deprecated 2.3.2
  */
 class SidResolver implements SidResolverInterface
 {
