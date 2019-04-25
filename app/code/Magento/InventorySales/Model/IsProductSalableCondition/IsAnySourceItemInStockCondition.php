@@ -9,13 +9,13 @@ namespace Magento\InventorySales\Model\IsProductSalableCondition;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
-use Magento\InventoryConfigurationApi\Model\GetAllowedProductTypesForSourceItemManagementInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForSkuInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
- * @inheritdoc
+ * Check if product has source items with the in stock status
  */
 class IsAnySourceItemInStockCondition implements IsProductSalableInterface
 {
@@ -30,31 +30,31 @@ class IsAnySourceItemInStockCondition implements IsProductSalableInterface
     private $searchCriteriaBuilder;
 
     /**
-     * @var GetProductTypesBySkusInterface
+     * @var GetSourcesAssignedToStockOrderedByPriorityInterface
      */
-    private $getProductTypesBySkus;
+    private $getSourcesAssignedToStockOrderedByPriority;
 
     /**
-     * @var GetAllowedProductTypesForSourceItemManagementInterface
+     * @var IsSourceItemManagementAllowedForSkuInterface
      */
-    private $getManageableTypes;
+    private $isSourceItemManagementAllowedForSku;
 
     /**
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param GetProductTypesBySkusInterface $getProductTypesBySkus
-     * @param GetAllowedProductTypesForSourceItemManagementInterface $getManageableTypes
+     * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
+     * @param IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku
      */
     public function __construct(
         SourceItemRepositoryInterface $sourceItemRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        GetProductTypesBySkusInterface $getProductTypesBySkus,
-        GetAllowedProductTypesForSourceItemManagementInterface $getManageableTypes
+        GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority,
+        IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku
     ) {
         $this->sourceItemRepository = $sourceItemRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->getProductTypesBySkus = $getProductTypesBySkus;
-        $this->getManageableTypes = $getManageableTypes;
+        $this->getSourcesAssignedToStockOrderedByPriority = $getSourcesAssignedToStockOrderedByPriority;
+        $this->isSourceItemManagementAllowedForSku = $isSourceItemManagementAllowedForSku;
     }
 
     /**
@@ -64,11 +64,15 @@ class IsAnySourceItemInStockCondition implements IsProductSalableInterface
      */
     public function execute(string $sku, int $stockId): bool
     {
-        if (!$this->isProductStockManageable($sku)) {
+        if (!$this->isSourceItemManagementAllowedForSku->execute($sku)) {
             return true;
         }
+
+        $sourceCodes = $this->getSourceCodesAssignedToStock($stockId);
+
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(SourceItemInterface::SKU, $sku)
+            ->addFilter(SourceItemInterface::SOURCE_CODE, $sourceCodes, 'in')
             ->addFilter(SourceItemInterface::STATUS, SourceItemInterface::STATUS_IN_STOCK)
             ->create();
 
@@ -78,15 +82,24 @@ class IsAnySourceItemInStockCondition implements IsProductSalableInterface
     }
 
     /**
-     * @param string $sku
+     * Provides source codes for certain stock
      *
-     * @return bool
+     * @param int $stockId
+     *
+     * @return array
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function isProductStockManageable(string $sku): bool
+    private function getSourceCodesAssignedToStock(int $stockId): array
     {
-        return in_array(
-            $this->getProductTypesBySkus->execute([$sku])[$sku],
-            $this->getManageableTypes->execute()
-        );
+        $sources = $this->getSourcesAssignedToStockOrderedByPriority->execute($stockId);
+        $sourceCodes = [];
+        foreach ($sources as $source) {
+            if ($source->isEnabled()) {
+                $sourceCodes[] = $source->getSourceCode();
+            }
+        }
+
+        return $sourceCodes;
     }
 }

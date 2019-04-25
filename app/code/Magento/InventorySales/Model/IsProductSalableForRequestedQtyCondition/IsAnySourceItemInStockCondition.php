@@ -7,12 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition;
 
-use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
+use Magento\InventorySales\Model\IsProductSalableCondition\IsAnySourceItemInStockCondition as IsAnySourceItemInStock;
+use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterfaceFactory;
-use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterfaceFactory;
-use Magento\InventorySales\Model\IsProductSalableCondition\IsAnySourceItemInStockCondition
-    as IsAnySourceInStockConditionCondition;
+use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 
 /**
  * @inheritdoc
@@ -20,7 +19,7 @@ use Magento\InventorySales\Model\IsProductSalableCondition\IsAnySourceItemInStoc
 class IsAnySourceItemInStockCondition implements IsProductSalableForRequestedQtyInterface
 {
     /**
-     * @var IsAnySourceInStockConditionCondition
+     * @var IsAnySourceItemInStock
      */
     private $isAnySourceInStockCondition;
 
@@ -35,12 +34,12 @@ class IsAnySourceItemInStockCondition implements IsProductSalableForRequestedQty
     private $productSalableResultFactory;
 
     /**
-     * @param IsAnySourceInStockConditionCondition $isAnySourceInStockCondition
+     * @param IsAnySourceItemInStock $isAnySourceInStockCondition
      * @param ProductSalabilityErrorInterfaceFactory $productSalabilityErrorFactory
      * @param ProductSalableResultInterfaceFactory $productSalableResultFactory
      */
     public function __construct(
-        IsAnySourceInStockConditionCondition $isAnySourceInStockCondition,
+        IsAnySourceItemInStock $isAnySourceInStockCondition,
         ProductSalabilityErrorInterfaceFactory $productSalabilityErrorFactory,
         ProductSalableResultInterfaceFactory $productSalableResultFactory
     ) {
@@ -57,14 +56,13 @@ class IsAnySourceItemInStockCondition implements IsProductSalableForRequestedQty
     public function execute(string $sku, int $stockId, float $requestedQty): ProductSalableResultInterface
     {
         $errors = [];
-        $isValid = $this->isAnySourceInStockCondition->execute($sku, $stockId);
-        if (!$isValid) {
-            $errors = [
-                $this->productSalabilityErrorFactory->create([
-                    'code' => 'stock_item_is_any_source_in_stock-no_source_items_in_stock',
-                    'message' => __('There are no source items with in stock status')
-                ])
+
+        if (!$this->isAnySourceInStockCondition->execute($sku, $stockId)) {
+            $data = [
+                'code' => 'is_any_source_item_in_stock-no_source_items_in_stock',
+                'message' => __('There are no source items with the in stock status')
             ];
+            $errors[] = $this->productSalabilityErrorFactory->create($data);
         }
 
         return $this->productSalableResultFactory->create(['errors' => $errors]);

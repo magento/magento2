@@ -1,7 +1,7 @@
 <?php
 /**
- *  Copyright © Magento, Inc. All rights reserved.
- *  See COPYING.txt for license details.
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
@@ -11,16 +11,16 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
-use Magento\InventorySales\Model\IsProductSalableCondition\IsAnySourceItemInStockCondition;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 class IsAnySourceItemInStockConditionTest extends TestCase
 {
     /**
-     * @var IsAnySourceItemInStockCondition
+     * @var IsProductSalableInterface
      */
-    private $isAnySourceInStockCondition;
+    private $isProductSalable;
 
     /**
      * @var ProductRepositoryInterface
@@ -40,8 +40,8 @@ class IsAnySourceItemInStockConditionTest extends TestCase
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->isAnySourceInStockCondition = $objectManager->get(
-            IsAnySourceItemInStockCondition::class
+        $this->isProductSalable = $objectManager->get(
+            IsProductSalableInterface::class
         );
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
         $this->stockItemCriteriaFactory = $objectManager->get(StockItemCriteriaInterfaceFactory::class);
@@ -53,13 +53,22 @@ class IsAnySourceItemInStockConditionTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items_out_of_stock.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     *
+     * @dataProvider sourceItemsStockData
      *
      * @magentoDbIsolation disabled
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param bool $expected
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testSourceItemsAreOutOfStock()
+    public function testSourceItemsAreOutOfStock(string $sku, int $stockId, bool $expected): void
     {
-        $product = $this->productRepository->get('SKU-1');
+        $product = $this->productRepository->get($sku);
         $stockItemSearchCriteria = $this->stockItemCriteriaFactory->create();
         $stockItemSearchCriteria->setProductsFilter($product->getId());
         $stockItemsCollection = $this->stockItemRepository->getList($stockItemSearchCriteria);
@@ -69,6 +78,24 @@ class IsAnySourceItemInStockConditionTest extends TestCase
         $legacyStockItem->setBackorders(1);
         $legacyStockItem->setUseConfigBackorders(0);
         $this->stockItemRepository->save($legacyStockItem);
-        $this->assertFalse($this->isAnySourceInStockCondition->execute('SKU-1', 10));
+        $this->assertEquals($expected, $this->isProductSalable->execute($sku, $stockId));
+    }
+
+    /**
+     * @return array
+     */
+    public function sourceItemsStockData(): array
+    {
+        return [
+            ['SKU-1', 10, true],
+            ['SKU-1', 20, false],
+            ['SKU-1', 30, true],
+            ['SKU-2', 10, false],
+            ['SKU-2', 20, true],
+            ['SKU-2', 30, true],
+            ['SKU-3', 10, false],
+            ['SKU-3', 20, false],
+            ['SKU-3', 30, false],
+        ];
     }
 }

@@ -24,3 +24,4 @@
 "Stock has at least one sale channel and could not be deleted.","Stock has at least one sale channel and could not be deleted."
 "Could not replace Sales Channels for Stock","Could not replace Sales Channels for Stock"
 "Wrong condition.","Wrong condition."
+"There are no source items with the in stock status","There are no source items with the in stock status"
