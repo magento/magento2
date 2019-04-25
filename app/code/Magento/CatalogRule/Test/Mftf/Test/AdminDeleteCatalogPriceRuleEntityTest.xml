@@ -49,7 +49,7 @@
             <deleteData createDataKey="createCategory1" stepKey="deleteCategoryFirst1"/>
         </after>
 
-        <!-- delete the simple product and catalog price rule -->
+        <!-- Delete the simple product and catalog price rule -->
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage1"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
         <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule1">
@@ -58,36 +58,33 @@
         </actionGroup>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
 
-        <!-- assert that the Success message is present after the delete -->
+        <!-- Assert that the Success message is present after the delete -->
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
 
-        <!-- assert that the Grid Empty message is present after deleting -->
-        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage1"/>
-
-        <!-- reindex -->
+        <!-- Reindex -->
         <magentoCLI command="cache:flush" stepKey="flushCache1"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
 
-        <!-- assert that the rule isn't present on the Category page -->
+        <!-- Assert that the rule isn't present on the Category page -->
         <amOnPage url="$$createCategory1.name$$.html" stepKey="goToStorefrontCategoryPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <dontSee selector="{{StorefrontCategoryProductSection.ProductCatalogRulePriceTitleByName($$createProduct1.name$$)}}" userInput="Regular Price" stepKey="dontSeeRegularPriceText1"/>
         <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductCatalogRuleSpecialPriceTitleByName($$createProduct1.name$$)}}" stepKey="dontSeeSpecialPrice1"/>
 
-        <!-- assert that the rule isn't present on the Product page -->
+        <!-- Assert that the rule isn't present on the Product page -->
         <amOnPage url="$$createProduct1.name$$.html" stepKey="goToStorefrontProductPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>
         <dontSee selector="{{StorefrontProductInfoMainSection.oldPriceTag}}" userInput="Regular Price" stepKey="dontSeeRegularPRiceText2"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createProduct1.price$$" stepKey="seeTrueProductPrice1"/>
 
-        <!-- assert that the rule isn't present in the Shopping Cart -->
+        <!-- Assert that the rule isn't present in the Shopping Cart -->
         <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToShoppingCart1">
             <argument name="productName" value="$$createProduct1.name$$"/>
         </actionGroup>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="openMiniShoppingCart1"/>
         <see selector="{{StorefrontMinicartSection.productPriceByName($$createProduct1.name$$)}}" userInput="$$createProduct1.price$$" stepKey="seeCorrectProductPrice1"/>
 
-        <!-- assert that the rule -->
+        <!-- Assert that the rule isn't present on the Checkout page -->
         <click selector="{{StorefrontMiniCartSection.goToCheckout}}" stepKey="goToCheckout1"/>
         <conditionalClick selector="{{CheckoutCartSummarySection.expandShoppingCartSummary}}" dependentSelector="{{CheckoutCartSummarySection.expandShoppingCartSummary}}" visible="true" stepKey="expandShoppingCartSummary1"/>
         <see selector="{{CheckoutCartProductSection.ProductRegularPriceByName($$createProduct1.name$$)}}" userInput="$$createProduct1.price$$" stepKey="seeCorrectProductPriceOnCheckout1"/>
@@ -183,7 +180,7 @@
             <deleteData createDataKey="createConfigProductAttribute1" stepKey="deleteConfigProductAttribute1"/>
         </after>
 
-        <!-- delete the simple product and catalog price rule -->
+        <!-- Delete the simple product and catalog price rule -->
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage1"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
         <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule1">
@@ -193,25 +190,22 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
 
-        <!-- assert that the Grid Empty message is present -->
-        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage1"/>
-
-        <!-- reindex -->
+        <!-- Reindex -->
         <magentoCLI command="cache:flush" stepKey="flushCache1"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
 
-        <!-- assert that the rule isn't present on the Category page -->
+        <!-- Assert that the rule isn't present on the Category page -->
         <amOnPage url="$$createCategory1.name$$.html" stepKey="goToStorefrontCategoryPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <see selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createConfigProduct1.name$$)}}" userInput="$$createConfigChildProduct1.price$$" stepKey="seeRegularPriceText1"/>
 
-        <!-- assert that the rule isn't present on the Product page -->
+        <!-- Assert that the rule isn't present on the Product page -->
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct1.custom_attributes[url_key]$$)}}" stepKey="goToStorefrontProductPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <dontSee selector="{{StorefrontProductInfoMainSection.oldPriceTag}}" userInput="Regular Price" stepKey="dontSeeRegularPriceText2"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigChildProduct1.price$$" stepKey="seeTrueProductPrice1"/>
 
-        <!-- assert that the rule isn't present in the Shopping Cart -->
+        <!-- Assert that the rule isn't present in the Shopping Cart -->
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="option1" stepKey="selectOption1"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
