@@ -33,6 +33,8 @@
 
             <actionGroup ref="CreateCatalogPriceRuleViaTheUi" stepKey="createCatalogPriceRuleViaTheUi1">
                 <argument name="catalogRule" value="DeleteActiveCatalogPriceRuleWithConditions"/>
+                <argument name="customerGroup" value="General"/>
+                <argument name="disregardRules" value="Yes"/>
             </actionGroup>
 
             <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="saveTheCatalogRule"/>
@@ -162,6 +164,8 @@
 
             <actionGroup ref="CreateCatalogPriceRuleViaTheUi" stepKey="createCatalogPriceRuleViaTheUi1">
                 <argument name="catalogRule" value="DeleteActiveCatalogPriceRuleWithConditions"/>
+                <argument name="customerGroup" value="General"/>
+                <argument name="disregardRules" value="Yes"/>
             </actionGroup>
 
             <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="saveTheCatalogRule"/>
