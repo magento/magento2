@@ -3,15 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\ResourceModel\Category\Flat;
 
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Catalog category flat collection
@@ -49,6 +53,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_storeId;
 
     /**
+     * Store config.
+     *
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param Logger $logger
      * @param FetchStrategyInterface $fetchStrategy
@@ -56,6 +67,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param AbstractDb $resource
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -64,9 +76,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        AbstractDb $resource = null
+        AbstractDb $resource = null,
+        ScopeConfigInterface $scopeConfig = null
     ) {
         $this->_storeManager = $storeManager;
+        $this->scopeConfig = $scopeConfig ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
@@ -385,6 +399,24 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function setPage($pageNum, $pageSize)
     {
         $this->setCurPage($pageNum)->setPageSize($pageSize);
+        return $this;
+    }
+
+    /**
+     * Add navigation max depth filter.
+     *
+     * @return $this
+     */
+    public function addNavigationMaxDepthFilter()
+    {
+        $navigationMaxDepth = (int)$this->scopeConfig->getValue(
+            'catalog/navigation/max_depth',
+            ScopeInterface::SCOPE_STORE
+        );
+        if ($navigationMaxDepth > 0) {
+            $this->addLevelFilter($navigationMaxDepth);
+        }
+
         return $this;
     }
 }
