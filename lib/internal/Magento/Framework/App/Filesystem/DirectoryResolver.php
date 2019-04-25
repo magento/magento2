@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\App\Filesystem;
 
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Magento directories resolver.
  */
@@ -16,11 +19,18 @@ class DirectoryResolver
     private $directoryList;
 
     /**
-     * @param DirectoryList $directoryList
+     * @var Filesystem
      */
-    public function __construct(DirectoryList $directoryList)
+    private $filesystem;
+
+    /**
+     * @param DirectoryList $directoryList
+     * @param Filesystem|null $filesystem
+     */
+    public function __construct(DirectoryList $directoryList, Filesystem $filesystem = null)
     {
         $this->directoryList = $directoryList;
+        $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(Filesystem::class);
     }
 
     /**
@@ -38,7 +48,8 @@ class DirectoryResolver
      */
     public function validatePath($path, $directoryConfig = DirectoryList::MEDIA)
     {
-        $realPath = realpath($path);
+        $directory = $this->filesystem->getDirectoryWrite($directoryConfig);
+        $realPath = $directory->getDriver()->getRealPathSafety($path);
         $root = $this->directoryList->getPath($directoryConfig);
 
         return strpos($realPath, $root) === 0;

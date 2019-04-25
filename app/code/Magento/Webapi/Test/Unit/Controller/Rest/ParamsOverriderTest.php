@@ -7,6 +7,7 @@
 namespace Magento\Webapi\Test\Unit\Controller\Rest;
 
 use \Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Api\SimpleDataObjectConverter;
 
 /**
  * Test Magento\Webapi\Controller\Rest\ParamsOverrider
@@ -36,10 +37,31 @@ class ParamsOverriderTest extends \PHPUnit_Framework_TestCase
             ['userContext' => $userContextMock]
         );
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject $objectConverter */
+        $objectConverter = $this->getMockBuilder(SimpleDataObjectConverter::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['convertKeysToCamelCase'])
+            ->getMock();
+        $objectConverter->expects($this->any())
+            ->method('convertKeysToCamelCase')
+            ->willReturnCallback(
+                function (array $array) {
+                    $converted = [];
+                    foreach ($array as $key => $value) {
+                        $converted[mb_strtolower($key)] = $value;
+                    }
+
+                    return $converted;
+                }
+            );
+
         /** @var \Magento\Webapi\Controller\Rest\ParamsOverrider $paramsOverrider */
         $paramsOverrider = $objectManager->getObject(
             'Magento\Webapi\Controller\Rest\ParamsOverrider',
-            ['paramOverriders' => ['%customer_id%' => $paramOverriderCustomerId ]]
+            [
+                'paramOverriders' => ['%customer_id%' => $paramOverriderCustomerId ],
+                'dataObjectConverter' => $objectConverter
+            ]
         );
 
         $this->assertEquals($expectedOverriddenParams, $paramsOverrider->override($requestData, $parameters));

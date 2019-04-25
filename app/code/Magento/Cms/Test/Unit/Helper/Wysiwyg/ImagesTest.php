@@ -74,7 +74,7 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->path = 'PATH/';
+        $this->path = 'PATH';
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
@@ -108,7 +108,8 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap(
                 [
                     [WysiwygConfig::IMAGE_DIRECTORY, null, $this->getAbsolutePath(WysiwygConfig::IMAGE_DIRECTORY)],
-                    [null, null, $this->getAbsolutePath(null)]
+                    [null, null, $this->getAbsolutePath(null)],
+                    ['', null, $this->getAbsolutePath('')],
                 ]
             );
 
@@ -173,7 +174,7 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
     public function testGetStorageRoot()
     {
         $this->assertEquals(
-            $this->getAbsolutePath(WysiwygConfig::IMAGE_DIRECTORY),
+            $this->getAbsolutePath(''),
             $this->imagesHelper->getStorageRoot()
         );
     }
@@ -197,7 +198,7 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
     public function testConvertPathToId()
     {
         $pathOne = '/test_path';
-        $pathTwo = $this->getAbsolutePath(WysiwygConfig::IMAGE_DIRECTORY) . '/test_path';
+        $pathTwo = $this->getAbsolutePath('') . '/test_path';
         $this->assertEquals(
             $this->imagesHelper->convertPathToId($pathOne),
             $this->imagesHelper->convertPathToId($pathTwo)
@@ -334,26 +335,30 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCurrentPath($pathId, $expectedPath, $isExist)
     {
-        $this->requestMock->expects($this->once())
+        $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->willReturn($pathId);
+            ->willReturnMap(
+                [
+                    ['node', null, $pathId],
+                ]
+            );
 
         $this->directoryWriteMock->expects($this->any())
             ->method('isDirectory')
             ->willReturnMap(
                 [
-                    ['/../wysiwyg/test_path', true],
-                    ['/../wysiwyg/my.jpg', false],
-                    ['/../wysiwyg', true]
+                    ['/../test_path', true],
+                    ['/../my.jpg', false],
+                    ['.', true],
                 ]
             );
         $this->directoryWriteMock->expects($this->any())
             ->method('getRelativePath')
             ->willReturnMap(
                 [
-                    ['PATH/wysiwyg/test_path', '/../wysiwyg/test_path'],
-                    ['PATH/wysiwyg/my.jpg', '/../wysiwyg/my.jpg'],
-                    ['PATH/wysiwyg', '/../wysiwyg'],
+                    ['PATH/test_path', '/../test_path'],
+                    ['PATH/my.jpg', '/../my.jpg'],
+                    ['PATH', '.'],
                 ]
             );
         $this->directoryWriteMock->expects($this->once())
@@ -370,7 +375,7 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             \Magento\Framework\Exception\LocalizedException::class,
-            'The directory PATH/wysiwyg is not writable by server.'
+            'The directory PATH is not writable by server.'
         );
 
         $this->directoryWriteMock->expects($this->once())
@@ -393,12 +398,12 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
     public function providerGetCurrentPath()
     {
         return [
-            ['L3Rlc3RfcGF0aA--', 'PATH/wysiwyg/test_path', true],
-            ['L215LmpwZw--', 'PATH/wysiwyg', true],
-            [null, 'PATH/wysiwyg', true],
-            ['L3Rlc3RfcGF0aA--', 'PATH/wysiwyg/test_path', false],
-            ['L215LmpwZw--', 'PATH/wysiwyg', false],
-            [null, 'PATH/wysiwyg', false]
+            ['L3Rlc3RfcGF0aA--', 'PATH/test_path', true],
+            ['L215LmpwZw--', 'PATH', true],
+            [null, 'PATH', true],
+            ['L3Rlc3RfcGF0aA--', 'PATH/test_path', false],
+            ['L215LmpwZw--', 'PATH', false],
+            [null, 'PATH', false],
         ];
     }
 

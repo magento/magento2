@@ -13,12 +13,16 @@ return [
                             'Magento_TestModuleMSC::resource1',
                         ],
                         'secure' => false,
+                        'realMethod' => 'item',
+                        'parameters' => []
                     ],
                     'create' => [
                         'resources' => [
                             'Magento_TestModuleMSC::resource3',
                         ],
                         'secure' => false,
+                        'realMethod' => 'create',
+                        'parameters' => []
                     ],
                 ],
             ],
@@ -30,6 +34,8 @@ return [
                             'Magento_TestModuleMSC::resource2',
                         ],
                         'secure' => false,
+                        'realMethod' => 'getPreconfiguredItem',
+                        'parameters' => []
                     ],
                 ],
             ],
@@ -42,12 +48,34 @@ return [
                             'Magento_Test1::resource1',
                         ],
                         'secure' => false,
+                        'realMethod' => 'item',
+                        'parameters' => []
+                    ],
+                    'itemDefault' => [
+                        'resources' => [
+                            'Magento_Test1::default',
+                        ],
+                        'secure' => false,
+                        'realMethod' => 'item',
+                        'parameters' => [
+                            'id' => [
+                                'force' => true,
+                                'value' => null,
+                            ],
+                        ]
                     ],
                     'create' => [
                         'resources' => [
                             'Magento_Test1::resource1',
                         ],
                         'secure' => false,
+                        'realMethod' => 'create',
+                        'parameters' => [
+                            'id' => [
+                                'force' => true,
+                                'value' => null,
+                            ],
+                        ]
                     ],
                 ],
             ],
@@ -61,6 +89,8 @@ return [
                             'Magento_Test1::resource2',
                         ],
                         'secure' => false,
+                        'realMethod' => 'item',
+                        'parameters' => []
                     ],
                     'create' => [
                         'resources' => [
@@ -68,6 +98,13 @@ return [
                             'Magento_Test1::resource2',
                         ],
                         'secure' => false,
+                        'realMethod' => 'create',
+                        'parameters' => [
+                            'id' => [
+                                'force' => true,
+                                'value' => null,
+                            ],
+                        ]
                     ],
                     'delete' => [
                         'resources' => [
@@ -75,6 +112,8 @@ return [
                             'Magento_Test1::resource2',
                         ],
                         'secure' => false,
+                        'realMethod' => 'delete',
+                        'parameters' => []
                     ],
                     'update' => [
                         'resources' => [
@@ -82,6 +121,8 @@ return [
                             'Magento_Test1::resource2',
                         ],
                         'secure' => false,
+                        'realMethod' => 'update',
+                        'parameters' => []
                     ],
                 ],
             ],
@@ -127,6 +168,40 @@ return [
                     'Magento_Test1::resource1' => true,
                 ],
                 'parameters' => [
+                ],
+            ],
+        ],
+        '/V1/testmodule1' => [
+            'POST' => [
+                'secure' => false,
+                'service' => [
+                    'class' => \Magento\TestModule1\Service\V1\AllSoapAndRestInterface::class,
+                    'method' => 'create',
+                ],
+                'resources' => [
+                    'Magento_Test1::resource1' => true,
+                ],
+                'parameters' => [
+                    'id' => [
+                        'force' => true,
+                        'value' => null,
+                    ],
+                ],
+            ],
+            'GET' => [
+                'secure' => false,
+                'service' => [
+                    'class' => \Magento\TestModule1\Service\V1\AllSoapAndRestInterface::class,
+                    'method' => 'item',
+                ],
+                'resources' => [
+                    'Magento_Test1::default' => true,
+                ],
+                'parameters' => [
+                    'id' => [
+                        'force' => true,
+                        'value' => null,
+                    ],
                 ],
             ],
         ],
@@ -181,24 +256,6 @@ return [
                 'resources' => [
                     'Magento_Test1::resource1' => true,
                     'Magento_Test1::resource2' => true,
-                ],
-                'parameters' => [
-                    'id' => [
-                        'force' => true,
-                        'value' => null,
-                    ],
-                ],
-            ],
-        ],
-        '/V1/testmodule1' => [
-            'POST' => [
-                'secure' => false,
-                'service' => [
-                    'class' => 'Magento\TestModule1\Service\V1\AllSoapAndRestInterface',
-                    'method' => 'create',
-                ],
-                'resources' => [
-                    'Magento_Test1::resource1' => true,
                 ],
                 'parameters' => [
                     'id' => [
