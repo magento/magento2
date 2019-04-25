@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php $_item = $block->getItem() ?>
 <tr>
@@ -15,16 +12,16 @@
         <?php if ($block->canShipPartiallyItem()): ?>
             <input type="text"
                    class="input-text admin__control-text qty-item"
-                   name="shipment[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>]"
-                   value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>" />
+                   name="shipment[items][<?= $block->escapeHtmlAttr($_item->getOrderItemId()) ?>]"
+                   value="<?= /* @noEscape */ $_item->getQty()*1 ?>" />
         <?php else: ?>
-            <?= /* @escapeNotVerified */ $_item->getQty()*1 ?>
+            <?= /* @noEscape */ $_item->getQty()*1 ?>
         <?php endif; ?>
     </td>
     <?php if (!$block->canShipPartiallyItem()): ?>
     <td class="col-ship last">
-        <input type="hidden" name="shipment[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>]" value="0" />
-        <input type="checkbox" name="shipment[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>]" value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>" checked />
+        <input type="hidden" name="shipment[items][<?= $block->escapeHtmlAttr($_item->getOrderItemId()) ?>]" value="0" />
+        <input type="checkbox" name="shipment[items][<?= $block->escapeHtmlAttr( $_item->getOrderItemId()) ?>]" value="<?= /* @noEscape */ $_item->getQty()*1 ?>" checked />
     </td>
     <?php endif; ?>
 </tr>
