@@ -5,9 +5,6 @@
  */
 namespace Magento\Eav\Model\Entity;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
-
 /**
  * Entity type model
  *
@@ -78,15 +75,9 @@ class Type extends \Magento\Framework\Model\AbstractModel
     protected $_storeFactory;
 
     /**
-     * @deprecated To instantiate resource models, use $resourceModelPool instead
      * @var \Magento\Framework\Validator\UniversalFactory
      */
     protected $_universalFactory;
-
-    /**
-     * @var ResourceModelPoolInterface
-     */
-    private $resourceModelPool;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -98,9 +89,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param ResourceModelPoolInterface|null $resourceModelPool
      * @codeCoverageIgnore
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -111,20 +100,13 @@ class Type extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = [],
-        ResourceModelPoolInterface $resourceModelPool = null
+        array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_attributeFactory = $attributeFactory;
         $this->_attSetFactory = $attSetFactory;
         $this->_storeFactory = $storeFactory;
         $this->_universalFactory = $universalFactory;
-        if ($resourceModelPool === null) {
-            $resourceModelPool = ObjectManager::getInstance()->get(
-                ResourceModelPoolInterface::class
-            );
-        }
-        $this->resourceModelPool = $resourceModelPool;
     }
 
     /**
@@ -381,7 +363,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      */
     public function getEntity()
     {
-        return $this->resourceModelPool->get($this->_data['entity_model']);
+        return $this->_universalFactory->create($this->_data['entity_model']);
     }
 
     /**
