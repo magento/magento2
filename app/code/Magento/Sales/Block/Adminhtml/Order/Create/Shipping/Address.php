@@ -81,6 +81,15 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      */
     public function getDontSaveInAddressBook()
     {
+        $shippingIsTheSameAsBilling = $this->getIsAsBilling() && $this->getIsShipping();
+        $params = $this->getRequest()->getParams();
+        if ($shippingIsTheSameAsBilling && $params) {
+            $save = $params['order']['billing_address']['save_in_address_book'] ?? false;
+            return !$save;
+        }
+        if ($shippingIsTheSameAsBilling) {
+            return !($this->getIsAsBilling() && $this->getIsShipping());
+        }
         return $this->getIsAsBilling();
     }
 
@@ -121,6 +130,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
 
     /**
      * Return is address disabled flag
+     *
      * Return true is the quote is virtual
      *
      * @return bool
