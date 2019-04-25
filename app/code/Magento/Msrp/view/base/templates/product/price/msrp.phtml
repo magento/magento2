@@ -9,7 +9,7 @@
 /**
  * Template for displaying product price at product view page, gift registry and wish-list
  *
- * @var $block \Magento\Catalog\Pricing\Render\PriceBox
+ * @var $block \Magento\Msrp\Pricing\Render\PriceBox
  */
 ?>
 <?php
@@ -21,19 +21,7 @@ $priceType = $block->getPrice();
 $product = $block->getSaleableItem();
 $productId = $product->getId();
 
-$amount = 0;
-if ($product->getMsrp()) {
-    $amount = $product->getMsrp();
-} elseif ($product->getTypeId() === \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
-    $amount = $product->getTypeInstance()->getChildrenMsrp($product);
-} elseif ($product->getTypeId() === \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
-    foreach ($product->getTypeInstance()->getUsedProducts($product) as $item) {
-        if ($item->getMsrp() !== null) {
-            $prices[] = $item->getMsrp();
-        }
-    }
-    $amount = $prices ? max($prices) : 0;
-}
+$amount = $block->getMsrpPriceCalculator()->getMsrpPriceValue($product);
 
 $msrpPrice = $block->renderAmount(
     $priceType->getCustomAmount($amount),

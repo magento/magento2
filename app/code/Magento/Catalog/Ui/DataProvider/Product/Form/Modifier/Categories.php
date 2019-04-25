@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
@@ -11,6 +13,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Catalog\Model\Category as CategoryModel;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Stdlib\ArrayManager;
@@ -202,6 +205,7 @@ class Categories extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @throws LocalizedException
      * @since 101.0.0
      */
     protected function customizeCategoriesField(array $meta)
@@ -306,6 +310,7 @@ class Categories extends AbstractModifier
      *
      * @param string|null $filter
      * @return array
+     * @throws LocalizedException
      * @since 101.0.0
      */
     protected function getCategoriesTree($filter = null)
@@ -321,7 +326,7 @@ class Categories extends AbstractModifier
         /* @var $matchingNamesCollection \Magento\Catalog\Model\ResourceModel\Category\Collection */
         $matchingNamesCollection = $this->categoryCollectionFactory->create();
 
-        if ($filter !== null) {
+        if (!empty($filter)) {
             $matchingNamesCollection->addAttributeToFilter(
                 'name',
                 ['like' => $this->dbHelper->addLikeEscape($filter, ['position' => 'any'])]
@@ -341,6 +346,19 @@ class Categories extends AbstractModifier
             }
         }
 
+        return $shownCategoriesIds;
+    }
+
+    /**
+     * Retrieve tree of categories with attributes.
+     *
+     * @param int $storeId
+     * @param array $shownCategoriesIds
+     * @return array|null
+     * @throws LocalizedException
+     */
+    private function retrieveCategoriesTree(int $storeId, array $shownCategoriesIds) : ?array
+    {
         /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
         $collection = $this->categoryCollectionFactory->create();
 

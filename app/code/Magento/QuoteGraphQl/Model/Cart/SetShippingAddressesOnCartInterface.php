@@ -27,12 +27,12 @@ interface SetShippingAddressesOnCartInterface
      *
      * @param ContextInterface $context
      * @param CartInterface $cart
-     * @param array $shippingAddresses
+     * @param array $shippingAddressesInput
      * @return void
      * @throws GraphQlInputException
      * @throws GraphQlAuthorizationException
      * @throws GraphQlAuthenticationException
      * @throws GraphQlNoSuchEntityException
      */
-    public function execute(ContextInterface $context, CartInterface $cart, array $shippingAddresses): void;
+    public function execute(ContextInterface $context, CartInterface $cart, array $shippingAddressesInput): void;
 }

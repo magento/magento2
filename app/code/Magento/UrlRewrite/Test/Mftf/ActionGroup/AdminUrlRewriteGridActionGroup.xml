@@ -25,7 +25,7 @@
         <see selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="{{targetPath}}" stepKey="seeTheTargetPath" />
         <see selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="{{redirectType}}" stepKey="seeTheRedirectTypeForOldUrl" />
     </actionGroup>
-    <actionGroup name="AdminSearchProductBySku">
+    <actionGroup name="AdminSearchUrlRewriteProductBySku">
         <arguments>
             <argument name="productSku" type="string"/>
         </arguments>
@@ -71,5 +71,27 @@
         <click selector="{{AdminUrlRewriteEditSection.okButton}}" stepKey="clickOnOkButton"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
         <see selector="{{AdminUrlRewriteIndexSection.successMessage}}" userInput="You deleted the URL rewrite." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+    <actionGroup name="AssertPageByUrlRewriteIsNotFound">
+        <arguments>
+            <argument name="requestPath" type="string"/>
+        </arguments>
+        <amOnPage url="{{requestPath}}" stepKey="amOnPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
+        <see userInput="Whoops, our bad..." stepKey="seeWhoops"/>
+    </actionGroup>
+    <actionGroup name="AdminSearchAndSelectUrlRewriteInGrid">
+        <arguments>
+            <argument name="requestPath" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteEditPage"/>
+        <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad"/>
+        <click selector="{{AdminUrlRewriteIndexSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{requestPath}}" stepKey="fillRedirectPathFilter"/>
+        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <click selector="{{AdminUrlRewriteIndexSection.editButton('1')}}" stepKey="clickOnEditButton"/>
+        <waitForPageLoad stepKey="waitForEditPageToLoad"/>
     </actionGroup>
 </actionGroups>
