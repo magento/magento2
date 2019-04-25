@@ -198,6 +198,8 @@
         "magento/module-inventory-distance-based-source-selection-admin-ui": "*",
         "magento/module-inventory-distance-based-source-selection-api": "*",
         "magento/module-inventory-elasticsearch": "*",
+        "magento/module-inventory-export-stock": "*",
+        "magento/module-inventory-export-stock-api": "*",
         "magento/module-inventory-grouped-product": "*",
         "magento/module-inventory-grouped-product-admin-ui": "*",
         "magento/module-inventory-grouped-product-indexer": "*",
