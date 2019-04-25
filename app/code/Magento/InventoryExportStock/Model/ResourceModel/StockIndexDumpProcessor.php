@@ -186,9 +186,18 @@ class StockIndexDumpProcessor
         if ($getQtyForNotManageStock === null) {
             $getQtyForNotManageStock = 'NULL';
         }
+        $ifExpression = '
+        IF(
+            `product_entity`.`type_id` IN (
+                \'' . Configurable::TYPE_CODE . '\',
+                \'' . Type::TYPE_BUNDLE . '\',
+                \'' . Grouped::TYPE_CODE . '\'),
+                NULL,
+            ' . $getQtyForNotManageStock . '
+        )';
         $select->from(
             ['legacy_stock_item' => $legacyStockItemTable],
-            [new Zend_Db_Expr($getQtyForNotManageStock . ' as qty'),
+            ['qty' =>new Zend_Db_Expr($ifExpression),
                 new Zend_Db_Expr('"1" as is_salable')]
         )->join(
             ['product_entity' => $productEntityTable],
