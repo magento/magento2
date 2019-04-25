@@ -7,7 +7,7 @@ namespace Magento\Email\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\MailException;
-use Magento\Framework\Mail\Message;
+use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Phrase;
 use Magento\Store\Model\ScopeInterface;
@@ -54,7 +54,7 @@ class Transport implements TransportInterface
     private $zendTransport;
 
     /**
-     * @var Message
+     * @var MessageInterface
      */
     private $message;
 
@@ -64,13 +64,13 @@ class Transport implements TransportInterface
     private $zendMessage;
 
     /**
-     * @param Message $message Email message object
+     * @param MessageInterface $message Email message object
      * @param ScopeConfigInterface $scopeConfig Core store config
      * @param ZendMessage $zendMessage
      * @param null|string|array|\Traversable $parameters Config options for sendmail parameters
      */
     public function __construct(
-        Message $message,
+        MessageInterface $message,
         ScopeConfigInterface $scopeConfig,
         ZendMessage $zendMessage,
         $parameters = null
