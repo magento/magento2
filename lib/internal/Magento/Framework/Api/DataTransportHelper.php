@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Api;
 
 use Exception;
+use LogicException;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\ObjectManager\ConfigInterface;
@@ -17,8 +18,28 @@ use Magento\Framework\Reflection\TypeProcessor;
 use ReflectionException;
 use Zend\Code\Reflection\ClassReflection;
 
-class ImmutableDataObjectHelper
+/**
+ * Data transport helper for DTO manipulation. Supports both mutable and immutable DTO.
+ *
+ * @api
+ */
+class DataTransportHelper
 {
+    /**
+     * Strategy for setter hydration
+     */
+    public const HYDRATOR_STRATEGY_SETTER = 'setter';
+
+    /**
+     * Strategy for constructor parameters injection
+     */
+    public const HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM = 'constructor';
+
+    /**
+     * Strategy for constructor data parameter injection
+     */
+    public const HYDRATOR_STRATEGY_CONSTRUCTOR_DATA = 'data';
+
     /**
      * @var ConfigInterface
      */
@@ -112,47 +133,79 @@ class ImmutableDataObjectHelper
     }
 
     /**
+     * Return the strategy for values injection.
+     *
+     *
      * @param string $className
      * @param array $data
      * @return array
      * @throws ReflectionException
      */
-    private function getConstructorData(string $className, array $data): array
+    public function getValuesHydratingStrategy(string $className, array $data): array
     {
+        $strategy = [
+            self::HYDRATOR_STRATEGY_SETTER => [],
+            self::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM => [],
+            self::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA => [],
+        ];
+
         $className = $this->getRealClassName($className);
         $class = new ClassReflection($className);
 
+        // Check for setters
+        foreach ($data as $propertyName => $propertyValue) {
+            $camelCaseProperty = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName);
+            try {
+                $setterMethod = $this->nameFinder->getSetterMethodName($class, $camelCaseProperty);
+                $type = $this->getPropertyTypeFromGetterMethod($class, $propertyName);
+                if ($type !== '') {
+                    $strategy[self::HYDRATOR_STRATEGY_SETTER][$propertyName] = [
+                        'type' => $type,
+                        'method' => $setterMethod
+                    ];
+                }
+
+            } catch (LogicException $e) {
+                unset($e);
+            }
+        }
+
+        // Check for constructor parameters
         $constructor = $class->getConstructor();
         if ($constructor === null) {
-            return [];
+            return $strategy;
         }
 
         // Inject data field if existing for backward compatibility with
         // \Magento\Framework\DataObject
         if ($this->isDataObjectModel($class->getName())) {
-            $res['data'] = [];
             foreach ($data as $propertyName => $propertyValue) {
                 // Find data getter to retrieve its type
-                $snakeCaseProperty = SimpleDataObjectConverter::camelCaseToSnakeCase($propertyName);
                 $type = $this->getPropertyTypeFromGetterMethod($class, $propertyName);
                 if ($type !== '') {
-                    $res['data'][$snakeCaseProperty] = $this->getTypeValue($propertyValue, $type);
+                    $strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA][$propertyName] = [
+                        'type' => $type
+                    ];
                 }
             }
-        } else {
-            // Inject into named parameters if a getter method exists
-            $res = [];
-            $parameters = $constructor->getParameters();
-            foreach ($parameters as $parameter) {
-                $type = $this->getPropertyTypeFromGetterMethod($class, $parameter->getName());
-                $snakeCaseProperty = SimpleDataObjectConverter::camelCaseToSnakeCase($parameter->getName());
-                if (($type !== '') && isset($data[$snakeCaseProperty])) {
-                    $res[$parameter->getName()] = $this->getTypeValue($data[$snakeCaseProperty], $type);
-                }
+
+            return $strategy;
+        }
+
+        // Inject into named parameters if a getter method exists
+        $parameters = $constructor->getParameters();
+        foreach ($parameters as $parameter) {
+            $type = $this->getPropertyTypeFromGetterMethod($class, $parameter->getName());
+            $snakeCaseProperty = SimpleDataObjectConverter::camelCaseToSnakeCase($parameter->getName());
+            if (($type !== '') && isset($data[$snakeCaseProperty])) {
+                $strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM][$snakeCaseProperty] = [
+                    'parameter' => $parameter->getName(),
+                    'type' => $type
+                ];
             }
         }
 
-        return $res;
+        return $strategy;
     }
 
     /**
@@ -189,8 +242,31 @@ class ImmutableDataObjectHelper
      */
     public function createFromArray(array $data, string $interfaceName)
     {
-        $constructorArgs = $this->getConstructorData($interfaceName, $data);
-        $resObject = $this->objectFactory->create($interfaceName, $constructorArgs);
+        $strategy = $this->getValuesHydratingStrategy($interfaceName, $data);
+
+        $constructorParams = [];
+        foreach ($strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM] as $paramData => $info) {
+            $paramConstructor = $info['parameter'];
+            $paramType = $info['type'];
+            $constructorParams[$paramConstructor] = $this->getTypeValue($data[$paramData], $paramType);
+        }
+
+        if (!empty($strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA])) {
+            $constructorParams['data'] = [];
+
+            foreach ($strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA] as $paramData => $info) {
+                $paramType = $info['type'];
+                $constructorParams['data'][$paramData] = $this->getTypeValue($data[$paramData], $paramType);
+            }
+        }
+
+        $resObject = $this->objectFactory->create($interfaceName, $constructorParams);
+
+        foreach ($strategy[self::HYDRATOR_STRATEGY_SETTER] as $paramData => $info) {
+            $methodName = $info['method'];
+            $paramType = $info['type'];
+            $resObject->$methodName($this->getTypeValue($data[$paramData], $paramType));
+        }
 
         if ($this->isDataModel($interfaceName)) {
             $resObject->setDataChanges(true);
