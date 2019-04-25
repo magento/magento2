@@ -71,6 +71,7 @@ class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
                 $result = [];
                 foreach ($undeclaredDependency as $name => $modules) {
                     $modules = array_unique($modules);
+                    $result[] = $this->getErrorMessage($name) . "\n" . implode("\t\n", $modules) . "\n";
                 }
                 if (!empty($result)) {
                     $this->fail(
