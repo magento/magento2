@@ -16,6 +16,7 @@ use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
 use Magento\InventorySalesApi\Model\ReturnProcessor\Request\ItemsToRefundInterfaceFactory;
 use Magento\Sales\Api\Data\CreditmemoItemInterface as CreditmemoItem;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 
 class DeductSourceItemQuantityOnRefundObserver implements ObserverInterface
 {
@@ -45,24 +46,32 @@ class DeductSourceItemQuantityOnRefundObserver implements ObserverInterface
     private $deductSourceItemQuantityOnRefund;
 
     /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
      * @param GetSkuFromOrderItemInterface $getSkuFromOrderItem
      * @param ItemsToRefundInterfaceFactory $itemsToRefundFactory
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      * @param DeductSourceItemQuantityOnRefund $deductSourceItemQuantityOnRefund
+     * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         GetSkuFromOrderItemInterface $getSkuFromOrderItem,
         ItemsToRefundInterfaceFactory $itemsToRefundFactory,
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
         GetProductTypesBySkusInterface $getProductTypesBySkus,
-        DeductSourceItemQuantityOnRefund $deductSourceItemQuantityOnRefund
+        DeductSourceItemQuantityOnRefund $deductSourceItemQuantityOnRefund,
+        OrderRepositoryInterface $orderRepository
     ) {
         $this->getSkuFromOrderItem = $getSkuFromOrderItem;
         $this->itemsToRefundFactory = $itemsToRefundFactory;
         $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
         $this->getProductTypesBySkus = $getProductTypesBySkus;
         $this->deductSourceItemQuantityOnRefund = $deductSourceItemQuantityOnRefund;
+        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -73,7 +82,7 @@ class DeductSourceItemQuantityOnRefundObserver implements ObserverInterface
     {
         /* @var $creditmemo \Magento\Sales\Model\Order\Creditmemo */
         $creditmemo = $observer->getEvent()->getCreditmemo();
-        $order = $creditmemo->getOrder();
+        $order = $this->orderRepository->get($creditmemo->getOrderId());
         $itemsToRefund = $refundedOrderItemIds = [];
         /** @var CreditmemoItem $item */
         foreach ($creditmemo->getItems() as $item) {
