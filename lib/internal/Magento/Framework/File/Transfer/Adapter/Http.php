@@ -6,28 +6,46 @@
 
 namespace Magento\Framework\File\Transfer\Adapter;
 
+use Magento\Framework\HTTP\PhpEnvironment\Response;
+use Magento\Framework\File\Mime;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\ObjectManager;
+use Zend\Http\Headers;
+
+/**
+ * File adapter to send the file to the client.
+ */
 class Http
 {
     /**
-     * @var \Magento\Framework\HTTP\PhpEnvironment\Response
+     * @var Response
      */
     private $response;
 
     /**
-     * @var \Magento\Framework\File\Mime
+     * @var Mime
      */
     private $mime;
 
     /**
-     * @param \Magento\Framework\App\Response\Http $response
-     * @param \Magento\Framework\File\Mime $mime
+     * @var HttpRequest
+     */
+    private $request;
+
+    /**
+     * @param Response $response
+     * @param Mime $mime
+     * @param HttpRequest|null $request
      */
     public function __construct(
-        \Magento\Framework\HTTP\PhpEnvironment\Response $response,
-        \Magento\Framework\File\Mime $mime
+        Response $response,
+        Mime $mime,
+        HttpRequest $request = null
     ) {
         $this->response = $response;
         $this->mime = $mime;
+        $objectManager = ObjectManager::getInstance();
+        $this->request = $request ?: $objectManager->get(HttpRequest::class);
     }
 
     /**
@@ -46,18 +64,17 @@ class Http
             throw new \InvalidArgumentException("File '{$filepath}' does not exists.");
         }
 
-        $mimeType = $this->mime->getMimeType($filepath);
-        if (is_array($options) && isset($options['headers']) && $options['headers'] instanceof \Zend\Http\Headers) {
-            $this->response->setHeaders($options['headers']);
-        }
-        $this->response->setHeader('Content-length', filesize($filepath));
-        $this->response->setHeader('Content-Type', $mimeType);
+        $this->prepareResponse($options, $filepath);
 
-        $this->response->sendHeaders();
+        if ($this->request->isHead()) {
+            // Do not send the body on HEAD requests.
+            return;
+        }
 
         $handle = fopen($filepath, 'r');
         if ($handle) {
             while (($buffer = fgets($handle, 4096)) !== false) {
+                // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
                 echo $buffer;
             }
             if (!feof($handle)) {
@@ -87,5 +104,23 @@ class Http
         }
 
         return $filePath;
+    }
+
+    /**
+     * Set and send all necessary headers.
+     *
+     * @param array $options
+     * @param string $filepath
+     */
+    private function prepareResponse($options, string $filepath): void
+    {
+        $mimeType = $this->mime->getMimeType($filepath);
+        if (is_array($options) && isset($options['headers']) && $options['headers'] instanceof Headers) {
+            $this->response->setHeaders($options['headers']);
+        }
+        $this->response->setHeader('Content-length', filesize($filepath));
+        $this->response->setHeader('Content-Type', $mimeType);
+
+        $this->response->sendHeaders();
     }
 }
