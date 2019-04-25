@@ -5,20 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MessageQueue\Api;
+namespace Magento\Framework\MessageQueue\PoisonPill;
 
 /**
  * Command interface describes how to create new version on poison pill.
- *
- * @api
  */
 interface PoisonPillPutInterface
 {
     /**
      * Put new version of poison pill inside DB.
      *
-     * @return int
+     * @return string
      * @throws \Exception
      */
-    public function put(): int;
+    public function put(): string;
 }
