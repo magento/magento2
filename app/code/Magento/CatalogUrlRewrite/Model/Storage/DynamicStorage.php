@@ -8,10 +8,12 @@ declare(strict_types=1);
 namespace Magento\CatalogUrlRewrite\Model\Storage;
 
 use Magento\Catalog\Model\ResourceModel\ProductFactory;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
+use Magento\Store\Model\ScopeInterface;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\Storage\DbStorage as BaseDbStorage;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
@@ -37,24 +39,21 @@ class DynamicStorage extends BaseDbStorage
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param ResourceConnection $resource
+     * @param ScopeConfigInterface $config
+     * @param ProductFactory $productFactory
      * @param LoggerInterface|null $logger
-     * @param ScopeConfigInterface|null $config
-     * @param ProductFactory|null $productFactory
-     * @throws \RuntimeException
      */
     public function __construct(
         UrlRewriteFactory $urlRewriteFactory,
         DataObjectHelper $dataObjectHelper,
         ResourceConnection $resource,
-        LoggerInterface $logger = null,
-        ScopeConfigInterface $config = null,
-        ProductFactory $productFactory = null
+        ScopeConfigInterface $config,
+        ProductFactory $productFactory,
+        LoggerInterface $logger = null
     ) {
         parent::__construct($urlRewriteFactory, $dataObjectHelper, $resource, $logger);
-        $this->config = $config ?? \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(ScopeConfigInterface::class);
-        $this->productFactory = $productFactory ?? \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(ProductFactory::class);
+        $this->config = $config;
+        $this->productFactory = $productFactory;
     }
 
     /**
@@ -145,8 +144,8 @@ class DynamicStorage extends BaseDbStorage
     private function getCategoryUrlSuffix($storeId = null)
     {
         return $this->config->getValue(
-            \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -161,7 +160,7 @@ class DynamicStorage extends BaseDbStorage
     {
         $requestPath = $data[UrlRewrite::REQUEST_PATH] ?? null;
 
-        $productUrl = basename($requestPath);
+        $productUrl = $this->getBaseName($requestPath);
         $data[UrlRewrite::REQUEST_PATH] = [$productUrl];
 
         $productFromDb = $this->connection->fetchRow($this->prepareSelect($data));
@@ -230,7 +229,7 @@ class DynamicStorage extends BaseDbStorage
             $data[UrlRewrite::ENTITY_TYPE] = 'category';
             $categoryFromDb = $this->connection->fetchRow($this->prepareSelect($data));
             foreach ($productsFromDb as $productFromDb) {
-                $productUrl = basename($productFromDb[UrlRewrite::REQUEST_PATH]);
+                $productUrl = $this->getBaseName($productFromDb[UrlRewrite::REQUEST_PATH]);
                 $productFromDb[UrlRewrite::REQUEST_PATH] = str_replace(
                     $this->getCategoryUrlSuffix($data[UrlRewrite::STORE_ID]),
                     '',
@@ -244,5 +243,14 @@ class DynamicStorage extends BaseDbStorage
         }
 
         return $rewrites;
+    }
+
+    /**
+     * @param string|null $string
+     * @return mixed
+     */
+    private function getBaseName($string)
+    {
+        return preg_replace('|.*?([^/])+$|', '\1', $string, 1);
     }
 }

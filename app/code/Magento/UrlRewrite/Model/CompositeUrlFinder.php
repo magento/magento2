@@ -94,7 +94,7 @@ class CompositeUrlFinder implements UrlFinderInterface
             $urlFinder = $this->objectManager->get($child['class']);
             $rewrites = $urlFinder->findAllByData($data);
             if (!$isDynamicRewrites) {
-               return $rewrites;
+                return $rewrites;
             }
             $mergeDataProvider->merge($rewrites);
         }
