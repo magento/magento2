@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14691"/>
             <group value="checkout"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <!-- Create virtual product -->
@@ -38,6 +39,7 @@
 
         <!-- Remove product from cart -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCart"/>
+        <waitForPageLoad stepKey="waitForCartPageLoad"/>
         <actionGroup ref="DeleteProductFromShoppingCartActionGroup" stepKey="deleteProduct">
             <argument name="productName" value="$$createVirtualProduct.name$$"/>
         </actionGroup>
