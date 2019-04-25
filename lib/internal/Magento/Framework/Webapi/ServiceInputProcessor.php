@@ -9,18 +9,24 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Webapi;
 
+use InvalidArgumentException;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
+use Magento\Framework\Reflection\NameFinder;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
+use ReflectionException;
 use Zend\Code\Reflection\ClassReflection;
 
 /**
@@ -31,35 +37,35 @@ use Zend\Code\Reflection\ClassReflection;
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
-    const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
+    const EXTENSION_ATTRIBUTES_TYPE = ExtensionAttributesInterface::class;
 
     /**
-     * @var \Magento\Framework\Reflection\TypeProcessor
+     * @var TypeProcessor
      */
     protected $typeProcessor;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Api\AttributeValueFactory
+     * @var AttributeValueFactory
      */
     protected $attributeValueFactory;
 
     /**
-     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface
+     * @var CustomAttributeTypeLocatorInterface
      */
     protected $customAttributeTypeLocator;
 
     /**
-     * @var \Magento\Framework\Reflection\MethodsMap
+     * @var MethodsMap
      */
     protected $methodsMap;
 
     /**
-     * @var \Magento\Framework\Reflection\NameFinder
+     * @var NameFinder
      */
     private $nameFinder;
 
@@ -111,24 +117,24 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $this->customAttributeTypeLocator = $customAttributeTypeLocator;
         $this->methodsMap = $methodsMap;
         $this->serviceTypeToEntityTypeMap = $serviceTypeToEntityTypeMap
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ServiceTypeToEntityTypeMap::class);
+            ?: ObjectManager::getInstance()->get(ServiceTypeToEntityTypeMap::class);
         $this->config = $config
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ConfigInterface::class);
+            ?: ObjectManager::getInstance()->get(ConfigInterface::class);
         $this->customAttributePreprocessors = $customAttributePreprocessors;
     }
 
     /**
      * The getter function to get the new NameFinder dependency
      *
-     * @return \Magento\Framework\Reflection\NameFinder
+     * @return NameFinder
      *
      * @deprecated 100.1.0
      */
     private function getNameFinder()
     {
         if ($this->nameFinder === null) {
-            $this->nameFinder = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Reflection\NameFinder::class);
+            $this->nameFinder = ObjectManager::getInstance()
+                ->get(NameFinder::class);
         }
         return $this->nameFinder;
     }
@@ -146,7 +152,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $serviceMethodName name of the method that we are trying to call
      * @param array $inputArray data to send to method in key-value format
      * @return array list of parameters that can be used to call the service method
-     * @throws WebapiException
+     * @throws Exception
+     * @throws InputException
+     * @throws LocalizedException
      */
     public function process($serviceClassName, $serviceMethodName, array $inputArray)
     {
@@ -156,21 +164,17 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             $paramName = $param[MethodsMap::METHOD_META_NAME];
             $snakeCaseParamName = strtolower(preg_replace("/(?<=\\w)(?=[A-Z])/", "_$1", $paramName));
             if (isset($inputArray[$paramName]) || isset($inputArray[$snakeCaseParamName])) {
-                $paramValue = isset($inputArray[$paramName])
-                    ? $inputArray[$paramName]
-                    : $inputArray[$snakeCaseParamName];
+                $paramValue = $inputArray[$paramName] ?? $inputArray[$snakeCaseParamName];
 
                 try {
                     $inputData[] = $this->convertValue($paramValue, $param[MethodsMap::METHOD_META_TYPE]);
                 } catch (SerializationException $e) {
                     throw new WebapiException(new Phrase($e->getMessage()));
                 }
+            } else if ($param[MethodsMap::METHOD_META_HAS_DEFAULT_VALUE]) {
+                $inputData[] = $param[MethodsMap::METHOD_META_DEFAULT_VALUE];
             } else {
-                if ($param[MethodsMap::METHOD_META_HAS_DEFAULT_VALUE]) {
-                    $inputData[] = $param[MethodsMap::METHOD_META_DEFAULT_VALUE];
-                } else {
-                    $inputError[] = $paramName;
-                }
+                $inputError[] = $paramName;
             }
         }
         $this->processInputError($inputError);
@@ -183,8 +187,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $className
      * @param array $data
      * @return array
-     * @throws \ReflectionException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws ReflectionException
+     * @throws LocalizedException
      */
     private function getConstructorData(string $className, array $data): array
     {
@@ -193,7 +197,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
 
         try {
             $constructor = $class->getMethod('__construct');
-        } catch (\ReflectionException $e) {
+        } catch (ReflectionException $e) {
             $constructor = null;
         }
 
@@ -209,9 +213,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
 
                 try {
                     $res[$parameter->getName()] = $this->convertValue($data[$parameter->getName()], $parameterType);
-                } catch (\ReflectionException $e) {
-                    // Parameter was not correclty declared or the class is uknown.
-                    // By not returing the contructor value, we will automatically fall back to the "setters" way.
+                } catch (ReflectionException $e) {
+                    // Parameter was not correctly declared or the class is unknown.
+                    // By not returning the constructor value, we will automatically fall back to the "setters" way.
                     continue;
                 }
             }
@@ -265,9 +269,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 } catch (\Exception $e) {
                     if (empty($value)) {
                         continue;
-                    } else {
-                        throw $e;
                     }
+
+                    throw $e;
                 }
                 try {
                     if ($camelCaseProperty === 'CustomAttributes') {
@@ -287,6 +291,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 $object->{$setterName}($setterValue);
             }
         }
+
         return $object;
     }
 
@@ -297,6 +302,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $dataObjectClassName
      * @return AttributeValue[]
      * @throws SerializationException
+     * @throws LocalizedException
      */
     protected function convertCustomAttributeValue($customAttributesValueArray, $dataObjectClassName)
     {
@@ -308,7 +314,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             if (!is_array($customAttribute)) {
                 $customAttribute = [AttributeValue::ATTRIBUTE_CODE => $key, AttributeValue::VALUE => $customAttribute];
             }
-            list($customAttributeCode, $customAttributeValue) = $this->processCustomAttribute($customAttribute);
+
+            [$customAttributeCode, $customAttributeValue] = $this->processCustomAttribute($customAttribute);
             $entityType = $this->serviceTypeToEntityTypeMap->getEntityType($dataObjectClassName);
             if ($entityType) {
                 $type = $this->customAttributeTypeLocator->getType(
@@ -319,8 +326,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 $type = TypeProcessor::ANY_TYPE;
             }
 
-            if ($this->typeProcessor->isTypeAny($type) || $this->typeProcessor->isTypeSimple($type)
-                || !is_array($customAttributeValue)
+            if (!is_array($customAttributeValue)
+                || $this->typeProcessor->isTypeAny($type) || $this->typeProcessor->isTypeSimple($type)
             ) {
                 try {
                     $attributeValue = $this->convertValue($customAttributeValue, $type);
@@ -408,13 +415,17 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             throw new SerializationException(
                 new Phrase('An empty custom attribute is specified. Enter the attribute and try again.')
             );
-        } elseif (!$customAttributeCode) {
+        }
+
+        if (!$customAttributeCode) {
             throw new SerializationException(
                 new Phrase(
                     'A custom attribute is specified with a missing attribute code. Verify the code and try again.'
                 )
             );
-        } elseif (!array_key_exists(AttributeValue::VALUE, $customAttribute)) {
+        }
+
+        if (!array_key_exists(AttributeValue::VALUE, $customAttribute)) {
             throw new SerializationException(
                 new Phrase(
                     'The "' . $customAttributeCode .
@@ -432,10 +443,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $type The type of data object to create
      * @param array $customAttributeValue The data object values
      * @return mixed
+     * @throws SerializationException
      */
     protected function _createDataObjectForTypeAndArrayValue($type, $customAttributeValue)
     {
-        if (substr($type, -2) === "[]") {
+        if (substr($type, -2) === '[]') {
             $type = substr($type, 0, -2);
             $attributeValue = [];
             foreach ($customAttributeValue as $value) {
@@ -454,7 +466,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param mixed $data
      * @param string $type Convert given value to the this type
      * @return mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function convertValue($data, $type)
     {
@@ -464,20 +476,17 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         }
         if ($this->typeProcessor->isTypeSimple($type) || $this->typeProcessor->isTypeAny($type)) {
             $result = $this->typeProcessor->processSimpleAndAnyType($data, $type);
-        } else {
-            /** Complex type or array of complex types */
-            if ($isArrayType) {
-                // Initializing the result for array type else it will return null for empty array
-                $result = is_array($data) ? [] : null;
-                $itemType = $this->typeProcessor->getArrayItemType($type);
-                if (is_array($data)) {
-                    foreach ($data as $key => $item) {
-                        $result[$key] = $this->_createFromArray($itemType, $item);
-                    }
+        } else if ($isArrayType) {
+            // Initializing the result for array type else it will return null for empty array
+            $result = is_array($data) ? [] : null;
+            $itemType = $this->typeProcessor->getArrayItemType($type);
+            if (is_array($data)) {
+                foreach ($data as $key => $item) {
+                    $result[$key] = $this->_createFromArray($itemType, $item);
                 }
-            } else {
-                $result = $this->_createFromArray($type, $data);
             }
+        } else {
+            $result = $this->_createFromArray($type, $data);
         }
         return $result;
     }
@@ -487,7 +496,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      *
      * @param array|mixed $value
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function _removeSoapItemNode($value)
     {
@@ -498,7 +507,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 return [$value['item']];
             }
         } else {
-            throw new \InvalidArgumentException('Value must be an array and must contain "item" field.');
+            throw new InvalidArgumentException('Value must be an array and must contain "item" field.');
         }
         /**
          * In case when only one Data object value is passed, it will not be wrapped into a subarray
