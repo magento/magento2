@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Controller;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -121,9 +122,9 @@ class GraphQl implements FrontControllerInterface
      * Handle GraphQL request
      *
      * @param RequestInterface $request
-     * @return Response
+     * @return ResponseInterface
      */
-    public function dispatch(RequestInterface $request) : HttpResponse
+    public function dispatch(RequestInterface $request) : ResponseInterface
     {
         $statusCode = 200;
         $jsonResult = $this->jsonFactory->create();
