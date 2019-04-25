@@ -210,6 +210,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     }
 
     /**
+     * Add 'use default checkbox' to attributes that can have it.
+     *
      * @param Category $category
      * @param array $meta
      * @return array
@@ -501,6 +503,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
                     $stat = $fileInfo->getStat($fileName);
                     $mime = $fileInfo->getMimeType($fileName);
 
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $categoryData[$attributeCode][0]['name'] = basename($fileName);
 
                     if ($fileInfo->isBeginsWithMediaDirectoryPath($fileName)) {
@@ -536,6 +539,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     }
 
     /**
+     * List form field sets and fields.
+     *
      * @return array
      * @since 101.0.0
      */
