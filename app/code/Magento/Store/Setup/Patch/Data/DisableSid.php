@@ -11,8 +11,7 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 use \Magento\Framework\App\Config\MutableScopeConfigInterface;
 
 /**
- * Class CreateDefaultPages
- * @package Magento\Cms\Setup\Patch
+ * Disable default frontend SID
  */
 class DisableSid implements DataPatchInterface, PatchVersionInterface
 {
@@ -28,34 +27,31 @@ class DisableSid implements DataPatchInterface, PatchVersionInterface
     private $mutableScopeConfig;
 
     /**
-     * @var string
+     * scope type
      */
-    protected $_scopeType;
+    const SCOPE_STORE = 'store';
 
     /**
      * Disable Sid constructor.
+     *
      * @param MutableScopeConfigInterface $mutableScopeConfig
-     * @param string $scopeType
      */
     public function __construct(
-        MutableScopeConfigInterface $mutableScopeConfig,
-        $scopeType
+        MutableScopeConfigInterface $mutableScopeConfig
     ) {
-        $this->mutableScopeConfig=$mutableScopeConfig;
-        $this->_scopeType=$scopeType;
+        $this->mutableScopeConfig = $mutableScopeConfig;
     }
 
     /**
-     * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @inheritdoc
      */
     public function apply()
     {
-        $this->mutableScopeConfig->setValue(self::XML_PATH_USE_FRONTEND_SID, 0, $this->_scopeType);
+        $this->mutableScopeConfig->setValue(self::XML_PATH_USE_FRONTEND_SID, 0, self::SCOPE_STORE);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -63,7 +59,7 @@ class DisableSid implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -71,7 +67,7 @@ class DisableSid implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

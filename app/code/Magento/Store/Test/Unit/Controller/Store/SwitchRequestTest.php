@@ -13,7 +13,7 @@ use Magento\Customer\Model\Session as CustomerSession;
 use \Magento\Framework\App\DeploymentConfig as DeploymentConfig;
 
 /**
- * Test class for \Magento\Store\Controller\Store\SwitchAction
+ * Test class for \Magento\Store\Controller\Store\SwitchRequest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SwitchRequestTest extends \PHPUnit\Framework\TestCase
@@ -51,7 +51,7 @@ class SwitchRequestTest extends \PHPUnit\Framework\TestCase
     /**
      * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $storeMock;
+    private $fromStoreMock;
 
     /**
      * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -69,7 +69,7 @@ class SwitchRequestTest extends \PHPUnit\Framework\TestCase
             $this->getMockBuilder(CustomerRepositoryInterface::class)->getMock();
         $this->storeRepositoryMock =
             $this->getMockBuilder(\Magento\Store\Api\StoreRepositoryInterface::class)
-                ->disableOriginalConstructor()->setMethods(['get'])->getMockForAbstractClass();
+                ->disableOriginalConstructor()->setMethods(['get', 'getActiveStoreByCode'])->getMockForAbstractClass();
 
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMock();
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
@@ -78,7 +78,7 @@ class SwitchRequestTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()->getMock();
-        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
+        $this->fromStoreMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBaseUrl'])
             ->getMockForAbstractClass();
@@ -120,7 +120,18 @@ class SwitchRequestTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('get')
             ->with($fromStoreCode)
-            ->willReturn($this->storeMock);
+            ->willReturn($this->fromStoreMock);
+
+        $this->storeRepositoryMock
+            ->expects($this->once())
+            ->method('getActiveStoreByCode')
+            ->with($targetStoreCode);
+
+        $this->fromStoreMock
+            ->expects($this->once())
+            ->method('getBaseUrl')
+            ->with(\Magento\Framework\UrlInterface::URL_TYPE_LINK)
+            ->willReturn($expectedRedirectUrl);
 
         $this->responseMock->expects($this->once())->method('setRedirect')->with($expectedRedirectUrl);
         $this->model->execute();

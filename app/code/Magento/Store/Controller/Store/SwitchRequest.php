@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Store\Controller\Store;
 
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Customer\Model\Session as CustomerSession;
@@ -16,11 +16,12 @@ use \Magento\Framework\App\DeploymentConfig as DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use \Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\StoreIsInactiveException;
 
 /**
  * Builds correct url to target store and performs redirect.
  */
-class SwitchRequest extends \Magento\Framework\App\Action\Action
+class SwitchRequest extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
     /**
      * @var StoreRepositoryInterface
@@ -78,10 +79,12 @@ class SwitchRequest extends \Magento\Framework\App\Action\Action
         $error = null;
 
         try {
-            /** @var \Magento\Store\Model\Store $fromStore */
             $fromStore = $this->storeRepository->get($fromStoreCode);
+            $this->storeRepository->getActiveStoreByCode($targetStoreCode);
         } catch (NoSuchEntityException $e) {
             $error = __('Requested store is not found.');
+        } catch (StoreIsInactiveException $e) {
+            $error = __('Requested store is inactive.');
         }
 
         if ($this->validateHash($customerId, $timeStamp, $signature, $fromStoreCode)) {
@@ -101,7 +104,8 @@ class SwitchRequest extends \Magento\Framework\App\Action\Action
 
         if ($error !== null) {
             $this->messageManager->addErrorMessage($error);
-            $this->getResponse()->setRedirect('/');
+            //redirect to previous store
+            $this->getResponse()->setRedirect($fromStore->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK));
         } else {
             $this->getResponse()->setRedirect("/$targetStoreCode");
         }

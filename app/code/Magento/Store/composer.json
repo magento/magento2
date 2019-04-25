@@ -12,7 +12,8 @@
         "magento/module-config": "*",
         "magento/module-directory": "*",
         "magento/module-media-storage": "*",
-        "magento/module-ui": "*"
+        "magento/module-ui": "*",
+        "magento/module-customer":"*"
     },
     "suggest": {
         "magento/module-deploy": "*"

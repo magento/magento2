@@ -13,6 +13,7 @@ use Magento\Customer\Model\Session as CustomerSession;
 use \Magento\Framework\App\DeploymentConfig as DeploymentConfig;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * Generate one time token and build redirect url
@@ -36,18 +37,26 @@ class HashGenerator implements StoreSwitcherInterface
     private $urlHelper;
 
     /**
+     * @var UserContextInterface
+     */
+    private $currentUser;
+
+    /**
      * @param CustomerSession $customerSession
      * @param DeploymentConfig $deploymentConfig
      * @param UrlHelper $urlHelper
+     * @param UserContextInterface $currentUser
      */
     public function __construct(
         CustomerSession $customerSession,
         DeploymentConfig $deploymentConfig,
-        UrlHelper $urlHelper
+        UrlHelper $urlHelper,
+        UserContextInterface $currentUser
     ) {
         $this->customerSession = $customerSession;
         $this->deploymentConfig = $deploymentConfig;
-        $this->urlHelper=$urlHelper;
+        $this->urlHelper = $urlHelper;
+        $this->currentUser = $currentUser;
     }
 
     /**
@@ -61,22 +70,27 @@ class HashGenerator implements StoreSwitcherInterface
     public function switch(StoreInterface $fromStore, StoreInterface $targetStore, string $redirectUrl): string
     {
         $targetUrl = $redirectUrl;
-        $customerId = $this->customerSession->getId();
+        $customerId = null;
+
+        if ($this->currentUser->getUserType() == UserContextInterface::USER_TYPE_CUSTOMER) {
+            $customerId = $this->currentUser->getUserId();
+        }
 
         if ($customerId) {
+            // phpcs:ignore
             $urlParts = parse_url($targetUrl);
             $host = $urlParts['host'];
             $scheme = $urlParts['scheme'];
             $key = (string)$this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
             $timeStamp = time();
             $fromStoreCode = $fromStore->getCode();
-            $targetStoreCode=$targetStore->getCode();
+            $targetStoreCode = $targetStore->getCode();
             $data = implode(',', [$customerId, $timeStamp, $fromStoreCode]);
             $signature = hash_hmac('sha256', $data, $key);
-            $targetUrl = $scheme . "://" . $host.'/stores/store/switchrequest';
+            $targetUrl = $scheme . "://" . $host . '/stores/store/switchrequest';
             $targetUrl = $this->urlHelper->addRequestParam(
                 $targetUrl,
-                ['customer_id' => $this->customerSession->getId()]
+                ['customer_id' => $customerId]
             );
             $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['time_stamp' => time()]);
             $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['signature' => $signature]);
