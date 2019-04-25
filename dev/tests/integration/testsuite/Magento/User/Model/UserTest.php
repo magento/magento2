@@ -113,6 +113,9 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('admin_role', $this->_model->getRole()->getRoleName());
     }
 
+    /**
+     * phpcs:disable Magento2.Functions.StaticFunction
+     */
     public static function roleDataFixture()
     {
         self::$_newRole = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
