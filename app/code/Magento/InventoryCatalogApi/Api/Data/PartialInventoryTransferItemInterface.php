@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalogApi\Api\Data;
 
 /**
+ * Specifies item and quantity for partial inventory transfer.
+ *
  * @api
  */
 interface PartialInventoryTransferItemInterface

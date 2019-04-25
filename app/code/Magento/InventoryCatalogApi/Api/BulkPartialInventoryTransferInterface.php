@@ -7,6 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalogApi\Api;
 
+/**
+ * Transfer Inventory between sources. Moves specified items from origin source to destination source.
+ *
+ * @api
+ */
 interface BulkPartialInventoryTransferInterface
 {
     /**
