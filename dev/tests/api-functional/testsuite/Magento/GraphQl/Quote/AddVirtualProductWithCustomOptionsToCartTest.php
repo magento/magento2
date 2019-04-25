@@ -62,7 +62,7 @@ mutation {
       cartItems: [
         {
           data: {
-            qty: $qty
+            quantity: $qty
             sku: "$sku"
           },
           customizable_options: $queryCustomizableOptions  
@@ -121,7 +121,7 @@ mutation {
       cartItems: [
         {
           data: {
-            qty: $qty
+            quantity: $qty
             sku: "$sku"
           }
         }

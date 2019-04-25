@@ -76,7 +76,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $item = current($responseCart['items']);
 
         $this->assertEquals($itemId, $item['id']);
-        $this->assertEquals($qty, $item['qty']);
+        $this->assertEquals($qty, $item['quantity']);
     }
 
     /**
@@ -229,7 +229,7 @@ mutation {
     cart {
       items {
         id
-        qty
+        quantity
       }
     }
   }
@@ -259,7 +259,7 @@ mutation {
     cart {
       items {
         id
-        qty
+        quantity
       }
     }
   }
@@ -285,7 +285,7 @@ QUERY;
             ],
             'missed_cart_item_qty' => [
                 'cart_items: [{ cart_item_id: 1 }]',
-                'Required parameter "quantity" for "cart_items" is missing.'
+                'Field CartItemUpdateQuantityInput.quantity of required type Float! was not provided.'
             ],
         ];
     }
@@ -312,7 +312,7 @@ mutation {
     cart {
       items {
         id
-        qty
+        quantity
       }
     }
   }
