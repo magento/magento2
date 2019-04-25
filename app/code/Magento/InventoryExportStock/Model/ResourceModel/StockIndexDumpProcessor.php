@@ -18,7 +18,6 @@ use Magento\InventoryExportStock\Model\GetQtyForNotManageStock;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 use Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\ManageStockCondition as NotManageStockCondition;
 use Psr\Log\LoggerInterface;
-use Zend_Db_Expr;
 
 /**
  * Class GetStockIndexDump provides sku and qty of products dumping them from stock index table
@@ -197,8 +196,8 @@ class StockIndexDumpProcessor
         )';
         $select->from(
             ['legacy_stock_item' => $legacyStockItemTable],
-            ['qty' =>new Zend_Db_Expr($ifExpression),
-                new Zend_Db_Expr('"1" as is_salable')]
+            ['qty' =>new \Zend_Db_Expr($ifExpression),
+                new \Zend_Db_Expr('"1" as is_salable')]
         )->join(
             ['product_entity' => $productEntityTable],
             'legacy_stock_item.product_id = product_entity.entity_id',
