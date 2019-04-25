@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Theme\Model\Design\Backend;
 
 use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
@@ -109,10 +110,7 @@ class File extends BackendFile
     }
 
     /**
-     * After Load
-     *
-     * @return File
-     * @throws LocalizedException
+     * @inheritDoc
      */
     public function afterLoad()
     {
