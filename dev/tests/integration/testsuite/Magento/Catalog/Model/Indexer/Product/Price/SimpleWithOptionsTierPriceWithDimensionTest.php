@@ -42,11 +42,14 @@ class SimpleWithOptionsTierPriceWithDimensionTest extends \PHPUnit\Framework\Tes
 
     /**
      * @magentoDbIsolation disabled
-     * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
+     * @--magentoIndexerDimensionMode catalog_product_price website_and_customer_group
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      */
     public function testTierPrice()
     {
+        $this->markTestSkipped(
+            'Skipped because of MAGETWO-99136'
+        );
         $tierPriceValue = 9.00;
 
         $tierPrice = $this->objectManager->create(ProductTierPriceInterfaceFactory::class)

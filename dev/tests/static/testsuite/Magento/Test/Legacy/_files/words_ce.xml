@@ -69,5 +69,8 @@
         <item>
             <path>dev/build/publication/sanity/ce.xml</path>
         </item>
+        <item>
+            <path>dev/composer.lock</path>
+        </item>
     </whitelist>
 </config>

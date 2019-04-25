@@ -74,7 +74,7 @@ class PlaceOrder extends AbstractAction
             $this->logger->critical($e);
             $this->messageManager->addExceptionMessage(
                 $e,
-                'The order #' . $quote->getReservedOrderId() . ' cannot be processed.'
+                __('The order #%1 cannot be processed.', $quote->getReservedOrderId())
             );
         }
 

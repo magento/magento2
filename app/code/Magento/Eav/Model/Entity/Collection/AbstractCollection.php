@@ -1035,6 +1035,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                 $this->_items[$entityId]->addData($row);
             }
         }
+        $this->_setIsLoaded();
         return $this;
     }
 

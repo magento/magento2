@@ -12,6 +12,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Block\Product\View\GalleryOptions;
 
 class GalleryTest extends \PHPUnit\Framework\TestCase
 {
@@ -41,10 +42,12 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         /** @var Gallery $block */
         $block = $layout->createBlock(Gallery::class);
         $block->setData('product', $product);
+        $galleryoptions = $this->objectManager->get(GalleryOptions::class);
+        $block->setData('gallery_options', $galleryoptions);
         $block->setTemplate("Magento_Catalog::product/view/gallery.phtml");
 
         $showCaption = $block->getVar('gallery/caption');
 
-        self::assertContains('"showCaption": ' . $showCaption, $block->toHtml());
+        self::assertContains('"showCaption":' . $showCaption, $block->toHtml());
     }
 }
