@@ -27,7 +27,7 @@ class OnInsertTest extends AbstractBackendController
     {
         $this->prepareRequest();
         $this->dispatch('backend/cms/wysiwyg_images/onInsert');
-        $this->assertRegExp('/pub\/media\/wysiwyg\/testFilename/', $this->getResponse()->getBody());
+        $this->assertRegExp('/pub\/media\/testFilename/', $this->getResponse()->getBody());
     }
 
     /**
