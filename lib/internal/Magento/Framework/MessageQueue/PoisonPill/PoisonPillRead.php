@@ -19,8 +19,8 @@ class PoisonPillRead implements PoisonPillReadInterface
      *
      * @return string
      */
-    public function getLatestVersion(): ?string
+    public function getLatestVersion(): string
     {
-        return null;
+        return '';
     }
 }

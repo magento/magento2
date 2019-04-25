@@ -35,6 +35,6 @@ class PoisonPillCompare implements PoisonPillCompareInterface
      */
     public function isLatestVersion(string $poisonPillVersion): bool
     {
-        return (string) $poisonPillVersion === (string) $this->poisonPillRead->getLatestVersion();
+        return $poisonPillVersion === $this->poisonPillRead->getLatestVersion();
     }
 }

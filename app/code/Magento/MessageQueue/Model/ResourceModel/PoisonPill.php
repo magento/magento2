@@ -50,7 +50,7 @@ class PoisonPill extends AbstractDb implements PoisonPillPutInterface, PoisonPil
     /**
      * @inheritdoc
      */
-    public function getLatestVersion(): ?string
+    public function getLatestVersion(): string
     {
         return $this->getVersionFromDb();
     }
@@ -58,9 +58,9 @@ class PoisonPill extends AbstractDb implements PoisonPillPutInterface, PoisonPil
     /**
      * Returns version form DB or null.
      *
-     * @return string|null
+     * @return string
      */
-    private function getVersionFromDb(): ?string
+    private function getVersionFromDb(): string
     {
         $select = $this->getConnection()->select()->from(
             $this->getTable(self::QUEUE_POISON_PILL_TABLE),
@@ -69,6 +69,6 @@ class PoisonPill extends AbstractDb implements PoisonPillPutInterface, PoisonPil
 
         $result = $this->getConnection()->fetchOne($select);
 
-        return $result === false ? null : $result;
+        return (string)$result;
     }
 }

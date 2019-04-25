@@ -17,5 +17,5 @@ interface PoisonPillReadInterface
      *
      * @return string
      */
-    public function getLatestVersion(): ?string;
+    public function getLatestVersion(): string;
 }
