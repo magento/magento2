@@ -312,7 +312,7 @@ define([
                         callback.call(this, elem, response);
                         currentURL = window.location.pathname;
                         if (currentURL.includes("/checkout/cart/")) {
-                            $("#shopping-cart-table").trigger('contentUpdated');
+                            location.reload();
                         }
                     } else {
                         msg = response['error_message'];
