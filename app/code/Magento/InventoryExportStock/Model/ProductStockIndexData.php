@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\InventoryExportStock\Model;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryExportStockApi\Api\Data\ProductStockIndexDataInterface;
 
 /**
  * Class ProductStockIndexData
  */
-class ProductStockIndexData extends AbstractExtensibleModel implements ProductStockIndexDataInterface
+class ProductStockIndexData extends AbstractModel implements ProductStockIndexDataInterface
 {
     /**
      * @inheritDoc

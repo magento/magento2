@@ -12,7 +12,9 @@
     "magento/module-catalog-inventory": "*",
     "magento/module-inventory-indexer": "*",
     "magento/module-inventory-configuration": "*",
-    "magento/module-inventory-configuration-api": "*"
+    "magento/module-inventory-configuration-api": "*",
+    "magento/module-inventory-configurable-product": "*",
+    "magento/module-inventory-grouped-product": "*"
   },
   "type": "magento2-module",
   "license": [
