@@ -36,14 +36,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $authorization;
 
     /**
-     * @var array
-     */
-    protected $designFieldSets = [
-        'design',
-        'custom_design_update',
-    ];
-
-    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -117,7 +109,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
         if (!$this->authorization->isAllowed('Magento_Cms::save_design')) {
             $designMeta = [];
-            foreach ($this->designFieldSets as $fieldSet) {
+            $designFieldSets = ['design', 'custom_design_update'];
+
+            foreach ($designFieldSets as $fieldSet) {
                 $designMeta[$fieldSet] = [
                     'arguments' => [
                         'data' => [
@@ -128,6 +122,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                     ],
                 ];
             }
+
             $meta = array_merge_recursive($meta, $designMeta);
         }
 
