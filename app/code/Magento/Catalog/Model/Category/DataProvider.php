@@ -340,6 +340,9 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
                 }
                 if ($attribute->usesSource()) {
                     $meta[$code]['options'] = $attribute->getSource()->getAllOptions();
+                    foreach ($meta[$code]['options'] as &$option) {
+                        $option['__disableTmpl'] = true;
+                    }
                 }
             }
 
