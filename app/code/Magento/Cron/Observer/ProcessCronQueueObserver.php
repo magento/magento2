@@ -192,6 +192,15 @@ class ProcessCronQueueObserver implements ObserverInterface
     }
 
     /**
+     * return currentTime
+     * @return current timestamp
+    **/
+    public function getCurrentTime()
+    {
+        return $this->dateTime->gmtTimestamp() ;
+    }
+
+    /**
      * Process cron queue
      * Generate tasks schedule
      * Cleanup tasks schedule
@@ -205,7 +214,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
 
-        $currentTime = $this->dateTime->gmtTimestamp();
+        $currentTime = $this->getCurrentTime();
         $jobGroupsRoot = $this->_config->getJobs();
         // sort jobs groups to start from used in separated process
         uksort(
@@ -546,7 +555,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     protected function saveSchedule($jobCode, $cronExpression, $timeInterval, $exists)
     {
-        $currentTime = $this->dateTime->gmtTimestamp();
+        $currentTime = $this->getCurrentTime();
         $timeAhead = $currentTime + $timeInterval;
         for ($time = $currentTime; $time < $timeAhead; $time += self::SECONDS_IN_MINUTE) {
             $scheduledAt = strftime('%Y-%m-%d %H:%M:00', $time);
