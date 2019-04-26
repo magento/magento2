@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="EnableGuestCheckoutWithDownloadableItems">
+        <data key="path">catalog/downloadable/disable_guest_checkout</data>
+        <data key="scope_id">0</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="DisableGuestCheckoutWithDownloadableItems">
+        <data key="path">catalog/downloadable/disable_guest_checkout</data>
+        <data key="scope_id">0</data>
+        <data key="value">1</data>
+    </entity>
+</entities>
