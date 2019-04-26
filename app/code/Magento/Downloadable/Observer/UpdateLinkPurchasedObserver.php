@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Downloadable\Observer;
 
@@ -13,7 +14,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
- * Update link purchased observer
+ * Assign Downloadable links to customer created after issuing guest order.
  */
 class UpdateLinkPurchasedObserver implements ObserverInterface
 {
