@@ -36,5 +36,8 @@
         <element name="stateInput" type="input" selector="input[name=region]"/>
         <element name="regionOptions" type="select" selector="select[name=region_id] option"/>
         <element name="editActiveAddress" type="button" selector="//div[@class='shipping-address-item selected-item']//span[text()='Edit']" timeout="30"/>
+        <element name="password" type="input" selector="#customer-password"/>
+        <element name="loginButton" type="button" selector="//button[@data-action='checkout-method-login']" timeout="30"/>
+        <element name="emailAddress" type="input" selector="#checkout-customer-email"/>
     </section>
 </sections>
