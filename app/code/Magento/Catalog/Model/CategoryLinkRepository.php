@@ -48,10 +48,11 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
         } catch (\Exception $e) {
             throw new CouldNotSaveException(
                 __(
-                    'Could not save product "%1" with position %2 to category %3',
+                    'Could not save product "%1" with position %2 to category %3 : %4',
                     $product->getId(),
                     $productLink->getPosition(),
-                    $category->getId()
+                    $category->getId(),
+                    $e->getMessage()
                 ),
                 $e
             );
@@ -89,11 +90,12 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
         } catch (\Exception $e) {
             throw new CouldNotSaveException(
                 __(
-                    'Could not save product "%product" with position %position to category %category',
+                    'Could not save product "%product" with position %position to category %category %error',
                     [
                         "product" => $product->getId(),
                         "position" => $backupPosition,
-                        "category" => $category->getId()
+                        "category" => $category->getId(),
+                        "error" => $e->getMessage()
                     ]
                 ),
                 $e
