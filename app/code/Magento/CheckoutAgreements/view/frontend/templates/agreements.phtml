@@ -19,7 +19,7 @@
     <?php /** @var \Magento\CheckoutAgreements\Api\Data\AgreementInterface $agreement */ ?>
     <?php foreach ($block->getAgreements() as $agreement) :?>
         <li class="item">
-            <div class="checkout-agreement-item-content"<?= ($agreement->getContentHeight() ? ' style="height:' . $block->escapeHtmlAttr($agreement->getContentHeight()) . '"' : '') ?>>
+            <div class="checkout-agreement-item-content"<?= $block->escapeHtmlAttr($agreement->getContentHeight() ? ' style="height:' . $agreement->getContentHeight() . '"' : '') ?>>
                 <?php if ($agreement->getIsHtml()) :?>
                     <?= /* @noEscape */ $agreement->getContent() ?>
                 <?php else :?>
