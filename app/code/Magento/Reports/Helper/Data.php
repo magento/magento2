@@ -63,22 +63,33 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $dateStart = new \DateTime($from);
         $dateEnd = new \DateTime($to);
+        $dateFormat = 'Y-m-d';
+        $dateInterval = new \DateInterval('P1D');
         while ($dateStart->diff($dateEnd)->invert == 0) {
             switch ($period) {
                 case self::REPORT_PERIOD_TYPE_DAY:
-                    $intervals[] = $dateStart->format('Y-m-d');
-                    $dateStart->add(new \DateInterval('P1D'));
+                    $intervals[] = $dateStart->format($dateFormat);
+                    $dateStart->add($dateInterval);
                     break;
                 case self::REPORT_PERIOD_TYPE_MONTH:
-                    $intervals[] = $dateStart->format('Y-m');
-                    $dateStart->add(new \DateInterval('P1M'));
+                    $dateFormat = 'Y-m';
+                    $dateInterval = new \DateInterval('P1M');
+                    $intervals[] = $dateStart->format($dateFormat);
+                    $dateStart->add($dateInterval);
                     break;
                 case self::REPORT_PERIOD_TYPE_YEAR:
-                    $intervals[] = $dateStart->format('Y');
-                    $dateStart->add(new \DateInterval('P1Y'));
+                    $dateFormat = 'Y';
+                    $dateInterval = new \DateInterval('P1Y');
+                    $intervals[] = $dateStart->format($dateFormat);
+                    $dateStart->add($dateInterval);
                     break;
             }
         }
+
+        if (!in_array($dateEnd->format($dateFormat), $intervals)) {
+            $intervals[] = $dateEnd->format($dateFormat);
+        }
+
         return $intervals;
     }
 

@@ -56,6 +56,13 @@ class Totals extends \Magento\Sales\Test\Block\Adminhtml\Order\Totals
     private $updateTotalsSelector = '.update-totals-button';
 
     /**
+     * Loader css selector.
+     *
+     * @var string
+     */
+    private $loader = '[data-role="loader"]';
+
+    /**
      * Submit invoice.
      *
      * @return void
@@ -126,6 +133,22 @@ class Totals extends \Magento\Sales\Test\Block\Adminhtml\Order\Totals
         $button = $this->_rootElement->find($this->updateTotalsSelector);
         if (!$button->isDisabled()) {
             $button->click();
+            $this->waitLoader();
         }
+    }
+
+    /**
+     * Wait loader to disappear.
+     *
+     * @return void
+     */
+    private function waitLoader()
+    {
+        $this->browser->waitUntil(
+            function () {
+                $element = $this->browser->find($this->loader);
+                return $element->isVisible() == false ? true : null;
+            }
+        );
     }
 }
