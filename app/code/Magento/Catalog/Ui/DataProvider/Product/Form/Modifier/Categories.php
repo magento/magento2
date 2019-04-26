@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
@@ -316,7 +314,9 @@ class Categories extends AbstractModifier
     protected function getCategoriesTree($filter = null)
     {
         $storeId = $this->locator->getStore()->getId();
-        $cacheKey = self::CATEGORY_TREE_ID . '_' . $storeId . '_' . $filter;
+        $cacheKey = $storeId
+            ? self::CATEGORY_TREE_ID . '_' . $storeId . '_' . $filter
+            : self::CATEGORY_TREE_ID . '_' . $filter;
 
         $categoryTree = $this->getCacheManager()->load($cacheKey);
         if ($categoryTree) {
@@ -346,19 +346,6 @@ class Categories extends AbstractModifier
             }
         }
 
-        return $shownCategoriesIds;
-    }
-
-    /**
-     * Retrieve tree of categories with attributes.
-     *
-     * @param int $storeId
-     * @param array $shownCategoriesIds
-     * @return array|null
-     * @throws LocalizedException
-     */
-    private function retrieveCategoriesTree(int $storeId, array $shownCategoriesIds) : ?array
-    {
         /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
         $collection = $this->categoryCollectionFactory->create();
 
