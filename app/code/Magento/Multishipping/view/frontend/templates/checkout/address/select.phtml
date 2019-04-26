@@ -4,21 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Multishipping\Block\Checkout\Address\Select $block */
 ?>
 <div class="multicheckout">
     <div class="block block-billing">
-    <?php foreach ($block->getAddress() as $address): ?>
+    <?php foreach ($block->getAddress() as $address) : ?>
         <div class="box box-billing-address">
             <div class="box-content">
                 <address>
                     <?= $block->getAddressAsHtml($address) ?>
-                    <?php if ($block->isAddressDefaultBilling($address)): ?>
+                    <?php if ($block->isAddressDefaultBilling($address)) : ?>
                         <br /><strong><?= $block->escapeHtml(__('Default Billing')); ?></strong>
                     <?php endif; ?>
-                    <?php if ($block->isAddressDefaultShipping($address)): ?>
+                    <?php if ($block->isAddressDefaultShipping($address)) : ?>
                         <br /><strong><?= $block->escapeHtml(__('Default Shipping')); ?></strong>
                     <?php endif; ?>
                 </address>
