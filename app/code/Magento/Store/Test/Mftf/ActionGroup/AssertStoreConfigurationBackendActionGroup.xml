@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStoreConfigurationBackendActionGroup">
+        <arguments>
+            <argument name="website" type="string"/>
+            <argument name="customStore" type="string"/>
+            <argument name="storeView1" type="string"/>
+            <argument name="storeView2" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigPage.url}}" stepKey="goToConfigStoreConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForSystemStoreConfigurationPageLoad"/>
+        <click selector="{{AdminConfigSection.defaultConfigButton}}" stepKey="clickDefaultConfigButton"/>
+        <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{website}}" stepKey="seeAssertWebsiteInDefaultConfigDropdown"/>
+        <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{customStore}}" stepKey="seeAssertSecondStoreInDefaultConfigDropdown"/>
+        <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{storeView1}}" stepKey="seeAssertFirstStoreViewInDefaultConfigDropdown"/>
+        <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{storeView2}}" stepKey="seeAssertSecondStoreViewInDefaultConfigDropdown"/>
+    </actionGroup>
+</actionGroups>

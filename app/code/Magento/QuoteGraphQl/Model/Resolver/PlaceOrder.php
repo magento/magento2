@@ -65,6 +65,13 @@ class PlaceOrder implements ResolverInterface
 
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
 
+        if ($context->getUserId() === 0) {
+            if (!$cart->getCustomerEmail()) {
+                throw new GraphQlInputException(__("Guest email for cart is missing. Please enter"));
+            }
+            $cart->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
+        }
+
         try {
             $orderId = $this->cartManagement->placeOrder($cart->getId());
             $order = $this->orderRepository->get($orderId);

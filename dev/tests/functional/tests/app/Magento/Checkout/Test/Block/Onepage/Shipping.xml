@@ -8,7 +8,7 @@
 <mapping strict="0">
     <fields>
         <email>
-            <selector>#customer-email</selector>
+            <selector>#checkout-customer-email</selector>
         </email>
         <firstname />
         <lastname />
