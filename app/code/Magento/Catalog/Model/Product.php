@@ -1202,7 +1202,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get formatted by currency product price
      *
-     * @return  array|double
+     * @return array|double
      *
      * @deprecated
      * @see getFormattedPrice()
@@ -1853,7 +1853,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Save current attribute with code $code and assign new value
      *
-     * @param string $code  Attribute code
+     * @param string $code Attribute code
      * @param mixed $value New attribute value
      * @param int $store Store ID
      * @return void
