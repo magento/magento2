@@ -41,6 +41,9 @@
         <!-- Select visual swatch -->
         <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="swatch_visual" stepKey="selectInputType"/>
 
+        <!-- Set Update Product Preview Image to Yes-->
+        <selectOption selector="{{AttributePropertiesSection.UpdateProductPreviewImage}}" userInput="Yes" stepKey="setUpdateProductPreviewImage"/>
+
         <!-- This hack is because the same <input type="file"> is re-purposed used for all uploads. -->
         <executeJS function="HTMLInputElement.prototype.click = function() { if(this.type !== 'file') HTMLElement.prototype.click.call(this); };" stepKey="disableClick"/>
 
