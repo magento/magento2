@@ -38,7 +38,7 @@ class PoisonPill extends AbstractDb implements PoisonPillPutInterface, PoisonPil
         $table = $this->getMainTable();
         $uuid = uniqid('version-');
         $version = $this->getVersionFromDb();
-        if ($version !== null) {
+        if ($version !== '') {
             $connection->update($table, ['version' => $uuid]);
         } else {
             $connection->insert($table, ['version' => $uuid]);
