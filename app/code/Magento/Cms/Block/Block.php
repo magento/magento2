@@ -86,7 +86,7 @@ class Block extends AbstractBlock implements \Magento\Framework\DataObject\Ident
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCacheKeyInfo()
     {
