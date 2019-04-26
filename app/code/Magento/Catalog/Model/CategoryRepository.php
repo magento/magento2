@@ -102,6 +102,9 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
                 }
             }
         } else {
+            //Clearing all redundant data and using only properly extracted data for the entity.
+            /** @var Category $category */
+            $category = $this->categoryFactory->create();
             $parentId = $category->getParentId() ?: $this->storeManager->getStore()->getRootCategoryId();
             $parentCategory = $this->get($parentId, $storeId);
             $existingData['path'] = $parentCategory->getPath();

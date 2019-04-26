@@ -1134,19 +1134,4 @@ class Category extends AbstractResource
         }
         return $this->aggregateCount;
     }
-
-    /**
-     * @inheritDoc
-     *
-     * @param CategoryEntity|object $object
-     */
-    public function validate($object)
-    {
-        $isValid = parent::validate($object);
-        if ($isValid !== true) {
-            return $isValid;
-        }
-
-        return true;
-    }
 }
