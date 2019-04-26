@@ -85,7 +85,8 @@ class CategoryRepositoryTest extends TestCase
 
         $category->setCustomAttribute('custom_design', 2);
         $category = $this->repo->save($category);
-        $this->assertEmpty($category->getCustomAttribute('custom_design'));
+        $customDesignAttribute = $category->getCustomAttribute('custom_design');
+        $this->assertTrue(!$customDesignAttribute || !$customDesignAttribute->getValue());
 
         //Admin has access to category' design.
         $this->aclBuilder->getAcl()
@@ -105,6 +106,7 @@ class CategoryRepositoryTest extends TestCase
         $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_category_design');
         $newCategory->setCustomAttribute('custom_design', 2);
         $newCategory = $this->repo->save($newCategory);
-        $this->assertEmpty($newCategory->getCustomAttribute('custom_design'));
+        $customDesignAttribute = $newCategory->getCustomAttribute('custom_design');
+        $this->assertTrue(!$customDesignAttribute || !$customDesignAttribute->getValue());
     }
 }

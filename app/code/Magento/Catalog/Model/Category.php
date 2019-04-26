@@ -948,12 +948,14 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             )
             && !$this->authorization->isAllowed('Magento_Catalog::edit_category_design')
         ) {
-            $this->setData('custom_design', $this->getOrigData('custom_design'));
-            $this->setData('custom_design_from', $this->getOrigData('custom_design_from'));
-            $this->setData('custom_design_to', $this->getOrigData('custom_design_to'));
-            $this->setData('page_layout', $this->getOrigData('page_layout'));
-            $this->setData('custom_layout_update', $this->getOrigData('custom_layout_update'));
-            $this->setData('custom_apply_to_products', $this->getOrigData('custom_apply_to_products'));
+            $this->getCustomAttributes();
+            foreach ($this->_designAttributes as $attributeCode) {
+                $this->setData($attributeCode, $value = $this->getOrigData($attributeCode));
+                if (array_key_exists($attributeCode, $this->_data[self::CUSTOM_ATTRIBUTES])) {
+                    //In case custom attribute were used to update the entity.
+                    $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]->setValue($value);
+                }
+            }
         }
 
         return parent::beforeSave();
