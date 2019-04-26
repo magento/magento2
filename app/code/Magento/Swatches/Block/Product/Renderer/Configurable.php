@@ -179,6 +179,9 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
                     $attributeDataArray
                 );
             }
+            if (isset($attributeDataArray['additional_data'])) {
+                $config[$attributeId]['additional_data'] = $attributeDataArray['additional_data'];
+            }
         }
 
         return $this->jsonEncoder->encode($config);
