@@ -25,18 +25,26 @@ class TestNestedDto
     private $testDto2;
 
     /**
+     * @var TestDto[]
+     */
+    private $testDtoArray;
+
+    /**
      * @param string $id
      * @param TestDto $testDto1
      * @param TestDto $testDto2
+     * @param TestDto[] $testDtoArray
      */
     public function __construct(
         string $id,
         TestDto $testDto1,
-        TestDto $testDto2
+        TestDto $testDto2,
+        array $testDtoArray
     ) {
         $this->id = $id;
         $this->testDto1 = $testDto1;
         $this->testDto2 = $testDto2;
+        $this->testDtoArray = $testDtoArray;
     }
 
     /**
@@ -61,5 +69,13 @@ class TestNestedDto
     public function getTestDto2(): TestDto
     {
         return $this->testDto2;
+    }
+
+    /**
+     * @return TestDto[]
+     */
+    public function getTestDtoArray(): array
+    {
+        return $this->testDtoArray;
     }
 }

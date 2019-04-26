@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Reflection;
 
-use Magento\Framework\Api\CustomAttributesDataInterface;
-use Magento\Framework\Phrase;
+use Magento\Framework\Api\DtoProcessor;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Data object processor for array serialization using class reflection
@@ -16,34 +16,14 @@ use Magento\Framework\Phrase;
 class DataObjectProcessor
 {
     /**
-     * @var MethodsMap
-     */
-    private $methodsMapProcessor;
-
-    /**
-     * @var TypeCaster
-     */
-    private $typeCaster;
-
-    /**
-     * @var FieldNamer
-     */
-    private $fieldNamer;
-
-    /**
-     * @var ExtensionAttributesProcessor
-     */
-    private $extensionAttributesProcessor;
-
-    /**
-     * @var CustomAttributesProcessor
-     */
-    private $customAttributesProcessor;
-
-    /**
      * @var array
      */
     private $processors;
+
+    /**
+     * @var DtoProcessor
+     */
+    private $dtoProcessor;
 
     /**
      * @param MethodsMap $methodsMapProcessor
@@ -51,6 +31,7 @@ class DataObjectProcessor
      * @param FieldNamer $fieldNamer
      * @param CustomAttributesProcessor $customAttributesProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
+     * @param DtoProcessor|null $dataTransportHelper
      * @param array $processors
      */
     public function __construct(
@@ -59,14 +40,12 @@ class DataObjectProcessor
         FieldNamer $fieldNamer,
         CustomAttributesProcessor $customAttributesProcessor,
         ExtensionAttributesProcessor $extensionAttributesProcessor,
-        array $processors = []
+        array $processors = [],
+        DtoProcessor $dataTransportHelper = null
     ) {
-        $this->methodsMapProcessor = $methodsMapProcessor;
-        $this->typeCaster = $typeCaster;
-        $this->fieldNamer = $fieldNamer;
-        $this->extensionAttributesProcessor = $extensionAttributesProcessor;
-        $this->customAttributesProcessor = $customAttributesProcessor;
         $this->processors = $processors;
+        $this->dtoProcessor = $dataTransportHelper ?:
+            ObjectManager::getInstance()->get(DtoProcessor::class);
     }
 
     /**
@@ -75,64 +54,11 @@ class DataObjectProcessor
      * @param mixed $dataObject
      * @param string $dataObjectType
      * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function buildOutputDataArray($dataObject, $dataObjectType)
     {
-        $methods = $this->methodsMapProcessor->getMethodsMap($dataObjectType);
-        $outputData = [];
-
-        foreach (array_keys($methods) as $methodName) {
-            if (!$this->methodsMapProcessor->isMethodValidForDataField($dataObjectType, $methodName)) {
-                continue;
-            }
-
-            $value = $dataObject->{$methodName}();
-            $isMethodReturnValueRequired = $this->methodsMapProcessor->isMethodReturnValueRequired(
-                $dataObjectType,
-                $methodName
-            );
-            if ($value === null && !$isMethodReturnValueRequired) {
-                continue;
-            }
-
-            $returnType = $this->methodsMapProcessor->getMethodReturnType($dataObjectType, $methodName);
-            $key = $this->fieldNamer->getFieldNameForMethodName($methodName);
-            if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES && $value === []) {
-                continue;
-            }
-
-            if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES) {
-                $value = $this->customAttributesProcessor->buildOutputDataArray($dataObject, $dataObjectType);
-            } elseif ($key === "extension_attributes") {
-                $value = $this->extensionAttributesProcessor->buildOutputDataArray($value, $returnType);
-                if (empty($value)) {
-                    continue;
-                }
-            } else {
-                if (is_object($value) && !($value instanceof Phrase)) {
-                    $value = $this->buildOutputDataArray($value, $returnType);
-                } elseif (is_array($value)) {
-                    $valueResult = [];
-                    $arrayElementType = substr($returnType, 0, -2);
-                    foreach ($value as $singleValue) {
-                        if (is_object($singleValue) && !($singleValue instanceof Phrase)) {
-                            $singleValue = $this->buildOutputDataArray($singleValue, $arrayElementType);
-                        }
-                        $valueResult[] = $this->typeCaster->castValueToType($singleValue, $arrayElementType);
-                    }
-                    $value = $valueResult;
-                } else {
-                    $value = $this->typeCaster->castValueToType($value, $returnType);
-                }
-            }
-
-            $outputData[$key] = $value;
-        }
-
-        $outputData = $this->changeOutputArray($dataObject, $outputData);
-
-        return $outputData;
+        $outputData = $this->dtoProcessor->getObjectData($dataObject, $dataObjectType);
+        return $this->changeOutputArray($dataObject, $outputData);
     }
 
     /**

@@ -53,52 +53,88 @@ class DataTransportHelperTest extends TestCase
     {
         /** @var TestDto $dto */
         $dto = $this->objectManager->create(TestDto::class, [
-            'paramOne' => 'test1',
-            'paramTwo' => 'test2',
+            'paramOne' => 1,
+            'paramTwo' => 2.0,
             'paramThree' => 'test3'
         ]);
 
-        $this->assertSame(
+        $this->assertEquals(
             [
-                'param_one' => 'test1',
-                'param_two' => 'test2',
+                'param_one' => 1,
+                'param_two' => 2.0,
                 'param_three' => 'test3'
             ],
             $this->dataTransportHelper->getObjectData($dto)
         );
     }
 
+    public function testGetObjectDataWithWrongTypes(): void
+    {
+        /** @var TestDto $dto */
+        $dto = $this->objectManager->create(TestDto::class, [
+            'paramOne' => '1',
+            'paramTwo' => '2.0',
+            'paramThree' => 'test3'
+        ]);
+
+        $res = $this->dataTransportHelper->getObjectData($dto);
+        $this->assertSame(1, $res['param_one']);
+        $this->assertSame(2.0, $res['param_two']);
+    }
+
     public function testGetNestedObjectData(): void
     {
         $dto1 = $this->objectManager->create(TestDto::class, [
-            'paramOne' => 'test1-1',
-            'paramTwo' => 'test1-2',
+            'paramOne' => 1,
+            'paramTwo' => 2.0,
             'paramThree' => 'test1-3'
         ]);
         $dto2 = $this->objectManager->create(TestDto::class, [
-            'paramOne' => 'test2-1',
-            'paramTwo' => 'test2-2',
+            'paramOne' => 2,
+            'paramTwo' => 4.0,
             'paramThree' => 'test2-3'
         ]);
+
+        $dtoArray = [];
+        for ($i=0; $i<2; $i++) {
+            $dtoArray[] = $this->objectManager->create(TestDto::class, [
+                'paramOne' => $i * 3 + 3,
+                'paramTwo' => $i * 3.0 + 4.0,
+                'paramThree' => 'array' . $i . '-3'
+            ]);
+        }
 
         $nestedDto = $this->objectManager->create(TestNestedDto::class, [
             'id' => 'my-id',
             'testDto1' => $dto1,
-            'testDto2' => $dto2
+            'testDto2' => $dto2,
+            'testDtoArray' => $dtoArray
         ]);
 
-        $this->assertSame(
+        $this->assertEquals(
             [
                 'id' => 'my-id',
                 'test_dto1' => [
-                    'param_one' => 'test1-1',
-                    'param_two' => 'test1-2',
+                    'param_one' => 1,
+                    'param_two' => 2.0,
                     'param_three' => 'test1-3'
                 ],
                 'test_dto2' => [
-                    'param_one' => 'test2-1',
-                    'param_two' => 'test2-2',
+                    'param_one' => 2,
+                    'param_two' => 4.0,
                     'param_three' => 'test2-3'
+                ],
+                'test_dto_array' => [
+                    [
+                        'param_one' => 3,
+                        'param_two' => 4.0,
+                        'param_three' => 'array0-3'
+                    ],
+                    [
+                        'param_one' => 6,
+                        'param_two' => 7.0,
+                        'param_three' => 'array1-3'
+                    ]
                 ]
             ],
             $this->dataTransportHelper->getObjectData($nestedDto)
@@ -110,15 +146,15 @@ class DataTransportHelperTest extends TestCase
         /** @var TestDto $dto */
         $dto = $this->dataTransportHelper->createFromArray(
             [
-                'param_one' => 'test1',
-                'param_two' => 'test2',
+                'param_one' => 1,
+                'param_two' => 2.0,
                 'param_three' => 'test3'
             ],
             TestDto::class
         );
 
-        $this->assertSame('test1', $dto->getParamOne());
-        $this->assertSame('test2', $dto->getParamTwo());
+        $this->assertSame(1, $dto->getParamOne());
+        $this->assertSame(2.0, $dto->getParamTwo());
         $this->assertSame('test3', $dto->getParamThree());
     }
 
@@ -129,14 +165,26 @@ class DataTransportHelperTest extends TestCase
             [
                 'id' => 'my-id',
                 'test_dto1' => [
-                    'param_one' => 'test1-1',
-                    'param_two' => 'test1-2',
+                    'param_one' => 1,
+                    'param_two' => 2.0,
                     'param_three' => 'test1-3'
                 ],
                 'test_dto2' => [
-                    'param_one' => 'test2-1',
-                    'param_two' => 'test2-2',
+                    'param_one' => 2,
+                    'param_two' => 4.0,
                     'param_three' => 'test2-3'
+                ],
+                'test_dto_array' => [
+                    [
+                        'param_one' => 3,
+                        'param_two' => 6.0,
+                        'param_three' => 'array0-3'
+                    ],
+                    [
+                        'param_one' => 4,
+                        'param_two' => 8.0,
+                        'param_three' => 'array1-3'
+                    ]
                 ]
             ],
             TestNestedDto::class
@@ -144,13 +192,23 @@ class DataTransportHelperTest extends TestCase
 
         $this->assertSame('my-id', $dto->getId());
 
-        $this->assertSame('test1-1', $dto->getTestDto1()->getParamOne());
-        $this->assertSame('test1-2', $dto->getTestDto1()->getParamTwo());
+        $this->assertSame(1, $dto->getTestDto1()->getParamOne());
+        $this->assertSame(2.0, $dto->getTestDto1()->getParamTwo());
         $this->assertSame('test1-3', $dto->getTestDto1()->getParamThree());
 
-        $this->assertSame('test2-1', $dto->getTestDto2()->getParamOne());
-        $this->assertSame('test2-2', $dto->getTestDto2()->getParamTwo());
+        $this->assertSame(2, $dto->getTestDto2()->getParamOne());
+        $this->assertSame(4.0, $dto->getTestDto2()->getParamTwo());
         $this->assertSame('test2-3', $dto->getTestDto2()->getParamThree());
+
+        $this->assertCount(2, $dto->getTestDtoArray());
+
+        $this->assertSame(3, $dto->getTestDtoArray()[0]->getParamOne());
+        $this->assertSame(6.0, $dto->getTestDtoArray()[0]->getParamTwo());
+        $this->assertSame('array0-3', $dto->getTestDtoArray()[0]->getParamThree());
+
+        $this->assertSame(4, $dto->getTestDtoArray()[1]->getParamOne());
+        $this->assertSame(8.0, $dto->getTestDtoArray()[1]->getParamTwo());
+        $this->assertSame('array1-3', $dto->getTestDtoArray()[1]->getParamThree());
     }
 
     public function testCreateUpdatedDataObject(): void
@@ -158,8 +216,8 @@ class DataTransportHelperTest extends TestCase
         /** @var TestDto $dto */
         $dto = $this->dataTransportHelper->createFromArray(
             [
-                'param_one' => 'test1',
-                'param_two' => 'test2',
+                'param_one' => 1,
+                'param_two' => 2.0,
                 'param_three' => 'test3'
             ],
             TestDto::class
@@ -169,16 +227,16 @@ class DataTransportHelperTest extends TestCase
         $updatedDto = $this->dataTransportHelper->createUpdatedObjectFromArray(
             $dto,
             [
-                'param_two' => 'test4'
+                'param_two' => 3.0
             ]
         );
 
         $this->assertNotSame($dto, $updatedDto);
 
-        $this->assertSame('test2', $dto->getParamTwo());
+        $this->assertSame(2.0, $dto->getParamTwo());
 
-        $this->assertSame('test1', $updatedDto->getParamOne());
-        $this->assertSame('test4', $updatedDto->getParamTwo());
+        $this->assertSame(1, $updatedDto->getParamOne());
+        $this->assertSame(3.0, $updatedDto->getParamTwo());
         $this->assertSame('test3', $updatedDto->getParamThree());
     }
 
@@ -189,42 +247,79 @@ class DataTransportHelperTest extends TestCase
             [
                 'id' => 'my-id',
                 'test_dto1' => [
-                    'param_one' => 'test1-1',
-                    'param_two' => 'test1-2',
+                    'param_one' => 1,
+                    'param_two' => 2.0,
                     'param_three' => 'test1-3'
                 ],
                 'test_dto2' => [
-                    'param_one' => 'test2-1',
-                    'param_two' => 'test2-2',
+                    'param_one' => 2,
+                    'param_two' => 4.0,
                     'param_three' => 'test2-3'
+                ],
+                'test_dto_array' => [
+                    [
+                        'param_one' => 3,
+                        'param_two' => 6.0,
+                        'param_three' => 'array0-3'
+                    ],
+                    [
+                        'param_one' => 4,
+                        'param_two' => 8.0,
+                        'param_three' => 'array1-3'
+                    ]
                 ]
             ],
             TestNestedDto::class
         );
 
-        /** @var TestDto $updatedDto */
+        /** @var TestNestedDto $updatedDto */
         $updatedDto = $this->dataTransportHelper->createUpdatedObjectFromArray(
             $dto,
             [
                 'test_dto1' => [
-                    'param_two' => 'test3'
+                    'param_two' => '10'
+                ],
+                'test_dto_array' => [
+                    [],
+                    [
+                        'param_one' => '11',
+                        'param_two' => '12',
+                        'param_three' => 'array3-3'
+                    ],
+                    [
+                        'param_one' => '13',
+                        'param_two' => '14',
+                        'param_three' => 'array4-3'
+                    ]
                 ]
             ]
         );
 
         $this->assertNotSame($dto, $updatedDto);
 
-        $this->assertSame('test1-2', $dto->getTestDto1()->getParamTwo());
-
         $this->assertSame('my-id', $updatedDto->getId());
 
-        $this->assertSame('test1-1', $updatedDto->getTestDto1()->getParamOne());
-        $this->assertSame('test3', $updatedDto->getTestDto1()->getParamTwo());
+        $this->assertSame(1, $updatedDto->getTestDto1()->getParamOne());
+        $this->assertSame(10.0, $updatedDto->getTestDto1()->getParamTwo());
         $this->assertSame('test1-3', $updatedDto->getTestDto1()->getParamThree());
 
-        $this->assertSame('test2-1', $updatedDto->getTestDto2()->getParamOne());
-        $this->assertSame('test2-2', $updatedDto->getTestDto2()->getParamTwo());
+        $this->assertSame(2, $updatedDto->getTestDto2()->getParamOne());
+        $this->assertSame(4.0, $updatedDto->getTestDto2()->getParamTwo());
         $this->assertSame('test2-3', $updatedDto->getTestDto2()->getParamThree());
+
+        $this->assertCount(3, $updatedDto->getTestDtoArray());
+
+        $this->assertSame(3, $updatedDto->getTestDtoArray()[0]->getParamOne());
+        $this->assertSame(6.0, $updatedDto->getTestDtoArray()[0]->getParamTwo());
+        $this->assertSame('array0-3', $updatedDto->getTestDtoArray()[0]->getParamThree());
+
+        $this->assertSame(11, $updatedDto->getTestDtoArray()[1]->getParamOne());
+        $this->assertSame(12.0, $updatedDto->getTestDtoArray()[1]->getParamTwo());
+        $this->assertSame('array3-3', $updatedDto->getTestDtoArray()[1]->getParamThree());
+
+        $this->assertSame(13, $updatedDto->getTestDtoArray()[2]->getParamOne());
+        $this->assertSame(14.0, $updatedDto->getTestDtoArray()[2]->getParamTwo());
+        $this->assertSame('array4-3', $updatedDto->getTestDtoArray()[2]->getParamThree());
     }
 
     public function testCreateExtensibleDataObject(): void
@@ -281,7 +376,10 @@ class DataTransportHelperTest extends TestCase
             [
                 'immutable_one' => 'test1',
                 'immutable_two' => 'test2',
-                'mutable_three' => 'test3'
+                'mutable_three' => 'test3',
+                'mutable_four' => 'test4',
+                'mutable_five' => 'test5',
+                'mutable_six' => 'test6',
             ],
             TestHybridDto::class
         );
@@ -289,6 +387,9 @@ class DataTransportHelperTest extends TestCase
         $this->assertSame('test1', $dto->getImmutableOne());
         $this->assertSame('test2', $dto->getImmutableTwo());
         $this->assertSame('test3', $dto->getMutableThree());
+        $this->assertSame('test4', $dto->getMutableFour());
+        $this->assertSame('test5', $dto->getMutableFive());
+        $this->assertSame('test6', $dto->getMutableSix());
     }
 
     /**
@@ -308,11 +409,11 @@ class DataTransportHelperTest extends TestCase
                     DataTransportHelper::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM => [
                         'param_one' => [
                             'parameter' => 'paramOne',
-                            'type' => 'string'
+                            'type' => 'int'
                         ],
                         'param_two' => [
                             'parameter' => 'paramTwo',
-                            'type' => 'string'
+                            'type' => 'float'
                         ],
                         'param_three' => [
                             'parameter' => 'paramThree',
@@ -351,7 +452,10 @@ class DataTransportHelperTest extends TestCase
                 [
                     'immutable_one' => 'test1',
                     'immutable_two' => 'test2',
-                    'mutable_three' => 'test3'
+                    'mutable_three' => 'test3',
+                    'mutable_four' => 'test4',
+                    'mutable_five' => 'test5',
+                    'mutable_six' => 'test6',
                 ],
                 [
                     DataTransportHelper::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM => [
@@ -363,11 +467,23 @@ class DataTransportHelperTest extends TestCase
                             'parameter' => 'immutableTwo',
                             'type' => 'string',
                         ],
+                        'mutable_three' => [
+                            'parameter' => 'mutableThree',
+                            'type' => 'string',
+                        ],
+                        'mutable_four' => [
+                            'parameter' => 'mutableFour',
+                            'type' => 'string',
+                        ]
                     ],
                     DataTransportHelper::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA => [],
                     DataTransportHelper::HYDRATOR_STRATEGY_SETTER => [
-                        'mutable_three' => [
-                            'method' => 'setMutableThree',
+                        'mutable_five' => [
+                            'method' => 'setMutableFive',
+                            'type' => 'string'
+                        ],
+                        'mutable_six' => [
+                            'method' => 'setMutableSix',
                             'type' => 'string'
                         ]
                     ]

@@ -7,7 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Api;
 
+use LogicException;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\MethodsMap;
+use Magento\Framework\Reflection\TypeProcessor;
+use ReflectionException;
 
 /**
  * Data object helper.
@@ -22,22 +28,22 @@ class DataObjectHelper
     protected $objectFactory;
 
     /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor
+     * @var DataObjectProcessor
      */
     protected $objectProcessor;
 
     /**
-     * @var \Magento\Framework\Reflection\TypeProcessor
+     * @var TypeProcessor
      */
     protected $typeProcessor;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttributesFactory
+     * @var ExtensionAttributesFactory
      */
     protected $extensionFactory;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     * @var JoinProcessorInterface
      */
     protected $joinProcessor;
 
@@ -47,20 +53,27 @@ class DataObjectHelper
     protected $methodsMapProcessor;
 
     /**
+     * @var DtoProcessor
+     */
+    private $dtoProcessor;
+
+    /**
      * @param ObjectFactory $objectFactory
-     * @param \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor
-     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
+     * @param DataObjectProcessor $objectProcessor
+     * @param TypeProcessor $typeProcessor
+     * @param ExtensionAttributesFactory $extensionFactory
+     * @param JoinProcessorInterface $joinProcessor
      * @param MethodsMap $methodsMapProcessor
+     * @param DtoProcessor $dtoProcessor
      */
     public function __construct(
         ObjectFactory $objectFactory,
-        \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor,
-        \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
-        MethodsMap $methodsMapProcessor
+        DataObjectProcessor $objectProcessor,
+        TypeProcessor $typeProcessor,
+        ExtensionAttributesFactory $extensionFactory,
+        JoinProcessorInterface $joinProcessor,
+        MethodsMap $methodsMapProcessor,
+        DtoProcessor $dtoProcessor = null
     ) {
         $this->objectFactory = $objectFactory;
         $this->objectProcessor = $objectProcessor;
@@ -68,6 +81,8 @@ class DataObjectHelper
         $this->extensionFactory = $extensionFactory;
         $this->joinProcessor = $joinProcessor;
         $this->methodsMapProcessor = $methodsMapProcessor;
+        $this->dtoProcessor = $dtoProcessor ?:
+            ObjectManager::getInstance()->get(DtoProcessor::class);
     }
 
     /**
@@ -77,13 +92,13 @@ class DataObjectHelper
      * @param array $data
      * @param string $interfaceName
      * @return $this
+     * @throws ReflectionException
+     * @deprecated
+     * @see \Magento\Framework\Api\DtoProcessor::createFromArray
      */
-    public function populateWithArray($dataObject, array $data, $interfaceName)
+    public function populateWithArray(&$dataObject, array $data, $interfaceName)
     {
-        if ($dataObject instanceof ExtensibleDataInterface) {
-            $data = $this->joinProcessor->extractExtensionAttributes(get_class($dataObject), $data);
-        }
-        $this->_setDataValues($dataObject, $data, $interfaceName);
+        $dataObject = $this->dtoProcessor->createUpdatedObjectFromArray($dataObject, $data, $interfaceName);
         return $this;
     }
 
@@ -101,7 +116,7 @@ class DataObjectHelper
         $dataObjectMethods = get_class_methods(get_class($dataObject));
         foreach ($data as $key => $value) {
             /* First, verify is there any setter for the key on the Service Data Object */
-            $camelCaseKey = \Magento\Framework\Api\SimpleDataObjectConverter::snakeCaseToUpperCamelCase($key);
+            $camelCaseKey = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($key);
             $possibleMethods = [
                 'set' . $camelCaseKey,
                 'setIs' . $camelCaseKey,
@@ -174,13 +189,13 @@ class DataObjectHelper
             return $this;
         }
 
-        if (is_subclass_of($returnType, \Magento\Framework\Api\ExtensibleDataInterface::class)) {
+        if (is_subclass_of($returnType, ExtensibleDataInterface::class)) {
             $object = $this->objectFactory->create($returnType, []);
             $this->populateWithArray($object, $value, $returnType);
-        } elseif (is_subclass_of($returnType, \Magento\Framework\Api\ExtensionAttributesInterface::class)) {
+        } elseif (is_subclass_of($returnType, ExtensionAttributesInterface::class)) {
             foreach ($value as $extensionAttributeKey => $extensionAttributeValue) {
                 $extensionAttributeGetterMethodName
-                    = 'get' . \Magento\Framework\Api\SimpleDataObjectConverter::snakeCaseToUpperCamelCase(
+                    = 'get' . SimpleDataObjectConverter::snakeCaseToUpperCamelCase(
                         $extensionAttributeKey
                     );
                 $methodReturnType = $this->methodsMapProcessor->getMethodReturnType(
@@ -226,7 +241,7 @@ class DataObjectHelper
      * @param mixed $firstDataObject
      * @param mixed $secondDataObject
      * @return $this
-     * @throws \LogicException
+     * @throws LogicException
      */
     public function mergeDataObjects(
         $interfaceName,
@@ -234,7 +249,7 @@ class DataObjectHelper
         $secondDataObject
     ) {
         if (!$firstDataObject instanceof $interfaceName || !$secondDataObject instanceof $interfaceName) {
-            throw new \LogicException('Wrong prototype object given. It can only be of "' . $interfaceName . '" type.');
+            throw new LogicException('Wrong prototype object given. It can only be of "' . $interfaceName . '" type.');
         }
         $secondObjectArray = $this->objectProcessor->buildOutputDataArray($secondDataObject, $interfaceName);
         $this->_setDataValues($firstDataObject, $secondObjectArray, $interfaceName);

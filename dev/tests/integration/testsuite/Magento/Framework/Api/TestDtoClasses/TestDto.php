@@ -10,12 +10,12 @@ namespace Magento\Framework\Api\TestDtoClasses;
 class TestDto
 {
     /**
-     * @var string
+     * @var int
      */
     private $paramOne;
 
     /**
-     * @var string
+     * @var float
      */
     private $paramTwo;
 
@@ -25,13 +25,13 @@ class TestDto
     private $paramThree;
 
     /**
-     * @param string $paramOne
-     * @param string $paramTwo
+     * @param int $paramOne
+     * @param float $paramTwo
      * @param string $paramThree
      */
     public function __construct(
-        string $paramOne,
-        string $paramTwo,
+        int $paramOne,
+        float $paramTwo,
         string $paramThree
     ) {
         $this->paramOne = $paramOne;
@@ -40,17 +40,17 @@ class TestDto
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getParamOne(): string
+    public function getParamOne(): int
     {
         return $this->paramOne;
     }
 
     /**
-     * @return string
+     * @return float
      */
-    public function getParamTwo(): string
+    public function getParamTwo(): float
     {
         return $this->paramTwo;
     }
