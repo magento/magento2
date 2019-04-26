@@ -16,10 +16,6 @@
         <plugin name="prevent_default_stock_deleting"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
     </type>
-    <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
-        <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save"
-                type="Magento\InventoryCatalog\Plugin\InventoryApi\SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin"/>
-    </type>
     <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
         <plugin name="priceIndexUpdater" type="Magento\InventoryCatalog\Plugin\InventoryIndexer\Indexer\SourceItem\PriceIndexUpdater" sortOrder="20"/>
     </type>
@@ -29,16 +25,7 @@
     <type name="Magento\CatalogInventory\Model\Indexer\ProductPriceIndexFilter">
         <plugin name="change_select_for_price_modifier" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\Indexer\ModifySelectInProductPriceIndexFilter"/>
     </type>
-    <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
-        <plugin name="set_to_zero_legacy_catalog_inventory_at_source_items_delete"
-                type="Magento\InventoryCatalog\Plugin\InventoryApi\SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin"/>
-    </type>
-    <type name="Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface">
-        <plugin name="update_source_item_at_legacy_qty_counter" type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyQtyCounterPlugin"/>
-    </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
-        <plugin name="update_source_item_at_legacy_stock_item_save"
-                type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyStockItemSavePlugin"/>
         <plugin name="priceIndexUpdater" disabled="true"/>
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Status">
@@ -82,11 +69,6 @@
             <argument name="tableNameSourceItem" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::TABLE_NAME_SOURCE_ITEM</argument>
         </arguments>
     </type>
-    <type name="Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem">
-        <arguments>
-            <argument name="sourceItemsSave" xsi:type="object">Magento\Inventory\Model\SourceItem\Command\SourceItemsSaveWithoutLegacySynchronization</argument>
-        </arguments>
-    </type>
     <type name="Magento\Inventory\Model\SourceItem\Command\SourceItemsSaveWithoutLegacySynchronization">
         <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save" disabled="true"/>
     </type>
@@ -107,6 +89,28 @@
                 type="Magento\InventoryCatalog\Model\BulkPartialInventoryTransfer"/>
     <preference for="Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferItemInterface"
                 type="Magento\InventoryCatalog\Model\PartialInventoryTransferItem"/>
+
+    <type name="Magento\InventoryCatalog\Model\BulkInventoryTransfer">
+        <arguments>
+            <!-- @deprecated parameter defaultSourceProvider has been deprecated and not in use now -->
+            <argument name="defaultSourceProvider" xsi:type="null" />
+            <!-- @deprecated parameter defaultSourceProvider has been deprecated and not in use now -->
+            <argument name="getProductIdsBySkus" xsi:type="null" />
+            <!-- @deprecated parameter legacyIndexer has been deprecated and not in use now -->
+            <argument name="legacyIndexer" xsi:type="null" />
+        </arguments>
+    </type>
+
+    <type name="Magento\InventoryCatalog\Model\BulkSourceUnassign">
+        <arguments>
+            <!-- @deprecated parameter defaultSourceProvider has been deprecated and not in use now -->
+            <argument name="defaultSourceProvider" xsi:type="null" />
+            <!-- @deprecated parameter defaultSourceProvider has been deprecated and not in use now -->
+            <argument name="getProductIdsBySkus" xsi:type="null" />
+            <!-- @deprecated parameter legacyIndexer has been deprecated and not in use now -->
+            <argument name="legacyIndexer" xsi:type="null" />
+        </arguments>
+    </type>
 
     <type name="\Magento\InventoryCatalogApi\Model\BulkSourceAssignValidatorChain">
         <arguments>

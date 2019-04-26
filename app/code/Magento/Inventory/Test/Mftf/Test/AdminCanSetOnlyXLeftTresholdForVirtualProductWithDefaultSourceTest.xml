@@ -64,6 +64,7 @@
             <argument name="filter_value" value="$$virtualProduct1.product[sku]$$"/>
         </actionGroup>
 
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="In Stock" stepKey="selectStockStatus" />
         <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="10" stepKey="fillSourceQuantityField1"/>
 
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>

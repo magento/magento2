@@ -12,4 +12,7 @@
     <event name="sales_order_item_cancel">
         <observer name="inventory" instance="Magento\InventorySales\Observer\CatalogInventory\CancelOrderItemObserver"/>
     </event>
+    <event name="sales_order_creditmemo_save_after">
+        <observer name="deduct_source_item_quantity_on_refund" instance="Magento\InventorySales\Observer\SalesInventory\DeductSourceItemQuantityOnRefundObserver"/>
+    </event>
 </config>
