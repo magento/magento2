@@ -14,6 +14,7 @@
             <title value="Customer should see downloadable products after place order as guest and registering after that"/>
             <description value="Verify that in 'My Downloadable Products' section in customer account user can see products."/>
             <severity value="AVERAGE"/>
+            <useCaseId value="MAGETWO-98656"/>
             <testCaseId value="MC-16011"/>
         </annotations>
         <before>
@@ -33,15 +34,15 @@
         </after>
         <!--Step 1: Go to Storefront as Guest-->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
-        <!--Step 2: Add virtual product to shopping cart-->
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="amOnStorefrontProductPage"/>
+        <!--Step 2: Add downloadable product to shopping cart-->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontProductPage"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
             <argument name="productCount" value="1"/>
         </actionGroup>
         <!--Step 3: Go to checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
-        <!--Step 4: Checkout select Check/Money Order payment, fill required fields and click Update and Place Order-->
+        <!--Step 4: Select Check/Money Order payment, fill required fields and click Update and Place Order-->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
         <actionGroup ref="GuestCheckoutSelectPaymentAndFillNewBillingAddressActionGroup" stepKey="changeAddress">
             <argument name="customerVar" value="Simple_US_Customer_NY"/>
@@ -49,6 +50,7 @@
             <argument name="paymentMethod" value="Check / Money order"/>
         </actionGroup>
         <click selector="{{CheckoutShippingSection.updateAddress}}" stepKey="saveAddress"/>
+        <waitForPageLoad stepKey="waitUpdateAddress"/>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />

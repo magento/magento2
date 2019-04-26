@@ -7,7 +7,7 @@
 -->
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="StorefrontCustomerDownloadableProductsPage" url="downloadable/customer/products/" area="storefront" module="Magento_Customer">
+    <page name="StorefrontCustomerDownloadableProductsPage" url="downloadable/customer/products/" area="storefront" module="Magento_Downloadable">
         <section name="StorefrontCustomerDownloadableProductsSection"/>
     </page>
 </pages>
