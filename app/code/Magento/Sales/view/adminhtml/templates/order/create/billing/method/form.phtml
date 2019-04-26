@@ -56,14 +56,11 @@
             'Magento_Sales/order/create/form'
         ], function(mage) {
             mage.apply();
-            if (window.isNewOrderLoaded) {
-                <?php if ($_methodsCount !== 1) : ?>
-                order.setPaymentMethod('<?= $block->escapeHtml($currentSelectedMethod); ?>');
-                <?php else : ?>
-                payment.switchMethod('<?= $block->escapeHtml($currentSelectedMethod); ?>');
-                <?php endif; ?>
-            }
-            window.isNewOrderLoaded = true;
+            <?php if ($_methodsCount !== 1) : ?>
+            order.setPaymentMethod('<?= $block->escapeHtml($currentSelectedMethod); ?>');
+            <?php elseif ($block->getQuote()->getCustomerId()) : ?>
+            payment.switchMethod('<?= $block->escapeHtml($currentSelectedMethod); ?>');
+            <?php endif; ?>
         });
     </script>
 <?php else : ?>
