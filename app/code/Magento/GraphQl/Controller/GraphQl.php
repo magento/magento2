@@ -114,8 +114,8 @@ class GraphQl implements FrontControllerInterface
         $this->resolverContext = $resolverContext;
         $this->requestProcessor = $requestProcessor;
         $this->queryFields = $queryFields;
-        $this->jsonFactory = $jsonFactory ?:ObjectManager::getInstance()->get(JsonFactory::class);
-        $this->httpResponse = $httpResponse ?:ObjectManager::getInstance()->get(HttpResponse::class);
+        $this->jsonFactory = $jsonFactory ?: ObjectManager::getInstance()->get(JsonFactory::class);
+        $this->httpResponse = $httpResponse ?: ObjectManager::getInstance()->get(HttpResponse::class);
     }
 
     /**
