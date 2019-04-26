@@ -21,6 +21,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Escaper;
 
 /**
+ * Loads data for product configurations.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AssociatedProducts
@@ -232,6 +234,7 @@ class AssociatedProducts
      *
      * @return void
      * @throws \Zend_Currency_Exception
+     * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
      */
     protected function prepareVariations()
     {
@@ -321,6 +324,7 @@ class AssociatedProducts
         $this->productIds = $productIds;
         $this->productAttributes = array_values($attributes);
     }
+    //phpcs: enable
 
     /**
      * Get JSON string that contains attribute code and value

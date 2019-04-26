@@ -40,7 +40,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAllOptions()
     {
@@ -49,8 +49,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             foreach ($this->_getCatalogConfig()->getAttributesUsedForSortBy() as $attribute) {
                 $this->_options[] = [
                     'label' => __($attribute['frontend_label']),
-                    'value' => $attribute['attribute_code'],
-                    '__disableTmpl' => true
+                    'value' => $attribute['attribute_code']
                 ];
             }
         }

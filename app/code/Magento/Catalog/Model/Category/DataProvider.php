@@ -207,6 +207,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
+     * Add 'use default checkbox' to attributes that can have it.
+     *
      * @param Category $category
      * @param array $meta
      * @return array
@@ -336,6 +338,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 }
                 if ($attribute->usesSource()) {
                     $meta[$code]['options'] = $attribute->getSource()->getAllOptions();
+                    foreach ($meta[$code]['options'] as &$option) {
+                        $option['__disableTmpl'] = true;
+                    }
                 }
             }
 
@@ -521,6 +526,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
+     * List form field sets and fields.
+     *
      * @return array
      * @since 101.0.0
      */

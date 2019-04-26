@@ -562,7 +562,8 @@ class EavTest extends AbstractModifierTest
                     'source'        => 'product-details',
                     'scopeLabel'    => '',
                     'globalScope'   => false,
-                    'sortOrder'     => 0
+                    'sortOrder'     => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                     ],
                 ],
             'default_null_prod_not_new_locked_and_required' => [
@@ -582,6 +583,7 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel'    => '',
                     'globalScope'   => false,
                     'sortOrder'     => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
                 'locked' => true,
             ],
@@ -601,7 +603,8 @@ class EavTest extends AbstractModifierTest
                     'source'        => 'product-details',
                     'scopeLabel'    => '',
                     'globalScope'   => false,
-                    'sortOrder'     => 0
+                    'sortOrder'     => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                     ],
                 ],
             'default_null_prod_new_and_not_required' => [
@@ -620,7 +623,8 @@ class EavTest extends AbstractModifierTest
                     'source'        => 'product-details',
                     'scopeLabel'    => '',
                     'globalScope'   => false,
-                    'sortOrder'     => 0
+                    'sortOrder'     => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
             ],
             'default_null_prod_new_and_required' => [
@@ -639,7 +643,8 @@ class EavTest extends AbstractModifierTest
                     'source'        => 'product-details',
                     'scopeLabel'    => '',
                     'globalScope'   => false,
-                    'sortOrder'     => 0
+                    'sortOrder'     => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
             ]
         ];
