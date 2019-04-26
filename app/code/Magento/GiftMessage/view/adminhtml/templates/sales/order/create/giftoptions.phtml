@@ -11,17 +11,17 @@
     <?php if ($_childHtml): ?>
         <tr class="row-gift-options">
             <td colspan="7">
-                <a class="action-link" href="#" id="gift_options_link_<?= $block->escapeHtmlAttr($_item->getId()) ?>"><?= $block->escapeHtml(__('Gift Options')) ?></a>
+                <a class="action-link" href="#" id="gift_options_link_<?= (int) $_item->getId() ?>"><?= $block->escapeHtml(__('Gift Options')) ?></a>
                 <script>
 require([
     "Magento_Sales/order/giftoptions_tooltip"
 ], function(){
 
-    giftOptionsTooltip.addTargetLink('gift_options_link_<?= $block->escapeJs($block->escapeHtml($_item->getId())) ?>', <?= $block->escapeJs($block->escapeHtml($_item->getId())) ?>);
+    giftOptionsTooltip.addTargetLink('gift_options_link_<?= (int) $_item->getId() ?>', <?= (int) $_item->getId() ?>);
 
 });
 </script>
-                <div id="gift_options_data_<?= $block->escapeHtmlAttr($_item->getId()) ?>">
+                <div id="gift_options_data_<?= (int) $_item->getId() ?>">
                     <?= /* @noEscape */ $_childHtml ?>
                 </div>
             </td>

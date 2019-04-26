@@ -6,7 +6,7 @@
 ?>
 
 <?php if ($block->canDisplayGiftmessage()): ?>
-<div id="gift-message-form-data-<?= $block->escapeHtmlAttr($block->getItem()->getId()) ?>" class="no-display">
+<div id="gift-message-form-data-<?= (int) $block->getItem()->getId() ?>" class="no-display">
     <form id="<?= $block->escapeHtmlAttr($block->getFieldId('form')) ?>" action="<?= $block->escapeUrl($block->getSaveUrl()) ?>">
         <input type="hidden" id="<?= $block->escapeHtmlAttr($block->getFieldId('type')) ?>" name="<?= $block->escapeHtmlAttr($block->getFieldName('type')) ?>" value="order_item" />
         <input type="hidden" id="<?= $block->escapeHtmlAttr($block->getFieldId('sender')) ?>" name="<?= $block->escapeHtmlAttr($block->getFieldName('sender')) ?>" value="<?= $block->escapeHtmlAttr($block->getSender()) ?>" />
