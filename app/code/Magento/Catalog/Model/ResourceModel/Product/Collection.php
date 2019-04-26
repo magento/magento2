@@ -31,6 +31,7 @@ use Magento\Framework\Indexer\DimensionFactory;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
@@ -297,6 +298,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
     /**
      * Collection constructor
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -322,6 +324,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param TableMaintainer|null $tableMaintainer
      * @param PriceTableResolver|null $priceTableResolver
      * @param DimensionFactory|null $dimensionFactory
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -1437,7 +1440,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 'u.url_rewrite_id=cu.url_rewrite_id'
             )->where('cu.url_rewrite_id IS NULL');
         }
-        
+
         // more priority is data with category id
         $urlRewrites = [];
 
@@ -1973,6 +1976,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             }
             // Set additional field filters
             foreach ($this->_priceDataFieldFilters as $filterData) {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $select->where(call_user_func_array('sprintf', $filterData));
             }
         } else {
@@ -2218,7 +2222,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getLinkField() . ' IN(?)',
             $productIds
         )->order(
-            $this->getLinkField()
+            'qty'
         );
         return $select;
     }
@@ -2278,6 +2282,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     public function addPriceDataFieldFilter($comparisonFormat, $fields)
     {
         if (!preg_match('/^%s( (<|>|=|<=|>=|<>) %s)*$/', $comparisonFormat)) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Invalid comparison format.');
         }
 

@@ -8,11 +8,11 @@ namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Product Test
@@ -180,7 +180,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $extensionAttrbutes;
+    private $extensionAttributes;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -200,7 +200,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @var ProductExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $extensionAttributes;
+    private $productExtAttributes;
 
     /**
      * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
@@ -218,7 +218,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Module\Manager::class,
             ['isEnabled']
         );
-        $this->extensionAttrbutes = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
+        $this->extensionAttributes = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
             ->setMethods(['getWebsiteIds', 'setWebsiteIds'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -372,13 +372,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->mediaConfig = $this->createMock(\Magento\Catalog\Model\Product\Media\Config::class);
         $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
 
-        $this->extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
+        $this->productExtAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods(['getStockItem'])
             ->getMockForAbstractClass();
         $this->extensionAttributesFactory
             ->expects($this->any())
             ->method('create')
-            ->willReturn($this->extensionAttributes);
+            ->willReturn($this->productExtAttributes);
 
         $this->filterCustomAttribute = $this->createTestProxy(
             \Magento\Catalog\Model\FilterProductCustomAttribute::class
@@ -565,14 +565,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->registry->expects($this->at(1))->method('registry')->will($this->returnValue($this->category));
         $this->assertFalse($this->model->getCategoryId());
         $this->assertEquals(10, $this->model->getCategoryId());
-    }
-
-    public function testGetCategoryIdWhenProductNotInCurrentCategory()
-    {
-        $this->model->setData('category_ids', [12]);
-        $this->category->expects($this->once())->method('getId')->will($this->returnValue(10));
-        $this->registry->expects($this->any())->method('registry')->will($this->returnValue($this->category));
-        $this->assertFalse($this->model->getCategoryId());
     }
 
     public function testGetIdBySku()

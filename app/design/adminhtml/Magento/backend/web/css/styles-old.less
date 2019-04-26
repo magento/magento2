@@ -2738,7 +2738,8 @@
     //  ---------------------------------------------
 
     #widget_instace_tabs_properties_section_content .widget-option-label {
-        margin-top: 6px;
+        margin-top: 7px;
+        display: inline-block;
     }
 
     //
@@ -3845,6 +3846,26 @@
 
     .rule-param-edit .element {
         display: inline;
+        position: relative;
+    }
+
+    .rule-param-edit .element input.input-date,
+    .rule-param-edit .element input.input-date[readonly] {
+        background-color: @color-white;
+        min-width: 140px;
+        width: 140px !important;
+        cursor: pointer;
+        text-align: center;
+        opacity: 1;
+        margin-right: 10px;
+        padding-right: 40px;
+
+        + .ui-datepicker-trigger {
+            position: absolute;
+            width: 140px;
+            text-align: right;
+            left: 0;
+        }
     }
 
     .rule-param-edit .element .addafter {

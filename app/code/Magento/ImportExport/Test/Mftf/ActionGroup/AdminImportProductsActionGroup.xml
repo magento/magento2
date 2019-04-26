@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminImportProductsActionGroup">
+        <arguments>
+            <argument name="behavior" type="string"/>
+            <argument name="importFile" type="string"/>
+            <argument name="importMessage" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="goToImportIndexPage"/>
+        <waitForPageLoad stepKey="AdminImportMainSectionLoad"/>
+        <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.importBehavior}}" stepKey="waitForImportBehaviorElementVisible"/>
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="{{behavior}}" stepKey="selectImportOption"/>
+        <attachFile selector="{{AdminImportMainSection.selectFileToImport}}" userInput="{{importFile}}" stepKey="attachFileForImport"/>
+        <click selector="{{AdminImportHeaderSection.checkDataButton}}" stepKey="clickCheckDataButton"/>
+        <click selector="{{AdminImportMainSection.importButton}}" stepKey="clickImportButton"/>
+        <waitForPageLoad stepKey="AdminImportMainSectionLoad2"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="Import successfully done" stepKey="assertSuccessMessage"/>
+        <waitForPageLoad stepKey="AdminMessagesSection"/>
+        <see selector="{{AdminMessagesSection.notice}}" userInput="{{importMessage}}" stepKey="seeImportMessage"/>
+        </actionGroup>
+    </actionGroups>

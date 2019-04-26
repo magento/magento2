@@ -7,9 +7,14 @@ namespace Magento\Sales\Model\Service;
 
 use Magento\Sales\Api\InvoiceManagementInterface;
 use Magento\Sales\Model\Order;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Catalog\Model\Product\Type;
 
 /**
  * Class InvoiceService
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InvoiceService implements InvoiceManagementInterface
 {
@@ -59,6 +64,13 @@ class InvoiceService implements InvoiceManagementInterface
     protected $orderConverter;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * Constructor
      *
      * @param \Magento\Sales\Api\InvoiceRepositoryInterface $repository
@@ -68,6 +80,7 @@ class InvoiceService implements InvoiceManagementInterface
      * @param \Magento\Sales\Model\Order\InvoiceNotifier $notifier
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Model\Convert\Order $orderConverter
+     * @param Json|null $serializer
      */
     public function __construct(
         \Magento\Sales\Api\InvoiceRepositoryInterface $repository,
@@ -76,7 +89,8 @@ class InvoiceService implements InvoiceManagementInterface
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Sales\Model\Order\InvoiceNotifier $notifier,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
-        \Magento\Sales\Model\Convert\Order $orderConverter
+        \Magento\Sales\Model\Convert\Order $orderConverter,
+        Json $serializer = null
     ) {
         $this->repository = $repository;
         $this->commentRepository = $commentRepository;
@@ -85,6 +99,7 @@ class InvoiceService implements InvoiceManagementInterface
         $this->invoiceNotifier = $notifier;
         $this->orderRepository = $orderRepository;
         $this->orderConverter = $orderConverter;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -134,6 +149,7 @@ class InvoiceService implements InvoiceManagementInterface
      */
     public function prepareInvoice(Order $order, array $qtys = [])
     {
+        $isQtysEmpty = empty($qtys);
         $invoice = $this->orderConverter->toInvoice($order);
         $totalQty = 0;
         $qtys = $this->prepareItemsQty($order, $qtys);
@@ -142,11 +158,11 @@ class InvoiceService implements InvoiceManagementInterface
                 continue;
             }
             $item = $this->orderConverter->itemToInvoiceItem($orderItem);
-            if ($orderItem->isDummy()) {
-                $qty = $orderItem->getQtyOrdered() ? $orderItem->getQtyOrdered() : 1;
-            } elseif (isset($qtys[$orderItem->getId()])) {
+            if (isset($qtys[$orderItem->getId()])) {
                 $qty = (double) $qtys[$orderItem->getId()];
-            } elseif (empty($qtys)) {
+            } elseif ($orderItem->isDummy()) {
+                $qty = $orderItem->getQtyOrdered() ? $orderItem->getQtyOrdered() : 1;
+            } elseif ($isQtysEmpty) {
                 $qty = $orderItem->getQtyToInvoice();
             } else {
                 $qty = 0;
@@ -172,25 +188,74 @@ class InvoiceService implements InvoiceManagementInterface
     {
         foreach ($order->getAllItems() as $orderItem) {
             if (empty($qtys[$orderItem->getId()])) {
-                continue;
-            }
-            if ($orderItem->isDummy()) {
-                if ($orderItem->getHasChildren()) {
-                    foreach ($orderItem->getChildrenItems() as $child) {
-                        if (!isset($qtys[$child->getId()])) {
-                            $qtys[$child->getId()] = $child->getQtyToInvoice();
-                        }
+                if ($orderItem->getProductType() == Type::TYPE_BUNDLE && !$orderItem->isShipSeparately()) {
+                    $qtys[$orderItem->getId()] = $orderItem->getQtyOrdered() - $orderItem->getQtyInvoiced();
+                } else {
+                    $parentItem = $orderItem->getParentItem();
+                    $parentItemId = $parentItem ? $parentItem->getId() : null;
+                    if ($parentItemId && isset($qtys[$parentItemId])) {
+                        $qtys[$orderItem->getId()] = $qtys[$parentItemId];
                     }
-                } elseif ($orderItem->getParentItem()) {
-                    $parent = $orderItem->getParentItem();
-                    if (!isset($qtys[$parent->getId()])) {
-                        $qtys[$parent->getId()] = $parent->getQtyToInvoice();
-                    }
+                    continue;
                 }
             }
+
+            $this->prepareItemQty($orderItem, $qtys);
         }
 
         return $qtys;
+    }
+
+    /**
+     * Prepare qty_invoiced for order item
+     *
+     * @param \Magento\Sales\Api\Data\OrderItemInterface $orderItem
+     * @param array $qtys
+     */
+    private function prepareItemQty(\Magento\Sales\Api\Data\OrderItemInterface $orderItem, &$qtys)
+    {
+        $this->prepareBundleQty($orderItem, $qtys);
+
+        if ($orderItem->isDummy()) {
+            if ($orderItem->getHasChildren()) {
+                foreach ($orderItem->getChildrenItems() as $child) {
+                    if (!isset($qtys[$child->getId()])) {
+                        $qtys[$child->getId()] = $child->getQtyToInvoice();
+                    }
+                    $parentId = $orderItem->getParentItemId();
+                    if ($parentId && array_key_exists($parentId, $qtys)) {
+                        $qtys[$orderItem->getId()] = $qtys[$parentId];
+                    } else {
+                        continue;
+                    }
+                }
+            } elseif ($orderItem->getParentItem()) {
+                $parent = $orderItem->getParentItem();
+                if (!isset($qtys[$parent->getId()])) {
+                    $qtys[$parent->getId()] = $parent->getQtyToInvoice();
+                }
+            }
+        }
+    }
+
+    /**
+     * Prepare qty to invoice for bundle products
+     *
+     * @param \Magento\Sales\Api\Data\OrderItemInterface $orderItem
+     * @param array $qtys
+     */
+    private function prepareBundleQty(\Magento\Sales\Api\Data\OrderItemInterface $orderItem, &$qtys)
+    {
+        if ($orderItem->getProductType() == Type::TYPE_BUNDLE && !$orderItem->isShipSeparately()) {
+            foreach ($orderItem->getChildrenItems() as $childItem) {
+                $bundleSelectionAttributes = $childItem->getProductOptionByCode('bundle_selection_attributes');
+                if (is_string($bundleSelectionAttributes)) {
+                    $bundleSelectionAttributes = $this->serializer->unserialize($bundleSelectionAttributes);
+                }
+
+                $qtys[$childItem->getId()] = $qtys[$orderItem->getId()] * $bundleSelectionAttributes['qty'];
+            }
+        }
     }
 
     /**

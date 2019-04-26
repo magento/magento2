@@ -5,14 +5,16 @@
  */
 
 /**
- * Reports Product Index Abstract Product Resource Collection
- *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Index\Collection;
 
 /**
+ * Reports Product Index Abstract Product Resource Collection.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -52,7 +54,7 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Customer\Model\Visitor $customerVisitor
-     * @param mixed $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -181,7 +183,8 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
     }
 
     /**
-     * Set customer id, that will be used in 'whereCondition'
+     * Set customer id, that will be used in 'whereCondition'.
+     *
      * @codeCoverageIgnore
      *
      * @param int $id

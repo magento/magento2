@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontQuickSearchResultsSection">
+        <element name="searchTextBox" type="text" selector="#search"/>
+        <element name="searchTextBoxButton" type="button" selector="button[class='action search']"/>
+        <element name="allResults" type="block" selector=".column.main"/>
+        <element name="productLink" type="select" selector="a[class='product-item-link']"/>
+        <element name="productByIndex" type="button" selector=".product-items li:nth-child({{var}}) .product-item-info" parameterized="true"/>
+        <element name="productByName" type="button" selector="//div[contains(@class, 'product-item-info') and .//*[contains(., '{{var}}')]]" parameterized="true"/>
+        <element name="addToCartBtn" type="button" selector="//button[contains(@class, 'tocart')]"/>
+        <element name="messageSection" type="text" selector="div .message"/>
+        <element name="productSpecialPrice" type="text" selector="//a[contains(text(), '{{productName}}')]/ancestor::div//span[contains(@data-price-type, 'finalPrice')]/span[contains(@class, 'price')]" parameterized="true"/>
+        <element name="asLowAsLabel" type="text" selector=".minimal-price-link > span"/>
+        <element name="textArea" type="text" selector="li[class='item']"/>
+        <element name="regularPrice" type="text" selector="//span[@class='price-wrapper ']/span[@class='price']"/>
+    </section>
+</sections>

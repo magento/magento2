@@ -125,32 +125,25 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $groupManagement = $this->getMockBuilder(\Magento\Customer\Api\GroupManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->entityMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->galleryResourceMock = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Product\Gallery::class
         )->disableOriginalConstructor()->getMock();
-
         $this->metadataPoolMock = $this->getMockBuilder(
             \Magento\Framework\EntityManager\MetadataPool::class
         )->disableOriginalConstructor()->getMock();
-
         $this->galleryReadHandlerMock = $this->getMockBuilder(
             \Magento\Catalog\Model\Product\Gallery\ReadHandler::class
         )->disableOriginalConstructor()->getMock();
-
         $this->storeManager->expects($this->any())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->any())->method('getStore')->willReturnSelf();
         $universalFactory->expects($this->exactly(1))->method('create')->willReturnOnConsecutiveCalls(
@@ -323,7 +316,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 [ '(customer_group_id=? AND all_groups=0) OR all_groups=1', $customerGroupId]
             )
             ->willReturnSelf();
-        $select->expects($this->once())->method('order')->with('entity_id')->willReturnSelf();
+        $select->expects($this->once())->method('order')->with('qty')->willReturnSelf();
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($select)
@@ -375,7 +368,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $select->expects($this->exactly(1))->method('where')
             ->with('entity_id IN(?)', [1])
             ->willReturnSelf();
-        $select->expects($this->once())->method('order')->with('entity_id')->willReturnSelf();
+        $select->expects($this->once())->method('order')->with('qty')->willReturnSelf();
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($select)
