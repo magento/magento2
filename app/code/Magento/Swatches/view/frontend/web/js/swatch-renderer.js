@@ -753,9 +753,9 @@ define([
                     $widget.options.jsonConfig.optionPrices
                 ]);
 
-            const checkAdditionalData = JSON.parse(this.options.jsonSwatchConfig[attributeId].additional_data);
+            var checkAdditionalData = JSON.parse(this.options.jsonSwatchConfig[attributeId]['additional_data']);
 
-            if (checkAdditionalData.update_product_preview_image == 1) {
+            if (1 == checkAdditionalData['update_product_preview_image']) {
                 $widget._loadMedia();
             }
 
