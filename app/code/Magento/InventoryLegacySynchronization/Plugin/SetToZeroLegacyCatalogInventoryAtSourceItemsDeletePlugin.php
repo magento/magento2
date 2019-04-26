@@ -77,7 +77,7 @@ class SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin
 
             $sku = $sourceItem->getSku();
 
-            $typeId = $this->getProductTypeBySku->execute([$sku])[$sku];
+            $typeId = $this->getProductTypeBySku->execute([$sku])[$sku] ?? '';
             if (false === $this->isSourceItemsAllowedForProductType->execute($typeId)) {
                 continue;
             }
