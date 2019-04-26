@@ -10,13 +10,14 @@ namespace Magento\GraphQl\Controller;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Webapi\Response;
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\GraphQl\Query\Fields as QueryFields;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\App\ObjectManager;
@@ -30,7 +31,7 @@ use Magento\Framework\App\ObjectManager;
 class GraphQl implements FrontControllerInterface
 {
     /**
-     * @var Response
+     * @var \Magento\Framework\Webapi\Response
      * @deprecated
      */
     private $response;
@@ -76,6 +77,11 @@ class GraphQl implements FrontControllerInterface
     private $jsonFactory;
 
     /**
+     * @var HttpResponse
+     */
+    private $httpResponse;
+
+    /**
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
@@ -85,6 +91,8 @@ class GraphQl implements FrontControllerInterface
      * @param HttpRequestProcessor $requestProcessor
      * @param QueryFields $queryFields
      * @param JsonFactory|null $jsonFactory
+     * @param HttpResponse|null $httpResponse
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Response $response,
@@ -95,7 +103,8 @@ class GraphQl implements FrontControllerInterface
         ContextInterface $resolverContext,
         HttpRequestProcessor $requestProcessor,
         QueryFields $queryFields,
-        JsonFactory $jsonFactory = null
+        JsonFactory $jsonFactory = null,
+        HttpResponse $httpResponse = null
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
@@ -105,16 +114,17 @@ class GraphQl implements FrontControllerInterface
         $this->resolverContext = $resolverContext;
         $this->requestProcessor = $requestProcessor;
         $this->queryFields = $queryFields;
-        $this->jsonFactory = $jsonFactory ?:ObjectManager::getInstance()->get(JsonFactory::class);
+        $this->jsonFactory = $jsonFactory ?: ObjectManager::getInstance()->get(JsonFactory::class);
+        $this->httpResponse = $httpResponse ?: ObjectManager::getInstance()->get(HttpResponse::class);
     }
 
     /**
      * Handle GraphQL request
      *
      * @param RequestInterface $request
-     * @return ResultInterface
+     * @return ResponseInterface
      */
-    public function dispatch(RequestInterface $request)
+    public function dispatch(RequestInterface $request) : ResponseInterface
     {
         $statusCode = 200;
         $jsonResult = $this->jsonFactory->create();
@@ -145,7 +155,8 @@ class GraphQl implements FrontControllerInterface
 
         $jsonResult->setHttpResponseCode($statusCode);
         $jsonResult->setData($result);
-        return $jsonResult;
+        $jsonResult->renderResult($this->httpResponse);
+        return $this->httpResponse;
     }
 
     /**

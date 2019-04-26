@@ -62,12 +62,7 @@ QUERY;
         $this->request->setPathInfo('/graphql');
         $this->request->setMethod('GET');
         $this->request->setQueryValue('query', $query);
-        /** @var \Magento\Framework\Controller\Result\Json $result */
-        $result = $this->graphqlController->dispatch($this->request);
-        /** @var \Magento\Framework\App\Response\Http $response */
-        $response = $this->objectManager->get(\Magento\Framework\App\Response\Http::class);
-        /** @var  $registry \Magento\Framework\Registry */
-        $result->renderResult($response);
+        $response = $this->graphqlController->dispatch($this->request);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
         $expectedCacheTags = ['cat_c','cat_c_' . $categoryId,'FPC'];

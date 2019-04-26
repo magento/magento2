@@ -101,11 +101,7 @@ QUERY;
         $headers = $this->objectManager->create(\Zend\Http\Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);
         $this->request->setHeaders($headers);
-        /** @var \Magento\Framework\App\Response\Http $response */
-        $response = $this->objectManager->create(\Magento\Framework\App\Response\Http::class);
-        /** @var \Magento\Framework\Controller\Result\Json $result */
-        $result = $this->graphql->dispatch($this->request);
-        $result->renderResult($response);
+        $response = $this->graphql->dispatch($this->request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
@@ -147,11 +143,7 @@ QUERY;
         $this->request->setPathInfo('/graphql');
         $this->request->setMethod('GET');
         $this->request->setQueryValue('query', $query);
-        /** @var \Magento\Framework\App\Response\Http $response */
-        $response = $this->objectManager->create(\Magento\Framework\App\Response\Http::class);
-        /** @var \Magento\Framework\Controller\Result\Json $result */
-        $result = $this->graphql->dispatch($this->request);
-        $result->renderResult($response);
+        $response = $this->graphql->dispatch($this->request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
@@ -203,11 +195,6 @@ QUERY;
         $this->request->setMethod('GET');
         $this->request->setParams($queryParams);
         $response = $this->graphql->dispatch($this->request);
-        /** @var \Magento\Framework\App\Response\Http $response */
-        $response = $this->objectManager->create(\Magento\Framework\App\Response\Http::class);
-        /** @var \Magento\Framework\Controller\Result\Json $result */
-        $result = $this->graphql->dispatch($this->request);
-        $result->renderResult($response);
         $output = $this->jsonSerializer->unserialize($response->getContent());
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
@@ -257,11 +244,7 @@ QUERY;
         $headers = $this->objectManager->create(\Zend\Http\Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);
         $this->request->setHeaders($headers);
-        /** @var \Magento\Framework\App\Response\Http $response */
-        $response = $this->objectManager->create(\Magento\Framework\App\Response\Http::class);
-        /** @var \Magento\Framework\Controller\Result\Json $result */
-        $result = $this->graphql->dispatch($this->request);
-        $result->renderResult($response);
+        $response = $this->graphql->dispatch($this->request);
         $outputResponse = $this->jsonSerializer->unserialize($response->getContent());
         if (isset($outputResponse['errors'][0])) {
             if (is_array($outputResponse['errors'][0])) {

@@ -69,7 +69,7 @@ class Kernel
      * @param \Magento\Framework\App\Response\HttpFactory|null $httpFactory
      * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      * @param AppState|null $state
-     * @param \Magento\PageCache\Model\Cache\Type $fullPageCache
+     * @param \Magento\PageCache\Model\Cache\Type|null $fullPageCache
      */
     public function __construct(
         \Magento\Framework\App\PageCache\Cache $cache,

@@ -18,7 +18,7 @@ class Identity implements IdentityInterface
      * Get product ids for cache tag
      *
      * @param array $resolvedData
-     * @return array
+     * @return string[]
      */
     public function getIdentities(array $resolvedData): array
     {

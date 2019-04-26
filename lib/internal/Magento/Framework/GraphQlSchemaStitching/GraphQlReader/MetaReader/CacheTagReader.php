@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader;
 
 /**
- * Reads documentation from the annotation @cacheable of an AST node
+ * Reads documentation from the annotation @cache of an AST node
  */
 class CacheTagReader
 {
