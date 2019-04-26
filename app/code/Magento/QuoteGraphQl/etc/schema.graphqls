@@ -241,12 +241,13 @@ type AvailableShippingMethod {
 }
 
 type AvailablePaymentMethod {
-    code: String @doc(description: "The payment method code")
-    title: String @doc(description: "The payment method title.")
+    code: String! @doc(description: "The payment method code")
+    title: String! @doc(description: "The payment method title.")
 }
 
 type SelectedPaymentMethod {
-    code: String @doc(description: "The payment method code")
+    code: String! @doc(description: "The payment method code")
+    title: String! @doc(description: "The payment method title.")
     purchase_order_number: String @doc(description: "The purchase order number.")
 }
 
