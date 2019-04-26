@@ -12,6 +12,7 @@
             <argument name="customerGroupName" type="string"/>
         </arguments>
         <amOnPage url="{{PriceRuleNewPage.url}}" stepKey="amOnCartPriceRuleCreateCreatePage"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.customerGroups}}" stepKey="waitForElementVisible"/>
         <see selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="{{customerGroupName}}" stepKey="assertCustomerGroupPresentOnCartPriceRuleForm"/>
     </actionGroup>
 </actionGroups>

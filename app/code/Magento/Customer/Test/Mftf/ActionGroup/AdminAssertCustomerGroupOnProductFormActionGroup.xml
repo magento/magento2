@@ -12,7 +12,9 @@
             <argument name="customerGroupName" type="string"/>
         </arguments>
         <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="amOnProductCreatePage"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="waitForAdvancedPricingLinkVisible"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForAddButtonVisible"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="clickAddButton"/>
         <see selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" userInput="{{customerGroupName}}" stepKey="assertCustomerGroupPresent"/>
     </actionGroup>

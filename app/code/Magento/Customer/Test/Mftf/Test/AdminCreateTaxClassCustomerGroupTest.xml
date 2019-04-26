@@ -28,11 +28,11 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <deleteData createDataKey="createCustomerTaxClass" after="deleteCustomerGroup" stepKey="deleteCustomerTaxClass"/>
             <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
                 <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters"/>
-            <deleteData createDataKey="createCustomerTaxClass" stepKey="deleteCustomerTaxClass"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Steps: 1. Log in to backend as admin user.
@@ -47,6 +47,11 @@
             <argument name="taxClass" value="$$customerTaxClassData.class_name$$"/>
         </actionGroup>
         <actionGroup ref="AdminAssertCustomerGroupPresentInGrid" stepKey="assertCustomerGroupDisplayedInGrid">
+            <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
+        </actionGroup>
+        <!-- 6. Go to Customers -> All Customers  -> click  "Add New Customer" button -->
+        <!--  Assert   created  Customer Group  displayed On Customer Form -->
+        <actionGroup ref="AdminAssertCustomerGroupOnCustomerForm" stepKey="assertCustomerGroupDisplayedOnCustomerForm">
             <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
         </actionGroup>
     </test>

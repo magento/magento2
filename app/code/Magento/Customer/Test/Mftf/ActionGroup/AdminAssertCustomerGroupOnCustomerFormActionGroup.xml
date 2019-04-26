@@ -12,6 +12,7 @@
             <argument name="customerGroupName" type="string"/>
         </arguments>
         <amOnPage url="{{AdminNewCustomerPage.url}}" stepKey="amOnCustomerCreatePage"/>
+        <waitForElementVisible selector="{{AdminCustomerAccountInformationSection.group}}" stepKey="waitForElementVisible"/>
         <see selector="{{AdminCustomerAccountInformationSection.group}}" userInput="{{customerGroupName}}" stepKey="assertCustomerGroupPresent"/>
     </actionGroup>
 </actionGroups>
