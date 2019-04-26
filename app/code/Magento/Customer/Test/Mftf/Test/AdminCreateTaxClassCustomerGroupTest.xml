@@ -32,8 +32,8 @@
                 <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
             <deleteData createDataKey="createCustomerTaxClass" stepKey="deleteCustomerTaxClass"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Steps: 1. Log in to backend as admin user.
                     2. Navigate to Stores > Other Settings > Customer Groups.
