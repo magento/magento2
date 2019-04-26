@@ -5,12 +5,12 @@
     "require": {
         "php": "~7.1.3||~7.2.0",
         "magento/module-authorization": "*",
-        "magento/module-store": "*",
         "magento/module-eav": "*",
         "magento/framework": "*"
     },
     "suggest": {
-        "magento/module-webapi": "*"
+        "magento/module-webapi": "*",
+        "magento/module-graph-ql-cache": "*"
     },
     "license": [
         "OSL-3.0",
