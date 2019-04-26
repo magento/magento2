@@ -235,11 +235,7 @@ class UrlRewriteHandler
         $rootCategoryId = null
     ) {
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
-        $generateProductRewrite = (bool)$this->scopeConfig->getValue(
-            'catalog/seo/generate_rewrites_on_save',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
+        $generateProductRewrite = (bool)$this->scopeConfig->getValue('catalog/seo/generate_rewrites_on_save');
 
         /** @var Collection $productCollection */
         $productCollection = $this->productCollectionFactory->create();

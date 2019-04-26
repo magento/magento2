@@ -184,7 +184,7 @@ class ProductScopeRewriteGenerator
             $this->canonicalUrlRewriteGenerator->generate($storeId, $product)
         );
 
-        if ($this->isCategoryRewritesEnabled($storeId)) {
+        if ($this->isCategoryRewritesEnabled()) {
             $mergeDataProvider->merge(
                 $this->categoriesUrlRewriteGenerator->generate($storeId, $product, $productCategories)
             );
@@ -199,7 +199,7 @@ class ProductScopeRewriteGenerator
             )
         );
 
-        if ($this->isCategoryRewritesEnabled($storeId)) {
+        if ($this->isCategoryRewritesEnabled()) {
             $mergeDataProvider->merge(
                 $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories)
             );
@@ -261,15 +261,10 @@ class ProductScopeRewriteGenerator
     /**
      * Check config value of generate_rewrites_on_save
      *
-     * @param int $storeId
      * @return bool
      */
-    private function isCategoryRewritesEnabled($storeId)
+    private function isCategoryRewritesEnabled()
     {
-        return (bool)$this->config->getValue(
-            'catalog/seo/generate_rewrites_on_save',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
+        return (bool)$this->config->getValue('catalog/seo/generate_rewrites_on_save');
     }
 }

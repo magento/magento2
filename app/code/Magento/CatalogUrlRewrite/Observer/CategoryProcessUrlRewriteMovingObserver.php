@@ -108,7 +108,7 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
             $this->urlRewriteHandler->deleteCategoryRewritesForChildren($category);
             $this->urlRewriteBunchReplacer->doBunchReplace($categoryUrlRewriteResult);
 
-            if ($this->isCategoryRewritesEnabled($category->getStoreId())) {
+            if ($this->isCategoryRewritesEnabled()) {
                 $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
                 $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
             }
@@ -134,15 +134,10 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
     /**
      * Check config value of generate_rewrites_on_save
      *
-     * @param int $storeId
      * @return bool
      */
-    private function isCategoryRewritesEnabled($storeId)
+    private function isCategoryRewritesEnabled()
     {
-        return (bool)$this->scopeConfig->getValue(
-            'catalog/seo/generate_rewrites_on_save',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
+        return (bool)$this->scopeConfig->getValue('catalog/seo/generate_rewrites_on_save');
     }
 }

@@ -67,16 +67,11 @@ class CompositeUrlFinder implements UrlFinderInterface
     /**
      * Check config value of generate_rewrites_on_save
      *
-     * @param int $storeId
      * @return bool
      */
-    private function isCategoryRewritesEnabled($storeId)
+    private function isCategoryRewritesEnabled()
     {
-        return (bool)$this->config->getValue(
-            'catalog/seo/generate_rewrites_on_save',
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
+        return (bool)$this->config->getValue('catalog/seo/generate_rewrites_on_save');
     }
 
     /**
@@ -84,10 +79,7 @@ class CompositeUrlFinder implements UrlFinderInterface
      */
     public function findAllByData(array $data)
     {
-        $store = isset($data[UrlRewrite::STORE_ID])
-            ? $data[UrlRewrite::STORE_ID]
-            : $this->storeResolver->getCurrentStoreId();
-        $isDynamicRewrites = !$this->isCategoryRewritesEnabled((int)$store);
+        $isDynamicRewrites = !$this->isCategoryRewritesEnabled();
 
         $mergeDataProvider = $this->mergeDataProviderFactory->create();
         foreach ($this->getChildren() as $child) {

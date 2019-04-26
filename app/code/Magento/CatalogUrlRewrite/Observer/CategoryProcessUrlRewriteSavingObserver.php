@@ -115,7 +115,7 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
                 $categoryUrlRewriteResult = $this->categoryUrlRewriteGenerator->generate($category);
                 $this->urlRewriteBunchReplacer->doBunchReplace($categoryUrlRewriteResult);
             }
-            if ($this->isCategoryRewritesEnabled($category->getStoreId())) {
+            if ($this->isCategoryRewritesEnabled()) {
                 if ($this->isChangedOnlyProduct($category)) {
                     $productUrlRewriteResult =
                         $this->urlRewriteHandler->updateProductUrlRewritesForChangedProduct($category);
@@ -205,15 +205,10 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
     /**
      * Check config value of generate_rewrites_on_save
      *
-     * @param int $storeId
      * @return bool
      */
-    private function isCategoryRewritesEnabled($storeId)
+    private function isCategoryRewritesEnabled()
     {
-        return (bool)$this->scopeConfig->getValue(
-            'catalog/seo/generate_rewrites_on_save',
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
+        return (bool)$this->scopeConfig->getValue('catalog/seo/generate_rewrites_on_save');
     }
 }

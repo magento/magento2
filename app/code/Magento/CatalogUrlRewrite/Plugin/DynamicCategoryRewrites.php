@@ -52,16 +52,11 @@ class DynamicCategoryRewrites
     /**
      * Check config value of generate_rewrites_on_save
      *
-     * @param int $storeId
      * @return bool
      */
-    private function isCategoryRewritesEnabled($storeId)
+    private function isCategoryRewritesEnabled()
     {
-        return (bool)$this->config->getValue(
-            'catalog/seo/generate_rewrites_on_save',
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
+        return (bool)$this->config->getValue('catalog/seo/generate_rewrites_on_save');
     }
 
     /**
@@ -74,10 +69,7 @@ class DynamicCategoryRewrites
      */
     private function proxy(callable $proceed, array $data, string $functionName)
     {
-        $store = isset($data[UrlRewrite::STORE_ID])
-            ? $data[UrlRewrite::STORE_ID]
-            : $this->storeResolver->getCurrentStoreId();
-        if ($this->isCategoryRewritesEnabled((int)$store)) {
+        if ($this->isCategoryRewritesEnabled()) {
             return $proceed($data);
         }
 
