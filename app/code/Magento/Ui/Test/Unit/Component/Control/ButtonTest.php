@@ -55,7 +55,7 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
     public function testGetAttributesHtml()
     {
         $expected = 'type="button" class="action- scalable classValue disabled" '
-            . 'onclick="location.href = \'url2\';" disabled="disabled" data-attributeKey="attributeValue" ';
+            . 'onclick="location.href = &#039;url2&#039;;" disabled="disabled" data-attributeKey="attributeValue" ';
         $this->button->setDisabled(true);
         $this->button->setData('url', 'url2');
         $this->button->setData('class', 'classValue');
