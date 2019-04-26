@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 ?>
 <?php if ($block->getRealOrderId()) : ?><p><?= /* @escapeNotVerified */ __('Order #') . $block->getRealOrderId() ?></p><?php endif ?>
 <?php if ($error = $block->getErrorMessage()) : ?><p><?= /* @escapeNotVerified */ $error ?></p><?php endif ?>
