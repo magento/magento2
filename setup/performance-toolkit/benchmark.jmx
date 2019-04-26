@@ -44214,7 +44214,7 @@ vars.put("product_sku", product.get("sku"));
         <collectionProp name="Arguments.arguments">
           <elementProp name="" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">{"query":"mutation {\n  setShippingMethodsOnCart(input: \n    {\n      cart_id: \"${quote_id}\", \n      shipping_methods: [{\n        cart_address_id: ${address_id}\n        carrier_code: \"flatrate\"\n        method_code: \"flatrate\"\n      }]\n    }) {\n    cart {\n      shipping_addresses {\n        selected_shipping_method {\n          carrier_code\n          method_code\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  setShippingMethodsOnCart(input: \n    {\n      cart_id: \"${quote_id}\", \n      shipping_methods: [{\n        carrier_code: \"flatrate\"\n        method_code: \"flatrate\"\n      }]\n    }) {\n    cart {\n      shipping_addresses {\n        selected_shipping_method {\n          carrier_code\n          method_code\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
