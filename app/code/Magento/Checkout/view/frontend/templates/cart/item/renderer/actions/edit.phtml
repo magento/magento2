@@ -8,8 +8,8 @@
 ?>
 <?php if ($block->isProductVisibleInSiteVisibility()): ?>
     <a class="action action-edit"
-       href="<?= /* @escapeNotVerified */ $block->getConfigureUrl() ?>"
-       title="<?= $block->escapeHtml(__('Edit item parameters')) ?>">
-        <span><?= /* @escapeNotVerified */ __('Edit') ?></span>
+       href="<?= $block->escapeUrl($block->getConfigureUrl()) ?>"
+       title="<?= $block->escapeHtmlAttr(__('Edit item parameters')) ?>">
+        <span><?= $block->escapeHtml(__('Edit')) ?></span>
     </a>
 <?php endif ?>

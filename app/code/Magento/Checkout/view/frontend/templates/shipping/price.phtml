@@ -8,4 +8,4 @@
 <?php /** @var $block \Magento\Checkout\Block\Shipping\Price */ ?>
 
 <?php $shippingPrice = $block->getShippingPrice(); ?>
-<?= /* @escapeNotVerified */ $shippingPrice ?>
+<?= $block->escapeHtml($shippingPrice) ?>

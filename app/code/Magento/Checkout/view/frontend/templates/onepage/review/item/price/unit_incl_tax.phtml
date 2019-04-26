@@ -10,5 +10,5 @@ $_item = $block->getItem();
 ?>
 <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getPriceInclTax($_item); ?>
 <span class="cart-price">
-    <?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_incl) ?>
+    <?= $block->escapeHtml($this->helper('Magento\Checkout\Helper\Data')->formatPrice($_incl)) ?>
 </span>
