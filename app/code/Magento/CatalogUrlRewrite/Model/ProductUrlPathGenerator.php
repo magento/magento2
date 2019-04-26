@@ -70,9 +70,15 @@ class ProductUrlPathGenerator
                 ? $this->prepareProductUrlKey($product)
                 : $this->prepareProductDefaultUrlKey($product);
         }
-        return $category === null
-            ? $path
-            : $this->categoryUrlPathGenerator->getUrlPath($category) . '/' . $path;
+
+        if ($category !== null) {
+            $categoryUrlPath = $this->categoryUrlPathGenerator->getUrlPath($category);
+            if ($categoryUrlPath !== '') {
+                return $categoryUrlPath . '/' . $path;
+            }
+        }
+
+        return $path;
     }
 
     /**

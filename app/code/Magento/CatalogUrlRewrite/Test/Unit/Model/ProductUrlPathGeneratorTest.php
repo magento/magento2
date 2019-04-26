@@ -173,6 +173,22 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+    public function testGetUrlPathWithCategoryHavingAnEmptyUrlPath(): void
+    {
+        $this->product->expects($this->once())->method('getData')->with('url_path')
+            ->will($this->returnValue('product-path'));
+        $this->categoryUrlPathGenerator->expects($this->once())->method('getUrlPath')
+            ->will($this->returnValue(''));
+
+        $this->assertEquals(
+            'product-path',
+            $this->productUrlPathGenerator->getUrlPath($this->product, $this->category)
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testGetUrlPathWithSuffix(): void
     {
         $storeId = 1;
