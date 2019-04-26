@@ -251,6 +251,6 @@ class DynamicStorage extends BaseDbStorage
      */
     private function getBaseName($string)
     {
-        return preg_replace('|.*?([^/])+$|', '\1', $string, 1);
+        return preg_replace('|.*?([^/]+)$|', '\1', $string, 1);
     }
 }
