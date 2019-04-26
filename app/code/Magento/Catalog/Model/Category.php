@@ -958,6 +958,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         ) {
             foreach ($this->_designAttributes as $attributeCode) {
                 $this->setData($attributeCode, $this->getOrigData($attributeCode));
+                $this->setCustomAttribute($attributeCode, $this->getOrigData($attributeCode));
             }
         }
 
