@@ -6,13 +6,19 @@
 
 /** @var $block \Magento\Checkout\Block\Onepage\Link */
 ?>
-<?php if ($block->isPossibleOnepageCheckout()):?>
+<?php if ($block->isPossibleOnepageCheckout()) :?>
     <button type="button"
             data-role="proceed-to-checkout"
             title="<?= $block->escapeHtmlAttr(__('Proceed to Checkout')) ?>"
-            data-mage-init='{"Magento_Checkout/js/proceed-to-checkout":{"checkoutUrl":"<?= $block->escapeJs($block->escapeUrl($block->getCheckoutUrl())) ?>"}}'
+            data-mage-init='{
+                "Magento_Checkout/js/proceed-to-checkout":{
+                    "checkoutUrl":"<?= $block->escapeJs($block->escapeUrl($block->getCheckoutUrl())) ?>"
+                }
+            }'
             class="action primary checkout<?= ($block->isDisabled()) ? ' disabled' : '' ?>"
-            <?php if ($block->isDisabled()):?>disabled="disabled"<?php endif; ?>>
+            <?php if ($block->isDisabled()) :?>
+                disabled="disabled"
+            <?php endif; ?>>
         <span><?= $block->escapeHtml(__('Proceed to Checkout')) ?></span>
     </button>
 <?php endif?>

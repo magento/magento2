@@ -8,7 +8,7 @@
 
 <?php if ($block->getCanViewOrder() && $block->getCanPrintOrder()) :?>
     <a href="<?= $block->escapeUrl($block->getPrintUrl()) ?>" target="_blank" class="print">
-        <?= $block->escapeHtml( __('Print receipt')) ?>
+        <?= $block->escapeHtml(__('Print receipt')) ?>
     </a>
     <?= $block->getChildHtml() ?>
 <?php endif;?>

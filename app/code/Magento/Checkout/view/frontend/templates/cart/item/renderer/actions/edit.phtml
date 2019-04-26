@@ -6,7 +6,7 @@
 
 /** @var $block \Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit */
 ?>
-<?php if ($block->isProductVisibleInSiteVisibility()): ?>
+<?php if ($block->isProductVisibleInSiteVisibility()) :?>
     <a class="action action-edit"
        href="<?= $block->escapeUrl($block->getConfigureUrl()) ?>"
        title="<?= $block->escapeHtmlAttr(__('Edit item parameters')) ?>">

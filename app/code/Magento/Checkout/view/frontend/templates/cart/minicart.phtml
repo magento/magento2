@@ -22,7 +22,7 @@
             </span>
         </span>
     </a>
-    <?php if ($block->getIsNeedToDisplaySideBar()): ?>
+    <?php if ($block->getIsNeedToDisplaySideBar()) :?>
         <div class="block block-minicart"
              data-role="dropdownDialog"
              data-mage-init='{"dropdownDialog":{
@@ -39,7 +39,7 @@
             </div>
             <?= $block->getChildHtml('minicart.addons') ?>
         </div>
-    <?php else: ?>
+    <?php else :?>
         <script>
             require(['jquery'], function ($) {
                 $('a.action.showcart').click(function() {
@@ -57,7 +57,9 @@
             "Magento_Ui/js/core/app": <?= $block->escapeJs($block->getJsLayout()) ?>
         },
         "*": {
-            "Magento_Ui/js/block-loader": "<?= $block->escapeJs($block->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))) ?>"
+            "Magento_Ui/js/block-loader": "<?= $block->escapeJs(
+                $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))
+            ) ?>"
         }
     }
     </script>
