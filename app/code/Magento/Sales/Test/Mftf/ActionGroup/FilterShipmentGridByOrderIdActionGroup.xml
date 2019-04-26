@@ -13,6 +13,8 @@
             <argument name="orderId" type="string"/>
         </arguments>
         <amOnPage url="{{AdminShipmentPage.url}}" stepKey="goToShipments"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearOrderFilters"/>
         <click selector="{{AdminShipmentGridSection.filter}}" stepKey="clickFilter"/>
         <fillField selector="{{AdminShipmentsFilterSection.orderNum}}" userInput="{{orderId}}" stepKey="fillOrderIdForFilter"/>
         <click selector="{{AdminShipmentsFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>

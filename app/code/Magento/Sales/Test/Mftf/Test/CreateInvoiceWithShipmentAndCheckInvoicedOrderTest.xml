@@ -139,7 +139,7 @@
 
         <!-- Assert shipment in grid -->
         <actionGroup ref="FilterShipmentGridByOrderIdActionGroup" stepKey="filterShipmentGridByOrderId">
-        <argument name="orderId" value="$getOrderId"/>
+            <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
         <click selector="{{AdminShipmentGridSection.firstRow}}" stepKey="openCreatedShipment"/>
         <waitForPageLoad stepKey="waitForShipmentDetailsPageToLoad"/>
