@@ -125,6 +125,58 @@ class GetCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_customer_not_default_store.php
+     */
+    public function testGetCartWithNotDefaultStore()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1_not_default_store');
+        $query = $this->getQuery($maskedQuoteId);
+
+        $headerMap = $this->getHeaderMap();
+        $headerMap['Store'] = 'fixture_second_store';
+
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+
+        self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('items', $response['cart']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Wrong store code specified for cart
+     */
+    public function testGetCartWithWrongStore()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $query = $this->getQuery($maskedQuoteId);
+
+        $headerMap = $this->getHeaderMap();
+        $headerMap['Store'] = 'fixture_second_store';
+
+        $this->graphQlQuery($query, [], '', $headerMap);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_customer_not_default_store.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Requested store is not found
+     */
+    public function testGetCartWithNotExistingStore()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1_not_default_store');
+        $query = $this->getQuery($maskedQuoteId);
+
+        $headerMap = $this->getHeaderMap();
+        $headerMap['Store'] = 'not_existing_store';
+
+        $this->graphQlQuery($query, [], '', $headerMap);
+    }
+
+    /**
      * @param string $maskedQuoteId
      * @return string
      */
