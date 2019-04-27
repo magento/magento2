@@ -52,7 +52,7 @@ class AddProductToCartTest extends GraphQlAbstract
      * @expectedException \Exception
      * @expectedExceptionMessage The product's required option(s) weren't entered. Make sure the options are entered and try again.
      */
-    public function testAddProductWithoutRequiredCustomOPtions()
+    public function testAddProductWithoutRequiredCustomOptions()
     {
         $sku = 'simple_with_custom_options';
         $qty = 1;
@@ -66,7 +66,7 @@ class AddProductToCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_custom_options.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
-    public function testAddProductWithRequiredCustomOPtions()
+    public function testAddProductWithRequiredCustomOptions()
     {
         $sku = 'simple_with_custom_options';
         $qty = 1;
