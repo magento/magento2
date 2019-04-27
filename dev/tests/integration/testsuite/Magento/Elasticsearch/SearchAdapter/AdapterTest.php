@@ -367,4 +367,18 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
             [['from' => '2000-02-01T00:00:00Z', 'to' => ''], 0],
         ];
     }
+
+    public function filterByAttributeValuesDataProvider()
+    {
+        $variations = parent::filterByAttributeValuesDataProvider();
+
+        $variations['quick search by date'] = [
+            'quick_search_container',
+            [
+                'search_term' => '2000-10-30',
+            ],
+        ];
+
+        return $variations;
+    }
 }
