@@ -28,6 +28,7 @@
             <item>Magento_Catalog::catalog</item>
             <item>Magento_Catalog::catalog_inventory</item>
             <item>Magento_Catalog::products</item>
+            <item>Magento_Catalog::update_attributes</item>
         </array>
     </entity>
     <entity name="RoleTest" type="user_role">

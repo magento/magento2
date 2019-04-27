@@ -32,11 +32,11 @@
     <!--Filter the product grid by the Name field-->
     <actionGroup name="filterProductGridByName">
         <arguments>
-            <argument name="product" defaultValue="_defaultProduct"/>
+            <argument name="productName" type="string"/>
         </arguments>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
-        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{product.name}}" stepKey="fillProductNameFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{productName}}" stepKey="fillProductNameFilter"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
     </actionGroup>
 
