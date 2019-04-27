@@ -20,6 +20,11 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
+    
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
 
     /**
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
@@ -27,10 +32,12 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
      */
     public function __construct(
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        \Psr\Log\LoggerInterface
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
+        $this->logger = $logger;
     }
 
     /**
@@ -46,13 +53,13 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
         try {
             $category->save();
         } catch (\Exception $e) {
+            $this->logger->critical($e->getMessage());
             throw new CouldNotSaveException(
                 __(
-                    'Could not save product "%1" with position %2 to category %3 : %4',
+                    'Could not save product "%1" with position %2 to category %3',
                     $product->getId(),
                     $productLink->getPosition(),
-                    $category->getId(),
-                    $e->getMessage()
+                    $category->getId()
                 ),
                 $e
             );
@@ -88,14 +95,14 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
         try {
             $category->save();
         } catch (\Exception $e) {
+            $this->logger->critical($e->getMessage());
             throw new CouldNotSaveException(
                 __(
-                    'Could not save product "%product" with position %position to category %category %error',
+                    'Could not save product "%product" with position %position to category %category',
                     [
                         "product" => $product->getId(),
                         "position" => $backupPosition,
-                        "category" => $category->getId(),
-                        "error" => $e->getMessage()
+                        "category" => $category->getId()
                     ]
                 ),
                 $e
