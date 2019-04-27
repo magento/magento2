@@ -327,7 +327,7 @@ class Store extends AbstractExtensibleModel implements
     private $eventManager;
 
     /**
-     * @var \Magento\MessageQueue\Api\PoisonPillPutInterface
+     * @var \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface
      */
     private $pillPut;
 
@@ -357,7 +357,7 @@ class Store extends AbstractExtensibleModel implements
      * @param bool $isCustomEntryPoint
      * @param array $data optional generic object data
      * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
-     * @param \Magento\MessageQueue\Api\PoisonPillPutInterface|null $pillPut
+     * @param \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface|null $pillPut
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -387,7 +387,7 @@ class Store extends AbstractExtensibleModel implements
         $isCustomEntryPoint = false,
         array $data = [],
         \Magento\Framework\Event\ManagerInterface $eventManager = null,
-        \Magento\MessageQueue\Api\PoisonPillPutInterface $pillPut = null
+        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_config = $config;
@@ -409,7 +409,7 @@ class Store extends AbstractExtensibleModel implements
         $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Event\ManagerInterface::class);
         $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\MessageQueue\Api\PoisonPillPutInterface::class);
+            ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class);
         parent::__construct(
             $context,
             $registry,
