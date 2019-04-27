@@ -33,7 +33,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     public function __construct(
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Psr\Log\LoggerInterface
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
