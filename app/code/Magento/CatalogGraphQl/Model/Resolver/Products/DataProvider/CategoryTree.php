@@ -149,6 +149,8 @@ class CategoryTree
     }
 
     /**
+     * Check if provided category active
+     *
      * @param Collection $collection
      * @param int $rootCategoryId
      *
