@@ -6,8 +6,6 @@
 
 namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
 
-use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
-use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
@@ -21,8 +19,6 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Indexer\DimensionFactory;
-use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 use Magento\Framework\Search\Request\EmptyRequestDataException;
 use Magento\Framework\Search\Request\NonExistingRequestNameException;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
@@ -139,10 +135,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param SearchResultFactory|null $searchResultFactory
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
-     * @param TableMaintainer|null $tableMaintainer
-     * @param PriceTableResolver|null $priceTableResolver
-     * @param DimensionFactory|null $dimensionFactory
-     * @param ResourceModelPoolInterface|null $resourceModelPool
      * @param string $searchRequestName
      * @param SearchCriteriaResolverFactory|null $searchCriteriaResolverFactory
      * @param SearchResultApplierFactory|null $searchResultApplierFactory
@@ -177,10 +169,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         SearchResultFactory $searchResultFactory = null,
         ProductLimitationFactory $productLimitationFactory = null,
         MetadataPool $metadataPool = null,
-        TableMaintainer $tableMaintainer = null,
-        PriceTableResolver $priceTableResolver = null,
-        DimensionFactory $dimensionFactory = null,
-        ResourceModelPoolInterface $resourceModelPool = null,
         $searchRequestName = 'advanced_search_container',
         SearchCriteriaResolverFactory $searchCriteriaResolverFactory = null,
         SearchResultApplierFactory $searchResultApplierFactory = null,
@@ -225,11 +213,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $groupManagement,
             $connection,
             $productLimitationFactory,
-            $metadataPool,
-            $tableMaintainer,
-            $priceTableResolver,
-            $dimensionFactory,
-            $resourceModelPool
+            $metadataPool
         );
     }
 

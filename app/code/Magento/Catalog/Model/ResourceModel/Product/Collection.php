@@ -37,7 +37,6 @@ use Magento\Store\Model\Store;
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
 {
-
     /**
      * Alias for index table
      */
@@ -326,7 +325,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param TableMaintainer|null $tableMaintainer
      * @param PriceTableResolver|null $priceTableResolver
      * @param DimensionFactory|null $dimensionFactory
-     * @param ResourceModelPoolInterface|null $resourceModelPool
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -355,8 +353,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         MetadataPool $metadataPool = null,
         TableMaintainer $tableMaintainer = null,
         PriceTableResolver $priceTableResolver = null,
-        DimensionFactory $dimensionFactory = null,
-        ResourceModelPoolInterface $resourceModelPool = null
+        DimensionFactory $dimensionFactory = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -384,8 +381,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $resourceHelper,
             $universalFactory,
             $storeManager,
-            $connection,
-            $resourceModelPool
+            $connection
         );
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
         $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(PriceTableResolver::class);
@@ -1981,7 +1977,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             }
             // Set additional field filters
             foreach ($this->_priceDataFieldFilters as $filterData) {
-                // phpcs:disable Magento2.Functions.DiscouragedFunction
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $select->where(call_user_func_array('sprintf', $filterData));
             }
         } else {
