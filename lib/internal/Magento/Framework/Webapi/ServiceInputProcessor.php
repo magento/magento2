@@ -12,6 +12,7 @@ namespace Magento\Framework\Webapi;
 use InvalidArgumentException;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\DtoProcessor;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
@@ -26,8 +27,6 @@ use Magento\Framework\Reflection\NameFinder;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
-use ReflectionException;
-use Zend\Code\Reflection\ClassReflection;
 
 /**
  * Deserialize arguments from API requests.
@@ -37,7 +36,10 @@ use Zend\Code\Reflection\ClassReflection;
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
-    const EXTENSION_ATTRIBUTES_TYPE = ExtensionAttributesInterface::class;
+    /**
+     * Extension attributes class name
+     */
+    public const EXTENSION_ATTRIBUTES_TYPE = ExtensionAttributesInterface::class;
 
     /**
      * @var TypeProcessor
@@ -90,6 +92,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $attributesPreprocessorsMap = [];
 
     /**
+     * @var DtoProcessor
+     */
+    private $dtoProcessor;
+
+    /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
@@ -99,6 +106,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param MethodsMap $methodsMap
      * @param ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap
      * @param ConfigInterface $config
+     * @param DtoProcessor|null $dtoProcessor
      * @param array $customAttributePreprocessors
      */
     public function __construct(
@@ -109,6 +117,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         MethodsMap $methodsMap,
         ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null,
         ConfigInterface $config = null,
+        DtoProcessor $dtoProcessor = null,
         array $customAttributePreprocessors = []
     ) {
         $this->typeProcessor = $typeProcessor;
@@ -121,22 +130,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $this->config = $config
             ?: ObjectManager::getInstance()->get(ConfigInterface::class);
         $this->customAttributePreprocessors = $customAttributePreprocessors;
-    }
-
-    /**
-     * The getter function to get the new NameFinder dependency
-     *
-     * @return NameFinder
-     *
-     * @deprecated 100.1.0
-     */
-    private function getNameFinder()
-    {
-        if ($this->nameFinder === null) {
-            $this->nameFinder = ObjectManager::getInstance()
-                ->get(NameFinder::class);
-        }
-        return $this->nameFinder;
+        $this->dtoProcessor = $dtoProcessor
+            ?: ObjectManager::getInstance()->get(DtoProcessor::class);
     }
 
     /**
@@ -182,49 +177,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     }
 
     /**
-     * Retrieve constructor data
-     *
-     * @param string $className
-     * @param array $data
-     * @return array
-     * @throws ReflectionException
-     * @throws LocalizedException
-     */
-    private function getConstructorData(string $className, array $data): array
-    {
-        $preferenceClass = $this->config->getPreference($className);
-        $class = new ClassReflection($preferenceClass ?: $className);
-
-        try {
-            $constructor = $class->getMethod('__construct');
-        } catch (ReflectionException $e) {
-            $constructor = null;
-        }
-
-        if ($constructor === null) {
-            return [];
-        }
-
-        $res = [];
-        $parameters = $constructor->getParameters();
-        foreach ($parameters as $parameter) {
-            if (isset($data[$parameter->getName()])) {
-                $parameterType = $this->typeProcessor->getParamType($parameter);
-
-                try {
-                    $res[$parameter->getName()] = $this->convertValue($data[$parameter->getName()], $parameterType);
-                } catch (ReflectionException $e) {
-                    // Parameter was not correctly declared or the class is unknown.
-                    // By not returning the constructor value, we will automatically fall back to the "setters" way.
-                    continue;
-                }
-            }
-        }
-
-        return $res;
-    }
-
-    /**
      * Creates a new instance of the given class and populates it with the array of data. The data can
      * be in different forms depending on the adapter being used, REST vs. SOAP. For REST, the data is
      * in snake_case (e.g. tax_class_id) while for SOAP the data is in camelCase (e.g. taxClassId).
@@ -238,61 +190,63 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      */
     protected function _createFromArray($className, $data)
     {
-        $data = is_array($data) ? $data : [];
-        // convert to string directly to avoid situations when $className is object
-        // which implements __toString method like \ReflectionObject
-        $className = (string) $className;
-        $class = new ClassReflection($className);
-        if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
-            $className = substr($className, 0, -strlen('Interface'));
-        }
+        return $this->dtoProcessor->createFromArray($data, $className);
 
-        // Primary method: assign to constructor parameters
-        $constructorArgs = $this->getConstructorData($className, $data);
-        $object = $this->objectManager->create($className, $constructorArgs);
-
-        // Secondary method: fallback to setter methods
-        foreach ($data as $propertyName => $value) {
-            if (isset($constructorArgs[$propertyName])) {
-                continue;
-            }
-
-            // Converts snake_case to uppercase CamelCase to help form getter/setter method names
-            // This use case is for REST only. SOAP request data is already camel cased
-            $camelCaseProperty = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName);
-            $methodName = $this->getNameFinder()->getGetterMethodName($class, $camelCaseProperty);
-            $methodReflection = $class->getMethod($methodName);
-            if ($methodReflection->isPublic()) {
-                $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
-                try {
-                    $setterName = $this->getNameFinder()->getSetterMethodName($class, $camelCaseProperty);
-                } catch (\Exception $e) {
-                    if (empty($value)) {
-                        continue;
-                    }
-
-                    throw $e;
-                }
-                try {
-                    if ($camelCaseProperty === 'CustomAttributes') {
-                        $setterValue = $this->convertCustomAttributeValue($value, $className);
-                    } else {
-                        $setterValue = $this->convertValue($value, $returnType);
-                    }
-                // phpcs:ignore Magento2.Exceptions.ThrowCatch
-                } catch (SerializationException $e) {
-                    throw new SerializationException(
-                        new Phrase(
-                            'Error occurred during "%field_name" processing. %details',
-                            ['field_name' => $propertyName, 'details' => $e->getMessage()]
-                        )
-                    );
-                }
-                $object->{$setterName}($setterValue);
-            }
-        }
-
-        return $object;
+//        $data = is_array($data) ? $data : [];
+//        // convert to string directly to avoid situations when $className is object
+//        // which implements __toString method like \ReflectionObject
+//        $className = (string) $className;
+//        $class = new ClassReflection($className);
+//        if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
+//            $className = substr($className, 0, -strlen('Interface'));
+//        }
+//
+//        // Primary method: assign to constructor parameters
+//        $constructorArgs = $this->getConstructorData($className, $data);
+//        $object = $this->objectManager->create($className, $constructorArgs);
+//
+//        // Secondary method: fallback to setter methods
+//        foreach ($data as $propertyName => $value) {
+//            if (isset($constructorArgs[$propertyName])) {
+//                continue;
+//            }
+//
+//            // Converts snake_case to uppercase CamelCase to help form getter/setter method names
+//            // This use case is for REST only. SOAP request data is already camel cased
+//            $camelCaseProperty = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName);
+//            $methodName = $this->getNameFinder()->getGetterMethodName($class, $camelCaseProperty);
+//            $methodReflection = $class->getMethod($methodName);
+//            if ($methodReflection->isPublic()) {
+//                $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
+//                try {
+//                    $setterName = $this->getNameFinder()->getSetterMethodName($class, $camelCaseProperty);
+//                } catch (\Exception $e) {
+//                    if (empty($value)) {
+//                        continue;
+//                    }
+//
+//                    throw $e;
+//                }
+//                try {
+//                    if ($camelCaseProperty === 'CustomAttributes') {
+//                        $setterValue = $this->convertCustomAttributeValue($value, $className);
+//                    } else {
+//                        $setterValue = $this->convertValue($value, $returnType);
+//                    }
+//                // phpcs:ignore Magento2.Exceptions.ThrowCatch
+//                } catch (SerializationException $e) {
+//                    throw new SerializationException(
+//                        new Phrase(
+//                            'Error occurred during "%field_name" processing. %details',
+//                            ['field_name' => $propertyName, 'details' => $e->getMessage()]
+//                        )
+//                    );
+//                }
+//                $object->{$setterName}($setterValue);
+//            }
+//        }
+//
+//        return $object;
     }
 
     /**

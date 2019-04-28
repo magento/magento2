@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor;
+namespace Magento\Framework\Webapi\ServiceInputProcessor;
 
 class TestService
 {
@@ -29,15 +29,6 @@ class TestService
     public function simpleImmutable(SimpleImmutable $simpleImmutable)
     {
         return $simpleImmutable;
-    }
-
-    /**
-     * @param SimpleConstructor $simpleConstructor
-     * @return SimpleConstructor
-     */
-    public function simpleConstructor(SimpleConstructor $simpleConstructor)
-    {
-        return $simpleConstructor;
     }
 
     /**

@@ -133,18 +133,6 @@ class DtoProcessor
     }
 
     /**
-     * Return true if a class is an ExtensionAttributes class
-     *
-     * @param string $className
-     * @return bool
-     */
-    private function isExtensionAttributes(string $className): bool
-    {
-        return
-            is_subclass_of($className, ExtensionAttributesInterface::class);
-    }
-
-    /**
      * Get real class name (if preferenced)
      *
      * @param string $className
@@ -178,22 +166,22 @@ class DtoProcessor
      */
     private function createObjectByType($value, string $type)
     {
-        if (is_object($value)) {
+        if (is_object($value) || ($type === 'array') || ($type === 'mixed')) {
             return $value;
-        }
-
-        if ($this->typeProcessor->isTypeSimple($type)) {
-            return $this->castType($value, $type);
         }
 
         if ($this->typeProcessor->isArrayType($type)) {
             $res = [];
-            foreach ($value as $subValue) {
+            foreach ($value as $k => $subValue) {
                 $itemType = $this->typeProcessor->getArrayItemType($type);
-                $res[] = $this->createObjectByType($subValue, $itemType);
+                $res[$k] = $this->createObjectByType($subValue, $itemType);
             }
 
             return $res;
+        }
+
+        if ($this->typeProcessor->isTypeSimple($type)) {
+            return $this->castType($value, $type);
         }
 
         return $this->createFromArray($value, $type);
@@ -328,6 +316,15 @@ class DtoProcessor
      */
     public function createFromArray(array $data, string $type, ?string $interfaceName = null)
     {
+        // Normalize snake case properties
+        foreach ($data as $k => $v) {
+            $snakeCaseKey = SimpleDataObjectConverter::camelCaseToSnakeCase($k);
+            if ($snakeCaseKey !== $k) {
+                $data[$snakeCaseKey] = $v;
+                unset($data[$k]);
+            }
+        }
+
         $data = $this->joinProcessor->extractExtensionAttributes($type, $data);
 
         $interfaceName = $interfaceName ?: $type;
