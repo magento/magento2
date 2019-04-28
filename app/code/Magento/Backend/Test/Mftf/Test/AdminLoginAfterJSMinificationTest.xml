@@ -17,11 +17,15 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set dev/js/minify_files 1" stepKey="enableJsMinification"/>
-            <magentoCLI command="cache:clean config" stepKey="cleanCache"/>
+            <magentoCLI command="config:set {{MinifyJavaScriptFilesEnableConfigData.path}} {{MinifyJavaScriptFilesEnableConfigData.value}}" stepKey="enableJsMinification"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
+        <after>
+            <magentoCLI command="config:set {{MinifyJavaScriptFilesDisableConfigData.path}} {{MinifyJavaScriptFilesDisableConfigData.value}}" stepKey="disableJsMinification"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-        <see userInput="Dashboard" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeDashboardTitle"/>
+        <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="loggedInSuccessfully"/>
+        <actionGroup ref="AssertAdminPageIsNot404ActionGroup" stepKey="dontSee404Page"/>
     </test>
 </tests>
