@@ -17,7 +17,7 @@ class TestService
      * @param string $name
      * @return string[]
      */
-    public function simple($entityId, $name)
+    public function simple($entityId, $name): array
     {
         return [$entityId, $name];
     }
@@ -26,7 +26,7 @@ class TestService
      * @param SimpleImmutable $simpleImmutable
      * @return SimpleImmutable
      */
-    public function simpleImmutable(SimpleImmutable $simpleImmutable)
+    public function simpleImmutable(SimpleImmutable $simpleImmutable): SimpleImmutable
     {
         return $simpleImmutable;
     }
@@ -35,7 +35,7 @@ class TestService
      * @param int $entityId
      * @return string[]
      */
-    public function simpleDefaultValue($entityId = self::DEFAULT_VALUE)
+    public function simpleDefaultValue($entityId = self::DEFAULT_VALUE): array
     {
         return [$entityId];
     }
@@ -44,7 +44,7 @@ class TestService
      * @param int $entityId
      * @return string[]
      */
-    public function constructorArguments($entityId = self::DEFAULT_VALUE)
+    public function constructorArguments($entityId = self::DEFAULT_VALUE): array
     {
         return [$entityId];
     }
@@ -53,7 +53,7 @@ class TestService
      * @param Nested $nested
      * @return Nested
      */
-    public function nestedData(Nested $nested)
+    public function nestedData(Nested $nested): Nested
     {
         return $nested;
     }
@@ -62,7 +62,7 @@ class TestService
      * @param int[] $ids
      * @return int[]
      */
-    public function simpleArray(array $ids)
+    public function simpleArray(array $ids): array
     {
         return $ids;
     }
@@ -71,7 +71,7 @@ class TestService
      * @param string[] $associativeArray
      * @return string[]
      */
-    public function associativeArray(array $associativeArray)
+    public function associativeArray(array $associativeArray): array
     {
         return $associativeArray;
     }
@@ -80,7 +80,7 @@ class TestService
      * @param Simple[] $dataObjects
      * @return Simple[]
      */
-    public function dataArray(array $dataObjects)
+    public function dataArray(array $dataObjects): array
     {
         return $dataObjects;
     }
@@ -89,7 +89,7 @@ class TestService
      * @param SimpleArray $arrayData
      * @return SimpleArray
      */
-    public function nestedSimpleArray(SimpleArray $arrayData)
+    public function nestedSimpleArray(SimpleArray $arrayData): SimpleArray
     {
         return $arrayData;
     }
@@ -98,7 +98,7 @@ class TestService
      * @param AssociativeArray $associativeArrayData
      * @return AssociativeArray
      */
-    public function nestedAssociativeArray(AssociativeArray $associativeArrayData)
+    public function nestedAssociativeArray(AssociativeArray $associativeArrayData): AssociativeArray
     {
         return $associativeArrayData;
     }
@@ -107,7 +107,7 @@ class TestService
      * @param DataArray $dataObjects
      * @return DataArray
      */
-    public function nestedDataArray(DataArray $dataObjects)
+    public function nestedDataArray(DataArray $dataObjects): DataArray
     {
         return $dataObjects;
     }
@@ -116,9 +116,8 @@ class TestService
      * @param ObjectWithCustomAttributes $param
      * @return ObjectWithCustomAttributes
      */
-    public function objectWithCustomAttributesMethod(
-        ObjectWithCustomAttributes $param
-    ) {
+    public function objectWithCustomAttributesMethod(ObjectWithCustomAttributes $param): ObjectWithCustomAttributes
+    {
         return $param;
     }
 }

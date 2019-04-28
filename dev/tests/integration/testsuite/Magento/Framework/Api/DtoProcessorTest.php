@@ -10,6 +10,7 @@ namespace Magento\Framework\Api;
 use Magento\Framework\Api\TestDtoClasses\TestDto;
 use Magento\Framework\Api\TestDtoClasses\TestDto2;
 use Magento\Framework\Api\TestDtoClasses\TestDtoWithArrays;
+use Magento\Framework\Api\TestDtoClasses\TestDtoWithCustomAttributes;
 use Magento\Framework\Api\TestDtoClasses\TestHybridDto;
 use Magento\Framework\Api\TestDtoClasses\TestMutableDto;
 use Magento\Framework\Api\TestDtoClasses\TestNestedDto;
@@ -54,6 +55,31 @@ class DtoProcessorTest extends TestCase
                 'param_one' => 1,
                 'param_two' => 2.0,
                 'param_three' => 'test3'
+            ],
+            $this->dataProcessor->getObjectData($dto)
+        );
+    }
+
+    public function testGetDtoWithCustomAttributes(): void
+    {
+        /** @var TestDtoWithCustomAttributes $dto */
+        $dto = $this->objectManager->create(TestDtoWithCustomAttributes::class, [
+            'paramOne' => 1,
+            'paramTwo' => 2.0
+        ]);
+
+        $dto->setCustomAttribute('my_custom_attribute', 'test3');
+
+        $this->assertEquals(
+            [
+                'param_one' => 1,
+                'param_two' => 2.0,
+                'custom_attributes' => [
+                    [
+                        'attribute_code' => 'my_custom_attribute',
+                        'value' => 'test3'
+                    ]
+                ]
             ],
             $this->dataProcessor->getObjectData($dto)
         );
@@ -130,6 +156,47 @@ class DtoProcessorTest extends TestCase
             ],
             $this->dataProcessor->getObjectData($nestedDto)
         );
+    }
+
+    public function testCreateDtoFromArrayWithCustomAttributesAsKeyValueFormat(): void
+    {
+        /** @var TestDtoWithCustomAttributes $dto */
+        $dto = $this->dataProcessor->createFromArray(
+            [
+                'param_one' => 1,
+                'param_two' => 2.0,
+                'custom_attributes' => [
+                    [
+                        'attribute_code' => 'my_custom_attribute',
+                        'value' => 'test3'
+                    ]
+                ]
+            ],
+            TestDtoWithCustomAttributes::class
+        );
+
+        $this->assertSame(1, $dto->getParamOne());
+        $this->assertSame(2.0, $dto->getParamTwo());
+        $this->assertSame('test3', $dto->getCustomAttribute('my_custom_attribute')->getValue());
+    }
+
+    public function testCreateDtoFromArrayWithCustomAttributes(): void
+    {
+        /** @var TestDtoWithCustomAttributes $dto */
+        $dto = $this->dataProcessor->createFromArray(
+            [
+                'param_one' => 1,
+                'param_two' => 2.0,
+                'custom_attributes' => [
+                    'my_custom_attribute' => 'test3'
+                ]
+            ],
+            TestDtoWithCustomAttributes::class
+        );
+
+        $this->assertSame(1, $dto->getParamOne());
+        $this->assertSame(2.0, $dto->getParamTwo());
+        $this->assertSame('test3', $dto->getCustomAttribute('my_custom_attribute')->getValue());
     }
 
     public function testCreateImmutableDtoFromArray(): void
@@ -422,7 +489,7 @@ class DtoProcessorTest extends TestCase
     public function hydratingStrategyDataProvider(): array
     {
         return [
-            [
+            'simpleDto' => [
                 TestDto::class,
                 [
                     'param_one' => 'test1',
@@ -445,10 +512,41 @@ class DtoProcessorTest extends TestCase
                         ],
                     ],
                     DtoProcessor::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA => [],
-                    DtoProcessor::HYDRATOR_STRATEGY_SETTER => []
+                    DtoProcessor::HYDRATOR_STRATEGY_SETTER => [],
+                    DtoProcessor::HYDRATOR_STRATEGY_ORPHAN => []
                 ]
             ],
-            [
+            'simpleDtoWithOrphanParameter' => [
+                TestDto::class,
+                [
+                    'param_one' => 'test1',
+                    'param_two' => 'test2',
+                    'param_three' => 'test3',
+                    'orphan_parameter' => 'test4'
+                ],
+                [
+                    DtoProcessor::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM => [
+                        'param_one' => [
+                            'parameter' => 'paramOne',
+                            'type' => 'int'
+                        ],
+                        'param_two' => [
+                            'parameter' => 'paramTwo',
+                            'type' => 'float'
+                        ],
+                        'param_three' => [
+                            'parameter' => 'paramThree',
+                            'type' => 'string'
+                        ],
+                    ],
+                    DtoProcessor::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA => [],
+                    DtoProcessor::HYDRATOR_STRATEGY_SETTER => [],
+                    DtoProcessor::HYDRATOR_STRATEGY_ORPHAN => [
+                        'orphan_parameter' => 'orphan_parameter'
+                    ]
+                ]
+            ],
+            'simpleDataObject' => [
                 TestSimpleObject::class,
                 [
                     'param_one' => 'test1',
@@ -468,10 +566,11 @@ class DtoProcessorTest extends TestCase
                             'type' => 'string'
                         ],
                     ],
-                    DtoProcessor::HYDRATOR_STRATEGY_SETTER => []
+                    DtoProcessor::HYDRATOR_STRATEGY_SETTER => [],
+                    DtoProcessor::HYDRATOR_STRATEGY_ORPHAN => []
                 ]
             ],
-            [
+            'hybridObject' => [
                 TestHybridDto::class,
                 [
                     'immutable_one' => 'test1',
@@ -510,7 +609,8 @@ class DtoProcessorTest extends TestCase
                             'method' => 'setMutableSix',
                             'type' => 'string'
                         ]
-                    ]
+                    ],
+                    DtoProcessor::HYDRATOR_STRATEGY_ORPHAN => []
                 ]
             ]
         ];

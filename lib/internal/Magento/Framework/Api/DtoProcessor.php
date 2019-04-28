@@ -44,6 +44,11 @@ class DtoProcessor
     public const HYDRATOR_STRATEGY_CONSTRUCTOR_DATA = 'data';
 
     /**
+     * List of orphan parameters
+     */
+    public const HYDRATOR_STRATEGY_ORPHAN = 'orphan';
+
+    /**
      * @var ConfigInterface
      */
     private $config;
@@ -117,6 +122,30 @@ class DtoProcessor
         return
             is_subclass_of($className, AbstractSimpleObject::class) ||
             is_subclass_of($className, DataObject::class);
+    }
+
+    /**
+     * Return true if a class is extensible through extension attributes
+     *
+     * @param string $className
+     * @return bool
+     */
+    private function isExtensibleObject(string $className): bool
+    {
+        return
+            is_subclass_of($className, ExtensibleDataInterface::class);
+    }
+
+    /**
+     * Return true if a class is extensible through custom attributes
+     *
+     * @param string $className
+     * @return bool
+     */
+    private function isCustomAttributesObject(string $className): bool
+    {
+        return
+            is_subclass_of($className, CustomAttributesDataInterface::class);
     }
 
     /**
@@ -202,6 +231,7 @@ class DtoProcessor
             self::HYDRATOR_STRATEGY_SETTER => [],
             self::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM => [],
             self::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA => [],
+            self::HYDRATOR_STRATEGY_ORPHAN => [],
         ];
 
         $className = $this->getRealClassName($className);
@@ -274,7 +304,11 @@ class DtoProcessor
                 }
 
             } catch (LogicException $e) {
-                unset($e);
+                if (!isset($strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA][$propertyName]) &&
+                    !isset($strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM][$propertyName])
+                ) {
+                    $strategy[self::HYDRATOR_STRATEGY_ORPHAN][$propertyName] = $propertyName;
+                }
             }
         }
 
@@ -306,6 +340,42 @@ class DtoProcessor
     }
 
     /**
+     * Return true if the array is associative
+     *
+     * @param array $arr
+     * @return bool
+     */
+    private function isAssociativeArray(array $arr): bool
+    {
+        if ([] === $arr) {
+            return false;
+        }
+
+        return array_keys($arr) !== range(0, count($arr) - 1);
+    }
+
+    /**
+     * @param array $customAttributes
+     * @return array
+     */
+    private function extractCustomAttributes(array $customAttributes): array
+    {
+        if (!$this->isAssociativeArray($customAttributes)) {
+            return $customAttributes;
+        }
+
+        $out = [];
+        foreach ($customAttributes as $attributeCode => $attributeValue) {
+            $out[] = [
+                'attribute_code' => $attributeCode,
+                'value' => $attributeValue
+            ];
+        }
+
+        return $out;
+    }
+
+    /**
      * Populate data object using data in array format.
      *
      * @param array $data
@@ -325,17 +395,26 @@ class DtoProcessor
             }
         }
 
-        $data = $this->joinProcessor->extractExtensionAttributes($type, $data);
-
-        $interfaceName = $interfaceName ?: $type;
-        $strategy = $this->getValuesHydratingStrategy($interfaceName, $data);
-
-        if (isset($data['extension_attributes']) && !is_object($data['extension_attributes'])) {
+        if (isset($data['extension_attributes']) &&
+            !is_object($data['extension_attributes']) &&
+            $this->isExtensibleObject($type)
+        ) {
             $data['extension_attributes'] = $this->extensionAttributesFactory->create(
                 $type,
                 $data['extension_attributes']
             );
+
+            $data = $this->joinProcessor->extractExtensionAttributes($type, $data);
         }
+
+        if (isset($data['custom_attributes']) &&
+            $this->isCustomAttributesObject($type)
+        ) {
+            $data['custom_attributes'] = $this->extractCustomAttributes($data['custom_attributes']);
+        }
+
+        $interfaceName = $interfaceName ?: $type;
+        $strategy = $this->getValuesHydratingStrategy($interfaceName, $data);
 
         $constructorParams = [];
         foreach ($strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM] as $paramData => $info) {
@@ -434,11 +513,25 @@ class DtoProcessor
                 if ($methodReflection->getNumberOfRequiredParameters() === 0) {
                     $value = $this->explodeObjectValue($sourceObject->$methodName());
 
-                    if (($propertyName === 'extension_attributes' || $propertyName === 'custom_attributes') &&
-                        empty($value)
+                    if (($propertyName === 'extension_attributes') &&
+                        empty($value) &&
+                        $this->isExtensibleObject($objectType)
                     ) {
                         continue;
                     }
+
+                    if ($this->isCustomAttributesObject($objectType)) {
+                        if (($propertyName === 'custom_attributes') &&
+                            empty($value)
+                        ) {
+                            continue;
+                        }
+
+                        if ($propertyName === 'custom_attributes_codes') {
+                            continue;
+                        }
+                    }
+
 
                     if ($value !== null) {
                         $res[$propertyName] = $this->castType(
