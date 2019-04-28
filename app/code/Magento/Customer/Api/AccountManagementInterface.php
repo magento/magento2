@@ -105,10 +105,11 @@ interface AccountManagementInterface
      *
      * @param string $email
      * @param string $password
+     * @param int $websiteId
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function authenticate($email, $password);
+    public function authenticate($email, $password, $websiteId);
 
     /**
      * Change customer password.
