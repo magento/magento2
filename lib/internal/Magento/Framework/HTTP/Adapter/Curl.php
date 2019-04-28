@@ -4,11 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * HTTP CURL Adapter
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Framework\HTTP\Adapter;
 
 /**
@@ -115,8 +110,8 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     /**
      * Add additional option to cURL
      *
-     * @param  int $option      the CURLOPT_* constants
-     * @param  mixed $value
+     * @param int $option the CURLOPT_* constants
+     * @param mixed $value
      * @return $this
      */
     public function addOption($option, $value)
