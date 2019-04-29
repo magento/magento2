@@ -624,7 +624,6 @@ class AccountManagement implements AccountManagementInterface
      * @param string $rpToken
      * @throws ExpiredException
      * @throws NoSuchEntityException
-     *
      * @return CustomerInterface
      * @throws LocalizedException
      */
@@ -703,7 +702,12 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setRpTokenCreatedAt(null);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
         $this->destroyCustomerSessions($customer->getId());
-        $this->sessionManager->destroy();
+        if ($this->sessionManager->isSessionExists()) {
+            //delete old session and move data to the new session
+            //use this instead of $this->sessionManager->regenerateId because last one doesn't delete old session
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            session_regenerate_id(true);
+        }
         $this->customerRepository->save($customer);
 
         return true;
@@ -1564,6 +1568,7 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * Destroy all active customer sessions by customer id (current session will not be destroyed).
+     *
      * Customer sessions which should be deleted are collecting from the "customer_visitor" table considering
      * configured session lifetime.
      *

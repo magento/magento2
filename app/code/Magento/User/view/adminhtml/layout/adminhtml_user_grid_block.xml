@@ -16,6 +16,7 @@
                     <argument name="default_sort" xsi:type="string">username</argument>
                     <argument name="default_dir" xsi:type="string">asc</argument>
                     <argument name="grid_url" xsi:type="url" path="*/*/roleGrid"/>
+                    <argument name="save_parameters_in_session" xsi:type="boolean">true</argument>
                 </arguments>
                 <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="permission.user.grid.columnSet">
                     <arguments>
