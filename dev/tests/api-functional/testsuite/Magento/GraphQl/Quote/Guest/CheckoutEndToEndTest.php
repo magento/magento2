@@ -226,7 +226,7 @@ mutation {
   ) {
     cart {
       billing_address {
-        address_type
+        __typename
       }
     }
   }
