@@ -5,20 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MessageQueue\Api;
+namespace Magento\Framework\MessageQueue\PoisonPill;
 
 /**
- * Interface describes how to describes how to compare poison pill with latest in DB.
- *
- * @api
+ * Interface describes how to compare given version of poison pill with latest in DB.
  */
 interface PoisonPillCompareInterface
 {
     /**
      * Check if version of current poison pill is latest.
      *
-     * @param int $poisonPillVersion
+     * @param string $poisonPillVersion
      * @return bool
      */
-    public function isLatestVersion(int $poisonPillVersion): bool;
+    public function isLatestVersion(string $poisonPillVersion): bool;
 }

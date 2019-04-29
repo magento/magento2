@@ -7,6 +7,8 @@
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
@@ -16,11 +18,10 @@ use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
+use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
-use Magento\Framework\Indexer\DimensionFactory;
 
 /**
  * Product collection
@@ -442,7 +443,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function getPriceExpression($select)
     {
-        //@todo: Add caching of price expresion
+        //@todo: Add caching of price expression
         $this->_preparePriceExpressionParameters($select);
         return $this->_priceExpression;
     }
