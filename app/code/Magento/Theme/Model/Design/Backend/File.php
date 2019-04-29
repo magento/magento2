@@ -20,6 +20,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -37,6 +38,11 @@ class File extends BackendFile
     private $mime;
 
     /**
+     * @var Database
+     */
+    private $databaseHelper;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param ScopeConfigInterface $config
@@ -48,6 +54,7 @@ class File extends BackendFile
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
+     * @param Database $databaseHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -61,7 +68,8 @@ class File extends BackendFile
         UrlInterface $urlBuilder,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        Database $databaseHelper = null
     ) {
         parent::__construct(
             $context,
@@ -76,6 +84,7 @@ class File extends BackendFile
             $data
         );
         $this->urlBuilder = $urlBuilder;
+        $this->databaseHelper = $databaseHelper ?: ObjectManager::getInstance()->get(Database::class);
     }
 
     /**
@@ -100,6 +109,10 @@ class File extends BackendFile
 
         $filename = basename($value['file']);
         $result = $this->_mediaDirectory->copyFile(
+            $this->getTmpMediaPath($filename),
+            $this->_getUploadDir() . '/' . $filename
+        );
+        $this->databaseHelper->renameFile(
             $this->getTmpMediaPath($filename),
             $this->_getUploadDir() . '/' . $filename
         );
