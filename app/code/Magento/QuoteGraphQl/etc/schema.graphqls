@@ -191,7 +191,6 @@ type Cart {
 }
 
 type CartAddress {
-    address_id: Int
     firstname: String
     lastname: String
     company: String
