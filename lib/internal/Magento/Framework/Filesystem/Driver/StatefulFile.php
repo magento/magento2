@@ -14,12 +14,12 @@ use Magento\Framework\Filesystem\Glob;
 
 /**
  * Filesystem driver that uses the local filesystem.
- * Assumed that stat cache is cleanup by data modification methods
+ * Assumed that stat cache is cleanup before test filesystem
  *
  * @package Magento\Framework\Filesystem\Driver
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class File implements DriverInterface
+class StatefulFile implements DriverInterface
 {
     /**
      * @var string
@@ -49,7 +49,9 @@ class File implements DriverInterface
      */
     public function isExists($path)
     {
-        $result = @file_exists($this->getScheme() . $path);
+        $filename = $this->getScheme() . $path;
+        clearstatcache(false, $filename);
+        $result = @file_exists($filename);
         if ($result === null) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
@@ -67,7 +69,9 @@ class File implements DriverInterface
      */
     public function stat($path)
     {
-        $result = @stat($this->getScheme() . $path);
+        $filename = $this->getScheme() . $path;
+        clearstatcache(false, $filename);
+        $result = @stat($filename);
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('Cannot gather stats! %1', [$this->getWarningMessage()])
@@ -85,7 +89,9 @@ class File implements DriverInterface
      */
     public function isReadable($path)
     {
-        $result = @is_readable($this->getScheme() . $path);
+        $filename = $this->getScheme() . $path;
+        clearstatcache(false, $filename);
+        $result = @is_readable($filename);
         if ($result === null) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
@@ -103,7 +109,9 @@ class File implements DriverInterface
      */
     public function isFile($path)
     {
-        $result = @is_file($this->getScheme() . $path);
+        $filename = $this->getScheme() . $path;
+        clearstatcache(false, $filename);
+        $result = @is_file($filename);
         if ($result === null) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
@@ -121,7 +129,9 @@ class File implements DriverInterface
      */
     public function isDirectory($path)
     {
-        $result = @is_dir($this->getScheme() . $path);
+        $filename = $this->getScheme() . $path;
+        clearstatcache(false, $filename);
+        $result = @is_dir($filename);
         if ($result === null) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
@@ -141,7 +151,9 @@ class File implements DriverInterface
      */
     public function fileGetContents($path, $flag = null, $context = null)
     {
-        $result = @file_get_contents($this->getScheme() . $path, $flag, $context);
+        $filename = $this->getScheme() . $path;
+        clearstatcache(false, $filename);
+        $result = @file_get_contents($filename, $flag, $context);
         if (false === $result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
@@ -162,7 +174,9 @@ class File implements DriverInterface
      */
     public function isWritable($path)
     {
-        $result = @is_writable($this->getScheme() . $path);
+        $filename = $this->getScheme() . $path;
+        clearstatcache(false, $filename);
+        $result = @is_writable($filename);
         if ($result === null) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
@@ -192,7 +206,6 @@ class File implements DriverInterface
      */
     public function createDirectory($path, $permissions = 0777)
     {
-        clearstatcache(false, $path);
         return $this->mkdirRecursive($path, $permissions);
     }
 
@@ -215,7 +228,6 @@ class File implements DriverInterface
             $this->mkdirRecursive($parentDir, $permissions);
         }
         $result = @mkdir($path, $permissions);
-        clearstatcache(false, $path);
         if (!$result) {
             if (is_dir($path)) {
                 $result = true;
@@ -265,6 +277,7 @@ class File implements DriverInterface
      */
     public function search($pattern, $path)
     {
+        clearstatcache();
         $globPattern = rtrim($path, '/') . '/' . ltrim($pattern, '/');
         $result = Glob::glob($globPattern, Glob::GLOB_BRACE);
         return is_array($result) ? $result : [];
@@ -285,8 +298,6 @@ class File implements DriverInterface
         $targetDriver = $targetDriver ?: $this;
         if (get_class($targetDriver) == get_class($this)) {
             $result = @rename($this->getScheme() . $oldPath, $newPath);
-            clearstatcache(false, $this->getScheme() . $oldPath);
-            clearstatcache(false, $newPath);
         } else {
             $content = $this->fileGetContents($oldPath);
             if (false !== $targetDriver->filePutContents($newPath, $content)) {
@@ -318,7 +329,6 @@ class File implements DriverInterface
         $targetDriver = $targetDriver ?: $this;
         if (get_class($targetDriver) == get_class($this)) {
             $result = @copy($this->getScheme() . $source, $destination);
-            clearstatcache(false, $destination);
         } else {
             $content = $this->fileGetContents($source);
             $result = $targetDriver->filePutContents($destination, $content);
@@ -352,7 +362,6 @@ class File implements DriverInterface
         $result = false;
         if ($targetDriver === null || get_class($targetDriver) == get_class($this)) {
             $result = @symlink($this->getScheme() . $source, $destination);
-            clearstatcache(false, $destination);
         }
         if (!$result) {
             throw new FileSystemException(
@@ -379,7 +388,6 @@ class File implements DriverInterface
     public function deleteFile($path)
     {
         $result = @unlink($this->getScheme() . $path);
-        clearstatcache(false, $this->getScheme() . $path);
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
@@ -430,7 +438,6 @@ class File implements DriverInterface
         } else {
             $result = @rmdir($fullPath);
         }
-        clearstatcache(false, $fullPath);
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
@@ -453,7 +460,6 @@ class File implements DriverInterface
     public function changePermissions($path, $permissions)
     {
         $result = @chmod($this->getScheme() . $path, $permissions);
-        clearstatcache(false, $this->getScheme() . $path);
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
@@ -482,8 +488,6 @@ class File implements DriverInterface
         } else {
             $result = @chmod($path, $dirPermissions);
         }
-        clearstatcache(false, $this->getScheme() . $path);
-
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
@@ -533,7 +537,6 @@ class File implements DriverInterface
         } else {
             $result = @touch($this->getScheme() . $path, $modificationTime);
         }
-        clearstatcache(false, $this->getScheme() . $path);
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
@@ -557,7 +560,6 @@ class File implements DriverInterface
     public function filePutContents($path, $content, $mode = null)
     {
         $result = @file_put_contents($this->getScheme() . $path, $content, $mode);
-        clearstatcache(false, $this->getScheme() . $path);
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
@@ -580,7 +582,6 @@ class File implements DriverInterface
     public function fileOpen($path, $mode)
     {
         $result = @fopen($this->getScheme() . $path, $mode);
-        clearstatcache(false, $this->getScheme() . $path);
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('File "%1" cannot be opened %2', [$path, $this->getWarningMessage()])
