@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="Magento_StoreGraphQl">
         <sequence>
+            <module name="Magento_Store"/>
             <module name="Magento_GraphQl"/>
         </sequence>
     </module>
