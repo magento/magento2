@@ -66,9 +66,21 @@ define([
         navigate: function () {
             var self = this;
 
-            getPaymentInformation().done(function () {
-                self.isVisible(true);
-            });
+            if (!self.hasShippingMethod()) {
+                this.isVisible(false);
+                stepNavigator.setHash('shipping');
+            } else {
+                getPaymentInformation().done(function () {
+                    self.isVisible(true);
+                });
+            }
+        },
+
+        /**
+         * @return {Boolean}
+         */
+        hasShippingMethod: function () {
+            return window.checkoutConfig.selectedShippingMethod !== null;
         },
 
         /**
