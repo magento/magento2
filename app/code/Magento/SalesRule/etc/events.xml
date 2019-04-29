@@ -27,4 +27,7 @@
     <event name="magento_salesrule_api_data_ruleinterface_load_after">
         <observer name="legacy_model_load" instance="Magento\Framework\EntityManager\Observer\AfterEntityLoad" />
     </event>
+    <event name="sales_quote_address_collect_totals_before">
+        <observer name="coupon_code_validation" instance="Magento\SalesRule\Observer\CouponCodeValidation" />
+    </event>
 </config>
