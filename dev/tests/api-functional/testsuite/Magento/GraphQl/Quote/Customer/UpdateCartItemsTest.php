@@ -285,7 +285,7 @@ QUERY;
             ],
             'missed_cart_item_qty' => [
                 'cart_items: [{ cart_item_id: 1 }]',
-                'Field CartItemUpdateQuantityInput.quantity of required type Float! was not provided.'
+                'Field CartItemUpdateInput.quantity of required type Float! was not provided.'
             ],
         ];
     }
