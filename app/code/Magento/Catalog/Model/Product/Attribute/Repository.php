@@ -113,11 +113,22 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
                 ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
                 ->getId()
         );
-        $existingAttributeModel = $this->eavConfig->getAttribute(
+        $attributeIdFlag = false;
+
+        if ($attribute->getAttributeId()) {
+           $attributeIdFlag = true; 
+        } elseif ($attribute->getAttributeCode()) {
+           $existAttrModel = $this->eavConfig->getAttribute(
             \Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE,
             $attribute->getAttributeCode()
-        );
-        if ($attribute->getAttributeId() || $existingAttributeModel->getAttributeId()) {
+            );
+
+           if ($existAttrModel->getAttributeId()) {
+                $attributeIdFlag = true; 
+           }
+        }
+
+        if ($attributeIdFlag) {
             $existingModel = $this->get($attribute->getAttributeCode());
 
             if (!$existingModel->getAttributeId()) {
