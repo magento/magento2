@@ -231,8 +231,10 @@ type CartAddressCountry {
 type SelectedShippingMethod {
     carrier_code: String
     method_code: String
-    label: String
-    amount: Float
+    carrier_title: String
+    method_title: String
+    amount: Money
+    base_amount: Money
 }
 
 type AvailableShippingMethod {

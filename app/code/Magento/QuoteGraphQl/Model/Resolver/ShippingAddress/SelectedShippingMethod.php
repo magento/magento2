@@ -11,6 +11,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address\Rate;
 
 /**
  * @inheritdoc
@@ -25,19 +27,38 @@ class SelectedShippingMethod implements ResolverInterface
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
-
+        /** @var Address $address */
         $address = $value['model'];
+        $rates = $address->getAllShippingRates();
 
-        if ($address->getShippingMethod()) {
-            list($carrierCode, $methodCode) = explode('_', $address->getShippingMethod(), 2);
-            $shippingAmount = $address->getShippingAmount();
+        if (count($rates) > 0) {
+            /** @var Rate $rate */
+            $rate = current($rates);
+
+            $data = [
+                'carrier_code' => $rate->getCarrier(),
+                'method_code' => $rate->getMethod(),
+                'carrier_title' => $rate->getCarrierTitle(),
+                'method_title' => $rate->getMethodTitle(),
+                'amount' => [
+                    'value' => $address->getShippingAmount(),
+                    'currency' => $address->getQuote()->getQuoteCurrencyCode(),
+                ],
+                'base_amount' => [
+                    'value' => $address->getBaseShippingAmount(),
+                    'currency' => $address->getQuote()->getBaseCurrencyCode(),
+                ],
+            ];
+        } else {
+            $data = [
+                'carrier_code' => null,
+                'method_code' => null,
+                'carrier_title' => null,
+                'method_title' => null,
+                'amount' => null,
+                'base_amount' => null,
+            ];
         }
-
-        return [
-            'carrier_code' => $carrierCode ?? null,
-            'method_code' => $methodCode ?? null,
-            'label' => $address->getShippingDescription(),
-            'amount' => $shippingAmount ?? null,
-        ];
+        return $data;
     }
 }
