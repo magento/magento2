@@ -1,4 +1,4 @@
-2.3.0
+2.3.0!!
 =============
 To get detailed information about changes in Magento 2.3.0, see the [Release Notes](https://devdocs.magento.com/guides/v2.3/release-notes/bk-release-notes.html)
 
