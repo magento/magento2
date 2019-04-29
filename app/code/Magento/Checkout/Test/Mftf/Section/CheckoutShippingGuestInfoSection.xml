@@ -20,7 +20,6 @@
         <element name="regionInput" type="input" selector="input[name=region]"/>
         <element name="postcode" type="input" selector="input[name=postcode]"/>
         <element name="country" type="select" selector="select[name=country_id]"/>
-        <element name="company" type="input" selector="input[name=company]"/>
         <element name="telephone" type="input" selector="input[name=telephone]"/>
         <element name="next" type="button" selector="button.button.action.continue.primary" timeout="30"/>
         <element name="firstShippingMethod" type="radio" selector=".row:nth-of-type(1) .col-method .radio"/>
