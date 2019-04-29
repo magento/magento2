@@ -69,12 +69,12 @@ class CheckoutEndToEndTest extends GraphQlAbstract
      */
     public function testCheckoutWorkflow()
     {
-        $qty = 2;
+        $quantity = 2;
 
         $sku = $this->findProduct();
         $cartId = $this->createEmptyCart();
         $this->setGuestEmailOnCart($cartId);
-        $this->addProductToCart($cartId, $qty, $sku);
+        $this->addProductToCart($cartId, $quantity, $sku);
 
         $this->setBillingAddress($cartId);
         $shippingAddress = $this->setShippingAddress($cartId);
@@ -162,11 +162,11 @@ QUERY;
 
     /**
      * @param string $cartId
-     * @param float $qty
+     * @param float $quantity
      * @param string $sku
      * @return void
      */
-    private function addProductToCart(string $cartId, float $qty, string $sku): void
+    private function addProductToCart(string $cartId, float $quantity, string $sku): void
     {
         $query = <<<QUERY
 mutation {  
@@ -176,7 +176,7 @@ mutation {
       cartItems: [
         {
           data: {
-            quantity: {$qty}
+            quantity: {$quantity}
             sku: "{$sku}"
           }
         }

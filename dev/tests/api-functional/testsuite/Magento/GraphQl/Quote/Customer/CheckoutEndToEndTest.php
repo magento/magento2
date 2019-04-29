@@ -81,7 +81,7 @@ class CheckoutEndToEndTest extends GraphQlAbstract
      */
     public function testCheckoutWorkflow()
     {
-        $qty = 2;
+        $quantity = 2;
 
         $this->createCustomer();
         $token = $this->loginCustomer();
@@ -89,7 +89,7 @@ class CheckoutEndToEndTest extends GraphQlAbstract
 
         $sku = $this->findProduct();
         $cartId = $this->createEmptyCart();
-        $this->addProductToCart($cartId, $qty, $sku);
+        $this->addProductToCart($cartId, $quantity, $sku);
 
         $this->setBillingAddress($cartId);
         $shippingAddress = $this->setShippingAddress($cartId);
