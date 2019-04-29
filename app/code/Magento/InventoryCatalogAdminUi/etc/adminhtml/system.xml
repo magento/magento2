@@ -10,16 +10,6 @@
 
     <system>
         <section id="cataloginventory">
-            <group id="legacy_stock" translate="label" type="text" sortOrder="600" showInDefault="1"
-                   showInWebsite="1" showInStore="1">
-                <label>Legacy stock alignment</label>
-                <field id="async" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0"
-                       showInStore="0" canRestore="1">
-                    <label>Run asynchronously</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>An asynchronous queue manager must be configured</comment>
-                </field>
-            </group>
             <group id="bulk_operations" translate="label" type="text" sortOrder="600" showInDefault="1"
                    showInWebsite="1" showInStore="1">
                 <label>Admin bulk operations</label>

@@ -5,11 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryLegacySynchronization\Test\Integration;
+namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Framework\MessageQueue\ConsumerFactory;
-use Magento\Framework\MessageQueue\ConsumerInterface;
 use Magento\InventoryCatalog\Model\GetDefaultSourceItemBySku;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -26,19 +24,12 @@ class UpdateDefaultSourceItemAtLegacyStockItemSaveTest extends TestCase
      */
     private $getDefaultSourceItemBySku;
 
-    /**
-     * @var ConsumerInterface
-     */
-    private $consumer;
-
     protected function setUp()
     {
         parent::setUp();
 
         $this->stockRegistry = Bootstrap::getObjectManager()->create(StockRegistryInterface::class);
         $this->getDefaultSourceItemBySku = Bootstrap::getObjectManager()->get(GetDefaultSourceItemBySku::class);
-        $this->consumer = Bootstrap::getObjectManager()->create(ConsumerFactory::class)
-            ->get('legacyInventorySynchronization', 100);
     }
 
     /**
@@ -49,7 +40,7 @@ class UpdateDefaultSourceItemAtLegacyStockItemSaveTest extends TestCase
      * @magentoDbIsolation enabled
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testSaveLegacyStockItemAssignedToDefaultSource(): void
+    public function testSaveLegacyStockItemAssignedToDefaultSource()
     {
         $stockItem = $this->stockRegistry->getStockItemBySku('SKU-1');
         $stockItem->setQty(10);
@@ -69,42 +60,10 @@ class UpdateDefaultSourceItemAtLegacyStockItemSaveTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
-     * @magentoAdminConfigFixture cataloginventory/legacy_stock/async 1
      * @magentoDbIsolation enabled
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testSaveLegacyStockItemAssignedToDefaultSourceAsynchronously(): void
-    {
-        $stockItem = $this->stockRegistry->getStockItemBySku('SKU-1');
-        $stockItem->setQty(10);
-        $this->stockRegistry->updateStockItemBySku('SKU-1', $stockItem);
-
-        $defaultSourceItem = $this->getDefaultSourceItemBySku->execute('SKU-1');
-        self::assertEquals(
-            5.5,
-            $defaultSourceItem->getQuantity(),
-            'Source item was update synchronously even if asynchronous operation was requested'
-        );
-
-        $this->consumer->process(1);
-
-        $defaultSourceItem = $this->getDefaultSourceItemBySku->execute('SKU-1');
-        self::assertEquals(
-            10,
-            $defaultSourceItem->getQuantity(),
-            'Asynchronous source item update failed'
-        );
-    }
-
-    /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
-     * @magentoDbIsolation enabled
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function testSaveLegacyStockItemNotAssignedToDefaultSource(): void
+    public function testSaveLegacyStockItemNotAssignedToDefaultSource()
     {
         $stockItem = $this->stockRegistry->getStockItemBySku('SKU-2');
         $stockItem->setQty(10);
@@ -138,7 +97,7 @@ class UpdateDefaultSourceItemAtLegacyStockItemSaveTest extends TestCase
      * @magentoDbIsolation enabled
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testSaveLegacyStockItemWithoutDefaultSourceAssignment(): void
+    public function testSaveLegacyStockItemWithoutDefaultSourceAssignment()
     {
         // SKU-3 is out of stock and not assigned to default source
         $stockItem = $this->stockRegistry->getStockItemBySku('SKU-3');
