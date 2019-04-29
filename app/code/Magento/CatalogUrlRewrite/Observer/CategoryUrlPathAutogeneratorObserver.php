@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Framework\Event\Observer;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\Store;
@@ -19,6 +20,14 @@ use Magento\Store\Model\Store;
  */
 class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
 {
+
+    /**
+     * Reserved endpoint names.
+     *
+     * @var array
+     */
+    private $invalidValues = ['admin', 'soap', 'rest', 'graphql'];
+
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
      */
@@ -72,7 +81,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
         if ($category->getUrlKey() !== false && !$useDefaultAttribute) {
             $resultUrlKey = $this->categoryUrlPathGenerator->getUrlKey($category);
             $this->updateUrlKey($category, $resultUrlKey);
-        } else if ($useDefaultAttribute) {
+        } elseif ($useDefaultAttribute) {
             $resultUrlKey = $category->formatUrlKey($category->getOrigData('name'));
             $this->updateUrlKey($category, $resultUrlKey);
             $category->setUrlKey(null)->setUrlPath(null);
@@ -92,6 +101,17 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
         if (empty($urlKey)) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Invalid URL key'));
         }
+
+        if (in_array($urlKey, $this->invalidValues)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __(
+                    'URL key "%1" conflicts with reserved endpoint names: %2. Try another url key.',
+                    $urlKey,
+                    implode(', ', $this->invalidValues)
+                )
+            );
+        }
+
         $category->setUrlKey($urlKey)
             ->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
         if (!$category->isObjectNew()) {
