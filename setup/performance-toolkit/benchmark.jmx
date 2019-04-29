@@ -44197,6 +44197,7 @@ vars.put("product_sku", product.get("sku"));
       <stringProp name="HTTPSampler.embedded_url_re"/>
       <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/get_current_shipping_address.jmx</stringProp>
     </HTTPSamplerProxy>
+    <hashTree/>
   
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Set Shipping Method On Cart" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
