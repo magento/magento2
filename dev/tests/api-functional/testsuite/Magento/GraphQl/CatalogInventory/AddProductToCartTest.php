@@ -94,7 +94,7 @@ class AddProductToCartTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId, $sku, $qty);
 
         $this->expectExceptionMessage(
-            "Could not add the product with SKU {$sku} to the shopping cart: The fewest you may purchase is 1."
+            "Could not add the product with SKU {$sku} to the shopping cart: The fewest you may purchase is 1"
         );
         $this->graphQlMutation($query);
     }

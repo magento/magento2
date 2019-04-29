@@ -48,7 +48,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
 
         $qty = 0.5;
         $this->expectExceptionMessage(
-            "Could not update the product with SKU simple_product: The fewest you may purchase is 1."
+            "Could not update the product with SKU simple_product: The fewest you may purchase is 1"
         );
         $query = $this->getQuery($maskedQuoteId, $itemId, $qty);
         $this->graphQlMutation($query);
