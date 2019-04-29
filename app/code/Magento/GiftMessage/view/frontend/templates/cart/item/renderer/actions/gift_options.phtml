@@ -6,7 +6,7 @@
 
 /** @var $block \Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions */
 ?>
-<?php if (!$block->isVirtual()): ?>
+<?php if (!$block->isVirtual()) : ?>
     <div id="gift-options-cart-item-<?= (int) $block->getItem()->getId() ?>"
         data-bind="scope:'giftOptionsCartItem-<?= (int) $block->getItem()->getId() ?>'"
         class="gift-options-cart-item">

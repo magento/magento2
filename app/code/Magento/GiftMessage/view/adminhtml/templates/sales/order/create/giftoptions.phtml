@@ -6,9 +6,9 @@
 ?>
 
 <?php $_item = $block->getItem() ?>
-<?php if ($_item): ?>
+<?php if ($_item) : ?>
     <?php $_childHtml = trim($block->getChildHtml('', false));?>
-    <?php if ($_childHtml): ?>
+    <?php if ($_childHtml) : ?>
         <tr class="row-gift-options">
             <td colspan="7">
                 <a class="action-link" href="#" id="gift_options_link_<?= (int) $_item->getId() ?>"><?= $block->escapeHtml(__('Gift Options')) ?></a>
