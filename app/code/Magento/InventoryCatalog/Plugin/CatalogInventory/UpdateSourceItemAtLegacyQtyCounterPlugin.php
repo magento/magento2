@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryLegacySynchronization\Plugin;
+namespace Magento\InventoryCatalog\Plugin\CatalogInventory;
 
 use Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface;
 use Magento\Framework\App\ResourceConnection;
@@ -59,7 +59,6 @@ class UpdateSourceItemAtLegacyQtyCounterPlugin
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ResourceConnection $resourceConnection
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
-     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         SourceItemRepositoryInterface $sourceItemRepository,
@@ -116,11 +115,6 @@ class UpdateSourceItemAtLegacyQtyCounterPlugin
      * @param int[] $productQuantitiesByProductId
      * @param string $operator
      * @return void
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Validation\ValidationException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @SuppressWarnings(PHPMD.LongVariable)
      */
     private function updateSourceItemAtLegacyCatalogInventoryQtyCounter(
         array $productQuantitiesByProductId,
@@ -149,8 +143,6 @@ class UpdateSourceItemAtLegacyQtyCounterPlugin
     /**
      * @param int[] $productQuantitiesByProductId
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @SuppressWarnings(PHPMD.LongVariable)
      */
     private function getProductQuantitiesBySku(array $productQuantitiesByProductId): array
     {
