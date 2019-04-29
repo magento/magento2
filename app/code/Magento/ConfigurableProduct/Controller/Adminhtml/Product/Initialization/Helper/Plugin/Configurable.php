@@ -158,7 +158,7 @@ class Configurable
             $configurableMatrix = json_decode($configurableMatrix, true);
 
             foreach ($configurableMatrix as $item) {
-                if ($item['newProduct']) {
+                if (isset($item['newProduct']) && $item['newProduct']) {
                     $result[$item['variationKey']] = $this->mapData($item);
 
                     if (isset($item['qty'])) {

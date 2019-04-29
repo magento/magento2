@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMassProductPriceUpdateTest">
+        <annotations>
+            <stories value="Mass product update "/>
+            <features value="Catalog"/>
+            <title value="Mass update simple product price"/>
+            <description value="Login as admin and update mass product price"/>
+            <testCaseId value="MC-8510"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct1"/>
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct2"/>
+        </before>
+        <after>
+            <deleteData  createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData  createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Open Product Index Page-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+
+        <!--Search products using keyword -->
+        <actionGroup ref="searchProductGridByKeyword2" stepKey="searchByKeyword">
+            <argument name="keyword" value="Testp"/>
+        </actionGroup>
+
+        <!--Sort Products by ID in descending order-->
+        <actionGroup ref="sortProductsByIdDescending" stepKey="sortProductsByIdDescending"/>
+
+        <!--Select products-->
+        <checkOption selector="{{AdminProductGridSection.productRowCheckboxBySku($$simpleProduct1.sku$$)}}" stepKey="selectFirstProduct"/>
+        <checkOption selector="{{AdminProductGridSection.productRowCheckboxBySku($$simpleProduct2.sku$$)}}" stepKey="selectSecondProduct"/>
+
+        <!-- Update product price-->
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickChangeStatus"/>
+        <waitForPageLoad stepKey="waitForProductAttributePageToLoad"/>
+        <scrollTo stepKey="scrollToPriceCheckBox" selector="{{AdminEditProductAttributesSection.ChangeAttributePriceToggle}}"  x="0" y="-160"/>
+        <click selector="{{AdminEditProductAttributesSection.ChangeAttributePriceToggle}}" stepKey="selectPriceCheckBox"/>
+        <fillField stepKey="fillPrice" selector="{{AdminEditProductAttributesSection.AttributePrice}}" userInput="90.99"/>
+        <click stepKey="clickOnSaveButton" selector="{{AdminEditProductAttributesSection.Save}}"/>
+        <waitForPageLoad stepKey="waitForUpdatedProductToSave" />
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpateSuccessMsg"/>
+
+        <!-- Run cron twice -->
+        <magentoCLI command="cron:run" stepKey="runCron1"/>
+        <magentoCLI command="cron:run" stepKey="runCron2"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitFormToReload1"/>
+
+        <!--Verify product name, sku and updated price-->
+        <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$simpleProduct1.sku$$)}}"/>
+        <waitForPageLoad stepKey="waitForFirstProductToLoad"/>
+        <seeInField stepKey="seeFirstProductNameInField" selector="{{AdminProductFormSection.productName}}" userInput="$$simpleProduct1.name$$"/>
+        <seeInField stepKey="seeFirstProductSkuInField" selector="{{AdminProductFormSection.productSku}}" userInput="$$simpleProduct1.sku$$"/>
+        <seeInField stepKey="seeFirstProductPriceInField" selector="{{AdminProductFormSection.productPrice}}" userInput="90.99"/>
+        <click stepKey="clickOnBackButton" selector="{{AdminGridMainControls.back}}"/>
+        <waitForPageLoad stepKey="waitForProductsToLoad"/>
+        <click stepKey="openSecondProduct" selector="{{AdminProductGridSection.productRowBySku($$simpleProduct2.sku$$)}}"/>
+        <waitForPageLoad stepKey="waitForSecondProductToLoad"/>
+        <seeInField stepKey="seeSecondProductNameInField" selector="{{AdminProductFormSection.productName}}" userInput="$$simpleProduct2.name$$"/>
+        <seeInField stepKey="seeSecondProductSkuInField" selector="{{AdminProductFormSection.productSku}}" userInput="$$simpleProduct2.sku$$"/>
+        <seeInField stepKey="seeSecondProductPriceInField" selector="{{AdminProductFormSection.productPrice}}" userInput="90.99"/>
+    </test>
+</tests>

@@ -15,9 +15,9 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
-
     .rating-summary {
         .lib-rating-summary();
+        
         .rating-result {
             margin-left: -5px;
         }
@@ -165,10 +165,10 @@
 
         .review-details {
             .customer-review-rating {
-                .lib-css(margin-bottom, @indent__base);
+                margin-bottom: @indent__base;
 
                 .item {
-                    .lib-css(margin-bottom, @indent__s);
+                    margin-bottom: @indent__s;
 
                     &:last-child {
                         margin-bottom: 0;
@@ -178,12 +178,12 @@
 
             .review-title {
                 .lib-heading(h3);
-                .lib-css(font-weight, @font-weight__semibold);
-                .lib-css(margin-bottom, @indent__base);
+                font-weight: @font-weight__semibold;
+                margin-bottom: @indent__base;
             }
 
             .review-content {
-                .lib-css(margin-bottom, @indent__base);
+                margin-bottom: @indent__base;
             }
         }
 
@@ -271,7 +271,7 @@
 
         &-field-rating {
             .control {
-                margin-bottom: 1.2*@indent__xl;
+                margin-bottom: 1.2 * @indent__xl;
                 margin-top: @indent__s;
             }
         }

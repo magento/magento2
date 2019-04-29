@@ -101,6 +101,9 @@ class SourceItemsProcessor
             }
 
             $sourceItemData[SourceItemInterface::SKU] = $sku;
+            if (empty($sourceItemData[SourceItemInterface::QUANTITY])) {
+                $sourceItemData[SourceItemInterface::QUANTITY] = 0;
+            }
             $this->dataObjectHelper->populateWithArray($sourceItem, $sourceItemData, SourceItemInterface::class);
 
             $sourceItemsForSave[] = $sourceItem;

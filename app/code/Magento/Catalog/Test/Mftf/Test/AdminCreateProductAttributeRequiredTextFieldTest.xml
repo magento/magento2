@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateProductAttributeRequiredTextFieldTest">
+        <annotations>
+            <stories value="Manage products"/>
+            <title value="Create Custom Product Attribute Text Field (Required) from Product Page"/>
+            <description value="Login as admin and create product attribute with Text Field and Required option"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-10906"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+
+            <!--Create Category-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+
+            <!--Create Simple Product-->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!--Delete created entity -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="deleteProductAttribute" stepKey="deleteCreatedAttribute">
+                <argument name="ProductAttribute" value="newProductAttribute"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Open Product Index Page-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+
+        <!-- Select Created Product-->
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="fillProductQty"/>
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="selectStockStatus"/>
+
+        <!-- Create Product Attribute -->
+        <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickOnAddAttribute"/>
+        <waitForPageLoad stepKey="waitForAttributePageToLoad"/>
+        <click selector="{{AdminProductFormSection.createNewAttributeBtn}}" stepKey="clickCreateNewAttributeButton"/>
+        <waitForPageLoad stepKey="waitForNewAttributePageToLoad"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.defaultLabel}}" stepKey="waitForDefaultLabelToBeVisible"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.defaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillAttributeLabel"/>
+        <selectOption selector="{{AdminCreateNewProductAttributeSection.inputType}}" userInput="Text Field" stepKey="selectTextField"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.isRequired}}" stepKey="enableIsRequiredOption"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.advancedAttributeProperties}}" stepKey="clickOnAdvancedAttributeProperties"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.attributeCode}}" stepKey="waitForAttributeCodeToVisible"/>
+        <scrollTo selector="{{AdminCreateNewProductAttributeSection.attributeCode}}" stepKey="scrollToAttributeCode"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.attributeCode}}" userInput="{{newProductAttribute.attribute_code}}" stepKey="fillAttributeCode"/>
+        <selectOption selector="{{AdminCreateNewProductAttributeSection.scope}}" userInput="Global" stepKey="selectScope"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.defaultValue}}" userInput="{{ProductAttributeOption8.value}}" stepKey="fillDefaultValue"/>
+        <scrollTo selector="{{AdminCreateNewProductAttributeSection.isUnique}}"   stepKey="scrollToIsUniqueOption"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.isUnique}}" stepKey="enableIsUniqueOption"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="clickOnSaveAttribute"/>
+        <waitForPageLoad stepKey="waitForAttributeToSave"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="saveTheProduct"/>
+        <waitForPageLoad stepKey="waitForProductToSave"/>
+
+        <!--Verify product attribute added in product form and Is Required message displayed-->
+        <scrollTo selector="{{AdminProductFormSection.contentTab}}" stepKey="scrollToContentTab"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.attributeTab}}" stepKey="waitForAttributeToVisible"/>
+        <seeElement selector="{{AdminProductFormSection.attributeFieldError}}" stepKey="seeAttributeInputFiledErrorMessage"/>
+
+        <!--Fill the Required field and save the product -->
+        <fillField selector="{{AdminProductFormSection.attributeRequiredInput(newProductAttribute.attribute_code)}}" userInput="attribute" stepKey="fillTheAttributeRequiredInputField"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfProductFormPage"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="saveTheProduct1"/>
+        <waitForPageLoad stepKey="waitForProductToSave1"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+    </test>
+</tests>

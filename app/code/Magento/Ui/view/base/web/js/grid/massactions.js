@@ -95,7 +95,7 @@ define([
         },
 
         /**
-         * Adds new action. If action with a specfied identifier
+         * Adds new action. If action with a specified identifier
          * already exists, than the original one will be overrided.
          *
          * @param {Object} action - Action object.
@@ -152,6 +152,11 @@ define([
         defaultCallback: function (action, data) {
             var itemsType = data.excludeMode ? 'excluded' : 'selected',
                 selections = {};
+
+            if (itemsType === 'excluded' && data.selected && data.selected.length) {
+                itemsType = 'selected';
+                data[itemsType] = _.difference(data.selected, data.excluded);
+            }
 
             selections[itemsType] = data[itemsType];
 

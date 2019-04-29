@@ -22,7 +22,7 @@
                 <button class="action action-update" type="button" data-bind="click: updateAddress">
                     <span data-bind="i18n: 'Update'"></span>
                 </button>
-                <button class="action action-cancel" type="button" data-bind="click: cancelAddressEdit">
+                <button class="action action-cancel" type="button" data-bind="click: cancelAddressEdit, visible: canUseCancelBillingAddress()">
                     <span data-bind="i18n: 'Cancel'"></span>
                 </button>
             </div>

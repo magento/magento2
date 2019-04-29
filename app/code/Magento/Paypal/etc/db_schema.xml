@@ -134,7 +134,7 @@
     <table name="paypal_payment_transaction" resource="default" engine="innodb"
            comment="PayPal Payflow Link Payment Transaction">
         <column xsi:type="int" name="transaction_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity Id"/>
+                comment="Entity ID"/>
         <column xsi:type="varchar" name="txn_id" nullable="true" length="100" comment="Txn Id"/>
         <column xsi:type="blob" name="additional_information" nullable="true" comment="Additional Information"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created At"/>

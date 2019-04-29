@@ -35,13 +35,6 @@
                 <requiredEntity createDataKey="createSource"/>
             </createData>
 
-            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
-            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
-                <field key="price">10.00</field>
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-            <createData entity="Msi_US_Customer" stepKey="createCustomer"/>
-
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
             <waitForPageLoad stepKey="waitForDashboardLoad"/>
 
@@ -55,6 +48,13 @@
             <waitForPageLoad time="30" stepKey="waitForDefaultStockPageLoaded"/>
             <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Msi_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>
             <comment userInput="Disable created source." stepKey="disableCreatedSourceComment"/>

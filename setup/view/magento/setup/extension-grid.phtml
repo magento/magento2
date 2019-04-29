@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <h2 class="page-title">{{$state.current.header}}</h2>
 
@@ -66,8 +69,8 @@
 
 <div class="row" ng-show="$root.isMarketplaceAuthorized && extensionsProcessed && total == 0">
     <label class="form-label not-found">
-        <b>You haven't purchased any extensions yet. Visit <a href="https://marketplace.magento.com">Marketplace</a> 
-            for purchasing extensions.</b><br/>
+        <strong>You haven't purchased any extensions yet. Visit <a href="https://marketplace.magento.com">Marketplace</a> 
+            for purchasing extensions.</strong><br/>
     </label>
 </div>
 <div class="admin__data-grid-outer-wrap"

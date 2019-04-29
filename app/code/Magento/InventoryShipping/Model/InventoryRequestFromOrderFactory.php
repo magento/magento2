@@ -60,7 +60,7 @@ class InventoryRequestFromOrderFactory
      * @param OrderInterface $order
      * @return InventoryRequestInterface
      */
-    public function create(OrderInterface $order) : InventoryRequestInterface
+    public function create(OrderInterface $order): InventoryRequestInterface
     {
         $requestItems = [];
         $websiteId = $order->getStore()->getWebsiteId();
@@ -81,8 +81,8 @@ class InventoryRequestFromOrderFactory
             }
 
             $requestItems[] = $this->itemRequestFactory->create([
-                    'sku' => $itemSku,
-                    'qty' => $qtyToDeliver
+                'sku' => $itemSku,
+                'qty' => $qtyToDeliver
             ]);
         }
 

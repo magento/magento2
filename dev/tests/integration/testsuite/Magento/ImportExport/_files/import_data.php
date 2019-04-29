@@ -107,6 +107,8 @@ $importDataResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager(
     \Magento\ImportExport\Model\ResourceModel\Import\Data::class
 );
 
+/** @var $importDataResource Magento\ImportExport\Model\ResourceModel\Import\Data */
+$importDataResource->cleanBunches();
 foreach ($bunches as $bunch) {
     $importDataResource->saveBunch($bunch['entity'], $bunch['behavior'], $bunch['data']);
 }

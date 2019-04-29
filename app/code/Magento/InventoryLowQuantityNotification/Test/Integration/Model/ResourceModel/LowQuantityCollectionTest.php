@@ -24,6 +24,7 @@ class LowQuantityCollectionTest extends TestCase
         $this->lowQuantityCollection = Bootstrap::getObjectManager()->create(LowQuantityCollection::class);
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * Tests that products from disabled sources are not present.
      * Each source code is used exclusively in one source item, so we check only source codes.
@@ -33,9 +34,9 @@ class LowQuantityCollectionTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @codingStandardsIgnoreLine
      * @magentoDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
      */
+    // @codingStandardsIgnoreEnd
     public function testLowQuantityCollection()
     {
         $expectedSourceCodes = [

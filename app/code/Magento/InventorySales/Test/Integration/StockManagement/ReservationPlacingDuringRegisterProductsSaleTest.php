@@ -12,12 +12,14 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Registry;
+use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\InventoryReservationsApi\Model\AppendReservationsInterface;
 use Magento\InventoryReservationsApi\Model\CleanupReservationsInterface;
 use Magento\InventoryReservationsApi\Model\GetReservationsQuantityInterface;
-use Magento\InventoryReservationsApi\Model\AppendReservationsInterface;
-use Magento\InventoryReservationsApi\Model\ReservationInterface;
 use Magento\InventoryReservationsApi\Model\ReservationBuilderInterface;
-use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
+use Magento\InventoryReservationsApi\Model\ReservationInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -26,6 +28,8 @@ use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Api\Data\CartItemInterfaceFactory;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -114,6 +118,16 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
      */
     private $storeManager;
 
+    /**
+     * @var StockRepositoryInterface
+     */
+    private $stockRepository;
+
+    /**
+     * @var StoreRepositoryInterface
+     */
+    private $storeRepository;
+
     protected function setUp()
     {
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
@@ -131,6 +145,8 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
         $this->resourceConnection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+        $this->stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
+        $this->storeRepository = Bootstrap::getObjectManager()->get(StoreRepositoryInterface::class);
     }
 
     /**
@@ -142,41 +158,37 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
     }
 
     /**
-     * Tests correct Product Salable Quantity decreasing after Order placing.
-     *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
      * @magentoDbIsolation disabled
      */
     public function testRegisterProductsSale()
     {
-        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/1587');
-
-        $this->storeManager->setCurrentStore('store_for_eu_website');
         $sku = 'SKU-1';
+        $stockId = 10;
         $quoteItemQty = 3.5;
 
-        $cart = $this->getCart();
+        $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
         $cartItem = $this->getCartItem($product, $quoteItemQty, (int)$cart->getId());
         $cart->addItem($cartItem);
         $this->cartRepository->save($cart);
 
-        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
-        self::assertEquals(0, $this->getReservationsQuantity->execute('SKU-1', 10));
+        self::assertEquals(8.5, $this->getProductSalableQty->execute($sku, $stockId));
+        self::assertEquals(0, $this->getReservationsQuantity->execute($sku, $stockId));
 
         $orderId = $this->cartManagement->placeOrder($cart->getId());
 
-        self::assertEquals(5, $this->getProductSalableQty->execute('SKU-1', 10));
-        self::assertEquals(-3.5, $this->getReservationsQuantity->execute('SKU-1', 10));
+        self::assertEquals(5, $this->getProductSalableQty->execute($sku, $stockId));
+        self::assertEquals(-3.5, $this->getReservationsQuantity->execute($sku, $stockId));
         self::assertEquals(
             '{"event_type":"order_placed","object_type":"order","object_id":"' . $orderId . '"}',
             $this->getReservationMetadata()
@@ -187,18 +199,31 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
     }
 
     /**
-     * Get Cart for placing Order.
-     *
+     * @param int $stockId
      * @return CartInterface
      */
-    private function getCart(): CartInterface
+    private function getCartByStockId(int $stockId): CartInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('reserved_order_id', 'test_order_1')
             ->create();
         /** @var CartInterface $cart */
         $cart = current($this->cartRepository->getList($searchCriteria)->getItems());
-        $cart->setStoreId(1);
+        /** @var StockInterface $stock */
+        $stock = $this->stockRepository->get($stockId);
+        /** @var SalesChannelInterface[] $salesChannels */
+        $salesChannels = $stock->getExtensionAttributes()->getSalesChannels();
+        $storeCode = 'store_for_';
+        foreach ($salesChannels as $salesChannel) {
+            if ($salesChannel->getType() == SalesChannelInterface::TYPE_WEBSITE) {
+                $storeCode .= $salesChannel->getCode();
+                break;
+            }
+        }
+        /** @var StoreInterface $store */
+        $store = $this->storeRepository->get($storeCode);
+        $this->storeManager->setCurrentStore($storeCode);
+        $cart->setStoreId($store->getId());
 
         return $cart;
     }

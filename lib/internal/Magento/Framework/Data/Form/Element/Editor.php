@@ -50,6 +50,8 @@ class Editor extends Textarea
     }
 
     /**
+     * Returns buttons translation
+     *
      * @return array
      */
     protected function getButtonTranslations()
@@ -64,6 +66,8 @@ class Editor extends Textarea
     }
 
     /**
+     * Returns JS config
+     *
      * @return bool|string
      * @throws \InvalidArgumentException
      */
@@ -80,8 +84,9 @@ class Editor extends Textarea
 
     /**
      * Fetch config options from plugin.  If $key is passed, return only that option key's value
+     *
      * @param string $pluginName
-     * @param null $key
+     * @param string|null $key
      * @return mixed all options or single option if $key is passed; null if nonexistent
      */
     public function getPluginConfigOptions($pluginName, $key = null)
@@ -101,13 +106,15 @@ class Editor extends Textarea
         $pluginOptions = $plugins[$pluginArrIndex]['options'];
 
         if ($key !== null) {
-            return isset($pluginOptions[$key]) ? $pluginOptions[$key] : null;
+            return $pluginOptions[$key] ?? null;
         } else {
             return $pluginOptions;
         }
     }
 
     /**
+     * Returns element html
+     *
      * @return string
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -200,6 +207,8 @@ class Editor extends Textarea
     }
 
     /**
+     * Returns theme
+     *
      * @return mixed
      */
     public function getTheme()
@@ -343,6 +352,8 @@ class Editor extends Textarea
     }
 
     /**
+     * Convert options
+     *
      * Convert options by replacing template constructions ( like {{var_name}} )
      * with data from this element object
      *
@@ -389,6 +400,7 @@ class Editor extends Textarea
 
     /**
      * Wraps Editor HTML into div if 'use_container' config option is set to true
+     *
      * If 'no_display' config option is set to true, the div will be invisible
      *
      * @param string $html HTML code to wrap
@@ -463,6 +475,8 @@ class Editor extends Textarea
     }
 
     /**
+     * Is Toggle Button Visible
+     *
      * @return bool
      */
     protected function isToggleButtonVisible()
@@ -527,5 +541,14 @@ class Editor extends Textarea
                 });
                 </script>';
         return $jsString;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHtmlId()
+    {
+        $suffix = $this->getConfig('dynamic_id') ? '${ $.wysiwygUniqueSuffix }' : '';
+        return parent::getHtmlId() . $suffix;
     }
 }

@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Framework\DataObject;
+
 /**
  * Utility class for copying data sets between objects
  */
-namespace Magento\Framework\DataObject;
-
 class Copy
 {
     /**
@@ -116,14 +116,13 @@ class Copy
     }
 
     /**
-     * Get data from object|array to object|array containing fields
-     * from fieldset matching an aspect.
+     * Get data from object|array to object|array containing fields from fieldset matching an aspect.
      *
      * @param string $fieldset
      * @param string $aspect a field name
      * @param array|\Magento\Framework\DataObject $source
      * @param string $root
-     * @return array $data
+     * @return array
      *
      * @api
      */
@@ -232,7 +231,7 @@ class Copy
     /**
      * Access the extension get method
      *
-     * @param \Magento\Framework\Api\ExtensibleDataInterface $object
+     * @param \Magento\Framework\Api\ExtensibleDataInterface $source
      * @param string $code
      *
      * @return mixed
@@ -240,7 +239,7 @@ class Copy
      */
     protected function getAttributeValueFromExtensibleDataObject($source, $code)
     {
-        $method = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
+        $method = 'get' . str_replace('_', '', ucwords($code, '_'));
 
         $methodExists = method_exists($source, $method);
         if ($methodExists == true) {
@@ -265,7 +264,7 @@ class Copy
     /**
      * Access the extension set method
      *
-     * @param \Magento\Framework\Api\ExtensibleDataInterface $object
+     * @param \Magento\Framework\Api\ExtensibleDataInterface $target
      * @param string $code
      * @param mixed $value
      *
@@ -274,7 +273,7 @@ class Copy
      */
     protected function setAttributeValueFromExtensibleDataObject($target, $code, $value)
     {
-        $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
+        $method = 'set' . str_replace('_', '', ucwords($code, '_'));
 
         $methodExists = method_exists($target, $method);
         if ($methodExists == true) {
