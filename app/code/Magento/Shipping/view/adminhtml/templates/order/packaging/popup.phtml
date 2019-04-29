@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+//phpcs:disable PSR2.Methods.FunctionCallSignature.SpaceBeforeOpenBracket
+//phpcs:disable Magento2.Security.IncludeFile.FoundIncludeFile
 ?>
 <?php /** @var $block \Magento\Shipping\Block\Adminhtml\Order\Packaging */ ?>
 <?php
@@ -51,7 +53,7 @@ $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 
             type: 'slide',
             title: '<?= $block->escapeJs($block->escapeHtml(__('Create Packages'))) ?>',
             buttons: [{
-                text: '<?= $block->escapeJs($block->escapeHtml( __('Cancel'))) ?>',
+                text: '<?= $block->escapeJs($block->escapeHtml(__('Cancel'))) ?>',
                 'class': 'action-secondary',
                 click: function () {
                     packaging.cancelPackaging();

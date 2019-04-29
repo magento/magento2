@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+//phpcs:disable Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace
+//phpcs:disable Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore
+//phpcs:disable Squiz.Operators.IncrementDecrementUsage.NotAllowed
+//phpcs:disable Squiz.PHP.NonExecutableCode.Unreachable
 ?>
 <div class="grid">
     <?php $randomId = rand(); ?>
@@ -31,14 +35,16 @@
             </thead>
             <tbody>
             <?php $i=0; ?>
-            <?php foreach ($block->getCollection() as $item): ?>
+            <?php foreach ($block->getCollection() as $item) : ?>
                 <?php
                     $_order = $block->getShipment()->getOrder();
                     $_orderItem = $_order->getItemById($item->getOrderItemId());
                 ?>
                 <?php if ($item->getIsVirtual()
-                    || ($_orderItem->isShipSeparately() && !($_orderItem->getParentItemId() || $_orderItem->getParentItem()))
-                    || (!$_orderItem->isShipSeparately() && ($_orderItem->getParentItemId() || $_orderItem->getParentItem()))): ?>
+                    || ($_orderItem->isShipSeparately()
+                        && !($_orderItem->getParentItemId() || $_orderItem->getParentItem()))
+                    || (!$_orderItem->isShipSeparately()
+                        && ($_orderItem->getParentItemId() || $_orderItem->getParentItem()))) : ?>
                     <?php continue; ?>
                 <?php endif; ?>
                 <tr class="data-grid-controls-row data-row <?= ($i++ % 2 != 0) ? '_odd-row' : '' ?>">
@@ -48,7 +54,7 @@
                             <input type="checkbox"
                                    name=""
                                    id="select-item-<?= /* @noEscape */ $randomId . '-' . $id ?>"
-                                   value="<?= $block->escapeHtmlAttr($id) ?>"
+                                   value="<?= (int) $id ?>"
                                    class="checkbox admin__control-checkbox">
                             <label for="select-item-<?= /* @noEscape */ $randomId . '-' . $id ?>"></label>
                         </label>
@@ -85,8 +91,15 @@
                         <input type="text"
                                name="qty"
                                value="<?= /* @noEscape */ $item->getQty()*1 ?>"
-                               class="input-text admin__control-text qty<?php if ($item->getOrderItem()->getIsQtyDecimal()): ?> qty-decimal<?php endif ?>">&nbsp;
-                        <button type="button" class="action-delete" data-action="package-delete-item" onclick="packaging.deleteItem(this);" style="display:none;">
+                               class="input-text admin__control-text qty
+                            <?php if ($item->getOrderItem()->getIsQtyDecimal()) : ?>
+                               qty-decimal
+                            <?php endif ?>">&nbsp;
+                        <button type="button"
+                                class="action-delete"
+                                data-action="package-delete-item"
+                                onclick="packaging.deleteItem(this);"
+                                style="display:none;">
                             <span><?= $block->escapeHtml(__('Delete')) ?></span>
                         </button>
                     </td>

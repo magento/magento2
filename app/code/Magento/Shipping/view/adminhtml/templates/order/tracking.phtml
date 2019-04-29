@@ -65,7 +65,7 @@ require(['prototype'], function(){
                     id="trackingC<%- data.index %>"
                     class="select admin__control-select carrier"
                     disabled="disabled">
-                <?php foreach ($block->getCarriers() as $_code => $_name): ?>
+                <?php foreach ($block->getCarriers() as $_code => $_name) : ?>
                     <option value="<?= $block->escapeHtmlAttr($_code) ?>"><?= $block->escapeHtml($_name) ?></option>
                 <?php endforeach; ?>
             </select>
