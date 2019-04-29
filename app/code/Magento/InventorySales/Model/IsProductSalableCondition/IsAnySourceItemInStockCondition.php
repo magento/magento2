@@ -40,30 +40,41 @@ class IsAnySourceItemInStockCondition implements IsProductSalableInterface
     private $isSourceItemManagementAllowedForSku;
 
     /**
+     * @var ManageStockCondition
+     */
+    private $manageStockCondition;
+
+    /**
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
      * @param IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku
+     * @param ManageStockCondition $manageStockCondition
      */
     public function __construct(
         SourceItemRepositoryInterface $sourceItemRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority,
-        IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku
+        IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku,
+        ManageStockCondition $manageStockCondition
     ) {
         $this->sourceItemRepository = $sourceItemRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->getSourcesAssignedToStockOrderedByPriority = $getSourcesAssignedToStockOrderedByPriority;
         $this->isSourceItemManagementAllowedForSku = $isSourceItemManagementAllowedForSku;
+        $this->manageStockCondition = $manageStockCondition;
     }
 
     /**
      * @inheritdoc
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(string $sku, int $stockId): bool
     {
+        // TODO Must be removed once MSI-2131 is complete.
+        if ($this->manageStockCondition->execute($sku, $stockId)) {
+            return true;
+        }
+
         if (!$this->isSourceItemManagementAllowedForSku->execute($sku)) {
             return true;
         }
