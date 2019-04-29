@@ -10,12 +10,12 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CheckoutFillEstimateShippingAndTaxActionGroup">
         <arguments>
-            <argument name="address" defaultValue="US_Address_TX"/>
+            <argument name="address" defaultValue="US_Address_TX" type="entity"/>
         </arguments>
         <conditionalClick selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.estimateShippingAndTaxSummary}}" visible="false" stepKey="openShippingDetails"/>
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="{{address.country_id}}" stepKey="selectCountry"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{address.state}}" stepKey="selectState"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.postcode}}" stepKey="waitForPasswordFieldToBeVisisble"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.postcode}}" stepKey="waitForPostCodeVisible"/>
         <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{address.postcode}}" stepKey="selectPostCode"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDiappear"/>
     </actionGroup>

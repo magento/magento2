@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontFillBillingAddressActionGroup">
       <arguments>
-          <argument name="address" defaultValue="CustomerUKAddress"/>
+          <argument name="address" defaultValue="CustomerUKAddress" type="entity"/>
       </arguments>
         <fillField selector="{{CheckoutPaymentSection.guestFirstName}}" userInput="{{address.firstname}}" stepKey="enterFirstName"/>
         <fillField selector="{{CheckoutPaymentSection.guestLastName}}" userInput="{{address.lastname}}" stepKey="enterLastName"/>

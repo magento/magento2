@@ -10,8 +10,8 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="FillGuestCheckoutShippingAddressFormActionGroup">
         <arguments>
-            <argument name="customer" defaultValue="Simple_US_Customer"/>
-            <argument name="customerAddress" defaultValue="US_Address_TX"/>
+            <argument name="customer" defaultValue="Simple_US_Customer" type="entity"/>
+            <argument name="customerAddress" defaultValue="US_Address_TX" type="entity"/>
         </arguments>
         <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{customer.email}}" stepKey="setCustomerEmail"/>
         <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customer.firstname}}" stepKey="SetCustomerFirstName"/>
@@ -22,6 +22,6 @@
         <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{customerAddress.telephone}}" stepKey="SetCustomerPhoneNumber"/>
     </actionGroup>
     <actionGroup name="FillGuestCheckoutShippingAddressWithCountryActionGroup" extends="FillGuestCheckoutShippingAddressFormActionGroup">
-       <selectOption selector="{{CheckoutShippingSection.country}}" userInput="{{customerAddress.country_id}}" stepKey="selectCountry" after="SetCustomerCity"/>
+       <selectOption selector="{{CheckoutShippingSection.country}}" userInput="{{customerAddress.country_id}}" stepKey="selectCustomerCountry" after="SetCustomerCity"/>
     </actionGroup>
 </actionGroups>

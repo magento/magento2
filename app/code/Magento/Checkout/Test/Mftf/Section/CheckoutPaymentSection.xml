@@ -54,7 +54,7 @@
         <element name="addressBook" type="button" selector="//a[text()='Address Book']"/>
         <element name="noQuotes" type="text" selector=".no-quotes-block"/>
         <element name="paymentMethodByName" type="text" selector="//*[@id='checkout-payment-method-load']//*[contains(@class, 'payment-group')]//label[normalize-space(.)='{{var1}}']" parameterized="true"/>
-        <element name="bankTransfer" type="radio" selector="//input[@id='banktransfer']"/>
+        <element name="bankTransfer" type="radio" selector="#banktransfer"/>
         <element name="billingAddressNotSameBankTransferCheckbox" type="checkbox" selector="#billing-address-same-as-shipping-banktransfer"/>
         <element name="billingAddressSelectShared" type="select" selector=".checkout-billing-address select[name='billing_address_id']"/>
     </section>
