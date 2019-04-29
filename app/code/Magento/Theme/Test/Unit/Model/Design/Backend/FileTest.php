@@ -64,6 +64,13 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $abstractResource = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\AbstractResource::class)
+            ->getMockForAbstractClass();
+
+        $abstractDb = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->fileBackend = new File(
             $context,
             $registry,
@@ -73,6 +80,9 @@ class FileTest extends \PHPUnit\Framework\TestCase
             $requestData,
             $filesystem,
             $this->urlBuilder,
+            $abstractResource,
+            $abstractDb,
+            [],
             $this->databaseHelper
         );
 
