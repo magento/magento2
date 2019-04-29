@@ -307,7 +307,7 @@ class DtoProcessor
                 if (!isset($strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA][$propertyName]) &&
                     !isset($strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM][$propertyName])
                 ) {
-                    $strategy[self::HYDRATOR_STRATEGY_ORPHAN][$propertyName] = $propertyName;
+                    $strategy[self::HYDRATOR_STRATEGY_ORPHAN][] = $propertyName;
                 }
             }
         }
@@ -531,7 +531,6 @@ class DtoProcessor
                             continue;
                         }
                     }
-
 
                     if ($value !== null) {
                         $res[$propertyName] = $this->castType(

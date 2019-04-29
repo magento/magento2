@@ -542,7 +542,7 @@ class DtoProcessorTest extends TestCase
                     DtoProcessor::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA => [],
                     DtoProcessor::HYDRATOR_STRATEGY_SETTER => [],
                     DtoProcessor::HYDRATOR_STRATEGY_ORPHAN => [
-                        'orphan_parameter' => 'orphan_parameter'
+                        'orphan_parameter'
                     ]
                 ]
             ],
