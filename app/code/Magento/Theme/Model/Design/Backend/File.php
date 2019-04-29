@@ -54,10 +54,10 @@ class File extends BackendFile
      * @param RequestDataInterface $requestData
      * @param Filesystem $filesystem
      * @param UrlInterface $urlBuilder
-     * @param Database $databaseHelper
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
+     * @param Database $databaseHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -69,10 +69,10 @@ class File extends BackendFile
         RequestDataInterface $requestData,
         Filesystem $filesystem,
         UrlInterface $urlBuilder,
-        Database $databaseHelper,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        Database $databaseHelper = null
     ) {
         parent::__construct(
             $context,
@@ -87,7 +87,7 @@ class File extends BackendFile
             $data
         );
         $this->urlBuilder = $urlBuilder;
-        $this->databaseHelper = $databaseHelper;
+        $this->databaseHelper = $databaseHelper ?: ObjectManager::getInstance()->get(Database::class);
     }
 
     /**
