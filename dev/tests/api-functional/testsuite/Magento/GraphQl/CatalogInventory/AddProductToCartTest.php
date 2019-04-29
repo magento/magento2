@@ -71,13 +71,13 @@ class AddProductToCartTest extends GraphQlAbstract
      * @expectedException \Exception
      * @expectedExceptionMessage Please enter a number greater than 0 in this field.
      */
-    public function testAddSimpleProductToCartWithNegativeQty()
+    public function testAddSimpleProductToCartWithNegativeQuantity()
     {
         $sku = 'simple';
-        $qty = -2;
+        $quantity = -2;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
-        $query = $this->getQuery($maskedQuoteId, $sku, $qty);
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
         $this->graphQlMutation($query);
     }
 
@@ -88,10 +88,10 @@ class AddProductToCartTest extends GraphQlAbstract
     public function testAddProductIfQuantityIsDecimal()
     {
         $sku = 'simple_product';
-        $qty = 0.2;
+        $quantity = 0.2;
 
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $query = $this->getQuery($maskedQuoteId, $sku, $qty);
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
 
         $this->expectExceptionMessage(
             "Could not add the product with SKU {$sku} to the shopping cart: The fewest you may purchase is 1"
@@ -102,10 +102,10 @@ class AddProductToCartTest extends GraphQlAbstract
     /**
      * @param string $maskedQuoteId
      * @param string $sku
-     * @param float $qty
+     * @param float $quantity
      * @return string
      */
-    private function getQuery(string $maskedQuoteId, string $sku, float $qty) : string
+    private function getQuery(string $maskedQuoteId, string $sku, float $quantity) : string
     {
         return <<<QUERY
 mutation {  
@@ -115,7 +115,7 @@ mutation {
       cartItems: [
         {
           data: {
-            quantity: $qty
+            quantity: $quantity
             sku: "$sku"
           }
         }

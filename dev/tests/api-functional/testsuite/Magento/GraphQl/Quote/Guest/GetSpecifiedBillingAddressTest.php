@@ -100,7 +100,7 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
                 'label' => null,
             ],
             'telephone' => null,
-            '__typename' => 'BillingCartAddress',
+            '__typename' => null,
         ];
         self::assertEquals($expectedBillingAddressData, $response['cart']['billing_address']);
     }

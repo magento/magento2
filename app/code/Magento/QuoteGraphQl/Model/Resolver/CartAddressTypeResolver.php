@@ -20,7 +20,7 @@ class CartAddressTypeResolver implements TypeResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolveType(array $data) : string
+    public function resolveType(array $data): string
     {
         if (!isset($data['model'])) {
             throw new LocalizedException(__('Missing key "model" in cart address data'));
@@ -33,7 +33,7 @@ class CartAddressTypeResolver implements TypeResolverInterface
         } elseif ($address->getAddressType() == AbstractAddress::TYPE_BILLING) {
             $addressType = 'BillingCartAddress';
         } else {
-            throw new LocalizedException( __('Unsupported cart address type'));
+            throw new LocalizedException(__('Unsupported cart address type'));
         }
         return $addressType;
     }
