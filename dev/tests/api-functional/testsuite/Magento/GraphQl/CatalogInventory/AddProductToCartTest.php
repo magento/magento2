@@ -39,10 +39,10 @@ class AddProductToCartTest extends GraphQlAbstract
     public function testAddProductIfQuantityIsNotAvailable()
     {
         $sku = 'simple';
-        $qty = 200;
+        $quantity = 200;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
-        $query = $this->getQuery($maskedQuoteId, $sku, $qty);
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
         $this->graphQlMutation($query);
     }
 
@@ -58,10 +58,10 @@ class AddProductToCartTest extends GraphQlAbstract
         $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/167');
 
         $sku = 'custom-design-simple-product';
-        $qty = 7;
+        $quantity = 7;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
-        $query = $this->getQuery($maskedQuoteId, $sku, $qty);
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
         $this->graphQlMutation($query);
     }
 
@@ -115,7 +115,7 @@ mutation {
       cartItems: [
         {
           data: {
-            qty: $qty
+            quantity: $qty
             sku: "$sku"
           }
         }
@@ -124,7 +124,7 @@ mutation {
   ) {
     cart {
       items {
-        qty
+        quantity
       }
     }
   }
