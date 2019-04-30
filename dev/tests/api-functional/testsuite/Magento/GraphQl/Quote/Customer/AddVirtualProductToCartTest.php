@@ -43,13 +43,13 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
     public function testAddVirtualProductToCart()
     {
         $sku = 'virtual_product';
-        $qty = 2;
+        $quantity = 2;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $query = $this->getQuery($maskedQuoteId, $sku, $qty);
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('cart', $response['addVirtualProductsToCart']);
-        self::assertEquals($qty, $response['addVirtualProductsToCart']['cart']['items'][0]['qty']);
+        self::assertEquals($quantity, $response['addVirtualProductsToCart']['cart']['items'][0]['quantity']);
         self::assertEquals($sku, $response['addVirtualProductsToCart']['cart']['items'][0]['product']['sku']);
     }
 
@@ -130,10 +130,10 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
     /**
      * @param string $maskedQuoteId
      * @param string $sku
-     * @param int $qty
+     * @param float $quantity
      * @return string
      */
-    private function getQuery(string $maskedQuoteId, string $sku, int $qty): string
+    private function getQuery(string $maskedQuoteId, string $sku, float $quantity): string
     {
         return <<<QUERY
 mutation {
@@ -142,7 +142,7 @@ mutation {
     cartItems: [
       {
         data: {
-          qty: {$qty}
+          quantity: {$quantity}
           sku: "{$sku}"
         }
       }                
@@ -151,7 +151,7 @@ mutation {
     cart {
       items {
         id
-        qty
+        quantity
         product {
           sku
         }
