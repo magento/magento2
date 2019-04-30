@@ -384,10 +384,11 @@ class DtoProcessorTest extends TestCase
             $dto,
             [
                 'test_dto1' => [
-                    'param_two' => '10'
+                    'param_one' => 2,
+                    'param_two' => 3.0,
+                    'param_three' => 'test1-4'
                 ],
                 'test_dto_array' => [
-                    [],
                     [
                         'param_one' => '11',
                         'param_two' => '12',
@@ -406,27 +407,23 @@ class DtoProcessorTest extends TestCase
 
         $this->assertSame('my-id', $updatedDto->getId());
 
-        $this->assertSame(1, $updatedDto->getTestDto1()->getParamOne());
-        $this->assertSame(10.0, $updatedDto->getTestDto1()->getParamTwo());
-        $this->assertSame('test1-3', $updatedDto->getTestDto1()->getParamThree());
+        $this->assertSame(2, $updatedDto->getTestDto1()->getParamOne());
+        $this->assertSame(3.0, $updatedDto->getTestDto1()->getParamTwo());
+        $this->assertSame('test1-4', $updatedDto->getTestDto1()->getParamThree());
 
         $this->assertSame(2, $updatedDto->getTestDto2()->getParamOne());
         $this->assertSame(4.0, $updatedDto->getTestDto2()->getParamTwo());
         $this->assertSame('test2-3', $updatedDto->getTestDto2()->getParamThree());
 
-        $this->assertCount(3, $updatedDto->getTestDtoArray());
+        $this->assertCount(2, $updatedDto->getTestDtoArray());
 
-        $this->assertSame(3, $updatedDto->getTestDtoArray()[0]->getParamOne());
-        $this->assertSame(6.0, $updatedDto->getTestDtoArray()[0]->getParamTwo());
-        $this->assertSame('array0-3', $updatedDto->getTestDtoArray()[0]->getParamThree());
+        $this->assertSame(11, $updatedDto->getTestDtoArray()[0]->getParamOne());
+        $this->assertSame(12.0, $updatedDto->getTestDtoArray()[0]->getParamTwo());
+        $this->assertSame('array3-3', $updatedDto->getTestDtoArray()[0]->getParamThree());
 
-        $this->assertSame(11, $updatedDto->getTestDtoArray()[1]->getParamOne());
-        $this->assertSame(12.0, $updatedDto->getTestDtoArray()[1]->getParamTwo());
-        $this->assertSame('array3-3', $updatedDto->getTestDtoArray()[1]->getParamThree());
-
-        $this->assertSame(13, $updatedDto->getTestDtoArray()[2]->getParamOne());
-        $this->assertSame(14.0, $updatedDto->getTestDtoArray()[2]->getParamTwo());
-        $this->assertSame('array4-3', $updatedDto->getTestDtoArray()[2]->getParamThree());
+        $this->assertSame(13, $updatedDto->getTestDtoArray()[1]->getParamOne());
+        $this->assertSame(14.0, $updatedDto->getTestDtoArray()[1]->getParamTwo());
+        $this->assertSame('array4-3', $updatedDto->getTestDtoArray()[1]->getParamThree());
     }
 
     public function testCreateMutableDataObject(): void

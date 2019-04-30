@@ -1,0 +1,83 @@
+declare(strict_types=1);
+
+namespace Magento\Framework\ObjectManager\Code\Generator;
+
+/**
+ * Mutator class for @see \Magento\Framework\ObjectManager\Code\Generator\SampleDto
+ */
+class SampleDtoMutator
+{
+    /**
+     * Dto Processor
+     *
+     * @var \Magento\Framework\Api\DtoProcessor
+     */
+    private $dtoProcessor = null;
+
+    /**
+     * Mutator data storage
+     *
+     * @var array
+     */
+    private $data = [
+        
+    ];
+
+    /**
+     * Mutator constructor
+     *
+     * @param Magento\Framework\Api\DtoProcessor $dtoProcessor
+     */
+    public function __construct(\Magento\Framework\Api\DtoProcessor $dtoProcessor)
+    {
+        $this->dtoProcessor = $dtoProcessor;
+    }
+
+    /**
+     * Mutator for param_one
+     *
+     * @param string $value
+     * @return \Magento\Framework\ObjectManager\Code\Generator\SampleDtoMutator
+     */
+    public function withParamOne(string $value) : \Magento\Framework\ObjectManager\Code\Generator\SampleDtoMutator
+    {
+        $this->data['param_one'] = $value;
+        return $this;
+    }
+
+    /**
+     * Mutator for param_two
+     *
+     * @param string $value
+     * @return \Magento\Framework\ObjectManager\Code\Generator\SampleDtoMutator
+     */
+    public function withParamTwo(string $value) : \Magento\Framework\ObjectManager\Code\Generator\SampleDtoMutator
+    {
+        $this->data['param_two'] = $value;
+        return $this;
+    }
+
+    /**
+     * Mutator for param_three
+     *
+     * @param int $value
+     * @return \Magento\Framework\ObjectManager\Code\Generator\SampleDtoMutator
+     */
+    public function withParamThree(int $value) : \Magento\Framework\ObjectManager\Code\Generator\SampleDtoMutator
+    {
+        $this->data['param_three'] = $value;
+        return $this;
+    }
+
+    /**
+     * Mutator constructor
+     *
+     * @sourceObject \Magento\Framework\ObjectManager\Code\Generator\SampleDto
+     */
+    public function mutate(\Magento\Framework\ObjectManager\Code\Generator\SampleDto $sourceObject) : \Magento\Framework\ObjectManager\Code\Generator\SampleDto
+    {
+        $res = $this->dtoProcessor->createUpdatedObjectFromArray($source, $this->data);
+        $this->data = [];
+        return $res;
+    }
+}

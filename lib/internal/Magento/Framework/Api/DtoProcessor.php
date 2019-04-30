@@ -471,7 +471,7 @@ class DtoProcessor
         ?string $objectType = null
     ) {
         $sourceObjectData = $this->getObjectData($sourceObject, $objectType);
-        $data = array_replace_recursive($sourceObjectData, $data);
+        $data = array_replace($sourceObjectData, $data);
 
         return $this->createFromArray($data, get_class($sourceObject), $objectType);
     }
