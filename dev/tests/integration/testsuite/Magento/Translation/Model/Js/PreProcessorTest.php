@@ -37,7 +37,10 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $viewFileSystem = $this->createPartialMock(FileSystem::class, ['getLocaleFileName']);
         $viewFileSystem->expects($this->any())->method('getLocaleFileName')
-            ->willReturn(dirname(__DIR__) . '/_files/Magento/Store/i18n/en_AU.csv');
+            ->willReturn(
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                dirname(__DIR__) . '/_files/Magento/Store/i18n/en_AU.csv'
+            );
 
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->addSharedInstance($viewFileSystem, FileSystem::class);
