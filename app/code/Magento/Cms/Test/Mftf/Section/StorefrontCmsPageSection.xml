@@ -10,5 +10,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCmsPageSection">
         <element name="imageSource" type="text" selector="img[src*='{{imageName}}']" parameterized="true"/>
+        <element name="mainContent" type="text" selector="#maincontent"/>
     </section>
 </sections>

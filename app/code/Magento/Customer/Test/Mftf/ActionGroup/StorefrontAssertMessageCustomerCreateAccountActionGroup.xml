@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+        
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertMessageCustomerCreateAccountActionGroup">
+        <arguments>
+            <argument name="message" type="string" defaultValue="Thank you for registering with Main Website Store." />
+            <argument name="messageType" type="string" defaultValue="success" />
+        </arguments>
+        <see selector="{{StorefrontCustomerDashboardAccountInformationSection.messageByType(messageType)}}" userInput="{{message}}" stepKey="verifyMessage" />
+    </actionGroup>
+</actionGroups>

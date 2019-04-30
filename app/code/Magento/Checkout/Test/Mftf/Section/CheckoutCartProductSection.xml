@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutCartProductSection">
         <element name="itemOptionsBlock" type="block"
                  selector=".item:nth-of-type({{numElement}}) .item-options"
@@ -35,5 +35,6 @@
         <element name="productPriceByName" type="text"
                  selector="//table[@id='shopping-cart-table']//tbody//tr[//a/text()='{{var1}}']//ancestor::td[contains(@class,'price')]//span[@class='price']"
                  parameterized="true"/>
+        <element name="productName" type="text" selector="//tbody[@class='cart item']//strong[@class='product-item-name']"/>
     </section>
 </sections>
