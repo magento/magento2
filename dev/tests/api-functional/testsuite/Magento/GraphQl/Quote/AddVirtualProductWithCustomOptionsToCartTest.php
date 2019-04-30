@@ -59,7 +59,7 @@ mutation {
   addVirtualProductsToCart(
     input: {
       cart_id: "{$maskedQuoteId}", 
-      cartItems: [
+      cart_items: [
         {
           data: {
             quantity: $quantity
@@ -118,7 +118,7 @@ mutation {
   addVirtualProductsToCart(
     input: {
       cart_id: "{$maskedQuoteId}", 
-      cartItems: [
+      cart_items: [
         {
           data: {
             quantity: $quantity
