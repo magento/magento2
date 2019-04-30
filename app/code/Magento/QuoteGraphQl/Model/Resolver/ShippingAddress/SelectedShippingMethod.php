@@ -7,18 +7,34 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver\ShippingAddress;
 
+use Magento\Directory\Model\Currency;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Rate;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @inheritdoc
  */
 class SelectedShippingMethod implements ResolverInterface
 {
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @param StoreManagerInterface $storeManager
+     */
+    public function __construct(
+        StoreManagerInterface $storeManager
+    ) {
+        $this->storeManager = $storeManager;
+    }
+
     /**
      * @inheritdoc
      */
@@ -35,6 +51,8 @@ class SelectedShippingMethod implements ResolverInterface
             list($carrierCode, $methodCode) = explode('_', $address->getShippingMethod(), 2);
             /** @var Rate $rate */
             $rate = current($rates);
+            /** @var Currency $currency */
+            $currency = $this->storeManager->getStore()->getBaseCurrency();
 
             $data = [
                 'carrier_code' => $carrierCode,
@@ -47,7 +65,7 @@ class SelectedShippingMethod implements ResolverInterface
                 ],
                 'base_amount' => [
                     'value' => $address->getBaseShippingAmount(),
-                    'currency' => $address->getQuote()->getBaseCurrencyCode(),
+                    'currency' => $currency,
                 ],
             ];
         } else {
