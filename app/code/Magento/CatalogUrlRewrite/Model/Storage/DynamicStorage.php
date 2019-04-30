@@ -246,6 +246,8 @@ class DynamicStorage extends BaseDbStorage
     }
 
     /**
+     * Return base name for path
+     *
      * @param string|null $string
      * @return mixed
      */
