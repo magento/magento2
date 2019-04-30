@@ -7,7 +7,6 @@
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminEditRoleResourcesSection">
-        <element name="roleScopes" type="select" selector="#gws_is_all"/>
         <element name="resourceAccess" type="select" selector="#all"/>
         <element name="resources" type="checkbox" selector="#role_info_tabs_account"/>
         <element name="storeName" type="checkbox" selector="//label[contains(text(),'{{var1}}')]" parameterized="true"/>
