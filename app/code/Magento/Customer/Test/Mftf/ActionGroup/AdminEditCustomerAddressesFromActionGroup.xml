@@ -39,4 +39,13 @@
         <click selector="{{AdminEditCustomerAddressesSection.defaultBillingAddressButton}}" stepKey="setDefaultBilling" before="setDefaultShipping"/>
         <click selector="{{AdminEditCustomerAddressesSection.defaultShippingAddressButton}}" stepKey="setDefaultShipping" before="fillPrefixName"/>
     </actionGroup>
+    <actionGroup name="SelectDropdownCustomerAddressAttributeValueActionGroup">
+        <arguments>
+            <argument name="customerAddressAttribute"/>
+            <argument name="optionValue" type="string"/>
+        </arguments>
+        <selectOption selector="{{AdminEditCustomerAddressesSection.dropDownAttribute(customerAddressAttribute.code)}}" userInput="{{optionValue}}" stepKey="selectOptionValue"/>
+        <click selector="{{AdminEditCustomerAddressesSection.save}}" stepKey="saveAddress"/>
+        <waitForPageLoad stepKey="waitForAddressSaved"/>
+    </actionGroup>
 </actionGroups>
