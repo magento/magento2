@@ -92,7 +92,10 @@ abstract class AbstractSource implements \SeekableIterator
             } else {
                 throw new \InvalidArgumentException(AbstractEntity::ERROR_CODE_COLUMNS_NUMBER);
             }
-        }
+	}
+
+	$row = array_map('trim', $row);
+
         return array_combine($this->_colNames, $row);
     }
 
