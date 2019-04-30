@@ -494,7 +494,7 @@ class Processor
     /**
      * Retrieve data for update attribute
      *
-     * @param  \Magento\Catalog\Model\Product $object
+     * @param \Magento\Catalog\Model\Product $object
      * @return array
      * @since 101.0.0
      */
