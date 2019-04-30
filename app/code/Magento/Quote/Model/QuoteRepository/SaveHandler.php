@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Model\QuoteRepository;
 
 use Magento\Quote\Api\Data\CartInterface;
@@ -10,7 +12,11 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
+use Magento\Quote\Api\Data\AddressInterfaceFactory;
 
+/**
+ * Handler for saving quote.
+ */
 class SaveHandler
 {
     /**
@@ -39,18 +45,25 @@ class SaveHandler
     private $addressRepository;
 
     /**
+     * @var AddressInterfaceFactory
+     */
+    private $quoteAddressFactory;
+
+    /**
      * @param \Magento\Quote\Model\ResourceModel\Quote $quoteResource
      * @param \Magento\Quote\Model\Quote\Item\CartItemPersister $cartItemPersister
      * @param \Magento\Quote\Model\Quote\Address\BillingAddressPersister $billingAddressPersister
      * @param \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister $shippingAssignmentPersister
      * @param AddressRepositoryInterface $addressRepository
+     * @param AddressInterfaceFactory|null $addressFactory
      */
     public function __construct(
         \Magento\Quote\Model\ResourceModel\Quote $quoteResource,
         \Magento\Quote\Model\Quote\Item\CartItemPersister $cartItemPersister,
         \Magento\Quote\Model\Quote\Address\BillingAddressPersister $billingAddressPersister,
         \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister $shippingAssignmentPersister,
-        AddressRepositoryInterface $addressRepository = null
+        AddressRepositoryInterface $addressRepository = null,
+        AddressInterfaceFactory $addressFactory = null
     ) {
         $this->quoteResourceModel = $quoteResource;
         $this->cartItemPersister = $cartItemPersister;
@@ -58,6 +71,8 @@ class SaveHandler
         $this->shippingAssignmentPersister = $shippingAssignmentPersister;
         $this->addressRepository = $addressRepository
             ?: ObjectManager::getInstance()->get(AddressRepositoryInterface::class);
+        $this->quoteAddressFactory = $addressFactory ?:ObjectManager::getInstance()
+            ->get(AddressInterfaceFactory::class);
     }
 
     /**
@@ -80,6 +95,9 @@ class SaveHandler
                 /** @var \Magento\Quote\Model\Quote\Item $item */
                 if (!$item->isDeleted()) {
                     $quote->setLastAddedItem($this->cartItemPersister->save($quote, $item));
+                } elseif (count($items) === 1) {
+                    $quote->setBillingAddress($this->quoteAddressFactory->create());
+                    $quote->setShippingAddress($this->quoteAddressFactory->create());
                 }
             }
         }
