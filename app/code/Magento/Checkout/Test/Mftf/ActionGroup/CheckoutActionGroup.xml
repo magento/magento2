@@ -294,7 +294,7 @@
             <argument name="orderNumberMessage"/>
             <argument name="emailYouMessage"/>
         </arguments>
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{orderNumberMessage}}" stepKey="seeOrderNumber"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{emailYouMessage}}" stepKey="seeEmailYou"/>
