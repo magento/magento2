@@ -309,7 +309,9 @@ mutation {
         available_shipping_methods {
           carrier_code
           method_code
-          amount
+          amount {
+            value
+          }
         }
       }
     }
@@ -334,7 +336,8 @@ QUERY;
         self::assertNotEmpty($availableShippingMethod['method_code']);
 
         self::assertArrayHasKey('amount', $availableShippingMethod);
-        self::assertNotEmpty($availableShippingMethod['amount']);
+        self::assertArrayHasKey('value', $availableShippingMethod['amount']);
+        self::assertNotEmpty($availableShippingMethod['amount']['value']);
 
         return $availableShippingMethod;
     }
