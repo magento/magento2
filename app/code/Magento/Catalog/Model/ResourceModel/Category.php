@@ -632,7 +632,7 @@ class Category extends AbstractResource
     public function findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue)
     {
         $serializeData = $this->serializer->serialize($entityIdsFilter);
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $entityIdsFilterHash = md5($serializeData);
 
         if (!isset($this->entitiesWhereAttributesIs[$entityIdsFilterHash][$attribute->getId()][$expectedValue])) {
