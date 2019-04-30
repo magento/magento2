@@ -300,7 +300,7 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
-     * Check refund availability
+     * Check refund availability.
      *
      * @return bool
      */
@@ -310,7 +310,7 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
-     * Check partial refund availability for invoice
+     * Check partial refund availability for invoice.
      *
      * @return bool
      */
@@ -320,7 +320,7 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
-     * Check partial capture availability
+     * Check partial capture availability.
      *
      * @return bool
      */
@@ -546,9 +546,7 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
-     * Create new invoice with maximum qty for invoice for each item
-     *
-     * Register this invoice and capture
+     * Create new invoice with maximum qty for invoice for each item register this invoice and capture
      *
      * @return Invoice
      */
@@ -686,6 +684,7 @@ class Payment extends Info implements OrderPaymentInterface
                         $gateway->refund($this, $baseAmountToRefund);
 
                         $creditmemo->setTransactionId($this->getLastTransId());
+                        // phpcs:ignore Magento2.Exceptions.ThrowCatch
                     } catch (\Magento\Framework\Exception\LocalizedException $e) {
                         if (!$captureTxn) {
                             throw new \Magento\Framework\Exception\LocalizedException(
@@ -732,10 +731,14 @@ class Payment extends Info implements OrderPaymentInterface
         $message = $message = $this->prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
         $orderState = $this->getOrderStateResolver()->getStateForOrder($this->getOrder());
+        $statuses = $this->getOrder()->getConfig()->getStateStatuses($orderState, false);
+        $status = in_array($this->getOrder()->getStatus(), $statuses, true)
+            ? $this->getOrder()->getStatus()
+            : $this->getOrder()->getConfig()->getStateDefaultStatus($orderState);
         $this->getOrder()
             ->addStatusHistoryComment(
                 $message,
-                $this->getOrder()->getConfig()->getStateDefaultStatus($orderState)
+                $status
             )->setIsCustomerNotified($creditmemo->getOrder()->getCustomerNoteNotify());
         $this->_eventManager->dispatch(
             'sales_order_payment_refund',
@@ -1203,7 +1206,7 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
-     * Add message to the specified transaction.
+     * Add transaction comments to order.
      *
      * @param Transaction|null $transaction
      * @param string $message

@@ -22,7 +22,6 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation2">
-            <data name="tag" xsi:type="string">to_maintain:yes, severity:S2</data>
             <data name="productsData/0" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <data name="cart/data/grand_total" xsi:type="string">761</data>
             <data name="cart/data/subtotal" xsi:type="string">756</data>
@@ -35,7 +34,6 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation3">
-            <data name="tag" xsi:type="string">to_maintain:yes, severity:S0</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
             <data name="cart/data/grand_total" xsi:type="string">345</data>
             <data name="cart/data/subtotal" xsi:type="string">340</data>
@@ -48,7 +46,6 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation4">
-            <data name="tag" xsi:type="string">to_maintain:yes, severity:S1</data>
             <data name="productsData/0" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
             <data name="cart/data/grand_total" xsi:type="string">50</data>
             <data name="cart/data/subtotal" xsi:type="string">50</data>
@@ -100,8 +97,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation8" summary="Enable https in backend and add products of different types to cart" ticketId="MAGETWO-42677">
-            <data name="tag" xsi:type="string">to_maintain:yes, severity:S0</data>
-            <data name="issue" xsi:type="string">Errors on configuration step. Skipped.</data>
+            <data name="tag" xsi:type="string">severity:S0</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
             <data name="productsData/1" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
             <data name="productsData/2" xsi:type="string">downloadableProduct::with_two_separately_links</data>
