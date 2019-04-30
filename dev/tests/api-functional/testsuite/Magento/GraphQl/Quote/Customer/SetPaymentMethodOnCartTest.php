@@ -196,7 +196,7 @@ mutation {
   ) {
     cart {
       items {
-        qty
+        quantity
       }
     }
   }
