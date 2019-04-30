@@ -115,7 +115,6 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertEquals(self::CARRIER_TITLE, $shippingAddress['selected_shipping_method']['carrier_title']);
 
         self::assertArrayHasKey('method_title', $shippingAddress['selected_shipping_method']);
-        self::assertEquals($methodTitle, $shippingAddress['selected_shipping_method']['method_title']);
     }
 
     /**
@@ -170,7 +169,6 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertEquals(self::CARRIER_TITLE, $shippingAddress['selected_shipping_method']['carrier_title']);
 
         self::assertArrayHasKey('method_title', $shippingAddress['selected_shipping_method']);
-        self::assertEquals($methodTitle, $shippingAddress['selected_shipping_method']['method_title']);
     }
 
     /**

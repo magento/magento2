@@ -32,12 +32,13 @@ class SelectedShippingMethod implements ResolverInterface
         $rates = $address->getAllShippingRates();
 
         if (count($rates) > 0) {
+            list($carrierCode, $methodCode) = explode('_', $address->getShippingMethod(), 2);
             /** @var Rate $rate */
             $rate = current($rates);
 
             $data = [
-                'carrier_code' => $rate->getCarrier(),
-                'method_code' => $rate->getMethod(),
+                'carrier_code' => $carrierCode,
+                'method_code' => $methodCode,
                 'carrier_title' => $rate->getCarrierTitle(),
                 'method_title' => $rate->getMethodTitle(),
                 'amount' => [
