@@ -37,6 +37,17 @@ abstract class Set extends \Magento\Backend\App\Action
     }
 
     /**
+     * Set initialization
+     *
+     * @return string set id
+     */
+    protected function initSet()
+    {
+        $setId = (int)$this->getRequest()->getParam('id');
+        return $setId;
+    }
+
+    /**
      * Define in register catalog_product entity type code as entityType
      *
      * @return void

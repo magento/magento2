@@ -6,10 +6,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 
-class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Set implements HttpPostActionInterface, HttpGetActionInterface
+class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Set implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Eav\Api\AttributeSetRepositoryInterface
@@ -35,15 +34,23 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Set implement
      */
     public function execute()
     {
-        $setId = $this->getRequest()->getParam('id');
         $resultRedirect = $this->resultRedirectFactory->create();
-        try {
-            $this->attributeSetRepository->deleteById($setId);
-            $this->messageManager->addSuccessMessage(__('The attribute set has been removed.'));
-            $resultRedirect->setPath('catalog/*/');
-        } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage(__('We can\'t delete this set right now.'));
+        $formKeyIsValid = $this->_formKeyValidator->validate($this->getRequest());
+        $isPost = $this->getRequest()->isPost();
+        if (!$formKeyIsValid || !$isPost) {
+            $this->messageManager->addError(__('We can\'t delete this set right now.'));
             $resultRedirect->setUrl($this->_redirect->getRedirectUrl($this->getUrl('*')));
+        }
+        $setId = $this->initSet();
+        if (!empty($setId)) {
+            try {
+                $this->attributeSetRepository->deleteById($setId);
+                $this->messageManager->addSuccessMessage(__('The attribute set has been removed.'));
+                $resultRedirect->setPath('catalog/*/');
+            } catch (\Exception $e) {
+                $this->messageManager->addErrorMessage(__('We can\'t delete this set right now.'));
+                $resultRedirect->setUrl($this->_redirect->getRedirectUrl($this->getUrl('*')));
+            }
         }
         return $resultRedirect;
     }
