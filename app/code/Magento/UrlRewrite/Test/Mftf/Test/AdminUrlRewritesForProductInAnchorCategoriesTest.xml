@@ -136,7 +136,7 @@
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="simpleSubCategory1" stepKey="deletesimpleSubCategory1"/>
-            <magentoCLI command="config:set catalog/seo/generate_rewrites_on_save 0" stepKey="resetConfigurationSetting"/>
+            <magentoCLI command="config:set catalog/seo/generate_rewrites_on_save 1" stepKey="resetConfigurationSetting"/>
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache"/>
         </after>
