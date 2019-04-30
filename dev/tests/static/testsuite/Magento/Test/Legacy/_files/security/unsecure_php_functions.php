@@ -41,6 +41,11 @@ return [
         'replacement' => '',
         'exclude' => [
             ['type' => 'library', 'name' => 'magento/framework', 'path' => 'App/Utility/Files.php'],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Authorizenet',
+                'path' => 'Model/Directpost/Response.php',
+            ],
         ],
     ],
     'srand' => [

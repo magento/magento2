@@ -12,6 +12,7 @@ use Magento\Payment\Block\ConfigurableInfo;
 
 /**
  * Payment information block for Authorize.net payment method.
+ * @deprecated 2.2.9 Authorize.net is removing all support for this payment method
  */
 class PaymentDetails extends ConfigurableInfo
 {

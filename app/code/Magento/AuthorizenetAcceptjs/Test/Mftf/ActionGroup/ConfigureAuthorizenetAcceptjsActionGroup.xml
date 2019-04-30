@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ConfigureAuthorizenetAcceptjs">
+        <arguments>
+            <argument name="paymentAction" type="string"/>
+        </arguments>
+        <!-- Navigate to configuration -->
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="goToConfigPaymentEditSection"/>
+        <scrollTo selector="{{AdminAuthorizenetAcceptjsConfigurationSection.openSectionToggle}}" stepKey="scrollToOpenConfig"/>
+        <conditionalClick selector="{{AdminAuthorizenetAcceptjsConfigurationSection.openSectionToggle}}" dependentSelector="{{AdminAuthorizenetAcceptjsConfigurationSection.alreadyOpenSectionToggle}}" visible="false" stepKey="openConfiguration"/>
+
+        <!-- Fill Auth.net fields and save -->
+        <waitForPageLoad stepKey="waitToFillApiLogin"/>
+        <conditionalClick selector="{{AdminAuthorizenetAcceptjsConfigurationSection.paymentActionCheckbox}}" dependentSelector="{{AdminAuthorizenetAcceptjsConfigurationSection.paymentActionSelectDisabled}}" visible="true" stepKey="uncheckPaymentActionDefault"/>
+        <selectOption selector="{{AdminAuthorizenetAcceptjsConfigurationSection.paymentActionSelect}}" userInput="{{paymentAction}}" stepKey="selectPaymentAction"/>
+        <scrollTo selector="{{AdminAuthorizenetAcceptjsConfigurationSection.apiLoginIdField}}" stepKey="scrollToApiLoginId"/>
+        <fillField selector="{{AdminAuthorizenetAcceptjsConfigurationSection.apiLoginIdField}}" userInput="{{_CREDS.authorizenet_acceptjs_api_login_id}}" stepKey="fillApiLoginId"/>
+        <fillField selector="{{AdminAuthorizenetAcceptjsConfigurationSection.transactionKeyField}}" userInput="{{_CREDS.authorizenet_acceptjs_transaction_key}}" stepKey="fillTransactionKey"/>
+        <fillField selector="{{AdminAuthorizenetAcceptjsConfigurationSection.publicClientKeyField}}" userInput="{{_CREDS.authorizenet_acceptjs_public_client_key}}" stepKey="fillPublicClientKey"/>
+        <fillField selector="{{AdminAuthorizenetAcceptjsConfigurationSection.signatureKeyField}}" userInput="{{_CREDS.authorizenet_acceptjs_signature_key}}" stepKey="fillSignatureKey"/>
+        <uncheckOption selector="{{AdminAuthorizenetAcceptjsConfigurationSection.enabledDefaultCheckbox}}" stepKey="uncheckCheckbox"/>
+        <selectOption selector="{{AdminAuthorizenetAcceptjsConfigurationSection.enabledDefaultSelect}}" userInput="Yes" stepKey="fillExpYear"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage" />
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickOnSave"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the configuration." stepKey="waitForSuccessMessage"/>
+    </actionGroup>
+    <actionGroup name="DisableAuthorizenetAcceptjs">
+        <magentoCLI command="config:set {{AuthorizenetAcceptjsConfigData.path}} {{AuthorizenetAcceptjsConfigData.value}}" stepKey="disableAuthorizenetAcceptjs"/>
+    </actionGroup>
+</actionGroups>
