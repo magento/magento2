@@ -54,6 +54,7 @@ class CategoryRepositoryTest extends TestCase
         $this->authorization = Bootstrap::getObjectManager()->get(Auth::class);
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
         $this->categoryFactory = Bootstrap::getObjectManager()->get(CategoryInterfaceFactory::class);
+        $this->authorization->login(TestBootstrap::ADMIN_NAME, TestBootstrap::ADMIN_PASSWORD);
     }
 
     /**
@@ -70,6 +71,7 @@ class CategoryRepositoryTest extends TestCase
     /**
      * Test authorization when saving category's design settings.
      *
+     * @return CategoryInterface
      * @magentoDataFixture Magento/Catalog/_files/category.php
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
@@ -78,7 +80,6 @@ class CategoryRepositoryTest extends TestCase
     public function testSaveDesign()
     {
         $category = $this->repository->get(333);
-        $this->authorization->login(TestBootstrap::ADMIN_NAME, TestBootstrap::ADMIN_PASSWORD);
 
         //Admin doesn't have access to category's design.
         $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_category_design');
@@ -97,7 +98,21 @@ class CategoryRepositoryTest extends TestCase
         $this->assertNotEmpty($category->getCustomAttribute('custom_design'));
         $this->assertEquals(2, $category->getCustomAttribute('custom_design')->getValue());
 
-        //Creating a new one
+        return $category;
+    }
+
+    /**
+     * Test authorization when saving category's design settings with restricted permission.
+     *
+     * @param CategoryInterface $category
+     * @return void
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @depends testSaveDesign
+     */
+    public function testSaveDesignWithRestrictedPermission(CategoryInterface $category)
+    {
         /** @var CategoryInterface $newCategory */
         $newCategory = $this->categoryFactory->create();
         $newCategory->setName('new category without design');
@@ -107,6 +122,7 @@ class CategoryRepositoryTest extends TestCase
         $newCategory->setCustomAttribute('custom_design', 2);
         $newCategory = $this->repository->save($newCategory);
         $customDesignAttribute = $newCategory->getCustomAttribute('custom_design');
+
         $this->assertTrue(!$customDesignAttribute || !$customDesignAttribute->getValue());
     }
 }
