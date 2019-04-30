@@ -88,6 +88,7 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
      * @dataProvider dataProviderShippingMethods
      * @param string $methodCode
      * @param string $methodTitle
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testSetUpsShippingMethod(string $methodCode, string $methodTitle)
     {
@@ -142,6 +143,7 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
      * @dataProvider dataProviderShippingMethodsBasedOnCanadaAddress
      * @param string $methodCode
      * @param string $methodTitle
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testSetUpsShippingMethodBasedOnCanadaAddress(string $methodCode, string $methodTitle)
     {
