@@ -28,8 +28,8 @@ class Cart extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Catalog\Block\Product\View $productView = null,
-        array $data = []
+        array $data = [],
+        \Magento\Catalog\Block\Product\View $productView = null
     ) {
         $this->productView = $productView ?:
                 \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Block\Product\View::class);
