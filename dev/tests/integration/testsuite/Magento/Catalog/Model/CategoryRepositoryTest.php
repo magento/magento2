@@ -9,6 +9,8 @@ namespace Magento\Catalog\Model;
 
 use Magento\Backend\Model\Auth;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterfaceFactory;
 use Magento\Framework\Acl\Builder;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -37,6 +39,11 @@ class CategoryRepositoryTest extends TestCase
     private $aclBuilder;
 
     /**
+     * @var CategoryInterfaceFactory
+     */
+    private $categoryFactory;
+
+    /**
      * Sets up common objects.
      *
      * @inheritDoc
@@ -46,6 +53,7 @@ class CategoryRepositoryTest extends TestCase
         $this->repository = Bootstrap::getObjectManager()->create(CategoryRepositoryInterface::class);
         $this->authorization = Bootstrap::getObjectManager()->get(Auth::class);
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
+        $this->categoryFactory = Bootstrap::getObjectManager()->get(CategoryInterfaceFactory::class);
     }
 
     /**
@@ -77,7 +85,8 @@ class CategoryRepositoryTest extends TestCase
 
         $category->setCustomAttribute('custom_design', 2);
         $category = $this->repository->save($category);
-        $this->assertEmpty($category->getCustomAttribute('custom_design'));
+        $customDesignAttribute = $category->getCustomAttribute('custom_design');
+        $this->assertTrue(!$customDesignAttribute || !$customDesignAttribute->getValue());
 
         //Admin has access to category' design.
         $this->aclBuilder->getAcl()
@@ -87,5 +96,17 @@ class CategoryRepositoryTest extends TestCase
         $category = $this->repository->save($category);
         $this->assertNotEmpty($category->getCustomAttribute('custom_design'));
         $this->assertEquals(2, $category->getCustomAttribute('custom_design')->getValue());
+
+        //Creating a new one
+        /** @var CategoryInterface $newCategory */
+        $newCategory = $this->categoryFactory->create();
+        $newCategory->setName('new category without design');
+        $newCategory->setParentId($category->getParentId());
+        $newCategory->setIsActive(true);
+        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_category_design');
+        $newCategory->setCustomAttribute('custom_design', 2);
+        $newCategory = $this->repository->save($newCategory);
+        $customDesignAttribute = $newCategory->getCustomAttribute('custom_design');
+        $this->assertTrue(!$customDesignAttribute || !$customDesignAttribute->getValue());
     }
 }
