@@ -117,6 +117,11 @@
             <group value="urlRewrite"/>
         </annotations>
         <before>
+            <!-- Set the configuration to generate URL rewrie for Products on Category Save to Yes (default)-->
+            <comment userInput="Enable SEO configuration setting to generate URL Rewrite on Category save " stepKey="commentEnableUrlRewriteConfig" />
+            <magentoCLI command="config:set catalog/seo/generate_rewrites_on_save 1" stepKey="enableGenerateUrlRewrite"/>
+            <!--Flush cache-->
+            <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
             <createData entity="SimpleSubCategory" stepKey="simpleSubCategory1"/>
             <!-- Create Simple product 1 and assign it to Category 1 -->
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
@@ -126,7 +131,7 @@
             <comment userInput="Disable SEO configuration setting to generate URL Rewrite on Category save " stepKey="commentDisableUrlRewriteConfig" />
             <magentoCLI command="config:set catalog/seo/generate_rewrites_on_save 0" stepKey="disableGenerateUrlRewrite"/>
             <!--Flush cache-->
-            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache2"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
