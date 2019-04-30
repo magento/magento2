@@ -276,4 +276,14 @@
         <seeInField userInput="{{ApiConfigurableProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="seeSkuRequired"/>
         <dontSeeInField userInput="{{ApiConfigurableProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="dontSeePriceRequired"/>
     </actionGroup>
+
+    <!--Click in Next Step and see Title-->
+    <actionGroup name="AdminConfigurableWizardMoveToNextStepActionGroup">
+        <arguments>
+            <argument name="title" type="string"/>
+        </arguments>
+        <click selector="{{ConfigurableProductSection.nextButton}}" stepKey="clickNextButton"/>
+        <waitForPageLoad stepKey="waitForNextStepLoaded"/>
+        <see userInput="{{title}}" selector="{{AdminProductFormConfigurationsSection.stepsWizardTitle}}" stepKey="seeStepTitle"/>
+    </actionGroup>
 </actionGroups>
