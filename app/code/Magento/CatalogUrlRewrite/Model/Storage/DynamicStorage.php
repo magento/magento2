@@ -213,7 +213,7 @@ class DynamicStorage extends BaseDbStorage
      */
     private function findProductRewritesByFilter(array $data)
     {
-        if (empty($data[UrlRewrite::ENTITY_TYPE]) || $data[UrlRewrite::ENTITY_TYPE] != 'product') {
+        if (empty($data[UrlRewrite::ENTITY_TYPE])) {
             return [];
         }
         $rewrites = [];
