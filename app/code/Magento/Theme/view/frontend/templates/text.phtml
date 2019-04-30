@@ -12,4 +12,11 @@ if (!empty($attr)) {
     }
 }
 echo
-    '<' . $block->getTag() . $attributes . '>' . $block->getText() . '</' . $block->getTag() . '>';
+    '<'
+    . $block->escapeHtml($block->getTag())
+    . $block->escapeHtmlAttr($attributes)
+    . '>'
+    . $block->escapeHtml($block->getText())
+    . '</'
+    . $block->escapeHtml($block->getTag())
+    . '>';

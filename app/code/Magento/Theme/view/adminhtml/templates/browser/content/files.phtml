@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php
@@ -14,15 +11,15 @@
 
 <?php if ($block->getFilesCount() > 0): ?>
     <?php foreach ($block->getFiles() as $file): ?>
-        <div class="filecnt file-font" id="<?= /* @escapeNotVerified */ $file['id'] ?>">
+        <div class="filecnt file-font" id="<?= $block->escapeHtmlAttr($file['id']) ?>">
             <p class="nm">
-                <?= /* @escapeNotVerified */ $file['text'] ?>
+                <?= $block->escapeHtml($file['text']) ?>
                 <?php if (isset($file['thumbnailParams'])): ?>
-                    <img src="<?= /* @escapeNotVerified */ $block->getUrl('*/*/previewImage', $file['thumbnailParams']) ?>">
+                    <img src="<?= $block->escapeUrl($block->getUrl('*/*/previewImage', $file['thumbnailParams'])) ?>" alt="<?= $block->escapeHtmlAttr(__('thumbnail')) ?>">
                 <?php endif; ?>
             </p>
         </div>
     <?php endforeach; ?>
 <?php else: ?>
-    <?= /* @escapeNotVerified */ __('We found no files.') ?>
+    <?= $block->escapeHtml(__('We found no files.')) ?>
 <?php endif; ?>

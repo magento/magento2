@@ -4,17 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 ?>
 <!doctype html>
-<html <?= /* @escapeNotVerified */ $htmlAttributes ?>>
-    <head <?= /* @escapeNotVerified */ $headAttributes ?>>
-        <?= /* @escapeNotVerified */ $requireJs ?>
-        <?= /* @escapeNotVerified */ $headContent ?>
-        <?= /* @escapeNotVerified */ $headAdditional ?>
+<html <?= $block->escapeHtmlAttr($htmlAttributes) ?>>
+    <head <?= $block->escapeHtmlAttr($headAttributes) ?>>
+        <?= $block->escapeHtml($requireJs) ?>
+        <?= $block->escapeHtml($headContent) ?>
+        <?= $block->escapeHtml($headAdditional) ?>
     </head>
-    <body data-container="body" data-mage-init='{"loaderAjax": {}, "loader": { "icon": "<?= /* @escapeNotVerified */ $loaderIcon ?>"}}' <?= /* @escapeNotVerified */ $bodyAttributes ?>>
-        <?= /* @escapeNotVerified */ $layoutContent ?>
+    <body data-container="body" data-mage-init='{"loaderAjax": {}, "loader": { "icon": "<?= $block->escapeHtmlAttr($loaderIcon) ?>"}}' <?= $block->escapeHtmlAttr($bodyAttributes) ?>>
+        <?= $block->escapeHtml($layoutContent) ?>
     </body>
 </html>

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 $target_id = $block->getTargetId();
 ?>
-<a id="<?= /* @escapeNotVerified */ $target_id ?>" tabindex="-1"></a>
+<a id="<?= $block->escapeHtmlAttr($target_id) ?>" tabindex="-1"></a>
