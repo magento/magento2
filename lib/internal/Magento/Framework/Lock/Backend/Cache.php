@@ -15,6 +15,11 @@ use Magento\Framework\Cache\FrontendInterface;
 class Cache implements \Magento\Framework\Lock\LockManagerInterface
 {
     /**
+     * Prefix for marking that key is locked or not.
+     */
+    const LOCK_PREFIX = 'LOCKED_RECORD_INFO_';
+
+    /**
      * @var FrontendInterface
      */
     private $cache;
@@ -26,12 +31,13 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
     {
         $this->cache = $cache;
     }
+
     /**
      * @inheritdoc
      */
     public function lock(string $name, int $timeout = -1): bool
     {
-        return $this->cache->save('1', $name, [], $timeout);
+        return $this->cache->save('1', $this->getIdentifier($name), [], $timeout);
     }
 
     /**
@@ -39,7 +45,7 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function unlock(string $name): bool
     {
-        return $this->cache->remove($name);
+        return $this->cache->remove($this->getIdentifier($name));
     }
 
     /**
@@ -47,6 +53,17 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function isLocked(string $name): bool
     {
-        return (bool)$this->cache->test($name);
+        return (bool)$this->cache->test($this->getIdentifier($name));
+    }
+
+    /**
+     * Get cache locked identifier based on cache identifier.
+     *
+     * @param string $cacheIdentifier
+     * @return string
+     */
+    private function getIdentifier(string $cacheIdentifier): string
+    {
+        return self::LOCK_PREFIX . $cacheIdentifier;
     }
 }

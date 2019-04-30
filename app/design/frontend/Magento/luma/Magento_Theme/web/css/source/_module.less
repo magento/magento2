@@ -77,6 +77,14 @@
         .lib-vendor-prefix-flex-grow(1);
     }
 
+    .page-main {
+        > .page-title-wrapper {
+            .page-title {
+                word-break: break-all;
+            }
+        }
+    }
+
     //
     //  Header
     //  ---------------------------------------------
@@ -103,6 +111,10 @@
             > li {
                 font-size: @font-size__base;
                 margin: 0 0 0 15px;
+
+                &.customer-welcome {
+                    margin: 0 0 0 5px;
+                }
 
                 > a {
                     .lib-link(
@@ -445,7 +457,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .logo {
         margin-bottom: 13px;
         margin-top: 4px;

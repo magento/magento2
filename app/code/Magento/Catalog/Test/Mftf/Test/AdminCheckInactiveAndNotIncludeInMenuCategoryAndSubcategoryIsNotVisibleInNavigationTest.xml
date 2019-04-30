@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckInactiveAndNotIncludeInMenuCategoryAndSubcategoryIsNotVisibleInNavigationTest">
+        <annotations>
+            <stories value="Create category"/>
+            <title value="Inactive Category and subcategory are not visible on navigation menu, Include in Menu = No"/>
+            <description value="Login as admin and verify inactive and inactive include in menu category and subcategory is not visible in navigation menu"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13638"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!--Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <!--Create Parent Inactive and Not Include In Menu Category -->
+            <createData entity="CatInactiveNotInMenu" stepKey="createCategory"/>
+        </before>
+
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Open Category Page-->
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoaded"/>
+        <!--Create subcategory under parent category -->
+        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
+        <waitForPageLoad stepKey="waitForCategoryToLoad"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}" stepKey="selectCategory"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
+        <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
+        <checkOption selector="{{AdminCategoryBasicFieldSection.IncludeInMenu}}" stepKey="enableIncludeInMenu"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="addSubCategoryName"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
+        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
+        <!-- Verify Parent Category and Sub category is not visible in navigation menu -->
+        <amOnPage url="$$createCategory.name_lwr$$/{{SimpleSubCategory.name_lwr}}.html" stepKey="openCategoryStoreFrontPage"/>
+        <waitForPageLoad stepKey="waitForCategoryStoreFrontPageToLoad"/>
+        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="dontSeeCategoryOnStoreNavigationBar"/>
+        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="dontSeeSubCategoryOnStoreNavigation"/>
+    </test>
+</tests>

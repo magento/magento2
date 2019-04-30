@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Config\Test\Unit;
 
+/**
+ * Test for \Magento\Framework\Config\Dom class.
+ */
 class DomTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -62,6 +65,37 @@ class DomTest extends \PHPUnit\Framework\TestCase
             ['override_node.xml', 'override_node_new.xml', [], null, 'override_node_merged.xml'],
             ['override_node_new.xml', 'override_node.xml', [], null, 'override_node_merged.xml'],
             ['text_node.xml', 'text_node_new.xml', [], null, 'text_node_merged.xml'],
+            'text node replaced with cdata' => [
+                'text_node_cdata.xml',
+                'text_node_cdata_new.xml',
+                [],
+                null,
+                'text_node_cdata_merged.xml'
+            ],
+            'cdata' => ['cdata.xml', 'cdata_new.xml', [], null, 'cdata_merged.xml'],
+            'cdata with html' => ['cdata_html.xml', 'cdata_html_new.xml', [], null, 'cdata_html_merged.xml'],
+            'cdata replaced with text node' => [
+                'cdata_text.xml',
+                'cdata_text_new.xml',
+                [],
+                null,
+                'cdata_text_merged.xml'
+            ],
+            'big cdata' => ['big_cdata.xml', 'big_cdata_new.xml', [], null, 'big_cdata_merged.xml'],
+            'big cdata with attribute' => [
+                'big_cdata_attribute.xml',
+                'big_cdata_attribute_new.xml',
+                [],
+                null,
+                'big_cdata_attribute_merged.xml'
+            ],
+            'big cdata replaced with text' => [
+                'big_cdata_text.xml',
+                'big_cdata_text_new.xml',
+                [],
+                null,
+                'big_cdata_text_merged.xml'
+            ],
             [
                 'recursive.xml',
                 'recursive_new.xml',
@@ -131,6 +165,48 @@ class DomTest extends \PHPUnit\Framework\TestCase
             'invalid' => [
                 '<root><node id="id1"/><unknown_node/></root>',
                 ["Element 'unknown_node': This element is not expected. Expected is ( node ).\nLine: 1\n"],
+            ],
+        ];
+    }
+
+    /**
+     * @param string $xml
+     * @param string $expectedValue
+     * @dataProvider validateWithDefaultValueDataProvider
+     */
+    public function testValidateWithDefaultValue($xml, $expectedValue)
+    {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
+
+        $actualErrors = [];
+
+        $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
+        $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
+
+        $actualValue = $dom->getDom()
+            ->getElementsByTagName('root')->item(0)
+            ->getElementsByTagName('node')->item(0)
+            ->getAttribute('attribute_with_default_value');
+
+        $this->assertEmpty($actualErrors);
+        $this->assertEquals($expectedValue, $actualValue);
+    }
+
+    /**
+     * @return array
+     */
+    public function validateWithDefaultValueDataProvider()
+    {
+        return [
+            'default_value' => [
+                '<root><node id="id1"/></root>',
+                'default_value'
+            ],
+            'custom_value' => [
+                '<root><node id="id1" attribute_with_default_value="non_default_value"/></root>',
+                'non_default_value'
             ],
         ];
     }

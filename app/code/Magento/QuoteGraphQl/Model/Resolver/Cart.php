@@ -12,7 +12,6 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
-use Magento\QuoteGraphQl\Model\Cart\ExtractDataFromCart;
 
 /**
  * @inheritdoc
@@ -20,25 +19,17 @@ use Magento\QuoteGraphQl\Model\Cart\ExtractDataFromCart;
 class Cart implements ResolverInterface
 {
     /**
-     * @var ExtractDataFromCart
-     */
-    private $extractDataFromCart;
-
-    /**
      * @var GetCartForUser
      */
     private $getCartForUser;
 
     /**
      * @param GetCartForUser $getCartForUser
-     * @param ExtractDataFromCart $extractDataFromCart
      */
     public function __construct(
-        GetCartForUser $getCartForUser,
-        ExtractDataFromCart $extractDataFromCart
+        GetCartForUser $getCartForUser
     ) {
         $this->getCartForUser = $getCartForUser;
-        $this->extractDataFromCart = $extractDataFromCart;
     }
 
     /**
@@ -46,7 +37,7 @@ class Cart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (!isset($args['cart_id'])) {
+        if (!isset($args['cart_id']) || empty($args['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
         $maskedCartId = $args['cart_id'];
@@ -54,14 +45,8 @@ class Cart implements ResolverInterface
         $currentUserId = $context->getUserId();
         $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId);
 
-        $data = array_merge(
-            [
-                'cart_id' => $maskedCartId,
-                'model' => $cart
-            ],
-            $this->extractDataFromCart->execute($cart)
-        );
-
-        return $data;
+        return [
+            'model' => $cart,
+        ];
     }
 }

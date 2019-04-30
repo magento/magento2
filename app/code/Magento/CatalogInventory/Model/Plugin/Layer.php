@@ -3,8 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogInventory\Model\Plugin;
 
+use Magento\Framework\Search\EngineResolverInterface;
+use Magento\Search\Model\EngineResolver;
+
+/**
+ * Catalog inventory plugin for layer.
+ */
 class Layer
 {
     /**
@@ -22,15 +29,23 @@ class Layer
     protected $scopeConfig;
 
     /**
+     * @var EngineResolverInterface
+     */
+    private $engineResolver;
+
+    /**
      * @param \Magento\CatalogInventory\Helper\Stock $stockHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param EngineResolverInterface $engineResolver
      */
     public function __construct(
         \Magento\CatalogInventory\Helper\Stock $stockHelper,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        EngineResolverInterface $engineResolver
     ) {
         $this->stockHelper = $stockHelper;
         $this->scopeConfig = $scopeConfig;
+        $this->engineResolver = $engineResolver;
     }
 
     /**
@@ -46,10 +61,20 @@ class Layer
         \Magento\Catalog\Model\Layer $subject,
         \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection $collection
     ) {
-        if ($this->_isEnabledShowOutOfStock()) {
+        if (!$this->isCurrentEngineMysql() || $this->_isEnabledShowOutOfStock()) {
             return;
         }
         $this->stockHelper->addIsInStockFilterToCollection($collection);
+    }
+
+    /**
+     * Check if current engine is MYSQL.
+     *
+     * @return bool
+     */
+    private function isCurrentEngineMysql()
+    {
+        return $this->engineResolver->getCurrentSearchEngine() === EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE;
     }
 
     /**

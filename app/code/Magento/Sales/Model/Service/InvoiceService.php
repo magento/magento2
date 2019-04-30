@@ -149,6 +149,7 @@ class InvoiceService implements InvoiceManagementInterface
      */
     public function prepareInvoice(Order $order, array $qtys = [])
     {
+        $isQtysEmpty = empty($qtys);
         $invoice = $this->orderConverter->toInvoice($order);
         $totalQty = 0;
         $qtys = $this->prepareItemsQty($order, $qtys);
@@ -161,7 +162,7 @@ class InvoiceService implements InvoiceManagementInterface
                 $qty = (double) $qtys[$orderItem->getId()];
             } elseif ($orderItem->isDummy()) {
                 $qty = $orderItem->getQtyOrdered() ? $orderItem->getQtyOrdered() : 1;
-            } elseif (empty($qtys)) {
+            } elseif ($isQtysEmpty) {
                 $qty = $orderItem->getQtyToInvoice();
             } else {
                 $qty = 0;
@@ -190,6 +191,11 @@ class InvoiceService implements InvoiceManagementInterface
                 if ($orderItem->getProductType() == Type::TYPE_BUNDLE && !$orderItem->isShipSeparately()) {
                     $qtys[$orderItem->getId()] = $orderItem->getQtyOrdered() - $orderItem->getQtyInvoiced();
                 } else {
+                    $parentItem = $orderItem->getParentItem();
+                    $parentItemId = $parentItem ? $parentItem->getId() : null;
+                    if ($parentItemId && isset($qtys[$parentItemId])) {
+                        $qtys[$orderItem->getId()] = $qtys[$parentItemId];
+                    }
                     continue;
                 }
             }
