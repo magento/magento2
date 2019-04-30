@@ -30,17 +30,26 @@ class SelectedShippingMethod implements ResolverInterface
         /** @var Address $address */
         $address = $value['model'];
         $rates = $address->getAllShippingRates();
+        $carrierTitle = null;
+        $methodTitle = null;
 
         if (count($rates) > 0) {
             list($carrierCode, $methodCode) = explode('_', $address->getShippingMethod(), 2);
+
             /** @var Rate $rate */
-            $rate = current($rates);
+            foreach ($rates as $rate) {
+                if ($rate->getCode() == $address->getShippingMethod()) {
+                    $carrierTitle = $rate->getCarrierTitle();
+                    $methodTitle = $rate->getMethodTitle();
+                    break;
+                }
+            }
 
             $data = [
                 'carrier_code' => $carrierCode,
                 'method_code' => $methodCode,
-                'carrier_title' => $rate->getCarrierTitle(),
-                'method_title' => $rate->getMethodTitle(),
+                'carrier_title' => $carrierTitle,
+                'method_title' => $methodTitle,
                 'amount' => [
                     'value' => $address->getShippingAmount(),
                     'currency' => $address->getQuote()->getQuoteCurrencyCode(),
@@ -54,8 +63,8 @@ class SelectedShippingMethod implements ResolverInterface
             $data = [
                 'carrier_code' => null,
                 'method_code' => null,
-                'carrier_title' => null,
-                'method_title' => null,
+                'carrier_title' => $carrierTitle,
+                'method_title' => $methodTitle,
                 'amount' => null,
                 'base_amount' => null,
             ];
