@@ -65,7 +65,7 @@ class SelectedShippingMethod implements ResolverInterface
                 ],
                 'base_amount' => [
                     'value' => $address->getBaseShippingAmount(),
-                    'currency' => $currency,
+                    'currency' => $currency->getCode(),
                 ],
             ];
         } else {
