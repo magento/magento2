@@ -8,10 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAssertProductQtyChangedAfterCreditMemoActionGroup">
+    <actionGroup name="AdminAssertProductQtyInGridActionGroup">
         <arguments>
-            <argument name="product" type="entity"/>
-            <argument name="changedQty" type="string"/>
+            <argument name="productSku" type="string"/>
+            <argument name="expectedQty" type="string"/>
         </arguments>
         <!-- Assert product Qty decreased after CreditMemo -->
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="onProductPage"/>
@@ -19,8 +19,8 @@
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openOrderGridFilters"/>
         <waitForPageLoad stepKey="waitForFilter"/>
-        <fillField userInput="{{product.sku}}"  selector="{{AdminProductGridFilterSection.skuFilter}}"  stepKey="fillOrderIdFilter"/>
+        <fillField userInput="{{productSku}}"  selector="{{AdminProductGridFilterSection.skuFilter}}"  stepKey="fillOrderIdFilter"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
-        <see userInput="{{changedQty}}" stepKey="assertQtyDecreased"/>
+        <see userInput="{{expectedQty}}" stepKey="assertQtyDecreased"/>
     </actionGroup>
 </actionGroups>

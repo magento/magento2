@@ -10,8 +10,8 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCreditMemoViewItemsSection">
         <element name="blockItemsRefunded" type="block" selector="#creditmemo_items_container"/>
-        <element name="productName" type="text" selector="td.col-product>div.product-title"/>
-        <element name="productPrice" type="text" selector=".col-price>.price-excl-tax>.price"/>
+        <element name="productName" type="text" selector="td.col-product > div.product-title"/>
+        <element name="productPrice" type="text" selector=".col-price > .price-excl-tax > .price"/>
         <element name="productQty" type="text" selector="td.col-qty"/>
     </section>
 </sections>

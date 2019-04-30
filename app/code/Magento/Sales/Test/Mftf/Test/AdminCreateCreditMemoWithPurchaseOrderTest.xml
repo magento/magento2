@@ -32,44 +32,44 @@
             <magentoCLI command="config:set {{enabledCheckMoneyOrder.label}} {{enabledCheckMoneyOrder.value}}" stepKey="enableCheckMoneyOrder"/>
             <magentoCLI command="config:set {{enabledPurchaseOrderPayment.label}} {{enabledPurchaseOrderPayment.value}}" stepKey="enableBankTransfer"/>
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
-
-            <!-- Create Order -->
-            <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderPage">
-                <argument name="customer" value="$createCustomer$"/>
-            </actionGroup>
-            <actionGroup ref="addSimpleProductToOrder" stepKey="addSecondProduct">
-                <argument name="product" value="$createProduct$"/>
-            </actionGroup>
-            <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerInfo">
-                <argument name="customer" value="$createCustomer$"/>
-                <argument name="address" value="US_Address_TX"/>
-            </actionGroup>
-            <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRate"/>
-            <conditionalClick selector="{{AdminOrderFormPaymentSection.linkPaymentOptions}}" dependentSelector="{{AdminOrderFormPaymentSection.linkPaymentOptions}}" visible="true" stepKey="openMoneyOption"/>
-            <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
-            <checkOption selector="{{AdminOrderFormPaymentSection.checkPurchaseOrder}}" stepKey="checkPurchaseOrder"/>
-            <waitForLoadingMaskToDisappear stepKey="waitForField"/>
-            <fillField selector="{{AdminOrderFormPaymentSection.fieldPurchaseOrderNumber}}" userInput="123456" stepKey="fillPONumber"/>
-            <click selector="{{AdminOrderFormPaymentSection.blockPayment}}" stepKey="unfocus"/>
-            <waitForPageLoad stepKey="waitForJavascriptToFinish"/>
-            <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="submitOrder"/>
-            <waitForPageLoad stepKey="waitForSubmitOrderPage"/>
-            <see stepKey="seeSuccessMessageForOrder" selector="{{AdminIndexManagementSection.successMessage}}" userInput="You created the order."/>
-
-            <!-- Create Invoice -->
-            <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startInvoice"/>
-            <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-            <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForMessageAppears"/>
-            <see selector="{{AdminMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
         </before>
         <after>
+            <magentoCLI command="config:set {{disabledPurchaseOrderPayment.label}} {{disabledPurchaseOrderPayment.value}}" stepKey="disableBankTransfer"/>
             <!-- Delete data -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <magentoCLI command="config:set {{disabledPurchaseOrderPayment.label}} {{disabledPurchaseOrderPayment.value}}" stepKey="disableBankTransfer"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+
+        <!-- Create Order -->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderPage">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSecondProduct">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerInfo">
+            <argument name="customer" value="$createCustomer$"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRate"/>
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.linkPaymentOptions}}" dependentSelector="{{AdminOrderFormPaymentSection.linkPaymentOptions}}" visible="true" stepKey="openMoneyOption"/>
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
+        <checkOption selector="{{AdminOrderFormPaymentSection.checkPurchaseOrder}}" stepKey="checkPurchaseOrder"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForField"/>
+        <fillField selector="{{AdminOrderFormPaymentSection.fieldPurchaseOrderNumber}}" userInput="123456" stepKey="fillPONumber"/>
+        <click selector="{{AdminOrderFormPaymentSection.blockPayment}}" stepKey="unfocus"/>
+        <waitForPageLoad stepKey="waitForJavascriptToFinish"/>
+        <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="submitOrder"/>
+        <waitForPageLoad stepKey="waitForSubmitOrderPage"/>
+        <see stepKey="seeSuccessMessageForOrder" selector="{{AdminIndexManagementSection.successMessage}}" userInput="You created the order."/>
+
+        <!-- Create Invoice -->
+        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startInvoice"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForMessageAppears"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
 
         <!-- Go to Sales > Orders > find out placed order and open -->
         <grabTextFrom selector="|Order # (\d+)|" stepKey="grabOrderId" />
