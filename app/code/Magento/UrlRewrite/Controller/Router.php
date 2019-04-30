@@ -82,7 +82,7 @@ class Router implements \Magento\Framework\App\RouterInterface
             $this->storeManager->getStore()->getId()
         );
 
-        if ($rewrite === null || !$this->isValidRedirect($rewrite)) {
+        if ($rewrite === null || $this->isValidRedirect($rewrite) === false) {
             //No rewrite rule matching current URl found or it is not valid.
             //Continuing with processing of this URL.
             return null;
@@ -153,8 +153,8 @@ class Router implements \Magento\Framework\App\RouterInterface
      * @param UrlRewrite $rewrite
      * @return bool
      */
-    protected function isValidRedirect(UrlRewrite $rewrite)
+    private function isValidRedirect(UrlRewrite $rewrite) : bool
     {
-        return $rewrite->getRequestPath() != $rewrite->getTargetPath();
+        return $rewrite->getRequestPath() !== $rewrite->getTargetPath();
     }
 }
