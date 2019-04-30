@@ -116,16 +116,16 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
         $attributeIdFlag = false;
 
         if ($attribute->getAttributeId()) {
-           $attributeIdFlag = true; 
+            $attributeIdFlag = true; 
         } elseif ($attribute->getAttributeCode()) {
-           $existAttrModel = $this->eavConfig->getAttribute(
-            \Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE,
-            $attribute->getAttributeCode()
+            $existAttrModel = $this->eavConfig->getAttribute(
+                \Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE,
+                $attribute->getAttributeCode()
             );
 
-           if ($existAttrModel->getAttributeId()) {
+            if ($existAttrModel->getAttributeId()) {
                 $attributeIdFlag = true; 
-           }
+            }
         }
 
         if ($attributeIdFlag) {
