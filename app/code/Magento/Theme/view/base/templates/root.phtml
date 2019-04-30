@@ -6,13 +6,13 @@
 
 ?>
 <!doctype html>
-<html <?= $block->escapeHtmlAttr($htmlAttributes) ?>>
-    <head <?= $block->escapeHtmlAttr($headAttributes) ?>>
-        <?= $block->escapeHtml($requireJs) ?>
-        <?= $block->escapeHtml($headContent) ?>
-        <?= $block->escapeHtml($headAdditional) ?>
+<html <?= /* @noEscape */ $htmlAttributes ?>>
+    <head <?= /* @noEscape */ $headAttributes ?>>
+        <?= /* @noEscape */ $requireJs ?>
+        <?= /* @noEscape */ $headContent ?>
+        <?= /* @noEscape */ $headAdditional ?>
     </head>
-    <body data-container="body" data-mage-init='{"loaderAjax": {}, "loader": { "icon": "<?= $block->escapeHtmlAttr($loaderIcon) ?>"}}' <?= $block->escapeHtmlAttr($bodyAttributes) ?>>
-        <?= $block->escapeHtml($layoutContent) ?>
+    <body data-container="body" data-mage-init='{"loaderAjax": {}, "loader": { "icon": "<?= /* @noEscape */ $loaderIcon ?>"}}' <?= /* @noEscape */ $bodyAttributes ?>>
+        <?= /* @noEscape */ $layoutContent ?>
     </body>
 </html>

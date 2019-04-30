@@ -10,7 +10,7 @@
     require.config({
         map: {
             '*': {
-                wysiwygAdapter: '<?= $block->escapeJs($block->getWysiwygAdapterPath()) ?>'
+                wysiwygAdapter: '<?= /* @noEscape */ $block->getWysiwygAdapterPath() ?>'
             }
         }
     });
