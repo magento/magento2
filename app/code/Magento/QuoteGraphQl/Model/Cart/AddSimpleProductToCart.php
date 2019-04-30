@@ -132,7 +132,7 @@ class AddSimpleProductToCart
         $customizableOptionsData = [];
         foreach ($cartItemData['customizable_options'] as $customizableOption) {
             if (isset($customizableOption['value_string'])) {
-                $customizableOptionsData[$customizableOption['id']] = $this->convertCustomOptions(
+                $customizableOptionsData[$customizableOption['id']] = $this->convertCustomOptionValue(
                     $customizableOption['value_string']
                 );
             }
@@ -158,10 +158,12 @@ class AddSimpleProductToCart
     }
 
     /**
+     * Convert custom options vakue
+     *
      * @param string $value
      * @return string|array
      */
-    private function convertCustomOptions(string $value)
+    private function convertCustomOptionValue(string $value)
     {
         $value = trim($value);
         if (substr($value, 0, 1) === "[" &&
