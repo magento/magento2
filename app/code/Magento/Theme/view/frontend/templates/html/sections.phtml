@@ -5,7 +5,7 @@
  */
 
 /**
-*  General template for displaying group of blocks devided into sections
+*  General template for displaying group of blocks divided into sections
 */
 
 $group = $block->getGroupName();
@@ -28,7 +28,7 @@ $groupBehavior = $block->getGroupBehaviour() ? $block->getGroupBehaviour() : '{"
                 <div class="section-item-title <?= $block->escapeHtmlAttr($groupCss) ?>-item-title" data-role="collapsible">
                     <a class="<?= $block->escapeHtmlAttr($groupCss) ?>-item-switch" data-toggle="switch" href="#<?= $block->escapeHtmlAttr($alias) ?>"><?= $block->escapeHtml($label) ?></a>
                 </div>
-                <div class="section-item-content <?= $block->escapeHtmlAttr($groupCss) ?>-item-content" id="<?= $block->escapeHtmlAttr($alias) ?>" data-role="content"><?= $block->escapeHtml($html) ?></div>
+                <div class="section-item-content <?= $block->escapeHtmlAttr($groupCss) ?>-item-content" id="<?= $block->escapeHtmlAttr($alias) ?>" data-role="content"><?= /* @noEscape */ $html ?></div>
             <?php endforeach;?>
         </div>
     </div>

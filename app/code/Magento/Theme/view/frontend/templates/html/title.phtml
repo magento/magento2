@@ -8,23 +8,23 @@
  * @var $block \Magento\Theme\Block\Html\Title
  */
 $cssClass = $block->getCssClass() ? ' ' . $block->getCssClass() : '';
-$title = '';
+$titleHtml = '';
 if (trim($block->getPageHeading())) {
-    $title = '<span class="base" data-ui-id="page-title-wrapper" '
+    $titleHtml = '<span class="base" data-ui-id="page-title-wrapper" '
         . $block->getAddBaseAttribute()
         . '>'
         . $block->escapeHtml($block->getPageHeading())
         . '</span>';
 }
 ?>
-<?php if ($title): ?>
+<?php if ($titleHtml): ?>
 <div class="page-title-wrapper<?= $block->escapeHtmlAttr($cssClass) ?>">
     <h1 class="page-title"
         <?php if ($block->getId()): ?> id="<?= $block->escapeHtmlAttr($block->getId()) ?>" <?php endif; ?>
         <?php if ($block->getAddBaseAttributeAria()): ?>
             aria-labelledby="<?= $block->escapeHtmlAttr($block->getAddBaseAttributeAria()) ?>"
         <?php endif; ?>>
-        <?= $block->escapeHtml($title) ?>
+        <?= /* @noEscape */ $titleHtml ?>
     </h1>
     <?= $block->getChildHtml() ?>
 </div>

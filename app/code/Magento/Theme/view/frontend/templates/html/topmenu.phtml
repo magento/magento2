@@ -11,12 +11,12 @@
  */
 
 $columnsLimit = $block->getColumnsLimit() ?: 0;
-$_menu = $block->getHtml('level-top', 'submenu', $columnsLimit)
+$_menuHtml = $block->getHtml('level-top', 'submenu', $columnsLimit)
 ?>
 
 <nav class="navigation" data-action="navigation">
     <ul data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
-        <?= $block->escapeHtml($_menu)?>
+        <?= /* @noEscape */ $_menuHtml?>
         <?= $block->getChildHtml() ?>
     </ul>
 </nav>
