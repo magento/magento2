@@ -40,7 +40,7 @@
         </after>
        <!--Assign product to category-->
         <comment userInput="Assign product to category" stepKey="commentAssignProductToCategory"/>
-        <amOnPage url="{{AdminCategoryEditPage.url($$categoryFirst.id$$)}}" stepKey="goToProductCategoryPage"/>
+        <amOnPage url="{{AdminCategoryEditPage.url($$categoryFirst.id$$)}}" stepKey="goToCategoryPage"/>
         <actionGroup ref="AddProductToCategory" stepKey="addProductToCategory">
             <argument name="productSku" value="$$simpleProduct2.sku$$"/>
         </actionGroup>
@@ -56,7 +56,7 @@
         <!--Check product in category grid-->
         <comment userInput="Check product in category grid" stepKey="commentCheckProduct"/>
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductsInCategorySection"/>
-        <seeElement selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$simpleProduct1.name$$)}}" stepKey="seeProductInCategoryGrid"/>
-        <seeElement selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$simpleProduct2.name$$)}}" stepKey="seeProductInCategoryGrid2"/>
+        <seeElement selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$simpleProduct1.name$$)}}" stepKey="seeProduct1InCategoryGrid"/>
+        <seeElement selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$simpleProduct2.name$$)}}" stepKey="seeProduct2InCategoryGrid"/>
     </test>
 </tests>
