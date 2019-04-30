@@ -1085,6 +1085,7 @@ class AccountManagement implements AccountManagementInterface
         $result = $this->getEavValidator()->isValid($customerModel);
         if ($result === false && is_array($this->getEavValidator()->getMessages())) {
             return $validationResults->setIsValid(false)->setMessages(
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 call_user_func_array(
                     'array_merge',
                     $this->getEavValidator()->getMessages()

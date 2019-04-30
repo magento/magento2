@@ -1386,7 +1386,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Retrieve quote items collection
      *
      * @param bool $useCache
-     * @return  \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
      */
     public function getItemsCollection($useCache = true)
     {
@@ -1441,7 +1441,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function hasItems()
     {
-        return sizeof($this->getAllItems()) > 0;
+        return count($this->getAllItems()) > 0;
     }
 
     /**
@@ -1500,7 +1500,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Delete quote item. If it does not have identifier then it will be only removed from collection
      *
-     * @param   \Magento\Quote\Model\Quote\Item $item
+     * @param \Magento\Quote\Model\Quote\Item $item
      * @return $this
      */
     public function deleteItem(\Magento\Quote\Model\Quote\Item $item)
@@ -1530,7 +1530,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Remove quote item by item identifier
      *
-     * @param   int $itemId
+     * @param int $itemId
      * @return $this
      */
     public function removeItem($itemId)
@@ -1581,7 +1581,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Adding new item to quote
      *
-     * @param   \Magento\Quote\Model\Quote\Item $item
+     * @param \Magento\Quote\Model\Quote\Item $item
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -2375,7 +2375,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Merge quotes
      *
-     * @param   Quote $quote
+     * @param Quote $quote
      * @return $this
      */
     public function merge(Quote $quote)
@@ -2613,7 +2613,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Check is address allowed for store
      *
      * @param Address $address
-     * @param  int|null $storeId
+     * @param int|null $storeId
      * @return bool
      */
     private function isAddressAllowedForWebsite(Address $address, $storeId): bool
