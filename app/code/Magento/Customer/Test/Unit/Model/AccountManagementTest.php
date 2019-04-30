@@ -1269,8 +1269,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         $storeId = 1;
 
-        mt_srand(mt_rand() + (100000000 * (float)microtime()) % PHP_INT_MAX);
-        $hash = md5(uniqid(microtime() . mt_rand(0, mt_getrandmax()), true));
+        $hash = hash('sha256', microtime() . random_int(PHP_INT_MIN, PHP_INT_MAX));
 
         $this->emailNotificationMock->expects($this->once())
             ->method('passwordReminder')
@@ -1294,8 +1293,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $templateIdentifier = 'Template Identifier';
         $sender = 'Sender';
 
-        mt_srand(mt_rand() + (100000000 * (float)microtime()) % PHP_INT_MAX);
-        $hash = md5(uniqid(microtime() . mt_rand(0, mt_getrandmax()), true));
+        $hash = hash('sha256', microtime() . random_int(PHP_INT_MIN, PHP_INT_MAX));
 
         $this->emailNotificationMock->expects($this->once())
             ->method('passwordResetConfirmation')
@@ -1319,8 +1317,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $templateIdentifier = 'Template Identifier';
         $sender = 'Sender';
 
-        mt_srand(mt_rand() + (100000000 * (float)microtime()) % PHP_INT_MAX);
-        $hash = md5(uniqid(microtime() . mt_rand(0, mt_getrandmax()), true));
+        $hash = hash('sha256', microtime() . random_int(PHP_INT_MIN, PHP_INT_MAX));
 
         $this->prepareInitiatePasswordReset($email, $templateIdentifier, $sender, $storeId, $customerId, $hash);
 
@@ -1641,7 +1638,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->customerSecure->expects($this->once())->method('setRpTokenCreatedAt')->with(null);
         $this->customerSecure->expects($this->any())->method('setPasswordHash')->willReturn(null);
 
-        $this->sessionManager->expects($this->atLeastOnce())->method('destroy');
+        $this->sessionManager->method('isSessionExists')->willReturn(false);
         $this->sessionManager->expects($this->atLeastOnce())->method('getSessionId');
         $visitor = $this->getMockBuilder(\Magento\Customer\Model\Visitor::class)
             ->disableOriginalConstructor()
