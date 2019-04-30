@@ -50,23 +50,38 @@ class SetOfflinePaymentMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
      *
      * @param string $methodCode
+     * @param string $methodTitle
      * @dataProvider offlinePaymentMethodDataProvider
      */
-    public function testSetOfflinePaymentMethod(string $methodCode)
+    public function testSetOfflinePaymentMethod(string $methodCode, string $methodTitle)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
-        $query = $this->getQuery(
-            $maskedQuoteId,
-            $methodCode
-        );
+        $query = $this->getQuery($maskedQuoteId, $methodCode);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('setPaymentMethodOnCart', $response);
         self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
         self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
-        self::assertArrayHasKey('code', $response['setPaymentMethodOnCart']['cart']['selected_payment_method']);
-        self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
+
+        $selectedPaymentMethod = $response['setPaymentMethodOnCart']['cart']['selected_payment_method'];
+        self::assertArrayHasKey('code', $selectedPaymentMethod);
+        self::assertEquals($methodCode, $selectedPaymentMethod['code']);
+
+        self::assertArrayHasKey('title', $selectedPaymentMethod);
+        self::assertEquals($methodTitle, $selectedPaymentMethod['title']);
+    }
+
+    /**
+     * @return array
+     */
+    public function offlinePaymentMethodDataProvider(): array
+    {
+        return [
+            'check_mo' => [Checkmo::PAYMENT_METHOD_CHECKMO_CODE, 'Check / Money order'],
+            'bank_transfer' => [Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE, 'Bank Transfer Payment'],
+            'cash_on_delivery' => [Cashondelivery::PAYMENT_METHOD_CASHONDELIVERY_CODE, 'Cash On Delivery'],
+        ];
     }
 
     /**
@@ -76,12 +91,11 @@ class SetOfflinePaymentMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
-     *
-     * @param string $methodCode
      */
     public function testSetPurchaseOrderPaymentMethod()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $methodTitle = 'Purchase Order';
         $methodCode = Purchaseorder::PAYMENT_METHOD_PURCHASEORDER_CODE;
         $poNumber = 'abc123';
 
@@ -97,34 +111,28 @@ mutation {
     cart {
       selected_payment_method {
         code
+        title
         purchase_order_number
       }
     }
   }
 }
 QUERY;
-
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('setPaymentMethodOnCart', $response);
         self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
         self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
-        self::assertArrayHasKey('code', $response['setPaymentMethodOnCart']['cart']['selected_payment_method']);
-        self::assertArrayHasKey('purchase_order_number', $response['setPaymentMethodOnCart']['cart']['selected_payment_method']);
-        self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
-        self::assertEquals($poNumber, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['purchase_order_number']);
-    }
 
-    /**
-     * @return array
-     */
-    public function offlinePaymentMethodDataProvider(): array
-    {
-        return [
-            'check_mo' => [Checkmo::PAYMENT_METHOD_CHECKMO_CODE],
-            'bank_transfer' => [Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE],
-            'cash_on_delivery' => [Cashondelivery::PAYMENT_METHOD_CASHONDELIVERY_CODE],
-        ];
+        $selectedPaymentMethod = $response['setPaymentMethodOnCart']['cart']['selected_payment_method'];
+        self::assertArrayHasKey('code', $selectedPaymentMethod);
+        self::assertEquals($methodCode, $selectedPaymentMethod['code']);
+
+        self::assertArrayHasKey('title', $selectedPaymentMethod);
+        self::assertEquals($methodTitle, $selectedPaymentMethod['title']);
+
+        self::assertArrayHasKey('purchase_order_number', $selectedPaymentMethod);
+        self::assertEquals($poNumber, $selectedPaymentMethod['purchase_order_number']);
     }
 
     /**
@@ -147,6 +155,7 @@ mutation {
     cart {
       selected_payment_method {
         code
+        title
       }
     }
   }
