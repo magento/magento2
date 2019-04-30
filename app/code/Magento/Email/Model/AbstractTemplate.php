@@ -17,8 +17,9 @@ use Magento\Store\Model\Store;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
- * Template model class
+ * Template model class.
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -505,7 +506,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
 
     /**
      * Apply design config so that emails are processed within the context of the appropriate area/store/theme.
-     * Can be called multiple times without issue.
      *
      * @return bool
      */
@@ -679,8 +679,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Save current design config and replace with design config from specified store
-     * Event is not dispatched.
+     * Save current design config and replace with design config from specified store. Event is not dispatched.
      *
      * @param null|bool|int|string $storeId
      * @param string $area

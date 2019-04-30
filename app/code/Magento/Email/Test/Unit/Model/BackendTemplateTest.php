@@ -12,6 +12,9 @@ namespace Magento\Email\Test\Unit\Model;
 use Magento\Email\Model\BackendTemplate;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Tests for  adminhtml email template model.
+ */
 class BackendTemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -72,13 +75,13 @@ class BackendTemplateTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->willReturnCallback(
                 function ($value) {
-                    switch($value) {
+                    switch ($value) {
                         case \Magento\MediaStorage\Helper\File\Storage\Database::class:
                             return ($this->databaseHelperMock);
                         case \Magento\Email\Model\ResourceModel\Template::class:
                             return ($this->resourceModelMock);
                         default:
-                            return(NULL);
+                            return(null);
                     }
                 }
             );
