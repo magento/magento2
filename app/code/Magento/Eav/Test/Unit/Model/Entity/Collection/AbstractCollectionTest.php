@@ -5,9 +5,6 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Collection;
 
-use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
-use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
-
 /**
  * AbstractCollection test
  *
@@ -31,7 +28,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     protected $loggerMock;
 
     /**
-     * @var FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fetchStrategyMock;
 
@@ -61,7 +58,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     protected $resourceHelperMock;
 
     /**
-     * @var ResourceModelPoolInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $validatorFactoryMock;
 
