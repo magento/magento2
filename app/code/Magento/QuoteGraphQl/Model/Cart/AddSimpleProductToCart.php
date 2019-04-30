@@ -66,8 +66,8 @@ class AddSimpleProductToCart
     public function execute(Quote $cart, array $cartItemData): void
     {
         $sku = $this->extractSku($cartItemData);
-        $qty = $this->extractQty($cartItemData);
-        if ($qty <= 0) {
+        $quantity = $this->extractQuantity($cartItemData);
+        if ($quantity <= 0) {
             throw new GraphQlInputException(
                 __('Please enter a number greater than 0 in this field.')
             );
@@ -81,7 +81,7 @@ class AddSimpleProductToCart
         }
 
         try {
-            $result = $cart->addProduct($product, $this->createBuyRequest($qty, $customizableOptions));
+            $result = $cart->addProduct($product, $this->createBuyRequest($quantity, $customizableOptions));
         } catch (\Exception $e) {
             throw new GraphQlInputException(
                 __(
@@ -113,19 +113,19 @@ class AddSimpleProductToCart
     }
 
     /**
-     * Extract Qty from cart item data
+     * Extract quantity from cart item data
      *
      * @param array $cartItemData
      * @return float
      * @throws GraphQlInputException
      */
-    private function extractQty(array $cartItemData): float
+    private function extractQuantity(array $cartItemData): float
     {
-        $qty = $this->arrayManager->get('data/qty', $cartItemData);
-        if (!isset($qty)) {
-            throw new GraphQlInputException(__('Missing key "qty" in cart item data'));
+        $quantity = $this->arrayManager->get('data/quantity', $cartItemData);
+        if (!isset($quantity)) {
+            throw new GraphQlInputException(__('Missing key "quantity" in cart item data'));
         }
-        return (float)$qty;
+        return (float)$quantity;
     }
 
     /**
@@ -148,15 +148,15 @@ class AddSimpleProductToCart
     /**
      * Format GraphQl input data to a shape that buy request has
      *
-     * @param float $qty
+     * @param float $quantity
      * @param array $customOptions
      * @return DataObject
      */
-    private function createBuyRequest(float $qty, array $customOptions): DataObject
+    private function createBuyRequest(float $quantity, array $customOptions): DataObject
     {
         return $this->dataObjectFactory->create([
             'data' => [
-                'qty' => $qty,
+                'qty' => $quantity,
                 'options' => $customOptions,
             ],
         ]);
