@@ -31,5 +31,8 @@
         <element name="viewColumnCheckbox" type="checkbox" selector="//div[contains(@class,'admin__data-grid-action-columns')]//div[contains(@class, 'admin__field-option')]//label[text() = '{{column}}']/preceding-sibling::input" parameterized="true"/>
         <element name="customerInOrdersSection" type="button" selector="(//td[contains(text(),'{{customer}}')])[1]" parameterized="true"/>
         <element name="productForOrder" type="button" selector="//td[contains(text(),'{{var}}')]" parameterized="true"/>
+        <element name="checkOrder" type="input" selector="//td[count(//div[@data-role='grid-wrapper'])]//input"/>
+        <element name="orderActions" type="button" selector="//div[contains(concat(' ',normalize-space(@class),' '),' row-gutter ')]//button[@title='Select Items']"/>
+        <element name="changeOrderStatus" type="button" selector="//div[contains(concat(' ',normalize-space(@class),' '),' row-gutter ')]//span[text()='{{status}}']" parameterized="true" timeout="30"/>
     </section>
 </sections>
