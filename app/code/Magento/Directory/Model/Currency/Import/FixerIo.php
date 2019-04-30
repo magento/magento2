@@ -71,10 +71,12 @@ class FixerIo extends AbstractImport
 
     /**
      * @inheritdoc
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function _convert($currencyFrom, $currencyTo)
     {
     }
+    //phpcs:enable Magento2.CodeAnalysis.EmptyBlock
 
     /**
      * Return currencies convert rates in batch mode
@@ -99,7 +101,7 @@ class FixerIo extends AbstractImport
             [$accessKey, $currencyFrom, $currenciesStr],
             self::CURRENCY_CONVERTER_URL
         );
-
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         set_time_limit(0);
         try {
             $response = $this->getServiceResponse($url);

@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Directory\Model\Currency\Import;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Import currency model.
+ */
 class CurrencyConverterApi extends AbstractImport
 {
     /**
@@ -48,7 +52,7 @@ class CurrencyConverterApi extends AbstractImport
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function fetchRates()
     {
@@ -87,6 +91,7 @@ class CurrencyConverterApi extends AbstractImport
         }
 
         foreach ($currenciesTo as $to) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             set_time_limit(0);
             try {
                 $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
@@ -150,7 +155,7 @@ class CurrencyConverterApi extends AbstractImport
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _convert($currencyFrom, $currencyTo)
     {
