@@ -950,7 +950,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         ) {
             foreach ($this->_designAttributes as $attributeCode) {
                 $this->setData($attributeCode, $value = $this->getOrigData($attributeCode));
-                if (array_key_exists($attributeCode, $this->_data[self::CUSTOM_ATTRIBUTES])) {
+                if (!empty($this->_data[self::CUSTOM_ATTRIBUTES])
+                    && array_key_exists($attributeCode, $this->_data[self::CUSTOM_ATTRIBUTES])) {
                     //In case custom attribute were used to update the entity.
                     $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]->setValue($value);
                 }
