@@ -206,6 +206,33 @@
         <remove keyForRemoval="uncheckRedirect2"/>
     </test>
 
+    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestAllStoreViewWithConfigurationTurnedOff" extends="AdminUrlRewritesForProductInAnchorCategoriesTestWithConfigurationTurnedOff">
+        <annotations>
+            <features value="Url Rewrite"/>
+            <stories value="Url-rewrites for product in anchor categories for all store views"/>
+            <title value="Url-rewrites for product in anchor categories"/>
+            <description value="Verify that Saving category do not delete UrlRewrites for subcategories and all products in them."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-94802"/>
+            <group value="urlRewrite"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="createSimpleProduct"/>
+            <!-- Create Simple product 1 and assign it to all the threee categories above -->
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct" after="simpleSubCategory3">
+                <requiredEntity createDataKey="simpleSubCategory1"/>
+                <requiredEntity createDataKey="simpleSubCategory2"/>
+                <requiredEntity createDataKey="simpleSubCategory3"/>
+            </createData>
+        </before>
+        <remove keyForRemoval="switchStoreView"/>
+        <!-- 3. Edit Category 1 for All store view: -->
+        <actionGroup ref="navigateToCreatedCategory" stepKey="goToCategoryPage" after="seeValue4">
+            <argument name="Category" value="$$simpleSubCategory1$$"/>
+        </actionGroup>
+        <remove keyForRemoval="uncheckRedirect2"/>
+    </test>
+
     <test name="AdminUrlRewritesForProductsWithConfigurationTurnedOff">
         <annotations>
             <features value="Url Rewrite"/>
