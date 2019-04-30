@@ -46,7 +46,7 @@ class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
     public function testAddSimpleProductWithOptions()
     {
         $sku = 'simple';
-        $qty = 1;
+        $quantity = 1;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $customOptionsValues = $this->getCustomOptionsValuesForQuery($sku);
@@ -62,7 +62,7 @@ mutation {
       cartItems: [
         {
           data: {
-            qty: $qty
+            quantity: $quantity
             sku: "$sku"
           },
           customizable_options: $queryCustomizableOptions  
@@ -110,7 +110,7 @@ QUERY;
     public function testAddSimpleProductWithNoRequiredOptionsSet()
     {
         $sku = 'simple';
-        $qty = 1;
+        $quantity = 1;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $query = <<<QUERY
@@ -121,7 +121,7 @@ mutation {
       cartItems: [
         {
           data: {
-            qty: $qty
+            quantity: $quantity
             sku: "$sku"
           }
         }
