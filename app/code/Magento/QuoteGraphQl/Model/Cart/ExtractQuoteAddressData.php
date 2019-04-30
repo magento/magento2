@@ -41,16 +41,7 @@ class ExtractQuoteAddressData
         $addressData = $this->dataObjectConverter->toFlatArray($address, [], AddressInterface::class);
         $addressData['model'] = $address;
 
-        if ($address->getAddressType() == AbstractAddress::TYPE_SHIPPING) {
-            $addressType = 'SHIPPING';
-        } elseif ($address->getAddressType() == AbstractAddress::TYPE_BILLING) {
-            $addressType = 'BILLING';
-        } else {
-            $addressType = null;
-        }
-
         $addressData = array_merge($addressData, [
-            'address_type' => $addressType,
             'country' => [
                 'code' => $address->getCountryId(),
                 'label' => $address->getCountry()

@@ -99,7 +99,7 @@ class UpdateCartItems implements ResolverInterface
             if (!isset($item['quantity'])) {
                 throw new GraphQlInputException(__('Required parameter "quantity" for "cart_items" is missing.'));
             }
-            $qty = (float)$item['quantity'];
+            $quantity = (float)$item['quantity'];
 
             $cartItem = $cart->getItemById($itemId);
             if ($cartItem === false) {
@@ -108,10 +108,10 @@ class UpdateCartItems implements ResolverInterface
                 );
             }
 
-            if ($qty <= 0.0) {
+            if ($quantity <= 0.0) {
                 $this->cartItemRepository->deleteById((int)$cart->getId(), $itemId);
             } else {
-                $cartItem->setQty($qty);
+                $cartItem->setQty($quantity);
                 $this->validateCartItem($cartItem);
                 $this->cartItemRepository->save($cartItem);
             }

@@ -81,7 +81,7 @@ class CheckoutEndToEndTest extends GraphQlAbstract
      */
     public function testCheckoutWorkflow()
     {
-        $qty = 2;
+        $quantity = 2;
 
         $this->createCustomer();
         $token = $this->loginCustomer();
@@ -89,7 +89,7 @@ class CheckoutEndToEndTest extends GraphQlAbstract
 
         $sku = $this->findProduct();
         $cartId = $this->createEmptyCart();
-        $this->addProductToCart($cartId, $qty, $sku);
+        $this->addProductToCart($cartId, $quantity, $sku);
 
         $this->setBillingAddress($cartId);
         $shippingMethod = $this->setShippingAddress($cartId);
@@ -215,7 +215,7 @@ mutation {
       cartItems: [
         {
           data: {
-            qty: {$qty}
+            quantity: {$qty}
             sku: "{$sku}"
           }
         }
@@ -224,7 +224,7 @@ mutation {
   ) {
     cart {
       items {
-        qty
+        quantity
         product {
           sku
         }
@@ -266,7 +266,7 @@ mutation {
   ) {
     cart {
       billing_address {
-        address_type
+        __typename
       }
     }
   }
