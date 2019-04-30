@@ -305,6 +305,15 @@
         <data key="filename">magento-again</data>
         <data key="file_extension">jpg</data>
     </entity>
+    <entity name="TestImageAdobe" type="image">
+        <data key="title" unique="suffix">magento-adobe</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="file">adobe-base.jpg</data>
+        <data key="filename">adobe-base</data>
+        <data key="file_extension">jpg</data>
+    </entity>
     <entity name="ProductWithUnicode" type="product">
         <data key="sku" unique="suffix">&#38657;&#20135;&#21697;</data>
         <data key="type_id">simple</data>
@@ -939,6 +948,19 @@
         <data key="attributeSetId">4</data>
         <data key="attributeGroupId">13</data>
         <data key="sortOrder">0</data>
+    </entity>
+    <entity name="productAlphabeticalA" type="product" extends="_defaultProduct">
+        <data key="name" unique="suffix">AAA Product</data>
+    </entity>
+    <entity name="productAlphabeticalB" type="product" extends="_defaultProduct">
+        <data key="name" unique="suffix">BBB Product</data>
+    </entity>
+    <entity name="productWithSpecialCharacters" type="product" extends="_defaultProduct">
+        <data key="name" unique="suffix">Product "!@#$%^&amp;*()+:;\|}{][?=~` </data>
+        <data key="nameWithSafeChars" unique="suffix">|}{][?=~` </data>
+    </entity>
+    <entity name="productWith130CharName" type="product" extends="_defaultProduct">
+        <data key="name" unique="suffix">ProductWith128Chars 1234567891123456789112345678911234567891123456789112345678911234567891123456789112345678 endnums</data>
     </entity>
     <entity name="simpleProductDefault" type="product">
         <data key="sku" unique="suffix">sku_simple_product_</data>

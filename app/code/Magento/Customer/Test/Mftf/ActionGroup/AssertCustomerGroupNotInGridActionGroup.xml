@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertCustomerGroupNotInGridActionGroup">
+        <arguments>
+            <argument name="customerGroup" type="entity" />
+        </arguments>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="cleanFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomerGroupIndexPage"/>
+        <fillField userInput="{{customerGroup.code}}" selector="{{AdminDataGridHeaderSection.filterFieldInput('customer_group_code')}}" stepKey="fillNameFieldOnFiltersSection"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
+    </actionGroup>
+</actionGroups>

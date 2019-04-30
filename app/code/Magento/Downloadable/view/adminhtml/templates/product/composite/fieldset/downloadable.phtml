@@ -30,7 +30,7 @@
                            value="<?= /* @escapeNotVerified */ $_link->getId() ?>" <?= /* @escapeNotVerified */ $block->getLinkCheckedValue($_link) ?>
                            price="<?= /* @escapeNotVerified */ $block->getCurrencyPrice($_link->getPrice()) ?>"/>
                     <?php endif; ?>
-                    <label for="links_<?= /* @escapeNotVerified */ $_link->getId() ?>" class="label">
+                    <label for="links_<?= /* @escapeNotVerified */ $_link->getId() ?>" class="label admin__field-label">
                         <?= $block->escapeHtml($_link->getTitle()) ?>
                         <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
                             &nbsp;(<a href="<?= /* @escapeNotVerified */ $block->getLinkSampleUrl($_link) ?>" <?= $block->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':'' ?>><?= /* @escapeNotVerified */ __('sample') ?></a>)
