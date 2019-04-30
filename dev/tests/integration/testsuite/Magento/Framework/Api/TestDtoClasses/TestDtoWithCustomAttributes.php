@@ -42,6 +42,9 @@ class TestDtoWithCustomAttributes extends AbstractExtensibleObject
         $this->paramTwo = $paramTwo;
     }
 
+    /**
+     * @return string[]
+     */
     public function getCustomAttributesCodes()
     {
         return ['my_custom_attribute'];

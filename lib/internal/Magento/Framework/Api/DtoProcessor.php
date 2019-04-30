@@ -14,6 +14,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessor;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\ObjectManager\ConfigInterface;
+use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\NameFinder;
 use Magento\Framework\Reflection\TypeCaster;
 use Magento\Framework\Reflection\TypeProcessor;
@@ -84,6 +85,11 @@ class DtoProcessor
     private $joinProcessor;
 
     /**
+     * @var MethodsMap
+     */
+    private $methodsMap;
+
+    /**
      * @param ObjectFactory $objectFactory
      * @param TypeProcessor $typeProcessor
      * @param TypeCaster $typeCaster
@@ -91,6 +97,7 @@ class DtoProcessor
      * @param NameFinder $nameFinder
      * @param JoinProcessor $joinProcessor
      * @param ExtensionAttributesFactory $extensionAttributesFactory
+     * @param MethodsMap $methodsMap
      */
     public function __construct(
         ObjectFactory $objectFactory,
@@ -99,7 +106,8 @@ class DtoProcessor
         ConfigInterface $config,
         NameFinder $nameFinder,
         JoinProcessor $joinProcessor,
-        ExtensionAttributesFactory $extensionAttributesFactory
+        ExtensionAttributesFactory $extensionAttributesFactory,
+        MethodsMap $methodsMap
     ) {
         $this->config = $config;
         $this->typeProcessor = $typeProcessor;
@@ -108,6 +116,7 @@ class DtoProcessor
         $this->typeCaster = $typeCaster;
         $this->extensionAttributesFactory = $extensionAttributesFactory;
         $this->joinProcessor = $joinProcessor;
+        $this->methodsMap = $methodsMap;
     }
 
     /**
@@ -500,18 +509,30 @@ class DtoProcessor
      */
     public function getObjectData($sourceObject, ?string $objectType = null): array
     {
+        if ($sourceObject === null || !is_object($sourceObject)) {
+            return [];
+        }
+
         $objectType = $objectType ?: get_class($sourceObject);
-        $sourceObjectMethods = get_class_methods($objectType);
+        $sourceObjectMethods = $this->methodsMap->getMethodsMap($objectType);
 
         $res = [];
-        foreach ($sourceObjectMethods as $sourceObjectMethod) {
+        foreach ($sourceObjectMethods as $sourceObjectMethod => $sourceObjectMethodInfo) {
+            if (!$this->methodsMap->isMethodValidForDataField($objectType, $sourceObjectMethod)) {
+                continue;
+            }
+
             if (preg_match('/^(is|get)([A-Z]\w*)$/', $sourceObjectMethod, $matches)) {
                 $propertyName = SimpleDataObjectConverter::camelCaseToSnakeCase($matches[2]);
                 $methodName = $matches[0];
 
                 $methodReflection = new ReflectionMethod($sourceObject, $methodName);
                 if ($methodReflection->getNumberOfRequiredParameters() === 0) {
-                    $value = $this->explodeObjectValue($sourceObject->$methodName());
+                    try {
+                        $value = $this->explodeObjectValue($sourceObject->$methodName());
+                    } catch (Exception $e) {
+                        continue;
+                    }
 
                     if (($propertyName === 'extension_attributes') &&
                         empty($value) &&
@@ -535,7 +556,7 @@ class DtoProcessor
                     if ($value !== null) {
                         $res[$propertyName] = $this->castType(
                             $value,
-                            (string) $methodReflection->getReturnType()
+                            $sourceObjectMethodInfo['type']
                         );
                     }
                 }
