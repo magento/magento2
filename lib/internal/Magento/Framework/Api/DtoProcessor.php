@@ -424,7 +424,7 @@ class DtoProcessor
             if (!empty($data['extension_attributes']) && !is_object($data['extension_attributes'])) {
                 $data['extension_attributes'] = $this->extensionAttributesFactory->create(
                     $type,
-                    $data['extension_attributes']
+                    ['data' => $data['extension_attributes']]
                 );
             }
 
