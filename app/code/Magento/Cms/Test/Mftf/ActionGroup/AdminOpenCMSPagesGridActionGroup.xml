@@ -7,10 +7,8 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminCmsPageFillContentField">
-        <arguments>
-            <argument name="content" type="string"/>
-        </arguments>
-        <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="{{content}}" stepKey="fillFieldContent"/>
+    <actionGroup name="AdminOpenCMSPagesGridActionGroup">
+        <amOnPage url="{{CmsPagesPage.url}}" stepKey="navigateToCMSPagesGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
     </actionGroup>
 </actionGroups>

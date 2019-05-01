@@ -23,12 +23,12 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Go to New CMS Page page-->
-        <actionGroup ref="AdminCmsPageNavigateToCreateNewPage" stepKey="navigateToCreateNewPage"/>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
         <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageData"/>
         <!--verify successfully saved-->
         <actionGroup ref="saveCmsPage" stepKey="saveNewPage"/>
         <!--verify page on frontend-->
-        <actionGroup ref="StorefrontCMSPageNavigateToPage" stepKey="navigateToPageOnStoreFront">
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="navigateToPageOnStoreFront">
             <argument name="identifier" value="{{_duplicatedCMSPage.identifier}}"/>
         </actionGroup>
         <actionGroup ref="AssertStoreFrontCMSPage" stepKey="verifyPageDataOnFrontend">
@@ -37,7 +37,10 @@
             <argument name="cmsContentHeading" value="{{_duplicatedCMSPage.content_heading}}"/>
         </actionGroup>
         <!--verify page in grid-->
-        <actionGroup ref="AssertCMSPageInGrid" stepKey="verifyPageInGrid">
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="openCMSPagesGridActionGroup"/>
+        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilters"/>
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortGridByIdDescending"/>
+        <actionGroup ref="AdminSelectCMSPageFromGridActionGroup" stepKey="verifyPageInGrid">
             <argument name="identifier" value="_duplicatedCMSPage.identifier"/>
         </actionGroup>
         <actionGroup ref="DeletePageByUrlKeyActionGroup" stepKey="deletePage">

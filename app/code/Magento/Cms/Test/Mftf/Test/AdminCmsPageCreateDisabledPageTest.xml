@@ -23,17 +23,18 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Go to New CMS Page page-->
-        <actionGroup ref="AdminCmsPageNavigateToCreateNewPage" stepKey="navigateToCreateNewPage"/>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
         <!--Fill the CMS page form-->
         <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageDataForDisabledPage"/>
         <!--Set page disabled-->
-        <actionGroup ref="AdminCMSPageSetDisabled" stepKey="setCMSPageDisabled"/>
+        <actionGroup ref="AdminDisableCMSPage" stepKey="setCMSPageDisabled"/>
         <!--Verify successfully saved-->
         <actionGroup ref="saveCmsPage" stepKey="saveDisabledPage"/>
         <!--Check that page is disabled on frontend-->
-        <actionGroup ref="AssertCMSPageNotFoundOnFront" stepKey="checkFirstPageNotFoundOnFront">
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="goToCMSPageOnStorefront">
             <argument name="identifier" value="{{_duplicatedCMSPage.identifier}}"/>
         </actionGroup>
+        <actionGroup ref="AssertCMSPageNotFoundOnStorefrontActionGroup" stepKey="seeNotFoundError"/>
         <!--Delete page-->
         <actionGroup ref="DeletePageByUrlKeyActionGroup" stepKey="deleteDisabledPage">
             <argument name="UrlKey" value="{{_duplicatedCMSPage.identifier}}"/>
