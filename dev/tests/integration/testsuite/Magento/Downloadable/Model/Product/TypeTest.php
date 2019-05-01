@@ -119,7 +119,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $expectedLink = [
             'is_shareable' => '2',
             'link_type' => 'file',
-            'link_file' => '/j/e/jellyfish_2_4.jpg',
+            'link_file' => '/j/e/jellyfish_2_4_1.jpg',
             'number_of_downloads' => '15',
             'price' => '15.0000',
             'sample_type' => 'file',
