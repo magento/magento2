@@ -229,5 +229,14 @@
         <seeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue('catalog/product/view/id/$grabProductIdFromUrl')}}" stepKey="seeUrlInTargetPathColumn3"/>
         <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('category-dutch/productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn5"/>
         <dontSeeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue(catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn5"/>
+
+        <!-- Switch StoreView -->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnProduct4Page"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToCustomStoreView">
+            <argument name="storeView" value="customStoreENNotUnique"/>
+        </actionGroup>
+
+        <amOnPage url="/productformagetwo68980-english.html" stepKey="navigateToProductPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="productformagetwo68980" stepKey="seeProductName"/>
     </test>
 </tests>
