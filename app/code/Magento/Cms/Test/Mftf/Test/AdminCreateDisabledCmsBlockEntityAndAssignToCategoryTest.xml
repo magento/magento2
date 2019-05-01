@@ -44,7 +44,7 @@
         <actionGroup ref="AdminAddCmsBlockToCategoryActionGroup" stepKey="addCmsBlockToCategory">
             <argument name="category" value="$$newDefaultCategory$$"/>
         </actionGroup>
-        
+
         <actionGroup ref="AssertNoTextOnCategoryFrontPageActionGroup" stepKey="assertBlockOnCategoryFrontPage">
             <argument name="category" value="$$newDefaultCategory$$"/>
             <argument name="text" value="{{_defaultBlock.content}}"/>
