@@ -74,6 +74,17 @@
                 <visible>false</visible>
             </settings>
         </field>
+        <field name="confirmation" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">customer</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+            </settings>
+        </field>
         <field name="created_in" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -118,7 +129,7 @@
                 </validation>
                 <dataType>number</dataType>
                 <tooltip>
-                    <link>http://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
+                    <link>https://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
                     <description translate="true">If your Magento installation has multiple websites, you can edit the scope to associate the customer with a specific site.</description>
                 </tooltip>
                 <imports>
