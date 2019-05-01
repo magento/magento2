@@ -10,6 +10,7 @@
     <actionGroup name="AssertStorefrontCheckoutCartItemsActionGroup">
         <arguments>
             <argument name="productName" type="string"/>
+            <argument name="productSku" type="string"/>
             <argument name="productPrice" type="string"/>
             <argument name="subtotal" type="string"/>
             <argument name="qty" type="string"/>
@@ -17,6 +18,6 @@
         <see selector="{{CheckoutCartProductSection.productName}}" userInput="{{productName}}"  stepKey="seeProductNameInCheckoutSummary"/>
         <see selector="{{CheckoutCartProductSection.checkoutCartProductPrice}}" userInput="{{productPrice}}" stepKey="seeProductPriceInCart"/>
         <see selector="{{CheckoutCartProductSection.checkoutCartSubtotal}}" userInput="{{subtotal}}" stepKey="seeSubtotalPrice"/>
-        <seeElement selector="{{CheckoutCartProductSection.quantity(qty)}}" stepKey="seeProductQuantity" />
+        <seeInField selector="{{CheckoutCartProductSection.qtyByContains(productSku)}}" userInput="{{qty}}" stepKey="seeProductQuantity"/>
     </actionGroup>
 </actionGroups>

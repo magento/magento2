@@ -138,6 +138,7 @@
         <!--Assert Product Details In Checkout cart -->
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertProductItemInCheckOutCart">
             <argument name="productName" value="$$createConfigProduct.name$$"/>
+            <argument name="productSku" value="$$createConfigChildProduct2.sku$$"/>
             <argument name="productPrice" value="$$createConfigChildProduct2.price$$"/>
             <argument name="subtotal" value="$40.00" />
             <argument name="qty" value="2"/>
