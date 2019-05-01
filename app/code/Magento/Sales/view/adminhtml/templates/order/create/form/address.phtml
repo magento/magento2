@@ -7,6 +7,16 @@
 // @codingStandardsIgnoreFile
 
 /**
+ * @var \Magento\Customer\Model\ResourceModel\Address\Collection $addressCollection
+ */
+$addressCollection = $block->getData('customerAddressCollection');
+
+$addressArray = [];
+if ($block->getCustomerId()) {
+    $addressArray = $addressCollection->setCustomerFilter([$block->getCustomerId()])->toArray();
+}
+
+/**
  * @var \Magento\Sales\ViewModel\Customer\AddressFormatter $customerAddressFormatter
  */
 $customerAddressFormatter = $block->getData('customerAddressFormatter');
