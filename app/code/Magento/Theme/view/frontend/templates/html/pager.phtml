@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Pager template
  *
@@ -37,7 +39,9 @@
             <?php if (!$block->isFirstPage()): ?>
                 <li class="item pages-item-previous">
                     <?php $text = $block->getAnchorTextForPrevious() ? $block->getAnchorTextForPrevious() : '';?>
-                    <a class="<?= $block->escapeHtmlAttr($text ? 'link ' : 'action ') ?> previous" href="<?= $block->escapeUrl($block->getPreviousPageUrl()) ?>" title="<?= $block->escapeHtmlAttr($text ? $text : __('Previous')) ?>">
+                    <a class="<?= $block->escapeHtmlAttr($text ? 'link ' : 'action ') ?> previous"
+                       href="<?= $block->escapeUrl($block->getPreviousPageUrl()) ?>"
+                       title="<?= $block->escapeHtmlAttr($text ? $text : __('Previous')) ?>">
                         <span class="label"><?= $block->escapeHtml(__('Page')) ?></span>
                         <span><?= $block->escapeHtml($text ? $text : __('Previous')) ?></span>
                     </a>
@@ -55,7 +59,9 @@
 
             <?php if ($block->canShowPreviousJump()): ?>
                 <li class="item">
-                    <a class="page previous jump" title="" href="<?= $block->escapeUrl($block->getPreviousJumpUrl()) ?>">
+                    <a class="page previous jump"
+                       title=""
+                       href="<?= $block->escapeUrl($block->getPreviousJumpUrl()) ?>">
                         <span>...</span>
                     </a>
                 </li>
@@ -99,7 +105,9 @@
             <?php if (!$block->isLastPage()): ?>
                 <li class="item pages-item-next">
                     <?php $text = $block->getAnchorTextForNext() ? $block->getAnchorTextForNext() : '';?>
-                    <a class="<?= $block->escapeHtmlAttr($text ? 'link ' : 'action ') ?> next" href="<?= $block->escapeUrl($block->getNextPageUrl()) ?>" title="<?= $block->escapeHtmlAttr($text ? $text : __('Next')) ?>">
+                    <a class="<?= $block->escapeHtmlAttr($text ? 'link ' : 'action ') ?> next"
+                       href="<?= $block->escapeUrl($block->getNextPageUrl()) ?>"
+                       title="<?= $block->escapeHtmlAttr($text ? $text : __('Next')) ?>">
                         <span class="label"><?= $block->escapeHtml(__('Page')) ?></span>
                         <span><?= $block->escapeHtml($text ? $text : __('Next')) ?></span>
                     </a>
@@ -114,7 +122,8 @@
             <strong class="limiter-label"><?= $block->escapeHtml(__('Show')) ?></strong>
             <select id="limiter" data-mage-init='{"redirectUrl": {"event":"change"}}' class="limiter-options">
                 <?php foreach ($block->getAvailableLimit() as $_key => $_limit): ?>
-                    <option value="<?= $block->escapeHtmlAttr($block->getLimitUrl($_key)) ?>"<?php if ($block->isLimitCurrent($_key)): ?>
+                    <option value="<?= $block->escapeHtmlAttr($block->getLimitUrl($_key)) ?>"
+                        <?php if ($block->isLimitCurrent($_key)): ?>
                         selected="selected"<?php endif ?>>
                         <?= $block->escapeHtml($_limit) ?>
                     </option>

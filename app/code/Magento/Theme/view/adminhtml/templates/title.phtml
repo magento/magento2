@@ -7,12 +7,12 @@
 /**
  * @var $block \Magento\Theme\Block\Html\Title
  */
-$titleId = ($block->getTitleId()) ? ' id="' . $block->getTitleId() . '"' : '';
+$titleIdHtml = ($block->getTitleId()) ? ' id="' . $block->escapeHtmlAttr($block->getTitleId()) . '"' : '';
 $titleClass = ($block->getTitleClass()) ? ' ' . $block->getTitleClass() : '';
 $title = $block->getPageTitle();
 ?>
 
 <div class="page-title-wrapper<?= $block->escapeHtmlAttr($titleClass) ?>">
-    <h1 class="page-title"<?= $block->escapeHtmlAttr($titleId) ?>><?= $block->escapeHtml($title) ?></h1>
+    <h1 class="page-title"<?= /* @noEscape */ $titleIdHtml ?>><?= $block->escapeHtml($title) ?></h1>
     <?= $block->getChildHtml() ?>
 </div>

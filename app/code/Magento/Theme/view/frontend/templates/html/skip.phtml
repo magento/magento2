@@ -7,4 +7,9 @@
 $target = $block->getTarget();
 $label = $block->getLabel();
 ?>
-<a class="action skip <?= $block->escapeHtmlAttr($target) ?>" href="#<?= $block->escapeHtmlAttr($target) ?>"><span><?= $block->escapeHtml($label) ?></span></a>
+<a class="action skip <?= $block->escapeHtmlAttr($target) ?>"
+   href="#<?= $block->escapeHtmlAttr($target) ?>">
+    <span>
+        <?= $block->escapeHtml($label) ?>
+    </span>
+</a>

@@ -5,7 +5,9 @@
  */
 ?>
 <div class="block <?= $block->escapeHtmlAttr($block->getBlockCss()) ?>">
-    <div class="block-title <?= $block->escapeHtmlAttr($block->getBlockCss()) ?>-title"><strong><?= $block->escapeHtml($block->getBlockTitle()) ?></strong></div>
+    <div class="block-title <?= $block->escapeHtmlAttr($block->getBlockCss()) ?>-title">
+        <strong><?= $block->escapeHtml($block->getBlockTitle()) ?></strong>
+    </div>
     <div class="block-content <?= $block->escapeHtmlAttr($block->getBlockCss()) ?>-content">
         <?= $block->getChildHtml() ?>
     </div>

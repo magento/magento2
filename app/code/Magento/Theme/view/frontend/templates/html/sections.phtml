@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
 *  General template for displaying group of blocks divided into sections
 */
@@ -15,7 +17,8 @@ $groupBehavior = $block->getGroupBehaviour() ? $block->getGroupBehaviour() : '{"
 <?php if ($detailedInfoGroup = $block->getGroupChildNames($group, 'getChildHtml')):?>
     <div class="sections <?= $block->escapeHtmlAttr($groupCss) ?>">
         <?php $layout = $block->getLayout(); ?>
-        <div class="section-items <?= $block->escapeHtmlAttr($groupCss) ?>-items" data-mage-init='<?= $block->escapeHtmlAttr($groupBehavior) ?>'>
+        <div class="section-items <?= $block->escapeHtmlAttr($groupCss) ?>-items"
+             data-mage-init='<?= $block->escapeHtmlAttr($groupBehavior) ?>'>
             <?php foreach ($detailedInfoGroup as $name):?>
                 <?php
                     $html = $layout->renderElement($name);
@@ -25,10 +28,18 @@ $groupBehavior = $block->getGroupBehaviour() ? $block->getGroupBehaviour() : '{"
                     $alias = $layout->getElementAlias($name);
                     $label = $block->getChildData($alias, 'title');
                 ?>
-                <div class="section-item-title <?= $block->escapeHtmlAttr($groupCss) ?>-item-title" data-role="collapsible">
-                    <a class="<?= $block->escapeHtmlAttr($groupCss) ?>-item-switch" data-toggle="switch" href="#<?= $block->escapeHtmlAttr($alias) ?>"><?= $block->escapeHtml($label) ?></a>
+                <div class="section-item-title <?= $block->escapeHtmlAttr($groupCss) ?>-item-title"
+                     data-role="collapsible">
+                    <a class="<?= $block->escapeHtmlAttr($groupCss) ?>-item-switch"
+                       data-toggle="switch" href="#<?= $block->escapeHtmlAttr($alias) ?>">
+                        <?= $block->escapeHtml($label) ?>
+                    </a>
                 </div>
-                <div class="section-item-content <?= $block->escapeHtmlAttr($groupCss) ?>-item-content" id="<?= $block->escapeHtmlAttr($alias) ?>" data-role="content"><?= /* @noEscape */ $html ?></div>
+                <div class="section-item-content <?= $block->escapeHtmlAttr($groupCss) ?>-item-content"
+                     id="<?= $block->escapeHtmlAttr($alias) ?>"
+                     data-role="content">
+                    <?= /* @noEscape */ $html ?>
+                </div>
             <?php endforeach;?>
         </div>
     </div>

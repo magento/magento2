@@ -3,9 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
 
-<?php
+// @codingStandardsIgnoreFile
+
 /** @var $block \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Files */
 ?>
 
@@ -15,7 +15,8 @@
             <p class="nm">
                 <?= $block->escapeHtml($file['text']) ?>
                 <?php if (isset($file['thumbnailParams'])): ?>
-                    <img src="<?= $block->escapeUrl($block->getUrl('*/*/previewImage', $file['thumbnailParams'])) ?>" alt="<?= $block->escapeHtmlAttr(__('thumbnail')) ?>">
+                    <img src="<?= $block->escapeUrl($block->getUrl('*/*/previewImage', $file['thumbnailParams'])) ?>"
+                         alt="<?= $block->escapeHtmlAttr(__('thumbnail')) ?>">
                 <?php endif; ?>
             </p>
         </div>

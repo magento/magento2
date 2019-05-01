@@ -9,7 +9,7 @@
  */
 ?>
 <?= $block->getBeforeHtml() ?>
-<button <?= $block->escapeHtmlAttr($block->getAttributesHtml()), $block->escapeHtmlAttr($block->getUiId()) ?>>
+<button <?= /* @noEscape */ $block->getAttributesHtml(), /* @noEscape */ $block->getUiId() ?>>
     <span><?= $block->escapeHtml($block->getLabel()) ?></span>
 </button>
 <?= $block->getAfterHtml() ?>

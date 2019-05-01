@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var $block \Magento\Backend\Block\Widget\Form\Renderer\Fieldset */
 ?>
 
@@ -59,7 +61,9 @@ jQuery(function($) {
     });
     $('body').trigger(
         'refreshJsList',
-        {jsList: <?= $block->escapeJs($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getJsFiles())) ?>}
+        {
+            jsList: <?= $block->escapeJs($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getJsFiles())) ?>
+        }
     );
 });
 

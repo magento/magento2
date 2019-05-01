@@ -4,15 +4,20 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var $block \Magento\Ui\Block\Component\StepsWizard */
 ?>
-<div data-role="steps-wizard-main" class="steps-wizard <?= /* @noEscape */ $block->getData('config/dataScope') ?>" data-bind="scope: '<?= $block->escapeHtmlAttr($block->getComponentName()) ?>'">
+<div data-role="steps-wizard-main"
+     class="steps-wizard <?= /* @noEscape */ $block->getData('config/dataScope') ?>"
+     data-bind="scope: '<?= $block->escapeHtmlAttr($block->getComponentName()) ?>'">
     <div data-role="messages" class="messages"></div>
 
     <div data-role="steps-wizard-controls" class="steps-wizard-navigation">
         <ul class="nav-bar">
             <?php foreach ($block->getSteps() as $step): ?>
-                <li data-role="collapsible" data-bind="css: { 'active': selectedStep() == '<?= $block->escapeHtmlAttr($step->getComponentName()) ?>'}">
+                <li data-role="collapsible"
+                    data-bind="css: { 'active': selectedStep() == '<?= $block->escapeHtmlAttr($step->getComponentName()) ?>'}">
                     <a href="#<?= $block->escapeHtmlAttr($step->getComponentName()) ?>"
                        data-bind="click: showSpecificStep">
                         <?= $block->escapeHtml($step->getCaption()) ?>
@@ -47,7 +52,7 @@
             <div data-bind="visible: selectedStep() == $element.id, css: {'no-display':false}"
                  class="content no-display" id="<?= $block->escapeHtmlAttr($step->getComponentName()) ?>"
                  data-role="content">
-                <?= $block->escapeHtml($step->getContent()) ?>
+                <?= /* @noEscape */ $step->getContent() ?>
             </div>
         <?php endforeach; ?>
     </div>
@@ -60,9 +65,9 @@
                 "components": {
                         "<?= $block->escapeJs($block->getComponentName()) ?>": {
                             "component": "Magento_Ui/js/lib/step-wizard",
-                            "initData": <?= $block->escapeJs($this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getInitData())) ?>,
-                            "stepsNames": <?= $block->escapeJs($this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getStepComponents())) ?>,
-                            "modalClass": "<?=  /* @noEscape */ $block->getData('config/dataScope') ?>"
+                            "initData": <?= /* @noEscape */ $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getInitData()) ?>,
+                            "stepsNames": <?= /* @noEscape */ $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getStepComponents()) ?>,
+                            "modalClass": "<?= /* @noEscape */ $block->getData('config/dataScope') ?>"
                         }
                     }
                 }

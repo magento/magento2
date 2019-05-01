@@ -16,10 +16,10 @@
         "*": {
             "mage/cookies": {
                 "expires": null,
-                "path": "<?= $block->escapeJs($block->getPath()) ?>",
-                "domain": "<?= $block->escapeJs($block->getDomain()) ?>",
+                "path": "<?= /* @noEscape */ $block->getPath() ?>",
+                "domain": "<?= /* @noEscape */ $block->getDomain() ?>",
                 "secure": false,
-                "lifetime": "<?= $block->escapeJs($block->getLifetime()) ?>"
+                "lifetime": "<?= /* @noEscape */ $block->getLifetime() ?>"
             }
         }
     }
