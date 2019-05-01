@@ -8,8 +8,15 @@ namespace Magento\Setup\Model\FixtureGenerator;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\ResourceModel\Store\CollectionFactory as StoreCollectionFactory;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
 /**
  * Generate specified amount of products based on passed fixture
@@ -39,22 +46,22 @@ use Magento\Store\Model\ScopeInterface;
 class ProductGenerator
 {
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var ProductFactory
      */
     private $productFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     * @var CategoryCollectionFactory
      */
     private $categoryCollectionFactory;
 
     /**
-     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     * @var UrlRewriteFactory
      */
     private $urlRewriteFactory;
 
     /**
-     * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
+     * @var StoreCollectionFactory
      */
     private $storeCollectionFactory;
 
@@ -74,7 +81,7 @@ class ProductGenerator
     private $entityGeneratorFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
@@ -89,7 +96,7 @@ class ProductGenerator
     private $productUrlSuffix = [];
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     private $scopeConfig;
 
@@ -99,25 +106,25 @@ class ProductGenerator
     private $customTableMap;
 
     /**
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
-     * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory $urlRewriteFactory
-     * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory
+     * @param ProductFactory $productFactory
+     * @param CategoryCollectionFactory $categoryCollectionFactory
+     * @param UrlRewriteFactory $urlRewriteFactory
+     * @param StoreCollectionFactory $storeCollectionFactory
      * @param EntityGeneratorFactory $entityGeneratorFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param ProductTemplateGeneratorFactory $productTemplateGeneratorFactory
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig
      * @param array $customTableMap
      */
     public function __construct(
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-        \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory $urlRewriteFactory,
-        \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory,
+        ProductFactory $productFactory,
+        CategoryCollectionFactory $categoryCollectionFactory,
+        UrlRewriteFactory $urlRewriteFactory,
+        StoreCollectionFactory $storeCollectionFactory,
         EntityGeneratorFactory $entityGeneratorFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        StoreManagerInterface $storeManager,
         ProductTemplateGeneratorFactory $productTemplateGeneratorFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        ScopeConfigInterface $scopeConfig,
         $customTableMap = []
     ) {
         $this->productFactory = $productFactory;
@@ -262,6 +269,7 @@ class ProductGenerator
      * @param int $entityNumber
      * @param array $fixtureMap
      * @return array
+     * @throws LocalizedException
      */
     private function urlRewriteHandler($productId, $entityNumber, $fixtureMap)
     {
@@ -280,7 +288,7 @@ class ProductGenerator
             ->setEntityType('product');
         $binds[] = $urlRewrite->toArray();
 
-        if (isset($fixtureMap['category_ids'])) {
+        if (isset($fixtureMap['category_ids']) && $this->isCategoryProductUrlRewriteGenerationEnabled()) {
             $categoryId = $fixtureMap['category_ids']($productId, $entityNumber);
             if (!isset($this->categories[$categoryId])) {
                 $this->categories[$categoryId] = $this->categoryCollectionFactory
@@ -332,5 +340,15 @@ class ProductGenerator
             );
         }
         return $this->productUrlSuffix[$storeId];
+    }
+
+    /**
+     * Check config value of generate_rewrites_on_save
+     *
+     * @return bool
+     */
+    private function isCategoryProductUrlRewriteGenerationEnabled()
+    {
+        return (bool)$this->scopeConfig->getValue('catalog/seo/generate_rewrites_on_save');
     }
 }
