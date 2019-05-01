@@ -7,12 +7,10 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertCMSPageNotFoundOnFront">
+    <actionGroup name="AdminSelectCMSPageFromGridActionGroup">
         <arguments>
-            <argument name="identifier" type="string"/>
+            <argument name="identifier" defaultValue=""/>
         </arguments>
-        <amOnPage url="{{StorefrontHomePage.url}}/{{identifier}}" stepKey="amOnPageOnStorefront"/>
-        <waitForPageLoad stepKey="waitForPageLoadOnStorefront"/>
-        <see userInput="Whoops, our bad..." stepKey="seePageErrorNotFound"/>
+        <click selector="{{CmsPagesPageActionsSection.select(identifier)}}" stepKey="clickSelectCMSPage" />
     </actionGroup>
 </actionGroups>

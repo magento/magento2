@@ -7,10 +7,11 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminCMSPageSelectInGrid">
+    <actionGroup name="StorefrontGoToCMSPageActionGroup">
         <arguments>
             <argument name="identifier" type="string"/>
         </arguments>
-        <checkOption selector="{{CmsPagesPageActionsSection.pageRowCheckboxByIdentifier(identifier)}}" stepKey="selectCmsPageInGrid"/>
+        <amOnPage url="{{StorefrontHomePage.url}}/{{identifier}}" stepKey="amOnCmsPageOnStorefront"/>
+        <waitForPageLoad stepKey="waitForPageLoadOnStorefront"/>
     </actionGroup>
 </actionGroups>
