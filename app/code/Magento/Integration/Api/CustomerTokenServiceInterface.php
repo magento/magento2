@@ -19,11 +19,11 @@ interface CustomerTokenServiceInterface
      *
      * @param string $username
      * @param string $password
-     * @param int $websiteId
+     * @param int|null $websiteId
      * @return string Token created
      * @throws \Magento\Framework\Exception\AuthenticationException
      */
-    public function createCustomerAccessToken($username, $password, $websiteId);
+    public function createCustomerAccessToken($username, $password, $websiteId = null);
 
     /**
      * Revoke token by customer id.
