@@ -27,7 +27,7 @@ input createEmptyCartInput {
 
 input AddSimpleProductsToCartInput {
     cart_id: String!
-    cartItems: [SimpleProductCartItemInput!]!
+    cart_items: [SimpleProductCartItemInput!]!
 }
 
 input SimpleProductCartItemInput {
@@ -37,7 +37,7 @@ input SimpleProductCartItemInput {
 
 input AddVirtualProductsToCartInput {
     cart_id: String!
-    cartItems: [VirtualProductCartItemInput!]!
+    cart_items: [VirtualProductCartItemInput!]!
 }
 
 input VirtualProductCartItemInput {
