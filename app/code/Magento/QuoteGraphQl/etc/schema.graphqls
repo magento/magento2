@@ -134,8 +134,7 @@ input PaymentMethodInput {
     purchase_order_number: String @doc(description:"Purchase order number")
 }
 
-input PaymentMethodAdditionalDataInput {
-}
+input PaymentMethodAdditionalDataInput
 
 input SetGuestEmailOnCartInput {
     cart_id: String!
@@ -262,8 +261,7 @@ type SelectedPaymentMethod {
     purchase_order_number: String @doc(description: "The purchase order number.")
 }
 
-type SelectedPaymentMethodAdditionalData {
-}
+type SelectedPaymentMethodAdditionalData
 
 type AppliedCoupon {
     code: String!
