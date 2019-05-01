@@ -239,10 +239,10 @@ type AvailableShippingMethod {
     method_code: String @doc(description: "Could be null if method is not available")
     method_title: String @doc(description: "Could be null if method is not available")
     error_message: String
-    amount: Float!
-    base_amount: Float @doc(description: "Could be null if method is not available")
-    price_excl_tax: Float!
-    price_incl_tax: Float!
+    amount: Money!
+    base_amount: Money @doc(description: "Could be null if method is not available")
+    price_excl_tax: Money!
+    price_incl_tax: Money!
     available: Boolean!
 }
 
