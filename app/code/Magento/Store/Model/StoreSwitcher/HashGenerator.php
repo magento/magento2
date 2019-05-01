@@ -71,6 +71,7 @@ class HashGenerator implements StoreSwitcherInterface
             $urlParts = parse_url($targetUrl);
             $host = $urlParts['host'];
             $scheme = $urlParts['scheme'];
+            $path=$urlParts['path'];
             $key = (string)$this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
             $timeStamp = time();
             $fromStoreCode = $fromStore->getCode();
@@ -82,11 +83,33 @@ class HashGenerator implements StoreSwitcherInterface
                 $targetUrl,
                 ['customer_id' => $customerId]
             );
-            $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['time_stamp' => time()]);
+            $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['time_stamp' => $timeStamp]);
             $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['signature' => $signature]);
             $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['___from_store' => $fromStoreCode]);
             $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['___to_store' => $targetStoreCode]);
+            $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['path' => $path]);
         }
         return $targetUrl;
+    }
+
+    /**
+     * Validates one time token
+     *
+     * @param string $signature
+     * @param array $data
+     * @return bool
+     */
+    public function validateHash(string $signature, array $data): bool
+    {
+        if (!empty($signature) && !empty($data)) {
+            $timeStamp = $data[1] ?? 0;
+            $value = implode(",", $data);
+            $key = (string)$this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
+
+            if (time() - $timeStamp <= 5 && hash_equals($signature, hash_hmac('sha256', $value, $key))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

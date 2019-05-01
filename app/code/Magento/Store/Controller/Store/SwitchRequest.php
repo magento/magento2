@@ -13,7 +13,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use \Magento\Framework\App\DeploymentConfig as DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Store\Model\StoreSwitcher\HashGenerator;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use \Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\StoreIsInactiveException;
@@ -44,24 +44,32 @@ class SwitchRequest extends \Magento\Framework\App\Action\Action implements Http
     private $customerRepository;
 
     /**
+     * @var HashGenerator
+     */
+    private $hashGenerator;
+
+    /**
      * @param Context $context
      * @param StoreRepositoryInterface $storeRepository
      * @param CustomerSession $session
      * @param DeploymentConfig $deploymentConfig
      * @param CustomerRepositoryInterface $customerRepository
+     * @param HashGenerator $hashGenerator
      */
     public function __construct(
         Context $context,
         StoreRepositoryInterface $storeRepository,
         CustomerSession $session,
         DeploymentConfig $deploymentConfig,
-        CustomerRepositoryInterface $customerRepository
+        CustomerRepositoryInterface $customerRepository,
+        HashGenerator $hashGenerator
     ) {
         parent::__construct($context);
         $this->storeRepository = $storeRepository;
         $this->customerSession = $session;
         $this->deploymentConfig = $deploymentConfig;
-        $this->customerRepository=$customerRepository;
+        $this->customerRepository = $customerRepository;
+        $this->hashGenerator = $hashGenerator;
     }
 
     /**
@@ -80,14 +88,15 @@ class SwitchRequest extends \Magento\Framework\App\Action\Action implements Http
 
         try {
             $fromStore = $this->storeRepository->get($fromStoreCode);
-            $this->storeRepository->getActiveStoreByCode($targetStoreCode);
+            $targetStore=$this->storeRepository->getActiveStoreByCode($targetStoreCode);
+            $targetUrl=$targetStore->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK);
         } catch (NoSuchEntityException $e) {
             $error = __('Requested store is not found.');
         } catch (StoreIsInactiveException $e) {
             $error = __('Requested store is inactive.');
         }
 
-        if ($this->validateHash($customerId, $timeStamp, $signature, $fromStoreCode)) {
+        if ($this->hashGenerator->validateHash($signature, [$customerId, $timeStamp, $fromStoreCode])) {
             try {
                 $customer = $this->customerRepository->getById($customerId);
                 if (!$this->customerSession->isLoggedIn()) {
@@ -107,29 +116,7 @@ class SwitchRequest extends \Magento\Framework\App\Action\Action implements Http
             //redirect to previous store
             $this->getResponse()->setRedirect($fromStore->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK));
         } else {
-            $this->getResponse()->setRedirect("/$targetStoreCode");
+            $this->getResponse()->setRedirect($targetUrl);
         }
-    }
-
-    /**
-     * Validates one time token
-     *
-     * @param int $customerId
-     * @param string $timeStamp
-     * @param string $signature
-     * @param string $fromStoreCode
-     * @return bool
-     */
-    private function validateHash(int $customerId, string $timeStamp, string $signature, string $fromStoreCode): bool
-    {
-
-        if ($customerId && $timeStamp && $signature) {
-            $data = implode(',', [$customerId, $timeStamp, $fromStoreCode]);
-            $key = (string)$this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
-            if (time() - $timeStamp <= 5 && hash_equals($signature, hash_hmac('sha256', $data, $key))) {
-                return true;
-            }
-        }
-        return false;
     }
 }
