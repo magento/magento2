@@ -10,6 +10,7 @@ namespace Magento\Framework\Api;
 
 use Exception;
 use LogicException;
+use Magento\Framework\Api\ExtensionAttribute\InjectorProcessor;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessor;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
@@ -90,12 +91,18 @@ class DtoProcessor
     private $methodsMap;
 
     /**
+     * @var InjectorProcessor
+     */
+    private $injectorProcessor;
+
+    /**
      * @param ObjectFactory $objectFactory
      * @param TypeProcessor $typeProcessor
      * @param TypeCaster $typeCaster
      * @param ConfigInterface $config
      * @param NameFinder $nameFinder
      * @param JoinProcessor $joinProcessor
+     * @param InjectorProcessor $injectorProcessor
      * @param ExtensionAttributesFactory $extensionAttributesFactory
      * @param MethodsMap $methodsMap
      */
@@ -106,6 +113,7 @@ class DtoProcessor
         ConfigInterface $config,
         NameFinder $nameFinder,
         JoinProcessor $joinProcessor,
+        InjectorProcessor $injectorProcessor,
         ExtensionAttributesFactory $extensionAttributesFactory,
         MethodsMap $methodsMap
     ) {
@@ -117,6 +125,7 @@ class DtoProcessor
         $this->extensionAttributesFactory = $extensionAttributesFactory;
         $this->joinProcessor = $joinProcessor;
         $this->methodsMap = $methodsMap;
+        $this->injectorProcessor = $injectorProcessor;
     }
 
     /**
@@ -189,7 +198,7 @@ class DtoProcessor
      */
     private function castType($value, string $type)
     {
-        if ($type === 'array' || !$this->typeProcessor->isTypeSimple($type)) {
+        if (is_array($value) || !$this->typeProcessor->isTypeSimple($type)) {
             return $value;
         }
 
@@ -204,7 +213,7 @@ class DtoProcessor
      */
     private function createObjectByType($value, string $type)
     {
-        if (is_object($value) || ($type === 'array') || ($type === 'mixed')) {
+        if (is_object($value) || is_array($value) || ($type === 'mixed')) {
             return $value;
         }
 
@@ -243,8 +252,9 @@ class DtoProcessor
             self::HYDRATOR_STRATEGY_ORPHAN => [],
         ];
 
-        $className = $this->getRealClassName($className);
         $class = new ClassReflection($className);
+        $realClassName = $this->getRealClassName($className);
+        $realClass = new ClassReflection($realClassName);
 
         // Enumerate parameters and types
         $paramTypes = [];
@@ -256,10 +266,10 @@ class DtoProcessor
         $requiredConstructorParams = [];
 
         // Check for constructor parameters
-        $constructor = $class->getConstructor();
+        $constructor = $realClass->getConstructor();
         if ($constructor !== null) {
             // Inject data constructor parameter
-            if ($this->isDataObject($class->getName())) {
+            if ($this->isDataObject($realClass->getName())) {
                 foreach ($data as $propertyName => $propertyValue) {
                     $type = $paramTypes[$propertyName];
                     if ($paramTypes[$propertyName] !== '') {
@@ -404,14 +414,19 @@ class DtoProcessor
             }
         }
 
-        if (isset($data['extension_attributes']) &&
-            !is_object($data['extension_attributes']) &&
-            $this->isExtensibleObject($type)
-        ) {
-            $data['extension_attributes'] = $this->extensionAttributesFactory->create(
-                $type,
-                $data['extension_attributes']
-            );
+        if ($this->isExtensibleObject($type)) {
+            if (isset($data['extension_attributes']) && is_object($data['extension_attributes'])) {
+                $data['extension_attributes'] = $this->getObjectData($data['extension_attributes']);
+            }
+
+            $data['extension_attributes'] = $this->injectorProcessor->execute($type, $data);
+
+            if (!empty($data['extension_attributes']) && !is_object($data['extension_attributes'])) {
+                $data['extension_attributes'] = $this->extensionAttributesFactory->create(
+                    $type,
+                    $data['extension_attributes']
+                );
+            }
 
             $data = $this->joinProcessor->extractExtensionAttributes($type, $data);
         }
