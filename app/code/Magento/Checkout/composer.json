@@ -23,7 +23,8 @@
         "magento/module-store": "*",
         "magento/module-tax": "*",
         "magento/module-theme": "*",
-        "magento/module-ui": "*"
+        "magento/module-ui": "*",
+        "magento/module-captcha": "*"
     },
     "suggest": {
         "magento/module-cookie": "*"

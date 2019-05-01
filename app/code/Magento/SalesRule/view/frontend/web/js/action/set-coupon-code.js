@@ -23,17 +23,37 @@ define([
 ) {
     'use strict';
 
-    return function (couponCode, isApplied) {
+    var dataModifiers = [],
+        successCallbacks = [],
+        failCallbacks = [],
+        action;
+
+    /**
+     * Apply provided coupon.
+     *
+     * @param {String} couponCode
+     * @param {Boolean}isApplied
+     * @returns {Deferred}
+     */
+    action = function (couponCode, isApplied) {
         var quoteId = quote.getQuoteId(),
             url = urlManager.getApplyCouponUrl(couponCode, quoteId),
-            message = $t('Your coupon was successfully applied.');
+            message = $t('Your coupon was successfully applied.'),
+            data = {},
+            headers = {};
 
+        //Allowing to modify coupon-apply request
+        dataModifiers.forEach(function (modifier) {
+            modifier(headers, data);
+        });
         fullScreenLoader.startLoader();
 
         return storage.put(
             url,
-            {},
-            false
+            data,
+            false,
+            null,
+            headers
         ).done(function (response) {
             var deferred;
 
@@ -50,11 +70,48 @@ define([
                 messageContainer.addSuccessMessage({
                     'message': message
                 });
+                //Allowing to tap into apply-coupon process.
+                successCallbacks.forEach(function (callback) {
+                    callback(response);
+                });
             }
         }).fail(function (response) {
             fullScreenLoader.stopLoader();
             totals.isLoading(false);
             errorProcessor.process(response, messageContainer);
+            //Allowing to tap into apply-coupon process.
+            failCallbacks.forEach(function (callback) {
+                callback(response);
+            });
         });
     };
+
+    /**
+     * Modifying data to be sent.
+     *
+     * @param {Function} modifier
+     */
+    action.registerDataModifier = function (modifier) {
+        dataModifiers.push(modifier);
+    };
+
+    /**
+     * When successfully added a coupon.
+     *
+     * @param {Function} callback
+     */
+    action.registerSuccessCallback = function (callback) {
+        successCallbacks.push(callback);
+    };
+
+    /**
+     * When failed to add a coupon.
+     *
+     * @param {Function} callback
+     */
+    action.registerFailCallback = function (callback) {
+        failCallbacks.push(callback);
+    };
+
+    return action;
 });
