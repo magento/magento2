@@ -1021,6 +1021,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $baseSubtotalInclTax = $this->getBaseSubtotalTotalInclTax();
         $request->setBaseSubtotalInclTax($baseSubtotalInclTax);
 
+        $this->_eventManager->dispatch($this->_eventPrefix . '_collect_rates_before', ['request' => $request]);
+
         $result = $this->_rateCollector->create()->collectRates($request)->getResult();
 
         $found = false;
