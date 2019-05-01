@@ -10,6 +10,7 @@ namespace Magento\Framework\App\Request;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Phrase;
 
@@ -29,8 +30,9 @@ class InvalidRequestException extends RuntimeException
     private $messages;
 
     /**
-     * @param ResponseInterface|ResultInterface $replaceResult Use this result
-     * instead of calling action instance.
+     * @param ResponseInterface|ResultInterface|NotFoundException $replaceResult
+     * Use this result instead of calling an action instance,
+     * if NotFoundException is given the the default 404 mechanism will be triggered.
      * @param Phrase[]|null $messages Messages to show to client
      * as error messages.
      */
@@ -43,7 +45,7 @@ class InvalidRequestException extends RuntimeException
     }
 
     /**
-     * @return ResponseInterface|ResultInterface
+     * @return ResponseInterface|ResultInterface|NotFoundException
      */
     public function getReplaceResult()
     {

@@ -59,6 +59,7 @@
                 <item name="totalsSortOrder" xsi:type="object">Magento\Checkout\Block\Checkout\TotalsProcessor</item>
                 <item name="directoryData" xsi:type="object">Magento\Checkout\Block\Checkout\DirectoryDataProcessor</item>
             </argument>
+            <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\JsonHexTag</argument>
         </arguments>
     </type>
     <type name="Magento\Checkout\Block\Cart\Totals">
@@ -82,5 +83,20 @@
                 <item name="custom_price" xsi:type="string">custom_price</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+        <arguments>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="addCartSuccessMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Checkout::messages/addCartSuccessMessage.phtml</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote">
+        <plugin name="clear_addresses_after_product_delete" type="Magento\Checkout\Plugin\Model\Quote\ResetQuoteAddresses"/>
     </type>
 </config>

@@ -13,8 +13,10 @@
 
 <script>
     require.config({
-        paths: {
-            wysiwygAdapter: '<?php /* @noEscape */ echo $block->getWysiwygAdapterPath(); ?>'
+        map: {
+            '*': {
+                wysiwygAdapter: '<?php /* @noEscape */ echo $block->getWysiwygAdapterPath(); ?>'
+            }
         }
     });
 </script>

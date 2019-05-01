@@ -7,10 +7,13 @@
 
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\CurrencySymbol\Controller\Adminhtml\System\Currency as CurrencyAction;
 
-class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency
+class FetchRates extends CurrencyAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Fetch rates action

@@ -10,6 +10,8 @@ use Magento\Customer\CustomerData\SectionSourceInterface;
 
 /**
  * Cart source
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Cart extends \Magento\Framework\DataObject implements SectionSourceInterface
 {
@@ -82,7 +84,7 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionData()
     {
@@ -98,7 +100,8 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
             'items' => $this->getRecentItems(),
             'extra_actions' => $this->layout->createBlock(\Magento\Catalog\Block\ShortcutButtons::class)->toHtml(),
             'isGuestCheckoutAllowed' => $this->isGuestCheckoutAllowed(),
-            'website_id' => $this->getQuote()->getStore()->getWebsiteId()
+            'website_id' => $this->getQuote()->getStore()->getWebsiteId(),
+            'storeId' => $this->getQuote()->getStore()->getStoreId()
         ];
     }
 
@@ -158,11 +161,10 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
                     : $item->getProduct();
 
                 $products = $this->catalogUrl->getRewriteByProductStore([$product->getId() => $item->getStoreId()]);
-                if (!isset($products[$product->getId()])) {
-                    continue;
+                if (isset($products[$product->getId()])) {
+                    $urlDataObject = new \Magento\Framework\DataObject($products[$product->getId()]);
+                    $item->getProduct()->setUrlDataObject($urlDataObject);
                 }
-                $urlDataObject = new \Magento\Framework\DataObject($products[$product->getId()]);
-                $item->getProduct()->setUrlDataObject($urlDataObject);
             }
             $items[] = $this->itemPoolInterface->getItemData($item);
         }

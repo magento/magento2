@@ -3,11 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ups\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Quote\Model\Quote\Address\RateRequestFactory;
 
+/**
+ * Integration tests for Carrier model class
+ */
 class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -64,6 +69,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoConfigFixture current_store carriers/ups/active 1
+     * @magentoConfigFixture current_store carriers/ups/type UPS
      * @magentoConfigFixture current_store carriers/ups/allowed_methods 1DA,GND
      * @magentoConfigFixture current_store carriers/ups/free_method GND
      */

@@ -21,15 +21,15 @@
                 comment="Update Time"/>
         <column xsi:type="varchar" name="ip" nullable="false" length="15" onCreate="migrateDataFrom(ip)"
                 comment="Remote user IP"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="ADMIN_USER_SESSION_USER_ID_ADMIN_USER_USER_ID" table="admin_user_session"
+        <constraint xsi:type="foreign" referenceId="ADMIN_USER_SESSION_USER_ID_ADMIN_USER_USER_ID" table="admin_user_session"
                     column="user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
-        <index name="ADMIN_USER_SESSION_SESSION_ID" indexType="btree">
+        <index referenceId="ADMIN_USER_SESSION_SESSION_ID" indexType="btree">
             <column name="session_id"/>
         </index>
-        <index name="ADMIN_USER_SESSION_USER_ID" indexType="btree">
+        <index referenceId="ADMIN_USER_SESSION_USER_ID" indexType="btree">
             <column name="user_id"/>
         </index>
     </table>
@@ -45,13 +45,13 @@
                 comment="Timestamp when the event occurs"/>
         <column xsi:type="varchar" name="ip" nullable="false" length="15" onCreate="migrateDataFrom(ip)"
                 comment="Remote user IP"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <index name="PASSWORD_RESET_REQUEST_EVENT_ACCOUNT_REFERENCE" indexType="btree">
+        <index referenceId="PASSWORD_RESET_REQUEST_EVENT_ACCOUNT_REFERENCE" indexType="btree">
             <column name="account_reference"/>
         </index>
-        <index name="PASSWORD_RESET_REQUEST_EVENT_CREATED_AT" indexType="btree">
+        <index referenceId="PASSWORD_RESET_REQUEST_EVENT_CREATED_AT" indexType="btree">
             <column name="created_at"/>
         </index>
     </table>

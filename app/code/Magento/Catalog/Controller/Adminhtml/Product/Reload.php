@@ -5,12 +5,13 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Backend reload of product create/edit form
  */
-class Reload extends \Magento\Catalog\Controller\Adminhtml\Product
+class Reload extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpPostActionInterface
 {
     /**
      * {@inheritdoc}

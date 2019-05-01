@@ -6,18 +6,24 @@
 namespace Magento\Elasticsearch\Model\Adapter\BatchDataMapper;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
-use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Model\Entity\Attribute;
 use Magento\Elasticsearch\Model\Adapter\Document\Builder;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldType\Date as DateFieldType;
 use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
 
 /**
  * Map product index data to search engine metadata
  */
 class ProductDataMapper implements BatchDataMapperInterface
 {
+    /**
+     * @var AttributeOptionInterface[]
+     */
+    private $attributeOptionsCache;
+
     /**
      * @var Builder
      */
@@ -32,11 +38,6 @@ class ProductDataMapper implements BatchDataMapperInterface
      * @var DateFieldType
      */
     private $dateFieldType;
-
-    /**
-     * @var array
-     */
-    private $attributeData = [];
 
     /**
      * @var array
@@ -100,15 +101,19 @@ class ProductDataMapper implements BatchDataMapperInterface
         $this->excludedAttributes = array_merge($this->defaultExcludedAttributes, $excludedAttributes);
         $this->additionalFieldsProvider = $additionalFieldsProvider;
         $this->dataProvider = $dataProvider;
+        $this->attributeOptionsCache = [];
     }
 
     /**
-     * {@inheritdoc}
+     * Map index data for using in search engine metadata
+     *
+     * @param array $documentData
+     * @param int $storeId
+     * @param array $context
+     * @return array
      */
     public function map(array $documentData, $storeId, array $context = [])
     {
-        // reset attribute data for new store
-        $this->attributeData = [];
         $documents = [];
 
         foreach ($documentData as $productId => $indexData) {
@@ -120,9 +125,7 @@ class ProductDataMapper implements BatchDataMapperInterface
                     $this->builder->addField($attributeCode, $value);
                     continue;
                 }
-                if (in_array($attributeCode, $this->excludedAttributes, true)) {
-                    continue;
-                }
+
                 $this->builder->addField(
                     $this->fieldMapper->getFieldName(
                         $attributeCode,
@@ -146,208 +149,179 @@ class ProductDataMapper implements BatchDataMapperInterface
     }
 
     /**
-     * Convert raw data retrieved from source tables to human-readable format
-     * E.g. [42 => [1 => 2]] will be converted to ['color' => '2', 'color_value' => 'red']
+     * Convert raw data retrieved from source tables to human-readable format.
      *
      * @param int $productId
      * @param array $indexData
      * @param int $storeId
      * @return array
      */
-    private function convertToProductData($productId, array $indexData, $storeId)
+    private function convertToProductData(int $productId, array $indexData, int $storeId): array
     {
         $productAttributes = [];
-        foreach ($indexData as $attributeId => $attributeValue) {
-            $attributeData = $this->getAttributeData($attributeId);
-            if (!$attributeData) {
+
+        if (isset($indexData['options'])) {
+            // cover case with "options"
+            // see \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider::prepareProductIndex
+            $productAttributes['options'] = $indexData['options'];
+            unset($indexData['options']);
+        }
+
+        foreach ($indexData as $attributeId => $attributeValues) {
+            $attribute = $this->dataProvider->getSearchableAttribute($attributeId);
+            if (in_array($attribute->getAttributeCode(), $this->excludedAttributes, true)) {
                 continue;
             }
-            $productAttributes = array_merge(
-                $productAttributes,
-                $this->convertAttribute(
-                    $productId,
-                    $attributeId,
-                    $attributeValue,
-                    $attributeData,
-                    $storeId
-                )
-            );
+
+            if (!\is_array($attributeValues)) {
+                $attributeValues = [$productId => $attributeValues];
+            }
+            $attributeValues = $this->prepareAttributeValues($productId, $attribute, $attributeValues, $storeId);
+            $productAttributes += $this->convertAttribute($attribute, $attributeValues);
         }
+
         return $productAttributes;
     }
 
     /**
-     * Convert data for attribute: 1) add new value {attribute_code}_value for select and multiselect searchable
-     * attributes, that will contain actual value 2) add child products data to composite products
+     * Convert data for attribute, add {attribute_code}_value for searchable attributes, that contain actual value.
+     *
+     * @param Attribute $attribute
+     * @param array $attributeValues
+     * @return array
+     */
+    private function convertAttribute(Attribute $attribute, array $attributeValues): array
+    {
+        $productAttributes = [];
+
+        $retrievedValue = $this->retrieveFieldValue($attributeValues);
+        if ($retrievedValue) {
+            $productAttributes[$attribute->getAttributeCode()] = $retrievedValue;
+
+            if ($attribute->getIsSearchable()) {
+                $attributeLabels = $this->getValuesLabels($attribute, $attributeValues);
+                $retrievedLabel = $this->retrieveFieldValue($attributeLabels);
+                if ($retrievedLabel) {
+                    $productAttributes[$attribute->getAttributeCode() . '_value'] = $retrievedLabel;
+                }
+            }
+        }
+
+        return $productAttributes;
+    }
+
+    /**
+     * Prepare attribute values.
      *
      * @param int $productId
-     * @param int $attributeId
-     * @param mixed $attributeValue
-     * @param array $attributeData
+     * @param Attribute $attribute
+     * @param array $attributeValues
      * @param int $storeId
      * @return array
      */
-    private function convertAttribute($productId, $attributeId, $attributeValue, array $attributeData, $storeId)
-    {
-        $productAttributes = [];
-        $attributeCode = $attributeData[AttributeInterface::ATTRIBUTE_CODE];
-        $attributeFrontendInput = $attributeData[AttributeInterface::FRONTEND_INPUT];
-        if (is_array($attributeValue)) {
-            if (!$attributeData['is_searchable']) {
-                $value = $this->getValueForAttribute(
-                    $productId,
-                    $attributeCode,
-                    $attributeValue,
-                    $attributeData['is_searchable']
-                );
-            } else {
-                if (($attributeFrontendInput == 'select' || $attributeFrontendInput == 'multiselect')
-                    && !in_array($attributeCode, $this->excludedAttributes)
-                ) {
-                    $value = $this->getValueForAttribute(
-                        $productId,
-                        $attributeCode,
-                        $attributeValue,
-                        $attributeData['is_searchable']
-                    );
-                    $productAttributes[$attributeCode . '_value'] = $this->getValueForAttributeOptions(
-                        $attributeData,
-                        $attributeValue
-                    );
-                } else {
-                    $value = implode(' ', $attributeValue);
-                }
-            }
-        } else {
-            $value = $attributeValue;
+    private function prepareAttributeValues(
+        int $productId,
+        Attribute $attribute,
+        array $attributeValues,
+        int $storeId
+    ): array {
+        if (in_array($attribute->getAttributeCode(), $this->attributesExcludedFromMerge, true)) {
+            $attributeValues = [
+                $productId => $attributeValues[$productId] ?? '',
+            ];
         }
 
-        // cover case with "options"
-        // see \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider::prepareProductIndex
-        if ($value) {
-            if ($attributeId === 'options') {
-                $productAttributes[$attributeId] = $value;
-            } else {
-                if (isset($attributeData[AttributeInterface::OPTIONS][$value])) {
-                    $productAttributes[$attributeCode . '_value'] = $attributeData[AttributeInterface::OPTIONS][$value];
-                }
-                $productAttributes[$attributeCode] = $this->formatProductAttributeValue(
-                    $value,
-                    $attributeData,
-                    $storeId
-                );
+        if ($attribute->getFrontendInput() === 'multiselect') {
+            $attributeValues = $this->prepareMultiselectValues($attributeValues);
+        }
+
+        if ($this->isAttributeDate($attribute)) {
+            foreach ($attributeValues as $key => $attributeValue) {
+                $attributeValues[$key] = $this->dateFieldType->formatDate($storeId, $attributeValue);
             }
         }
-        return $productAttributes;
+
+        return $attributeValues;
     }
 
     /**
-     * Get product attribute data by attribute id
+     * Prepare multiselect values.
      *
-     * @param int $attributeId
+     * @param array $values
      * @return array
      */
-    private function getAttributeData($attributeId)
+    private function prepareMultiselectValues(array $values): array
     {
-        if (!array_key_exists($attributeId, $this->attributeData)) {
-            $attribute = $this->dataProvider->getSearchableAttribute($attributeId);
-            if ($attribute) {
-                $options = [];
-                if ($attribute->getFrontendInput() === 'select' || $attribute->getFrontendInput() === 'multiselect') {
-                    foreach ($attribute->getOptions() as $option) {
-                        $options[$option->getValue()] = $option->getLabel();
-                    }
-                }
-                $this->attributeData[$attributeId] = [
-                    AttributeInterface::ATTRIBUTE_CODE => $attribute->getAttributeCode(),
-                    AttributeInterface::FRONTEND_INPUT => $attribute->getFrontendInput(),
-                    AttributeInterface::BACKEND_TYPE => $attribute->getBackendType(),
-                    AttributeInterface::OPTIONS => $options,
-                    'is_searchable' => $attribute->getIsSearchable(),
-                ];
-            } else {
-                $this->attributeData[$attributeId] = null;
-            }
-        }
-
-        return $this->attributeData[$attributeId];
+        return \array_merge(...\array_map(function (string $value) {
+            return \explode(',', $value);
+        }, $values));
     }
 
     /**
-     * Format product attribute value for search engine
+     * Is attribute date.
      *
-     * @param mixed $value
-     * @param array $attributeData
-     * @param string $storeId
-     * @return string
+     * @param Attribute $attribute
+     * @return bool
      */
-    private function formatProductAttributeValue($value, $attributeData, $storeId)
+    private function isAttributeDate(Attribute $attribute): bool
     {
-        if ($attributeData[AttributeInterface::FRONTEND_INPUT] === 'date'
-            || in_array($attributeData[AttributeInterface::BACKEND_TYPE], ['datetime', 'timestamp'])) {
-            return $this->dateFieldType->formatDate($storeId, $value);
-        } elseif ($attributeData[AttributeInterface::FRONTEND_INPUT] === 'multiselect') {
-            return str_replace(',', ' ', $value);
-        } else {
-            return $value;
-        }
+        return $attribute->getFrontendInput() === 'date'
+            || in_array($attribute->getBackendType(), ['datetime', 'timestamp'], true);
     }
 
     /**
-     * Return single value if value exists for the productId in array, otherwise return concatenated array values
+     * Get values labels.
      *
-     * @param int $productId
-     * @param string $attributeCode
-     * @param array $attributeValue
-     * @param bool $isSearchable
-     * @return mixed
+     * @param Attribute $attribute
+     * @param array $attributeValues
+     * @return array
      */
-    private function getValueForAttribute($productId, $attributeCode, array $attributeValue, $isSearchable)
+    private function getValuesLabels(Attribute $attribute, array $attributeValues): array
     {
-        if ((!$isSearchable || in_array($attributeCode, $this->attributesExcludedFromMerge))
-            && isset($attributeValue[$productId])
-        ) {
-            $value = $attributeValue[$productId];
-        } elseif (in_array($attributeCode, $this->attributesExcludedFromMerge) && !isset($attributeValue[$productId])) {
-            $value = '';
-        } else {
-            $value = implode(' ', $attributeValue);
+        $attributeLabels = [];
+
+        $options = $this->getAttributeOptions($attribute);
+        if (empty($options)) {
+            return $attributeLabels;
         }
-        return $value;
+
+        foreach ($options as $option) {
+            if (\in_array($option->getValue(), $attributeValues)) {
+                $attributeLabels[] = $option->getLabel();
+            }
+        }
+
+        return $attributeLabels;
     }
 
     /**
-     * Concatenate select and multiselect attribute values
+     * Retrieve options for attribute
      *
-     * @param array $attributeData
-     * @param array $attributeValue
-     * @return string
+     * @param Attribute $attribute
+     * @return array
      */
-    private function getValueForAttributeOptions(array $attributeData, array $attributeValue)
+    private function getAttributeOptions(Attribute $attribute): array
     {
-        $result = null;
-        $selectedValues = [];
-        if ($attributeData[AttributeInterface::FRONTEND_INPUT] == 'select') {
-            foreach ($attributeValue as $selectedValue) {
-                if (isset($attributeData[AttributeInterface::OPTIONS][$selectedValue])) {
-                    $selectedValues[] = $attributeData[AttributeInterface::OPTIONS][$selectedValue];
-                }
-            }
+        if (!isset($this->attributeOptionsCache[$attribute->getId()])) {
+            $options = $attribute->getOptions() ?? [];
+            $this->attributeOptionsCache[$attribute->getId()] = $options;
         }
-        if ($attributeData[AttributeInterface::FRONTEND_INPUT] == 'multiselect') {
-            foreach ($attributeValue as $selectedAttributeValues) {
-                $selectedAttributeValues = explode(',', $selectedAttributeValues);
-                foreach ($selectedAttributeValues as $selectedValue) {
-                    if (isset($attributeData[AttributeInterface::OPTIONS][$selectedValue])) {
-                        $selectedValues[] = $attributeData[AttributeInterface::OPTIONS][$selectedValue];
-                    }
-                }
-            }
-        }
-        $selectedValues = array_unique($selectedValues);
-        if (!empty($selectedValues)) {
-            $result = implode(' ', $selectedValues);
-        }
-        return $result;
+
+        return $this->attributeOptionsCache[$attribute->getId()];
+    }
+
+    /**
+     * Retrieve value for field. If field have only one value this method return it.
+     * Otherwise will be returned array of these values.
+     * Note: array of values must have index keys, not as associative array.
+     *
+     * @param array $values
+     * @return array|string
+     */
+    private function retrieveFieldValue(array $values)
+    {
+        $values = \array_filter(\array_unique($values));
+
+        return count($values) === 1 ? \array_shift($values) : \array_values($values);
     }
 }

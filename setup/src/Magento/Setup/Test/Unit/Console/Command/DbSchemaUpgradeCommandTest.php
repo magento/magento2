@@ -3,10 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Console\Command\DbSchemaUpgradeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -58,10 +58,10 @@ class DbSchemaUpgradeCommandTest extends \PHPUnit\Framework\TestCase
             [
                 'options' => [
                     '--magento-init-params' => '',
-                    '--convert_old_scripts' => false
+                    '--convert-old-scripts' => false
                 ],
                 'expectedOptions' => [
-                    'convert_old_scripts' => false,
+                    'convert-old-scripts' => false,
                     'magento-init-params' => '',
                 ]
             ],

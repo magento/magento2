@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory as EavAttributeFactory;
 use Magento\Catalog\Ui\DataProvider\CatalogEavValidationRules;
@@ -290,7 +291,7 @@ class Eav extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -401,7 +402,7 @@ class Eav extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -419,7 +420,7 @@ class Eav extends AbstractModifier
 
             foreach ($attributes as $attribute) {
                 if (null !== ($attributeValue = $this->setupAttributeData($attribute))) {
-                    if ($attribute->getFrontendInput() === 'price' && is_scalar($attributeValue)) {
+                    if ($this->isPriceAttribute($attribute, $attributeValue)) {
                         $attributeValue = $this->formatPrice($attributeValue);
                     }
                     $data[$productId][self::DATA_SOURCE_DEFAULT][$attribute->getAttributeCode()] = $attributeValue;
@@ -428,6 +429,32 @@ class Eav extends AbstractModifier
         }
 
         return $data;
+    }
+
+    /**
+     * Obtain if given attribute is a price
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @param string|integer $attributeValue
+     * @return bool
+     */
+    private function isPriceAttribute(ProductAttributeInterface $attribute, $attributeValue)
+    {
+        return $attribute->getFrontendInput() === 'price'
+            && is_scalar($attributeValue)
+            && !$this->isBundleSpecialPrice($attribute);
+    }
+
+    /**
+     * Obtain if current product is bundle and given attribute is special_price
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @return bool
+     */
+    private function isBundleSpecialPrice(ProductAttributeInterface $attribute)
+    {
+        return $this->locator->getProduct()->getTypeId() === ProductType::TYPE_BUNDLE
+            && $attribute->getAttributeCode() === ProductAttributeInterface::CODE_SPECIAL_PRICE;
     }
 
     /**
@@ -532,8 +559,8 @@ class Eav extends AbstractModifier
     /**
      * Loads attributes for specified groups at once
      *
-     * @param AttributeGroupInterface[] ...$groups
-     * @return @return ProductAttributeInterface[]
+     * @param AttributeGroupInterface[] $groups
+     * @return ProductAttributeInterface[]
      */
     private function loadAttributesForGroups(array $groups)
     {
@@ -649,7 +676,7 @@ class Eav extends AbstractModifier
         // TODO: Refactor to $attribute->getOptions() when MAGETWO-48289 is done
         $attributeModel = $this->getAttributeModel($attribute);
         if ($attributeModel->usesSource()) {
-            $options = $attributeModel->getSource()->getAllOptions();
+            $options = $attributeModel->getSource()->getAllOptions(true, true);
             $meta = $this->arrayManager->merge($configPath, $meta, [
                 'options' => $this->convertOptionsValueToString($options),
             ]);
@@ -707,7 +734,8 @@ class Eav extends AbstractModifier
     }
 
     /**
-     * Returns attribute default value, based on db setting or setting in the system configuration
+     * Returns attribute default value, based on db setting or setting in the system configuration.
+     *
      * @param ProductAttributeInterface $attribute
      * @return null|string
      */
@@ -742,6 +770,8 @@ class Eav extends AbstractModifier
     }
 
     /**
+     * Adds 'use default value' checkbox.
+     *
      * @param ProductAttributeInterface $attribute
      * @param array $meta
      * @return array
@@ -890,7 +920,7 @@ class Eav extends AbstractModifier
     {
         $valueMap = $this->formElementMapper->getMappings();
 
-        return isset($valueMap[$value]) ? $valueMap[$value] : $value;
+        return $valueMap[$value] ?? $value;
     }
 
     /**
@@ -944,6 +974,9 @@ class Eav extends AbstractModifier
         $attributeCode = $attribute->getAttributeCode();
         /** @var Product $product */
         $product = $this->locator->getProduct();
+        if ($product->isLockedAttribute($attributeCode)) {
+            return false;
+        }
 
         if (isset($this->canDisplayUseDefault[$attributeCode])) {
             return $this->canDisplayUseDefault[$attributeCode];

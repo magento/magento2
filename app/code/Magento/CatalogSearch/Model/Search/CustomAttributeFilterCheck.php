@@ -10,8 +10,10 @@ use Magento\Eav\Model\Config as EavConfig;
 use Magento\Catalog\Model\Product;
 
 /**
- * Class CustomAttributeFilterSelector
  * Checks if FilterInterface is by custom attribute
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class CustomAttributeFilterCheck
 {
@@ -42,7 +44,7 @@ class CustomAttributeFilterCheck
 
         return $attribute
             && $filter->getType() === FilterInterface::TYPE_TERM
-            && in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true);
+            && in_array($attribute->getFrontendInput(), ['select', 'multiselect', 'boolean'], true);
     }
 
     /**

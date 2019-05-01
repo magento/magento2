@@ -11,11 +11,12 @@
 <form action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>" method="post" id="attributes-edit-form" class="attributes-edit-form" enctype="multipart/form-data">
     <?= $block->getBlockHtml('formkey') ?>
 </form>
-<script>
-require(['jquery', "mage/mage"], function(jQuery){
-
-    jQuery('#attributes-edit-form').mage('form')
-        .mage('validation', {validationUrl: '<?= /* @escapeNotVerified */ $block->getValidationUrl() ?>'});
-
-});
+<script type="text/x-magento-init">
+    {
+        "#attributes-edit-form": {
+            "Magento_Catalog/catalog/product/edit/attribute": {
+                "validationUrl": "<?= /* @escapeNotVerified */ $block->getValidationUrl() ?>"
+            }
+        }
+    }
 </script>

@@ -418,6 +418,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->with(false)
             ->willReturnSelf();
         $storageCollectionMock->expects($this->once())
+            ->method('setOrder')
+            ->with('basename', \Magento\Framework\Data\Collection\Filesystem::SORT_ORDER_ASC)
+            ->willReturnSelf();
+        $storageCollectionMock->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($collectionArray));
         $storageCollectionInvMock = $storageCollectionMock->expects($this->exactly(sizeof($expectedRemoveKeys)))
@@ -440,14 +444,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $thumbnailDestination = $thumbnailTargetPath . '/' . $fileName;
         $type = 'image';
         $result = [
-            'result',
-            'cookie' => [
-                'name' => 'session_name',
-                'value' => '1',
-                'lifetime' => '50',
-                'path' => 'cookie/path',
-                'domain' => 'cookie_domain',
-            ],
+            'result'
         ];
         $uploader = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Uploader::class)
             ->disableOriginalConstructor()
@@ -506,17 +503,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $image->expects($this->atLeastOnce())->method('save')->with($thumbnailDestination);
 
         $this->adapterFactoryMock->expects($this->atLeastOnce())->method('create')->willReturn($image);
-
-        $this->sessionMock->expects($this->atLeastOnce())->method('getName')
-            ->willReturn($result['cookie']['name']);
-        $this->sessionMock->expects($this->atLeastOnce())->method('getSessionId')
-            ->willReturn($result['cookie']['value']);
-        $this->sessionMock->expects($this->atLeastOnce())->method('getCookieLifetime')
-            ->willReturn($result['cookie']['lifetime']);
-        $this->sessionMock->expects($this->atLeastOnce())->method('getCookiePath')
-            ->willReturn($result['cookie']['path']);
-        $this->sessionMock->expects($this->atLeastOnce())->method('getCookieDomain')
-            ->willReturn($result['cookie']['domain']);
 
         $this->assertEquals($result, $this->imagesStorage->uploadFile($targetPath, $type));
     }

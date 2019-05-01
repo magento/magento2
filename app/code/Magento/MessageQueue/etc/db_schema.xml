@@ -14,11 +14,14 @@
         <column xsi:type="varchar" name="message_code" nullable="false" length="255" default="" comment="Message Code"/>
         <column xsi:type="timestamp" name="created_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="unique" name="QUEUE_LOCK_MESSAGE_CODE">
+        <constraint xsi:type="unique" referenceId="QUEUE_LOCK_MESSAGE_CODE">
             <column name="message_code"/>
         </constraint>
+    </table>
+    <table name="queue_poison_pill" resource="default" engine="innodb" comment="Sequence table for poison pill versions">
+        <column xsi:type="varchar" name="version" length="255" nullable="false" comment="Poison Pill version."/>
     </table>
 </schema>

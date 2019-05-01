@@ -4,9 +4,11 @@
     "require": {
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
+        "magento/module-backend": "*",
         "magento/module-ui": "*",
         "magento/module-variable": "*",
         "magento/module-widget": "*"
+
     },
     "suggest": {
         "magento/module-cms": "*"

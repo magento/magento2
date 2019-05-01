@@ -7,7 +7,7 @@ namespace Magento\Checkout\Block\Checkout;
 
 use Magento\Checkout\Helper\Data;
 use Magento\Framework\App\ObjectManager;
-use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class LayoutProcessor
@@ -40,9 +40,9 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     private $checkoutDataHelper;
 
     /**
-     * @var StoreResolverInterface
+     * @var StoreManagerInterface
      */
-    private $storeResolver;
+    private $storeManager;
 
     /**
      * @var \Magento\Shipping\Model\Config
@@ -53,30 +53,36 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @param \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider
      * @param \Magento\Ui\Component\Form\AttributeMapper $attributeMapper
      * @param AttributeMerger $merger
+     * @param \Magento\Customer\Model\Options|null $options
+     * @param Data|null $checkoutDataHelper
+     * @param \Magento\Shipping\Model\Config|null $shippingConfig
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider,
         \Magento\Ui\Component\Form\AttributeMapper $attributeMapper,
-        AttributeMerger $merger
+        AttributeMerger $merger,
+        \Magento\Customer\Model\Options $options = null,
+        Data $checkoutDataHelper = null,
+        \Magento\Shipping\Model\Config $shippingConfig = null,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->attributeMetadataDataProvider = $attributeMetadataDataProvider;
         $this->attributeMapper = $attributeMapper;
         $this->merger = $merger;
+        $this->options = $options ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Customer\Model\Options::class);
+        $this->checkoutDataHelper = $checkoutDataHelper ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Data::class);
+        $this->shippingConfig = $shippingConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Shipping\Model\Config::class);
+        $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(StoreManagerInterface::class);
     }
 
     /**
-     * @deprecated 100.0.11
-     * @return \Magento\Customer\Model\Options
-     */
-    private function getOptions()
-    {
-        if (!is_object($this->options)) {
-            $this->options = ObjectManager::getInstance()->get(\Magento\Customer\Model\Options::class);
-        }
-        return $this->options;
-    }
-
-    /**
+     * Get address attributes.
+     *
      * @return array
      */
     private function getAddressAttributes()
@@ -116,6 +122,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
             if (!in_array($code, $codes)) {
                 continue;
             }
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $options = call_user_func($attributesToConvert[$code]);
             if (!is_array($options)) {
                 continue;
@@ -143,8 +150,8 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     public function process($jsLayout)
     {
         $attributesToConvert = [
-            'prefix' => [$this->getOptions(), 'getNamePrefixOptions'],
-            'suffix' => [$this->getOptions(), 'getNameSuffixOptions'],
+            'prefix' => [$this->options, 'getNamePrefixOptions'],
+            'suffix' => [$this->options, 'getNameSuffixOptions'],
         ];
 
         $elements = $this->getAddressAttributes();
@@ -192,8 +199,8 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      */
     private function processShippingChildrenComponents($shippingRatesLayout)
     {
-        $activeCarriers = $this->getShippingConfig()->getActiveCarriers(
-            $this->getStoreResolver()->getCurrentStoreId()
+        $activeCarriers = $this->shippingConfig->getActiveCarriers(
+            $this->storeManager->getStore()->getId()
         );
         foreach (array_keys($shippingRatesLayout) as $carrierName) {
             $carrierKey = str_replace('-rates-validation', '', $carrierName);
@@ -206,6 +213,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 
     /**
      * Appends billing address form component to payment layout
+     *
      * @param array $paymentLayout
      * @param array $elements
      * @return array
@@ -221,7 +229,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         }
 
         // The if billing address should be displayed on Payment method or page
-        if ($this->getCheckoutDataHelper()->isDisplayBillingOnPaymentMethodAvailable()) {
+        if ($this->checkoutDataHelper->isDisplayBillingOnPaymentMethodAvailable()) {
             $paymentLayout['payments-list']['children'] =
                 array_merge_recursive(
                     $paymentLayout['payments-list']['children'],
@@ -280,8 +288,14 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
             'provider' => 'checkoutProvider',
             'deps' => 'checkoutProvider',
             'dataScopePrefix' => 'billingAddress' . $paymentCode,
+            'billingAddressListProvider' => '${$.name}.billingAddressList',
             'sortOrder' => 1,
             'children' => [
+                'billingAddressList' => [
+                    'component' => 'Magento_Checkout/js/view/billing-address/list',
+                    'displayArea' => 'billing-address-list',
+                    'template' => 'Magento_Checkout/billing-address/list'
+                ],
                 'form-fields' => [
                     'component' => 'uiComponent',
                     'displayArea' => 'additional-fieldsets',
@@ -339,50 +353,5 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 ],
             ],
         ];
-    }
-
-    /**
-     * Get checkout data helper instance
-     *
-     * @return Data
-     * @deprecated 100.1.4
-     */
-    private function getCheckoutDataHelper()
-    {
-        if (!$this->checkoutDataHelper) {
-            $this->checkoutDataHelper = ObjectManager::getInstance()->get(Data::class);
-        }
-
-        return $this->checkoutDataHelper;
-    }
-
-    /**
-     * Retrieve Shipping Configuration.
-     *
-     * @return \Magento\Shipping\Model\Config
-     * @deprecated 100.2.0
-     */
-    private function getShippingConfig()
-    {
-        if (!$this->shippingConfig) {
-            $this->shippingConfig = ObjectManager::getInstance()->get(\Magento\Shipping\Model\Config::class);
-        }
-
-        return $this->shippingConfig;
-    }
-
-    /**
-     * Get store resolver.
-     *
-     * @return StoreResolverInterface
-     * @deprecated 100.2.0
-     */
-    private function getStoreResolver()
-    {
-        if (!$this->storeResolver) {
-            $this->storeResolver = ObjectManager::getInstance()->get(StoreResolverInterface::class);
-        }
-
-        return $this->storeResolver;
     }
 }

@@ -13,8 +13,8 @@ use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
 /**
- * Class SetInitialSearchWeightForAttributes
- * @package Magento\CatalogSearch\Setup\Patch
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVersionInterface
 {

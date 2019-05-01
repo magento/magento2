@@ -6,10 +6,11 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 
-class CleanMedia extends \Magento\Backend\Controller\Adminhtml\Cache
+class CleanMedia extends \Magento\Backend\Controller\Adminhtml\Cache implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session

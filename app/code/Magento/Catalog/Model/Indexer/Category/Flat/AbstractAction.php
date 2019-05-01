@@ -7,8 +7,10 @@
 namespace Magento\Catalog\Model\Indexer\Category\Flat;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\EntityManager\MetadataPool;
 
+/**
+ * Abstract action class for category flat indexers.
+ */
 class AbstractAction
 {
     /**
@@ -111,7 +113,7 @@ class AbstractAction
     public function getMainStoreTable($storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID)
     {
         if (is_string($storeId)) {
-            $storeId = intval($storeId);
+            $storeId = (int) $storeId;
         }
 
         $suffix = sprintf('store_%d', $storeId);
@@ -131,7 +133,7 @@ class AbstractAction
         $table = $this->connection->newTable(
             $tableName
         )->setComment(
-            sprintf("Catalog Category Flat", $tableName)
+            'Catalog Category Flat'
         );
 
         //Adding columns
@@ -379,7 +381,7 @@ class AbstractAction
         $linkField = $this->getCategoryMetadata()->getLinkField();
         foreach ($attributesType as $type) {
             foreach ($this->getAttributeTypeValues($type, $entityIds, $storeId) as $row) {
-                if (isset($row[$linkField]) && isset($row['attribute_id'])) {
+                if (isset($row[$linkField], $row['attribute_id'])) {
                     $attributeId = $row['attribute_id'];
                     if (isset($attributes[$attributeId])) {
                         $attributeCode = $attributes[$attributeId]['attribute_code'];
@@ -497,6 +499,8 @@ class AbstractAction
     }
 
     /**
+     * Get category metadata instance.
+     *
      * @return \Magento\Framework\EntityManager\EntityMetadata
      */
     private function getCategoryMetadata()
@@ -510,6 +514,8 @@ class AbstractAction
     }
 
     /**
+     * Get skip static columns instance.
+     *
      * @return array
      */
     private function getSkipStaticColumns()

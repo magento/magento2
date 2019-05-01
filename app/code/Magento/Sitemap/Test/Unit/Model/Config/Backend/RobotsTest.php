@@ -37,6 +37,11 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
      */
     private $storeResolver;
 
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManager;
+
     protected function setUp()
     {
         $this->context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
@@ -57,12 +62,16 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+            ->getMockForAbstractClass();
+
         $this->model = new \Magento\Sitemap\Model\Config\Backend\Robots(
             $this->context,
             $this->registry,
             $this->scopeConfig,
             $this->typeList,
-            $this->storeResolver
+            $this->storeResolver,
+            $this->storeManager
         );
     }
 
@@ -73,8 +82,14 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
     {
         $storeId = 1;
 
-        $this->storeResolver->expects($this->once())
-            ->method('getCurrentStoreId')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMock();
+
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->willReturn($storeMock);
+
+        $storeMock->expects($this->once())
+            ->method('getId')
             ->willReturn($storeId);
 
         $expected = [

@@ -9,6 +9,8 @@ namespace Magento\Checkout\Model;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
+ * Payment information management
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInformationManagementInterface
@@ -72,7 +74,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function savePaymentInformationAndPlaceOrder(
         $cartId,
@@ -98,7 +100,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function savePaymentInformation(
         $cartId,
@@ -115,9 +117,10 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             $quote->setDataChanges(true);
             $shippingAddress = $quote->getShippingAddress();
             if ($shippingAddress && $shippingAddress->getShippingMethod()) {
-                $shippingDataArray = explode('_', $shippingAddress->getShippingMethod());
-                $shippingCarrier = array_shift($shippingDataArray);
-                $shippingAddress->setLimitCarrier($shippingCarrier);
+                $shippingRate = $shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod());
+                $shippingAddress->setLimitCarrier(
+                    $shippingRate ? $shippingRate->getCarrier() : $shippingAddress->getShippingMethod()
+                );
             }
         }
         $this->paymentMethodManagement->set($cartId, $paymentMethod);
@@ -125,7 +128,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getPaymentInformation($cartId)
     {

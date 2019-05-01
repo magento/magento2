@@ -313,18 +313,18 @@ angular.module('readiness-check', ['remove-dialog'])
                     item.url = item.url + '?type=' + item.params;
                 } else {
                     return $http.post(item.url, item.params)
-                        .success(function (data) {
-                            item.process(data)
-                        })
-                        .error(function (data, status) {
+                        .then(function successCallback(resp) {
+                            item.process(resp.data);
+                        }, function successCallback() {
                             item.fail();
                         });
                 }
             }
             // setting 1 minute timeout to prevent system from timing out
-            return $http.get(item.url, {timeout: 60000})
-                .success(function(data) { item.process(data) })
-                .error(function(data, status) {
+            return $http.get(item.url, { timeout: 60000 })
+                .then(function successCallback(resp) {
+                    item.process(resp.data);
+                }, function errorCallback() {
                     item.fail();
                 });
         };

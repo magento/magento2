@@ -13,6 +13,7 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  *
  * @api
  * @since 100.0.2
@@ -171,7 +172,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCustomer()
     {
         if (!$this->_currentCustomer && $this->_customerSession->isLoggedIn()) {
-            $this->_currentCustomer = $this->_customerSession->getCustomerDataObject();
+            $this->_currentCustomer = $this->_customerSession->getCustomerData();
         }
         return $this->_currentCustomer;
     }
@@ -195,6 +196,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Retrieve wishlist item count (include config settings)
+     *
      * Used in top link menu only
      *
      * @return int
@@ -354,7 +356,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      *
-     * @return  string|false
+     * @return string|false
      */
     public function getUpdateParams($item)
     {
@@ -381,7 +383,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve params for adding item to shopping cart
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
-     * @return  string
+     * @return string
      */
     public function getAddToCartUrl($item)
     {
@@ -427,7 +429,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve URL for adding item to shopping cart from shared wishlist
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
-     * @return  string
+     * @return string
      */
     public function getSharedAddToCartUrl($item)
     {
@@ -450,6 +452,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get cart URL parameters
+     *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return array
      */
@@ -576,7 +580,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             ) {
                 $count = $collection->getItemsQty();
             } else {
-                $count = $collection->getSize();
+                $count = $collection->count();
             }
             $this->_customerSession->setWishlistDisplayType(
                 $this->scopeConfig->getValue(

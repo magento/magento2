@@ -166,7 +166,7 @@ class DbValidator
             return true;
         }
 
-        // check table privileges
+        // check database privileges
         $schemaPrivilegesQuery = "SELECT PRIVILEGE_TYPE FROM SCHEMA_PRIVILEGES " .
             "WHERE '$dbName' LIKE TABLE_SCHEMA AND REPLACE(GRANTEE, '\'', '') = current_user()";
         $grantInfo = $connection->query($schemaPrivilegesQuery)->fetchAll(\PDO::FETCH_NUM);
@@ -175,7 +175,7 @@ class DbValidator
         }
 
         $errorMessage = 'Database user does not have enough privileges. Please make sure '
-            . implode(', ', $requiredPrivileges) . " privileges are granted to table '{$dbName}'.";
+            . implode(', ', $requiredPrivileges) . " privileges are granted to database '{$dbName}'.";
         throw new \Magento\Setup\Exception($errorMessage);
     }
 

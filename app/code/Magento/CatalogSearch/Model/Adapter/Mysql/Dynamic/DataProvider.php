@@ -24,6 +24,8 @@ use \Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class DataProvider implements DataProviderInterface
 {
