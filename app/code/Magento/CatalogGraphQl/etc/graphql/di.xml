@@ -80,4 +80,26 @@
     </virtualType>
     <preference for="Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match"
                 type="Magento\CatalogGraphQl\Model\Search\Adapter\Mysql\Query\Builder\Match" />
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="product_url_suffix" xsi:type="string">catalog/seo/product_url_suffix</item>
+                <item name="category_url_suffix" xsi:type="string">catalog/seo/category_url_suffix</item>
+                <item name="product_use_categories" xsi:type="string">catalog/seo/product_use_categories</item>
+                <item name="save_rewrites_history" xsi:type="string">catalog/seo/save_rewrites_history</item>
+                <item name="title_separator" xsi:type="string">catalog/seo/title_separator</item>
+                <item name="category_canonical_tag" xsi:type="string">catalog/seo/category_canonical_tag</item>
+                <item name="product_canonical_tag" xsi:type="string">catalog/seo/product_canonical_tag</item>
+                <item name="list_mode" xsi:type="string">catalog/frontend/list_mode</item>
+                <item name="grid_per_page_values" xsi:type="string">catalog/frontend/grid_per_page_values</item>
+                <item name="list_per_page_values" xsi:type="string">catalog/frontend/list_per_page_values</item>
+                <item name="grid_per_page" xsi:type="string">catalog/frontend/grid_per_page</item>
+                <item name="list_per_page" xsi:type="string">catalog/frontend/list_per_page</item>
+                <item name="flat_catalog_category" xsi:type="string">catalog/frontend/flat_catalog_category</item>
+                <item name="catalog_default_sort_by" xsi:type="string">catalog/frontend/default_sort_by</item>
+                <item name="parse_url_directives" xsi:type="string">catalog/frontend/parse_url_directives</item>
+                <item name="remember_pagination" xsi:type="string">catalog/frontend/remember_pagination</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
