@@ -39,7 +39,7 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
@@ -71,7 +71,7 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
                 'label' => 'US',
             ],
             'telephone' => '3468676',
-            'address_type' => 'BILLING',
+            '__typename' => 'BillingCartAddress',
             'customer_notes' => null,
         ];
         self::assertEquals($expectedBillingAddressData, $response['cart']['billing_address']);
@@ -79,7 +79,7 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
@@ -110,7 +110,7 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
                 'label' => null,
             ],
             'telephone' => null,
-            'address_type' => 'BILLING',
+            '__typename' => 'BillingCartAddress',
             'customer_notes' => null,
         ];
         self::assertEquals($expectedBillingAddressData, $response['cart']['billing_address']);
@@ -132,7 +132,7 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
     /**
      * _security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
@@ -150,7 +150,7 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
     /**
      * _security
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
@@ -197,7 +197,7 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
         label
       }
       telephone
-      address_type
+      __typename
       customer_notes
     }
   }
