@@ -1,4 +1,4 @@
-# AuthornizenetGraphQl
+# AuthorizenetGraphQl
 
- **AuthornizenetGraphQl** provides type and resolver for method additional
+ **AuthorizenetGraphQl** provides type and resolver for method additional
 information.
