@@ -212,7 +212,7 @@ mutation {
   addSimpleProductsToCart(
     input: {
       cart_id: "{$cartId}"
-      cartItems: [
+      cart_items: [
         {
           data: {
             quantity: {$qty}
