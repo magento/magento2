@@ -7,7 +7,8 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminNavigateToCreateNewCMSBlockPage">
-        <amOnPage url="{{CmsNewBlock.url}}" stepKey="navigateToCreateNewCMSBlockPage"/>
+    <actionGroup name="AdminSetCMSBlockEnabledActionGroup">
+        <seeElement selector="{{BlockNewPageBasicFieldsSection.isActive('0')}}" stepKey="seeBlockIsDisabled" />
+        <click selector="{{BlockNewPageBasicFieldsSection.isActiveLabel}}" stepKey="setBlockEnabled"/>
     </actionGroup>
 </actionGroups>

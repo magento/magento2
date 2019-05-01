@@ -29,17 +29,23 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="AdminNavigateToCreateNewCMSBlockPage" stepKey="navigateToCreateNewCMSBlockPage"/>
+        <actionGroup ref="AdminNavigateToCreateNewCMSBlockPageActionGroup" stepKey="navigateToCreateNewCMSBlockPage"/>
         <actionGroup ref="FillOutBlockContent" stepKey="fillOutBlockContent"/>
-        <actionGroup ref="AdminSetCMSBlockDisabled" stepKey="disableBlock"/>
+        <actionGroup ref="AdminSetCMSBlockDisabledActionGroup" stepKey="disableBlock"/>
         <actionGroup ref="saveCMSBlock" stepKey="saveCMSBlock"/>
-        <actionGroup ref="AssertCMSBlockInGrid" stepKey="assertCMSBlockInGrid">
-            <argument name="CMSBlockPage" value="_defaultBlock"/>
+
+        <actionGroup ref="AdminOpenCMSBlocksGridActionGroup" stepKey="openCMSBlocksGrid"/>
+        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilters"/>
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortGridByIdDescending"/>
+        <actionGroup ref="AdminSelectCMSBlockFromGridActionGroup" stepKey="verifyBlockInGrid">
+            <argument name="identifier" value="_defaultBlock.identifier"/>
         </actionGroup>
-        <actionGroup ref="AdminAddCmsBlockToCategory" stepKey="addCmsBlockToCategory">
+
+        <actionGroup ref="AdminAddCmsBlockToCategoryActionGroup" stepKey="addCmsBlockToCategory">
             <argument name="category" value="$$newDefaultCategory$$"/>
         </actionGroup>
-        <actionGroup ref="AssertNoTextOnCategoryFrontPage" stepKey="assertBlockOnCategoryFrontPage">
+        
+        <actionGroup ref="AssertNoTextOnCategoryFrontPageActionGroup" stepKey="assertBlockOnCategoryFrontPage">
             <argument name="category" value="$$newDefaultCategory$$"/>
             <argument name="text" value="{{_defaultBlock.content}}"/>
         </actionGroup>

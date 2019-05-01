@@ -7,7 +7,7 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminSetCMSBlockDisabled">
+    <actionGroup name="AdminSetCMSBlockDisabledActionGroup">
         <seeElement selector="{{BlockNewPageBasicFieldsSection.isActive('1')}}" stepKey="seeBlockIsEnabled" />
         <click selector="{{BlockNewPageBasicFieldsSection.isActiveLabel}}" stepKey="setBlockDisabled"/>
     </actionGroup>

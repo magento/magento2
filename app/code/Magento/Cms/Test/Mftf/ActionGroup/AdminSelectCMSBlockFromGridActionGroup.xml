@@ -7,7 +7,10 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminNavigateToCreateNewCMSBlockPageActionGroup">
-        <amOnPage url="{{CmsNewBlock.url}}" stepKey="navigateToCreateNewCMSBlockPage"/>
+    <actionGroup name="AdminSelectCMSBlockFromGridActionGroup">
+        <arguments>
+            <argument name="identifier" defaultValue=""/>
+        </arguments>
+        <click selector="{{BlockPageActionsSection.select(identifier)}}" stepKey="clickSelectCreatedCMSBlock" />
     </actionGroup>
 </actionGroups>
