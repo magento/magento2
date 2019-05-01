@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCmsPageCreateDisabledPageTest">
+    <test name="AdminCMSPageCreateDisabledPageTest">
         <annotations>
             <features value="Cms"/>
             <title value="Create disabled CMS Page via the Admin"/>

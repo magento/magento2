@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCmsPageCreatePageTest">
+    <test name="AdminCMSPageCreatePageTest">
         <annotations>
             <features value="Cms"/>
             <title value="Create CMS Page via the Admin"/>

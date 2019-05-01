@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCmsPageCreatePageWithBlockTest">
+    <test name="AdminCMSPageCreatePageWithBlockTest">
         <annotations>
             <features value="Cms"/>
             <title value="Create CMS Page that contains block content via the Admin"/>
