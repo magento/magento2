@@ -976,6 +976,48 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     public function requestShippingRates(\Magento\Quote\Model\Quote\Item\AbstractItem $item = null)
     {
         /** @var $request \Magento\Quote\Model\Quote\Address\RateRequest */
+        $request = $this->getAddressRateRequest($item);
+
+        $result = $this->_rateCollector->create()->collectRates($request)->getResult();
+
+        $found = false;
+        if ($result) {
+            $shippingRates = $result->getAllRates();
+
+            foreach ($shippingRates as $shippingRate) {
+                $rate = $this->_addressRateFactory->create()->importShippingRate($shippingRate);
+                if (!$item) {
+                    $this->addShippingRate($rate);
+                }
+
+                if ($this->getShippingMethod() == $rate->getCode()) {
+                    if ($item) {
+                        $item->setBaseShippingAmount($rate->getPrice());
+                    } else {
+
+                        /** @var \Magento\Store\Api\Data\StoreInterface */
+                        $store = $this->storeManager->getStore();
+                        $amountPrice = $store->getBaseCurrency()
+                            ->convert($rate->getPrice(), $store->getCurrentCurrencyCode());
+                        $this->setBaseShippingAmount($rate->getPrice());
+                        $this->setShippingAmount($amountPrice);
+                    }
+
+                    $found = true;
+                }
+            }
+        }
+
+        return $found;
+    }
+
+    /**
+     * @param Item\AbstractItem|null $item
+     * @return Address\RateRequest
+     */
+    public function getAddressRateRequest(\Magento\Quote\Model\Quote\Item\AbstractItem $item = null)
+    {
+        /** @var $request \Magento\Quote\Model\Quote\Address\RateRequest */
         $request = $this->_rateRequestFactory->create();
         $request->setAllItems($item ? [$item] : $this->getAllItems());
         $request->setDestCountryId($this->getCountryId());
@@ -1021,39 +1063,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $baseSubtotalInclTax = $this->getBaseSubtotalTotalInclTax();
         $request->setBaseSubtotalInclTax($baseSubtotalInclTax);
 
-        $this->_eventManager->dispatch($this->_eventPrefix . '_collect_rates_before', ['request' => $request]);
-
-        $result = $this->_rateCollector->create()->collectRates($request)->getResult();
-
-        $found = false;
-        if ($result) {
-            $shippingRates = $result->getAllRates();
-
-            foreach ($shippingRates as $shippingRate) {
-                $rate = $this->_addressRateFactory->create()->importShippingRate($shippingRate);
-                if (!$item) {
-                    $this->addShippingRate($rate);
-                }
-
-                if ($this->getShippingMethod() == $rate->getCode()) {
-                    if ($item) {
-                        $item->setBaseShippingAmount($rate->getPrice());
-                    } else {
-
-                        /** @var \Magento\Store\Api\Data\StoreInterface */
-                        $store = $this->storeManager->getStore();
-                        $amountPrice = $store->getBaseCurrency()
-                            ->convert($rate->getPrice(), $store->getCurrentCurrencyCode());
-                        $this->setBaseShippingAmount($rate->getPrice());
-                        $this->setShippingAmount($amountPrice);
-                    }
-
-                    $found = true;
-                }
-            }
-        }
-
-        return $found;
+        return $request;
     }
 
     /******************************* Total Collector Interface *******************************************/
