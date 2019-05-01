@@ -101,7 +101,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     private $eventManager;
 
     /**
-     * @var \Magento\MessageQueue\Api\PoisonPillPutInterface
+     * @var \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface
      */
     private $pillPut;
 
@@ -117,7 +117,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
-     * @param \Magento\MessageQueue\Api\PoisonPillPutInterface|null $pillPut
+     * @param \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface|null $pillPut
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -132,7 +132,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         \Magento\Framework\Event\ManagerInterface $eventManager = null,
-        \Magento\MessageQueue\Api\PoisonPillPutInterface $pillPut = null
+        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
     ) {
         $this->_configDataResource = $configDataResource;
         $this->_storeListFactory = $storeListFactory;
@@ -140,7 +140,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Event\ManagerInterface::class);
         $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\MessageQueue\Api\PoisonPillPutInterface::class);
+            ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class);
         parent::__construct(
             $context,
             $registry,

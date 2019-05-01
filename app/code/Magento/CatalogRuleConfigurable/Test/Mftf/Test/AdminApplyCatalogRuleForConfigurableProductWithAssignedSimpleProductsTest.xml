@@ -178,8 +178,8 @@
         <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createPriceRule">
             <argument name="catalogRule" value="CatalogRuleToFixed"/>
         </actionGroup>
-        <actionGroup ref="SelectNewCustomerGroupActionGroup" stepKey="addCustomerGroup">
-            <argument name="customerGroup" value="$$customerGroup.code$$"/>
+        <actionGroup ref="CatalogSelectCustomerGroupActionGroup" stepKey="addCustomerGroup">
+            <argument name="customerGroupName" value="$$customerGroup.code$$"/>
         </actionGroup>
 
         <!-- Save price rule -->
