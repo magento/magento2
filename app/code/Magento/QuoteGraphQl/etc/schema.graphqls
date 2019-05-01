@@ -52,7 +52,7 @@ input CartItemInput {
 
 input CustomizableOptionInput {
     id: Int!
-    value: String!
+    value_string: String!
 }
 
 input ApplyCouponToCartInput {
@@ -306,8 +306,7 @@ interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\
 type SelectedCustomizableOption {
     id: Int!
     label: String!
-    type: String!
-    is_required: Int!
+    is_required: Boolean!
     values: [SelectedCustomizableOptionValue!]!
     sort_order: Int!
 }
@@ -315,9 +314,8 @@ type SelectedCustomizableOption {
 type SelectedCustomizableOptionValue {
     id: Int!
     label: String!
-    value: String!
+    value: String
     price: CartItemSelectedOptionValuePrice!
-    sort_order: Int!
 }
 
 type CartItemSelectedOptionValuePrice {
