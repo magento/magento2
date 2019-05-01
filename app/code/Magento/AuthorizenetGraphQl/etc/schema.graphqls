@@ -1,0 +1,12 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+input PaymentMethodAdditionalDataInput {
+    authorizenet: AuthorizenetInput
+}
+
+input AuthorizenetInput {
+    opaque_data_descriptor: String!
+    opaque_data_value: String!
+    cc_last_4: Int!
+}

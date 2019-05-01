@@ -18,6 +18,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\Quote\Api\Data\PaymentInterfaceFactory;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
+use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool;
 
 /**
  * Mutation resolver for setting payment method for shopping cart
@@ -40,18 +41,26 @@ class SetPaymentMethodOnCart implements ResolverInterface
     private $paymentFactory;
 
     /**
+     * @var AdditionalDataProviderPool
+     */
+    private $additionalDataProviderPool;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param PaymentMethodManagementInterface $paymentMethodManagement
      * @param PaymentInterfaceFactory $paymentFactory
+     * @param AdditionalDataProviderPool $additionalDataProviderPool
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         PaymentMethodManagementInterface $paymentMethodManagement,
-        PaymentInterfaceFactory $paymentFactory
+        PaymentInterfaceFactory $paymentFactory,
+        AdditionalDataProviderPool $additionalDataProviderPool
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentFactory = $paymentFactory;
+        $this->additionalDataProviderPool = $additionalDataProviderPool;
     }
 
     /**
@@ -71,6 +80,12 @@ class SetPaymentMethodOnCart implements ResolverInterface
 
         $poNumber = $args['input']['payment_method']['purchase_order_number'] ?? null;
         $additionalData = $args['input']['payment_method']['additional_data'] ?? [];
+        if (empty($additionalData)) {
+            $additionalData = $this->additionalDataProviderPool->getData(
+                $paymentMethodCode,
+                $args
+            );
+        }
 
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
         $payment = $this->paymentFactory->create([
