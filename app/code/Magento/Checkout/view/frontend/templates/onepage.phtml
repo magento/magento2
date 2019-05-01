@@ -18,12 +18,12 @@
     <script type="text/x-magento-init">
         {
             "#checkout": {
-                "Magento_Ui/js/core/app": <?= $block->escapeJs($block->getJsLayout()) ?>
+                "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
             }
         }
     </script>
     <script>
-        window.checkoutConfig = <?= $block->escapeJs($block->getSerializedCheckoutConfig()) ?>;
+        window.checkoutConfig = <?= /* @noEscape */ $block->getSerializedCheckoutConfig() ?>;
         // Create aliases for customer.js model from customer module
         window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
         window.customerData = window.checkoutConfig.customerData;

@@ -13,7 +13,8 @@
         __(
             'Click <a href="%1">here</a> to continue shopping.',
             $block->escapeUrl($block->getContinueShoppingUrl())
-        )
+        ),
+        ['a']
     ) ?>
     </p>
     <?= $block->getChildHtml('shopping.cart.table.after') ?>

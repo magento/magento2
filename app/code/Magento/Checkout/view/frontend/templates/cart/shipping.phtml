@@ -29,12 +29,12 @@
         <script type="text/x-magento-init">
             {
                 "#block-summary": {
-                    "Magento_Ui/js/core/app": <?= $block->escapeJs($block->getJsLayout()) ?>
+                    "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
                 }
             }
         </script>
         <script>
-            window.checkoutConfig = <?= $block->escapeJs($block->getSerializedCheckoutConfig()) ?>;
+            window.checkoutConfig = <?= /* @noEscape */ $block->getSerializedCheckoutConfig() ?>;
             window.customerData = window.checkoutConfig.customerData;
             window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
             require([

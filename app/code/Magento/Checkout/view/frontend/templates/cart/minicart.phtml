@@ -49,12 +49,12 @@
         </script>
     <?php endif ?>
     <script>
-        window.checkout = <?= $block->escapeJs($block->getSerializedConfig()) ?>;
+        window.checkout = <?= /* @noEscape */ $block->getSerializedConfig() ?>;
     </script>
     <script type="text/x-magento-init">
     {
         "[data-block='minicart']": {
-            "Magento_Ui/js/core/app": <?= $block->escapeJs($block->getJsLayout()) ?>
+            "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
         },
         "*": {
             "Magento_Ui/js/block-loader": "<?= $block->escapeJs(

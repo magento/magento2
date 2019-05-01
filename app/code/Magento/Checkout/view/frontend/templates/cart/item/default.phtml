@@ -5,6 +5,7 @@
  */
 
 // phpcs:disable Magento2.Templates.ThisInTemplate
+// phpcs:disable Magento2.Files.LineLength.MaxExceeded
 
 /** @var $block \Magento\Checkout\Block\Cart\Item\Renderer */
 
@@ -35,9 +36,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
             <div class="product-item-details">
                 <strong class="product-item-name">
                     <?php if ($block->hasProductUrl()) :?>
-                        <a href="<?= $block->escapeUrl($block->getProductUrl()) ?>">
-                            <?= $block->escapeHtml($block->getProductName()) ?>
-                        </a>
+                        <a href="<?= $block->escapeUrl($block->getProductUrl()) ?>"><?= $block->escapeHtml($block->getProductName()) ?></a>
                     <?php else :?>
                         <?= $block->escapeHtml($block->getProductName()) ?>
                     <?php endif; ?>
@@ -125,7 +124,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
     <tr class="item-actions">
         <td colspan="4">
             <div class="actions-toolbar">
-                <?= $block->escapeHtml($block->getActions($_item)) ?>
+                <?= /* @noEscape */ $block->getActions($_item) ?>
             </div>
         </td>
     </tr>
