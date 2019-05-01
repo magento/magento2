@@ -84,4 +84,14 @@ class Block extends AbstractBlock implements \Magento\Framework\DataObject\Ident
     {
         return [\Magento\Cms\Model\Block::CACHE_TAG . '_' . $this->getBlockId()];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCacheKeyInfo()
+    {
+        $cacheKeyInfo = parent::getCacheKeyInfo();
+        $cacheKeyInfo[] = $this->_storeManager->getStore()->getId();
+        return $cacheKeyInfo;
+    }
 }
