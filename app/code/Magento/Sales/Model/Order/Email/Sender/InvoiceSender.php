@@ -96,10 +96,11 @@ class InvoiceSender extends Sender
      * @param Invoice $invoice
      * @param bool $forceSyncMode
      * @return bool
+     * @throws \Exception
      */
     public function send(Invoice $invoice, $forceSyncMode = false)
     {
-        $invoice->setSendEmail(true);
+        $invoice->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $invoice->getOrder();
@@ -146,6 +147,7 @@ class InvoiceSender extends Sender
      *
      * @param Order $order
      * @return string
+     * @throws \Exception
      */
     protected function getPaymentHtml(Order $order)
     {
