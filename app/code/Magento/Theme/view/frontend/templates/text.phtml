@@ -11,7 +11,8 @@ if (!empty($attr)) {
         $attributes .= ' ' . $attribute . '="' . $value . '"';
     }
 }
-echo
+?>
+<?=
     '<'
     . $block->escapeHtml($block->getTag())
     . $block->escapeHtml($attributes)
@@ -20,3 +21,4 @@ echo
     . '</'
     . $block->escapeHtml($block->getTag())
     . '>';
+?>
