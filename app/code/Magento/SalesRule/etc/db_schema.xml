@@ -208,17 +208,17 @@
         <column xsi:type="varchar" name="coupon_code" nullable="true" length="50" comment="Coupon Code"/>
         <column xsi:type="int" name="coupon_uses" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Coupon Uses"/>
-        <column xsi:type="decimal" name="subtotal_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="subtotal_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Subtotal Amount"/>
         <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Discount Amount"/>
-        <column xsi:type="decimal" name="total_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="total_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Total Amount"/>
-        <column xsi:type="decimal" name="subtotal_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="subtotal_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Subtotal Amount Actual"/>
         <column xsi:type="decimal" name="discount_amount_actual" scale="4" precision="12" unsigned="false"
                 nullable="false" default="0" comment="Discount Amount Actual"/>
-        <column xsi:type="decimal" name="total_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Amount Actual"/>
         <column xsi:type="varchar" name="rule_name" nullable="true" length="255" comment="Rule Name"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -250,17 +250,17 @@
         <column xsi:type="varchar" name="coupon_code" nullable="true" length="50" comment="Coupon Code"/>
         <column xsi:type="int" name="coupon_uses" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Coupon Uses"/>
-        <column xsi:type="decimal" name="subtotal_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="subtotal_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Subtotal Amount"/>
         <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Discount Amount"/>
-        <column xsi:type="decimal" name="total_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="total_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Total Amount"/>
-        <column xsi:type="decimal" name="subtotal_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="subtotal_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Subtotal Amount Actual"/>
         <column xsi:type="decimal" name="discount_amount_actual" scale="4" precision="12" unsigned="false"
                 nullable="false" default="0" comment="Discount Amount Actual"/>
-        <column xsi:type="decimal" name="total_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Amount Actual"/>
         <column xsi:type="varchar" name="rule_name" nullable="true" length="255" comment="Rule Name"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -292,11 +292,11 @@
         <column xsi:type="varchar" name="coupon_code" nullable="true" length="50" comment="Coupon Code"/>
         <column xsi:type="int" name="coupon_uses" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Coupon Uses"/>
-        <column xsi:type="decimal" name="subtotal_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="subtotal_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Subtotal Amount"/>
         <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Discount Amount"/>
-        <column xsi:type="decimal" name="total_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="total_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Total Amount"/>
         <column xsi:type="varchar" name="rule_name" nullable="true" length="255" comment="Rule Name"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">

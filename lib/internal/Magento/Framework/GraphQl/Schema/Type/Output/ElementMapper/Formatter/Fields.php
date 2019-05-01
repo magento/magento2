@@ -16,7 +16,6 @@ use Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\FormatterInterfac
 use Magento\Framework\GraphQl\Schema\Type\Output\OutputMapper;
 use Magento\Framework\GraphQl\Schema\Type\OutputTypeInterface;
 use Magento\Framework\GraphQl\Schema\Type\ScalarTypes;
-use Magento\Framework\GraphQl\Schema\TypeFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfoFactory;
 
@@ -41,11 +40,6 @@ class Fields implements FormatterInterface
     private $inputMapper;
 
     /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
      * @var ScalarTypes
      */
     private $scalarTypes;
@@ -64,7 +58,6 @@ class Fields implements FormatterInterface
      * @param ObjectManagerInterface $objectManager
      * @param OutputMapper $outputMapper
      * @param InputMapper $inputMapper
-     * @param TypeFactory $typeFactory
      * @param ScalarTypes $scalarTypes
      * @param WrappedTypeProcessor $wrappedTypeProcessor
      * @param ResolveInfoFactory $resolveInfoFactory
@@ -73,7 +66,6 @@ class Fields implements FormatterInterface
         ObjectManagerInterface $objectManager,
         OutputMapper $outputMapper,
         InputMapper $inputMapper,
-        TypeFactory $typeFactory,
         ScalarTypes $scalarTypes,
         WrappedTypeProcessor $wrappedTypeProcessor,
         ResolveInfoFactory $resolveInfoFactory
@@ -81,14 +73,13 @@ class Fields implements FormatterInterface
         $this->objectManager = $objectManager;
         $this->outputMapper = $outputMapper;
         $this->inputMapper = $inputMapper;
-        $this->typeFactory = $typeFactory;
         $this->scalarTypes = $scalarTypes;
         $this->wrappedTypeProcessor = $wrappedTypeProcessor;
         $this->resolveInfoFactory = $resolveInfoFactory;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function format(TypeInterface $configElement, OutputTypeInterface $outputType): array
     {

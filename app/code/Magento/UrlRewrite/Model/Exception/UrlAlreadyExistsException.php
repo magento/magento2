@@ -8,7 +8,7 @@ namespace Magento\UrlRewrite\Model\Exception;
 use Magento\Framework\Phrase;
 
 /**
- * Specific exception for URL key already exists
+ * Exception for already created url.
  *
  * @api
  * @since 100.2.0

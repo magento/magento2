@@ -68,7 +68,7 @@ define([
 
         /**
          * Calls parent's initElement method.
-         * Assignes callbacks on various events of incoming element.
+         * Assigns callbacks on various events of incoming element.
          *
          * @param  {Object} elem
          * @return {Object} - reference to instance
@@ -162,6 +162,10 @@ define([
             }
 
             this.error(hasErrors || message);
+
+            if (hasErrors || message) {
+                this.open();
+            }
         },
 
         /**

@@ -1,6 +1,22 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
+type Query {
+    customerDownloadableProducts: CustomerDownloadableProducts @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\CustomerDownloadableProducts") @doc(description: "The query returns the contents of a customer's downloadable products") @cache(cacheable: false)
+}
+
+type CustomerDownloadableProducts {
+    items: [CustomerDownloadableProduct] @doc(description: "List of purchased downloadable items")
+}
+
+type CustomerDownloadableProduct {
+    order_increment_id: String
+    date: String
+    status: String
+    download_url: String
+    remaining_downloads: String
+}
+
 type DownloadableProduct implements ProductInterface, CustomizableProductInterface @doc(description: "DownloadableProduct defines a product that the customer downloads") {
     downloadable_product_samples: [DownloadableProductSamples] @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\Product\\DownloadableOptions") @doc(description: "An array containing information about samples of this downloadable product.")
     downloadable_product_links: [DownloadableProductLinks] @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\Product\\DownloadableOptions") @doc(description: "An array containing information about the links for this downloadable product")

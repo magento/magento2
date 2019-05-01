@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="catalog">
+            <group id="search">
+                <!-- Elasticsearch 6.0+ -->
+                <field id="elasticsearch6_server_hostname" translate="label" type="text" sortOrder="71"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Elasticsearch Server Hostname</label>
+                    <depends>
+                        <field id="engine">elasticsearch6</field>
+                    </depends>
+                </field>
+
+                <field id="elasticsearch6_server_port" translate="label" type="text" sortOrder="72" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Elasticsearch Server Port</label>
+                    <depends>
+                        <field id="engine">elasticsearch6</field>
+                    </depends>
+                </field>
+
+                <field id="elasticsearch6_index_prefix" translate="label" type="text" sortOrder="73" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Elasticsearch Index Prefix</label>
+                    <depends>
+                        <field id="engine">elasticsearch6</field>
+                    </depends>
+                </field>
+
+                <field id="elasticsearch6_enable_auth" translate="label" type="select" sortOrder="74" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Enable Elasticsearch HTTP Auth</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="engine">elasticsearch6</field>
+                    </depends>
+                </field>
+
+                <field id="elasticsearch6_username" translate="label" type="text" sortOrder="75" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Elasticsearch HTTP Username</label>
+                    <depends>
+                        <field id="engine">elasticsearch6</field>
+                        <field id="elasticsearch6_enable_auth">1</field>
+                    </depends>
+                </field>
+
+                <field id="elasticsearch6_password" translate="label" type="text" sortOrder="76" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Elasticsearch HTTP Password</label>
+                    <depends>
+                        <field id="engine">elasticsearch6</field>
+                        <field id="elasticsearch6_enable_auth">1</field>
+                    </depends>
+                </field>
+
+                <field id="elasticsearch6_server_timeout" translate="label" type="text" sortOrder="77" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Elasticsearch Server Timeout</label>
+                    <depends>
+                        <field id="engine">elasticsearch6</field>
+                    </depends>
+                </field>
+
+                <field id="elasticsearch6_test_connect_wizard" translate="button_label" sortOrder="78" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label/>
+                    <button_label>Test Connection</button_label>
+                    <frontend_model>Magento\Elasticsearch6\Block\Adminhtml\System\Config\TestConnection</frontend_model>
+                    <depends>
+                        <field id="engine">elasticsearch6</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

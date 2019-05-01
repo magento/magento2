@@ -4,26 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Paypal\Block\Express\InContext\Minicart\Button;
-
 /**
- * @var \Magento\Paypal\Block\Express\InContext\Minicart\Button $block
+ * @var \Magento\Paypal\Block\Express\InContext\Minicart\SmartButton $block
  */
-$config = [
-    'Magento_Paypal/js/in-context/button' => [
-        'id' => $block->escapeHtml($block->getContainerId()),
-        'linkDataAction' => $block->escapeHtml($block->getLinkAction()),
-        'paypalButton' => $block->escapeHtml(Button::PAYPAL_BUTTON_ID),
-        'addToCartSelector' => $block->escapeHtml($block->getAddToCartSelector())
-    ]
-];
-
 ?>
-<div data-mage-init='<?= /* @noEscape */ json_encode($config) ?>'
+<div data-mage-init='<?= /* @noEscape */ $block->getJsInitParams() ?>'
      class="paypal checkout paypal-logo <?= $block->escapeHtml($block->getContainerId()) ?>-container">
-    <a data-action="<?= $block->escapeHtml($block->getLinkAction()) ?>" href="#">
-        <img class="paypal-button-hidden"
-             src="<?= $block->escapeHtml($block->getImageUrl()) ?>"
-             alt="Check out with PayPal" />
-    </a>
 </div>

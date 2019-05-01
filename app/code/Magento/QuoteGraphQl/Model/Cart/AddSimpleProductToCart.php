@@ -61,11 +61,17 @@ class AddSimpleProductToCart
      * @return void
      * @throws GraphQlNoSuchEntityException
      * @throws GraphQlInputException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(Quote $cart, array $cartItemData): void
     {
         $sku = $this->extractSku($cartItemData);
-        $qty = $this->extractQty($cartItemData);
+        $quantity = $this->extractQuantity($cartItemData);
+        if ($quantity <= 0) {
+            throw new GraphQlInputException(
+                __('Please enter a number greater than 0 in this field.')
+            );
+        }
         $customizableOptions = $this->extractCustomizableOptions($cartItemData);
 
         try {
@@ -74,7 +80,16 @@ class AddSimpleProductToCart
             throw new GraphQlNoSuchEntityException(__('Could not find a product with SKU "%sku"', ['sku' => $sku]));
         }
 
-        $result = $cart->addProduct($product, $this->createBuyRequest($qty, $customizableOptions));
+        try {
+            $result = $cart->addProduct($product, $this->createBuyRequest($quantity, $customizableOptions));
+        } catch (\Exception $e) {
+            throw new GraphQlInputException(
+                __(
+                    'Could not add the product with SKU %sku to the shopping cart: %message',
+                    ['sku' => $sku, 'message' => $e->getMessage()]
+                )
+            );
+        }
 
         if (is_string($result)) {
             throw new GraphQlInputException(__($result));
@@ -98,19 +113,19 @@ class AddSimpleProductToCart
     }
 
     /**
-     * Extract Qty from cart item data
+     * Extract quantity from cart item data
      *
      * @param array $cartItemData
      * @return float
      * @throws GraphQlInputException
      */
-    private function extractQty(array $cartItemData): float
+    private function extractQuantity(array $cartItemData): float
     {
-        $qty = $this->arrayManager->get('data/qty', $cartItemData);
-        if (!isset($qty)) {
-            throw new GraphQlInputException(__('Missing key "qty" in cart item data'));
+        $quantity = $this->arrayManager->get('data/quantity', $cartItemData);
+        if (!isset($quantity)) {
+            throw new GraphQlInputException(__('Missing key "quantity" in cart item data'));
         }
-        return (float)$qty;
+        return (float)$quantity;
     }
 
     /**
@@ -133,15 +148,15 @@ class AddSimpleProductToCart
     /**
      * Format GraphQl input data to a shape that buy request has
      *
-     * @param float $qty
+     * @param float $quantity
      * @param array $customOptions
      * @return DataObject
      */
-    private function createBuyRequest(float $qty, array $customOptions): DataObject
+    private function createBuyRequest(float $quantity, array $customOptions): DataObject
     {
         return $this->dataObjectFactory->create([
             'data' => [
-                'qty' => $qty,
+                'qty' => $quantity,
                 'options' => $customOptions,
             ],
         ]);

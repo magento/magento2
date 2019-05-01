@@ -162,7 +162,7 @@
 & when (@media-common = true) {
     .abs-login-block-title {
         strong {
-            font-weight: 500;
+            font-weight: @font-weight__heavier;
         }
 
         .lib-font-size(18);
@@ -178,11 +178,11 @@
 
 & when (@media-common = true) {
     .abs-block-title {
+        margin-bottom: 15px;
+        
         > strong {
             .lib-heading(h3);
         }
-
-        margin-bottom: 15px;
     }
 }
 
@@ -194,6 +194,7 @@
     .abs-account-blocks {
         .block-title {
             &:extend(.abs-block-title all);
+            
             > .action {
                 margin-left: 15px;
             }
@@ -208,7 +209,7 @@
             }
 
             > .action {
-                font-weight: 400;
+                font-weight: @font-weight__regular;
                 margin-left: @indent__s;
             }
         }
@@ -232,10 +233,10 @@
 & when (@media-common = true) {
     .abs-dropdown-simple {
         .lib-dropdown(
-        @_dropdown-list-item-padding: 5px 5px 5px 23px,
-        @_dropdown-list-min-width: 200px,
-        @_icon-font-margin: 0 0 0 5px,
-        @_icon-font-vertical-align: middle
+            @_dropdown-list-item-padding: 5px 5px 5px 23px,
+            @_dropdown-list-min-width: 200px,
+            @_icon-font-margin: 0 0 0 5px,
+            @_icon-font-vertical-align: middle
         );
     }
 }
@@ -252,7 +253,7 @@
 }
 
 //
-//  Marging for blocks & widgets
+//  Margin for blocks & widgets
 //  ---------------------------------------------
 
 & when (@media-common = true) {
@@ -268,13 +269,13 @@
 & when (@media-common = true) {
     .abs-remove-button-for-blocks {
         .lib-icon-font(
-        @icon-remove,
-        @_icon-font-size: 26px,
-        @_icon-font-line-height: 15px,
-        @_icon-font-text-hide: true,
-        @_icon-font-color: @color-gray19,
-        @_icon-font-color-hover: @color-gray19,
-        @_icon-font-color-active: @color-gray19
+            @icon-remove,
+            @_icon-font-size: 26px,
+            @_icon-font-line-height: 15px,
+            @_icon-font-text-hide: true,
+            @_icon-font-color: @color-gray19,
+            @_icon-font-color-hover: @color-gray19,
+            @_icon-font-color-active: @color-gray19
         );
     }
 }
@@ -289,14 +290,14 @@
 
         > a {
             .lib-link(
-            @_link-color: @product-name-link__color,
-            @_link-text-decoration: @product-name-link__text-decoration,
-            @_link-color-visited: @product-name-link__color__visited,
-            @_link-text-decoration-visited: @product-name-link__text-decoration__visited,
-            @_link-color-hover: @product-name-link__color__hover,
-            @_link-text-decoration-hover: @product-name-link__text-decoration__hover,
-            @_link-color-active: @product-name-link__color__active,
-            @_link-text-decoration-active: @product-name-link__text-decoration__active
+                @_link-color: @product-name-link__color,
+                @_link-text-decoration: @product-name-link__text-decoration,
+                @_link-color-visited: @product-name-link__color__visited,
+                @_link-text-decoration-visited: @product-name-link__text-decoration__visited,
+                @_link-color-hover: @product-name-link__color__hover,
+                @_link-text-decoration-hover: @product-name-link__text-decoration__hover,
+                @_link-color-active: @product-name-link__color__active,
+                @_link-text-decoration-active: @product-name-link__text-decoration__active
             );
         }
     }
@@ -613,11 +614,11 @@
 & when (@media-common = true) {
     .abs-navigation-icon {
         .lib-icon-font(
-        @_icon-font-content: @icon-down,
-        @_icon-font-size: 34px,
-        @_icon-font-line-height: 1.2,
-        @_icon-font-position: after,
-        @_icon-font-display: block
+            @_icon-font-content: @icon-down,
+            @_icon-font-size: 34px,
+            @_icon-font-line-height: 1.2,
+            @_icon-font-position: after,
+            @_icon-font-display: block
         );
 
         &:after {
@@ -635,8 +636,8 @@
 & when (@media-common = true) {
     .abs-split-button {
         .lib-dropdown-split(
-        @_options-selector : ~'.items',
-        @_dropdown-split-button-border-radius-fix: true
+            @_options-selector : ~'.items',
+            @_dropdown-split-button-border-radius-fix: true
         );
         vertical-align: middle;
     }
@@ -654,13 +655,13 @@
 
     .abs-actions-addto-gridlist {
         .lib-icon-font(
-        @_icon-font-content: '',
-        @_icon-font-size: 29px,
-        @_icon-font-color: @addto-color,
-        @_icon-font-color-hover: @addto-hover-color,
-        @_icon-font-text-hide: true,
-        @_icon-font-vertical-align: middle,
-        @_icon-font-line-height: 24px
+            @_icon-font-content: '',
+            @_icon-font-size: 29px,
+            @_icon-font-color: @addto-color,
+            @_icon-font-color-hover: @addto-hover-color,
+            @_icon-font-text-hide: true,
+            @_icon-font-vertical-align: middle,
+            @_icon-font-line-height: 24px
         );
     }
 }
@@ -762,11 +763,11 @@
         padding-right: 12px;
         position: relative;
         .lib-icon-font(
-        @icon-down,
-        @_icon-font-size: 26px,
-        @_icon-font-line-height: 10px,
-        @_icon-font-margin: 3px 0 0 0,
-        @_icon-font-position: after
+            @icon-down,
+            @_icon-font-size: 26px,
+            @_icon-font-line-height: 10px,
+            @_icon-font-margin: 3px 0 0 0,
+            @_icon-font-position: after
         );
 
         &:after {
@@ -777,16 +778,16 @@
 
         &-expanded {
             .lib-icon-font-symbol(
-            @_icon-font-content: @icon-up,
-            @_icon-font-position: after
+                @_icon-font-content: @icon-up,
+                @_icon-font-position: after
             );
         }
     }
 
     .abs-tax-total-expanded {
         .lib-icon-font-symbol(
-        @_icon-font-content: @icon-up,
-        @_icon-font-position: after
+            @_icon-font-content: @icon-up,
+            @_icon-font-position: after
         );
     }
 }
@@ -867,10 +868,10 @@
 & when (@media-common = true) {
     .abs-icon-add {
         .lib-icon-font(
-        @_icon-font-content: @icon-expand,
-        @_icon-font-size: 10px,
-        @_icon-font-line-height: 10px,
-        @_icon-font-vertical-align: middle
+            @_icon-font-content: @icon-expand,
+            @_icon-font-size: 10px,
+            @_icon-font-line-height: 10px,
+            @_icon-font-vertical-align: middle
         );
     }
 }
@@ -878,12 +879,12 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .abs-icon-add-mobile {
         .lib-icon-font(
-        @_icon-font-content: @icon-expand,
-        @_icon-font-size: 10px,
-        @_icon-font-line-height: 10px,
-        @_icon-font-vertical-align: middle,
-        @_icon-font-margin: 0 5px 0 0,
-        @_icon-font-display: block
+            @_icon-font-content: @icon-expand,
+            @_icon-font-size: 10px,
+            @_icon-font-line-height: 10px,
+            @_icon-font-vertical-align: middle,
+            @_icon-font-margin: 0 5px 0 0,
+            @_icon-font-display: block
         );
     }
 }
@@ -924,11 +925,11 @@
         position: relative;
 
         .lib-icon-font(
-        @_icon-font-content: @icon-down,
-        @_icon-font-size: 28px,
-        @_icon-font-text-hide: false,
-        @_icon-font-position: after,
-        @_icon-font-display: block
+            @_icon-font-content: @icon-down,
+            @_icon-font-size: 28px,
+            @_icon-font-text-hide: false,
+            @_icon-font-position: after,
+            @_icon-font-display: block
         );
 
         &:after {
@@ -1068,12 +1069,12 @@
                 font-weight: @font-weight__bold;
                 .lib-link-as-button();
                 .lib-button(
-                @_button-padding: 7px 15px 7px 0,
-                @_button-icon-use: true,
-                @_button-font-content: @icon-prev,
-                @_button-icon-font-size: 32px,
-                @_button-icon-font-line-height: 16px,
-                @_button-icon-font-position: before
+                    @_button-padding: 7px 15px 7px 0,
+                    @_button-icon-use: true,
+                    @_button-font-content: @icon-prev,
+                    @_button-icon-font-size: 32px,
+                    @_button-icon-font-line-height: 16px,
+                    @_button-icon-font-position: before
                 );
 
                 &:active {
@@ -1083,9 +1084,9 @@
 
             &.update {
                 .lib-button-icon(
-                @icon-update,
-                @_icon-font-size: 32px,
-                @_icon-font-line-height: 16px
+                    @icon-update,
+                    @_icon-font-size: 32px,
+                    @_icon-font-line-height: 16px
                 );
                 padding-left: @indent__xs;
             }
@@ -1160,7 +1161,7 @@
 
 & when (@media-common = true) {
     .abs-field-date-input {
-        .lib-css(margin-right, @indent__s);
+        margin-right: @indent__s;
         width: calc(~'100% -' @icon-calendar__font-size + @indent__s);
     }
 }
@@ -1175,7 +1176,7 @@
         position: relative;
 
         input {
-            .lib-css(margin-right, @indent__s);
+            margin-right: @indent__s;
             width: calc(~'100% -' @checkout-tooltip-icon__font-size + @indent__s + @indent__xs);
         }
     }
@@ -1193,12 +1194,12 @@
     &:before,
     &:after {
         .lib-arrow(
-        @_position: top,
-        @_size: @checkout-tooltip-icon-arrow__font-size,
-        @_color: @checkout-tooltip-content__background-color
+            @_position: top,
+            @_size: @checkout-tooltip-icon-arrow__font-size,
+            @_color: @checkout-tooltip-content__background-color
         );
         .lib-css(margin-top, @checkout-tooltip-icon-arrow__left);
-        .lib-css(right, @indent__s);
+        right: @indent__s;
         left: auto;
         top: 0;
     }
@@ -1234,11 +1235,11 @@
         .lib-css(border-bottom, @checkout-step-title__border);
         .lib-css(padding-bottom, @checkout-step-title__padding);
         .lib-typography(
-        @_font-size: @checkout-step-title__font-size,
-        @_font-weight: @checkout-step-title__font-weight,
-        @_font-family: false,
-        @_font-style: false,
-        @_line-height: false
+            @_font-size: @checkout-step-title__font-size,
+            @_font-weight: @checkout-step-title__font-weight,
+            @_font-family: false,
+            @_font-style: false,
+            @_line-height: false
         );
     }
 }
@@ -1299,11 +1300,11 @@
 
                 .amount .price {
                     .lib-icon-font(
-                    @icon-down,
-                    @_icon-font-size: 30px,
-                    @_icon-font-text-hide: true,
-                    @_icon-font-position: after,
-                    @_icon-font-display: block
+                        @icon-down,
+                        @_icon-font-size: 30px,
+                        @_icon-font-text-hide: true,
+                        @_icon-font-position: after,
+                        @_icon-font-display: block
                     );
                     padding-right: @indent__m;
                     position: relative;
@@ -1323,16 +1324,16 @@
 
                     .amount .price {
                         .lib-icon-font-symbol(
-                        @_icon-font-content: @icon-up,
-                        @_icon-font-position: after
+                            @_icon-font-content: @icon-up,
+                            @_icon-font-position: after
                         );
                     }
                 }
             }
 
             &-details {
-                display: none;
                 .lib-css(border-bottom, @border-width__base solid @border-color__base);
+                display: none;
 
                 &.shown {
                     display: table-row;
@@ -1357,10 +1358,10 @@
             cursor: pointer;
             font-weight: @font-weight__semibold;
             .lib-icon-font(
-            @_icon-font-content: @icon-down,
-            @_icon-font-size: 30px,
-            @_icon-font-position: after,
-            @_icon-font-display: block
+                @_icon-font-content: @icon-down,
+                @_icon-font-size: 30px,
+                @_icon-font-position: after,
+                @_icon-font-display: block
             );
             margin-bottom: 0;
             overflow: hidden;
@@ -1388,8 +1389,8 @@
         &.active {
             > .title {
                 .lib-icon-font-symbol(
-                @_icon-font-content: @icon-up,
-                @_icon-font-position: after
+                    @_icon-font-content: @icon-up,
+                    @_icon-font-position: after
                 );
             }
 
