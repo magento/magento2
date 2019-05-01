@@ -61,6 +61,8 @@ class ExtensibleDataObjectConverter
     }
 
     /**
+     * Recursive process array to process customer attributes
+     *
      * @param array $dataObjectArray
      * @param array $skipAttributes
      * @return array
