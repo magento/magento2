@@ -21,20 +21,20 @@ require([
 //<![CDATA[
     $.extend(true, $, {
         calendarConfig: {
-            dayNames: <?= /* @escapeNotVerified */ $days['wide'] ?>,
-            dayNamesMin: <?= /* @escapeNotVerified */ $days['abbreviated'] ?>,
-            monthNames: <?= /* @escapeNotVerified */ $months['wide'] ?>,
-            monthNamesShort: <?= /* @escapeNotVerified */ $months['abbreviated'] ?>,
-            infoTitle: "<?= /* @escapeNotVerified */ __('About the calendar') ?>",
-            firstDay: <?= /* @escapeNotVerified */ $firstDay ?>,
-            closeText: "<?= /* @escapeNotVerified */ __('Close') ?>",
-            currentText: "<?= /* @escapeNotVerified */ __('Go Today') ?>",
-            prevText: "<?= /* @escapeNotVerified */ __('Previous') ?>",
-            nextText: "<?= /* @escapeNotVerified */ __('Next') ?>",
-            weekHeader: "<?= /* @escapeNotVerified */ __('WK') ?>",
-            timeText: "<?= /* @escapeNotVerified */ __('Time') ?>",
-            hourText: "<?= /* @escapeNotVerified */ __('Hour') ?>",
-            minuteText: "<?= /* @escapeNotVerified */ __('Minute') ?>",
+            dayNames: <?= $block->escapeJs($days['wide']) ?>,
+            dayNamesMin: <?= $block->escapeJs($days['abbreviated']) ?>,
+            monthNames: <?= $block->escapeJs($months['wide']) ?>,
+            monthNamesShort: <?= $block->escapeJs($months['abbreviated']) ?>,
+            infoTitle: "<?= $block->escapeJs(__('About the calendar')) ?>",
+            firstDay: <?= $block->escapeJs($firstDay) ?>,
+            closeText: "<?= $block->escapeJs(__('Close')) ?>",
+            currentText: "<?= $block->escapeJs(__('Go Today')) ?>",
+            prevText: "<?= $block->escapeJs(__('Previous')) ?>",
+            nextText: "<?= $block->escapeJs(__('Next')) ?>",
+            weekHeader: "<?= $block->escapeJs(__('WK')) ?>",
+            timeText: "<?= $block->escapeJs(__('Time')) ?>",
+            hourText: "<?= $block->escapeJs(__('Hour')) ?>",
+            minuteText: "<?= $block->escapeJs(__('Minute')) ?>",
             dateFormat: $.datepicker.RFC_2822,
             showOn: "button",
             showAnim: "",
@@ -51,7 +51,7 @@ require([
         }
     });
 
-    enUS = <?= /* @escapeNotVerified */ $enUS ?>; // en_US locale reference
+    enUS = <?= $block->escapeJs($enUS) ?>; // en_US locale reference
 //]]>
 
 });

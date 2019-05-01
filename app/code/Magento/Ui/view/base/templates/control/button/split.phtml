@@ -6,8 +6,6 @@
 
 // @codingStandardsIgnoreFile
 
-?>
-<?php
 /** @var $block \Magento\Ui\Component\Control\SplitButton */
 ?>
 
@@ -17,24 +15,24 @@
     </button>
     <?php if ($block->hasSplit()): ?>
         <button <?= $block->getToggleAttributesHtml() ?>>
-            <span><?= /* @escapeNotVerified */ __('Select'); ?></span>
+            <span><?= $block->escapeHtml(__('Select')) ?></span>
         </button>
 
         <?php if (!$block->getDisabled()): ?>
-            <ul class="dropdown-menu" <?= /* @escapeNotVerified */ $block->getUiId("dropdown-menu") ?>>
+            <ul class="dropdown-menu" <?= /* @noEscape */ $block->getUiId("dropdown-menu") ?>>
                 <?php foreach ($block->getOptions() as $key => $option): ?>
-                <li>
+                    <li>
                     <span <?= $block->getOptionAttributesHtml($key, $option) ?>>
                         <?= $block->escapeHtml($option['label']) ?>
                     </span>
-                    <?php if (isset($option['hint'])): ?>
-                    <div class="tooltip" <?= /* @escapeNotVerified */ $block->getUiId('item', $key, 'tooltip') ?>>
-                        <a href="<?= $block->escapeHtml($option['hint']['href']) ?>" class="help">
-                            <?= $block->escapeHtml($option['hint']['label']) ?>
-                        </a>
-                    </div>
-                    <?php endif; ?>
-                </li>
+                        <?php if (isset($option['hint'])): ?>
+                            <div class="tooltip" <?= /* @noEscape */ $block->getUiId('item', $key, 'tooltip') ?>>
+                                <a href="<?= $block->escapeUrl($option['hint']['href']) ?>" class="help">
+                                    <?= $block->escapeHtml($option['hint']['label']) ?>
+                                </a>
+                            </div>
+                        <?php endif; ?>
+                    </li>
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>
