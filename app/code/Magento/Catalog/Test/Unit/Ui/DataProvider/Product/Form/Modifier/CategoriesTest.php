@@ -154,38 +154,4 @@ class CategoriesTest extends AbstractModifierTest
     {
         return [[true], [false]];
     }
-
-    public function testModifyMetaWithCaching()
-    {
-        $this->arrayManagerMock->expects($this->exactly(2))
-            ->method('findPath')
-            ->willReturn(true);
-        $cacheManager = $this->getMockBuilder(CacheInterface::class)
-            ->getMockForAbstractClass();
-        $cacheManager->expects($this->once())
-            ->method('load')
-            ->with(Categories::CATEGORY_TREE_ID . '_');
-        $cacheManager->expects($this->once())
-            ->method('save');
-        
-        $modifier = $this->createModel();
-        $cacheContextProperty = new \ReflectionProperty(
-            Categories::class,
-            'cacheManager'
-        );
-        $cacheContextProperty->setAccessible(true);
-        $cacheContextProperty->setValue($modifier, $cacheManager);
-
-        $groupCode = 'test_group_code';
-        $meta = [
-            $groupCode => [
-                'children' => [
-                    'category_ids' => [
-                        'sortOrder' => 10,
-                    ],
-                ],
-            ],
-        ];
-        $modifier->modifyMeta($meta);
-    }
 }

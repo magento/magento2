@@ -6,16 +6,16 @@
 
 namespace Magento\ConfigurableProduct\Setup\Patch\Data;
 
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * Class InstallInitialConfigurableAttributes
+ *
  * @package Magento\ConfigurableProduct\Setup\Patch
  */
 class InstallInitialConfigurableAttributes implements DataPatchInterface, PatchVersionInterface
@@ -24,6 +24,7 @@ class InstallInitialConfigurableAttributes implements DataPatchInterface, PatchV
      * @var ModuleDataSetupInterface
      */
     private $moduleDataSetup;
+
     /**
      * @var EavSetupFactory
      */
@@ -64,18 +65,21 @@ class InstallInitialConfigurableAttributes implements DataPatchInterface, PatchV
             'color'
         ];
         foreach ($attributes as $attributeCode) {
-            $relatedProductTypes = explode(
-                ',',
-                $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode, 'apply_to')
-            );
-            if (!in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
-                $relatedProductTypes[] = Configurable::TYPE_CODE;
-                $eavSetup->updateAttribute(
-                    \Magento\Catalog\Model\Product::ENTITY,
-                    $attributeCode,
-                    'apply_to',
-                    implode(',', $relatedProductTypes)
+            $attribute = $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode, 'apply_to');
+            if ($attribute) {
+                $relatedProductTypes = explode(
+                    ',',
+                    $attribute
                 );
+                if (!in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
+                    $relatedProductTypes[] = Configurable::TYPE_CODE;
+                    $eavSetup->updateAttribute(
+                        \Magento\Catalog\Model\Product::ENTITY,
+                        $attributeCode,
+                        'apply_to',
+                        implode(',', $relatedProductTypes)
+                    );
+                }
             }
         }
     }
