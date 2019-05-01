@@ -17,7 +17,7 @@
 <form action="<?= $block->escapeUrl($block->getPostActionUrl()) ?>" method="post" id="shipping_method_form" class="form multicheckout shipping">
     <?php foreach ($block->getAddresses() as $_index => $_address) : ?>
     <div class="block block-shipping">
-        <div class="block-title"><strong><?= $block->escapeHtml(__('Address %1 <span>of %2</span>', ($_index+1), $block->getAddressCount())) ?></strong></div>
+        <div class="block-title"><strong><?= $block->escapeHtml(__('Address %1 <span>of %2</span>', ($_index+1), $block->getAddressCount()), ['span']) ?></strong></div>
         <div class="block-content">
             <div class="box box-shipping-address">
                 <strong class="box-title">
@@ -27,7 +27,7 @@
                     </a>
                 </strong>
                 <div class="box-content">
-                    <address><?= $block->escapeHtml($_address->format('html')) ?></address>
+                    <address><?= /* @noEscape */ $_address->format('html') ?></address>
                 </div>
             </div>
             <div class="box box-shipping-method">
@@ -102,7 +102,7 @@
                             <?php foreach ($block->getAddressItems($_address) as $_item) : ?>
                                 <tr>
                                     <td class="col item" data-th="<?= $block->escapeHtmlAttr(__('Product Name')) ?>"><?= $block->getItemHtml($_item->getQuoteItem()) ?></td>
-                                    <td class="col qty" data-th="<?= $block->escapeHtmlAttr(__('Qty')) ?>"><?= (int) $_item->getQty() ?></td>
+                                    <td class="col qty" data-th="<?= $block->escapeHtmlAttr(__('Qty')) ?>"><?= $block->escapeHtml($_item->getQty()) ?></td>
                                 </tr>
                             <?php endforeach; ?>
                             </tbody>
