@@ -41,7 +41,7 @@
                         </requires>
                     </field>
                     <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
-                        <comment>http://docs.magento.com/m2/ce/user_guide/payment/braintree.html</comment>
+                        <comment>https://docs.magento.com/m2/ce/user_guide/payment/braintree.html</comment>
                         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
                     </group>
                     <group id="braintree_required" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="5">
