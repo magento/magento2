@@ -7,12 +7,11 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertCMSPageNotFoundOnFront">
+    <actionGroup name="StorefrontGoToCMSPageActionGroup">
         <arguments>
             <argument name="identifier" type="string"/>
         </arguments>
-        <amOnPage url="{{StorefrontHomePage.url}}/{{identifier}}" stepKey="amOnPageOnFrontend"/>
-        <waitForPageLoad stepKey="waitForPageLoadOnFrontend"/>
-        <see userInput="Whoops, our bad..." stepKey="seePageErrorForFirstPage"/>
+        <amOnPage url="{{StorefrontHomePage.url}}/{{identifier}}" stepKey="amOnCmsPageOnStorefront"/>
+        <waitForPageLoad stepKey="waitForPageLoadOnStorefront"/>
     </actionGroup>
 </actionGroups>

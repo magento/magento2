@@ -38,7 +38,7 @@
         </actionGroup>
         <actionGroup ref="AssertCMSPageContent" stepKey="verifyPageDataInAdmin"/>
         <!--Verify data on frontend-->
-        <actionGroup ref="StorefrontCMSPageNavigateToPage" stepKey="navigateToPageOnStorefront">
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="navigateToPageOnStorefront">
             <argument name="identifier" value="{{_duplicatedCMSPage.identifier}}"/>
         </actionGroup>
         <actionGroup ref="AssertStoreFrontCMSPage" stepKey="verifyPageDataOnFrontend">

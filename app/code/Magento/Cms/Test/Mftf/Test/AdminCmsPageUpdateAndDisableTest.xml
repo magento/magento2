@@ -32,12 +32,13 @@
         <!--Fill data using _duplicatedCMSPage-->
         <actionGroup ref="FillOutCMSPageContent" stepKey="fillNewData"/>
         <!--Deactivate page-->
-        <actionGroup ref="AdminCMSPageSetDisabled" stepKey="disablePage"/>
+        <actionGroup ref="AdminDisableCMSPageActionGroup" stepKey="setPageDisabled"/>
         <!--Save page-->
-        <actionGroup ref="saveCmsPage" stepKey="saveDeactivatedPage"/>
-        <!--Check that page is not found on frontend-->
-        <actionGroup ref="AssertCMSPageNotFoundOnFront" stepKey="checkPageIsDisabledOnStorefront">
+        <actionGroup ref="saveCmsPage" stepKey="saveDisabledPage"/>
+        <!--Check that page is not found on storefront-->
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="goToCMSPageOnStorefront">
             <argument name="identifier" value="{{_duplicatedCMSPage.identifier}}"/>
         </actionGroup>
+        <actionGroup ref="AssertCMSPageNotFoundOnStorefrontActionGroup" stepKey="seeNotFoundError"/>
     </test>
 </tests>
