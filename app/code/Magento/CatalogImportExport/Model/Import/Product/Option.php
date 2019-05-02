@@ -52,6 +52,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     const COLUMN_ROW_SORT = '_custom_option_row_sort';
 
+    const OPTION_TITLE_PATTERN = '/option_title\=[+-]?([0-9]*.)?[0-9]+/';
+
     /**#@-*/
 
     /**
@@ -2018,36 +2020,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_productEntity->getMultipleValueSeparator(),
             $rowData['custom_options']
         );
-        $options = [];
+
         $optionValues = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['custom_options']);
-        $k = 0;
-        $name = '';
-        foreach ($optionValues as $optionValue) {
-            $pattern = '/option_title\=[+-]?([0-9]*.)?[0-9]+/';
-            $optionParamsStr = preg_replace($pattern, '', $optionValue);
-            preg_match($pattern, $optionValue, $match);
-            $optionValueParams = explode($this->_productEntity->getMultipleValueSeparator(), $optionParamsStr);
-            array_push($optionValueParams, isset($match[0]) ? $match[0] : '');
-            foreach ($optionValueParams as $nameAndValue) {
-                $nameAndValue = explode('=', $nameAndValue, 2);
-                if (!empty($nameAndValue)) {
-                    $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
-                    $value = trim($value);
-                    $fieldName = trim($nameAndValue[0]);
-                    if ($value && ($fieldName == 'name')) {
-                        if ($name != $value) {
-                            $name = $value;
-                            $k = 0;
-                        }
-                    }
-                    if ($name) {
-                        $options[$name][$k][$fieldName] = $value;
-                    }
-                }
-            }
-            $options[$name][$k]['_custom_option_store'] = $rowData[Product::COL_STORE_VIEW_CODE];
-            $k++;
-        }
+        $options = $this->getOptionValueOptions($optionValues, $rowData);
         $rowData['custom_options'] = $options;
         return $rowData;
     }
@@ -2125,5 +2100,67 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 ->_saveSpecificTypeTitles($types['titles'])
                 ->_updateProducts($products);
         }
+    }
+
+
+    /**
+     * Preparing custom options value.
+     *
+     * @param array $optionValues
+     * @param array $rowData
+     *
+     * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function getOptionValueOptions($optionValues, $rowData)
+    {
+        $options = [];
+        $k = 0;
+        $name = '';
+        foreach ($optionValues as $optionValue) {
+            $optionValueParams = $this->parseOptionValueOption($optionValue);
+
+            foreach ($optionValueParams as $nameAndValue) {
+                $nameAndValue = explode('=', $nameAndValue, 2);
+                if (!empty($nameAndValue)) {
+                    $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
+                    $value = trim($value);
+                    $fieldName = trim($nameAndValue[0]);
+                    if ($value && ($fieldName == 'name')) {
+                        if ($name != $value) {
+                            $name = $value;
+                            $k = 0;
+                        }
+                    }
+                    if ($name) {
+                        $options[$name][$k][$fieldName] = $value;
+                    }
+                }
+            }
+            $options[$name][$k]['_custom_option_store'] = $rowData[Product::COL_STORE_VIEW_CODE];
+            $k++;
+        }
+
+        return $options;
+    }
+
+    /**
+     * Parse option value data
+     *
+     * @param $optionValue
+     * @return array $optionValueParams
+     */
+    private function parseOptionValueOption($optionValue)
+    {
+        $pattern = self::OPTION_TITLE_PATTERN;
+        $optionParamsStr = preg_replace($pattern, '', $optionValue);
+
+        preg_match($pattern, $optionValue, $match);
+
+        $optionValueParams = explode($this->_productEntity->getMultipleValueSeparator(), $optionParamsStr);
+        array_push($optionValueParams, isset($match[0]) ? $match[0] : '');
+
+        return $optionValueParams;
     }
 }
