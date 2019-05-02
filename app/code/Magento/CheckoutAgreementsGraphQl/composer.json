@@ -9,8 +9,7 @@
         "magento/module-checkout-agreements": "*"
     },
     "suggest": {
-        "magento/module-graph-ql": "*",
-        "magento/module-store-graph-ql": "*"
+        "magento/module-graph-ql": "*"
     },
     "license": [
         "OSL-3.0",

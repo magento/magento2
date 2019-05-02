@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\CheckoutAgreements\Api;
+namespace Magento\GraphQl\CheckoutAgreements;
 
 use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
 use Magento\CheckoutAgreements\Model\Agreement as AgreementModel;
@@ -20,8 +20,14 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
-class CheckoutAgreementsListTest extends GraphQlAbstract
+/**
+ * Get checkout agreements test
+ */
+class GetCheckoutAgreementsTest extends GraphQlAbstract
 {
+    /**
+     * @var string 
+     */
     private $agreementsXmlConfigPath = 'checkout/options/enable_agreements';
 
     /**
@@ -55,14 +61,14 @@ class CheckoutAgreementsListTest extends GraphQlAbstract
 
         $response = $this->graphQlQuery($query);
 
-        $this->assertArrayHasKey('checkoutAgreements', $response);
+        self::assertArrayHasKey('checkoutAgreements', $response);
         $agreements = $response['checkoutAgreements'];
-        $this->assertCount(1, $agreements);
-        $this->assertEquals('Checkout Agreement (active)', $agreements[0]['name']);
-        $this->assertEquals('Checkout agreement content: <b>HTML</b>', $agreements[0]['content']);
-        $this->assertEquals('200px', $agreements[0]['content_height']);
-        $this->assertEquals('Checkout agreement checkbox text.', $agreements[0]['checkbox_text']);
-        $this->assertEquals(true, $agreements[0]['is_html']);
+        self::assertCount(1, $agreements);
+        self::assertEquals('Checkout Agreement (active)', $agreements[0]['name']);
+        self::assertEquals('Checkout agreement content: <b>HTML</b>', $agreements[0]['content']);
+        self::assertEquals('200px', $agreements[0]['content_height']);
+        self::assertEquals('Checkout agreement checkbox text.', $agreements[0]['checkbox_text']);
+        self::assertEquals(true, $agreements[0]['is_html']);
     }
 
     /**
@@ -81,14 +87,14 @@ class CheckoutAgreementsListTest extends GraphQlAbstract
         $headerMap['Store'] = $secondStoreCode;
         $response = $this->graphQlQuery($query, [], '', $headerMap);
 
-        $this->assertArrayHasKey('checkoutAgreements', $response);
+        self::assertArrayHasKey('checkoutAgreements', $response);
         $agreements = $response['checkoutAgreements'];
-        $this->assertCount(1, $agreements);
-        $this->assertEquals($agreementsName, $agreements[0]['name']);
-        $this->assertEquals('Checkout agreement content: <b>HTML</b>', $agreements[0]['content']);
-        $this->assertEquals('200px', $agreements[0]['content_height']);
-        $this->assertEquals('Checkout agreement checkbox text.', $agreements[0]['checkbox_text']);
-        $this->assertEquals(true, $agreements[0]['is_html']);
+        self::assertCount(1, $agreements);
+        self::assertEquals($agreementsName, $agreements[0]['name']);
+        self::assertEquals('Checkout agreement content: <b>HTML</b>', $agreements[0]['content']);
+        self::assertEquals('200px', $agreements[0]['content_height']);
+        self::assertEquals('Checkout agreement checkbox text.', $agreements[0]['checkbox_text']);
+        self::assertEquals(true, $agreements[0]['is_html']);
     }
 
     /**
@@ -106,9 +112,9 @@ class CheckoutAgreementsListTest extends GraphQlAbstract
 
         $response = $this->graphQlQuery($query);
 
-        $this->assertArrayHasKey('checkoutAgreements', $response);
+        self::assertArrayHasKey('checkoutAgreements', $response);
         $agreements = $response['checkoutAgreements'];
-        $this->assertCount(0, $agreements);
+        self::assertCount(0, $agreements);
     }
 
     public function testGetAgreementNotSet()
@@ -117,9 +123,9 @@ class CheckoutAgreementsListTest extends GraphQlAbstract
 
         $response = $this->graphQlQuery($query);
 
-        $this->assertArrayHasKey('checkoutAgreements', $response);
+        self::assertArrayHasKey('checkoutAgreements', $response);
         $agreements = $response['checkoutAgreements'];
-        $this->assertCount(0, $agreements);
+        self::assertCount(0, $agreements);
     }
 
     /**
@@ -133,9 +139,9 @@ class CheckoutAgreementsListTest extends GraphQlAbstract
 
         $response = $this->graphQlQuery($query);
 
-        $this->assertArrayHasKey('checkoutAgreements', $response);
+        self::assertArrayHasKey('checkoutAgreements', $response);
         $agreements = $response['checkoutAgreements'];
-        $this->assertCount(0, $agreements);
+        self::assertCount(0, $agreements);
     }
 
     /**

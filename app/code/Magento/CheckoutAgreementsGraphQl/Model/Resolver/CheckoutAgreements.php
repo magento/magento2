@@ -7,10 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\CheckoutAgreementsGraphQl\Model\Resolver;
 
-use Magento\CheckoutAgreementsGraphQl\Model\Resolver\DataProvider\CheckoutAgreements as CheckoutAgreementsDataProvider;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
+use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Checkout Agreements resolver, used for GraphQL request processing
@@ -18,17 +22,33 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 class CheckoutAgreements implements ResolverInterface
 {
     /**
-     * @var CheckoutAgreementsDataProvider
+     * @var CollectionFactory
      */
-    private $checkoutAgreementsDataProvider;
+    private $agreementCollectionFactory;
 
     /**
-     * @param CheckoutAgreementsDataProvider $checkoutAgreementsDataProvider
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @param CollectionFactory $agreementCollectionFactory
+     * @param StoreManagerInterface $storeManager
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        CheckoutAgreementsDataProvider $checkoutAgreementsDataProvider
+        CollectionFactory $agreementCollectionFactory,
+        StoreManagerInterface $storeManager,
+        ScopeConfigInterface $scopeConfig
     ) {
-        $this->checkoutAgreementsDataProvider = $checkoutAgreementsDataProvider;
+        $this->agreementCollectionFactory = $agreementCollectionFactory;
+        $this->storeManager = $storeManager;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -41,8 +61,26 @@ class CheckoutAgreements implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $checkoutAgreementsData = $this->checkoutAgreementsDataProvider->getData();
+        if (!$this->scopeConfig->isSetFlag('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE)) {
+            return [];
+        }
 
-        return $checkoutAgreementsData;
+        $agreementsCollection = $this->agreementCollectionFactory->create();
+        $agreementsCollection->addStoreFilter($this->storeManager->getStore()->getId());
+        $agreementsCollection->addFieldToFilter('is_active', 1);
+
+        $checkoutAgreementData = [];
+        /** @var AgreementInterface $checkoutAgreement */
+        foreach ($agreementsCollection->getItems() as $checkoutAgreement) {
+            $checkoutAgreementData[] = [
+                AgreementInterface::AGREEMENT_ID => $checkoutAgreement->getAgreementId(),
+                AgreementInterface::CONTENT => $checkoutAgreement->getContent(),
+                AgreementInterface::NAME => $checkoutAgreement->getName(),
+                AgreementInterface::CONTENT_HEIGHT => $checkoutAgreement->getContentHeight(),
+                AgreementInterface::CHECKBOX_TEXT => $checkoutAgreement->getCheckboxText(),
+                AgreementInterface::IS_HTML => $checkoutAgreement->getIsHtml(),
+            ];
+        }
+        return $checkoutAgreementData;
     }
 }
