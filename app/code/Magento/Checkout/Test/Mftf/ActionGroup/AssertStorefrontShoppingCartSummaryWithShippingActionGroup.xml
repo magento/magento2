@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" extends="AssertStorefrontShoppingCartSummaryItemsActionGroup">
+        <arguments>
+            <argument name="shipping" type="string"/>
+        </arguments>
+        <waitForLoadingMaskToDisappear stepKey="waitForMaskToDisappear" after="assertSubtotal"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.shipping}}" time="60" stepKey="waitForElementToBeVisible" after="waitForMaskToDisappear"/>
+        <!-- Shipping can take a long time to change in builds, can't rely on an explicit wait-->
+        <wait time="30" stepKey="waitForShippingDetailsToLoad" after="waitForElementToBeVisible"/>
+        <see userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" stepKey="assertShipping" after="waitForShippingDetailsToLoad" />
+    </actionGroup>
+</actionGroups>

@@ -10,6 +10,7 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductFormAdvancedPricingSection">
         <element name="customerGroupPriceAddButton" type="button" selector="[data-action='add_new_row']" timeout="30"/>
+        <element name="addCustomerGroupPrice" type="button" selector="//span[text()='Add']/ancestor::button" timeout="30"/>
         <element name="customerGroupPriceDeleteButton" type="button" selector="[data-action='remove_row']" timeout="30"/>
         <element name="advancedPricingCloseButton" type="button" selector=".product_form_product_form_advanced_pricing_modal button.action-close" timeout="30"/>
         <element name="productTierPriceWebsiteSelect" type="select" selector="[name='product[tier_price][{{var1}}][website_id]']" parameterized="true"/>
@@ -22,6 +23,7 @@
         <element name="specialPrice" type="input" selector="input[name='product[special_price]']"/>
         <element name="doneButton" type="button" selector=".product_form_product_form_advanced_pricing_modal button.action-primary" timeout="5"/>
         <element name="msrp" type="input" selector="//input[@name='product[msrp]']" timeout="30"/>
+        <element name="msrpType" type="select" selector="//select[@name='product[msrp_display_actual_price_type]']" timeout="30"/>
         <element name="save" type="button" selector="#save-button"/>
     </section>
 </sections>
