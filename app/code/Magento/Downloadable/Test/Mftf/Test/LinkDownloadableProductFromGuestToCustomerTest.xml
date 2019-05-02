@@ -46,7 +46,7 @@
             <argument name="customerVar" value="Simple_US_NY_Customer"/>
             <argument name="customerAddressVar" value="US_Address_NY"/>
         </actionGroup>
-        <click selector="{{CheckoutShippingSection.updateAddress}}" stepKey="saveAddress"/>
+        <click selector="{{CheckoutPaymentSection.update}}"  stepKey="clickUpdateButton" />
         <waitForPageLoad stepKey="waitUpdateAddress"/>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
