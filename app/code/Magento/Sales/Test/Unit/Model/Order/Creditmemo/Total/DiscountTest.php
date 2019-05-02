@@ -48,8 +48,9 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
             ]);
         $this->creditmemoMock = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo::class, [
                 'setBaseCost', 'getAllItems', 'getOrder', 'getBaseShippingAmount', 'roundPrice',
-                'setDiscountAmount', 'setBaseDiscountAmount', 'getBaseShippingInclTax', 'getBaseShippingTaxAmount'
-            ]);
+                'setDiscountAmount', 'setBaseDiscountAmount', 'getBaseShippingInclTax', 'getBaseShippingTaxAmount',
+            'hasBaseShippingAmount'
+        ]);
         $this->creditmemoItemMock = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo\Item::class, [
                 'getHasChildren', 'getBaseCost', 'getQty', 'getOrderItem', 'setDiscountAmount',
                 'setBaseDiscountAmount', 'isLast'
@@ -59,6 +60,9 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
 
     public function testCollect()
     {
+        $this->creditmemoMock->expects($this->exactly(1))
+            ->method('hasBaseShippingAmount')
+            ->willReturn(true);
         $this->creditmemoMock->expects($this->exactly(2))
             ->method('setDiscountAmount')
             ->willReturnSelf();
@@ -129,6 +133,9 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
 
     public function testCollectNoBaseShippingAmount()
     {
+        $this->creditmemoMock->expects($this->exactly(1))
+            ->method('hasBaseShippingAmount')
+            ->willReturn(false);
         $this->creditmemoMock->expects($this->exactly(2))
             ->method('setDiscountAmount')
             ->willReturnSelf();
@@ -138,7 +145,7 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
         $this->creditmemoMock->expects($this->once())
             ->method('getOrder')
             ->willReturn($this->orderMock);
-        $this->creditmemoMock->expects($this->once())
+        $this->creditmemoMock->expects($this->never())
             ->method('getBaseShippingAmount')
             ->willReturn(0);
         $this->creditmemoMock->expects($this->once())
@@ -205,6 +212,9 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
 
     public function testCollectZeroShipping()
     {
+        $this->creditmemoMock->expects($this->exactly(1))
+            ->method('hasBaseShippingAmount')
+            ->willReturn(true);
         $this->creditmemoMock->expects($this->exactly(2))
             ->method('setDiscountAmount')
             ->willReturnSelf();
@@ -276,6 +286,9 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
      */
     public function testCollectNonZeroShipping()
     {
+        $this->creditmemoMock->expects($this->exactly(1))
+            ->method('hasBaseShippingAmount')
+            ->willReturn(true);
         $this->creditmemoMock->expects($this->once())
             ->method('setDiscountAmount')
             ->willReturnSelf();
