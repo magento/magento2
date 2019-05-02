@@ -36,6 +36,8 @@
         <!-- Elements that make it easier to select the most recently added element -->
         <element name="lastOptionTitle" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, '_required')]//input" />
         <element name="lastOptionTypeParent" type="block" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__action-multiselect-text')]" />
+        <element name="lastOptionPrice" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@name, '[price]')]"/>
+        <element name="lastOptionPriceType" type="select" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@name, '[price_type]')]"/>
         <!-- var 1 represents the option type that you want to select, i.e "radio buttons" -->
         <element name="optionType" type="block" selector="//*[@data-index='custom_options']//label[text()='{{var1}}'][ancestor::*[contains(@class, '_active')]]" parameterized="true" />
         <element name="addValue" type="button" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@data-action='add_new_row']" timeout="30"/>
