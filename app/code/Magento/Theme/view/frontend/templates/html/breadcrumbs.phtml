@@ -12,7 +12,7 @@
         <?php foreach ($crumbs as $crumbName => $crumbInfo) : ?>
             <li class="item <?= $block->escapeHtmlAttr($crumbName) ?>">
             <?php if ($crumbInfo['link']) : ?>
-                <a href="<?= $block->escapeHtmlUrl($crumbInfo['link']) ?>"
+                <a href="<?= $block->escapeUrl($crumbInfo['link']) ?>"
                    title="<?= $block->escapeHtml($crumbInfo['title']) ?>">
                     <?= $block->escapeHtml($crumbInfo['label']) ?>
                 </a>
