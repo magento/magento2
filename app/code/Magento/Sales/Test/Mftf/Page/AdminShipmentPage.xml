@@ -8,8 +8,7 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="AdminDashboardPage" url="admin/dashboard/" area="admin" module="Magento_Backend">
-        <section name="AdminMenuSection"/>
-        <section name="AdminDashboardSection"/>
+    <page name="AdminShipmentPage" url="sales/shipment/" area="admin" module="Magento_Sales">
+        <section name="AdminShipmentGridSection"/>
     </page>
 </pages>
