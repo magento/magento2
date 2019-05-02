@@ -957,8 +957,13 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             && !$this->authorization->isAllowed('Magento_Catalog::edit_category_design')
         ) {
             foreach ($this->_designAttributes as $attributeCode) {
-                $this->setData($attributeCode, $this->getOrigData($attributeCode));
-                $this->setCustomAttribute($attributeCode, $this->getOrigData($attributeCode));
+                $this->setData($attributeCode, $value = $this->getOrigData($attributeCode));
+                if (!empty($this->_data[self::CUSTOM_ATTRIBUTES])
+                    && array_key_exists($attributeCode, $this->_data[self::CUSTOM_ATTRIBUTES])
+                ) {
+                    //In case custom attribute were used to update the entity.
+                    $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]->setValue($value);
+                }
             }
         }
 
