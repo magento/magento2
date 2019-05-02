@@ -6,8 +6,11 @@
 // phpcs:ignore Magento2.Security.IncludeFile
 include __DIR__ . '/authenticate.php';
 
+// phpcs:ignore Magento2.Security.Superglobal
 if (!empty($_POST['token']) && !empty($_POST['website_code'])) {
+    // phpcs:ignore Magento2.Security.Superglobal
     if (authenticate(urldecode($_POST['token']))) {
+        // phpcs:ignore Magento2.Security.Superglobal
         $websiteCode = urldecode($_POST['website_code']);
         $rootDir = '../../../../';
         $websiteDir = $rootDir . 'websites/' . $websiteCode . '/';
@@ -35,8 +38,10 @@ EOD;
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         file_put_contents($websiteDir . 'index.php', $contents);
     } else {
+        // phpcs:ignore Magento2.Security.LanguageConstruct
         echo "Command not unauthorized.";
     }
 } else {
+    // phpcs:ignore Magento2.Security.LanguageConstruct
     echo "'token' or 'website_code' parameter is not set.";
 }

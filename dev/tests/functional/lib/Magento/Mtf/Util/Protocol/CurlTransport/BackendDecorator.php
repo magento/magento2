@@ -109,6 +109,7 @@ class BackendDecorator implements CurlInterface
                 $isAuthorized = true;
                 $_ENV['app_backend_url'] = $url;
                 break;
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
             } catch (\Exception $e) {
                 continue;
             }
