@@ -327,6 +327,15 @@
         <data key="filename">magento-again</data>
         <data key="file_extension">jpg</data>
     </entity>
+    <entity name="TestImageAdobe" type="image">
+        <data key="title" unique="suffix">magento-adobe</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="file">adobe-base.jpg</data>
+        <data key="filename">adobe-base</data>
+        <data key="file_extension">jpg</data>
+    </entity>
     <entity name="ProductWithUnicode" type="product">
         <data key="sku" unique="suffix">&#38657;&#20135;&#21697;</data>
         <data key="type_id">simple</data>
@@ -471,6 +480,11 @@
     <entity name="productWithDropdownOption" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionValueDropdown</requiredEntity>
+    </entity>
+    <entity name="productWithDropdownAndFieldOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionValueDropdown</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField</requiredEntity>
     </entity>
     <entity name="ProductWithTextFieldAndAreaOptions" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
@@ -1089,5 +1103,45 @@
         <data key="weight">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="SimpleProduct_100" type="product">
+        <data key="sku" unique="suffix">testSku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">testProductName</data>
+        <data key="price">100.00</data>
+        <data key="urlKey" unique="suffix">testurlkey</data>
+        <data key="status">1</data>
+        <data key="quantity">777</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock777</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleOneQty10" type="product2">
+        <data key="sku" unique="suffix">api-simple-product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Simple Product</data>
+        <data key="price">40.00</data>
+        <data key="urlKey" unique="suffix">api-simple-product</data>
+        <data key="status">1</data>
+        <data key="quantity">10</data>
+        <requiredEntity type="product_extension_attribute">EavStock10</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleTwoQty10" type="product2">
+        <data key="sku" unique="suffix">api-simple-product-two</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Simple Product Two</data>
+        <data key="price">40.00</data>
+        <data key="urlKey" unique="suffix">api-simple-product-two</data>
+        <data key="status">1</data>
+        <data key="quantity">10</data>
+        <requiredEntity type="product_extension_attribute">EavStock10</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
 </entities>

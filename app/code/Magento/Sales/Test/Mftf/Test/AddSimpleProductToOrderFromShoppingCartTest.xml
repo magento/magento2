@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddSimpleProductToOrderFromShoppingCartTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Add Products to Order from Shopping Cart"/>
+            <title value="Add simple product to order from shopping cart test"/>
+            <description value="Add simple product to order from shopping cart"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16007"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Create product -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+        </before>
+        <after>
+            <!-- Admin log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+
+            <!-- Customer log out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!-- Login as admin -->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+        <!-- Search and open customer -->
+        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCreatedCustomer">
+            <argument name="email" value="$$createCustomer.email$$"/>
+        </actionGroup>
+        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickEditButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Click create order -->
+        <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickCreateOrder"/>
+
+        <!-- Check product in customer's activities in shopping cart section -->
+        <see selector="{{AdminCustomerActivitiesShoppingCartSection.productName}}" userInput="$$createProduct.name$$" stepKey="seeProductNameInShoppingCartSection"/>
+        <see selector="{{AdminCustomerActivitiesShoppingCartSection.productPrice}}" userInput="$$createProduct.price$$" stepKey="seeProductPriceInShoppingCartSection"/>
+
+        <!-- Click update changes -->
+        <checkOption selector="{{AdminCustomerActivitiesShoppingCartSection.addToOrder}}" stepKey="checkOptionAddToOrder"/>
+        <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickUpdateChangesBtn"/>
+        <waitForPageLoad stepKey="waitForOrderUpdating"/>
+
+        <!-- Assert product in items ordered grid -->
+        <see selector="{{AdminCustomerCreateNewOrderSection.productName}}" userInput="$$createProduct.name$$" stepKey="seeProductName"/>
+        <see selector="{{AdminCustomerCreateNewOrderSection.productPrice}}" userInput="$$createProduct.price$$" stepKey="seeProductPrice"/>
+        <seeInField selector="{{AdminCustomerCreateNewOrderSection.productQty}}" userInput="{{ApiSimpleSingleQty.quantity}}" stepKey="seeProductQty"/>
+    </test>
+</tests>
