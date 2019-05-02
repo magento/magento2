@@ -3,20 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-include __DIR__ . '/authenticate.php';
 
-if (!empty($_POST['token']) && !empty($_POST['path'])) {
-    if (authenticate(urldecode($_POST['token']))) {
-        $path = urldecode($_POST['path']);
-
-        if (file_exists('../../../../' . $path)) {
-            echo 'path exists: true';
-        } else {
-            echo 'path exists: false';
-        }
+// phpcs:ignore Magento2.Security.Superglobal
+if (isset($_GET['path'])) {
+    // phpcs:ignore Magento2.Security.Superglobal
+    $path = urldecode($_GET['path']);
+    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+    if (file_exists('../../../../' . $path)) {
+        // phpcs:ignore Magento2.Security.LanguageConstruct
+        echo 'path exists: true';
     } else {
-        echo "Command not unauthorized.";
+        // phpcs:ignore Magento2.Security.LanguageConstruct
+        echo 'path exists: false';
     }
 } else {
-    echo "'token' or 'path' parameter is not set.";
+    // phpcs:ignore Magento2.Exceptions.DirectThrow
+    throw new \InvalidArgumentException("GET parameter 'path' is not set.");
 }

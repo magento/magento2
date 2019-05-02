@@ -153,7 +153,6 @@
     <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />
     <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Framework\Api\AttributeInterface" type="Magento\Framework\Api\AttributeValue" />
-    <preference for="Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface" type="Magento\Framework\Model\ResourceModel\ResourceModelPool" />
     <preference for="Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface" type="Magento\Framework\Model\ResourceModel\Db\TransactionManager" />
     <preference for="Magento\Framework\Api\Data\ImageContentInterface" type="Magento\Framework\Api\ImageContent" />
     <preference for="Magento\Framework\Api\ImageContentValidatorInterface" type="Magento\Framework\Api\ImageContentValidator" />
@@ -1740,7 +1739,7 @@
             <argument name="map" xsi:type="array">
                 <item name="OPTIONS" xsi:type="string">\Magento\Framework\App\Action\HttpOptionsActionInterface</item>
                 <item name="GET" xsi:type="string">\Magento\Framework\App\Action\HttpGetActionInterface</item>
-                <item name="HEAD" xsi:type="string">\Magento\Framework\App\Action\HttpHeadActionInterface</item>
+                <item name="HEAD" xsi:type="string">\Magento\Framework\App\Action\HttpGetActionInterface</item>
                 <item name="POST" xsi:type="string">\Magento\Framework\App\Action\HttpPostActionInterface</item>
                 <item name="PUT" xsi:type="string">\Magento\Framework\App\Action\HttpPutActionInterface</item>
                 <item name="PATCH" xsi:type="string">\Magento\Framework\App\Action\HttpPatchActionInterface</item>
@@ -1765,4 +1764,8 @@
             <argument name="delayTimeout" xsi:type="number">20</argument>
         </arguments>
     </type>
+    <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompareInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompare"/>
+    <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillPut"/>
+    <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillReadInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillRead"/>
+    <preference for="Magento\Framework\MessageQueue\CallbackInvokerInterface" type="Magento\Framework\MessageQueue\CallbackInvoker"/>
 </config>

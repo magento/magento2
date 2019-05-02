@@ -58,6 +58,27 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Ensure that getSize works correctly with clear
+     *
+     */
+    public function testClearTotalRecords()
+    {
+        $objOne = new \Magento\Framework\DataObject(['id' => 1, 'name' => 'one']);
+        $objTwo = new \Magento\Framework\DataObject(['id' => 2, 'name' => 'two']);
+        $objThree = new \Magento\Framework\DataObject(['id' => 3, 'name' => 'three']);
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $this->collection->addItem($objOne);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $this->collection->addItem($objTwo);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $this->collection->addItem($objThree);
+        $this->assertEquals(3, $this->collection->getSize());
+        $this->collection->clear();
+        $this->assertEquals(0, $this->collection->getSize());
+    }
+
+    /**
      * Callback function.
      *
      * @param \Magento\Framework\DataObject $object

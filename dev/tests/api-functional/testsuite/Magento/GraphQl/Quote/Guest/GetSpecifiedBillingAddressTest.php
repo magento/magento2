@@ -63,7 +63,7 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
                 'label' => 'US',
             ],
             'telephone' => '3468676',
-            'address_type' => 'BILLING',
+            '__typename' => 'BillingCartAddress',
         ];
         self::assertEquals($expectedBillingAddressData, $response['cart']['billing_address']);
     }
@@ -100,7 +100,7 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
                 'label' => null,
             ],
             'telephone' => null,
-            'address_type' => 'BILLING',
+            '__typename' => 'BillingCartAddress',
         ];
         self::assertEquals($expectedBillingAddressData, $response['cart']['billing_address']);
     }
@@ -161,7 +161,7 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
         label
       }
       telephone
-      address_type
+      __typename
     }
   }
 }
