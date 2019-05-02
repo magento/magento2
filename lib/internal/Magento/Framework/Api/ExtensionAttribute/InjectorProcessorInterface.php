@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Api\ExtensionAttribute;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\ExtensionAttributesInterface;
+
 /**
  * Extension attributes injectors processor interface
  *
@@ -18,8 +21,8 @@ interface InjectorProcessorInterface
      * Process object for injections
      *
      * @param string $type
-     * @param array $data
-     * @return array
+     * @param ExtensibleDataInterface $object
+     * @param ExtensionAttributesInterface $extensionAttributes
      */
-    public function execute(string $type, array $data): array;
+    public function execute(string $type, $object, $extensionAttributes): void;
 }

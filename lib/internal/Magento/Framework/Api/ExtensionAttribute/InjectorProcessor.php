@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Framework\Api\ExtensionAttribute;
 
 use LogicException;
+use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -41,31 +43,28 @@ class InjectorProcessor
      * Process object for injections
      *
      * @param string $type
-     * @param array $data
-     * @return array
+     * @param ExtensibleDataInterface $object
+     * @param ExtensionAttributesInterface $extensionAttributes
+     * @return void
      */
-    public function execute(string $type, array $data): array
+    public function execute(string $type, ExtensibleDataInterface $object, $extensionAttributes): void
     {
         $config = $this->injectorConfig->get();
 
-        $data['extension_attributes'] = $data['extension_attributes'] ?? [];
-
-        if (isset($config[$type])) {
-            foreach ($config[$type] as $injectorClassName) {
-                /** @var InjectorProcessorInterface $injector */
-                $injector = $this->objectManager->get($injectorClassName);
-                if (!($injector instanceof InjectorProcessorInterface)) {
-                    throw new LogicException(
-                        $config[$type] . ' injector class must implement ' . InjectorProcessorInterface::class
-                    );
-                }
-                $data['extension_attributes'] = array_replace(
-                    $data['extension_attributes'],
-                    $injector->execute($type, $data)
-                );
-            }
+        if (!isset($config[$type])) {
+            return;
         }
 
-        return $data['extension_attributes'];
+        foreach ($config[$type] as $injectorClassName) {
+            /** @var InjectorProcessorInterface $injector */
+            $injector = $this->objectManager->get($injectorClassName);
+            if (!($injector instanceof InjectorProcessorInterface)) {
+                throw new LogicException(
+                    $config[$type] . ' injector class must implement ' . InjectorProcessorInterface::class
+                );
+            }
+
+            $injector->execute($type, $object, $extensionAttributes);
+        }
     }
 }

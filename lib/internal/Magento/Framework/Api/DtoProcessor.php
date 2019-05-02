@@ -415,26 +415,24 @@ class DtoProcessor
         }
 
         if ($this->isExtensibleObject($type)) {
-            if (isset($data['extension_attributes']) && is_object($data['extension_attributes'])) {
-                $data['extension_attributes'] = $this->getObjectData($data['extension_attributes']);
-            }
-
-            $data['extension_attributes'] = $this->injectorProcessor->execute($type, $data);
-
-            if (!empty($data['extension_attributes']) && !is_object($data['extension_attributes'])) {
-                $data['extension_attributes'] = $this->extensionAttributesFactory->create(
+            if (!isset($data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]) ||
+                !is_object($data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY])
+            ) {
+                $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] = $this->extensionAttributesFactory->create(
                     $type,
-                    ['data' => $data['extension_attributes']]
+                    ['data' => $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] ?? []]
                 );
             }
 
             $data = $this->joinProcessor->extractExtensionAttributes($type, $data);
         }
 
-        if (isset($data['custom_attributes']) &&
+        if (isset($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]) &&
             $this->isCustomAttributesObject($type)
         ) {
-            $data['custom_attributes'] = $this->extractCustomAttributes($data['custom_attributes']);
+            $data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES] = $this->extractCustomAttributes(
+                $data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]
+            );
         }
 
         $interfaceName = $interfaceName ?: $type;
@@ -466,6 +464,14 @@ class DtoProcessor
 
         if ($this->isDataModel($interfaceName)) {
             $resObject->setDataChanges(true);
+        }
+
+        if ($this->isExtensibleObject($type)) {
+            $this->injectorProcessor->execute(
+                $type,
+                $resObject,
+                $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]
+            );
         }
 
         return $resObject;
