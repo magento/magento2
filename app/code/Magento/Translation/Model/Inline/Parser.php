@@ -112,6 +112,11 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     protected $_appState;
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    protected $escaper;
+
+    /**
      * @var \Magento\Framework\Translate\InlineInterface
      */
     protected $_translateInline;
@@ -153,6 +158,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * @param \Magento\Translation\Model\ResourceModel\StringUtilsFactory $resource
      * @param \Zend_Filter_Interface $inputFilter
      * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\App\Cache\TypeListInterface $appCache
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param array $relatedCacheTypes
@@ -162,6 +168,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Zend_Filter_Interface $inputFilter,
         \Magento\Framework\App\State $appState,
+        \Magento\Framework\Escaper $escaper,
         \Magento\Framework\App\Cache\TypeListInterface $appCache,
         \Magento\Framework\Translate\InlineInterface $translateInline,
         array $relatedCacheTypes = []
@@ -170,6 +177,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         $this->_storeManager = $storeManager;
         $this->_inputFilter = $inputFilter;
         $this->_appState = $appState;
+        $this->escaper = $escaper;
         $this->_appCache = $appCache;
         $this->_translateInline = $translateInline;
         $this->relatedCacheTypes = $relatedCacheTypes;
@@ -344,7 +352,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     {
         $specialTags = $tagHtml . '<span class="translate-inline-' . $tagName . '" ' . $this->_getHtmlAttribute(
             self::DATA_TRANSLATE,
-            '[' . htmlspecialchars(join(',', $trArr)) . ']'
+            '[' . $this->escaper->escapeHtml(join(',', $trArr)) . ']'
         );
         $additionalAttr = $this->_getAdditionalHtmlAttribute($tagName);
         if ($additionalAttr !== null) {
@@ -372,7 +380,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
             strlen($tagName) + 1
         ) . ' ' . $this->_getHtmlAttribute(
             self::DATA_TRANSLATE,
-            htmlspecialchars('[' . join(',', $trArr) . ']')
+                $this->escaper->escapeHtml('[' . join(',', $trArr) . ']')
         );
         $additionalAttr = $this->_getAdditionalHtmlAttribute($tagName);
         if ($additionalAttr !== null) {
@@ -446,7 +454,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
                     $tagHtml = str_replace($matches[0], '', $tagHtml);
                     $trAttr = ' ' . $this->_getHtmlAttribute(
                         self::DATA_TRANSLATE,
-                        '[' . htmlspecialchars($matches[1]) . ',' . str_replace("\"", "'", join(',', $trArr)) . ']'
+                        '[' . $this->escaper->escapeHtml($matches[1]) . ',' . str_replace("\"", "'", join(',', $trArr)) . ']'
                     );
                 } else {
                     $trAttr = ' ' . $this->_getHtmlAttribute(
@@ -649,7 +657,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
             );
 
             $spanHtml = $this->_getDataTranslateSpan(
-                '[' . htmlspecialchars($translateProperties) . ']',
+                '[' . $this->escaper->escapeJs($translateProperties) . ']',
                 $matches[1][0]
             );
             $this->_content = substr_replace($this->_content, $spanHtml, $matches[0][1], strlen($matches[0][0]));

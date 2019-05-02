@@ -23,9 +23,15 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $scope;
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    protected $escaper;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
+     * @param \Magento\Framework\Escaper $escaper
      * @param string $connectionName
      * @param string|null $scope
      */
@@ -33,11 +39,13 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
+        \Magento\Framework\Escaper $escaper,
         $connectionName = null,
         $scope = null
     ) {
         $this->_localeResolver = $localeResolver;
         $this->scopeResolver = $scopeResolver;
+        $this->escaper = $escaper;
         $this->scope = $scope;
         parent::__construct($context, $connectionName);
     }
@@ -211,7 +219,7 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $string = htmlspecialchars_decode($string);
         $connection = $this->getConnection();
         $table = $this->getMainTable();
-        $translate = htmlspecialchars($translate, ENT_QUOTES);
+        $translate = $this->escaper->escapeHtml($translate);
 
         if ($locale === null) {
             $locale = $this->_localeResolver->getLocale();

@@ -31,19 +31,27 @@ class Preview extends \Magento\Backend\Block\Widget
     protected $_subscriberFactory;
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    protected $escaper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
+     * @param \Magento\Framework\Escaper $escaper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
+        \Magento\Framework\Escaper $escaper,
         array $data = []
     ) {
         $this->_templateFactory = $templateFactory;
         $this->_subscriberFactory = $subscriberFactory;
+        $this->escaper = $escaper;
         parent::__construct($context, $data);
     }
 
@@ -84,7 +92,7 @@ class Preview extends \Magento\Backend\Block\Widget
         $template->revertDesign();
 
         if ($template->isPlain()) {
-            $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";
+            $templateProcessed = "<pre>" . $this->escaper->escapeHtml($templateProcessed) . "</pre>";
         }
 
         \Magento\Framework\Profiler::stop($this->profilerName);

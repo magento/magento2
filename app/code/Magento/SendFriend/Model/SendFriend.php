@@ -145,7 +145,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         $this->_transportBuilder = $transportBuilder;
         $this->_catalogImage = $catalogImage;
         $this->_sendfriendData = $sendfriendData;
-        $this->_escaper = $escaper;
+        $this->escaper = $escaper;
         $this->remoteAddress = $remoteAddress;
         $this->cookieManager = $cookieManager;
         $this->inlineTranslation = $inlineTranslation;
@@ -178,10 +178,10 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
 
         $this->inlineTranslation->suspend();
 
-        $message = nl2br(htmlspecialchars($this->getSender()->getMessage()));
+        $message = nl2br($this->escaper->escapeHtml($this->getSender()->getMessage()));
         $sender = [
-            'name' => $this->_escaper->escapeHtml($this->getSender()->getName()),
-            'email' => $this->_escaper->escapeHtml($this->getSender()->getEmail()),
+            'name' => $this->escaper->escapeHtml($this->getSender()->getName()),
+            'email' => $this->escaper->escapeHtml($this->getSender()->getEmail()),
         ];
 
         foreach ($this->getRecipients()->getEmails() as $k => $email) {

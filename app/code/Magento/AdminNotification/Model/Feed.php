@@ -38,6 +38,11 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     protected $_backendConfig;
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    protected $escaper;
+
+    /**
      * @var \Magento\AdminNotification\Model\InboxFactory
      */
     protected $_inboxFactory;
@@ -69,6 +74,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
+     * @param \Magento\Framework\Escaper $escaper
      * @param InboxFactory $inboxFactory
      * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
@@ -83,6 +89,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Backend\App\ConfigInterface $backendConfig,
+        \Magento\Framework\Escaper $escaper,
         \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
         \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
@@ -94,6 +101,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_backendConfig    = $backendConfig;
+        $this->escaper           = $escaper;
         $this->_inboxFactory     = $inboxFactory;
         $this->curlFactory       = $curlFactory;
         $this->_deploymentConfig = $deploymentConfig;
@@ -252,6 +260,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      */
     private function escapeString(\SimpleXMLElement $data)
     {
-        return htmlspecialchars((string)$data);
+        return $this->escaper->escapeHtml((string)$data);
     }
 }
