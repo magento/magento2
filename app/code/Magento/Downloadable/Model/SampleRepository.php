@@ -101,7 +101,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList($sku)
     {
