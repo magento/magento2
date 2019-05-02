@@ -133,24 +133,21 @@ define([
                 event.preventDefault();
             }
 
-            if (this.validate() &&
-                additionalValidators.validate() &&
-                this.isPlaceOrderActionAllowed() === true
-            ) {
+            if (this.validate() && additionalValidators.validate()) {
                 this.isPlaceOrderActionAllowed(false);
 
                 this.getPlaceOrderDeferredObject()
-                    .done(
+                    .fail(
+                        function () {
+                            self.isPlaceOrderActionAllowed(true);
+                        }
+                    ).done(
                         function () {
                             self.afterPlaceOrder();
 
                             if (self.redirectAfterPlaceOrder) {
                                 redirectOnSuccessAction.execute();
                             }
-                        }
-                    ).always(
-                        function () {
-                            self.isPlaceOrderActionAllowed(true);
                         }
                     );
 

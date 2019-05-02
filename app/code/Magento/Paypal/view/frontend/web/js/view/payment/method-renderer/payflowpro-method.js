@@ -79,10 +79,7 @@ define([
         placeOrder: function () {
             var self = this;
 
-            if (this.validateHandler() &&
-                additionalValidators.validate() &&
-                this.isPlaceOrderActionAllowed() === true
-            ) {
+            if (this.validateHandler() && additionalValidators.validate()) {
                 this.isPlaceOrderActionAllowed(false);
                 fullScreenLoader.startLoader();
                 $.when(
