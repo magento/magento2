@@ -6,6 +6,11 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Psr\Log\LoggerInterface;
+
+/**
+ * Test for \Magento\Catalog\Model\CategoryLinkRepository.
+ */
 class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -28,14 +33,21 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $productLinkMock;
 
+    /**
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $loggerMock;
+
     protected function setUp()
     {
         $this->categoryRepositoryMock = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
         $this->productRepositoryMock = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->productLinkMock = $this->createMock(\Magento\Catalog\Api\Data\CategoryProductLinkInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->model = new \Magento\Catalog\Model\CategoryLinkRepository(
             $this->categoryRepositoryMock,
-            $this->productRepositoryMock
+            $this->productRepositoryMock,
+            $this->loggerMock
         );
     }
 
@@ -126,6 +138,7 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $productSku = "testSku";
         $productId = 55;
         $productPositions = [55 => 1];
+        $errorMessage = 'Error message';
         $categoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\Category::class,
             ['getProductsPosition', 'setPostedProducts', 'save', 'getId']
@@ -139,7 +152,8 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $productMock->expects($this->exactly(2))->method('getId')->willReturn($productId);
         $categoryMock->expects($this->once())->method('setPostedProducts')->with([]);
         $categoryMock->expects($this->once())->method('getId')->willReturn($categoryId);
-        $categoryMock->expects($this->once())->method('save')->willThrowException(new \Exception());
+        $categoryMock->expects($this->once())->method('save')->willThrowException(new \Exception($errorMessage));
+        $this->loggerMock->expects($this->once())->method('critical')->with($errorMessage);
         $this->model->deleteByIds($categoryId, $productSku);
     }
 

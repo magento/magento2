@@ -6,9 +6,14 @@
 
 namespace Magento\Catalog\Model;
 
-use Magento\Framework\Exception\InputException;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Psr\Log\LoggerInterface;
 
+/**
+ * Manage Product to Category assigment.
+ */
 class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkRepositoryInterface
 {
     /**
@@ -20,28 +25,29 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
-    
+
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Psr\Log\LoggerInterface $logger
+        LoggerInterface $logger = null
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
-        $this->logger = $logger;
+        $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink)
     {
@@ -68,7 +74,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink)
     {
@@ -76,7 +82,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteByIds($categoryId, $sku)
     {
