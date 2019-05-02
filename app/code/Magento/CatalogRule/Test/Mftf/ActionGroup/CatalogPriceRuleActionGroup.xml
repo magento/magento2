@@ -56,8 +56,8 @@
     <actionGroup name="CreateCatalogPriceRuleViaTheUi">
         <arguments>
             <argument name="catalogRule" defaultValue="_defaultCatalogRule"/>
-            <argument name="customerGroup" defaultValue="General"/>
-            <argument name="disregardRules" defaultValue="Yes"/>
+            <argument name="customerGroup" defaultValue="General" type="string"/>
+            <argument name="disregardRules" defaultValue="Yes" type="string"/>
         </arguments>
 
         <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}" stepKey="fillName1"/>
