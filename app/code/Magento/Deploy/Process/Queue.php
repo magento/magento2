@@ -336,6 +336,9 @@ class Queue
         if ($this->isCanBeParalleled()) {
             if ($package->getState() === null) {
                 $pid = $this->getPid($package);
+
+                // When $pid comes back as null the child process for this package has not yet started; prevents both
+                // hanging until timeout expires (which was behaviour in 2.2.x) and the type error from strict_types
                 if ($pid === null) {
                     return false;
                 }
