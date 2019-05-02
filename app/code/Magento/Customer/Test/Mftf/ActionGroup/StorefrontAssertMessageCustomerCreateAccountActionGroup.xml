@@ -11,8 +11,7 @@
     <actionGroup name="StorefrontAssertMessageCustomerCreateAccountActionGroup">
         <arguments>
             <argument name="message" type="string" defaultValue="Thank you for registering with Main Website Store." />
-            <argument name="messageType" type="string" defaultValue="success" />
         </arguments>
-        <see selector="{{StorefrontCustomerDashboardAccountInformationSection.messageByType(messageType)}}" userInput="{{message}}" stepKey="verifyMessage" />
+        <see selector="{{StorefrontMessagesSection.successMessage}}" userInput="{{message}}" stepKey="verifyMessage" />
     </actionGroup>
 </actionGroups>

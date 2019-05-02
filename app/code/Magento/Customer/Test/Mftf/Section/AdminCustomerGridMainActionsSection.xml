@@ -10,8 +10,5 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCustomerGridMainActionsSection">
         <element name="addNewCustomer" type="button" selector="#add" timeout="30"/>
-        <element name="delete" type="button" selector="//*[contains(@class, 'admin__data-grid-header')]//span[contains(@class,'action-menu-item') and text()='Delete']"/>
-        <element name="actions" type="text" selector=".action-select"/>
-        <element name="customerCheckbox" type="button" selector="//*[contains(text(),'{{customerEmail}}')]/parent::td/preceding-sibling::td/label[@class='data-grid-checkbox-cell-inner']//input" parameterized="true"/>
     </section>
 </sections>

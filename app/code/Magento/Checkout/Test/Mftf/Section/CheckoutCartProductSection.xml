@@ -35,6 +35,6 @@
         <element name="productPriceByName" type="text"
                  selector="//table[@id='shopping-cart-table']//tbody//tr[//a/text()='{{var1}}']//ancestor::td[contains(@class,'price')]//span[@class='price']"
                  parameterized="true"/>
-        <element name="productName" type="text" selector="//tbody[@class='cart item']//strong[@class='product-item-name']"/>
+        <element name="productName" type="text" selector="#shopping-cart-table .product-item-details > strong"/>
     </section>
 </sections>

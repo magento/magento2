@@ -10,6 +10,5 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerDashboardAccountInformationSection">
         <element name="ContactInformation" type="textarea" selector=".box.box-information .box-content"/>
-        <element name="messageByType" type="block" selector="#maincontent .message-{{messageType}}" parameterized="true" />
     </section>
 </sections>

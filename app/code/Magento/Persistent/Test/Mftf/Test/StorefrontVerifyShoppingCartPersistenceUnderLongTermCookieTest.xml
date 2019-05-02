@@ -40,10 +40,10 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteJohnSmithCustomer">
-                <argument name="customerEmail" value="John_Smith_Customer.email"/>
+                <argument name="customerEmail" value="{{John_Smith_Customer.email}}"/>
             </actionGroup>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteJohnDoeCustomer">
-                <argument name="customerEmail" value="Simple_Customer_Without_Address.email"/>
+                <argument name="customerEmail" value="{{Simple_Customer_Without_Address.email}}"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
