@@ -39,7 +39,7 @@
         <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <actionGroup ref="filterProductGridByName" stepKey="filterGridByName">
-            <argument name="productName" value="{{SimpleProduct.name}}"/>
+            <argument name="product" value="SimpleProduct"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.firstRow}}" userInput="{{SimpleProduct3.name}}" stepKey="seeProductNameInGrid"/>
     </test>
