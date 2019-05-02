@@ -33,5 +33,10 @@
         <element name="subtotal" type="text" selector="//tr[@class='totals sub']//td[@class='amount']/span"/>
         <element name="emptyCart" type="text" selector=".counter.qty.empty"/>
         <element name="minicartContent" type="block" selector="#minicart-content-wrapper"/>
+        <element name="messageEmptyCart" type="text" selector="//*[@id='minicart-content-wrapper']//*[contains(@class,'subtitle empty')]"/>
+        <element name="visibleItemsCountText" type="text" selector="//div[@class='items-total']"/>
+        <element name="productQuantity" type="input" selector="//*[@id='mini-cart']//a[contains(text(),'{{productName}}')]/../..//div[@class='details-qty qty']//input[@data-item-qty='{{qty}}']" parameterized="true"/>
+        <element name="productImage" type="text" selector="//ol[@id='mini-cart']//img[@class='product-image-photo']"/>
+        <element name="productSubTotal" type="text" selector="//div[@class='subtotal']//span/span[@class='price']"/>
     </section>
 </sections>
