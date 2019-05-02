@@ -28,7 +28,7 @@ class SaveRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Curr
                         )->getNumber($value));
                         $data[$currencyCode][$currencyTo] = $value;
                         if ($value == 0) {
-                            $this->messageManager->addWarning(
+                            $this->messageManager->addWarningMessage(
                                 __('Please correct the input data for "%1 => %2" rate.', $currencyCode, $currencyTo)
                             );
                         }
@@ -36,9 +36,9 @@ class SaveRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Curr
                 }
 
                 $this->_objectManager->create(\Magento\Directory\Model\Currency::class)->saveRates($data);
-                $this->messageManager->addSuccess(__('All valid rates have been saved.'));
+                $this->messageManager->addSuccessMessage(__('All valid rates have been saved.'));
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         }
 

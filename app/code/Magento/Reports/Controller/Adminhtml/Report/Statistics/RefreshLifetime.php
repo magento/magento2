@@ -25,11 +25,11 @@ class RefreshLifetime extends Statistics implements HttpPostActionInterface
             foreach ($collectionsNames as $collectionName) {
                 $this->_objectManager->create($collectionName)->aggregate();
             }
-            $this->messageManager->addSuccess(__('You refreshed lifetime statistics.'));
+            $this->messageManager->addSuccessMessage(__('You refreshed lifetime statistics.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t refresh lifetime statistics.'));
+            $this->messageManager->addErrorMessage(__('We can\'t refresh lifetime statistics.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
 

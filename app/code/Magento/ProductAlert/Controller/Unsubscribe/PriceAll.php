@@ -23,9 +23,9 @@ class PriceAll extends UnsubscribeController
                         ->getStore()
                         ->getWebsiteId()
                 );
-            $this->messageManager->addSuccess(__('You will no longer receive price alerts for this product.'));
+            $this->messageManager->addSuccessMessage(__('You will no longer receive price alerts for this product.'));
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Unable to update the alert subscription.'));
+            $this->messageManager->addExceptionMessage($e, __('Unable to update the alert subscription.'));
         }
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

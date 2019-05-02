@@ -103,7 +103,7 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex implements HttpP
                         $item->delete();
                     } catch (\Exception $e) {
                         $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                        $this->messageManager->addError(__('We can\'t delete item from Wish List right now.'));
+                        $this->messageManager->addErrorMessage(__('We can\'t delete item from Wish List right now.'));
                     }
                 }
 
@@ -118,7 +118,7 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex implements HttpP
                     );
                     $updatedItems++;
                 } catch (\Exception $e) {
-                    $this->messageManager->addError(
+                    $this->messageManager->addErrorMessage(
                         __(
                             'Can\'t save description %1',
                             $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($description)
@@ -133,7 +133,7 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex implements HttpP
                     $wishlist->save();
                     $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
                 } catch (\Exception $e) {
-                    $this->messageManager->addError(__('Can\'t update wish list'));
+                    $this->messageManager->addErrorMessage(__('Can\'t update wish list'));
                 }
             }
 

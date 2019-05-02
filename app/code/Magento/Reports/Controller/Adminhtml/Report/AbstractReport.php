@@ -152,7 +152,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         $refreshStatsLink = $this->getUrl('reports/report_statistics');
         $directRefreshLink = $this->getUrl('reports/report_statistics/refreshRecent');
 
-        $this->messageManager->addNotice(
+        $this->messageManager->addNoticeMessage(
             __(
                 'Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, ' .
                 'click <a href="#2" data-post="%3">here</a>.',

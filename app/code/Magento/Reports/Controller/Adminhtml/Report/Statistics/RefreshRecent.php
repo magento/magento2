@@ -30,11 +30,11 @@ class RefreshRecent extends \Magento\Reports\Controller\Adminhtml\Report\Statist
             foreach ($collectionsNames as $collectionName) {
                 $this->_objectManager->create($collectionName)->aggregate($date);
             }
-            $this->messageManager->addSuccess(__('Recent statistics have been updated.'));
+            $this->messageManager->addSuccessMessage(__('Recent statistics have been updated.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t refresh recent statistics.'));
+            $this->messageManager->addErrorMessage(__('We can\'t refresh recent statistics.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
 

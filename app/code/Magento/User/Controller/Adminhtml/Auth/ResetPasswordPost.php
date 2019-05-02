@@ -49,7 +49,7 @@ class ResetPasswordPost extends Auth
         try {
             $this->_validateResetPasswordLinkToken($userId, $passwordResetToken);
         } catch (\Exception $exception) {
-            $this->messageManager->addError(__('Your password reset link has expired.'));
+            $this->messageManager->addErrorMessage(__('Your password reset link has expired.'));
             $this->getResponse()->setRedirect(
                 $this->backendDataHelper->getHomePageUrl()
             );
@@ -67,7 +67,7 @@ class ResetPasswordPost extends Auth
             $errors = $user->validate();
             if ($errors !== true && !empty($errors)) {
                 foreach ($errors as $error) {
-                    $this->messageManager->addError($error);
+                    $this->messageManager->addErrorMessage($error);
                     $this->_redirect(
                         'adminhtml/auth/resetpassword',
                         ['_nosecret' => true, '_query' => ['id' => $userId, 'token' => $passwordResetToken]]
@@ -75,7 +75,7 @@ class ResetPasswordPost extends Auth
                 }
             } else {
                 $user->save();
-                $this->messageManager->addSuccess(__('You updated your password.'));
+                $this->messageManager->addSuccessMessage(__('You updated your password.'));
                 $this->getResponse()->setRedirect(
                     $this->backendDataHelper->getHomePageUrl()
                 );

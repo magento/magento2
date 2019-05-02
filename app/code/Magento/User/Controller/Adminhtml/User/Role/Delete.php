@@ -30,9 +30,9 @@ class Delete extends \Magento\User\Controller\Adminhtml\User\Role
 
         try {
             $this->_initRole()->delete();
-            $this->messageManager->addSuccess(__('You deleted the role.'));
+            $this->messageManager->addSuccessMessage(__('You deleted the role.'));
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('An error occurred while deleting this role.'));
+            $this->messageManager->addErrorMessage(__('An error occurred while deleting this role.'));
         }
 
         return $resultRedirect->setPath("*/*/");

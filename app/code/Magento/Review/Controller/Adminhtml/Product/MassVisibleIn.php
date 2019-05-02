@@ -18,7 +18,7 @@ class MassVisibleIn extends ProductController
     {
         $reviewsIds = $this->getRequest()->getParam('reviews');
         if (!is_array($reviewsIds)) {
-            $this->messageManager->addError(__('Please select review(s).'));
+            $this->messageManager->addErrorMessage(__('Please select review(s).'));
         } else {
             try {
                 $stores = $this->getRequest()->getParam('stores');
@@ -27,13 +27,13 @@ class MassVisibleIn extends ProductController
                     $model->setSelectStores($stores);
                     $model->save();
                 }
-                $this->messageManager->addSuccess(
+                $this->messageManager->addSuccessMessage(
                     __('A total of %1 record(s) have been updated.', count($reviewsIds))
                 );
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException(
+                $this->messageManager->addExceptionMessage(
                     $e,
                     __('Something went wrong while updating these review(s).')
                 );

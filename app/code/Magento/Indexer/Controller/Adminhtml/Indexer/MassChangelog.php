@@ -29,13 +29,13 @@ class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer implem
                     )->get($indexerId);
                     $model->setScheduled(true);
                 }
-                $this->messageManager->addSuccess(
+                $this->messageManager->addSuccessMessage(
                     __('%1 indexer(s) are in "Update by Schedule" mode.', count($indexerIds))
                 );
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException(
+                $this->messageManager->addExceptionMessage(
                     $e,
                     __("We couldn't change indexer(s)' mode because of an error.")
                 );
