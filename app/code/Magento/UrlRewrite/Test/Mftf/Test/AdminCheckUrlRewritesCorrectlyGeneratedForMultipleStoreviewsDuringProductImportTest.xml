@@ -237,6 +237,19 @@
         </actionGroup>
 
         <amOnPage url="/productformagetwo68980-english.html" stepKey="navigateToProductPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="productformagetwo68980" stepKey="seeProductName"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="productformagetwo68980-english" stepKey="seeProductName"/>
+        <amOnPage url="/category-english/productformagetwo68980-english.html" stepKey="navigateToProductPage2"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="productformagetwo68980-english" stepKey="seeProductName2"/>
+
+        <!-- Switch StoreView -->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnProduct4Page2"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToCustomStoreView2">
+            <argument name="storeView" value="customStoreNLNotUnique"/>
+        </actionGroup>
+
+        <amOnPage url="/productformagetwo68980-dutch.html" stepKey="navigateToProductPage3"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="productformagetwo68980-dutch" stepKey="seeProductName3"/>
+        <amOnPage url="/category-dutch/productformagetwo68980-dutch.html" stepKey="navigateToProductPage4"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="productformagetwo68980-dutch" stepKey="seeProductName4"/>
     </test>
 </tests>
