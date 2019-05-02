@@ -8,6 +8,11 @@ namespace Magento\Translation\Model\ResourceModel;
 class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
@@ -23,30 +28,25 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $scope;
 
     /**
-     * @var \Magento\Framework\Escaper
-     */
-    protected $escaper;
-
-    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
-     * @param \Magento\Framework\Escaper $escaper
      * @param string $connectionName
      * @param string|null $scope
+     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
-        \Magento\Framework\Escaper $escaper,
         $connectionName = null,
-        $scope = null
+        $scope = null,
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->_localeResolver = $localeResolver;
         $this->scopeResolver = $scopeResolver;
-        $this->escaper = $escaper;
         $this->scope = $scope;
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
         parent::__construct($context, $connectionName);
     }
 

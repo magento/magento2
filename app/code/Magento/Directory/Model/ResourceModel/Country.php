@@ -14,13 +14,21 @@ namespace Magento\Directory\Model\ResourceModel;
 class Country extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * Resource initialization
      *
+     * @param \Magento\Framework\Escaper|null $escaper
      * @return void
      */
-    protected function _construct()
-    {
+    protected function _construct(
+        \Magento\Framework\Escaper $escaper = null
+    ) {
         $this->_init('directory_country', 'country_id');
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
     }
 
     /**
@@ -44,7 +52,7 @@ class Country extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             default:
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Please correct the country code: %1.', htmlspecialchars($code))
+                    __('Please correct the country code: %1.', $this->escaper->escapeHtml($code))
                 );
         }
 

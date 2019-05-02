@@ -26,6 +26,11 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     const XML_LAST_UPDATE_PATH = 'system/adminnotification/last_update';
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * Feed url
      *
      * @var string
@@ -36,11 +41,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * @var \Magento\Backend\App\ConfigInterface
      */
     protected $_backendConfig;
-
-    /**
-     * @var \Magento\Framework\Escaper
-     */
-    protected $escaper;
 
     /**
      * @var \Magento\AdminNotification\Model\InboxFactory
@@ -74,7 +74,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
-     * @param \Magento\Framework\Escaper $escaper
      * @param InboxFactory $inboxFactory
      * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
@@ -83,13 +82,13 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Framework\Escaper|null $escaper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Backend\App\ConfigInterface $backendConfig,
-        \Magento\Framework\Escaper $escaper,
         \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
         \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
@@ -97,16 +96,17 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Escaper $escaper = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_backendConfig    = $backendConfig;
-        $this->escaper           = $escaper;
         $this->_inboxFactory     = $inboxFactory;
         $this->curlFactory       = $curlFactory;
         $this->_deploymentConfig = $deploymentConfig;
         $this->productMetadata   = $productMetadata;
         $this->urlBuilder        = $urlBuilder;
+        $this->escaper           = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
     }
 
     /**

@@ -20,6 +20,11 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     const DATA_TRANSLATE = 'data-translate';
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * Response body or JSON content string
      *
      * @var string
@@ -112,11 +117,6 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     protected $_appState;
 
     /**
-     * @var \Magento\Framework\Escaper
-     */
-    protected $escaper;
-
-    /**
      * @var \Magento\Framework\Translate\InlineInterface
      */
     protected $_translateInline;
@@ -158,29 +158,29 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * @param \Magento\Translation\Model\ResourceModel\StringUtilsFactory $resource
      * @param \Zend_Filter_Interface $inputFilter
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\App\Cache\TypeListInterface $appCache
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param array $relatedCacheTypes
+     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         \Magento\Translation\Model\ResourceModel\StringUtilsFactory $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Zend_Filter_Interface $inputFilter,
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\Escaper $escaper,
         \Magento\Framework\App\Cache\TypeListInterface $appCache,
         \Magento\Framework\Translate\InlineInterface $translateInline,
-        array $relatedCacheTypes = []
+        array $relatedCacheTypes = [],
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->_resourceFactory = $resource;
         $this->_storeManager = $storeManager;
         $this->_inputFilter = $inputFilter;
         $this->_appState = $appState;
-        $this->escaper = $escaper;
         $this->_appCache = $appCache;
         $this->_translateInline = $translateInline;
         $this->relatedCacheTypes = $relatedCacheTypes;
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
     }
 
     /**
@@ -380,7 +380,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
             strlen($tagName) + 1
         ) . ' ' . $this->_getHtmlAttribute(
             self::DATA_TRANSLATE,
-                $this->escaper->escapeHtml('[' . join(',', $trArr) . ']')
+            $this->escaper->escapeHtml('[' . join(',', $trArr) . ']')
         );
         $additionalAttr = $this->_getAdditionalHtmlAttribute($tagName);
         if ($additionalAttr !== null) {
@@ -657,7 +657,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
             );
 
             $spanHtml = $this->_getDataTranslateSpan(
-                '[' . $this->escaper->escapeJs($translateProperties) . ']',
+                '[' . $this->escaper->escapeHtmlAttr($translateProperties) . ']',
                 $matches[1][0]
             );
             $this->_content = substr_replace($this->_content, $spanHtml, $matches[0][1], strlen($matches[0][0]));

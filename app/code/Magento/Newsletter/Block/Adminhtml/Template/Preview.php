@@ -14,6 +14,11 @@ namespace Magento\Newsletter\Block\Adminhtml\Template;
 class Preview extends \Magento\Backend\Block\Widget
 {
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * Name for profiler
      *
      * @var string
@@ -31,27 +36,22 @@ class Preview extends \Magento\Backend\Block\Widget
     protected $_subscriberFactory;
 
     /**
-     * @var \Magento\Framework\Escaper
-     */
-    protected $escaper;
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
-     * @param \Magento\Framework\Escaper $escaper
      * @param array $data
+     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
-        \Magento\Framework\Escaper $escaper,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->_templateFactory = $templateFactory;
         $this->_subscriberFactory = $subscriberFactory;
-        $this->escaper = $escaper;
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
         parent::__construct($context, $data);
     }
 
@@ -150,6 +150,8 @@ class Preview extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return template
+     *
      * @param \Magento\Newsletter\Model\Template $template
      * @param string $id
      * @return $this
