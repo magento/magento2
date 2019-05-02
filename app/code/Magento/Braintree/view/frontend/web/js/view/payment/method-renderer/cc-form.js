@@ -79,7 +79,6 @@ define(
                      */
                     onError: function (response) {
                         braintree.showError($t('Payment ' + this.getTitle() + ' can\'t be initialized'));
-                        this.isPlaceOrderActionAllowed(true);
                         throw response.message;
                     },
 
