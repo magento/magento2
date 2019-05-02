@@ -123,7 +123,6 @@ class AfterAddressSaveObserver implements ObserverInterface
         /** @var $customerAddress Address */
         $customerAddress = $observer->getCustomerAddress();
         $customer = $customerAddress->getCustomer();
-        $customer->getAddressesCollection()->clear();
 
         if (!$this->_customerAddress->isVatValidationEnabled($customer->getStore())
             || $this->_coreRegistry->registry(self::VIV_PROCESSED_FLAG)
@@ -140,6 +139,7 @@ class AfterAddressSaveObserver implements ObserverInterface
             ) {
                 $defaultGroupId = $this->_groupManagement->getDefaultGroup($customer->getStore())->getId();
                 if (!$customer->getDisableAutoGroupChange() && $customer->getGroupId() != $defaultGroupId) {
+                    $customer->getAddressesCollection()->clear();
                     $customer->setGroupId($defaultGroupId);
                     $customer->save();
                     $this->customerSession->setCustomerGroupId($defaultGroupId);
@@ -157,6 +157,7 @@ class AfterAddressSaveObserver implements ObserverInterface
                 );
 
                 if (!$customer->getDisableAutoGroupChange() && $customer->getGroupId() != $newGroupId) {
+                    $customer->getAddressesCollection()->clear();
                     $customer->setGroupId($newGroupId);
                     $customer->save();
                     $this->customerSession->setCustomerGroupId($newGroupId);
