@@ -24,7 +24,11 @@ define([
                 customer = customerData.get('customer');
 
             this._super();
-            this.renderPayPalButtons(element);
+
+            if (config.clientConfig.isVisibleOnProductPage) {
+                this.renderPayPalButtons(element);
+            }
+
             this.declinePayment = !customer().firstname && !cart().isGuestCheckoutAllowed;
 
             return this;

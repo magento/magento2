@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminDashboardSection">
+        <element name="dashboardDiagramContent" type="button" selector="#diagram_tab_content"/>
+        <element name="dashboardDiagramOrderContentTab" type="block" selector="#diagram_tab_orders_content"/>
+        <element name="dashboardDiagramAmounts" type="button" selector="#diagram_tab_amounts"/>
+        <element name="dashboardDiagramAmountsContentTab" type="block" selector="#diagram_tab_amounts_content"/>
+        <element name="dashboardDiagramTotals" type="text" selector="#diagram_tab_amounts_content"/>
+        <element name="dashboardTotals" type="text" selector="//*[@class='dashboard-totals-label' and contains(text(), '{{columnName}}')]/../*[@class='dashboard-totals-value']" parameterized="true"/>
+    </section>
+</sections>
