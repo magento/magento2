@@ -15,6 +15,7 @@ $lastLoginDateStore = $block->getStoreLastLoginDate();
 
 $createDateAdmin = $block->getCreateDate();
 $createDateStore = $block->getStoreCreateDate();
+$allowedAddressHtmlTags = ['b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'sub', 'sup', 'ul'];
 ?>
 
 <div class="fieldset-wrapper customer-information">
@@ -65,7 +66,7 @@ $createDateStore = $block->getStoreCreateDate();
     <address>
         <strong><?php echo $block->escapeHtml(__('Default Billing Address')) ?></strong>
         <br/>
-        <?php echo $block->getBillingAddressHtml() ?>
+        <?php echo $block->escapeHtml($block->getBillingAddressHtml(), $allowedAddressHtmlTags) ?>
     </address>
 
 </div>

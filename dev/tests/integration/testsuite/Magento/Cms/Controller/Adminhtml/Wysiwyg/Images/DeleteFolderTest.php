@@ -7,6 +7,7 @@
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Response\HttpFactory as ResponseFactory;
 
 /**
  * Tests Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFolder.
@@ -34,16 +35,27 @@ class DeleteFolderTest extends \PHPUnit_Framework_TestCase
     private $fullDirectoryPath;
 
     /**
+     * @var \Magento\Framework\Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var ResponseFactory
+     */
+    private $responseFactory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
-        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
+        $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
         $this->imagesHelper = $objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot();
+        $this->responseFactory = $objectManager->get(ResponseFactory::class);
         $this->model = $objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFolder::class);
     }
 
@@ -52,6 +64,7 @@ class DeleteFolderTest extends \PHPUnit_Framework_TestCase
      * be removed.
      *
      * @return void
+     * @magentoAppIsolation enabled
      */
     public function testExecute()
     {
@@ -70,6 +83,31 @@ class DeleteFolderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Execute method to check that there is no ability to remove folder which is in excluded directories list.
+     *
+     * @return void
+     * @magentoAppIsolation enabled
+     */
+    public function testExecuteWithExcludedDirectoryName()
+    {
+        $directoryName = 'downloadable';
+        $expectedResponseMessage = 'We cannot delete directory /downloadable.';
+        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $mediaDirectory->create($directoryName);
+        $this->assertFileExists($this->fullDirectoryPath . DIRECTORY_SEPARATOR . $directoryName);
+
+        $this->model->getRequest()->setParams(['node' => $this->imagesHelper->idEncode($directoryName)]);
+        $this->model->getRequest()->setMethod('POST');
+        $jsonResponse = $this->model->execute();
+        $jsonResponse->renderResult($response = $this->responseFactory->create());
+        $data = json_decode($response->getBody(), true);
+
+        $this->assertTrue($data['error']);
+        $this->assertEquals($expectedResponseMessage, $data['message']);
+        $this->assertFileExists($this->fullDirectoryPath . $directoryName);
+    }
+
+    /**
      * @inheritdoc
      */
     public static function tearDownAfterClass()
@@ -80,6 +118,9 @@ class DeleteFolderTest extends \PHPUnit_Framework_TestCase
         $directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         if ($directory->isExist('wysiwyg')) {
             $directory->delete('wysiwyg');
+        }
+        if ($directory->isExist('downloadable')) {
+            $directory->delete('downloadable');
         }
     }
 }
