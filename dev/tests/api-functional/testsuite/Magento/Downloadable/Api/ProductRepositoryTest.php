@@ -227,7 +227,9 @@ class ProductRepositoryTest extends WebapiAbstract
             'price' => 5.0,
             'number_of_downloads' => 999,
             'link_type' => 'file',
-            'sample_type' => 'file'
+            'link_file' => $linkFile,
+            'sample_type' => 'file',
+            'sample_file' => $sampleFile,
         ];
         $linkData = $this->getLinkData();
 
@@ -273,6 +275,7 @@ class ProductRepositoryTest extends WebapiAbstract
             'number_of_downloads' => 999,
             'link_type' => 'file',
             'sample_type' => 'file',
+            'sample_file' => '/s/a/sample2.jpg',
         ];
         $expectedLinkData = array_merge($expectedLinkData, $this->getExpectedLinkData());
         $this->assertEquals($expectedLinkData, $resultLinks);

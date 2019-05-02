@@ -6,7 +6,11 @@
 namespace Magento\Downloadable\Test\Unit\Model\Sample;
 
 use Magento\Downloadable\Model\Sample\ContentValidator;
+use Magento\Downloadable\Helper\File;
 
+/**
+ * Unit tests for Magento\Downloadable\Model\Sample\ContentValidator.
+ */
 class ContentValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -34,12 +38,31 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $sampleFileMock;
 
+    /**
+     * @var File|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $fileMock;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
         $this->fileValidatorMock = $this->createMock(\Magento\Downloadable\Model\File\ContentValidator::class);
         $this->urlValidatorMock = $this->createMock(\Magento\Framework\Url\Validator::class);
         $this->sampleFileMock = $this->createMock(\Magento\Downloadable\Api\Data\File\ContentInterface::class);
-        $this->validator = new ContentValidator($this->fileValidatorMock, $this->urlValidatorMock);
+        $this->fileMock = $this->createMock(File::class);
+
+        $this->validator = $objectManager->getObject(
+            ContentValidator::class,
+            [
+                'fileContentValidator' => $this->fileValidatorMock,
+                'urlValidator' => $this->urlValidatorMock,
+                'fileHelper' => $this->fileMock,
+            ]
+        );
     }
 
     public function testIsValid()
