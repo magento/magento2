@@ -380,13 +380,13 @@
     <!--Select Bank Transfer payment method-->
     <actionGroup name="SelectBankTransferPaymentMethodActionGroup" extends="SelectCheckMoneyPaymentMethod">
         <remove keyForRemoval="checkCheckMoneyOption"/>
-        <conditionalClick selector="{{AdminOrderFormPaymentSection.bankTransferOption}}" dependentSelector="{{AdminOrderFormPaymentSection.bankTransferOption}}" visible="true" stepKey="checkBankTransferOption" after="waitForPaymentOptions"/>
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.checkBankTransfer}}" dependentSelector="{{AdminOrderFormPaymentSection.checkBankTransfer}}" visible="true" stepKey="checkBankTransferOption" after="waitForPaymentOptions"/>
     </actionGroup>
 
     <!--Select Cash on Delivery payment method-->
     <actionGroup name="SelectCashOnDeliveryPaymentMethodActionGroup" extends="SelectCheckMoneyPaymentMethod">
         <remove keyForRemoval="checkCheckMoneyOption"/>
-        <conditionalClick selector="{{AdminOrderFormPaymentSection.cashOnDelivery}}" dependentSelector="{{AdminOrderFormPaymentSection.cashOnDelivery}}" visible="true" stepKey="checkCashOnDeliveryOption" after="waitForPaymentOptions"/>
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.checkCashOnDelivery}}" dependentSelector="{{AdminOrderFormPaymentSection.checkCashOnDelivery}}" visible="true" stepKey="checkCashOnDeliveryOption" after="waitForPaymentOptions"/>
     </actionGroup>
 
     <!--Select Purchase Order payment method-->
@@ -395,8 +395,8 @@
             <argument name="purchaseOrderNumber" type="string"/>
         </arguments>
         <remove keyForRemoval="checkCheckMoneyOption"/>
-        <conditionalClick selector="{{AdminOrderFormPaymentSection.purchaseOrder}}" dependentSelector="{{AdminOrderFormPaymentSection.purchaseOrder}}" visible="true" stepKey="checkPurchaseOrderOption" after="waitForPaymentOptions"/>
-        <fillField selector="{{AdminOrderFormPaymentSection.purchaseOrderNumber}}" userInput="{{purchaseOrderNumber}}" stepKey="fillPurchaseOrderNumber"/>
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.checkPurchaseOrder}}" dependentSelector="{{AdminOrderFormPaymentSection.checkPurchaseOrder}}" visible="true" stepKey="checkPurchaseOrderOption" after="waitForPaymentOptions"/>
+        <fillField selector="{{AdminOrderFormPaymentSection.fieldPurchaseOrderNumber}}" userInput="{{purchaseOrderNumber}}" stepKey="fillPurchaseOrderNumber"/>
     </actionGroup>
 
     <!-- Create Order -->
