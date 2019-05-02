@@ -90,7 +90,7 @@ class InvoiceSenderTest extends AbstractSenderTest
 
         $this->invoiceMock->expects($this->once())
             ->method('setSendEmail')
-            ->with(true);
+            ->with($emailSendingResult);
 
         $this->globalConfig->expects($this->once())
             ->method('getValue')
@@ -136,7 +136,7 @@ class InvoiceSenderTest extends AbstractSenderTest
                     ]
                 );
 
-            $this->identityContainerMock->expects($this->once())
+            $this->identityContainerMock->expects($this->exactly(2))
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
 
@@ -212,7 +212,7 @@ class InvoiceSenderTest extends AbstractSenderTest
 
         $this->invoiceMock->expects($this->once())
             ->method('setSendEmail')
-            ->with(true);
+            ->with(false);
 
         $this->globalConfig->expects($this->once())
             ->method('getValue')
@@ -247,7 +247,7 @@ class InvoiceSenderTest extends AbstractSenderTest
                 ]
             );
 
-        $this->identityContainerMock->expects($this->once())
+        $this->identityContainerMock->expects($this->exactly(2))
             ->method('isEnabled')
             ->willReturn(false);
 
