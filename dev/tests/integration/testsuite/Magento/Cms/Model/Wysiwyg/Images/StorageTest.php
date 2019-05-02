@@ -110,6 +110,31 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+    public function testDeleteDirectory(): void
+    {
+        $path = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->getCurrentPath();
+        $dir = 'testDeleteDirectory';
+        $fullPath = $path . $dir;
+        $this->storage->createDirectory($dir, $path);
+        $this->assertFileExists($fullPath);
+        $this->storage->deleteDirectory($fullPath);
+        $this->assertFileNotExists($fullPath);
+    }
+
+    /**
+     * @return void
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage We cannot delete directory /downloadable.
+     */
+    public function testDeleteDirectoryWithExcludedDirPath(): void
+    {
+        $dir = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->getCurrentPath() . 'downloadable';
+        $this->storage->deleteDirectory($dir);
+    }
+
+    /**
+     * @return void
+     */
     public function testUploadFile(): void
     {
         $fileName = 'magento_small_image.jpg';
@@ -126,8 +151,36 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'error' => 0,
             'size' => 12500,
         ];
+
         $this->storage->uploadFile(self::$_baseDir);
         $this->assertTrue(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+        // phpcs:enable
+    }
+
+    /**
+     * @return void
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage We can't upload the file to current folder right now. Please try another folder.
+     */
+    public function testUploadFileWithExcludedDirPath(): void
+    {
+        $fileName = 'magento_small_image.jpg';
+        $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
+        $filePath = $tmpDirectory->getAbsolutePath($fileName);
+        // phpcs:disable
+        $fixtureDir = realpath(__DIR__ . '/../../../../Catalog/_files');
+        copy($fixtureDir . DIRECTORY_SEPARATOR . $fileName, $filePath);
+
+        $_FILES['image'] = [
+            'name' => $fileName,
+            'type' => 'image/jpeg',
+            'tmp_name' => $filePath,
+            'error' => 0,
+            'size' => 12500,
+        ];
+
+        $dir = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->getCurrentPath() . 'downloadable';
+        $this->storage->uploadFile($dir);
         // phpcs:enable
     }
 

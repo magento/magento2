@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Customer;
 
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
-use Magento\GraphQl\Quote\GetQuoteShippingAddressIdByReservedQuoteId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -24,11 +23,6 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
     private $getMaskedQuoteIdByReservedOrderId;
 
     /**
-     * @var GetQuoteShippingAddressIdByReservedQuoteId
-     */
-    private $getQuoteShippingAddressIdByReservedQuoteId;
-
-    /**
      * @var CustomerTokenServiceInterface
      */
     private $customerTokenService;
@@ -40,9 +34,6 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->getQuoteShippingAddressIdByReservedQuoteId = $objectManager->get(
-            GetQuoteShippingAddressIdByReservedQuoteId::class
-        );
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
@@ -64,13 +55,11 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
     public function testSetOfflineShippingMethod(string $carrierCode, string $methodCode, float $amount, string $label)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $quoteAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute('test_quote');
 
         $query = $this->getQuery(
             $maskedQuoteId,
             $methodCode,
-            $carrierCode,
-            $quoteAddressId
+            $carrierCode
         );
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
@@ -111,14 +100,12 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
      * @param string $maskedQuoteId
      * @param string $shippingMethodCode
      * @param string $shippingCarrierCode
-     * @param int $shippingAddressId
      * @return string
      */
     private function getQuery(
         string $maskedQuoteId,
         string $shippingMethodCode,
-        string $shippingCarrierCode,
-        int $shippingAddressId
+        string $shippingCarrierCode
     ): string {
         return <<<QUERY
 mutation {
@@ -126,7 +113,6 @@ mutation {
     {
       cart_id: "$maskedQuoteId", 
       shipping_methods: [{
-        cart_address_id: $shippingAddressId
         carrier_code: "$shippingCarrierCode"
         method_code: "$shippingMethodCode"
       }]

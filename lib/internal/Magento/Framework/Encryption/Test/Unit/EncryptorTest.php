@@ -16,6 +16,9 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\Encryption\KeyValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Test case for \Magento\Framework\Encryption\Encryptor
+ */
 class EncryptorTest extends \PHPUnit\Framework\TestCase
 {
     private const CRYPT_KEY_1 = 'g9mY9KLrcuAVJfsmVUSRkKFLDdUPVkaZ';
@@ -67,7 +70,9 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     public function testGetHashSpecifiedSalt(): void
     {
         $this->randomGeneratorMock->expects($this->never())->method('getRandomString');
-        $expected = '13601bda4ea78e55a07b98866d2be6be0744e3866f13c00c811cab608a28f322:salt:1';
+        $expected = $this->encryptor->getLatestHashVersion() === Encryptor::HASH_VERSION_ARGON2ID13 ?
+            '7640855aef9cb6ffd20229601d2904a2192e372b391db8230d7faf073b393e4c:salt:2' :
+            '13601bda4ea78e55a07b98866d2be6be0744e3866f13c00c811cab608a28f322:salt:1';
         $actual = $this->encryptor->getHash('password', 'salt');
         $this->assertEquals($expected, $actual);
     }
@@ -78,9 +83,11 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $this->randomGeneratorMock
             ->expects($this->once())
             ->method('getRandomString')
-            ->with(32)
+            ->with($this->encryptor->getLatestHashVersion() === Encryptor::HASH_VERSION_ARGON2ID13 ? 16 : 32)
             ->willReturn($salt);
-        $expected = 'a1c7fc88037b70c9be84d3ad12522c7888f647915db78f42eb572008422ba2fa:' . $salt . ':1';
+        $expected = $this->encryptor->getLatestHashVersion() === Encryptor::HASH_VERSION_ARGON2ID13 ?
+            '0be2351d7513d3e9622bd2df1891c39ba5ba6d1e3d67a058c60d6fd83f6641d8:' . $salt . ':2' :
+            'a1c7fc88037b70c9be84d3ad12522c7888f647915db78f42eb572008422ba2fa:' . $salt . ':1';
         $actual = $this->encryptor->getHash('password', true);
         $this->assertEquals($expected, $actual);
     }
@@ -90,9 +97,15 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $this->randomGeneratorMock
             ->expects($this->once())
             ->method('getRandomString')
-            ->with(11)
-            ->willReturn('random_salt');
-        $expected = '4c5cab8dd00137d11258f8f87b93fd17bd94c5026fc52d3c5af911dd177a2611:random_salt:1';
+            ->with($this->encryptor->getLatestHashVersion() === Encryptor::HASH_VERSION_ARGON2ID13 ? 16 : 11)
+            ->willReturn(
+                $this->encryptor->getLatestHashVersion() === Encryptor::HASH_VERSION_ARGON2ID13 ?
+                    'random_salt12345' :
+                    'random_salt'
+            );
+        $expected = $this->encryptor->getLatestHashVersion() === Encryptor::HASH_VERSION_ARGON2ID13 ?
+            'ca7982945fa90444b78d586678ff1c223ce13f99a39ec9541eae8b63ada3816a:random_salt12345:2' :
+            '4c5cab8dd00137d11258f8f87b93fd17bd94c5026fc52d3c5af911dd177a2611:random_salt:1';
         $actual = $this->encryptor->getHash('password', 11);
         $this->assertEquals($expected, $actual);
     }

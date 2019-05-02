@@ -554,6 +554,7 @@ class AccountManagement implements AccountManagementInterface
         }
         try {
             $this->getAuthentication()->authenticate($customerId, $password);
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (InvalidEmailOrPasswordException $e) {
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
@@ -894,6 +895,7 @@ class AccountManagement implements AccountManagementInterface
             throw new InputMismatchException(
                 __('A customer with the same email address already exists in an associated website.')
             );
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (LocalizedException $e) {
             throw $e;
         }
@@ -910,6 +912,7 @@ class AccountManagement implements AccountManagementInterface
                 }
             }
             $this->customerRegistry->remove($customer->getId());
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (InputException $e) {
             $this->customerRepository->delete($customer);
             throw $e;
@@ -1012,6 +1015,7 @@ class AccountManagement implements AccountManagementInterface
     {
         try {
             $this->getAuthentication()->authenticate($customer->getId(), $currentPassword);
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (InvalidEmailOrPasswordException $e) {
             throw new InvalidEmailOrPasswordException(
                 __("The password doesn't match this account. Verify the password and try again.")
@@ -1071,6 +1075,7 @@ class AccountManagement implements AccountManagementInterface
         $result = $this->getEavValidator()->isValid($customerModel);
         if ($result === false && is_array($this->getEavValidator()->getMessages())) {
             return $validationResults->setIsValid(false)->setMessages(
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 call_user_func_array(
                     'array_merge',
                     $this->getEavValidator()->getMessages()
@@ -1532,7 +1537,7 @@ class AccountManagement implements AccountManagementInterface
      */
     public function getPasswordHash($password)
     {
-        return $this->encryptor->getHash($password);
+        return $this->encryptor->getHash($password, true);
     }
 
     /**
