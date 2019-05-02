@@ -31,7 +31,8 @@ return [
                 'shape' => 'pillow',
                 'label' => 'installment',
                 'installmentperiod' => 0
-            ]
+            ],
+            'isVisibleOnProductPage' => 0
         ]
     ],
     'checkout' => [
@@ -59,7 +60,8 @@ return [
                 'shape' => 'pillow',
                 'label' => 'installment',
                 'installmentperiod' => 0
-            ]
+            ],
+            'isVisibleOnProductPage' => 0
         ]
     ],
     'mini_cart' => [
@@ -86,7 +88,8 @@ return [
                 'color' => 'gold',
                 'shape' => 'rect',
                 'label' => 'paypal'
-            ]
+            ],
+            'isVisibleOnProductPage' => 0
         ]
     ],
     'mini_cart' => [
@@ -113,7 +116,8 @@ return [
                 'color' => 'gold',
                 'shape' => 'rect',
                 'label' => 'paypal'
-            ]
+            ],
+            'isVisibleOnProductPage' => 0
         ]
     ],
     'product' => [
@@ -140,7 +144,8 @@ return [
                 'color' => 'gold',
                 'shape' => 'rect',
                 'label' => 'paypal',
-            ]
+            ],
+            'isVisibleOnProductPage' => 0
         ]
     ]
 ];
