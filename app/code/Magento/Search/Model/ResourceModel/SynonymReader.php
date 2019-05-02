@@ -85,11 +85,10 @@ class SynonymReader extends AbstractDb
      */
     private function queryByPhrase($phrase)
     {
-        $phrase = $this->fullTextSelect->removeSpecialCharacters($phrase);
         $matchQuery = $this->fullTextSelect->getMatchQuery(
             ['synonyms' => 'synonyms'],
             $phrase,
-            Fulltext::FULLTEXT_MODE_BOOLEAN
+            Fulltext::FULLTEXT_MODE_NATURAL
         );
         $query = $this->getConnection()->select()->from(
             $this->getMainTable()

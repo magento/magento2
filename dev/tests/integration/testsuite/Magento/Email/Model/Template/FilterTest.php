@@ -266,7 +266,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'Empty or missing file' => [
                 TemplateTypesInterface::TYPE_HTML,
                 'file="css/non-existent-file.css"',
-                '/* Contents of css/non-existent-file.css could not be loaded or is empty */'
+                '/* Contents of the specified CSS file could not be loaded or is empty */'
             ],
             'File with compilation error results in error message' => [
                 TemplateTypesInterface::TYPE_HTML,

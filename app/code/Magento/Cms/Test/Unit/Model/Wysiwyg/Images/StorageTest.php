@@ -133,7 +133,9 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             true,
             ['getRealPath']
         );
-        $this->driverMock->expects($this->any())->method('getRealPath')->willReturnArgument(0);
+        $this->driverMock = $this->getMockBuilder(\Magento\Framework\Filesystem\DriverInterface::class)
+            ->setMethods(['getRealPathSafety'])
+            ->getMockForAbstractClass();
 
         $this->directoryMock = $this->getMock(
             \Magento\Framework\Filesystem\Directory\Write::class,
@@ -283,6 +285,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Exception\LocalizedException::class,
             sprintf('Directory %s is not under storage root path.', self::INVALID_DIRECTORY_OVER_ROOT)
         );
+        $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->will($this->returnArgument(0));
         $this->imagesStorage->deleteDirectory(self::INVALID_DIRECTORY_OVER_ROOT);
     }
 
@@ -295,6 +298,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Exception\LocalizedException::class,
             sprintf('We can\'t delete root directory %s right now.', self::STORAGE_ROOT_DIR)
         );
+        $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->will($this->returnArgument(0));
         $this->imagesStorage->deleteDirectory(self::STORAGE_ROOT_DIR);
     }
 
@@ -464,10 +468,11 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testUploadFile()
     {
-        $targetPath = '/target/path';
+        $path = 'target/path';
+        $targetPath = self::STORAGE_ROOT_DIR . $path;
         $fileName = 'image.gif';
         $realPath = $targetPath . '/' . $fileName;
-        $thumbnailTargetPath = self::STORAGE_ROOT_DIR . '/.thumbs';
+        $thumbnailTargetPath = self::STORAGE_ROOT_DIR . '/.thumbs' . $path;
         $thumbnailDestination = $thumbnailTargetPath . '/' . $fileName;
         $type = 'image';
         $result = [

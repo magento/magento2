@@ -11,6 +11,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * Fixture generator for Order entities with configurable number of different types of order items.
+ *
  * Optionally generates inactive quotes for generated orders.
  *
  * Support the following format:
@@ -508,7 +509,7 @@ class OrdersFixture extends Fixture
      * DB connection (if setup). Additionally filters out quote-related queries, if appropriate flag is set.
      *
      * @param string $table
-     * @param array ...$replacements
+     * @param array $replacements
      * @return void
      */
     protected function query($table, ... $replacements)
@@ -703,7 +704,7 @@ class OrdersFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -711,7 +712,7 @@ class OrdersFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {
@@ -722,6 +723,7 @@ class OrdersFixture extends Fixture
 
     /**
      * Get real table name for db table, validated by db adapter.
+     *
      * In case prefix or other features mutating default table names are used.
      *
      * @param string $tableName
