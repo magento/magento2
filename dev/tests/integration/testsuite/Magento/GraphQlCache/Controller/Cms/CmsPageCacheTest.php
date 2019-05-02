@@ -48,7 +48,6 @@ class CmsPageCacheTest extends AbstractGraphqlCacheTest
         $cmsPageBlank = $this->objectManager->get(GetPageByIdentifier::class)->execute('page_design_blank', 0);
         $pageIdBlank = $cmsPageBlank->getId();
 
-
         $queryCmsPage100 =
             <<<QUERY
         {
@@ -91,8 +90,7 @@ QUERY;
         $requestedCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
         $expectedCacheTags = ['cms_p', 'cms_p_' .$pageId100 , 'FPC'];
         $this->assertEquals($expectedCacheTags, $requestedCacheTags);
-
-
+        
         $request = $this->prepareRequest($queryCmsPageBlank);
         $response = $this->graphqlController->dispatch($request);
         $this->assertEquals(
