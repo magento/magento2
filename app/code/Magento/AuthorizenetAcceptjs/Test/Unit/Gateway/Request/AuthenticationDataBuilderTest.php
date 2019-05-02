@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request\AuthenticationDataBuilder
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder
  */
 class AuthenticationDataBuilderTest extends TestCase
 {

@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Command\CaptureStrategyCommand
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Command\CaptureStrategyCommand
  */
 class CaptureStrategyCommandTest extends TestCase
 {

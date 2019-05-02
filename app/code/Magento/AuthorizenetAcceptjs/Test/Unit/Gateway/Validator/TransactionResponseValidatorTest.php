@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Validator\TransactionResponseValidator
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Validator\TransactionResponseValidator
  */
 class TransactionResponseValidatorTest extends TestCase
 {

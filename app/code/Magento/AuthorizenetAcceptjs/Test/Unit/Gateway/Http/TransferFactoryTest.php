@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Http\TransferFactory
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Http\TransferFactory
  */
 class TransferFactoryTest extends TestCase
 {

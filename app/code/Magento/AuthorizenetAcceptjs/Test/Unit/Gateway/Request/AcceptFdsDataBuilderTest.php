@@ -17,7 +17,7 @@ use Magento\Sales\Model\Order\Payment;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request\AcceptFdsDataBuilderTest
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Request\AcceptFdsDataBuilderTest
  */
 class AcceptFdsDataBuilderTest extends TestCase
 {

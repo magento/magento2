@@ -12,7 +12,7 @@ use Magento\AuthorizenetAcceptjs\Gateway\Request\RefundTransactionTypeDataBuilde
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request\RefundTransactionTypeDataBuilder
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Request\RefundTransactionTypeDataBuilder
  */
 class RefundTransactionTypeDataBuilderTest extends TestCase
 {

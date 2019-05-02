@@ -13,7 +13,7 @@ use Magento\AuthorizenetAcceptjs\Gateway\Request\RequestTypeBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request\RequestTypeBuilder
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Request\RequestTypeBuilder
  */
 class RequestTypeBuilderTest extends TestCase
 {

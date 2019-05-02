@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Command\FetchTransactionInfoCommand
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Command\FetchTransactionInfoCommand
  */
 class FetchTransactionInfoCommandTest extends TestCase
 {

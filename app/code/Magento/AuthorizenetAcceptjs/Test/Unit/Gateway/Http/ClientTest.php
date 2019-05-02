@@ -21,7 +21,7 @@ use Zend_Http_Client;
 use Zend_Http_Response;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Http\Client
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Http\Client
  */
 class ClientTest extends TestCase
 {

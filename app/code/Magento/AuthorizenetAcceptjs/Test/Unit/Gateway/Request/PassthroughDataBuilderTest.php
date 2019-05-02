@@ -12,7 +12,7 @@ use Magento\AuthorizenetAcceptjs\Model\PassthroughDataObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request\PassthroughDataBuilder
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Request\PassthroughDataBuilder
  */
 class PassthroughDataBuilderTest extends TestCase
 {

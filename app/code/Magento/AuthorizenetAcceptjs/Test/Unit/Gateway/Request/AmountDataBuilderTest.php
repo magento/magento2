@@ -12,7 +12,7 @@ use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request\AmountDataBuilder
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Request\AmountDataBuilder
  */
 class AmountDataBuilderTest extends TestCase
 {

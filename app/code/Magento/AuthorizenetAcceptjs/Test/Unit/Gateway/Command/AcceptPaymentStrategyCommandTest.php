@@ -19,7 +19,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Command\AcceptPaymentStrategyCommandTest
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Command\AcceptPaymentStrategyCommandTest
  */
 class AcceptPaymentStrategyCommandTest extends TestCase
 {

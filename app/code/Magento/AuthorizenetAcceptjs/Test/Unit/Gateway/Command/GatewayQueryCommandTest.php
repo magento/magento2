@@ -22,7 +22,7 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Command\GatewayQueryCommand
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Command\GatewayQueryCommand
  */
 class GatewayQueryCommandTest extends TestCase
 {

@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Setup\InstallData
+ * Test for Magento\AuthorizenetAcceptjs\Setup\InstallData
  */
 class InstallDataTest extends TestCase
 {

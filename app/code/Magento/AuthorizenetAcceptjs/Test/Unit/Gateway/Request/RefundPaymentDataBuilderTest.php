@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request\RefundPaymentDataBuilder
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Request\RefundPaymentDataBuilder
  */
 class RefundPaymentDataBuilderTest extends TestCase
 {

@@ -13,7 +13,7 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\SubjectReader
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\SubjectReader
  */
 class SubjectReaderTest extends TestCase
 {

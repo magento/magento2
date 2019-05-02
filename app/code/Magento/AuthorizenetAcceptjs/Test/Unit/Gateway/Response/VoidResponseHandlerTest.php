@@ -16,7 +16,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Response\VoidResponseHandler
+ * Test Magento\AuthorizenetAcceptjs\Gateway\Response\VoidResponseHandler
  */
 class VoidResponseHandlerTest extends TestCase
 {

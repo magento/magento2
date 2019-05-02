@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Config
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Config
  */
 class ConfigTest extends TestCase
 {

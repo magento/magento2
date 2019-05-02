@@ -16,7 +16,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request\ShippingDataBuilder
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Request\ShippingDataBuilder
  */
 class ShippingDataBuilderTest extends TestCase
 {

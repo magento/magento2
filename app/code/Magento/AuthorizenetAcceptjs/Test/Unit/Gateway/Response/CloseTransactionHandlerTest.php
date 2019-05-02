@@ -16,7 +16,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Response\CloseTransactionHandler
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandler
  */
 class CloseTransactionHandlerTest extends TestCase
 {

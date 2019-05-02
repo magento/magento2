@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Block\InfoTest
+ * Test for Magento\AuthorizenetAcceptjs\Block\InfoTest
  */
 class InfoTest extends TestCase
 {

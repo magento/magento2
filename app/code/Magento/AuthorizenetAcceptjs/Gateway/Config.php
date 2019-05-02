@@ -34,19 +34,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const SOLUTION_ID_PRODUCTION = 'AAA175350';
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
-     * @param null|string $methodCode
-     * @param string $pathPattern
-     */
-    public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        $methodCode = null,
-        $pathPattern = self::DEFAULT_PATH_PATTERN
-    ) {
-        parent::__construct($scopeConfig, $methodCode, $pathPattern);
-    }
-
-    /**
      * Gets the login id
      *
      * @param int|null $storeId

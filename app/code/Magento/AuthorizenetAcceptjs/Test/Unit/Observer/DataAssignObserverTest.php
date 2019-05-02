@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Observer\DataAssignObserver
+ * Test for Magento\AuthorizenetAcceptjs\Observer\DataAssignObserver
  */
 class DataAssignObserverTest extends TestCase
 {

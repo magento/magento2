@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Command\RefundTransactionStrategyCommand
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Command\RefundTransactionStrategyCommand
  */
 class RefundTransactionStrategyCommandTest extends TestCase
 {

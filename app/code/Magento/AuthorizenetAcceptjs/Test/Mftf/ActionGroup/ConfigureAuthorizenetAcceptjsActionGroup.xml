@@ -29,7 +29,8 @@
         <selectOption selector="{{AdminAuthorizenetAcceptjsConfigurationSection.enabledDefaultSelect}}" userInput="Yes" stepKey="fillExpYear"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage" />
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickOnSave"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the configuration." stepKey="waitForSuccessMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForSuccessMessageAppears"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
     </actionGroup>
     <actionGroup name="DisableAuthorizenetAcceptjs">
         <magentoCLI command="config:set {{AuthorizenetAcceptjsConfigData.path}} {{AuthorizenetAcceptjsConfigData.value}}" stepKey="disableAuthorizenetAcceptjs"/>

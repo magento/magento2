@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request\OrderDataBuilder
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Request\OrderDataBuilder
  */
 class OrderDataBuilderTest extends TestCase
 {

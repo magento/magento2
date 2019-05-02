@@ -17,7 +17,7 @@ define([
         },
 
         /**
-         * @{inheritdoc}
+         * @inheritdoc
          */
         initialize: function () {
             validatorHandler.initialize();

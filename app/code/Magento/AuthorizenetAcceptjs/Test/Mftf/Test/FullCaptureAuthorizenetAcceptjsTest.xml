@@ -61,7 +61,7 @@
         <actionGroup ref="CheckoutSelectShippingMethodActionGroup" stepKey="selectFlatRateShipping">
             <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>
-        <actionGroup ref="StorefrontFillPaymentInformation" stepKey="fillPaymentInfo"/>
+        <actionGroup ref="StorefrontFillAuthorizenetPaymentInformation" stepKey="fillPaymentInfo"/>
 
         <!-- Place Order -->
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceOrder">

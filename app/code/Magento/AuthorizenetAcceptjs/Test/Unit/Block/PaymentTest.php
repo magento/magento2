@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Block\Payment
+ * Test for Magento\AuthorizenetAcceptjs\Block\Payment
  */
 class PaymentTest extends TestCase
 {

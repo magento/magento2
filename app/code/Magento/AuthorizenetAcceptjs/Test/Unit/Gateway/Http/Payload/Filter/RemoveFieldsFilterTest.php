@@ -12,7 +12,7 @@ use Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\Filter\RemoveFieldsFilter;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Http\Payload\Filter\RemoveFieldsFilter
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\Filter\RemoveFieldsFilter
  */
 class RemoveFieldsFilterTest extends TestCase
 {

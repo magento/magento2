@@ -16,7 +16,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request\PaymentDataBuilder
+ * Test for Magento\AuthorizenetAcceptjs\Gateway\Request\PaymentDataBuilder
  */
 class PaymentDataBuilderTest extends TestCase
 {

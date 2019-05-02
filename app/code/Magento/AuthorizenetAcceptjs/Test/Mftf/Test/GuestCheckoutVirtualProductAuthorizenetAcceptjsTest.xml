@@ -55,7 +55,7 @@
         <actionGroup ref="GuestCheckoutAuthorizenetFillBillingAddress" stepKey="fillAddressForm">
             <argument name="customerAddress" value="CustomerAddressSimple"/>
         </actionGroup>
-        <actionGroup ref="StorefrontFillPaymentInformation" stepKey="fillPaymentInfo"/>
+        <actionGroup ref="StorefrontFillAuthorizenetPaymentInformation" stepKey="fillPaymentInfo"/>
         <!-- Place Order -->
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceOrder">
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
