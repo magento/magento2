@@ -20,4 +20,10 @@
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" time="30" stepKey="waitForProductAddedMessage"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{product.name}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
     </actionGroup>
+    <actionGroup name="StorefrontAddSimpleProductWithQtyActionGroup" extends="AddSimpleProductToCart">
+        <arguments>
+            <argument name="quantity" type="string" defaultValue="1"/>
+        </arguments>
+        <fillField userInput="{{quantity}}" selector="{{StorefrontProductPageSection.qtyInput}}" stepKey="fillProductQty" after="goToProductPage"/>
+    </actionGroup>
 </actionGroups>
