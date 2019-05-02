@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 return [
     'data' => [
         'dest_country_id' => 'DE',
@@ -24,6 +26,7 @@ return [
         'limit_carrier' => null,
         'base_subtotal_incl_tax' => '5',
         'orig_country_id' => 'US',
+        'country_id' => 'US',
         'orig_region_id' => '12',
         'orig_city' => 'Fremont',
         'orig_postcode' => '94538',
@@ -44,5 +47,5 @@ return [
         'ship_date' => '2014-01-09',
         'action' => 'RateEstimate',
         'all_items' => [],
-    ]
+    ],
 ];
