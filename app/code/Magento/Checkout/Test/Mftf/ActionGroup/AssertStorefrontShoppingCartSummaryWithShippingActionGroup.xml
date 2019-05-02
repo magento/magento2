@@ -13,7 +13,8 @@
         </arguments>
         <waitForLoadingMaskToDisappear stepKey="waitForMaskToDisappear" after="assertSubtotal"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.shipping}}" time="60" stepKey="waitForElementToBeVisible" after="waitForMaskToDisappear"/>
-        <wait time="5" stepKey="waitForShippingDetailsToLoad" after="waitForElementToBeVisible"/>
+        <!-- Shipping can take a long time to change in builds, can't rely on an explicit wait-->
+        <wait time="30" stepKey="waitForShippingDetailsToLoad" after="waitForElementToBeVisible"/>
         <see userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" stepKey="assertShipping" after="waitForShippingDetailsToLoad" />
     </actionGroup>
 </actionGroups>

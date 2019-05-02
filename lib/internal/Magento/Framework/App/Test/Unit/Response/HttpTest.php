@@ -290,45 +290,6 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('json_string', $this->model->getBody('default'));
     }
 
-    /**
-     *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage ObjectManager isn't initialized
-     */
-    public function testWakeUpWithException()
-    {
-        /* ensure that the test preconditions are met */
-        $objectManagerClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $instanceProperty = $objectManagerClass->getProperty('_instance');
-        $instanceProperty->setAccessible(true);
-        $instanceProperty->setValue(null);
-
-        $this->model->__wakeup();
-        $this->assertNull($this->cookieMetadataFactoryMock);
-        $this->assertNull($this->cookieManagerMock);
-    }
-
-    /**
-     * Test for the magic method __wakeup
-     *
-     * @covers \Magento\Framework\App\Response\Http::__wakeup
-     */
-    public function testWakeUpWith()
-    {
-        $objectManagerMock = $this->createMock(\Magento\Framework\App\ObjectManager::class);
-        $objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with(\Magento\Framework\Stdlib\CookieManagerInterface::class)
-            ->will($this->returnValue($this->cookieManagerMock));
-        $objectManagerMock->expects($this->at(1))
-            ->method('get')
-            ->with(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class)
-            ->will($this->returnValue($this->cookieMetadataFactoryMock));
-
-        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
-        $this->model->__wakeup();
-    }
-
     public function testSetXFrameOptions()
     {
         $value = 'DENY';

@@ -55,6 +55,7 @@
         <!--Assert Product Details In Checkout cart -->
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertProductItemInCheckOutCart">
             <argument name="productName" value="$$createDownloadableProduct.name$$"/>
+            <argument name="productSku" value="$$createDownloadableProduct.sku$$"/>
             <argument name="productPrice" value="$123.00"/>
             <argument name="subtotal" value="$123.00" />
             <argument name="qty" value="1"/>
