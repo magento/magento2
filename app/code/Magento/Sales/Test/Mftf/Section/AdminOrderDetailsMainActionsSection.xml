@@ -19,5 +19,6 @@
         <element name="reorder" type="button" selector="#order_reorder" timeout="30"/>
         <element name="edit" type="button" selector="#order_edit" timeout="30"/>
         <element name="modalOk" type="button" selector=".action-accept"/>
+        <element name="unhold" type="button" selector="#order-view-unhold-button" timeout="30"/>
     </section>
 </sections>
