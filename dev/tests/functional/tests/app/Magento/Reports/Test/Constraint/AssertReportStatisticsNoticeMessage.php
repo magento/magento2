@@ -38,6 +38,7 @@ class AssertReportStatisticsNoticeMessage extends AbstractAssertSalesReportResul
         $this->salesReportPage = $salesReportPage;
         $this->searchInSalesReportGrid($salesReport);
         $date = $this->getLastUpdatedDate();
+        $currentDate->setTimezone(new \DateTimeZone($_ENV['magento_timezone']));
         $currentDateTime = $currentDate->format('M j, Y, g');
         $displayedDateTime = date('M j, Y, g', strtotime($date));
         \PHPUnit\Framework\Assert::assertEquals(
