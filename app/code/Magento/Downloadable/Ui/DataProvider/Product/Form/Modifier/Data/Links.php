@@ -156,7 +156,7 @@ class Links
         $sampleFile = $link->getSampleFile();
         if ($sampleFile) {
             $file = $this->downloadableFile->getFilePath($this->linkModel->getBaseSamplePath(), $sampleFile);
-            if ($this->checkLinksFile($file)) {
+            if ($this->isLinkFileValid($file)) {
                 $linkData['sample']['file'][0] = [
                     'file' => $sampleFile,
                     'name' => $this->downloadableFile->getFileFromPathFile($sampleFile),
@@ -185,7 +185,7 @@ class Links
         $linkFile = $link->getLinkFile();
         if ($linkFile) {
             $file = $this->downloadableFile->getFilePath($this->linkModel->getBasePath(), $linkFile);
-            if ($this->checkLinksFile($file)) {
+            if ($this->isLinkFileValid($file)) {
                 $linkData['file'][0] = [
                     'file' => $linkFile,
                     'name' => $this->downloadableFile->getFileFromPathFile($linkFile),
@@ -208,7 +208,7 @@ class Links
      * @param string $file
      * @return bool
      */
-    private function checkLinksFile(string $file): bool
+    private function isLinkFileValid(string $file): bool
     {
         try {
             return $this->downloadableFile->ensureFileInFilesystem($file);

@@ -235,7 +235,7 @@ class SampleRepositoryTest extends WebapiAbstract
      * @expectedExceptionMessage Sample file not found. Please try again.
      * @return void
      */
-    public function testCreateThrowsExceptionIfSampleFileNotFoundInSystem(): void
+    public function testCreateSampleWithMissingFileThrowsException(): void
     {
         $requestData = [
             'isGlobalScopeContent' => false,

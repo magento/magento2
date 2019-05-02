@@ -42,6 +42,9 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
      */
     private $downloadableProductTypeMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);

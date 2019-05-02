@@ -137,7 +137,7 @@ class Samples
         $sampleFile = $sample->getSampleFile();
         if ($sampleFile) {
             $file = $this->downloadableFile->getFilePath($this->sampleModel->getBasePath(), $sampleFile);
-            if ($this->checkSamplesFile($file)) {
+            if ($this->isSampleFileValid($file)) {
                 $sampleData['file'][0] = [
                     'file' => $sampleFile,
                     'name' => $this->downloadableFile->getFileFromPathFile($sampleFile),
@@ -160,7 +160,7 @@ class Samples
      * @param string $file
      * @return bool
      */
-    private function checkSamplesFile(string $file): bool
+    private function isSampleFileValid(string $file): bool
     {
         try {
             return $this->downloadableFile->ensureFileInFilesystem($file);

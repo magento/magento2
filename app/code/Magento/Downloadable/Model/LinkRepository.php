@@ -180,14 +180,14 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         if ($link->getId() !== null) {
             return $this->updateLink($product, $link, $isGlobalScopeContent);
         } else {
-            if ($product->getTypeId() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
+            if ($product->getTypeId() !== Type::TYPE_DOWNLOADABLE) {
                 throw new InputException(
                     __('The product needs to be the downloadable type. Verify the product and try again.')
                 );
             }
             $this->validateLinkType($link);
-            $validateSampleContent = $this->isValidateSample($link);
-            if (!$this->contentValidator->isValid($link, true, $validateSampleContent)) {
+            $this->validateSampleType($link);
+            if (!$this->contentValidator->isValid($link, true, $link->hasSampleType())) {
                 throw new InputException(__('The link information is invalid. Verify the link and try again.'));
             }
             $title = $link->getTitle();
@@ -304,7 +304,8 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
             );
         }
         $this->validateLinkType($link);
-        $validateSampleContent = $this->isValidateSample($link);
+        $this->validateSampleType($link);
+        $validateSampleContent = $link->hasSampleType();
         if (!$this->contentValidator->isValid($link, true, $validateSampleContent)) {
             throw new InputException(__('The link information is invalid. Verify the link and try again.'));
         }
@@ -349,7 +350,8 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      * Check that Link type exist.
      *
      * @param LinkInterface $link
-     * @throws \Magento\Framework\Exception\InputException
+     * @return void
+     * @throws InputException
      */
     private function validateLinkType(LinkInterface $link): void
     {
@@ -361,21 +363,15 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     /**
      * Check that Link sample type exist.
      *
-     * @param \Magento\Downloadable\Api\Data\LinkInterface $link
-     * @return bool
-     * @throws \Magento\Framework\Exception\InputException
+     * @param LinkInterface $link
+     * @return void
+     * @throws InputException
      */
-    private function isValidateSample(LinkInterface $link): bool
+    private function validateSampleType(LinkInterface $link): void
     {
-        if ($link->hasSampleType()) {
-            if (in_array($link->getSampleType(), ['url', 'file'], true)) {
-                return true;
-            } else {
-                throw new InputException(__('The link sample type is invalid. Verify and try again.'));
-            }
+        if ($link->hasSampleType() && !in_array($link->getSampleType(), ['url', 'file'], true)) {
+            throw new InputException(__('The link sample type is invalid. Verify and try again.'));
         }
-
-        return false;
     }
 
     /**
