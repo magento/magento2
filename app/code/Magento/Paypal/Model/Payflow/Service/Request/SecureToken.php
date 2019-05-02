@@ -64,6 +64,7 @@ class SecureToken
         $request->setTrxtype(Payflowpro::TRXTYPE_AUTH_ONLY);
         $request->setVerbosity('HIGH');
         $request->setAmt(0);
+        $request->setCurrency($quote->getBaseCurrencyCode());
         $request->setCreatesecuretoken('Y');
         $request->setSecuretokenid($this->mathRandom->getUniqueHash());
         $request->setReturnurl($this->url->getUrl('paypal/transparent/response'));

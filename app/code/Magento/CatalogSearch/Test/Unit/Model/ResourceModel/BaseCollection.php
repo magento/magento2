@@ -5,8 +5,6 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 
-use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
-
 /**
  * Base class for Collection tests.
  *
@@ -44,17 +42,19 @@ class BaseCollection extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Get mock for ResourceModelPool so Collection can be used.
+     * Get mock for UniversalFactory so Collection can be used.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|ResourceModelPoolInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getResourceModelPool()
+    protected function getUniversalFactory()
     {
         $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
             ->disableOriginalConstructor()
             ->setMethods(['select'])
             ->getMockForAbstractClass();
-        $select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $connection->expects($this->any())->method('select')->willReturn($select);
 
         $entity = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
@@ -74,14 +74,14 @@ class BaseCollection extends \PHPUnit\Framework\TestCase
             ->method('getEntityTable')
             ->willReturn('table');
 
-        $resourceModelPool = $this->getMockBuilder(ResourceModelPoolInterface::class)
-            ->setMethods(['get'])
+        $universalFactory = $this->getMockBuilder(\Magento\Framework\Validator\UniversalFactory::class)
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $resourceModelPool->expects($this->once())
-            ->method('get')
+        $universalFactory->expects($this->once())
+            ->method('create')
             ->willReturn($entity);
 
-        return $resourceModelPool;
+        return $universalFactory;
     }
 }
