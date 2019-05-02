@@ -5,20 +5,21 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQlCache\Controller\Cms;
+namespace Magento\GraphQlCache\Controller\UrlRewrite;
 
-use Magento\Cms\Model\BlockRepository;
+use Magento\Cms\Api\Data\PageInterface;
+use Magento\Cms\Api\GetPageByIdentifierInterface;
 use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
 
 /**
- * Test caching works for CMS blocks
+ * Test caching works for cmsPage UrlResolver
  *
  * @magentoAppArea graphql
  * @magentoCache full_page enabled
  * @magentoDbIsolation disabled
  */
-class BlockCacheTest extends AbstractGraphqlCacheTest
+class CmsPageUrlResolverCacheTest extends AbstractGraphqlCacheTest
 {
     /**
      * @var GraphQl
@@ -31,36 +32,37 @@ class BlockCacheTest extends AbstractGraphqlCacheTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->graphqlController = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
+        $this->graphqlController = $this->objectManager->get(GraphQl::class);
     }
 
     /**
-     * Test that the correct cache tags get added to request for cmsBlocks
-     *
-     * @magentoDataFixture Magento/Cms/_files/block.php
+     * @magentoDataFixture Magento/Cms/_files/pages.php
      */
-    public function testCmsBlocksRequestHasCorrectTags(): void
+    public function testCmsUrlResolverRequestHasCorrectTags()
     {
-        $blockIdentifier = 'fixture_block';
-        $blockRepository = $this->objectManager->get(BlockRepository::class);
-        $block = $blockRepository->getById($blockIdentifier);
-
+        /** @var GetPageByIdentifierInterface $page */
+        $page = $this->objectManager->get(GetPageByIdentifierInterface::class);
+        /** @var PageInterface $cmsPage */
+        $cmsPage = $page->execute('page100', 0);
+        $cmsPageId = $cmsPage->getId();
+        $requestPath = $cmsPage->getIdentifier();
         $query
             = <<<QUERY
- {
-    cmsBlocks(identifiers: ["$blockIdentifier"]) {
-        items {
-            title
-    	    identifier
-            content
-        }
-    }
+{
+  urlResolver(url:"{$requestPath}")
+  {
+   id
+   relative_url
+   canonical_url
+   type
+  }
 }
 QUERY;
         $request = $this->prepareRequest($query);
+        /** @var \Magento\Framework\App\Response\Http $response */
         $response = $this->graphqlController->dispatch($request);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $expectedCacheTags = ['cms_b', 'cms_b_' . $block->getId(), 'cms_b_' . $block->getIdentifier(), 'FPC'];
+        $expectedCacheTags = ['cms_p','cms_p_' . $cmsPageId,'FPC'];
         $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
         $actualCacheTags = explode(',', $rawActualCacheTags);
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
