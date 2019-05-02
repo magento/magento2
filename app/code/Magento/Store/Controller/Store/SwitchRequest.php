@@ -10,33 +10,23 @@ namespace Magento\Store\Controller\Store;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Customer\Model\Session as CustomerSession;
-use \Magento\Framework\App\DeploymentConfig as DeploymentConfig;
 use Magento\Store\Model\StoreSwitcher\HashGenerator;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use \Magento\Framework\Exception\LocalizedException;
-use Magento\Store\Model\StoreIsInactiveException;
+use Magento\Framework\Url\DecoderInterface;
+use \Magento\Framework\App\ActionInterface;
 
 /**
  * Builds correct url to target store and performs redirect.
  */
 class SwitchRequest extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
-    /**
-     * @var StoreRepositoryInterface
-     */
-    private $storeRepository;
 
     /**
      * @var customerSession
      */
     private $customerSession;
-
-    /**
-     * @var \Magento\Framework\App\DeploymentConfig
-     */
-    private $deploymentConfig;
 
     /**
      * @var CustomerRepositoryInterface
@@ -49,27 +39,29 @@ class SwitchRequest extends \Magento\Framework\App\Action\Action implements Http
     private $hashGenerator;
 
     /**
+     * @var DecoderInterface
+     */
+    private $urlDecoder;
+
+    /**
      * @param Context $context
-     * @param StoreRepositoryInterface $storeRepository
      * @param CustomerSession $session
-     * @param DeploymentConfig $deploymentConfig
      * @param CustomerRepositoryInterface $customerRepository
      * @param HashGenerator $hashGenerator
+     * @param DecoderInterface $urlDecoder
      */
     public function __construct(
         Context $context,
-        StoreRepositoryInterface $storeRepository,
         CustomerSession $session,
-        DeploymentConfig $deploymentConfig,
         CustomerRepositoryInterface $customerRepository,
-        HashGenerator $hashGenerator
+        HashGenerator $hashGenerator,
+        DecoderInterface $urlDecoder
     ) {
         parent::__construct($context);
-        $this->storeRepository = $storeRepository;
         $this->customerSession = $session;
-        $this->deploymentConfig = $deploymentConfig;
         $this->customerRepository = $customerRepository;
         $this->hashGenerator = $hashGenerator;
+        $this->urlDecoder = $urlDecoder;
     }
 
     /**
@@ -82,41 +74,30 @@ class SwitchRequest extends \Magento\Framework\App\Action\Action implements Http
         $fromStoreCode = (string)$this->_request->getParam('___from_store');
         $customerId = (int)$this->_request->getParam('customer_id');
         $timeStamp = (string)$this->_request->getParam('time_stamp');
-        $targetStoreCode = $this->_request->getParam('___to_store');
         $signature = (string)$this->_request->getParam('signature');
         $error = null;
+        $encodedUrl = (string)$this->_request->getParam(ActionInterface::PARAM_NAME_URL_ENCODED);
+        $targetUrl = $this->urlDecoder->decode($encodedUrl);
+        $data=[$customerId, $timeStamp, $fromStoreCode];
 
-        try {
-            $fromStore = $this->storeRepository->get($fromStoreCode);
-            $targetStore=$this->storeRepository->getActiveStoreByCode($targetStoreCode);
-            $targetUrl=$targetStore->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK);
-        } catch (NoSuchEntityException $e) {
-            $error = __('Requested store is not found.');
-        } catch (StoreIsInactiveException $e) {
-            $error = __('Requested store is inactive.');
-        }
-
-        if ($this->hashGenerator->validateHash($signature, [$customerId, $timeStamp, $fromStoreCode])) {
+        if ($targetUrl && $this->hashGenerator->validateHash($signature, $data)) {
             try {
                 $customer = $this->customerRepository->getById($customerId);
                 if (!$this->customerSession->isLoggedIn()) {
                     $this->customerSession->setCustomerDataAsLoggedIn($customer);
                 }
+                $this->getResponse()->setRedirect($targetUrl);
             } catch (NoSuchEntityException $e) {
                 $error = __('The requested customer does not exist.');
             } catch (LocalizedException $e) {
                 $error = __('There was an error retrieving the customer record.');
             }
         } else {
-            $error = __('Invalid request. Store switching action cannot be performed at this time.');
+            $error = __('The requested store cannot be found. Please check the request and try again.');
         }
 
         if ($error !== null) {
             $this->messageManager->addErrorMessage($error);
-            //redirect to previous store
-            $this->getResponse()->setRedirect($fromStore->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK));
-        } else {
-            $this->getResponse()->setRedirect($targetUrl);
         }
     }
 }

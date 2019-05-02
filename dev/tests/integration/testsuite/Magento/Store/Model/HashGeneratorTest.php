@@ -14,6 +14,8 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Session;
 use \Magento\Framework\App\DeploymentConfig as DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use \Magento\Framework\App\ActionInterface;
+use Magento\Framework\Url\Helper\Data as UrlHelper;
 
 /**
  * Test class for \Magento\Store\Model\StoreSwitcher\HashGenerator
@@ -33,7 +35,7 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     *
+     * @var int
      */
     private $customerId;
 
@@ -51,9 +53,14 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
     private $deploymentConfig;
 
     /**
-     *
+     * @var string
      */
     private $key;
+
+    /**
+     * @var UrlHelper
+     */
+    private $urlHelper;
 
     /**
      * Class dependencies initialization
@@ -80,6 +87,7 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->customerId = $customer->getId();
         $this->deploymentConfig = $this->objectManager->get(DeploymentConfig::class);
         $this->key = (string)$this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
+        $this->urlHelper=$this->objectManager->create(UrlHelper::class);
     }
 
     /**
@@ -94,6 +102,7 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
         $redirectUrl = "http://domain.com/";
         $fromStoreCode = 'test';
         $toStoreCode = 'fixture_second_store';
+        $encodedUrl=$this->urlHelper->getEncodedUrl($redirectUrl);
         /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
         $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
         $fromStore = $storeRepository->get($fromStoreCode);
@@ -103,9 +112,18 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
         $signature = hash_hmac('sha256', $data, $this->key);
         $customerId = $this->customerId;
 
-        $expectedUrl = "http://domain.com/stores/store/switchrequest?customer_id=$customerId";
-        $expectedUrl .= "&time_stamp=$timeStamp&signature=$signature";
-        $expectedUrl .= "&___from_store=$fromStoreCode&___to_store=$toStoreCode";
+        $expectedUrl = "http://domain.com/stores/store/switchrequest";
+        $expectedUrl = $this->urlHelper->addRequestParam(
+            $expectedUrl,
+            ['customer_id' => $customerId]
+        );
+        $expectedUrl = $this->urlHelper->addRequestParam($expectedUrl, ['time_stamp' => $timeStamp]);
+        $expectedUrl = $this->urlHelper->addRequestParam($expectedUrl, ['signature' => $signature]);
+        $expectedUrl = $this->urlHelper->addRequestParam($expectedUrl, ['___from_store' => $fromStoreCode]);
+        $expectedUrl = $this->urlHelper->addRequestParam(
+            $expectedUrl,
+            [ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl]
+        );
         $this->assertEquals($expectedUrl, $this->hashGenerator->switch($fromStore, $toStore, $redirectUrl));
     }
 

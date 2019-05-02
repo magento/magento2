@@ -13,6 +13,7 @@ use \Magento\Framework\App\DeploymentConfig as DeploymentConfig;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Authorization\Model\UserContextInterface;
+use \Magento\Framework\App\ActionInterface;
 
 /**
  * Generate one time token and build redirect url
@@ -61,6 +62,7 @@ class HashGenerator implements StoreSwitcherInterface
     {
         $targetUrl = $redirectUrl;
         $customerId = null;
+        $encodedUrl = $this->urlHelper->getEncodedUrl($redirectUrl);
 
         if ($this->currentUser->getUserType() == UserContextInterface::USER_TYPE_CUSTOMER) {
             $customerId = $this->currentUser->getUserId();
@@ -71,11 +73,9 @@ class HashGenerator implements StoreSwitcherInterface
             $urlParts = parse_url($targetUrl);
             $host = $urlParts['host'];
             $scheme = $urlParts['scheme'];
-            $path=$urlParts['path'];
             $key = (string)$this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
             $timeStamp = time();
             $fromStoreCode = $fromStore->getCode();
-            $targetStoreCode = $targetStore->getCode();
             $data = implode(',', [$customerId, $timeStamp, $fromStoreCode]);
             $signature = hash_hmac('sha256', $data, $key);
             $targetUrl = $scheme . "://" . $host . '/stores/store/switchrequest';
@@ -86,8 +86,10 @@ class HashGenerator implements StoreSwitcherInterface
             $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['time_stamp' => $timeStamp]);
             $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['signature' => $signature]);
             $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['___from_store' => $fromStoreCode]);
-            $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['___to_store' => $targetStoreCode]);
-            $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['path' => $path]);
+            $targetUrl = $this->urlHelper->addRequestParam(
+                $targetUrl,
+                [ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl]
+            );
         }
         return $targetUrl;
     }
