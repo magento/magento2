@@ -423,14 +423,9 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $properties = parent::__sleep();
         $properties = array_diff($properties, ['_coreFileStorageDatabase', '_config']);
         return $properties;
@@ -440,14 +435,9 @@ class Store extends AbstractExtensibleModel implements
      * Init not serializable fields
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         parent::__wakeup();
         $this->_coreFileStorageDatabase = ObjectManager::getInstance()
             ->get(\Magento\MediaStorage\Helper\File\Storage\Database::class);

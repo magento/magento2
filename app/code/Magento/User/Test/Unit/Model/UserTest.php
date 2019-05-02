@@ -47,6 +47,31 @@ class UserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+    public function testSleep()
+    {
+        $excludedProperties = [
+            '_eventManager',
+            '_cacheManager',
+            '_registry',
+            '_appState',
+            '_userData',
+            '_config',
+            '_validatorObject',
+            '_roleFactory',
+            '_encryptor',
+            '_transportBuilder',
+            '_storeManager',
+            '_validatorBeforeSave'
+        ];
+        $actualResult = $this->model->__sleep();
+        $this->assertNotEmpty($actualResult);
+        $expectedResult = array_intersect($actualResult, $excludedProperties);
+        $this->assertEmpty($expectedResult);
+    }
+
+    /**
+     * @return void
+     */
     public function testChangeResetPasswordLinkToken()
     {
         $token = '1';
