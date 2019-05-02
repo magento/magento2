@@ -96,7 +96,7 @@ QUERY;
         $this->assertEquals(
             'MISS',
             $response->getHeader('X-Magento-Cache-Debug')->getFieldValue(),
-            "expected MISS on page pageBlank dsdss id {$pageIdBlank}"
+            "expected MISS on page pageBlank id {$pageIdBlank}"
         );
         $requestedCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
         $expectedCacheTags = ['cms_p', 'cms_p_' .$pageIdBlank , 'FPC'];

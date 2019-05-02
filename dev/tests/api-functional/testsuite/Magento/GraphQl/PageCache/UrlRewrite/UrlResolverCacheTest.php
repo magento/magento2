@@ -86,18 +86,7 @@ class UrlResolverCacheTest extends GraphQlAbstract
             ]
         );
         $categoryId = $actualUrls->getEntityId();
-        $query
-            = <<<QUERY
-{
-  urlResolver(url:"{$categoryUrlKey}")
-  {
-   id
-   relative_url
-   canonical_url
-   type
-  }
-}
-QUERY;
+        $query = $this->getUrlResolverQuery($categoryUrlKey);
         $responseMiss = $this->graphQlQueryWithResponseHeaders($query);
         $this->assertArrayHasKey('X-Magento-Tags', $responseMiss['headers']);
         $actualTags = explode(',', $responseMiss['headers']['X-Magento-Tags']);
@@ -130,18 +119,8 @@ QUERY;
         $page->load('page100');
         $cmsPageId = $page->getId();
         $requestPath = $page->getIdentifier();
-        $query
-            = <<<QUERY
-{
-  urlResolver(url:"{$requestPath}")
-  {
-   id
-   relative_url
-   canonical_url
-   type
-  }
-}
-QUERY;
+
+        $query = $this->getUrlResolverQuery($requestPath);
         $responseMiss = $this->graphQlQueryWithResponseHeaders($query);
         $this->assertArrayHasKey('X-Magento-Tags', $responseMiss['headers']);
         $actualTags = explode(',', $responseMiss['headers']['X-Magento-Tags']);
