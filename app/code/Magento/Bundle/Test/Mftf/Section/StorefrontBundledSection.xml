@@ -36,6 +36,6 @@
         <element name="checkboxOptionLabel" type="text" selector="//label//span[contains(text(), '{{optionName}}')]/../..//div[@class='control']//div[@class='field choice']//label[contains(.,'{{productName}}')]" parameterized="true"/>
         <element name="multiselectOptionFourProducts" type="multiselect" selector="//label//span[contains(text(), '{{productName}}')]/../..//select[@multiple='multiple']" parameterized="true"/>
         <element name="currencyTrigger" type="select" selector="#switcher-currency-trigger" timeout="30"/>
-        <element name="currency" type="select" selector="//a[text()='{{arg}}']" parameterized="true" timeout="10"/>
+        <element name="currency" type="select" selector="//a[text()='{{arg}}']" parameterized="true"/>
     </section>
 </sections>
