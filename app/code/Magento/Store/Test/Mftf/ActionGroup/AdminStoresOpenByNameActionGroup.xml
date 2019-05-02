@@ -8,19 +8,10 @@
 <!-- Test XML Example -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenStoreViewByNameActionGroup">
-        <arguments>
-            <argument name="storeViewName" type="string"/>
-        </arguments>
-        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
-        <!--Filter stores grid by store view-->
-        <conditionalClick selector="{{AdminStoresGridFilterSection.clearFilters}}" dependentSelector="{{AdminStoresGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
-        <click selector="{{AdminStoresGridFilterSection.filters}}" stepKey="openStoresFilters"/>
-        <fillField selector="{{AdminStoresGridFilterSection.storeViewFilter}}" userInput="{{storeViewName}}" stepKey="fillStoreViewFilter"/>
-        <click selector="{{AdminStoresGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+    <actionGroup name="AdminOpenStoreViewByNameActionGroup" extends="filterStoresGridByStoreView">
+        <amOnPage url="{{AdminSystemStorePage.url}}" before="clickClearFilters" stepKey="amOnAdminSystemStorePage"/>
         <!--Open store view page-->
-        <see selector="{{AdminStoresGridSection.storeViewInFirstRow}}" userInput="{{storeViewName}}" stepKey="seeAssertStoreViewInGridMessage"/>
+        <see selector="{{AdminStoresGridSection.storeViewInFirstRow}}" userInput="{{storeView}}" after="waitForGridLoad" stepKey="seeAssertStoreViewInGridMessage"/>
         <click selector="{{AdminStoresGridSection.storeViewInFirstRow}}" stepKey="clickStoreViewFirstRowInGrid"/>
         <waitForPageLoad stepKey="waitForAdminSystemStoreViewPageLoad"/>
     </actionGroup>
