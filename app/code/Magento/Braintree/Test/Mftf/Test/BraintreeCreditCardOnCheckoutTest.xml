@@ -81,7 +81,7 @@
         <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="LoggedInCheckoutFillNewBillingAddressActionGroup1">
             <argument name="Address" value="US_Address_NY"/>
         </actionGroup>
-        <click selector="{{CheckoutPaymentSection.addressAction('Save Address')}}" stepKey="SaveAddress"/>
+        <click selector="{{CheckoutPaymentSection.addressAction('Ship here')}}" stepKey="SaveAddress"/>
         <waitForPageLoad stepKey="waitForPageLoad9"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext1"/>
         <waitForPageLoad stepKey="waitForPageLoad10"/>

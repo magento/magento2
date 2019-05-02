@@ -890,9 +890,14 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * @inheritdoc
      * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         return array_diff(
             parent::__sleep(),
             ['_fetchStrategy', '_logger', '_conn', 'extensionAttributesJoinProcessor']
@@ -902,9 +907,14 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * @inheritdoc
      * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_logger = $objectManager->get(Logger::class);
