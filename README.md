@@ -27,7 +27,7 @@ To suggest documentation improvements, click [here][4].
 [4]: <https://devdocs.magento.com>
 
 <h3>Community Maintainers</h3>
-The members of this team have been recognized for their outstanding commitment to maintaining and improving Magento. Magento has granted them permission to accept, merge, and reject pull requests, as well as review issues, and thanks these Community Maintainers for their valuable contributions.
+The members of this team have been recognized for their outstanding commitment to maintaining and improving Magento. Magento has granted them permission to accept, merge and reject pull requests, as well as review issues, and thanks these Community Maintainers for their valuable contributions.
 
 <a href="https://magento.com/magento-contributors#maintainers">
     <img src="https://raw.githubusercontent.com/wiki/magento/magento2/images/maintainers.png"/>
