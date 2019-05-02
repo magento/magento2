@@ -17,7 +17,7 @@ use Magento\Framework\Stdlib\ArrayManager;
  */
 class AuthorizenetDataProvider implements AdditionalDataProviderInterface
 {
-    private const PATH_ADDITIONAL_DATA = 'input/payment_method/additional_data/authorizenet';
+    private const PATH_ADDITIONAL_DATA = 'input/payment_method/additional_data/authorizenet_acceptjs';
 
     /**
      * @var ArrayManager

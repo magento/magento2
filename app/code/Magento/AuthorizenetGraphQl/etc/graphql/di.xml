@@ -9,7 +9,7 @@
     <type name="Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool">
         <arguments>
             <argument name="dataProviders" xsi:type="array">
-                <item name="authorizenet" xsi:type="object">Magento\AuthorizenetGraphQl\Model\AuthorizenetDataProvider</item>
+                <item name="authorizenet_acceptjs" xsi:type="object">Magento\AuthorizenetGraphQl\Model\AuthorizenetDataProvider</item>
             </argument>
         </arguments>
     </type>

@@ -79,13 +79,10 @@ class SetPaymentMethodOnCart implements ResolverInterface
         $paymentMethodCode = $args['input']['payment_method']['code'];
 
         $poNumber = $args['input']['payment_method']['purchase_order_number'] ?? null;
-        $additionalData = $args['input']['payment_method']['additional_data'] ?? [];
-        if (empty($additionalData)) {
-            $additionalData = $this->additionalDataProviderPool->getData(
-                $paymentMethodCode,
-                $args
-            );
-        }
+        $additionalData = $this->additionalDataProviderPool->getData(
+            $paymentMethodCode,
+            $args
+        ) ?? [];
 
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
         $payment = $this->paymentFactory->create([
