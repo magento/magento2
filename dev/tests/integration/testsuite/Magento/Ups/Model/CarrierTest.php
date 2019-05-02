@@ -57,6 +57,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store carriers/ups/active 1
      * @magentoConfigFixture current_store carriers/ups/allowed_methods 1DA,GND
      * @magentoConfigFixture current_store carriers/ups/free_method GND
+     * @magentoConfigFixture current_store carriers/ups/type UPS
      */
     public function testCollectFreeRates()
     {
@@ -75,5 +76,30 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $methods = $result[$this->carrier::CODE]['methods'];
         $this->assertEquals(0, $methods['GND']['price']);
         $this->assertNotEquals(0, $methods['1DA']['price']);
+    }
+
+    /**
+     * Check default UPS carrier parameters.
+     *
+     * @return void
+     */
+    public function testValidDefaultParameters()
+    {
+        $protocolType = $this->carrier->getConfigData('type');
+        $this->assertEquals("UPS_XML", $protocolType, "Default type should be UPS_XML");
+
+        $gatewayUrl = $this->carrier->getConfigData('gateway_url');
+        $this->assertEquals(
+            "https://www.ups.com/using/services/rave/qcostcgi.cgi",
+            $gatewayUrl,
+            "Incorrect gateway url"
+        );
+
+        $gatewayXmlUrl = $this->carrier->getConfigData('gateway_xml_url');
+        $this->assertEquals(
+            "https://onlinetools.ups.com/ups.app/xml/Rate",
+            $gatewayXmlUrl,
+            "Incorrect gateway XML url"
+        );
     }
 }
