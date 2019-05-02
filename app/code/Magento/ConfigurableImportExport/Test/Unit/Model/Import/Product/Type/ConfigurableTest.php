@@ -636,16 +636,61 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             ]
         );
 
+        $rowValidationDataProvider = $this->rowValidationDataProvider();
+
         // Checking that variations with duplicate sku are invalid
-        $duplicateProduct = $this->_getNumericalSkuDataDuplicate();
-        $result = $this->configurable->isRowValid($duplicateProduct, 0);
+        $result = $this->configurable->isRowValid($rowValidationDataProvider['duplicateProduct'], 0);
         $this->assertFalse($result);
 
         // Checking that variations with SKUs that are the same when interpreted as number,
         // but different when interpreted as string are valid
-        $nonDuplicateProduct = $this->_getNumericalSkuDataNonDuplicate();
-        $result = $this->configurable->isRowValid($nonDuplicateProduct, 0);
+        $result = $this->configurable->isRowValid($rowValidationDataProvider['nonDuplicateProduct'], 0);
         $this->assertTrue($result);
+    }
+
+    /**
+     * @return array
+     */
+    public function rowValidationDataProvider()
+    {
+        return [
+            'duplicateProduct' => [
+                'sku' => 'configurableNumericalSkuDuplicateVariation',
+                'store_view_code' => null,
+                'attribute_set_code' => 'Default',
+                'product_type' => 'configurable',
+                'name' => 'Configurable Product with duplicate numerical SKUs in variations',
+                'product_websites' => 'website_1',
+                'configurable_variation_labels' => 'testattr2=Select Configuration',
+                'configurable_variations' => 'sku=1234.1,'
+                    . 'testattr2=attr2val1,'
+                    . 'display=1|sku=1234.1,'
+                    . 'testattr2=attr2val1,'
+                    . 'display=0',
+                '_store' => null,
+                '_attribute_set' => 'Default',
+                '_type' => 'configurable',
+                '_product_websites' => 'website_1',
+            ],
+            'nonDuplicateProduct' => [
+                'sku' => 'configurableNumericalSkuNonDuplicateVariation',
+                'store_view_code' => null,
+                'attribute_set_code' => 'Default',
+                'product_type' => 'configurable',
+                'name' => 'Configurable Product with different numerical SKUs in variations',
+                'product_websites' => 'website_1',
+                'configurable_variation_labels' => 'testattr2=Select Configuration',
+                'configurable_variations' => 'sku=1234.10,'
+                    . 'testattr2=attr2val1,'
+                    . 'display=1|sku=1234.1,'
+                    . 'testattr2=attr2val2,'
+                    . 'display=0',
+                '_store' => null,
+                '_attribute_set' => 'Default',
+                '_type' => 'configurable',
+                '_product_websites' => 'website_1',
+            ]
+        ];
     }
 
     /**
@@ -663,55 +708,5 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         $reflectionProperty->setValue($object, $value);
 
         return $object;
-    }
-
-    /**
-     * @return array
-     */
-    protected function _getNumericalSkuDataNonDuplicate(): array
-    {
-        return [
-            'sku' => 'configurableNumericalSkuNonDuplicateVariation',
-            'store_view_code' => null,
-            'attribute_set_code' => 'Default',
-            'product_type' => 'configurable',
-            'name' => 'Configurable Product with different numerical SKUs in variations',
-            'product_websites' => 'website_1',
-            'configurable_variation_labels' => 'testattr2=Select Configuration',
-            'configurable_variations' => 'sku=1234.10,'
-                . 'testattr2=attr2val1,'
-                . 'display=1|sku=1234.1,'
-                . 'testattr2=attr2val2,'
-                . 'display=0',
-            '_store' => null,
-            '_attribute_set' => 'Default',
-            '_type' => 'configurable',
-            '_product_websites' => 'website_1',
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    protected function _getNumericalSkuDataDuplicate(): array
-    {
-        return [
-            'sku' => 'configurableNumericalSkuDuplicateVariation',
-            'store_view_code' => null,
-            'attribute_set_code' => 'Default',
-            'product_type' => 'configurable',
-            'name' => 'Configurable Product with duplicate numerical SKUs in variations',
-            'product_websites' => 'website_1',
-            'configurable_variation_labels' => 'testattr2=Select Configuration',
-            'configurable_variations' => 'sku=1234.1,'
-                . 'testattr2=attr2val1,'
-                . 'display=1|sku=1234.1,'
-                . 'testattr2=attr2val1,'
-                . 'display=0',
-            '_store' => null,
-            '_attribute_set' => 'Default',
-            '_type' => 'configurable',
-            '_product_websites' => 'website_1',
-        ];
     }
 }
