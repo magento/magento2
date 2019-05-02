@@ -28,9 +28,22 @@ define([
          * @return {String}
          */
         getShippingMethodTitle: function () {
-            var shippingMethod = quote.shippingMethod();
+            var shippingMethod,
+                shippingTitleParts = [];
 
-            return shippingMethod ? shippingMethod['carrier_title'] + ' - ' + shippingMethod['method_title'] : '';
+            shippingMethod = quote.shippingMethod();
+
+            if (typeof shippingMethod['carrier_title'] !== 'undefined' &&
+                shippingMethod['carrier_title'].trim().length !== 0) {
+                shippingTitleParts.push(shippingMethod['carrier_title']);
+            }
+
+            if (typeof shippingMethod['method_title'] !== 'undefined' &&
+                shippingMethod['method_title'].trim().length !== 0) {
+                shippingTitleParts.push(shippingMethod['method_title']);
+            }
+
+            return shippingTitleParts.join(' - ');
         },
 
         /**

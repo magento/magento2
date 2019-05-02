@@ -21,21 +21,25 @@ define([
          * @return {*}
          */
         getShippingMethodTitle: function () {
-            var shippingMethod = '',
-                shippingMethodTitle = '';
+            var shippingMethod,
+                shippingTitleParts = [];
 
             if (!this.isCalculated()) {
                 return '';
             }
             shippingMethod = quote.shippingMethod();
 
-            if (typeof shippingMethod['method_title'] !== 'undefined') {
-                shippingMethodTitle = ' - ' + shippingMethod['method_title'];
+            if (typeof shippingMethod['carrier_title'] !== 'undefined' &&
+                shippingMethod['carrier_title'].trim().length !== 0) {
+                shippingTitleParts.push(shippingMethod['carrier_title']);
             }
 
-            return shippingMethod ?
-                shippingMethod['carrier_title'] + shippingMethodTitle :
-                shippingMethod['carrier_title'];
+            if (typeof shippingMethod['method_title'] !== 'undefined' &&
+                shippingMethod['method_title'].trim().length !== 0) {
+                shippingTitleParts.push(shippingMethod['method_title']);
+            }
+
+            return shippingTitleParts.join(' - ');
         },
 
         /**
