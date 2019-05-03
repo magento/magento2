@@ -27,8 +27,8 @@
         <click stepKey="clickToCalender" selector="{{AdminNewCatalogPriceRule.toDateButton}}"/>
         <click stepKey="clickToToday" selector="{{AdminNewCatalogPriceRule.todayDate}}"/>
         <click stepKey="openActionDropdown" selector="{{AdminNewCatalogPriceRule.actionsTab}}"/>
-        <selectOption stepKey="discountType" selector="{{AdminNewCatalogPriceRuleActions.apply}}" userInput="{{catalogRule.simple_action}}"/>
         <fillField stepKey="fillDiscountValue" selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="{{catalogRule.discount_amount}}"/>
+        <selectOption stepKey="discountType" selector="{{AdminNewCatalogPriceRuleActions.apply}}" userInput="{{catalogRule.simple_action}}"/>
         <selectOption stepKey="discardSubsequentRules" selector="{{AdminNewCatalogPriceRuleActions.disregardRules}}" userInput="Yes"/>
 
         <!-- Scroll to top and either save or save and apply after the action group -->
@@ -70,7 +70,6 @@
         <click selector="{{AdminNewCatalogPriceRule.fromDateButton}}" stepKey="clickFromCalender"/>
         <click selector="{{AdminNewCatalogPriceRule.todayDate}}" stepKey="clickFromToday"/>
     </actionGroup>
-
     <!-- Apply all of the saved catalog price rules -->
     <actionGroup name="applyCatalogPriceRules">
         <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
