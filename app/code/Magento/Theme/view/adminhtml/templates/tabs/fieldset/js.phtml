@@ -62,7 +62,7 @@ jQuery(function($) {
     $('body').trigger(
         'refreshJsList',
         {
-            jsList: <?= $block->escapeJs($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getJsFiles())) ?>
+            jsList: <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getJsFiles()) ?>
         }
     );
 });

@@ -18,7 +18,7 @@
     <img src="<?= $block->escapeUrl($block->getLogoSrc()) ?>"
          title="<?= $block->escapeHtmlAttr($block->getLogoAlt()) ?>"
          alt="<?= $block->escapeHtmlAttr($block->getLogoAlt()) ?>"
-         <?= $block->escapeHtml($block->getLogoWidth() ? 'width="' . $block->getLogoWidth() . '"' : '') ?>
-         <?= $block->escapeHtml($block->getLogoHeight() ? 'height="' . $block->getLogoHeight() . '"' : '') ?>
+         <?= $block->getLogoWidth() ? 'width="' . $block->escapeHtmlAttr($block->getLogoWidth()) . '"' : '' ?>
+         <?= $block->getLogoHeight() ? 'height="' . $block->escapeHtmlAttr($block->getLogoHeight()) . '"' : '' ?>
     />
 </a>
