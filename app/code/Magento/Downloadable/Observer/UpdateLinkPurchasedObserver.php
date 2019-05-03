@@ -63,7 +63,7 @@ class UpdateLinkPurchasedObserver implements ObserverInterface
      */
     private function getPurchasedCollection(int $orderId): PurchasedCollection
     {
-        return $purchasedCollection = $this->purchasedCollectionFactory->create()->addFieldToFilter(
+        return $this->purchasedCollectionFactory->create()->addFieldToFilter(
             'order_id',
             ['eq' => $orderId]
         );
