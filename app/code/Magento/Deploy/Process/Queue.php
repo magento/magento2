@@ -335,7 +335,7 @@ class Queue
 
                     unset($this->inProgress[$package->getPath()]);
                     return pcntl_wexitstatus($status) === 0;
-                } else if ($result === -1) {
+                } elseif ($result === -1) {
                     $errno = pcntl_errno();
                     $strerror = pcntl_strerror($errno);
 
