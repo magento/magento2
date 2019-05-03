@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CmsGraphQl\Model\Resolver;
 
-use Magento\CmsGraphQl\Model\Resolver\DataProvider\PageDataProvider as PageDataProvider;
+use Magento\CmsGraphQl\Model\Resolver\DataProvider\Page as PageDataProvider;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -49,10 +49,16 @@ class Page implements ResolverInterface
             throw new GraphQlInputException(__('"Page id/identifier should be specified'));
         }
 
-        if (isset($args['id'])) {
-            $pageData = $this->getPageDataById($this->getPageId($args));
-        } elseif (isset($args['identifier'])) {
-            $pageData = $this->getPageDataByIdentifier($this->getPageIdentifier($args));
+        $pageData = [];
+
+        try {
+            if (isset($args['id'])) {
+                $pageData = $this->getPageDataById($this->getPageId($args));
+            } elseif (isset($args['identifier'])) {
+                $pageData = $this->getPageDataByIdentifier($this->getPageIdentifier($args));
+            }
+        } catch (NoSuchEntityException $e) {
+            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         }
 
         return $pageData;
@@ -83,12 +89,7 @@ class Page implements ResolverInterface
      */
     private function getPageDataById(int $pageId): array
     {
-        try {
-            $pageData = $this->pageDataProvider->getDataByPageId($pageId);
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
-        }
-        return $pageData;
+        return $this->pageDataProvider->getDataByPageId($pageId);
     }
 
     /**
@@ -98,11 +99,6 @@ class Page implements ResolverInterface
      */
     private function getPageDataByIdentifier(string $pageIdentifier): array
     {
-        try {
-            $pageData = $this->pageDataProvider->getDataByPageIdentifier($pageIdentifier);
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
-        }
-        return $pageData;
+        return $this->pageDataProvider->getDataByPageIdentifier($pageIdentifier);
     }
 }
