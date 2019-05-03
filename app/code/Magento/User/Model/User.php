@@ -448,7 +448,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @throws NotificationExceptionInterface
      * @deprecated
      * @see NotificatorInterface::sendForgotPassword()
-     *
      */
     public function sendPasswordResetConfirmationEmail()
     {

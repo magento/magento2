@@ -183,6 +183,10 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * {@inheritdoc} Added custom attributes support.
+     *
+     * @param string|array $key
+     * @param mixed $value
+     * @return $this
      */
     public function setData($key, $value = null)
     {
@@ -199,6 +203,9 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * {@inheritdoc} Unset customAttributesChanged flag
+     *
+     * @param null|string|array $key
+     * @return $thi
      */
     public function unsetData($key = null)
     {

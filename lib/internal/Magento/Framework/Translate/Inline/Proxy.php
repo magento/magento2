@@ -122,7 +122,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
     /**
      * Replace translation templates with HTML fragments
      *
-     * @param array|string &$body
+     * @param array|string $body
      * @param bool $isJson
      * @return $this
      */

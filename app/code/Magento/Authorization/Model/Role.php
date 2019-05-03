@@ -40,7 +40,7 @@ class Role extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Authorization\Model\ResourceModel\Role\Collection $resourceCollection
      * @param array $data
      */
-    public function __construct(
+    public function __construct( //phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Authorization\Model\ResourceModel\Role $resource,
