@@ -7,8 +7,7 @@
 namespace Magento\Translation\Model\Inline;
 
 /**
- * This class is responsible for parsing content and applying necessary html element
- * wrapping and client scripts for inline translation.
+ * Parse content, applying necessary html element wrapping and client scripts for inline translation.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -249,7 +248,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * Apply input filter to values of translation parameters
      *
      * @param array &$translateParams
-     * @param array $fieldNames Names of fields values of which are to be filtered
+     * @param array $fieldNames
      * @return void
      */
     protected function _filterTranslationParams(array &$translateParams, array $fieldNames)
@@ -372,7 +371,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * Format translation for simple tags.  Added translate mode attribute for vde requests.
      *
      * @param string $tagHtml
-     * @param string  $tagName
+     * @param string $tagName
      * @param array $trArr
      * @return string
      */
@@ -397,8 +396,8 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     /**
      * Get translate data by regexp
      *
-     * @param string $regexp
-     * @param string &$text
+     * @param string       $regexp
+     * @param string       &$text
      * @param string|array $locationCallback
      * @param array $options
      * @return array
