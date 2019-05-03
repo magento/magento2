@@ -55,19 +55,27 @@ class Preview extends \Magento\Backend\Block\Widget
      * Prepare html output
      *
      * @return string
+     * @throws \Exception
      */
     protected function _toHtml()
     {
+        /** @var $request \Magento\Framework\App\Request\Http */
+        $request = $this->getRequest();
+
+        if(!$request->isSafeMethod()) {
+            throw new \Exception('Wrong request.');
+        }
+
         $storeId = $this->getAnyStoreView()->getId();
         /** @var $template \Magento\Email\Model\Template */
         $template = $this->_emailFactory->create();
 
-        if ($id = (int)$this->getRequest()->getParam('id')) {
+        if ($id = (int)$request->getParam('id')) {
             $template->load($id);
         } else {
-            $template->setTemplateType($this->getRequest()->getParam('type'));
-            $template->setTemplateText($this->getRequest()->getParam('text'));
-            $template->setTemplateStyles($this->getRequest()->getParam('styles'));
+            $template->setTemplateType($request->getParam('type'));
+            $template->setTemplateText($request->getParam('text'));
+            $template->setTemplateStyles($request->getParam('styles'));
         }
 
         \Magento\Framework\Profiler::start($this->profilerName);
