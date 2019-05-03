@@ -5,6 +5,9 @@
  */
 namespace Magento\Translation\Model\ResourceModel;
 
+/**
+ * String translation utilities
+ */
 class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -46,7 +49,9 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->_localeResolver = $localeResolver;
         $this->scopeResolver = $scopeResolver;
         $this->scope = $scope;
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Escaper::class
+        );
         parent::__construct($context, $connectionName);
     }
 

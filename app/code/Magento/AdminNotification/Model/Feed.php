@@ -106,13 +106,16 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         $this->_deploymentConfig = $deploymentConfig;
         $this->productMetadata   = $productMetadata;
         $this->urlBuilder        = $urlBuilder;
-        $this->escaper           = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
+        $this->escaper           = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Escaper::class
+        );
     }
 
     /**
      * Init model
      *
      * @return void
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function _construct()
     {

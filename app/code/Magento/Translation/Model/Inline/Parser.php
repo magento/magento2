@@ -137,6 +137,8 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     private $relatedCacheTypes;
 
     /**
+     * Return cache manager
+     *
      * @return \Magento\Translation\Model\Inline\CacheManager
      *
      * @deprecated 100.1.0
@@ -164,8 +166,8 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
-        \Magento\Translation\Model\ResourceModel\StringUtilsFactory $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Translation\Model\ResourceModel\StringUtilsFactory $resource,
         \Zend_Filter_Interface $inputFilter,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\App\Cache\TypeListInterface $appCache,
@@ -180,7 +182,9 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         $this->_appCache = $appCache;
         $this->_translateInline = $translateInline;
         $this->relatedCacheTypes = $relatedCacheTypes;
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Escaper::class
+        );
     }
 
     /**
@@ -454,7 +458,8 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
                     $tagHtml = str_replace($matches[0], '', $tagHtml);
                     $trAttr = ' ' . $this->_getHtmlAttribute(
                         self::DATA_TRANSLATE,
-                        '[' . $this->escaper->escapeHtml($matches[1]) . ',' . str_replace("\"", "'", join(',', $trArr)) . ']'
+                        '[' . $this->escaper->escapeHtml($matches[1]) . ',' .
+                        str_replace("\"", "'", join(',', $trArr)) . ']'
                     );
                 } else {
                     $trAttr = ' ' . $this->_getHtmlAttribute(

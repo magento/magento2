@@ -28,7 +28,9 @@ class Country extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\Escaper $escaper = null
     ) {
         $this->_init('directory_country', 'country_id');
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Escaper::class
+        );
     }
 
     /**
