@@ -511,7 +511,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             $this->y -= 15;
             $this->_setFontBold($page, 12);
             $page->setFillColor(new \Zend_Pdf_Color_GrayScale(0));
-            $page->drawText(__('Payment Method'), 35, $this->y, 'UTF-8');
+            $page->drawText(__('Payment Method:'), 35, $this->y, 'UTF-8');
             $page->drawText(__('Shipping Method:'), 285, $this->y, 'UTF-8');
 
             $this->y -= 10;
