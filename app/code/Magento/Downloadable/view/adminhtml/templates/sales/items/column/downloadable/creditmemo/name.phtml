@@ -9,25 +9,25 @@
 ?>
 
 <?php if ($_item = $block->getItem()): ?>
-    <div class="product-title"><?= /* @escapeNotVerified */ $_item->getName() ?></div>
-    <div><strong><?= /* @escapeNotVerified */ __('SKU') ?>:</strong> <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getSku()))) ?></div>
+    <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
+    <div><strong><?= $block->escapeHtml(__('SKU')) ?>:</strong> <?= $block->escapeHtml(implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->getSku()))) ?></div>
     <?php if ($block->getOrderOptions()): ?>
         <dl class="item-options">
         <?php foreach ($block->getOrderOptions() as $_option): ?>
             <dt><?= $block->escapeHtml($_option['label']) ?></dt>
             <dd>
             <?php if (isset($_option['custom_view']) && $_option['custom_view']): ?>
-                <?= /* @escapeNotVerified */ $_option['value'] ?>
+                <?= $block->escapeHtml($_option['value']) ?>
             <?php else: ?>
-                <?= $block->truncateString($_option['value'], 55, '', $_remainder) ?>
+                <?= $block->escapeHtml($block->truncateString($_option['value'], 55, '', $_remainder)) ?>
                 <?php if ($_remainder):?>
-                    ... <span id="<?= /* @escapeNotVerified */ $_id = 'id' . uniqid() ?>"><?= /* @escapeNotVerified */ $_remainder ?></span>
+                    ... <span id="<?= $block->escapeHtmlAttr($_id = 'id' . uniqid()) ?>"><?= $block->escapeHtml($_remainder) ?></span>
                     <script>
 require(['prototype'], function(){
 
-    $('<?= /* @escapeNotVerified */ $_id ?>').hide();
-    $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseover', function(){$('<?= /* @escapeNotVerified */ $_id ?>').show();});
-    $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseout',  function(){$('<?= /* @escapeNotVerified */ $_id ?>').hide();});
+    $('<?= $block->escapeJs($_id) ?>').hide();
+    $('<?= $block->escapeJs($_id) ?>').up().observe('mouseover', function(){$('<?= $block->escapeJs($_id) ?>').show();});
+    $('<?= $block->escapeJs($_id) ?>').up().observe('mouseout',  function(){$('<?= $block->escapeJs($_id) ?>').hide();});
 
 });
 </script>

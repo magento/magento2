@@ -21,7 +21,7 @@ $isElementReadonly = $block->getElement()
 ?>
 
 <?php if (!($attributeCode === 'price' && $block->getCanReadPrice() === false)): ?>
-    <div class="<?= /* @escapeNotVerified */  $attributeCode ?> "><?= /* @escapeNotVerified */  $elementHtml ?></div>
+    <div class="<?= $block->escapeHtmlAttr($attributeCode) ?> "><?= $block->escapeHtml($elementHtml) ?></div>
 <?php endif; ?>
 
 <?= $block->getExtendedElement($switchAttributeCode)->toHtml() ?>
@@ -29,9 +29,9 @@ $isElementReadonly = $block->getElement()
 <?php if (!$isElementReadonly && $block->getDisableChild()) { ?>
     <script>
         require(['prototype'], function () {
-            function <?= /* @escapeNotVerified */ $switchAttributeCode ?>_change() {
-                var $attribute = $('<?= /* @escapeNotVerified */ $attributeCode ?>');
-                if ($('<?= /* @escapeNotVerified */ $switchAttributeCode ?>').value == '<?= /* @escapeNotVerified */ $block::DYNAMIC ?>') {
+            function <?= $block->escapeJs($switchAttributeCode) ?>_change() {
+                var $attribute = $('<?= $block->escapeJs($attributeCode) ?>');
+                if ($('<?= $block->escapeJs($switchAttributeCode) ?>').value == '<?= $block->escapeJs($block::DYNAMIC) ?>') {
                     if ($attribute) {
                         $attribute.disabled = true;
                         $attribute.value = '';
@@ -45,7 +45,7 @@ $isElementReadonly = $block->getElement()
                         <?php if ($attributeCode === 'price' && !$block->getCanEditPrice() && $block->getCanReadPrice()
                                 && $block->getProduct()->isObjectNew()): ?>
                             <?php $defaultProductPrice = $block->getDefaultProductPrice() ?: "''"; ?>
-                            $attribute.value = <?= /* @escapeNotVerified */ $defaultProductPrice ?>;
+                            $attribute.value = <?= $block->escapeJs($defaultProductPrice) ?>;
                         <?php else: ?>
                             $attribute.disabled = false;
                             $attribute.addClassName('required-entry');
@@ -59,10 +59,10 @@ $isElementReadonly = $block->getElement()
 
             <?php if (!($attributeCode === 'price' && !$block->getCanEditPrice()
                     && !$block->getProduct()->isObjectNew())): ?>
-                $('<?= /* @escapeNotVerified */ $switchAttributeCode ?>').observe('change', <?= /* @escapeNotVerified */ $switchAttributeCode ?>_change);
+                $('<?= $block->escapeJs($switchAttributeCode) ?>').observe('change', <?= $block->escapeJs($switchAttributeCode) ?>_change);
             <?php endif; ?>
             Event.observe(window, 'load', function(){
-                <?= /* @escapeNotVerified */ $switchAttributeCode ?>_change();
+                <?= $block->escapeJs($switchAttributeCode) ?>_change();
             });
         });
     </script>

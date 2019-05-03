@@ -10,7 +10,7 @@
 ?>
 <?php $_item = $block->getItem() ?>
 <?php $_order = $block->getItem()->getOrderItem()->getOrder() ?>
-<tr class="border" id="order-item-row-<?= /* @escapeNotVerified */ $_item->getId() ?>">
+<tr class="border" id="order-item-row-<?= $block->escapeHtmlAttr($_item->getId()) ?>">
     <td class="col name" data-th="<?= $block->escapeHtml(__('Product Name')) ?>">
         <strong class="product name product-item-name"><?= $block->escapeHtml($_item->getName()) ?></strong>
         <?php if ($_options = $block->getItemOptions()): ?>
@@ -20,12 +20,12 @@
                     <?php if (!$block->getPrintStatus()): ?>
                         <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
                         <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
-                            <?= /* @escapeNotVerified */ $_formatedOptionValue['value'] ?>
+                            <?= $block->escapeHtml($_formatedOptionValue['value']) ?>
                             <?php if (isset($_formatedOptionValue['full_view'])): ?>
                                 <div class="tooltip content">
                                     <dl class="item options">
                                         <dt><?= $block->escapeHtml($_option['label']) ?></dt>
-                                        <dd><?= /* @escapeNotVerified */ $_formatedOptionValue['full_view'] ?></dd>
+                                        <dd><?= $block->escapeHtml($_formatedOptionValue['full_view']) ?></dd>
                                     </dl>
                                 </div>
                             <?php endif; ?>
@@ -53,15 +53,15 @@
         <?php endif; ?>
         <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>"><?= /* @escapeNotVerified */ $block->prepareSku($block->getSku()) ?></td>
+    <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>"><?= $block->escapeHtml($block->prepareSku($block->getSku())) ?></td>
     <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
         <?= $block->getItemPriceHtml() ?>
     </td>
-    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>"><?= /* @escapeNotVerified */ $_item->getQty()*1 ?></td>
+    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>"><?= $block->escapeHtml($_item->getQty()*1) ?></td>
     <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
         <?= $block->getItemRowTotalHtml() ?>
     </td>
-    <td class="col discount" data-th="<?= $block->escapeHtml(__('Discount Amount')) ?>"><?= /* @escapeNotVerified */ $_order->formatPrice(-$_item->getDiscountAmount()) ?></td>
+    <td class="col discount" data-th="<?= $block->escapeHtml(__('Discount Amount')) ?>"><?= $block->escapeHtml($_order->formatPrice(-$_item->getDiscountAmount())) ?></td>
     <td class="col total" data-th="<?= $block->escapeHtml(__('Row Total')) ?>">
         <?= $block->getItemRowTotalAfterDiscountHtml() ?>
     </td>
