@@ -12,5 +12,8 @@
         <element name="statusCodeFilterField" type="input" selector="[data-role=filter-form] [name=status]"/>
         <element name="statusCodeDataColumn" type="input" selector="[data-role=row] [data-column=status]"/>
         <element name="statusLabelDataColumn" type="input" selector="[data-role=row] [data-column=label]"/>
+        <element name="stateCodeAndTitleDataColumn" type="input" selector="[data-role=row] [data-column=state]"/>
+        <element name="assignStatusToStateButton" type="button" selector="#assign" timeout="30"/>
+        <element name="unassign" type="text" selector="[data-role=row] [data-column=unassign]"/>
     </section>
 </sections>
