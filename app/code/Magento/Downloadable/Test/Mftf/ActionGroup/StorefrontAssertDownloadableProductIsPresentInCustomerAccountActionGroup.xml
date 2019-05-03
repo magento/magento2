@@ -12,9 +12,7 @@
         <arguments>
             <argument name="product"/>
         </arguments>
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="goToMyAccountPage"/>
-        <click selector="{{StorefrontCustomerSidebarSection.sidebarTab('My Downloadable Products')}}" stepKey="clickDownloadableProducts"/>
-        <waitForPageLoad stepKey="waitForDownloadableProductsPageLoad" />
+        <amOnPage url="{{StorefrontCustomerDownloadableProductsPage.url}}" stepKey="goToCustomerDownloadableProductsPage"/>
         <seeElement selector="{{StorefrontCustomerDownloadableProductsSection.productName(product.name)}}" stepKey="seeStorefontDownloadableProductsProductName" />
     </actionGroup>
 </actionGroups>

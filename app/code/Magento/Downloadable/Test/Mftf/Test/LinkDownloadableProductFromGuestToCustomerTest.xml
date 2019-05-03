@@ -10,28 +10,34 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="LinkDownloadableProductFromGuestToCustomerTest">
         <annotations>
-            <stories value="Customer Account"/>
+            <features value="Downloadable"/>
+            <stories value="Downloadable products in customer account"/>
             <title value="Customer should see downloadable products after place order as guest and registering after that"/>
             <description value="Verify that in 'My Downloadable Products' section in customer account user can see products."/>
             <severity value="AVERAGE"/>
             <useCaseId value="MAGETWO-98655"/>
             <testCaseId value="MC-16148"/>
+            <group value="catalog"/>
+            <group value="downloadable"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableGuestCheckoutWithDownloadableItems.path}} {{EnableGuestCheckoutWithDownloadableItems.value}}" stepKey="enableGuestCheckoutWithDownloadableItems" />
-            <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="ApiDownloadableProduct" stepKey="createProduct"/>
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink">
                 <requiredEntity createDataKey="createProduct"/>
             </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="RemoveCustomerFromAdminActionGroup" stepKey="deleteCustomer">
+                <argument name="customer" value="Simple_US_NY_Customer"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
             <magentoCLI command="config:set {{DisableGuestCheckoutWithDownloadableItems.path}} {{DisableGuestCheckoutWithDownloadableItems.value}}" stepKey="disableGuestCheckoutWithDownloadableItems" />
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
-            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
         </after>
         <!--Step 1: Go to Storefront as Guest-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+        <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="loginAsGuest"/>
         <!--Step 2: Add downloadable product to shopping cart-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontProductPage"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
