@@ -16,6 +16,7 @@ use Psr\Log\LoggerInterface as Logger;
 /**
  * Base items collection class
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

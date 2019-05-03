@@ -12,6 +12,7 @@ use \Magento\Framework\Data\Collection\AbstractDb;
 /**
  * Abstract Resource Collection
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
