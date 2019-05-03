@@ -39,11 +39,11 @@
             <deleteData createDataKey="createSimple2" stepKey="deleteSimple2"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
-            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteJohnSmithCustomer">
-                <argument name="customerEmail" value="{{John_Smith_Customer.email}}"/>
+            <actionGroup ref="RemoveCustomerFromAdminActionGroup" stepKey="deleteJohnSmithCustomer">
+                <argument name="customer" value="John_Smith_Customer"/>
             </actionGroup>
-            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteJohnDoeCustomer">
-                <argument name="customerEmail" value="{{Simple_Customer_Without_Address.email}}"/>
+            <actionGroup ref="RemoveCustomerFromAdminActionGroup" stepKey="deleteJohnDoeCustomer">
+                <argument name="customer" value="Simple_Customer_Without_Address"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
