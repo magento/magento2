@@ -656,6 +656,9 @@ class Eav extends AbstractModifier
         $attributeModel = $this->getAttributeModel($attribute);
         if ($attributeModel->usesSource()) {
             $options = $attributeModel->getSource()->getAllOptions(true, true);
+            foreach ($options as &$option) {
+                $option['__disableTmpl'] = true;
+            }
             $meta = $this->arrayManager->merge($configPath, $meta, [
                 'options' => $this->convertOptionsValueToString($options),
             ]);
