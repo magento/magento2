@@ -5,17 +5,23 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Quote\Guest;
+namespace Magento\GraphQl\Quote\Customer;
 
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for get specified billing address
+ * Test for get specified shipping address
  */
-class GetSpecifiedBillingAddressTest extends GraphQlAbstract
+class GetSpecifiedShippingAddressTest extends GraphQlAbstract
 {
+    /**
+     * @var CustomerTokenServiceInterface
+     */
+    private $customerTokenService;
+
     /**
      * @var GetMaskedQuoteIdByReservedOrderId
      */
@@ -28,24 +34,26 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      */
-    public function testGetSpecifiedBillingAddress()
+    public function testGetSpecifiedShippingAddress()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
 
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
         self::assertArrayHasKey('cart', $response);
-        self::assertArrayHasKey('billing_address', $response['cart']);
+        self::assertArrayHasKey('shipping_addresses', $response['cart']);
 
-        $expectedBillingAddressData = [
+        $expectedShippingAddressData = [
             'firstname' => 'John',
             'lastname' => 'Smith',
             'company' => 'CompanyName',
@@ -63,26 +71,28 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
                 'label' => 'US',
             ],
             'telephone' => '3468676',
-            '__typename' => 'BillingCartAddress',
+            '__typename' => 'ShippingCartAddress',
+            'customer_notes' => null,
         ];
-        self::assertEquals($expectedBillingAddressData, $response['cart']['billing_address']);
+        self::assertEquals($expectedShippingAddressData, current($response['cart']['shipping_addresses']));
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
-    public function testGetSpecifiedBillingAddressIfBillingAddressIsNotSet()
+    public function testGetSpecifiedShippingAddressIfShippingAddressIsNotSet()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
 
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
         self::assertArrayHasKey('cart', $response);
-        self::assertArrayHasKey('billing_address', $response['cart']);
+        self::assertArrayHasKey('shipping_addresses', $response['cart']);
 
-        $expectedBillingAddressData = [
+        $expectedShippingAddressData = [
             'firstname' => null,
             'lastname' => null,
             'company' => null,
@@ -100,38 +110,64 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
                 'label' => null,
             ],
             'telephone' => null,
-            '__typename' => 'BillingCartAddress',
+            '__typename' => 'ShippingCartAddress',
+            'customer_notes' => null,
         ];
-        self::assertEquals($expectedBillingAddressData, $response['cart']['billing_address']);
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
-     */
-    public function testGetBillingAddressOfNonExistentCart()
-    {
-        $maskedQuoteId = 'non_existent_masked_id';
-        $query = $this->getQuery($maskedQuoteId);
-        $this->graphQlQuery($query);
+        self::assertEquals($expectedShippingAddressData, current($response['cart']['shipping_addresses']));
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
-    public function testGetBillingAddressFromAnotherCustomerCart()
+    public function testGetSpecifiedShippingAddressOfNonExistentCart()
+    {
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = $this->getQuery($maskedQuoteId);
+
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * _security
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     */
+    public function testGetSpecifiedShippingAddressFromGuestCart()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $query = $this->getQuery($maskedQuoteId);
 
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
-        $this->graphQlQuery($query);
+        $this->graphQlQuery($this->getQuery($maskedQuoteId), [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * _security
+     * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     */
+    public function testGetSpecifiedShippingAddressFromAnotherCustomerCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $this->expectExceptionMessage(
+            "The current user cannot perform operations on cart \"$maskedQuoteId\""
+        );
+        $this->graphQlQuery(
+            $this->getQuery($maskedQuoteId),
+            [],
+            '',
+            $this->getHeaderMap('customer2@search.example.com')
+        );
     }
 
     /**
@@ -143,7 +179,7 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
         return <<<QUERY
 {
   cart(cart_id: "$maskedQuoteId") {
-    billing_address {
+    shipping_addresses {
       firstname
       lastname
       company
@@ -162,9 +198,22 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
       }
       telephone
       __typename
+      customer_notes
     }
   }
 }
 QUERY;
+    }
+
+    /**
+     * @param string $username
+     * @param string $password
+     * @return array
+     */
+    private function getHeaderMap(string $username = 'customer@example.com', string $password = 'password'): array
+    {
+        $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
+        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
+        return $headerMap;
     }
 }
