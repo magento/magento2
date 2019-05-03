@@ -9,6 +9,7 @@ use Magento\Cms\Api\Data;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SortOrder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -16,6 +17,8 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Cms\Model\ResourceModel\Page as ResourcePage;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * Class PageRepository
@@ -64,6 +67,16 @@ class PageRepository implements PageRepositoryInterface
     private $storeManager;
 
     /**
+     * @var UserContextInterface
+     */
+    private $userContext;
+
+    /**
+     * @var AuthorizationInterface
+     */
+    private $authorization;
+
+    /**
      * @param ResourcePage $resource
      * @param PageFactory $pageFactory
      * @param Data\PageInterfaceFactory $dataPageFactory
@@ -72,6 +85,10 @@ class PageRepository implements PageRepositoryInterface
      * @param DataObjectHelper $dataObjectHelper
      * @param DataObjectProcessor $dataObjectProcessor
      * @param StoreManagerInterface $storeManager
+     * @param UserContextInterface|null $userContext
+     * @param AuthorizationInterface|null $authorization
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ResourcePage $resource,
@@ -81,7 +98,9 @@ class PageRepository implements PageRepositoryInterface
         Data\PageSearchResultsInterfaceFactory $searchResultsFactory,
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        UserContextInterface $userContext = null,
+        AuthorizationInterface $authorization = null
     ) {
         $this->resource = $resource;
         $this->pageFactory = $pageFactory;
@@ -91,12 +110,14 @@ class PageRepository implements PageRepositoryInterface
         $this->dataPageFactory = $dataPageFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->storeManager = $storeManager;
+        $this->userContext = $userContext ?: ObjectManager::getInstance()->get(UserContextInterface::class);
+        $this->authorization = $authorization ?: ObjectManager::getInstance()->get(AuthorizationInterface::class);
     }
 
     /**
      * Save Page data
      *
-     * @param \Magento\Cms\Api\Data\PageInterface $page
+     * @param \Magento\Cms\Api\Data\PageInterface|Page $page
      * @return Page
      * @throws CouldNotSaveException
      */
@@ -107,6 +128,32 @@ class PageRepository implements PageRepositoryInterface
             $page->setStoreId($storeId);
         }
         try {
+            //Validate changing of design.
+            $userType = $this->userContext->getUserType();
+            if (($userType === UserContextInterface::USER_TYPE_ADMIN
+                    || $userType === UserContextInterface::USER_TYPE_INTEGRATION)
+                && !$this->authorization->isAllowed('Magento_Cms::save_design')
+            ) {
+                if (!$page->getId()) {
+                    $page->setLayoutUpdateXml(null);
+                    $page->setPageLayout(null);
+                    $page->setCustomTheme(null);
+                    $page->setCustomLayoutUpdateXml(null);
+                    $page->setCustomRootTemplate(null);
+                    $page->setCustomThemeFrom(null);
+                    $page->setCustomThemeTo(null);
+                } else {
+                    $savedPage = $this->getById($page->getId());
+                    $page->setLayoutUpdateXml($savedPage->getLayoutUpdateXml());
+                    $page->setPageLayout($savedPage->getPageLayout());
+                    $page->setCustomTheme($savedPage->getCustomTheme());
+                    $page->setCustomLayoutUpdateXml($savedPage->getCustomLayoutUpdateXml());
+                    $page->setCustomRootTemplate($savedPage->getCustomRootTemplate());
+                    $page->setCustomThemeFrom($savedPage->getCustomThemeFrom());
+                    $page->setCustomThemeTo($savedPage->getCustomThemeTo());
+                }
+            }
+
             $this->resource->save($page);
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__(

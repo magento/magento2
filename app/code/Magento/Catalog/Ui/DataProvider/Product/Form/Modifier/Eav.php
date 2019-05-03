@@ -18,8 +18,10 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory as GroupCollectionFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Filter\Translit;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\StoreManagerInterface;
@@ -168,6 +170,26 @@ class Eav extends AbstractModifier
     private $localeCurrency;
 
     /**
+     * @var AuthorizationInterface
+     */
+    private $authorization;
+
+    /**
+     * Product design attribute codes.
+     *
+     * @var array
+     */
+    private $designAttributeCodes = [
+        'custom_design',
+        'page_layout',
+        'options_container',
+        'custom_layout_update',
+        'custom_design_from',
+        'custom_design_to',
+        'custom_layout',
+    ];
+
+    /**
      * @param LocatorInterface $locator
      * @param CatalogEavValidationRules $catalogEavValidationRules
      * @param Config $eavConfig
@@ -187,6 +209,8 @@ class Eav extends AbstractModifier
      * @param DataPersistorInterface $dataPersistor
      * @param array $attributesToDisable
      * @param array $attributesToEliminate
+     * @param AuthorizationInterface|null $authorization
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -208,7 +232,8 @@ class Eav extends AbstractModifier
         ScopeOverriddenValue $scopeOverriddenValue,
         DataPersistorInterface $dataPersistor,
         $attributesToDisable = [],
-        $attributesToEliminate = []
+        $attributesToEliminate = [],
+        AuthorizationInterface $authorization = null
     ) {
         $this->locator = $locator;
         $this->catalogEavValidationRules = $catalogEavValidationRules;
@@ -229,6 +254,7 @@ class Eav extends AbstractModifier
         $this->dataPersistor = $dataPersistor;
         $this->attributesToDisable = $attributesToDisable;
         $this->attributesToEliminate = $attributesToEliminate;
+        $this->authorization = $authorization ?: ObjectManager::getInstance()->get(AuthorizationInterface::class);
     }
 
     /**
@@ -549,6 +575,7 @@ class Eav extends AbstractModifier
     public function setupAttributeMeta(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
     {
         $configPath = ltrim(static::META_CONFIG_PATH, ArrayManager::DEFAULT_PATH_DELIMITER);
+        $attributeCode = $attribute->getAttributeCode();
 
         $meta = $this->arrayManager->set($configPath, [], [
             'dataType' => $attribute->getFrontendInput(),
@@ -558,7 +585,7 @@ class Eav extends AbstractModifier
             'notice' => $attribute->getNote(),
             'default' => (!$this->isProductExists()) ? $attribute->getDefaultValue() : null,
             'label' => __($attribute->getDefaultFrontendLabel()),
-            'code' => $attribute->getAttributeCode(),
+            'code' => $attributeCode,
             'source' => $groupCode,
             'scopeLabel' => $this->getScopeLabel($attribute),
             'globalScope' => $this->isScopeGlobal($attribute),
@@ -591,7 +618,7 @@ class Eav extends AbstractModifier
             ]);
         }
 
-        if (in_array($attribute->getAttributeCode(), $this->attributesToDisable)) {
+        if (in_array($attributeCode, $this->attributesToDisable)) {
             $meta = $this->arrayManager->merge($configPath, $meta, [
                 'disabled' => true,
             ]);
@@ -621,6 +648,22 @@ class Eav extends AbstractModifier
                 // Gallery attribute is being handled by "Images And Videos" section
                 $meta = [];
                 break;
+        }
+
+        //Checking access to design config.
+        if (in_array($attributeCode, $this->designAttributeCodes, true)
+            && !$this->authorization->isAllowed('Magento_Catalog::edit_product_design')
+        ) {
+            $meta = $this->arrayManager->merge(
+                $configPath,
+                $meta,
+                [
+                    'disabled' => true,
+                    'validation' => ['required' => false],
+                    'required' => false,
+                    'serviceDisabled' => true,
+                ]
+            );
         }
 
         return $meta;

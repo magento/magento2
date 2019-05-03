@@ -26,7 +26,8 @@
         "magento/module-config": "100.1.*",
         "magento/module-media-storage": "100.1.*",
         "magento/framework": "100.1.*",
-        "magento/module-ui": "100.1.*"
+        "magento/module-ui": "100.1.*",
+        "magento/module-authorization": "100.1.*"
     },
     "suggest": {
         "magento/module-cookie": "100.1.*",
