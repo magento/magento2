@@ -22,7 +22,7 @@ use Magento\Cms\Api\GetPageByIdentifierInterface;
  * @magentoCache full_page enabled
  * @magentoDbIsolation disabled
  */
-class CategoryUrlResolverCacheTest extends AbstractGraphqlCacheTest
+class AllEntitiesUrlResolverCacheTest extends AbstractGraphqlCacheTest
 {
     /**
      * @var GraphQl
@@ -44,7 +44,7 @@ class CategoryUrlResolverCacheTest extends AbstractGraphqlCacheTest
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      * @magentoDataFixture Magento/Cms/_files/pages.php
      */
-    public function testCategoryUrlResolverRequestHasCorrectTags()
+    public function testAllEntitiesUrlResolverRequestHasCorrectTags()
     {
         $categoryUrlKey = 'cat-1.html';
         $productUrlKey = 'p002.html';
