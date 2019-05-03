@@ -16,6 +16,7 @@
         <fillField selector="{{StorefrontCustomerCreateFormSection.passwordField}}" userInput="{{customer.password}}" stepKey="typePassword"/>
         <fillField selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" userInput="{{customer.password}}" stepKey="typeConfirmationPassword"/>
         <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickOnCreateAccount"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForConfirmModal"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="Thank you for registering" stepKey="verifyAccountCreated"/>
     </actionGroup>
 </actionGroups>
