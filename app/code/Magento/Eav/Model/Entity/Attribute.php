@@ -310,9 +310,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     }
 
     /**
-     * Save additional data
+     * @inheritdoc
      *
-     * @return $this
+     * Save additional data.
      */
     public function afterSave()
     {
@@ -496,9 +496,14 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     /**
      * @inheritdoc
      * @since 100.0.7
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $this->unsetData('attribute_set_info');
         return array_diff(
             parent::__sleep(),
@@ -509,9 +514,14 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     /**
      * @inheritdoc
      * @since 100.0.7
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         parent::__wakeup();
         $objectManager = ObjectManager::getInstance();
         $this->_localeDate = $objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);

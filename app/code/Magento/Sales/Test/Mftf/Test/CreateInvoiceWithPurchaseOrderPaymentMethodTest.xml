@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateInvoiceWithPurchaseOrderPaymentMethodTest" extends="CreateInvoiceWithCashOnDeliveryPaymentMethodTest">
+        <annotations>
+            <stories value="Create Invoice for Offline Payment Methods"/>
+            <title value="Create invoice with purchase order payment method test"/>
+            <description value="Create invoice with purchase order payment method"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-15870"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Enable payment method -->
+            <magentoCLI command="config:set {{PurchaseOrderEnableConfigData.path}} {{PurchaseOrderEnableConfigData.value}}" stepKey="enablePaymentMethod"/>
+        </before>
+        <after>
+            <!-- Disable payment method -->
+            <magentoCLI command="config:set {{PurchaseOrderDisabledConfigData.path}} {{PurchaseOrderDisabledConfigData.value}}" stepKey="disablePaymentMethod"/>
+        </after>
+
+        <!-- Select purchase order payment method -->
+        <actionGroup ref="SelectPurchaseOrderPaymentMethodActionGroup" stepKey="selectPaymentMethod">
+            <argument name="purchaseOrderNumber" value="12345"/>
+        </actionGroup>
+
+        <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocus" after="selectPaymentMethod"/>
+        <waitForPageLoad stepKey="waitForJavascriptToFinish" after="unfocus"/>
+    </test>
+</tests>
