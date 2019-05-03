@@ -19,19 +19,21 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <!--Go to new order status page-->
-            <amOnPage url="{{AdminOrderStatusPage.url}}" stepKey="goToOrderStatusPage"/>
-            <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewStatus"/>
-            <!--Fill the form and validate save success message-->
-            <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
-                <argument name="status" value="{{defaultOrderStatus.status}}"/>
-                <argument name="label" value="{{defaultOrderStatus.label}}"/>
-            </actionGroup>
-            <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeFormSaveSuccess"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+
+        <!--Go to new order status page-->
+        <amOnPage url="{{AdminOrderStatusPage.url}}" stepKey="goToOrderStatusPage"/>
+        <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewStatus"/>
+
+        <!--Fill the form and validate save success message-->
+        <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
+            <argument name="status" value="{{defaultOrderStatus.status}}"/>
+            <argument name="label" value="{{defaultOrderStatus.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeFormSaveSuccess"/>
 
         <!--Open the created order status in grid page and change the order state to Pending and verify save message-->
         <actionGroup ref="AssertOrderStatusExistsInGrid" stepKey="searchCreatedOrderStatus">
@@ -50,6 +52,7 @@
             <argument name="status" value="{{defaultOrderStatus.status}}"/>
             <argument name="label" value="{{defaultOrderStatus.label}}"/>
         </actionGroup>
+
         <!--Click unassign and verify AssertOrderStatusSuccessUnassignMessage-->
         <click selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="clickUnassign"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You have unassigned the order status." stepKey="seeAssertOrderStatusSuccessUnassignMessage"/>
@@ -59,6 +62,7 @@
             <argument name="status" value="{{defaultOrderStatus.status}}"/>
             <argument name="label" value="{{defaultOrderStatus.label}}"/>
         </actionGroup>
+
         <!--Verify the order status grid page shows the updated order status and verify AssertOrderStatusNotAssigned-->
         <dontSee selector="{{AdminOrderStatusGridSection.stateCodeAndTitleDataColumn}}" stepKey="seeEmptyStateCodeAndTitleValue"/>
         <dontSee selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="seeAssertOrderStatusNotAssigned"/>
