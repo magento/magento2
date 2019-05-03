@@ -79,7 +79,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                        id="<?= ($block->escapeHtmlAttr($helpLinkId)) ?>"
                        data-mage-init='{"addToCart":{
                                             "helpLinkId": "#<?= $block->escapeJs($block->escapeHtml($helpLinkId)) ?>",
-                                            "productName": "<?= $block->escapeHtml($product->getName()) ?>",
+                                            "productName": "<?= $block->escapeJs($block->escapeHtml($product->getName())) ?>",
                                             "showAddToCart": false
                                             }
                                         }'
