@@ -9,6 +9,9 @@ namespace Magento\GraphQl\Catalog;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test media gallery queries
+ */
 class MediaGalleryTest extends GraphQlAbstract
 {
     /**
@@ -43,6 +46,43 @@ QUERY;
         self::assertArrayHasKey('url', $response['products']['items'][0]['small_image']);
         self::assertContains('magento_image.jpg', $response['products']['items'][0]['small_image']['url']);
         self::assertTrue($this->checkImageExists($response['products']['items'][0]['small_image']['url']));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_multiple_images.php
+     */
+    public function testMediaGalleryTypesAreCorrect()
+    {
+        $productSku = 'simple';
+        $query = <<<QUERY
+{
+  products(filter: {sku: {eq: "{$productSku}"}}) {
+    items {    
+      media_gallery_entries {
+      	label
+        media_type
+        file
+        types
+      }
+    }
+  }    
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+
+        $this->assertNotEmpty($response['products']['items'][0]['media_gallery_entries']);
+        $mediaGallery = $response['products']['items'][0]['media_gallery_entries'];
+        $this->assertCount(2, $mediaGallery);
+
+        $this->assertEquals('Image Alt Text', $mediaGallery[0]['label']);
+        $this->assertEquals('image', $mediaGallery[0]['media_type']);
+        $this->assertContains('magento_image', $mediaGallery[0]['file']);
+        $this->assertEquals(['image', 'small_image'], $mediaGallery[0]['types']);
+
+        $this->assertEquals('Thumbnail Image', $mediaGallery[1]['label']);
+        $this->assertEquals('image', $mediaGallery[1]['media_type']);
+        $this->assertContains('magento_thumbnail', $mediaGallery[1]['file']);
+        $this->assertEquals(['thumbnail', 'swatch_image'], $mediaGallery[1]['types']);
     }
 
     /**
