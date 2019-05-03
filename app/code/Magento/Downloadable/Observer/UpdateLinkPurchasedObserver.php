@@ -52,7 +52,7 @@ class UpdateLinkPurchasedObserver implements ObserverInterface
             $linkPurchased->setCustomerId($customerId)->save();
         }
 
-        return $this;
+        return;
     }
 
     /**
