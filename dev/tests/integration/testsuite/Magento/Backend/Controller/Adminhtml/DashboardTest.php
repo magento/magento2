@@ -19,10 +19,15 @@ class DashboardTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->assertContains('dashboard-diagram', $actual);
     }
 
+    /**
+     * Tests tunnelAction.
+     *
+     * @return void
+     * @throws \Exception
+     */
     public function testTunnelAction()
     {
-        $this->markTestSkipped('MAGETWO-98803');
-
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $testUrl = \Magento\Backend\Block\Dashboard\Graph::API_URL . '?cht=p3&chd=t:60,40&chs=250x100&chl=Hello|World';
         $handle = curl_init();
         curl_setopt($handle, CURLOPT_URL, $testUrl);
@@ -36,6 +41,7 @@ class DashboardTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             curl_close($handle);
             throw $e;
         }
+        // phpcs:enable
 
         $gaData = [
             'cht' => 'lc',

@@ -13,8 +13,6 @@ use Magento\Sales\Api\Data\OrderAddressInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @SuppressWarnings(PHPMD.TooManyPublicMethods)
- * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
 class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 {
@@ -24,9 +22,9 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Quote\Model\SubmitQuoteValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\QuoteValidator|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $submitQuoteValidator;
+    protected $quoteValidator;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -145,7 +143,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->submitQuoteValidator = $this->createMock(\Magento\Quote\Model\SubmitQuoteValidator::class);
+        $this->quoteValidator = $this->createMock(\Magento\Quote\Model\QuoteValidator::class);
         $this->eventManager = $this->getMockForAbstractClass(\Magento\Framework\Event\ManagerInterface::class);
         $this->orderFactory = $this->createPartialMock(
             \Magento\Sales\Api\Data\OrderInterfaceFactory::class,
@@ -212,7 +210,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             \Magento\Quote\Model\QuoteManagement::class,
             [
                 'eventManager' => $this->eventManager,
-                'submitQuoteValidator' => $this->submitQuoteValidator,
+                'quoteValidator' => $this->quoteValidator,
                 'orderFactory' => $this->orderFactory,
                 'orderManagement' => $this->orderManagement,
                 'customerManagement' => $this->customerManagement,
@@ -562,9 +560,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             $shippingAddress
         );
 
-        $this->submitQuoteValidator->expects($this->once())
-            ->method('validateQuote')
-            ->with($quote);
+        $this->quoteValidator->expects($this->once())->method('validateBeforeSubmit')->with($quote);
         $this->quoteAddressToOrder->expects($this->once())
             ->method('convert')
             ->with($shippingAddress, $orderData)
@@ -659,7 +655,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs(
                 [
                     'eventManager' => $this->eventManager,
-                    'quoteValidator' => $this->submitQuoteValidator,
+                    'quoteValidator' => $this->quoteValidator,
                     'orderFactory' => $this->orderFactory,
                     'orderManagement' => $this->orderManagement,
                     'customerManagement' => $this->customerManagement,
@@ -716,7 +712,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs(
                 [
                 'eventManager' => $this->eventManager,
-                    'quoteValidator' => $this->submitQuoteValidator,
+                    'quoteValidator' => $this->quoteValidator,
                     'orderFactory' => $this->orderFactory,
                     'orderManagement' => $this->orderManagement,
                     'customerManagement' => $this->customerManagement,
@@ -938,9 +934,6 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         return $order;
     }
 
-    /**
-     * @throws NoSuchEntityException
-     */
     public function testGetCartForCustomer()
     {
         $customerId = 100;
@@ -985,9 +978,6 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         return $object;
     }
 
-    /**
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
     public function testSubmitForCustomer()
     {
         $orderData = [];
@@ -1020,8 +1010,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             $shippingAddress
         );
 
-        $this->submitQuoteValidator->method('validateQuote')
-            ->with($quote);
+        $this->quoteValidator->expects($this->once())->method('validateBeforeSubmit')->with($quote);
         $this->quoteAddressToOrder->expects($this->once())
             ->method('convert')
             ->with($shippingAddress, $orderData)
