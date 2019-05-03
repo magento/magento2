@@ -614,7 +614,7 @@ class SessionManager implements SessionManagerInterface
     private function initIniOptions()
     {
         foreach ($this->sessionConfig->getOptions() as $option => $value) {
-            if ($option == 'session.save_handler') {
+            if ($option === 'session.save_handler') {
                 continue;
             } else {
                 $result = ini_set($option, $value);

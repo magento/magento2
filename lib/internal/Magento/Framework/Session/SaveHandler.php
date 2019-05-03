@@ -6,7 +6,7 @@
 namespace Magento\Framework\Session;
 
 use Magento\Framework\Session\Config\ConfigInterface;
-use \Magento\Framework\Exception\SessionException;
+use Magento\Framework\Exception\SessionException;
 
 /**
  * Magento session save handler
