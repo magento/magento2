@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAddProductToCartFromCategoryActionGroup">
+        <arguments>
+            <argument name="product" type="entity"/>
+        </arguments>
+        <scrollTo selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="scroll"/>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="clickAddToCart" />
+        <waitForAjaxLoad stepKey="waitForAjax"/>
+    </actionGroup>
+</actionGroups>
+
+
