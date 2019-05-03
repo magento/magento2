@@ -21,6 +21,7 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid" />
         </variation>
         <variation name="CatalogRule_Create_Inactive_AdminOnly">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogPriceRule/data/name" xsi:type="string">CatalogPriceRule %isolation%</data>
             <data name="catalogPriceRule/data/description" xsi:type="string">Catalog Price Rule Description</data>
             <data name="catalogPriceRule/data/is_active" xsi:type="string">Inactive</data>
