@@ -73,9 +73,7 @@
 
         <!-- 4. Click Sign Out -->
         <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="logoutJohnSmithCustomer"/>
-        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" stepKey="seeLogoutSuccessPageUrlAfterLogOutJohnSmithCustomer"/>
-        <waitForPageLoad stepKey="waitForRedirectToHomePage"/>
-        <waitForText selector="{{StorefrontCmsPageSection.mainContent}}" userInput="CMS homepage content goes here." stepKey="waitForLoadContentMessage"/>
+        <actionGroup ref="StorefrontWaitCustomerLoggedOut" stepKey="waitJohnSmithCustomerLoggedOut"/>
         <actionGroup ref="StorefrontAssertPersistentCustomerWelcomeMessageNotPresentActionGroup" stepKey="dontSeeWelcomeJohnSmithCustomerNotYouMessage">
             <argument name="customerFullName" value="{{John_Smith_Customer.fullname}}"/>
         </actionGroup>
@@ -102,9 +100,7 @@
 
         <!-- 7. Click Log Out  -->
         <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="logoutJohnDoeCustomer"/>
-        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" stepKey="seeLogoutSuccessPageUrlAfterLogOutJohnDoeCustomer"/>
-        <waitForPageLoad stepKey="waitForHomePageLoad"/>
-        <waitForText selector="{{StorefrontCmsPageSection.mainContent}}" userInput="CMS homepage content goes here." stepKey="waitForLoadContentMessageOnHomePage"/>
+        <actionGroup ref="StorefrontWaitCustomerLoggedOut" stepKey="waitJohnDoeCustomerLoggedOut"/>
         <actionGroup ref="StorefrontAssertPersistentCustomerWelcomeMessageActionGroup" stepKey="seeWelcomeForJohnDoeCustomer">
             <argument name="customerFullName" value="{{Simple_Customer_Without_Address.fullname}}"/>
         </actionGroup>
@@ -149,9 +145,7 @@
 
         <!-- 12. Sign out and click the Not you? link  -->
         <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="logoutJohnDoeCustomerSecondTime"/>
-        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" stepKey="seeLogoutSuccessPageUrlAfterLogOutJohnSmithCustomerSecondTime"/>
-        <waitForPageLoad stepKey="waitForHomePageLoadAfter5Seconds"/>
-        <waitForText selector="{{StorefrontCmsPageSection.mainContent}}" userInput="CMS homepage content goes here." stepKey="waitForLoadMainContentMessageOnHomePage"/>
+        <actionGroup ref="StorefrontWaitCustomerLoggedOut" stepKey="waitJohnDoeCustomerLoggedOutSecondTime"/>
         <click selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="clickOnNotYouLink" />
         <waitForPageLoad stepKey="waitForCustomerLoginPageLoad"/>
         <actionGroup ref="AssertMiniCartEmpty" stepKey="assertMiniCartEmptyAfterJohnDoeSignOut" />
