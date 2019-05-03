@@ -17,6 +17,11 @@ use Magento\Framework\DB\DataConverter\SerializedToJson;
 class LayoutUpdateConverter extends SerializedToJson
 {
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @var Normalizer
      */
     private $normalizer;
@@ -27,13 +32,18 @@ class LayoutUpdateConverter extends SerializedToJson
      * @param Serialize $serialize
      * @param Json $json
      * @param Normalizer $normalizer
+     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         Serialize $serialize,
         Json $json,
-        Normalizer $normalizer
+        Normalizer $normalizer,
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->normalizer = $normalizer;
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Escaper::class
+        );
         parent::__construct($serialize, $json);
     }
 
@@ -85,7 +95,7 @@ class LayoutUpdateConverter extends SerializedToJson
      */
     protected function encodeJson($value)
     {
-        return htmlspecialchars(
+        return $this->escaper->escapeJs(
             $this->normalizer->replaceReservedCharacters(parent::encodeJson($value))
         );
     }
