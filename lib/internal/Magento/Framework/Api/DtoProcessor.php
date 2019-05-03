@@ -213,7 +213,7 @@ class DtoProcessor
      */
     private function createObjectByType($value, string $type)
     {
-        if (is_object($value) || is_array($value) || ($type === 'mixed')) {
+        if (is_object($value) || is_array($value) || ($type === 'mixed') || ($type === 'array')) {
             return $value;
         }
 
