@@ -485,13 +485,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('<a href="http://example.com/?SID=' . $sessionId . '">www.example.com</a>', $sessionUrl);
     }
 
-    public function testUseSessionIdForUrl()
-    {
-        $_SERVER['HTTP_HOST'] = 'localhost';
-        $this->assertFalse($this->model->useSessionIdForUrl(true));
-        $this->assertFalse($this->model->useSessionIdForUrl(false));
-    }
-
     /**
      * Note: isolation flushes the URL memory cache
      * @magentoAppIsolation enabled

@@ -57,6 +57,7 @@ class HashGenerator implements StoreSwitcherInterface
      * @param StoreInterface $targetStore store where to go to
      * @param string $redirectUrl original url requested for redirect after switching
      * @return string redirect url
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function switch(StoreInterface $fromStore, StoreInterface $targetStore, string $redirectUrl): string
     {

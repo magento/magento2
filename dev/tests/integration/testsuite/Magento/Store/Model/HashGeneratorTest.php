@@ -21,7 +21,6 @@ use Magento\Framework\Url\Helper\Data as UrlHelper;
  * Test class for \Magento\Store\Model\StoreSwitcher\HashGenerator
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-
 class HashGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
