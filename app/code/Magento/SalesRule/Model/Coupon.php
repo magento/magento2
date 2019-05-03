@@ -39,10 +39,10 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Set rule instance
      *
-     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param Rule $rule
      * @return $this
      */
-    public function setRule(\Magento\SalesRule\Model\Rule $rule)
+    public function setRule(Rule $rule)
     {
         $this->setRuleId($rule->getId());
         return $this;
@@ -51,7 +51,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Load primary coupon for specified rule
      *
-     * @param \Magento\SalesRule\Model\Rule|int $rule
+     * @param Rule|int $rule
      * @return $this
      */
     public function loadPrimaryByRule($rule)
@@ -190,6 +190,8 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * Set Times Used
+     *
      * @param int $timesUsed
      * @return $this
      */
@@ -273,6 +275,8 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * Set type
+     *
      * @param int $type
      * @return $this
      */

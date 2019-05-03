@@ -17,9 +17,6 @@
             <description value="Verify that admin is able to upload image to CMS Page with TinyMCE3 enabled"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-95725"/>
-            <skip>
-                <issueId value="MC-5371" />
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>

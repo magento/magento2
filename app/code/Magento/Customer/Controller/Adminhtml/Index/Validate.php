@@ -11,6 +11,9 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Message\Error;
 use Magento\Customer\Controller\Adminhtml\Index as CustomerAction;
 
+/**
+ * Class for validation of customer
+ */
 class Validate extends CustomerAction implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
@@ -73,40 +76,6 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
     }
 
     /**
-     * Customer address validation.
-     *
-     * @param \Magento\Framework\DataObject $response
-     * @return void
-     */
-    protected function _validateCustomerAddress($response)
-    {
-        $addresses = $this->getRequest()->getPost('address');
-        if (!is_array($addresses)) {
-            return;
-        }
-        foreach (array_keys($addresses) as $index) {
-            if ($index == '_template_') {
-                continue;
-            }
-
-            $addressForm = $this->_formFactory->create('customer_address', 'adminhtml_customer_address');
-
-            $requestScope = sprintf('address/%s', $index);
-            $formData = $addressForm->extractData($this->getRequest(), $requestScope);
-
-            $errors = $addressForm->validateData($formData);
-            if ($errors !== true) {
-                $messages = $response->hasMessages() ? $response->getMessages() : [];
-                foreach ($errors as $error) {
-                    $messages[] = $error;
-                }
-                $response->setMessages($messages);
-                $response->setError(1);
-            }
-        }
-    }
-
-    /**
      * AJAX customer validation action
      *
      * @return \Magento\Framework\Controller\Result\Json
@@ -116,10 +85,7 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
         $response = new \Magento\Framework\DataObject();
         $response->setError(0);
 
-        $customer = $this->_validateCustomer($response);
-        if ($customer) {
-            $this->_validateCustomerAddress($response);
-        }
+        $this->_validateCustomer($response);
         $resultJson = $this->resultJsonFactory->create();
         if ($response->getError()) {
             $response->setError(true);

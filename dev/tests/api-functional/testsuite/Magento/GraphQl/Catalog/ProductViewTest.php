@@ -90,6 +90,7 @@ class ProductViewTest extends GraphQlAbstract
                 title
                 required
                 sort_order
+                option_id
                 ... on CustomizableFieldOption {
                   product_sku
                   field_option: value {
@@ -128,6 +129,26 @@ class ProductViewTest extends GraphQlAbstract
                 }
                 ... on CustomizableRadioOption {
                   radio_option: value {
+                    option_type_id
+                    sku
+                    price
+                    price_type
+                    title
+                    sort_order
+                  }
+                }
+                ... on CustomizableCheckboxOption {
+                  checkbox_option: value {
+                    option_type_id
+                    sku
+                    price
+                    price_type
+                    title
+                    sort_order
+                  }
+                }
+                ... on CustomizableMultipleOption {
+                  multiple_option: value {
                     option_type_id
                     sku
                     price
@@ -334,6 +355,7 @@ QUERY;
                 title
                 required
                 sort_order
+                option_id
                 ... on CustomizableFieldOption {
                   product_sku
                   field_option: value {
@@ -734,7 +756,7 @@ QUERY;
                         $values = $option->getValues();
                         /** @var \Magento\Catalog\Model\Product\Option\Value $value */
                         $value = current($values);
-                        $findValueKeyName = $option->getType() === 'radio' ? 'radio_option' : 'drop_down_option';
+                        $findValueKeyName = $option->getType() . '_option';
                         if ($value->getTitle() === $optionsArray[$findValueKeyName][0]['title']) {
                             $match = true;
                         }
@@ -749,11 +771,12 @@ QUERY;
             $assertionMap = [
                 ['response_field' => 'sort_order', 'expected_value' => $option->getSortOrder()],
                 ['response_field' => 'title', 'expected_value' => $option->getTitle()],
-                ['response_field' => 'required', 'expected_value' => $option->getIsRequire()]
+                ['response_field' => 'required', 'expected_value' => $option->getIsRequire()],
+                ['response_field' => 'option_id', 'expected_value' => $option->getOptionId()]
             ];
 
             if (!empty($option->getValues())) {
-                $valueKeyName = $option->getType() === 'radio' ? 'radio_option' : 'drop_down_option';
+                $valueKeyName = $option->getType() . '_option';
                 $value = current($optionsArray[$valueKeyName]);
                 /** @var \Magento\Catalog\Model\Product\Option\Value $productValue */
                 $productValue = current($option->getValues());
@@ -773,7 +796,7 @@ QUERY;
                         ['response_field' => 'product_sku', 'expected_value' => $option->getProductSku()],
                     ]
                 );
-                $valueKeyName = "";
+
                 if ($option->getType() === 'file') {
                     $valueKeyName = 'file_option';
                     $valueAssertionMap = [

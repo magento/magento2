@@ -835,6 +835,11 @@
         <index referenceId="CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE_VALUE_ID" indexType="btree">
             <column name="value_id"/>
         </index>
+        <index referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_ENTT_ID_VAL_ID_STORE_ID" indexType="btree">
+            <column name="entity_id"/>
+            <column name="value_id"/>
+            <column name="store_id"/>
+        </index>
     </table>
     <table name="catalog_product_option" resource="default" engine="innodb" comment="Catalog Product Option Table">
         <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="true"

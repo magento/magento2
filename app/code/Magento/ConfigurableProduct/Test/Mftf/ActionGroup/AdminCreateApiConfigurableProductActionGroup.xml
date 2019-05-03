@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateApiConfigurableProductActionGroup">
         <arguments>
-            <argument name="productName" defaultValue="ApiConfigurableProductWithOutCategory" type="string"/>
+            <argument name="productName" defaultValue="{{ApiConfigurableProductWithOutCategory.name}}" type="string"/>
         </arguments>
 
         <!-- Create the configurable product based on the data in the /data folder -->
@@ -60,6 +60,19 @@
         <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
             <requiredEntity createDataKey="createConfigProduct"/>
             <requiredEntity createDataKey="createConfigChildProduct2"/>
+        </createData>
+    </actionGroup>
+
+    <!-- Create the configurable product, children are not visible individually -->
+    <actionGroup name="AdminCreateApiConfigurableProductWithHiddenChildActionGroup" extends="AdminCreateApiConfigurableProductActionGroup">
+        <!-- Create the 2 children that will be a part of the configurable product -->
+        <createData entity="ApiSimpleOneHidden" stepKey="createConfigChildProduct1">
+            <requiredEntity createDataKey="createConfigProductAttribute"/>
+            <requiredEntity createDataKey="getConfigAttributeOption1"/>
+        </createData>
+        <createData entity="ApiSimpleTwoHidden" stepKey="createConfigChildProduct2">
+            <requiredEntity createDataKey="createConfigProductAttribute"/>
+            <requiredEntity createDataKey="getConfigAttributeOption2"/>
         </createData>
     </actionGroup>
 </actionGroups>

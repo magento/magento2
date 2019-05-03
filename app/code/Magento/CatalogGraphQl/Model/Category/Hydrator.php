@@ -52,11 +52,11 @@ class Hydrator
             $categoryData = $category->getData();
         } else {
             $categoryData = $this->dataObjectProcessor->buildOutputDataArray($category, CategoryInterface::class);
-            $categoryData['product_count'] = $category->getProductCount();
         }
         $categoryData['id'] = $category->getId();
         $categoryData['children'] = [];
         $categoryData['available_sort_by'] = $category->getAvailableSortBy();
+        $categoryData['model'] = $category;
         return $this->flattener->flatten($categoryData);
     }
 }

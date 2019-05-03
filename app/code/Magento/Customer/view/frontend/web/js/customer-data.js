@@ -75,17 +75,17 @@ define([
 
         /**
          * @param {Object} sectionNames
-         * @param {Number} updateSectionId
+         * @param {Boolean} forceNewSectionTimestamp
          * @return {*}
          */
-        getFromServer: function (sectionNames, updateSectionId) {
+        getFromServer: function (sectionNames, forceNewSectionTimestamp) {
             var parameters;
 
             sectionNames = sectionConfig.filterClientSideSections(sectionNames);
             parameters = _.isArray(sectionNames) ? {
                 sections: sectionNames.join(',')
             } : [];
-            parameters['update_section_id'] = updateSectionId;
+            parameters['force_new_section_timestamp'] = forceNewSectionTimestamp;
 
             return $.getJSON(options.sectionLoadUrl, parameters).fail(function (jqXHR) {
                 throw new Error(jqXHR);
@@ -216,6 +216,9 @@ define([
                     $.cookieStorage.set(privateContentVersion, privateContent);
                 }
                 $.localStorage.set(privateContentVersion, privateContent);
+                _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
+                    buffer.notify(sectionName, sectionData);
+                });
                 this.reload([], false);
                 isLoading = true;
             } else if (expiredSectionNames.length > 0) {
@@ -326,11 +329,11 @@ define([
 
         /**
          * @param {Array} sectionNames
-         * @param {Number} updateSectionId
+         * @param {Boolean} forceNewSectionTimestamp
          * @return {*}
          */
-        reload: function (sectionNames, updateSectionId) {
-            return dataProvider.getFromServer(sectionNames, updateSectionId).done(function (sections) {
+        reload: function (sectionNames, forceNewSectionTimestamp) {
+            return dataProvider.getFromServer(sectionNames, forceNewSectionTimestamp).done(function (sections) {
                 $(document).trigger('customer-data-reload', [sectionNames]);
                 buffer.update(sections);
             });
