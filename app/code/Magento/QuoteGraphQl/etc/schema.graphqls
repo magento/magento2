@@ -308,7 +308,14 @@ type VirtualCartItem implements CartItemInterface @doc(description: "Virtual Car
 interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemTypeResolver") {
     id: String!
     quantity: Float!
+    prices: CartItemPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemPrices")
     product: ProductInterface!
+}
+
+type CartItemPrices {
+    price: Money!
+    row_total: Money!
+    row_total_including_tax: Money!
 }
 
 type SelectedCustomizableOption {
