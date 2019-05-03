@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQlCache\Controller\Cms;
 
 use Magento\Cms\Model\GetPageByIdentifier;
+use Magento\Cms\Model\PageRepository;
 use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
 
@@ -80,6 +81,7 @@ QUERY;
          }
 QUERY;
 
+        // check to see that the first entity gets a MISS when called the first time
         $request = $this->prepareRequest($queryCmsPage100);
         $response = $this->graphqlController->dispatch($request);
         $this->assertEquals(
@@ -90,7 +92,8 @@ QUERY;
         $requestedCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
         $expectedCacheTags = ['cms_p', 'cms_p_' .$pageId100 , 'FPC'];
         $this->assertEquals($expectedCacheTags, $requestedCacheTags);
-        
+
+        // check to see that the second entity gets a miss when called the first time
         $request = $this->prepareRequest($queryCmsPageBlank);
         $response = $this->graphqlController->dispatch($request);
         $this->assertEquals(
@@ -102,6 +105,7 @@ QUERY;
         $expectedCacheTags = ['cms_p', 'cms_p_' .$pageIdBlank , 'FPC'];
         $this->assertEquals($expectedCacheTags, $requestedCacheTags);
 
+        // check to see that the first entity gets a HIT when called the second time
         $request = $this->prepareRequest($queryCmsPage100);
         $response = $this->graphqlController->dispatch($request);
         $this->assertEquals(
@@ -113,6 +117,7 @@ QUERY;
         $expectedCacheTags = ['cms_p', 'cms_p_' .$pageId100 , 'FPC'];
         $this->assertEquals($expectedCacheTags, $requestedCacheTags);
 
+        // check to see that the second entity gets a HIT when called the second time
         $request = $this->prepareRequest($queryCmsPageBlank);
         $response = $this->graphqlController->dispatch($request);
         $this->assertEquals(
@@ -122,6 +127,38 @@ QUERY;
         );
         $requestedCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
         $expectedCacheTags = ['cms_p', 'cms_p_' .$pageIdBlank , 'FPC'];
+        $this->assertEquals($expectedCacheTags, $requestedCacheTags);
+
+
+        /** @var PageRepository $pageRepository */
+        $pageRepository = $this->objectManager->get(PageRepository::class);
+
+        $page = $pageRepository->getById($pageId100);
+        $page->setTitle('something else that causes invalidation');
+        $pageRepository->save($page);
+
+        // check to see that the first entity gets a MISS and it was invalidated
+        $request = $this->prepareRequest($queryCmsPage100);
+        $response = $this->graphqlController->dispatch($request);
+        $this->assertEquals(
+            'MISS',
+            $response->getHeader('X-Magento-Cache-Debug')->getFieldValue(),
+            "expected MISS on page page100 id {$queryCmsPage100}"
+        );
+        $requestedCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
+        $expectedCacheTags = ['cms_p', 'cms_p_' .$pageId100 , 'FPC'];
+        $this->assertEquals($expectedCacheTags, $requestedCacheTags);
+
+        // check to see that the first entity gets a HIT when called the second time
+        $request = $this->prepareRequest($queryCmsPage100);
+        $response = $this->graphqlController->dispatch($request);
+        $this->assertEquals(
+            'HIT',
+            $response->getHeader('X-Magento-Cache-Debug')->getFieldValue(),
+            "expected MISS on page page100 id {$queryCmsPage100}"
+        );
+        $requestedCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
+        $expectedCacheTags = ['cms_p', 'cms_p_' .$pageId100 , 'FPC'];
         $this->assertEquals($expectedCacheTags, $requestedCacheTags);
     }
 }
