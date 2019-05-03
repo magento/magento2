@@ -113,7 +113,7 @@ class AfterPaymentSaveObserver implements ObserverInterface
     /**
      * Reads Payment token from Order Payment
      *
-     * @param OrderPaymentExtensionInterface | null $extensionAttributes
+     * @param OrderPaymentExtensionInterface|null $extensionAttributes
      * @return PaymentTokenInterface | null
      */
     protected function getPaymentToken(OrderPaymentExtensionInterface $extensionAttributes = null)
