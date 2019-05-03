@@ -140,16 +140,16 @@
         <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickCreateOrder"/>
 
         <!-- Add configure to first product -->
-        <actionGroup ref="AddConfigureToProductActionGroup" stepKey="addConfigureToFirstProduct">
-            <argument name="productName" value="$$createFirstConfigProduct.name$$"/>
-            <argument name="option" value="$$getFirstConfigAttributeOption.value$$"/>
-        </actionGroup>
+        <click selector="{{AdminCustomerActivitiesComparisonListSection.addToOrderConfigure($$createFirstConfigProduct.name$$)}}" stepKey="configureFirstProduct"/>
+        <selectOption selector="{{AdminCustomerActivitiesConfigureSection.addAttribute}}" userInput="$$getFirstConfigAttributeOption.value$$" stepKey="selectOptionForFirstProduct"/>
+        <click selector="{{AdminCustomerActivitiesConfigureSection.okButton}}" stepKey="clickOkBtnForFirstProduct"/>
+        <waitForPageLoad stepKey="waitForConfigureForFirstProductLoad"/>
 
         <!-- Add configure to second product -->
-        <actionGroup ref="AddConfigureToProductActionGroup" stepKey="addConfigureToSecondProduct">
-            <argument name="productName" value="$$createSecondConfigProduct.name$$"/>
-            <argument name="option" value="$$getSecondConfigAttributeOption.value$$"/>
-        </actionGroup>
+        <click selector="{{AdminCustomerActivitiesComparisonListSection.addToOrderConfigure($$createSecondConfigProduct.name$$)}}" stepKey="configureSecondProduct"/>
+        <selectOption selector="{{AdminCustomerActivitiesConfigureSection.addAttribute}}" userInput="$$getSecondConfigAttributeOption.value$$" stepKey="selectOptionForSecond"/>
+        <click selector="{{AdminCustomerActivitiesConfigureSection.okButton}}" stepKey="clickOkBtnForSecondProduct"/>
+        <waitForPageLoad stepKey="waitForConfigureForSecondProductLoad"/>
 
         <!-- Click 'Update Changes' -->
         <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickUpdateChangesBtn"/>

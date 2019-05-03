@@ -11,7 +11,5 @@
     <section name="AdminCustomerActivitiesComparisonListSection">
         <element name="addProductToOrder" type="text" selector="//div[@id='order-sidebar_compared']//tr[td[.='{{productName}}']]//input[contains(@name,'add')]" parameterized="true" timeout="30"/>
         <element name="addToOrderConfigure" type="button" selector="//div[@id='order-sidebar_compared']//tr[td[contains(.,'{{productName}}')]]//a[contains(@class, 'icon-configure')]" parameterized="true" timeout="30"/>
-        <element name="addAttribute" type="select" selector="[id*='attribute']" timeout="30"/>
-        <element name="okButton" type="button" selector="//button[contains(concat(' ',normalize-space(@class),' '),' action-primary ')]" timeout="30"/>
     </section>
 </sections>
