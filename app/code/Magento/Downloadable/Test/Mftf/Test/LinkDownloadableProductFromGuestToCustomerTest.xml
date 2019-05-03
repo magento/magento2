@@ -29,15 +29,15 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <magentoCLI command="config:set {{DisableGuestCheckoutWithDownloadableItems.path}} {{DisableGuestCheckoutWithDownloadableItems.value}}" stepKey="disableGuestCheckoutWithDownloadableItems" />
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
             <actionGroup ref="RemoveCustomerFromAdminActionGroup" stepKey="deleteCustomer">
                 <argument name="customer" value="Simple_US_NY_Customer"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
-            <magentoCLI command="config:set {{DisableGuestCheckoutWithDownloadableItems.path}} {{DisableGuestCheckoutWithDownloadableItems.value}}" stepKey="disableGuestCheckoutWithDownloadableItems" />
-            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
         </after>
         <!--Step 1: Go to Storefront as Guest-->
-        <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="loginAsGuest"/>
+        <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="logoutCustomer"/>
         <!--Step 2: Add downloadable product to shopping cart-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontProductPage"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
