@@ -717,6 +717,7 @@ class Store extends AbstractExtensibleModel implements
                 $indexFileName = 'index.php';
             } else {
                 $scriptFilename = $this->_request->getServer('SCRIPT_FILENAME');
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $indexFileName = basename($scriptFilename);
             }
             $url .= $indexFileName . '/';
@@ -1071,9 +1072,10 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Reinit Stores on after save
      *
-     * @deprecated 100.1.3
      * @return $this
+     * @throws \Exception
      * @since 100.1.3
+     * @deprecated 100.1.3
      */
     public function afterSave()
     {
@@ -1204,10 +1206,12 @@ class Store extends AbstractExtensibleModel implements
             return $storeUrl;
         }
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $storeParsedUrl = parse_url($storeUrl);
 
         $storeParsedQuery = [];
         if (isset($storeParsedUrl['query'])) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             parse_str($storeParsedUrl['query'], $storeParsedQuery);
         }
 
@@ -1235,6 +1239,7 @@ class Store extends AbstractExtensibleModel implements
         $requestStringParts = explode('?', $requestString, 2);
         $requestStringPath = $requestStringParts[0];
         if (isset($requestStringParts[1])) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             parse_str($requestStringParts[1], $requestString);
         } else {
             $requestString = [];
@@ -1378,6 +1383,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function getStorePath()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $parsedUrl = parse_url($this->getBaseUrl());
         return $parsedUrl['path'] ?? '/';
     }

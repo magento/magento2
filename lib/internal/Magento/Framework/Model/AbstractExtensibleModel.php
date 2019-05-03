@@ -158,7 +158,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setCustomAttributes(array $attributes)
     {
@@ -166,7 +166,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
@@ -182,9 +182,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * Added custom attributes support.
+     * {@inheritdoc} Added custom attributes support.
      */
     public function setData($key, $value = null)
     {
@@ -200,9 +198,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * Unset customAttributesChanged flag
+     * {@inheritdoc} Unset customAttributesChanged flag
      */
     public function unsetData($key = null)
     {

@@ -146,6 +146,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
                         return $acl->isAllowed($user->getAclRole(), null, $privilege);
                     }
                 } catch (\Exception $e) {
+                    return false;
                 }
             }
         }

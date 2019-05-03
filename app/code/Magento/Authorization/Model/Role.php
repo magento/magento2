@@ -51,7 +51,7 @@ class Role extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function __sleep()
     {
@@ -60,7 +60,7 @@ class Role extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function __wakeup()
     {

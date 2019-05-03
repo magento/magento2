@@ -137,7 +137,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @return void
      */
-    protected function _construct()
+    protected function _construct() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
 

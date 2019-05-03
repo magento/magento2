@@ -365,10 +365,8 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
     /**
      * Hook for operations before rendering filters
-     *
-     * @return void
      */
-    protected function _renderFiltersBefore()
+    protected function _renderFiltersBefore() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
 
@@ -730,6 +728,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     public function printLogQuery($printQuery = false, $logQuery = false, $sql = null)
     {
         if ($printQuery || $this->getFlag('print_query')) {
+            //phpcs:ignore Magento2.Security.LanguageConstruct
             echo $sql === null ? $this->getSelect()->__toString() : $sql;
         }
 
@@ -823,7 +822,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @return void
      */
-    protected function _initSelect()
+    protected function _initSelect() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
         // no implementation, should be overridden in children classes
     }

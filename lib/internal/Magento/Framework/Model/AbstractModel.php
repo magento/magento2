@@ -199,7 +199,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @return void
      */
-    protected function _construct()
+    protected function _construct() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
 
