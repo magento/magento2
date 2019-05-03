@@ -52,7 +52,7 @@ class UpdateLinkPurchasedObserver implements ObserverInterface
             $linkPurchased->setCustomerId($customerId)->save();
         }
 
-        return;
+        return $this;
     }
 
     /**
@@ -63,11 +63,9 @@ class UpdateLinkPurchasedObserver implements ObserverInterface
      */
     private function getPurchasedCollection(int $orderId): PurchasedCollection
     {
-        $purchasedCollection = $this->purchasedCollectionFactory->create()->addFieldToFilter(
+        return $purchasedCollection = $this->purchasedCollectionFactory->create()->addFieldToFilter(
             'order_id',
             ['eq' => $orderId]
         );
-
-        return $purchasedCollection;
     }
 }
