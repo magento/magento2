@@ -209,6 +209,8 @@ class ProductGenerator
     }
 
     /**
+     * Initialize fixture default values
+     *
      * @param array $fixture
      * @return void
      */
@@ -237,6 +239,8 @@ class ProductGenerator
     }
 
     /**
+     * Get fixture value
+     *
      * @param string $fixtureKey
      * @param int $productId
      * @param int $entityNumber
@@ -250,6 +254,8 @@ class ProductGenerator
     }
 
     /**
+     * Get bind value
+     *
      * @param callable|mixed $fixtureValue
      * @param int $productId
      * @param int $entityNumber
@@ -258,7 +264,7 @@ class ProductGenerator
     private function getBindValue($fixtureValue, $productId, $entityNumber)
     {
         return is_callable($fixtureValue)
-            ? call_user_func($fixtureValue, $productId, $entityNumber)
+            ? $fixtureValue($productId, $entityNumber)
             : $fixtureValue;
     }
 

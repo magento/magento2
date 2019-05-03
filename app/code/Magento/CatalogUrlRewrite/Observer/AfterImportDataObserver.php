@@ -223,8 +223,7 @@ class AfterImportDataObserver implements ObserverInterface
     }
 
     /**
-     * Action after data import.
-     * Save new url rewrites and remove old if exist.
+     * Action after data import. Save new url rewrites and remove old if exist.
      *
      * @param Observer $observer
      * @return void
@@ -351,6 +350,7 @@ class AfterImportDataObserver implements ObserverInterface
 
     /**
      * Generate product url rewrites
+     *
      * @return UrlRewrite[]
      * @throws LocalizedException
      */
@@ -407,6 +407,7 @@ class AfterImportDataObserver implements ObserverInterface
 
     /**
      * Generate list based on categories.
+     *
      * @return UrlRewrite[]
      * @throws LocalizedException
      */
@@ -555,6 +556,7 @@ class AfterImportDataObserver implements ObserverInterface
 
     /**
      * Check, category suited for url-rewrite generation.
+     *
      * @param Category $category
      * @param int $storeId
      * @return bool
@@ -580,6 +582,7 @@ class AfterImportDataObserver implements ObserverInterface
 
     /**
      * Get category by id considering store scope.
+     *
      * @param int $categoryId
      * @param int $storeId
      * @return Category|DataObject
