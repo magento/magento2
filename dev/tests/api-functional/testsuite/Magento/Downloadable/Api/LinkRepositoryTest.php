@@ -305,7 +305,7 @@ class LinkRepositoryTest extends WebapiAbstract
      * @expectedExceptionMessage Link file not found. Please try again.
      * @return void
      */
-    public function testCreateLinkWithMissingFileThrowsException(): void
+    public function testCreateLinkWithMissingLinkFileThrowsException(): void
     {
         $requestData = [
             'isGlobalScopeContent' => false,
@@ -334,7 +334,7 @@ class LinkRepositoryTest extends WebapiAbstract
      * @expectedExceptionMessage Link sample file not found. Please try again.
      * @return void
      */
-    public function testCreateLinkWithMissingSampleThrowsException(): void
+    public function testCreateLinkWithMissingSampleFileThrowsException(): void
     {
         $requestData = [
             'isGlobalScopeContent' => false,
