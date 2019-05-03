@@ -5,10 +5,12 @@
  */
 namespace Magento\Framework\View\Model\Layout;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
 use Magento\Framework\View\Model\Layout\Update\Validator;
 
@@ -41,8 +43,14 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 
     /**
      * Cache id suffix for page layout
+     * @deprecated it was replaced by PAGE_LAYOUT_MERGED_CACHE_SUFFIX
      */
     const PAGE_LAYOUT_CACHE_SUFFIX = 'page_layout';
+
+    /**
+     * Cache id suffix for layout xml and page layout
+     */
+    const PAGE_LAYOUT_MERGED_CACHE_SUFFIX = 'page_layout_merged';
 
     /**
      * @var \Magento\Framework\View\Design\ThemeInterface
@@ -53,6 +61,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @var \Magento\Framework\Url\ScopeInterface
      */
     private $scope;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
 
     /**
      * In-memory cache for loaded layout updates
@@ -173,10 +186,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\View\Model\Layout\Update\Validator $validator
      * @param \Psr\Log\LoggerInterface $logger
-     * @param ReadFactory $readFactory ,
+     * @param ReadFactory $readFactory
      * @param \Magento\Framework\View\Design\ThemeInterface $theme Non-injectable theme instance
      * @param string $cacheSuffix
      * @param LayoutCacheKeyInterface $layoutCacheKey
+     * @param SerializerInterface|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -192,6 +206,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         \Magento\Framework\View\Design\ThemeInterface $theme = null,
         $cacheSuffix = '',
         LayoutCacheKeyInterface $layoutCacheKey = null
+        SerializerInterface $serializer = null
     ) {
         $this->theme = $theme ?: $design->getDesignTheme();
         $this->scope = $scopeResolver->getScope();
@@ -205,6 +220,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $this->cacheSuffix = $cacheSuffix;
         $this->layoutCacheKey = $layoutCacheKey
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(LayoutCacheKeyInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -437,12 +453,16 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 
         $this->addHandle($handles);
 
-        $cacheId = $this->getCacheId();
-        $cacheIdPageLayout = $cacheId . '_' . self::PAGE_LAYOUT_CACHE_SUFFIX;
+        $cacheId = $this->getCacheId() . '_' . self::PAGE_LAYOUT_MERGED_CACHE_SUFFIX;
+
         $result = $this->_loadCache($cacheId);
-        if ($result) {
-            $this->addUpdate($result);
-            $this->pageLayout = $this->_loadCache($cacheIdPageLayout);
+        if ($result !== false) {
+
+            $data = $this->serializer->unserialize($result);
+
+            $this->pageLayout = $data["pageLayout"];
+            $this->addUpdate($data["layout"]);
+
             foreach ($this->getHandles() as $handle) {
                 $this->allHandles[$handle] = $this->handleProcessed;
             }
@@ -455,8 +475,13 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 
         $layout = $this->asString();
         $this->_validateMergedLayout($cacheId, $layout);
-        $this->_saveCache($layout, $cacheId, $this->getHandles());
-        $this->_saveCache((string)$this->pageLayout, $cacheIdPageLayout, $this->getHandles());
+
+        $data = [
+            "pageLayout" => (string)$this->pageLayout,
+            "layout"     => $layout
+        ];
+        $this->_saveCache($this->serializer->serialize($data), $cacheId, $this->getHandles());
+
         return $this;
     }
 
