@@ -10,10 +10,10 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontQuickSearchActionGroup">
         <arguments>
-            <argument name="textForSearch" type="string"/>
+            <argument name="searchPhrase" type="string"/>
         </arguments>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
-        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="{{textForSearch}}" stepKey="fillSearchField"/>
+        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="{{searchPhrase}}" stepKey="fillSearchField"/>
         <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
     </actionGroup>
 </actionGroups>

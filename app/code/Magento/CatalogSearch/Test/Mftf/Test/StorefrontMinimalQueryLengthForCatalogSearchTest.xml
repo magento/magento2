@@ -17,14 +17,14 @@
             <severity value="AVERAGE"/>
             <testCaseId value="MC-15905"/>
             <useCaseId value="MAGETWO-73989"/>
-            <group value="CatalogSearch"/>
+            <group value="catalogSearch"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <createData entity="SetMinQueryLength" stepKey="setMinQueryLength"/>
+            <createData entity="SetMinQueryLengthToOne" stepKey="setMinQueryLengthToOne"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -36,12 +36,12 @@
         <actionGroup ref="AdminAssertQueryLengthHintsActionGroup" stepKey="assertQueryLengthHints"/>
         <actionGroup ref="StorefrontSearchProductActionGroup" stepKey="searchForProducts">
             <argument name="product" value="$$createProduct$$"/>
-            <argument name="textForSearch" value="s"/>
+            <argument name="searchPhrase" value="s"/>
         </actionGroup>
-        <createData entity="SetMinQueryLength2" stepKey="setMinQueryLengthToTwo"/>
+        <createData entity="SetMinQueryLengthToTwo" stepKey="setMinQueryLengthToTwo"/>
         <actionGroup ref="StorefrontSearchProductActionGroup" stepKey="searchForProductsAgain">
             <argument name="product" value="$$createProduct$$"/>
-            <argument name="textForSearch" value="si"/>
+            <argument name="searchPhrase" value="si"/>
         </actionGroup>
     </test>
 </tests>

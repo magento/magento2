@@ -6,7 +6,7 @@
   */
 -->
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="AdminCatalogSearchConfigurationPage" url="admin/system_config/edit/section/catalog/{{tab_anchor}}" area="admin" module="Magento_Config" parameterized="true">
+    <page name="AdminCatalogSearchConfigurationPage" url="admin/system_config/edit/section/catalog/{{tab_anchor}}" area="admin" module="Magento_CatalogSearch" parameterized="true">
         <section name="AdminCatalogSearchConfigurationSection"/>
     </page>
 </pages>

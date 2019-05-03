@@ -12,7 +12,9 @@
             <object key="search" dataType="catalog_search_config">
                 <object key="fields" dataType="catalog_search_config">
                     <object key="min_query_length" dataType="length_config">
-                        <field key="inherit">boolean</field>
+                        <object key="inherit" dataType="length_config_inherit">
+                            <field key="value">boolean</field>
+                        </object>
                         <field key="value">integer</field>
                     </object>
                 </object>

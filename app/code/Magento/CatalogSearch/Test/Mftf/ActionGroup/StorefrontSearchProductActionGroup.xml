@@ -12,6 +12,7 @@
         <arguments>
             <argument name="product"/>
         </arguments>
-        <see selector="{{StorefrontCategoryMainSection.productNameInGrid(product.name)}}" userInput="{{product.name}}" after="clickSearchButton" stepKey="seeProductNameInCatalogSearchPage"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.productNameInGrid(product.name)}}" after="clickSearchButton" stepKey="waitForProductNameElement"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productNameInGrid(product.name)}}" stepKey="seeProductNameInCatalogSearchPage"/>
     </actionGroup>
 </actionGroups>
