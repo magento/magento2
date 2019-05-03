@@ -91,7 +91,7 @@ class ActionList
         if ($area) {
             $area = '\\' . $area;
         }
-        if (strpos($namespace, self::NOT_ALLOWED_IN_NAMESPACE_PATH) !== false) {
+        if (stripos($namespace, self::NOT_ALLOWED_IN_NAMESPACE_PATH) !== false) {
             return null;
         }
         if (in_array(strtolower($action), $this->reservedWords)) {
