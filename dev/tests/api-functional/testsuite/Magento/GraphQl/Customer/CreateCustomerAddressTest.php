@@ -13,6 +13,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 
+/**
+ * Create customer address tests
+ */
 class CreateCustomerAddressTest extends GraphQlAbstract
 {
     /**
@@ -117,7 +120,7 @@ MUTATION;
         $userName = 'customer@example.com';
         $password = 'password';
 
-        $response = $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('createCustomerAddress', $response);
         $this->assertArrayHasKey('customer_id', $response['createCustomerAddress']);
         $this->assertEquals($customerId, $response['createCustomerAddress']['customer_id']);
@@ -158,7 +161,7 @@ mutation{
   }
 }
 MUTATION;
-        $this->graphQlQuery($mutation);
+        $this->graphQlMutation($mutation);
     }
 
     /**
@@ -195,7 +198,73 @@ MUTATION;
 
         $userName = 'customer@example.com';
         $password = 'password';
-        $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testCreateCustomerAddressWithRedundantStreetLine()
+    {
+        $newAddress = [
+            'region' => [
+                'region' => 'Arizona',
+                'region_id' => 4,
+                'region_code' => 'AZ'
+            ],
+            'country_id' => 'US',
+            'street' => ['Line 1 Street', 'Line 2', 'Line 3'],
+            'company' => 'Company name',
+            'telephone' => '123456789',
+            'fax' => '123123123',
+            'postcode' => '7777',
+            'city' => 'City Name',
+            'firstname' => 'Adam',
+            'lastname' => 'Phillis',
+            'middlename' => 'A',
+            'prefix' => 'Mr.',
+            'suffix' => 'Jr.',
+            'vat_id' => '1',
+            'default_shipping' => true,
+            'default_billing' => false
+        ];
+
+        $mutation
+            = <<<MUTATION
+mutation {
+  createCustomerAddress(input: {
+    region: {
+        region: "{$newAddress['region']['region']}"
+        region_id: {$newAddress['region']['region_id']}
+        region_code: "{$newAddress['region']['region_code']}"
+    }
+    country_id: {$newAddress['country_id']}
+    street: ["{$newAddress['street'][0]}","{$newAddress['street'][1]}","{$newAddress['street'][2]}"]
+    company: "{$newAddress['company']}"
+    telephone: "{$newAddress['telephone']}"
+    fax: "{$newAddress['fax']}"
+    postcode: "{$newAddress['postcode']}"
+    city: "{$newAddress['city']}"
+    firstname: "{$newAddress['firstname']}"
+    lastname: "{$newAddress['lastname']}"
+    middlename: "{$newAddress['middlename']}"
+    prefix: "{$newAddress['prefix']}"
+    suffix: "{$newAddress['suffix']}"
+    vat_id: "{$newAddress['vat_id']}"
+    default_shipping: true
+    default_billing: false
+  }) {
+    id
+  }
+}
+MUTATION;
+
+        $userName = 'customer@example.com';
+        $password = 'password';
+
+        self::expectExceptionMessage('"Street Address" cannot contain more than 2 lines.');
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**

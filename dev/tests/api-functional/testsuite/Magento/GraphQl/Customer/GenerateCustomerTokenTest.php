@@ -38,7 +38,7 @@ mutation {
 }
 MUTATION;
 
-        $response = $this->graphQlQuery($mutation);
+        $response = $this->graphQlMutation($mutation);
         $this->assertArrayHasKey('generateCustomerToken', $response);
         $this->assertInternalType('array', $response['generateCustomerToken']);
     }
@@ -66,6 +66,56 @@ MUTATION;
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('GraphQL response contains errors: The account sign-in' . ' ' .
             'was incorrect or your account is disabled temporarily. Please wait and try again later.');
-        $this->graphQlQuery($mutation);
+        $this->graphQlMutation($mutation);
+    }
+
+    /**
+     * Verify customer with empty email
+     */
+    public function testGenerateCustomerTokenWithEmptyEmail()
+    {
+        $email = '';
+        $password = 'bad-password';
+
+        $mutation
+            = <<<MUTATION
+mutation {
+	generateCustomerToken(
+        email: "{$email}"
+        password: "{$password}"
+    ) {
+        token
+    }
+}
+MUTATION;
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: Specify the "email" value.');
+        $this->graphQlMutation($mutation);
+    }
+
+    /**
+     * Verify customer with empty password
+     */
+    public function testGenerateCustomerTokenWithEmptyPassword()
+    {
+        $email = 'customer@example.com';
+        $password = '';
+
+        $mutation
+            = <<<MUTATION
+mutation {
+	generateCustomerToken(
+        email: "{$email}"
+        password: "{$password}"
+    ) {
+        token
+    }
+}
+MUTATION;
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: Specify the "password" value.');
+        $this->graphQlMutation($mutation);
     }
 }

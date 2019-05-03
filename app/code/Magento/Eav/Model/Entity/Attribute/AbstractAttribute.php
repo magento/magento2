@@ -1404,9 +1404,14 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * @inheritdoc
      * @since 100.0.7
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         return array_diff(
             parent::__sleep(),
             [
@@ -1429,9 +1434,14 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * @inheritdoc
      * @since 100.0.7
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
