@@ -12,9 +12,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for get specified billing address
+ * Test for get specified shipping address
  */
-class GetSpecifiedBillingAddressTest extends GraphQlAbstract
+class GetSpecifiedShippingAddressTest extends GraphQlAbstract
 {
     /**
      * @var GetMaskedQuoteIdByReservedOrderId
@@ -34,18 +34,18 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      */
-    public function testGetSpecifiedBillingAddress()
+    public function testGetSpecifiedShippingAddress()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
 
         $response = $this->graphQlQuery($query);
         self::assertArrayHasKey('cart', $response);
-        self::assertArrayHasKey('billing_address', $response['cart']);
+        self::assertArrayHasKey('shipping_addresses', $response['cart']);
 
-        $expectedBillingAddressData = [
+        $expectedShippingAddressData = [
             'firstname' => 'John',
             'lastname' => 'Smith',
             'company' => 'CompanyName',
@@ -63,9 +63,9 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
                 'label' => 'US',
             ],
             'telephone' => '3468676',
-            '__typename' => 'BillingCartAddress',
+            '__typename' => 'ShippingCartAddress',
         ];
-        self::assertEquals($expectedBillingAddressData, $response['cart']['billing_address']);
+        self::assertEquals($expectedShippingAddressData, current($response['cart']['shipping_addresses']));
     }
 
     /**
@@ -73,16 +73,16 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
-    public function testGetSpecifiedBillingAddressIfBillingAddressIsNotSet()
+    public function testGetSpecifiedShippingAddressIfShippingAddressIsNotSet()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
 
         $response = $this->graphQlQuery($query);
         self::assertArrayHasKey('cart', $response);
-        self::assertArrayHasKey('billing_address', $response['cart']);
+        self::assertArrayHasKey('shipping_addresses', $response['cart']);
 
-        $expectedBillingAddressData = [
+        $expectedShippingAddressData = [
             'firstname' => null,
             'lastname' => null,
             'company' => null,
@@ -100,16 +100,16 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
                 'label' => null,
             ],
             'telephone' => null,
-            '__typename' => 'BillingCartAddress',
+            '__typename' => 'ShippingCartAddress',
         ];
-        self::assertEquals($expectedBillingAddressData, $response['cart']['billing_address']);
+        self::assertEquals($expectedShippingAddressData, current($response['cart']['shipping_addresses']));
     }
 
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
-    public function testGetBillingAddressOfNonExistentCart()
+    public function testGetShippingAddressOfNonExistentCart()
     {
         $maskedQuoteId = 'non_existent_masked_id';
         $query = $this->getQuery($maskedQuoteId);
@@ -117,13 +117,14 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
     }
 
     /**
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      */
-    public function testGetBillingAddressFromAnotherCustomerCart()
+    public function testGetShippingAddressFromCustomerCart()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
@@ -143,7 +144,7 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
         return <<<QUERY
 {
   cart(cart_id: "$maskedQuoteId") {
-    billing_address {
+    shipping_addresses {
       firstname
       lastname
       company
