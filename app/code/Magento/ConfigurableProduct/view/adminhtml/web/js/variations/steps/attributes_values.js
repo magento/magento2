@@ -184,32 +184,56 @@ define([
          * @return {Boolean}
          */
         saveOptions: function () {
-            var options = [];
+            var newOptions = [],
+                errorsInAttributes = [],
+                allOptions = [];
 
             this.attributes.each(function (attribute) {
-                attribute.chosenOptions.each(function (id) {
+
+                attribute.options.each(function (element) {
                     var option = attribute.options.findWhere({
-                        id: id,
-                        'is_new': true
+                        id: element.id
                     });
 
-                    if (option) {
-                        options.push(option);
+                    if (option.is_new === true) {
+                        newOptions.push(option);
                     }
+
+                    if (typeof allOptions[option.attribute_id] === 'undefined') {
+                        allOptions[option.attribute_id] = [];
+                    }
+
+                    if (typeof allOptions[option.attribute_id][option.label] !== 'undefined') {
+                        errorsInAttributes.push(attribute);
+                    }
+
+                    allOptions[option.attribute_id][option.label] = option.label;
                 });
             });
 
-            if (!options.length) {
+            if (errorsInAttributes.length) {
+                var errorMessage = $.mage.__('Attributes must have unique option values');
+                throw new Error(errorMessage);
+            }
+
+            if (!newOptions.length) {
                 return false;
             }
+
             $.ajax({
                 type: 'POST',
                 url: this.createOptionsUrl,
                 data: {
-                    options: options
+                    options: newOptions
                 },
                 showLoader: true
             }).done(function (savedOptions) {
+                if (savedOptions.error) {
+                    this.notificationMessage.error = savedOptions.error;
+                    this.notificationMessage.text = savedOptions.message;
+                    return;
+                }
+
                 this.attributes.each(function (attribute) {
                     _.each(savedOptions, function (newOptionId, oldOptionId) {
                         var option = attribute.options.findWhere({
