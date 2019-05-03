@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Backend\Block\Page $block */
+?>
+<div id="preview" class="cms-revision-preview">
+    <iframe
+            name="preview_iframe"
+            id="preview_iframe"
+            frameborder="0"
+            title="<?php echo $block->escapeHtml(__('Preview')) ?>"
+            width="100%"
+            sandbox="allow-forms allow-pointer-lock"
+            src="<?php echo $block->escapeUrl($block->getUrl('*/*/popup', ['_current' => true])) ?>"
+    />
+</div>
