@@ -17,7 +17,6 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\NameFinder;
-use Magento\Framework\Reflection\TypeCaster;
 use Magento\Framework\Reflection\TypeProcessor;
 use ReflectionException;
 use ReflectionMethod;
@@ -71,11 +70,6 @@ class DtoProcessor
     private $objectFactory;
 
     /**
-     * @var TypeCaster
-     */
-    private $typeCaster;
-
-    /**
      * @var ExtensionAttributesFactory
      */
     private $extensionAttributesFactory;
@@ -98,7 +92,6 @@ class DtoProcessor
     /**
      * @param ObjectFactory $objectFactory
      * @param TypeProcessor $typeProcessor
-     * @param TypeCaster $typeCaster
      * @param ConfigInterface $config
      * @param NameFinder $nameFinder
      * @param JoinProcessor $joinProcessor
@@ -109,7 +102,6 @@ class DtoProcessor
     public function __construct(
         ObjectFactory $objectFactory,
         TypeProcessor $typeProcessor,
-        TypeCaster $typeCaster,
         ConfigInterface $config,
         NameFinder $nameFinder,
         JoinProcessor $joinProcessor,
@@ -121,7 +113,6 @@ class DtoProcessor
         $this->typeProcessor = $typeProcessor;
         $this->nameFinder = $nameFinder;
         $this->objectFactory = $objectFactory;
-        $this->typeCaster = $typeCaster;
         $this->extensionAttributesFactory = $extensionAttributesFactory;
         $this->joinProcessor = $joinProcessor;
         $this->methodsMap = $methodsMap;
@@ -202,7 +193,27 @@ class DtoProcessor
             return $value;
         }
 
-        return $this->typeCaster->castValueToType($value, $type);
+        if ($type === 'int' || $type === 'integer') {
+            return (int) $value;
+        }
+
+        if ($type === 'string') {
+            return (string) $value;
+        }
+
+        if ($type === 'bool' || $type === 'boolean' || $type === 'true' || $type === 'false') {
+            return (bool) $value;
+        }
+
+        if ($type === 'float') {
+            return (float) $value;
+        }
+
+        if ($type === 'double') {
+            return (double) $value;
+        }
+
+        return $value;
     }
 
     /**
