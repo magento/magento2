@@ -26,7 +26,7 @@
                 <item name="area" xsi:type="string">Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\Text</item>
                 <item name="drop_down" xsi:type="string">Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\Dropdown</item>
                 <item name="radio" xsi:type="string">Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\Dropdown</item>
-                <item name="checkbox" xsi:type="string">Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\Dropdown</item>
+                <item name="checkbox" xsi:type="string">Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\Multiple</item>
                 <item name="multiple" xsi:type="string">Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\Multiple</item>
             </argument>
         </arguments>
