@@ -8,7 +8,7 @@
  * @var \Magento\Ui\Component\Form $block
  */
 ?>
-<?= $block->escapeHtml($block->renderChildComponent('before_form')) ?>
+<?=/* @noEscape */ $block->renderChildComponent('before_form') ?>
 <div data-role="spinner"
      data-component="<?= $block->escapeHtmlAttr($block->getName()) ?>.areas"
      class="admin__data-grid-loading-mask">
@@ -18,4 +18,4 @@
      class="entry-edit form-inline">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>
-<?= $block->escapeHtml($block->renderChildComponent('after_form')) ?>
+<?= /* @noEscape */ $block->renderChildComponent('after_form') ?>

@@ -11,7 +11,7 @@
 <?php if ($block->isLoggingEnabled()): ?>
     <script>
         window.onerror = function(msg, url, line) {
-            var key = "<?= $block->escapeHtmlAttr($block->getSessionStorageKey()) ?>";
+            var key = "<?= $block->escapeJs($block->getSessionStorageKey()) ?>";
             var errors = {};
             if (sessionStorage.getItem(key)) {
                 errors = JSON.parse(sessionStorage.getItem(key));
