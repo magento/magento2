@@ -27,12 +27,14 @@ class Cache implements ConfigOptionsListInterface
     const INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE = 'cache-backend-redis-db';
     const INPUT_KEY_CACHE_BACKEND_REDIS_PORT = 'cache-backend-redis-port';
     const INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD = 'cache-backend-redis-password';
+    const INPUT_KEY_CACHE_ID_PREFIX = 'cache-id-prefix';
 
     const CONFIG_PATH_CACHE_BACKEND = 'cache/frontend/default/backend';
     const CONFIG_PATH_CACHE_BACKEND_SERVER = 'cache/frontend/default/backend_options/server';
     const CONFIG_PATH_CACHE_BACKEND_DATABASE = 'cache/frontend/default/backend_options/database';
     const CONFIG_PATH_CACHE_BACKEND_PORT = 'cache/frontend/default/backend_options/port';
     const CONFIG_PATH_CACHE_BACKEND_PASSWORD = 'cache/frontend/default/backend_options/password';
+    const CONFIG_PATH_CACHE_ID_PREFIX = 'cache/frontend/default/id_prefix';
 
     /**
      * @var array
@@ -112,6 +114,12 @@ class Cache implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_CACHE_BACKEND_PASSWORD,
                 'Redis server password'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_CACHE_ID_PREFIX,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_CACHE_ID_PREFIX,
+                'ID prefix for cache keys'
             )
         ];
     }
@@ -122,6 +130,11 @@ class Cache implements ConfigOptionsListInterface
     public function createConfig(array $options, DeploymentConfig $deploymentConfig)
     {
         $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        if (isset($options[self::INPUT_KEY_CACHE_ID_PREFIX])) {
+            $configData->set(self::CONFIG_PATH_CACHE_ID_PREFIX, $options[self::INPUT_KEY_CACHE_ID_PREFIX]);
+        } else {
+            $configData->set(self::CONFIG_PATH_CACHE_ID_PREFIX, $this->generateCachePrefix());
+        }
 
         if (isset($options[self::INPUT_KEY_CACHE_BACKEND])) {
             if ($options[self::INPUT_KEY_CACHE_BACKEND] == self::INPUT_VALUE_CACHE_REDIS) {
@@ -240,5 +253,15 @@ class Cache implements ConfigOptionsListInterface
         } else {
             return '';
         }
+    }
+
+    /**
+     * Generate default cache ID prefix based on installation dir
+     *
+     * @return string
+     */
+    private function generateCachePrefix(): string
+    {
+        return substr(\md5(dirname(__DIR__, 6)), 0, 3) . '_';
     }
 }
