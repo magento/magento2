@@ -50,8 +50,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
         \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
         ProductRepositoryInterface $productRepository,
         Validator $formKeyValidator
-    )
-    {
+    ) {
         $this->_customerSession = $customerSession;
         $this->wishlistProvider = $wishlistProvider;
         $this->productRepository = $productRepository;
@@ -115,6 +114,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
             $resultRedirect->setUrl($this->_redirect->getRefererUrl());
             return $resultRedirect;
         }
+
         try {
             $buyRequest = new \Magento\Framework\DataObject($requestParams);
 
