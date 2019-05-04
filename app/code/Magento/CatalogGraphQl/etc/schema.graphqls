@@ -9,184 +9,11 @@ type Query {
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
         sort: ProductSortInput @doc(description: "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.")
      ): Products
-     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes")
+     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes") @cache(cacheTag: "cat_p", cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Identity")
     category (
         id: Int @doc(description: "Id of the category")
     ): CategoryTree
-    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree")
-}
-
-enum CurrencyEnum @doc(description: "The list of available currency codes") {
-    AFN
-    ALL
-    AZN
-    DZD
-    AOA
-    ARS
-    AMD
-    AWG
-    AUD
-    BSD
-    BHD
-    BDT
-    BBD
-    BYR
-    BZD
-    BMD
-    BTN
-    BOB
-    BAM
-    BWP
-    BRL
-    GBP
-    BND
-    BGN
-    BUK
-    BIF
-    KHR
-    CAD
-    CVE
-    CZK
-    KYD
-    GQE
-    CLP
-    CNY
-    COP
-    KMF
-    CDF
-    CRC
-    HRK
-    CUP
-    DKK
-    DJF
-    DOP
-    XCD
-    EGP
-    SVC
-    ERN
-    EEK
-    ETB
-    EUR
-    FKP
-    FJD
-    GMD
-    GEK
-    GEL
-    GHS
-    GIP
-    GTQ
-    GNF
-    GYD
-    HTG
-    HNL
-    HKD
-    HUF
-    ISK
-    INR
-    IDR
-    IRR
-    IQD
-    ILS
-    JMD
-    JPY
-    JOD
-    KZT
-    KES
-    KWD
-    KGS
-    LAK
-    LVL
-    LBP
-    LSL
-    LRD
-    LYD
-    LTL
-    MOP
-    MKD
-    MGA
-    MWK
-    MYR
-    MVR
-    LSM
-    MRO
-    MUR
-    MXN
-    MDL
-    MNT
-    MAD
-    MZN
-    MMK
-    NAD
-    NPR
-    ANG
-    YTL
-    NZD
-    NIC
-    NGN
-    KPW
-    NOK
-    OMR
-    PKR
-    PAB
-    PGK
-    PYG
-    PEN
-    PHP
-    PLN
-    QAR
-    RHD
-    RON
-    RUB
-    RWF
-    SHP
-    STD
-    SAR
-    RSD
-    SCR
-    SLL
-    SGD
-    SKK
-    SBD
-    SOS
-    ZAR
-    KRW
-    LKR
-    SDG
-    SRD
-    SZL
-    SEK
-    CHF
-    SYP
-    TWD
-    TJS
-    TZS
-    THB
-    TOP
-    TTD
-    TND
-    TMM
-    USD
-    UGX
-    UAH
-    AED
-    UYU
-    UZS
-    VUV
-    VEB
-    VEF
-    VND
-    CHE
-    CHW
-    XOF
-    WST
-    YER
-    ZMK
-    ZWD
-    TRY
-    AZM
-    ROL
-    TRL
-    XPF
+    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "The category query searches for categories that match the criteria specified in the search and filter attributes") @cache(cacheTag: "cat_c", cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
 }
 
 type Price @doc(description: "The Price object defines the price of a product as well as any tax-related adjustments.") {
@@ -212,11 +39,6 @@ enum PriceTypeEnum @doc(description: "This enumeration the price type.") {
     FIXED
     PERCENT
     DYNAMIC
-}
-
-type Money @doc(description: "A Money object defines a monetary value, including a numeric value and a currency code.") {
-    value: Float @doc(description: "A number expressing a monetary value")
-    currency: CurrencyEnum @doc(description: "A three-letter currency code, such as USD or EUR")
 }
 
 type ProductPrices @doc(description: "The ProductPrices object contains the regular price of an item, as well as its minimum and maximum prices. Only composite products, which include bundle, configurable, and grouped products, can contain a minimum and maximum price.") {
@@ -275,7 +97,7 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     price: ProductPrices @doc(description: "A ProductPrices object, indicating the price of an item") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
     gift_message_available: String @doc(description: "Indicates whether a gift message is available")
     manufacturer: Int @doc(description: "A number representing the product's manufacturer")
-    categories: [CategoryInterface] @doc(description: "The categories assigned to a product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories")
+    categories: [CategoryInterface] @doc(description: "The categories assigned to a product") @cache(cacheTag: "cat_c", cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories")
     canonical_url: String @doc(description: "Canonical URL") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CanonicalUrl")
 }
 
@@ -396,7 +218,7 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
         sort: ProductSortInput @doc(description: "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.")
-    ): CategoryProducts @doc(description: "The list of products assigned to the category") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Products")
+    ): CategoryProducts @doc(description: "The list of products assigned to the category") @cache(cacheTag: "cat_p", cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Identity") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Products")
     breadcrumbs: [Breadcrumb] @doc(description: "Breadcrumbs, parent categories info") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Breadcrumbs")
 }
 
@@ -460,7 +282,7 @@ input ProductFilterInput @doc(description: "ProductFilterInput defines the filte
     description: FilterTypeInput @doc(description: "Detailed information about the product. The value can include simple HTML tags.")
     short_description: FilterTypeInput @doc(description: "A short description of the product. Its use depends on the theme.")
     price: FilterTypeInput @doc(description: "The price of an item")
-    special_price: FilterTypeInput @doc(description: "The discounted price of the product")
+    special_price: FilterTypeInput @doc(description: "The discounted price of the product. Do not include the currency code.")
     special_from_date: FilterTypeInput @doc(description: "The beginning date that a product has a special price")
     special_to_date: FilterTypeInput @doc(description: "The end date that a product has a special price")
     weight: FilterTypeInput @doc(description: "The weight of the item, in units defined by the store")
@@ -477,7 +299,6 @@ input ProductFilterInput @doc(description: "ProductFilterInput defines the filte
     custom_layout_update: FilterTypeInput @doc(description: "XML code that is applied as a layout update to the product page")
     min_price: FilterTypeInput @doc(description:"The numeric minimal price of the product. Do not include the currency code.")
     max_price: FilterTypeInput @doc(description:"The numeric maximal price of the product. Do not include the currency code.")
-    special_price: FilterTypeInput @doc(description:"The numeric special price of the product. Do not include the currency code.")
     category_id: FilterTypeInput @doc(description: "Category ID the product belongs to")
     options_container: FilterTypeInput @doc(description: "If the product has multiple options, determines where they appear on the product page")
     required_options: FilterTypeInput @doc(description: "Indicates whether the product has required options")

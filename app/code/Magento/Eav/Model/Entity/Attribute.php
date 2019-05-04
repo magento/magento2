@@ -5,7 +5,9 @@
  */
 namespace Magento\Eav\Model\Entity;
 
+use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
@@ -81,6 +83,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     protected $dateTimeFormatter;
 
     /**
+     * @var AttributeCodeValidator|null
+     */
+    private $attributeCodeValidator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -100,6 +107,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param AttributeCodeValidator|null $attributeCodeValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
      */
@@ -122,7 +130,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         DateTimeFormatterInterface $dateTimeFormatter,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        AttributeCodeValidator $attributeCodeValidator = null
     ) {
         parent::__construct(
             $context,
@@ -145,6 +154,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         $this->_localeResolver = $localeResolver;
         $this->reservedAttributeList = $reservedAttributeList;
         $this->dateTimeFormatter = $dateTimeFormatter;
+        $this->attributeCodeValidator = $attributeCodeValidator ?: ObjectManager::getInstance()->get(
+            AttributeCodeValidator::class
+        );
     }
 
     /**
@@ -230,31 +242,19 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      */
     public function beforeSave()
     {
+        if (isset($this->_data['attribute_code'])
+            && !$this->attributeCodeValidator->isValid($this->_data['attribute_code'])
+        ) {
+            $errorMessages = implode("\n", $this->attributeCodeValidator->getMessages());
+            throw new LocalizedException(__($errorMessages));
+        }
+
         // prevent overriding product data
         if (isset($this->_data['attribute_code']) && $this->reservedAttributeList->isReservedAttribute($this)) {
             throw new LocalizedException(
                 __(
                     'The attribute code \'%1\' is reserved by system. Please try another attribute code',
                     $this->_data['attribute_code']
-                )
-            );
-        }
-
-        /**
-         * Check for maximum attribute_code length
-         */
-        if (isset(
-            $this->_data['attribute_code']
-        ) && !\Zend_Validate::is(
-            $this->_data['attribute_code'],
-            'StringLength',
-            ['max' => self::ATTRIBUTE_CODE_MAX_LENGTH]
-        )
-        ) {
-            throw new LocalizedException(
-                __(
-                    'The attribute code needs to be %1 characters or fewer. Re-enter the code and try again.',
-                    self::ATTRIBUTE_CODE_MAX_LENGTH
                 )
             );
         }
@@ -310,9 +310,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     }
 
     /**
-     * Save additional data
+     * @inheritdoc
      *
-     * @return $this
+     * Save additional data.
      */
     public function afterSave()
     {
@@ -496,9 +496,14 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     /**
      * @inheritdoc
      * @since 100.0.7
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $this->unsetData('attribute_set_info');
         return array_diff(
             parent::__sleep(),
@@ -509,11 +514,16 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     /**
      * @inheritdoc
      * @since 100.0.7
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         parent::__wakeup();
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $objectManager = ObjectManager::getInstance();
         $this->_localeDate = $objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $this->_localeResolver = $objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
         $this->reservedAttributeList = $objectManager->get(\Magento\Catalog\Model\Product\ReservedAttributeList::class);

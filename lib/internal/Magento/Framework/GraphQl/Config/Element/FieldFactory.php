@@ -62,7 +62,8 @@ class FieldFactory
                 'itemType' => isset($fieldData['itemType']) ? $fieldData['itemType'] : '',
                 'resolver' => isset($fieldData['resolver']) ? $fieldData['resolver'] : '',
                 'description' => isset($fieldData['description']) ? $fieldData['description'] : '',
-                'arguments' => $arguments
+                'cache' => isset($fieldData['cache']) ? $fieldData['cache'] : [],
+                'arguments' => $arguments,
             ]
         );
     }
