@@ -232,7 +232,6 @@
             </argument>
         </arguments>
     </type>
-    <preference for="\Magento\Catalog\Ui\Component\Column\DataTypeConfigProviderInterface" type="Magento\Catalog\Ui\Component\Column\DataTypeConfigProviderPool"/>
     <type name="Magento\Catalog\Ui\Component\Column\DataTypeConfigProviderPool">
         <arguments>
             <argument name="providers" xsi:type="array">

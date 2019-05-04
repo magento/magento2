@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Ui\Component\Column;
 
+use InvalidArgumentException;
+
 /**
  * Class DataTypeConfigProviderPool
  *
  * @package Magento\Catalog\Ui\Component\Column
+ * @api
  */
-class DataTypeConfigProviderPool implements DataTypeConfigProviderInterface
+class DataTypeConfigProviderPool
 {
     /**
      * @var array
@@ -36,10 +39,10 @@ class DataTypeConfigProviderPool implements DataTypeConfigProviderInterface
      *
      * @return array
      */
-    public function getConfig(string $dataType):array
+    public function getConfig(string $dataType): array
     {
         return isset($this->dataTypeConfigProviders[$dataType]) ?
-            $this->dataTypeConfigProviders[$dataType]->getConfig($dataType)
+            $this->dataTypeConfigProviders[$dataType]->getConfig()
             : [];
     }
 
@@ -54,7 +57,7 @@ class DataTypeConfigProviderPool implements DataTypeConfigProviderInterface
             $this->dataTypeConfigProviders,
             function ($provider) {
                 if (!$provider instanceof DataTypeConfigProviderInterface) {
-                    throw new \InvalidArgumentException(
+                    throw new InvalidArgumentException(
                         sprintf(
                             '$provider should implement DataTypeConfigProviderInterface, %s given',
                             get_class($provider)

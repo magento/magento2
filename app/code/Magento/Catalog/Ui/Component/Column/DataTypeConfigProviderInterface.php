@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Ui\Component\Column;
 
 /**
@@ -13,9 +14,9 @@ namespace Magento\Catalog\Ui\Component\Column;
 interface DataTypeConfigProviderInterface
 {
     /**
-     * @param string $dataType
+     * Get config
      *
      * @return array
      */
-    public function getConfig(string $dataType):array;
+    public function getConfig(): array;
 }

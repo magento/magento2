@@ -5,9 +5,14 @@
  */
 namespace Magento\Catalog\Ui\Component;
 
-use Magento\Catalog\Ui\Component\Column\DataTypeConfigProviderInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Ui\Component\Column\DataTypeConfigProviderPool;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Filters\FilterModifier;
+use Magento\Ui\Component\Listing\Columns\ColumnInterface;
 
 /**
  * Column Factory
@@ -18,7 +23,7 @@ use Magento\Ui\Component\Filters\FilterModifier;
 class ColumnFactory
 {
     /**
-     * @var \Magento\Framework\View\Element\UiComponentFactory
+     * @var UiComponentFactory
      */
     protected $componentFactory;
 
@@ -45,32 +50,32 @@ class ColumnFactory
     ];
 
     /**
-     * @var \Magento\Catalog\Ui\Component\Column\DataTypeConfigProviderInterface
+     * @var DataTypeConfigProviderPool
      */
     private $configProvider;
 
     /**
-     * @param \Magento\Framework\View\Element\UiComponentFactory                   $componentFactory
-     * @param \Magento\Catalog\Ui\Component\Column\DataTypeConfigProviderInterface $configProvider
+     * @param UiComponentFactory $componentFactory
+     * @param DataTypeConfigProviderPool $configProvider
      */
     public function __construct(
-        \Magento\Framework\View\Element\UiComponentFactory $componentFactory,
-        DataTypeConfigProviderInterface $configProvider = null
+        UiComponentFactory $componentFactory,
+        DataTypeConfigProviderPool $configProvider = null
     ) {
         $this->componentFactory = $componentFactory;
         $this->configProvider = $configProvider
-            ?? ObjectManager::getInstance()->get(DataTypeConfigProviderInterface::class);
+            ?? ObjectManager::getInstance()->get(DataTypeConfigProviderPool::class);
     }
 
     /**
      * Create Factory
      *
-     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
-     * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
+     * @param ProductAttributeInterface $attribute
+     * @param ContextInterface $context
      * @param array $config
      *
-     * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return ColumnInterface
+     * @throws LocalizedException
      */
     public function create($attribute, $context, array $config = [])
     {
@@ -118,7 +123,7 @@ class ColumnFactory
     /**
      * Get Data Type
      *
-     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @param ProductAttributeInterface $attribute
      *
      * @return string
      */

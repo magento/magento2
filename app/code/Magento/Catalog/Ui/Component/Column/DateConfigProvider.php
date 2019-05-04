@@ -34,11 +34,9 @@ class DateConfigProvider implements DataTypeConfigProviderInterface
     }
 
     /**
-     * @param string $dataType
-     *
      * @return array
      */
-    public function getConfig(string $dataType):array
+    public function getConfig(): array
     {
         return ['timeZone' => $this->getTimeZone()];
     }
@@ -46,7 +44,7 @@ class DateConfigProvider implements DataTypeConfigProviderInterface
     /**
      * @return string
      */
-    private function getTimeZone():string
+    private function getTimeZone(): string
     {
         return (string)$this->scopeConfig->getValue(
             Custom::XML_PATH_GENERAL_LOCALE_TIMEZONE
