@@ -24,6 +24,9 @@ class Type implements OptionSourceInterface
     const TYPE_BUNDLE = 'bundle';
 
     const TYPE_VIRTUAL = 'virtual';
+    
+    const TYPE_DOWNLOADABLE = 'downloadable';
+    
     /**#@-*/
 
     /**
