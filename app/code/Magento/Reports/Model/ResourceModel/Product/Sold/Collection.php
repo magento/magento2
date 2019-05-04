@@ -79,6 +79,10 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
         )->having(
             'order_items.qty_ordered > ?',
             0
+        )->columns(
+            'SUM(order_items.qty_ordered) as ordered_qty'
+        )->group(
+            'order_items.product_id'
         );
         return $this;
     }
