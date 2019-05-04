@@ -19,7 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Unit test for Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Import
  */
-class ImportTest extends \PHPUnit_Framework_TestCase
+class ImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Import
@@ -77,9 +77,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->dataHashGeneratorMock = $this->getMockBuilder(DataHashGenerator::class)
             ->getMock();
-        $this->rowParserMock->expects($this->any())
-            ->method('parse')
-            ->willReturnArgument(0);
         $this->dataHashGeneratorMock->expects($this->any())
             ->method('getHash')
             ->willReturnCallback(
@@ -124,6 +121,15 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ['a4', 'b4', 'c4', 'd4', 'e4'],
             ['a5', 'b5', 'c5', 'd5', 'e5'],
         ];
+        $this->rowParserMock->expects($this->any())
+            ->method('parse')
+            ->willReturn(
+                [['a1', 'b1', 'c1', 'd1', 'e1']],
+                [['a2', 'b2', 'c2', 'd2', 'e2']],
+                [['a3', 'b3', 'c3', 'd3', 'e3']],
+                [['a4', 'b4', 'c4', 'd4', 'e4']],
+                [['a5', 'b5', 'c5', 'd5', 'e5']]
+            );
         $file = $this->createFileMock($lines);
         $expectedResult = [
             [
@@ -167,6 +173,13 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             [],
             ['a2', 'b2', 'c2', 'd2', 'e2'],
         ];
+        $this->rowParserMock->expects($this->any())
+            ->method('parse')
+            ->willReturn(
+                [['a1', 'b1', 'c1', 'd1', 'e1']],
+                [['a1', 'b1', 'c1', 'd1', 'e1']],
+                [['a2', 'b2', 'c2', 'd2', 'e2']]
+            );
         $file = $this->createFileMock($lines);
         $expectedResult = [
             [
@@ -193,7 +206,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please correct Table Rates File Format.
+     * @expectedExceptionMessage The Table Rates File Format is incorrect. Verify the format and try again.
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testGetDataFromEmptyFile()

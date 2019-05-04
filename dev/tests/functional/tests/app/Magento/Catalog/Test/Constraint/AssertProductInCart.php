@@ -62,7 +62,7 @@ class AssertProductInCart extends AbstractConstraint
 
         // Check price
         $this->countPrices($product, $checkoutCart);
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $this->fixtureActualPrice,
             $this->formPrice,
             'Product price in shopping cart is not correct.'

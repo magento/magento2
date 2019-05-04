@@ -8,7 +8,7 @@ namespace Magento\CatalogRule\Test\Unit\Plugin\Indexer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CategoryTest extends \PHPUnit_Framework_TestCase
+class CategoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor|\PHPUnit_Framework_MockObject_MockObject
@@ -27,19 +27,12 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productRuleProcessor = $this->getMock(
-            \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor::class,
-            [],
-            [],
-            '',
-            false
+        $this->productRuleProcessor = $this->createMock(
+            \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor::class
         );
-        $this->subject = $this->getMock(
+        $this->subject = $this->createPartialMock(
             \Magento\Catalog\Model\Category::class,
-            ['getAffectedProductIds', '__wakeUp'],
-            [],
-            '',
-            false
+            ['getChangedProductIds', '__wakeUp']
         );
 
         $this->plugin = (new ObjectManager($this))->getObject(
@@ -53,7 +46,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testAfterSaveWithoutAffectedProductIds()
     {
         $this->subject->expects($this->any())
-            ->method('getAffectedProductIds')
+            ->method('getChangedProductIds')
             ->will($this->returnValue([]));
 
         $this->productRuleProcessor->expects($this->never())
@@ -67,7 +60,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $productIds = [1, 2, 3];
 
         $this->subject->expects($this->any())
-            ->method('getAffectedProductIds')
+            ->method('getChangedProductIds')
             ->will($this->returnValue($productIds));
 
         $this->productRuleProcessor->expects($this->once())

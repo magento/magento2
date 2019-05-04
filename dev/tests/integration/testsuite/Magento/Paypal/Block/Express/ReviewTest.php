@@ -9,7 +9,7 @@
  */
 namespace Magento\Paypal\Block\Express;
 
-class ReviewTest extends \PHPUnit_Framework_TestCase
+class ReviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Sales/_files/quote.php

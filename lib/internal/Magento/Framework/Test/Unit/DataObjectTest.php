@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Test\Unit;
 
-class DataObjectTest extends \PHPUnit_Framework_TestCase
+class DataObjectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DataObject
@@ -110,7 +110,7 @@ class DataObjectTest extends \PHPUnit_Framework_TestCase
             'key1' => 'value1',
             'key2' => [
                 'subkey2.1' => 'value2.1',
-                'subkey2.2' => 'multiline'. PHP_EOL .'string',
+                'subkey2.2' => 'multiline' . PHP_EOL . 'string',
                 'subkey2.3' => new \Magento\Framework\DataObject(['test_key' => 'test_value']),
             ],
             'key3' => 5,
@@ -160,7 +160,7 @@ string',
      */
     public function testSetGetDataUsingMethod()
     {
-        $mock = $this->getMock(\Magento\Framework\DataObject::class, ['setTestData', 'getTestData']);
+        $mock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['setTestData', 'getTestData']);
         $mock->expects($this->once())->method('setTestData')->with($this->equalTo('data'));
         $mock->expects($this->once())->method('getTestData');
 
@@ -305,10 +305,14 @@ string',
      */
     public function testGetSet()
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->dataObject->test = 'test';
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->assertEquals('test', $this->dataObject->test);
 
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->dataObject->testTest = 'test';
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->assertEquals('test', $this->dataObject->testTest);
     }
 
@@ -380,6 +384,9 @@ string',
         $this->assertEquals($expectedOutput, $output);
     }
 
+    /**
+     * @return array
+     */
     public function underscoreDataProvider()
     {
         return [

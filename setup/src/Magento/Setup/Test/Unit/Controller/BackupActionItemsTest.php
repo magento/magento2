@@ -12,7 +12,7 @@ use \Magento\Setup\Controller\ResponseTypeInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BackupActionItemsTest extends \PHPUnit_Framework_TestCase
+class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
@@ -49,21 +49,16 @@ class BackupActionItemsTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->directoryList =
-            $this->getMock(\Magento\Framework\App\Filesystem\DirectoryList::class, [], [], '', false);
+            $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
         $this->objectManagerProvider =
-            $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
-        $this->backupRollback = $this->getMock(
-            \Magento\Setup\Model\BackupRollback::class,
-            ['getDBDiskSpace', 'dbBackup'],
-            [],
-            '',
-            false
-        );
-        $objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class, [], [], '', false);
+            $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
+        $this->backupRollback =
+            $this->createPartialMock(\Magento\Framework\Setup\BackupRollback::class, ['getDBDiskSpace', 'dbBackup']);
+        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManager->expects($this->once())->method('create')->willReturn($this->backupRollback);
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
-        $this->log = $this->getMock(\Magento\Setup\Model\WebLogger::class, [], [], '', false);
-        $this->filesystem = $this->getMock(\Magento\Framework\Backup\Filesystem::class, [], [], '', false);
+        $this->log = $this->createMock(\Magento\Setup\Model\WebLogger::class);
+        $this->filesystem = $this->createMock(\Magento\Framework\Backup\Filesystem::class);
 
         $this->controller = new BackupActionItems(
             $this->objectManagerProvider,
@@ -72,11 +67,11 @@ class BackupActionItemsTest extends \PHPUnit_Framework_TestCase
             $this->filesystem
         );
 
-        $request = $this->getMock(\Zend\Http\PhpEnvironment\Request::class, [], [], '', false);
-        $response = $this->getMock(\Zend\Http\PhpEnvironment\Response::class, [], [], '', false);
-        $routeMatch = $this->getMock(\Zend\Mvc\Router\RouteMatch::class, [], [], '', false);
+        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->getMock(\Zend\Mvc\MvcEvent::class, [], [], '', false);
+        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
         $mvcEvent->expects($this->any())->method('setRequest')->with($request)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);

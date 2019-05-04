@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Model\Attribute\Data;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException as CoreException;
+use Magento\Framework\Validator\EmailAddress;
 
 /**
  * EAV Attribute Abstract Data Model
@@ -17,6 +16,7 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractData
 {
@@ -143,6 +143,7 @@ abstract class AbstractData
 
     /**
      * Set scope visibility
+     *
      * Search value only in scope or search value in scope and global
      *
      * @param bool $flag
@@ -203,7 +204,7 @@ abstract class AbstractData
      */
     public function getExtractedData($index = null)
     {
-        if (!is_null($index)) {
+        if ($index !== null) {
             if (isset($this->_extractedData[$index])) {
                 return $this->_extractedData[$index];
             }
@@ -260,9 +261,9 @@ abstract class AbstractData
      */
     protected function _dateFilterFormat($format = null)
     {
-        if (is_null($format)) {
+        if ($format === null) {
             // get format
-            if (is_null($this->_dateFilterFormat)) {
+            if ($this->_dateFilterFormat === null) {
                 $this->_dateFilterFormat = \IntlDateFormatter::SHORT;
             }
             return $this->_localeDate->getDateFormat($this->_dateFilterFormat);
@@ -296,7 +297,7 @@ abstract class AbstractData
      * Validate value by attribute input validation rule
      *
      * @param string $value
-     * @return string|true
+     * @return array|true
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -311,9 +312,13 @@ abstract class AbstractData
 
         if (!empty($validateRules['input_validation'])) {
             $label = $this->getAttribute()->getStoreLabel();
+            $allowWhiteSpace = false;
             switch ($validateRules['input_validation']) {
+                case 'alphanum-with-spaces':
+                    $allowWhiteSpace = true;
+                    // Continue to alphanumeric validation
                 case 'alphanumeric':
-                    $validator = new \Zend_Validate_Alnum(true);
+                    $validator = new \Zend_Validate_Alnum($allowWhiteSpace);
                     $validator->setMessage(__('"%1" invalid type entered.', $label), \Zend_Validate_Alnum::INVALID);
                     $validator->setMessage(
                         __('"%1" contains non-alphabetic or non-numeric characters.', $label),
@@ -357,7 +362,8 @@ abstract class AbstractData
                     __("Invalid type given. String expected")
                     __("'%value%' appears to be a DNS hostname but contains a dash in an invalid position")
                     __("'%value%' does not match the expected structure for a DNS hostname")
-                    __("'%value%' appears to be a DNS hostname but cannot match against hostname schema for TLD '%tld%'")
+                    __("'%value%' appears to be a DNS hostname but cannot match against hostname schema
+                     * for TLD '%tld%'")
                     __("'%value%' does not appear to be a valid local network name")
                     __("'%value%' does not appear to be a valid URI hostname")
                     __("'%value%' appears to be an IP address but IP addresses are not allowed")
@@ -365,7 +371,7 @@ abstract class AbstractData
                     __("'%value%' appears to be a DNS hostname but cannot extract TLD part")
                     __("'%value%' appears to be a DNS hostname but cannot match TLD against known list")
                     */
-                    $validator = new \Zend_Validate_EmailAddress();
+                    $validator = new EmailAddress();
                     $validator->setMessage(
                         __('"%1" invalid type entered.', $label),
                         \Zend_Validate_EmailAddress::INVALID
@@ -407,16 +413,13 @@ abstract class AbstractData
                         \Zend_Validate_Hostname::IP_ADDRESS_NOT_ALLOWED
                     );
                     $validator->setMessage(
-                        __("'%value%' looks like a DNS hostname but we cannot match the TLD against known list."),
-                        \Zend_Validate_Hostname::UNKNOWN_TLD
-                    );
-                    $validator->setMessage(
                         __("'%value%' looks like a DNS hostname but contains a dash in an invalid position."),
                         \Zend_Validate_Hostname::INVALID_DASH
                     );
                     $validator->setMessage(
                         __(
-                            "'%value%' looks like a DNS hostname but we cannot match it against the hostname schema for TLD '%tld%'."
+                            "'%value%' looks like a DNS hostname but we cannot match it against the "
+                            . "hostname schema for TLD '%tld%'."
                         ),
                         \Zend_Validate_Hostname::INVALID_HOSTNAME_SCHEMA
                     );

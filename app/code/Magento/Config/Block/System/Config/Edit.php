@@ -11,9 +11,13 @@
  */
 namespace Magento\Config\Block\System\Config;
 
+use \Magento\Framework\App\ObjectManager;
+use \Magento\Framework\Serialize\Serializer\Json;
+
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Edit extends \Magento\Backend\Block\Widget
 {
@@ -41,16 +45,24 @@ class Edit extends \Magento\Backend\Block\Widget
     protected $_configStructure;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $jsonSerializer;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Config\Model\Config\Structure $configStructure
      * @param array $data
+     * @param Json|null $jsonSerializer
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Config\Model\Config\Structure $configStructure,
-        array $data = []
+        array $data = [],
+        Json $jsonSerializer = null
     ) {
         $this->_configStructure = $configStructure;
+        $this->jsonSerializer = $jsonSerializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $data);
     }
 
@@ -105,5 +117,23 @@ class Edit extends \Magento\Backend\Block\Widget
     public function getSaveUrl()
     {
         return $this->getUrl('*/system_config/save', ['_current' => true]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getConfigSearchParamsJson()
+    {
+        $params = [];
+        if ($this->getRequest()->getParam('section')) {
+            $params['section'] = $this->getRequest()->getParam('section');
+        }
+        if ($this->getRequest()->getParam('group')) {
+            $params['group'] = $this->getRequest()->getParam('group');
+        }
+        if ($this->getRequest()->getParam('field')) {
+            $params['field'] = $this->getRequest()->getParam('field');
+        }
+        return $this->jsonSerializer->serialize($params);
     }
 }

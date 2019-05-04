@@ -11,6 +11,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Dashboard Customer Info
  *
  * @api
+ * @since 100.0.2
  */
 class Info extends \Magento\Framework\View\Element\Template
 {
@@ -26,7 +27,9 @@ class Info extends \Magento\Framework\View\Element\Template
      */
     protected $_subscriberFactory;
 
-    /** @var \Magento\Customer\Helper\View */
+    /**
+     * @var \Magento\Customer\Helper\View
+     */
     protected $_helperView;
 
     /**
@@ -99,7 +102,7 @@ class Info extends \Magento\Framework\View\Element\Template
             $this->_subscription = $this->_createSubscriber();
             $customer = $this->getCustomer();
             if ($customer) {
-                $this->_subscription->loadByEmail($customer->getEmail());
+                $this->_subscription->loadByCustomerId($customer->getId());
             }
         }
         return $this->_subscription;

@@ -11,4 +11,9 @@
             <table name="cataloginventory_stock_item" entity_column="product_id" />
         </subscriptions>
     </view>
+    <view id="catalog_product_price" class="Magento\Catalog\Model\Indexer\Product\Price" group="indexer">
+        <subscriptions>
+            <table name="cataloginventory_stock_item" entity_column="product_id" />
+        </subscriptions>
+    </view>
 </config>

@@ -42,7 +42,7 @@ class AssertVoidInCommentsHistory extends AbstractConstraint
         $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
         $latestComment = $infoTab->getCommentsHistoryBlock()->getLatestComment();
 
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             self::VOIDED_AMOUNT . $prices['grandTotal'],
             $latestComment['comment'],
             'Incorrect voided amount value for the order #' . $orderId

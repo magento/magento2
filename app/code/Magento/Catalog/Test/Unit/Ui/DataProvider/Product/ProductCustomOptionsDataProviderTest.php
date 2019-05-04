@@ -12,7 +12,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\DB\Select as DbSelect;
 
-class ProductCustomOptionsDataProviderTest extends \PHPUnit_Framework_TestCase
+class ProductCustomOptionsDataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -54,7 +54,16 @@ class ProductCustomOptionsDataProviderTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->collectionMock = $this->getMockBuilder(AbstractCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getSelect', 'getTable', 'getIterator', 'isLoaded', 'toArray', 'getSize'])
+            ->setMethods([
+                'load',
+                'getSelect',
+                'getTable',
+                'getIterator',
+                'isLoaded',
+                'toArray',
+                'getSize',
+                'setStoreId'
+            ])
             ->getMockForAbstractClass();
         $this->dbSelectMock = $this->getMockBuilder(DbSelect::class)
             ->disableOriginalConstructor()

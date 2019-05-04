@@ -15,6 +15,7 @@ use Magento\Newsletter\Model\ResourceModel\Queue\Collection;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Subscriber extends \Magento\Backend\Block\Template
 {
@@ -28,7 +29,7 @@ class Subscriber extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'subscriber/list.phtml';
+    protected $_template = 'Magento_Newsletter::subscriber/list.phtml';
 
     /**
      * @var \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory

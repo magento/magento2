@@ -10,26 +10,35 @@ namespace Magento\Catalog\Model\ResourceModel\Indexer;
  */
 class ActiveTableSwitcher
 {
-    /** Suffix for replica index table. */
+    /**
+     * Suffix for replica index table.
+     *
+     * @var string
+     */
     private $additionalTableSuffix = '_replica';
 
-    /** Suffix for outdated index table. */
+    /**
+     * Suffix for outdated index table.
+     *
+     * @var string
+     */
     private $outdatedTableSuffix = '_outdated';
 
     /**
      * Switch index tables from replica to active.
      *
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @param string $tableName
+     * @param array $tableNames
      * @return void
      */
-    public function switchTable(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $tableName)
+    public function switchTable(\Magento\Framework\DB\Adapter\AdapterInterface $connection, array $tableNames)
     {
-        $outdatedTableName = $tableName . $this->outdatedTableSuffix;
-        $replicaTableName = $tableName . $this->additionalTableSuffix;
+        $toRename = [];
+        foreach ($tableNames as $tableName) {
+            $outdatedTableName = $tableName . $this->outdatedTableSuffix;
+            $replicaTableName = $tableName . $this->additionalTableSuffix;
 
-        $connection->renameTablesBatch(
-            [
+            $renameBatch = [
                 [
                     'oldName' => $tableName,
                     'newName' => $outdatedTableName
@@ -42,8 +51,13 @@ class ActiveTableSwitcher
                     'oldName' => $outdatedTableName,
                     'newName' => $replicaTableName
                 ]
-            ]
-        );
+            ];
+            $toRename = array_merge($toRename, $renameBatch);
+        }
+
+        if (!empty($toRename)) {
+            $connection->renameTablesBatch($toRename);
+        }
     }
 
     /**

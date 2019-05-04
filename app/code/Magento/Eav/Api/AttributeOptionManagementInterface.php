@@ -8,6 +8,7 @@ namespace Magento\Eav\Api;
 /**
  * Interface AttributeOptionManagementInterface
  * @api
+ * @since 100.0.2
  */
 interface AttributeOptionManagementInterface
 {
@@ -19,7 +20,7 @@ interface AttributeOptionManagementInterface
      * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\InputException
-     * @return bool
+     * @return string
      */
     public function add($entityType, $attributeCode, $option);
 

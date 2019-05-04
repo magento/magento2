@@ -10,7 +10,7 @@ use \Magento\Framework\Data\Collection\AbstractDb;
 /**
  * Test class for \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator
  */
-class CollectionByPagesIteratorTest extends \PHPUnit_Framework_TestCase
+class CollectionByPagesIteratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator
@@ -36,16 +36,16 @@ class CollectionByPagesIteratorTest extends \PHPUnit_Framework_TestCase
         $pageCount = 3;
 
         /** @var $callbackMock \PHPUnit_Framework_MockObject_MockObject */
-        $callbackMock = $this->getMock(\stdClass::class, ['callback']);
+        $callbackMock = $this->createPartialMock(\stdClass::class, ['callback']);
 
         $fetchStrategy = $this->getMockForAbstractClass(
             \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
         );
 
-        $select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $select = $this->createMock(\Magento\Framework\DB\Select::class);
 
-        $entityFactory = $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false);
-        $logger = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $entityFactory = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
 
         /** @var $collectionMock AbstractDb|\PHPUnit_Framework_MockObject_MockObject */
         $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)

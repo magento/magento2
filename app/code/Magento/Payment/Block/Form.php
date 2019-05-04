@@ -11,6 +11,7 @@ use Magento\Payment\Model\MethodInterface;
  * Payment method form base block
  *
  * @api
+ * @since 100.0.2
  */
 class Form extends \Magento\Framework\View\Element\Template
 {

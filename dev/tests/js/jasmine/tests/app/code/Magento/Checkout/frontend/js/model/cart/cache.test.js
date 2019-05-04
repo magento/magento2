@@ -30,6 +30,13 @@ define([
         });
     });
 
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+    });
+
     describe('Magento_Checkout/js/model/cart/cache', function () {
         describe('Check the "get" method', function () {
             it('Check default call with "cart-data" key', function () {

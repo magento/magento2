@@ -7,7 +7,7 @@ namespace Magento\Config\Block\System\Config\Form\Field;
 
 /**
  * Backend system config array field renderer
- * @deprecated
+ * @deprecated 100.1.0
  */
 class Regexceptions extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
 {

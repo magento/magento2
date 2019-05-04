@@ -7,7 +7,7 @@ namespace Magento\Customer\Block\Account;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class DashboardTest extends \PHPUnit_Framework_TestCase
+class DashboardTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Dashboard */
     private $block;

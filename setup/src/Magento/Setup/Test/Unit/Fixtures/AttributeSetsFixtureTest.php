@@ -12,7 +12,7 @@ use Magento\Setup\Fixtures\AttributeSetsFixture;
 /**
  * @SuppressWarnings(PHPMD)
  */
-class AttributeSetsFixtureTest extends \PHPUnit_Framework_TestCase
+class AttributeSetsFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel

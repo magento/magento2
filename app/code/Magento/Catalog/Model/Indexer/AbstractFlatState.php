@@ -9,6 +9,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractFlatState
 {
@@ -32,7 +33,9 @@ abstract class AbstractFlatState
      */
     protected $isAvailable;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**

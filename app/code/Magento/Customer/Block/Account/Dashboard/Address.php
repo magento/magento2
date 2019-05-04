@@ -13,6 +13,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Class to manage customer dashboard addresses section
  *
  * @api
+ * @since 100.0.2
  */
 class Address extends \Magento\Framework\View\Element\Template
 {

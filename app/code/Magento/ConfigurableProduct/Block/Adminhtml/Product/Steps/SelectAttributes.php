@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps;
  * Adminhtml block for fieldset of configurable product
  *
  * @api
+ * @since 100.0.2
  */
 class SelectAttributes extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
 {

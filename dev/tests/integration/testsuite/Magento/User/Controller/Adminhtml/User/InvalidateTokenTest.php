@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\User\Controller\Adminhtml\User;
 
 use Magento\Framework\Message\MessageInterface;
@@ -39,7 +37,7 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
         $this->getRequest()->setParam('user_id', $adminUserId);
         $this->dispatch('backend/admin/user/invalidateToken');
         $token = $tokenModel->loadByAdminId($adminUserId);
-        $this->assertEquals(1, $token->getRevoked());
+        $this->assertEquals(null, $token->getId());
     }
 
     /**
@@ -82,7 +80,7 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
     /**
      * @magentoDataFixture Magento/User/_files/user_with_role.php
      */
-    public function testInvalidateToken_NoTokens()
+    public function testInvalidateTokenNoTokens()
     {
         /** @var \Magento\User\Model\User $userModel */
         $userModel = Bootstrap::getObjectManager()->get(\Magento\User\Model\User::class);
@@ -91,13 +89,9 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
         // invalidate token
         $this->getRequest()->setParam('user_id', $adminUserId);
         $this->dispatch('backend/admin/user/invalidateToken');
-        $this->assertSessionMessages(
-            $this->equalTo(['This user has no tokens.']),
-            MessageInterface::TYPE_ERROR
-        );
     }
 
-    public function testInvalidateToken_NoUser()
+    public function testInvalidateTokenNoUser()
     {
         $this->dispatch('backend/admin/user/invalidateToken');
         $this->assertSessionMessages(
@@ -106,15 +100,11 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
         );
     }
 
-    public function testInvalidateToken_InvalidUser()
+    public function testInvalidateTokenInvalidUser()
     {
         $adminUserId = 999;
         // invalidate token
         $this->getRequest()->setParam('user_id', $adminUserId);
         $this->dispatch('backend/admin/user/invalidateToken');
-        $this->assertSessionMessages(
-            $this->equalTo(['This user has no tokens.']),
-            MessageInterface::TYPE_ERROR
-        );
     }
 }

@@ -10,7 +10,7 @@ use \Magento\Framework\Css\PreProcessor\File\Collector\Aggregated;
 /**
  * Tests Aggregate
  */
-class AggregatedTest extends \PHPUnit_Framework_TestCase
+class AggregatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\File\FileList\Factory|\PHPUnit_Framework_MockObject_MockObject
@@ -98,9 +98,9 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider getFilesDataProvider
      *
-     * @param $libraryFiles array Files in lib directory
-     * @param $baseFiles array Files in base directory
-     * @param $themeFiles array Files in theme
+     * @param array $libraryFiles Files in lib directory
+     * @param array $baseFiles Files in base directory
+     * @param array $themeFiles Files in theme
      * *
      * @return void
      */

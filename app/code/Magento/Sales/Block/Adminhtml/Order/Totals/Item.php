@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Totals;
  * Totals item block
  *
  * @api
+ * @since 100.0.2
  */
 class Item extends \Magento\Sales\Block\Adminhtml\Order\Totals
 {

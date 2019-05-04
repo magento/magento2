@@ -8,7 +8,7 @@ namespace Magento\Store\Test\Unit\Block\Store;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
-class SwitcherTest extends \PHPUnit_Framework_TestCase
+class SwitcherTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Block\Store\Switcher
@@ -82,7 +82,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
     {
         $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLocaleCode', 'isActive', 'getId', 'getGroupId', 'getCollection'])
+            ->setMethods(['getLocaleCode', 'isActive', 'getId', 'getGroupId', 'getCollection', 'setLocaleCode'])
             ->getMock();
         $groupMock = $this->getMockBuilder(\Magento\Store\Model\Group::class)
             ->disableOriginalConstructor()

@@ -20,7 +20,7 @@
                         <?php $showWebsite = true; ?>
                         <div class="admin__field field-website_label">
                             <label class="admin__field-label" for="">
-                                <span><?php echo $block->escapeHtml($_website->getName()) ?></span>
+                                <span><?= $block->escapeHtml($_website->getName()) ?></span>
                             </label>
                             <div class="admin__field-control">
                                 <div class="admin__field admin__field-option">
@@ -36,19 +36,19 @@
                     <?php if ($showGroup == false): ?>
                         <?php $showGroup = true; ?>
                         <div class="admin__field field-group_label">
-                            <label class="admin__field-label" for=""><span><?php echo $block->escapeHtml($_group->getName()) ?></span></label>
+                            <label class="admin__field-label" for=""><span><?= $block->escapeHtml($_group->getName()) ?></span></label>
                             <div class="admin__field-control"></div>
                         </div>
                     <?php endif; ?>
 
                     <div class="admin__field field-store_label">
-                        <label class="admin__field-label" for=""><span><?php echo $block->escapeHtml($_group->getName()) ?></span></label>
+                        <label class="admin__field-label" for=""><span><?= $block->escapeHtml($_group->getName()) ?></span></label>
                         <div class="admin__field-control">
                             <div class="nested">
                                 <div class="admin__field admin__field-option">
-                                    <input type="radio" id="store_<?php /* @escapeNotVerified */ echo $_store->getId() ?>" class="admin__control-radio" onclick="order.setStoreId('<?php /* @escapeNotVerified */ echo $_store->getId() ?>')"/>
-                                    <label class="admin__field-label" for="store_<?php /* @escapeNotVerified */ echo $_store->getId() ?>">
-                                        <?php echo $block->escapeHtml($_store->getName()) ?>
+                                    <input type="radio" id="store_<?= /* @escapeNotVerified */ $_store->getId() ?>" class="admin__control-radio" onclick="order.setStoreId('<?= /* @escapeNotVerified */ $_store->getId() ?>')"/>
+                                    <label class="admin__field-label" for="store_<?= /* @escapeNotVerified */ $_store->getId() ?>">
+                                        <?= $block->escapeHtml($_store->getName()) ?>
                                     </label>
                                 </div>
                             </div>

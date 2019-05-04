@@ -7,7 +7,10 @@ namespace Magento\Customer\Test\Unit\Observer;
 
 use Magento\Customer\Observer\UpgradeCustomerPasswordObserver;
 
-class UpgradeCustomerPasswordObserverTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class UpgradeCustomerPasswordObserverTest for testing upgrade password observer
+ */
+class UpgradeCustomerPasswordObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UpgradeCustomerPasswordObserver
@@ -29,9 +32,13 @@ class UpgradeCustomerPasswordObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected $customerRegistry;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->customerRepository = $this->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
+        $this->customerRepository = $this
+            ->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
             ->getMockForAbstractClass();
         $this->customerRegistry = $this->getMockBuilder(\Magento\Customer\Model\CustomerRegistry::class)
             ->disableOriginalConstructor()
@@ -47,6 +54,9 @@ class UpgradeCustomerPasswordObserverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Unit test for verifying customers password upgrade observer
+     */
     public function testUpgradeCustomerPassword()
     {
         $customerId = '1';
@@ -57,6 +67,8 @@ class UpgradeCustomerPasswordObserverTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getId'])
             ->getMock();
         $customer = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
+            ->setMethods(['setData'])
+            ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $customerSecure = $this->getMockBuilder(\Magento\Customer\Model\Data\CustomerSecure::class)
             ->disableOriginalConstructor()

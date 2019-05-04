@@ -10,7 +10,7 @@ use Magento\NewRelicReporting\Model\Observer\ReportSystemCacheFlush;
 /**
  * Class ReportSystemCacheFlushTest
  */
-class ReportSystemCacheFlushTest extends \PHPUnit_Framework_TestCase
+class ReportSystemCacheFlushTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReportSystemCacheFlush

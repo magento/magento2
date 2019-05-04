@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Test\Unit\Model;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class QueueTest extends \PHPUnit_Framework_TestCase
+class QueueTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Newsletter\Model\Queue
@@ -147,7 +147,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getStoreId', 'getSubscriberEmail', 'getSubscriberFullName', 'received'])
             ->getMock();
-        $transport = $this->getMock(\Magento\Framework\Mail\TransportInterface::class);
+        $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
         $this->subscribersCollection->expects($this->once())->method('getQueueJoinedFlag')->willReturn(false);
         $this->subscribersCollection->expects($this->once())->method('useQueue')->with($this->queue)->willReturnSelf();
         $this->subscribersCollection->expects($this->once())->method('getSize')->willReturn(5);

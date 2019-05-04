@@ -9,6 +9,7 @@ namespace Magento\GoogleAdwords\Model\Filter;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class UppercaseTitle implements \Zend_Filter_Interface
 {

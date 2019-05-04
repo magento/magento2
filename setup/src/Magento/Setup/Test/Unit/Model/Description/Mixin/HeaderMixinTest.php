@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Model\Description\Mixin;
 
-class HeaderMixinTest extends \PHPUnit_Framework_TestCase
+class HeaderMixinTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Model\Description\Mixin\HeaderMixin
@@ -25,6 +25,9 @@ class HeaderMixinTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->mixin->apply($subject));
     }
 
+    /**
+     * @return array
+     */
     public function getTestData()
     {
         return [

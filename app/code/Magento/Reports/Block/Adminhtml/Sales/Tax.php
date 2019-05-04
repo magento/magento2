@@ -10,6 +10,7 @@ namespace Magento\Reports\Block\Adminhtml\Sales;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Tax extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -18,7 +19,7 @@ class Tax extends \Magento\Backend\Block\Widget\Grid\Container
      *
      * @var string
      */
-    protected $_template = 'report/grid/container.phtml';
+    protected $_template = 'Magento_Reports::report/grid/container.phtml';
 
     /**
      * {@inheritdoc}

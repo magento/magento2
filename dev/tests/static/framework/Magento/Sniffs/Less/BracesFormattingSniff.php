@@ -5,9 +5,9 @@
  */
 namespace Magento\Sniffs\Less;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
-use PHP_CodeSniffer_Tokens;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Class BracesFormattingSniff
@@ -15,9 +15,9 @@ use PHP_CodeSniffer_Tokens;
  * Ensure there is a single blank line after the closing brace of a class definition
  *
  * @see Squiz_Sniffs_CSS_ClassDefinitionClosingBraceSpaceSniff
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#braces
+ * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#braces
  */
-class BracesFormattingSniff implements PHP_CodeSniffer_Sniff
+class BracesFormattingSniff implements Sniff
 {
     /**
      * A list of tokenizers this sniff supports.
@@ -27,7 +27,7 @@ class BracesFormattingSniff implements PHP_CodeSniffer_Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -35,9 +35,9 @@ class BracesFormattingSniff implements PHP_CodeSniffer_Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 
@@ -77,7 +77,7 @@ class BracesFormattingSniff implements PHP_CodeSniffer_Sniff
             return;
         }
 
-        $prev = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr - 1), null, true);
+        $prev = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($stackPtr - 1), null, true);
         if ($prev !== false && $tokens[$prev]['line'] !== ($tokens[$stackPtr]['line'] - 1)) {
             $num = ($tokens[$stackPtr]['line'] - $tokens[$prev]['line'] - 1);
             $error = 'Expected 0 blank lines before closing brace of class definition; %s found';

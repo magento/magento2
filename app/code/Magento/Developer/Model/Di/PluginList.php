@@ -22,9 +22,7 @@ class PluginList extends Interception\PluginList\PluginList
     const PLUGIN_TYPE_AFTER = 'after';
     /**#@-*/
 
-    /**
-     * @var array
-     */
+    /**#@-*/
     private $pluginList = [
        self::PLUGIN_TYPE_BEFORE => [],
        self::PLUGIN_TYPE_AROUND => [],
@@ -147,7 +145,10 @@ class PluginList extends Interception\PluginList\PluginList
             if (!array_key_exists($pluginInstance, $this->pluginList[$this->pluginTypeMapping[$typeCode]])) {
                 $this->pluginList[$this->pluginTypeMapping[$typeCode]][$pluginInstance] = [];
             }
-            $this->pluginList[$this->pluginTypeMapping[$typeCode]][$pluginInstance][] = $pluginMethod ;
+
+            if (!in_array($pluginMethod, $this->pluginList[$this->pluginTypeMapping[$typeCode]][$pluginInstance])) {
+                $this->pluginList[$this->pluginTypeMapping[$typeCode]][$pluginInstance][] = $pluginMethod;
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ use Magento\Reports\Model\ResourceModel\Order\Collection;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Order\Collection
@@ -202,7 +202,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      * @param int $useAggregatedData
      * @param string $mainTable
      * @param int $isFilter
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getIfNullSqlResult
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $getIfNullSqlResult
      * @dataProvider useAggregatedDataDataProvider
      * @return void
      */
@@ -309,7 +309,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      * @param int $isFilter
      * @param int $useAggregatedData
      * @param string $mainTable
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getIfNullSqlResult
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $getIfNullSqlResult
      * @dataProvider totalsDataProvider
      * @return void
      */

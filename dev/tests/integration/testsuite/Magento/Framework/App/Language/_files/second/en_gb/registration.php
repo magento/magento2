@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-\Magento\Framework\Component\ComponentRegistrar::register(
-    \Magento\Framework\Component\ComponentRegistrar::LANGUAGE,
-    'second_en_gb',
-    __DIR__
-);
+use \Magento\Framework\Component\ComponentRegistrar;
+
+ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'second_en_gb', __DIR__);

@@ -10,7 +10,7 @@ use Magento\Theme\Model\Design\Config\Storage;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StorageTest extends \PHPUnit_Framework_TestCase
+class StorageTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Storage */
     protected $model;

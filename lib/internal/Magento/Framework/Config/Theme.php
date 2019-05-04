@@ -26,7 +26,9 @@ class Theme
      */
     protected $_data;
 
-    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    /**
+     * @var \Magento\Framework\Config\Dom\UrnResolver
+     */
     protected $urnResolver;
 
     /**

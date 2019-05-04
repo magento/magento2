@@ -10,6 +10,9 @@ use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Indexer\CacheContext;
 
+/**
+ * Abstract class for CatalogRule indexers.
+ */
 abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface, IdentityInterface
 {
     /**
@@ -66,7 +69,6 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     {
         $this->indexBuilder->reindexFull();
         $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
-        //TODO: remove after fix fpc. MAGETWO-50668
         $this->getCacheManager()->clean($this->getIdentities());
     }
 
@@ -137,9 +139,10 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     abstract protected function doExecuteRow($id);
 
     /**
-     * @return \Magento\Framework\App\CacheInterface|mixed
+     * Get cache manager
      *
-     * @deprecated
+     * @return \Magento\Framework\App\CacheInterface|mixed
+     * @deprecated 100.0.7
      */
     private function getCacheManager()
     {
@@ -155,7 +158,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Get cache context
      *
      * @return \Magento\Framework\Indexer\CacheContext
-     * @deprecated
+     * @deprecated 100.0.7
      */
     protected function getCacheContext()
     {

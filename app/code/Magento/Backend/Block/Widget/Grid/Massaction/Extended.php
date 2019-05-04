@@ -3,17 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
 /**
  * Grid widget massaction block
  *
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 100.2.0 in favour of UI component implementation
  * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
  * @author      Magento Core Team <core@magentocommerce.com>
  * @TODO MAGETWO-31510: Remove deprecated class
+ * @since 100.0.2
  */
 class Extended extends \Magento\Backend\Block\Widget
 {
@@ -68,7 +70,7 @@ class Extended extends \Magento\Backend\Block\Widget
     public function _construct()
     {
         parent::_construct();
-        $this->setErrorText($this->escapeHtml(__('Please select items.')));
+        $this->setErrorText($this->escapeHtml(__('An item needs to be selected. Select and try again.')));
     }
 
     /**
@@ -217,9 +219,8 @@ class Extended extends \Magento\Backend\Block\Widget
         if ($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
             $selected = explode(',', $selected);
             return join(',', $selected);
-        } else {
-            return '';
         }
+        return '';
     }
 
     /**
@@ -232,9 +233,8 @@ class Extended extends \Magento\Backend\Block\Widget
         if ($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
             $selected = explode(',', $selected);
             return $selected;
-        } else {
-            return [];
         }
+        return [];
     }
 
     /**
@@ -274,7 +274,14 @@ class Extended extends \Magento\Backend\Block\Widget
 
         /** @var \Magento\Framework\Data\Collection $allIdsCollection */
         $allIdsCollection = clone $this->getParentBlock()->getCollection();
-        $gridIds = $allIdsCollection->clear()->setPageSize(0)->getAllIds();
+
+        if ($this->getMassactionIdField()) {
+            $massActionIdField = $this->getMassactionIdField();
+        } else {
+            $massActionIdField = $this->getParentBlock()->getMassactionIdField();
+        }
+
+        $gridIds = $allIdsCollection->setPageSize(0)->getColumnValues($massActionIdField);
 
         if (!empty($gridIds)) {
             return join(",", $gridIds);

@@ -11,7 +11,7 @@ namespace Magento\Cms\Test\Unit\Helper;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PageTest extends \PHPUnit_Framework_TestCase
+class PageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Helper\Page
@@ -118,6 +118,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     private $httpRequestMock;
 
+    /**
+     * Test Setup
+     */
     protected function setUp()
     {
         $this->actionMock = $this->getMockBuilder(\Magento\Framework\App\Action\Action::class)
@@ -175,6 +178,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->layoutProcessorMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ProcessorInterface::class)
             ->getMockForAbstractClass();
         $this->blockMock = $this->getMockBuilder(\Magento\Framework\View\Element\AbstractBlock::class)
+            ->setMethods(['setContentHeading'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->messagesBlockMock = $this->getMockBuilder(\Magento\Framework\View\Element\Messages::class)
@@ -196,7 +200,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->resultPageFactory = $this->getMock(\Magento\Framework\View\Result\PageFactory::class, [], [], '', false);
+        $this->resultPageFactory = $this->createMock(\Magento\Framework\View\Result\PageFactory::class);
 
         $this->object = $objectManager->getObject(
             \Magento\Cms\Helper\Page::class,
@@ -366,6 +370,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function renderPageExtendedDataProvider()
     {
         return [
@@ -466,12 +473,15 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->object->getPageUrl($pageId));
     }
 
+    /**
+     * @return array
+     */
     public function getPageUrlDataProvider()
     {
         return [
             'ids NOT EQUAL BUT page->load() NOT SUCCESSFUL' => [
                 'pageId' => 123,
-                'internalPageId' => 234,
+                'internalPageId' => null,
                 'pageLoadResultIndex' => 0,
                 'expectedResult' => null,
             ],

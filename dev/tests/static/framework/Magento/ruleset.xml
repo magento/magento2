@@ -7,23 +7,12 @@
 -->
 <ruleset name="Magento">
     <description>Custom Magento coding standard.</description>
+    <rule ref="./../../../../../vendor/magento/magento-coding-standard/Magento2"/>
 
-    <rule ref="PSR2"/>
-
-    <rule ref="Magento.Files.LineLength">
-        <properties>
-            <property name="lineLimit" value="120"/>
-            <property name="absoluteLineLimit" value="120"/>
-        </properties>
-    </rule>
-    <rule ref="Magento.LiteralNamespaces.LiteralNamespaces">
+    <!-- ToDo: Improve Annotation sniffs in magento/magento-coding-standard and remove from here. -->
+    <rule ref="Magento.Annotation">
         <exclude-pattern>*/_files/*</exclude-pattern>
+        <exclude-pattern>*/Test/*</exclude-pattern>
+        <exclude-pattern>*Test.php</exclude-pattern>
     </rule>
-
-    <rule ref="Generic.Functions.CallTimePassByReference"/>
-    <rule ref="Generic.PHP.DeprecatedFunctions"/>
-
-    <rule ref="Squiz.Commenting.DocCommentAlignment"/>
-    <rule ref="Squiz.Functions.GlobalFunction"/>
-    <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing"/>
 </ruleset>

@@ -9,7 +9,7 @@ namespace Magento\Framework\Pricing\Test\Unit\Adjustment;
  * Class CalculatorTest
  *
  */
-class CalculatorTest extends \PHPUnit_Framework_TestCase
+class CalculatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Pricing\Adjustment\Calculator

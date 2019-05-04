@@ -9,8 +9,9 @@ namespace Magento\Catalog\Block\Product\ProductList;
  * Test class for \Magento\Catalog\Block\Product\List\Upsell.
  *
  * @magentoDataFixture Magento/Catalog/_files/products_upsell.php
+ * @magentoDbIsolation disabled
  */
-class UpsellTest extends \PHPUnit_Framework_TestCase
+class UpsellTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\ProductList\Upsell

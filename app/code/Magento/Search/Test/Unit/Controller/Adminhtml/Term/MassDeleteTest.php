@@ -9,7 +9,7 @@ namespace Magento\Search\Test\Unit\Controller\Adminhtml\Term;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Controller\ResultFactory;
 
-class MassDeleteTest extends \PHPUnit_Framework_TestCase
+class MassDeleteTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $messageManager;
@@ -54,7 +54,7 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addSuccess', 'addError'])
+            ->setMethods(['addSuccessMessage', 'addErrorMessage'])
             ->getMockForAbstractClass();
         $this->pageFactory = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
             ->setMethods([])
@@ -107,7 +107,7 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
         $this->createQuery(0, 1);
         $this->createQuery(1, 2);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->will($this->returnSelf());
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')

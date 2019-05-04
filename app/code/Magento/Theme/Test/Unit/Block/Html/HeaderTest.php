@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\Block\Html;
 
-class HeaderTest extends \PHPUnit_Framework_TestCase
+class HeaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Block\Html\Header

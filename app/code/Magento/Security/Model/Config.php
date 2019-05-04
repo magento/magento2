@@ -25,9 +25,16 @@ class Config implements ConfigInterface
     const XML_PATH_ADMIN_AREA = 'admin/security/';
 
     /**
-     * Configuration path to fronted area
+     * Configuration path to frontend area
      */
-    const XML_PATH_FRONTED_AREA = 'customer/password/';
+    const XML_PATH_FRONTEND_AREA = 'customer/password/';
+
+    /**
+     * Configuration path to fronted area
+     * @deprecated
+     * @see \Magento\Security\Model\Config::XML_PATH_FRONTEND_AREA
+     */
+    const XML_PATH_FRONTED_AREA = self::XML_PATH_FRONTEND_AREA;
 
     /**
      * Configuration path to admin account sharing
@@ -134,7 +141,7 @@ class Config implements ConfigInterface
         if ($this->scope->getCurrentScope() == \Magento\Framework\App\Area::AREA_ADMINHTML) {
             return self::XML_PATH_ADMIN_AREA;
         }
-        return self::XML_PATH_FRONTED_AREA;
+        return self::XML_PATH_FRONTEND_AREA;
     }
 
     /**

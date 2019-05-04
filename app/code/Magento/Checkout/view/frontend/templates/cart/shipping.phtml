@@ -12,7 +12,7 @@
 <div id="block-shipping" class="block shipping" data-mage-init='{"collapsible":{"openedState": "active", "saveState": true}}'>
     <div class="title" data-role="title">
         <strong id="block-shipping-heading" role="heading" aria-level="2">
-            <?php /* @escapeNotVerified */ echo $block->getQuote()->isVirtual() ? __('Estimate Tax') : __('Estimate Shipping and Tax') ?>
+            <?= /* @escapeNotVerified */ $block->getQuote()->isVirtual() ? __('Estimate Tax') : __('Estimate Shipping and Tax') ?>
         </strong>
     </div>
     <div id="block-summary" data-bind="scope:'block-summary'" class="content" data-role="content" aria-labelledby="block-shipping-heading">
@@ -20,20 +20,20 @@
         <script type="text/x-magento-init">
             {
                 "#block-summary": {
-                    "Magento_Ui/js/core/app": <?php /* @escapeNotVerified */ echo $block->getJsLayout();?>
+                    "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout() ?>
                 }
             }
         </script>
         <script>
-            window.checkoutConfig = <?php /* @escapeNotVerified */ echo $block->getSerializedCheckoutConfig(); ?>;
+            window.checkoutConfig = <?= /* @escapeNotVerified */ $block->getSerializedCheckoutConfig() ?>;
             window.customerData = window.checkoutConfig.customerData;
             window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
             require([
                 'mage/url',
                 'Magento_Ui/js/block-loader'
             ], function(url, blockLoader) {
-                blockLoader("<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/loader-1.gif'); ?>");
-                return url.setBaseUrl('<?php /* @escapeNotVerified */ echo $block->getBaseUrl();?>');
+                blockLoader("<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-1.gif') ?>");
+                return url.setBaseUrl('<?= /* @escapeNotVerified */ $block->getBaseUrl() ?>');
             })
         </script>
     </div>

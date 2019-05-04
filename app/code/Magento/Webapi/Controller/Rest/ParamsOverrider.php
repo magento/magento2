@@ -197,7 +197,7 @@ class ParamsOverrider
             $index = array_search($serviceMethodParamName, array_column($methodParams, 'name'));
             if ($index !== false) {
                 $paramObjectType = $methodParams[$index][MethodsMap::METHOD_META_TYPE];
-                $setter = 'set' . ucfirst(SimpleDataObjectConverter::snakeCaseToCamelCase($objectProperty));
+                $setter = 'set' . SimpleDataObjectConverter::snakeCaseToUpperCamelCase($objectProperty);
                 if (array_key_exists(
                     $setter,
                     $this->getMethodsMap()->getMethodsMap($paramObjectType)
@@ -214,7 +214,7 @@ class ParamsOverrider
      *
      * @return \Magento\Framework\Reflection\MethodsMap
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getMethodsMap()
     {

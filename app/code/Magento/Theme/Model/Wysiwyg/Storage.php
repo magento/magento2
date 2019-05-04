@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Theme wysiwyg storage model
- */
 namespace Magento\Theme\Model\Wysiwyg;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Theme wysiwyg storage model
+ */
 class Storage
 {
     /**
@@ -105,7 +105,7 @@ class Storage
      * Upload file
      *
      * @param string $targetPath
-     * @return bool
+     * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function uploadFile($targetPath)
@@ -119,20 +119,13 @@ class Storage
         $uploader->setAllowRenameFiles(true);
         $uploader->setFilesDispersion(false);
         $result = $uploader->save($targetPath);
+        unset($result['path']);
 
         if (!$result) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t upload the file right now.'));
         }
 
         $this->_createThumbnail($targetPath . '/' . $uploader->getUploadedFileName());
-
-        $result['cookie'] = [
-            'name' => $this->_helper->getSession()->getName(),
-            'value' => $this->_helper->getSession()->getSessionId(),
-            'lifetime' => $this->_helper->getSession()->getCookieLifetime(),
-            'path' => $this->_helper->getSession()->getCookiePath(),
-            'domain' => $this->_helper->getSession()->getCookieDomain()
-        ];
 
         return $result;
     }
@@ -273,7 +266,7 @@ class Storage
             if (self::TYPE_IMAGE == $storageType) {
                 $requestParams['file'] = $fileName;
                 $file['thumbnailParams'] = $requestParams;
-
+                //phpcs:ignore Generic.PHP.NoSilencedErrors
                 $size = @getimagesize($path);
                 if (is_array($size)) {
                     $file['width'] = $size[0];

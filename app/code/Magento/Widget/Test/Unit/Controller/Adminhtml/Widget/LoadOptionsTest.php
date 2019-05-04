@@ -18,7 +18,7 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Test class for \Magento\Widget\Controller\Adminhtml\Widget\LoadOptions
  */
-class LoadOptionsTest extends \PHPUnit_Framework_TestCase
+class LoadOptionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper

@@ -10,7 +10,7 @@ namespace Magento\CatalogSearch\Test\Unit\Model;
  * @see \Magento\CatalogSearch\Model\Advanced
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdvancedTest extends \PHPUnit_Framework_TestCase
+class AdvancedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
@@ -54,7 +54,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->collection = $this->getMock(
+        $this->collection = $this->createPartialMock(
             \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection::class,
             [
                 'addAttributeToSelect',
@@ -64,34 +64,21 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
                 'addStoreFilter',
                 'setVisibility',
                 'addFieldsToFilter'
-            ],
-            [],
-            '',
-            false
+            ]
         );
-        $this->resource = $this->getMock(
+        $this->resource = $this->createPartialMock(
             \Magento\CatalogSearch\Model\ResourceModel\Advanced::class,
-            ['prepareCondition', '__wakeup', 'getIdFieldName'],
-            [],
-            '',
-            false
+            ['prepareCondition', '__wakeup', 'getIdFieldName']
         );
 
-        $this->resourceProvider = $this->getMock(
-            \Magento\CatalogSearch\Model\ResourceModel\ResourceProvider::class,
-            ['getResource', 'getResourceCollection', 'getAdvancedResultCollection'],
-            [],
-            '',
-            false
-        );
+        $this->resourceProvider = $this->getMockBuilder(
+            \Magento\CatalogSearch\Model\ResourceModel\ResourceProvider::class
+        )
+            ->setMethods(['getResource', 'getResourceCollection', 'getAdvancedResultCollection'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->dataCollection = $this->getMock(
-            \Magento\Framework\Data\Collection::class,
-            ['getIterator'],
-            [],
-            '',
-            false
-        );
+        $this->dataCollection = $this->createPartialMock(\Magento\Framework\Data\Collection::class, ['getIterator']);
 
         $this->currency = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
             ->setMethods(['getRate'])
@@ -112,6 +99,9 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->store);
     }
 
+    /**
+     * @return array
+     */
     public function addFiltersDataProvider()
     {
         return array_merge(
@@ -260,6 +250,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
                 'productCollectionFactory' => $productCollectionFactory,
                 'storeManager' => $this->storeManager,
                 'currencyFactory' => $currencyFactory,
+                'collectionProvider' => null
             ]
         );
         $instance->addFilters($values);
@@ -272,12 +263,9 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
      */
     private function createBackend($table)
     {
-        $backend = $this->getMock(
+        $backend = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class,
-            ['getTable'],
-            [],
-            '',
-            false
+            ['getTable']
         );
         $backend->expects($this->once())
             ->method('getTable')
@@ -285,6 +273,10 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
         return $backend;
     }
 
+    /**
+     * @param string $optionText
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function createSource($optionText = 'optionText')
     {
         $source = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class)
@@ -297,6 +289,9 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
         return $source;
     }
 
+    /**
+     * @return array
+     */
     private function addFiltersPriceDataProvider()
     {
         return [
@@ -395,9 +390,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
         $frontendInput = null,
         $backendType = null
     ) {
-        $attribute = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-            [
+        $attribute = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [
                 'getAttributeCode',
                 'getStoreLabel',
                 'getFrontendInput',
@@ -405,11 +398,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
                 'getBackendType',
                 'getSource',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $attribute->expects($this->any())->method('getBackend')->willReturn($backend);
         $attribute->expects($this->any())->method('getSource')->willReturn($source);
         $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));

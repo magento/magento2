@@ -14,6 +14,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 abstract class AbstractModel extends AbstractExtensibleModel
 {

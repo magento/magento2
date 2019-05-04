@@ -6,7 +6,7 @@
 
 namespace Magento\Directory\Model\Country\Postcode\Config;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Directory\Model\Country\Postcode\Config\Reader

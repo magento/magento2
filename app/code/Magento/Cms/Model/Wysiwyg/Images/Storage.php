@@ -3,19 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Cms\Model\Wysiwyg\Images;
 
 use Magento\Cms\Helper\Wysiwyg\Images;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * Wysiwyg Images model
+ * Wysiwyg Images model.
+ *
+ * Tightly connected with controllers responsible for managing files so it uses session and is (sort of) a part
+ * of the presentation layer.
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  *
  * @api
+ * @since 100.0.2
  */
 class Storage extends \Magento\Framework\DataObject
 {
@@ -240,10 +248,12 @@ class Storage extends \Magento\Framework\DataObject
     protected function removeItemFromCollection($collection, $conditions)
     {
         $regExp = $conditions['reg_exp'] ? '~' . implode('|', array_keys($conditions['reg_exp'])) . '~i' : null;
-        $storageRootLength = strlen($this->_cmsWysiwygImages->getStorageRoot());
+        $storageRoot = $this->_cmsWysiwygImages->getStorageRoot();
+        $storageRootLength = strlen($storageRoot);
 
         foreach ($collection as $key => $value) {
-            $rootChildParts = explode('/', substr($value->getFilename(), $storageRootLength));
+            $mediaSubPathname = substr($value->getFilename(), $storageRootLength);
+            $rootChildParts = explode('/', '/' . ltrim($mediaSubPathname, '/'));
 
             if (array_key_exists($rootChildParts[1], $conditions['plain'])
                 || ($regExp && preg_match($regExp, $value->getFilename()))) {
@@ -267,7 +277,8 @@ class Storage extends \Magento\Framework\DataObject
         $collection = $this->getCollection($path)
             ->setCollectDirs(true)
             ->setCollectFiles(false)
-            ->setCollectRecursively(false);
+            ->setCollectRecursively(false)
+            ->setOrder('basename', \Magento\Framework\Data\Collection\Filesystem::SORT_ORDER_ASC);
 
         $conditions = $this->getConditionsForExcludeDirs();
 
@@ -317,6 +328,8 @@ class Storage extends \Magento\Framework\DataObject
             $item->setName($item->getBasename());
             $item->setShortName($this->_cmsWysiwygImages->getShortFilename($item->getBasename()));
             $item->setUrl($this->_cmsWysiwygImages->getCurrentUrl() . $item->getBasename());
+            $item->setSize(filesize($item->getFilename()));
+            $item->setMimeType(\mime_content_type($item->getFilename()));
 
             if ($this->isImage($item->getBasename())) {
                 $thumbUrl = $this->getThumbnailUrl($item->getFilename(), true);
@@ -484,6 +497,9 @@ class Storage extends \Magento\Framework\DataObject
         }
         $uploader->setAllowRenameFiles(true);
         $uploader->setFilesDispersion(false);
+        if (!$uploader->checkMimeType($this->getAllowedMimeTypes($type))) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('File validation failed.'));
+        }
         $result = $uploader->save($targetPath);
 
         if (!$result) {
@@ -492,14 +508,6 @@ class Storage extends \Magento\Framework\DataObject
 
         // create thumbnail
         $this->resizeFile($targetPath . '/' . $uploader->getUploadedFileName(), true);
-
-        $result['cookie'] = [
-            'name' => $this->getSession()->getName(),
-            'value' => $this->getSession()->getSessionId(),
-            'lifetime' => $this->getSession()->getCookieLifetime(),
-            'path' => $this->getSession()->getCookiePath(),
-            'domain' => $this->getSession()->getCookieDomain(),
-        ];
 
         return $result;
     }
@@ -559,10 +567,10 @@ class Storage extends \Magento\Framework\DataObject
      * Create thumbnail for image and save it to thumbnails directory
      *
      * @param string $source Image path to be resized
-     * @param bool $keepRation Keep aspect ratio or not
+     * @param bool $keepRatio Keep aspect ratio or not
      * @return bool|string Resized filepath or false if errors were occurred
      */
-    public function resizeFile($source, $keepRation = true)
+    public function resizeFile($source, $keepRatio = true)
     {
         $realPath = $this->_directory->getRelativePath($source);
         if (!$this->_directory->isFile($realPath) || !$this->_directory->isExist($realPath)) {
@@ -579,7 +587,7 @@ class Storage extends \Magento\Framework\DataObject
         }
         $image = $this->_imageFactory->create();
         $image->open($source);
-        $image->keepAspectRatio($keepRation);
+        $image->keepAspectRatio($keepRatio);
         $image->resize($this->_resizeParameters['width'], $this->_resizeParameters['height']);
         $dest = $targetDir . '/' . pathinfo($source, PATHINFO_BASENAME);
         $image->save($dest);
@@ -640,11 +648,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function getAllowedExtensions($type = null)
     {
-        if (is_string($type) && array_key_exists("{$type}_allowed", $this->_extensions)) {
-            $allowed = $this->_extensions["{$type}_allowed"];
-        } else {
-            $allowed = $this->_extensions['allowed'];
-        }
+        $allowed = $this->getExtensionsList($type);
 
         return array_keys(array_filter($allowed));
     }
@@ -734,7 +738,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     protected function _sanitizePath($path)
     {
-        return rtrim(preg_replace('~[/\\\]+~', '/', $this->_directory->getDriver()->getRealPath($path)), '/');
+        return rtrim(preg_replace('~[/\\\]+~', '/', $this->_directory->getDriver()->getRealPathSafety($path)), '/');
     }
 
     /**
@@ -749,5 +753,35 @@ class Storage extends \Magento\Framework\DataObject
             $this->_sanitizePath($path),
             strlen($this->_sanitizePath($this->_cmsWysiwygImages->getStorageRoot()))
         );
+    }
+
+    /**
+     * Prepare mime types config settings.
+     *
+     * @param string|null $type Type of storage, e.g. image, media etc.
+     * @return array Array of allowed file extensions
+     */
+    private function getAllowedMimeTypes($type = null): array
+    {
+        $allowed = $this->getExtensionsList($type);
+
+        return array_values(array_filter($allowed));
+    }
+
+    /**
+     * Get list of allowed file extensions with mime type in values.
+     *
+     * @param string|null $type
+     * @return array
+     */
+    private function getExtensionsList($type = null): array
+    {
+        if (is_string($type) && array_key_exists("{$type}_allowed", $this->_extensions)) {
+            $allowed = $this->_extensions["{$type}_allowed"];
+        } else {
+            $allowed = $this->_extensions['allowed'];
+        }
+
+        return $allowed;
     }
 }

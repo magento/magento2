@@ -9,7 +9,7 @@ namespace Magento\GroupedProduct\Pricing\Price;
 use Magento\Catalog\Api\Data\ProductTierPriceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class FinalPriceTest extends \PHPUnit_Framework_TestCase
+class FinalPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped.php

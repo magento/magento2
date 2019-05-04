@@ -1,6 +1,6 @@
 <?php
 /**
- * Attribure lock state validator
+ * Attribute lock state validator
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.

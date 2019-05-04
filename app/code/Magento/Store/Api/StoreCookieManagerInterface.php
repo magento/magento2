@@ -12,6 +12,7 @@ use Magento\Store\Api\Data\StoreInterface;
  * Store cookie manager interface
  *
  * @api
+ * @since 100.0.2
  */
 interface StoreCookieManagerInterface
 {

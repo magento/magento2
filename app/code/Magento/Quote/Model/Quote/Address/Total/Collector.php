@@ -69,7 +69,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory
-     * @param mixed $sourceData
+     * @param \Magento\Framework\Simplexml\Element|mixed $sourceData
      * @param mixed $store
      * @param SerializerInterface $serializer
      */

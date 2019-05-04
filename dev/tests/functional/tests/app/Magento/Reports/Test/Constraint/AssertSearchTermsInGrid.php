@@ -31,7 +31,7 @@ class AssertSearchTermsInGrid extends AbstractConstraint
             'num_results' => $countProducts,
             'popularity' => $countSearch,
         ];
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $searchIndex->getSearchGrid()->isRowVisible($filter),
             'Search terms report is absent in Search Terms grid.'
         );

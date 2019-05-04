@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Block\Account;
 
@@ -13,11 +14,13 @@ use \Magento\Customer\Block\Account\SortLinkInterface;
  * Class for sorting links in navigation panels.
  *
  * @api
+ * @since 100.2.0
  */
 class Navigation extends Links
 {
     /**
      * {@inheritdoc}
+     * @since 100.2.0
      */
     public function getLinks()
     {
@@ -42,8 +45,8 @@ class Navigation extends Links
      * @return int
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function compare(SortLinkInterface $firstLink, SortLinkInterface $secondLink)
+    private function compare(SortLinkInterface $firstLink, SortLinkInterface $secondLink): int
     {
-        return ($firstLink->getSortOrder() < $secondLink->getSortOrder());
+        return  $secondLink->getSortOrder() <=> $firstLink->getSortOrder();
     }
 }

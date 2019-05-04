@@ -33,7 +33,7 @@ class CurrencyDisplayOptions implements ObserverInterface
     {
         $baseCode = $observer->getEvent()->getBaseCode();
         $currencyOptions = $observer->getEvent()->getCurrencyOptions();
-        $currencyOptions->setData($this->getCurrencyOptions($baseCode));
+        $currencyOptions->addData($this->getCurrencyOptions($baseCode));
 
         return $this;
     }

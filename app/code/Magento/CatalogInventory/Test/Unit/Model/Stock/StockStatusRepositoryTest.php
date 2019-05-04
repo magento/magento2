@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StockStatusRepositoryTest extends \PHPUnit_Framework_TestCase
+class StockStatusRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StockStatusRepository

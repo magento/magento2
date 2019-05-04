@@ -8,7 +8,7 @@ namespace Magento\Ui\Test\Unit\Config\Converter;
 use Magento\Ui\Config\Converter\Composite;
 use Magento\Ui\Config\ConverterInterface;
 
-class CompositeTest extends \PHPUnit_Framework_TestCase
+class CompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConverterInterface|\PHPUnit_Framework_MockObject_MockObject

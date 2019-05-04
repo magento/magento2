@@ -6,9 +6,10 @@
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Backend\App\Area\FrontNameResolver;
-use Magento\Framework\App\ObjectManagerFactory;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Indexer\Model\Indexer\Collection;
 
-class AbstractIndexerCommandCommonSetup extends \PHPUnit_Framework_TestCase
+class AbstractIndexerCommandCommonSetup extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManager\ConfigLoader
@@ -16,7 +17,7 @@ class AbstractIndexerCommandCommonSetup extends \PHPUnit_Framework_TestCase
     protected $configLoaderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\IndexerFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterfaceFactory
      */
     protected $indexerFactory;
 
@@ -40,32 +41,34 @@ class AbstractIndexerCommandCommonSetup extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $indexerCollectionMock;
+
     protected function setUp()
     {
-        $this->objectManagerFactory = $this->getMock(
-            \Magento\Framework\App\ObjectManagerFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->objectManagerFactory = $this->createMock(\Magento\Framework\App\ObjectManagerFactory::class);
         $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $this->objectManagerFactory->expects($this->any())->method('create')->willReturn($this->objectManager);
 
-        $this->stateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
-        $this->configLoaderMock = $this->getMock(
-            \Magento\Framework\App\ObjectManager\ConfigLoader::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->stateMock = $this->createMock(\Magento\Framework\App\State::class);
+        $this->configLoaderMock = $this->createMock(\Magento\Framework\App\ObjectManager\ConfigLoader::class);
 
         $this->collectionFactory = $this->getMockBuilder(\Magento\Indexer\Model\Indexer\CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->indexerFactory = $this->getMockBuilder(\Magento\Indexer\Model\IndexerFactory::class)
+
+        $this->indexerCollectionMock = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->collectionFactory
+            ->method('create')
+            ->willReturn($this->indexerCollectionMock);
+
+        $this->indexerFactory = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -78,7 +81,7 @@ class AbstractIndexerCommandCommonSetup extends \PHPUnit_Framework_TestCase
                         $this->getObjectManagerReturnValueMap(),
                         [
                             [\Magento\Indexer\Model\Indexer\CollectionFactory::class, $this->collectionFactory],
-                            [\Magento\Indexer\Model\IndexerFactory::class, $this->indexerFactory],
+                            [\Magento\Framework\Indexer\IndexerInterfaceFactory::class, $this->indexerFactory],
                         ]
                     )
                 )
@@ -111,5 +114,37 @@ class AbstractIndexerCommandCommonSetup extends \PHPUnit_Framework_TestCase
         $this->stateMock->expects($this->once())
             ->method('setAreaCode')
             ->with(FrontNameResolver::AREA_CODE);
+    }
+
+    /**
+     * @param array $methods
+     * @param array $data
+     * @return \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
+     */
+    protected function getIndexerMock(array $methods = [], array $data = [])
+    {
+        /** @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface $indexer */
+        $indexer = $this->getMockBuilder(IndexerInterface::class)
+            ->setMethods(array_merge($methods, ['getId', 'getTitle']))
+            ->getMockForAbstractClass();
+        $indexer->method('getId')
+            ->willReturn($data['indexer_id'] ?? '');
+        $indexer->method('getTitle')
+            ->willReturn($data['title'] ?? '');
+        return $indexer;
+    }
+
+    /**
+     * Init Indexer Collection Mock by items.
+     *
+     * @param IndexerInterface[] $items
+     * @throws \Exception
+     */
+    protected function initIndexerCollectionByItems(array $items)
+    {
+        $this->indexerCollectionMock
+            ->method('getItems')
+            ->with()
+            ->willReturn($items);
     }
 }

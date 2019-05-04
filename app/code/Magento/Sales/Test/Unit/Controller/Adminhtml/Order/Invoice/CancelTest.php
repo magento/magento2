@@ -15,7 +15,7 @@ use Magento\Sales\Api\InvoiceRepositoryInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CancelTest extends \PHPUnit_Framework_TestCase
+class CancelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -88,7 +88,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
             ->disableOriginalConstructor()
@@ -213,7 +213,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->method('save');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You canceled the invoice.');
 
         $this->invoiceRepository->expects($this->once())
@@ -295,7 +295,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->will($this->throwException($e));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($message);
 
         $invoiceMock->expects($this->once())
@@ -343,7 +343,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->will($this->throwException($e));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($message);
 
         $invoiceMock->expects($this->once())

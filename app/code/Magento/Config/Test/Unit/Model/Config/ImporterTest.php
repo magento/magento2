@@ -14,7 +14,6 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\State;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Flag;
-use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\ArrayUtils;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
@@ -25,7 +24,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * @see Importer
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ImporterTest extends \PHPUnit_Framework_TestCase
+class ImporterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Importer
@@ -83,12 +82,10 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
+            ->setMethods(['create', 'getFlagData', 'saveFlag'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->flagMock = $this->getMockBuilder(Flag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->flagResourceMock = $this->getMockBuilder(FlagResource::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->arrayUtilsMock = $this->getMockBuilder(ArrayUtils::class)
@@ -125,9 +122,6 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     */
     public function testImport()
     {
         $data = [];
@@ -150,6 +144,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->method('emulateAreaCode')
             ->with(Area::AREA_ADMINHTML, $this->anything())
             ->willReturnCallback(function ($area, $function) {
+                $this->assertEquals(Area::AREA_ADMINHTML, $area);
                 return $function();
             });
         $this->saveProcessorMock->expects($this->once())
@@ -159,6 +154,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->method('setCurrentScope')
             ->with(Area::AREA_ADMINHTML);
         $this->scopeMock->expects($this->at(2))
+            ->method('setCurrentScope')
+            ->with('oldScope');
+        $this->scopeMock->expects($this->at(3))
             ->method('setCurrentScope')
             ->with('oldScope');
         $this->flagManagerMock->expects($this->once())

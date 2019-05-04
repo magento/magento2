@@ -37,7 +37,7 @@ class AssertProductReviewNotOnProductPage extends AbstractConstraint
 
         $reviewBlock = $catalogProductView->getCustomerReviewBlock();
         $catalogProductView->getViewBlock()->selectTab('Reviews');
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $reviewBlock->isVisibleReviewItem(),
             'Error, product review is displayed.'
         );

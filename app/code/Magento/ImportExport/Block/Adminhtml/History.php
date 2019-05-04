@@ -10,6 +10,7 @@ namespace Magento\ImportExport\Block\Adminhtml;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class History extends \Magento\Backend\Block\Widget\Grid\Container
 {

@@ -32,12 +32,12 @@ class AssertPagersSummaryText extends AbstractConstraint
         $pagerSize = $configSection['checkout/cart/number_items_to_display_pager']['value'];
         $totalItems = count($cart->getItems());
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             sprintf(self::PAGER_SUMMARY_TEXT, $pagerSize, $totalItems),
             $checkoutCart->getTopPagerBlock()->getAmountToolbar()->getText(),
             'Top Pager summary text isn\'t satisfy test data'
         );
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             sprintf(self::PAGER_SUMMARY_TEXT, $pagerSize, $totalItems),
             $checkoutCart->getBottomPagerBlock()->getAmountToolbar()->getText(),
             'Bottom Pager summary text isn\'t satisfy test data'

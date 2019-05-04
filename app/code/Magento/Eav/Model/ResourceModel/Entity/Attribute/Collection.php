@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
 use Magento\Eav\Model\Entity\Type;
@@ -12,6 +13,7 @@ use Magento\Eav\Model\Entity\Type;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -86,7 +88,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Specify select columns which are used for load arrtibute values
+     * Specify select columns which are used for load attribute values
      *
      * @return $this
      */
@@ -127,7 +129,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Specify attribute set filter
      *
-     * @param int $setId
+     * @param int|int[] $setId
      * @return $this
      */
     public function setAttributeSetFilter($setId)
@@ -182,6 +184,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Specify multiple attribute sets filter
+     *
      * Result will be ordered by sort_order
      *
      * @param array $setIds
@@ -209,20 +212,21 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setInAllAttributeSetsFilter(array $setIds)
     {
-        foreach ($setIds as $setId) {
-            $setId = (int)$setId;
-            if (!$setId) {
-                continue;
-            }
-            $alias = sprintf('entity_attribute_%d', $setId);
-            $joinCondition = $this->getConnection()->quoteInto(
-                "{$alias}.attribute_id = main_table.attribute_id AND {$alias}.attribute_set_id =?",
-                $setId
-            );
-            $this->join([$alias => 'eav_entity_attribute'], $joinCondition, 'attribute_id');
+        if (!empty($setIds)) {
+            $this->getSelect()
+                ->join(
+                    ['entity_attribute' => $this->getTable('eav_entity_attribute')],
+                    'entity_attribute.attribute_id = main_table.attribute_id',
+                    ['count' => new \Zend_Db_Expr('COUNT(*)')]
+                )
+                ->where(
+                    'entity_attribute.attribute_set_id IN (?)',
+                    $setIds
+                )
+                ->group('entity_attribute.attribute_id')
+                ->having(new \Zend_Db_Expr('COUNT(*)') . ' = ' . count($setIds));
         }
 
-        //$this->getSelect()->distinct(true);
         $this->setOrder('is_user_defined', self::SORT_ORDER_ASC);
 
         return $this;
@@ -472,7 +476,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSelectCountSql()
     {
@@ -489,6 +493,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $cond
      * @param string $cols
      * @return $this
+     * @since 100.1.0
      */
     public function joinLeft($table, $cond, $cols = '*')
     {

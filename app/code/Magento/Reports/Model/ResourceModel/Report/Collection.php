@@ -13,20 +13,21 @@ namespace Magento\Reports\Model\ResourceModel\Report;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Data\Collection
 {
     /**
      * From value
      *
-     * @var string
+     * @var \DateTime
      */
     protected $_from;
 
     /**
      * To value
      *
-     * @var string
+     * @var \DateTime
      */
     protected $_to;
 
@@ -114,14 +115,14 @@ class Collection extends \Magento\Framework\Data\Collection
      * Set interval
      * @codeCoverageIgnore
      *
-     * @param \DateTime $fromDate
-     * @param \DateTime $toDate
+     * @param \DateTimeInterface $fromDate
+     * @param \DateTimeInterface $toDate
      * @return $this
      */
-    public function setInterval($fromDate, $toDate)
+    public function setInterval(\DateTimeInterface $fromDate, \DateTimeInterface $toDate)
     {
-        $this->_from = $fromDate;
-        $this->_to = $toDate;
+        $this->_from = new \DateTime($fromDate->format('Y-m-d'), $fromDate->getTimezone());
+        $this->_to = new \DateTime($toDate->format('Y-m-d'), $toDate->getTimezone());
 
         return $this;
     }
@@ -214,8 +215,11 @@ class Collection extends \Magento\Framework\Data\Collection
                 )
             );
         } else {
+            // Transform the start date to UTC whilst preserving the date. This is required as getTimestamp()
+            // is in UTC which may result in a different month from the original start date due to time zones.
+            $dateStartUtc = (new \DateTime())->createFromFormat('d-m-Y g:i:s', $dateStart->format('d-m-Y 00:00:00'));
             $interval['end'] = $this->_localeDate->convertConfigTimeToUtc(
-                $dateStart->format('Y-m-' . date('t', $dateStart->getTimestamp()) . ' 23:59:59')
+                $dateStart->format('Y-m-' . date('t', $dateStartUtc->getTimestamp()) . ' 23:59:59')
             );
         }
 

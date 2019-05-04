@@ -5,8 +5,8 @@
  */
 namespace Magento\Sniffs\Less;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 /**
  * Class VariablesSniff
@@ -16,11 +16,10 @@ use PHP_CodeSniffer_Sniff;
  *   they should be located in the module file, in the beginning of the general comment.
  * - All variable names must be lowercase
  *
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#local-variables
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#naming
- *
+ * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#local-variables
+ * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#naming
  */
-class VariablesSniff implements PHP_CodeSniffer_Sniff
+class VariablesSniff implements Sniff
 {
     /**
      * A list of tokenizers this sniff supports.
@@ -30,7 +29,7 @@ class VariablesSniff implements PHP_CodeSniffer_Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -38,9 +37,9 @@ class VariablesSniff implements PHP_CodeSniffer_Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
         $currentToken = $tokens[$stackPtr];
@@ -62,12 +61,20 @@ class VariablesSniff implements PHP_CodeSniffer_Sniff
 
         $classBefore = $phpcsFile->findPrevious(T_STYLE, $stackPtr);
         if (false !== $classBefore) {
-            $phpcsFile->addError('Variable declaration located not in the beginning of general comments', $stackPtr);
+            $phpcsFile->addError(
+                'Variable declaration located not in the beginning of general comments',
+                $stackPtr,
+                'VariableLocation'
+            );
         }
 
         $variableName = $tokens[$stackPtr + 1]['content'];
         if (preg_match('/[A-Z]/', $variableName)) {
-            $phpcsFile->addError('Variable declaration contains uppercase symbols', $stackPtr);
+            $phpcsFile->addError(
+                'Variable declaration contains uppercase symbols',
+                $stackPtr,
+                'VariableUppercase'
+            );
         }
     }
 }

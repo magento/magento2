@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model;
 
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
@@ -93,7 +94,12 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         try {
             $this->attributeSetResource->save($attributeSet);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__('There was an error saving attribute set.'));
+            throw new CouldNotSaveException(
+                __(
+                    'The attribute set couldn\'t be saved due to an error. '
+                    . 'Verify your information and try again. If the error persists, please try again later.'
+                )
+            );
         }
         return $attributeSet;
     }
@@ -120,7 +126,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     /**
      * Retrieve entity type code from search criteria
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return null|string
      */
@@ -159,9 +165,14 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         try {
             $this->attributeSetResource->delete($attributeSet);
         } catch (\Magento\Framework\Exception\StateException $exception) {
-            throw new CouldNotDeleteException(__('Default attribute set can not be deleted'));
+            throw new CouldNotDeleteException(__('The default attribute set can\'t be deleted.'));
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__('There was an error deleting attribute set.'));
+            throw new CouldNotDeleteException(
+                __(
+                    'The attribute set couldn\'t be deleted due to an error. '
+                    . 'Try again — if the error persists, please try again later.'
+                )
+            );
         }
         return true;
     }
@@ -177,7 +188,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

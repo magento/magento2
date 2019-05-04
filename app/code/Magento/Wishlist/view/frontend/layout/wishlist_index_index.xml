@@ -13,10 +13,12 @@
         </referenceBlock>
         <referenceContainer name="content">
             <block class="Magento\Wishlist\Block\Customer\Wishlist" name="customer.wishlist" template="Magento_Wishlist::view.phtml" cacheable="false">
+                <block class="Magento\Theme\Block\Html\Pager" name="wishlist_item_pager"/>
                 <block class="Magento\Wishlist\Block\Rss\Link" name="wishlist.rss.link" template="Magento_Wishlist::rss/wishlist.phtml"/>
                 <block class="Magento\Wishlist\Block\Customer\Wishlist\Items" name="customer.wishlist.items" as="items" template="Magento_Wishlist::item/list.phtml" cacheable="false">
                     <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Image" name="customer.wishlist.item.image" template="Magento_Wishlist::item/column/image.phtml" cacheable="false"/>
                     <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Info" name="customer.wishlist.item.name" template="Magento_Wishlist::item/column/name.phtml" cacheable="false"/>
+                    <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column" name="customer.wishlist.item.review" template="Magento_Wishlist::item/column/review.phtml" cacheable="false"/>
                     <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Cart" name="customer.wishlist.item.price" template="Magento_Wishlist::item/column/price.phtml" cacheable="false">
                         <block class="Magento\Catalog\Pricing\Render" name="product.price.render.wishlist">
                             <arguments>
@@ -39,6 +41,7 @@
                         </block>
                         <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Cart" name="customer.wishlist.item.cart" template="Magento_Wishlist::item/column/cart.phtml" cacheable="false">
                             <arguments>
+                                <argument name="allowedQuantityViewModel" xsi:type="object">Magento\Wishlist\ViewModel\AllowedQuantity</argument>
                                 <argument name="title" translate="true" xsi:type="string">Add to Cart</argument>
                             </arguments>
                         </block>

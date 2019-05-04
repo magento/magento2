@@ -9,7 +9,7 @@
  */
 namespace Magento\Catalog\Model;
 
-class DesignTest extends \PHPUnit_Framework_TestCase
+class DesignTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Design
@@ -32,8 +32,12 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\View\DesignInterface::class
         );
+        $translate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\TranslateInterface::class
+        );
         $this->assertEquals('package', $design->getDesignTheme()->getPackageCode());
         $this->assertEquals('theme', $design->getDesignTheme()->getThemeCode());
+        $this->assertEquals('themepackage/theme', $translate->getTheme());
     }
 
     /**

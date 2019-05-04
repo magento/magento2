@@ -7,7 +7,9 @@ namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct;
 
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
-    /** @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface
+     */
     protected $attributeRepository;
 
     /**

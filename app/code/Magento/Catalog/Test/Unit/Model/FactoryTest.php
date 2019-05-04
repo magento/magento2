@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model;
 
 use \Magento\Catalog\Model\Factory;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -39,7 +39,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->model = $this->getMock(\Magento\Catalog\Model\Product\Option::class, [], [], '', false);
+        $this->model = $this->createMock(\Magento\Catalog\Model\Product\Option::class);
 
         $this->setObjectManager();
 
@@ -48,7 +48,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setObjectManager()
     {
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->objectManager
             ->expects($this->any())

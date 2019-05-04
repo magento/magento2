@@ -12,7 +12,7 @@ namespace Magento\Test\Integrity;
 use Magento\Framework\App\Utility\Files;
 use \Magento\Framework\App\Bootstrap;
 
-class TestPlacementTest extends \PHPUnit_Framework_TestCase
+class TestPlacementTest extends \PHPUnit\Framework\TestCase
 {
     /** @var array */
     private $scanList = ['dev/tests/unit/testsuite/Magento'];

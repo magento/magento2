@@ -8,7 +8,7 @@ namespace Magento\Cms\Test\Unit\Block\Adminhtml\Page\Widget;
 /**
  * @covers \Magento\Cms\Block\Adminhtml\Page\Widget\Chooser
  */
-class ChooserTest extends \PHPUnit_Framework_TestCase
+class ChooserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Block\Adminhtml\Page\Widget\Chooser
@@ -236,6 +236,9 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->elementMock, $this->this->prepareElementHtml($this->elementMock));
     }
 
+    /**
+     * @return array
+     */
     public function prepareElementHtmlDataProvider()
     {
         return [

@@ -16,13 +16,48 @@ class StoreTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
         $response = $this->getResponse()->getBody();
 
-        $this->assertSelectEquals('#add', 'Create Website', 1, $response);
-        $this->assertSelectCount('#add_group', 1, $response);
-        $this->assertSelectCount('#add_store', 1, $response);
-
-        $this->assertSelectEquals('#add.disabled', 'Create Website', 0, $response);
-        $this->assertSelectCount('#add_group.disabled', 0, $response);
-        $this->assertSelectCount('#add_store.disabled', 0, $response);
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="add" and @title = "Create Website"]/span[text() = "Create Website"]',
+                $response
+            )
+        );
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="add_group"]',
+                $response
+            )
+        );
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="add_store"]',
+                $response
+            )
+        );
+        $this->assertEquals(
+            0,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id = "add" and @class = "disabled"]',
+                $response
+            )
+        );
+        $this->assertEquals(
+            0,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="add_group" and contains(@class,"disabled")]',
+                $response
+            )
+        );
+        $this->assertEquals(
+            0,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="add_store" and contains(@class,"disabled")]',
+                $response
+            )
+        );
     }
 
     /**

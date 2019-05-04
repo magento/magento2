@@ -150,6 +150,7 @@ class ArrayUtils
      * @param string $path The leading path
      * @param string $separator The path parts separator
      * @return array
+     * @since 100.2.0
      */
     public function flatten(array $data, $path = '', $separator = '/')
     {
@@ -180,6 +181,7 @@ class ArrayUtils
      * @param array $originalArray The array to compare from
      * @param array $newArray The array to compare with
      * @return array Diff array
+     * @since 100.2.0
      */
     public function recursiveDiff(array $originalArray, array $newArray)
     {

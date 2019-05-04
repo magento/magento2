@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Model\PageLayout\Config\BuilderInterface;
 use Magento\Framework\View\PageLayout\Config;
 
-class PageLayoutTest extends \PHPUnit_Framework_TestCase
+class PageLayoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BuilderInterface|\PHPUnit_Framework_MockObject_MockObject

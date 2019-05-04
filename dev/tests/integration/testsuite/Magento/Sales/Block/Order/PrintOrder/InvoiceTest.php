@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Block\Order\PrintOrder;
 
-class InvoiceTest extends \PHPUnit_Framework_TestCase
+class InvoiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

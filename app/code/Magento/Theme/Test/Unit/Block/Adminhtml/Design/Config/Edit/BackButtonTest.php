@@ -9,7 +9,7 @@ use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\UrlInterface;
 use Magento\Theme\Block\Adminhtml\Design\Config\Edit\BackButton;
 
-class BackButtonTest extends \PHPUnit_Framework_TestCase
+class BackButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BackButton

@@ -8,6 +8,7 @@ namespace Magento\Setup\Model;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Encryption\KeyValidator;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\Setup\Option\SelectConfigOption;
@@ -28,13 +29,29 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     private $configGenerator;
 
-    /** @var  DbValidator */
+    /**
+     * @var \Magento\Setup\Validator\DbValidator
+     */
     private $dbValidator;
 
-    /** @var  array */
-    private $validSaveHandlers = [
-        ConfigOptionsListConstants::SESSION_SAVE_FILES,
-        ConfigOptionsListConstants::SESSION_SAVE_DB,
+    /**
+     * @var array
+     */
+    private $configOptionsCollection = [];
+
+    /**
+     * @var KeyValidator
+     */
+    private $encryptionKeyValidator;
+
+    /**
+     * @var array
+     */
+    private $configOptionsListClasses = [
+        \Magento\Setup\Model\ConfigOptionsList\Session::class,
+        \Magento\Setup\Model\ConfigOptionsList\Cache::class,
+        \Magento\Setup\Model\ConfigOptionsList\PageCache::class,
+        \Magento\Setup\Model\ConfigOptionsList\Lock::class,
     ];
 
     /**
@@ -42,33 +59,35 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      *
      * @param ConfigGenerator $configGenerator
      * @param DbValidator $dbValidator
+     * @param KeyValidator|null $encryptionKeyValidator
      */
-    public function __construct(ConfigGenerator $configGenerator, DbValidator $dbValidator)
-    {
+    public function __construct(
+        ConfigGenerator $configGenerator,
+        DbValidator $dbValidator,
+        KeyValidator $encryptionKeyValidator = null
+    ) {
         $this->configGenerator = $configGenerator;
         $this->dbValidator = $dbValidator;
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        foreach ($this->configOptionsListClasses as $className) {
+            $this->configOptionsCollection[] = $objectManager->get($className);
+        }
+        $this->encryptionKeyValidator = $encryptionKeyValidator ?: $objectManager->get(KeyValidator::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getOptions()
     {
-        return [
+        $options = [
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY,
                 'Encryption key'
-            ),
-            new SelectConfigOption(
-                ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE,
-                SelectConfigOption::FRONTEND_WIZARD_SELECT,
-                $this->validSaveHandlers,
-                ConfigOptionsListConstants::CONFIG_PATH_SESSION_SAVE,
-                'Session save handler',
-                ConfigOptionsListConstants::SESSION_SAVE_FILES
             ),
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_HOST,
@@ -146,16 +165,21 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 'http Cache hosts'
             ),
         ];
+
+        foreach ($this->configOptionsCollection as $configOptionsList) {
+            $options = array_merge($options, $configOptionsList->getOptions());
+        }
+
+        return $options;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createConfig(array $data, DeploymentConfig $deploymentConfig)
     {
         $configData = [];
         $configData[] = $this->configGenerator->createCryptConfig($data, $deploymentConfig);
-        $configData[] = $this->configGenerator->createSessionConfig($data);
         $definitionConfig = $this->configGenerator->createDefinitionsConfig($data);
         if (isset($definitionConfig)) {
             $configData[] = $definitionConfig;
@@ -165,11 +189,16 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         $configData[] = $this->configGenerator->createXFrameConfig();
         $configData[] = $this->configGenerator->createModeConfig();
         $configData[] = $this->configGenerator->createCacheHostsConfig($data);
+
+        foreach ($this->configOptionsCollection as $configOptionsList) {
+            $configData[] = $configOptionsList->createConfig($data, $deploymentConfig);
+        }
+
         return $configData;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {
@@ -193,9 +222,12 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             $errors = array_merge($errors, $this->validateDbSettings($options, $deploymentConfig));
         }
 
+        foreach ($this->configOptionsCollection as $configOptionsList) {
+            $errors = array_merge($errors, $configOptionsList->validate($options, $deploymentConfig));
+        }
+
         $errors = array_merge(
             $errors,
-            $this->validateSessionSave($options),
             $this->validateEncryptionKey($options)
         );
 
@@ -248,24 +280,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     }
 
     /**
-     * Validates session save param
-     *
-     * @param array $options
-     * @return string[]
-     */
-    private function validateSessionSave(array $options)
-    {
-        $errors = [];
-        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE])
-            && !in_array($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE], $this->validSaveHandlers)
-        ) {
-            $errors[] = "Invalid session handler '{$options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE]}'";
-        }
-
-        return $errors;
-    }
-
-    /**
      * Validates encryption key param
      *
      * @param array $options
@@ -276,8 +290,9 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         $errors = [];
 
         if (isset($options[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY])
-            && !$options[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY]) {
-            $errors[] = 'Invalid encryption key';
+            && !$this->encryptionKeyValidator->isValid($options[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY])
+        ) {
+            $errors[] = 'Invalid encryption key. Encryption key must be 32 character string without any white space.';
         }
 
         return $errors;

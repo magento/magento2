@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -26,7 +27,7 @@ class CartItemRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
      */
     public function testAddProduct()
     {
@@ -69,7 +70,7 @@ class CartItemRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
      * @expectedException \Exception
      * @expectedExceptionMessage You need to choose options for your item.
      */
@@ -105,7 +106,7 @@ class CartItemRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Cart %1 does not contain item %2
+     * @expectedExceptionMessage The %1 Cart doesn't contain the %2 item.
      */
     public function testUpdateIncorrectItem()
     {

@@ -12,7 +12,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Test for \Magento\Catalog\Model\Layer\Filter\DataProvider\Category
  */
-class CategoryTest extends \PHPUnit_Framework_TestCase
+class CategoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Catalog\Model\Category|MockObject */
     private $category;
@@ -77,6 +77,9 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return \Magento\Catalog\Model\Layer\Filter\DataProvider\Category
+     */
     public function testGetCategoryWithAppliedId()
     {
         $storeId = 1234;

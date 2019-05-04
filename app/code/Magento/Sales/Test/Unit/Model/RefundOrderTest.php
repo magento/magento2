@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Framework\App\ResourceConnection;
@@ -30,7 +31,7 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class RefundOrderTest extends \PHPUnit_Framework_TestCase
+class RefundOrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
@@ -245,9 +246,9 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
             ->method('setState')
             ->with(Order::STATE_CLOSED)
             ->willReturnSelf();
-        $this->orderMock->expects($this->once())
-            ->method('getState')
-            ->willReturn(Order::STATE_CLOSED);
+        $this->configMock->expects($this->once())
+            ->method('getStateStatuses')
+            ->willReturn(['first, second']);
         $this->configMock->expects($this->once())
             ->method('getStateDefaultStatus')
             ->with(Order::STATE_CLOSED)
@@ -407,6 +408,9 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function dataProvider()
     {
         return [

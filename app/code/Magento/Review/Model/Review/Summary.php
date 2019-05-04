@@ -11,6 +11,7 @@ namespace Magento\Review\Model\Review;
  * @api
  *
  * @codeCoverageIgnore
+ * @since 100.0.2
  */
 class Summary extends \Magento\Framework\Model\AbstractModel
 {

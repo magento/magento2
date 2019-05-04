@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Grid\Massaction;
 
-class ItemsUpdaterTest extends \PHPUnit_Framework_TestCase
+class ItemsUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  \Magento\Sales\Model\Order\Grid\Massaction\ItemsUpdater
@@ -20,7 +20,7 @@ class ItemsUpdaterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->authorizationMock = $this->getMock(\Magento\Framework\Authorization::class, [], [], '', false);
+        $this->authorizationMock = $this->createMock(\Magento\Framework\Authorization::class);
         $this->itemUpdater = new \Magento\Sales\Model\Order\Grid\Massaction\ItemsUpdater(
             $this->authorizationMock
         );

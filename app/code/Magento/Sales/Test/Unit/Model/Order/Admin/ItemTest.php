@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Admin;
 /**
  * Class ValidatorTest
  */
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

@@ -16,11 +16,12 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var EavValidationRules|\PHPUnit_Framework_MockObject_MockObject
@@ -72,6 +73,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     private $fileInfo;
 
+    /**
+     * @var PoolInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $modifierPool;
+
     protected function setUp()
     {
         $this->eavValidationRules = $this->getMockBuilder(EavValidationRules::class)
@@ -120,6 +126,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->fileInfo = $this->getMockBuilder(FileInfo::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->modifierPool = $this->getMockBuilder(PoolInterface::class)->getMockForAbstractClass();
     }
 
     /**
@@ -137,6 +145,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->eavEntityMock);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        /** @var DataProvider $model */
         $model = $objectManager->getObject(
             DataProvider::class,
             [
@@ -147,6 +157,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'eavConfig' => $this->eavConfig,
                 'request' => $this->request,
                 'categoryFactory' => $this->categoryFactory,
+                'pool' => $this->modifierPool
             ]
         );
 
@@ -316,5 +327,30 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('image', $result[$categoryId]);
 
         $this->assertEquals($expects, $result[$categoryId]['image']);
+    }
+
+    public function testGetMetaWithoutParentInheritanceResolving()
+    {
+        $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->registry->expects($this->once())
+            ->method('registry')
+            ->with('category')
+            ->willReturn($categoryMock);
+        $attributeMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $categoryMock->expects($this->once())
+            ->method('getAttributes')
+            ->willReturn(['image' => $attributeMock]);
+        $categoryMock->expects($this->never())
+            ->method('getParentId');
+
+        $this->modifierPool->expects($this->once())
+            ->method('getModifiersInstances')
+            ->willReturn([]);
+
+        $this->getModel()->getMeta();
     }
 }

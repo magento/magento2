@@ -9,7 +9,7 @@ namespace Magento\Swatches\Test\Unit\Controller\Ajax;
 /**
  * Class Media
  */
-class MediaTest extends \PHPUnit_Framework_TestCase
+class MediaTest extends \PHPUnit\Framework\TestCase
 {
     /** @var array */
     private $mediaGallery;
@@ -20,6 +20,9 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject */
     private $productModelFactoryMock;
 
+    /** @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    private $config;
+
     /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
     private $productMock;
 
@@ -28,6 +31,9 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $requestMock;
+
+    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $responseMock;
 
     /** @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject */
     private $resultFactory;
@@ -52,29 +58,29 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->swatchHelperMock = $this->getMock(\Magento\Swatches\Helper\Data::class, [], [], '', false);
-        $this->productModelFactoryMock = $this->getMock(
+        $this->swatchHelperMock = $this->createMock(\Magento\Swatches\Helper\Data::class);
+        $this->productModelFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\ProductFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $this->contextMock = $this->getMock(\Magento\Framework\App\Action\Context::class, [], [], '', false);
+        $this->config = $this->createMock(\Magento\PageCache\Model\Config::class);
+        $this->config->method('getTtl')->willReturn(1);
 
-        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->contextMock = $this->createMock(\Magento\Framework\App\Action\Context::class);
+
+        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->contextMock->method('getRequest')->willReturn($this->requestMock);
-        $this->resultFactory = $this->getMock(
-            \Magento\Framework\Controller\ResultFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setPublicHeaders'])
+            ->getMockForAbstractClass();
+        $this->responseMock->method('setPublicHeaders')->willReturnSelf();
+        $this->contextMock->method('getResponse')->willReturn($this->responseMock);
+        $this->resultFactory = $this->createPartialMock(\Magento\Framework\Controller\ResultFactory::class, ['create']);
         $this->contextMock->method('getResultFactory')->willReturn($this->resultFactory);
 
-        $this->jsonMock = $this->getMock(\Magento\Framework\Controller\Result\Json::class, [], [], '', false);
+        $this->jsonMock = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
         $this->resultFactory->expects($this->once())->method('create')->with('json')->willReturn($this->jsonMock);
 
         $this->controller = $this->objectManager->getObject(
@@ -82,7 +88,8 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             [
                 'context' => $this->contextMock,
                 'swatchHelper' => $this->swatchHelperMock,
-                'productModelFactory' => $this->productModelFactoryMock
+                'productModelFactory' => $this->productModelFactoryMock,
+                'config' => $this->config
             ]
         );
     }
@@ -95,6 +102,10 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->with(59)
             ->willReturn($this->productMock);
+        $this->productMock
+            ->expects($this->once())
+            ->method('getIdentities')
+            ->willReturn(['tags']);
 
         $this->productModelFactoryMock
             ->expects($this->once())

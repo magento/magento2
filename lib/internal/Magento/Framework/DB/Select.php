@@ -400,7 +400,7 @@ class Select extends \Zend_Db_Select
     /**
      * Render STRAIGHT_JOIN clause
      *
-     * @param string   $sql SQL query
+     * @param string $sql SQL query
      * @return string
      */
     protected function _renderStraightjoin($sql)
@@ -452,7 +452,7 @@ class Select extends \Zend_Db_Select
     /**
      * Render FOR UPDATE clause
      *
-     * @param string   $sql SQL query
+     * @param string $sql SQL query
      * @return string
      */
     protected function _renderForupdate($sql)
@@ -467,9 +467,9 @@ class Select extends \Zend_Db_Select
     /**
      * Add EXISTS clause
      *
-     * @param  Select $select
-     * @param  string           $joinCondition
-     * @param   bool            $isExists
+     * @param Select $select
+     * @param string $joinCondition
+     * @param bool $isExists
      * @return $this
      */
     public function exists($select, $joinCondition, $isExists = true)
@@ -501,6 +501,7 @@ class Select extends \Zend_Db_Select
      * Converts this object to an SQL SELECT string.
      *
      * @return string|null This object as a SELECT string. (or null if a string cannot be produced.)
+     * @since 100.1.0
      */
     public function assemble()
     {
@@ -508,10 +509,18 @@ class Select extends \Zend_Db_Select
     }
 
     /**
+     * Remove links to other objects.
+     *
      * @return string[]
+     * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $properties = array_keys(get_object_vars($this));
         $properties = array_diff(
             $properties,
@@ -527,9 +536,15 @@ class Select extends \Zend_Db_Select
      * Init not serializable fields
      *
      * @return void
+     * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_adapter = $objectManager->get(ResourceConnection::class)->getConnection();
         $this->selectRenderer = $objectManager->get(\Magento\Framework\DB\Select\SelectRenderer::class);

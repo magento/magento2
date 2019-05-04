@@ -8,7 +8,7 @@ namespace Magento\Framework\Serialize\Test\Unit\Serializer;
 use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\Serializer\Json;
 
-class JsonTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
@@ -34,6 +34,9 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function serializeDataProvider()
     {
         $dataObject = new DataObject(['something']);
@@ -62,6 +65,9 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function unserializeDataProvider()
     {
         return [
@@ -95,6 +101,9 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $this->json->unserialize($value);
     }
 
+    /**
+     * @return array
+     */
     public function unserializeExceptionDataProvider()
     {
         return [

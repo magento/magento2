@@ -10,7 +10,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Price;
  * Class CostStorageTest.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CostStorageTest extends \PHPUnit_Framework_TestCase
+class CostStorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Price\PricePersistenceFactory|\PHPUnit_Framework_MockObject_MockObject

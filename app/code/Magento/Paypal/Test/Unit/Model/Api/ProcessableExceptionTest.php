@@ -7,7 +7,7 @@ namespace Magento\Paypal\Test\Unit\Model\Api;
 
 use Magento\Paypal\Model\Api\ProcessableException;
 
-class ProcessableExceptionTest extends \PHPUnit_Framework_TestCase
+class ProcessableExceptionTest extends \PHPUnit\Framework\TestCase
 {
     const UNKNOWN_CODE = 10411;
 

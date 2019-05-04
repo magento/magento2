@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSwatchProductWithFileCustomOptionTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Add configurable product to cart"/>
+            <title value="Configurable product with swatch option and file custom option"/>
+            <description value="Configurable product with swatch option and file custom option. When adding to cart with an invalid filetype, the correct error message is shown, and options remain selected."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-93101"/>
+            <group value="ConfigurableProduct"/>
+            <group value="Swatches"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+        <!-- Create a configurable swatch product via the UI -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="searchAndSelectCategory"/>
+        <!--Add swatch attribute to configurable product-->
+        <actionGroup ref="AddVisualSwatchToProductActionGroup" stepKey="addSwatchToProduct"/>
+        <!--Add custom option to configurable product-->
+        <actionGroup ref="AddProductCustomOptionFile" stepKey="addCustomOptionToProduct"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        
+        <!--Go to storefront-->
+        <amOnPage url="" stepKey="goToHomePage"/>
+        <waitForPageLoad stepKey="waitForHomePageLoad"/>
+        <click selector="{{StorefrontNavigationSection.topCategory($$createCategory.name$$)}}" stepKey="goToCategoryStorefront"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="$$createCategory.name$$" stepKey="seeOnCategoryPage"/>
+        <!--Add configurable product to cart-->
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductTitleByName(BaseConfigurableProduct.name)}}" stepKey="hoverProductInGrid"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(BaseConfigurableProduct.name)}}" stepKey="tryAddToCartFromCategoryPage"/>
+        <waitForPageLoad stepKey="waitForRedirectToProductPage"/>
+        <seeInCurrentUrl url="{{StorefrontProductPage.url(BaseConfigurableProduct.name)}}" stepKey="seeOnProductPage"/>
+        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel(visualSwatchOption2.default_label)}}" stepKey="clickSwatchOption"/>
+        <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue(visualSwatchAttribute.default_label)}}" userInput="{{visualSwatchOption2.default_label}}" stepKey="seeSwatchIsSelected"/>
+
+        <!--Try invalid file-->
+        <attachFile selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" userInput="lorem_ipsum.docx" stepKey="attachInvalidFile"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCartInvalidFile"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.alertMessage}}" stepKey="waitForErrorMessageInvalidFile"/>
+        <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="The file 'lorem_ipsum.docx' for '{{ProductOptionFile.title}}' has an invalid extension." stepKey="seeMessageInvalidFile"/>
+        <!--Swatch remains selected-->
+        <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue(visualSwatchAttribute.default_label)}}" userInput="{{visualSwatchOption2.default_label}}" stepKey="seeSwatchRemainsSelected"/>
+        <!--Try valid file-->
+        <attachFile selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" userInput="{{MagentoLogo.file}}" stepKey="attachValidFile"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$132.99" stepKey="seePriceUpdated"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCartValidFile"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="You added {{BaseConfigurableProduct.name}} to your shopping cart." stepKey="seeSuccessMessage"/>
+
+        <!--Check item in cart-->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCart"/>
+        <waitForPageLoad stepKey="waitForCartPageLoad"/>
+        <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName(BaseConfigurableProduct.name)}}" stepKey="seeProductInCart"/>
+        <see selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute(BaseConfigurableProduct.name, visualSwatchAttribute.default_label)}}" userInput="{{visualSwatchOption2.default_label}}" stepKey="seeSelectedSwatch"/>
+        <see selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute(BaseConfigurableProduct.name, ProductOptionFile.title)}}" userInput="{{MagentoLogo.file}}" stepKey="seeCorrectOptionFile"/>
+        <!--Delete cart item-->
+        <click selector="{{CheckoutCartProductSection.RemoveItem}}" stepKey="deleteCartItem"/>
+
+        <!--Delete product-->
+        <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
+            <argument name="sku" value="{{BaseConfigurableProduct.sku}}"/>
+        </actionGroup>
+    </test>
+</tests>

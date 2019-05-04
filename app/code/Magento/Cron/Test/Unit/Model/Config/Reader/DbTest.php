@@ -13,7 +13,7 @@ use Magento\GoogleAdwords\Block\Code;
  *
  * @package Magento\Cron\Test\Unit\Model\Config\Reader
  */
-class DbTest extends \PHPUnit_Framework_TestCase
+class DbTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config | \PHPUnit_Framework_MockObject_MockObject

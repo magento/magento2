@@ -9,7 +9,7 @@
  */
 namespace Magento\Test\Legacy;
 
-class CopyrightTest extends \PHPUnit_Framework_TestCase
+class CopyrightTest extends \PHPUnit\Framework\TestCase
 {
     public function testCopyright()
     {

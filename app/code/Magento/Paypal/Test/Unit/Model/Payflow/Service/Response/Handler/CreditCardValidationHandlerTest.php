@@ -9,7 +9,7 @@ use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\CreditCardValidationHandler;
 
-class CreditCardValidationHandlerTest extends \PHPUnit_Framework_TestCase
+class CreditCardValidationHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function testHandleCreditCardValidationFields()
     {

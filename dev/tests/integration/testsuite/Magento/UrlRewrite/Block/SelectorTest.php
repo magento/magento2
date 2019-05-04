@@ -9,7 +9,7 @@ namespace Magento\UrlRewrite\Block;
  * Test for \Magento\UrlRewrite\Block\Selector
  * @magentoAppArea adminhtml
  */
-class SelectorTest extends \PHPUnit_Framework_TestCase
+class SelectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

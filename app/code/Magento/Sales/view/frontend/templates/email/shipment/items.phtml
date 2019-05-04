@@ -14,22 +14,19 @@
         <thead>
             <tr>
                 <th class="item-info">
-                    <?= /* @escapeNotVerified */  __('Items'); ?>
+                    <?= /* @escapeNotVerified */  __('Items') ?>
                 </th>
                 <th class="item-qty">
-                    <?= /* @escapeNotVerified */  __('Qty'); ?>
+                    <?= /* @escapeNotVerified */  __('Qty') ?>
                 </th>
             </tr>
         </thead>
         <?php foreach ($_shipment->getAllItems() as $_item): ?>
-            <?php
-                if ($_item->getOrderItem()->getParentItem()) {
-                    continue;
-                }
-            ?>
-            <tbody>
-                <?= $block->getItemHtml($_item) ?>
-            </tbody>
+            <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
+                <tbody>
+                    <?= $block->getItemHtml($_item) ?>
+                </tbody>
+            <?php endif; ?>
         <?php endforeach; ?>
     </table>
 <?php endif; ?>

@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Model;
 /**
  * Customer log model test.
  */
-class LogTest extends \PHPUnit_Framework_TestCase
+class LogTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Customer log model.

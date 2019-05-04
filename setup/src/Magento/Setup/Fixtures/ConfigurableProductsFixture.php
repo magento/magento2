@@ -552,7 +552,7 @@ class ConfigurableProductsFixture extends Fixture
 
         if (count($skuPull) !== count(array_unique($skuPull))) {
             throw new ValidatorException(
-                __('Sku pattern for configurable product must be unique per attribute set')
+                __("The configurable product's SKU pattern must be unique in an attribute set.")
             );
         }
 
@@ -591,7 +591,9 @@ class ConfigurableProductsFixture extends Fixture
                 }
             }
         } else {
-            throw new ValidatorException(__('Configurable product config is invalid'));
+            throw new ValidatorException(
+                __('The configurable product config is invalid. Verify the product and try again.')
+            );
         }
 
         return $configurableConfigs;
@@ -720,6 +722,8 @@ class ConfigurableProductsFixture extends Fixture
         if ($searchTerms !== null) {
             $searchTerms = array_key_exists(0, $searchTerms['search_term'])
                 ? $searchTerms['search_term'] : [$searchTerms['search_term']];
+        } else {
+            $searchTerms = [];
         }
         return $searchTerms;
     }
@@ -843,10 +847,11 @@ class ConfigurableProductsFixture extends Fixture
             $minAmountOfWordsDescription,
             $descriptionPrefix
         ) {
-            $count = $searchTerms === null
+            $countSearchTerms = is_array($searchTerms) ? count($searchTerms) : 0;
+            $count = !$searchTerms
                 ? 0
                 : round(
-                    $searchTerms[$index % count($searchTerms)]['count'] * (
+                    $searchTerms[$index % $countSearchTerms]['count'] * (
                         $configurableProductsCount / ($simpleProductsCount + $configurableProductsCount)
                     )
                 );
@@ -856,8 +861,8 @@ class ConfigurableProductsFixture extends Fixture
                 $maxAmountOfWordsDescription,
                 $descriptionPrefix . '-' . $index
             ) .
-            ($index <= ($count * count($searchTerms)) ? ' ' .
-            $searchTerms[$index % count($searchTerms)]['term'] : '');
+            ($index <= ($count * $countSearchTerms) ? ' ' .
+            $searchTerms[$index % $countSearchTerms]['term'] : '');
         };
     }
 

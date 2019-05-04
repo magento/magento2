@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Unit\Model\Attribute\Backend;
 
-class BooleanTest extends \PHPUnit_Framework_TestCase
+class BooleanTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\Attribute\Backend\Data\Boolean

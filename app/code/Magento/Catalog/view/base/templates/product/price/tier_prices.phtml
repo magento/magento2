@@ -18,7 +18,7 @@ $msrpShowOnGesture = $block->getPriceType('msrp_price')->isShowPriceOnGesture();
 $product = $block->getSaleableItem();
 ?>
 <?php if (count($tierPrices)) : ?>
-    <ul class="<?php /* @escapeNotVerified */ echo($block->hasListClass() ? $block->getListClass() : 'prices-tier items'); ?>">
+    <ul class="<?= /* @escapeNotVerified */ ($block->hasListClass() ? $block->getListClass() : 'prices-tier items') ?>">
     <?php foreach ($tierPrices as $index => $price) : ?>
         <li class="item">
             <?php
@@ -55,11 +55,11 @@ $product = $block->getSaleableItem();
                         $tierPriceData['qty'] = $price['price_qty'];
                     }
                 ?>
-                <?php /* @escapeNotVerified */ echo __('Buy %1 for: ', $price['price_qty']); ?>
+                <?= /* @escapeNotVerified */ __('Buy %1 for: ', $price['price_qty']) ?>
                 <a href="javascript:void(0);"
-                   id="<?php /* @escapeNotVerified */ echo($popupId);?>"
-                   data-tier-price="<?php echo $block->escapeHtml($block->jsonEncode($tierPriceData)); ?>">
-                    <?php /* @escapeNotVerified */ echo __('Click for price'); ?></a>
+                   id="<?= /* @escapeNotVerified */ ($popupId) ?>"
+                   data-tier-price="<?= $block->escapeHtml($block->jsonEncode($tierPriceData)) ?>">
+                    <?= /* @escapeNotVerified */ __('Click for price') ?></a>
                 <?php else:
                     $priceAmountBlock = $block->renderAmount(
                         $price['price'],
@@ -95,9 +95,9 @@ $product = $block->getSaleableItem();
                         "inputQty": "#qty",
                         "attr": "[data-tier-price]",
                         "productForm": "#product_addtocart_form",
-                        "productId": "<?php /* @escapeNotVerified */ echo $productId; ?>",
+                        "productId": "<?= /* @escapeNotVerified */ $productId ?>",
                         "productIdInput": "input[type=hidden][name=product]",
-                        "isSaleable": "<?php /* @escapeNotVerified */ echo $isSaleable; ?>"
+                        "isSaleable": "<?= /* @escapeNotVerified */ $isSaleable ?>"
                     }
                 }
             }

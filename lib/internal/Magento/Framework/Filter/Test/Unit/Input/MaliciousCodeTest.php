@@ -8,7 +8,7 @@ namespace Magento\Framework\Filter\Test\Unit\Input;
 
 use \Magento\Framework\Filter\Input\MaliciousCode;
 
-class MaliciousCodeTest extends \PHPUnit_Framework_TestCase
+class MaliciousCodeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Filter\Input\MaliciousCode */
     protected $filter;
@@ -33,6 +33,9 @@ class MaliciousCodeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function filterDataProvider()
     {
         return [

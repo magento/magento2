@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductDownloadableSection">
+        <element name="sectionHeader" type="button" selector="div[data-index='downloadable']" timeout="30" />
+        <element name="sectionLinkGrid" type="text" selector="//div[@data-index='link']" timeout="30"/>
+        <element name="isDownloadableProduct" type="input" selector="input[name='is_downloadable']" />
+        <element name="linksTitleInput" type="input" selector="input[name='product[links_title]']" />
+        <element name="isLinksPurchasedSeparately" type="input" selector="input[name='product[links_purchased_separately]']" />
+        <element name="linksAddLinkButton" type="button" selector="div[data-index='container_links'] button[data-action='add_new_row']" />
+        <element name="lastLinkRow" type="text" selector="table[data-index=link] tbody tr:last-of-type"/>
+
+        <!-- Parameterized selectors for elements in an individual link row -->
+        <element name="addLinkTitleInput" type="input" selector="input[name='downloadable[link][{{var1}}][title]']" parameterized="true" />
+        <element name="addLinkPriceInput" type="input" selector="input[name='downloadable[link][{{var1}}][price]']" parameterized="true" />
+        <element name="addLinkFileTypeSelector" type="select" selector="select[name='downloadable[link][{{var1}}][type]']" parameterized="true" />
+        <element name="addLinkSampleTypeSelector" type="select" selector="select[name='downloadable[link][{{var1}}][sample][type]']" parameterized="true" />
+        <element name="addLinkShareableSelector" type="select" selector="select[name='downloadable[link][{{var1}}][is_shareable]']" parameterized="true" />
+        <element name="addLinkMaxDownloadsInput" type="input" selector="input[name='downloadable[link][{{var1}}][number_of_downloads]']" parameterized="true" />
+        <element name="addLinkIsUnlimitedDownloads" type="input" selector="input[name='downloadable[link][{{var1}}][is_unlimited]']" parameterized="true" />
+        <element name="addLinkRemoveRowButton" type="button" selector="div[data-index='container_links'] tr[data-repeat-index='{{var1}}'] button[data-action='remove_row']" parameterized="true" />
+        <!-- Only one of Upload/Url Inputs are available for File and Sample depending on the value of the corresponding TypeSelector -->
+        <element name="addLinkFileUploadFile" type="file" selector="div[data-index='container_links'] tr[data-repeat-index='{{var1}}'] fieldset[data-index='container_file'] input[type='file']" parameterized="true" />
+        <element name="addLinkFileUrlInput" type="input" selector="input[name='downloadable[link][{{var1}}][link_url]']" parameterized="true" />
+        <element name="addLinkSampleUploadFile" type="file" selector="div[data-index='container_links'] tr[data-repeat-index='{{var1}}'] fieldset[data-index='container_sample'] input[type='file']" parameterized="true" />
+        <element name="addLinkSampleUrlInput" type="input" selector="input[name='downloadable[link][{{var1}}][sample][url]']" parameterized="true" />
+        
+        <element name="samplesTitleInput" type="input" selector="input[name='product[samples_title]']"/>
+        <element name="samplesAddLinkButton" type="button" selector="div[data-index='container_samples'] button[data-action='add_new_row']" />
+
+        <!-- Parameterized selectors for elements in an individual sample row -->
+        <element name="addSampleTitleInput" type="input" selector="input[name='downloadable[sample][{{var1}}][title]']" parameterized="true" />
+        <element name="addSampleFileTypeSelector" type="select" selector="select[name='downloadable[sample][{{var1}}][type]']" parameterized="true" />
+        <element name="addSampleRemoveRowButton" type="button" selector="div[data-index='container_links'] tr[data-repeat-index='{{var1}}'] button[data-action='remove_row']" parameterized="true" />
+        <element name="addSampleFileUploadFile" type="file" selector="div[data-index='container_samples'] tr[data-repeat-index='{{var1}}'] input[type='file']" parameterized="true" />
+        <element name="addSampleFileUrlInput" type="input" selector="input[name='downloadable[sample][{{var1}}][sample_url]']" parameterized="true" />
+    </section>
+</sections>

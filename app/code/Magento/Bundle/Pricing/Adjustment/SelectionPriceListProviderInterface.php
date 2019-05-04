@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product;
 /**
  * Provide list of bundle selection prices
  * @api
+ * @since 100.2.0
  */
 interface SelectionPriceListProviderInterface
 {
@@ -19,6 +20,7 @@ interface SelectionPriceListProviderInterface
      * @param boolean $searchMin
      * @param boolean $useRegularPrice
      * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
+     * @since 100.2.0
      */
     public function getPriceList(Product $bundleProduct, $searchMin, $useRegularPrice);
 }

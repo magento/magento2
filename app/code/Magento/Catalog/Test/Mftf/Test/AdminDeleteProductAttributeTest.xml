@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DeleteProductAttributeTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product attributes"/>
+            <title value="Delete Product Attribute"/>
+            <description value="Admin should able to delete a product attribute"/>
+            <testCaseId value="MC-10887"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="productAttributeWysiwyg" stepKey="createProductAttribute"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="deleteProductAttributeByAttributeCode" stepKey="deleteProductAttribute">
+            <argument name="ProductAttributeCode" value="$$createProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <!-- Assert the product attribute is not in the grid by Attribute code -->
+        <actionGroup ref="filterProductAttributeByAttributeCode" stepKey="filterByAttributeCode">
+            <argument name="ProductAttributeCode" value="$$createProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
+        <!--Assert the product attribute is not in the grid by Default Label -->
+        <actionGroup ref="filterProductAttributeByDefaultLabel" stepKey="filterByDefaultLabel">
+            <argument name="productAttributeLabel" value="$$createProductAttribute.default_frontend_label$$"/>
+        </actionGroup>
+        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage2"/>
+         <!--Go to the Catalog > Products page and create Simple Product -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>
+        <waitForPageLoad stepKey="waitForProductList"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="toggleAddProductBtn"/>
+        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="chooseAddSimpleProduct"/>
+        <waitForPageLoad stepKey="waitForProductAdded"/>
+        <!-- Press Add Attribute button -->
+        <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickAddAttributeBtn"/>
+        <waitForPageLoad stepKey="waitForAttributeAdded"/>
+        <!-- Filter By Attribute Label on Add Attribute Page -->
+        <click selector="{{AdminProductFiltersSection.filter}}" stepKey="clickOnFilter"/>
+        <actionGroup ref="filterProductAttributeByAttributeLabel" stepKey="filterByAttributeLabel">
+            <argument name="productAttributeLabel" value="$$createProductAttribute.default_frontend_label$$"/>
+        </actionGroup>
+        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage3"/>
+         <!-- Filter By Attribute Code on Export > Products page -->
+        <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="navigateToSystemExport"/>
+        <selectOption selector="{{AdminExportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
+        <waitForElementVisible selector="{{AdminExportMainSection.entityAttributes}}" stepKey="waitForElementVisible"/>
+        <click selector="{{AdminExportAttributeSection.resetFilter}}" stepKey="resetFilter"/>
+        <fillField selector="{{AdminExportAttributeSection.filterByAttributeCode}}" userInput="$$createProductAttribute.attribute_code$$" stepKey="setAttributeCode"/>
+        <waitForPageLoad stepKey="waitForUserInput"/>
+        <click selector="{{AdminExportAttributeSection.search}}" stepKey="searchForAttribute"/>
+        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage4"/>
+    </test>
+</tests>

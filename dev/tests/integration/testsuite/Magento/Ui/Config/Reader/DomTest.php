@@ -10,7 +10,7 @@ use Magento\Framework\Config\FileIterator;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
 
-class DomTest extends \PHPUnit_Framework_TestCase
+class DomTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Dom

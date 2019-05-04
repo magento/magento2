@@ -7,7 +7,7 @@ namespace Magento\SalesRule\Test\Unit\Block\Adminhtml\Promo\Quote\Edit;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class SaveButtonTest extends \PHPUnit_Framework_TestCase
+class SaveButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\SaveButton
@@ -26,9 +26,9 @@ class SaveButtonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
-        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $contextMock = $this->getMock(\Magento\Backend\Block\Widget\Context::class, [], [], '', false);
+        $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $contextMock = $this->createMock(\Magento\Backend\Block\Widget\Context::class);
 
         $contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
 

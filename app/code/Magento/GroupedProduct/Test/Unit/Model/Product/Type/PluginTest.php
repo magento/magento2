@@ -6,7 +6,7 @@
  */
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\Type;
 
-class PluginTest extends \PHPUnit_Framework_TestCase
+class PluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -25,8 +25,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->moduleManagerMock = $this->getMock(\Magento\Framework\Module\Manager::class, [], [], '', false);
-        $this->subjectMock = $this->getMock(\Magento\Catalog\Model\Product\Type::class, [], [], '', false);
+        $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\Manager::class);
+        $this->subjectMock = $this->createMock(\Magento\Catalog\Model\Product\Type::class);
         $this->object = new \Magento\GroupedProduct\Model\Product\Type\Plugin($this->moduleManagerMock);
     }
 

@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Price\Validation;
 /**
  * Test for model Magento\Catalog\Product\Price\Validation\InvalidSkuProcessor.
  */
-class InvalidSkuProcessorTest extends \PHPUnit_Framework_TestCase
+class InvalidSkuProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor

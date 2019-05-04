@@ -8,7 +8,7 @@ namespace Magento\ImportExport\Test\Unit\Model\Import;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
-abstract class AbstractImportTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractImportTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper

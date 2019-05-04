@@ -10,6 +10,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 /**
  * Interface CartManagementInterface
  * @api
+ * @since 100.0.2
  */
 interface CartManagementInterface
 {

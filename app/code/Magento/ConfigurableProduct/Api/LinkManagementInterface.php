@@ -10,6 +10,7 @@ namespace Magento\ConfigurableProduct\Api;
  * Manage children products of configurable product
  *
  * @api
+ * @since 100.0.2
  */
 interface LinkManagementInterface
 {

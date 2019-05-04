@@ -11,6 +11,7 @@ use Magento\Customer\Model\Context;
  * Last ordered items sidebar
  *
  * @api
+ * @since 100.0.2
  */
 class Sidebar extends \Magento\Framework\View\Element\Template
 {

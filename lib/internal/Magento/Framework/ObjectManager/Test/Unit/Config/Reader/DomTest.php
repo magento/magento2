@@ -8,7 +8,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Config\Reader;
 
 require_once __DIR__ . '/_files/ConfigDomMock.php';
 
-class DomTest extends \PHPUnit_Framework_TestCase
+class DomTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -37,28 +37,10 @@ class DomTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
-        $this->converterMock = $this->getMock(
-            \Magento\Framework\ObjectManager\Config\Mapper\Dom::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->schemaLocatorMock = $this->getMock(
-            \Magento\Framework\ObjectManager\Config\SchemaLocator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->validationStateMock = $this->getMock(
-            \Magento\Framework\Config\ValidationStateInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
+        $this->converterMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Mapper\Dom::class);
+        $this->schemaLocatorMock = $this->createMock(\Magento\Framework\ObjectManager\Config\SchemaLocator::class);
+        $this->validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
 
         $this->model = new \Magento\Framework\ObjectManager\Config\Reader\Dom(
             $this->fileResolverMock,

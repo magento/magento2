@@ -7,7 +7,7 @@ namespace Magento\Store\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class GroupTest extends \PHPUnit_Framework_TestCase
+class GroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\Store

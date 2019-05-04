@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Cache\Test\Unit\Backend\Decorator;
 
-class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
+class DecoratorAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Zend_Cache_Backend_File
@@ -18,7 +18,7 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_mockBackend = $this->getMock(\Zend_Cache_Backend_File::class);
+        $this->_mockBackend = $this->createMock(\Zend_Cache_Backend_File::class);
     }
 
     protected function tearDown()
@@ -54,7 +54,7 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array options
+     * @param array $options
      * @expectedException \Zend_Cache_Exception
      * @dataProvider constructorExceptionDataProvider
      */
@@ -63,11 +63,14 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
         $this->getMockForAbstractClass(\Magento\Framework\Cache\Backend\Decorator\AbstractDecorator::class, [$options]);
     }
 
+    /**
+     * @return array
+     */
     public function constructorExceptionDataProvider()
     {
         return [
             'empty' => [[]],
-            'wrong_class' => [['concrete_backend' => $this->getMock(\Test_Class::class)]]
+            'wrong_class' => [['concrete_backend' => $this->getMockBuilder('Test_Class')->getMock()]]
         ];
     }
 
@@ -86,6 +89,9 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
         call_user_func([$decorator, $methodName], null, null);
     }
 
+    /**
+     * @return array
+     */
     public function allMethodsDataProvider()
     {
         $return = [];

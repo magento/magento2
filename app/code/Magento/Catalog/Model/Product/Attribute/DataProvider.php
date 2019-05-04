@@ -5,15 +5,14 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
-use Magento\Catalog\Model\Category;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Eav\Model\Entity\Attribute as EavAttribute;
-use Magento\Ui\Component\Form;
 use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Element\DataType\Text;
+use Magento\Store\Model\Store;
 
 /**
  * Data provider for the form of adding new product attribute.
@@ -114,27 +113,28 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     private function customizeFrontendLabels($meta)
     {
+        $labelConfigs = [];
+
         foreach ($this->storeRepository->getList() as $store) {
             $storeId = $store->getId();
 
             if (!$storeId) {
                 continue;
             }
-
-            $meta['manage-titles']['children'] = [
-                'frontend_label[' . $storeId . ']' => $this->arrayManager->set(
-                    'arguments/data/config',
-                    [],
-                    [
-                        'formElement' => Input::NAME,
-                        'componentType' => Field::NAME,
-                        'label' => $store->getName(),
-                        'dataType' => Text::NAME,
-                        'dataScope' => 'frontend_label[' . $storeId . ']'
-                    ]
-                ),
-            ];
+            $labelConfigs['frontend_label[' . $storeId . ']'] = $this->arrayManager->set(
+                'arguments/data/config',
+                [],
+                [
+                    'formElement' => Input::NAME,
+                    'componentType' => Field::NAME,
+                    'label' => $store->getName(),
+                    'dataType' => Text::NAME,
+                    'dataScope' => 'frontend_label[' . $storeId . ']'
+                ]
+            );
         }
+        $meta['manage-titles']['children'] = $labelConfigs;
+
         return $meta;
     }
 
@@ -149,40 +149,36 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $sortOrder = 1;
         foreach ($this->storeRepository->getList() as $store) {
             $storeId = $store->getId();
-
+            $storeLabelConfiguration = [
+                'dataType' => 'text',
+                'formElement' => 'input',
+                'component' => 'Magento_Catalog/js/form/element/input',
+                'template' => 'Magento_Catalog/form/element/input',
+                'prefixName' => 'option.value',
+                'prefixElementName' => 'option_',
+                'suffixName' => (string)$storeId,
+                'label' => $store->getName(),
+                'sortOrder' => $sortOrder,
+                'componentType' => Field::NAME,
+            ];
+            // JS code can't understand 'required-entry' => false|null, we have to avoid even empty property.
+            if ($store->getCode() == Store::ADMIN_CODE) {
+                $storeLabelConfiguration['validation'] = [
+                    'required-entry' => true,
+                ];
+            }
             $meta['attribute_options_select_container']['children']['attribute_options_select']['children']
             ['record']['children']['value_option_' . $storeId] = $this->arrayManager->set(
                 'arguments/data/config',
                 [],
-                [
-                    'dataType' => 'text',
-                    'formElement' => 'input',
-                    'component' => 'Magento_Catalog/js/form/element/input',
-                    'template' => 'Magento_Catalog/form/element/input',
-                    'prefixName' => 'option.value',
-                    'prefixElementName' => 'option_',
-                    'suffixName' => (string)$storeId,
-                    'label' => $store->getName(),
-                    'sortOrder' => $sortOrder,
-                    'componentType' => Field::NAME,
-                ]
+                $storeLabelConfiguration
             );
+
             $meta['attribute_options_multiselect_container']['children']['attribute_options_multiselect']['children']
             ['record']['children']['value_option_' . $storeId] = $this->arrayManager->set(
                 'arguments/data/config',
                 [],
-                [
-                    'dataType' => 'text',
-                    'formElement' => 'input',
-                    'component' => 'Magento_Catalog/js/form/element/input',
-                    'template' => 'Magento_Catalog/form/element/input',
-                    'prefixName' => 'option.value',
-                    'prefixElementName' => 'option_',
-                    'suffixName' => (string)$storeId,
-                    'label' => $store->getName(),
-                    'sortOrder' => $sortOrder,
-                    'componentType' => Field::NAME,
-                ]
+                $storeLabelConfiguration
             );
             ++$sortOrder;
         }

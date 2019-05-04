@@ -6,7 +6,7 @@
  */
 namespace Magento\Quote\Test\Unit\Model\Cart\Totals;
 
-class ItemConverterTest extends \PHPUnit_Framework_TestCase
+class ItemConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -38,21 +38,12 @@ class ItemConverterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configPoolMock = $this->getMock(
-            \Magento\Catalog\Helper\Product\ConfigurationPool::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
-        $this->dataObjectHelperMock = $this->getMock(\Magento\Framework\Api\DataObjectHelper::class, [], [], '', false);
-        $this->totalsFactoryMock = $this->getMock(
+        $this->configPoolMock = $this->createMock(\Magento\Catalog\Helper\Product\ConfigurationPool::class);
+        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->dataObjectHelperMock = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
+        $this->totalsFactoryMock = $this->createPartialMock(
             \Magento\Quote\Api\Data\TotalsItemInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
         $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
@@ -70,12 +61,12 @@ class ItemConverterTest extends \PHPUnit_Framework_TestCase
     {
         $productType = 'simple';
 
-        $itemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
+        $itemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
         $itemMock->expects($this->once())->method('toArray')->will($this->returnValue(['options' => []]));
         $itemMock->expects($this->any())->method('getProductType')->will($this->returnValue($productType));
 
-        $simpleConfigMock = $this->getMock(\Magento\Catalog\Helper\Product\Configuration::class, [], [], '', false);
-        $defaultConfigMock = $this->getMock(\Magento\Catalog\Helper\Product\Configuration::class, [], [], '', false);
+        $simpleConfigMock = $this->createMock(\Magento\Catalog\Helper\Product\Configuration::class);
+        $defaultConfigMock = $this->createMock(\Magento\Catalog\Helper\Product\Configuration::class);
 
         $this->configPoolMock->expects($this->any())->method('getByProductType')
             ->will($this->returnValueMap([['simple', $simpleConfigMock], ['default', $defaultConfigMock]]));

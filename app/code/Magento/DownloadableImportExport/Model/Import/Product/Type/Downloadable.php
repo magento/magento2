@@ -7,6 +7,7 @@
  */
 namespace Magento\DownloadableImportExport\Model\Import\Product\Type;
 
+use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\Framework\EntityManager\MetadataPool;
 use \Magento\Store\Model\Store;
 
@@ -283,7 +284,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum)) {
                     continue;
                 }
-                $productData = $newSku[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU]];
+                $rowSku = strtolower($rowData[ImportProduct::COL_SKU]);
+                $productData = $newSku[$rowSku];
                 if ($this->_type != $productData['type_id']) {
                     continue;
                 }
@@ -405,7 +407,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     * Get additional attributes for dowloadable product.
+     * Get additional attributes for downloadable product.
      *
      * @param array $rowData
      * @return array
@@ -436,7 +438,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $result = $defaultValue;
         if (isset($rowData[self::COL_DOWNLOADABLE_LINKS])) {
             $options = explode(
-                \Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
+                ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
                 $rowData[self::COL_DOWNLOADABLE_LINKS]
             );
             foreach ($options as $option) {
@@ -461,7 +463,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $result = '';
         if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])) {
             $options = explode(
-                \Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
+                ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
                 $rowData[self::COL_DOWNLOADABLE_SAMPLES]
             );
             foreach ($options as $option) {
@@ -727,7 +729,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $result = [];
         $options = explode(
-            \Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
+            ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
             $rowCol
         );
         foreach ($options as $option) {
@@ -751,7 +753,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $result = [];
         $options = explode(
-            \Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
+            ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
             $rowCol
         );
         foreach ($options as $option) {
@@ -775,7 +777,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $option = [];
         foreach ($values as $keyValue) {
             $keyValue = trim($keyValue);
-            if ($pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR)) {
+            $pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR);
+            if ($pos !== false) {
                 $key = substr($keyValue, 0, $pos);
                 $value = substr($keyValue, $pos + 1);
                 if ($key == 'sample') {
@@ -808,7 +811,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $option = [];
         foreach ($values as $keyValue) {
             $keyValue = trim($keyValue);
-            if ($pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR)) {
+            $pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR);
+            if ($pos !== false) {
                 $key = substr($keyValue, 0, $pos);
                 $value = substr($keyValue, $pos + 1);
                 if ($key == self::URL_OPTION_VALUE || $key == self::FILE_OPTION_VALUE) {

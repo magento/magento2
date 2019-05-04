@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\ObjectManager\Config\Mapper;
 
-use Magento\Framework\Config\Converter\Dom\DiFlat as FlatConverter;
+use Magento\Framework\Config\Converter\Dom\Flat as FlatConverter;
 use Magento\Framework\Config\Dom\ArrayNodeConfig;
 use Magento\Framework\Config\Dom\NodePathMatcher;
 

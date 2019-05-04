@@ -28,7 +28,7 @@ class PaymentSectionModifier
      * Payment configuration has predefined special blocks:
      *  - Account information (id = account),
      *  - Recommended Solutions (id = recommended_solutions),
-     *  - Other PayPal paymnt solution (id = other_paypal_payment_solutions),
+     *  - Other PayPal payment solution (id = other_paypal_payment_solutions),
      *  - Other payment methods (id = other_payment_methods).
      * All payment methods configuration should be moved to one of this group.
      * To move payment method to specific configuration group specify "displayIn"

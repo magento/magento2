@@ -9,5 +9,5 @@
 ?>
 
 <div class="order-date">
-    <?php /* @escapeNotVerified */ echo __('<span class="label">Order Date:</span> %1', '<date>' . $block->formatDate($block->getOrder()->getCreatedAt(), \IntlDateFormatter::LONG) . '</date>') ?>
+    <?= /* @escapeNotVerified */ __('<span class="label">Order Date:</span> %1', '<date>' . $block->formatDate($block->getOrder()->getCreatedAt(), \IntlDateFormatter::LONG) . '</date>') ?>
 </div>

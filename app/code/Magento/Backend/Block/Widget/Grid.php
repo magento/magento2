@@ -10,10 +10,11 @@ namespace Magento\Backend\Block\Widget;
  * Backend grid widget block
  *
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 100.2.0 in favour of UI component implementation
  * @method string getRowClickCallback() getRowClickCallback()
- * @method \Magento\Backend\Block\Widget\Grid setRowClickCallback() setRowClickCallback(string $value)
+ * @method \Magento\Backend\Block\Widget\Grid setRowClickCallback(string $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 class Grid extends \Magento\Backend\Block\Widget
 {
@@ -149,7 +150,10 @@ class Grid extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Internal constructor, that is called from real constructor
+     *
      * @return void
+     *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _construct()
@@ -708,6 +712,7 @@ class Grid extends \Magento\Backend\Block\Widget
 
     /**
      * Grid url getter
+     *
      * Version of getGridUrl() but with parameters
      *
      * @param array $params url parameters

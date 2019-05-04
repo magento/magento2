@@ -5,8 +5,8 @@
  */
 namespace Magento\Sniffs\Less;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 /**
  * Class ZeroUnitsSniff
@@ -14,18 +14,17 @@ use PHP_CodeSniffer_Sniff;
  * Ensure that units for 0 is not specified
  * Omit leading "0"s in values, use dot instead
  *
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#and-units
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#floating-values
- *
+ * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#and-units
+ * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#floating-values
  */
-class ZeroUnitsSniff implements PHP_CodeSniffer_Sniff
+class ZeroUnitsSniff implements Sniff
 {
     const CSS_PROPERTY_UNIT_PX = 'px';
     const CSS_PROPERTY_UNIT_EM = 'em';
     const CSS_PROPERTY_UNIT_REM = 'rem';
 
     /**
-     * List of available CSS Propery units
+     * List of available CSS Property units
      *
      * @var array
      */
@@ -43,7 +42,7 @@ class ZeroUnitsSniff implements PHP_CodeSniffer_Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -51,9 +50,9 @@ class ZeroUnitsSniff implements PHP_CodeSniffer_Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
         $tokenCode = $tokens[$stackPtr]['code'];
@@ -66,14 +65,14 @@ class ZeroUnitsSniff implements PHP_CodeSniffer_Sniff
             && T_STRING === $nextToken['code']
             && in_array($nextToken['content'], $this->units)
         ) {
-            $phpcsFile->addError('Units specified for "0" value', $stackPtr);
+            $phpcsFile->addError('Units specified for "0" value', $stackPtr, 'ZeroUnitFound');
         }
 
         if ((T_DNUMBER === $tokenCode)
             && 0 === strpos($tokenContent, "0")
             && ((float)$tokenContent < 1)
         ) {
-            $phpcsFile->addError('Values starts from "0"', $stackPtr);
+            $phpcsFile->addError('Values starts from "0"', $stackPtr, 'ZeroUnitFound');
         }
     }
 }

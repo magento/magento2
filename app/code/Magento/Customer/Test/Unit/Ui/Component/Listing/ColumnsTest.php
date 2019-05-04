@@ -7,7 +7,7 @@ namespace Magento\Customer\Test\Unit\Ui\Component\Listing;
 
 use Magento\Customer\Ui\Component\Listing\Columns;
 
-class ColumnsTest extends \PHPUnit_Framework_TestCase
+class ColumnsTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
@@ -38,27 +38,14 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
-        $this->columnFactory = $this->getMock(
+        $this->columnFactory = $this->createPartialMock(
             \Magento\Customer\Ui\Component\ColumnFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->attributeRepository = $this->getMock(
-            \Magento\Customer\Ui\Component\Listing\AttributeRepository::class,
-            [],
-            [],
-            '',
-            false
+        $this->attributeRepository = $this->createMock(
+            \Magento\Customer\Ui\Component\Listing\AttributeRepository::class
         );
-        $this->attribute = $this->getMock(
-            \Magento\Customer\Model\Attribute::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->attribute = $this->createMock(\Magento\Customer\Model\Attribute::class);
         $this->column = $this->getMockForAbstractClass(
             \Magento\Ui\Component\Listing\Columns\ColumnInterface::class,
             [],

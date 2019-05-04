@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\Element;
 
 use Magento\Framework\Config\DataInterface;
@@ -48,7 +49,7 @@ class UiComponentFactory extends DataObject
     /**
      * UI component manager
      *
-     * @deprecated since 2.2.0
+     * @deprecated 100.2.0
      * @var ManagerInterface
      */
     protected $componentManager;
@@ -147,6 +148,14 @@ class UiComponentFactory extends DataObject
         }
         $components = array_filter($components);
         $componentArguments['components'] = $components;
+
+       /**
+        * Prevent passing ACL restricted blocks to htmlContent constructor
+        */
+        if (isset($componentArguments['block']) && !$componentArguments['block']) {
+            return null;
+        }
+
         if (!isset($componentArguments['context'])) {
             $componentArguments['context'] = $renderContext;
         }
@@ -248,6 +257,7 @@ class UiComponentFactory extends DataObject
      * @param array $children
      * @return array
      * @throws LocalizedException
+     * @since 100.1.0
      */
     protected function getBundleChildren(array $children = [])
     {
@@ -256,13 +266,17 @@ class UiComponentFactory extends DataObject
         foreach ($children as $identifier => $config) {
             if (!isset($config['componentType'])) {
                 throw new LocalizedException(new Phrase(
-                    'The configuration parameter "componentType" is a required for "%1" component.',
+                    'The "componentType" configuration parameter is required for the "%1" component.',
                     $identifier
                 ));
             }
 
             if (!isset($componentArguments['context'])) {
-                throw new LocalizedException(new \Magento\Framework\Phrase('Each UI component should have context.'));
+                throw new LocalizedException(
+                    new \Magento\Framework\Phrase(
+                        'An error occurred with the UI component. Each component needs context. Verify and try again.'
+                    )
+                );
             }
 
             $rawComponentData = $this->definitionData->get($config['componentType']);
@@ -290,6 +304,7 @@ class UiComponentFactory extends DataObject
      * @param array $bundleComponents
      * @param bool $reverseMerge
      * @return array
+     * @since 100.1.0
      */
     protected function mergeMetadata($identifier, array $bundleComponents, $reverseMerge = false)
     {
@@ -314,6 +329,7 @@ class UiComponentFactory extends DataObject
      * @param array $data
      * @param bool $reverseMerge
      * @return array
+     * @since 100.1.0
      */
     protected function mergeMetadataElement(array $bundleComponents, $name, array $data, $reverseMerge = false)
     {
@@ -351,6 +367,7 @@ class UiComponentFactory extends DataObject
      * @param bool $reverseMerge
      * @return array
      * @throws LocalizedException
+     * @since 100.1.0
      */
     protected function mergeMetadataItem(array $bundleComponents, array $metadata, $reverseMerge = false)
     {
@@ -370,7 +387,7 @@ class UiComponentFactory extends DataObject
             if (!$isMerged) {
                 if (!isset($data['arguments']['data']['config']['componentType'])) {
                     throw new LocalizedException(new Phrase(
-                        'The configuration parameter "componentType" is a required for "%1" component.',
+                        'The "componentType" configuration parameter is required for the "%1" component.',
                         [$name]
                     ));
                 }
@@ -403,6 +420,7 @@ class UiComponentFactory extends DataObject
      * @param string $identifier
      * @param array $bundleComponents
      * @return DataProviderInterface|null
+     * @since 100.1.0
      */
     protected function getDataProvider($identifier, array $bundleComponents)
     {

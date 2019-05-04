@@ -7,7 +7,7 @@ namespace Magento\Tax\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CalculationTest extends \PHPUnit_Framework_TestCase
+class CalculationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests the building of the search templates for the postal code
@@ -19,10 +19,10 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
     public function testCreateSearchPostCodeTemplates($postalCode, $exactPostalcode)
     {
         // create the mocks
-        $resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
-        $storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
+        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
 
-        $taxData = $this->getMock(\Magento\Tax\Helper\Data::class, ['getPostCodeSubStringLength'], [], '', false);
+        $taxData = $this->createPartialMock(\Magento\Tax\Helper\Data::class, ['getPostCodeSubStringLength']);
         $taxData
             ->expects($this->any())
             ->method('getPostCodeSubStringLength')

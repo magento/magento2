@@ -9,7 +9,7 @@ namespace Magento\Newsletter\Block\Adminhtml\Queue\Edit;
  * Test class for \Magento\Newsletter\Block\Adminhtml\Queue\Edit\Form
  * @magentoAppArea adminhtml
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

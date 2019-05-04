@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
-class GuestPaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
+class GuestPaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\GuestCart\GuestPaymentMethodManagement
@@ -45,14 +45,10 @@ class GuestPaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->paymentMethodManagementMock = $this->getMock(
-            \Magento\Quote\Api\PaymentMethodManagementInterface::class,
-            [],
-            [],
-            '',
-            false
+        $this->paymentMethodManagementMock = $this->createMock(
+            \Magento\Quote\Api\PaymentMethodManagementInterface::class
         );
-        $this->paymentMock = $this->getMock(\Magento\Quote\Model\Quote\Payment::class, [], [], '', false);
+        $this->paymentMock = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
 
         $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';
         $this->cartId = 11;
@@ -80,7 +76,7 @@ class GuestPaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $paymentMethod = $this->getMock(\Magento\Quote\Api\Data\PaymentMethodInterface::class, [], [], '', false);
+        $paymentMethod = $this->createMock(\Magento\Quote\Api\Data\PaymentMethodInterface::class);
         $this->paymentMethodManagementMock->expects($this->once())->method('getList')->willReturn([$paymentMethod]);
         $this->assertEquals([$paymentMethod], $this->model->getList($this->maskedCartId));
     }

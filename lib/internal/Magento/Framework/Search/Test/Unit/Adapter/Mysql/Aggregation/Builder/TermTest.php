@@ -11,7 +11,7 @@ use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class TermTest extends \PHPUnit_Framework_TestCase
+class TermTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Term

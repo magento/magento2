@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument;
 
-class ParserTest extends \PHPUnit_Framework_TestCase
+class ParserTest extends \PHPUnit\Framework\TestCase
 {
     public function testParse()
     {

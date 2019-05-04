@@ -10,7 +10,7 @@ use Magento\Theme\Model\Theme;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\TestFramework\Helper\CacheCleaner;
 
-class ThemeProviderTest extends \PHPUnit_Framework_TestCase
+class ThemeProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ThemeProvider

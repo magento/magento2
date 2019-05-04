@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="TinyMCESection">
+        <element name="checkIfContentTabOpen" type="button" selector="//span[text()='Content']/parent::strong/parent::*[@data-state-collapsible='closed']"/>
+        <element name="CheckIfTabExpand" type="button" selector="//div[@data-state-collapsible='closed']//span[text()='Content']"/>
+        <element name="TinyMCE4" type="text" selector=".mce-branding-powered-by" />
+        <element name="InsertWidgetBtn" type="button" selector=".action-add-widget"/>
+        <element name="InsertWidgetIcon" type="button" selector="div[aria-label='Insert Widget']"/>
+        <element name="InsertVariableBtn" type="button" selector=".scalable.add-variable.plugin"/>
+        <element name="InsertVariableIcon" type="button" selector="div[aria-label='Insert Variable']"/>
+        <element name="InsertImageBtn" type="button" selector=".scalable.action-add-image.plugin"/>
+        <element name="InsertImageIcon" type="button" selector=".mce-i-image"/>
+        <element name="Style" type="button" selector=".mce-txt" />
+        <element name="Bold" type="button" selector=".mce-i-bold" />
+        <element name="Italic" type="button" selector=".mce-i-italic" />
+        <element name="Underline" type="button" selector=".mce-i-underline" />
+        <element name="AlignLeft" type="button" selector=".mce-i-alignleft" />
+        <element name="AlignCenter" type="button" selector=".mce-i-aligncenter" />
+        <element name="AlignRight" type="button" selector=".mce-i-alignright" />
+        <element name="Bullet" type="button" selector=".mce-i-bullist" />
+        <element name="Numlist" type="button" selector=".mce-i-numlist" />
+        <element name="InsertLink" type="button" selector=".mce-i-link" />
+        <element name="InsertImage" type="button" selector=".mce-i-image" />
+        <element name="InsertTable" type="button" selector=".mce-i-table" />
+        <element name="SpecialCharacter" type="button" selector=".mce-i-charmap" />
+        <element name="WidgetButton" type="button" selector="span[class*='magento-widget mceNonEditable']"/>
+        <element name="EditorContent" type="input" selector="#tinymce"/>
+    </section>
+    <section name="MediaGallerySection">
+        <element name="Browse" type="button" selector=".mce-i-browse"/>
+        <element name="browseForImage" type="button" selector="//*[@id='srcbrowser']"/>
+        <element name="BrowseUploadImage" type="file" selector=".fileupload" />
+        <element name="image" type="text" selector="//small[text()='{{var1}}']" parameterized="true"/>
+        <element name="imageOrImageCopy" type="text" selector="//div[contains(@class,'media-gallery-modal')]//img[contains(@alt, '{{arg1}}.{{arg2}}')]|//img[contains(@alt,'{{arg1}}_') and contains(@alt,'.{{arg2}}')]" parameterized="true"/>
+        <element name="imageSelected" type="text" selector="//small[text()='{{var1}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
+        <element name="ImageSource" type="input" selector=".mce-combobox.mce-abs-layout-item.mce-last.mce-has-open" />
+        <element name="ImageDescription" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-last" />
+        <element name="ImageDescriptionTinyMCE3" type="input" selector="#alt" />
+        <element name="Height" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-first" />
+        <element name="UploadImage" type="file" selector=".fileupload" />
+        <element name="OkBtn" type="button" selector="//span[text()='Ok']"/>
+        <element name="insertBtn" type="button" selector="#insert"/>
+        <element name="InsertFile" type="text" selector="#insert_files"/>
+        <element name="CreateFolder" type="button" selector="#new_folder" />
+        <element name="DeleteSelectedBtn" type="text" selector="#delete_files"/>
+        <element name="CancelBtn" type="button" selector="#cancel" />
+        <element name="FolderName" type="button" selector="input[data-role='promptField']" />
+        <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />
+        <element name="StorageRootArrow" type="button" selector="#root > .jstree-icon" />
+        <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
+        <element name="WysiwygArrow" type="button" selector="#d3lzaXd5Zw-- > .jstree-icon" />
+        <element name="checkIfWysiwygArrowExpand" type="button" selector="//li[@id='d3lzaXd5Zw--' and contains(@class,'jstree-closed')]" />
+        <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
+        <element name="imageBlockByName" type="block" selector="//div[@data-row='file'][contains(., '{{imageName}}')]" parameterized="true"/>
+    </section>
+    <section name="VariableSection">
+        <element name="InsertWidget" type="button" selector="#insert_variable"/>
+        <element name="InsertVariableBtnEnabled" type="button" selector="//button[@id='insert_variable' and not(contains(@class,'disabled'))]"/>
+        <element name="InsertVariableBtnDisabled" type="button" selector="//button[@id='insert_variable' and contains(@class,'disabled')]"/>
+        <element name="CancelBtnEnabled" type="button" selector="//button[@class='action-scalable cancel' and not(contains(@class,'disabled'))]"/>
+        <element name="Close" type="button" selector="#close"/>
+        <element name="SearchTxtbox" type="input" selector="input[placeholder='Search by keyword']"/>
+        <element name="ColName" type="text" selector="//table[@class='data-grid data-grid-draggable']/thead/tr/th/span[text()='{{var1}}']" parameterized="true"/>
+        <element name="Radio" type="input" selector="//input[@type='radio' and contains(@value, '{{var1}}')]" parameterized="true"/>
+        <element name="VariableRadio" type="input" selector="//div[text()='{{var1}}']/parent::td//preceding-sibling::td/input[@type='radio']" parameterized="true"/>
+        <element name="VariableInAscSort" type="input" selector="#variable"/>
+        <element name="VariableInDescSort" type="input" selector="#variable"/>
+        <element name="Type" type="input" selector="#value"/>
+        <element name="Code" type="input" selector="#code"/>
+        <element name="searchResult" type="text" selector="//table/tbody/tr//td/div[text()='{{var1}}']" parameterized="true" />
+        <element name="VariableTitle" type="text" selector="//h1[contains(text(), 'Insert Variable')]"/>
+    </section>
+    <section name="WidgetSection">
+        <element name="InsertWidgetTitle" type="text" selector="//h1[contains(text(),'Insert Widget')]"/>
+        <element name="DisplayType" type="select" selector="select[name='parameters[display_type]']"/>
+        <element name="SelectCategoryTitle" type="text" selector="//h1[contains(text(),'Select Category')]"/>
+        <element name="SelectProductTitle" type="text" selector="//h1[contains(text(),'Select Product')]"/>
+        <element name="SelectPageTitle" type="text" selector="//h1[contains(text(),'Select Page')]"/>
+        <element name="SelectBlockTitle" type="text" selector="//h1[contains(text(),'Select Block')]"/>
+        <element name="InsertWidget" type="button" selector="#insert_button" timeout="30"/>
+        <element name="InsertWidgetBtnDisabled" type="button" selector="//button[@id='insert_button' and contains(@class,'disabled')]"/>
+        <element name="InsertWidgetBtnEnabled" type="button" selector="//button[@id='insert_button' and not(contains(@class,'disabled'))]"/>
+        <element name="CancelBtnEnabled" type="button" selector="//button[@id='reset' and not(contains(@class,'disabled'))]"/>
+        <element name="Close" type="button" selector="#close"/>
+        <element name="WidgetType" type="button" selector="#select_widget_type"/>
+        <element name="WidgetTemplate" type="button" selector="select[name='parameters[template]']"/>
+        <element name="BtnChooser" type="button" selector=".btn-chooser"/>
+        <element name="CMSPage" type="text" selector="//td[contains(text(),'Home page')]"/>
+        <element name="BlockPage" type="text" selector="//td[contains(text(),'{{var1}}')]" parameterized="true"/>
+        <element name="PreCreateCategory" type="text" selector=" //span[contains(text(),'{{var1}}')]" parameterized="true"/>
+        <element name="PreCreateProduct" type="text" selector="//td[contains(text(),'{{var1}}')]" parameterized="true"/>
+        <element name="NoOfProductToDisplay" type="input" selector="input[data-ui-id='wysiwyg-widget-options-fieldset-element-text-parameters-products-count']"/>
+        <element name="AddParam" type="button" selector=".rule-param-add"/>
+        <element name="ConditionsDropdown" type="select" selector="#conditions__1__new_child"/>
+        <element name="RuleParam" type="button" selector="//a[text()='...']"/>
+        <element name="RuleParam1" type="button" selector="(//span[@class='rule-param']//a)[{{var}}]" parameterized="true"/>
+        <element name="RuleParamSelect" type="select" selector="//ul[contains(@class,'rule-param-children')]/li[{{arg1}}]//*[contains(@class,'rule-param')][{{arg2}}]//select" parameterized="true"/>
+        <element name="RuleParamInput" type="input" selector="//ul[contains(@class,'rule-param-children')]/li[{{arg1}}]//*[contains(@class,'rule-param')][{{arg2}}]//input" parameterized="true"/>
+        <element name="RuleParamLabel" type="input" selector="//ul[contains(@class,'rule-param-children')]/li[{{arg1}}]//*[contains(@class,'rule-param')][{{arg2}}]//a" parameterized="true"/>
+        <element name="Chooser" type="button" selector="//img[@title='Open Chooser']"/>
+        <element name="PageSize" type="input" selector="input[name='parameters[page_size]']"/>
+        <element name="ProductAttribute" type="multiselect" selector="select[name='parameters[show_attributes][]']" />
+        <element name="ButtonToShow" type="multiselect" selector="select[name='parameters[show_buttons][]']"/>
+        <!--Compare on Storefront-->
+        <element name="ProductName" type="text" selector=".product.name.product-item-name" />
+        <element name="CompareBtn" type="button" selector=".action.tocompare"/>
+        <element name="ClearCompare" type="button" selector="#compare-clear-all"/>
+        <element name="AcceptClear" type="button" selector=".action-primary.action-accept" />
+        <element name="ChooserName" type="input" selector="input[name='chooser_name']" />
+        <element name="SelectPageButton" type="button" selector="//button[@title='Select Page...']"/>
+        <element name="SelectPageFilterInput" type="input" selector="input.admin__control-text[name='{{filterName}}']" parameterized="true"/>
+    </section>
+</sections>

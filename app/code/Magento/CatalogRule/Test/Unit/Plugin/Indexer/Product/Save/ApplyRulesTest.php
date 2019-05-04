@@ -7,7 +7,7 @@ namespace Magento\CatalogRule\Test\Unit\Plugin\Indexer\Product\Save;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ApplyRulesTest extends \PHPUnit_Framework_TestCase
+class ApplyRulesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor|\PHPUnit_Framework_MockObject_MockObject

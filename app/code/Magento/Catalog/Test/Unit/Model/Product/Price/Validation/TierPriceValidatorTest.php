@@ -11,7 +11,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Price\Validation;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TierPriceValidatorTest extends \PHPUnit_Framework_TestCase
+class TierPriceValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator

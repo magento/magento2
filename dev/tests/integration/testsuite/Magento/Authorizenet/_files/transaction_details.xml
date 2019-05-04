@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<getTransactionDetailsResponse>
+    <messages>
+        <resultCode>Ok</resultCode>
+        <message>
+            <code>I00001</code>
+            <text>Successful.</text>
+        </message>
+    </messages>
+    <transaction>
+        <transId>40004862720</transId>
+        <submitTimeUTC>2017-06-12T13:33:10.1Z</submitTimeUTC>
+        <submitTimeLocal>2017-06-12T06:33:10.1</submitTimeLocal>
+        <transactionType>authOnlyTransaction</transactionType>
+        <transactionStatus>authorizedPendingCapture</transactionStatus>
+        <responseCode>1</responseCode>
+        <responseReasonCode>1</responseReasonCode>
+        <responseReasonDescription>Approval</responseReasonDescription>
+        <authCode>YWO2E2</authCode>
+        <AVSResponse>Y</AVSResponse>
+        <cardCodeResponse>P</cardCodeResponse>
+        <FDSFilterAction>{filterAction}</FDSFilterAction>
+        <FDSFilters>
+            <FDSFilter>
+                <name>Amount Filter</name>
+                <action>{filterAction}</action>
+            </FDSFilter>
+        </FDSFilters>
+        <order>
+            <invoiceNumber>100000002</invoiceNumber>
+        </order>
+        <authAmount>120.15</authAmount>
+        <settleAmount>120.15</settleAmount>
+        <shipping>
+            <amount>5.00</amount>
+        </shipping>
+        <taxExempt>false</taxExempt>
+        <payment>
+            <creditCard>
+                <cardNumber>XXXX1111</cardNumber>
+                <expirationDate>XXXX</expirationDate>
+                <cardType>Visa</cardType>
+            </creditCard>
+        </payment>
+        <customer>
+            <email>user_1@example.com</email>
+        </customer>
+        <billTo>
+            <firstName>John</firstName>
+            <lastName>Smith</lastName>
+            <company>CompanyName</company>
+            <address>Green str, 67</address>
+            <city>CityM</city>
+            <state>Alabama</state>
+            <zip>93930</zip>
+            <country>US</country>
+            <phoneNumber>3468676</phoneNumber>
+            <faxNumber>04040404</faxNumber>
+        </billTo>
+        <shipTo>
+            <firstName>John</firstName>
+            <lastName>Smith</lastName>
+            <company>CompanyName</company>
+            <address>Green str, 67</address>
+            <city>CityM</city>
+            <state>Alabama</state>
+            <zip>93930</zip>
+            <country>US</country>
+        </shipTo>
+        <recurringBilling>false</recurringBilling>
+        <customerIP>195.14.124.5</customerIP>
+        <product>Card Not Present</product>
+        <marketType>eCommerce</marketType>
+    </transaction>
+</getTransactionDetailsResponse>

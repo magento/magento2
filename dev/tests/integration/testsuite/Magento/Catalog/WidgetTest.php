@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog;
 
-class WidgetTest extends \PHPUnit_Framework_TestCase
+class WidgetTest extends \PHPUnit\Framework\TestCase
 {
     public function testNewProductsWidget()
     {

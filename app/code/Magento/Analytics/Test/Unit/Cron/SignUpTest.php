@@ -15,7 +15,7 @@ use Magento\Framework\FlagManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SignUpTest extends \PHPUnit_Framework_TestCase
+class SignUpTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Connector|\PHPUnit_Framework_MockObject_MockObject

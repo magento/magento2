@@ -23,7 +23,7 @@ class HtmlContent implements ConverterInterface
         if ($node->nodeType == XML_ELEMENT_NODE) {
             $xml = '<?xml version="1.0"?>' . "\n"
                 . '<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' . "\n"
-                . $node->ownerDocument->saveXml($node) . "\n"
+                . $node->ownerDocument->saveXML($node) . "\n"
                 . '</layout>';
             $items['layout']['xsi:type'] = 'string';
             $items['layout']['name'] = 'layout';
@@ -32,7 +32,6 @@ class HtmlContent implements ConverterInterface
             $items['name']['xsi:type'] = 'string';
             $items['name']['name'] = 'block';
             $items['name']['value'] = $node->getAttribute('name');
-
         }
         return [
             'xsi:type' => 'array',

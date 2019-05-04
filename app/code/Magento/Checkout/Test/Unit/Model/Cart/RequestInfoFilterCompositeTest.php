@@ -8,7 +8,7 @@ namespace Magento\Checkout\Test\Unit\Model\Cart;
 /**
  * Class RequestInfoFilterTest
  */
-class RequestInfoFilterCompositeTest extends \PHPUnit_Framework_TestCase
+class RequestInfoFilterCompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Checkout\Model\Cart\RequestInfoFilterComposite
@@ -27,19 +27,13 @@ class RequestInfoFilterCompositeTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $requestInfoFilterMock1  = $this->getMock(
+        $requestInfoFilterMock1 = $this->createPartialMock(
             \Magento\Checkout\Model\Cart\RequestInfoFilter::class,
-            ['filter'],
-            [],
-            '',
-            false
+            ['filter']
         );
-        $requestInfoFilterMock2  = $this->getMock(
+        $requestInfoFilterMock2 = $this->createPartialMock(
             \Magento\Checkout\Model\Cart\RequestInfoFilter::class,
-            ['filter'],
-            [],
-            '',
-            false
+            ['filter']
         );
 
         $requestInfoFilterMock1->expects($this->atLeastOnce())

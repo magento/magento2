@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Model\Source;
 
 use \Magento\Payment\Model\Source\Cctype;
 
-class CctypeTest extends \PHPUnit_Framework_TestCase
+class CctypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Payment config model

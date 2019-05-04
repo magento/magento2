@@ -26,9 +26,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     const KEY_CODE = 'code';
     /**#@-*/
 
-    /**
-     * @var array
-     */
+    /**#@-*/
     protected $options = [];
 
     /**

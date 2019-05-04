@@ -14,7 +14,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class ExtensionGridTest
  */
-class ExtensionGridTest extends \PHPUnit_Framework_TestCase
+class ExtensionGridTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Extension|MockObject
@@ -83,9 +83,9 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->packagesDataMock = $this->getMock(PackagesData::class, [], [], '', false);
-        $this->packagesAuthMock = $this->getMock(PackagesAuth::class, [], [], '', false);
-        $this->gridExtensionMock = $this->getMock(Extension::class, [], [], '', false);
+        $this->packagesDataMock = $this->createMock(PackagesData::class);
+        $this->packagesAuthMock = $this->createMock(PackagesAuth::class);
+        $this->gridExtensionMock = $this->createMock(Extension::class);
 
         $this->controller = new ExtensionGrid(
             $this->packagesDataMock,
@@ -110,13 +110,13 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
             ->method('syncPackagesData')
             ->willReturn($this->lastSyncData);
         $this->packagesAuthMock->expects($this->once())
-             ->method('getAuthJsonData')
-             ->willReturn(
-                 [
-                     'username' => 'someusername',
-                     'password' => 'somepassword'
-                 ]
-             );
+            ->method('getAuthJsonData')
+            ->willReturn(
+                [
+                    'username' => 'someusername',
+                    'password' => 'somepassword'
+                ]
+            );
 
         $jsonModel = $this->controller->extensionsAction();
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);

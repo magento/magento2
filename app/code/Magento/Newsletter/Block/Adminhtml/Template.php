@@ -16,7 +16,7 @@ class Template extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'template/list.phtml';
+    protected $_template = 'Magento_Newsletter::template/list.phtml';
 
     /**
      * @return $this

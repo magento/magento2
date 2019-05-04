@@ -9,7 +9,7 @@ namespace Magento\Framework\Controller\Test\Unit\Result;
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class RawTest extends \PHPUnit_Framework_TestCase
+class RawTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Controller\Result\Raw */
     protected $raw;
@@ -24,13 +24,7 @@ class RawTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->response = $this->getMock(
-            HttpResponseInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->response = $this->createMock(HttpResponseInterface::class);
         $this->raw = $this->objectManagerHelper->getObject(\Magento\Framework\Controller\Result\Raw::class);
     }
 

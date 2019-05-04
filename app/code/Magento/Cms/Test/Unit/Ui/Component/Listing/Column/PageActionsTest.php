@@ -8,7 +8,7 @@ namespace Magento\Cms\Test\Unit\Ui\Component\Listing\Column;
 use Magento\Cms\Ui\Component\Listing\Column\PageActions;
 use Magento\Framework\Escaper;
 
-class PageActionsTest extends \PHPUnit_Framework_TestCase
+class PageActionsTest extends \PHPUnit\Framework\TestCase
 {
     public function testPrepareItemsByPageId()
     {
@@ -70,6 +70,7 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
                             'title' => __('Delete %1', $title),
                             'message' => __('Are you sure you want to delete a %1 record?', $title)
                         ],
+                        'post' => true
                     ]
                 ],
             ]

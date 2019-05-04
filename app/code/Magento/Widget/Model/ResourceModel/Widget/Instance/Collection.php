@@ -10,11 +10,12 @@ namespace Magento\Widget\Model\ResourceModel\Widget\Instance;
  * Widget Instance Collection
  *
  * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
-     * Fields map for corellation names & real selected fields
+     * Fields map for correlation names & real selected fields
      *
      * @var array
      */

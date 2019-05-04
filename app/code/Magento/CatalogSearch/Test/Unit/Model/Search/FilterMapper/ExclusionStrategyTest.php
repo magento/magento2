@@ -15,7 +15,12 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Search\Request\Filter\Term;
 use Magento\Store\Api\Data\WebsiteInterface;
 
-class ExclusionStrategyTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
+class ExclusionStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ExclusionStrategy
@@ -44,16 +49,37 @@ class ExclusionStrategyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resourceConnectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
-        $this->adapterMock = $this->getMock(AdapterInterface::class);
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
+        $this->adapterMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);
-        $this->storeManagerMock = $this->getMock(StoreManagerInterface::class);
-        $this->aliasResolverMock = $this->getMock(AliasResolver::class, [], [], '', false);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->aliasResolverMock = $this->createMock(AliasResolver::class);
+
+        $this->indexScopeResolverMock = $this->createMock(
+            \Magento\Framework\Search\Request\IndexScopeResolverInterface::class
+        );
+        $this->tableResolverMock = $this->createMock(
+            \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver::class
+        );
+        $this->dimensionMock = $this->createMock(\Magento\Framework\Indexer\Dimension::class);
+        $this->dimensionFactoryMock = $this->createMock(\Magento\Framework\Indexer\DimensionFactory::class);
+        $this->dimensionFactoryMock->method('create')->willReturn($this->dimensionMock);
+        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $storeMock->method('getId')->willReturn(1);
+        $storeMock->method('getWebsiteId')->willReturn(1);
+        $this->storeManagerMock->method('getStore')->willReturn($storeMock);
+        $this->indexScopeResolverMock->method('resolve')->willReturn('catalog_product_index_price');
+        $this->httpContextMock = $this->createMock(\Magento\Framework\App\Http\Context::class);
+        $this->httpContextMock->method('getValue')->willReturn(1);
 
         $this->model = new ExclusionStrategy(
             $this->resourceConnectionMock,
             $this->storeManagerMock,
-            $this->aliasResolverMock
+            $this->aliasResolverMock,
+            $this->tableResolverMock,
+            $this->dimensionFactoryMock,
+            $this->indexScopeResolverMock,
+            $this->httpContextMock
         );
     }
 
@@ -61,13 +87,14 @@ class ExclusionStrategyTest extends \PHPUnit_Framework_TestCase
     {
         $attributeCode = 'price';
         $websiteId = 1;
-        $selectMock = $this->getMock(Select::class, [], [], '', false);
+        $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->any())->method('joinInner')->willReturnSelf();
+        $selectMock->expects($this->any())->method('getPart')->willReturn([]);
 
-        $searchFilterMock = $this->getMock(Term::class, [], [], '', false);
+        $searchFilterMock = $this->createMock(Term::class);
         $searchFilterMock->expects($this->any())->method('getField')->willReturn($attributeCode);
 
-        $websiteMock = $this->getMock(WebsiteInterface::class);
+        $websiteMock = $this->createMock(WebsiteInterface::class);
         $websiteMock->expects($this->any())->method('getId')->willReturn($websiteId);
         $this->storeManagerMock->expects($this->any())->method('getWebsite')->willReturn($websiteMock);
 

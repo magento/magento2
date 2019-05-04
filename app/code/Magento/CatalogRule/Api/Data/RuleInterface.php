@@ -7,6 +7,7 @@ namespace Magento\CatalogRule\Api\Data;
 
 /**
  * @api
+ * @since 100.1.0
  */
 interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
@@ -35,12 +36,14 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
      * Returns rule id field
      *
      * @return int|null
+     * @since 100.1.0
      */
     public function getRuleId();
 
     /**
      * @param int $ruleId
      * @return $this
+     * @since 100.1.0
      */
     public function setRuleId($ruleId);
 
@@ -48,12 +51,14 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
      * Returns rule name
      *
      * @return string
+     * @since 100.1.0
      */
     public function getName();
 
     /**
      * @param string $name
      * @return $this
+     * @since 100.1.0
      */
     public function setName($name);
 
@@ -61,12 +66,14 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
      * Returns rule description
      *
      * @return string|null
+     * @since 100.1.0
      */
     public function getDescription();
 
     /**
      * @param string $description
      * @return $this
+     * @since 100.1.0
      */
     public function setDescription($description);
 
@@ -74,12 +81,14 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
      * Returns rule activity flag
      *
      * @return int
+     * @since 100.1.0
      */
     public function getIsActive();
 
     /**
      * @param int $isActive
      * @return $this
+     * @since 100.1.0
      */
     public function setIsActive($isActive);
 
@@ -87,12 +96,14 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
      * Returns rule condition
      *
      * @return \Magento\CatalogRule\Api\Data\ConditionInterface|null
+     * @since 100.1.0
      */
     public function getRuleCondition();
 
     /**
      * @param \Magento\CatalogRule\Api\Data\ConditionInterface $condition
      * @return $this
+     * @since 100.1.0
      */
     public function setRuleCondition($condition);
 
@@ -100,12 +111,14 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
      * Returns stop rule processing flag
      *
      * @return int|null
+     * @since 100.1.0
      */
     public function getStopRulesProcessing();
 
     /**
      * @param int $isStopProcessing
      * @return $this
+     * @since 100.1.0
      */
     public function setStopRulesProcessing($isStopProcessing);
 
@@ -113,12 +126,14 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
      * Returns rule sort order
      *
      * @return int|null
+     * @since 100.1.0
      */
     public function getSortOrder();
 
     /**
      * @param int $sortOrder
      * @return $this
+     * @since 100.1.0
      */
     public function setSortOrder($sortOrder);
 
@@ -126,12 +141,14 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
      * Returns rule simple action
      *
      * @return string
+     * @since 100.1.0
      */
     public function getSimpleAction();
 
     /**
      * @param string $action
      * @return $this
+     * @since 100.1.0
      */
     public function setSimpleAction($action);
 
@@ -139,12 +156,14 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
      * Returns discount amount
      *
      * @return float
+     * @since 100.1.0
      */
     public function getDiscountAmount();
 
     /**
      * @param float $amount
      * @return $this
+     * @since 100.1.0
      */
     public function setDiscountAmount($amount);
 
@@ -152,6 +171,7 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\CatalogRule\Api\Data\RuleExtensionInterface|null
+     * @since 100.1.0
      */
     public function getExtensionAttributes();
 
@@ -160,6 +180,7 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
      *
      * @param \Magento\CatalogRule\Api\Data\RuleExtensionInterface $extensionAttributes
      * @return $this
+     * @since 100.1.0
      */
     public function setExtensionAttributes(\Magento\CatalogRule\Api\Data\RuleExtensionInterface $extensionAttributes);
 }

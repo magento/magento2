@@ -12,7 +12,8 @@ define([
     'Magento_Checkout/js/model/payment/method-converter',
     'Magento_Checkout/js/model/error-processor',
     'Magento_Checkout/js/model/full-screen-loader',
-    'Magento_Checkout/js/action/select-billing-address'
+    'Magento_Checkout/js/action/select-billing-address',
+    'Magento_Checkout/js/model/shipping-save-processor/payload-extender'
 ], function (
     ko,
     quote,
@@ -22,7 +23,8 @@ define([
     methodConverter,
     errorProcessor,
     fullScreenLoader,
-    selectBillingAddressAction
+    selectBillingAddressAction,
+    payloadExtender
 ) {
     'use strict';
 
@@ -33,7 +35,7 @@ define([
         saveShippingInformation: function () {
             var payload;
 
-            if (!quote.billingAddress()) {
+            if (!quote.billingAddress() && quote.shippingAddress().canUseForBilling()) {
                 selectBillingAddressAction(quote.shippingAddress());
             }
 
@@ -45,6 +47,8 @@ define([
                     'shipping_carrier_code': quote.shippingMethod()['carrier_code']
                 }
             };
+
+            payloadExtender(payload);
 
             fullScreenLoader.startLoader();
 

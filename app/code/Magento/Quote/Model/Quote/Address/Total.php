@@ -6,19 +6,24 @@
 namespace Magento\Quote\Model\Quote\Address;
 
 /**
+ * Class Total
+ *
+ * @method string getCode()
+ *
  * @api
+ * @since 100.0.2
  */
 class Total extends \Magento\Framework\DataObject
 {
     /**
      * @var array
      */
-    protected $totalAmounts;
+    protected $totalAmounts = [];
 
     /**
      * @var array
      */
-    protected $baseTotalAmounts;
+    protected $baseTotalAmounts = [];
 
     /**
      * Serializer interface instance.
@@ -51,6 +56,8 @@ class Total extends \Magento\Framework\DataObject
      */
     public function setTotalAmount($code, $amount)
     {
+        $amount = is_float($amount) ? round($amount, 4) : $amount;
+
         $this->totalAmounts[$code] = $amount;
         if ($code != 'subtotal') {
             $code = $code . '_amount';
@@ -69,6 +76,8 @@ class Total extends \Magento\Framework\DataObject
      */
     public function setBaseTotalAmount($code, $amount)
     {
+        $amount = is_float($amount) ? round($amount, 4) : $amount;
+
         $this->baseTotalAmounts[$code] = $amount;
         if ($code != 'subtotal') {
             $code = $code . '_amount';
@@ -164,10 +173,12 @@ class Total extends \Magento\Framework\DataObject
 
     /**
      * Set the full info, which is used to capture tax related information.
+     *
      * If a string is used, it is assumed to be serialized.
      *
      * @param array|string $info
      * @return $this
+     * @since 100.1.0
      */
     public function setFullInfo($info)
     {
@@ -179,6 +190,7 @@ class Total extends \Magento\Framework\DataObject
      * Returns the full info, which is used to capture tax related information.
      *
      * @return array
+     * @since 100.1.0
      */
     public function getFullInfo()
     {

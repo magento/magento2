@@ -5,7 +5,14 @@
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
-class LinksTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class LinksTest
+ *
+ * @package Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable
+ * @deprecated
+ * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Links
+ */
+class LinksTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppArea adminhtml

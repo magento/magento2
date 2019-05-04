@@ -6,8 +6,9 @@
  */
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.2/phpunit.xsd"
          colors="true"
+         columns="max"
          bootstrap="bootstrap.php"
          backupGlobals="false"
          verbose="true"
@@ -26,6 +27,20 @@
             </arguments>
         </listener>
         <listener class="Magento\Mtf\System\Event\StateListener" />
+        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+            <arguments>
+                <string>var/allure-results</string> <!-- XML files output directory -->
+                <boolean>false</boolean> <!-- Whether to delete previous results on rerun -->
+                <array> <!-- A list of custom annotations to ignore (optional) -->
+                    <element key="0">
+                        <string>ZephyrId</string>
+                    </element>
+                    <element key="1">
+                        <string>Group</string>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
     </listeners>
 
     <php>

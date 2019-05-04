@@ -63,9 +63,7 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
     {
         $this->initConnections();
         $connectionName = \Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION;
-
-        $resourceName = preg_replace("/_setup$/", '', $resourceName);
-
+ 
         if (!isset($this->_connectionNames[$resourceName])) {
             $resourcesConfig = $this->get();
             $pointerResourceName = $resourceName;

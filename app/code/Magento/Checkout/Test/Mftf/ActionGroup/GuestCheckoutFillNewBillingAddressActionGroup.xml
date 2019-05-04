@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Guest checkout filling billing section -->
+    <actionGroup name="GuestCheckoutFillNewBillingAddressActionGroup">
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customerVar.email}}" stepKey="enterEmail"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading3" />
+        <fillField selector="{{CheckoutPaymentSection.guestFirstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutPaymentSection.guestLastName}}" userInput="{{customerVar.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutPaymentSection.guestStreet}}" userInput="{{customerAddressVar.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutPaymentSection.guestCity}}" userInput="{{customerAddressVar.city}}" stepKey="enterCity"/>
+        <selectOption selector="{{CheckoutPaymentSection.guestRegion}}" userInput="{{customerAddressVar.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutPaymentSection.guestPostcode}}" userInput="{{customerAddressVar.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector="{{CheckoutPaymentSection.guestTelephone}}" userInput="{{customerAddressVar.telephone}}" stepKey="enterTelephone"/>
+    </actionGroup>
+
+    <actionGroup name="LoggedInCheckoutFillNewBillingAddressActionGroup">
+        <arguments>
+            <argument name="Address"/>
+            <!-- the classPrefix argument is to specifically select the inputs of the correct form
+                 this is to prevent having 3 action groups doing essentially the same thing -->
+            <argument name="classPrefix" type="string" defaultValue=""/>
+        </arguments>
+        <fillField stepKey="fillFirstName" selector="{{classPrefix}} {{CheckoutShippingSection.firstName}}" userInput="{{Address.firstname}}"/>
+        <fillField stepKey="fillLastName" selector="{{classPrefix}} {{CheckoutShippingSection.lastName}}" userInput="{{Address.lastname}}"/>
+        <fillField stepKey="fillCompany" selector="{{classPrefix}} {{CheckoutShippingSection.company}}" userInput="{{Address.company}}"/>
+        <fillField stepKey="fillPhoneNumber" selector="{{classPrefix}} {{CheckoutShippingSection.telephone}}" userInput="{{Address.telephone}}"/>
+        <fillField stepKey="fillStreetAddress1" selector="{{classPrefix}} {{CheckoutShippingSection.street}}" userInput="{{Address.street[0]}}"/>
+        <fillField stepKey="fillStreetAddress2" selector="{{classPrefix}} {{CheckoutShippingSection.street2}}" userInput="{{Address.street[1]}}"/>
+        <fillField stepKey="fillCityName" selector="{{classPrefix}} {{CheckoutShippingSection.city}}" userInput="{{Address.city}}"/>
+        <selectOption stepKey="selectState" selector="{{classPrefix}} {{CheckoutShippingSection.region}}" userInput="{{Address.state}}"/>
+        <fillField stepKey="fillZip" selector="{{classPrefix}} {{CheckoutShippingSection.postcode}}" userInput="{{Address.postcode}}"/>
+        <selectOption stepKey="selectCounty" selector="{{classPrefix}} {{CheckoutShippingSection.country}}" userInput="{{Address.country_id}}"/>
+        <waitForPageLoad stepKey="waitForFormUpdate2"/>
+    </actionGroup>
+    <!--Filling address without second address field and without state field-->
+    <actionGroup name="LoggedInCheckoutWithOneAddressFieldWithoutStateField" extends="LoggedInCheckoutFillNewBillingAddressActionGroup">
+        <remove keyForRemoval="fillStreetAddress2"/>
+        <remove keyForRemoval="selectState"/>
+    </actionGroup>
+
+    <actionGroup name="clearCheckoutAddressPopupFieldsActionGroup">
+        <arguments>
+            <argument name="classPrefix" type="string" defaultValue=""/>
+        </arguments>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.firstName}}" stepKey="clearFieldFirstName"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.lastName}}" stepKey="clearFieldLastName"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.company}}" stepKey="clearFieldCompany"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.street}}" stepKey="clearFieldStreetAddress1"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.street2}}" stepKey="clearFieldStreetAddress2"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.city}}" stepKey="clearFieldCityName"/>
+        <selectOption selector="{{classPrefix}} {{CheckoutShippingSection.region}}" userInput="" stepKey="clearFieldRegion"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.postcode}}"  stepKey="clearFieldZip"/>
+        <selectOption selector="{{classPrefix}} {{CheckoutShippingSection.country}}" userInput="" stepKey="clearFieldCounty"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.telephone}}" stepKey="clearFieldPhoneNumber"/>
+    </actionGroup>
+    <actionGroup name="GuestCheckoutSelectPaymentAndFillNewBillingAddressActionGroup" extends="GuestCheckoutFillNewBillingAddressActionGroup">
+        <arguments>
+            <argument name="paymentMethod" type="string"/>
+        </arguments>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" after="waitForLoading3" stepKey="waitForPaymentSectionLoaded"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.paymentMethodByName(paymentMethod)}}" dependentSelector="{{CheckoutPaymentSection.billingAddress}}" visible="false" parametrized="true" before="enterFirstName" stepKey="clickCheckMoneyOrderPayment"/>
+    </actionGroup>
+</actionGroups>

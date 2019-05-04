@@ -76,6 +76,6 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPricesOnGroupedProductPage ext
         $actualPrices = $this->getTotals($actualPrices);
         //Prices verification
         $message = 'Prices from dataset should be equal to prices on frontend.';
-        \PHPUnit_Framework_Assert::assertEquals($prices, $actualPrices, $message);
+        \PHPUnit\Framework\Assert::assertEquals($prices, $actualPrices, $message);
     }
 }

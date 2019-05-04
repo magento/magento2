@@ -20,7 +20,10 @@ use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory;
 
 /**
+ * EAV entity attribute form renderer.
+ *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\Frontend\FrontendInterface
 {
@@ -66,7 +69,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
     /**
      * @param BooleanFactory $attrBooleanFactory
      * @param CacheInterface $cache
-     * @param $storeResolver @deprecated
+     * @param null $storeResolver @deprecated
      * @param array $cacheTags
      * @param StoreManagerInterface $storeManager
      * @param Serializer $serializer
@@ -164,7 +167,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
                 $options = $opt->getAllOptions();
                 if ($options) {
                     foreach ($options as $option) {
-                        if ($option['value'] == $value) {
+                        if ($option['value'] === $value) {
                             $valueOption = $option['label'];
                         }
                     }
@@ -233,6 +236,9 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
                 case 'alphanumeric':
                     $class = 'validate-alphanum';
                     break;
+                case 'alphanum-with-spaces':
+                    $class = 'validate-alphanum-with-spaces';
+                    break;
                 case 'numeric':
                     $class = 'validate-digits';
                     break;
@@ -282,7 +288,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
     }
 
     /**
-     * Reireive config field
+     * Retrieve config field
      *
      * @param string $fieldName
      * @return mixed

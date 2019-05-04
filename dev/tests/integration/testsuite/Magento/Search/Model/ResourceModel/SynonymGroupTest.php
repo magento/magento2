@@ -5,7 +5,7 @@
  */
 namespace Magento\Search\Model\ResourceModel;
 
-class SynonymGroupTest extends \PHPUnit_Framework_TestCase
+class SynonymGroupTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetByScope()
     {

@@ -19,7 +19,7 @@ class CartItem extends AbstractCartItem
      *
      * @var string
      */
-    protected $edit = '.action.edit';
+    protected $edit = '.action-edit';
 
     /**
      * Selector for "Remove item" button
@@ -40,7 +40,7 @@ class CartItem extends AbstractCartItem
      *
      * @var string
      */
-    protected $wishlistButton = '.action-towishlist';
+    protected $wishlistButton = '.towishlist';
 
     /**
      * Quantity input selector

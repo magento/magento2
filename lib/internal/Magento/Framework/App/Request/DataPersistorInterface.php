@@ -7,6 +7,7 @@ namespace Magento\Framework\App\Request;
 
 /**
  * @api
+ * @since 100.1.0
  */
 interface DataPersistorInterface
 {
@@ -16,6 +17,7 @@ interface DataPersistorInterface
      * @param string $key
      * @param mixed $data
      * @return void
+     * @since 100.1.0
      */
     public function set($key, $data);
 
@@ -24,6 +26,7 @@ interface DataPersistorInterface
      *
      * @param string $key
      * @return mixed
+     * @since 100.1.0
      */
     public function get($key);
 
@@ -32,6 +35,7 @@ interface DataPersistorInterface
      *
      * @param string $key
      * @return void
+     * @since 100.1.0
      */
     public function clear($key);
 }

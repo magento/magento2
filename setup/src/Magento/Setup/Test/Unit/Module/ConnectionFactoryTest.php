@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Module;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Module\ConnectionFactory;
 
-class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
+class ConnectionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConnectionFactory
@@ -18,21 +18,15 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $serviceLocatorMock = $this->getMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
-        $objectManagerProviderMock = $this->getMock(
-            \Magento\Setup\Model\ObjectManagerProvider::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $serviceLocatorMock = $this->createMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $objectManagerProviderMock = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $serviceLocatorMock->expects($this->once())
             ->method('get')
             ->with(
                 \Magento\Setup\Model\ObjectManagerProvider::class
             )
             ->willReturn($objectManagerProviderMock);
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerProviderMock->expects($this->once())
             ->method('get')
             ->willReturn($objectManagerMock);

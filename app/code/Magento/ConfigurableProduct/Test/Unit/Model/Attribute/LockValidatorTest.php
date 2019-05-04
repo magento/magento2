@@ -12,7 +12,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ConfigurableProduct\Model\Attribute\LockValidator;
 
-class LockValidatorTest extends \PHPUnit_Framework_TestCase
+class LockValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ConfigurableProduct\Model\Attribute\LockValidator
@@ -108,6 +108,10 @@ class LockValidatorTest extends \PHPUnit_Framework_TestCase
         $this->validate(true);
     }
 
+    /**
+     * @param $exception
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function validate($exception)
     {
         $attrTable = 'someAttributeTable';

@@ -8,16 +8,15 @@
 
 /** @var \Magento\UrlRewrite\Block\Edit $block */
 ?>
-<?php echo $block->getChildHtml() ?>
+<?= $block->getChildHtml() ?>
 <?php if ($block->getChildBlock('form')): ?>
-<script>
-require([
-    'jquery',
-    'mage/backend/form',
-    'mage/backend/validation'
-], function($){
-    $('#edit_form').form()
-        .validation({validationUrl: '<?php echo $block->escapeUrl($block->getValidationUrl()) ?>'});
-});
+<script type="text/x-magento-init">
+    {
+        "#edit_form": {
+            "Magento_UrlRewrite/js/url-rewrite-validation" : {
+                "url": "<?= $block->escapeUrl($block->getValidationUrl()) ?>"
+            }
+        }
+    }
 </script>
 <?php endif; ?>

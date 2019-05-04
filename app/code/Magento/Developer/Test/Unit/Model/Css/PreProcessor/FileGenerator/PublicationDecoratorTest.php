@@ -20,7 +20,7 @@ use Magento\Framework\View\Asset\Repository;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PublicationDecoratorTest extends \PHPUnit_Framework_TestCase
+class PublicationDecoratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PublicationDecorator

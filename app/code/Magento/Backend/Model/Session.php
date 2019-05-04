@@ -9,6 +9,7 @@ namespace Magento\Backend\Model;
  * Backend user session
  *
  * @api
+ * @since 100.0.2
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {

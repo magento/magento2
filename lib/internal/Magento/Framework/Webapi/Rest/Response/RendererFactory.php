@@ -16,7 +16,9 @@ class RendererFactory
      */
     protected $_objectManager;
 
-    /** @var \Magento\Framework\Webapi\Rest\Request */
+    /**
+     * @var \Magento\Framework\Webapi\Rest\Request
+     */
     protected $_request;
 
     /**

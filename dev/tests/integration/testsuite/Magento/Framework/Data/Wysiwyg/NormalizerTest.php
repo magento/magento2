@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Wysiwyg;
 
-class NormalizerTest extends \PHPUnit_Framework_TestCase
+class NormalizerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Wysiwyg\Normalizer

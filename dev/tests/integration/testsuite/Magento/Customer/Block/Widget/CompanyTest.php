@@ -10,7 +10,7 @@ namespace Magento\Customer\Block\Widget;
  *
  * @magentoAppArea frontend
  */
-class CompanyTest extends \PHPUnit_Framework_TestCase
+class CompanyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

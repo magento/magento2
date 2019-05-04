@@ -13,6 +13,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class BackendTemplate extends Template
 {

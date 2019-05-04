@@ -8,8 +8,10 @@ namespace Magento\Paypal\Test\Unit\Block\Bml;
 
 use Magento\Catalog\Block as CatalogBlock;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Paypal\Model\ConfigFactory;
+use Magento\Paypal\Model\Config;
 
-class ShortcutTest extends \PHPUnit_Framework_TestCase
+class ShortcutTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Paypal\Block\Bml\Shortcut */
     protected $shortcut;
@@ -28,17 +30,29 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->paymentHelperMock = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
-        $this->randomMock = $this->getMock(\Magento\Framework\Math\Random::class);
-        $this->paypalShortcutHelperMock = $this->getMock(\Magento\Paypal\Helper\Shortcut\ValidatorInterface::class);
+        $this->paymentHelperMock = $this->createMock(\Magento\Payment\Helper\Data::class);
+        $this->randomMock = $this->createMock(\Magento\Framework\Math\Random::class);
+        $this->paypalShortcutHelperMock = $this->createMock(\Magento\Paypal\Helper\Shortcut\ValidatorInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['create'])
+                ->getMock();
+
+        $configMock = $this->getMockBuilder(Config::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['setMethod'])
+                ->getMock();
+        $configFactoryMock->expects($this->any())->method('create')->willReturn($configMock);
+
         $this->shortcut = $this->objectManagerHelper->getObject(
             \Magento\Paypal\Block\Bml\Shortcut::class,
             [
                 'paymentData' => $this->paymentHelperMock,
                 'mathRandom' => $this->randomMock,
                 'shortcutValidator' => $this->paypalShortcutHelperMock,
+                'config' => $configFactoryMock
             ]
         );
     }

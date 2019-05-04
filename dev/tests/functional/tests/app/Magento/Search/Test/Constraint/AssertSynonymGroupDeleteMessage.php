@@ -25,7 +25,7 @@ class AssertSynonymGroupDeleteMessage extends AbstractConstraint
     public function processAssert(SynonymGroupIndex $synonymGroupIndex)
     {
         $actualMessage = $synonymGroupIndex->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::DELETE_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

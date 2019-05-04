@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Code\Test\Unit\Validator;
 
-class ConstructorArgumentTypesTest extends \PHPUnit_Framework_TestCase
+class ConstructorArgumentTypesTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -26,20 +26,9 @@ class ConstructorArgumentTypesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->argumentsReaderMock = $this->getMock(
-            \Magento\Framework\Code\Reader\ArgumentsReader::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->sourceArgumentsReaderMock = $this->getMock(
-            \Magento\Framework\Code\Reader\SourceArgumentsReader::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->argumentsReaderMock = $this->createMock(\Magento\Framework\Code\Reader\ArgumentsReader::class);
+        $this->sourceArgumentsReaderMock =
+            $this->createMock(\Magento\Framework\Code\Reader\SourceArgumentsReader::class);
         $this->model = new \Magento\Framework\Code\Validator\ConstructorArgumentTypes(
             $this->argumentsReaderMock,
             $this->sourceArgumentsReaderMock

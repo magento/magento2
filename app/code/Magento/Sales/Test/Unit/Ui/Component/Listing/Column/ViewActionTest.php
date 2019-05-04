@@ -12,7 +12,7 @@ use Magento\Sales\Ui\Component\Listing\Column\ViewAction;
 /**
  * Class ViewActionTest
  */
-class ViewActionTest extends \PHPUnit_Framework_TestCase
+class ViewActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ViewAction

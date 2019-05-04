@@ -12,11 +12,12 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
 use Magento\Framework\View\Asset\MergeableInterface;
 use Magento\Framework\View\Asset\MergeStrategyInterface;
+use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 
 /**
  * Class MergedTest
  */
-class MergedTest extends \PHPUnit_Framework_TestCase
+class MergedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -43,6 +44,11 @@ class MergedTest extends \PHPUnit_Framework_TestCase
      */
     private $assetRepo;
 
+    /**
+     * @var StorageInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $versionStorage;
+
     protected function setUp()
     {
         $this->assetJsOne = $this->getMockForAbstractClass(MergeableInterface::class);
@@ -61,11 +67,12 @@ class MergedTest extends \PHPUnit_Framework_TestCase
             ->method('getPath')
             ->willReturn('script_two.js');
 
-        $this->logger = $this->getMock(LoggerInterface::class);
-        $this->mergeStrategy = $this->getMock(MergeStrategyInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->mergeStrategy = $this->createMock(MergeStrategyInterface::class);
         $this->assetRepo = $this->getMockBuilder(AssetRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->versionStorage = $this->createMock(StorageInterface::class);
     }
 
     /**
@@ -74,7 +81,13 @@ class MergedTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorNothingToMerge()
     {
-        new \Magento\Framework\View\Asset\Merged($this->logger, $this->mergeStrategy, $this->assetRepo, []);
+        new \Magento\Framework\View\Asset\Merged(
+            $this->logger,
+            $this->mergeStrategy,
+            $this->assetRepo,
+            [],
+            $this->versionStorage
+        );
     }
 
     /**
@@ -90,6 +103,7 @@ class MergedTest extends \PHPUnit_Framework_TestCase
             'mergeStrategy' => $this->mergeStrategy,
             'assetRepo' => $this->assetRepo,
             'assets' => [$this->assetJsOne, $assetUrl],
+            'versionStorage' => $this->versionStorage,
         ]);
     }
 
@@ -109,6 +123,7 @@ class MergedTest extends \PHPUnit_Framework_TestCase
             'mergeStrategy' => $this->mergeStrategy,
             'assetRepo' => $this->assetRepo,
             'assets' => [$this->assetJsOne, $assetCss],
+            'versionStorage' => $this->versionStorage,
         ]);
     }
 
@@ -124,9 +139,10 @@ class MergedTest extends \PHPUnit_Framework_TestCase
             'mergeStrategy' => $this->mergeStrategy,
             'assetRepo' => $this->assetRepo,
             'assets' => $assets,
+            'versionStorage' => $this->versionStorage,
         ]);
 
-        $mergedAsset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
+        $mergedAsset = $this->createMock(\Magento\Framework\View\Asset\File::class);
         $this->mergeStrategy
             ->expects($this->once())
             ->method('merge')
@@ -158,6 +174,7 @@ class MergedTest extends \PHPUnit_Framework_TestCase
             'mergeStrategy' => $this->mergeStrategy,
             'assetRepo' => $this->assetRepo,
             'assets' => [$this->assetJsOne, $this->assetJsTwo, $assetBroken],
+            'versionStorage' => $this->versionStorage,
         ]);
 
         $this->logger->expects($this->once())->method('critical')->with($this->identicalTo($mergeError));

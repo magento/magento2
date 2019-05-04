@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend;
 
-class StockTest extends \PHPUnit_Framework_TestCase
+class StockTest extends \PHPUnit\Framework\TestCase
 {
     const ATTRIBUTE_NAME = 'quantity_and_stock_status';
 
@@ -35,12 +35,9 @@ class StockTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getStockItem', '__wakeup'])
             ->getMock();
 
-        $this->stockItemMock = $this->getMock(
+        $this->stockItemMock = $this->createPartialMock(
             \Magento\CatalogInventory\Model\Stock\Item::class,
-            ['getIsInStock', 'getQty', '__wakeup'],
-            [],
-            '',
-            false
+            ['getIsInStock', 'getQty', '__wakeup']
         );
 
         $this->stockRegistry->expects($this->any())
@@ -50,7 +47,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
             \Magento\Catalog\Model\Product\Attribute\Backend\Stock::class,
             ['stockRegistry' => $this->stockRegistry]
         );
-        $attribute = $this->getMock(\Magento\Framework\DataObject::class, ['getAttributeCode']);
+        $attribute = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getAttributeCode']);
         $attribute->expects($this->atLeastOnce())
             ->method('getAttributeCode')
             ->will($this->returnValue(self::ATTRIBUTE_NAME));
@@ -64,7 +61,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $this->stockItemMock->expects($this->once())->method('getIsInStock')->will($this->returnValue(1));
         $this->stockItemMock->expects($this->once())->method('getQty')->will($this->returnValue(5));
 
-        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getWebsiteId', '__wakeup'], [], '', false);
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId', '__wakeup']);
         $store->expects($this->once())
             ->method('getWebsiteId')
             ->will($this->returnValue(10));

@@ -19,7 +19,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoDbIsolation enabled
  */
-class ByQuantityAndStockStatusTest extends \PHPUnit_Framework_TestCase
+class ByQuantityAndStockStatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductInterfaceFactory
@@ -47,8 +47,8 @@ class ByQuantityAndStockStatusTest extends \PHPUnit_Framework_TestCase
     private $productData = [
         ProductInterface::TYPE_ID => Type::TYPE_SIMPLE,
         'website_ids' => [1],
-        ProductInterface::NAME => 'Simple',
-        ProductInterface::SKU => 'simple',
+        ProductInterface::NAME => 'simpleForQuantityAndStockStatus',
+        ProductInterface::SKU => 'simpleForQuantityAndStockStatus',
         ProductInterface::PRICE => 100,
         ProductInterface::EXTENSION_ATTRIBUTES_KEY => [],
     ];
@@ -90,7 +90,7 @@ class ByQuantityAndStockStatusTest extends \PHPUnit_Framework_TestCase
         $product->setQuantityAndStockStatus($this->stockItemData);
         $this->productRepository->save($product);
 
-        $this->stockItemDataChecker->checkStockItemData('simple', $this->stockItemData);
+        $this->stockItemDataChecker->checkStockItemData('simpleForQuantityAndStockStatus', $this->stockItemData);
     }
 
     /**
@@ -105,6 +105,6 @@ class ByQuantityAndStockStatusTest extends \PHPUnit_Framework_TestCase
         $product->setData('quantity_and_stock_status', $this->stockItemData);
         $this->productRepository->save($product);
 
-        $this->stockItemDataChecker->checkStockItemData('simple', $this->stockItemData);
+        $this->stockItemDataChecker->checkStockItemData('simpleForQuantityAndStockStatus', $this->stockItemData);
     }
 }

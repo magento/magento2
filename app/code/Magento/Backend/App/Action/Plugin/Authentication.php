@@ -160,7 +160,7 @@ class Authentication
             } else {
                 $this->_actionFlag->set('', \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH, true);
                 $this->_response->setRedirect($this->_url->getCurrentUrl());
-                $this->messageManager->addError(__('Invalid Form Key. Please refresh the page.'));
+                $this->messageManager->addErrorMessage(__('Invalid Form Key. Please refresh the page.'));
                 $isRedirectNeeded = true;
             }
         }
@@ -205,7 +205,7 @@ class Authentication
             $this->_auth->login($username, $password);
         } catch (AuthenticationException $e) {
             if (!$request->getParam('messageSent')) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $request->setParam('messageSent', true);
                 $outputValue = false;
             }

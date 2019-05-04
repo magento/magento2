@@ -9,7 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 require_once __DIR__ . '/_files/ioMock.php';
 
-class FsTest extends \PHPUnit_Framework_TestCase
+class FsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

@@ -7,7 +7,7 @@ namespace Magento\Customer\Model\Metadata;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class FormFactoryTest extends \PHPUnit_Framework_TestCase
+class FormFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var array */
     private $_requestData;

@@ -7,13 +7,14 @@ namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\DefaultProcessor;
+use Magento\Config\Model\Config;
+use Magento\Config\Model\Config\Factory as ConfigFactory;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Config\Value;
-use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
@@ -23,7 +24,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * @see DefaultProcessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
+class DefaultProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DefaultProcessor
@@ -56,16 +57,17 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
     private $resourceModelMock;
 
     /**
+     * @var ConfigFactory|Mock
+     */
+    private $configFactory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configPathResolverMock = $this->getMockBuilder(ConfigPathResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $this->configPathResolverMock = $this->createMock(ConfigPathResolver::class);
         $this->resourceModelMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->setMethods(['save'])
@@ -74,14 +76,14 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getResource'])
             ->getMock();
-        $this->preparedValueFactoryMock = $this->getMockBuilder(PreparedValueFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->preparedValueFactoryMock = $this->createMock(PreparedValueFactory::class);
+        $this->configFactory = $this->createMock(ConfigFactory::class);
 
         $this->model = new DefaultProcessor(
             $this->preparedValueFactoryMock,
             $this->deploymentConfigMock,
-            $this->configPathResolverMock
+            $this->configPathResolverMock,
+            $this->configFactory
         );
     }
 
@@ -98,15 +100,16 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $this->configMockForProcessTest($path, $scope, $scopeCode);
 
-        $this->preparedValueFactoryMock->expects($this->once())
+        $config = $this->createMock(Config::class);
+        $this->configFactory->expects($this->once())
             ->method('create')
-            ->willReturn($this->valueMock);
-        $this->valueMock->expects($this->once())
-            ->method('getResource')
-            ->willReturn($this->resourceModelMock);
-        $this->resourceModelMock->expects($this->once())
+            ->with(['data' => ['scope' => $scope, 'scope_code' => $scopeCode]])
+            ->willReturn($config);
+        $config->expects($this->once())
+            ->method('setDataByPath')
+            ->with($path, $value);
+        $config->expects($this->once())
             ->method('save')
-            ->with($this->valueMock)
             ->willReturnSelf();
 
         $this->model->process($path, $value, $scope, $scopeCode);
@@ -122,28 +125,6 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
             ['test/test/test', 'value', ScopeInterface::SCOPE_WEBSITE, 'base'],
             ['test/test/test', 'value', ScopeInterface::SCOPE_STORE, 'test'],
         ];
-    }
-
-    public function testProcessWithWrongValueInstance()
-    {
-        $path = 'test/test/test';
-        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
-        $scopeCode = null;
-        $value = 'value';
-        $valueInterfaceMock = $this->getMockBuilder(ValueInterface::class)
-            ->getMockForAbstractClass();
-
-        $this->configMockForProcessTest($path, $scope, $scopeCode);
-
-        $this->preparedValueFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($valueInterfaceMock);
-        $this->valueMock->expects($this->never())
-            ->method('getResource');
-        $this->resourceModelMock->expects($this->never())
-            ->method('save');
-
-        $this->model->process($path, $value, $scope, $scopeCode);
     }
 
     /**
@@ -162,39 +143,19 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap([
                 ['system/default/test/test/test', null],
             ]);
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('isAvailable')
-            ->willReturn(true);
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We can't save this option because Magento is not installed.
-     */
-    public function testProcessNotInstalled()
-    {
-        $path = 'test/test/test';
-        $value = 'value';
-
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('isAvailable')
-            ->willReturn(false);
-
-        $this->model->process($path, $value, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null);
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The value you set has already been locked. To change the value, use the --lock option.
+     * @codingStandardsIgnoreStart
+     * @expectedExceptionMessage The value you set has already been locked. To change the value, use the --lock-env option.
+     * @codingStandardsIgnoreEnd
      */
     public function testProcessLockedValue()
     {
         $path = 'test/test/test';
         $value = 'value';
 
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('isAvailable')
-            ->willReturn(true);
         $this->deploymentConfigMock->expects($this->once())
             ->method('get')
             ->willReturnMap([
@@ -204,6 +165,9 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
         $this->configPathResolverMock->expects($this->once())
             ->method('resolve')
             ->willReturn('system/default/test/test/test');
+
+        $this->configFactory->expects($this->never())
+            ->method('create');
 
         $this->model->process($path, $value, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null);
     }

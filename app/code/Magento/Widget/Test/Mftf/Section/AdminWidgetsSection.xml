@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminWidgetsSection">
+        <element name="widgetTitleSearch" type="input" selector="#widgetInstanceGrid_filter_title"/>
+        <element name="searchButton" type="button" selector=".action-default.scalable.action-secondary"/>
+        <element name="searchResult" type="text" selector="#widgetInstanceGrid_table>tbody>tr:nth-child(1)"/>
+    </section>
+</sections>

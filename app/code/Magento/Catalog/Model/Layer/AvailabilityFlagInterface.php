@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Layer;
 
 /**
  * @api
+ * @since 100.0.2
  */
 interface AvailabilityFlagInterface
 {

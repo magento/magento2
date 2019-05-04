@@ -1,0 +1,20 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/**
+ * Product viewed counter template
+ *
+ * @var $block \Magento\Catalog\Block\Ui\ProductViewCounter
+ */
+?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+                "Magento_Catalog/js/product/view/provider": {
+                    "data": <?= /* @escapeNotVerified */ $block->getCurrentProductData() ?>
+            }
+        }
+    }
+</script>

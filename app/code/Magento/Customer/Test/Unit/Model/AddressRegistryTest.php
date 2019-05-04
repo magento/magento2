@@ -7,7 +7,7 @@
  */
 namespace Magento\Customer\Test\Unit\Model;
 
-class AddressRegistryTest extends \PHPUnit_Framework_TestCase
+class AddressRegistryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\AddressRegistry

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -15,7 +13,7 @@ use Magento\Framework\Locale\Resolver;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DobTest extends \PHPUnit_Framework_TestCase
+class DobTest extends \PHPUnit\Framework\TestCase
 {
     /** Constants used in the unit tests */
     const MIN_DATE = '01/01/2010';
@@ -33,7 +31,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
     const YEAR = '2014';
 
     // Value of date('Y', strtotime(self::DATE))
-    const DATE_FORMAT = 'M/d/yy';
+    const DATE_FORMAT = 'M/d/Y';
 
     /** Constants used by Dob::setDateInput($code, $html) */
     const DAY_HTML =
@@ -59,6 +57,16 @@ class DobTest extends \PHPUnit_Framework_TestCase
      */
     protected $filterFactory;
 
+    /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
+     * @var \Magento\Framework\View\Element\Template\Context
+     */
+    private $context;
+
     protected function setUp()
     {
         $zendCacheCore = new \Zend_Cache_Core();
@@ -71,11 +79,11 @@ class DobTest extends \PHPUnit_Framework_TestCase
             false
         );
         $frontendCache->expects($this->any())->method('getLowLevelFrontend')->will($this->returnValue($zendCacheCore));
-        $cache = $this->getMock(\Magento\Framework\App\CacheInterface::class);
+        $cache = $this->createMock(\Magento\Framework\App\CacheInterface::class);
         $cache->expects($this->any())->method('getFrontend')->will($this->returnValue($frontendCache));
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $localeResolver = $this->getMock(\Magento\Framework\Locale\ResolverInterface::class);
+        $localeResolver = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
         $localeResolver->expects($this->any())
             ->method('getLocale')
             ->willReturn(Resolver::DEFAULT_LOCALE);
@@ -84,8 +92,13 @@ class DobTest extends \PHPUnit_Framework_TestCase
             ['localeResolver' => $localeResolver]
         );
 
-        $context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
-        $context->expects($this->any())->method('getLocaleDate')->will($this->returnValue($timezone));
+        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
+        $this->context->expects($this->any())->method('getLocaleDate')->will($this->returnValue($timezone));
+        $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['escapeHtml'])
+            ->getMock();
+        $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaper));
 
         $this->attribute = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
@@ -102,10 +115,10 @@ class DobTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->_block = new \Magento\Customer\Block\Widget\Dob(
-            $context,
-            $this->getMock(\Magento\Customer\Helper\Address::class, [], [], '', false),
+            $this->context,
+            $this->createMock(\Magento\Customer\Helper\Address::class),
             $this->customerMetadata,
-            $this->getMock(\Magento\Framework\View\Element\Html\Date::class, [], [], '', false),
+            $this->createMock(\Magento\Framework\View\Element\Html\Date::class),
             $this->filterFactory
         );
     }
@@ -334,13 +347,9 @@ class DobTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMinDateRange($validationRules, $expectedValue)
     {
-        $this->attribute->expects(
-            $this->once()
-        )->method(
-                'getValidationRules'
-            )->will(
-                $this->returnValue($validationRules)
-            );
+        $this->attribute->expects($this->once())
+            ->method('getValidationRules')
+            ->will($this->returnValue($validationRules));
         $this->assertEquals($expectedValue, $this->_block->getMinDateRange());
     }
 
@@ -404,13 +413,9 @@ class DobTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMaxDateRange($validationRules, $expectedValue)
     {
-        $this->attribute->expects(
-            $this->once()
-        )->method(
-                'getValidationRules'
-            )->will(
-                $this->returnValue($validationRules)
-            );
+        $this->attribute->expects($this->once())
+            ->method('getValidationRules')
+            ->will($this->returnValue($validationRules));
         $this->assertEquals($expectedValue, $this->_block->getMaxDateRange());
     }
 
@@ -464,23 +469,39 @@ class DobTest extends \PHPUnit_Framework_TestCase
             );
         $this->assertNull($this->_block->getMaxDateRange());
     }
-    
-    public function testGetHtmlExtraParamsWithoutRequiredOption() {
+
+    public function testGetHtmlExtraParamsWithoutRequiredOption()
+    {
+        $this->escaper->expects($this->any())
+            ->method('escapeHtml')
+            ->with('{"validate-date":{"dateFormat":"M\/d\/Y"}}')
+            ->will($this->returnValue('{"validate-date":{"dateFormat":"M\/d\/Y"}}'));
+
         $this->attribute->expects($this->once())
             ->method("isRequired")
             ->willReturn(false);
 
-        $this->assertEquals($this->_block->getHtmlExtraParams(), 'data-validate="{\'validate-date-au\':true}"');
+        $this->assertEquals(
+            $this->_block->getHtmlExtraParams(),
+            'data-validate="{"validate-date":{"dateFormat":"M\/d\/Y"}}"'
+        );
     }
 
-    public function testGetHtmlExtraParamsWithRequiredOption() {
+    public function testGetHtmlExtraParamsWithRequiredOption()
+    {
         $this->attribute->expects($this->once())
             ->method("isRequired")
             ->willReturn(true);
+        $this->escaper->expects($this->any())
+            ->method('escapeHtml')
+            ->with('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}')
+            ->will($this->returnValue('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}'));
+
+        $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaper));
 
         $this->assertEquals(
-            $this->_block->getHtmlExtraParams(),
-            'data-validate="{\'validate-date-au\':true, required:true}"'
+            'data-validate="{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}"',
+            $this->_block->getHtmlExtraParams()
         );
     }
 }

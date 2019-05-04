@@ -7,7 +7,7 @@ namespace Magento\Setup\Console\Command;
 
 use Symfony\Component\Console\Tester\CommandTester;
 
-class I18nCollectPhrasesCommandTest extends \PHPUnit_Framework_TestCase
+class I18nCollectPhrasesCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var I18nCollectPhrasesCommand

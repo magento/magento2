@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\Indexer\Table;
 
+/**
+ * Interface \Magento\Framework\Indexer\Table\StrategyInterface
+ *
+ */
 interface StrategyInterface
 {
     const IDX_SUFFIX = '_idx';

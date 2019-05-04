@@ -11,6 +11,7 @@ namespace Magento\Sales\Api;
  * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
  * document lists the products and their quantities in the delivery package. A shipment document can contain comments.
  * @api
+ * @since 100.0.2
  */
 interface ShipmentCommentRepositoryInterface
 {
@@ -35,6 +36,7 @@ interface ShipmentCommentRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\ShipmentCommentInterface $entity The shipment comment.
      * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function delete(\Magento\Sales\Api\Data\ShipmentCommentInterface $entity);
 
@@ -43,6 +45,7 @@ interface ShipmentCommentRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\ShipmentCommentInterface $entity The shipment comment.
      * @return \Magento\Sales\Api\Data\ShipmentCommentInterface Shipment comment interface.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\Sales\Api\Data\ShipmentCommentInterface $entity);
 }

@@ -7,7 +7,7 @@ namespace Magento\Paypal\Test\Unit\Model\System\Config\Source;
 
 use Magento\Paypal\Model\System\Config\Source\BmlPosition;
 
-class BmlPositionTest extends \PHPUnit_Framework_TestCase
+class BmlPositionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  BmlPosition */
     protected $model;

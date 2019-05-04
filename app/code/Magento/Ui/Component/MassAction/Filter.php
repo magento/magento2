@@ -3,18 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Component\MassAction;
 
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
+ * Filter component.
+ *
  * @api
+ * @since 100.0.2
  */
 class Filter
 {
@@ -94,17 +98,19 @@ class Filter
 
         if ('false' !== $excluded) {
             if (!$isExcludedIdsValid && !$isSelectedIdsValid) {
-                throw new LocalizedException(__('Please select item(s).'));
+                throw new LocalizedException(__('An item needs to be selected. Select and try again.'));
             }
         }
-        /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection $collection */
-        $idsArray = $this->getFilterIds();
-        if (!empty($idsArray)) {
-            $collection->addFieldToFilter(
-                $collection->getIdFieldName(),
-                ['in' => $idsArray]
-            );
+
+        $filterIds = $this->getFilterIds();
+        if (\is_array($selected)) {
+            $filterIds = array_unique(array_merge($filterIds, $selected));
         }
+        $collection->addFieldToFilter(
+            $collection->getIdFieldName(),
+            ['in' => $filterIds]
+        );
+
         return $collection;
     }
 
@@ -161,7 +167,7 @@ class Filter
             } elseif (is_array($selected) && !empty($selected)) {
                 $collection->addFieldToFilter($collection->getIdFieldName(), ['in' => $selected]);
             } else {
-                throw new LocalizedException(__('Please select item(s).'));
+                throw new LocalizedException(__('An item needs to be selected. Select and try again.'));
             }
         } catch (\Exception $e) {
             throw new LocalizedException(__($e->getMessage()));
@@ -222,7 +228,9 @@ class Filter
             // Use collection's getAllIds for optimization purposes.
             $idsArray = $this->getDataProvider()->getAllIds();
         } else {
-            $searchResult = $this->getDataProvider()->getSearchResult();
+            $dataProvider = $this->getDataProvider();
+            $dataProvider->setLimit(0, false);
+            $searchResult = $dataProvider->getSearchResult();
             // Use compatible search api getItems when searchResult is not a collection.
             foreach ($searchResult->getItems() as $item) {
                 /** @var $item \Magento\Framework\Api\Search\DocumentInterface */

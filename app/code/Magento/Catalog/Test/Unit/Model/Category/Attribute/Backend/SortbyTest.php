@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Backend;
 
-class SortbyTest extends \PHPUnit_Framework_TestCase
+class SortbyTest extends \PHPUnit\Framework\TestCase
 {
     const DEFAULT_ATTRIBUTE_CODE = 'attribute_name';
 
@@ -36,12 +34,12 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestSkipped('Due to MAGETWO-48956');
         $this->_objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->_model = $this->_objectHelper->getObject(
             \Magento\Catalog\Model\Category\Attribute\Backend\Sortby::class,
             ['scopeConfig' => $this->_scopeConfig]
         );
-        $this->_attribute = $this->getMock(
+        $this->_attribute = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             [
                 'getName',
@@ -52,10 +50,7 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
                 '__wakeup',
                 'getIsRequired',
                 'getIsUnique'
-            ],
-            [],
-            '',
-            false
+            ]
         );
 
         $this->_model->setAttribute($this->_attribute);
@@ -76,6 +71,9 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $object->getData($attributeCode));
     }
 
+    /**
+     * @return array
+     */
     public function beforeSaveDataProvider()
     {
         return [
@@ -122,6 +120,9 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $object->getData($attributeCode));
     }
 
+    /**
+     * @return array
+     */
     public function afterLoadDataProvider()
     {
         return [
@@ -164,6 +165,9 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $this->_model->validate($object));
     }
 
+    /**
+     * @return array
+     */
     public function validateDataProvider()
     {
         return [
@@ -256,6 +260,9 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_model->validate($object));
     }
 
+    /**
+     * @return array
+     */
     public function validateDefaultSortDataProvider()
     {
         return [
@@ -277,8 +284,8 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
             [
                 'default_sort_by',
                 [
-                    'available_sort_by' => NULL,
-                    'default_sort_by' => NULL,
+                    'available_sort_by' => null,
+                    'default_sort_by' => null,
                     'use_post_data_config' => ['available_sort_by', 'default_sort_by', 'filter_price_range']
                 ]
             ],
@@ -299,20 +306,23 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
         $this->_model->validate($object);
     }
 
+    /**
+     * @return array
+     */
     public function validateDefaultSortException()
     {
         return [
             [
                 'default_sort_by',
                 [
-                    'available_sort_by' => NULL,
+                    'available_sort_by' => null,
                     'use_post_data_config' => ['default_sort_by']
                 ],
             ],
             [
                 'default_sort_by',
                 [
-                    'available_sort_by' => NULL,
+                    'available_sort_by' => null,
                     'use_post_data_config' => []
                 ]
             ],

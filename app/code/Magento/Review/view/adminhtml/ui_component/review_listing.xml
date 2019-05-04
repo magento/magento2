@@ -24,6 +24,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_Review::reviews_all</aclResource>
         <dataProvider class="Magento\Review\Ui\DataProvider\Product\ReviewDataProvider" name="review_listing_data_source">
             <settings>
                 <requestFieldName>entity_id</requestFieldName>

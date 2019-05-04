@@ -43,7 +43,7 @@ class AssertShipmentInShipmentsTab extends AbstractConstraint
                 'qty_from' => number_format($totalQty[$key], 4, '.', ''),
                 'qty_to' => number_format($totalQty[$key], 4, '.', ''),
             ];
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 $salesOrderView
                     ->getOrderForm()
                     ->getTab('shipments')

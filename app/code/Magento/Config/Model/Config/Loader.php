@@ -14,6 +14,7 @@ namespace Magento\Config\Model\Config;
  *
  * @package Magento\Config\Model\Config
  * @api
+ * @since 100.0.2
  */
 class Loader
 {

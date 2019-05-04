@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Price;
 /**
  * Test for SpecialPriceStorage model.
  */
-class SpecialPriceStorageTest extends \PHPUnit_Framework_TestCase
+class SpecialPriceStorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Api\SpecialPriceInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -178,7 +178,7 @@ class SpecialPriceStorageTest extends \PHPUnit_Framework_TestCase
             ->with(
                 1,
                 __(
-                    'Requested product doesn\'t exist. '
+                    'The product that was requested doesn\'t exist. Verify the product and try again. '
                     . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.',
                     [
                         'SKU' => 'sku_1',

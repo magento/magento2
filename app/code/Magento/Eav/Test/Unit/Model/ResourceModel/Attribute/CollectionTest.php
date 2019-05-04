@@ -4,15 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Test\Unit\Model\ResourceModel\Attribute;
 
 /**
  * Class CollectionTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\ResourceModel\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
@@ -76,33 +74,27 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->entityFactoryMock = $this->getMock(
-            \Magento\Framework\Data\Collection\EntityFactory::class,
-            [],
-            [],
-            '',
-            false
+        $this->entityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->fetchStrategyMock = $this->createMock(
+            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
         );
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->fetchStrategyMock = $this->getMock(\Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class);
-        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 
-        $this->eavConfigMock = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
-        $this->entityTypeMock = $this->getMock(\Magento\Eav\Model\Entity\Type::class, ['__wakeup'], [], '', false);
+        $this->eavConfigMock = $this->createMock(\Magento\Eav\Model\Config::class);
+        $this->entityTypeMock = $this->createPartialMock(\Magento\Eav\Model\Entity\Type::class, ['__wakeup']);
         $this->entityTypeMock->setAdditionalAttributeTable('some_extra_table');
         $this->eavConfigMock->expects($this->any())
             ->method('getEntityType')
             ->will($this->returnValue($this->entityTypeMock));
 
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnSelf());
 
-        $this->connectionMock = $this->getMock(
+        $this->connectionMock = $this->createPartialMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['select', 'describeTable', 'quoteIdentifier', '_connect', '_quote'],
-            [],
-            '',
-            false);
+            ['select', 'describeTable', 'quoteIdentifier', '_connect', '_quote']
+        );
         $this->selectRenderer = $this->getMockBuilder(\Magento\Framework\DB\Select\SelectRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -123,7 +115,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->any())->method('quoteIdentifier')->will($this->returnArgument(0));
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnvalueMap(
+            ->will($this->returnValueMap(
                 [
                     [
                         'some_main_table',
@@ -185,6 +177,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->model->getSelectCountSql()->assemble();
     }
 
+    /**
+     * @return array
+     */
     public function initSelectDataProvider()
     {
         return [

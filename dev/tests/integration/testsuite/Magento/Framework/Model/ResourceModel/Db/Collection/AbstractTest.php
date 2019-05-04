@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Model\ResourceModel\Db\Collection;
 
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
@@ -71,5 +71,43 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->_model->getSelect()->where('code = :code');
         $this->_model->addBindParam('code', 'admin');
         $this->assertEquals(['0'], $this->_model->getAllIds());
+    }
+
+    /**
+     * Check add field to select doesn't remove expression field from select.
+     *
+     * @return void
+     */
+    public function testAddExpressionFieldToSelectWithAdditionalFields()
+    {
+        $expectedColumns = ['code', 'test_field'];
+        $actualColumns = [];
+
+        $testExpression = new \Zend_Db_Expr('(sort_order + group_id)');
+        $this->_model->addExpressionFieldToSelect('test_field', $testExpression, ['sort_order', 'group_id']);
+        $this->_model->addFieldToSelect('code', 'code');
+        $columns = $this->_model->getSelect()->getPart(\Magento\Framework\DB\Select::COLUMNS);
+        foreach ($columns as $columnEntry) {
+            $actualColumns[] = $columnEntry[2];
+        }
+
+        $this->assertEquals($expectedColumns, $actualColumns);
+    }
+
+    /**
+     * Check add expression field doesn't remove all fields from select.
+     *
+     * @return void
+     */
+    public function testAddExpressionFieldToSelectWithoutAdditionalFields()
+    {
+        $expectedColumns = ['*', 'test_field'];
+
+        $testExpression = new \Zend_Db_Expr('(sort_order + group_id)');
+        $this->_model->addExpressionFieldToSelect('test_field', $testExpression, ['sort_order', 'group_id']);
+        $columns = $this->_model->getSelect()->getPart(\Magento\Framework\DB\Select::COLUMNS);
+        $actualColumns = [$columns[0][1], $columns[1][2]];
+
+        $this->assertEquals($expectedColumns, $actualColumns);
     }
 }

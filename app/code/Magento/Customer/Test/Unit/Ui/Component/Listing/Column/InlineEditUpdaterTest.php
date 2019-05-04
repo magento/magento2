@@ -9,7 +9,7 @@ use Magento\Customer\Ui\Component\Listing\Column\ValidationRules;
 use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
 use Magento\Customer\Api\Data\ValidationRuleInterface;
 
-class InlineEditUpdaterTest extends \PHPUnit_Framework_TestCase
+class InlineEditUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ValidationRules|\PHPUnit_Framework_MockObject_MockObject  */
     protected $validationRules;

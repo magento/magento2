@@ -205,7 +205,7 @@ class OrderStatus implements DataProviderInterface
     }
 
     /**
-     * Get data for Header esction of RSS feed
+     * Get data for Header section of RSS feed
      *
      * @return array
      */

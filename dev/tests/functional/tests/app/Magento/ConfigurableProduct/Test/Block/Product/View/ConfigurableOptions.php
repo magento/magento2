@@ -223,4 +223,27 @@ class ConfigurableOptions extends CustomOptions
     {
         return $this->_rootElement->find($this->optionsContext, Locator::SELECTOR_XPATH)->isVisible();
     }
+
+    /**
+     * Select configurable product option by it index
+     *
+     * @param FixtureInterface $product
+     * @param string $variation
+     * @return void
+     */
+    public function selectConfigurableOption(FixtureInterface $product, $variation)
+    {
+        /** @var ConfigurableProduct $product */
+        $attributesData = [];
+        $productVariations = [];
+        if ($product->hasData('configurable_attributes_data')) {
+            $attributesData = $product->getConfigurableAttributesData()['attributes_data'];
+            $productVariations = $product->getConfigurableAttributesData()['matrix'];
+        }
+        if (array_key_exists($variation, $productVariations)) {
+            $variationOption = explode(' ', $variation);
+            //Select option specified in variation
+            $this->chooseOptions($variationOption, $attributesData);
+        }
+    }
 }

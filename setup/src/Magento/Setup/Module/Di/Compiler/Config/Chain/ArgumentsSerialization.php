@@ -14,7 +14,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Used for argument's array serialization and store to the DI configuration.
  *
- * @deprecated Di arguments are now stored in raw php format and could be cached by OPcache,
+ * @deprecated 2.2.0 Di arguments are now stored in raw php format and could be cached by OPcache,
  *             this class will be removed in the next backward incompatible release.
  */
 class ArgumentsSerialization implements ModificationInterface

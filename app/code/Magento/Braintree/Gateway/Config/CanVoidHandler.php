@@ -5,7 +5,7 @@
  */
 namespace Magento\Braintree\Gateway\Config;
 
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Config\ValueHandlerInterface;
 use Magento\Sales\Model\Order\Payment;
 

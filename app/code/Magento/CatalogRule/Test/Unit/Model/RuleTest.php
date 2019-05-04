@@ -8,7 +8,7 @@ namespace Magento\CatalogRule\Test\Unit\Model;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RuleTest extends \PHPUnit_Framework_TestCase
+class RuleTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CatalogRule\Model\Rule */
     protected $rule;
@@ -59,85 +59,53 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->storeModel = $this->getMock(\Magento\Store\Model\Store::class, ['__wakeup', 'getId'], [], '', false);
-        $this->combineFactory = $this->getMock(
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeModel = $this->createPartialMock(\Magento\Store\Model\Store::class, ['__wakeup', 'getId']);
+        $this->combineFactory = $this->createPartialMock(
             \Magento\CatalogRule\Model\Rule\Condition\CombineFactory::class,
             [
                 'create'
-            ],
-            [],
-            '',
-            false
+            ]
         );
-        $this->productModel = $this->getMock(
+        $this->productModel = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
             [
-                '__wakeup', 'getId', 'setData'
-            ],
-            [],
-            '',
-            false
+                '__wakeup',
+                'getId',
+                'setData'
+            ]
         );
-        $this->condition = $this->getMock(
+        $this->condition = $this->createPartialMock(
             \Magento\Rule\Model\Condition\Combine::class,
             [
                 'setRule',
                 'validate'
-            ],
-            [],
-            '',
-            false
+            ]
         );
-        $this->websiteModel = $this->getMock(
+        $this->websiteModel = $this->createPartialMock(
             \Magento\Store\Model\Website::class,
             [
                 '__wakeup',
                 'getId',
                 'getDefaultStore'
-            ],
-            [],
-            '',
-            false
+            ]
         );
-        $this->_ruleProductProcessor = $this->getMock(
-            \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class,
-            [],
-            [],
-            '',
-            false
+        $this->_ruleProductProcessor = $this->createMock(
+            \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class
         );
 
-        $this->_productCollectionFactory = $this->getMock(
+        $this->_productCollectionFactory = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
-        $this->_resourceIterator = $this->getMock(
+        $this->_resourceIterator = $this->createPartialMock(
             \Magento\Framework\Model\ResourceModel\Iterator::class,
-            ['walk'],
-            [],
-            '',
-            false
+            ['walk']
         );
 
-        $extensionFactoryMock = $this->getMock(
-            \Magento\Framework\Api\ExtensionAttributesFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $attributeValueFactoryMock = $this->getMock(
-            \Magento\Framework\Api\AttributeValueFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $extensionFactoryMock = $this->createMock(\Magento\Framework\Api\ExtensionAttributesFactory::class);
+        $attributeValueFactoryMock = $this->createMock(\Magento\Framework\Api\AttributeValueFactory::class);
 
         $this->rule = $this->objectManager->getObject(
             \Magento\CatalogRule\Model\Rule::class,
@@ -336,7 +304,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterDelete()
     {
-        $indexer = $this->getMock(\Magento\Framework\Indexer\IndexerInterface::class);
+        $indexer = $this->createMock(\Magento\Framework\Indexer\IndexerInterface::class);
         $indexer->expects($this->once())->method('invalidate');
         $this->_ruleProductProcessor->expects($this->once())->method('getIndexer')->will($this->returnValue($indexer));
         $this->rule->afterDelete();
@@ -350,7 +318,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     public function testAfterUpdate()
     {
         $this->rule->isObjectNew(false);
-        $indexer = $this->getMock(\Magento\Framework\Indexer\IndexerInterface::class);
+        $indexer = $this->createMock(\Magento\Framework\Indexer\IndexerInterface::class);
         $indexer->expects($this->once())->method('invalidate');
         $this->_ruleProductProcessor->expects($this->once())->method('getIndexer')->will($this->returnValue($indexer));
         $this->rule->afterSave();
@@ -372,7 +340,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     {
         $this->rule->setData('website_ids', []);
         $this->rule->isObjectNew($isObjectNew);
-        $indexer = $this->getMock(\Magento\Framework\Indexer\IndexerInterface::class);
+        $indexer = $this->createMock(\Magento\Framework\Indexer\IndexerInterface::class);
         $indexer->expects($this->any())->method('invalidate');
         $this->_ruleProductProcessor->expects($this->any())->method('getIndexer')->will($this->returnValue($indexer));
 
@@ -410,5 +378,11 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->rule->setId(100);
         $expectedResult = 'form_namerule_conditions_fieldset_100';
         $this->assertEquals($expectedResult, $this->rule->getConditionsFieldSetId($formName));
+    }
+
+    public function testReindex()
+    {
+        $this->_ruleProductProcessor->expects($this->once())->method('reindexList');
+        $this->rule->reindex();
     }
 }

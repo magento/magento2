@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model\Product\Attribute\Source;
 
 use Magento\TestFramework\Helper\CacheCleaner;
 
-class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
+class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture

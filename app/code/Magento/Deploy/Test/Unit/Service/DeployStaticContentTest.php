@@ -5,6 +5,7 @@
  */
 namespace Magento\Deploy\Test\Unit\Service;
 
+use Magento\Deploy\Console\DeployStaticOptions;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Process\Queue;
 use Magento\Deploy\Service\Bundle;
@@ -29,7 +30,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DeployStaticContentTest extends \PHPUnit_Framework_TestCase
+class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DeployStaticContent|Mock
@@ -63,33 +64,15 @@ class DeployStaticContentTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->deployStrategyFactory = $this->getMock(
-            DeployStrategyFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->queueFactory = $this->getMock(
-            QueueFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->deployStrategyFactory = $this->createPartialMock(DeployStrategyFactory::class, ['create']);
+        $this->queueFactory = $this->createPartialMock(QueueFactory::class, ['create']);
         $this->logger = $this->getMockForAbstractClass(
             LoggerInterface::class,
             [],
             '',
             false
         );
-        $this->objectManager = $this->getMock(
-            ObjectManagerInterface::class,
-            ['create', 'get', 'configure'],
-            [],
-            '',
-            false
-        );
+        $this->objectManager = $this->createPartialMock(ObjectManagerInterface::class, ['create', 'get', 'configure']);
         $this->versionStorage = $this->getMockForAbstractClass(
             StorageInterface::class,
             ['save'],
@@ -113,7 +96,7 @@ class DeployStaticContentTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeploy($options, $expectedContentVersion)
     {
-        $package = $this->getMock(Package::class, [], [], '', false);
+        $package = $this->createMock(Package::class);
         if ($options['refresh-content-version-only']) {
             $package->expects($this->never())->method('isVirtual');
             $package->expects($this->never())->method('getArea');
@@ -205,6 +188,9 @@ class DeployStaticContentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $this->service->deploy($options));
     }
 
+    /**
+     * @return array
+     */
     public function deployDataProvider()
     {
         return [
@@ -235,5 +221,36 @@ class DeployStaticContentTest extends \PHPUnit_Framework_TestCase
                 '654321'
             ]
         ];
+    }
+
+    public function testMaxExecutionTimeOptionPassed()
+    {
+        $options = [
+            DeployStaticOptions::MAX_EXECUTION_TIME => 100,
+            DeployStaticOptions::REFRESH_CONTENT_VERSION_ONLY => false,
+            DeployStaticOptions::JOBS_AMOUNT => 3,
+            DeployStaticOptions::STRATEGY => 'compact',
+            DeployStaticOptions::NO_JAVASCRIPT => true,
+            DeployStaticOptions::NO_HTML_MINIFY => true,
+        ];
+
+        $queueMock = $this->createMock(Queue::class);
+        $strategyMock = $this->createMock(CompactDeploy::class);
+        $this->queueFactory->expects($this->once())
+            ->method('create')
+            ->with([
+                'logger' => $this->logger,
+                'maxExecTime' => 100,
+                'maxProcesses' => 3,
+                'options' => $options,
+                'deployPackageService' => null
+            ])
+            ->willReturn($queueMock);
+        $this->deployStrategyFactory->expects($this->once())
+            ->method('create')
+            ->with('compact', ['queue' => $queueMock])
+            ->willReturn($strategyMock);
+
+        $this->service->deploy($options);
     }
 }

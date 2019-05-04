@@ -11,7 +11,7 @@ use \Magento\Framework\View\Layout\Reader\Container;
 use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -56,9 +56,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @param string $containerName
      * @param array $structureElement
      * @param array $expectedData
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getStructureCondition
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setStructureCondition
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setRemoveCondition
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $getStructureCondition
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setStructureCondition
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setRemoveCondition
      *
      * @dataProvider processDataProvider
      */

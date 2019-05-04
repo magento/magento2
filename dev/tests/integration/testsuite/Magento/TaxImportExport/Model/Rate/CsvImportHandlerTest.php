@@ -5,7 +5,7 @@
  */
 namespace Magento\TaxImportExport\Model\Rate;
 
-class CsvImportHandlerTest extends \PHPUnit_Framework_TestCase
+class CsvImportHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TaxImportExport\Model\Rate\CsvImportHandler
@@ -57,7 +57,7 @@ class CsvImportHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDbIsolation enabled
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage One of the countries has invalid code.
+     * @expectedExceptionMessage Country code is invalid: ZZ
      */
     public function testImportFromCsvFileThrowsExceptionWhenCountryCodeIsInvalid()
     {

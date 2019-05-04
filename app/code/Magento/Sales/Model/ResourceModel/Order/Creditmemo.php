@@ -50,6 +50,10 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
             $object->setBillingAddressId($object->getOrder()->getBillingAddress()->getId());
         }
 
+        if (!$object->getInvoiceId() && $object->getInvoice()) {
+            $object->setInvoiceId($object->getInvoice()->getId());
+        }
+
         return parent::_beforeSave($object);
     }
 }

@@ -67,7 +67,9 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      */
     protected $joinProcessor;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
@@ -180,7 +182,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
-     * @deprecated
+     * @deprecated 100.2.0
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
@@ -200,7 +202,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     /**
      * Translates a field name to a DB column name for use in collection queries.
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @param string $field a field name that should be translated to a DB column name.
      * @return string
      */
@@ -230,7 +232,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
 
         $countryCode = $taxRate->getTaxCountryId();
         if (!\Zend_Validate::is($countryCode, 'NotEmpty')) {
-            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'country_id']));
+            $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'country_id']));
         } elseif (!\Zend_Validate::is(
             $this->countryFactory->create()->loadByCode($countryCode)->getId(),
             'NotEmpty'
@@ -262,12 +264,14 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
             );
         }
 
-        if (!\Zend_Validate::is($taxRate->getRate(), 'NotEmpty')) {
-            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'percentage_rate']));
+        if (!is_numeric($taxRate->getRate()) || $taxRate->getRate() < 0) {
+            $exception->addError(
+                __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'percentage_rate'])
+            );
         }
 
         if (!\Zend_Validate::is(trim($taxRate->getCode()), 'NotEmpty')) {
-            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'code']));
+            $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'code']));
         }
 
         if ($taxRate->getZipIsRange()) {
@@ -290,7 +294,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
             }
         } else {
             if (!\Zend_Validate::is(trim($taxRate->getTaxPostcode()), 'NotEmpty')) {
-                $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'postcode']));
+                $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'postcode']));
             }
         }
 
@@ -302,7 +306,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

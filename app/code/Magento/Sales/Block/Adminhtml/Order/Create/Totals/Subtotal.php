@@ -20,7 +20,7 @@ class Subtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      *
      * @var string
      */
-    protected $_template = 'order/create/totals/subtotal.phtml';
+    protected $_template = 'Magento_Sales::order/create/totals/subtotal.phtml';
 
     /**
      * Tax config
@@ -54,14 +54,14 @@ class Subtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
     }
 
     /**
-     * Check if we need display both sobtotals
+     * Check if we need display both subtotals
      *
      * @return bool
      */
     public function displayBoth()
     {
         /**
-         * Check without store parameter - we wil get admin configuration value
+         * Check without store parameter - we will get admin configuration value
          */
         return $this->_taxConfig->displayCartSubtotalBoth();
     }

@@ -11,6 +11,7 @@ use Magento\Payment\Gateway\Command\CommandException;
  * Interface CommandInterface
  * @package Magento\Payment\Gateway
  * @api
+ * @since 100.0.2
  */
 interface CommandInterface
 {

@@ -10,6 +10,7 @@ namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Uploader extends \Magento\Backend\Block\Media\Uploader
 {
@@ -18,7 +19,7 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
      *
      * @var string
      */
-    protected $_template = 'browser/content/uploader.phtml';
+    protected $_template = 'Magento_Theme::browser/content/uploader.phtml';
 
     /**
      * @var \Magento\Theme\Helper\Storage

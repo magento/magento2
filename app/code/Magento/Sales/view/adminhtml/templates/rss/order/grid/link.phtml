@@ -9,5 +9,5 @@
 /** @var $block \Magento\Sales\Block\Adminhtml\Rss\Order\Grid\Link */
 ?>
 <?php if ($block->isRssAllowed() && $block->getLink()): ?>
-<a href="<?php /* @escapeNotVerified */ echo $block->getLink() ?>" class="link-feed"><?php /* @escapeNotVerified */ echo $block->getLabel() ?></a>
+<a href="<?= /* @escapeNotVerified */ $block->getLink() ?>" class="link-feed"><?= /* @escapeNotVerified */ $block->getLabel() ?></a>
 <?php endif; ?>

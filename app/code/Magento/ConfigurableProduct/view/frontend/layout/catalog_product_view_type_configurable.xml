@@ -14,7 +14,7 @@
         <referenceContainer name="product.info.type">
             <block class="Magento\ConfigurableProduct\Block\Product\View\Type\Configurable" name="product.info.configurable" as="product_type_data" template="Magento_Catalog::product/view/type/default.phtml"/>
             <container name="product.info.configurable.extra" after="product.info.configurable" as="product_type_data_extra" label="Product Extra Info">
-                <block class="Magento\ConfigurableProduct\Block\Stockqty\Type\Configurable" template="Magento_CatalogInventory::stockqty/composite.phtml"/>
+                <block class="Magento\ConfigurableProduct\Block\Stockqty\Type\Configurable" name="product.info.configurable.extra.catalog_inventory_stockqty_composite" template="Magento_CatalogInventory::stockqty/composite.phtml"/>
             </container>
         </referenceContainer>
         <referenceBlock name="product.info.options.wrapper">

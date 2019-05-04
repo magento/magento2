@@ -9,8 +9,11 @@ namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Price;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 
-class LowestPriceOptionsProviderTest extends \PHPUnit_Framework_TestCase
+class LowestPriceOptionsProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProvider
@@ -42,6 +45,16 @@ class LowestPriceOptionsProviderTest extends \PHPUnit_Framework_TestCase
      */
     private $productCollection;
 
+    /**
+     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManagerMock;
+
+    /**
+     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeMock;
+
     protected function setUp()
     {
         $this->connection = $this
@@ -68,6 +81,11 @@ class LowestPriceOptionsProviderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($this->productCollection);
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMockForAbstractClass();
+        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->setMethods(['getId'])
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -76,6 +94,7 @@ class LowestPriceOptionsProviderTest extends \PHPUnit_Framework_TestCase
                 'resourceConnection' => $this->resourceConnection,
                 'linkedProductSelectBuilder' => $this->linkedProductSelectBuilder,
                 'collectionFactory' => $this->collectionFactory,
+                'storeManager' => $this->storeManagerMock,
             ]
         );
     }
@@ -90,10 +109,17 @@ class LowestPriceOptionsProviderTest extends \PHPUnit_Framework_TestCase
         $this->productCollection
             ->expects($this->once())
             ->method('addAttributeToSelect')
-            ->with(['price', 'special_price', 'special_from_date', 'special_to_date'])
+            ->with(['price', 'special_price', 'special_from_date', 'special_to_date', 'tax_class_id'])
             ->willReturnSelf();
         $this->productCollection->expects($this->once())->method('addIdFilter')->willReturnSelf();
         $this->productCollection->expects($this->once())->method('getItems')->willReturn($linkedProducts);
+        $this->storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->with(Store::DEFAULT_STORE_ID)
+            ->willReturn($this->storeMock);
+        $this->storeMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(Store::DEFAULT_STORE_ID);
 
         $this->assertEquals($linkedProducts, $this->model->getProducts($product));
     }

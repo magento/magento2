@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Config\Test\Unit;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Config\ReaderInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -25,9 +25,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->readerMock = $this->getMock(\Magento\Framework\Config\ReaderInterface::class);
-        $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->readerMock = $this->createMock(\Magento\Framework\Config\ReaderInterface::class);
+        $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     public function testGetConfigNotCached()

@@ -9,7 +9,7 @@ use Magento\Framework\App;
 use Magento\Setup\Module\Di\App\Task\Operation\Area;
 use Magento\Setup\Module\Di\Compiler\Config;
 
-class AreaTest extends \PHPUnit_Framework_TestCase
+class AreaTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var App\AreaList | \PHPUnit_Framework_MockObject_MockObject
@@ -48,7 +48,8 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $this->configReaderMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Compiler\Config\Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configWriterMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Compiler\Config\WriterInterface::class)
+        $this->configWriterMock =
+            $this->getMockBuilder(\Magento\Framework\App\ObjectManager\ConfigWriterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->configChain = $this->getMockBuilder(\Magento\Setup\Module\Di\Compiler\Config\ModificationChain::class)

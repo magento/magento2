@@ -14,7 +14,7 @@ $objectManager = Bootstrap::getObjectManager();
 $amount = 120.15;
 
 /** @var Payment $payment */
-$payment = $objectManager->get(Payment::class);
+$payment = $objectManager->create(Payment::class);
 $payment
     ->setMethod('authorizenet_directpost')
     ->setAnetTransType('AUTH_ONLY')
@@ -68,3 +68,19 @@ $order->setIncrementId('100000002')
 /** @var OrderRepositoryInterface $orderRepository */
 $orderRepository = $objectManager->get(OrderRepositoryInterface::class);
 $orderRepository->save($order);
+
+$clonedOrder = clone $order;
+$clonedOrder->setIncrementId('100000003')
+    ->setId(null)
+    ->setBillingAddress($billingAddress->setId(null))
+    ->setShippingAddress($shippingAddress->setId(null))
+    ->setPayment($payment->setId(null));
+$orderRepository->save($clonedOrder);
+
+$clonedOrder = clone $order;
+$clonedOrder->setIncrementId('100000004')
+    ->setId(null)
+    ->setBillingAddress($billingAddress->setId(null))
+    ->setShippingAddress($shippingAddress->setId(null))
+    ->setPayment($payment->setId(null));
+$orderRepository->save($clonedOrder);

@@ -7,7 +7,7 @@ namespace Magento\Theme\Test\Unit\Model\Theme\Customization;
 
 use \Magento\Theme\Model\Theme\Customization\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetFileTypes()
     {

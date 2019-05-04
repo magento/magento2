@@ -10,17 +10,17 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
 /**
  * SendFriend Log
  *
- * @method \Magento\SendFriend\Model\ResourceModel\SendFriend _getResource()
- * @method \Magento\SendFriend\Model\ResourceModel\SendFriend getResource()
  * @method int getIp()
  * @method \Magento\SendFriend\Model\SendFriend setIp(int $value)
  * @method int getTime()
  * @method \Magento\SendFriend\Model\SendFriend setTime(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class SendFriend extends \Magento\Framework\Model\AbstractModel
 {
@@ -163,6 +163,8 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Sends email to recipients
+     *
      * @return $this
      * @throws CoreException
      */
@@ -237,7 +239,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         }
 
         $email = $this->getSender()->getEmail();
-        if (empty($email) or !\Zend_Validate::is($email, 'EmailAddress')) {
+        if (empty($email) || !\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
             $errors[] = __('Invalid Sender Email');
         }
 
@@ -252,7 +254,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
 
         // validate recipients email addresses
         foreach ($this->getRecipients()->getEmails() as $email) {
-            if (!\Zend_Validate::is($email, 'EmailAddress')) {
+            if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
                 $errors[] = __('Please enter a correct recipient email address.');
                 break;
             }
@@ -282,13 +284,13 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         // validate array
         if (!is_array(
             $recipients
-        ) or !isset(
+        ) || !isset(
             $recipients['email']
-        ) or !isset(
+        ) || !isset(
             $recipients['name']
-        ) or !is_array(
+        ) || !is_array(
             $recipients['email']
-        ) or !is_array(
+        ) || !is_array(
             $recipients['name']
         )
         ) {
@@ -488,7 +490,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
             $oldTimes = explode(',', $oldTimes);
             foreach ($oldTimes as $oldTime) {
                 $periodTime = $time - $this->_sendfriendData->getPeriod();
-                if (is_numeric($oldTime) and $oldTime >= $periodTime) {
+                if (is_numeric($oldTime) && $oldTime >= $periodTime) {
                     $newTimes[] = $oldTime;
                 }
             }

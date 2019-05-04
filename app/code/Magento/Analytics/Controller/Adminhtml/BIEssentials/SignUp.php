@@ -5,16 +5,15 @@
  */
 namespace Magento\Analytics\Controller\Adminhtml\BIEssentials;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Class SignUp
- *
  * Provides link to BI Essentials signup
  */
-class SignUp extends Action
+class SignUp extends Action implements HttpGetActionInterface
 {
     /**
      * Path to config value with URL to BI Essentials sign-up page.
@@ -29,6 +28,11 @@ class SignUp extends Action
     private $config;
 
     /**
+     * @inheritdoc
+     */
+    const ADMIN_RESOURCE = 'Magento_Analytics::bi_essentials';
+
+    /**
      * @param Context $context
      * @param ScopeConfigInterface $config
      */
@@ -38,16 +42,6 @@ class SignUp extends Action
     ) {
         $this->config = $config;
         parent::__construct($context);
-    }
-
-    /**
-     * Check admin permissions for this controller
-     *
-     * @return boolean
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Analytics::bi_essentials');
     }
 
     /**

@@ -7,7 +7,7 @@ namespace Magento\Theme\Block\Html;
 
 use Magento\Customer\Model\Context;
 
-class FooterTest extends \PHPUnit_Framework_TestCase
+class FooterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Model\Theme

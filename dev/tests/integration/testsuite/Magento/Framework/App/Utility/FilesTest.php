@@ -9,7 +9,7 @@ namespace Magento\Framework\App\Utility;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 
-class FilesTest extends \PHPUnit_Framework_TestCase
+class FilesTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Framework\App\Utility\Files */
     protected $model;

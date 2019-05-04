@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\ObjectManager\Test\Unit\Profiler;
 
-class FactoryDecoratorTest extends \PHPUnit_Framework_TestCase
+class FactoryDecoratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Name of the base class to wrap in logger

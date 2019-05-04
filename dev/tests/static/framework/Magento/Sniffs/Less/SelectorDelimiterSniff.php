@@ -5,8 +5,8 @@
  */
 namespace Magento\Sniffs\Less;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 /**
  * Class SelectorDelimiterSniff
@@ -14,10 +14,9 @@ use PHP_CodeSniffer_Sniff;
  * Ensure that a line break exists after each selector delimiter.
  * No spaces should be before or after delimiters.
  *
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#selector-delimiters
- *
+ * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#selector-delimiters
  */
-class SelectorDelimiterSniff implements PHP_CodeSniffer_Sniff
+class SelectorDelimiterSniff implements Sniff
 {
     /**
      * A list of tokenizers this sniff supports.
@@ -27,7 +26,7 @@ class SelectorDelimiterSniff implements PHP_CodeSniffer_Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -35,9 +34,9 @@ class SelectorDelimiterSniff implements PHP_CodeSniffer_Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 
@@ -50,12 +49,14 @@ class SelectorDelimiterSniff implements PHP_CodeSniffer_Sniff
     }
 
     /**
-     * @param PHP_CodeSniffer_File $phpcsFile
+     * Parenthesis validation.
+     *
+     * @param File $phpcsFile
      * @param int $stackPtr
      * @param array $tokens
      * @return void
      */
-    private function validateParenthesis(PHP_CodeSniffer_File $phpcsFile, $stackPtr, array $tokens)
+    private function validateParenthesis(File $phpcsFile, $stackPtr, array $tokens)
     {
         $nextPtr = $stackPtr + 1;
 

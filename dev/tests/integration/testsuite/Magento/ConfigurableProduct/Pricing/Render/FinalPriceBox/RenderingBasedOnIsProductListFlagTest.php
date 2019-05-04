@@ -17,7 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Test price rendering according to is_product_list flag for Configurable product
  */
-class RenderingBasedOnIsProductListFlagTest extends \PHPUnit_Framework_TestCase
+class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductInterface
@@ -75,13 +75,26 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoAppArea frontend
+     * @magentoDbIsolation disabled
      */
     public function testRenderingByDefault()
     {
         $html = $this->finalPriceBox->toHtml();
         self::assertContains('5.99', $html);
-        self::assertSelectCount('.special-price', true, $html);
-        self::assertSelectCount('.old-price', true, $html);
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[contains(@class,"normal-price")]',
+                $html
+            )
+        );
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[contains(@class,"old-price")]',
+                $html
+            )
+        );
     }
 
     /**
@@ -97,14 +110,27 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoAppArea frontend
      * @dataProvider isProductListDataProvider
+     * @magentoDbIsolation disabled
      */
     public function testRenderingAccordingToIsProductListFlag($flag, $count)
     {
         $this->finalPriceBox->setData('is_product_list', $flag);
         $html = $this->finalPriceBox->toHtml();
         self::assertContains('5.99', $html);
-        self::assertSelectCount('.special-price', $count, $html);
-        self::assertSelectCount('.old-price', $count, $html);
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[contains(@class,"normal-price")]',
+                $html
+            )
+        );
+        $this->assertEquals(
+            $count,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[contains(@class,"old-price")]',
+                $html
+            )
+        );
     }
 
     /**
@@ -113,7 +139,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit_Framework_TestCase
     public function isProductListDataProvider()
     {
         return [
-            'is_not_product_list' => [false, true],
+            'is_not_product_list' => [false, 1],
             'is_product_list' => [true, 0],
         ];
     }

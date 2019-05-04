@@ -6,10 +6,9 @@
 
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
-use \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Email;
-
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Shipping\Controller\Adminhtml\Order\Shipment\Email;
 
 /**
  * Class EmailTest
@@ -17,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * @package Magento\Shipping\Controller\Adminhtml\Order\Shipment
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EmailTest extends \PHPUnit_Framework_TestCase
+class EmailTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Email
@@ -82,14 +81,11 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->shipmentLoader = $this->getMock(
+        $this->shipmentLoader = $this->createPartialMock(
             \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class,
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load'],
-            [],
-            '',
-            false
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
         );
-        $this->context = $this->getMock(
+        $this->context = $this->createPartialMock(
             \Magento\Backend\App\Action\Context::class,
             [
                 'getRequest',
@@ -101,54 +97,38 @@ class EmailTest extends \PHPUnit_Framework_TestCase
                 'getActionFlag',
                 'getHelper',
                 'getResultFactory'
-            ],
-            [],
-            '',
-            false
+            ]
         );
-        $this->response = $this->getMock(
+        $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
-            ['setRedirect', 'sendResponse'],
-            [],
-            '',
-            false
+            ['setRedirect', 'sendResponse']
         );
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
-            ->setMethods([
-                'isPost',
-                'getModuleName',
-                'setModuleName',
-                'getActionName',
-                'setActionName',
-                'getParam',
-                'getCookie',
-            ])
+            ->setMethods(
+                [
+                    'isPost',
+                    'getModuleName',
+                    'setModuleName',
+                    'getActionName',
+                    'setActionName',
+                    'getParam',
+                    'getCookie',
+                ]
+            )
             ->getMockForAbstractClass();
-        $this->objectManager = $this->getMock(
+        $this->objectManager = $this->createPartialMock(
             \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->messageManager = $this->getMock(
+        $this->messageManager = $this->createPartialMock(
             \Magento\Framework\Message\Manager::class,
-            ['addSuccess', 'addError'],
-            [],
-            '',
-            false
+            ['addSuccess', 'addError']
         );
-        $this->session = $this->getMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice'], [], '', false);
-        $this->actionFlag = $this->getMock(\Magento\Framework\App\ActionFlag::class, ['get'], [], '', false);
-        $this->helper = $this->getMock(\Magento\Backend\Helper\Data::class, ['getUrl'], [], '', false);
-        $this->resultRedirect = $this->getMock(\Magento\Backend\Model\View\Result\Redirect::class, [], [], '', false);
-        $this->resultFactory = $this->getMock(
-            \Magento\Framework\Controller\ResultFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->session = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
+        $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
+        $this->helper = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
+        $this->resultRedirect = $this->createMock(\Magento\Backend\Model\View\Result\Redirect::class);
+        $this->resultFactory = $this->createPartialMock(\Magento\Framework\Controller\ResultFactory::class, ['create']);
         $this->resultFactory->expects($this->once())
             ->method('create')
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
@@ -180,15 +160,12 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $orderId = 10003;
         $tracking = [];
         $shipment = ['items' => []];
-        $orderShipment = $this->getMock(
+        $orderShipment = $this->createPartialMock(
             \Magento\Sales\Model\Order\Shipment::class,
-            ['load', 'save', '__wakeup'],
-            [],
-            '',
-            false
+            ['load', 'save', '__wakeup']
         );
         $shipmentNotifierClassName = \Magento\Shipping\Model\ShipmentNotifier::class;
-        $shipmentNotifier = $this->getMock($shipmentNotifierClassName, ['notify', '__wakeup'], [], '', false);
+        $shipmentNotifier = $this->createPartialMock($shipmentNotifierClassName, ['notify', '__wakeup']);
 
         $this->request->expects($this->any())
             ->method('getParam')

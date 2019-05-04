@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CmsPagesPageActionsSection">
+        <element name="filterButton" type="input" selector="//button[text()='Filters']"/>
+        <element name="URLKey" type="input" selector="//div[@class='admin__form-field-control']/input[@name='identifier']"/>
+        <element name="ApplyFiltersBtn" type="button" selector="//span[text()='Apply Filters']"/>
+        <element name="searchInput" type="input" selector="//*[@id='fulltext']"/>
+        <element name="searchButton" type="button" selector="//*[@id='fulltext']/parent::*/button"/>
+        <element name="addNewPageButton" type="button" selector="#add" timeout="30"/>
+        <element name="select" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//button[text()='Select']" parameterized="true"/>
+        <element name="edit" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//a[text()='Edit']" parameterized="true"/>
+        <element name="preview" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//a[text()='View']" parameterized="true"/>
+        <element name="clearAllButton" type="button" selector="//div[@class='admin__data-grid-header']//button[contains(text(), 'Clear all')]"/>
+        <element name="activeFilters" type="button" selector="//div[@class='admin__data-grid-header']//span[contains(text(), 'Active filters:')]" />
+        <element name="spinner" type="input" selector='//div[@data-component="cms_page_listing.cms_page_listing.cms_page_columns"]'/>
+        <element name="firstItemSelectButton" type="button" selector=".data-grid .action-select-wrap button.action-select"/>
+        <element name="firstItemEditButton" type="button" selector=".data-grid .action-select-wrap .action-menu-item[data-action~='item-edit']"/>
+        <element name="activeFilter" type="button" selector="(//div[contains(@class, 'admin__data-grid-filters-current') and contains(@class, '_show')])[1]"/>
+        <element name="savePageSuccessMessage" type="text" selector=".message-success"/>
+        <element name="delete" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//a[text()='Delete']" parameterized="true"/>
+        <element name="deleteConfirm" type="button" selector=".action-primary.action-accept" timeout="60"/>
+    </section>
+</sections>

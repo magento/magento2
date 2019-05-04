@@ -44,7 +44,7 @@ class AssertOrderAddresses extends AbstractConstraint
         $orderBillingAddress = $salesOrderView->getAddressesBlock()->getCustomerBillingAddress();
         $orderShippingAddress = $salesOrderView->getAddressesBlock()->getCustomerShippingAddress();
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $selectedBillingAddress == $orderBillingAddress && $selectedShippingAddress == $orderShippingAddress,
             'Billing and shipping addresses from the address book and from the order page are not the same.'
         );

@@ -10,7 +10,7 @@ use Magento\Paypal\Model\Billing\AgreementFactory;
 use Magento\Paypal\Model\BillingAgreementConfigProvider;
 use Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement;
 
-class BillingAgreementConfigProviderTest extends \PHPUnit_Framework_TestCase
+class BillingAgreementConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CurrentCustomer|\PHPUnit_Framework_MockObject_MockObject

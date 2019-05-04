@@ -11,12 +11,15 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 
 /**
+ * Abstract cache command
+ *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractCacheCommand extends Command
 {
     /**
-     * Input option bootsrap
+     * Input option bootstrap
      */
     const INPUT_KEY_BOOTSTRAP = 'bootstrap';
 
@@ -39,7 +42,7 @@ abstract class AbstractCacheCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {

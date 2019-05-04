@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Price;
 /**
  * Class PricePersistenceTest.
  */
-class PricePersistenceTest extends \PHPUnit_Framework_TestCase
+class PricePersistenceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Attribute|\PHPUnit_Framework_MockObject_MockObject
@@ -93,14 +93,12 @@ class PricePersistenceTest extends \PHPUnit_Framework_TestCase
         $attributeId = 5;
         $skus = ['sku_1', 'sku_2'];
         $idsBySku = [
-            'sku_1' =>
-                [
-                    1 => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
-                ],
-            'sku_2' =>
-                [
-                    2 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
-                ]
+            'sku_1' => [
+                1 => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
+            ],
+            'sku_2' => [
+                2 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
+            ]
         ];
         $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()->getMock();
@@ -228,14 +226,12 @@ class PricePersistenceTest extends \PHPUnit_Framework_TestCase
         $attributeId = 5;
         $skus = ['sku_1', 'sku_2'];
         $idsBySku = [
-            'sku_1' =>
-                [
-                    1 => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
-                ],
-            'sku_2' =>
-                [
-                    2 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
-                ]
+            'sku_1' => [
+                1 => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
+            ],
+            'sku_2' => [
+                2 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
+            ]
         ];
         $this->productIdLocator
             ->expects($this->once())
@@ -278,14 +274,12 @@ class PricePersistenceTest extends \PHPUnit_Framework_TestCase
         $attributeId = 5;
         $skus = ['sku_1', 'sku_2'];
         $idsBySku = [
-            'sku_1' =>
-                [
-                    1 => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
-                ],
-            'sku_2' =>
-                [
-                    2 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
-                ]
+            'sku_1' => [
+                1 => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
+            ],
+            'sku_2' => [
+                2 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
+            ]
         ];
         $this->productIdLocator
             ->expects($this->once())

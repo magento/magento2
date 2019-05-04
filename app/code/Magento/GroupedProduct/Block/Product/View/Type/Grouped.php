@@ -9,6 +9,7 @@ namespace Magento\GroupedProduct\Block\Product\View\Type;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Grouped extends \Magento\Catalog\Block\Product\View\AbstractView
 {

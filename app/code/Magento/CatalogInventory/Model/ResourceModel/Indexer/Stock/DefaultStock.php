@@ -11,11 +11,17 @@ use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
+ *
+ * @deprecated 2.3.0 Replaced with Multi Source Inventory
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
  */
 class DefaultStock extends AbstractIndexer implements StockInterface
 {
@@ -47,6 +53,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
 
     /**
      * @var StockConfigurationInterface
+     * @since 100.1.0
      */
     protected $stockConfiguration;
 
@@ -129,6 +136,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * Returns action run type
      *
      * @return string
+     * @since 100.2.0
      */
     public function getActionType()
     {
@@ -140,6 +148,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @param string $type
      * @return $this
+     * @since 100.2.0
      */
     public function setActionType($type)
     {
@@ -221,6 +230,9 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     {
         $connection = $this->getConnection();
         $qtyExpr = $connection->getCheckSql('cisi.qty > 0', 'cisi.qty', 0);
+        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $linkField = $metadata->getLinkField();
+
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             ['entity_id']
@@ -232,6 +244,12 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         )->joinInner(
             ['cisi' => $this->getTable('cataloginventory_stock_item')],
             'cisi.stock_id = cis.stock_id AND cisi.product_id = e.entity_id',
+            []
+        )->joinInner(
+            ['mcpei' => $this->getTable('catalog_product_entity_int')],
+            'e.' . $linkField . ' = mcpei.' . $linkField
+            . ' AND mcpei.attribute_id = ' . $this->_getAttribute('status')->getId()
+            . ' AND mcpei.value = ' . ProductStatus::STATUS_ENABLED,
             []
         )->columns(
             ['qty' => $qtyExpr]
@@ -295,9 +313,26 @@ class DefaultStock extends AbstractIndexer implements StockInterface
                 $data = [];
             }
         }
+
+        $this->deleteOldRecords($entityIds);
         $this->_updateIndexTable($data);
 
         return $this;
+    }
+
+    /**
+     * Delete records by their ids from index table
+     * Used to clean table before re-indexation
+     *
+     * @param array $ids
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function deleteOldRecords(array $ids)
+    {
+        if (count($ids) !== 0) {
+            $this->getConnection()->delete($this->getMainTable(), ['product_id in (?)' => $ids]);
+        }
     }
 
     /**
@@ -334,6 +369,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @param AdapterInterface $connection
      * @param bool $isAggregate
      * @return mixed
+     * @since 100.1.0
      */
     protected function getStatusExpression(AdapterInterface $connection, $isAggregate = false)
     {
@@ -357,7 +393,8 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     /**
      * @return StockConfigurationInterface
      *
-     * @deprecated
+     * @deprecated 100.1.0
+     * @since 100.1.0
      */
     protected function getStockConfiguration()
     {

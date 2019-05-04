@@ -11,7 +11,7 @@ use Magento\Developer\Model\Di\PluginList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Developer\Model\Di\Information;
 
-class InformationTest extends \PHPUnit_Framework_TestCase
+class InformationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Developer\Model\Di\Information

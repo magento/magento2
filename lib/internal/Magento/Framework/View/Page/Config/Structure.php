@@ -216,6 +216,7 @@ class Structure
      * Reformat 'Page config structure' to array.
      *
      * @return array
+     * @since 100.2.0
      */
     public function __toArray()
     {
@@ -232,6 +233,7 @@ class Structure
      *
      * @param array $data
      * @return void
+     * @since 100.2.0
      */
     public function populateWithArray(array $data)
     {
@@ -249,6 +251,6 @@ class Structure
      */
     private function getArrayValueByKey($key, array $array)
     {
-        return isset($array[$key]) ? $array[$key] : [];
+        return $array[$key] ?? [];
     }
 }

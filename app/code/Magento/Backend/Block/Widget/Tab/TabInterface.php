@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\Widget\Tab;
  * Backend Widget Tab Interface
  *
  * @api
+ * @since 100.0.2
  */
 interface TabInterface
 {

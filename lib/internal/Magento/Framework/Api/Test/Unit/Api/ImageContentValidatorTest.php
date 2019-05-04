@@ -9,7 +9,7 @@ namespace Magento\Framework\Api\Test\Unit\Api;
 /**
  * Unit test class for \Magento\Framework\Api\ImageContentValidator
  */
-class ImageContentValidatorTest extends \PHPUnit_Framework_TestCase
+class ImageContentValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Api\ImageContentValidator

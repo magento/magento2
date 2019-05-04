@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Model\Indexer\Attribute;
 use Magento\Customer\Model\Indexer\Attribute\Filter;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 
-class FilterTest extends \PHPUnit_Framework_TestCase
+class FilterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
     protected $resource;
@@ -33,21 +33,15 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->connection = $this->getMockForAbstractClass(
             \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false
         );
-        $this->flatScopeResolver = $this->getMock(
-            \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->indexerRegistry = $this->getMock(\Magento\Framework\Indexer\IndexerRegistry::class, [], [], '', false);
+        $this->flatScopeResolver = $this->createMock(\Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver::class);
+        $this->indexerRegistry = $this->createMock(\Magento\Framework\Indexer\IndexerRegistry::class);
         $this->indexer = $this->getMockForAbstractClass(
             \Magento\Framework\Indexer\IndexerInterface::class,
             [],

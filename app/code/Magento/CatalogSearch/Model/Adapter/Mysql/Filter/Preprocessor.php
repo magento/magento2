@@ -8,8 +8,9 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Filter;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\CatalogInventory\Model\Stock;
+use Magento\CatalogSearch\Model\Search\FilterMapper\VisibilityFilter;
 use Magento\CatalogSearch\Model\Search\TableMapper;
+use Magento\Customer\Model\Session;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
@@ -20,12 +21,15 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Request\FilterInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
-use Magento\Customer\Model\Session;
 
 /**
+ * ElasticSearch search filter pre-processor.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class Preprocessor implements PreprocessorInterface
 {
@@ -127,7 +131,7 @@ class Preprocessor implements PreprocessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(FilterInterface $filter, $isNegation, $query)
     {
@@ -135,10 +139,13 @@ class Preprocessor implements PreprocessorInterface
     }
 
     /**
+     * Process query with field.
+     *
      * @param FilterInterface $filter
      * @param bool $isNegation
      * @param string $query
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function processQueryWithField(FilterInterface $filter, $isNegation, $query)
     {
@@ -166,8 +173,10 @@ class Preprocessor implements PreprocessorInterface
                 $this->connection->quoteIdentifier($alias . '.' . $attribute->getAttributeCode()),
                 $query
             );
+        } elseif ($filter->getField() === VisibilityFilter::VISIBILITY_FILTER_FIELD) {
+            return '';
         } elseif ($filter->getType() === FilterInterface::TYPE_TERM &&
-            in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
+            in_array($attribute->getFrontendInput(), ['select', 'multiselect', 'boolean'], true)
         ) {
             $resultQuery = $this->processTermSelect($filter, $isNegation);
         } elseif ($filter->getType() === FilterInterface::TYPE_RANGE &&
@@ -201,19 +210,23 @@ class Preprocessor implements PreprocessorInterface
                 ->where('main_table.store_id = ?', Store::DEFAULT_STORE_ID)
                 ->having($query);
 
-            $resultQuery = 'search_index.entity_id IN (
-                select entity_id from  ' . $this->conditionManager->wrapBrackets($select) . ' as filter
-            )';
+            $resultQuery = 'search_index.entity_id IN ('
+                . 'select entity_id from  '
+                . $this->conditionManager->wrapBrackets($select)
+                . ' as filter)';
         }
 
         return $resultQuery;
     }
 
     /**
+     * Process range numeric.
+     *
      * @param FilterInterface $filter
      * @param string $query
      * @param Attribute $attribute
      * @return string
+     * @throws \Exception
      */
     private function processRangeNumeric(FilterInterface $filter, $query, $attribute)
     {
@@ -235,14 +248,17 @@ class Preprocessor implements PreprocessorInterface
             ->where('main_table.store_id = ?', $currentStoreId)
             ->having($query);
 
-        $resultQuery = 'search_index.entity_id IN (
-                select entity_id from  ' . $this->conditionManager->wrapBrackets($select) . ' as filter
-            )';
+        $resultQuery = 'search_index.entity_id IN ('
+            . 'select entity_id from  '
+            . $this->conditionManager->wrapBrackets($select)
+            . ' as filter)';
 
         return $resultQuery;
     }
 
     /**
+     * Process term select.
+     *
      * @param FilterInterface $filter
      * @param bool $isNegation
      * @return string
@@ -265,29 +281,7 @@ class Preprocessor implements PreprocessorInterface
             $value
         );
 
-        if ($this->isAddStockFilter()) {
-            $resultQuery = sprintf(
-                '%1$s AND %2$s%3$s.stock_status = %4$s',
-                $resultQuery,
-                $alias,
-                AliasResolver::STOCK_FILTER_SUFFIX,
-                Stock::STOCK_IN_STOCK
-            );
-        }
-
         return $resultQuery;
-    }
-
-    /**
-     * @return bool
-     */
-    private function isAddStockFilter()
-    {
-        $isShowOutOfStock = $this->scopeConfig->isSetFlag(
-            'cataloginventory/options/show_out_of_stock',
-            ScopeInterface::SCOPE_STORE
-        );
-        return false === $isShowOutOfStock;
     }
 
     /**

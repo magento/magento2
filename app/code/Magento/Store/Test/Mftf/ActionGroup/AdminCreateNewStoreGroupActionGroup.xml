@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Admin creates new Store group -->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateNewStoreGroupActionGroup">
+        <arguments>
+            <argument name="website" type="string"/>
+            <argument name="storeGroupName" type="string"/>
+            <argument name="storeGroupCode" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminSystemStoreGroupPage.url}}" stepKey="navigateToNewStoreView"/>
+        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <!--Create Store group -->
+        <selectOption selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" userInput="{{website}}" stepKey="selectWebsite" />
+        <fillField selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" userInput="{{storeGroupName}}" stepKey="enterStoreGroupName" />
+        <fillField selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" userInput="{{storeGroupCode}}" stepKey="enterStoreGroupCode" />
+        <selectOption selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="Default Category" stepKey="chooseRootCategory" />
+        <click selector="{{AdminStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreGroup" />
+        <waitForElementVisible selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="waitForStoreGridReload"/>
+        <see userInput="You saved the store." stepKey="seeSavedMessage" />
+    </actionGroup>
+    <actionGroup name="CreateCustomStore">
+        <arguments>
+            <argument name="website" type="string"/>
+            <argument name="store" type="string"/>
+            <argument name="rootCategory" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForSystemStorePage"/>
+        <click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="selectCreateStore"/>
+        <selectOption userInput="{{website}}" selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" stepKey="selectMainWebsite"/>
+        <fillField userInput="{{store}}" selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" stepKey="fillStoreName"/>
+        <fillField userInput="{{store}}" selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" stepKey="fillStoreCode"/>
+        <selectOption userInput="{{rootCategory}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectStoreStatus"/>
+        <click selector="{{AdminStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreGroup" />
+        <waitForElementVisible selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="waitForStoreGridReload"/>
+        <see userInput="You saved the store." stepKey="seeSavedMessage"/>
+    </actionGroup>
+    <actionGroup name="AssertStoreGroupInGrid">
+        <arguments>
+            <argument name="storeGroupName" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{storeGroupName}}" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="fillSearchStoreGroupField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <see selector="{{AdminStoresGridSection.nthRow('1')}}" userInput="{{storeGroupName}}" stepKey="seeAssertStoreGroupInGridMessage"/>
+    </actionGroup>
+    <actionGroup name="AssertStoreGroupForm">
+        <arguments>
+            <argument name="website" type="string"/>
+            <argument name="storeGroupName" type="string"/>
+            <argument name="storeGroupCode" type="string"/>
+            <argument name="rootCategory" type="string"/>
+        </arguments>
+        <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickEditExistingStoreRow"/>
+        <waitForPageLoad stepKey="waitTillAdminSystemStoreGroupPage"/>
+        <seeInField selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" userInput="{{website}}" stepKey="seeAssertWebsite"/>
+        <seeInField selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" userInput="{{storeGroupName}}" stepKey="seeAssertStoreGroupName"/>
+        <seeInField selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" userInput="{{storeGroupCode}}" stepKey="seeAssertStoreGroupCode"/>
+        <seeInField selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="{{rootCategory}}" stepKey="seeAssertRootCategory"/>
+    </actionGroup>
+</actionGroups>

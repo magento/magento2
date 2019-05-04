@@ -9,6 +9,7 @@ namespace Magento\Payment\Gateway\Config;
  * Interface ValueHandlerInterface
  * @package Magento\Payment\Gateway\Config
  * @api
+ * @since 100.0.2
  */
 interface ValueHandlerInterface
 {

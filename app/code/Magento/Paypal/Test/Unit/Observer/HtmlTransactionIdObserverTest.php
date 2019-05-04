@@ -8,7 +8,7 @@ namespace Magento\Paypal\Test\Unit\Observer;
 /**
  * Class HtmlTransactionIdObserverTest
  */
-class HtmlTransactionIdObserverTest extends \PHPUnit_Framework_TestCase
+class HtmlTransactionIdObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Paypal\Observer\HtmlTransactionIdObserver
@@ -37,13 +37,7 @@ class HtmlTransactionIdObserverTest extends \PHPUnit_Framework_TestCase
         $this->_observer = new \Magento\Framework\Event\Observer();
         $this->_observer->setEvent($this->_event);
 
-        $this->paypalDataMock = $this->getMock(
-            \Magento\Paypal\Helper\Data::class,
-            ['getHtmlTransactionId'],
-            [],
-            '',
-            false
-        );
+        $this->paypalDataMock = $this->createPartialMock(\Magento\Paypal\Helper\Data::class, ['getHtmlTransactionId']);
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
             \Magento\Paypal\Observer\HtmlTransactionIdObserver::class,

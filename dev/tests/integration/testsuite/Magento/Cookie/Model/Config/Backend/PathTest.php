@@ -7,7 +7,7 @@
  */
 namespace Magento\Cookie\Model\Config\Backend;
 
-class PathTest extends \PHPUnit_Framework_TestCase
+class PathTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Method is not publicly accessible, so it must be called through parent

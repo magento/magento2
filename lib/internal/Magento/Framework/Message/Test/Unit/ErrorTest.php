@@ -10,7 +10,7 @@ use Magento\Framework\Message\MessageInterface;
 /**
  * \Magento\Framework\Message\Error test case
  */
-class ErrorTest extends \PHPUnit_Framework_TestCase
+class ErrorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Message\Error

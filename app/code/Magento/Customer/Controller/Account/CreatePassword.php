@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,12 +7,20 @@ namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
-class CreatePassword extends \Magento\Customer\Controller\AbstractAccount
+/**
+ * Class CreatePassword
+ *
+ * @package Magento\Customer\Controller\Account
+ */
+class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implements HttpGetActionInterface
 {
-    /** @var AccountManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     */
     protected $accountManagement;
 
     /**
@@ -52,27 +59,27 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount
     public function execute()
     {
         $resetPasswordToken = (string)$this->getRequest()->getParam('token');
-        $customerId = (int)$this->getRequest()->getParam('id');
-        $isDirectLink = $resetPasswordToken != '' && $customerId != 0;
+        $isDirectLink = $resetPasswordToken != '';
         if (!$isDirectLink) {
             $resetPasswordToken = (string)$this->session->getRpToken();
-            $customerId = (int)$this->session->getRpCustomerId();
         }
 
         try {
-            $this->accountManagement->validateResetPasswordLinkToken($customerId, $resetPasswordToken);
+            $this->accountManagement->validateResetPasswordLinkToken(null, $resetPasswordToken);
 
             if ($isDirectLink) {
                 $this->session->setRpToken($resetPasswordToken);
-                $this->session->setRpCustomerId($customerId);
                 $resultRedirect = $this->resultRedirectFactory->create();
                 $resultRedirect->setPath('*/*/createpassword');
+
                 return $resultRedirect;
             } else {
                 /** @var \Magento\Framework\View\Result\Page $resultPage */
                 $resultPage = $this->resultPageFactory->create();
-                $resultPage->getLayout()->getBlock('resetPassword')->setCustomerId($customerId)
+                $resultPage->getLayout()
+                    ->getBlock('resetPassword')
                     ->setResetPasswordLinkToken($resetPasswordToken);
+
                 return $resultPage;
             }
         } catch (\Exception $exception) {

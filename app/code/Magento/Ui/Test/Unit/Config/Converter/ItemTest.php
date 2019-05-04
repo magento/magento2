@@ -9,7 +9,7 @@ use Magento\Ui\Config\ConverterInterface;
 use Magento\Ui\Config\Converter\Item;
 use Magento\Ui\Config\ConverterUtils;
 
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Item

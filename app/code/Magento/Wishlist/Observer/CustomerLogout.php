@@ -16,7 +16,9 @@ use Magento\Customer\Model\Session;
  */
 class CustomerLogout implements ObserverInterface
 {
-    /** @var Session */
+    /**
+     * @var \Magento\Customer\Model\Session
+     */
     protected $customerSession;
 
     /**

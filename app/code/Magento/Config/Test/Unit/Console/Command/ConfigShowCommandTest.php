@@ -15,7 +15,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Config\Console\Command\ConfigShow\ValueProcessor;
 
-class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
+class ConfigShowCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ValidatorInterface|MockObject

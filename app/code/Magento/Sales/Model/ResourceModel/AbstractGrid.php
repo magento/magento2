@@ -11,6 +11,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 /**
  * Class AbstractGrid
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractGrid extends AbstractDb implements GridInterface
 {
@@ -47,7 +48,6 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
     /**
      * Returns connection
      *
-     * @todo: make method protected
      * @return AdapterInterface
      */
     public function getConnection()
@@ -90,7 +90,7 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
      *
      * @param string $default
      * @return string
-     * @deprecated this method is not used in abstract model but only in single child so
+     * @deprecated 100.2.0 this method is not used in abstract model but only in single child so
      * this deprecation is a part of cleaning abstract classes.
      * @see \Magento\Sales\Model\ResourceModel\Provider\UpdatedIdListProvider
      */
@@ -103,6 +103,6 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
 
         $row = $this->getConnection()->fetchRow($select);
 
-        return isset($row['updated_at']) ? $row['updated_at'] : $default;
+        return $row['updated_at'] ?? $default;
     }
 }

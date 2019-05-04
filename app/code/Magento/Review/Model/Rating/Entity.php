@@ -8,8 +8,6 @@ namespace Magento\Review\Model\Rating;
 /**
  * Ratings entity model
  *
- * @method \Magento\Review\Model\ResourceModel\Rating\Entity _getResource()
- * @method \Magento\Review\Model\ResourceModel\Rating\Entity getResource()
  * @method string getEntityCode()
  * @method \Magento\Review\Model\Rating\Entity setEntityCode(string $value)
  *

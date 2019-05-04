@@ -10,6 +10,7 @@ namespace Magento\Eav\Api\Data;
  * Created from:
  * @codeCoverageIgnore
  * @api
+ * @since 100.0.2
  */
 interface AttributeOptionInterface
 {

@@ -15,15 +15,15 @@
 ?>
 
 <div class="admin__field field-apply-coupon-code">
-    <label class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Apply Coupon Code') ?></span></label>
+    <label class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Apply Coupon Code') ?></span></label>
     <div class="admin__field-control">
         <input type="text" class="admin__control-text" id="coupons:code" value="" name="coupon_code" />
-        <?php echo $block->getButtonHtml(__('Apply'), 'order.applyCoupon($F(\'coupons:code\'))') ?>
+        <?= $block->getButtonHtml(__('Apply'), 'order.applyCoupon($F(\'coupons:code\'))') ?>
         <?php if ($block->getCouponCode()): ?>
         <p class="added-coupon-code">
-            <span><?php echo $block->escapeHtml($block->getCouponCode()) ?></span>
-            <a href="#" onclick="order.applyCoupon(''); return false;" title="<?php /* @escapeNotVerified */ echo __('Remove Coupon Code') ?>"
-               class="action-remove"><span><?php /* @escapeNotVerified */ echo __('Remove') ?></span></a>
+            <span><?= $block->escapeHtml($block->getCouponCode()) ?></span>
+            <a href="#" onclick="order.applyCoupon(''); return false;" title="<?= /* @escapeNotVerified */ __('Remove Coupon Code') ?>"
+               class="action-remove"><span><?= /* @escapeNotVerified */ __('Remove') ?></span></a>
         </p>
         <?php endif; ?>
         <script>

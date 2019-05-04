@@ -13,8 +13,6 @@ use Magento\Quote\Model\Quote\Address;
  * Shopping Cart Rule data model
  *
  * @api
- * @method \Magento\SalesRule\Model\ResourceModel\Rule _getResource()
- * @method \Magento\SalesRule\Model\ResourceModel\Rule getResource()
  * @method string getName()
  * @method \Magento\SalesRule\Model\Rule setName(string $value)
  * @method string getDescription()
@@ -65,6 +63,7 @@ use Magento\Quote\Model\Quote\Address;
  * @method int getRuleId()
  * @method \Magento\SalesRule\Model\Rule setRuleId(int $ruleId)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Rule extends \Magento\Rule\Model\AbstractModel
 {
@@ -309,8 +308,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
-     * Initialize rule model data from array.
-     * Set store labels if applicable.
+     * Initialize rule model data from array. Set store labels if applicable.
      *
      * @param array $data
      * @return $this
@@ -502,6 +500,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             $this->getUsesPerCustomer() ? $this->getUsesPerCustomer() : null
         )->setExpirationDate(
             $this->getToDate()
+        )->setType(
+            \Magento\SalesRule\Api\Data\CouponInterface::TYPE_GENERATED
         );
 
         $couponCode = self::getCouponCodeGenerator()->generateCode();
@@ -522,7 +522,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                         $coupon->setCode(
                             $couponCode . self::getCouponCodeGenerator()->getDelimiter() . sprintf(
                                 '%04u',
-                                rand(0, 9999)
+                                random_int(0, 9999)
                             )
                         );
                         continue;
@@ -540,7 +540,10 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * Get from date.
+     *
      * @return string
+     * @since 100.1.0
      */
     public function getFromDate()
     {
@@ -548,7 +551,10 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * Get to date.
+     *
      * @return string
+     * @since 100.1.0
      */
     public function getToDate()
     {
@@ -609,8 +615,11 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * Get conditions field set id.
+     *
      * @param string $formName
      * @return string
+     * @since 100.1.0
      */
     public function getConditionsFieldSetId($formName = '')
     {
@@ -618,8 +627,11 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * Get actions field set id.
+     *
      * @param string $formName
      * @return string
+     * @since 100.1.0
      */
     public function getActionsFieldSetId($formName = '')
     {

@@ -35,7 +35,7 @@
     <type name="Magento\Catalog\Model\Product\Attribute\Repository">
         <plugin name="filterCustomAttribute" type="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute" />
     </type>
-    <type name="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute">
+    <type name="Magento\Catalog\Model\FilterProductCustomAttribute">
         <arguments>
             <argument name="blackList" xsi:type="array">
                 <item name="quantity_and_stock_status" xsi:type="string">quantity_and_stock_status</item>
@@ -44,7 +44,7 @@
     </type>
     <type name="Magento\CatalogInventory\Observer\UpdateItemsStockUponConfigChangeObserver">
         <arguments>
-            <argument name="resourceStock" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Stock\Proxy</argument>
+            <argument name="resourceStockItem" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Layer">
@@ -60,6 +60,13 @@
     <type name="Magento\Store\Model\ResourceModel\Group">
         <plugin name="storeGroupResourceAroundBeforeSave" type="Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup"/>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Full">
+        <arguments>
+            <argument name="indexerList" xsi:type="array">
+                <item name="cataloginventory_stock" xsi:type="const">Magento\CatalogInventory\Model\Indexer\Stock\Processor::INDEXER_ID</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Block\Product\View">
         <plugin name="quantityValidators" type="Magento\CatalogInventory\Block\Plugin\ProductView" />
     </type>
@@ -71,8 +78,8 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="catalogInventoryAfterLoad" type="Magento\CatalogInventory\Model\Plugin\AfterProductLoad"/>
     </type>
-    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
-        <plugin name="catalogInventoryAroundSave" sortOrder="20" type="Magento\CatalogInventory\Model\Plugin\AroundProductRepositorySave"/>
+    <type name="Magento\Catalog\Model\Product\Action">
+        <plugin name="ReindexUpdatedProducts" type="Magento\CatalogInventory\Model\Plugin\ReindexUpdatedProducts"/>
     </type>
     <type name="Magento\CatalogInventory\Setup\UpgradeData">
         <arguments>
@@ -103,5 +110,32 @@
             </argument>
             <argument name="batchSizeManagement" xsi:type="object">Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement</argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\Data\CollectionModifier">
+        <arguments>
+            <argument name="conditions" xsi:type="array">
+                <item name="stockStatusCondition" xsi:type="object">Magento\CatalogInventory\Model\ProductCollectionStockCondition</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface">
+        <arguments>
+            <argument name="priceModifiers" xsi:type="array">
+                <item name="inventoryProductPriceIndexFilter" xsi:type="object">Magento\CatalogInventory\Model\Indexer\ProductPriceIndexFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier">
+        <arguments>
+            <argument name="priceModifiers" xsi:type="array">
+                <item name="inventoryProductPriceIndexFilter" xsi:type="object">Magento\CatalogInventory\Model\Indexer\ProductPriceIndexFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
+        <plugin name="priceIndexUpdater" type="Magento\CatalogInventory\Model\Plugin\PriceIndexUpdater" />
+    </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save">
+        <plugin name="massAction" type="Magento\CatalogInventory\Plugin\MassUpdateProductAttribute" />
     </type>
 </config>

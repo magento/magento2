@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order\Item;
 /**
  * Class CreateQuantityValidatorTest
  */
-class CreateQuantityValidatorTest extends \PHPUnit_Framework_TestCase
+class CreateQuantityValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OrderItemRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -97,6 +97,9 @@ class CreateQuantityValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->createQuantityValidator->validate($this->entity));
     }
 
+    /**
+     * @return array
+     */
     public function dataProvider()
     {
         return [

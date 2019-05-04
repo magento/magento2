@@ -7,7 +7,7 @@ namespace Magento\Theme\Model\Theme\Domain;
 
 use Magento\Framework\View\Design\ThemeInterface;
 
-class VirtualTest extends \PHPUnit_Framework_TestCase
+class VirtualTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array

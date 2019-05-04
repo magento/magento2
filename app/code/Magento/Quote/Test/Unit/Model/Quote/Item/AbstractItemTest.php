@@ -8,7 +8,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 /**
  * Class AbstractItemTest
  */
-class AbstractItemTest extends \PHPUnit_Framework_TestCase
+class AbstractItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the getTotalDiscountAmount function

@@ -10,8 +10,9 @@ define([
     'Magento_Braintree/js/view/payment/method-renderer/cc-form',
     'Magento_Braintree/js/validator',
     'Magento_Vault/js/view/payment/vault-enabler',
-    'mage/translate'
-], function ($, Component, validator, VaultEnabler, $t) {
+    'mage/translate',
+    'Magento_Checkout/js/model/payment/additional-validators'
+], function ($, Component, validator, VaultEnabler, $t, additionalValidators) {
     'use strict';
 
     return Component.extend({
@@ -61,7 +62,7 @@ define([
         },
 
         /**
-         * @returns {Bool}
+         * @returns {Boolean}
          */
         isVaultEnabled: function () {
             return this.vaultEnabler.isVaultEnabled();
@@ -104,7 +105,6 @@ define([
                 }
 
                 if (event.type !== 'fieldStateChange') {
-
                     return false;
                 }
 
@@ -144,10 +144,19 @@ define([
         },
 
         /**
+         * Returns state of place order button
+         * @returns {Boolean}
+         */
+        isButtonActive: function () {
+            return this.isActive() && this.isPlaceOrderActionAllowed();
+        },
+
+        /**
          * Trigger order placing
          */
         placeOrderClick: function () {
-            if (this.validateCardType()) {
+            if (this.validateCardType() && additionalValidators.validate()) {
+                this.isPlaceOrderActionAllowed(false);
                 $(this.getSelector('submit')).trigger('click');
             }
         },

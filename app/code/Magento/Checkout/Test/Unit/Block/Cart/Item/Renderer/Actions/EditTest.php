@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit;
 use Magento\Quote\Model\Quote\Item;
 
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Edit

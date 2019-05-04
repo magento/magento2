@@ -10,18 +10,39 @@
 @currency-addon-symbol__border-color: @field-control__border-color;
 @currency-addon-symbol__color: @color-gray52;
 @currency-addon-symbol__height: @field-control__height;
-@currency-addon-symbol__width: 1.6rem;
+@currency-addon-symbol__width: 2.6rem;
+
 
 //
 //  Common
 //  _____________________________________________
 
 .currency-addon {
+    border: 1px solid rgb(173,173,173);
     position: relative;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    display: inline-flex;
+    flex-flow: row nowrap;
+    width: 100%;
 
     .admin__control-text {
-        border-width: 1px 1px 1px 0;
-        padding-left: @currency-addon-symbol__width + .2;
+        -ms-flex-order: 1;
+        -webkit-appearance: none;
+        -webkit-flex-grow: 1;
+        -webkit-flex-shrink: 1;
+        -webkit-order: 1;
+        appearance: none;
+        background-color: transparent;
+        border-color: transparent;
+        box-shadow: none;
+        flex-grow: 1;
+        flex-shrink: 1;
+        order: 1;
+        vertical-align: top;
 
         &:focus {
             + .currency-symbol {
@@ -30,18 +51,29 @@
         }
     }
 
+    label.error {
+        left: 0;
+        position: absolute;
+        top: 33px;
+    }
+
     .currency-symbol {
+        -webkit-flex-basis: auto;
+        -webkit-flex-grow: 0;
+        -webkit-flex-shrink: 0;
         border: solid @currency-addon-symbol__border-color;
-        border-width: 0 0 0 1px;
+        border-width: 0;
         box-sizing: border-box;
         color: @currency-addon-symbol__color;
+        flex-basis: auto;
+        flex-grow: 0;
+        flex-shrink: 0;
         height: @currency-addon-symbol__height;
-        left: 0;
+        order: 0;
         padding: 7px 0 0 @indent__xs;
-        position: absolute;
-        top: 0;
+        position: static;
         transition: @smooth__border-color;
-        width: @currency-addon-symbol__width;
+        z-index: 1;
     }
 
     ._error & {

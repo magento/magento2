@@ -6,7 +6,7 @@
 
 namespace Magento\Fedex\Model;
 
-class CarrierTest extends \PHPUnit_Framework_TestCase
+class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Fedex\Model\Carrier

@@ -5,7 +5,7 @@
  */
 namespace Magento\Reports\Test\Unit\Observer;
 
-class CustomerLogoutObserverTest extends \PHPUnit_Framework_TestCase
+class CustomerLogoutObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Observer\CustomerLogoutObserver

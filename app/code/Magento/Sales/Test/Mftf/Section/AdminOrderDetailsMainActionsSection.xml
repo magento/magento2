@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderDetailsMainActionsSection">
+        <element name="back" type="button" selector="#back" timeout="30"/>
+        <element name="cancel" type="button" selector="#order-view-cancel-button" timeout="30"/>
+        <element name="sendEmail" type="button" selector="#send_notification" timeout="30"/>
+        <element name="creditMemo" type="button" selector="#order_creditmemo" timeout="30"/>
+        <element name="hold" type="button" selector="#order-view-hold-button" timeout="30"/>
+        <element name="invoice" type="button" selector="#order_invoice" timeout="30"/>
+        <element name="ship" type="button" selector="#order_ship" timeout="30"/>
+        <element name="reorder" type="button" selector="#order_reorder" timeout="30"/>
+        <element name="edit" type="button" selector="#order_edit" timeout="30"/>
+        <element name="modalOk" type="button" selector=".action-accept"/>
+    </section>
+</sections>

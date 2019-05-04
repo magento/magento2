@@ -33,7 +33,7 @@ class AssertCustomerGroupChangedToDefaultOnCustomerForm extends AbstractConstrai
     ) {
         $customerIndexEdit->open(['id' => $customer->getId()]);
         $customerFormData = $customerIndexNew->getCustomerForm()->getData($customer);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $customerFormData['group_id'] == $defaultCustomerGroup->getCustomerGroupCode(),
             "Customer group not set to default after group was deleted."
         );

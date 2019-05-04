@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
 
 use Magento\Catalog\Model\Product\Type;
@@ -15,7 +13,7 @@ use Magento\ConfigurableProduct\Model\Product\VariationHandler;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class VariationHandlerTest extends \PHPUnit_Framework_TestCase
+class VariationHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var VariationHandler
@@ -63,43 +61,18 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->productFactoryMock = $this->getMock(
-            \Magento\Catalog\Model\ProductFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->entityFactoryMock = $this->getMock(
-            \Magento\Eav\Model\EntityFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->attributeSetFactory = $this->getMock(
+        $this->productFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
+        $this->entityFactoryMock = $this->createPartialMock(\Magento\Eav\Model\EntityFactory::class, ['create']);
+        $this->attributeSetFactory = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute\SetFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->stockConfiguration = $this->getMock(
-            \Magento\CatalogInventory\Api\StockConfigurationInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->configurableProduct = $this->getMock(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
-            [],
-            [],
-            '',
-            false
+        $this->stockConfiguration = $this->createMock(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
+        $this->configurableProduct = $this->createMock(
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class
         );
 
-        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, ['getMediaGallery'], [], '', false);
+        $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getMediaGallery']);
 
         $this->model = $this->objectHelper->getObject(
             \Magento\ConfigurableProduct\Model\Product\VariationHandler::class,

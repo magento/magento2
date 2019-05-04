@@ -32,7 +32,7 @@ class AssignBackendModelToAttributeObserver implements ObserverInterface
     }
 
     /**
-     * Automaticaly assign backend model to weee attributes
+     * Automatically assign backend model to weee attributes
      *
      * @param   \Magento\Framework\Event\Observer $observer
      * @return  $this

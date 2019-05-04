@@ -7,10 +7,10 @@
  * @var $block \Magento\OfflinePayments\Block\Info\Purchaseorder
  */
 ?>
-<div class="order-payment-method-name"><?php echo $block->escapeHtml($block->getMethod()->getTitle()); ?></div>
+<div class="order-payment-method-name"><?= $block->escapeHtml($block->getMethod()->getTitle()) ?></div>
 <table class="data-table admin__table-secondary">
     <tr>
-        <th><?php echo $block->escapeHtml(__('Purchase Order Number')); ?>:</th>
-        <td><?php echo $block->escapeHtml($block->getInfo()->getPoNumber()); ?></td>
+        <th><?= $block->escapeHtml(__('Purchase Order Number')) ?>:</th>
+        <td><?= $block->escapeHtml($block->getInfo()->getPoNumber()) ?></td>
     </tr>
 </table>

@@ -12,6 +12,7 @@ use Magento\Framework\Data\OptionSourceInterface;
  * Product type model
  *
  * @api
+ * @since 100.0.2
  */
 class Type implements OptionSourceInterface
 {
@@ -231,7 +232,7 @@ class Type implements OptionSourceInterface
     public function getOptionText($optionId)
     {
         $options = $this->getOptionArray();
-        return isset($options[$optionId]) ? $options[$optionId] : null;
+        return $options[$optionId] ?? null;
     }
 
     /**
@@ -284,7 +285,7 @@ class Type implements OptionSourceInterface
 
             $types = $this->getTypes();
             foreach ($types as $typeId => $typeInfo) {
-                $priority = isset($typeInfo['index_priority']) ? abs(intval($typeInfo['index_priority'])) : 0;
+                $priority = isset($typeInfo['index_priority']) ? abs((int) $typeInfo['index_priority']) : 0;
                 if (!empty($typeInfo['composite'])) {
                     $compositePriority[$typeId] = $priority;
                 } else {
@@ -306,7 +307,7 @@ class Type implements OptionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

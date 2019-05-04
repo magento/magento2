@@ -12,15 +12,15 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
- * @method Attribute _getResource()
- * @method Attribute getResource()
+ * Configurable product attribute model.
+ *
  * @method Attribute setProductAttribute(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $value)
  * @method \Magento\Eav\Model\Entity\Attribute\AbstractAttribute getProductAttribute()
  */
 class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\ConfigurableProduct\Api\Data\OptionInterface
 {
-    /**#@+
+    /**
      * Constants for field names
      */
     const KEY_ATTRIBUTE_ID = 'attribute_id';
@@ -29,10 +29,9 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     const KEY_IS_USE_DEFAULT = 'is_use_default';
     const KEY_VALUES = 'values';
     const KEY_PRODUCT_ID = 'product_id';
-    /**#@-*/
 
     /**
-     * @var MetadataPool
+     * @var MetadataPool|\Magento\Framework\EntityManager\MetadataPool
      */
     private $metadataPool;
 
@@ -89,7 +88,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLabel()
     {
@@ -115,10 +114,10 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * Load counfigurable attribute by product and product's attribute
+     * Load configurable attribute by product and product's attribute.
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute  $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return void
      */
     public function loadByProductAndAttribute($product, $attribute)
@@ -147,7 +146,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getAttributeId()
@@ -156,7 +155,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getPosition()
@@ -165,7 +164,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getIsUseDefault()
@@ -174,7 +173,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getValues()
@@ -185,8 +184,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     //@codeCoverageIgnoreStart
 
     /**
-     * @param string $attributeId
-     * @return $this
+     * @inheritdoc
      */
     public function setAttributeId($attributeId)
     {
@@ -194,8 +192,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * @param string $label
-     * @return $this
+     * @inheritdoc
      */
     public function setLabel($label)
     {
@@ -203,8 +200,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * @param int $position
-     * @return $this
+     * @inheritdoc
      */
     public function setPosition($position)
     {
@@ -212,8 +208,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * @param bool $isUseDefault
-     * @return $this
+     * @inheritdoc
      */
     public function setIsUseDefault($isUseDefault)
     {
@@ -221,8 +216,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * @param \Magento\ConfigurableProduct\Api\Data\OptionValueInterface[] $values
-     * @return $this
+     * @inheritdoc
      */
     public function setValues(array $values = null)
     {
@@ -230,7 +224,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface|null
      */
@@ -240,7 +234,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface $extensionAttributes
      * @return $this
@@ -252,7 +246,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getProductId()
     {
@@ -260,7 +254,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setProductId($value)
     {
@@ -271,9 +265,14 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         return array_diff(
             parent::__sleep(),
             ['metadataPool']
@@ -282,9 +281,14 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->metadataPool = $objectManager->get(MetadataPool::class);

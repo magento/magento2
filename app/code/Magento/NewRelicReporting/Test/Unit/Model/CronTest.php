@@ -10,7 +10,7 @@ use Magento\NewRelicReporting\Model\Cron;
 /**
  * Class CronTest
  */
-class CronTest extends \PHPUnit_Framework_TestCase
+class CronTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\NewRelicReporting\Model\Cron

@@ -10,6 +10,7 @@ namespace Magento\Backend\Block\Dashboard\Tab\Customers;
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @api
+ * @since 100.0.2
  */
 class Newest extends \Magento\Backend\Block\Dashboard\Grid
 {

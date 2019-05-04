@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="googleoptimizer_code" resource="default" engine="innodb" comment="Google Experiment code">
+        <column xsi:type="int" name="code_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Google experiment code id"/>
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Optimized entity id product id or catalog id"/>
+        <column xsi:type="varchar" name="entity_type" nullable="true" length="50" comment="Optimized entity type"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="Store id"/>
+        <column xsi:type="text" name="experiment_script" nullable="true" comment="Google experiment script"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="code_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="GOOGLEOPTIMIZER_CODE_STORE_ID_STORE_STORE_ID" table="googleoptimizer_code"
+                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="GOOGLEOPTIMIZER_CODE_STORE_ID_ENTITY_ID_ENTITY_TYPE">
+            <column name="store_id"/>
+            <column name="entity_id"/>
+            <column name="entity_type"/>
+        </constraint>
+    </table>
+</schema>

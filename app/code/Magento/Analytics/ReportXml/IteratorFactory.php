@@ -9,7 +9,7 @@ namespace Magento\Analytics\ReportXml;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Class IteratorFactory
+ * Factory to create a result iterator
  */
 class IteratorFactory
 {
@@ -24,8 +24,6 @@ class IteratorFactory
     private $defaultIteratorName;
 
     /**
-     * IteratorFactory constructor.
-     *
      * @param ObjectManagerInterface $objectManager
      * @param string $defaultIteratorName
      */

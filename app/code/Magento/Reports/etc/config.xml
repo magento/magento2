@@ -19,6 +19,15 @@
                 <ytd_start>1,1</ytd_start>
                 <mtd_start>1</mtd_start>
             </dashboard>
+            <options>
+                <enabled>1</enabled>
+                <product_view_enabled>1</product_view_enabled>
+                <product_send_enabled>1</product_send_enabled>
+                <product_compare_enabled>1</product_compare_enabled>
+                <product_to_cart_enabled>1</product_to_cart_enabled>
+                <product_to_wishlist_enabled>1</product_to_wishlist_enabled>
+                <wishlist_share_enabled>1</wishlist_share_enabled>
+            </options>
         </reports>
     </default>
 </config>

@@ -10,6 +10,7 @@ namespace Magento\MediaStorage\Helper\File;
  * File storage helper
  *
  * @api
+ * @since 100.0.2
  */
 class Storage extends \Magento\Framework\App\Helper\AbstractHelper
 {

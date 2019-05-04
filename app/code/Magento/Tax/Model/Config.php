@@ -472,7 +472,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 100.1.3
      */
     public function displayCartDiscountInclTax($store = null)
     {
@@ -486,7 +486,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 100.1.3
      */
     public function displayCartDiscountExclTax($store = null)
     {
@@ -500,7 +500,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 100.1.3
      */
     public function displayCartDiscountBoth($store = null)
     {
@@ -670,7 +670,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 100.1.3
      */
     public function displaySalesDiscountInclTax($store = null)
     {
@@ -684,7 +684,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 100.1.3
      */
     public function displaySalesDiscountExclTax($store = null)
     {
@@ -698,7 +698,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 100.1.3
      */
     public function displaySalesDiscountBoth($store = null)
     {
@@ -832,12 +832,12 @@ class Config
      * If it necessary will be returned conversion type (minus or plus)
      *
      * @param null|int|string|Store $store
-     * @return bool
+     * @return bool|int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function needPriceConversion($store = null)
     {
-        $res = false;
+        $res = 0;
         $priceIncludesTax = $this->priceIncludesTax($store) || $this->getNeedUseShippingExcludeTax();
         if ($priceIncludesTax) {
             switch ($this->getPriceDisplayType($store)) {
@@ -845,7 +845,7 @@ class Config
                 case self::DISPLAY_TYPE_BOTH:
                     return self::PRICE_CONVERSION_MINUS;
                 case self::DISPLAY_TYPE_INCLUDING_TAX:
-                    $res = true;
+                    $res = false;
                     break;
                 default:
                     break;

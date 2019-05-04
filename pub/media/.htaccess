@@ -1,4 +1,4 @@
-Options All -Indexes
+Options -Indexes
 
 <IfModule mod_php5.c>
 php_flag engine 0
@@ -22,6 +22,9 @@ SetHandler default-handler
 
     Options +FollowSymLinks
     RewriteEngine on
+
+    ## you can put here your pub/media folder path relative to web root
+    #RewriteBase /magento/pub/media/
 
 ############################################
 ## never rewrite for existing files

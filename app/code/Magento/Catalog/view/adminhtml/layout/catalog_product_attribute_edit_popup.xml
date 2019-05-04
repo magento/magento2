@@ -13,11 +13,11 @@
         <referenceContainer name="content">
             <block template="Magento_Catalog::catalog/product/attribute/form.phtml" class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit" name="attribute_edit_content">
                 <container name="form" label="Form">
-                    <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Main" as="main"/>
-                    <block class="Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Options" as="advanced-options"/>
-                    <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced" as="options"/>
-                    <block class="Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Labels" as="labels"/>
-                    <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front" as="front-options"/>
+                    <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Main" name="form.main" as="main"/>
+                    <block class="Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Options" name="form.advanced_options" as="advanced-options"/>
+                    <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced" name="form.options" as="options"/>
+                    <block class="Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Labels" name="form.labels" as="labels"/>
+                    <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front" name="form.front_options" as="front-options"/>
                 </container>
             </block>
             <block class="Magento\Backend\Block\Template" name="attribute_edit_js" template="Magento_Catalog::catalog/product/attribute/js.phtml"/>

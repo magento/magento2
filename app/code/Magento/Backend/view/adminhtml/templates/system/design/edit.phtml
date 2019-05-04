@@ -4,8 +4,8 @@
  * See COPYING.txt for license details.
  */
 ?>
-<form action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" id="design-edit-form">
-    <?php echo $block->getBlockHtml('formkey')?>
+<form action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>" method="post" id="design-edit-form">
+    <?= $block->getBlockHtml('formkey') ?>
 </form>
 <script>
 require([

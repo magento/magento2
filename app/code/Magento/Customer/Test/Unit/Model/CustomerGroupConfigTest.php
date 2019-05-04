@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class CustomerGroupConfigTest extends \PHPUnit_Framework_TestCase
+class CustomerGroupConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper

@@ -123,7 +123,7 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
 
     public function testMassStatusAction()
     {
-        $storeId = 1;
+        $storeId = 2;
         $status = \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED;
         $filters = [
             'store_id' => 2,
@@ -138,7 +138,7 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
         $this->request->expects($this->exactly(3))
             ->method('getParam')
             ->willReturnMap([
-                ['store', 0, $storeId],
+                ['store', null, $storeId],
                 ['status', null, $status],
                 ['filters', [], $filters]
             ]);

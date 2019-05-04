@@ -13,7 +13,7 @@
 <tr>
     <td class="item-info has-extra">
         <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
-        <p class="sku"><?= /* @escapeNotVerified */  __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+        <p class="sku"><?= /* @escapeNotVerified */  __('SKU') ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()): ?>
         <dl>
             <?php foreach ($block->getItemOptions() as $option): ?>
@@ -39,9 +39,9 @@
                 <tr>
                     <td>
                         <h3><?= /* @escapeNotVerified */  __('Gift Message') ?></h3>
-                        <strong><?= /* @escapeNotVerified */  __('From:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
-                        <br /><strong><?= /* @escapeNotVerified */  __('To:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
-                        <br /><strong><?= /* @escapeNotVerified */  __('Message:'); ?></strong>
+                        <strong><?= /* @escapeNotVerified */  __('From:') ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+                        <br /><strong><?= /* @escapeNotVerified */  __('To:') ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+                        <br /><strong><?= /* @escapeNotVerified */  __('Message:') ?></strong>
                         <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
                     </td>
                 </tr>
@@ -50,6 +50,6 @@
     </td>
     <td class="item-qty"><?= /* @escapeNotVerified */  $_item->getQtyOrdered() * 1 ?></td>
     <td class="item-price">
-        <?= /* @escapeNotVerified */  $block->getItemPrice($_item); ?>
+        <?= /* @escapeNotVerified */  $block->getItemPrice($_item) ?>
     </td>
 </tr>

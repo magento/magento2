@@ -9,11 +9,11 @@
  */
 namespace Magento\Framework\Cache;
 
-class CoreTest extends \PHPUnit_Framework_TestCase
+class CoreTest extends \PHPUnit\Framework\TestCase
 {
     public function testSetBackendSuccess()
     {
-        $mockBackend = $this->getMock(\Zend_Cache_Backend_File::class);
+        $mockBackend = $this->createMock(\Zend_Cache_Backend_File::class);
         $config = [
             'backend_decorators' => [
                 'test_decorator' => [
@@ -37,7 +37,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetBackendException()
     {
-        $mockBackend = $this->getMock(\Zend_Cache_Backend_File::class);
+        $mockBackend = $this->createMock(\Zend_Cache_Backend_File::class);
         $config = ['backend_decorators' => ['test_decorator' => ['class' => 'Zend_Cache_Backend']]];
 
         $core = new \Magento\Framework\Cache\Core($config);

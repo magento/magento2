@@ -30,15 +30,16 @@ class Compiled implements ConfigInterface
     private $preferences;
 
     /**
-     * Constructor
-     *
      * @param array $data
      */
     public function __construct($data)
     {
-        $this->arguments = $data['arguments'] ?: [];
-        $this->virtualTypes = $data['instanceTypes'] ?: [];
-        $this->preferences = $data['preferences'] ?: [];
+        $this->arguments = isset($data['arguments']) && is_array($data['arguments'])
+            ? $data['arguments'] : [];
+        $this->virtualTypes = isset($data['instanceTypes']) && is_array($data['instanceTypes'])
+            ? $data['instanceTypes'] : [];
+        $this->preferences = isset($data['preferences']) && is_array($data['preferences'])
+            ? $data['preferences'] : [];
     }
 
     /**
@@ -120,6 +121,7 @@ class Compiled implements ConfigInterface
      */
     public function getPreference($type)
     {
+        $type = ltrim($type, '\\');
         if (isset($this->preferences[$type])) {
             return $this->preferences[$type];
         }
@@ -134,13 +136,13 @@ class Compiled implements ConfigInterface
      */
     public function extend(array $configuration)
     {
-        $this->arguments = isset($configuration['arguments'])
+        $this->arguments = isset($configuration['arguments']) && is_array($configuration['arguments'])
             ? array_replace($this->arguments, $configuration['arguments'])
             : $this->arguments;
-        $this->virtualTypes = isset($configuration['instanceTypes'])
+        $this->virtualTypes = isset($configuration['instanceTypes']) && is_array($configuration['instanceTypes'])
             ? array_replace($this->virtualTypes, $configuration['instanceTypes'])
             : $this->virtualTypes;
-        $this->preferences = isset($configuration['preferences'])
+        $this->preferences = isset($configuration['preferences']) && is_array($configuration['preferences'])
             ? array_replace($this->preferences, $configuration['preferences'])
             : $this->preferences;
     }

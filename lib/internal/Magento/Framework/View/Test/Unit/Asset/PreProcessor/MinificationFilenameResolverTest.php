@@ -13,7 +13,7 @@ use Magento\Framework\View\Asset\PreProcessor\MinificationFilenameResolver;
  *
  * @see \Magento\Framework\View\Asset\PreProcessor\MinificationFilenameResolver
  */
-class MinificationFilenameResolverTest extends \PHPUnit_Framework_TestCase
+class MinificationFilenameResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Run test for resolve method

@@ -50,7 +50,7 @@ class AssertCmsBlockNotInGrid extends AbstractConstraint
             $filter['update_time_from'] = date("M j, Y", strtotime($cmsBlock->getUpdateTime()));
         }
 
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $cmsBlockIndex->getCmsBlockGrid()->isRowVisible($filter, true, false),
             'CMS Block with '
             . 'title \'' . $filter['title'] . '\', '

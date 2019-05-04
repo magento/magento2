@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Language;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class DictionaryTest extends \PHPUnit_Framework_TestCase
+class DictionaryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

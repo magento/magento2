@@ -6,6 +6,7 @@
 
 namespace Magento\Directory\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Directory\Model\Currency\Filter;
 
@@ -15,6 +16,7 @@ use Magento\Directory\Model\Currency\Filter;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Currency extends \Magento\Framework\Model\AbstractModel
 {
@@ -65,6 +67,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     protected $_localeCurrency;
 
     /**
+     * @var CurrencyConfig
+     */
+    private $currencyConfig;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
@@ -75,6 +82,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param CurrencyConfig $currencyConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -87,7 +95,8 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        CurrencyConfig $currencyConfig = null
     ) {
         parent::__construct(
             $context,
@@ -101,6 +110,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         $this->_directoryHelper = $directoryHelper;
         $this->_currencyFilterFactory = $currencyFilterFactory;
         $this->_localeCurrency = $localeCurrency;
+        $this->currencyConfig = $currencyConfig ?: ObjectManager::getInstance()->get(CurrencyConfig::class);
     }
 
     /**
@@ -215,7 +225,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         if ($toCurrency === null) {
             return $price;
         } elseif ($rate = $this->getRate($toCurrency)) {
-            return $price * $rate;
+            return (float)$price * (float)$rate;
         }
 
         throw new \Exception(__(
@@ -346,7 +356,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     public function getConfigAllowCurrencies()
     {
-        $allowedCurrencies = $this->_getResource()->getConfigCurrencies($this, self::XML_PATH_CURRENCY_ALLOW);
+        $allowedCurrencies = $this->currencyConfig->getConfigCurrencies(self::XML_PATH_CURRENCY_ALLOW);
         $appBaseCurrencyCode = $this->_directoryHelper->getBaseCurrencyCode();
         if (!in_array($appBaseCurrencyCode, $allowedCurrencies)) {
             $allowedCurrencies[] = $appBaseCurrencyCode;
@@ -368,8 +378,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     public function getConfigDefaultCurrencies()
     {
-        $defaultCurrencies = $this->_getResource()->getConfigCurrencies($this, self::XML_PATH_CURRENCY_DEFAULT);
-        return $defaultCurrencies;
+        return $this->currencyConfig->getConfigCurrencies(self::XML_PATH_CURRENCY_DEFAULT);
     }
 
     /**
@@ -377,8 +386,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     public function getConfigBaseCurrencies()
     {
-        $defaultCurrencies = $this->_getResource()->getConfigCurrencies($this, self::XML_PATH_CURRENCY_BASE);
-        return $defaultCurrencies;
+        return $this->currencyConfig->getConfigCurrencies(self::XML_PATH_CURRENCY_BASE);
     }
 
     /**

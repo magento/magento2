@@ -48,6 +48,8 @@
     <preference for="Magento\Catalog\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface" type="Magento\Catalog\Model\Config\Source\Product\Options\Price"/>
     <preference for="Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterface" type="Magento\Catalog\Model\Indexer\Product\Flat\Table\Builder"/>
+    <preference for="Magento\Catalog\Api\ProductRenderListInterface" type="Magento\Catalog\Model\ProductRenderList"/>
+    <preference for="Magento\Catalog\Api\Data\ProductRenderSearchResultsInterface" type="Magento\Catalog\Model\ProductRenderSearchResults"/>
     <preference for="Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface" type="Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolver"/>
     <preference for="Magento\Catalog\Model\Product\Media\ConfigInterface" type="Magento\Catalog\Model\Product\Media\Config"/>
     <preference for="Magento\Framework\View\Asset\ContextInterface" type="Magento\Catalog\Model\View\Asset\Image\Context"/>
@@ -62,7 +64,15 @@
     <preference for="Magento\Catalog\Api\Data\PriceUpdateResultInterface" type="Magento\Catalog\Model\Product\Price\PriceUpdateResult" />
     <preference for="Magento\Catalog\Api\SpecialPriceInterface" type="Magento\Catalog\Model\ResourceModel\Product\Price\SpecialPrice" />
     <preference for="Magento\Catalog\Model\ProductIdLocatorInterface" type="Magento\Catalog\Model\ProductIdLocator" />
+    <preference for="Magento\Catalog\Api\Data\ProductRender\ButtonInterface" type="Magento\Catalog\Model\ProductRender\Button" />
+    <preference for="Magento\Catalog\Api\Data\ProductRender\ImageInterface" type="Magento\Catalog\Model\ProductRender\Image" />
+    <preference for="Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface" type="Magento\Catalog\Model\ProductRender\PriceInfo" />
+    <preference for="Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface" type="Magento\Catalog\Model\ProductRender\FormattedPriceInfo" />
     <preference for="Magento\Framework\Indexer\BatchProviderInterface" type="Magento\Framework\Indexer\BatchProvider" />
+    <preference for="Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface" type="Magento\Catalog\Model\Indexer\Product\Price\InvalidateIndex" />
+    <preference for="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface" type="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactory" />
+    <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite" />
+    <preference for="Magento\Catalog\Api\Data\MassActionInterface" type="\Magento\Catalog\Model\MassAction" />
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -76,6 +86,16 @@
         <arguments>
             <argument name="state" xsi:type="object" shared="false">Magento\Framework\Mview\View\StateInterface</argument>
             <argument name="changelog" xsi:type="object" shared="false">Magento\Framework\Mview\View\ChangelogInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Full">
+        <arguments>
+            <argument name="indexerList" xsi:type="array">
+                <item name="catalog_category_product" xsi:type="const">Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID</item>
+                <item name="catalog_product_category" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID</item>
+                <item name="catalog_product_price" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID</item>
+                <item name="catalog_product_attribute" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool">
@@ -138,19 +158,26 @@
             <argument name="options" xsi:type="array">
                 <item name="option1" xsi:type="array">
                     <item name="value" xsi:type="string">container1</item>
-                    <item name="label" xsi:type="string">Product Info Column</item>
+                    <item name="label" xsi:type="string" translatable="true">Product Info Column</item>
                 </item>
                 <item name="option2" xsi:type="array">
                     <item name="value" xsi:type="string">container2</item>
-                    <item name="label" xsi:type="string">Block after Info Column</item>
+                    <item name="label" xsi:type="string" translatable="true">Block after Info Column</item>
                 </item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Helper\Data">
         <arguments>
-            <argument name="templateFilterModel" xsi:type="string">Magento\Catalog\Model\Template\Filter</argument>
+            <argument name="templateFilterModel" xsi:type="string">Magento\Widget\Model\Template\Filter</argument>
             <argument name="catalogSession" xsi:type="object">Magento\Catalog\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Helper\Output">
+        <arguments>
+            <argument name="directivePatterns" xsi:type="array">
+                <item name="construct" xsi:type="const">\Magento\Framework\Filter\Template::CONSTRUCTION_PATTERN</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Config\Source\GridPerPage">
@@ -194,6 +221,12 @@
                 <item name="gif" xsi:type="string">gif</item>
                 <item name="png" xsi:type="string">png</item>
             </argument>
+            <argument name="allowedMimeTypes" xsi:type="array">
+                <item name="jpg" xsi:type="string">image/jpg</item>
+                <item name="jpeg" xsi:type="string">image/jpeg</item>
+                <item name="gif" xsi:type="string">image/gif</item>
+                <item name="png" xsi:type="string">image/png</item>
+            </argument>
         </arguments>
     </virtualType>
     <type name="Magento\Catalog\Controller\Adminhtml\Category\Image\Upload">
@@ -207,7 +240,8 @@
         </arguments>
     </type>
     <type name="Magento\Store\Model\ResourceModel\Website">
-        <plugin name="priceIndexerOnWebsiteDelete" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\Website"/>
+        <plugin name="invalidatePriceIndexerOnWebsite" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\Website"/>
+        <plugin name="categoryProductWebsiteAfterDelete" type="\Magento\Catalog\Model\Indexer\Category\Product\Plugin\Website"/>
     </type>
     <type name="Magento\Store\Model\ResourceModel\Store">
         <plugin name="storeViewResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView"/>
@@ -339,6 +373,7 @@
                 <item name="base_price" xsi:type="string">Magento\Catalog\Pricing\Price\BasePrice</item>
                 <item name="custom_option_price" xsi:type="string">Magento\Catalog\Pricing\Price\CustomOptionPrice</item>
                 <item name="configured_price" xsi:type="string">Magento\Catalog\Pricing\Price\ConfiguredPrice</item>
+                <item name="configured_regular_price" xsi:type="string">Magento\Catalog\Pricing\Price\ConfiguredRegularPrice</item>
             </argument>
         </arguments>
     </virtualType>
@@ -528,14 +563,8 @@
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="imagesResizeCommand" xsi:type="object">Magento\Catalog\Console\Command\ImagesResizeCommand</item>
                 <item name="productAttributesCleanUp" xsi:type="object">Magento\Catalog\Console\Command\ProductAttributesCleanUp</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Catalog\Console\Command\ImagesResizeCommand">
-        <arguments>
-            <argument name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Config\View">
@@ -568,6 +597,13 @@
         </arguments>
     </type>
     <type name="Magento\Sales\Api\OrderItemRepositoryInterface">
+        <arguments>
+            <argument name="processorPool" xsi:type="array">
+                <item name="custom_options" xsi:type="object">Magento\Catalog\Model\ProductOptionProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\ProductOption">
         <arguments>
             <argument name="processorPool" xsi:type="array">
                 <item name="custom_options" xsi:type="object">Magento\Catalog\Model\ProductOptionProcessor</item>
@@ -613,6 +649,10 @@
                     <item name="entityTableName" xsi:type="string">catalog_category_product</item>
                     <item name="identifierField" xsi:type="string">entity_id</item>
                 </item>
+                <item name="Magento\Catalog\Api\Data\ProductFrontendActionInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_product_frontend_action</item>
+                    <item name="identifierField" xsi:type="string">action_id</item>
+                </item>
             </argument>
         </arguments>
     </type>
@@ -631,12 +671,14 @@
                         <item name="mediaGalleryCreate" xsi:type="string">Magento\Catalog\Model\Product\Gallery\CreateHandler</item>
                         <item name="categoryProductLinksSave" xsi:type="string">Magento\Catalog\Model\Category\Link\SaveHandler</item>
                         <item name="websitePersistor" xsi:type="string">Magento\Catalog\Model\Product\Website\SaveHandler</item>
+                        <item name="tierPriceCreator" xsi:type="string">Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\SaveHandler</item>
                     </item>
                     <item name="update" xsi:type="array">
                         <item name="optionUpdater" xsi:type="string">Magento\Catalog\Model\Product\Option\SaveHandler</item>
                         <item name="mediaGalleryUpdate" xsi:type="string">Magento\Catalog\Model\Product\Gallery\UpdateHandler</item>
                         <item name="categoryProductLinksSave" xsi:type="string">Magento\Catalog\Model\Category\Link\SaveHandler</item>
                         <item name="websitePersistor" xsi:type="string">Magento\Catalog\Model\Product\Website\SaveHandler</item>
+                        <item name="tierPriceUpdater" xsi:type="string">Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler</item>
                     </item>
                 </item>
             </argument>
@@ -650,15 +692,21 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Eav\Model\EavCustomAttributeTypeLocator">
-         <arguments>
-            <argument name="serviceEntityTypeMap" xsi:type="array">
+    <type name="Magento\Framework\Webapi\ServiceTypeToEntityTypeMap">
+        <arguments>
+            <argument name="serviceTypeToEntityTypeMap" xsi:type="array">
                 <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="const">Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE</item>
+                <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="const">Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE</item>
             </argument>
-            <argument name="serviceBackendModelDataInterfaceMap" xsi:type="array">
-                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
-                    <item name="Magento\Catalog\Model\Product\Attribute\Backend\Media" xsi:type="string">Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface</item>
-                </item>
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\TypeLocator\ComplexType">
+         <arguments>
+            <argument name="backendModelToAttributeTypeMap" xsi:type="array">
+                <item name="Magento\Catalog\Model\Product\Attribute\Backend\Sku" xsi:type="string">string</item>
+                <item name="Magento\Catalog\Model\Product\Attribute\Backend\Category" xsi:type="string">int[]</item>
+                <item name="Magento\Catalog\Model\Product\Attribute\Backend\Stock" xsi:type="string">Magento\CatalogInventory\Api\Data\StockItemInterface[]</item>
+                <item name="Magento\Catalog\Model\Category\Attribute\Backend\Sortby" xsi:type="string">string[]</item>
             </argument>
         </arguments>
     </type>
@@ -788,6 +836,9 @@
             <argument name="attributePersistor" xsi:type="object">Magento\Catalog\Model\ResourceModel\AttributePersistor</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Eav\Model\ResourceModel\ReadSnapshot">
+        <plugin name="catalogReadSnapshot" type="Magento\Catalog\Plugin\Model\ResourceModel\ReadSnapshotPlugin" />
+    </type>
     <type name="Magento\Framework\EntityManager\Operation\AttributePool">
         <arguments>
             <argument name="extensionActions" xsi:type="array">
@@ -833,6 +884,7 @@
             <argument name="customFilters" xsi:type="array">
                 <item name="category_id" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductCategoryFilter</item>
                 <item name="store" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductStoreFilter</item>
+                <item name="store_id" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductStoreFilter</item>
                 <item name="website_id" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductWebsiteFilter</item>
             </argument>
         </arguments>
@@ -856,6 +908,11 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\ProductRenderList">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
+        </arguments>
+    </type>
     <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
         <plugin name="copy_quote_files_to_order" type="Magento\Catalog\Model\Plugin\QuoteItemProductOption"/>
     </type>
@@ -877,6 +934,7 @@
     <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice">
         <arguments>
             <argument name="baseSelectProcessor" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor</argument>
+            <argument name="priceTableResolver" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Price\CostStorage">
@@ -910,6 +968,36 @@
             <argument name="allowedProductTypes" xsi:type="array">
                 <item name="0" xsi:type="string">simple</item>
                 <item name="1" xsi:type="string">virtual</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
+        <arguments>
+            <argument name="productProviders" xsi:type="array">
+                <item name="image" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Image</item>
+                <item name="price" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Price</item>
+                <item name="url" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Url</item>
+                <item name="additional_info" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\AdditionalInfo</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\FrontendStorageConfigurationPool">
+        <arguments>
+            <argument name="storageConfigurations" xsi:type="array">
+                <item name="recently_viewed_product" xsi:type="object">Magento\Catalog\Model\Widget\RecentlyViewedStorageConfiguration</item>
+                <item name="recently_compared_product" xsi:type="object">Magento\Catalog\Model\Widget\RecentlyComparedStorageConfiguration</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Image">
+        <arguments>
+            <argument name="imageCodes" xsi:type="array">
+                <item name="widget_recently_viewed_grid" xsi:type="string">recently_viewed_products_grid_content_widget</item>
+                <item name="widget_recently_viewed_list" xsi:type="string">recently_viewed_products_list_content_widget</item>
+                <item name="widget_recently_viewed_sidebar" xsi:type="string">recently_viewed_products_images_names_widget</item>
+                <item name="widget_recently_compared_grid" xsi:type="string">recently_compared_products_grid_content_widget</item>
+                <item name="widget_recently_compared_list" xsi:type="string">recently_compared_products_list_content_widget</item>
+                <item name="widget_recently_compared_sidebar" xsi:type="string">recently_compared_products_images_names_widget</item>
             </argument>
         </arguments>
     </type>
@@ -989,9 +1077,92 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Data\CollectionModifier">
+        <arguments>
+            <argument name="conditions" xsi:type="array">
+                <item name="productVisibilityCondition" xsi:type="object">Magento\Catalog\Model\ProductVisibilityCondition</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
         <arguments>
             <argument name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">indexer</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\Factory">
+        <arguments>
+            <argument name="eavAttributeConditionBuilder" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\EavAttributeCondition</argument>
+            <argument name="nativeAttributeConditionBuilder" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\NativeAttributeCondition</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory">
+        <arguments>
+            <argument name="dimensionProviders" xsi:type="array">
+                <!-- @see \Magento\Store\Model\Indexer\WebsiteDimensionProvider::DIMENSION_NAME -->
+                <item name="ws" xsi:type="object">Magento\Store\Model\Indexer\WebsiteDimensionProvider</item>
+                <!-- @see \Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider::DIMENSION_NAME -->
+                <item name="cg" xsi:type="object">Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Price\Plugin\TableResolver">
+        <arguments>
+            <argument name="priceTableResolver" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver\Proxy</argument>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+            <argument name="context" xsi:type="object">Magento\Framework\App\Http\Context\Proxy</argument>
+            <!-- Unccomment after fix issue with Proxy generation -->
+            <!--<argument name="dimensionModeConfiguration" xsi:type="object">-->
+                <!--Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration\Proxy-->
+            <!--</argument>-->
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Layer\Filter\Price">
+        <arguments>
+            <argument name="priceTableResolver" xsi:type="object">
+                Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CustomOptionPriceModifier">
+        <arguments>
+            <argument name="tableStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">indexer</argument>
+            <argument name="tableResolver" xsi:type="object">Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier">
+        <arguments>
+            <argument name="priceModifiers" xsi:type="array">
+                <item name="customOptionPriceModifier" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CustomOptionPriceModifier</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\VirtualProductPrice" type="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\SimpleProductPrice">
+        <arguments>
+            <argument name="productType" xsi:type="string">virtual</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand">
+        <arguments>
+            <argument name="dimensionSwitchers" xsi:type="array">
+                <item name="catalog_product_price" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Indexer\Console\Command\IndexerShowDimensionsModeCommand">
+        <arguments>
+            <argument name="indexers" xsi:type="array">
+                <item name="catalog_product_price" xsi:type="string">catalog_product_price</item>
+            </argument>
         </arguments>
     </type>
 </config>

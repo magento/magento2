@@ -11,10 +11,15 @@
  */
 namespace Magento\Widget\Block;
 
+/**
+ * Interface \Magento\Widget\Block\BlockInterface
+ *
+ */
 interface BlockInterface
 {
     /**
      * Add data to the widget.
+     *
      * Retains previous data in the widget.
      *
      * @param array $arr
@@ -31,7 +36,7 @@ interface BlockInterface
      *
      * @param string|array $key
      * @param mixed $value
-     * @return \Magento\Framework\DataObject
+     * @return $this
      */
     public function setData($key, $value = null);
 }

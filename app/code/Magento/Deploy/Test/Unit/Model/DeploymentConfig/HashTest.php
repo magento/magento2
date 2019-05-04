@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 
 use Magento\Deploy\Model\DeploymentConfig\DataCollector;
@@ -13,7 +14,7 @@ use Magento\Framework\Flag;
 use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\FlagFactory;
 
-class HashTest extends \PHPUnit_Framework_TestCase
+class HashTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Generator|\PHPUnit_Framework_MockObject_MockObject
@@ -137,7 +138,7 @@ class HashTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Hash has not been saved
+     * @expectedExceptionMessage The hash isn't saved.
      */
     public function testRegenerateWithException()
     {

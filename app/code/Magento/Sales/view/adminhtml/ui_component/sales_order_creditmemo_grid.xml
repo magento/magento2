@@ -21,6 +21,7 @@
         <settings>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_Sales::sales_creditmemo</aclResource>
         <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="sales_order_creditmemo_grid_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
@@ -91,7 +92,7 @@
         <column name="order_increment_id">
             <settings>
                 <filter>text</filter>
-                <label translate="true">Order</label>
+                <label translate="true">Order #</label>
             </settings>
         </column>
         <column name="order_created_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">

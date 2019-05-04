@@ -14,7 +14,7 @@ namespace Magento\Authorization\Test\Unit\Model\ResourceModel;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RulesTest extends \PHPUnit_Framework_TestCase
+class RulesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test constants

@@ -12,7 +12,7 @@ use Magento\Catalog\Model\ProductLink\Converter\ConverterInterface;
 use Magento\Catalog\Model\ProductLink\Converter\ConverterPool;
 use Magento\Catalog\Model\Product;
 
-class CollectionProviderTest extends \PHPUnit_Framework_TestCase
+class CollectionProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CollectionProvider
@@ -41,10 +41,10 @@ class CollectionProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productMock = $this->getMock(Product::class, [], [], '', false, false);
-        $this->converterPoolMock = $this->getMock(ConverterPool::class, [], [], '', false, false);
-        $this->providerMock = $this->getMock(CollectionProviderInterface::class);
-        $this->converterMock = $this->getMock(ConverterInterface::class);
+        $this->productMock = $this->createMock(Product::class);
+        $this->converterPoolMock = $this->createMock(ConverterPool::class);
+        $this->providerMock = $this->createMock(CollectionProviderInterface::class);
+        $this->converterMock = $this->createMock(ConverterInterface::class);
 
         $this->model = new CollectionProvider($this->converterPoolMock, ['crosssell' => $this->providerMock]);
     }
@@ -54,13 +54,17 @@ class CollectionProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCollection()
     {
-        $linkedProductOneMock = $this->getMock(Product::class, [], [], '', false, false);
-        $linkedProductTwoMock = $this->getMock(Product::class, [], [], '', false, false);
-        $linkedProductThreeMock = $this->getMock(Product::class, [], [], '', false, false);
+        $linkedProductOneMock = $this->createMock(Product::class);
+        $linkedProductTwoMock = $this->createMock(Product::class);
+        $linkedProductThreeMock = $this->createMock(Product::class);
+        $linkedProductFourMock = $this->createMock(Product::class);
+        $linkedProductFiveMock = $this->createMock(Product::class);
 
         $linkedProductOneMock->expects($this->once())->method('getId')->willReturn(1);
         $linkedProductTwoMock->expects($this->once())->method('getId')->willReturn(2);
         $linkedProductThreeMock->expects($this->once())->method('getId')->willReturn(3);
+        $linkedProductFourMock->expects($this->once())->method('getId')->willReturn(4);
+        $linkedProductFiveMock->expects($this->once())->method('getId')->willReturn(5);
 
         $this->converterPoolMock->expects($this->once())
             ->method('getConverter')
@@ -71,9 +75,11 @@ class CollectionProviderTest extends \PHPUnit_Framework_TestCase
             [$linkedProductOneMock, ['name' => 'Product One', 'position' => 10]],
             [$linkedProductTwoMock, ['name' => 'Product Two', 'position' => 2]],
             [$linkedProductThreeMock, ['name' => 'Product Three', 'position' => 2]],
+            [$linkedProductFourMock, ['name' => 'Product Four', 'position' => null]],
+            [$linkedProductFiveMock, ['name' => 'Product Five']],
         ];
 
-        $this->converterMock->expects($this->exactly(3))->method('convert')->willReturnMap($map);
+        $this->converterMock->expects($this->exactly(5))->method('convert')->willReturnMap($map);
 
         $this->providerMock->expects($this->once())
             ->method('getLinkedProducts')
@@ -82,14 +88,18 @@ class CollectionProviderTest extends \PHPUnit_Framework_TestCase
                 [
                     $linkedProductOneMock,
                     $linkedProductTwoMock,
-                    $linkedProductThreeMock
+                    $linkedProductThreeMock,
+                    $linkedProductFourMock,
+                    $linkedProductFiveMock,
                 ]
             );
 
         $expectedResult = [
-            2 => ['name' => 'Product Two', 'position' => 2],
-            3 => ['name' => 'Product Three', 'position' => 2],
-            10 => ['name' => 'Product One', 'position' => 10],
+            0 => ['name' => 'Product Four', 'position' => 0],
+            1 => ['name' => 'Product Five', 'position' => 0],
+            2 => ['name' => 'Product Three', 'position' => 2],
+            3 => ['name' => 'Product Two', 'position' => 2],
+            4 => ['name' => 'Product One', 'position' => 10],
         ];
 
         $actualResult = $this->model->getCollection($this->productMock, 'crosssell');
@@ -101,7 +111,7 @@ class CollectionProviderTest extends \PHPUnit_Framework_TestCase
      * Test exception when collection provider is not configured for product link type.
      *
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Collection provider is not registered
+     * @expectedExceptionMessage The collection provider isn't registered.
      */
     public function testGetCollectionWithMissingProviders()
     {

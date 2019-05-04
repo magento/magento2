@@ -78,10 +78,6 @@ class ReturnToStockOrder
         \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
         \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
-        if ($this->stockConfiguration->isAutoReturnEnabled()) {
-            return $resultEntityId;
-        }
-
         $order = $this->orderRepository->get($orderId);
 
         $returnToStockItems = [];
@@ -91,10 +87,11 @@ class ReturnToStockOrder
         ) {
             $returnToStockItems = $arguments->getExtensionAttributes()->getReturnToStockItems();
         }
-
-        $creditmemo = $this->creditmemoRepository->get($resultEntityId);
-        $this->returnProcessor->execute($creditmemo, $order, $returnToStockItems);
-
+        $isAutoReturn = $this->stockConfiguration->isAutoReturnEnabled();
+        if ($isAutoReturn || !empty($returnToStockItems)) {
+            $creditmemo = $this->creditmemoRepository->get($resultEntityId);
+            $this->returnProcessor->execute($creditmemo, $order, $returnToStockItems, $isAutoReturn);
+        }
         return $resultEntityId;
     }
 }

@@ -15,6 +15,7 @@
             <xs:element name="settings" minOccurs="0" maxOccurs="1">
                 <xs:complexType>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:group ref="abstractSettings"/>
                         <xs:group ref="componentSelectSettings"/>
                     </xs:choice>
                 </xs:complexType>
@@ -29,9 +30,21 @@
         </xs:complexContent>
     </xs:complexType>
 
+    <xs:complexType name="formElementSelect">
+        <xs:sequence>
+            <xs:element name="settings" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:group ref="componentSelectSettings"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="ui_element_attributes"/>
+    </xs:complexType>
+
     <xs:group name="componentSelectSettings">
         <xs:choice>
-            <xs:group ref="abstractSettings"/>
             <xs:element name="options" type="optionsType">
                 <xs:annotation>
                     <xs:documentation>

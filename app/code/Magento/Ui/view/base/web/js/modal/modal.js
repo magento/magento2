@@ -104,11 +104,12 @@ define([
                 /**
                  * Escape key press handler,
                  * close modal window
+                 * @param {Object} event - event
                  */
-                escapeKey: function () {
+                escapeKey: function (event) {
                     if (this.options.isOpen && this.modal.find(document.activeElement).length ||
                         this.options.isOpen && this.modal[0] === document.activeElement) {
-                        this.closeModal();
+                        this.closeModal(event);
                     }
                 }
             }
@@ -336,11 +337,18 @@ define([
          * Set z-index and margin for modal and overlay.
          */
         _setActive: function () {
-            var zIndex = this.modal.zIndex();
+            var zIndex = this.modal.zIndex(),
+                baseIndex = zIndex + this._getVisibleCount();
 
+            if (this.modal.data('active')) {
+                return;
+            }
+
+            this.modal.data('active', true);
+
+            this.overlay.zIndex(++baseIndex);
             this.prevOverlayIndex = this.overlay.zIndex();
-            this.modal.zIndex(zIndex + this._getVisibleCount());
-            this.overlay.zIndex(zIndex + (this._getVisibleCount() - 1));
+            this.modal.zIndex(this.overlay.zIndex() + 1);
 
             if (this._getVisibleSlideCount()) {
                 this.modal.css('marginLeft', this.options.modalLeftMargin * this._getVisibleSlideCount());
@@ -352,9 +360,10 @@ define([
          */
         _unsetActive: function () {
             this.modal.removeAttr('style');
+            this.modal.data('active', false);
 
             if (this.overlay) {
-                this.overlay.zIndex(this.prevOverlayIndex);
+                this.overlay.zIndex(this.prevOverlayIndex - 1);
             }
         },
 

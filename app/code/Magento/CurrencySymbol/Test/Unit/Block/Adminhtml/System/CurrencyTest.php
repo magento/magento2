@@ -5,7 +5,7 @@
  */
 namespace Magento\CurrencySymbol\Test\Unit\Block\Adminhtml\System;
 
-class CurrencyTest extends \PHPUnit_Framework_TestCase
+class CurrencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object manager helper
@@ -26,21 +26,12 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareLayout()
     {
-        $childBlockMock = $this->getMock(
+        $childBlockMock = $this->createPartialMock(
             \Magento\Framework\View\Element\BlockInterface::class,
-            ['addChild', 'toHtml'],
-            [],
-            '',
-            false
+            ['addChild', 'toHtml']
         );
 
-        $blockMock = $this->getMock(
-            \Magento\Framework\View\Element\BlockInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $blockMock = $this->createMock(\Magento\Framework\View\Element\BlockInterface::class);
 
         /** @var $layoutMock \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
         $layoutMock = $this->getMockForAbstractClass(

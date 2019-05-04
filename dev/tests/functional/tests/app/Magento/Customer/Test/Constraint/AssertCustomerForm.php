@@ -37,20 +37,41 @@ class AssertCustomerForm extends AbstractConstraint
     ];
 
     /**
+     * Locale map.
+     *
+     * @var array
+     */
+    private $localeMap = [
+        'en_GB' => 'd/m/Y'
+    ];
+
+    /**
+     * Format date for current locale.
+     *
+     * @var string
+     */
+    private $localeFormat = 'm/d/Y';
+
+    /**
      * Assert that displayed customer data on edit page(backend) equals passed from fixture.
      *
      * @param Customer $customer
      * @param CustomerIndex $pageCustomerIndex
      * @param CustomerIndexEdit $pageCustomerIndexEdit
-     * @param Address $address[optional]
+     * @param Address $address [optional]
+     * @param string $locale
      * @return void
      */
     public function processAssert(
         Customer $customer,
         CustomerIndex $pageCustomerIndex,
         CustomerIndexEdit $pageCustomerIndexEdit,
-        Address $address = null
+        Address $address = null,
+        $locale = ''
     ) {
+        $this->localeFormat = '' !== $locale && isset($this->localeMap[$locale])
+            ? $this->localeMap[$locale]
+            : $this->localeFormat;
         $data = [];
         $filter = [];
 
@@ -60,6 +81,9 @@ class AssertCustomerForm extends AbstractConstraint
         } else {
             $data['addresses'] = [];
         }
+        if (isset($data['customer']['dob'])) {
+            $data['customer']['dob'] = date($this->localeFormat, strtotime($data['customer']['dob']));
+        }
         $filter['email'] = $data['customer']['email'];
 
         $pageCustomerIndex->open();
@@ -67,7 +91,7 @@ class AssertCustomerForm extends AbstractConstraint
 
         $dataForm = $pageCustomerIndexEdit->getCustomerForm()->getDataCustomer($customer, $address);
         $dataDiff = $this->verify($data, $dataForm);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             empty($dataDiff),
             'Customer data on edit page(backend) not equals to passed from fixture.'
             . "\nFailed values: " . implode(', ', $dataDiff)
@@ -124,13 +148,13 @@ class AssertCustomerForm extends AbstractConstraint
         $customerGroupName = $customer->getGroupId();
 
         if ($customerGroupName) {
-            \PHPUnit_Framework_Assert::assertNotEmpty(
+            \PHPUnit\Framework\Assert::assertNotEmpty(
                 $formData['customer']['group_id'],
                 'Customer Group value is empty.'
             );
 
             if (!empty($formData['customer']['group_id'])) {
-                \PHPUnit_Framework_Assert::assertContains(
+                \PHPUnit\Framework\Assert::assertContains(
                     $customerGroupName,
                     $formData['customer']['group_id'],
                     'Customer Group name is incorrect.'

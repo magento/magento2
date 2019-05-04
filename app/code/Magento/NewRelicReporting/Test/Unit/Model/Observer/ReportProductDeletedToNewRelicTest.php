@@ -10,7 +10,7 @@ use Magento\NewRelicReporting\Model\Observer\ReportProductDeletedToNewRelic;
 /**
  * Class ReportProductDeletedToNewRelicTest
  */
-class ReportProductDeletedToNewRelicTest extends \PHPUnit_Framework_TestCase
+class ReportProductDeletedToNewRelicTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReportProductDeletedToNewRelic

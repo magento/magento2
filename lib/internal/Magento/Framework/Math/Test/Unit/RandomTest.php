@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Math\Test\Unit;
 
-class RandomTest extends \PHPUnit_Framework_TestCase
+class RandomTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param int    $length
@@ -26,6 +26,9 @@ class RandomTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function getRandomStringDataProvider()
     {
         return [
@@ -77,6 +80,9 @@ class RandomTest extends \PHPUnit_Framework_TestCase
         $this->assertGreaterThanOrEqual($min, $number);
     }
 
+    /**
+     * @return array
+     */
     public function testGetRandomNumberProvider()
     {
         return [

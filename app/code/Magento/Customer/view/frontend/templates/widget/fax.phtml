@@ -9,10 +9,10 @@
 /** @var \Magento\Customer\Block\Widget\Fax $block */
 ?>
 
-<div class="field fax <?php echo $block->isRequired() ? 'required' : '' ?>">
+<div class="field fax <?= $block->isRequired() ? 'required' : '' ?>">
     <label for="fax" class="label">
         <span>
-            <?php echo $block->escapeHtml(__('Fax')) ?>
+            <?= $block->escapeHtml(__('Fax')) ?>
         </span>
     </label>
     <div class="control">
@@ -25,9 +25,9 @@
         <input type="text"
                name="fax"
                id="fax"
-               value="<?php echo $block->escapeHtmlAttr($block->getFax()) ?>"
-               title="<?php echo $block->escapeHtmlAttr(__('Fax')) ?>"
-               class="input-text <?php echo $_validationClass ?: '' ?>"
+               value="<?= $block->escapeHtmlAttr($block->getFax()) ?>"
+               title="<?= $block->escapeHtmlAttr(__('Fax')) ?>"
+               class="input-text <?= $_validationClass ?: '' ?>"
         >
     </div>
 </div>

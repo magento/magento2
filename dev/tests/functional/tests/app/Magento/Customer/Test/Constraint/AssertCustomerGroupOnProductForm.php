@@ -36,7 +36,7 @@ class AssertCustomerGroupOnProductForm extends AbstractConstraint
 
         /** @var AdvancedPricing $advancedPricingTab */
         $advancedPricingTab = $catalogProductNew->getProductForm()->getSection('advanced-pricing');
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $advancedPricingTab->getTierPriceForm()->isVisibleCustomerGroup($customerGroup),
             "Customer group {$customerGroup->getCustomerGroupCode()} not in tier price form on product page."
         );

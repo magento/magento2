@@ -7,7 +7,7 @@ namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader\InstancesNamesList;
 
 use Magento\Setup\Module\Di\Compiler\Log\Log;
 
-class DirectoryTest extends \PHPUnit_Framework_TestCase
+class DirectoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Di\Code\Reader\ClassesScanner | \PHPUnit_Framework_MockObject_MockObject

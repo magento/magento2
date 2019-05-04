@@ -7,7 +7,7 @@ namespace Magento\Payment\Test\Unit\Gateway\Http\Converter;
 
 use Magento\Payment\Gateway\Http\Converter\HtmlFormConverter;
 
-class HtmlFormConverterTest extends \PHPUnit_Framework_TestCase
+class HtmlFormConverterTest extends \PHPUnit\Framework\TestCase
 {
     public function testConvert()
     {
@@ -24,7 +24,8 @@ class HtmlFormConverterTest extends \PHPUnit_Framework_TestCase
     public function testConvertNotValidHtml()
     {
         $converter = new HtmlFormConverter();
-        $converter->convert('Not html. Really not.');
+        $result = $converter->convert('Not html. Really not.');
+        $this->assertNotNull($result);
     }
 
     /**

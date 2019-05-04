@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderFormPaymentSection">
+        <element name="header" type="text" selector="#order-methods span.title"/>
+        <element name="getShippingMethods" type="text" selector="#order-shipping_method a.action-default" timeout="30"/>
+        <element name="flatRateOption" type="radio" selector="#s_method_flatrate_flatrate" timeout="30"/>
+        <element name="shippingError" type="text" selector="#order[has_shipping]-error"/>
+        <element name="freeShippingOption" type="radio" selector="#s_method_freeshipping_freeshipping" timeout="30"/>
+        <element name="checkMoneyOption" type="radio" selector="#p_method_checkmo" timeout="30"/>
+        <element name="paymentBlock" type="text" selector="#order-billing_method" />
+        <element name="paymentError" type="text" selector="#payment[method]-error"/>
+    </section>
+</sections>

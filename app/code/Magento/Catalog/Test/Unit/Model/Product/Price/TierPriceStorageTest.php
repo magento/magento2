@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Price;
 /**
  * TierPriceStorage test.
  */
-class TierPriceStorageTest extends \PHPUnit_Framework_TestCase
+class TierPriceStorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Price\TierPricePersistence|\PHPUnit_Framework_MockObject_MockObject
@@ -150,6 +150,30 @@ class TierPriceStorageTest extends \PHPUnit_Framework_TestCase
         $prices = $this->tierPriceStorage->get($skus);
         $this->assertNotEmpty($prices);
         $this->assertEquals(2, count($prices));
+    }
+
+    /**
+     * Test get method without tierprices.
+     *
+     * @return void
+     */
+    public function testGetWithoutTierPrices()
+    {
+        $skus = ['simple', 'virtual'];
+        $this->tierPriceValidator
+            ->expects($this->once())
+            ->method('validateSkus')
+            ->with($skus)
+            ->willReturn($skus);
+        $this->productIdLocator->expects($this->atLeastOnce())
+            ->method('retrieveProductIdsBySkus')
+            ->with(['simple', 'virtual'])
+            ->willReturn(['simple' => ['2' => 'simple'], 'virtual' => ['3' => 'virtual']]);
+        $this->tierPricePersistence->expects($this->once())->method('get')->willReturn([]);
+        $this->tierPricePersistence->expects($this->never())->method('getEntityLinkField');
+        $this->tierPriceFactory->expects($this->never())->method('create');
+        $prices = $this->tierPriceStorage->get($skus);
+        $this->assertEmpty($prices);
     }
 
     /**

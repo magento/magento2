@@ -10,7 +10,7 @@ namespace Magento\SalesInventory\Test\Unit\Model\Plugin\Order;
  * Class ReturnToStockInvoiceTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
+class ReturnToStockInvoiceTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\SalesInventory\Model\Plugin\Order\ReturnToStockInvoice */
     private $returnTOStock;
@@ -63,7 +63,7 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface
      */
-    private $extencionAttributesMock;
+    private $extensionAttributesMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Api\StockConfigurationInterface
@@ -91,11 +91,11 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
             \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface::class
         )->disableOriginalConstructor()
             ->getMock();
-        $this->extencionAttributesMock = $this->getMockBuilder(
+        $this->extensionAttributesMock = $this->getMockBuilder(
             \Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface::class
         )->disableOriginalConstructor()
             ->setMethods(['getReturnToStockItems'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -128,14 +128,14 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
         $invoiceId = 98;
         $this->creditmemoCreationArgumentsMock->expects($this->exactly(3))
             ->method('getExtensionAttributes')
-            ->willReturn($this->extencionAttributesMock);
+            ->willReturn($this->extensionAttributesMock);
 
         $this->invoiceRepositoryMock->expects($this->once())
             ->method('get')
             ->with($invoiceId)
             ->willReturn($this->invoiceMock);
 
-        $this->extencionAttributesMock->expects($this->exactly(2))
+        $this->extensionAttributesMock->expects($this->exactly(2))
             ->method('getReturnToStockItems')
             ->willReturn($returnToStockItems);
 

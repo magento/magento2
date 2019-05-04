@@ -24,6 +24,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_AdminNotification::show_list</aclResource>
         <dataProvider class="Magento\AdminNotification\Ui\Component\DataProvider\DataProvider" name="notification_area_data_source">
             <settings>
                 <requestFieldName>identity</requestFieldName>

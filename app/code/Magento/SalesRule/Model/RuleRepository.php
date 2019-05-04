@@ -8,7 +8,6 @@ namespace Magento\SalesRule\Model;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SortOrder;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 
 /**
@@ -63,7 +62,9 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
      */
     protected $ruleCollectionFactory;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
@@ -105,7 +106,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\SalesRule\Api\Data\RuleInterface $rule)
     {
@@ -117,7 +118,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getById($id)
     {
@@ -134,7 +135,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -181,13 +182,13 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
+     * @param FilterGroup $filterGroup
      * @param Collection $collection
-     * @deprecated
+     * @deprecated 100.2.0
      * @return void
      */
     protected function addFilterGroupToCollection(
-        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
+        FilterGroup $filterGroup,
         Collection $collection
     ) {
         $fields = [];
@@ -205,7 +206,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

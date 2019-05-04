@@ -7,18 +7,18 @@ namespace Magento\Framework\View\Test\Unit\Element\Message\Renderer;
 
 use Magento\Framework\View\Element\Message\Renderer\RenderersPool;
 
-class RenderersPoolTest extends \PHPUnit_Framework_TestCase
+class RenderersPoolTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetRenderer()
     {
         $renderers = [
-            'renderer_1' => $this->getMock(
+            'renderer_1' => $this->createMock(
                 \Magento\Framework\View\Element\Message\Renderer\RendererInterface::class
             ),
-            'renderer_2' => $this->getMock(
+            'renderer_2' => $this->createMock(
                 \Magento\Framework\View\Element\Message\Renderer\RendererInterface::class
             ),
-            'renderer_3' => $this->getMock(
+            'renderer_3' => $this->createMock(
                 \Magento\Framework\View\Element\Message\Renderer\RendererInterface::class
             )
         ];

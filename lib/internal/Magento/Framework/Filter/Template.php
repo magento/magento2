@@ -9,7 +9,12 @@
  */
 namespace Magento\Framework\Filter;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\AbstractModel;
+
 /**
+ * Template filter
+ *
  * @api
  */
 class Template implements \Zend_Filter_Interface
@@ -19,22 +24,27 @@ class Template implements \Zend_Filter_Interface
      */
     const CONSTRUCTION_PATTERN = '/{{([a-z]{0,10})(.*?)}}/si';
 
-    /**#@+
-     * Construction logic regular expression
+    /**
+     * Construction `depend` regular expression
      */
     const CONSTRUCTION_DEPEND_PATTERN = '/{{depend\s*(.*?)}}(.*?){{\\/depend\s*}}/si';
 
+    /**
+     * Construction `if` regular expression
+     */
     const CONSTRUCTION_IF_PATTERN = '/{{if\s*(.*?)}}(.*?)({{else}}(.*?))?{{\\/if\s*}}/si';
 
+    /**
+     * Construction `template` regular expression
+     */
     const CONSTRUCTION_TEMPLATE_PATTERN = '/{{(template)(.*?)}}/si';
 
-    /**#@-*/
-
     /**
-     * Callbacks that will be applied after filtering
-     *
-     * @var array
+     * Construction `for` regular expression
      */
+    const LOOP_PATTERN = '/{{for(?P<loopItem>.*? )(in)(?P<loopData>.*?)}}(?P<loopBody>.*?){{\/for}}/si';
+
+    /**#@-*/
     private $afterFilterCallbacks = [];
 
     /**
@@ -55,6 +65,18 @@ class Template implements \Zend_Filter_Interface
      * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
+
+    /**
+     * @var string[]
+     */
+    private $restrictedMethods = [
+        'addafterfiltercallback',
+        'getresourcecollection',
+        'load',
+        'save',
+        'getcollection',
+        'getresource'
+    ];
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
@@ -134,6 +156,8 @@ class Template implements \Zend_Filter_Interface
             }
         }
 
+        $value = $this->filterFor($value);
+
         if (preg_match_all(self::CONSTRUCTION_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
                 $callback = [$this, $construction[1] . 'Directive'];
@@ -154,6 +178,56 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Filter the string as template.
+     *
+     * @param string $value
+     * @example syntax {{for item in order.items}} name: {{var item.name}} {{/for}} order items collection.
+     * @example syntax {{for thing in things}} {{var thing.whatever}} {{/for}} e.g.:custom collection.
+     * @return string
+     */
+    private function filterFor($value)
+    {
+        if (preg_match_all(self::LOOP_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
+            foreach ($constructions as $construction) {
+                if (!$this->isValidLoop($construction)) {
+                    return $value;
+                }
+
+                $fullTextToReplace = $construction[0];
+                $loopData = $this->getVariable($construction['loopData'], '');
+
+                $loopTextToReplace = $construction['loopBody'];
+                $loopItemVariableName = preg_replace('/\s+/', '', $construction['loopItem']);
+
+                if (is_array($loopData) || $loopData instanceof \Traversable) {
+                    $replaceText = $this->getLoopReplacementText($loopData, $loopItemVariableName, $loopTextToReplace);
+                    $value = str_replace($fullTextToReplace, $replaceText, $value);
+                }
+            }
+        }
+
+        return $value;
+    }
+
+    /**
+     * Check if the matched construction is valid.
+     *
+     * @param array $construction
+     * @return bool
+     */
+    private function isValidLoop(array $construction)
+    {
+        $requiredFields = ['loopBody', 'loopItem', 'loopData'];
+        $validFields = array_filter(
+            $requiredFields,
+            function ($field) use ($construction) {
+                return isset($construction[$field]) && strlen(trim($construction[$field]));
+            }
+        );
+        return count($requiredFields) == count($validFields);
+    }
+
+    /**
      * Runs callbacks that have been added to filter content after directive processing is finished.
      *
      * @param string $value
@@ -171,8 +245,9 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * Adds a callback to run after main filtering has happened. Callback must accept a single argument and return
-     * a string of the processed value.
+     * Adds a callback to run after main filtering has happened.
+     *
+     * Callback must accept a single argument and return a string of the processed value.
      *
      * @param callable $afterFilterCallback
      * @return $this
@@ -200,6 +275,8 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Get var directive
+     *
      * @param string[] $construction
      * @return string
      */
@@ -231,7 +308,7 @@ class Template implements \Zend_Filter_Interface
     {
         // Processing of {template config_path=... [...]} statement
         $templateParameters = $this->getParameters($construction[2]);
-        if (!isset($templateParameters['config_path']) or !$this->getTemplateProcessor()) {
+        if (!isset($templateParameters['config_path']) || !$this->getTemplateProcessor()) {
             // Not specified template or not set include processor
             $replacedValue = '{Error in template processing}';
         } else {
@@ -245,6 +322,8 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Get depend directive
+     *
      * @param string[] $construction
      * @return string
      */
@@ -263,6 +342,8 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * If directive
+     *
      * @param string[] $construction
      * @return string
      */
@@ -302,6 +383,46 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Validate method call initiated in a template.
+     *
+     * Deny calls for methods that may disrupt template processing.
+     *
+     * @param object $object
+     * @param string $method
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    private function validateVariableMethodCall($object, string $method): void
+    {
+        if ($object === $this) {
+            if (in_array(mb_strtolower($method), $this->restrictedMethods)) {
+                throw new \InvalidArgumentException("Method $method cannot be called from template.");
+            }
+        }
+    }
+
+    /**
+     * Check allowed methods for data objects.
+     *
+     * Deny calls for methods that may disrupt template processing.
+     *
+     * @param object $object
+     * @param string $method
+     * @return bool
+     * @throws \InvalidArgumentException
+     */
+    private function isAllowedDataObjectMethod($object, string $method): bool
+    {
+        if ($object instanceof AbstractExtensibleModel || $object instanceof AbstractModel) {
+            if (in_array(mb_strtolower($method), $this->restrictedMethods)) {
+                throw new \InvalidArgumentException("Method $method cannot be called from template.");
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Return variable value for var construction
      *
      * @param string $value raw parameters
@@ -317,14 +438,14 @@ class Template implements \Zend_Filter_Interface
         $stackVars = $tokenizer->tokenize();
         $result = $default;
         $last = 0;
-        for ($i = 0; $i < count($stackVars); $i++) {
+        for ($i = 0, $count = count($stackVars); $i < $count; $i++) {
             if ($i == 0 && isset($this->templateVars[$stackVars[$i]['name']])) {
                 // Getting of template value
                 $stackVars[$i]['variable'] = & $this->templateVars[$stackVars[$i]['name']];
             } elseif (isset($stackVars[$i - 1]['variable'])
                     && $stackVars[$i - 1]['variable'] instanceof \Magento\Framework\DataObject
             ) {
-                // If object calling methods or getting properties
+                // If data object calling methods or getting properties
                 if ($stackVars[$i]['type'] == 'property') {
                     $caller = 'get' . $this->string->upperCaseWords($stackVars[$i]['name'], '_', '');
                     $stackVars[$i]['variable'] = method_exists(
@@ -334,16 +455,32 @@ class Template implements \Zend_Filter_Interface
                         $stackVars[$i]['name']
                     );
                 } elseif ($stackVars[$i]['type'] == 'method') {
-                    // Calling of object method
+                    // Calling of data object method
                     if (method_exists($stackVars[$i - 1]['variable'], $stackVars[$i]['name'])
                             || substr($stackVars[$i]['name'], 0, 3) == 'get'
                     ) {
                         $stackVars[$i]['args'] = $this->getStackArgs($stackVars[$i]['args']);
-                        $stackVars[$i]['variable'] = call_user_func_array(
-                            [$stackVars[$i - 1]['variable'], $stackVars[$i]['name']],
-                            $stackVars[$i]['args']
-                        );
+
+                        if ($this->isAllowedDataObjectMethod($stackVars[$i - 1]['variable'], $stackVars[$i]['name'])) {
+                            $stackVars[$i]['variable'] = call_user_func_array(
+                                [$stackVars[$i - 1]['variable'], $stackVars[$i]['name']],
+                                $stackVars[$i]['args']
+                            );
+                        }
                     }
+                }
+                $last = $i;
+            } elseif (isset($stackVars[$i - 1]['variable'])
+                && is_object($stackVars[$i - 1]['variable'])
+                && $stackVars[$i]['type'] == 'method'
+            ) {
+                // Calling object methods
+                $object = $stackVars[$i - 1]['variable'];
+                $method = $stackVars[$i]['name'];
+                if (method_exists($object, $method)) {
+                    $args = $this->getStackArgs($stackVars[$i]['args']);
+                    $this->validateVariableMethodCall($object, $method);
+                    $stackVars[$i]['variable'] = call_user_func_array([$object, $method], $args);
                 }
                 $last = $i;
             }
@@ -373,5 +510,54 @@ class Template implements \Zend_Filter_Interface
             }
         }
         return $stack;
+    }
+
+    /**
+     * Process loop text to replace.
+     *
+     * @param array $loopData
+     * @param string $loopItemVariableName
+     * @param string $loopTextToReplace
+     * @return string
+     */
+    private function getLoopReplacementText(array $loopData, $loopItemVariableName, $loopTextToReplace)
+    {
+        $loopText = [];
+        $loopIndex = 0;
+        $loopDataObject = new \Magento\Framework\DataObject();
+
+        foreach ($loopData as $loopItemDataObject) {
+            // Loop item can be an array or DataObject.
+            // If loop item is an array, convert it to DataObject
+            // to have unified interface if the collection
+            if (!$loopItemDataObject instanceof \Magento\Framework\DataObject) {
+                if (!is_array($loopItemDataObject)) {
+                    continue;
+                }
+                $loopItemDataObject = new \Magento\Framework\DataObject($loopItemDataObject);
+            }
+
+            $loopDataObject->setData('index', $loopIndex++);
+            $this->templateVars['loop'] = $loopDataObject;
+            $this->templateVars[$loopItemVariableName] = $loopItemDataObject;
+
+            if (preg_match_all(
+                self::CONSTRUCTION_PATTERN,
+                $loopTextToReplace,
+                $attributes,
+                PREG_SET_ORDER
+            )
+            ) {
+                $subText = $loopTextToReplace;
+                foreach ($attributes as $attribute) {
+                    $text = $this->getVariable($attribute[2], '');
+                    $subText = str_replace($attribute[0], $text, $subText);
+                }
+                $loopText[] = $subText;
+            }
+            unset($this->templateVars[$loopItemVariableName]);
+        }
+        $replaceText = implode('', $loopText);
+        return $replaceText;
     }
 }

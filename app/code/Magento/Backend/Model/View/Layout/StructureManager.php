@@ -16,6 +16,7 @@ use Magento\Framework\View\Layout\Data\Structure;
  * By using this class developer can remove layout entities (block, uiComponent) from scheduled structure
  * Removed entities will not appear at rendered page
  * @api
+ * @since 100.2.0
  */
 class StructureManager
 {
@@ -27,6 +28,7 @@ class StructureManager
      * @param string $elementName
      * @param bool $isChild
      * @return bool
+     * @since 100.2.0
      */
     public function removeElement(
         ScheduledStructure $scheduledStructure,

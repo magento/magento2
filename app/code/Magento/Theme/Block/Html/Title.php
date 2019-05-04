@@ -15,6 +15,7 @@ use Magento\Framework\View\Element\Template;
  * @method string getTitleId()
  * @method string getTitleClass()
  * @api
+ * @since 100.0.2
  */
 class Title extends Template
 {

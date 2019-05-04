@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Stdlib\DateTime;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -64,7 +65,7 @@ class DateTimeFormatter implements DateTimeFormatterInterface
     /**
      * Implements what IntlDateFormatter::formatObject() is in PHP 5.5+
      *
-     * @param \IntlCalendar|\DateTime $object
+     * @param \IntlCalendar|\DateTimeInterface $object
      * @param string|int|array|null $format
      * @param string|null $locale
      * @return string
@@ -82,7 +83,9 @@ class DateTimeFormatter implements DateTimeFormatterInterface
             $dateFormat = $timeFormat = \IntlDateFormatter::MEDIUM;
             $pattern = $format;
         } else {
-            throw new LocalizedException(new Phrase('Format type is invalid'));
+            throw new LocalizedException(
+                new Phrase('The format type is invalid. Verify the format type and try again.')
+            );
         }
 
         $timezone = $object->getTimezone();

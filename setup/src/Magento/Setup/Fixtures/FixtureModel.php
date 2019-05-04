@@ -10,6 +10,7 @@
 namespace Magento\Setup\Fixtures;
 
 use Magento\Indexer\Console\Command\IndexerReindexCommand;
+use Magento\Setup\Exception;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -48,10 +49,17 @@ class FixtureModel
     protected $fixtures = [];
 
     /**
+     * List of fixtures indexed by class names
+     *
+     * @var \Magento\Setup\Fixtures\Fixture[]
+     */
+    private $fixturesByNames = [];
+
+    /**
      * Parameters labels
      *
      * @var array
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected $paramLabels = [];
 
@@ -97,7 +105,7 @@ class FixtureModel
      */
     public function loadFixtures()
     {
-        $files = glob(__DIR__ . DIRECTORY_SEPARATOR . self::FIXTURE_PATTERN);
+        $files = glob(__DIR__ . DIRECTORY_SEPARATOR . self::FIXTURE_PATTERN, GLOB_NOSORT);
 
         foreach ($files as $file) {
             $file = basename($file, '.php');
@@ -109,7 +117,18 @@ class FixtureModel
                     'fixtureModel' => $this,
                 ]
             );
-            $this->fixtures[$fixture->getPriority()] = $fixture;
+
+            if (isset($this->fixtures[$fixture->getPriority()])) {
+                throw new \InvalidArgumentException(
+                    sprintf('Duplicate priority %d in fixture %s', $fixture->getPriority(), $type)
+                );
+            }
+
+            if ($fixture->getPriority() >= 0) {
+                $this->fixtures[$fixture->getPriority()] = $fixture;
+            }
+
+            $this->fixturesByNames[get_class($fixture)] = $fixture;
         }
 
         ksort($this->fixtures);
@@ -120,7 +139,7 @@ class FixtureModel
      * Get param labels
      *
      * @return array
-     * @deprecated
+     * @deprecated 2.2.0
      */
     public function getParamLabels()
     {
@@ -135,6 +154,21 @@ class FixtureModel
     public function getFixtures()
     {
         return $this->fixtures;
+    }
+
+    /**
+     * Returns fixture by name
+     * @param $name string
+     * @return \Magento\Setup\Fixtures\Fixture
+     * @throws \Magento\Setup\Exception
+     */
+    public function getFixtureByName($name)
+    {
+        if (!array_key_exists($name, $this->fixturesByNames)) {
+            throw new Exception('Wrong fixture name');
+        }
+
+        return $this->fixturesByNames[$name];
     }
 
     /**
@@ -191,7 +225,7 @@ class FixtureModel
      * Reset object manager
      *
      * @return \Magento\Framework\ObjectManagerInterface
-     * @deprecated
+     * @deprecated 2.2.0
      */
     public function resetObjectManager()
     {

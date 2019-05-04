@@ -6,15 +6,15 @@
 
 namespace Magento\Security\Test\Unit\Controller\Adminhtml\Session;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test class for \Magento\Security\Test\Unit\Controller\Adminhtml\Session\LogoutAll testing
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LogoutAllTest extends \PHPUnit_Framework_TestCase
+class LogoutAllTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  \Magento\Security\Controller\Adminhtml\Session\LogoutAll
@@ -74,7 +74,7 @@ class LogoutAllTest extends \PHPUnit_Framework_TestCase
 
         $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addSuccess', 'addError', 'addException'])
+            ->setMethods(['addSuccessMessage', 'addErrorMessage', 'addExceptionMessage'])
             ->getMockForAbstractClass();
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')
@@ -88,12 +88,9 @@ class LogoutAllTest extends \PHPUnit_Framework_TestCase
             ->method('getSession')
             ->willReturn($this->session);
 
-        $this->sessionsManager =  $this->getMock(
+        $this->sessionsManager = $this->createPartialMock(
             \Magento\Security\Model\AdminSessionsManager::class,
-            ['logoutOtherUserSessions'],
-            [],
-            '',
-            false
+            ['logoutOtherUserSessions']
         );
 
         $this->actionFlagMock = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
@@ -112,13 +109,7 @@ class LogoutAllTest extends \PHPUnit_Framework_TestCase
             ->method('getResponse')
             ->willReturn($this->responseMock);
 
-        $this->backendHelperMock = $this->getMock(
-            \Magento\Backend\Helper\Data::class,
-            ['getUrl'],
-            [],
-            '',
-            false
-        );
+        $this->backendHelperMock = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
         $this->contextMock->expects($this->any())
             ->method('getHelper')
             ->willReturn($this->backendHelperMock);
@@ -141,12 +132,12 @@ class LogoutAllTest extends \PHPUnit_Framework_TestCase
         $this->sessionsManager->expects($this->once())
             ->method('logoutOtherUserSessions');
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with($successMessage);
         $this->messageManager->expects($this->never())
-            ->method('addError');
+            ->method('addErrorMessage');
         $this->messageManager->expects($this->never())
-            ->method('addException');
+            ->method('addExceptionMessage');
         $this->responseMock->expects($this->once())
             ->method('setRedirect');
         $this->actionFlagMock->expects($this->once())
@@ -167,7 +158,7 @@ class LogoutAllTest extends \PHPUnit_Framework_TestCase
             ->method('logoutOtherUserSessions')
             ->willThrowException(new LocalizedException($phrase));
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($phrase);
         $this->controller->execute();
     }
@@ -182,7 +173,7 @@ class LogoutAllTest extends \PHPUnit_Framework_TestCase
             ->method('logoutOtherUserSessions')
             ->willThrowException(new \Exception());
         $this->messageManager->expects($this->once())
-            ->method('addException')
+            ->method('addExceptionMessage')
             ->with(new \Exception(), $phrase);
         $this->controller->execute();
     }

@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\ProductLink;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class ManagementTest extends \PHPUnit_Framework_TestCase
+class ManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ProductLink\Management
@@ -40,22 +38,10 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productRepositoryMock = $this->getMock(
-            \Magento\Catalog\Model\ProductRepository::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->productRepositoryMock = $this->createMock(\Magento\Catalog\Model\ProductRepository::class);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
 
-        $this->linkTypeProviderMock = $this->getMock(
-            \Magento\Catalog\Model\Product\LinkTypeProvider::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->linkTypeProviderMock = $this->createMock(\Magento\Catalog\Model\Product\LinkTypeProvider::class);
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $this->objectManager->getObject(
@@ -93,7 +79,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Unknown link type: bad type
+     * @expectedExceptionMessage The "bad type" link type is unknown. Verify the type and try again.
      */
     public function testGetLinkedItemsByTypeWithWrongType()
     {
@@ -146,7 +132,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage linkType is a required field.
+     * @expectedExceptionMessage "linkType" is required. Enter and try again.
      */
     public function testSetProductLinksWithoutLinkTypeInLink()
     {
@@ -168,7 +154,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Provided link type "bad type" does not exist
+     * @expectedExceptionMessage The "bad type" link type wasn't found. Verify the type and try again.
      */
     public function testSetProductLinksThrowExceptionIfProductLinkTypeDoesNotExist()
     {
@@ -195,7 +181,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested product doesn't exist
+     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testSetProductLinksNoProductException()
     {
@@ -217,14 +203,19 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->productRepositoryMock->expects($this->once())
             ->method('get')
-            ->will($this->throwException(
-                new \Magento\Framework\Exception\NoSuchEntityException(__('Requested product doesn\'t exist'))));
+            ->will(
+                $this->throwException(
+                    new \Magento\Framework\Exception\NoSuchEntityException(
+                        __("The product that was requested doesn't exist. Verify the product and try again.")
+                    )
+                )
+            );
         $this->model->setProductLinks($productSku, $links);
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Invalid data provided for linked products
+     * @expectedExceptionMessage The linked products data is invalid. Verify the data and try again.
      */
     public function testSetProductLinksInvalidDataException()
     {

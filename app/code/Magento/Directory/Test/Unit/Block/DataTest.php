@@ -21,7 +21,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  Data */
     private $block;
@@ -81,7 +81,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->serializerMock = $this->getMock(SerializerInterface::class, [], [], '', false);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->block,
             'serializer',

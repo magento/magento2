@@ -14,6 +14,7 @@ use Magento\Framework\EntityManager\MetadataPool;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -139,6 +140,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @var MetadataPool
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -214,6 +216,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get metadata pool object
      *
      * @return MetadataPool
+     * @since 100.1.0
      */
     protected function getMetadataPool()
     {
@@ -304,6 +307,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         $checkInStock = $this->_productInStock && !$this->stockConfiguration->isShowOutOfStock();
 
+        /** @var \Magento\Wishlist\Model\Item $item */
         foreach ($this as $item) {
             $product = $productCollection->getItemById($item->getProductId());
             if ($product) {
@@ -317,7 +321,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                     $item->setPrice($product->getPrice());
                 }
             } else {
-                $item->isDeleted(true);
+                $this->removeItemByKey($item->getId());
             }
         }
 
@@ -415,6 +419,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Set Salable Filter.
+     *
      * This filter apply Salable Product Types Filter to product collection.
      *
      * @param bool $flag
@@ -428,6 +433,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Set In Stock Filter.
+     *
      * This filter remove items with no salable product.
      *
      * @param bool $flag
@@ -475,7 +481,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         if (isset($constraints['to'])) {
             $firstDay = new \DateTime();
-            $firstDay->modify('-' . $gmtOffset . ' second')->modify('-' . (intval($constraints['to']) + 1) . ' day');
+            $firstDay->modify('-' . $gmtOffset . ' second')->modify('-' . ((int)($constraints['to']) + 1) . ' day');
             $filter['from'] = $firstDay;
         }
 
@@ -564,6 +570,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * After load data
+     *
      * @return $this
      */
     protected function _afterLoadData()

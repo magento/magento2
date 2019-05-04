@@ -10,7 +10,7 @@ use Magento\Framework\Message\MessageInterface;
 /**
  * \Magento\Framework\Message\Success test case
  */
-class SuccessTest extends \PHPUnit_Framework_TestCase
+class SuccessTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Message\Success

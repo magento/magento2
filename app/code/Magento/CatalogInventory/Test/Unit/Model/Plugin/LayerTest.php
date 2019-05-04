@@ -5,7 +5,9 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Plugin;
 
-class LayerTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Search\EngineResolverInterface;
+
+class LayerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Plugin\Layer
@@ -22,20 +24,24 @@ class LayerTest extends \PHPUnit_Framework_TestCase
      */
     protected $_stockHelperMock;
 
+    /**
+     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $engineResolver;
+
     protected function setUp()
     {
-        $this->_scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->_stockHelperMock = $this->getMock(
-            \Magento\CatalogInventory\Helper\Stock::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_stockHelperMock = $this->createMock(\Magento\CatalogInventory\Helper\Stock::class);
+        $this->engineResolver = $this->getMockBuilder(EngineResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCurrentSearchEngine'])
+            ->getMockForAbstractClass();
 
         $this->_model = new \Magento\CatalogInventory\Model\Plugin\Layer(
             $this->_stockHelperMock,
-            $this->_scopeConfigMock
+            $this->_scopeConfigMock,
+            $this->engineResolver
         );
     }
 
@@ -44,6 +50,10 @@ class LayerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddStockStatusDisabledShow()
     {
+        $this->engineResolver->expects($this->any())
+            ->method('getCurrentSearchEngine')
+            ->willReturn('mysql');
+
         $this->_scopeConfigMock->expects(
             $this->once()
         )->method(
@@ -54,16 +64,10 @@ class LayerTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(true)
         );
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collectionMock */
-        $collectionMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $collectionMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
         $this->_stockHelperMock->expects($this->never())->method('addIsInStockFilterToCollection');
         /** @var \Magento\Catalog\Model\Layer $subjectMock */
-        $subjectMock = $this->getMock(\Magento\Catalog\Model\Layer::class, [], [], '', false);
+        $subjectMock = $this->createMock(\Magento\Catalog\Model\Layer::class);
         $this->_model->beforePrepareProductCollection($subjectMock, $collectionMock);
     }
 
@@ -72,6 +76,10 @@ class LayerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddStockStatusEnabledShow()
     {
+        $this->engineResolver->expects($this->any())
+            ->method('getCurrentSearchEngine')
+            ->willReturn('mysql');
+
         $this->_scopeConfigMock->expects(
             $this->once()
         )->method(
@@ -82,13 +90,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(false)
         );
 
-        $collectionMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $collectionMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
 
         $this->_stockHelperMock->expects(
             $this->once()
@@ -98,7 +100,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
             $collectionMock
         );
 
-        $subjectMock = $this->getMock(\Magento\Catalog\Model\Layer::class, [], [], '', false);
+        $subjectMock = $this->createMock(\Magento\Catalog\Model\Layer::class);
         $this->_model->beforePrepareProductCollection($subjectMock, $collectionMock);
     }
 }

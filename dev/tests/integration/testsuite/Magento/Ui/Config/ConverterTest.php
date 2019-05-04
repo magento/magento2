@@ -10,7 +10,7 @@ use Magento\Framework\Config\FileIterator;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Converter
@@ -88,6 +88,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             ['form'],
             ['hidden'],
             ['htmlContent'],
+            ['imageUploader'],
             ['input'],
             ['insertForm'],
             ['insertListing'],

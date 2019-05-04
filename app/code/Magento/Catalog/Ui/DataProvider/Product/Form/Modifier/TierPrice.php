@@ -18,6 +18,7 @@ use Magento\Ui\Component\Form\Field;
  * Tier prices modifier adds price type option to tier prices.
  *
  * @api
+ * @since 101.1.0
  */
 class TierPrice extends AbstractModifier
 {
@@ -44,7 +45,8 @@ class TierPrice extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @since 101.1.0
      */
     public function modifyData(array $data)
     {
@@ -52,7 +54,11 @@ class TierPrice extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * Add tier price info to meta array.
+     *
+     * @since 101.1.0
+     * @param array $meta
+     * @return array
      */
     public function modifyMeta(array $meta)
     {
@@ -147,8 +153,8 @@ class TierPrice extends AbstractModifier
                                     'dataType' => Price::NAME,
                                     'addbefore' => '%',
                                     'validation' => [
-                                        'validate-number' => true,
-                                        'less-than-equals-to' => 100
+                                        'required-entry' => true,
+                                        'validate-positive-percent-decimal' => true
                                     ],
                                     'visible' => $firstOption
                                         && $firstOption['value'] == ProductPriceOptionsInterface::VALUE_PERCENT,

@@ -5,6 +5,7 @@
  */
 namespace Magento\Paypal\Test\Unit\Controller\Payflow;
 
+use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Checkout\Block\Onepage\Success;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
@@ -26,7 +27,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReturnUrlTest extends \PHPUnit_Framework_TestCase
+class ReturnUrlTest extends \PHPUnit\Framework\TestCase
 {
     const LAST_REAL_ORDER_ID = '000000001';
 
@@ -91,6 +92,11 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
+     * @var PaymentFailuresInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $paymentFailures;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -138,17 +144,29 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getLastRealOrderId', 'getLastRealOrder', 'restoreQuote'])
             ->getMock();
 
+        $this->quote = $this->getMockBuilder(CartInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->context->method('getView')
             ->willReturn($this->view);
         $this->context->method('getRequest')
             ->willReturn($this->request);
 
-        $this->returnUrl = $this->objectManager->getObject(ReturnUrl::class, [
-            'context' => $this->context,
-            'checkoutSession' => $this->checkoutSession,
-            'orderFactory' => $this->orderFactory,
-            'checkoutHelper' => $this->checkoutHelper,
-        ]);
+        $this->returnUrl = $this->objectManager->getObject(
+            ReturnUrl::class,
+            [
+                'context' => $this->context,
+                'checkoutSession' => $this->checkoutSession,
+                'orderFactory' => $this->orderFactory,
+                'checkoutHelper' => $this->checkoutHelper,
+                'paymentFailures' => $this->paymentFailures,
+            ]
+        );
     }
 
     /**
@@ -169,7 +187,8 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
             ->with('goto_success_page', true)
             ->willReturnSelf();
 
-        $this->returnUrl->execute();
+        $result = $this->returnUrl->execute();
+        $this->assertNull($result);
     }
 
     /**
@@ -320,6 +339,7 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
             'checkoutSession' => $this->checkoutSession,
             'orderFactory' => $this->orderFactory,
             'checkoutHelper' => $this->checkoutHelper,
+            'paymentFailures' => $this->paymentFailures,
         ]);
 
         $returnUrl->execute();

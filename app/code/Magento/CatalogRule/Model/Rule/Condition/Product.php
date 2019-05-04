@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Catalog Rule Product Condition data model
- */
 namespace Magento\CatalogRule\Model\Rule\Condition;
 
 /**
+ * Catalog Rule Product Condition data model
+ *
  * @method string getAttribute() Returns attribute code
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
@@ -24,11 +23,14 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     {
         $attrCode = $this->getAttribute();
         if ('category_ids' == $attrCode) {
-            return $this->validateAttribute($model->getAvailableInCategories());
+            return parent::validate($model);
         }
 
         $oldAttrValue = $model->getData($attrCode);
         if ($oldAttrValue === null) {
+            if ($this->getOperator() === '<=>') {
+                return true;
+            }
             return false;
         }
 
@@ -99,6 +101,10 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     {
         $attribute = $model->getResource()->getAttribute($this->getAttribute());
         if ($attribute && $attribute->getBackendType() == 'datetime') {
+            if (!$value) {
+                return null;
+            }
+            $this->setValue(strtotime($this->getValue()));
             $value = strtotime($value);
         }
 

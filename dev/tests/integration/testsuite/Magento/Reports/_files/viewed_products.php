@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\AreaList::class)
     ->getArea('adminhtml')
     ->load(\Magento\Framework\App\Area::PART_CONFIG);
@@ -35,10 +33,10 @@ foreach ($productIds as $productId) {
         new \Magento\Framework\Event\Observer(
             [
                 'event' => new \Magento\Framework\DataObject(
-                        [
-                            'product' => new \Magento\Framework\DataObject(['id' => $productId]),
+                    [
+                        'product' => new \Magento\Framework\DataObject(['id' => $productId]),
                         ]
-                    ),
+                ),
             ]
         )
     );

@@ -1,0 +1,207 @@
+{
+    "review_entity": {
+        "column": {
+            "entity_id": true,
+            "entity_code": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "review_status": {
+        "column": {
+            "status_id": true,
+            "status_code": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "review": {
+        "column": {
+            "review_id": true,
+            "created_at": true,
+            "entity_id": true,
+            "entity_pk_value": true,
+            "status_id": true
+        },
+        "index": {
+            "REVIEW_ENTITY_ID": true,
+            "REVIEW_STATUS_ID": true,
+            "REVIEW_ENTITY_PK_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "REVIEW_ENTITY_ID_REVIEW_ENTITY_ENTITY_ID": true,
+            "REVIEW_STATUS_ID_REVIEW_STATUS_STATUS_ID": true
+        }
+    },
+    "review_detail": {
+        "column": {
+            "detail_id": true,
+            "review_id": true,
+            "store_id": true,
+            "title": true,
+            "detail": true,
+            "nickname": true,
+            "customer_id": true
+        },
+        "index": {
+            "REVIEW_DETAIL_REVIEW_ID": true,
+            "REVIEW_DETAIL_STORE_ID": true,
+            "REVIEW_DETAIL_CUSTOMER_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "REVIEW_DETAIL_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "REVIEW_DETAIL_REVIEW_ID_REVIEW_REVIEW_ID": true,
+            "REVIEW_DETAIL_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "review_entity_summary": {
+        "column": {
+            "primary_id": true,
+            "entity_pk_value": true,
+            "entity_type": true,
+            "reviews_count": true,
+            "rating_summary": true,
+            "store_id": true
+        },
+        "index": {
+            "REVIEW_ENTITY_SUMMARY_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "REVIEW_ENTITY_SUMMARY_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "review_store": {
+        "column": {
+            "review_id": true,
+            "store_id": true
+        },
+        "index": {
+            "REVIEW_STORE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "REVIEW_STORE_REVIEW_ID_REVIEW_REVIEW_ID": true,
+            "REVIEW_STORE_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "rating_entity": {
+        "column": {
+            "entity_id": true,
+            "entity_code": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "RATING_ENTITY_ENTITY_CODE": true
+        }
+    },
+    "rating": {
+        "column": {
+            "rating_id": true,
+            "entity_id": true,
+            "rating_code": true,
+            "position": true,
+            "is_active": true
+        },
+        "index": {
+            "RATING_ENTITY_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "RATING_ENTITY_ID_RATING_ENTITY_ENTITY_ID": true,
+            "RATING_RATING_CODE": true
+        }
+    },
+    "rating_option": {
+        "column": {
+            "option_id": true,
+            "rating_id": true,
+            "code": true,
+            "value": true,
+            "position": true
+        },
+        "index": {
+            "RATING_OPTION_RATING_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "RATING_OPTION_RATING_ID_RATING_RATING_ID": true
+        }
+    },
+    "rating_option_vote": {
+        "column": {
+            "vote_id": true,
+            "option_id": true,
+            "remote_ip": true,
+            "remote_ip_long": true,
+            "customer_id": true,
+            "entity_pk_value": true,
+            "rating_id": true,
+            "review_id": true,
+            "percent": true,
+            "value": true
+        },
+        "index": {
+            "RATING_OPTION_VOTE_OPTION_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "RATING_OPTION_VOTE_OPTION_ID_RATING_OPTION_OPTION_ID": true,
+            "RATING_OPTION_VOTE_REVIEW_ID_REVIEW_REVIEW_ID": true
+        }
+    },
+    "rating_option_vote_aggregated": {
+        "column": {
+            "primary_id": true,
+            "rating_id": true,
+            "entity_pk_value": true,
+            "vote_count": true,
+            "vote_value_sum": true,
+            "percent": true,
+            "percent_approved": true,
+            "store_id": true
+        },
+        "index": {
+            "RATING_OPTION_VOTE_AGGREGATED_RATING_ID": true,
+            "RATING_OPTION_VOTE_AGGREGATED_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "RATING_OPTION_VOTE_AGGREGATED_RATING_ID_RATING_RATING_ID": true,
+            "RATING_OPTION_VOTE_AGGREGATED_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "rating_store": {
+        "column": {
+            "rating_id": true,
+            "store_id": true
+        },
+        "index": {
+            "RATING_STORE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "RATING_STORE_STORE_ID_STORE_STORE_ID": true,
+            "RATING_STORE_RATING_ID_RATING_RATING_ID": true
+        }
+    },
+    "rating_title": {
+        "column": {
+            "rating_id": true,
+            "store_id": true,
+            "value": true
+        },
+        "index": {
+            "RATING_TITLE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "RATING_TITLE_RATING_ID_RATING_RATING_ID": true,
+            "RATING_TITLE_STORE_ID_STORE_STORE_ID": true
+        }
+    }
+}

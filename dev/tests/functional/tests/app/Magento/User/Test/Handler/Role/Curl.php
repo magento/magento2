@@ -57,7 +57,7 @@ class Curl extends AbstractCurl implements RoleInterface
         $response = $curl->read();
         $curl->close();
 
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             throw new \Exception("Role creating by curl handler was not successful! Response: $response");
         }
 

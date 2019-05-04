@@ -15,16 +15,16 @@
 <?php if (($_products = $block->getRecentlyViewedProducts()) && $_products->getSize()): ?>
 <div class="block widget block-viewed-products-names">
     <div class="block-title">
-        <strong><?php /* @escapeNotVerified */ echo __('Recently Viewed') ?></strong>
+        <strong><?= /* @escapeNotVerified */ __('Recently Viewed') ?></strong>
     </div>
     <div class="block-content">
         <?php $suffix = $block->getNameInLayout(); ?>
-        <ol id="widget-viewed-<?php /* @escapeNotVerified */ echo $suffix; ?>" class="product-items product-items-names">
+        <ol id="widget-viewed-<?= /* @escapeNotVerified */ $suffix ?>" class="product-items product-items-names">
         <?php foreach ($_products as $_product): ?>
             <li class="product-item">
                 <strong class="product-item-name">
-                    <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="product-item-link">
-                        <?php /* @escapeNotVerified */ echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
+                    <a href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>" class="product-item-link">
+                        <?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
                     </a>
                 </strong>
             </li>

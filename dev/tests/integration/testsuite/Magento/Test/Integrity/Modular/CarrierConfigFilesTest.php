@@ -9,7 +9,7 @@ namespace Magento\Test\Integrity\Modular;
 
 use Magento\Framework\Module\Dir;
 
-class CarrierConfigFilesTest extends \PHPUnit_Framework_TestCase
+class CarrierConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\Reader

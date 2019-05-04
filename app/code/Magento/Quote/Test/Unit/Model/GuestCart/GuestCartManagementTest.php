@@ -7,7 +7,7 @@
 
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
-class GuestCartManagementTest extends \PHPUnit_Framework_TestCase
+class GuestCartManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -57,22 +57,16 @@ class GuestCartManagementTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $this->quoteIdMaskFactoryMock = $this->getMock(
+        $this->quoteIdMaskFactoryMock = $this->createPartialMock(
             \Magento\Quote\Model\QuoteIdMaskFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->quoteIdMaskMock = $this->getMock(
+        $this->quoteIdMaskMock = $this->createPartialMock(
             \Magento\Quote\Model\QuoteIdMask::class,
-            ['getQuoteId', 'getMaskedId', 'load', 'save', 'setQuoteId'],
-            [],
-            '',
-            false
+            ['getQuoteId', 'getMaskedId', 'load', 'save', 'setQuoteId']
         );
 
-        $this->cartRepositoryMock = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->cartRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
 
         $this->quoteMock = $this->getMockForAbstractClass(
             \Magento\Quote\Api\Data\CartInterface::class,
@@ -100,7 +94,7 @@ class GuestCartManagementTest extends \PHPUnit_Framework_TestCase
         $cartId = 1;
         $this->quoteIdMaskMock->expects($this->once())->method('setQuoteId')->with($cartId)->willReturnSelf();
         $this->quoteIdMaskMock->expects($this->once())->method('save')->willReturnSelf();
-        $this->quoteIdMaskMock->expects($this->once())->method('getMaskedId')->willreturn($maskedCartId);
+        $this->quoteIdMaskMock->expects($this->once())->method('getMaskedId')->willReturn($maskedCartId);
         $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteIdMaskMock);
         $this->quoteManagementMock->expects($this->once())->method('createEmptyCart')->willReturn($cartId);
 

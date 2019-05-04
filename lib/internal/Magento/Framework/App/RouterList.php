@@ -119,14 +119,6 @@ class RouterList implements RouterListInterface
      */
     protected function compareRoutersSortOrder($routerDataFirst, $routerDataSecond)
     {
-        if ((int)$routerDataFirst['sortOrder'] == (int)$routerDataSecond['sortOrder']) {
-            return 0;
-        }
-
-        if ((int)$routerDataFirst['sortOrder'] < (int)$routerDataSecond['sortOrder']) {
-            return -1;
-        } else {
-            return 1;
-        }
+        return (int)$routerDataFirst['sortOrder'] <=> (int)$routerDataSecond['sortOrder'];
     }
 }

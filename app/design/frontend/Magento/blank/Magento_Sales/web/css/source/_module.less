@@ -262,7 +262,7 @@
         }
 
         .toolbar {
-            &:extend(.abs-add-clearfix-desktop all);
+            &:extend(.abs-add-clearfix-mobile all);
 
             .pages {
                 float: right;
@@ -292,6 +292,14 @@
                     width: 100%;
                 }
             }
+        }
+    }
+    .order-items.table-wrapper {
+        .col.price,
+        .col.qty,
+        .col.subtotal,
+        .col.msrp {
+            text-align: left;
         }
     }
 }

@@ -5,11 +5,11 @@
  */
 ?>
 <div class="order-details-items shipments">
-    <?php echo $block->getChildHtml('shipment_items') ?>
+    <?= $block->getChildHtml('shipment_items') ?>
     <div class="actions-toolbar">
         <div class="secondary">
-            <a href="<?php /* @escapeNotVerified */ echo $block->getBackUrl() ?>" class="action back">
-                <span><?php /* @escapeNotVerified */ echo $block->getBackTitle() ?></span>
+            <a href="<?= /* @escapeNotVerified */ $block->getBackUrl() ?>" class="action back">
+                <span><?= /* @escapeNotVerified */ $block->getBackTitle() ?></span>
             </a>
         </div>
     </div>

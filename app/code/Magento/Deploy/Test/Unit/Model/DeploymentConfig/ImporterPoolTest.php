@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
@@ -11,7 +12,7 @@ use Magento\Framework\App\DeploymentConfig\ValidatorInterface;
 use Magento\Framework\ObjectManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
-class ImporterPoolTest extends \PHPUnit_Framework_TestCase
+class ImporterPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ImporterPool
@@ -68,7 +69,7 @@ class ImporterPoolTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
-     * @expectedExceptionMessage Parameter "importer_class" must be present.
+     * @expectedExceptionMessage The parameter "importer_class" is missing. Set the "importer_class" and try again.
      */
     public function testGetImportersEmptyParameterClass()
     {

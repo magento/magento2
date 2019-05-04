@@ -16,16 +16,25 @@ use Magento\Framework\Escaper;
 class Editor extends Textarea
 {
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * Editor constructor.
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         Factory $factoryElement,
         CollectionFactory $factoryCollection,
         Escaper $escaper,
-        $data = []
+        $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
 
@@ -36,9 +45,13 @@ class Editor extends Textarea
             $this->setType('textarea');
             $this->setExtType('textarea');
         }
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
+     * Returns buttons translation
+     *
      * @return array
      */
     protected function getButtonTranslations()
@@ -53,6 +66,55 @@ class Editor extends Textarea
     }
 
     /**
+     * Returns JS config
+     *
+     * @return bool|string
+     * @throws \InvalidArgumentException
+     */
+    protected function getJsonConfig()
+    {
+        if (is_object($this->getConfig()) && method_exists($this->getConfig(), 'toJson')) {
+            return $this->getConfig()->toJson();
+        } else {
+            return $this->serializer->serialize(
+                $this->getConfig()
+            );
+        }
+    }
+
+    /**
+     * Fetch config options from plugin.  If $key is passed, return only that option key's value
+     *
+     * @param string $pluginName
+     * @param string|null $key
+     * @return mixed all options or single option if $key is passed; null if nonexistent
+     */
+    public function getPluginConfigOptions($pluginName, $key = null)
+    {
+        if (!is_array($this->getConfig('plugins'))) {
+            return null;
+        }
+
+        $plugins = $this->getConfig('plugins');
+
+        $pluginArrIndex = array_search($pluginName, array_column($plugins, 'name'));
+
+        if ($pluginArrIndex === false || !isset($plugins[$pluginArrIndex]['options'])) {
+            return null;
+        }
+
+        $pluginOptions = $plugins[$pluginArrIndex]['options'];
+
+        if ($key !== null) {
+            return $pluginOptions[$key] ?? null;
+        } else {
+            return $pluginOptions;
+        }
+    }
+
+    /**
+     * Returns element html
+     *
      * @return string
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -117,70 +179,21 @@ class Editor extends Textarea
                 ' >' .
                 $this->getEscapedValue() .
                 '</textarea>' .
-                $js .
-                '
-                <script type="text/javascript">
-                //<![CDATA[
-                window.tinyMCE_GZ = window.tinyMCE_GZ || {}; 
-                window.tinyMCE_GZ.loaded = true;
-                require([
-                "jquery", 
-                "mage/translate", 
-                "mage/adminhtml/events", 
-                "mage/adminhtml/wysiwyg/tiny_mce/setup", 
-                "mage/adminhtml/wysiwyg/widget"
-                ], function(jQuery){' .
-                "\n" .
-                '  (function($) {$.mage.translate.add(' .
-                \Zend_Json::encode(
-                    $this->getButtonTranslations()
-                ) .
-                ')})(jQuery);' .
-                "\n" .
-                $jsSetupObject .
-                ' = new tinyMceWysiwygSetup("' .
-                $this->getHtmlId() .
-                '", ' .
-                \Zend_Json::encode(
-                    $this->getConfig()
-                ) .
-                ');' .
-                $forceLoad .
-                '
-                    editorFormValidationHandler = ' .
-                $jsSetupObject .
-                '.onFormValidation.bind(' .
-                $jsSetupObject .
-                ');
-                    Event.observe("toggle' .
-                $this->getHtmlId() .
-                '", "click", ' .
-                $jsSetupObject .
-                '.toggle.bind(' .
-                $jsSetupObject .
-                '));
-                    varienGlobalEvents.attachEventHandler("formSubmit", editorFormValidationHandler);
-                    varienGlobalEvents.clearEventHandlers("open_browser_callback");
-                    varienGlobalEvents.attachEventHandler("open_browser_callback", ' .
-                $jsSetupObject .
-                '.openFileBrowser);
-                //]]>
-                });
-                </script>';
+                $js . $this->getInlineJs($jsSetupObject, $forceLoad);
 
             $html = $this->_wrapIntoContainer($html);
             $html .= $this->getAfterElementHtml();
             return $html;
         } else {
             // Display only buttons to additional features
-            if ($this->getConfig('widget_window_url')) {
+            if ($this->getPluginConfigOptions('magentowidget', 'window_url')) {
                 $html = $this->_getButtonsHtml() . $js . parent::getElementHtml();
                 if ($this->getConfig('add_widgets')) {
                     $html .= '<script type="text/javascript">
                     //<![CDATA[
                     require(["jquery", "mage/translate", "mage/adminhtml/wysiwyg/widget"], function(jQuery){
                         (function($) {
-                            $.mage.translate.add(' . \Zend_Json::encode($this->getButtonTranslations()) . ')
+                            $.mage.translate.add(' . $this->serializer->serialize($this->getButtonTranslations()) . ')
                         })(jQuery);
                     });
                     //]]>
@@ -194,6 +207,8 @@ class Editor extends Textarea
     }
 
     /**
+     * Returns theme
+     *
      * @return mixed
      */
     public function getTheme()
@@ -261,8 +276,8 @@ class Editor extends Textarea
                 [
                     'title' => $this->translate('Insert Widget...'),
                     'onclick' => "widgetTools.openDialog('"
-                        . $this->getConfig('widget_window_url')
-                        . "widget_target_id/" . $this->getHtmlId() . "')",
+                        . $this->getPluginConfigOptions('magentowidget', 'window_url')
+                        . "widget_target_id/" . $this->getHtmlId() . "/')",
                     'class' => 'action-add-widget plugin',
                     'style' => $visible ? '' : 'display:none',
                 ]
@@ -337,6 +352,8 @@ class Editor extends Textarea
     }
 
     /**
+     * Convert options
+     *
      * Convert options by replacing template constructions ( like {{var_name}} )
      * with data from this element object
      *
@@ -383,6 +400,7 @@ class Editor extends Textarea
 
     /**
      * Wraps Editor HTML into div if 'use_container' config option is set to true
+     *
      * If 'no_display' config option is set to true, the div will be invisible
      *
      * @param string $html HTML code to wrap
@@ -457,10 +475,80 @@ class Editor extends Textarea
     }
 
     /**
+     * Is Toggle Button Visible
+     *
      * @return bool
      */
     protected function isToggleButtonVisible()
     {
         return !$this->getConfig()->hasData('toggle_button') || $this->getConfig('toggle_button');
+    }
+
+    /**
+     * Returns inline js to initialize wysiwyg adapter
+     *
+     * @param string $jsSetupObject
+     * @param string $forceLoad
+     * @return string
+     */
+    protected function getInlineJs($jsSetupObject, $forceLoad)
+    {
+        $jsString = '
+                <script type="text/javascript">
+                //<![CDATA[
+                window.tinyMCE_GZ = window.tinyMCE_GZ || {}; 
+                window.tinyMCE_GZ.loaded = true;
+                require([
+                "jquery", 
+                "mage/translate", 
+                "mage/adminhtml/events", 
+                "mage/adminhtml/wysiwyg/tiny_mce/setup", 
+                "mage/adminhtml/wysiwyg/widget"
+                ], function(jQuery){' .
+            "\n" .
+            '  (function($) {$.mage.translate.add(' .
+            $this->serializer->serialize(
+                $this->getButtonTranslations()
+            ) .
+            ')})(jQuery);' .
+            "\n" .
+            $jsSetupObject .
+            ' = new wysiwygSetup("' .
+            $this->getHtmlId() .
+            '", ' .
+            $this->getJsonConfig() .
+            ');' .
+            $forceLoad .
+            '
+                    editorFormValidationHandler = ' .
+            $jsSetupObject .
+            '.onFormValidation.bind(' .
+            $jsSetupObject .
+            ');
+                    Event.observe("toggle' .
+            $this->getHtmlId() .
+            '", "click", ' .
+            $jsSetupObject .
+            '.toggle.bind(' .
+            $jsSetupObject .
+            '));
+                    varienGlobalEvents.attachEventHandler("formSubmit", editorFormValidationHandler);
+                    varienGlobalEvents.clearEventHandlers("open_browser_callback");
+                    varienGlobalEvents.attachEventHandler("open_browser_callback", ' .
+            $jsSetupObject .
+            '.openFileBrowser);
+                //]]>
+                });
+                </script>';
+        return $jsString;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHtmlId()
+    {
+        $suffix = $this->getConfig('dynamic_id') ? '${ $.wysiwygUniqueSuffix }' : '';
+        return parent::getHtmlId() . $suffix;
     }
 }

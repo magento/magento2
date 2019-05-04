@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\CacheCleaner;
  * @magentoDbIsolation enabled
  * @magentoDataFixture Magento/Eav/_files/attribute_for_search.php
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config

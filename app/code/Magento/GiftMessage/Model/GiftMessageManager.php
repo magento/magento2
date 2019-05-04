@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\GiftMessage\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -98,7 +99,7 @@ class GiftMessageManager
      * @param \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage The gift message.
      * @param null|int $entityId The entity ID.
      * @return void
-     * @throws \Magento\Framework\Exception\CouldNotSaveException The specified gift message is not available.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException The gift message isn't available.
      */
     public function setMessage(\Magento\Quote\Model\Quote $quote, $type, $giftMessage, $entityId = null)
     {
@@ -111,7 +112,7 @@ class GiftMessageManager
         try {
             $this->add($message, $quote);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not add gift message to shopping cart'));
+            throw new CouldNotSaveException(__("The gift message couldn't be added to Cart."));
         }
     }
 }

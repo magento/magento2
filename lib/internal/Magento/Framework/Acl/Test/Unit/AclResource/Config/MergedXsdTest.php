@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Acl\Test\Unit\AclResource\Config;
 
-class MergedXsdTest extends \PHPUnit_Framework_TestCase
+class MergedXsdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Acl\AclResource\Config\SchemaLocator

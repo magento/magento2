@@ -7,10 +7,9 @@ namespace Magento\Framework\Serialize\Test\Unit\Serializer;
 
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Serialize\Signer;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\Serialize\InvalidSignatureException;
 
-class SerializeTest extends \PHPUnit_Framework_TestCase
+class SerializeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Serialize
@@ -33,6 +32,9 @@ class SerializeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($serializedValue, $this->serialize->serialize($value));
     }
 
+    /**
+     * @return array
+     */
     public function serializeDataProvider()
     {
         return [
@@ -56,6 +58,9 @@ class SerializeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($value, $this->serialize->unserialize($serializedValue));
     }
 
+    /**
+     * @return array
+     */
     public function unserializeDataProvider()
     {
         return [
@@ -88,6 +93,9 @@ class SerializeTest extends \PHPUnit_Framework_TestCase
         $this->serialize->unserialize($value);
     }
 
+    /**
+     * @return array
+     */
     public function unserializeExceptionDataProvider()
     {
         return [

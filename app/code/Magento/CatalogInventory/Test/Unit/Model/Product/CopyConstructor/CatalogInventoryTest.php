@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Product\CopyConstructor;
 
-class CatalogInventoryTest extends \PHPUnit_Framework_TestCase
+class CatalogInventoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Product\CopyConstructor\CatalogInventory
@@ -39,29 +39,14 @@ class CatalogInventoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productMock = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            ['__wakeup', 'getStore'],
-            [],
-            '',
-            false
-        );
-        $store = $this->getMock(
-            \Magento\Store\Model\Store::class,
-            ['getWebsiteId', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['__wakeup', 'getStore']);
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId', '__wakeup']);
         $store->expects($this->any())->method('getWebsiteId')->willReturn(0);
         $this->productMock->expects($this->any())->method('getStore')->willReturn($store);
 
-        $this->duplicateMock = $this->getMock(
+        $this->duplicateMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['setStockData', '__wakeup'],
-            [],
-            '',
-            false
+            ['setStockData', '__wakeup']
         );
 
         $this->stockItemDoMock = $this->getMockForAbstractClass(

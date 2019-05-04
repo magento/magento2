@@ -13,31 +13,28 @@
  */
 ?>
 
-<?php $block->getCurrencySymbolsData();?>
-
-<form id="currency-symbols-form" action="<?php /* @escapeNotVerified */ echo $block->getFormActionUrl() ?>" method="post">
-    <input name="form_key" type="hidden" value="<?php /* @escapeNotVerified */ echo $block->getFormKey() ?>" />
+<form id="currency-symbols-form" action="<?= /* @escapeNotVerified */ $block->getFormActionUrl() ?>" method="post">
+    <input name="form_key" type="hidden" value="<?= /* @escapeNotVerified */ $block->getFormKey() ?>" />
     <fieldset class="admin__fieldset">
         <?php foreach ($block->getCurrencySymbolsData() as $code => $data): ?>
         <div class="admin__field _required">
-            <label class="admin__field-label" for="custom_currency_symbol<?php /* @escapeNotVerified */ echo $code; ?>">
-                <span><?php /* @escapeNotVerified */ echo $code; ?> (<?php /* @escapeNotVerified */ echo $data['displayName']; ?>)</span>
+            <label class="admin__field-label" for="custom_currency_symbol<?= /* @escapeNotVerified */ $code ?>">
+                <span><?= /* @escapeNotVerified */ $code ?> (<?= /* @escapeNotVerified */ $data['displayName'] ?>)</span>
             </label>
             <div class="admin__field-control">
-                <input id="custom_currency_symbol<?php /* @escapeNotVerified */ echo $code; ?>"
-                       class="required-entry admin__control-text"
+                <input id="custom_currency_symbol<?= /* @escapeNotVerified */ $code ?>"
+                       class="required-entry admin__control-text <?= $data['inherited'] ? 'disabled' : '' ?>"
                        type="text"
-                       value="<?php echo $block->escapeHtmlAttr($data['displaySymbol']); ?>"
-                       <?php echo $data['inherited'] ? ' disabled="disabled"' : '';?>
-                       name="custom_currency_symbol[<?php /* @escapeNotVerified */ echo $code; ?>]">
+                       value="<?= $block->escapeHtmlAttr($data['displaySymbol']) ?>"
+                       name="custom_currency_symbol[<?= /* @escapeNotVerified */ $code ?>]">
                 <div class="admin__field admin__field-option">
-                    <input id="custom_currency_symbol_inherit<?php /* @escapeNotVerified */ echo $code; ?>"
+                    <input id="custom_currency_symbol_inherit<?= /* @escapeNotVerified */ $code ?>"
                            class="admin__control-checkbox" type="checkbox"
-                           onclick="toggleUseDefault(<?php /* @escapeNotVerified */ echo '\'' . $code . '\',\'' . $block->escapeJs($data['parentSymbol']) . '\''; ?>)"
-                            <?php echo $data['inherited'] ? ' checked="checked"' : ''; ?>
+                           onclick="toggleUseDefault(<?= /* @escapeNotVerified */ '\'' . $code . '\',\'' . $block->escapeJs($data['parentSymbol']) . '\'' ?>)"
+                            <?= $data['inherited'] ? ' checked="checked"' : '' ?>
                            value="1"
-                           name="inherit_custom_currency_symbol[<?php /* @escapeNotVerified */ echo $code; ?>]">
-                    <label class="admin__field-label" for="custom_currency_symbol_inherit<?php /* @escapeNotVerified */ echo $code; ?>"><span><?php /* @escapeNotVerified */ echo $block->getInheritText(); ?></span></label>
+                           name="inherit_custom_currency_symbol[<?= /* @escapeNotVerified */ $code ?>]">
+                    <label class="admin__field-label" for="custom_currency_symbol_inherit<?= /* @escapeNotVerified */ $code ?>"><span><?= /* @escapeNotVerified */ $block->getInheritText() ?></span></label>
                 </div>
             </div>
         </div>
@@ -51,16 +48,18 @@ require(['jquery', "mage/mage", 'prototype'], function(jQuery){
 
     function toggleUseDefault(code, value)
     {
-        checkbox = $('custom_currency_symbol_inherit'+code);
-        input = $('custom_currency_symbol'+code);
-        if (checkbox.checked) {
-            input.value = value;
-            input.disabled = true;
+        checkbox = jQuery('#custom_currency_symbol_inherit'+code);
+        input = jQuery('#custom_currency_symbol'+code);
+
+        if (checkbox.is(':checked')) {
+            input.addClass('disabled');
+            input.val(value);
+            input.prop('readonly', true);
         } else {
-            input.disabled = false;
+            input.removeClass('disabled');
+            input.prop('readonly', false);
         }
     }
-
     window.toggleUseDefault = toggleUseDefault;
 });
 </script>

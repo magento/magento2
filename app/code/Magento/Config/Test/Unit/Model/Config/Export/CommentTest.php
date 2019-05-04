@@ -13,7 +13,7 @@ use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CommentTest extends \PHPUnit_Framework_TestCase
+class CommentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DumpConfigSourceInterface|\PHPUnit_Framework_MockObject_MockObject

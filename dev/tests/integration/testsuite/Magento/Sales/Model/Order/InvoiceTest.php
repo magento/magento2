@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Order;
 
-class InvoiceTest extends \PHPUnit_Framework_TestCase
+class InvoiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Collection

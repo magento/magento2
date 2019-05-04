@@ -8,6 +8,9 @@ namespace Magento\Catalog\Plugin\Model\ResourceModel;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Config cache plugin.
+ */
 class Config
 {
     /**#@+
@@ -17,10 +20,12 @@ class Config
     const PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID = 'PRODUCT_LISTING_SORT_BY_ATTRIBUTES';
     /**#@-*/
 
-    /** @var \Magento\Framework\App\CacheInterface */
+    /**#@-*/
     protected $cache;
 
-    /** @var bool|null */
+    /**
+     * @var bool|null
+     */
     protected $isCacheEnabled = null;
 
     /**
@@ -44,8 +49,10 @@ class Config
     }
 
     /**
+     * Cache attribute used in listing.
+     *
      * @param \Magento\Catalog\Model\ResourceModel\Config $config
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @return array
      */
     public function aroundGetAttributesUsedInListing(
@@ -71,8 +78,10 @@ class Config
     }
 
     /**
+     * Cache attributes used for sorting.
+     *
      * @param \Magento\Catalog\Model\ResourceModel\Config $config
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @return array
      */
     public function aroundGetAttributesUsedForSortBy(

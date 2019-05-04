@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * Test for class \Magento\Braintree\Model\Ui\PayPal\ConfigProvider
  */
-class ConfigProviderTest extends \PHPUnit_Framework_TestCase
+class ConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config|MockObject
@@ -77,6 +77,9 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                 'width' => 30, 'height' => 26, 'url' => 'https://icon.test.url'
             ]);
 
+        $this->config->method('isRequiredBillingAddress')
+            ->willReturn(1);
+
         self::assertEquals($expected, $this->configProvider->getConfig());
     }
 
@@ -101,7 +104,8 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                             'skipOrderReview' => false,
                             'paymentIcon' => [
                                 'width' => 30, 'height' => 26, 'url' => 'https://icon.test.url'
-                            ]
+                            ],
+                            'isRequiredBillingAddress' => true
                         ]
                     ]
                 ]

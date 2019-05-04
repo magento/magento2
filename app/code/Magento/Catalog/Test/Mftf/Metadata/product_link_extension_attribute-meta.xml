@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateProductLinkExtensionAttribute" dataType="product_link_extension_attribute" type="create">
+        <contentType>application/json</contentType>
+        <field key="qty">integer</field>
+    </operation>
+    <operation name="UpdateProductLinkExtensionAttribute" dataType="product_link_extension_attribute" type="update">
+        <contentType>application/json</contentType>
+        <field key="qty">integer</field>
+    </operation>
+</operations>

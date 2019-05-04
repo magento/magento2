@@ -10,12 +10,13 @@ use Magento\Framework\App\State;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Phrase;
 use Magento\Setup\Module\I18n\Locale;
+use Magento\Theme\Block\Html\Footer;
 
 /**
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FilterTest extends \PHPUnit_Framework_TestCase
+class FilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Email\Model\Template\Filter
@@ -56,12 +57,12 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testBlockDirective()
     {
-        $class = 'Magento\\\\Theme\\\\Block\\\\Html\\\\Footer';
-        $data = ["{{block class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'}}",
-                'block',
-                " class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'",
-
-            ];
+        $class = Footer::class;
+        $data = [
+            "{{block class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'}}",
+            'block',
+            " class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'",
+        ];
         $html = $this->model->blockDirective($data);
         $this->assertContains('<div class="footer-container">', $html);
     }
@@ -129,22 +130,22 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'area parameter - omitted' => [
                 'adminhtml',
                 'handle="email_template_test_handle"',
-                '<b>Email content for frontend/Magento/default theme</b>',
+                '<strong>Email content for frontend/Magento/default theme</strong>',
             ],
             'area parameter - frontend' => [
                 'adminhtml',
                 'handle="email_template_test_handle" area="frontend"',
-                '<b>Email content for frontend/Magento/default theme</b>',
+                '<strong>Email content for frontend/Magento/default theme</strong>',
             ],
             'area parameter - backend' => [
                 'frontend',
                 'handle="email_template_test_handle" area="adminhtml"',
-                '<b>Email content for adminhtml/Magento/default theme</b>',
+                '<strong>Email content for adminhtml/Magento/default theme</strong>',
             ],
             'custom parameter' => [
                 'frontend',
                 'handle="email_template_test_handle" template="Magento_Email::sample_email_content_custom.phtml"',
-                '<b>Custom Email content for frontend/Magento/default theme</b>',
+                '<strong>Custom Email content for frontend/Magento/default theme</strong>',
             ],
         ];
         return $result;
@@ -351,9 +352,9 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 false,
                 true,
             ],
-            'Production mode - File with compilation error results in unmodified markup' => [
+            'Production mode - File with compilation error results in structurally unmodified markup' => [
                 '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
-                '<html><p></p> </html>',
+                '<p></p>',
                 true,
             ],
             'Developer mode - File with compilation error results in error message' => [

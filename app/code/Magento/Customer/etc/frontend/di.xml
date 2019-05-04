@@ -57,7 +57,7 @@
     <type name="Magento\Checkout\Block\Cart\Sidebar">
         <plugin name="customer_cart" type="Magento\Customer\Model\Cart\ConfigPlugin" />
     </type>
-    <type name="Magento\Framework\Session\SessionManager">
+    <type name="Magento\Framework\Session\SessionManagerInterface">
         <plugin name="session_checker" type="Magento\Customer\CustomerData\Plugin\SessionChecker" />
     </type>
     <type name="Magento\Authorization\Model\CompositeUserContext">
@@ -67,6 +67,13 @@
                     <item name="type" xsi:type="object">Magento\Customer\Model\Authorization\CustomerSessionUserContext</item>
                     <item name="sortOrder" xsi:type="string">10</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Block\CustomerData">
+        <arguments>
+            <argument name="expirableSectionNames" xsi:type="array">
+                <item name="cart" xsi:type="string">cart</item>
             </argument>
         </arguments>
     </type>

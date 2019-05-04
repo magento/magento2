@@ -9,7 +9,7 @@ use Magento\Search\Model\Autocomplete;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Search\Model\Autocomplete\DataProviderInterface;
 
-class AutocompleteTest extends \PHPUnit_Framework_TestCase
+class AutocompleteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Autocomplete

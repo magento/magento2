@@ -70,6 +70,7 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         'default_shipping',
         'addresses',
         'disable_auto_group_change',
+        'custom_attribute',
     ];
 
     /**
@@ -115,6 +116,29 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         unset($data['customer']['password_confirmation']);
         $data = $this->prepareAddressData($data);
         $data = $this->prepareExtensionAttributes($data);
+        $data = $this->prepareCustomAttributes($data);
+        return $data;
+    }
+
+    /**
+     * Prepare Custom Attributes.
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function prepareCustomAttributes(array $data)
+    {
+        if (isset($data['customer']['custom_attribute'])) {
+            $data['customer']['custom_attribute']['attribute_code'] = $data['customer']['custom_attribute']['code'];
+            unset($data['customer']['custom_attribute']['code']);
+            if (is_array($data['customer']['custom_attribute']['value'])) {
+                $data['customer']['custom_attribute']['value'] =
+                    implode(',', $data['customer']['custom_attribute']['value']);
+            }
+            $data['customer']['custom_attributes'][0] = $data['customer']['custom_attribute'];
+            unset($data['customer']['custom_attribute']);
+        }
+
         return $data;
     }
 
@@ -126,9 +150,14 @@ class Webapi extends AbstractWebapi implements CustomerInterface
      */
     protected function getCustomerGroup(Customer $customer)
     {
-        return $customer->hasData('group_id')
-            ? $customer->getDataFieldConfig('group_id')['source']->getCustomerGroup()->getCustomerGroupId()
-            : self::GENERAL_GROUP;
+        if ($customer->hasData('group_id')) {
+            if ($customer->getDataFieldConfig('group_id')['source']->getCustomerGroup()) {
+                return $customer->getDataFieldConfig('group_id')['source']->getCustomerGroup()->getCustomerGroupId();
+            }
+            return $customer->getData('group_id');
+        } else {
+            return self::GENERAL_GROUP;
+        }
     }
 
     /**

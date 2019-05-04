@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Code;
 
+/**
+ * Interface \Magento\Framework\Code\ValidatorInterface
+ *
+ */
 interface ValidatorInterface
 {
     /**

@@ -16,7 +16,7 @@ use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Check that that widget with type Recently Viewed Products is present on category page
+ * Check that widget with type Recently Viewed Products is present on category page
  */
 class AssertWidgetRecentlyViewedProducts extends AbstractConstraint
 {
@@ -80,7 +80,17 @@ class AssertWidgetRecentlyViewedProducts extends AbstractConstraint
         $productSimple->persist();
         $category->persist();
         $this->browser->open($_ENV['app_frontend_url'] . $productSimple->getUrlKey() . '.html');
+        $this->waitForJsCoreInitialize();
         $this->checkRecentlyViewedBlockOnCategory($productSimple, $category);
+    }
+
+    /**
+     * as JS is loaded after page is initialized we should have time it to load
+     * @return void
+     */
+    private function waitForJsCoreInitialize()
+    {
+        sleep(1);
     }
 
     /**
@@ -98,7 +108,7 @@ class AssertWidgetRecentlyViewedProducts extends AbstractConstraint
         $this->cmsIndex->getTopmenu()->selectCategoryByName($category->getName());
 
         $products = $this->catalogCategoryView->getViewBlock()->getProductsFromRecentlyViewedBlock();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             in_array($productSimple->getName(), $products),
             'Product' . $productSimple->getName() . ' is absent on Recently Viewed block on Category page.'
         );

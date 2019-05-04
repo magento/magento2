@@ -11,7 +11,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * Class ResolverTest
  * @package Magento\Framework\View\Test\Unit\Element\Template\File
  */
-class ResolverTest extends \PHPUnit_Framework_TestCase
+class ResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Resolver object
@@ -39,7 +39,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_viewFileSystemMock = $this->getMock(\Magento\Framework\View\FileSystem::class, [], [], '', false);
+        $this->_viewFileSystemMock = $this->createMock(\Magento\Framework\View\FileSystem::class);
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->setMethods(['serialize'])
             ->disableOriginalConstructor()

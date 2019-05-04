@@ -11,7 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::system">
                     <resource id="Magento_Backend::convert">
-                        <resource id="Magento_TaxImportExport::import_export" title="Import/Export Tax Rates" sortOrder="30" />
+                        <resource id="Magento_TaxImportExport::import_export" title="Import/Export Tax Rates" translate="title" sortOrder="30" />
                     </resource>
                 </resource>
             </resource>

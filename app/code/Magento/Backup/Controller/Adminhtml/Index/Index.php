@@ -6,7 +6,9 @@
  */
 namespace Magento\Backup\Controller\Adminhtml\Index;
 
-class Index extends \Magento\Backup\Controller\Adminhtml\Index
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\Backup\Controller\Adminhtml\Index implements HttpGetActionInterface
 {
     /**
      * Backup list action

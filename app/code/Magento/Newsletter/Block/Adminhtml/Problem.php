@@ -12,13 +12,14 @@ use Magento\Newsletter\Model\ResourceModel\Problem\Collection;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Problem extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
      */
-    protected $_template = 'problem/list.phtml';
+    protected $_template = 'Magento_Newsletter::problem/list.phtml';
 
     /**
      * @var \Magento\Newsletter\Model\ResourceModel\Problem\Collection

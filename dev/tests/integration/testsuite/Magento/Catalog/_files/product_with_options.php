@@ -35,10 +35,11 @@ $product->setTypeId(
     true
 )->setStockData(
     [
-        'qty' => 0,
-        'is_in_stock' => 0
+        'qty' => 100,
+        'is_in_stock' => 1,
+        'manage_stock' => 1,
     ]
-);
+)->setHasOptions(true);
 
 $options = [
     [
@@ -46,7 +47,7 @@ $options = [
         'type' => 'field',
         'is_require' => true,
         'sort_order' => 1,
-        'price' => 10.0,
+        'price' => -10.0,
         'price_type' => 'fixed',
         'sku' => 'sku1',
         'max_characters' => 10,
@@ -204,4 +205,8 @@ foreach ($options as $option) {
     $customOptions[] = $customOption;
 }
 
-$product->setOptions($customOptions)->save();
+$product->setOptions($customOptions);
+
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$productRepository->save($product);

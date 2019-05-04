@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Report;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Model\ResourceModel\Report\Collection

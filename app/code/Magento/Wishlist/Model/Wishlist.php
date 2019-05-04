@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -16,8 +18,6 @@ use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
 /**
  * Wishlist model
  *
- * @method \Magento\Wishlist\Model\ResourceModel\Wishlist _getResource()
- * @method \Magento\Wishlist\Model\ResourceModel\Wishlist getResource()
  * @method int getShared()
  * @method \Magento\Wishlist\Model\Wishlist setShared(int $value)
  * @method string getSharingCode()
@@ -28,6 +28,7 @@ use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @api
+ * @since 100.0.2
  */
 class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -216,7 +217,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     public function getName()
     {
         $name = $this->_getData('name');
-        if (!strlen($name)) {
+        if ($name === null || !strlen($name)) {
             return $this->_wishlistData->getDefaultWishlistName();
         }
         return $name;
@@ -379,6 +380,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
 
     /**
      * Adds new product to wishlist.
+     *
      * Returns new item or string on error.
      *
      * @param int|\Magento\Catalog\Model\Product $product
@@ -580,7 +582,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function getItemsCount()
     {
-        return $this->getItemCollection()->getSize();
+        return $this->getItemCollection()->count();
     }
 
     /**
@@ -638,6 +640,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         $item = null;
         if ($itemId instanceof Item) {
             $item = $itemId;
+            $itemId = $item->getId();
         } else {
             $item = $this->getItem((int)$itemId);
         }

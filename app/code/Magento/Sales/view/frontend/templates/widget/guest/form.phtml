@@ -11,24 +11,24 @@
 <?php if ($block->isEnable()): ?>
     <div class="widget block block-orders-returns">
         <div class="block-title">
-            <strong role="heading" aria-level="2"><?php /* @escapeNotVerified */ echo __('Orders and Returns') ?></strong>
+            <strong role="heading" aria-level="2"><?= /* @escapeNotVerified */ __('Orders and Returns') ?></strong>
         </div>
         <div class="block-content">
-            <form id="oar-widget-orders-and-returns-form" data-mage-init='{"ordersReturns":{},"validation":{}}' action="<?php /* @escapeNotVerified */ echo $block->getActionUrl() ?>" method="post"
+            <form id="oar-widget-orders-and-returns-form" data-mage-init='{"ordersReturns":{},"validation":{}}' action="<?= /* @escapeNotVerified */ $block->getActionUrl() ?>" method="post"
                   class="form form-orders-search" name="guest_post">
                 <fieldset class="fieldset">
                     <div class="field find required">
-                        <label class="label"><span><?php /* @escapeNotVerified */ echo __('Find Order By') ?></span></label>
+                        <label class="label"><span><?= /* @escapeNotVerified */ __('Find Order By') ?></span></label>
 
                         <div class="control">
                             <select name="oar_type" id="quick-search-type-id" class="select" title="">
-                                <option value="email"><?php /* @escapeNotVerified */ echo __('Email') ?></option>
-                                <option value="zip"><?php /* @escapeNotVerified */ echo __('ZIP Code') ?></option>
+                                <option value="email"><?= /* @escapeNotVerified */ __('Email') ?></option>
+                                <option value="zip"><?= /* @escapeNotVerified */ __('ZIP Code') ?></option>
                             </select>
                         </div>
                     </div>
                     <div class="field id required">
-                        <label for="oar-order-id" class="label"><span><?php /* @escapeNotVerified */ echo __('Order ID') ?></span></label>
+                        <label for="oar-order-id" class="label"><span><?= /* @escapeNotVerified */ __('Order ID') ?></span></label>
 
                         <div class="control">
                             <input type="text" class="input-text" id="oar-order-id" name="oar_order_id" autocomplete="off"
@@ -37,7 +37,7 @@
                     </div>
                     <div class="field lastname required">
                         <label for="oar-billing-lastname"
-                               class="label"><span><?php /* @escapeNotVerified */ echo __('Billing Last Name') ?></span></label>
+                               class="label"><span><?= /* @escapeNotVerified */ __('Billing Last Name') ?></span></label>
 
                         <div class="control">
                             <input type="text" class="input-text" id="oar-billing-lastname" name="oar_billing_lastname"
@@ -45,7 +45,7 @@
                         </div>
                     </div>
                     <div id="oar-email" class="field email required">
-                        <label for="oar_email" class="label"><span><?php /* @escapeNotVerified */ echo __('Email') ?></span></label>
+                        <label for="oar_email" class="label"><span><?= /* @escapeNotVerified */ __('Email') ?></span></label>
 
                         <div class="control">
                             <input type="email" class="input-text" id="oar_email" name="oar_email" autocomplete="off"
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <div id="oar-zip" style="display: none;" class="field zip required">
-                        <label for="oar_zip" class="label"><span><?php /* @escapeNotVerified */ echo __('Billing ZIP Code') ?></span></label>
+                        <label for="oar_zip" class="label"><span><?= /* @escapeNotVerified */ __('Billing ZIP Code') ?></span></label>
 
                         <div class="control">
                             <input type="text" class="input-text" id="oar_zip" name="oar_zip"
@@ -63,8 +63,8 @@
                 </fieldset>
                 <div class="actions-toolbar">
                     <div class="primary">
-                        <button type="submit" title="<?php echo $block->escapeHtml(__('Search')) ?>" class="action search">
-                            <span><?php /* @escapeNotVerified */ echo __('Search') ?></span>
+                        <button type="submit" title="<?= $block->escapeHtml(__('Search')) ?>" class="action search">
+                            <span><?= /* @escapeNotVerified */ __('Search') ?></span>
                         </button>
                     </div>
                 </div>

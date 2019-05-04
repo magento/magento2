@@ -5,7 +5,7 @@
  */
 namespace Magento\Test\Integrity\Modular\Magento\Email;
 
-class EmailTemplateConfigFilesTest extends \PHPUnit_Framework_TestCase
+class EmailTemplateConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test that email template configuration file matches the format
@@ -17,13 +17,7 @@ class EmailTemplateConfigFilesTest extends \PHPUnit_Framework_TestCase
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $schemaFile = $urnResolver->getRealPath('urn:magento:module:Magento_Email:etc/email_templates.xsd');
-        $validationStateMock = $this->getMock(
-            \Magento\Framework\Config\ValidationStateInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
         $dom = new \Magento\Framework\Config\Dom(file_get_contents($file), $validationStateMock);
@@ -86,7 +80,7 @@ class EmailTemplateConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testMergedFormat()
     {
-        $validationState = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationState = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationState->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
         /** @var \Magento\Email\Model\Template\Config\Reader $reader */
         $reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

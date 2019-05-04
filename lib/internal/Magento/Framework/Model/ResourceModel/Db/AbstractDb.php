@@ -156,9 +156,14 @@ abstract class AbstractDb extends AbstractResource
      * Provide variables to serialize
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $properties = array_keys(get_object_vars($this));
         $properties = array_diff($properties, ['_resources', '_connections']);
         return $properties;
@@ -168,9 +173,14 @@ abstract class AbstractDb extends AbstractResource
      * Restore global dependencies
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $this->_resources = \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\App\ResourceConnection::class);
     }
@@ -219,8 +229,10 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
-     * Set main entity table name and primary key field name
-     * If field name is omitted {table_name}_id will be used
+     * Main table setter.
+     *
+     * Set main entity table name and primary key field name.
+     * If field name is omitted {table_name}_id will be used.
      *
      * @param string $mainTable
      * @param string|null $idFieldName
@@ -253,8 +265,10 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
+     * Main table getter.
+     *
      * Returns main table name - extracted from "module/table" style and
-     * validated by db adapter
+     * validated by db adapter.
      *
      * @throws LocalizedException
      * @return string
@@ -542,8 +556,7 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
-     * Check that model data fields that can be saved
-     * has really changed comparing with origData
+     * Check that model data fields that can be saved has really changed comparing with origData.
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return bool
@@ -871,6 +884,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\DataObject $object
      * @return void
+     * @since 100.1.0
      */
     public function beforeSave(\Magento\Framework\DataObject $object)
     {
@@ -882,6 +896,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\DataObject $object
      * @return void
+     * @since 100.1.0
      */
     public function afterSave(\Magento\Framework\DataObject $object)
     {
@@ -893,6 +908,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\DataObject $object
      * @return void
+     * @since 100.1.0
      */
     public function beforeDelete(\Magento\Framework\DataObject $object)
     {
@@ -904,6 +920,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\DataObject $object
      * @return void
+     * @since 100.1.0
      */
     public function afterDelete(\Magento\Framework\DataObject $object)
     {
@@ -915,6 +932,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\Model\AbstractModel|void
+     * @since 100.1.0
      */
     public function serializeFields(\Magento\Framework\Model\AbstractModel $object)
     {

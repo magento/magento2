@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Product;
 
 /**
@@ -14,6 +12,7 @@ namespace Magento\Catalog\Model\Product;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Action extends \Magento\Framework\Model\AbstractModel
 {
@@ -24,7 +23,9 @@ class Action extends \Magento\Framework\Model\AbstractModel
      */
     protected $_productWebsiteFactory;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**
@@ -74,16 +75,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         $this->_init(\Magento\Catalog\Model\ResourceModel\Product\Action::class);
-    }
-
-    /**
-     * Retrieve resource instance wrapper
-     *
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Action
-     */
-    protected function _getResource()
-    {
-        return parent::_getResource();
     }
 
     /**
@@ -177,5 +168,7 @@ class Action extends \Magento\Framework\Model\AbstractModel
         if (!$categoryIndexer->isScheduled()) {
             $categoryIndexer->reindexList(array_unique($productIds));
         }
+
+        $this->_eventManager->dispatch('catalog_product_to_website_change', ['products' => $productIds]);
     }
 }

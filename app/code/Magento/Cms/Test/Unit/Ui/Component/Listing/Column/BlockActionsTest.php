@@ -16,7 +16,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * BlockActionsTest contains unit tests for \Magento\Cms\Ui\Component\Listing\Column\BlockActions class
  */
-class BlockActionsTest extends \PHPUnit_Framework_TestCase
+class BlockActionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BlockActions
@@ -37,7 +37,7 @@ class BlockActionsTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $context = $this->getMock(ContextInterface::class);
+        $context = $this->createMock(ContextInterface::class);
 
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
@@ -46,7 +46,7 @@ class BlockActionsTest extends \PHPUnit_Framework_TestCase
             ->method('getProcessor')
             ->willReturn($processor);
 
-        $this->urlBuilder = $this->getMock(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
         $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
@@ -95,6 +95,7 @@ class BlockActionsTest extends \PHPUnit_Framework_TestCase
                             'title' => __('Delete %1', $title),
                             'message' => __('Are you sure you want to delete a %1 record?', $title)
                         ],
+                        'post' => true
                     ]
                 ],
             ]

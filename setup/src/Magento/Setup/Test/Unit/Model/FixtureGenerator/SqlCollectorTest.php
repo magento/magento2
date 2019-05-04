@@ -13,7 +13,7 @@ use Magento\Setup\Model\FixtureGenerator\SqlCollector;
 /**
  * Collect insert queries for quick entity generation
  */
-class SqlCollectorTest extends \PHPUnit_Framework_TestCase
+class SqlCollectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SqlCollector
@@ -65,7 +65,7 @@ class SqlCollectorTest extends \PHPUnit_Framework_TestCase
         $this->resourceConnection->expects($this->once())->method('getConnection')->willReturn($connection);
 
         $query = $this->getMockBuilder(\Zend_Db_Profiler_Query::class)->disableOriginalConstructor()->getMock();
-        $query->expects($this->once())->method('getQueryType')->willReturn(\Zend_Db_Profiler::SELECT);
+        $query->expects($this->exactly(2))->method('getQueryType')->willReturn(\Zend_Db_Profiler::SELECT);
         $profiler->expects($this->once())->method('getQueryProfiles')->willReturn([$query]);
 
         $this->unit->disable();

@@ -22,9 +22,7 @@ class Filter implements QueryInterface
 
     /**#@-*/
 
-    /**
-     * @var string
-     */
+    /**#@-*/
     protected $name;
 
     /**

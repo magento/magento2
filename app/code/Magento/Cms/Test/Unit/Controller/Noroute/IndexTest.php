@@ -5,7 +5,7 @@
  */
 namespace Magento\Cms\Test\Unit\Controller\Noroute;
 
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Controller\Noroute\Index
@@ -40,8 +40,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -56,9 +56,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->forwardMock);
 
-        $scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->_cmsHelperMock = $this->getMock(\Magento\Cms\Helper\Page::class, [], [], '', false);
+        $scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->_cmsHelperMock = $this->createMock(\Magento\Cms\Helper\Page::class);
         $valueMap = [
             [\Magento\Framework\App\Config\ScopeConfigInterface::class,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,

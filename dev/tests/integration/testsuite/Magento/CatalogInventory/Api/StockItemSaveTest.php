@@ -9,10 +9,11 @@ use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
-class StockItemSaveTest extends \PHPUnit_Framework_TestCase
+class StockItemSaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSave()
     {

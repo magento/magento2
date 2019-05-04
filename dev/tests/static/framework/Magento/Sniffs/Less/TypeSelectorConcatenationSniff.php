@@ -5,18 +5,17 @@
  */
 namespace Magento\Sniffs\Less;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 /**
  * Class TypeSelectorConcatenation
  *
  * Ensure that selector in one line, concatenation is not used
  *
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#formatting-1
- *
+ * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#formatting-1
  */
-class TypeSelectorConcatenationSniff implements PHP_CodeSniffer_Sniff
+class TypeSelectorConcatenationSniff implements Sniff
 {
     /**
      * A list of tokenizers this sniff supports.
@@ -34,7 +33,7 @@ class TypeSelectorConcatenationSniff implements PHP_CodeSniffer_Sniff
     ];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -42,16 +41,16 @@ class TypeSelectorConcatenationSniff implements PHP_CodeSniffer_Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 
         if (0 === strpos($tokens[$stackPtr + 1]['content'], '-')
             && in_array($tokens[$stackPtr - 1]['content'], $this->symbolsBeforeConcat)
         ) {
-            $phpcsFile->addError('Concatenation is used', $stackPtr);
+            $phpcsFile->addError('Concatenation is used', $stackPtr, 'ConcatenationUsage');
         }
     }
 }

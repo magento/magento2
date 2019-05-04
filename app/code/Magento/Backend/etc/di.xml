@@ -99,6 +99,10 @@
                     <item name="class" xsi:type="string">Magento\Backend\Model\Search\Order</item>
                     <item name="acl" xsi:type="string">Magento_Sales::sales</item>
                 </item>
+                <item name="config" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Backend\Model\Search\Config</item>
+                    <item name="acl" xsi:type="string">Magento_Config::config</item>
+                </item>
             </argument>
         </arguments>
     </type>
@@ -194,4 +198,8 @@
             <argument name="anchorRenderer" xsi:type="object">Magento\Backend\Block\AnchorRenderer</argument>
         </arguments>
     </type>
+    <preference for="Magento\Backend\Spi\SessionUserHydratorInterface"
+                type="Magento\Backend\Model\Auth\SessionUserHydrator" />
+    <preference for="Magento\Backend\Spi\SessionAclHydratorInterface"
+                type="Magento\Backend\Model\Auth\SessionAclHydrator" />
 </config>

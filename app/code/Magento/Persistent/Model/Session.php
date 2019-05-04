@@ -12,6 +12,7 @@ namespace Magento\Persistent\Model;
  * @method int getCustomerId()
  * @method Session setCustomerId()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Session extends \Magento\Framework\Model\AbstractModel
 {
@@ -196,6 +197,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Serialize info for Resource Model to save
+     *
      * For new model check and set available cookie key
      *
      * @return $this
@@ -353,7 +355,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
         $lifetime = $this->_coreConfig->getValue(
             \Magento\Persistent\Helper\Data::XML_PATH_LIFE_TIME,
             'website',
-            intval($websiteId)
+            (int)$websiteId
         );
 
         if ($lifetime) {
@@ -401,7 +403,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Get request object
      *
      * @return \Magento\Framework\App\Request\Http
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getRequest()
     {
@@ -416,6 +418,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Set `updated_at` to be always changed
      *
      * @return $this
+     * @since 100.1.0
      */
     public function save()
     {

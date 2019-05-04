@@ -34,7 +34,9 @@ class InvoiceRepository implements InvoiceRepositoryInterface
      */
     protected $searchResultFactory;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
@@ -64,13 +66,15 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     public function get($id)
     {
         if (!$id) {
-            throw new \Magento\Framework\Exception\InputException(__('ID required'));
+            throw new \Magento\Framework\Exception\InputException(__('An ID is needed. Set the ID and try again.'));
         }
         if (!isset($this->registry[$id])) {
             /** @var \Magento\Sales\Api\Data\InvoiceInterface $entity */
             $entity = $this->metadata->getNewInstance()->load($id);
             if (!$entity->getEntityId()) {
-                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
+                throw new NoSuchEntityException(
+                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
+                );
             }
             $this->registry[$id] = $entity;
         }
@@ -141,7 +145,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

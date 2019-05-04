@@ -13,7 +13,7 @@ use Magento\Framework\DB\Logger\File;
 use Magento\Framework\DB\Logger\Quiet;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class LoggerProxyTest extends \PHPUnit_Framework_TestCase
+class LoggerProxyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Logger\LoggerProxy

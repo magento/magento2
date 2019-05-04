@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
-class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
+class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
      * Possible flags for assertion
@@ -19,6 +19,8 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
     const FLAG_ABSTRACT = 'abstract';
 
     const FLAG_REFERENCE = 'passedByReference';
+
+    const FLAG_VARIADIC = 'variadic';
 
     /**#@-*/
 
@@ -38,6 +40,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         self::FLAG_FINAL => 'isFinal',
         self::FLAG_ABSTRACT => 'isAbstract',
         self::FLAG_REFERENCE => 'getPassedByReference',
+        self::FLAG_VARIADIC => 'getVariadic',
     ];
 
     /**
@@ -65,7 +68,13 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             'final' => true,
             'static' => true,
             'parameters' => [
-                ['name' => 'data', 'type' => 'array', 'defaultValue' => [], 'passedByReference' => true],
+                [
+                    'name' => 'data',
+                    'type' => 'array',
+                    'defaultValue' => [],
+                    'passedByReference' => true,
+                    'variadic' => false
+                ],
             ],
             'body' => 'return 1;',
             'docblock' => ['shortDescription' => 'test short description'],
@@ -205,6 +214,9 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
                         $actualDefaultValue = $actualParameter->getDefaultValue();
                         $this->assertEquals($parameterData['defaultValue'], $actualDefaultValue->getValue());
                     }
+
+                    // assert variadic flag
+                    $this->_assertFlag(self::FLAG_VARIADIC, $parameterData, $actualParameter);
                 }
             }
 

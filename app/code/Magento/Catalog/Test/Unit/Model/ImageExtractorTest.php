@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ImageExtractorTest extends \PHPUnit_Framework_TestCase
+class ImageExtractorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ImageExtractor
@@ -23,7 +23,7 @@ class ImageExtractorTest extends \PHPUnit_Framework_TestCase
     public function testProcess()
     {
         $expectedArray = include(__DIR__ . '/_files/converted_view.php');
-        $this->assertEquals($expectedArray, $this->model->process($this->getDomElement(), 'media'));
+        $this->assertSame($expectedArray, $this->model->process($this->getDomElement(), 'media'));
     }
 
     /**

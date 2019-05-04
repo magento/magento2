@@ -104,7 +104,7 @@
             <resource ref="anonymous" />
         </resources>
     </route>
-    <!-- Managing My shipping information -->
+    <!-- Managing My payment information -->
     <route url="/V1/carts/mine/set-payment-information" method="POST">
         <service class="Magento\Checkout\Api\PaymentInformationManagementInterface" method="savePaymentInformation"/>
         <resources>

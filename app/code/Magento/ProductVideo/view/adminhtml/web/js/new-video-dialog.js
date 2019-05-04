@@ -21,6 +21,7 @@ define([
             container: '.video-player-container',
             videoClass: 'product-video',
             reset: false,
+            useYoutubeNocookie: false,
             metaData: {
                 DOM: {
                     title: '.video-information.title span',
@@ -86,34 +87,36 @@ define([
          * @private
          */
         _doUpdate: function () {
+            var uploaderLinkUrl,
+                uploaderLink;
+
             this.reset();
-            this.element.find(this.options.container).append('<div class="' +
-            this.options.videoClass +
-            '" data-type="' +
-            this.options.videoProvider +
-            '" data-code="' +
-            this.options.videoId +
-            '" data-width="100%" data-height="100%"></div>');
+            this.element.find(this.options.container).append(
+                '<div class="' +
+                this.options.videoClass +
+                '" data-type="' +
+                this.options.videoProvider +
+                '" data-code="' +
+                this.options.videoId +
+                '" data-youtubenocookie="' +
+                this.options.useYoutubeNocookie +
+                '" data-width="100%" data-height="100%"></div>'
+            );
             this.element.find(this.options.metaData.DOM.wrapper).show();
             this.element.find(this.options.metaData.DOM.title).text(this.options.metaData.data.title);
             this.element.find(this.options.metaData.DOM.uploaded).text(this.options.metaData.data.uploaded);
             this.element.find(this.options.metaData.DOM.duration).text(this.options.metaData.data.duration);
 
             if (this.options.videoProvider === 'youtube') {
-                this.element.find(this.options.metaData.DOM.uploader).html(
-                    '<a href="https://youtube.com/channel/' +
-                    this.options.metaData.data.uploaderUrl +
-                    '" target="_blank">' +
-                    this.options.metaData.data.uploader +
-                    '</a>'
-                );
+                uploaderLinkUrl = 'https://youtube.com/channel/' + this.options.metaData.data.uploaderUrl;
             } else if (this.options.videoProvider === 'vimeo') {
-                this.element.find(this.options.metaData.DOM.uploader).html(
-                    '<a href="' +
-                    this.options.metaData.data.uploaderUrl +
-                    '" target="_blank">' + this.options.metaData.data.uploader +
-                    '</a>');
+                uploaderLinkUrl = this.options.metaData.data.uploaderUrl;
             }
+            uploaderLink = document.createElement('a');
+            uploaderLink.setAttribute('href', uploaderLinkUrl);
+            uploaderLink.setAttribute('target', '_blank');
+            uploaderLink.innerText = this.options.metaData.data.uploader;
+            this.element.find(this.options.metaData.DOM.uploader)[0].appendChild(uploaderLink);
             this.element.find('.' + this.options.videoClass).productVideoLoader();
 
         },
@@ -337,6 +340,7 @@ define([
                 .createVideoPlayer({
                     videoId: data.videoId,
                     videoProvider: data.videoProvider,
+                    useYoutubeNocookie: data.useYoutubeNocookie,
                     reset: false,
                     metaData: {
                         DOM: {

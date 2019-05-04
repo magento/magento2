@@ -15,4 +15,7 @@
     <event name="catalog_product_view_config">
         <observer name="weee" instance="Magento\Weee\Observer\UpdateProductOptionsObserver" />
     </event>
+    <event name="payment_cart_collect_items_and_amounts">
+        <observer name="magento_weee" instance="Magento\Weee\Observer\AddPaymentWeeeItem" />
+    </event>
 </config>

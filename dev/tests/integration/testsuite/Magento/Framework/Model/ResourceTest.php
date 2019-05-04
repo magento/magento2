@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Model;
 
-class ResourceTest extends \PHPUnit_Framework_TestCase
+class ResourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection

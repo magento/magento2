@@ -11,10 +11,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\QuestionFactory;
 use Symfony\Component\Console\Question\Question;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Phrase;
 
-class YesNoTest extends \PHPUnit_Framework_TestCase
+class YesNoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var InputInterface|\PHPUnit_Framework_MockObject_MockObject

@@ -11,7 +11,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\Config\ScopeInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class EmulatedAdminhtmlAreaProcessorTest extends \PHPUnit_Framework_TestCase
+class EmulatedAdminhtmlAreaProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * The application scope manager.

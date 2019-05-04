@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 /**
  * @covers \Magento\Customer\Controller\Adminhtml\Index\Index
  */
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Controller\Adminhtml\Index\Index

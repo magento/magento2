@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\Widget\Form;
 /**
  * @magentoAppArea adminhtml
  */
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetFormHtml()
     {
@@ -19,11 +19,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         );
         // Create block with blocking _prepateLayout(), which is used by block to instantly add 'form' child
         /** @var $block \Magento\Backend\Block\Widget\Form\Container */
-        $block = $this->getMock(
-            \Magento\Backend\Block\Widget\Form\Container::class,
-            ['_prepareLayout'],
-            [$objectManager->create(\Magento\Backend\Block\Widget\Context::class)]
-        );
+        $block = $this->getMockBuilder(\Magento\Backend\Block\Widget\Form\Container::class)
+            ->setMethods(['_prepareLayout'])
+            ->setConstructorArgs([$objectManager->create(\Magento\Backend\Block\Widget\Context::class)])
+            ->getMock();
 
         $layout->addBlock($block, 'block');
         $form = $layout->addBlock(\Magento\Framework\View\Element\Text::class, 'form', 'block');

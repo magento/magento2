@@ -12,7 +12,7 @@ use Magento\Security\Model\ConfigInterface;
 /**
  * Test class for \Magento\Security\Model\AdminSessionInfo testing
  */
-class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
+class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  \Magento\Security\Model\AdminSessionInfo

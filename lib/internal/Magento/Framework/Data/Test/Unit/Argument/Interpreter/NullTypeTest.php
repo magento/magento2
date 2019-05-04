@@ -7,7 +7,7 @@ namespace Magento\Framework\Data\Test\Unit\Argument\Interpreter;
 
 use \Magento\Framework\Data\Argument\Interpreter\NullType;
 
-class NullTypeTest extends \PHPUnit_Framework_TestCase
+class NullTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testEvaluate()
     {

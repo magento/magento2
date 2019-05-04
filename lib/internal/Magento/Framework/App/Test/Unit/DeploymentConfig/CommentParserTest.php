@@ -11,7 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 
-class CommentParserTest extends \PHPUnit_Framework_TestCase
+class CommentParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject

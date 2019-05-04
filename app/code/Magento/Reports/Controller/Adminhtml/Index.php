@@ -13,6 +13,7 @@ namespace Magento\Reports\Controller\Adminhtml;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class Index extends \Magento\Backend\App\Action
 {

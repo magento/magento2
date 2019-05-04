@@ -6,7 +6,7 @@
 
 namespace Magento\SalesRule\Test\Unit\Model\Plugin;
 
-class QuoteConfigProductAttributesTest extends \PHPUnit_Framework_TestCase
+class QuoteConfigProductAttributesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes|\PHPUnit_Framework_MockObject_MockObject
@@ -21,7 +21,7 @@ class QuoteConfigProductAttributesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->ruleResource = $this->getMock(\Magento\SalesRule\Model\ResourceModel\Rule::class, [], [], '', false);
+        $this->ruleResource = $this->createMock(\Magento\SalesRule\Model\ResourceModel\Rule::class);
 
         $this->plugin = $objectManager->getObject(
             \Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes::class,
@@ -33,7 +33,7 @@ class QuoteConfigProductAttributesTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterGetProductAttributes()
     {
-        $subject = $this->getMock(\Magento\Quote\Model\Quote\Config::class, [], [], '', false);
+        $subject = $this->createMock(\Magento\Quote\Model\Quote\Config::class);
         $attributeCode = 'code of the attribute';
         $expected = [0 => $attributeCode];
 

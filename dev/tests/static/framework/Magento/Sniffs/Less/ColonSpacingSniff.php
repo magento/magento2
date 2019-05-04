@@ -5,19 +5,18 @@
  */
 namespace Magento\Sniffs\Less;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
-use PHP_CodeSniffer_Tokens;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Class ColonSpacingSniff
  *
  * Ensure that single quotes are used
  *
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#properties-colon-indents
- *
+ * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#properties-colon-indents
  */
-class ColonSpacingSniff implements PHP_CodeSniffer_Sniff
+class ColonSpacingSniff implements Sniff
 {
     /**
      * A list of tokenizers this sniff supports.
@@ -27,7 +26,7 @@ class ColonSpacingSniff implements PHP_CodeSniffer_Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -35,9 +34,9 @@ class ColonSpacingSniff implements PHP_CodeSniffer_Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 
@@ -49,13 +48,13 @@ class ColonSpacingSniff implements PHP_CodeSniffer_Sniff
     /**
      * Check is it need to check spaces
      *
-     * @param PHP_CodeSniffer_File $phpcsFile
+     * @param File $phpcsFile
      * @param int $stackPtr
      * @param array $tokens
      *
      * @return bool
      */
-    private function needValidateSpaces(PHP_CodeSniffer_File $phpcsFile, $stackPtr, $tokens)
+    private function needValidateSpaces(File $phpcsFile, $stackPtr, $tokens)
     {
         $nextSemicolon = $phpcsFile->findNext(T_SEMICOLON, $stackPtr);
 
@@ -66,7 +65,7 @@ class ColonSpacingSniff implements PHP_CodeSniffer_Sniff
             return false;
         }
 
-        $prev = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr - 1), null, true);
+        $prev = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($stackPtr - 1), null, true);
         if ($tokens[$prev]['code'] !== T_STYLE) {
             // The colon is not part of a style definition.
             return false;
@@ -83,13 +82,13 @@ class ColonSpacingSniff implements PHP_CodeSniffer_Sniff
     /**
      * Validate Colon Spacing according to requirements
      *
-     * @param PHP_CodeSniffer_File $phpcsFile
+     * @param File $phpcsFile
      * @param int $stackPtr
      * @param array $tokens
      *
      * @return void
      */
-    private function validateSpaces(PHP_CodeSniffer_File $phpcsFile, $stackPtr, array $tokens)
+    private function validateSpaces(File $phpcsFile, $stackPtr, array $tokens)
     {
         if (T_WHITESPACE === $tokens[($stackPtr - 1)]['code']) {
             $phpcsFile->addError('There must be no space before a colon in a style definition', $stackPtr, 'Before');

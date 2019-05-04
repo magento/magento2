@@ -16,7 +16,11 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class FilterContextTest extends \PHPUnit_Framework_TestCase
+/**
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
+class FilterContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FilterContext|\PHPUnit_Framework_MockObject_MockObject
@@ -134,11 +138,11 @@ class FilterContextTest extends \PHPUnit_Framework_TestCase
             ->method('apply')
             ->with($filter, $this->select)
             ->willReturn(false);
-        $this->termDropdownStrategy->expects($this->once())
+        $this->termDropdownStrategy->expects($this->never())
             ->method('apply')
             ->with($filter, $this->select)
             ->willReturn(true);
-        $this->assertTrue($this->filterContext->apply($filter, $this->select));
+        $this->assertFalse($this->filterContext->apply($filter, $this->select));
     }
 
     public function testApplyOnTermFilterByMultiSelect()
@@ -153,11 +157,11 @@ class FilterContextTest extends \PHPUnit_Framework_TestCase
             ->method('apply')
             ->with($filter, $this->select)
             ->willReturn(false);
-        $this->termDropdownStrategy->expects($this->once())
+        $this->termDropdownStrategy->expects($this->never())
             ->method('apply')
             ->with($filter, $this->select)
             ->willReturn(true);
-        $this->assertTrue($this->filterContext->apply($filter, $this->select));
+        $this->assertFalse($this->filterContext->apply($filter, $this->select));
     }
 
     public function testApplyOnTermFilterByStaticAttribute()

@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class AbstractConfigTest
  * @package Magento\Paypal\Test\Unit\Model
  */
-class AbstractConfigTest extends \PHPUnit_Framework_TestCase
+class AbstractConfigTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -189,14 +189,14 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider isWppApiAvailabeDataProvider
      */
-    public function testIsWppApiAvailabe($returnMap, $expectedValue)
+    public function testIsWppApiAvailable($returnMap, $expectedValue)
     {
         $this->config->setMethod('paypal_express');
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->willReturnMap($returnMap);
 
-        $this->assertEquals($expectedValue, $this->config->isWppApiAvailabe());
+        $this->assertEquals($expectedValue, $this->config->isWppApiAvailable());
     }
 
     /**
@@ -273,6 +273,9 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
         $this->config->isMethodAvailable($methodCode);
     }
 
+    /**
+     * @return array
+     */
     public function isMethodAvailableDataProvider()
     {
         return [
@@ -290,12 +293,58 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
         $this->config->isMethodActive('method');
     }
 
+    /**
+     * Check bill me later active setting uses disable funding options
+     *
+     * @param string|null $disableFundingOptions
+     * @param int $expectedFlag
+     * @param bool $expectedValue
+     *
+     * @dataProvider isMethodActiveBmlDataProvider
+     */
+    public function testIsMethodActiveBml($disableFundingOptions, $expectedFlag, $expectedValue)
+    {
+        $this->scopeConfigMock->method('getValue')
+            ->with(
+                self::equalTo('payment/paypal_express/disable_funding_options'),
+                self::equalTo('store')
+            )
+            ->willReturn($disableFundingOptions);
+
+        $this->scopeConfigMock->method('isSetFlag')
+            ->with('payment/paypal_express_bml/active')
+            ->willReturn($expectedFlag);
+
+        self::assertEquals($expectedValue, $this->config->isMethodActive('paypal_express_bml'));
+    }
+
+    /**
+     * @return array
+     */
+    public function isMethodActiveBmlDataProvider()
+    {
+        return [
+            ['CREDIT,CARD,ELV', 0, false],
+            ['CREDIT,CARD,ELV', 1, true],
+            ['CREDIT', 0, false],
+            ['CREDIT', 1, true],
+            ['CARD', 0, true],
+            ['CARD', 1, true],
+            [null, 0, true],
+            [null, 1, true]
+        ];
+    }
+
+    /**
+     * Checks a case, when notation code based on Magento edition.
+     */
     public function testGetBuildNotationCode()
     {
-        $productMetadata = $this->getMock(ProductMetadataInterface::class, [], [], '', false);
-        $productMetadata->expects($this->once())
-            ->method('getEdition')
-            ->will($this->returnValue('SomeEdition'));
+        $productMetadata = $this->getMockBuilder(ProductMetadataInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productMetadata->method('getEdition')
+            ->willReturn('SomeEdition');
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $objectManagerHelper->setBackwardCompatibleProperty(
@@ -304,6 +353,20 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
             $productMetadata
         );
 
-        $this->assertEquals('Magento_Cart_SomeEdition', $this->config->getBuildNotationCode());
+        self::assertEquals('Magento_Cart_SomeEdition', $this->config->getBuildNotationCode());
+    }
+
+    /**
+     * Checks a case, when notation code should be provided from configuration.
+     */
+    public function testBuildNotationCodeFromConfig()
+    {
+        $notationCode = 'Magento_Cart_EditionFromConfig';
+
+        $this->scopeConfigMock->method('getValue')
+            ->with(self::equalTo('paypal/notation_code'), self::equalTo('stores'))
+            ->willReturn($notationCode);
+
+        self::assertEquals($notationCode, $this->config->getBuildNotationCode());
     }
 }

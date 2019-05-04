@@ -5,18 +5,18 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend;
 
-class CategoryTest extends \PHPUnit_Framework_TestCase
+class CategoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testAfterLoad()
     {
         $categoryIds = [1, 2, 3, 4, 5];
 
-        $product = $this->getMock(\Magento\Framework\DataObject::class, ['getCategoryIds', 'setData']);
+        $product = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getCategoryIds', 'setData']);
         $product->expects($this->once())->method('getCategoryIds')->will($this->returnValue($categoryIds));
 
         $product->expects($this->once())->method('setData')->with('category_ids', $categoryIds);
 
-        $categoryAttribute = $this->getMock(\Magento\Framework\DataObject::class, ['getAttributeCode']);
+        $categoryAttribute = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getAttributeCode']);
         $categoryAttribute->expects(
             $this->once()
         )->method(

@@ -3,22 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Downloadable\Model\Product\Type;
-use Magento\Downloadable\Model\Source\TypeUpload;
 use Magento\Downloadable\Model\Source\Shareable;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Downloadable\Model\Source\TypeUpload;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Ui\Component\DynamicRows;
 use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Container;
+use Magento\Ui\Component\DynamicRows;
 use Magento\Ui\Component\Form;
 
 /**
- * Class adds a grid with links
+ * Class adds a grid with links.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Links extends AbstractModifier
@@ -86,7 +88,7 @@ class Links extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -101,7 +103,7 @@ class Links extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function modifyMeta(array $meta)
@@ -160,6 +162,8 @@ class Links extends AbstractModifier
     }
 
     /**
+     * Returns configuration for dynamic rows
+     *
      * @return array
      */
     protected function getDynamicRows()
@@ -180,6 +184,8 @@ class Links extends AbstractModifier
     }
 
     /**
+     * Returns Record column configuration
+     *
      * @return array
      */
     protected function getRecord()
@@ -221,6 +227,8 @@ class Links extends AbstractModifier
     }
 
     /**
+     * Returns Title column configuration
+     *
      * @return array
      */
     protected function getTitleColumn()
@@ -230,13 +238,16 @@ class Links extends AbstractModifier
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => __('Title'),
+            'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => 10,
         ];
         $titleField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Input::NAME,
             'componentType' => Form\Field::NAME,
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => 'title',
+            'labelVisible' => false,
             'validation' => [
                 'required-entry' => true,
             ],
@@ -246,6 +257,8 @@ class Links extends AbstractModifier
     }
 
     /**
+     * Returns Price column configuration
+     *
      * @return array
      */
     protected function getPriceColumn()
@@ -255,7 +268,9 @@ class Links extends AbstractModifier
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => __('Price'),
+            'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => 20,
         ];
         $priceField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Input::NAME,
@@ -263,6 +278,7 @@ class Links extends AbstractModifier
             'dataType' => Form\Element\DataType\Number::NAME,
             'component' => 'Magento_Downloadable/js/components/price-handler',
             'dataScope' => 'price',
+            'labelVisible' => false,
             'addbefore' => $this->locator->getStore()->getBaseCurrency()
                 ->getCurrencySymbol(),
             'validation' => [
@@ -279,6 +295,8 @@ class Links extends AbstractModifier
     }
 
     /**
+     * Returns File column configuration
+     *
      * @return array
      */
     protected function getFileColumn()
@@ -288,7 +306,9 @@ class Links extends AbstractModifier
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => __('File'),
+            'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => 30,
         ];
         $fileTypeField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Select::NAME,
@@ -299,6 +319,7 @@ class Links extends AbstractModifier
             'options' => $this->typeUpload->toOptionArray(),
             'typeFile' => 'links_file',
             'typeUrl' => 'link_url',
+            'labelVisible' => false,
         ];
         $fileLinkUrl['arguments']['data']['config'] = [
             'formElement' => Form\Element\Input::NAME,
@@ -341,6 +362,8 @@ class Links extends AbstractModifier
     }
 
     /**
+     * Returns Sample column configuration
+     *
      * @return array
      */
     protected function getSampleColumn()
@@ -350,7 +373,9 @@ class Links extends AbstractModifier
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => __('Sample'),
+            'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => 40,
         ];
         $sampleTypeField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Select::NAME,
@@ -359,6 +384,7 @@ class Links extends AbstractModifier
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => 'sample.type',
             'options' => $this->typeUpload->toOptionArray(),
+            'labelVisible' => false,
             'typeFile' => 'sample_file',
             'typeUrl' => 'sample_url',
         ];
@@ -378,6 +404,7 @@ class Links extends AbstractModifier
             'component' => 'Magento_Downloadable/js/components/file-uploader',
             'elementTmpl' => 'Magento_Downloadable/components/file-uploader',
             'fileInputName' => 'link_samples',
+            'labelVisible' => false,
             'uploaderConfig' => [
                 'url' => $this->urlBuilder->addSessionParam()->getUrl(
                     'adminhtml/downloadable_file/upload',
@@ -399,6 +426,8 @@ class Links extends AbstractModifier
     }
 
     /**
+     * Returns Sharable columns configuration
+     *
      * @return array
      */
     protected function getShareableColumn()
@@ -409,6 +438,7 @@ class Links extends AbstractModifier
             'componentType' => Form\Field::NAME,
             'dataType' => Form\Element\DataType\Number::NAME,
             'dataScope' => 'is_shareable',
+            'sortOrder' => 50,
             'options' => $this->shareable->toOptionArray(),
         ];
 
@@ -416,6 +446,8 @@ class Links extends AbstractModifier
     }
 
     /**
+     * Returns max downloads column configuration
+     *
      * @return array
      */
     protected function getMaxDownloadsColumn()
@@ -425,13 +457,16 @@ class Links extends AbstractModifier
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => __('Max. Downloads'),
+            'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => 60,
         ];
         $numberOfDownloadsField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Input::NAME,
             'componentType' => Form\Field::NAME,
             'dataType' => Form\Element\DataType\Number::NAME,
             'dataScope' => 'number_of_downloads',
+            'labelVisible' => false,
             'value' => 0,
             'validation' => [
                 'validate-zero-or-greater' => true,

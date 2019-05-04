@@ -5,8 +5,8 @@
  */
 namespace Magento\Sniffs\Less;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 /**
  * Class TypeSelectorsSniff
@@ -18,10 +18,9 @@ use PHP_CodeSniffer_Sniff;
  * - Type selectors must be lowercase
  * - Write selector in one line, do not use concatenation
  *
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#selectors-naming
- *
+ * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#selectors-naming
  */
-class TypeSelectorsSniff implements PHP_CodeSniffer_Sniff
+class TypeSelectorsSniff implements Sniff
 {
     /**
      * Tags that are not allowed as type selector
@@ -56,7 +55,7 @@ class TypeSelectorsSniff implements PHP_CodeSniffer_Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -64,9 +63,9 @@ class TypeSelectorsSniff implements PHP_CodeSniffer_Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 

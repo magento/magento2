@@ -8,7 +8,7 @@ namespace Magento\Framework\Controller\Test\Unit\Result;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ForwardTest extends \PHPUnit_Framework_TestCase
+class ForwardTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Controller\Result\Forward */
     protected $forward;

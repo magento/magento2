@@ -9,15 +9,15 @@
 /** @var \Magento\Newsletter\Block\Adminhtml\Subscriber $block */
 
 ?>
-<?php echo $block->getChildHtml('grid') ?>
+<?= $block->getChildHtml('grid') ?>
 <?php if (count($block->getQueueAsOptions())>0 && $block->getShowQueueAdd()): ?>
 <div class="form-buttons">
     <select id="queueList" name="queue">
     <?php foreach ($block->getQueueAsOptions() as $_queue): ?>
-        <option value="<?php echo $block->escapeHtmlAttr($_queue['value']) ?>"><?php echo $block->escapeHtml($_queue['label']) ?> #<?php echo $block->escapeHtml($_queue['value']) ?></option>
+        <option value="<?= $block->escapeHtmlAttr($_queue['value']) ?>"><?= $block->escapeHtml($_queue['label']) ?> #<?= $block->escapeHtml($_queue['value']) ?></option>
     <?php endforeach; ?>
     </select>
-    <button type="button" class="scalable" onclick="subscriberController.addToQueue();"><span><span><span><?php echo $block->escapeHtml(__('Add to Queue')); ?></span></span></span></button>
+    <button type="button" class="scalable" onclick="subscriberController.addToQueue();"><span><span><span><?= $block->escapeHtml(__('Add to Queue')) ?></span></span></span></button>
 </div>
 <?php endif ?>
 <script>

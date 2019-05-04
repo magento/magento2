@@ -8,7 +8,7 @@ namespace Magento\Variable\Block\System\Variable;
 /**
  * @magentoAppArea adminhtml
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

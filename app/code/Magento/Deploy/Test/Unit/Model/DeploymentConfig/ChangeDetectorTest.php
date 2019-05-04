@@ -10,7 +10,7 @@ use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Deploy\Model\DeploymentConfig\DataCollector;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 
-class ChangeDetectorTest extends \PHPUnit_Framework_TestCase
+class ChangeDetectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Hash|\PHPUnit_Framework_MockObject_MockObject

@@ -30,7 +30,7 @@ interface WriterInterface
      * @param \Magento\Setup\Module\I18n\Locale $locale
      * @param string $mode One of const of WriterInterface::MODE_
      * @return void
-     * @deprecated Writing to a specified pack path is not supported after custom vendor directory support.
+     * @deprecated 2.1.0 Writing to a specified pack path is not supported after custom vendor directory support.
      * Dictionary data will be written to current Magento codebase.
      */
     public function write(Dictionary $dictionary, $packPath, Locale $locale, $mode);

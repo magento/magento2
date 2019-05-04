@@ -14,6 +14,6 @@
         "Magento_Paypal/js/solutions",
         "domReady!"
     ], function (Solutions) {
-        var solutions = new Solutions({config: {solutions: <?php /* @noEscape */ echo $block->getJson(); ?>}});
+        var solutions = new Solutions({config: {solutions: <?= /* @noEscape */ $block->getJson() ?>}});
     });
 </script>

@@ -17,7 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Template|\PHPUnit_Framework_MockObject_MockObject
@@ -45,11 +45,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         }
 
-        $this->mail = $this->getMock(
-            \Zend_Mail::class,
-            ['send', 'addTo', 'addBcc', 'setReturnPath', 'setReplyTo'],
-            ['utf-8']
-        );
+        $this->mail = $this->getMockBuilder(\Zend_Mail::class)
+            ->setMethods(['send', 'addTo', 'addBcc', 'setReturnPath', 'setReplyTo'])
+            ->setConstructorArgs(['utf-8'])
+            ->getMock();
 
         $this->model = $this->getMockBuilder(\Magento\Email\Model\Template::class)
             ->setMethods(['_getMail'])
@@ -108,7 +107,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($this->model->getTemplateText());
         $this->assertNotEmpty($this->model->getTemplateSubject());
         $this->assertNotEmpty($this->model->getOrigTemplateVariables());
-        $this->assertInternalType('array', \Zend_Json::decode($this->model->getOrigTemplateVariables()));
+        $this->assertInternalType('array', json_decode($this->model->getOrigTemplateVariables(), true));
     }
 
     /**
@@ -316,25 +315,25 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 Area::AREA_FRONTEND,
                 TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="customer/create_account/email_template"}}',
-                '<b>customer_create_account_email_template template from Vendor/custom_theme</b>',
+                '<strong>customer_create_account_email_template template from Vendor/custom_theme</strong>',
             ],
             'Template from parent theme - frontend' => [
                 Area::AREA_FRONTEND,
                 TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="customer/create_account/email_confirmation_template"}}',
-                '<b>customer_create_account_email_confirmation_template template from Vendor/default</b>',
+                '<strong>customer_create_account_email_confirmation_template template from Vendor/default</strong',
             ],
             'Template from grandparent theme - frontend' => [
                 Area::AREA_FRONTEND,
                 TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="customer/create_account/email_confirmed_template"}}',
-                '<b>customer_create_account_email_confirmed_template template from Magento/default</b>',
+                '<strong>customer_create_account_email_confirmed_template template from Magento/default</strong',
             ],
             'Template from grandparent theme - adminhtml' => [
                 BackendFrontNameResolver::AREA_CODE,
                 TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="catalog/productalert_cron/error_email_template"}}',
-                '<b>catalog_productalert_cron_error_email_template template from Magento/default</b>',
+                '<strong>catalog_productalert_cron_error_email_template template from Magento/default</strong',
                 null,
                 null,
                 true,
@@ -704,8 +703,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $testTemplateVariables = '{"var data.name":"Sender Name","var data.email":"Sender Email"}';
         $this->model->setOrigTemplateVariables($testTemplateVariables);
         $variablesOptionArray = $this->model->getVariablesOptionArray(true);
-        $this->assertEquals('Template Variables', $variablesOptionArray['label']->getText());
-        $this->assertEquals($this->model->getVariablesOptionArray(), $variablesOptionArray['value']);
+        $this->assertEquals('Template Variables', $variablesOptionArray[0]['label']->getText());
+        $this->assertEquals($this->model->getVariablesOptionArray(), $variablesOptionArray[0]['value']);
     }
 
     /**

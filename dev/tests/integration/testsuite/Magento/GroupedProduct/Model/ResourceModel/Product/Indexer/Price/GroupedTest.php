@@ -17,7 +17,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 /**
  * Test class for Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\Grouped
  */
-class GroupedTest extends \PHPUnit_Framework_TestCase
+class GroupedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductRepositoryInterface
@@ -50,6 +50,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testReindex()
     {

@@ -13,6 +13,7 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensibleModel
 {
@@ -53,6 +54,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 100.2.0
      */
     protected $serializer;
 
@@ -482,7 +484,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
 
     /**
      * @return \Magento\Framework\Api\ExtensionAttributesFactory
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getExtensionFactory()
     {
@@ -492,7 +494,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
 
     /**
      * @return \Magento\Framework\Api\AttributeValueFactory
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getCustomAttributeFactory()
     {

@@ -11,7 +11,7 @@ namespace Magento\Test\Legacy;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class LayoutTest extends \PHPUnit_Framework_TestCase
+class LayoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * List of obsolete nodes
@@ -355,7 +355,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'unsetChild',
             'unsetChildren',
             'updateButton',
-            'setIsProductListingContext'
+            'setIsProductListingContext',
+            'checkCompanyStatus', // MAGETWO-88965
+            'setRendererType', // MAGETWO-88965
         ];
     }
 }

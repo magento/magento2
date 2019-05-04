@@ -12,9 +12,8 @@
 namespace Magento\Framework\HTTP\Client;
 
 /**
- * @SuppressWarnings(PHPMD.UnusedPrivateField)
- */
-/**
+ * Socket client
+ *
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 class Socket implements \Magento\Framework\HTTP\ClientInterface
@@ -134,6 +133,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Set headers from hash
+     *
      * @param array $headers
      * @return void
      */
@@ -167,6 +167,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Authorization: Basic header
+     *
      * Login credentials support
      *
      * @param string $login username
@@ -235,8 +236,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
     }
 
     /**
-     * Set host, port from full url
-     * and return relative url
+     * Set host, port from full url and return relative url
      *
      * @param string $uri ex. http://google.com/index.php?a=b
      * @return string ex. /index.php?a=b
@@ -273,7 +273,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Make POST request
      *
      * @param string $uri
-     * @param array $params
+     * @param array|string $params use string in case of JSON or XML POST request
      * @return void
      */
     public function post($uri, $params)
@@ -330,6 +330,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
     /**
      * Get cookies array with details
      * (domain, expire time etc)
+     *
      * @return array
      */
     public function getCookiesFull()
@@ -424,7 +425,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
         if (count($line) != 3) {
             return $this->doError("Invalid response line returned from server: " . $responseLine);
         }
-        $this->_responseStatus = intval($line[1]);
+        $this->_responseStatus = (int)$line[1];
         $this->processResponseHeaders();
 
         $this->processRedirect();
@@ -444,6 +445,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Get response status code
+     *
      * @see \Magento\Framework\HTTP\Client#getStatus()
      *
      * @return int
@@ -455,10 +457,12 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Make request
+     *
      * @param string $method
      * @param string $uri
-     * @param array $params
+     * @param array|string $params use string in case of JSON or XML POST request
      * @return void
+     * @throws \Exception
      */
     protected function makeRequest($method, $uri, $params = [])
     {
@@ -473,8 +477,8 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
         $appendHeaders = [];
         $paramsStr = false;
-        if ($isPost && count($params)) {
-            $paramsStr = http_build_query($params);
+        if ($isPost && $params) {
+            $paramsStr = is_array($params) ? http_build_query($params) : $params;
             $appendHeaders['Content-type'] = 'application/x-www-form-urlencoded';
             $appendHeaders['Content-length'] = strlen($paramsStr);
         }
@@ -492,6 +496,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Throw error exception
+     *
      * @param string $string
      * @return void
      * @throws \Exception
@@ -503,6 +508,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Convert headers hash to string
+     *
      * @param array $append
      * @return string
      */

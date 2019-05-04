@@ -26,6 +26,7 @@
         <settings>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_Braintree::settlement_report</aclResource>
         <dataProvider class="BraintreeTransactionsDataProvider" name="braintree_report_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>

@@ -239,7 +239,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         $response = $curl->read();
         $curl->close();
 
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             $this->_eventManager->dispatchEvent(['curl_failed'], [$response]);
             throw new \Exception('Product creation by curl handler was not successful!');
         }
@@ -345,7 +345,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     }
 
     /**
-     * Preparation wheather product 'Is Virtual'.
+     * Preparation whether product 'Is Virtual'.
      *
      * @return void
      */
@@ -363,8 +363,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function prepareAttributeSet()
     {
-        if (
-            $this->fixture->hasData('attribute_set_id')
+        if ($this->fixture->hasData('attribute_set_id')
             && !empty($this->fixture->getDataFieldConfig('attribute_set_id')['source'])
             && $this->fixture->getDataFieldConfig('attribute_set_id')['source']->getAttributeSet()
         ) {
@@ -372,8 +371,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
                 ->getDataFieldConfig('attribute_set_id')['source']
                 ->getAttributeSet()
                 ->getAttributeSetId();
-        } else if (
-            $this->fixture->hasData('attribute_set_id')
+        } else if ($this->fixture->hasData('attribute_set_id')
             && !empty($this->fixture->getDataFieldConfig('attribute_set_id')['source'])
             && $this->fixture->getDataFieldConfig('attribute_set_id')['source']->getAttributeSet()
         ) {
@@ -413,7 +411,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             : ['is_in_stock' => 'In Stock'];
 
         if (!isset($quantityAndStockStatus['is_in_stock'])) {
-            $qty = isset($quantityAndStockStatus['qty']) ? intval($quantityAndStockStatus['qty']) : null;
+            $qty = isset($quantityAndStockStatus['qty']) ? (int)$quantityAndStockStatus['qty'] : null;
             $quantityAndStockStatus['is_in_stock'] = 0 === $qty ? 'Out of Stock' : 'In Stock';
         }
 

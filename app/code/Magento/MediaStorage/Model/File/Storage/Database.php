@@ -9,6 +9,7 @@ namespace Magento\MediaStorage\Model\File\Storage;
  * Class Database
  *
  * @api
+ * @since 100.0.2
  */
 class Database extends \Magento\MediaStorage\Model\File\Storage\Database\AbstractDatabase
 {
@@ -47,6 +48,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Store media base directory path
      *
      * @var string
+     * @since 100.1.0
      */
     protected $mediaBaseDirectory = null;
 
@@ -366,6 +368,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Retrieve media base directory path
      *
      * @return string
+     * @since 100.1.0
      */
     public function getMediaBaseDirectory()
     {

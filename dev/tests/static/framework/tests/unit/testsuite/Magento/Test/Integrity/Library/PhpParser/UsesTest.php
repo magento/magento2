@@ -9,7 +9,7 @@ use Magento\TestFramework\Integrity\Library\PhpParser\Uses;
 
 /**
  */
-class UsesTest extends \PHPUnit_Framework_TestCase
+class UsesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Uses

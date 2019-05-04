@@ -27,7 +27,7 @@ class AssertWishlistIsEmpty extends AbstractConstraint
     {
         $cmsIndex->getCmsPageBlock()->waitPageInit();
         $cmsIndex->getLinksBlock()->openLink("My Wish List");
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $wishlistIndex->getWishlistBlock()->isEmptyBlockVisible(),
             'Wish List is not empty.'
         );

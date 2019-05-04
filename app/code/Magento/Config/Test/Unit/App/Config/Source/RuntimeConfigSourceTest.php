@@ -16,7 +16,7 @@ use Magento\Framework\App\Config\Value;
  * Test Class for retrieving runtime configuration from database.
  * @package Magento\Config\Test\Unit\App\Config\Source
  */
-class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
+class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject

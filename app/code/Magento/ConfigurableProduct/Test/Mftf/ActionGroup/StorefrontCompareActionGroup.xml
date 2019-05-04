@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Check the configurable product in comparison page -->
+    <actionGroup name="StorefrontCheckCompareConfigurableProductActionGroup">
+        <arguments>
+            <argument name="product"/>
+            <argument name="optionProduct"/>
+        </arguments>
+        <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName(product.name)}}" stepKey="assertProductName"/>
+        <see userInput="${{optionProduct.price}}.00" selector="{{StorefrontProductCompareMainSection.ProductPriceByName(product.name)}}" stepKey="assertProductPrice"/>
+        <see userInput="{{product.sku}}" selector="{{StorefrontProductCompareMainSection.ProductAttributeByCodeAndProductName('SKU', product.name)}}" stepKey="assertProductSku"/>
+        <!-- @TODO: MAGETWO-80272 Move to Magento_Checkout -->
+        <seeElement selector="{{StorefrontProductCompareMainSection.ProductAddToCartByName(product.name)}}" stepKey="assertProductAddToCart"/>
+    </actionGroup>
+</actionGroups>

@@ -41,6 +41,7 @@ interface SetupInterface
      *
      * @param string $tableName
      * @return string
+     * @since 100.1.0
      */
     public function getTablePlaceholder($tableName);
 

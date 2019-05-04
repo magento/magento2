@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Page\Config\Reader;
 
-class HtmlTest extends \PHPUnit_Framework_TestCase
+class HtmlTest extends \PHPUnit\Framework\TestCase
 {
     public function testInterpret()
     {

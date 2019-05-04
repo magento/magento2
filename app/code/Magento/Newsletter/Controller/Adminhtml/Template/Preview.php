@@ -6,7 +6,12 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Template;
 
-class Preview extends \Magento\Newsletter\Controller\Adminhtml\Template
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
+/**
+ * View a rendered template.
+ */
+class Preview extends \Magento\Newsletter\Controller\Adminhtml\Template implements HttpGetActionInterface
 {
     /**
      * Preview Newsletter template

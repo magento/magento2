@@ -44,7 +44,7 @@ require([
          */
         getFilter: function() {
             if ($('entity') && $F('entity')) {
-                var url    = "<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/getFilter') ?>";
+                var url    = "<?= /* @escapeNotVerified */ $block->getUrl('*/*/getFilter') ?>";
                 var entity = $F('entity');
                 if (entity != this.previousGridEntity) {
                     this.previousGridEntity = entity;
@@ -64,6 +64,7 @@ require([
                     this.modifyFilterGrid();
                 }
             } else {
+                this.previousGridEntity = '';
                 $('export_filter_container').hide();
             }
         }

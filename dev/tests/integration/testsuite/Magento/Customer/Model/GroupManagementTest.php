@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Test for Magento\Customer\Model\GroupManagement
  */
-class GroupManagementTest extends \PHPUnit_Framework_TestCase
+class GroupManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

@@ -10,7 +10,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 /**
  * @magentoAppIsolation enabled
  */
-class AbstractBlockTest extends \PHPUnit_Framework_TestCase
+class AbstractBlockTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\AbstractBlock

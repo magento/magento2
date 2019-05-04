@@ -7,6 +7,7 @@ namespace Magento\AdminNotification\Model\System\Message;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class CacheOutdated implements \Magento\Framework\Notification\MessageInterface
 {

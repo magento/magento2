@@ -12,6 +12,7 @@ namespace Magento\Sales\Api\Data;
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
  * @api
+ * @since 100.0.2
  */
 interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -413,6 +414,8 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
 
     /**
      * Gets the applied rule IDs for the order item.
+     *
+     * Rules are comma separated if there are more than one.
      *
      * @return string|null Applied rule IDs.
      */

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyTinyMCEv4IsNativeWYSIWYGOnCMSPageTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="MAGETWO-42046-Apply new WYSIWYG on CMS Page"/>
+            <group value="Cms"/>
+            <title value="Admin should see TinyMCEv4.6 is the native WYSIWYG on CMS Page"/>
+            <description value="Admin should see TinyMCEv4.6 is the native WYSIWYG on CMS Page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-84182 "/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+        </before>
+        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
+        <fillField selector="{{CmsNewPagePageContentSection.contentHeading}}" userInput="{{_defaultCmsPage.content_heading}}" stepKey="fillFieldContentHeading"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
+        <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE4"/>
+        <actionGroup ref="VerifyMagentoEntityActionGroup" stepKey="verifyMagentoEntities"/>
+        <executeJS function="tinyMCE.get('cms_page_form_content').setContent('Hello World!');" stepKey="executeJSFillContent"/>
+        <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn" />
+        <waitForElementVisible selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="waitForInsertWidget" />
+        <see selector="{{TinyMCESection.InsertImageBtn}}" userInput="Insert Image..." stepKey="assertInf17"/>
+        <see selector="{{TinyMCESection.InsertWidgetBtn}}" userInput="Insert Widget..." stepKey="assertInfo18"/>
+        <see selector="{{TinyMCESection.InsertVariableBtn}}" userInput="Insert Variable..." stepKey="assertInfo19"/>
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="waitForSaveButtonVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
+        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <see userInput="{{_defaultCmsPage.content_heading}}" stepKey="seeContentHeading"/>
+        <see userInput="Hello World!" stepKey="seeContent" />
+        <after>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

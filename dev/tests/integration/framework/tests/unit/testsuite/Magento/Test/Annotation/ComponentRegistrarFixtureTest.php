@@ -9,7 +9,7 @@ namespace Magento\Test\Annotation;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Annotation\ComponentRegistrarFixture;
 
-class ComponentRegistrarFixtureTest extends \PHPUnit_Framework_TestCase
+class ComponentRegistrarFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ComponentRegistrar

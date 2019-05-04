@@ -49,7 +49,7 @@ class LogoutCustomerOnFrontendStep implements TestStepInterface
     {
         $this->customerAccount->open();
         $this->cmsIndex->getCmsPageBlock()->waitPageInit();
-        if ($this->cmsIndex->getTitleBlock()->getTitle() != 'Customer Login') {
+        if ($this->cmsIndex->getTitleBlock()->getTitle() === 'My Account') {
             $this->cmsIndex->getLinksBlock()->openLink('Sign Out');
             $this->cmsIndex->getCmsPageBlock()->waitUntilTextIsVisible('Home Page');
             $this->cmsIndex->getCmsPageBlock()->waitPageInit();

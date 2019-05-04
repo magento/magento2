@@ -12,7 +12,7 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Sales\Api\Data\CreditmemoCommentInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class CreditmemoCommentRepositoryInterfaceTest extends \PHPUnit_Framework_TestCase
+class CreditmemoCommentRepositoryInterfaceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CreditmemoCommentRepositoryInterface

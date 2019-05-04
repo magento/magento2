@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Element\Text;
 
-class ListTest extends \PHPUnit_Framework_TestCase
+class ListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\LayoutInterface

@@ -10,7 +10,9 @@ namespace Magento\Integration\Helper\Oauth;
  */
 class Data
 {
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     protected $_scopeConfig;
 
     /**

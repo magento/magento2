@@ -39,7 +39,7 @@ class AssertWidgetProductLink extends AbstractConstraint
         $cmsIndex->getTopmenu()->selectCategoryByName($widget->getWidgetInstance()[0]['entities']->getName());
         $cmsIndex->getWidgetView()->clickToWidget($widget, $widget->getParameters()['anchor_text']);
         $title = $productView->getTitleBlock()->getTitle();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $widget->getParameters()['entities'][0]->getName(),
             $title,
             'Wrong product title.'

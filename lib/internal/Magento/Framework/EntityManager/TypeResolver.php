@@ -50,13 +50,13 @@ class TypeResolver
         $interfaceNames = $reflectionClass->getInterfaceNames();
         $dataInterfaces = [];
         foreach ($interfaceNames as $interfaceName) {
-            if (strpos($interfaceName, '\Api\Data\\')) {
+            if (strpos($interfaceName, '\Api\Data\\') !== false) {
                 $dataInterfaces[] = $interfaceName;
             }
         }
 
         if (count($dataInterfaces) == 0) {
-            throw new \Exception('Unable to determine data interface for ' . $className);
+            return $className;
         }
 
         foreach ($dataInterfaces as $dataInterface) {

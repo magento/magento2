@@ -13,10 +13,10 @@
             <container name="product.info.grouped.extra" after="product.info.grouped" before="product.info.grouped" as="product_type_data_extra" label="Product Extra Info"/>
         </referenceContainer>
         <referenceContainer name="product.info.grouped.extra">
-            <block class="Magento\GroupedProduct\Block\Stockqty\Type\Grouped" template="Magento_CatalogInventory::stockqty/composite.phtml"/>
+            <block class="Magento\GroupedProduct\Block\Stockqty\Type\Grouped" name="product.info.grouped.stock-composite" template="Magento_CatalogInventory::stockqty/composite.phtml"/>
         </referenceContainer>
         <referenceContainer name="product.info.type">
-            <block class="Magento\GroupedProduct\Block\Product\View\Type\Grouped" as="product.info.grouped" template="Magento_GroupedProduct::product/view/type/default.phtml"/>
+            <block class="Magento\GroupedProduct\Block\Product\View\Type\Grouped" name="product.info.grouped.stock" as="product.info.grouped" template="Magento_GroupedProduct::product/view/type/default.phtml"/>
         </referenceContainer>
     </body>
 </page>

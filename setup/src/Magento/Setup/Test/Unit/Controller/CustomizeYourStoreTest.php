@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\CustomizeYourStore;
 
-class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
+class CustomizeYourStoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Controller\CustomizeYourStore
@@ -37,18 +37,12 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
-        $this->objectManager = $this->getMock(\Magento\Framework\App\ObjectManager::class, [], [], '', false);
+        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\App\ObjectManager::class);
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
-        $this->sampleDataState = $this->getMock(
-            \Magento\Framework\Setup\SampleData\State::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->lists = $this->getMock(\Magento\Framework\Setup\Lists::class, [], [], '', false);
-        $this->moduleList = $this->getMock(\Magento\Framework\Module\FullModuleList::class, [], [], '', false);
+        $this->sampleDataState = $this->createMock(\Magento\Framework\Setup\SampleData\State::class);
+        $this->lists = $this->createMock(\Magento\Framework\Setup\Lists::class);
+        $this->moduleList = $this->createMock(\Magento\Framework\Module\FullModuleList::class);
         $this->controller = new CustomizeYourStore($this->moduleList, $this->lists, $objectManagerProvider);
     }
 

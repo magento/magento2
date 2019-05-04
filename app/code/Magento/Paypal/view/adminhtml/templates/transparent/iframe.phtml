@@ -15,13 +15,13 @@ $params = $block->getParams();
 <head>
 <script>
 <?php if (isset($params['redirect'])): ?>
-    window.location="<?php echo $block->escapeUrl($params['redirect']); ?>";
+    window.location="<?= $block->escapeUrl($params['redirect']) ?>";
 <?php elseif (isset($params['redirect_parent'])): ?>
-    window.top.location="<?php echo $block->escapeUrl($params['redirect_parent']); ?>";
+    window.top.location="<?= $block->escapeUrl($params['redirect_parent']) ?>";
 <?php elseif (isset($params['error_msg'])): ?>
-    window.top.alert(<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($params['error_msg']); ?>);
+    window.top.alert(<?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($params['error_msg']) ?>);
 <?php elseif (isset($params['order_success'])): ?>
-    window.top.location = "<?php echo $block->escapeUrl($params['order_success']); ?>";
+    window.top.location = "<?= $block->escapeUrl($params['order_success']) ?>";
 <?php else: ?>
     var require = window.top.require;
     require(['jquery'], function($) {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-class CacheFilesTest extends \PHPUnit_Framework_TestCase
+class CacheFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $area
@@ -13,7 +13,7 @@ class CacheFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testCacheConfig($area)
     {
-        $validationStateMock = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

@@ -1,0 +1,32 @@
+{
+    "sales_sequence_profile": {
+        "column": {
+            "profile_id": true,
+            "meta_id": true,
+            "prefix": true,
+            "suffix": true,
+            "start_value": true,
+            "step": true,
+            "max_value": true,
+            "warning_value": true,
+            "is_active": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_SEQUENCE_PROFILE_META_ID_SALES_SEQUENCE_META_META_ID": true,
+            "SALES_SEQUENCE_PROFILE_META_ID_PREFIX_SUFFIX": true
+        }
+    },
+    "sales_sequence_meta": {
+        "column": {
+            "meta_id": true,
+            "entity_type": true,
+            "store_id": true,
+            "sequence_table": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_SEQUENCE_META_ENTITY_TYPE_STORE_ID": true
+        }
+    }
+}

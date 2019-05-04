@@ -11,6 +11,7 @@ use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Grouped extends DefaultRenderer
 {

@@ -5,8 +5,6 @@
  */
 namespace Magento\GiftMessage\Api;
 
-// @codingStandardsIgnoreFile
-
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class CartRepositoryTest extends WebapiAbstract
@@ -136,7 +134,8 @@ class CartRepositoryTest extends WebapiAbstract
         $quote->load('test_order_item_with_message', 'reserved_order_id');
         $quote->getGiftMessageId();
         /** @var  \Magento\GiftMessage\Model\Message $message */
-        $message = $this->objectManager->create(\Magento\GiftMessage\Model\Message::class)->load($quote->getGiftMessageId());
+        $message = $this->objectManager->create(\Magento\GiftMessage\Model\Message::class)
+            ->load($quote->getGiftMessageId());
         $this->assertEquals('John Doe', $message->getRecipient());
         $this->assertEquals('Jane Roe', $message->getSender());
         $this->assertEquals('Gift Message Text New', $message->getMessage());
@@ -182,7 +181,8 @@ class CartRepositoryTest extends WebapiAbstract
         $quote->load('test_order_item_with_message', 'reserved_order_id');
         $quote->getGiftMessageId();
         /** @var  \Magento\GiftMessage\Model\Message $message */
-        $message = $this->objectManager->create(\Magento\GiftMessage\Model\Message::class)->load($quote->getGiftMessageId());
+        $message = $this->objectManager->create(\Magento\GiftMessage\Model\Message::class)
+            ->load($quote->getGiftMessageId());
         $this->assertEquals('John Doe', $message->getRecipient());
         $this->assertEquals('Jane Roe', $message->getSender());
         $this->assertEquals('Gift Message Text New', $message->getMessage());

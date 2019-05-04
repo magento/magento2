@@ -10,7 +10,10 @@ use Magento\Framework\View\Element\Template;
 use Magento\Translation\Model\Js\Config;
 
 /**
+ * JS translation block
+ *
  * @api
+ * @since 100.0.2
  */
 class Js extends Template
 {
@@ -52,7 +55,7 @@ class Js extends Template
     }
 
     /**
-     * gets current js-translation.json timestamp
+     * Gets current js-translation.json timestamp
      *
      * @return string
      */
@@ -62,10 +65,22 @@ class Js extends Template
     }
 
     /**
+     * Get translation file path
+     *
      * @return string
      */
     public function getTranslationFilePath()
     {
         return $this->fileManager->getTranslationFilePath();
+    }
+
+    /**
+     * Gets current version of the translation file.
+     *
+     * @return string
+     */
+    public function getTranslationFileVersion()
+    {
+        return $this->fileManager->getTranslationFileVersion();
     }
 }

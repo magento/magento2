@@ -18,7 +18,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class LoaderTest
  */
-class LoaderTest extends \PHPUnit_Framework_TestCase
+class LoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OptionValueInterfaceFactory|MockObject

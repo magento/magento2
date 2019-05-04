@@ -9,6 +9,7 @@ namespace Magento\ImportExport\Model\ResourceModel;
  * Collection by pages iterator
  *
  * @api
+ * @since 100.0.2
  */
 class CollectionByPagesIterator
 {

@@ -25,7 +25,7 @@ use Magento\Framework\Controller\Result\Json;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddAttributeToTemplateTest extends \PHPUnit_Framework_TestCase
+class AddAttributeToTemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -128,7 +128,7 @@ class AddAttributeToTemplateTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addFilter', 'create', 'setPageSize'])
+            ->setMethods(['addFilter', 'create', 'setPageSize', 'addSortOrder'])
             ->getMockForAbstractClass();
         $this->searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()

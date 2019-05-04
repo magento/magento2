@@ -21,18 +21,16 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     const LIBRARY = 'library';
     const THEME = 'theme';
     const LANGUAGE = 'language';
+    const SETUP = 'setup';
     /**#@- */
 
-    /**
-     * All paths
-     *
-     * @var array
-     */
+    /**#@- */
     private static $paths = [
         self::MODULE => [],
         self::LIBRARY => [],
         self::LANGUAGE => [],
         self::THEME => [],
+        self::SETUP => []
     ];
 
     /**
@@ -72,7 +70,7 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     public function getPath($type, $componentName)
     {
         self::validateType($type);
-        return isset(self::$paths[$type][$componentName]) ? self::$paths[$type][$componentName] : null;
+        return self::$paths[$type][$componentName] ?? null;
     }
 
     /**

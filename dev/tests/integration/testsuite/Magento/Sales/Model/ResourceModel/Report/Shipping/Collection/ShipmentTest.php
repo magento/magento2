@@ -8,7 +8,7 @@ namespace Magento\Sales\Model\ResourceModel\Report\Shipping\Collection;
 /**
  * Integration tests for shipments reports collection which is used to obtain shipment reports by shipment date.
  */
-class ShipmentTest extends \PHPUnit_Framework_TestCase
+class ShipmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Report\Shipping\Collection\Shipment

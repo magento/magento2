@@ -57,7 +57,6 @@ class GeneratedClassesAutoloader
             include $classSourceFile;
             return true;
         } else {
-
             foreach ($this->generators as $generator) {
                 $content = $generator->generate($className);
                 if ($content) {
@@ -66,8 +65,7 @@ class GeneratedClassesAutoloader
                     include $classSourceFile;
                     return true;
                 }
-            };
-
+            }
         }
 
         return false;

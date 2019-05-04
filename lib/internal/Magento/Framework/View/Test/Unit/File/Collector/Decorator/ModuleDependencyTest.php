@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\File\Collector\Decorator;
 
-class ModuleDependencyTest extends \PHPUnit_Framework_TestCase
+class ModuleDependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\File\Collector\Decorator\ModuleDependency
@@ -28,12 +26,13 @@ class ModuleDependencyTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_fileSource = $this->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
-        $this->_moduleListMock = $this->getMock(\Magento\Framework\Module\ModuleListInterface::class);
+        $this->_moduleListMock = $this->createMock(\Magento\Framework\Module\ModuleListInterface::class);
         $this->_moduleListMock->expects($this->any())
             ->method('getNames')
             ->will($this->returnValue(['Fixture_ModuleB', 'Fixture_ModuleA']));
         $this->_model = new \Magento\Framework\View\File\Collector\Decorator\ModuleDependency(
-            $this->_fileSource, $this->_moduleListMock
+            $this->_fileSource,
+            $this->_moduleListMock
         );
     }
 
@@ -54,6 +53,9 @@ class ModuleDependencyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedFiles, $this->_model->getFiles($theme, '*.xml'), $message);
     }
 
+    /**
+     * @return array
+     */
     public function getFilesDataProvider()
     {
         $fileOne = new \Magento\Framework\View\File('b.xml', 'Fixture_ModuleB');

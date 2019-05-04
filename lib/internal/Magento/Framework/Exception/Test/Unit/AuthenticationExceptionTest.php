@@ -12,7 +12,7 @@ use Magento\Framework\Phrase;
 /**
  * Class AuthenticationExceptionTest
  */
-class AuthenticationExceptionTest extends \PHPUnit_Framework_TestCase
+class AuthenticationExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return void
@@ -21,10 +21,13 @@ class AuthenticationExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $authenticationException = new AuthenticationException(
             new Phrase(
-                'An authentication error occurred.',
+                'An authentication error occurred. Verify and try again.',
                 ['consumer_id' => 1, 'resources' => 'record2']
             )
         );
-        $this->assertSame('An authentication error occurred.', $authenticationException->getMessage());
+        $this->assertSame(
+            'An authentication error occurred. Verify and try again.',
+            $authenticationException->getMessage()
+        );
     }
 }

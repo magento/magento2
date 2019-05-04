@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element\Dependency;
 
-class MapperTest extends \PHPUnit_Framework_TestCase
+class MapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Field prefix
@@ -98,7 +98,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     {
         $expected = [];
         $rowData = array_values($this->_testData);
-        for ($i = 0; $i < count($this->_testData); ++$i) {
+        $count = count($this->_testData);
+        for ($i = 0; $i < $count; ++$i) {
             $data = $rowData[$i];
             $dependentPath = 'some path ' . $i;
             $field = $this->_getField(
@@ -149,6 +150,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function getDependenciesDataProvider()
     {
         return [[true], [false]];
@@ -158,7 +162,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     {
         $expected = [];
         $rowData = array_values($this->_testData);
-        for ($i = 0; $i < count($this->_testData); ++$i) {
+        $count = count($this->_testData);
+        for ($i = 0; $i < $count; ++$i) {
             $data = $rowData[$i];
             $field = $this->_getField(
                 true,

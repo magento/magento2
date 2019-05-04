@@ -7,7 +7,7 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
+class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\ResponseFactory
@@ -33,7 +33,7 @@ class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->factory = $helper->getObject(
             \Magento\Framework\Search\Adapter\Mysql\ResponseFactory::class,
@@ -49,6 +49,7 @@ class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
                 ['title' => 'twoTitle', 'description' => 'twoDescription'],
             ],
             'aggregations' => [],
+            'total' => 2
         ];
 
         $this->documentFactory->expects($this->at(0))->method('create')
@@ -61,7 +62,7 @@ class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManager->expects($this->once())->method('create')
             ->with(
                 $this->equalTo(\Magento\Framework\Search\Response\QueryResponse::class),
-                $this->equalTo(['documents' => ['document1', 'document2'], 'aggregations' => null])
+                $this->equalTo(['documents' => ['document1', 'document2'], 'aggregations' => null, 'total' => 2])
             )
             ->will($this->returnValue('QueryResponseObject'));
 

@@ -20,7 +20,7 @@
                         <label>Access list</label>
                         <comment>IPs access list separated with ',' that can purge Varnish configuration for config file generation.
                             If field is empty default value localhost will be saved.</comment>
-                        <backend_model>Magento\PageCache\Model\System\Config\Backend\Varnish</backend_model>
+                        <backend_model>Magento\PageCache\Model\System\Config\Backend\AccessList</backend_model>
                         <depends>
                             <field id="caching_application">1</field>
                         </depends>
@@ -49,7 +49,7 @@
                             <field id="caching_application">1</field>
                         </depends>
                     </field>
-                    <field id="export_button_version4" type="button" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="export_button_version4" translate="label" type="button" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Export Configuration</label>
                         <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish4</frontend_model>
                         <depends>

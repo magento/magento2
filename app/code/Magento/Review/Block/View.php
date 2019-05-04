@@ -10,6 +10,7 @@ namespace Magento\Review\Block;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class View extends \Magento\Catalog\Block\Product\AbstractProduct
 {
@@ -18,7 +19,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @var string
      */
-    protected $_template = 'view.phtml';
+    protected $_template = 'Magento_Review::view.phtml';
 
     /**
      * Rating option model

@@ -9,13 +9,14 @@ namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttri
  * New product attribute created on product edit page
  *
  * @api
+ * @since 100.0.2
  */
 class Created extends \Magento\Backend\Block\Widget
 {
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/attribute/new/created.phtml';
+    protected $_template = 'Magento_ConfigurableProduct::catalog/product/attribute/new/created.phtml';
 
     /**
      * Core registry

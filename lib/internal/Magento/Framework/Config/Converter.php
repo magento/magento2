@@ -103,7 +103,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
         }
         if (!count($result)) {
-            $result = $node->nodeValue;
+            $result = (strtolower($node->nodeValue) !== 'true' && strtolower($node->nodeValue) !== 'false')
+                ? $node->nodeValue
+                : filter_var($node->nodeValue, FILTER_VALIDATE_BOOLEAN);
         }
         return $result;
     }

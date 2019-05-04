@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Test class for \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent testing
  */
-class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
+class PasswordResetRequestEventTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent */
     protected $model;
@@ -33,29 +33,11 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->dateTimeMock = $this->getMock(
-            \Magento\Framework\Stdlib\DateTime::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->dateTimeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
 
-        $this->resourceMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
 
-        $this->dbAdapterMock = $this->getMock(
-            \Magento\Framework\DB\Adapter\AdapterInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->dbAdapterMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
 
         $this->model = $objectManager->getObject(
             \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent::class,

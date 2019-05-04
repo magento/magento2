@@ -9,6 +9,7 @@ namespace Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options;
  * Block Class for Text Swatch
  *
  * @api
+ * @since 100.0.2
  */
 class Text extends AbstractSwatch
 {
@@ -21,6 +22,7 @@ class Text extends AbstractSwatch
      * Return json config for text option JS initialization
      *
      * @return array
+     * @since 100.1.0
      */
     public function getJsonConfig()
     {

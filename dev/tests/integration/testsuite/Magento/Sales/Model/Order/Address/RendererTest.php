@@ -14,7 +14,7 @@ use Magento\Store\Model\Store;
 use Magento\Sales\Model\Order\Address as OrderAddress;
 use Magento\Sales\Model\Order;
 
-class RendererTest extends \PHPUnit_Framework_TestCase
+class RendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface
@@ -36,6 +36,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      */
     private $config;
 
+    /**
+     * Set up
+     */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -46,7 +49,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Sales/_files/order_fixture_store.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testFormat()

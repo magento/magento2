@@ -10,7 +10,7 @@ use Magento\Setup\Console\Command\MaintenanceAllowIpsCommand;
 use Magento\Setup\Validator\IpValidator;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class MaintenanceAllowIpsCommandTest extends \PHPUnit_Framework_TestCase
+class MaintenanceAllowIpsCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
@@ -29,8 +29,8 @@ class MaintenanceAllowIpsCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->maintenanceMode = $this->getMock(\Magento\Framework\App\MaintenanceMode::class, [], [], '', false);
-        $this->ipValidator = $this->getMock(\Magento\Setup\Validator\IpValidator::class, [], [], '', false);
+        $this->maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
+        $this->ipValidator = $this->createMock(\Magento\Setup\Validator\IpValidator::class);
         $this->command = new MaintenanceAllowIpsCommand($this->maintenanceMode, $this->ipValidator);
     }
 
@@ -67,6 +67,33 @@ class MaintenanceAllowIpsCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $addressInfo
+     * @param array $input
+     * @param array $validatorMessages
+     * @param string $expectedMessage
+     * @dataProvider executeWithAddDataProvider
+     */
+    public function testExecuteWithAdd(array $addressInfo, array $input, array $validatorMessages, $expectedMessage)
+    {
+        $newAddressInfo = array_unique(array_merge($addressInfo, $input['ip']));
+
+        $this->ipValidator->expects($this->once())->method('validateIps')->willReturn($validatorMessages);
+        $this->maintenanceMode
+            ->expects($this->once())
+            ->method('setAddresses')
+            ->with(implode(',', $newAddressInfo));
+
+        $this->maintenanceMode
+            ->expects($this->exactly(2))
+            ->method('getAddressInfo')
+            ->willReturnOnConsecutiveCalls($addressInfo, $newAddressInfo);
+
+        $tester = new CommandTester($this->command);
+        $tester->execute($input);
+        $this->assertEquals($expectedMessage, $tester->getDisplay());
+    }
+
+    /**
      * return array
      */
     public function executeDataProvider()
@@ -75,7 +102,7 @@ class MaintenanceAllowIpsCommandTest extends \PHPUnit_Framework_TestCase
             [
                 ['ip' => ['127.0.0.1', '127.0.0.2'], '--none' => false],
                 [],
-                'Set exempt IP-addresses: 127.0.0.1, 127.0.0.2' . PHP_EOL
+                'Set exempt IP-addresses: 127.0.0.1 127.0.0.2' . PHP_EOL
             ],
             [
                 ['--none' => true],
@@ -97,6 +124,33 @@ class MaintenanceAllowIpsCommandTest extends \PHPUnit_Framework_TestCase
                 [],
                 ''
             ]
+        ];
+    }
+
+    /**
+     * return array
+     */
+    public function executeWithAddDataProvider()
+    {
+        return [
+            [
+                [],
+                ['ip' => ['127.0.0.1'], '--add' => true],
+                [],
+                'Set exempt IP-addresses: 127.0.0.1' . PHP_EOL,
+            ],
+            [
+                ['127.0.0.1'],
+                ['ip' => ['127.0.0.1'], '--add' => true],
+                [],
+                'Set exempt IP-addresses: 127.0.0.1' . PHP_EOL,
+            ],
+            [
+                ['127.0.0.1'],
+                ['ip' => ['127.0.0.2'], '--add' => true],
+                [],
+                'Set exempt IP-addresses: 127.0.0.1 127.0.0.2' . PHP_EOL,
+            ],
         ];
     }
 }

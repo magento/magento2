@@ -7,7 +7,7 @@ namespace Magento\Framework\Composer;
 
 use Magento\Composer\MagentoComposerApplication;
 
-class RemoveTest extends \PHPUnit_Framework_TestCase
+class RemoveTest extends \PHPUnit\Framework\TestCase
 {
     public function testRemove()
     {
@@ -24,7 +24,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
                 [
                     'command' => 'remove',
                     'packages' => ['magento/package-a', 'magento/package-b'],
-                    '--no-update' => true,
+                    '--no-update-with-dependencies' => true,
                 ]
             );
         $composerAppFactory->expects($this->once())

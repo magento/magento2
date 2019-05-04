@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,7 +10,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Sender;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EmailSenderTest extends \PHPUnit_Framework_TestCase
+class EmailSenderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo\Sender\EmailSender
@@ -249,7 +248,7 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
 
         $this->creditmemoMock->expects($this->once())
             ->method('setSendEmail')
-            ->with(true);
+            ->with($emailSendingResult);
 
         if (!$configValue || $forceSyncMode) {
             $transport = [
@@ -262,6 +261,7 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
                 'formattedShippingAddress' => 'Formatted address',
                 'formattedBillingAddress' => 'Formatted address',
             ];
+            $transport = new \Magento\Framework\DataObject($transport);
 
             $this->eventManagerMock->expects($this->once())
                 ->method('dispatch')
@@ -269,15 +269,16 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
                     'email_creditmemo_set_template_vars_before',
                     [
                         'sender' => $this->subject,
-                        'transport' => $transport,
+                        'transport' => $transport->getData(),
+                        'transportObject' => $transport
                     ]
                 );
 
             $this->templateContainerMock->expects($this->once())
                 ->method('setTemplateVars')
-                ->with($transport);
+                ->with($transport->getData());
 
-            $this->identityContainerMock->expects($this->once())
+            $this->identityContainerMock->expects($this->exactly(2))
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
 

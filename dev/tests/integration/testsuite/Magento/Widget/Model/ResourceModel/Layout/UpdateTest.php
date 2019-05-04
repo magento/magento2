@@ -5,7 +5,7 @@
  */
 namespace Magento\Widget\Model\ResourceModel\Layout;
 
-class UpdateTest extends \PHPUnit_Framework_TestCase
+class UpdateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Model\ResourceModel\Layout\Update

@@ -12,6 +12,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  * Abstract rule action
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractAction extends \Magento\Framework\DataObject implements ActionInterface
 {
@@ -48,13 +49,16 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
 
         $this->loadAttributeOptions()->loadOperatorOptions()->loadValueOptions();
 
-        foreach (array_keys($this->getAttributeOption()) as $attr) {
-            $this->setAttribute($attr);
-            break;
+        $attributes = $this->getAttributeOption();
+        if ($attributes) {
+            reset($attributes);
+            $this->setAttribute(key($attributes));
         }
-        foreach (array_keys($this->getOperatorOption()) as $operator) {
-            $this->setOperator($operator);
-            break;
+
+        $operators = $this->getOperatorOption();
+        if ($operators) {
+            reset($operators);
+            $this->setOperator(key($operators));
         }
     }
 

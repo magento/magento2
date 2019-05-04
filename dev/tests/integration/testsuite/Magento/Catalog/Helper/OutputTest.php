@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Helper;
 
-class OutputTest extends \PHPUnit_Framework_TestCase
+class OutputTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Helper\Output
@@ -62,6 +62,24 @@ class OutputTest extends \PHPUnit_Framework_TestCase
             \Magento\Catalog\Model\Category::ENTITY,
             "&lt;p&gt;line1&lt;/p&gt;\nline2"
         );
+    }
+
+    /**
+     * @dataProvider isDirectiveDataProvider
+     */
+    public function testIsDirective($html, $expectedResult)
+    {
+        $this->assertEquals($expectedResult, $this->_helper->isDirectivesExists($html));
+    }
+
+    public function isDirectiveDataProvider()
+    {
+        return [
+            ['{{', false],
+            ['Test string', false],
+            ['{store url="customer/account/login"}', false],
+            ['{{store url="customer/account/login"}}', true],
+        ];
     }
 
     /**

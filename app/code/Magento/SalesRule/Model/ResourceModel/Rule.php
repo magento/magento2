@@ -100,7 +100,7 @@ class Rule extends AbstractResource
     /**
      * @param AbstractModel $object
      * @return void
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function loadCustomerGroupIds(AbstractModel $object)
     {
@@ -113,7 +113,7 @@ class Rule extends AbstractResource
     /**
      * @param AbstractModel $object
      * @return void
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function loadWebsiteIds(AbstractModel $object)
     {
@@ -239,7 +239,7 @@ class Rule extends AbstractResource
                 $connection->delete($table, ['rule_id=?' => $ruleId, 'store_id IN (?)' => $deleteByStoreIds]);
             }
         } catch (\Exception $e) {
-            $connection->rollback();
+            $connection->rollBack();
             throw $e;
         }
         $connection->commit();
@@ -397,7 +397,7 @@ class Rule extends AbstractResource
 
     /**
      * @return \Magento\Framework\EntityManager\EntityManager
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getEntityManager()
     {

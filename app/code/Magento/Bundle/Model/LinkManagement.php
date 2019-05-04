@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Bundle\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -87,7 +88,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     {
         $product = $this->productRepository->get($productSku, true);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new InputException(__('Only implemented for bundle product'));
+            throw new InputException(__('This is implemented for bundle products only.'));
         }
 
         $childrenList = [];
@@ -125,25 +126,30 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         $product = $this->productRepository->get($sku, true);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             throw new InputException(
-                __('Product with specified sku: "%1" is not a bundle product', [$product->getSku()])
+                __('The product with the "%1" SKU isn\'t a bundle product.', [$product->getSku()])
             );
         }
 
         /** @var \Magento\Catalog\Model\Product $linkProductModel */
         $linkProductModel = $this->productRepository->get($linkedProduct->getSku());
         if ($linkProductModel->isComposite()) {
-            throw new InputException(__('Bundle product could not contain another composite product'));
+            throw new InputException(__('The bundle product can\'t contain another composite product.'));
         }
 
         if (!$linkedProduct->getId()) {
-            throw new InputException(__('Id field of product link is required'));
+            throw new InputException(__('The product link needs an ID field entered. Enter and try again.'));
         }
 
         /** @var \Magento\Bundle\Model\Selection $selectionModel */
         $selectionModel = $this->bundleSelection->create();
         $selectionModel->load($linkedProduct->getId());
         if (!$selectionModel->getId()) {
-            throw new InputException(__('Can not find product link with id "%1"', [$linkedProduct->getId()]));
+            throw new InputException(
+                __(
+                    'The product link with the "%1" ID field wasn\'t found. Verify the ID and try again.',
+                    [$linkedProduct->getId()]
+                )
+            );
         }
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $selectionModel = $this->mapProductLinkToSelectionModel(
@@ -168,6 +174,8 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
      * @param string $linkedProductId
      * @param string $parentProductId
      * @return \Magento\Bundle\Model\Selection
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function mapProductLinkToSelectionModel(
         \Magento\Bundle\Model\Selection $selectionModel,
@@ -177,7 +185,10 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     ) {
         $selectionModel->setProductId($linkedProductId);
         $selectionModel->setParentProductId($parentProductId);
-        if (($productLink->getOptionId() !== null)) {
+        if ($productLink->getSelectionId() !== null) {
+            $selectionModel->setSelectionId($productLink->getSelectionId());
+        }
+        if ($productLink->getOptionId() !== null) {
             $selectionModel->setOptionId($productLink->getOptionId());
         }
         if ($productLink->getPosition() !== null) {
@@ -213,12 +224,17 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     ) {
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             throw new InputException(
-                __('Product with specified sku: "%1" is not a bundle product', $product->getSku())
+                __('The product with the "%1" SKU isn\'t a bundle product.', $product->getSku())
             );
         }
 
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+
         $options = $this->optionCollection->create();
+
         $options->setIdFilter($optionId);
+        $options->setProductLinkFilter($product->getData($linkField));
+
         $existingOption = $options->getFirstItem();
 
         if (!$existingOption->getId()) {
@@ -230,20 +246,20 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
             );
         }
 
-        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         /* @var $resource \Magento\Bundle\Model\ResourceModel\Bundle */
         $resource = $this->bundleFactory->create();
         $selections = $resource->getSelectionsData($product->getData($linkField));
         /** @var \Magento\Catalog\Model\Product $linkProductModel */
         $linkProductModel = $this->productRepository->get($linkedProduct->getSku());
         if ($linkProductModel->isComposite()) {
-            throw new InputException(__('Bundle product could not contain another composite product'));
+            throw new InputException(__('The bundle product can\'t contain another composite product.'));
         }
 
         if ($selections) {
             foreach ($selections as $selection) {
                 if ($selection['option_id'] == $optionId &&
-                    $selection['product_id'] == $linkProductModel->getEntityId()) {
+                    $selection['product_id'] == $linkProductModel->getEntityId() &&
+                    $selection['parent_product_id'] == $product->getData($linkField)) {
                     if (!$product->getCopyFromView()) {
                         throw new CouldNotSaveException(
                             __(
@@ -285,7 +301,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         $product = $this->productRepository->get($sku, true);
 
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new InputException(__('Product with specified sku: %1 is not a bundle product', $sku));
+            throw new InputException(__('The product with the "%1" SKU isn\'t a bundle product.', $sku));
         }
 
         $excludeSelectionIds = [];
@@ -300,12 +316,11 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
                     continue;
                 }
                 $excludeSelectionIds[] = $selection->getSelectionId();
-                $usedProductIds[] = $selection->getProductId();
             }
         }
         if (empty($removeSelectionIds)) {
             throw new \Magento\Framework\Exception\NoSuchEntityException(
-                __('Requested bundle option product doesn\'t exist')
+                __("The bundle product doesn't exist. Review your request and try again.")
             );
         }
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();

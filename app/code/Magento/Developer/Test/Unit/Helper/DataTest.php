@@ -5,7 +5,7 @@
  */
 namespace Magento\Developer\Test\Unit\Helper;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Developer\Helper\Data
@@ -68,6 +68,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->helper->isDevAllowed($storeId));
     }
 
+    /**
+     * @return array
+     */
     public function isDevAllowedDataProvider()
     {
         return [

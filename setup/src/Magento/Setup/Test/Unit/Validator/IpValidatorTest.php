@@ -7,7 +7,7 @@ namespace Magento\Setup\Test\Unit\Validator;
 
 use Magento\Setup\Validator\IpValidator;
 
-class IpValidatorTest extends \PHPUnit_Framework_TestCase
+class IpValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var IpValidator

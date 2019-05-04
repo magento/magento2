@@ -5,12 +5,14 @@
  */
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 /**
  * Class AbstractEnableTest
  *
  * Test for class \Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable
  */
-class AbstractEnableTest extends \PHPUnit_Framework_TestCase
+class AbstractEnableTest extends \PHPUnit\Framework\TestCase
 {
     const EXPECTED_ATTRIBUTE = 'data-enable="stub"';
 
@@ -43,8 +45,18 @@ class AbstractEnableTest extends \PHPUnit_Framework_TestCase
             )->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $objectManager = new ObjectManager($this);
+        $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
+        $reflection = new \ReflectionClass($this->elementMock);
+        $reflection_property = $reflection->getProperty('_escaper');
+        $reflection_property->setAccessible(true);
+        $reflection_property->setValue($this->elementMock, $escaper);
+
         $this->abstractEnable = $objectManager->getObject(
-            \Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable\Stub::class
+            \Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable\Stub::class,
+            [
+                '_escaper' => $objectManager->getObject(\Magento\Framework\Escaper::class)
+            ]
         );
     }
 

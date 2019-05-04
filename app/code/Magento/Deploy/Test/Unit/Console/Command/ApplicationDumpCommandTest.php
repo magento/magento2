@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Test command for dump application state
  */
-class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
+class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var InputInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -130,7 +130,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
             ->method('writeln')
             ->withConsecutive(
                 [['system' => 'Some comment message']],
-                ['<info>Done.</info>']
+                ['<info>Done. Config types dumped: system</info>']
             );
 
         $method = new \ReflectionMethod(ApplicationDumpCommand::class, 'execute');

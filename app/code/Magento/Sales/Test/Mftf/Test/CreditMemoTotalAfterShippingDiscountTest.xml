@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreditMemoTotalAfterShippingDiscountTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Credit memos"/>
+            <title value="Verify credit memo grand total after shipping discount is applied via Cart Price Rule"/>
+            <description value="Verify credit memo grand total after shipping discount is applied via Cart Price Rule"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-92924"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
+            <actionGroup ref="SetTaxClassForShipping" stepKey="setShippingTaxClass"/>
+        </before>
+        <after>
+            <actionGroup ref="ResetTaxClassForShipping" stepKey="resetTaxClassForShipping"/>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteSalesRule">
+                <argument name="ruleName" value="{{ApiSalesRule.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteCategory1"/>
+        </after>
+
+        <!-- Create a cart price rule for $10 Fixed amount discount -->
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForRulesPage"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ApiSalesRule.name}}" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsite"/>
+        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="chooseNotLoggedInCustomerGroup"/>
+        <generateDate date="-1 day" format="m/d/Y" stepKey="yesterdayDate"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$yesterdayDate}" stepKey="fillFromDate"/>
+
+        <!-- Open the Actions Tab in the Rules Edit page -->
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.applyDiscountToShippingLabel}}" stepKey="waitForElementToBeVisible"/>
+        <click selector="{{AdminCartPriceRulesFormSection.applyDiscountToShippingLabel}}" stepKey="enableApplyDiscountToShiping"/>
+        <seeCheckboxIsChecked selector="{{AdminCartPriceRulesFormSection.applyDiscountToShipping}}" stepKey="discountIsAppliedToShiping"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount" stepKey="selectActionType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="10" stepKey="fillDiscountAmount"/>
+
+        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+        <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+
+        <!-- Place an order from Storefront as a Guest  -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverOverProduct"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductToAdd"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <!-- fill out customer information -->
+        <fillField selector="{{CheckoutShippingGuestInfoSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.street}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.city}}" userInput="{{CustomerAddressSimple.city}}" stepKey="enterCity"/>
+        <selectOption selector="{{CheckoutShippingGuestInfoSection.region}}" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+
+        <!-- Choose Shippping - Flat Rate Shipping  -->
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask2"/>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment3"/>
+
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+        <!-- Search for Order in the order grid -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
+        <waitForPageLoad time="30" stepKey="waitForOrderListPageLoad"/>
+        <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilter"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
+
+        <!-- Create invoice -->
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>
+
+        <!-- Verify Invoice Totals including subTotal Shipping  Discount and GrandTotal -->
+        <see selector="{{AdminInvoiceTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleProduct.subtotal}}" stepKey="seeInvoiceSubTotal"/>
+        <comment userInput="Shipping and Handling" stepKey="commentViewShippingAndHandling" after="seeInvoiceSubTotal"/>
+        <see selector="{{AdminInvoiceTotalSection.total('Shipping')}}" userInput="${{AdminOrderSimpleProduct.shipping}}" stepKey="seeShippingAndHandling"/>
+        <scrollTo selector="{{AdminInvoiceTotalSection.total('Shipping')}}" stepKey="scrollToInvoiceTotals"/>
+        <grabTextFrom selector="{{AdminInvoiceTotalSection.total('Shipping')}}" stepKey="grabShippingCost"/>
+        <assertEquals expected='$5.00' expectedType="string" actual="($grabShippingCost)" message="ExpectedShipping" stepKey="assertShippingAndHandling"/>
+
+        <see selector="{{AdminInvoiceTotalSection.total('Discount')}}" userInput="-$15.00" stepKey="seeShippingAndHandling2"/>
+        <grabTextFrom selector="{{AdminInvoiceTotalSection.total('Discount')}}" stepKey="grabInvoiceDiscount"/>
+        <assertEquals expected='-$15.00' expectedType="string" actual="($grabInvoiceDiscount)" message="ExpectedDiscount" stepKey="assertDiscountValue"/>
+
+        <see selector="{{AdminInvoiceTotalSection.grandTotal}}" userInput="$113.00" stepKey="seeCorrectGrandTotal"/>
+        <grabTextFrom selector="{{AdminInvoiceTotalSection.grandTotal}}" stepKey="grabInvoiceGrandTotal" after="seeCorrectGrandTotal"/>
+
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage1"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderProcessing"/>
+
+        <!--Create Credit Memo-->
+        <comment userInput="Admin creates credit memo" stepKey="createCreditMemoComment"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreateCreditMemo" after="createCreditMemoComment"/>
+        <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewCreditMemoPage" after="clickCreateCreditMemo"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoInPageTitle" after="seeNewCreditMemoPage"/>
+
+        <!-- Verify Refund Totals -->
+        <see selector="{{AdminCreditMemoTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleProduct.subtotal}}" stepKey="seeRefundSubTotal"/>
+        <grabTextFrom selector="{{AdminCreditMemoTotalSection.total('Discount')}}" stepKey="grabRefundDiscountValue"/>
+        <assertEquals expected='-$15.00' expectedType="string" actual="($grabRefundDiscountValue)" message="notExpectedDiscountOnRefundPage" stepKey="assertDiscountValue1"/>
+        <grabTextFrom selector="{{AdminInvoiceTotalSection.grandTotal}}" stepKey="grabRefundGrandTotal"/>
+        <assertEquals expected="($grabInvoiceGrandTotal)" actual="($grabRefundGrandTotal)" message="RefundGrandTotalMatchesWithInvoiceGrandTotal" stepKey="compareRefundGrandTotalAndInvoiceGrandTotal"/>
+    </test>
+</tests>
+

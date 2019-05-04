@@ -12,7 +12,7 @@ use Magento\Framework\Css\PreProcessor\Instruction\Import;
 /**
  * Class ImportTest
  */
-class ImportTest extends \PHPUnit_Framework_TestCase
+class ImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Asset\NotationResolver\Module|\PHPUnit_Framework_MockObject_MockObject
@@ -37,13 +37,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
 
-        $this->notationResolver = $this->getMock(
-            \Magento\Framework\View\Asset\NotationResolver\Module::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->notationResolver = $this->createMock(\Magento\Framework\View\Asset\NotationResolver\Module::class);
         $contextMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\Asset\ContextInterface::class,
             [],
@@ -51,13 +45,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             false
         );
         $contextMock->expects($this->any())->method('getPath')->willReturn('');
-        $this->asset = $this->getMock(
-            \Magento\Framework\View\Asset\File::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
         $this->asset->expects($this->any())->method('getContentType')->will($this->returnValue('css'));
         $this->asset->expects($this->any())->method('getContext')->willReturn($contextMock);
 

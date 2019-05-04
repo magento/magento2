@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Test for Magento\Framework\Filesystem class
  *
  */
-class FilesystemTest extends \PHPUnit_Framework_TestCase
+class FilesystemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Filesystem

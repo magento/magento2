@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Config;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Config\Reader

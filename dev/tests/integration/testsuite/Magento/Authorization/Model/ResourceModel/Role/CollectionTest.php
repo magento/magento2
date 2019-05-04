@@ -11,7 +11,7 @@ use Magento\Authorization\Model\UserContextInterface;
  * Role collection test
  * @magentoAppArea adminhtml
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Authorization\Model\ResourceModel\Role\Collection

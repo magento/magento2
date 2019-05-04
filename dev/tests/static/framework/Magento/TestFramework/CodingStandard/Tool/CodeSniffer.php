@@ -3,15 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * PHP Code Sniffer tool wrapper
- */
 namespace Magento\TestFramework\CodingStandard\Tool;
 
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use Magento\TestFramework\CodingStandard\ToolInterface;
 
+/**
+ * PHP Code Sniffer tool wrapper
+ */
 class CodeSniffer implements ToolInterface, ExtensionInterface
 {
     /**
@@ -40,7 +39,10 @@ class CodeSniffer implements ToolInterface, ExtensionInterface
      *
      * @var array
      */
-    private $extensions = ['php', 'phtml'];
+    private $extensions = [
+        'php' => 'PHP',
+        'phtml' => 'PHP',
+    ];
 
     /**
      * Constructor
@@ -52,6 +54,7 @@ class CodeSniffer implements ToolInterface, ExtensionInterface
     public function __construct($rulesetDir, $reportFile, Wrapper $wrapper)
     {
         $this->rulesetDir = $rulesetDir;
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         if (!file_exists($rulesetDir) && file_exists($fullPath = realpath(__DIR__ . '/../../../../' . $rulesetDir))) {
             $this->rulesetDir = $fullPath;
         }
@@ -60,7 +63,7 @@ class CodeSniffer implements ToolInterface, ExtensionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtensions(array $extensions)
     {
@@ -74,11 +77,11 @@ class CodeSniffer implements ToolInterface, ExtensionInterface
      */
     public function canRun()
     {
-        return class_exists('PHP_CodeSniffer_CLI');
+        return class_exists('\PHP_CodeSniffer\Runner');
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function run(array $whiteList)
     {
@@ -86,18 +89,21 @@ class CodeSniffer implements ToolInterface, ExtensionInterface
             return 0;
         }
 
+        if (!defined('PHP_CODESNIFFER_IN_TESTS')) {
+            define('PHP_CODESNIFFER_IN_TESTS', true);
+        }
+
         $this->wrapper->checkRequirements();
-        $settings = $this->wrapper->getDefaults();
+        $settings = [];
         $settings['files'] = $whiteList;
-        $settings['standard'] = [$this->rulesetDir];
+        $settings['standards'] = [$this->rulesetDir];
         $settings['extensions'] = $this->extensions;
-        $settings['warningSeverity'] = 0;
         $settings['reports']['full'] = $this->reportFile;
+        $this->wrapper->setSettings($settings);
 
-        $this->wrapper->setValues($settings);
-
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         ob_start();
-        $result = $this->wrapper->process();
+        $result = $this->wrapper->runPHPCS();
         ob_end_clean();
 
         return $result;

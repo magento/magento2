@@ -10,6 +10,7 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Form
 {
@@ -22,9 +23,7 @@ class Form
 
     /**#@-*/
 
-    /**
-     * @var CustomerMetadataInterface
-     */
+    /**#@-*/
     protected $_customerMetadataService;
 
     /**

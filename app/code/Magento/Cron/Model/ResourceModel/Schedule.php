@@ -9,6 +9,7 @@ namespace Magento\Cron\Model\ResourceModel;
  * Schedule resource
  *
  * @api
+ * @since 100.0.2
  */
 class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -59,12 +60,20 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $newStatus
      * @param string $currentStatus
      * @return bool
+     * @since 100.2.0
      */
     public function trySetJobUniqueStatusAtomic($scheduleId, $newStatus, $currentStatus)
     {
         $connection = $this->getConnection();
 
-        $match = $connection->quoteInto('existing.job_code = current.job_code AND existing.status = ?', $newStatus);
+        // this condition added to avoid cron jobs locking after incorrect termination of running job
+        $match = $connection->quoteInto(
+            'existing.job_code = current.job_code ' .
+            'AND (existing.executed_at > UTC_TIMESTAMP() - INTERVAL 1 DAY OR existing.executed_at IS NULL) ' .
+            'AND existing.status = ?',
+            $newStatus
+        );
+
         $selectIfUnlocked = $connection->select()
             ->joinLeft(
                 ['existing' => $this->getTable('cron_schedule')],

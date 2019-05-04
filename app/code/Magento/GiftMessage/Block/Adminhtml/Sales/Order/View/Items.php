@@ -10,6 +10,7 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Items extends \Magento\Backend\Block\Template
 {
@@ -170,7 +171,7 @@ class Items extends \Magento\Backend\Block\Template
     /**
      * Retrieve save url
      *
-     * @return array
+     * @return string
      * @codeCoverageIgnore
      */
     public function getSaveUrl()

@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea adminhtml
  */
-class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
+class CustomerQuoteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Ensure that customer group is updated in customer quote, when it is changed for the customer.

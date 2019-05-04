@@ -11,6 +11,7 @@ use Magento\Integration\Model\Oauth\Token as OauthTokenModel;
  * Integration oAuth Service Interface
  *
  * @api
+ * @since 100.0.2
  */
 interface OauthServiceInterface
 {

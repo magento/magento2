@@ -7,6 +7,7 @@ namespace Magento\Customer\Model\Checkout;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Customer\Model\Url;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -22,6 +23,7 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * @var UrlInterface
+     * @deprecated
      */
     protected $urlBuilder;
 
@@ -31,18 +33,27 @@ class ConfigProvider implements ConfigProviderInterface
     protected $scopeConfig;
 
     /**
+     * @var Url
+     */
+    private $customerUrl;
+
+    /**
      * @param UrlInterface $urlBuilder
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
+     * @param Url|null $customerUrl
      */
     public function __construct(
         UrlInterface $urlBuilder,
         StoreManagerInterface $storeManager,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        Url $customerUrl = null
     ) {
         $this->urlBuilder = $urlBuilder;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
+        $this->customerUrl = $customerUrl ?? ObjectManager::getInstance()
+                ->get(Url::class);
     }
 
     /**
@@ -78,7 +89,7 @@ class ConfigProvider implements ConfigProviderInterface
      */
     protected function getLoginUrl()
     {
-        return $this->urlBuilder->getUrl(Url::ROUTE_ACCOUNT_LOGIN);
+        return $this->customerUrl->getLoginUrl();
     }
 
     /**

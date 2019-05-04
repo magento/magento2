@@ -9,7 +9,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
  * Test class for \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection.
  * @magentoDbIsolation disabled
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection

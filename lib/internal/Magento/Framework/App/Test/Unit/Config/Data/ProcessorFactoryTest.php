@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Config\Data;
 
-class ProcessorFactoryTest extends \PHPUnit_Framework_TestCase
+class ProcessorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Config\Data\ProcessorFactory
@@ -24,7 +24,7 @@ class ProcessorFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Framework\App\Config\Data\ProcessorFactory($this->_objectManager);
         $this->_processorMock = $this->getMockForAbstractClass(
             \Magento\Framework\App\Config\Data\ProcessorInterface::class
@@ -55,7 +55,6 @@ class ProcessorFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessageRegExp /\w+\\WrongBackendModel is not instance of \w+\\ProcessorInterface/
      */
     public function testGetModelWithWrongInterface()
     {
@@ -67,7 +66,7 @@ class ProcessorFactoryTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\App\Config\Data\WrongBackendModel::class
         )->will(
             $this->returnValue(
-                $this->getMock(\Magento\Framework\App\Config\Data\WrongBackendModel::class, [], [], '', false)
+                $this->getMockBuilder('WrongBackendModel')->getMock()
             )
         );
 

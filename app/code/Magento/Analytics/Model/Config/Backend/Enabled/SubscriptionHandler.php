@@ -7,7 +7,6 @@ namespace Magento\Analytics\Model\Config\Backend\Enabled;
 
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Config\Backend\CollectionTime;
-use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\FlagManager;
@@ -26,6 +25,17 @@ class SubscriptionHandler
      * Config path for schedule setting of subscription handler.
      */
     const CRON_STRING_PATH = 'crontab/default/jobs/analytics_subscribe/schedule/cron_expr';
+
+    /**
+     * Config value for schedule setting of subscription handler.
+     */
+    const CRON_EXPR_ARRAY = [
+        '0',                    # Minute
+        '*',                    # Hour
+        '*',                    # Day of the Month
+        '*',                    # Month of the Year
+        '*',                    # Day of the Week
+    ];
 
     /**
      * Max value for reserve counter of attempts to subscribe.
@@ -56,13 +66,6 @@ class SubscriptionHandler
     private $analyticsToken;
 
     /**
-     * Resource for managing last notification time about subscription to Magento Analytics.
-     *
-     * @var NotificationTime
-     */
-    private $notificationTime;
-
-    /**
      * @var ReinitableConfigInterface
      */
     private $reinitableConfig;
@@ -71,20 +74,17 @@ class SubscriptionHandler
      * @param WriterInterface $configWriter
      * @param FlagManager $flagManager
      * @param AnalyticsToken $analyticsToken
-     * @param NotificationTime $notificationTime
      * @param ReinitableConfigInterface $reinitableConfig
      */
     public function __construct(
         WriterInterface $configWriter,
         FlagManager $flagManager,
         AnalyticsToken $analyticsToken,
-        NotificationTime $notificationTime,
         ReinitableConfigInterface $reinitableConfig
     ) {
         $this->configWriter = $configWriter;
         $this->flagManager = $flagManager;
         $this->analyticsToken = $analyticsToken;
-        $this->notificationTime = $notificationTime;
         $this->reinitableConfig = $reinitableConfig;
     }
 
@@ -100,7 +100,6 @@ class SubscriptionHandler
         if (!$this->analyticsToken->isTokenExist()) {
             $this->setCronSchedule();
             $this->setAttemptsFlag();
-            $this->notificationTime->unsetLastTimeNotificationValue();
             $this->reinitableConfig->reinit();
         }
 
@@ -114,18 +113,7 @@ class SubscriptionHandler
      */
     private function setCronSchedule()
     {
-        $cronExprArray = [
-            '0',                    # Minute
-            '*',                    # Hour
-            '*',                    # Day of the Month
-            '*',                    # Month of the Year
-            '*',                    # Day of the Week
-        ];
-
-        $cronExprString = join(' ', $cronExprArray);
-
-        $this->configWriter->save(self::CRON_STRING_PATH, $cronExprString);
-
+        $this->configWriter->save(self::CRON_STRING_PATH, join(' ', self::CRON_EXPR_ARRAY));
         return true;
     }
 

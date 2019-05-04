@@ -13,7 +13,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class SpecialPriceIndexerTest extends \PHPUnit_Framework_TestCase
+class SpecialPriceIndexerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductRepositoryInterface
@@ -43,6 +43,7 @@ class SpecialPriceIndexerTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoDataFixture Magento/Catalog/_files/enable_price_index_schedule.php
+     * @magentoDbIsolation disabled
      */
     public function testFullReindexIfChildHasSpecialPrice()
     {
@@ -79,6 +80,7 @@ class SpecialPriceIndexerTest extends \PHPUnit_Framework_TestCase
      * Use collection to check data in index
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testOnSaveIndexationIfChildHasSpecialPrice()
     {

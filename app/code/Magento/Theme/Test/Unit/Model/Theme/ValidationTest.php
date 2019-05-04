@@ -9,7 +9,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
-class ValidationTest extends \PHPUnit_Framework_TestCase
+class ValidationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $data
@@ -31,6 +31,9 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($messages, $validator->getErrorMessages());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderValidate()
     {
         return [

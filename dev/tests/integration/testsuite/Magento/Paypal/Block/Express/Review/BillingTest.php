@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Class BillingTest
  */
-class BillingTest extends \PHPUnit_Framework_TestCase
+class BillingTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Paypal\Block\Express\Review\Billing */
     protected $_block;

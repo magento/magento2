@@ -5,8 +5,8 @@
  */
 namespace Magento\Sniffs\Less;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 /**
  * Class ClassNamingSniff
@@ -17,10 +17,9 @@ use PHP_CodeSniffer_Sniff;
  * - start with a letter (except helper classes);
  * - words should be separated with dash '-';
  *
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#standard-classes
- *
+ * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#standard-classes
  */
-class ClassNamingSniff implements PHP_CodeSniffer_Sniff
+class ClassNamingSniff implements Sniff
 {
 
     const STRING_HELPER_CLASSES_PREFIX = '_';
@@ -35,7 +34,7 @@ class ClassNamingSniff implements PHP_CodeSniffer_Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -43,9 +42,9 @@ class ClassNamingSniff implements PHP_CodeSniffer_Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 
@@ -61,12 +60,6 @@ class ClassNamingSniff implements PHP_CodeSniffer_Sniff
         $className = $tokens[$stackPtr + 1]['content'];
         if (preg_match_all('/[^a-z0-9\-_]/U', $className, $matches)) {
             $phpcsFile->addError('Class name contains not allowed symbols', $stackPtr, 'NotAllowedSymbol', $matches);
-        }
-
-        if (!empty(strpos($className, self::STRING_HELPER_CLASSES_PREFIX))
-            && empty(strpos($className, self::STRING_ALLOWED_UNDERSCORES))
-        ) {
-            $phpcsFile->addError('"_" symbol allowed only for helper classes', $stackPtr, 'UnderscoreSymbol');
         }
     }
 }

@@ -9,7 +9,11 @@ namespace Magento\Review\Block\Product;
 
 use Magento\Catalog\Block\Product\ReviewRendererInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Review\Observer\PredispatchReviewObserver;
 
+/**
+ * Class ReviewRenderer
+ */
 class ReviewRenderer extends \Magento\Framework\View\Element\Template implements ReviewRendererInterface
 {
     /**
@@ -18,8 +22,8 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      * @var array
      */
     protected $_availableTemplates = [
-        self::FULL_VIEW => 'helper/summary.phtml',
-        self::SHORT_VIEW => 'helper/summary_short.phtml',
+        self::FULL_VIEW => 'Magento_Review::helper/summary.phtml',
+        self::SHORT_VIEW => 'Magento_Review::helper/summary_short.phtml',
     ];
 
     /**
@@ -44,6 +48,19 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
     }
 
     /**
+     * Review module availability
+     *
+     * @return string
+     */
+    public function isReviewEnabled() : string
+    {
+        return $this->_scopeConfig->getValue(
+            PredispatchReviewObserver::XML_PATH_REVIEW_ACTIVE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
      * Get review summary html
      *
      * @param Product $product
@@ -57,6 +74,10 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
         $templateType = self::DEFAULT_VIEW,
         $displayIfNoReviews = false
     ) {
+        if (!$product->getRatingSummary()) {
+            $this->_reviewFactory->create()->getEntitySummary($product, $this->_storeManager->getStore()->getId());
+        }
+
         if (!$product->getRatingSummary() && !$displayIfNoReviews) {
             return '';
         }
@@ -68,9 +89,6 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
 
         $this->setDisplayIfEmpty($displayIfNoReviews);
 
-        if (!$product->getRatingSummary()) {
-            $this->_reviewFactory->create()->getEntitySummary($product, $this->_storeManager->getStore()->getId());
-        }
         $this->setProduct($product);
 
         return $this->toHtml();

@@ -7,7 +7,7 @@ namespace Magento\Checkout\Test\Unit\Model\Session;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class SuccessValidatorTest extends \PHPUnit_Framework_TestCase
+class SuccessValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
@@ -90,6 +90,10 @@ class SuccessValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }
 
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $checkoutSession
+     * @return object
+     */
     protected function createSuccessValidator(\PHPUnit_Framework_MockObject_MockObject $checkoutSession)
     {
         return $this->objectManagerHelper->getObject(

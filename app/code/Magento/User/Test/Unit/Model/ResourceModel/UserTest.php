@@ -13,12 +13,12 @@ use Magento\Framework\Serialize\Serializer\Json;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\User\Model\ResourceModel\User */
     protected $model;
 
-    /** @var \Magento\User\Model\User|\PHPUnit_framework_MockObject_MockObject */
+    /** @var \Magento\User\Model\User|\PHPUnit_Framework_MockObject_MockObject */
     protected $userMock;
 
     /** @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject */
@@ -176,7 +176,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->model->_clearUserRoles($this->userMock);
     }
 
-    public function testDeleteSucess()
+    public function testDeleteSuccess()
     {
         $uid = 123;
         $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->dbAdapterMock);
@@ -330,7 +330,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $roleId = 44;
         $methodUserMock->expects($this->once())->method('getUserId')->willReturn($uid);
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
-        $methodUserMock->expects($this->atleastOnce())->method('getRoleId')->willReturn($roleId);
+        $methodUserMock->expects($this->atLeastOnce())->method('getRoleId')->willReturn($roleId);
         $this->dbAdapterMock->expects($this->once())->method('delete');
 
         $this->assertInstanceOf(
@@ -413,7 +413,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $methodUserMock->expects($this->once())->method('getRoleId')->willReturn($roleId);
         $extraData = ['user', 'extra', 'data'];
 
-        $serializerMock = $this->getMock(Json::class, ['serialize', 'unserialize'], [], '', false);
+        $serializerMock = $this->createPartialMock(Json::class, ['serialize', 'unserialize']);
         $serializerMock->expects($this->once())
             ->method('unserialize')
             ->with(json_encode($extraData))
@@ -451,7 +451,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $extraData = ['user', 'extra', 'data'];
 
-        $serializerMock = $this->getMock(Json::class, ['serialize', 'unserialize'], [], '', false);
+        $serializerMock = $this->createPartialMock(Json::class, ['serialize', 'unserialize']);
         $serializerMock->expects($this->once())
             ->method('unserialize')
             ->with(json_encode($extraData))
@@ -483,7 +483,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $extraData = null;
 
-        $serializerMock = $this->getMock(Json::class, ['serialize', 'unserialize'], [], '', false);
+        $serializerMock = $this->createPartialMock(Json::class, ['serialize', 'unserialize']);
         $serializerMock->expects($this->never())
             ->method('unserialize');
 

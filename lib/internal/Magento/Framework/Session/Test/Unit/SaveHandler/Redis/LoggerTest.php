@@ -6,9 +6,8 @@
 namespace Magento\Framework\Session\Test\Unit\SaveHandler\Redis;
 
 use Cm\RedisSession\Handler\LoggerInterface;
-use Magento\Framework\Session\SaveHandler\Redis\Logger;
 
-class LoggerTest extends \PHPUnit_Framework_TestCase
+class LoggerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Cm\RedisSession\Handler\ConfigInterface
@@ -37,12 +36,12 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->config = $this->getMock(\Cm\RedisSession\Handler\ConfigInterface::class, [], [], '', false);
+        $this->config = $this->createMock(\Cm\RedisSession\Handler\ConfigInterface::class);
         $this->config->expects($this->once())
             ->method('getLogLevel')
             ->willReturn(LoggerInterface::DEBUG);
-        $this->psrLogger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
-        $this->request = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->psrLogger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
         //$this->logger = new Logger($this->config, $this->psrLogger, $this->request);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->logger = $objectManager->getObject(
@@ -70,6 +69,9 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->logger->log($message, $logLevel);
     }
 
+    /**
+     * @return array
+     */
     public function logDataProvider()
     {
         return [

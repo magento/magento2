@@ -6,9 +6,9 @@
 namespace Magento\Framework\Session\SaveHandler\Redis;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
+use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 
 /**
  * Redis session save handler
@@ -101,6 +101,26 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     const PARAM_BREAK_AFTER             = 'session/redis/break_after';
 
     /**
+     * Configuration path for comma separated list of sentinel servers
+     */
+    const PARAM_SENTINEL_SERVERS        = 'session/redis/sentinel_servers';
+
+    /**
+     * Configuration path for sentinel master
+     */
+    const PARAM_SENTINEL_MASTER         = 'session/redis/sentinel_master';
+
+    /**
+     * Configuration path for verify sentinel master flag
+     */
+    const PARAM_SENTINEL_VERIFY_MASTER  = 'session/redis/sentinel_verify_master';
+
+    /**
+     * Configuration path for number of sentinel connection retries
+     */
+    const PARAM_SENTINEL_CONNECT_RETRIES = 'session/redis/sentinel_connect_retries';
+
+    /**
      * Cookie lifetime config path
      */
     const XML_PATH_COOKIE_LIFETIME = 'web/cookie/cookie_lifetime';
@@ -116,9 +136,14 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     const SESSION_MAX_LIFETIME = 31536000;
 
     /**
+     * Try to break lock for at most this many seconds
+     */
+    const DEFAULT_FAIL_AFTER = 15;
+
+    /**
      * Deployment config
      *
-     * @var DeploymentConfig $deploymentConfig
+     * @var DeploymentConfig
      */
     private $deploymentConfig;
 
@@ -126,6 +151,11 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
+
+    /**
+     * @var State
+     */
+    private $appState;
 
     /**
      * @param DeploymentConfig $deploymentConfig
@@ -143,7 +173,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLogLevel()
     {
@@ -151,7 +181,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getHost()
     {
@@ -159,7 +189,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPort()
     {
@@ -167,7 +197,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDatabase()
     {
@@ -175,7 +205,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPassword()
     {
@@ -183,7 +213,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTimeout()
     {
@@ -191,7 +221,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPersistentIdentifier()
     {
@@ -199,7 +229,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCompressionThreshold()
     {
@@ -207,7 +237,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCompressionLibrary()
     {
@@ -215,7 +245,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMaxConcurrency()
     {
@@ -223,7 +253,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMaxLifetime()
     {
@@ -231,7 +261,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMinLifetime()
     {
@@ -239,7 +269,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDisableLocking()
     {
@@ -247,7 +277,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBotLifetime()
     {
@@ -255,7 +285,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBotFirstLifetime()
     {
@@ -263,7 +293,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFirstLifetime()
     {
@@ -271,7 +301,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBreakAfter()
     {
@@ -279,7 +309,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLifetime()
     {
@@ -287,5 +317,45 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
             return (int)$this->scopeConfig->getValue(self::XML_PATH_ADMIN_SESSION_LIFETIME);
         }
         return (int)$this->scopeConfig->getValue(self::XML_PATH_COOKIE_LIFETIME, StoreScopeInterface::SCOPE_STORE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSentinelServers()
+    {
+        return $this->deploymentConfig->get(self::PARAM_SENTINEL_SERVERS);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSentinelMaster()
+    {
+        return $this->deploymentConfig->get(self::PARAM_SENTINEL_MASTER);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSentinelVerifyMaster()
+    {
+        return $this->deploymentConfig->get(self::PARAM_SENTINEL_VERIFY_MASTER);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSentinelConnectRetries()
+    {
+        return $this->deploymentConfig->get(self::PARAM_SENTINEL_CONNECT_RETRIES);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFailAfter()
+    {
+        return self::DEFAULT_FAIL_AFTER;
     }
 }

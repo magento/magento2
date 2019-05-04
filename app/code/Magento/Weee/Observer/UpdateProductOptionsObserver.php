@@ -16,7 +16,9 @@ class UpdateProductOptionsObserver implements ObserverInterface
      */
     protected $weeeData = null;
 
-    /** @var \Magento\Framework\Registry */
+    /**
+     * @var \Magento\Framework\Registry
+     */
     protected $registry;
 
     /**

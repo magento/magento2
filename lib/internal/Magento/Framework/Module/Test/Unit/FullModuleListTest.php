@@ -7,7 +7,7 @@ namespace Magento\Framework\Module\Test\Unit;
 
 use \Magento\Framework\Module\FullModuleList;
 
-class FullModuleListTest extends \PHPUnit_Framework_TestCase
+class FullModuleListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ModuleList
@@ -16,7 +16,7 @@ class FullModuleListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $loaderMock = $this->getMock(\Magento\Framework\Module\ModuleList\Loader::class, [], [], '', false);
+        $loaderMock = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
         $modules = [
             'Vendor_A' => ['data' => 'a'],
             'Vendor_B' => ['data' => 'b'],

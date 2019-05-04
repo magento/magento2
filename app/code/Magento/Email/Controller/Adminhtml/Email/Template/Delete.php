@@ -22,21 +22,21 @@ class Delete extends \Magento\Email\Controller\Adminhtml\Email\Template
                 if (count($template->getSystemConfigPathsWhereCurrentlyUsed()) == 0) {
                     $template->delete();
                     // display success message
-                    $this->messageManager->addSuccess(__('You deleted the email template.'));
+                    $this->messageManager->addSuccessMessage(__('You deleted the email template.'));
                     $this->_objectManager->get(\Magento\Framework\App\ReinitableConfig::class)->reinit();
                     // go to grid
                     $this->_redirect('adminhtml/*/');
                     return;
                 }
                 // display error  message
-                $this->messageManager->addError(__('The email template is currently being used.'));
+                $this->messageManager->addErrorMessage(__('The email template is currently being used.'));
                 // redirect to edit form
                 $this->_redirect('adminhtml/*/edit', ['id' => $template->getId()]);
                 return;
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __('We can\'t delete email template data right now. Please review log and try again.')
                 );
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
@@ -52,7 +52,7 @@ class Delete extends \Magento\Email\Controller\Adminhtml\Email\Template
             }
         }
         // display error message
-        $this->messageManager->addError(__('We can\'t find an email template to delete.'));
+        $this->messageManager->addErrorMessage(__('We can\'t find an email template to delete.'));
         // go to grid
         $this->_redirect('adminhtml/*/');
     }

@@ -5,10 +5,10 @@
  */
 
 use Magento\Payment\Helper\Data;
+use Magento\Sales\Api\ShipmentTrackRepositoryInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Track;
-use Magento\Sales\Model\Order\Shipment\Item;
+use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require 'default_rollback.php';
@@ -20,14 +20,11 @@ $paymentInfoBlock = Bootstrap::getObjectManager()->get(Data::class)
     ->getInfoBlock($payment);
 $payment->setBlockMock($paymentInfoBlock);
 
-/** @var Shipment $shipment */
-$shipment = Bootstrap::getObjectManager()->create(Shipment::class);
-$shipment->setOrder($order);
-
-/** @var Item $shipmentItem */
-$shipmentItem = Bootstrap::getObjectManager()->create(Item::class);
-$shipmentItem->setOrderItem($orderItem);
-$shipment->addItem($shipmentItem);
+$items = [];
+foreach ($order->getItems() as $orderItem) {
+    $items[$orderItem->getId()] = $orderItem->getQtyOrdered();
+}
+$shipment = Bootstrap::getObjectManager()->get(ShipmentFactory::class)->create($order, $items);
 $shipment->setPackages([['1'], ['2']]);
 $shipment->setShipmentStatus(\Magento\Sales\Model\Order\Shipment::STATUS_NEW);
 $shipment->save();
@@ -75,6 +72,9 @@ $tracks = [
     ],
 ];
 
+/** @var ShipmentTrackRepositoryInterface $shipmentTrackRepository */
+$shipmentTrackRepository = Bootstrap::getObjectManager()->get(ShipmentTrackRepositoryInterface::class);
+
 foreach ($tracks as $data) {
     /** @var $track Track */
     $track = Bootstrap::getObjectManager()->create(Track::class);
@@ -86,5 +86,5 @@ foreach ($tracks as $data) {
     $track->setDescription($data['description']);
     $track->setQty($data['qty']);
     $track->setWeight($data['weight']);
-    $track->save();
+    $shipmentTrackRepository->save($track);
 }

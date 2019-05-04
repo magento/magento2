@@ -13,6 +13,7 @@ namespace Magento\Newsletter\Block\Adminhtml\Queue\Preview;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {

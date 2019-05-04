@@ -7,10 +7,10 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<p class="switcher"><label for="store_switcher"><?php /* @escapeNotVerified */ echo __('View Statistics For:') ?></label>
-<?php echo $block->getHintHtml() ?>
+<p class="switcher"><label for="store_switcher"><?= /* @escapeNotVerified */ __('View Statistics For:') ?></label>
+<?= $block->getHintHtml() ?>
 <select name="store_switcher" id="store_switcher" class="left-col-block" onchange="return switchStore(this);">
-    <option value=""><?php /* @escapeNotVerified */ echo __('All Websites') ?></option>
+    <option value=""><?= /* @escapeNotVerified */ __('All Websites') ?></option>
     <?php foreach ($block->getWebsiteCollection() as $_website): ?>
         <?php $showWebsite = false; ?>
         <?php foreach ($block->getGroupCollection($_website) as $_group): ?>
@@ -18,14 +18,14 @@
             <?php foreach ($block->getStoreCollection($_group) as $_store): ?>
                 <?php if ($showWebsite == false): ?>
                     <?php $showWebsite = true; ?>
-                    <option website="true" value="<?php /* @escapeNotVerified */ echo $_website->getId() ?>"<?php if ($block->getRequest()->getParam('website') == $_website->getId()): ?> selected="selected"<?php endif; ?>><?php /* @escapeNotVerified */ echo $_website->getName() ?></option>
+                    <option website="true" value="<?= /* @escapeNotVerified */ $_website->getId() ?>"<?php if ($block->getRequest()->getParam('website') == $_website->getId()): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ $_website->getName() ?></option>
                 <?php endif; ?>
                 <?php if ($showGroup == false): ?>
                     <?php $showGroup = true; ?>
-                    <!--optgroup label="&nbsp;&nbsp;&nbsp;<?php /* @escapeNotVerified */ echo $_group->getName() ?>"-->
-                    <option group="true" value="<?php /* @escapeNotVerified */ echo $_group->getId() ?>"<?php if ($block->getRequest()->getParam('group') == $_group->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;<?php /* @escapeNotVerified */ echo $_group->getName() ?></option>
+                    <!--optgroup label="&nbsp;&nbsp;&nbsp;<?= /* @escapeNotVerified */ $_group->getName() ?>"-->
+                    <option group="true" value="<?= /* @escapeNotVerified */ $_group->getId() ?>"<?php if ($block->getRequest()->getParam('group') == $_group->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;<?= /* @escapeNotVerified */ $_group->getName() ?></option>
                 <?php endif; ?>
-                <option value="<?php /* @escapeNotVerified */ echo $_store->getId() ?>"<?php if ($block->getStoreId() == $_store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php /* @escapeNotVerified */ echo $_store->getName() ?></option>
+                <option value="<?= /* @escapeNotVerified */ $_store->getId() ?>"<?php if ($block->getStoreId() == $_store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?= /* @escapeNotVerified */ $_store->getName() ?></option>
             <?php endforeach; ?>
             <?php if ($showGroup): ?>
                 <!--</optgroup>-->
@@ -57,7 +57,7 @@
                 var select = $('order_amounts_period');
             }
             var periodParam = select.value ? 'period/' + select.value + '/' : '';
-            setLocation('<?php /* @escapeNotVerified */ echo $block->getSwitchUrl() ?>' + storeParam + periodParam);
+            setLocation('<?= /* @escapeNotVerified */ $block->getSwitchUrl() ?>' + storeParam + periodParam);
         }
     });
 </script>

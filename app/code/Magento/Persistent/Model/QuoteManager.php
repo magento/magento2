@@ -7,6 +7,8 @@ namespace Magento\Persistent\Model;
 
 /**
  * Class QuoteManager
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class QuoteManager
 {
@@ -87,6 +89,7 @@ class QuoteManager
                 ->setCustomerLastname(null)
                 ->setCustomerGroupId(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID)
                 ->setIsPersistent(false)
+                ->setCustomerIsGuest(true)
                 ->removeAllAddresses();
             //Create guest addresses
             $quote->getShippingAddress();
@@ -108,8 +111,9 @@ class QuoteManager
      */
     public function convertCustomerCartToGuest()
     {
+        $quoteId = $this->checkoutSession->getQuoteId();
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->quoteRepository->get($this->checkoutSession->getQuote()->getId());
+        $quote = $this->quoteRepository->get($quoteId);
         if ($quote && $quote->getId()) {
             $this->_setQuotePersistent = false;
             $quote->setIsActive(true)

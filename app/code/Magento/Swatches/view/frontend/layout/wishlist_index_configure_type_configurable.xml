@@ -6,9 +6,6 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <head>
-        <css src="Magento_Swatches::css/swatches.css"/>
-    </head>
     <body>
         <referenceBlock name="product.info.options.configurable" remove="true"/>
         <referenceBlock name="product.info.options.wrapper">

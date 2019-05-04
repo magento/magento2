@@ -59,7 +59,7 @@ class AssertCategoryOnCustomWebsite extends AbstractConstraint
 
         $websiteCode = $storeGroup->getDataFieldConfig('website_id')['source']->getWebsite()->getData('code');
         $browser->open($_ENV['app_frontend_url'] . 'websites/' . $websiteCode . '/' . $category->getName() . '.html');
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $category->getName(),
             $categoryView->getTitleBlock()->getTitle(),
             'Wrong category name is displayed on custom website store.'

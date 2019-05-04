@@ -18,6 +18,7 @@ use Magento\Framework\Indexer\StateInterface;
  * @method int getParentId() getParentId()
  * @method \Magento\Customer\Model\Address setParentId() setParentId(int $parentId)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Address extends \Magento\Customer\Model\Address\AbstractAddress
 {
@@ -121,6 +122,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
+     * Initialize address model
+     *
      * @return void
      */
     protected function _construct()
@@ -153,9 +156,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         // Need to explicitly set this due to discrepancy in the keys between model and data object
         $this->setIsDefaultBilling($address->isDefaultBilling());
         $this->setIsDefaultShipping($address->isDefaultShipping());
-        if (!$this->getAttributeSetId()) {
-            $this->setAttributeSetId(AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS);
-        }
         $customAttributes = $address->getCustomAttributes();
         if ($customAttributes !== null) {
             foreach ($customAttributes as $attribute) {
@@ -167,17 +167,21 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
-     * {@inheritdoc}
+     * Create address data object based on current address model.
+     *
+     * @param int|null $defaultBillingAddressId
+     * @param int|null $defaultShippingAddressId
+     * @return AddressInterface
+     * Use Api/Data/AddressInterface as a result of service operations. Don't rely on the model to provide
+     * the instance of Api/Data/AddressInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getDataModel($defaultBillingAddressId = null, $defaultShippingAddressId = null)
     {
         if ($this->getCustomerId() || $this->getParentId()) {
-            if ($this->getCustomer()->getDefaultBillingAddress()) {
-                $defaultBillingAddressId = $this->getCustomer()->getDefaultBillingAddress()->getId();
-            }
-            if ($this->getCustomer()->getDefaultShippingAddress()) {
-                $defaultShippingAddressId = $this->getCustomer()->getDefaultShippingAddress()->getId();
-            }
+            $customer = $this->getCustomer();
+            $defaultBillingAddressId = $customer->getDefaultBilling() ?: $defaultBillingAddressId;
+            $defaultShippingAddressId = $customer->getDefaultShipping() ?: $defaultShippingAddressId;
         }
         return parent::getDataModel($defaultBillingAddressId, $defaultShippingAddressId);
     }
@@ -260,6 +264,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
+     * Clone address
+     *
      * @return void
      */
     public function __clone()
@@ -300,6 +306,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
+     * Create customer model
+     *
      * @return Customer
      */
     protected function _createCustomer()
@@ -351,13 +359,16 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
-        if (!$indexer->isScheduled()) {
-            $indexer->reindexRow($this->getCustomerId());
-        }
+        $indexer->reindexRow($this->getCustomerId());
     }
 
     /**
-     * {@inheritdoc}
+     * Get a list of custom attribute codes.
+     *
+     * By default, entity can be extended only using extension attributes functionality.
+     *
+     * @return string[]
+     * @since 100.0.6
      */
     protected function getCustomAttributesCodes()
     {
@@ -366,8 +377,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
     /**
      * Get new AttributeList dependency for application code.
+     *
      * @return \Magento\Customer\Model\Address\CustomAttributeListInterface
-     * @deprecated
+     * @deprecated 100.0.6
      */
     private function getAttributeList()
     {
@@ -383,6 +395,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Retrieve attribute set id for customer address.
      *
      * @return int
+     * @since 100.2.0
      */
     public function getAttributeSetId()
     {

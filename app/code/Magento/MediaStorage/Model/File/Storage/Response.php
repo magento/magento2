@@ -56,7 +56,11 @@ class Response extends Http implements
     public function sendResponse()
     {
         if ($this->_filePath && $this->getHttpResponseCode() == 200) {
-            $this->_transferAdapter->send($this->_filePath);
+            $options = [
+                'filepath' => $this->_filePath,
+                'headers' => $this->getHeaders(),
+            ];
+            $this->_transferAdapter->send($options);
         } else {
             parent::sendResponse();
         }

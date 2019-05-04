@@ -281,6 +281,11 @@ return [
     ['canCreateUser', 'Magento\User\Model\ResourceModel\User'],
     ['canPrint', 'Magento\Checkout\Block\Onepage\Success'],
     [
+        'getAllServiceDataInterfaces',
+        'Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface',
+        'Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface::getDataTypes()'
+    ],
+    [
         'canTestHeaders',
         'Magento\TestFramework\Bootstrap',
         'Magento_TestFramework_Helper_Bootstrap::canTestHeaders',
@@ -2521,5 +2526,47 @@ return [
     ['getDataFormTab', 'Magento\Backend\Test\Block\Widget\Tab', 'Magento\Ui\Test\Block\Adminhtml\AbstractContainer::getFieldsData'],
     ['getBunchImages', 'Magento\CatalogImportExport\Model\Import\Product'],
     ['_isAttributeValueEmpty', 'Magento\Catalog\Model\ResourceModel\AbstractResource'],
-    ['var_dump', '']
+    ['var_dump', ''],
+    ['each', ''],
+    ['strval', ''],
+    ['create_function', ''],
+    ['configure', 'Magento\Framework\MessageQueue\BatchConsumer'],
+    [
+            'getExchangeByTopic',
+            'Magento\Framework\MessageQueue\Config\Data',
+            '\Magento\Framework\MessageQueue\ConfigInterface::getExchangeByTopic'
+        ],
+    [
+            'getQueuesByTopic',
+            'Magento\Framework\MessageQueue\Config\Data',
+            '\Magento\Framework\MessageQueue\ConfigInterface::getQueuesByTopic'
+        ],
+    [
+            'getConnectionByTopic',
+            'Magento\Framework\MessageQueue\Config\Data',
+            '\Magento\Framework\MessageQueue\ConfigInterface::getConnectionByTopic'
+        ],
+    [
+            'getConnectionByConsumer',
+            'Magento\Framework\MessageQueue\Config\Data',
+            '\Magento\Framework\MessageQueue\ConfigInterface::getConnectionByConsumer'
+        ],
+    [
+            'getMessageSchemaType',
+            'Magento\Framework\MessageQueue\Config\Data',
+            '\Magento\Framework\MessageQueue\ConfigInterface::getMessageSchemaType'
+        ],
+    [
+            'getCallback',
+            'Magento\Framework\MessageQueue\ConsumerConfiguration'
+        ],
+    [
+            'getCallback',
+            'Magento\Framework\MessageQueue\ConsumerConfigurationInterface'
+        ],
+    [
+            'configure',
+            'Magento\Framework\MessageQueue\ConsumerInterface'
+        ],
+    ['isOrderIncrementIdUsed', 'Magento\Quote\Model\ResourceModel\Quote', 'Magento\Sales\Model\OrderIncrementIdChecker::isIncrementIdUsed'],
 ];

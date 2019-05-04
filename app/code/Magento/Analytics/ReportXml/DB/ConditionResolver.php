@@ -10,8 +10,6 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Sql\Expression;
 
 /**
- * Class ConditionResolver
- *
  * Mapper for WHERE conditions
  */
 class ConditionResolver
@@ -116,7 +114,7 @@ class ConditionResolver
         ) {
             $expression = $columns[$condition['attribute']];
         } else {
-            $expression = $tableName . '.' . $condition['attribute'];
+            $expression = $this->getConnection()->quoteIdentifier($tableName . '.' . $condition['attribute']);
         }
         return sprintf(
             $this->conditionMap[$condition['operator']],
@@ -161,6 +159,6 @@ class ConditionResolver
             }
             $filtersParts[] = '(' . implode(' ' . strtoupper($glue) . ' ', $parts) . ')';
         }
-        return implode(' AND ', $filtersParts);
+        return implode(' OR ', $filtersParts);
     }
 }

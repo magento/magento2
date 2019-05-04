@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Block\Guest;
 /**
  * Test class for \Magento\Sales\Block\Guest\Link
  */
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     public function testToHtml()
     {

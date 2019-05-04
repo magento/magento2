@@ -8,7 +8,7 @@ namespace Magento\Reports\Test\Unit\Block\Adminhtml\Sales\Grid\Column\Renderer;
 
 use Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date;
 
-class DateTest extends \PHPUnit_Framework_TestCase
+class DateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date
@@ -97,7 +97,9 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->resolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->getMock();
 
-        $this->dateTimeFormatter = $this->getMock(\Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface::class);
+        $this->dateTimeFormatter = $this->createMock(
+            \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface::class
+        );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->date = $objectManager->getObject(

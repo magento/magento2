@@ -11,9 +11,10 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 /**
  * Class MassAssignGroupTest
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassAssignGroupTest extends \PHPUnit_Framework_TestCase
+class MassAssignGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Controller\Adminhtml\Index\MassAssignGroup
@@ -70,29 +71,25 @@ class MassAssignGroupTest extends \PHPUnit_Framework_TestCase
      */
     protected $customerRepositoryMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->contextMock = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
-        $resultRedirectFactory = $this->getMock(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class,
-            [],
-            [],
-            '',
-            false
+        $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $resultRedirectFactory = $this->createMock(
+            \Magento\Backend\Model\View\Result\RedirectFactory::class
         );
-        $this->responseMock = $this->getMock(\Magento\Framework\App\ResponseInterface::class, [], [], '', false);
+        $this->responseMock = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->objectManagerMock = $this->getMock(
+        $this->objectManagerMock = $this->createPartialMock(
             \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->messageManagerMock = $this->getMock(\Magento\Framework\Message\Manager::class, [], [], '', false);
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\Manager::class);
         $this->customerCollectionMock =
             $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
             ->disableOriginalConstructor()
@@ -130,7 +127,7 @@ class MassAssignGroupTest extends \PHPUnit_Framework_TestCase
             ->method('getResultFactory')
             ->willReturn($resultFactoryMock);
 
-        $this->filterMock = $this->getMock(\Magento\Ui\Component\MassAction\Filter::class, [], [], '', false);
+        $this->filterMock = $this->createMock(\Magento\Ui\Component\MassAction\Filter::class);
         $this->filterMock->expects($this->once())
             ->method('getCollection')
             ->with($this->customerCollectionMock)
@@ -138,7 +135,8 @@ class MassAssignGroupTest extends \PHPUnit_Framework_TestCase
         $this->customerCollectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->customerCollectionMock);
-        $this->customerRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
+        $this->customerRepositoryMock = $this
+            ->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
             ->getMockForAbstractClass();
         $this->massAction = $objectManagerHelper->getObject(
             \Magento\Customer\Controller\Adminhtml\Index\MassAssignGroup::class,
@@ -151,12 +149,18 @@ class MassAssignGroupTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Unit test to verify mass customer group assignment use case
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testExecute()
     {
         $customersIds = [10, 11, 12];
-        $customerMock = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class
-        )->getMockForAbstractClass();
+        $customerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
+            ->setMethods(['setData'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->customerCollectionMock->expects($this->any())
             ->method('getAllIds')
             ->willReturn($customersIds);
@@ -177,6 +181,11 @@ class MassAssignGroupTest extends \PHPUnit_Framework_TestCase
         $this->massAction->execute();
     }
 
+    /**
+     * Unit test to verify expected error during mass customer group assignment use case
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testExecuteWithException()
     {
         $customersIds = [10, 11, 12];

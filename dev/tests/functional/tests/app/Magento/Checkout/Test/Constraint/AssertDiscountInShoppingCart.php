@@ -28,7 +28,7 @@ class AssertDiscountInShoppingCart extends AbstractConstraint
     {
         $checkoutCart->open();
         $checkoutCart->getTotalsBlock()->waitForUpdatedTotals();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             number_format($cart->getDiscount(), 2),
             $checkoutCart->getTotalsBlock()->getDiscount(),
             'Discount amount in the shopping cart not equals to discount amount from fixture.'

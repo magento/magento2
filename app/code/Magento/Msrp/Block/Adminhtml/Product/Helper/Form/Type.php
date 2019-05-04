@@ -10,7 +10,9 @@ namespace Magento\Msrp\Block\Adminhtml\Product\Helper\Form;
  */
 class Type extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price
 {
-    /** @var \Magento\Msrp\Model\Config*/
+    /**
+     * @var \Magento\Msrp\Model\Config
+     */
     protected $config;
 
     /**

@@ -5,7 +5,7 @@
  */
 namespace Magento\Cms\Test\Unit\Controller\Index;
 
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Controller\Index\Index
@@ -42,11 +42,14 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     protected $pageId = 'home';
 
+    /**
+     * Test setUp
+     */
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -61,9 +64,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->forwardMock);
 
-        $scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->cmsHelperMock = $this->getMock(\Magento\Cms\Helper\Page::class, [], [], '', false);
+        $scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->cmsHelperMock = $this->createMock(\Magento\Cms\Helper\Page::class);
         $valueMap = [
             [\Magento\Framework\App\Config\ScopeConfigInterface::class,
                 $scopeConfigMock,
@@ -84,11 +87,16 @@ class IndexTest extends \PHPUnit_Framework_TestCase
                 'response' => $responseMock,
                 'objectManager' => $objectManagerMock,
                 'request' => $this->requestMock,
-                'resultForwardFactory' => $this->forwardFactoryMock
+                'resultForwardFactory' => $this->forwardFactoryMock,
+                'scopeConfig' => $scopeConfigMock,
+                'page' => $this->cmsHelperMock
             ]
         );
     }
 
+    /**
+     * Controller test
+     */
     public function testExecuteResultPage()
     {
         $this->cmsHelperMock->expects($this->once())
@@ -98,6 +106,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->resultPageMock, $this->controller->execute());
     }
 
+    /**
+     * Controller test
+     */
     public function testExecuteResultForward()
     {
         $this->forwardMock->expects($this->once())

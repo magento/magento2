@@ -4,24 +4,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
-class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
+class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implements HttpPostActionInterface
 {
-    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+     */
     protected $productUrlPathGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     */
     protected $categoryUrlPathGenerator;
 
-    /** @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator */
+    /**
+     * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator
+     */
     protected $cmsPageUrlPathGenerator;
 
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     */
     protected $urlFinder;
 
     /**
@@ -88,8 +98,8 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
             $rewrite = $this->urlFinder->findOneByData($data);
             if (!$rewrite) {
                 $message = $model->getEntityType() === self::ENTITY_TYPE_PRODUCT
-                    ? __('The product you chose is not associated with the selected store or category.')
-                    : __('The category you chose is not associated with the selected store.');
+                    ? __("The selected product isn't associated with the selected store or category.")
+                    : __("The selected category isn't associated with the selected store.");
                 throw new LocalizedException($message);
             }
             $targetPath = $rewrite->getRequestPath();
@@ -166,7 +176,10 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
                 $this->messageManager->addError($e->getMessage());
                 $session->setUrlRewriteData($data);
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving URL Rewrite.'));
+                $this->messageManager->addException(
+                    $e,
+                    __('An error occurred while saving the URL rewrite. Please try to save again.')
+                );
                 $session->setUrlRewriteData($data);
             }
         }

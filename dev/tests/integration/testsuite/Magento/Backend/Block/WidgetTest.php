@@ -10,7 +10,7 @@ namespace Magento\Backend\Block;
  *
  * @magentoAppArea adminhtml
  */
-class WidgetTest extends \PHPUnit_Framework_TestCase
+class WidgetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @covers \Magento\Backend\Block\Widget::getButtonHtml

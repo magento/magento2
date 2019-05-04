@@ -9,7 +9,10 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 
 /**
+ * Renderer for Editable sales rules
+ *
  * @api
+ * @since 100.0.2
  */
 class Editable extends AbstractBlock implements RendererInterface
 {
@@ -51,9 +54,9 @@ class Editable extends AbstractBlock implements RendererInterface
 
         if ($element->getShowAsText()) {
             $html = ' <input type="hidden" class="hidden" id="' .
-                $element->getHtmlId() .
+                $this->escapeHtmlAttr($element->getHtmlId()) .
                 '" name="' .
-                $element->getName() .
+                $this->escapeHtmlAttr($element->getName()) .
                 '" value="' .
                 $element->getValue() .
                 '" data-form-part="' .

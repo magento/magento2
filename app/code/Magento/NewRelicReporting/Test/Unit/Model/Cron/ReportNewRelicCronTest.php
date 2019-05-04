@@ -10,7 +10,7 @@ use Magento\NewRelicReporting\Model\Cron\ReportNewRelicCron;
 /**
  * Class ReportNewRelicCronTest
  */
-class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
+class ReportNewRelicCronTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReportNewRelicCron
@@ -144,24 +144,10 @@ class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
      */
     public function testReportNewRelicCron()
     {
-        $testModuleData = [
-            'changes' => [
-                ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'enabled'],
-                ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'disabled'],
-                ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'installed'],
-                ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'uninstalled'],
-            ],
-            'enabled' => 1,
-            'disabled' => 1,
-            'installed' => 1,
-        ];
 
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $this->collect->expects($this->once())
-            ->method('getModuleData')
-            ->willReturn($testModuleData);
         $this->counter->expects($this->once())
             ->method('getAllProductsCount');
         $this->counter->expects($this->once())
@@ -198,24 +184,10 @@ class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
      */
     public function testReportNewRelicCronRequestFailed()
     {
-        $testModuleData = [
-            'changes' => [
-                ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'enabled'],
-                ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'disabled'],
-                ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'installed'],
-                ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'uninstalled'],
-            ],
-            'enabled' => 1,
-            'disabled' => 1,
-            'installed' => 1,
-        ];
 
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $this->collect->expects($this->once())
-            ->method('getModuleData')
-            ->willReturn($testModuleData);
         $this->counter->expects($this->once())
             ->method('getAllProductsCount');
         $this->counter->expects($this->once())

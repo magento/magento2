@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Gateway\Http\Converter;
 
 use Magento\Payment\Gateway\Http\ConverterException;
@@ -12,6 +13,7 @@ use Magento\Payment\Gateway\Http\ConverterInterface;
  * Class HtmlFormConverter
  * @package Magento\Payment\Gateway\Http\Converter
  * @api
+ * @since 100.0.2
  */
 class HtmlFormConverter implements ConverterInterface
 {
@@ -28,7 +30,9 @@ class HtmlFormConverter implements ConverterInterface
 
         libxml_use_internal_errors(true);
         if (!$document->loadHTML($response)) {
-            throw new ConverterException(__('Wrong gateway response format.'));
+            throw new ConverterException(
+                __('The gateway response format was incorrect. Verify the format and try again.')
+            );
         }
         libxml_use_internal_errors(false);
 

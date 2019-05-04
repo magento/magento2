@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ConfigurableProductOneOption" type="ConfigurableProductOption">
+        <var key="attribute_id" entityKey="attribute_id" entityType="ProductAttribute" />
+        <data key="label">option</data>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+    </entity>
+    <entity name="ConfigurableProductTwoOptions" type="ConfigurableProductOption">
+        <var key="attribute_id" entityKey="attribute_id" entityType="ProductAttribute" />
+        <data key="label">option</data>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex2</requiredEntity>
+    </entity>
+    <entity name="ConfigurableProductThreeOptions" type="ConfigurableProductOption">
+        <var key="attribute_id" entityKey="attribute_id" entityType="ProductAttribute" />
+        <data key="label">option</data>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex2</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex3</requiredEntity>
+    </entity>
+</entities>

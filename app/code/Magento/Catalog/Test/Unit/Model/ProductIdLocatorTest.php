@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Model;
 /**
  * Unit test for ProductIdLocator class.
  */
-class ProductIdLocatorTest extends \PHPUnit_Framework_TestCase
+class ProductIdLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
@@ -58,7 +58,16 @@ class ProductIdLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $skus = ['sku_1', 'sku_2'];
         $collection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
-            ->setMethods(['getIterator', 'addFieldToFilter'])
+            ->setMethods(
+                [
+                    'getItems',
+                    'addFieldToFilter',
+                    'setPageSize',
+                    'getLastPageNumber',
+                    'setCurPage',
+                    'clear'
+                ]
+            )
             ->disableOriginalConstructor()->getMock();
         $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
             ->setMethods(['getSku', 'getData', 'getTypeId'])
@@ -69,7 +78,11 @@ class ProductIdLocatorTest extends \PHPUnit_Framework_TestCase
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $collection->expects($this->once())->method('addFieldToFilter')
             ->with(\Magento\Catalog\Api\Data\ProductInterface::SKU, ['in' => $skus])->willReturnSelf();
-        $collection->expects($this->once())->method('getIterator')->willReturn(new \ArrayIterator([$product]));
+        $collection->expects($this->atLeastOnce())->method('getItems')->willReturn([$product]);
+        $collection->expects($this->atLeastOnce())->method('setPageSize')->willReturnSelf();
+        $collection->expects($this->atLeastOnce())->method('getLastPageNumber')->willReturn(1);
+        $collection->expects($this->atLeastOnce())->method('setCurPage')->with(1)->willReturnSelf();
+        $collection->expects($this->atLeastOnce())->method('clear')->willReturnSelf();
         $this->metadataPool
             ->expects($this->once())
             ->method('getMetadata')

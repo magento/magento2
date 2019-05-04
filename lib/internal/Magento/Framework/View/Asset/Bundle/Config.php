@@ -15,7 +15,7 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 /**
  * Class Config
- * @deprecated since 2.2.0
+ * @deprecated 100.2.0
  * @see \Magento\Deploy\Config\BundleConfig
  */
 class Config implements Bundle\ConfigInterface
@@ -27,9 +27,7 @@ class Config implements Bundle\ConfigInterface
     const VIEW_CONFIG_BUNDLE_SIZE_NAME = 'bundle_size';
     /**#@-*/
 
-    /**
-     * @var ListInterface
-     */
+    /**#@-*/
     protected $themeList;
 
     /**

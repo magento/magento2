@@ -3,29 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Model\Express;
 
 use Magento\Customer\Api\Data\CustomerInterface as CustomerDataObject;
 use Magento\Customer\Model\AccountManagement;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Cart as PaypalCart;
 use Magento\Paypal\Model\Config as PaypalConfig;
 use Magento\Quote\Model\Quote\Address;
-use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
  * Wrapper that performs Paypal Express and Checkout communication
- * Use current Paypal Express method instance
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Checkout
 {
     /**
      * Cache ID prefix for "pal" lookup
+     *
      * @var string
      */
     const PAL_CACHE_ID = 'paypal_express_checkout_pal';
@@ -271,11 +273,6 @@ class Checkout
     protected $totalsCollector;
 
     /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
-
-    /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Tax\Helper\Data $taxData
@@ -372,6 +369,7 @@ class Checkout
 
     /**
      * Checkout with PayPal image URL getter
+     *
      * Spares API calls of getting "pal" variable, by putting it into cache per store view
      *
      * @return string
@@ -505,7 +503,8 @@ class Checkout
         $solutionType = $this->_config->getMerchantCountry() == 'DE'
             ? \Magento\Paypal\Model\Config::EC_SOLUTION_TYPE_MARK
             : $this->_config->getValue('solutionType');
-        $this->_getApi()->setAmount($this->_quote->getBaseGrandTotal())
+        $totalAmount = round($this->_quote->getBaseGrandTotal(), 2);
+        $this->_getApi()->setAmount($totalAmount)
             ->setCurrencyCode($this->_quote->getBaseCurrencyCode())
             ->setInvNum($this->_quote->getReservedOrderId())
             ->setReturnUrl($returnUrl)
@@ -603,15 +602,17 @@ class Checkout
 
     /**
      * Update quote when returned from PayPal
-     * rewrite billing address by paypal
-     * save old billing address for new customer
+     *
+     * Rewrite billing address by paypal, save old billing address for new customer, and
      * export shipping address in case address absence
      *
      * @param string $token
+     * @param string|null $payerIdentifier
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function returnFromPaypal($token)
+    public function returnFromPaypal($token, string $payerIdentifier = null)
     {
         $this->_getApi()
             ->setToken($token)
@@ -620,14 +621,15 @@ class Checkout
 
         $this->ignoreAddressValidation();
 
+        // check if we came from the Express Checkout button
+        $isButton = (bool)$quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON);
+
         // import shipping address
         $exportedShippingAddress = $this->_getApi()->getExportedShippingAddress();
         if (!$quote->getIsVirtual()) {
             $shippingAddress = $quote->getShippingAddress();
             if ($shippingAddress) {
-                if ($exportedShippingAddress
-                    && $quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON) == 1
-                ) {
+                if ($exportedShippingAddress && $isButton) {
                     $this->_setExportedAddressData($shippingAddress, $exportedShippingAddress);
                     // PayPal doesn't provide detailed shipping info: prefix, middlename, lastname, suffix
                     $shippingAddress->setPrefix(null);
@@ -655,12 +657,11 @@ class Checkout
         }
 
         // import billing address
-        $portBillingFromShipping = $quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON) == 1
-            && $this->_config->getValue(
-                'requireBillingAddress'
-            ) != \Magento\Paypal\Model\Config::REQUIRE_BILLING_ADDRESS_ALL
-            && !$quote->isVirtual();
-        if ($portBillingFromShipping) {
+        $requireBillingAddress = (int)$this->_config->getValue(
+            'requireBillingAddress'
+        ) === \Magento\Paypal\Model\Config::REQUIRE_BILLING_ADDRESS_ALL;
+
+        if ($isButton && !$requireBillingAddress && !$quote->isVirtual()) {
             $billingAddress = clone $shippingAddress;
             $billingAddress->unsAddressId()->unsAddressType()->setCustomerAddressId(null);
             $data = $billingAddress->getData();
@@ -668,11 +669,17 @@ class Checkout
             $quote->getBillingAddress()->addData($data);
             $quote->getShippingAddress()->setSameAsBilling(1);
         } else {
-            $billingAddress = $quote->getBillingAddress();
+            $billingAddress = $quote->getBillingAddress()->setCustomerAddressId(null);
         }
         $exportedBillingAddress = $this->_getApi()->getExportedBillingAddress();
 
-        $this->_setExportedAddressData($billingAddress, $exportedBillingAddress);
+        // Since country is required field for billing and shipping address,
+        // we consider the address information to be empty if country is empty.
+        $isEmptyAddress = ($billingAddress->getCountryId() === null);
+
+        if ($requireBillingAddress || $isEmptyAddress) {
+            $this->_setExportedAddressData($billingAddress, $exportedBillingAddress);
+        }
         $billingAddress->setCustomerNote($exportedBillingAddress->getData('note'));
         $quote->setBillingAddress($billingAddress);
         $quote->setCheckoutMethod($this->getCheckoutMethod());
@@ -681,7 +688,8 @@ class Checkout
         $payment = $quote->getPayment();
         $payment->setMethod($this->_methodType);
         $this->_paypalInfo->importToPayment($this->_getApi(), $payment);
-        $payment->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_PAYER_ID, $this->_getApi()->getPayerId())
+        $payerId = $payerIdentifier ? : $this->_getApi()->getPayerId();
+        $payment->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_PAYER_ID, $payerId)
             ->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_TOKEN, $token);
         $quote->collectTotals();
         $this->quoteRepository->save($quote);
@@ -796,8 +804,7 @@ class Checkout
 
         $this->ignoreAddressValidation();
         $this->_quote->collectTotals();
-        $orderId = $this->quoteManagement->placeOrder($this->_quote->getId());
-        $order = $this->getOrderRepository()->get($orderId);
+        $order = $this->quoteManagement->submit($this->_quote);
 
         if (!$order) {
             return;
@@ -817,7 +824,13 @@ class Checkout
             case \Magento\Sales\Model\Order::STATE_PROCESSING:
             case \Magento\Sales\Model\Order::STATE_COMPLETE:
             case \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW:
-                $this->orderSender->send($order);
+                try {
+                    if (!$order->getEmailSent()) {
+                        $this->orderSender->send($order);
+                    }
+                } catch (\Exception $e) {
+                    $this->_logger->critical($e);
+                }
                 $this->_checkoutSession->start();
                 break;
             default:
@@ -903,12 +916,6 @@ class Checkout
      */
     protected function _setExportedAddressData($address, $exportedAddress)
     {
-        // Exported data is more priority if we came from Express Checkout button
-        $isButton = (bool)$this->_quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON);
-        if (!$isButton) {
-            return;
-        }
-
         foreach ($exportedAddress->getExportedKeys() as $key) {
             $data = $exportedAddress->getData($key);
             if (!empty($data)) {
@@ -945,6 +952,8 @@ class Checkout
     }
 
     /**
+     * Get api
+     *
      * @return \Magento\Paypal\Model\Api\Nvp
      */
     protected function _getApi()
@@ -957,8 +966,9 @@ class Checkout
 
     /**
      * Attempt to collect address shipping rates and return them for further usage in instant update API
-     * Returns empty array if it was impossible to obtain any shipping rate
-     * If there are shipping rates obtained, the method must return one of them as default.
+     *
+     * Returns empty array if it was impossible to obtain any shipping rate and
+     * if there are shipping rates obtained, the method must return one of them as default.
      *
      * @param Address $address
      * @param bool $mayReturnEmpty
@@ -1042,22 +1052,20 @@ class Checkout
      * Compare two shipping options based on their amounts
      *
      * This function is used as a callback comparison function in shipping options sorting process
-     * @see self::_prepareShippingOptions()
      *
+     * @see self::_prepareShippingOptions()
      * @param \Magento\Framework\DataObject $option1
      * @param \Magento\Framework\DataObject $option2
      * @return int
      */
     protected static function cmpShippingOptions(DataObject $option1, DataObject $option2)
     {
-        if ($option1->getAmount() == $option2->getAmount()) {
-            return 0;
-        }
-        return ($option1->getAmount() < $option2->getAmount()) ? -1 : 1;
+        return $option1->getAmount() <=> $option2->getAmount();
     }
 
     /**
      * Try to find whether the code provided by PayPal corresponds to any of possible shipping rates
+     *
      * This method was created only because PayPal has issues with returning the selected code.
      * If in future the issue is fixed, we don't need to attempt to match it. It would be enough to set the method code
      * before collecting shipping rates
@@ -1068,6 +1076,7 @@ class Checkout
      */
     protected function _matchShippingMethodCode(Address $address, $selectedCode)
     {
+        $address->collectShippingRates();
         $options = $this->_prepareShippingOptions($address, false);
         foreach ($options as $option) {
             if ($selectedCode === $option['code'] // the proper case as outlined in documentation
@@ -1083,6 +1092,7 @@ class Checkout
 
     /**
      * Create payment redirect url
+     *
      * @param bool|null $button
      * @param string $token
      * @return void
@@ -1106,6 +1116,7 @@ class Checkout
 
     /**
      * Set shipping options to api
+     *
      * @param \Magento\Paypal\Model\Cart $cart
      * @param \Magento\Quote\Model\Quote\Address|null $address
      * @return void
@@ -1148,21 +1159,5 @@ class Checkout
             ->setCustomerIsGuest(true)
             ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
         return $this;
-    }
-
-    /**
-     * Returns order repository instance
-     *
-     * @return OrderRepositoryInterface
-     * @deprecated
-     */
-    private function getOrderRepository()
-    {
-        if ($this->orderRepository === null) {
-            $this->orderRepository = ObjectManager::getInstance()
-                ->get(OrderRepositoryInterface::class);
-        }
-
-        return $this->orderRepository;
     }
 }

@@ -288,7 +288,11 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
                 $priceInfo['qty'] = $priceInfo['price_qty'];
                 unset($priceInfo['price_qty']);
 
-                unset($priceInfo['website_id']);
+                if (isset($priceInfo['website_id'])) {
+                    $priceInfo['extension_attributes']['website_id'] = $priceInfo['website_id'];
+                    unset($priceInfo['website_id']);
+                }
+
                 unset($priceInfo['delete']);
 
                 $this->fields['product']['tier_prices'][$key] = $priceInfo;

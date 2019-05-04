@@ -7,10 +7,11 @@
 namespace Magento\User\Test\TestCase;
 
 use Magento\Backend\Test\Page\AdminAuthLogin;
+use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
-use Magento\User\Test\Fixture\User;
 use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\User\Test\Fixture\User;
 use Magento\User\Test\Page\Adminhtml\UserLocks;
 
 /**
@@ -96,16 +97,19 @@ class UnlockAdminUserTest extends Injectable
      * @param string $incorrectPassword
      * @param int $attempts
      * @param string $configData
+     * @param ConfigData $config
      * @return array
      */
     public function test(
         User $customAdmin,
         $incorrectPassword,
         $attempts,
-        $configData
+        $configData,
+        ConfigData $config
     ) {
         // Preconditions
         $this->configData = $configData;
+        $config->persist();
         $this->testStepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $configData]

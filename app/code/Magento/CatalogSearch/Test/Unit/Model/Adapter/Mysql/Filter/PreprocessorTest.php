@@ -15,8 +15,10 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
-class PreprocessorTest extends \PHPUnit_Framework_TestCase
+class PreprocessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AliasResolver|\PHPUnit_Framework_MockObject_MockObject
@@ -302,7 +304,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->aliasResolver->expects($this->once())->method('getAlias')
             ->willReturn('termAttrAlias');
 
-        $this->filter->expects($this->exactly(3))
+        $this->filter->expects($this->exactly(4))
             ->method('getField')
             ->willReturn('termField');
         $this->filter->expects($this->exactly(2))
@@ -314,6 +316,9 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $this->removeWhitespaces($actualResult));
     }
 
+    /**
+     * @return array
+     */
     public function testTermFilterDataProvider()
     {
         return [
@@ -377,7 +382,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $attributeId = 1234567;
 
         $this->scope->expects($this->once())->method('getId')->will($this->returnValue($scopeId));
-        $this->filter->expects($this->exactly(4))
+        $this->filter->expects($this->exactly(5))
             ->method('getField')
             ->will($this->returnValue('not_static_attribute'));
         $this->config->expects($this->exactly(1))
@@ -438,6 +443,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
     {
         $query = 'static_attribute LIKE %name%';
         $expected = 'search_index.entity_id IN (select entity_id from () as filter)';
+
         $this->filter->expects($this->any())
             ->method('getField')
             ->willReturn('termField');

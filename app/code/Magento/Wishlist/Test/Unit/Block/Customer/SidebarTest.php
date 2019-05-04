@@ -8,7 +8,7 @@ namespace Magento\Wishlist\Test\Unit\Block\Customer;
 use Magento\Framework\Pricing\Render;
 use Magento\Wishlist\Block\Customer\Sidebar;
 
-class SidebarTest extends \PHPUnit_Framework_TestCase
+class SidebarTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\Context|\PHPUnit_Framework_MockObject_MockObject
@@ -46,9 +46,14 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->block = new Sidebar(
-            $this->productContext,
-            $this->httpContext
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $this->block = $objectManager->getObject(
+            Sidebar::class,
+            [
+                'context' => $this->productContext,
+                'httpContext' => $this->httpContext
+            ]
         );
     }
 

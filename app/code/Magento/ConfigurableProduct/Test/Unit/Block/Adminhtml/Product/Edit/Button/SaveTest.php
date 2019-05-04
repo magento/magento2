@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\Registry;
 use Magento\Catalog\Api\Data\ProductInterface;
 
-class SaveTest extends \PHPUnit_Framework_TestCase
+class SaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SaveButton
@@ -38,7 +38,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['isReadonly', 'isDuplicable'])
+            ->setMethods(['isReadonly', 'isDuplicable', 'isComposite'])
             ->getMockForAbstractClass();
 
         $this->registryMock->expects(static::any())

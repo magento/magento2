@@ -13,7 +13,7 @@ use Magento\Framework\Controller\ResultFactory;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Cart
@@ -735,7 +735,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new ProductException(__('Test Phrase')));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('This product(s) is out of stock.', null)
             ->willReturnSelf();
 
@@ -901,7 +901,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addNotice')
+            ->method('addNoticeMessage')
             ->with('message', null)
             ->willReturnSelf();
 
@@ -1073,7 +1073,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addNotice')
+            ->method('addNoticeMessage')
             ->with('message', null)
             ->willReturnSelf();
 

@@ -70,7 +70,7 @@
                 <input>select</input>
             </simple_free_shipping>
             <actions_serialized>
-                <selector>#rule_actions_fieldset</selector>
+                <selector>.fieldset[id^="sales_rule_formrule_actions_fieldset_"]</selector>
                 <input>conditions</input>
             </actions_serialized>
         </fields>
@@ -82,7 +82,7 @@
     </labels>
     <manage_coupon_code>
         <class>\Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\ManageCouponCode</class>
-        <selector>[data-index="block_promo_sales_rule_edit_tab_coupons"]</selector>
+        <selector>[data-index="manage_coupon_codes"]</selector>
         <strategy>css selector</strategy>
     </manage_coupon_code>
 </sections>

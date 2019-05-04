@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
-use \Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
+use Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
 
 class CreditmemoCommentSenderTest extends AbstractSenderTest
 {
@@ -27,12 +27,9 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
         $this->stepMockSetup();
         $this->stepIdentityContainerInit(\Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity::class);
         $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
-        $this->creditmemoMock = $this->getMock(
+        $this->creditmemoMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Creditmemo::class,
-            ['getStore', '__wakeup', 'getOrder'],
-            [],
-            '',
-            false
+            ['getStore', '__wakeup', 'getOrder']
         );
         $this->creditmemoMock->expects($this->any())
             ->method('getStore')

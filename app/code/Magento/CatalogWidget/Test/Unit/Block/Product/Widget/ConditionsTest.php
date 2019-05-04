@@ -5,19 +5,19 @@
  */
 namespace Magento\CatalogWidget\Test\Unit\Block\Product\Widget;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\CatalogWidget\Block\Product\Widget\Conditions;
-use Magento\Framework\Registry;
 use Magento\Backend\Block\Template\Context;
+use Magento\CatalogWidget\Block\Product\Widget\Conditions;
 use Magento\CatalogWidget\Model\Rule;
-use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\LayoutInterface;
 
 /**
  * Test class for \Magento\CatalogWidget\Block\Product\Widget\Conditions
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConditionsTest extends \PHPUnit_Framework_TestCase
+class ConditionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -184,83 +184,20 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         $data = ['area' => 'backend'];
-        $abstractElementMock = $this->getMock(
+        $abstractElementMock = $this->createPartialMock(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,
-            ['getContainer'],
-            [],
-            '',
-            false
+            ['getContainer']
         );
-        $eventManagerMock = $this->getMock(
-            \Magento\Framework\Event\ManagerInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $scopeConfigMock = $this->getMock(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $fieldsetMock = $this->getMock(
-            \Magento\Framework\Data\Form\Element\Fieldset::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $combineMock = $this->getMock(
-            \Magento\Rule\Model\Condition\Combine::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $resolverMock = $this->getMock(
-            \Magento\Framework\View\Element\Template\File\Resolver::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $filesystemMock = $this->getMock(
-            \Magento\Framework\Filesystem::class,
-            ['getDirectoryRead'],
-            [],
-            '',
-            false
-        );
-        $validatorMock = $this->getMock(
-            \Magento\Framework\View\Element\Template\File\Validator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $templateEnginePoolMock = $this->getMock(
-            \Magento\Framework\View\TemplateEnginePool::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $templateEngineMock = $this->getMock(
-            \Magento\Framework\View\TemplateEngineInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $directoryReadMock = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\ReadInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $fieldsetMock = $this->createMock(\Magento\Framework\Data\Form\Element\Fieldset::class);
+        $combineMock = $this->createMock(\Magento\Rule\Model\Condition\Combine::class);
+        $resolverMock = $this->createMock(\Magento\Framework\View\Element\Template\File\Resolver::class);
+        $filesystemMock = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryRead']);
+        $validatorMock = $this->createMock(\Magento\Framework\View\Element\Template\File\Validator::class);
+        $templateEnginePoolMock = $this->createMock(\Magento\Framework\View\TemplateEnginePool::class);
+        $templateEngineMock = $this->createMock(\Magento\Framework\View\TemplateEngineInterface::class);
+        $directoryReadMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
 
         $this->ruleMock->expects($this->once())->method('getConditions')->willReturn($combineMock);
         $combineMock->expects($this->once())->method('setJsFormObject')->willReturnSelf();

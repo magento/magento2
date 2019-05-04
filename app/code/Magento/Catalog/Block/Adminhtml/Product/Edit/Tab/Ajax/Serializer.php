@@ -10,7 +10,7 @@ use Magento\Framework\View\Element\Template;
 /**
  * Class Serializer
  * @package Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax
- * @deprecated
+ * @deprecated 101.1.0
  */
 class Serializer extends \Magento\Framework\View\Element\Template
 {
@@ -41,13 +41,13 @@ class Serializer extends \Magento\Framework\View\Element\Template
     public function _construct()
     {
         parent::_construct();
-        $this->setTemplate('catalog/product/edit/serializer.phtml');
+        $this->setTemplate('Magento_Catalog::catalog/product/edit/serializer.phtml');
         return $this;
     }
 
     /**
      * @return string
-     * @deprecated
+     * @deprecated 101.1.0
      */
     public function getProductsJSON()
     {

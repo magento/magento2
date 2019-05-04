@@ -15,7 +15,7 @@ use Magento\Quote\Model\Webapi\ParamOverriderCartId;
 /**
  * Test for \Magento\Quote\Model\Webapi\ParamOverriderCartId
  */
-class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
+class ParamOverriderCartIdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ParamOverriderCartId
@@ -67,6 +67,9 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($retValue, $this->model->getOverriddenValue());
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function testGetOverriddenValueIsCustomerAndCartDoesNotExist()
     {
         $customerId = 1;
@@ -83,7 +86,7 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
             ->with($customerId)
             ->will($this->throwException(new NoSuchEntityException()));
 
-        $this->assertNull($this->model->getOverriddenValue());
+        $this->model->getOverriddenValue();
     }
 
     public function testGetOverriddenValueIsCustomerAndCartIsNull()

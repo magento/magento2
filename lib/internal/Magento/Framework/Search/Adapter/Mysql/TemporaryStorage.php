@@ -6,12 +6,18 @@
 
 namespace Magento\Framework\Search\Adapter\Mysql;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 
 /**
+ * MySQL search temporary storage.
+ *
  * @api
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class TemporaryStorage
 {
@@ -26,11 +32,20 @@ class TemporaryStorage
     private $resource;
 
     /**
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @var DeploymentConfig
      */
-    public function __construct(\Magento\Framework\App\ResourceConnection $resource)
-    {
+    private $config;
+
+    /**
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param DeploymentConfig|null $config
+     */
+    public function __construct(
+        \Magento\Framework\App\ResourceConnection $resource,
+        DeploymentConfig $config = null
+    ) {
         $this->resource = $resource;
+        $this->config = $config !== null ? $config : ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -38,7 +53,7 @@ class TemporaryStorage
      *
      * @param \Magento\Framework\Api\Search\DocumentInterface[] $documents
      * @return Table
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function storeDocuments($documents)
     {
@@ -50,6 +65,7 @@ class TemporaryStorage
      *
      * @param \Magento\Framework\Api\Search\DocumentInterface[] $documents
      * @return Table
+     * @since 100.1.0
      */
     public function storeApiDocuments($documents)
     {
@@ -88,6 +104,8 @@ class TemporaryStorage
     }
 
     /**
+     * Store select results in temporary table.
+     *
      * @param Select $select
      * @return Table
      * @throws \Zend_Db_Exception
@@ -100,6 +118,8 @@ class TemporaryStorage
     }
 
     /**
+     * Get connection.
+     *
      * @return false|AdapterInterface
      */
     private function getConnection()
@@ -108,6 +128,8 @@ class TemporaryStorage
     }
 
     /**
+     * Create temporary table for search select results.
+     *
      * @return Table
      * @throws \Zend_Db_Exception
      */
@@ -116,7 +138,9 @@ class TemporaryStorage
         $connection = $this->getConnection();
         $tableName = $this->resource->getTableName(str_replace('.', '_', uniqid(self::TEMPORARY_TABLE_PREFIX, true)));
         $table = $connection->newTable($tableName);
-        $connection->dropTemporaryTable($table->getName());
+        if ($this->config->get('db/connection/indexer/persistent')) {
+            $connection->dropTemporaryTable($table->getName());
+        }
         $table->addColumn(
             self::FIELD_ENTITY_ID,
             Table::TYPE_INTEGER,

@@ -11,10 +11,14 @@ use \Magento\Framework\Webapi\Rest\Request;
 
 class Router
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $_routes = [];
 
-    /** @var \Magento\Webapi\Model\Rest\Config */
+    /**
+     * @var \Magento\Webapi\Model\Rest\Config
+     */
     protected $_apiConfig;
 
     /**

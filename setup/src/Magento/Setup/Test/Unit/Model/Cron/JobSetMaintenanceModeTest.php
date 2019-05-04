@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class JobSetMaintenanceModeTest
  */
-class JobSetMaintenanceModeTest extends \PHPUnit_Framework_TestCase
+class JobSetMaintenanceModeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Status|\PHPUnit_Framework_MockObject_MockObject
@@ -37,10 +37,10 @@ class JobSetMaintenanceModeTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManagerProviderMock = $this->getMock(ObjectManagerProvider::class, [], [], '', false);
+        $this->objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);
         $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class, [], '', false);
-        $cleanupFiles = $this->getMock(CleanupFiles::class, [], [], '', false);
-        $cache = $this->getMock(Cache::class, [], [], '', false);
+        $cleanupFiles = $this->createMock(CleanupFiles::class);
+        $cache = $this->createMock(Cache::class);
         $valueMap = [
             [CleanupFiles::class, $cleanupFiles],
             [Cache::class, $cache],
@@ -49,13 +49,13 @@ class JobSetMaintenanceModeTest extends \PHPUnit_Framework_TestCase
         $objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValueMap($valueMap));
         $this->objectManagerProviderMock->expects($this->once())->method('get')->willReturn($objectManager);
 
-        $this->statusMock = $this->getMock(Status::class, [], [], '', false);
-        $this->outputMock = $this->getMock(OutputInterface::class);
+        $this->statusMock = $this->createMock(Status::class);
+        $this->outputMock = $this->createMock(OutputInterface::class);
     }
 
     public function testExecuteMaintenanceModeDisable()
     {
-        $command = $this->getMock(MaintenanceDisableCommand::class, [], [], '', false);
+        $command = $this->createMock(MaintenanceDisableCommand::class);
         $command->expects($this->once())->method('run');
 
         $jobMaintenanceDisable = new JobSetMaintenanceMode(
@@ -75,7 +75,7 @@ class JobSetMaintenanceModeTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteMaintenanceModeDisableExeption()
     {
-        $command = $this->getMock(MaintenanceDisableCommand::class, [], [], '', false);
+        $command = $this->createMock(MaintenanceDisableCommand::class);
         $command->expects($this->once())->method('isSetAddressInfo')->willReturn(true);
         $command->expects($this->never())->method('run');
 
@@ -91,7 +91,7 @@ class JobSetMaintenanceModeTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteMaintenanceModeEnable()
     {
-        $command = $this->getMock(MaintenanceEnableCommand::class, [], [], '', false);
+        $command = $this->createMock(MaintenanceEnableCommand::class);
         $command->expects($this->once())->method('run');
 
         $jobMaintenanceEnable = new JobSetMaintenanceMode(

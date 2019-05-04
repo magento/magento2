@@ -19,7 +19,7 @@ use Magento\Store\Model\Store;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PriceColumn

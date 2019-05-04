@@ -29,6 +29,20 @@
 
         <saveHandler class="Magento\Cms\Model\Indexer\StoreResource"/>
         <structure class="Magento\Cms\Model\Indexer\IndexStructure"/>
-
+        <dependencies>
+            <indexer id="indexer_2"/>
+        </dependencies>
+    </indexer>
+    <indexer id="indexer_2" view_id="indexer_2"
+             class="Magento\Module\IndexerSecond">
+        <dependencies>
+            <indexer id="indexer_4" />
+        </dependencies>
+    </indexer>
+    <indexer id="indexer_3" view_id="indexer_3"
+             class="Magento\Module\IndexerThird">
+    </indexer>
+    <indexer id="indexer_4" view_id="indexer_4"
+             class="Magento\Module\IndexerFourth">
     </indexer>
 </config>

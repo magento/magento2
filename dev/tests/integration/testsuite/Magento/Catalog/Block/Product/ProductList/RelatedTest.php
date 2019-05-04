@@ -9,8 +9,9 @@ namespace Magento\Catalog\Block\Product\ProductList;
  * Test class for \Magento\Catalog\Block\Product\List\Related.
  *
  * @magentoDataFixture Magento/Catalog/_files/products_related.php
+ * @magentoDbIsolation disabled
  */
-class RelatedTest extends \PHPUnit_Framework_TestCase
+class RelatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\ProductList\Related

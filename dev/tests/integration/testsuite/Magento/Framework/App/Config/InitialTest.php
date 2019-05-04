@@ -10,7 +10,7 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Config\Initial as Config;
 
-class InitialTest extends \PHPUnit_Framework_TestCase
+class InitialTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

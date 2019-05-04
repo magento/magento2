@@ -8,7 +8,7 @@ namespace Magento\MediaStorage\Test\Unit\Helper\File;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\MediaStorage\Helper\File\Media;
 
-class MediaTest extends \PHPUnit_Framework_TestCase
+class MediaTest extends \PHPUnit\Framework\TestCase
 {
     const UPDATE_TIME = 'update_time';
 
@@ -87,6 +87,9 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->helper->collectFileInfo($mediaDirectory, $path));
     }
 
+    /**
+     * @return array
+     */
     public function pathDataProvider()
     {
         return [
@@ -97,7 +100,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage File mediaDir/path does not exist
+     * @expectedExceptionMessage The "mediaDir/path" file doesn't exist. Verify the file and try again.
      */
     public function testCollectFileInfoNotFile()
     {

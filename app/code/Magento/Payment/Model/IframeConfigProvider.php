@@ -24,6 +24,7 @@ use Psr\Log\LoggerInterface;
  * Extends from this class only in case of urgency.
  *
  * @api
+ * @since 100.0.2
  */
 class IframeConfigProvider implements ConfigProviderInterface
 {

@@ -26,5 +26,8 @@
         <image_size_y>
             <selector>[name$='[image_size_y]']</selector>
         </image_size_y>
+        <add_before>
+            <selector>[class*="admin__addon-prefix"]</selector>
+        </add_before>
     </fields>
 </mapping>

@@ -10,6 +10,7 @@ use Magento\Store\Model\Store;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Security implements \Magento\Framework\Notification\MessageInterface
 {

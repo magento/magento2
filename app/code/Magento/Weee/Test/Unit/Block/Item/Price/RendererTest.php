@@ -7,7 +7,7 @@ namespace Magento\Weee\Test\Unit\Block\Item\Price;
 
 use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 
-class RendererTest extends \PHPUnit_Framework_TestCase
+class RendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Weee\Block\Item\Price\Renderer
@@ -95,7 +95,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param bool $showWeeeDetails
      * @param bool $hasWeeeAmount
      * @param bool $expectedValue
-     * @dataProvider testDisplayPriceWithWeeeDetailsDataProvider
+     * @dataProvider displayPriceWithWeeeDetailsDataProvider
      */
     public function testDisplayPriceWithWeeeDetails(
         $isWeeeEnabled,
@@ -122,7 +122,10 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $this->renderer->displayPriceWithWeeeDetails());
     }
 
-    public function testDisplayPriceWithWeeeDetailsDataProvider()
+    /**
+     * @return array
+     */
+    public function displayPriceWithWeeeDetailsDataProvider()
     {
         $data = [
             'weee_disabled_true_true' => [
@@ -190,7 +193,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param $weeeEnabled
      * @param $includeWeee
      * @param $expectedValue
-     * @dataProvider testGetDisplayPriceDataProvider
+     * @dataProvider getDisplayPriceDataProvider
      */
     public function testGetUnitDisplayPriceInclTax(
         $priceInclTax,
@@ -226,7 +229,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param $weeeEnabled
      * @param $includeWeee
      * @param $expectedValue
-     * @dataProvider testGetDisplayPriceDataProvider
+     * @dataProvider getDisplayPriceDataProvider
      */
     public function testGetBaseUnitDisplayPriceInclTax(
         $basePriceInclTax,
@@ -262,7 +265,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param $weeeEnabled
      * @param $includeWeee
      * @param $expectedValue
-     * @dataProvider testGetDisplayPriceDataProvider
+     * @dataProvider getDisplayPriceDataProvider
      */
     public function testGetUnitDisplayPriceExclTax(
         $priceExclTax,
@@ -297,7 +300,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param $weeeEnabled
      * @param $includeWeee
      * @param $expectedValue
-     * @dataProvider testGetDisplayPriceDataProvider
+     * @dataProvider getDisplayPriceDataProvider
      */
     public function testGetBaseUnitDisplayPriceExclTax(
         $basePriceExclTax,
@@ -336,7 +339,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param $weeeEnabled
      * @param $includeWeee
      * @param $expectedValue
-     * @dataProvider testGetDisplayPriceDataProvider
+     * @dataProvider getDisplayPriceDataProvider
      */
     public function testGetRowDisplayPriceExclTax(
         $rowTotal,
@@ -371,7 +374,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param $weeeEnabled
      * @param $includeWeee
      * @param $expectedValue
-     * @dataProvider testGetDisplayPriceDataProvider
+     * @dataProvider getDisplayPriceDataProvider
      */
     public function testGetBaseRowDisplayPriceExclTax(
         $baseRowTotal,
@@ -406,7 +409,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param $weeeEnabled
      * @param $includeWeee
      * @param $expectedValue
-     * @dataProvider testGetDisplayPriceDataProvider
+     * @dataProvider getDisplayPriceDataProvider
      */
     public function testGetRowDisplayPriceInclTax(
         $rowTotalInclTax,
@@ -442,7 +445,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param $weeeEnabled
      * @param $includeWeee
      * @param $expectedValue
-     * @dataProvider testGetDisplayPriceDataProvider
+     * @dataProvider getDisplayPriceDataProvider
      */
     public function testGetBaseRowDisplayPriceInclTax(
         $baseRowTotalInclTax,
@@ -472,7 +475,10 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $this->renderer->getBaseRowDisplayPriceInclTax());
     }
 
-    public function testGetDisplayPriceDataProvider()
+    /**
+     * @return array
+     */
+    public function getDisplayPriceDataProvider()
     {
         $data = [
             'weee_disabled_true' => [
@@ -512,7 +518,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param $weeeTaxInclTax
      * @param $weeeEnabled
      * @param $expectedValue
-     * @dataProvider testGetFinalDisplayPriceDataProvider
+     * @dataProvider getFinalDisplayPriceDataProvider
      */
     public function testGetFinalUnitDisplayPriceInclTax(
         $priceInclTax,
@@ -541,7 +547,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param $baseWeeeTaxInclTax
      * @param $weeeEnabled
      * @param $expectedValue
-     * @dataProvider testGetFinalDisplayPriceDataProvider
+     * @dataProvider getFinalDisplayPriceDataProvider
      */
     public function testGetBaseFinalUnitDisplayPriceInclTax(
         $basePriceInclTax,
@@ -570,7 +576,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param $weeeTaxExclTax
      * @param $weeeEnabled
      * @param $expectedValue
-     * @dataProvider testGetFinalDisplayPriceDataProvider
+     * @dataProvider getFinalDisplayPriceDataProvider
      */
     public function testGetFinalUnitDisplayPriceExclTax(
         $priceExclTax,
@@ -598,7 +604,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param $baseWeeeTaxExclTax
      * @param $weeeEnabled
      * @param $expectedValue
-     * @dataProvider testGetFinalDisplayPriceDataProvider
+     * @dataProvider getFinalDisplayPriceDataProvider
      */
     public function testGetBaseFinalUnitDisplayPriceExclTax(
         $basePriceExclTax,
@@ -630,7 +636,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param $rowWeeeTaxExclTax
      * @param $weeeEnabled
      * @param $expectedValue
-     * @dataProvider testGetFinalDisplayPriceDataProvider
+     * @dataProvider getFinalDisplayPriceDataProvider
      */
     public function testGetFianlRowDisplayPriceExclTax(
         $rowTotal,
@@ -658,7 +664,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param $baseRowWeeeTaxExclTax
      * @param $weeeEnabled
      * @param $expectedValue
-     * @dataProvider testGetFinalDisplayPriceDataProvider
+     * @dataProvider getFinalDisplayPriceDataProvider
      */
     public function testGetBaseFianlRowDisplayPriceExclTax(
         $baseRowTotal,
@@ -686,7 +692,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param $rowWeeeTaxInclTax
      * @param $weeeEnabled
      * @param $expectedValue
-     * @dataProvider testGetFinalDisplayPriceDataProvider
+     * @dataProvider getFinalDisplayPriceDataProvider
      */
     public function testGetFinalRowDisplayPriceInclTax(
         $rowTotalInclTax,
@@ -715,7 +721,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      * @param $baseRowWeeeTaxInclTax
      * @param $weeeEnabled
      * @param $expectedValue
-     * @dataProvider testGetFinalDisplayPriceDataProvider
+     * @dataProvider getFinalDisplayPriceDataProvider
      */
     public function testGetBaseFinalRowDisplayPriceInclTax(
         $baseRowTotalInclTax,
@@ -739,7 +745,10 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $this->renderer->getBaseFinalRowDisplayPriceInclTax());
     }
 
-    public function testGetFinalDisplayPriceDataProvider()
+    /**
+     * @return array
+     */
+    public function getFinalDisplayPriceDataProvider()
     {
         $data = [
             'weee_disabled_true' => [

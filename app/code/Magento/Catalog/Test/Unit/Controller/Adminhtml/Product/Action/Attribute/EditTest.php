@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Action\Attribut
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save */
     private $object;
@@ -80,7 +80,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getParam', 'getParams', 'setParams'])
             ->disableOriginalConstructor()->getMock();
 
-        $objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['isProductsHasSku'])
             ->disableOriginalConstructor()->getMock();
@@ -94,7 +94,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->setMethods([])
             ->disableOriginalConstructor()->getMock();
-        $messageManager->expects($this->any())->method('addError')->willReturn(true);
+        $messageManager->expects($this->any())->method('addErrorMessage')->willReturn(true);
         $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->setMethods(['getRequest', 'getObjectManager', 'getMessageManager', 'getResultRedirectFactory'])
             ->disableOriginalConstructor()->getMock();

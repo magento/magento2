@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit\Cache\Tag\Strategy;
 
 use \Magento\Framework\App\Cache\Tag\Strategy\Identifier;
 
-class IdentifierTest extends \PHPUnit_Framework_TestCase
+class IdentifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Identifier
@@ -22,13 +22,14 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWithScalar()
     {
-        $this->setExpectedException(\InvalidArgumentException::class, 'Provided argument is not an object');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Provided argument is not an object');
         $this->model->getTags('scalar');
     }
 
     public function testGetTagsWithObject()
     {
-        $this->assertEquals([], $this->model->getTags(new \StdClass));
+        $this->assertEquals([], $this->model->getTags(new \stdClass));
     }
 
     public function testGetTagsWithIdentityInterface()

@@ -9,6 +9,7 @@ namespace Magento\Search\Block\Adminhtml\Reports;
  * Adminhtml search report page content block
  *
  * @api
+ * @since 100.0.2
  */
 class Search extends \Magento\Backend\Block\Widget\Grid\Container
 {

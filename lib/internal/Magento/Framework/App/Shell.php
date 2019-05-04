@@ -18,10 +18,14 @@ use Psr\Log\LoggerInterface;
  */
 class Shell implements ShellInterface
 {
-    /** @var Driver */
+    /**
+     * @var \Magento\Framework\Shell\Driver
+     */
     private $driver;
 
-    /** @var LoggerInterface */
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
     private $logger;
 
     /**

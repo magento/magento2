@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Config\Block\System\Config\Form\Field\FieldArray;
 
 /**
@@ -13,6 +11,7 @@ namespace Magento\Config\Block\System\Config\Form\Field\FieldArray;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -85,7 +84,9 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
             'class' => $this->_getParam($params, 'class'),
             'renderer' => false,
         ];
-        if (!empty($params['renderer']) && $params['renderer'] instanceof \Magento\Framework\View\Element\AbstractBlock) {
+        if (!empty($params['renderer'])
+            && $params['renderer'] instanceof \Magento\Framework\View\Element\AbstractBlock
+        ) {
             $this->_columns[$name]['renderer'] = $params['renderer'];
         }
     }
@@ -226,11 +227,9 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
             $column['size'] .
             '"' : '') .
             ' class="' .
-            (isset(
-            $column['class']
-        ) ? $column['class'] : 'input-text') . '"' . (isset(
-            $column['style']
-        ) ? ' style="' . $column['style'] . '"' : '') . '/>';
+            (isset($column['class'])
+                ? $column['class']
+                : 'input-text') . '"' . (isset($column['style']) ? ' style="' . $column['style'] . '"' : '') . '/>';
     }
 
     /**
@@ -283,6 +282,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
 
     /**
      * @return string
+     * @since 100.2.0
      */
     public function getAddButtonLabel()
     {

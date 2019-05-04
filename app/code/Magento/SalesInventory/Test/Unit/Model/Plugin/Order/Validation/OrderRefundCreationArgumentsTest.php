@@ -15,9 +15,9 @@ use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 
 /**
- * Class OrderRefundCreatetionArgumentsTest
+ * Class OrderRefundCreationArgumentsTest
  */
-class OrderRefundCreationArgumentsTest extends \PHPUnit_Framework_TestCase
+class OrderRefundCreationArgumentsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OrderRefundCreationArguments
@@ -32,7 +32,7 @@ class OrderRefundCreationArgumentsTest extends \PHPUnit_Framework_TestCase
     /**
      * @var CreditmemoCreationArgumentsExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $extencionAttributesMock;
+    private $extensionAttributesMock;
 
     /**
      * @var CreditmemoCreationArgumentsInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -69,10 +69,10 @@ class OrderRefundCreationArgumentsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->extencionAttributesMock = $this->getMockBuilder(CreditmemoCreationArgumentsExtensionInterface::class)
+        $this->extensionAttributesMock = $this->getMockBuilder(CreditmemoCreationArgumentsExtensionInterface::class)
             ->setMethods(['getReturnToStockItems'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->validateResultMock = $this->getMockBuilder(ValidatorResultInterface::class)
             ->disableOriginalConstructor()
@@ -101,9 +101,9 @@ class OrderRefundCreationArgumentsTest extends \PHPUnit_Framework_TestCase
         $returnToStockItems = [1];
         $this->creditmemoCreationArgumentsMock->expects($this->exactly(3))
             ->method('getExtensionAttributes')
-            ->willReturn($this->extencionAttributesMock);
+            ->willReturn($this->extensionAttributesMock);
 
-        $this->extencionAttributesMock->expects($this->exactly(2))
+        $this->extensionAttributesMock->expects($this->exactly(2))
             ->method('getReturnToStockItems')
             ->willReturn($returnToStockItems);
 

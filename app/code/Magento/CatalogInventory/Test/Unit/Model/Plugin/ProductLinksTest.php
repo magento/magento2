@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Plugin;
 
-class ProductLinksTest extends \PHPUnit_Framework_TestCase
+class ProductLinksTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Plugin\ProductLinks
@@ -24,20 +24,8 @@ class ProductLinksTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock(
-            \Magento\CatalogInventory\Model\Configuration::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->stockHelperMock = $this->getMock(
-            \Magento\CatalogInventory\Helper\Stock::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->configMock = $this->createMock(\Magento\CatalogInventory\Model\Configuration::class);
+        $this->stockHelperMock = $this->createMock(\Magento\CatalogInventory\Helper\Stock::class);
 
         $this->model = new \Magento\CatalogInventory\Model\Plugin\ProductLinks(
             $this->configMock,
@@ -60,19 +48,18 @@ class ProductLinksTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($collectionMock, $this->model->afterGetProductCollection($subjectMock, $collectionMock));
     }
 
+    /**
+     * @return array
+     */
     private function buildMocks()
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collectionMock */
-        $collectionMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class,
-            [],
-            [],
-            '',
-            false
+        $collectionMock = $this->createMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class
         );
 
         /** @var \Magento\Catalog\Model\Product\Link $subjectMock */
-        $subjectMock = $this->getMock(\Magento\Catalog\Model\Product\Link::class, [], [], '', false);
+        $subjectMock = $this->createMock(\Magento\Catalog\Model\Product\Link::class);
         return [$collectionMock, $subjectMock];
     }
 

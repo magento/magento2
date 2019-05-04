@@ -64,7 +64,7 @@ class FrontendDecorator implements CurlInterface
     protected function authorize(Customer $customer)
     {
         $url = $_ENV['app_frontend_url'] . 'customer/account/login/';
-        $this->transport->write($url);
+        $this->transport->write($url, [], CurlInterface::GET);
         $this->read();
         $url = $_ENV['app_frontend_url'] . 'customer/account/loginPost/';
         $data = [
@@ -74,7 +74,7 @@ class FrontendDecorator implements CurlInterface
         ];
         $this->transport->write($url, $data, CurlInterface::POST, ['Set-Cookie:' . $this->cookies]);
         $response = $this->read();
-        if (strpos($response, 'customer/account/login')) {
+        if (strpos($response, 'customer/account/login') !== false) {
             throw new \Exception($customer->getFirstname() . ', cannot be logged in by curl handler!');
         }
     }

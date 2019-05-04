@@ -8,7 +8,7 @@ namespace Magento\Bundle\Test\Unit\Controller\Adminhtml\Bundle\Selection;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class GridTest extends \PHPUnit_Framework_TestCase
+class GridTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Bundle\Controller\Adminhtml\Bundle\Selection\Grid */
     protected $controller;
@@ -43,15 +43,15 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
-        $this->response = $this->getMock(
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
             [
                 'sendResponse',
                 'setBody'
             ]
         );
-        $this->view = $this->getMock(\Magento\Framework\App\ViewInterface::class);
+        $this->view = $this->createMock(\Magento\Framework\App\ViewInterface::class);
 
         $this->context->expects($this->any())
             ->method('getRequest')
@@ -73,7 +73,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
+        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $block = $this->getMockBuilder(
             \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid::class
         )

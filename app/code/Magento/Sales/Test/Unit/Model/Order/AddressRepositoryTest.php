@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -13,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
+class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Subject of testing.
@@ -43,20 +44,14 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->metadata = $this->getMock(
+        $this->metadata = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Metadata::class,
-            ['getNewInstance', 'getMapper'],
-            [],
-            '',
-            false
+            ['getNewInstance', 'getMapper']
         );
 
-        $this->searchResultFactory = $this->getMock(
+        $this->searchResultFactory = $this->createPartialMock(
             \Magento\Sales\Api\Data\OrderAddressSearchResultInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
@@ -80,19 +75,13 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGet($id, $entityId)
     {
         if (!$id) {
-            $this->setExpectedException(
+            $this->expectException(
                 \Magento\Framework\Exception\InputException::class
             );
 
             $this->subject->get($id);
         } else {
-            $address = $this->getMock(
-                \Magento\Sales\Model\Order\Address::class,
-                ['load', 'getEntityId'],
-                [],
-                '',
-                false
-            );
+            $address = $this->createPartialMock(\Magento\Sales\Model\Order\Address::class, ['load', 'getEntityId']);
             $address->expects($this->once())
                 ->method('load')
                 ->with($id)
@@ -106,7 +95,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
                 ->willReturn($address);
 
             if (!$entityId) {
-                $this->setExpectedException(
+                $this->expectException(
                     \Magento\Framework\Exception\NoSuchEntityException::class
                 );
 
@@ -146,20 +135,8 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $searchCriteria = $this->getMock(
-            \Magento\Framework\Api\SearchCriteria::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $collection = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Address\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $searchCriteria = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $collection = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Address\Collection::class);
 
         $this->collectionProcessorMock->expects($this->once())
             ->method('process')
@@ -173,13 +150,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $address = $this->getMock(
-            \Magento\Sales\Model\Order\Address::class,
-            ['getEntityId'],
-            [],
-            '',
-            false
-        );
+        $address = $this->createPartialMock(\Magento\Sales\Model\Order\Address::class, ['getEntityId']);
         $address->expects($this->once())
             ->method('getEntityId')
             ->willReturn(1);
@@ -206,17 +177,11 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage Could not delete order address
+     * @expectedExceptionMessage The order address couldn't be deleted.
      */
     public function testDeleteWithException()
     {
-        $address = $this->getMock(
-            \Magento\Sales\Model\Order\Address::class,
-            ['getEntityId'],
-            [],
-            '',
-            false
-        );
+        $address = $this->createPartialMock(\Magento\Sales\Model\Order\Address::class, ['getEntityId']);
         $address->expects($this->never())
             ->method('getEntityId');
 
@@ -242,13 +207,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSave()
     {
-        $address = $this->getMock(
-            \Magento\Sales\Model\Order\Address::class,
-            ['getEntityId'],
-            [],
-            '',
-            false
-        );
+        $address = $this->createPartialMock(\Magento\Sales\Model\Order\Address::class, ['getEntityId']);
         $address->expects($this->any())
             ->method('getEntityId')
             ->willReturn(1);
@@ -275,17 +234,11 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save order address
+     * @expectedExceptionMessage The order address couldn't be saved.
      */
     public function testSaveWithException()
     {
-        $address = $this->getMock(
-            \Magento\Sales\Model\Order\Address::class,
-            ['getEntityId'],
-            [],
-            '',
-            false
-        );
+        $address = $this->createPartialMock(\Magento\Sales\Model\Order\Address::class, ['getEntityId']);
         $address->expects($this->never())
             ->method('getEntityId');
 
@@ -311,13 +264,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $address = $this->getMock(
-            \Magento\Sales\Model\Order\Address::class,
-            ['getEntityId'],
-            [],
-            '',
-            false
-        );
+        $address = $this->createPartialMock(\Magento\Sales\Model\Order\Address::class, ['getEntityId']);
 
         $this->metadata->expects($this->once())
             ->method('getNewInstance')

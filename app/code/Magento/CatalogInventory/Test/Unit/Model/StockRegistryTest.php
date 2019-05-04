@@ -8,7 +8,7 @@ namespace Magento\CatalogInventory\Test\Unit\Model;
 /**
  * Class StockRegistryTest
  */
-class StockRegistryTest extends \PHPUnit_Framework_TestCase
+class StockRegistryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\StockRegistry

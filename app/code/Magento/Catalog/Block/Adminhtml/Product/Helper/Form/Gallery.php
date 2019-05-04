@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Catalog product gallery attribute
  *
@@ -13,11 +11,16 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Registry;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Catalog\Api\Data\ProductInterface;
 
+/**
+ * Adminhtml gallery block
+ */
 class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**
@@ -69,26 +72,36 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     protected $registry;
 
     /**
+     * @var DataPersistorInterface
+     */
+    private $dataPersistor;
+
+    /**
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Registry $registry
      * @param \Magento\Framework\Data\Form $form
      * @param array $data
+     * @param DataPersistorInterface|null $dataPersistor
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         Registry $registry,
         \Magento\Framework\Data\Form $form,
-        $data = []
+        $data = [],
+        DataPersistorInterface $dataPersistor = null
     ) {
         $this->storeManager = $storeManager;
         $this->registry = $registry;
         $this->form = $form;
+        $this->dataPersistor = $dataPersistor ?: ObjectManager::getInstance()->get(DataPersistorInterface::class);
         parent::__construct($context, $data);
     }
 
     /**
+     * Returns element html.
+     *
      * @return string
      */
     public function getElementHtml()
@@ -104,7 +117,24 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      */
     public function getImages()
     {
-        return $this->registry->registry('current_product')->getData('media_gallery') ?: null;
+        $images = $this->getDataObject()->getData('media_gallery') ?: null;
+        if ($images === null) {
+            $images = ((array)$this->dataPersistor->get('catalog_product'))['product']['media_gallery'] ?? null;
+        }
+
+        return $images;
+    }
+
+    /**
+     * Get value for given type.
+     *
+     * @param string $type
+     * @return string|null
+     */
+    public function getImageValue(string $type)
+    {
+        $product = (array)$this->dataPersistor->get('catalog_product');
+        return $product['product'][$type] ?? null;
     }
 
     /**
@@ -119,11 +149,13 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
         $content->setId($this->getHtmlId() . '_content')->setElement($this);
         $content->setFormName($this->formName);
         $galleryJs = $content->getJsObjectName();
-        $content->getUploader()->getConfig()->setMegiaGallery($galleryJs);
+        $content->getUploader()->getConfig()->setMediaGallery($galleryJs);
         return $content->toHtml();
     }
 
     /**
+     * Returns html id
+     *
      * @return string
      */
     protected function getHtmlId()
@@ -132,6 +164,8 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     }
 
     /**
+     * Returns name
+     *
      * @return string
      */
     public function getName()
@@ -140,6 +174,8 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     }
 
     /**
+     * Returns suffix for field name
+     *
      * @return string
      */
     public function getFieldNameSuffix()
@@ -148,6 +184,8 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     }
 
     /**
+     * Returns data scope html id
+     *
      * @return string
      */
     public function getDataScopeHtmlId()
@@ -232,7 +270,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     /**
      * Retrieve attribute field name
      *
-     *
      * @param Attribute $attribute
      * @return string
      */
@@ -246,6 +283,8 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     }
 
     /**
+     * Returns html content of the block
+     *
      * @return string
      */
     public function toHtml()

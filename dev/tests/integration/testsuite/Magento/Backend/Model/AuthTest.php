@@ -5,6 +5,7 @@
  */
 namespace Magento\Backend\Model;
 
+use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Exception\AuthenticationException;
 
 /**
@@ -14,7 +15,7 @@ use Magento\Framework\Exception\AuthenticationException;
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
-class AuthTest extends \PHPUnit_Framework_TestCase
+class AuthTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Auth
@@ -55,7 +56,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
         // by default \Magento\Backend\Model\Auth\Session class will instantiate as a Authentication Storage
         $this->assertInstanceOf(\Magento\Backend\Model\Auth\Session::class, $this->_model->getAuthStorage());
 
-        $mockStorage = $this->getMock(\Magento\Backend\Model\Auth\StorageInterface::class);
+        $mockStorage = $this->createMock(\Magento\Backend\Model\Auth\StorageInterface::class);
         $this->_model->setAuthStorage($mockStorage);
         $this->assertInstanceOf(\Magento\Backend\Model\Auth\StorageInterface::class, $this->_model->getAuthStorage());
 
@@ -86,6 +87,19 @@ class AuthTest extends \PHPUnit_Framework_TestCase
             $this->_model->getUser()
         );
         $this->assertGreaterThan(time() - 10, $this->_model->getAuthStorage()->getUpdatedAt());
+    }
+
+    public function testLoginFlushesFormKey()
+    {
+        /** @var FormKey $dataFormKey */
+        $dataFormKey = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(FormKey::class);
+        $beforeKey = $dataFormKey->getFormKey();
+        $this->_model->login(
+            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
+        $afterKey = $dataFormKey->getFormKey();
+        $this->assertNotEquals($beforeKey, $afterKey);
     }
 
     /**

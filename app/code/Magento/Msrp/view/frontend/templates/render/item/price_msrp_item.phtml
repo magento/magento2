@@ -29,27 +29,27 @@
 <div class="price-box msrp">
     <?php if ($_product->getMsrp()): ?>
         <?php $_msrpPrice = $pricingHelper->currency($_product->getMsrp(), true, false) ?>
-        <span class="old-price"><?php /* @escapeNotVerified */ echo $_msrpPrice ?></span>
+        <span class="old-price"><?= /* @escapeNotVerified */ $_msrpPrice ?></span>
     <?php endif; ?>
     <?php if ($_catalogHelper->isShowPriceOnGesture($_product)): ?>
         <?php $priceElementId = 'product-price-' . $_id . $block->getIdSuffix(); ?>
-        <span id="<?php /* @escapeNotVerified */ echo $priceElementId ?>" style="display: none"></span>
+        <span id="<?= /* @escapeNotVerified */ $priceElementId ?>" style="display: none"></span>
         <?php $popupId = 'msrp-popup-' . $_id . $block->getRandomString(20); ?>
         <a href="javascript:void(0);"
-           id="<?php /* @escapeNotVerified */ echo($popupId);?>"
-           data-mage-init='{"addToCart":{"popupId": "#<?php /* @escapeNotVerified */ echo($popupId);?>",
-                                         "productName": "<?php /* @noEscape */ echo $block->escapeJs($block->escapeHtml($_product->getName())) ?>",
-                                         "realPrice": <?php /* @escapeNotVerified */ echo $block->getRealPriceJs($_product) ?>,
-                                         "msrpPrice": "<?php /* @escapeNotVerified */ echo $_msrpPrice ?>",
-                                         "priceElementId":"<?php /* @escapeNotVerified */ echo $priceElementId ?>",
+           id="<?= /* @escapeNotVerified */ ($popupId) ?>"
+           data-mage-init='{"addToCart":{"popupId": "#<?= /* @escapeNotVerified */ ($popupId) ?>",
+                                         "productName": "<?= /* @noEscape */ $block->escapeJs($block->escapeHtml($_product->getName())) ?>",
+                                         "realPrice": <?= /* @escapeNotVerified */ $block->getRealPriceJs($_product) ?>,
+                                         "msrpPrice": "<?= /* @escapeNotVerified */ $_msrpPrice ?>",
+                                         "priceElementId":"<?= /* @escapeNotVerified */ $priceElementId ?>",
                                          "popupCartButtonId": "#map-popup-button",
-                                         "cartForm": "#wishlist-view-form"}}'><?php /* @escapeNotVerified */ echo __('Click for price') ?>
+                                         "cartForm": "#wishlist-view-form"}}'><?= /* @escapeNotVerified */ __('Click for price') ?>
         </a>
     <?php else: ?>
         <span class="msrp-message">
-            <?php /* @escapeNotVerified */ echo $_catalogHelper->getMsrpPriceMessage($_product) ?>
+            <?= /* @escapeNotVerified */ $_catalogHelper->getMsrpPriceMessage($_product) ?>
         </span>
     <?php endif; ?>
     <?php $helpLinkId = 'msrp-help-' . $_id . $block->getRandomString(20); ?>
-    <a href="javascript:void(0);" id="<?php /* @escapeNotVerified */ echo($helpLinkId);?>" data-mage-init='{"addToCart":{"helpLinkId": "#<?php /* @escapeNotVerified */ echo($helpLinkId);?>", "productName": "<?php /* @noEscape */ echo $block->escapeJs($block->escapeHtml($_product->getName())) ?>"}}' class="link tip"><?php /* @escapeNotVerified */ echo __("What's this?"); ?></a>
+    <a href="javascript:void(0);" id="<?= /* @escapeNotVerified */ ($helpLinkId) ?>" data-mage-init='{"addToCart":{"helpLinkId": "#<?= /* @escapeNotVerified */ ($helpLinkId) ?>", "productName": "<?= /* @noEscape */ $block->escapeJs($block->escapeHtml($_product->getName())) ?>"}}' class="link tip"><?= /* @escapeNotVerified */ __("What's this?") ?></a>
 </div>

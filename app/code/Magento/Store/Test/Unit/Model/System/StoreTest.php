@@ -6,7 +6,7 @@
 
 namespace Magento\Store\Test\Unit\Model\System;
 
-class StoreTest extends \PHPUnit_Framework_TestCase
+class StoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\System\Store
@@ -104,6 +104,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getStoresStructureDataProvider()
     {
         $websiteName = 'website';
@@ -207,6 +210,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getStoreValuesForFormDataProvider()
     {
         $websiteName = 'website';

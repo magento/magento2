@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\View\Design\Theme;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test validator with valid data

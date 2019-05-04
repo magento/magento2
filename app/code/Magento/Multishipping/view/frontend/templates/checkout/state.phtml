@@ -16,6 +16,6 @@
 ?>
 <ol class="block multicheckout progress items" id="checkout-progress-state">
     <?php foreach ($block->getSteps() as $_step): ?>
-        <li title="<?php /* @escapeNotVerified */ echo $_step->getLabel() ?>" class="item<?php echo($_step->getIsActive()) ? ' active' : ''?>"><span><?php /* @escapeNotVerified */ echo $_step->getLabel() ?></span></li>
+        <li title="<?= /* @escapeNotVerified */ $_step->getLabel() ?>" class="item<?= ($_step->getIsActive()) ? ' active' : '' ?>"><span><?= /* @escapeNotVerified */ $_step->getLabel() ?></span></li>
     <?php endforeach; ?>
 </ol>

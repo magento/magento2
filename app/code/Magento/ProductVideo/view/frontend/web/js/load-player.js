@@ -88,6 +88,7 @@ define(['jquery', 'jquery/ui'], function ($) {
             this._playing = this._autoplay || false;
             this._loop = this.element.data('loop');
             this._rel = this.element.data('related');
+            this.useYoutubeNocookie = this.element.data('youtubenocookie') || false;
 
             this._responsive = this.element.data('responsive') !== false;
 
@@ -164,6 +165,12 @@ define(['jquery', 'jquery/ui'], function ($) {
                  * Handle event
                  */
                 'youtubeapiready': function () {
+                    var host = 'https://www.youtube.com';
+
+                    if (self.useYoutubeNocookie) {
+                        host = 'https://www.youtube-nocookie.com';
+                    }
+
                     if (self._player !== undefined) {
                         return;
                     }
@@ -182,6 +189,7 @@ define(['jquery', 'jquery/ui'], function ($) {
                         width: self._width,
                         videoId: self._code,
                         playerVars: self._params,
+                        host: host,
                         events: {
 
                             /**
@@ -317,7 +325,7 @@ define(['jquery', 'jquery/ui'], function ($) {
             if (this._loop) {
                 additionalParams += '&loop=1';
             }
-            src = window.location.protocol + '//player.vimeo.com/video/' +
+            src = 'https://player.vimeo.com/video/' +
                 this._code + '?api=1&player_id=vimeo' +
                 this._code +
                 timestamp +
@@ -332,6 +340,7 @@ define(['jquery', 'jquery/ui'], function ($) {
                     .attr('webkitallowfullscreen', '')
                     .attr('mozallowfullscreen', '')
                     .attr('allowfullscreen', '')
+                    .attr('referrerPolicy', 'origin')
             );
             this._player = window.$f(this.element.children(':first')[0]);
 

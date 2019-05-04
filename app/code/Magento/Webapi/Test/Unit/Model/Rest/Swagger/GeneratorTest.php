@@ -10,7 +10,7 @@ namespace Magento\Webapi\Test\Unit\Model\Rest\Swagger;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     const OPERATION_NAME = 'operationName';
 
@@ -74,12 +74,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(self::OPERATION_NAME));
 
         $this->customAttributeTypeLocatorMock = $this->getMockBuilder(
-            \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+            \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface::class
+        )->disableOriginalConstructor()->setMethods(['getDataTypes'])
+            ->getMockForAbstractClass();
         $this->customAttributeTypeLocatorMock->expects($this->any())
-            ->method('getAllServiceDataInterfaces')
-            ->willReturn(['$customAttributeClass']);
+            ->method('getDataTypes')
+            ->willReturn(['customAttributeClass']);
 
         $storeMock = $this->getMockBuilder(
             \Magento\Store\Model\Store::class
@@ -113,7 +113,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'cache' => $this->cacheMock,
                 'typeProcessor' => $this->typeProcessorMock,
                 'serviceMetadata' => $this->serviceMetadataMock,
-                'customAttributeTypeLocator' => $this->customAttributeTypeLocatorMock,
+                'serviceTypeList' => $this->customAttributeTypeLocatorMock,
                 'authorization' => $authorizationMock,
                 'serializer' => $this->serializer
             ]
@@ -223,7 +223,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                     ]
                 ],
                 // @codingStandardsIgnoreStart
-                '{"swagger":"2.0","info":{"version":"","title":""},"host":"magento.host","basePath":"/rest/default","schemes":["http://"],"tags":[{"name":"testModule5AllSoapAndRestV2","description":"AllSoapAndRestInterface"}],"paths":{"/V1/testModule5":{"post":{"tags":["testModule5AllSoapAndRestV2"],"description":"Add new item.","operationId":"' . self::OPERATION_NAME . 'Post","parameters":[{"name":"$body","in":"body","schema":{"required":["item"],"properties":{"item":{"$ref":"#/definitions/test-module5-v2-entity-all-soap-and-rest"}},"type":"object"}}],"responses":{"200":{"description":"200 Success.","schema":{"$ref":"#/definitions/test-module5-v2-entity-all-soap-and-rest"}},"401":{"description":"401 Unauthorized","schema":{"$ref":"#/definitions/error-response"}},"500":{"description":"Internal Server error","schema":{"$ref":"#/definitions/error-response"}},"default":{"description":"Unexpected error","schema":{"$ref":"#/definitions/error-response"}}}}}},"definitions":{"error-response":{"type":"object","properties":{"message":{"type":"string","description":"Error message"},"errors":{"$ref":"#/definitions/error-errors"},"code":{"type":"integer","description":"Error code"},"parameters":{"$ref":"#/definitions/error-parameters"},"trace":{"type":"string","description":"Stack trace"}},"required":["message"]},"error-errors":{"type":"array","description":"Errors list","items":{"$ref":"#/definitions/error-errors-item"}},"error-errors-item":{"type":"object","description":"Error details","properties":{"message":{"type":"string","description":"Error message"},"parameters":{"$ref":"#/definitions/error-parameters"}}},"error-parameters":{"type":"array","description":"Error parameters list","items":{"$ref":"#/definitions/error-parameters-item"}},"error-parameters-item":{"type":"object","description":"Error parameters item","properties":{"resources":{"type":"string","description":"ACL resource"},"fieldName":{"type":"string","description":"Missing or invalid field name"},"fieldValue":{"type":"string","description":"Incorrect field value"}}},"test-module5-v2-entity-all-soap-and-rest":{"type":"object","description":"Some Data Object","properties":{"price":{"type":"integer"}},"required":["price"]}}}'
+                '{"swagger":"2.0","info":{"version":"","title":""},"host":"magento.host","basePath":"/rest/default","schemes":["http://"],"tags":[{"name":"testModule5AllSoapAndRestV2","description":"AllSoapAndRestInterface"}],"paths":{"/V1/testModule5":{"post":{"tags":["testModule5AllSoapAndRestV2"],"description":"Add new item.","operationId":"' . self::OPERATION_NAME . 'Post","parameters":[{"name":"operationNamePostBody","in":"body","schema":{"required":["item"],"properties":{"item":{"$ref":"#/definitions/test-module5-v2-entity-all-soap-and-rest"}},"type":"object"}}],"responses":{"200":{"description":"200 Success.","schema":{"$ref":"#/definitions/test-module5-v2-entity-all-soap-and-rest"}},"401":{"description":"401 Unauthorized","schema":{"$ref":"#/definitions/error-response"}},"500":{"description":"Internal Server error","schema":{"$ref":"#/definitions/error-response"}},"default":{"description":"Unexpected error","schema":{"$ref":"#/definitions/error-response"}}}}}},"definitions":{"error-response":{"type":"object","properties":{"message":{"type":"string","description":"Error message"},"errors":{"$ref":"#/definitions/error-errors"},"code":{"type":"integer","description":"Error code"},"parameters":{"$ref":"#/definitions/error-parameters"},"trace":{"type":"string","description":"Stack trace"}},"required":["message"]},"error-errors":{"type":"array","description":"Errors list","items":{"$ref":"#/definitions/error-errors-item"}},"error-errors-item":{"type":"object","description":"Error details","properties":{"message":{"type":"string","description":"Error message"},"parameters":{"$ref":"#/definitions/error-parameters"}}},"error-parameters":{"type":"array","description":"Error parameters list","items":{"$ref":"#/definitions/error-parameters-item"}},"error-parameters-item":{"type":"object","description":"Error parameters item","properties":{"resources":{"type":"string","description":"ACL resource"},"fieldName":{"type":"string","description":"Missing or invalid field name"},"fieldValue":{"type":"string","description":"Incorrect field value"}}},"test-module5-v2-entity-all-soap-and-rest":{"type":"object","description":"Some Data Object","properties":{"price":{"type":"integer"}},"required":["price"]}}}'
                 // @codingStandardsIgnoreEnd
             ],
             [
@@ -280,7 +280,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $typeName
      * @param array $result
-     * @dataProvider testGetObjectSchemaDataProvider
+     * @dataProvider getObjectSchemaDataProvider
      */
     public function testGetObjectSchema($typeName, $description, $result)
     {
@@ -295,7 +295,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(json_encode($result), json_encode($actual));
     }
 
-    public function testGetObjectSchemaDataProvider()
+    /**
+     * @return array
+     */
+    public function getObjectSchemaDataProvider()
     {
         return [
             [
@@ -332,7 +335,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $typeData
      * @param array $expected
-     * @dataProvider testGenerateDefinitionDataProvider
+     * @dataProvider generateDefinitionDataProvider
      */
     public function testGenerateDefinition($typeData, $expected)
     {
@@ -354,7 +357,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(json_encode($expected), json_encode($actual));
     }
 
-    public function testGenerateDefinitionDataProvider()
+    /**
+     * @return array
+     */
+    public function generateDefinitionDataProvider()
     {
         return [
             [

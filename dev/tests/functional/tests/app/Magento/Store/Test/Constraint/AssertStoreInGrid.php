@@ -31,7 +31,7 @@ class AssertStoreInGrid extends AbstractConstraint
     {
         $storeName = $store->getName();
         $storeIndex->open()->getStoreGrid()->search(['store_title' => $storeName]);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $storeIndex->getStoreGrid()->isStoreExists($storeName),
             'Store \'' . $storeName . '\' is not present in grid.'
         );

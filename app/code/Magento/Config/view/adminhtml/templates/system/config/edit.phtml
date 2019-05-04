@@ -14,26 +14,58 @@
  *  getSaveUrl() - string
  *  getSections() - array
  *  getForm() - html
+ *  getConfigSearchParamsJson() - string
  */
 ?>
-<form action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
-    <?php echo $block->getBlockHtml('formkey')?>
+<style>
+    .highlighted {
+        background-color: #DFF7FF!important;
+    }
+</style>
+<form action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
+    <?= $block->getBlockHtml('formkey') ?>
     <div class="accordion">
-        <?php echo $block->getChildHtml('form') ?>
+        <?= $block->getChildHtml('form') ?>
     </div>
 </form>
 <script>
 require([
     "jquery",
     "uiRegistry",
-    "jquery/jquery.hashchange",
     "mage/mage",
     "prototype",
     "mage/adminhtml/form",
-    "domReady!"
+    "domReady!",
+    "jquery/ui"
 ], function(jQuery, registry){
 
     var adminSystemConfig = {
+        navigateToElement: function (searchRequest) {
+            if ('section' in searchRequest) {
+                var section = searchRequest.section;
+            }
+            if ('group' in searchRequest) {
+                var group = searchRequest.group;
+            }
+            if ('field' in searchRequest) {
+                var field = searchRequest.field;
+            }
+            if (typeof section === 'undefined') {
+                return;
+            }
+            if (typeof group !== 'undefined') {
+                var groupElement = jQuery('#' + section + '_' + group);
+
+                var parentSection = groupElement.parents('.section-config');
+                parentSection.addClass('highlighted');
+                setTimeout(function() {
+                    parentSection.removeClass('highlighted', 2000, "easeInBack");
+                }, 3000);
+                if (!parentSection.hasClass('active')) {
+                    Fieldset.toggleCollapse(section + '_' + group);
+                }
+            }
+        },
         getUp: function (element, tag) {
             var $element = Element.extend(element);
             if (typeof $element.upTag == 'undefined') {
@@ -346,9 +378,11 @@ require([
         return false;
     };
 
-    jQuery(window).hashchange(handleHash);
+    window.addEventListener('hashchange', handleHash);
     handleHash();
 
     registry.set('adminSystemConfig', adminSystemConfig);
+
+    adminSystemConfig.navigateToElement(<?php echo /* @noEscape */ $block->getConfigSearchParamsJson(); ?>);
 });
 </script>

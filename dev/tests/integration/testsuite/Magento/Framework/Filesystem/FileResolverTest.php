@@ -9,7 +9,7 @@ namespace Magento\Framework\Filesystem;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class FileResolverTest extends \PHPUnit_Framework_TestCase
+class FileResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Path to add to include path

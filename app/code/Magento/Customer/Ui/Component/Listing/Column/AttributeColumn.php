@@ -13,7 +13,9 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
 
 class AttributeColumn extends Column
 {
-    /** @var AttributeRepository */
+    /**
+     * @var \Magento\Customer\Ui\Component\Listing\AttributeRepository
+     */
     protected $attributeRepository;
 
     /**

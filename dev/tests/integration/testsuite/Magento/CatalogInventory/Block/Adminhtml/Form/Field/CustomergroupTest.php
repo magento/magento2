@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
 
-class CustomergroupTest extends \PHPUnit_Framework_TestCase
+class CustomergroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Block\Adminhtml\Form\Field\Customergroup
@@ -22,7 +20,7 @@ class CustomergroupTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function test_toHtml()
+    public function testToHtml()
     {
         $this->_block->setClass('customer_group_select');
         $this->_block->setId('123');

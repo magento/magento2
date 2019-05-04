@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Downloadable\Block\Adminhtml\Sales\Items\Column\Downloadable;
 
 use Magento\Downloadable\Model\Link;
@@ -16,6 +14,7 @@ use Magento\Store\Model\ScopeInterface;
  * Sales Order downloadable items name column renderer
  *
  * @api
+ * @since 100.0.2
  */
 class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
 {

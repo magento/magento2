@@ -3,8 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Condition;
 
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Framework\App\ScopeResolverInterface;
+use \Magento\Framework\DB\Adapter\AdapterInterface;
+use \Magento\Framework\DB\Select;
+use Magento\Framework\Locale\Format;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 use \Magento\Rule\Model\Condition\Context;
 use \Magento\Backend\Helper\Data;
 use \Magento\Eav\Model\Config;
@@ -20,7 +28,7 @@ use \Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /** @var SalesRuleProduct */
     protected $model;
@@ -46,11 +54,17 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /** @var Collection|\PHPUnit_Framework_MockObject_MockObject */
     protected $collectionMock;
 
-    /** @var FormatInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $formatMock;
+    /** @var FormatInterface */
+    protected $format;
 
     /** @var AttributeLoaderInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $attributeLoaderInterfaceMock;
+
+    /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $adapterInterfaceMock;
+
+    /** @var Select|\PHPUnit_Framework_MockObject_MockObject */
+    protected $selectMock;
 
     /**
      * Setup the test
@@ -78,20 +92,54 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->attributeLoaderInterfaceMock
             ->expects($this->any())
             ->method('getAttributesByCode')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
+        $this->selectMock = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['distinct', 'from', 'where'])
+            ->getMock();
+        $this->selectMock
+            ->expects($this->any())
+            ->method('distinct')
+            ->willReturnSelf();
+        $this->selectMock
+            ->expects($this->any())
+            ->method('from')
+            ->with($this->anything(), $this->anything())
+            ->willReturnSelf();
+        $this->adapterInterfaceMock = $this->getMockBuilder(AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['fetchCol', 'select'])
+            ->getMockForAbstractClass();
+        $this->adapterInterfaceMock
+            ->expects($this->any())
+            ->method('select')
+            ->willReturn($this->selectMock);
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['loadAllAttributes'])
+            ->setMethods(['loadAllAttributes', 'getConnection', 'getTable'])
             ->getMock();
         $this->productMock
             ->expects($this->any())
             ->method('loadAllAttributes')
-            ->will($this->returnValue($this->attributeLoaderInterfaceMock));
+            ->willReturn($this->attributeLoaderInterfaceMock);
+        $this->productMock
+            ->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->adapterInterfaceMock);
+        $this->productMock
+            ->expects($this->any())
+            ->method('getTable')
+            ->with($this->anything())
+            ->willReturn('table_name');
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->formatMock = $this->getMockBuilder(FormatInterface::class)
-            ->getMockForAbstractClass();
+        $this->format = new Format(
+            $this->getMockBuilder(ScopeResolverInterface::class)->disableOriginalConstructor()->getMock(),
+            $this->getMockBuilder(ResolverInterface::class)->disableOriginalConstructor()->getMock(),
+            $this->getMockBuilder(CurrencyFactory::class)->disableOriginalConstructor()->getMock()
+        );
+
         $this->model = new SalesRuleProduct(
             $this->contextMock,
             $this->backendHelperMock,
@@ -100,14 +148,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $this->productRepositoryMock,
             $this->productMock,
             $this->collectionMock,
-            $this->formatMock
+            $this->format
         );
     }
 
     /**
      * @return array
      */
-    public function testGetValueElementChooserUrlDataProvider()
+    public function getValueElementChooserUrlDataProvider()
     {
         return [
             'category_ids_without_js_object' => [
@@ -140,7 +188,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @param string $attribute
      * @param string $url
      * @param string $jsObject
-     * @dataProvider testGetValueElementChooserUrlDataProvider
+     * @dataProvider getValueElementChooserUrlDataProvider
      */
     public function testGetValueElementChooserUrl($attribute, $url, $jsObject = '')
     {
@@ -157,5 +205,118 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertEquals($url, $this->model->getValueElementChooserUrl());
+    }
+
+    /**
+     * test ValidateCategoriesIgnoresVisibility
+     */
+    public function testValidateCategoriesIgnoresVisibility(): void
+    {
+        /* @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAttribute', 'getId', 'setQuoteItemQty', 'setQuoteItemPrice'])
+            ->getMock();
+        $product
+            ->expects($this->any())
+            ->method('setQuoteItemQty')
+            ->willReturnSelf();
+        $product
+            ->expects($this->any())
+            ->method('setQuoteItemPrice')
+            ->willReturnSelf();
+        /* @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
+        $item = $this->getMockBuilder(AbstractItem::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getProduct'])
+            ->getMockForAbstractClass();
+        $item->expects($this->any())
+            ->method('getProduct')
+            ->willReturn($product);
+        $this->model->setAttribute('category_ids');
+
+        $this->selectMock
+            ->expects($this->once())
+            ->method('where')
+            ->with($this->logicalNot($this->stringContains('visibility')), $this->anything(), $this->anything());
+
+        $this->model->validate($item);
+    }
+
+    /**
+     * @param boolean $isValid
+     * @param string $conditionValue
+     * @param string $operator
+     * @param double $productPrice
+     * @dataProvider localisationProvider
+     */
+    public function testQuoteLocaleFormatPrice($isValid, $conditionValue, $operator = '>=', $productPrice = 2000.00)
+    {
+        $attr = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAttribute'])
+            ->getMockForAbstractClass();
+
+        $attr->expects($this->any())
+            ->method('getAttribute')
+            ->willReturn('');
+
+        /* @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setQuoteItemPrice', 'getResource', 'hasData', 'getData',])
+            ->getMock();
+
+        $product->expects($this->any())
+            ->method('setQuoteItemPrice')
+            ->willReturnSelf();
+
+        $product->expects($this->any())
+            ->method('getResource')
+            ->willReturn($attr);
+
+        $product->expects($this->any())
+            ->method('hasData')
+            ->willReturn(true);
+
+        $product->expects($this->any())
+            ->method('getData')
+            ->with('quote_item_price')
+            ->willReturn($productPrice);
+
+        /* @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
+        $item = $this->getMockBuilder(AbstractItem::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getPrice', 'getProduct',])
+            ->getMockForAbstractClass();
+
+        $item->expects($this->any())
+            ->method('getPrice')
+            ->willReturn($productPrice);
+
+        $item->expects($this->any())
+            ->method('getProduct')
+            ->willReturn($product);
+
+        $this->model->setAttribute('quote_item_price');
+        $this->model->setData('operator', $operator);
+
+        $this->assertEquals($isValid, $this->model->setValue($conditionValue)->validate($item));
+    }
+
+    /**
+     * DataProvider for testQuoteLocaleFormatPrice
+     *
+     * @return array
+     */
+    public function localisationProvider(): array
+    {
+        return [
+            'number' => [true, 500.01],
+            'locale' => [true, '1,500.03'],
+            'operation' => [true, '1,500.03', '!='],
+            'stringOperation' => [false, '1,500.03', '{}'],
+            'smallPrice' => [false, '1,500.03', '>=', 1000],
+        ];
     }
 }

@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Model\ResourceModel\Type\Db;
 
+/**
+ * Interface \Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface
+ *
+ */
 interface ConnectionFactoryInterface
 {
     /**

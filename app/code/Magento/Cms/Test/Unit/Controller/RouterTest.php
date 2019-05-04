@@ -8,7 +8,7 @@ namespace Magento\Cms\Test\Unit\Controller;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RouterTest extends \PHPUnit_Framework_TestCase
+class RouterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Controller\Router
@@ -78,7 +78,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testMatchCmsControllerRouterMatchBeforeEventParams()
     {
         $identifier = '/test';
-        $trimedIdentifier = 'test';
+        $trimmedIdentifier = 'test';
         $pageId = 1;
         $storeId = 1;
 
@@ -114,10 +114,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $requestMock->expects($this->once())
             ->method('setAlias')
-            ->with(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $trimedIdentifier)
+            ->with(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $trimmedIdentifier)
             ->willReturnSelf();
 
-        $condition = new \Magento\Framework\DataObject(['identifier' => $trimedIdentifier, 'continue' => true]);
+        $condition = new \Magento\Framework\DataObject(['identifier' => $trimmedIdentifier, 'continue' => true]);
 
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
@@ -135,7 +135,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $pageMock->expects($this->once())
             ->method('checkIdentifier')
-            ->with($trimedIdentifier, $storeId)
+            ->with($trimmedIdentifier, $storeId)
             ->willReturn($pageId);
 
         $this->pageFactoryMock->expects($this->once())

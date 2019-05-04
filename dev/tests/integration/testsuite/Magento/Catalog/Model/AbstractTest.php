@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model;
 
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Stub class name for class under test

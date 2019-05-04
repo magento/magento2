@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Webapi\Model\ServiceMetadata">
+        <plugin name="webapiServiceMetadataAsync" type="Magento\WebapiAsync\Plugin\ServiceMetadata" />
+    </type>
+    <type name="Magento\Webapi\Model\Cache\Type\Webapi">
+        <plugin name="webapiCacheAsync" type="Magento\WebapiAsync\Plugin\Cache\Webapi" />
+    </type>
+    <virtualType name="Magento\WebapiAsync\Model\VirtualType\Rest\Config" type="Magento\Webapi\Model\Rest\Config">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\WebapiAsync\Model\BulkServiceConfig</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\WebapiAsync\Controller\VirtualType\Rest\Router" type="Magento\Webapi\Controller\Rest\Router">
+        <arguments>
+            <argument name="apiConfig" xsi:type="object">Magento\WebapiAsync\Model\VirtualType\Rest\Config</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\WebapiAsync\Controller\VirtualType\Rest\RequestValidator" type="Magento\Webapi\Controller\Rest\RequestValidator">
+        <arguments>
+            <argument name="router" xsi:type="object">Magento\WebapiAsync\Controller\VirtualType\Rest\Router</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\WebapiAsync\Controller\VirtualType\InputParamsResolver" type="Magento\WebapiAsync\Controller\Rest\Asynchronous\InputParamsResolver">
+        <arguments>
+            <argument name="requestValidator" xsi:type="object">Magento\WebapiAsync\Controller\VirtualType\Rest\RequestValidator</argument>
+            <argument name="isBulk" xsi:type="boolean">true</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\WebapiAsync\Controller\Rest\VirtualType\AsynchronousBulkRequestProcessor" type="Magento\WebapiAsync\Controller\Rest\AsynchronousRequestProcessor">
+        <arguments>
+            <argument name="inputParamsResolver" xsi:type="object">Magento\WebapiAsync\Controller\VirtualType\InputParamsResolver</argument>
+            <argument name="processorPath" xsi:type="const">Magento\WebapiAsync\Controller\Rest\AsynchronousRequestProcessor::BULK_PROCESSOR_PATH</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\WebapiAsync\Controller\Rest\VirtualType\AsynchronousBulkSchemaRequestProcessor" type="Magento\WebapiAsync\Controller\Rest\AsynchronousSchemaRequestProcessor">
+        <arguments>
+            <argument name="processorPath" xsi:type="const">Magento\WebapiAsync\Controller\Rest\AsynchronousSchemaRequestProcessor::BULK_PROCESSOR_PATH</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Webapi\Controller\Rest">
+        <plugin name="webapiContorllerRestAsync" type="Magento\WebapiAsync\Plugin\ControllerRest" />
+    </type>
+</config>

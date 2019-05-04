@@ -15,42 +15,32 @@
     <div class="fieldset">
         <?php if ($block->shouldRenderQuantity()): ?>
         <div class="field qty">
-            <label class="label" for="qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?></span></label>
+            <label class="label" for="qty"><span><?= /* @escapeNotVerified */ __('Qty') ?></span></label>
             <div class="control">
                 <input type="number"
                        name="qty"
                        id="qty"
-                       value="<?php /* @escapeNotVerified */ echo $block->getProductDefaultQty() * 1 ?>"
-                       title="<?php /* @escapeNotVerified */ echo __('Qty') ?>"
+                       min="0"
+                       value="<?= /* @escapeNotVerified */ $block->getProductDefaultQty() * 1 ?>"
+                       title="<?= /* @escapeNotVerified */ __('Qty') ?>"
                        class="input-text qty"
-                       data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+                       data-validate="<?= $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
                        />
             </div>
         </div>
         <?php endif; ?>
         <div class="actions">
             <button type="submit"
-                    title="<?php /* @escapeNotVerified */ echo $buttonTitle ?>"
+                    title="<?= /* @escapeNotVerified */ $buttonTitle ?>"
                     class="action primary tocart"
-                    id="product-addtocart-button">
-                <span><?php /* @escapeNotVerified */ echo $buttonTitle ?></span>
+                    id="product-addtocart-button" disabled>
+                <span><?= /* @escapeNotVerified */ $buttonTitle ?></span>
             </button>
-            <?php echo $block->getChildHtml('', true) ?>
+            <?= $block->getChildHtml('', true) ?>
         </div>
     </div>
 </div>
 <?php endif; ?>
-<?php if ($block->isRedirectToCartEnabled()) : ?>
-<script type="text/x-magento-init">
-    {
-        "#product_addtocart_form": {
-            "Magento_Catalog/product/view/validation": {
-                "radioCheckboxClosest": ".nested"
-            }
-        }
-    }
-</script>
-<?php else : ?>
 <script type="text/x-magento-init">
     {
         "#product_addtocart_form": {
@@ -58,4 +48,3 @@
         }
     }
 </script>
-<?php endif; ?>

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DB\Query;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -75,7 +76,9 @@ class Generator
         $fromSelect = $select->getPart(\Magento\Framework\DB\Select::FROM);
         if (empty($fromSelect)) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase('Select object must have correct "FROM" part')
+                new \Magento\Framework\Phrase(
+                    'The select object must have the correct "FROM" part. Verify and try again.'
+                )
             );
         }
 
@@ -131,7 +134,7 @@ class Generator
      * @return BatchIteratorInterface
      * @throws LocalizedException Throws if incorrect "FROM" part in \Select exists
      * @see \Magento\Framework\DB\Query\Generator
-     * @deprecated This is a temporary solution which is made due to the fact that we
+     * @deprecated 100.2.0 This is a temporary solution which is made due to the fact that we
      *             can't change method generate() in version 2.1 due to a backwards incompatibility.
      *             In 2.2 version need to use original method generate() with additional parameter.
      */
@@ -143,7 +146,9 @@ class Generator
         $fromSelect = $select->getPart(\Magento\Framework\DB\Select::FROM);
         if (empty($fromSelect)) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase('Select object must have correct "FROM" part')
+                new \Magento\Framework\Phrase(
+                    'The select object must have the correct "FROM" part. Verify and try again.'
+                )
             );
         }
 

@@ -11,6 +11,9 @@ use Magento\CatalogSearch\Model\Search\RequestGenerator;
 /**
  * Purpose of class is to resolve table alias for Search Request filter
  * @api
+ * @since 100.1.6
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class AliasResolver
 {
@@ -23,6 +26,7 @@ class AliasResolver
     /**
      * @param \Magento\Framework\Search\Request\FilterInterface $filter
      * @return string alias of the filter in database
+     * @since 100.1.6
      */
     public function getAlias(\Magento\Framework\Search\Request\FilterInterface $filter)
     {

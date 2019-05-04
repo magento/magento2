@@ -140,7 +140,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     /**
      * Set state updated time
      *
-     * @param string|int|\DateTime $updated
+     * @param string|int|\DateTimeInterface $updated
      * @return $this
      */
     public function setUpdated($updated)

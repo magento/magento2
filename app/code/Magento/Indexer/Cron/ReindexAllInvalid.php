@@ -5,8 +5,6 @@
  */
 namespace Magento\Indexer\Cron;
 
-use Magento\Indexer\Model\Indexer;
-
 class ReindexAllInvalid
 {
     /**

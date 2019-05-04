@@ -44,5 +44,13 @@ class CustomerGrid extends DataGrid
         'entity_id_to' => [
             'selector' => '[name="entity_id[to]"]',
         ],
+        'dob_from' => [
+            'selector' => '[name="dob[from]"]',
+            'input' => 'datepicker',
+        ],
+        'dob_to' => [
+            'selector' => '[name="dob[to]"]',
+            'input' => 'datepicker',
+        ],
     ];
 }

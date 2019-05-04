@@ -20,6 +20,7 @@ use Magento\Payment\Model\MethodInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -83,6 +84,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get config name of method model
+     *
      * @param string $code
      * @return string
      */
@@ -119,7 +122,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param null|string|bool|int $store
      * @param Quote|null $quote
      * @return AbstractMethod[]
-     * @deprecated
+     * @deprecated 100.1.3
      * @see \Magento\Payment\Api\PaymentMethodListInterface
      */
     public function getStoreMethods($store = null, $quote = null)
@@ -150,15 +153,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         @uasort(
             $res,
             function (MethodInterface $a, MethodInterface $b) {
-                if ((int)$a->getConfigData('sort_order') < (int)$b->getConfigData('sort_order')) {
-                    return -1;
-                }
-
-                if ((int)$a->getConfigData('sort_order') > (int)$b->getConfigData('sort_order')) {
-                    return 1;
-                }
-
-                return 0;
+                return (int)$a->getConfigData('sort_order') <=> (int)$b->getConfigData('sort_order');
             }
         );
 
@@ -266,10 +261,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $groupRelations = [];
 
         foreach ($this->getPaymentMethods() as $code => $data) {
-            if (isset($data['title'])) {
-                $methods[$code] = $data['title'];
-            } else {
-                $methods[$code] = $this->getMethodInstance($code)->getConfigData('title', $store);
+            if (!empty($data['active'])) {
+                $storedTitle = $this->getMethodInstance($code)->getConfigData('title', $store);
+                if (isset($storedTitle)) {
+                    $methods[$code] = $storedTitle;
+                } elseif (isset($data['title'])) {
+                    $methods[$code] = $data['title'];
+                }
             }
             if ($asLabelValue && $withGroups && isset($data['group'])) {
                 $groupRelations[$code] = $data['group'];
@@ -292,6 +290,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             foreach ($methods as $code => $title) {
                 if (isset($groups[$code])) {
                     $labelValues[$code]['label'] = $title;
+                    if (!isset($labelValues[$code]['value'])) {
+                        $labelValues[$code]['value'] = null;
+                    }
                 } elseif (isset($groupRelations[$code])) {
                     unset($labelValues[$code]);
                     $labelValues[$groupRelations[$code]]['value'][$code] = ['value' => $code, 'label' => $title];

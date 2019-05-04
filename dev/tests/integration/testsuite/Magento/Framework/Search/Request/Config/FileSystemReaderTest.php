@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Search\Request\Config;
 
-class FileSystemReaderTest extends \PHPUnit_Framework_TestCase
+class FileSystemReaderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  FilesystemReader */
     protected $object;

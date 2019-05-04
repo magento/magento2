@@ -10,7 +10,7 @@ use \Magento\Sales\Model\CronJob\AggregateSalesReportBestsellersData;
 /**
  * Tests Magento\Sales\Model\CronJob\AggregateSalesReportBestsellersDataTest
  */
-class AggregateSalesReportBestsellersDataTest extends \PHPUnit_Framework_TestCase
+class AggregateSalesReportBestsellersDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject

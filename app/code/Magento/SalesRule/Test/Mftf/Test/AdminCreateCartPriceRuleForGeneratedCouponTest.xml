@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCartPriceRuleForGeneratedCouponTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Create cart price rule"/>
+            <title value="Admin should be able to create a cart price rule for auto generated coupon codes"/>
+            <description value="Admin should be able to create a cart price rule for auto generated coupon codes"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-75"/>
+            <group value="SalesRule"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <!-- Delete the cart price rule we made during the test -->
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
+                <argument name="ruleName" value="{{_defaultCoupon.code}}"/>
+            </actionGroup>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Create a cart price rule  -->
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForPriceList"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{_defaultCoupon.code}}" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
+        <checkOption selector="{{AdminCartPriceRulesFormSection.useAutoGeneration}}" stepKey="tickAutoGeneration"/>
+        <generateDate date="-1 day" format="m/d/Y" stepKey="yesterdayDate"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$yesterdayDate}" stepKey="fillFromDate"/>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="selectActionType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="0.99" stepKey="fillDiscountAmount"/>
+        <click selector="{{AdminCartPriceRulesFormSection.saveAndContinue}}" stepKey="clickSaveAndContinueButton"/>
+
+        <!-- Generate some coupon codes -->
+        <click selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}" stepKey="expandCouponSection"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponQty}}" userInput="10" stepKey="fillCouponQty"/>
+        <click selector="{{AdminCartPriceRulesFormSection.generateCouponsButton}}" stepKey="clickGenerate"/>
+        <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="Message is added to queue, wait to get your coupons soon" stepKey="seeGenerationSuccess"/>
+
+        <!-- Run cron twice -->
+        <magentoCLI command="cron:run" stepKey="runCron1"/>
+        <magentoCLI command="cron:run" stepKey="runCron2"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitFormToReload1"/>
+        <click selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}" stepKey="expandCouponSection2"/>
+
+        <!-- Grab a coupon code and hold on to it for later -->
+        <grabTextFrom selector="{{AdminCartPriceRulesFormSection.generatedCouponByIndex('1')}}" stepKey="grabCouponCode"/>
+
+        <!-- Create a product to check the storefront -->
+        <actionGroup ref="FillAdminSimpleProductForm" stepKey="fillProductFieldsInAdmin">
+            <argument name="category" value="$$createPreReqCategory$$"/>
+            <argument name="simpleProduct" value="_defaultProduct"/>
+        </actionGroup>
+
+        <!-- Spot check the storefront -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
+        <waitForPageLoad stepKey="waitForAddToCart"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
+        <waitForPageLoad stepKey="waitForCartPage"/>
+        <conditionalClick selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" dependentSelector="{{StorefrontSalesRuleCartCouponSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader"/>
+        <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="waitForCouponField" />
+        <fillField selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" userInput="{$grabCouponCode}" stepKey="fillCouponField"/>
+        <click selector="{{StorefrontSalesRuleCartCouponSection.applyButton}}" stepKey="clickApplyButton"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
+        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$0.99" stepKey="seeDiscountTotal"/>
+    </test>
+</tests>

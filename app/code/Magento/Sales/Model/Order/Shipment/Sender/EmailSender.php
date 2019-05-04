@@ -7,9 +7,12 @@ namespace Magento\Sales\Model\Order\Shipment\Sender;
 
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Order\Shipment\SenderInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Email notification sender for Shipment.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailSender extends Sender implements SenderInterface
 {
@@ -86,6 +89,7 @@ class EmailSender extends Sender implements SenderInterface
      * @param bool $forceSyncMode
      *
      * @return bool
+     * @throws \Exception
      */
     public function send(
         \Magento\Sales\Api\Data\OrderInterface $order,
@@ -93,7 +97,7 @@ class EmailSender extends Sender implements SenderInterface
         \Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
         $forceSyncMode = false
     ) {
-        $shipment->setSendEmail(true);
+        $shipment->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $transport = [
@@ -106,13 +110,17 @@ class EmailSender extends Sender implements SenderInterface
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
                 'formattedBillingAddress' => $this->getFormattedBillingAddress($order)
             ];
+            $transportObject = new DataObject($transport);
 
+            /**
+             * Event argument `transport` is @deprecated. Use `transportObject` instead.
+             */
             $this->eventManager->dispatch(
                 'email_shipment_set_template_vars_before',
-                ['sender' => $this, 'transport' => $transport]
+                ['sender' => $this, 'transport' => $transportObject->getData(), 'transportObject' => $transportObject]
             );
 
-            $this->templateContainer->setTemplateVars($transport);
+            $this->templateContainer->setTemplateVars($transportObject->getData());
 
             if ($this->checkAndSend($order)) {
                 $shipment->setEmailSent(true);
@@ -138,6 +146,7 @@ class EmailSender extends Sender implements SenderInterface
      * @param \Magento\Sales\Api\Data\OrderInterface $order
      *
      * @return string
+     * @throws \Exception
      */
     private function getPaymentHtml(\Magento\Sales\Api\Data\OrderInterface $order)
     {

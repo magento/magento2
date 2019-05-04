@@ -6,9 +6,13 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $block \Magento\Catalog\Block\Catalog\Product\View\Addto\Compare */
+/** @var $block \Magento\Catalog\Block\Product\View\Addto\Compare */
 ?>
 
-<a href="#" data-post='<?php /* @escapeNotVerified */ echo $block->getPostDataParams();?>'
+<?php $viewModel = $block->getData('addToCompareViewModel'); ?>
+<?php if ($viewModel->isAvailableForCompare($block->getProduct())): ?>
+<a href="#" data-post='<?= /* @escapeNotVerified */ $block->getPostDataParams() ?>'
         data-role="add-to-links"
-        class="action tocompare"><span><?php /* @escapeNotVerified */ echo __('Add to Compare') ?></span></a>
+        class="action tocompare"><span><?= /* @escapeNotVerified */ __('Add to Compare') ?></span></a>
+<?php endif; ?>
+

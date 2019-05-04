@@ -6,11 +6,10 @@
 
 namespace Magento\Analytics\ReportXml\DB;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Sql\ColumnValueExpression;
 
 /**
- * Class ColumnsResolver
- *
  * Resolves columns names
  */
 class ColumnsResolver
@@ -21,13 +20,40 @@ class ColumnsResolver
     private $nameResolver;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    private $connection;
+
+    /**
      * ColumnsResolver constructor.
+     *
      * @param NameResolver $nameResolver
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        NameResolver $nameResolver
+        NameResolver $nameResolver,
+        ResourceConnection $resourceConnection
     ) {
         $this->nameResolver = $nameResolver;
+        $this->resourceConnection = $resourceConnection;
+    }
+
+    /**
+     * Returns connection
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    private function getConnection()
+    {
+        if (!$this->connection) {
+            $this->connection = $this->resourceConnection->getConnection();
+        }
+        return $this->connection;
     }
 
     /**
@@ -50,11 +76,13 @@ class ColumnsResolver
             $columnName = $this->nameResolver->getName($attributeData);
             if (isset($attributeData['function'])) {
                 $prefix = '';
-                if (isset($attributeData['distinct']) && $attributeData['distinct'] == true) {
+                if (!empty($attributeData['distinct'])) {
                     $prefix = ' DISTINCT ';
                 }
                 $expression = new ColumnValueExpression(
-                    strtoupper($attributeData['function']) . '(' . $prefix . $tableAlias . '.' . $columnName . ')'
+                    strtoupper($attributeData['function']) . '(' . $prefix
+                    . $this->getConnection()->quoteIdentifier($tableAlias . '.' . $columnName)
+                    . ')'
                 );
             } else {
                 $expression = $tableAlias . '.' . $columnName;

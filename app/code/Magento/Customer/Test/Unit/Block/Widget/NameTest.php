@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
@@ -17,7 +15,7 @@ use Magento\Customer\Block\Widget\Name;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NameTest extends \PHPUnit_Framework_TestCase
+class NameTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
      * Constant values used throughout the various unit tests.
@@ -74,13 +72,13 @@ class NameTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_escaper = $this->getMock(\Magento\Framework\Escaper::class, [], [], '', false);
-        $context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $this->_escaper = $this->createMock(\Magento\Framework\Escaper::class);
+        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->_escaper));
 
-        $addressHelper = $this->getMock(\Magento\Customer\Helper\Address::class, [], [], '', false);
+        $addressHelper = $this->createMock(\Magento\Customer\Helper\Address::class);
 
-        $this->_options = $this->getMock(\Magento\Customer\Model\Options::class, [], [], '', false);
+        $this->_options = $this->createMock(\Magento\Customer\Model\Options::class);
 
         $this->attribute = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
@@ -159,6 +157,9 @@ class NameTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_block->{$method}());
     }
 
+    /**
+     * @return array
+     */
     public function methodDataProvider()
     {
         return [
@@ -211,8 +212,8 @@ class NameTest extends \PHPUnit_Framework_TestCase
          * special characters so that the escapeHtml() method returns a htmlspecialchars translated value.
          */
         $customer = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class)->getMockForAbstractClass(
-            );
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        )->getMockForAbstractClass();
         $customer->expects($this->once())->method('getPrefix')->willReturn('  <' . self::PREFIX . '>  ');
 
         $this->_block->setObject($customer);
@@ -238,8 +239,8 @@ class NameTest extends \PHPUnit_Framework_TestCase
     public function testGetPrefixOptionsEmpty()
     {
         $customer = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class)->getMockForAbstractClass(
-            );
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        )->getMockForAbstractClass();
         $this->_block->setObject($customer);
 
         $this->_options->expects(
@@ -260,8 +261,8 @@ class NameTest extends \PHPUnit_Framework_TestCase
          * a properly htmlspecialchars translated value is returned.
          */
         $customer = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class)->getMockForAbstractClass(
-            );
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        )->getMockForAbstractClass();
         $customer->expects($this->once())->method('getSuffix')->willReturn('  <' . self::SUFFIX . '>  ');
         $this->_block->setObject($customer);
 
@@ -286,8 +287,8 @@ class NameTest extends \PHPUnit_Framework_TestCase
     public function testGetSuffixOptionsEmpty()
     {
         $customer = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class)->getMockForAbstractClass(
-            );
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        )->getMockForAbstractClass();
         $this->_block->setObject($customer);
 
         $this->_options->expects(

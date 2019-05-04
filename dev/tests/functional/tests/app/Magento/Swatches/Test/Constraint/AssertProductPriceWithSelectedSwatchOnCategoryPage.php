@@ -25,7 +25,7 @@ class AssertProductPriceWithSelectedSwatchOnCategoryPage extends AbstractConstra
     ) {
         $priceBlock = $catalogCategoryView->getListProductBlock()->getProductItem($product)->getPriceBlock();
         $configuredPrice = $product->getCheckoutData()['cartItem']['subtotal'];
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             number_format($configuredPrice, 2, '.', ''),
             $priceBlock->getPrice(),
             'Product configured price on category page is not correct.'

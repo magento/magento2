@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Model\ResourceModel\Entity;
 
-class TableTest extends \PHPUnit_Framework_TestCase
+class TableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Entity\Table

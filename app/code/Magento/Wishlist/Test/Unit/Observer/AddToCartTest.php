@@ -11,7 +11,7 @@ use \Magento\Wishlist\Observer\AddToCart as Observer;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddToCartTest extends \PHPUnit_Framework_TestCase
+class AddToCartTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Observer

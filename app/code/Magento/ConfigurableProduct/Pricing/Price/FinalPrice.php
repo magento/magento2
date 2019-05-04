@@ -8,7 +8,9 @@ namespace Magento\ConfigurableProduct\Pricing\Price;
 
 class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice
 {
-    /** @var PriceResolverInterface */
+    /**
+     * @var \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
+     */
     protected $priceResolver;
 
     /**

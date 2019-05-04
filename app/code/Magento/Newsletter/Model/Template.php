@@ -8,8 +8,6 @@ namespace Magento\Newsletter\Model;
 /**
  * Template model
  *
- * @method \Magento\Newsletter\Model\ResourceModel\Template _getResource()
- * @method \Magento\Newsletter\Model\ResourceModel\Template getResource()
  * @method string getTemplateCode()
  * @method \Magento\Newsletter\Model\Template setTemplateCode(string $value)
  * @method \Magento\Newsletter\Model\Template setTemplateText(string $value)
@@ -35,13 +33,15 @@ namespace Magento\Newsletter\Model;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class Template extends \Magento\Email\Model\AbstractTemplate
 {
     /**
      * Mail object
      *
-     * @var \Zend_Mail
+     * @deprecated Unused property
+     *
      */
     protected $_mail;
 

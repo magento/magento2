@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Config\Test\Unit;
 
-class XsdTest extends \PHPUnit_Framework_TestCase
+class XsdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $xsdFile

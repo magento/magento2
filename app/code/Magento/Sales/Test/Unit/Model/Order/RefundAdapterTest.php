@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\Order;
 /**
  * Unit test for refund adapter.
  */
-class RefundAdapterTest extends \PHPUnit_Framework_TestCase
+class RefundAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\RefundAdapter

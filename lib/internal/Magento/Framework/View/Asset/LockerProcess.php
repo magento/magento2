@@ -127,7 +127,7 @@ class LockerProcess implements LockerProcessInterface
 
     /**
      * @return State
-     * @deprecated
+     * @deprecated 100.1.1
      */
     private function getState()
     {

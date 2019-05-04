@@ -10,7 +10,7 @@ namespace Magento\Cms\Test\Unit\Model\Template;
  *
  * @covers \Magento\Cms\Model\Template\Filter
  */
-class FilterTest extends \PHPUnit_Framework_TestCase
+class FilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -57,6 +57,22 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ' url="wysiwyg/image.jpg"'
         ];
         $expectedResult = 'pub/media/wysiwyg/image.jpg';
+        $this->storeMock->expects($this->once())
+            ->method('getBaseMediaDir')
+            ->willReturn($baseMediaDir);
+        $this->assertEquals($expectedResult, $this->filter->mediaDirective($construction));
+    }
+
+    public function testMediaDirectiveWithEncodedQuotes()
+    {
+        $baseMediaDir = 'pub/media';
+        $construction = [
+            '{{media url=&quot;wysiwyg/image.jpg&quot;}}',
+            'media',
+            ' url=&quot;wysiwyg/image.jpg&quot;'
+        ];
+        $expectedResult = 'pub/media/wysiwyg/image.jpg';
+
         $this->storeMock->expects($this->once())
             ->method('getBaseMediaDir')
             ->willReturn($baseMediaDir);

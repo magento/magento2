@@ -8,7 +8,7 @@ namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth;
 /**
  * Unit test for \Magento\Integration\Model\ResourceModel\Oauth\Nonce
  */
-class NonceTest extends \PHPUnit_Framework_TestCase
+class NonceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -27,12 +27,12 @@ class NonceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
+        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
 
-        $this->resourceMock = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
-        $contextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
+        $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
         $this->nonceResource = new \Magento\Integration\Model\ResourceModel\Oauth\Nonce($contextMock);
@@ -47,7 +47,7 @@ class NonceTest extends \PHPUnit_Framework_TestCase
 
     public function testSelectByCompositeKey()
     {
-        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $selectMock->expects($this->once())->method('from')->will($this->returnValue($selectMock));
         $selectMock->expects($this->exactly(2))->method('where')->will($this->returnValue($selectMock));
         $this->connectionMock->expects($this->once())->method('select')->willReturn($selectMock);

@@ -10,7 +10,7 @@ use Magento\Paypal\Model\Payflow\Service\Response\Validator\AVSResponse;
 use Magento\Paypal\Model\Payflow\Transparent;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class AVSResponseTest extends \PHPUnit_Framework_TestCase
+class AVSResponseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AVSResponse

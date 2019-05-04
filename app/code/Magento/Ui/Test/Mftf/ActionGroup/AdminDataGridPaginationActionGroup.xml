@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="adminDataGridSelectPerPage">
+        <arguments>
+            <argument name="perPage" type="string"/>
+        </arguments>
+        <click selector="{{AdminDataGridPaginationSection.perPageDropdown}}" stepKey="clickPerPageDropdown"/>
+        <click selector="{{AdminDataGridPaginationSection.perPageOption(perPage)}}" stepKey="selectCustomPerPage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+    </actionGroup>
+
+    <actionGroup name="adminDataGridSelectCustomPerPage">
+        <arguments>
+            <argument name="perPage"/>
+        </arguments>
+        <click selector="{{AdminDataGridPaginationSection.perPageDropdown}}" stepKey="clickPerPageDropdown"/>
+        <click selector="{{AdminDataGridPaginationSection.perPageOption('Custom')}}" stepKey="selectCustomPerPage"/>
+        <waitForElementVisible selector="{{AdminDataGridPaginationSection.perPageInput}}" time="30" stepKey="waitForInputVisible"/>
+        <fillField selector="{{AdminDataGridPaginationSection.perPageInput}}" userInput="{{perPage}}" stepKey="fillCustomPerPage"/>
+        <click selector="{{AdminDataGridPaginationSection.perPageApplyInput}}" stepKey="applyCustomPerPage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+        <seeInField selector="{{AdminDataGridPaginationSection.perPageDropDownValue}}" userInput="{{perPage}}" stepKey="seePerPageValueInDropDown"/>
+    </actionGroup>
+
+    <actionGroup name="adminDataGridDeleteCustomPerPage">
+        <arguments>
+            <argument name="perPage"/>
+        </arguments>
+        <click selector="{{AdminDataGridPaginationSection.perPageDropdown}}" stepKey="clickPerPageDropdown1"/>
+        <click selector="{{AdminDataGridPaginationSection.perPageEditCustomValue(perPage)}}" stepKey="clickToEditCustomPerPage"/>
+        <waitForElementVisible selector="{{AdminDataGridPaginationSection.perPageDeleteCustomValue(perPage)}}" time="30" stepKey="waitForDeleteButtonVisible"/>
+        <click selector="{{AdminDataGridPaginationSection.perPageDeleteCustomValue(perPage)}}" stepKey="clickToDeleteCustomPerPage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+        <click selector="{{AdminDataGridPaginationSection.perPageDropdown}}" stepKey="clickPerPageDropdown"/>
+        <dontSeeElement selector="{{AdminDataGridPaginationSection.perPageDropDownItem(perPage)}}" stepKey="dontSeeDropDownItem"/>
+    </actionGroup>
+</actionGroups>

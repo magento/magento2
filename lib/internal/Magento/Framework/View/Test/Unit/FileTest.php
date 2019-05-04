@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit;
 
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\File

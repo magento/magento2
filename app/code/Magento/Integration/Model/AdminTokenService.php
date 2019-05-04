@@ -72,7 +72,7 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createAdminAccessToken($username, $password)
     {
@@ -87,7 +87,10 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
              * Need to make sure that this is refactored once exception handling is updated in Auth Model.
              */
             throw new AuthenticationException(
-                __('You did not sign in correctly or your account is temporarily disabled.')
+                __(
+                    'The account sign-in was incorrect or your account is disabled temporarily. '
+                    . 'Please wait and try again later.'
+                )
             );
         }
         $this->getRequestThrottler()->resetAuthenticationFailuresCount($username, RequestThrottler::USER_TYPE_ADMIN);
@@ -95,20 +98,26 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
     }
 
     /**
-     * {@inheritdoc}
+     * Revoke token by admin id.
+     *
+     * The function will delete the token from the oauth_token table.
+     *
+     * @param int $adminId
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function revokeAdminAccessToken($adminId)
     {
         $tokenCollection = $this->tokenModelCollectionFactory->create()->addFilterByAdminId($adminId);
         if ($tokenCollection->getSize() == 0) {
-            throw new LocalizedException(__('This user has no tokens.'));
+            return true;
         }
         try {
             foreach ($tokenCollection as $token) {
-                $token->setRevoked(1)->save();
+                $token->delete();
             }
         } catch (\Exception $e) {
-            throw new LocalizedException(__('The tokens could not be revoked.'));
+            throw new LocalizedException(__("The tokens couldn't be revoked."));
         }
         return true;
     }
@@ -117,7 +126,7 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
      * Get request throttler instance
      *
      * @return RequestThrottler
-     * @deprecated
+     * @deprecated 100.0.4
      */
     private function getRequestThrottler()
     {

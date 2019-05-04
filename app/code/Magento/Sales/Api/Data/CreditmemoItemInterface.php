@@ -13,6 +13,7 @@ namespace Magento\Sales\Api\Data;
  * customer account so that the customer can make future purchases. A credit memo item is an invoiced item for which
  * a merchant creates a credit memo.
  * @api
+ * @since 100.0.2
  */
 interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

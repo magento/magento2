@@ -7,7 +7,7 @@ namespace Magento\Msrp\Test\Unit\Model\Product\Attribute\Source\Type;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Msrp\Model\Product\Attribute\Source\Type\Price
@@ -22,12 +22,9 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFlatColumns()
     {
-        $abstractAttributeMock = $this->getMock(
+        $abstractAttributeMock = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
-            ['getAttributeCode', '__wakeup'],
-            [],
-            '',
-            false
+            ['getAttributeCode', '__wakeup']
         );
 
         $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));

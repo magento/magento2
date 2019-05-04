@@ -5,7 +5,7 @@
  */
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Action\Discount;
 
-class ByPercentTest extends \PHPUnit_Framework_TestCase
+class ByPercentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Model\Rule\Action\Discount\ByPercent
@@ -223,13 +223,7 @@ class ByPercentTest extends \PHPUnit_Framework_TestCase
      */
     public function testFixQuantity($step, $qty, $expected)
     {
-        $rule = $this->getMock(
-            \Magento\SalesRule\Model\Rule::class,
-            ['getDiscountStep', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $rule = $this->createPartialMock(\Magento\SalesRule\Model\Rule::class, ['getDiscountStep', '__wakeup']);
         $rule->expects($this->once())->method('getDiscountStep')->will($this->returnValue($step));
 
         $this->assertEquals($expected, $this->model->fixQuantity($qty, $rule));

@@ -10,6 +10,6 @@
 ?>
 <?php $_item = $block->getItem() ?>
 <div class="price-container">
-    <span class="price-label"><?php /* @escapeNotVerified */ echo __('Price')?></span>
-    <span class="price-wrapper"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getCalculationPrice()) ?></span>
+    <span class="price-label"><?= /* @escapeNotVerified */ __('Price') ?></span>
+    <span class="price-wrapper"><?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getCalculationPrice()) ?></span>
 </div>

@@ -7,7 +7,7 @@ namespace Magento\Framework\Filesystem\Test\Unit\Driver;
 
 use \Magento\Framework\Filesystem\Driver\Https;
 
-class HttpsTest extends \PHPUnit_Framework_TestCase
+class HttpsTest extends \PHPUnit\Framework\TestCase
 {
     public static $fSockOpen;
 

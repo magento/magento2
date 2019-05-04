@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Stdlib\Cookie;
 
-class PhpCookieReaderTest extends \PHPUnit_Framework_TestCase
+class PhpCookieReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array

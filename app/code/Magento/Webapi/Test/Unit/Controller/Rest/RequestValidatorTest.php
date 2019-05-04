@@ -3,9 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Webapi\Test\Unit\Controller\Rest;
 
-class RequestValidatorTest extends \PHPUnit_Framework_TestCase
+class RequestValidatorTest extends \PHPUnit\Framework\TestCase
 {
     const SERVICE_METHOD = 'testMethod';
 
@@ -63,8 +64,8 @@ class RequestValidatorTest extends \PHPUnit_Framework_TestCase
         $this->authorizationMock = $this->getMockBuilder(\Magento\Framework\Webapi\Authorization::class)
             ->disableOriginalConstructor()->getMock();
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->storeMock = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class);
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
 
         $this->requestValidator =
@@ -131,7 +132,7 @@ class RequestValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\AuthorizationException
-     * @expectedExceptionMessage Consumer is not authorized to access 5, 6
+     * @expectedExceptionMessage The consumer isn't authorized to access 5, 6.
      */
     public function testAuthorizationFailed()
     {

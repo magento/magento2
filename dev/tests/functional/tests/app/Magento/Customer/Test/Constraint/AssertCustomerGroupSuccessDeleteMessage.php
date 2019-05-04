@@ -25,7 +25,7 @@ class AssertCustomerGroupSuccessDeleteMessage extends AbstractConstraint
     public function processAssert(CustomerGroupIndex $customerGroupIndex)
     {
         $actualMessage = $customerGroupIndex->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_DELETE_MESSAGE,
             $actualMessage,
             'Wrong message is displayed.'

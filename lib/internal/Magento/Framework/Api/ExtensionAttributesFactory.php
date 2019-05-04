@@ -42,14 +42,14 @@ class ExtensionAttributesFactory
      *
      * @param string $extensibleClassName
      * @param array $data
-     * @return object
+     * @return \Magento\Framework\Api\ExtensionAttributesInterface
      */
     public function create($extensibleClassName, $data = [])
     {
         $interfaceReflection = new \ReflectionClass($this->getExtensibleInterfaceName($extensibleClassName));
 
         $methodReflection = $interfaceReflection->getMethod('getExtensionAttributes');
-        if ($methodReflection->getDeclaringClass() == self::EXTENSIBLE_INTERFACE_NAME) {
+        if ($methodReflection->getDeclaringClass()->getName() === self::EXTENSIBLE_INTERFACE_NAME) {
             throw new \LogicException(
                 "Method 'getExtensionAttributes' must be overridden in the interfaces "
                 . "which extend '" . self::EXTENSIBLE_INTERFACE_NAME . "'. "
@@ -88,6 +88,7 @@ class ExtensionAttributesFactory
         $exceptionMessage = "Class '{$extensibleClassName}' must implement an interface, "
             . "which extends from '" . self::EXTENSIBLE_INTERFACE_NAME . "'";
         $notExtensibleClassFlag = '';
+
         if (isset($this->classInterfaceMap[$extensibleClassName])) {
             if ($notExtensibleClassFlag === $this->classInterfaceMap[$extensibleClassName]) {
                 throw new \LogicException($exceptionMessage);
@@ -97,7 +98,7 @@ class ExtensionAttributesFactory
         }
         $modelReflection = new \ReflectionClass($extensibleClassName);
         if ($modelReflection->isInterface()
-            && $modelReflection->isSubClassOf(self::EXTENSIBLE_INTERFACE_NAME)
+            && $modelReflection->isSubclassOf(self::EXTENSIBLE_INTERFACE_NAME)
             && $modelReflection->hasMethod('getExtensionAttributes')
         ) {
             $this->classInterfaceMap[$extensibleClassName] = $extensibleClassName;

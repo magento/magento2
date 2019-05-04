@@ -13,6 +13,7 @@ use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
  * Shopping cart item render block
  *
  * @api
+ * @since 100.0.2
  */
 class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
 {
@@ -68,6 +69,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
 
     /**
      * Overloaded method for getting list of bundle options
+     *
      * Caches result in quote item, because it can be used in cart 'recent view' and on same page in cart checkout
      *
      * @return array
@@ -87,7 +89,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
         $messages = [];
         $quoteItem = $this->getItem();
 
-        // Add basic messages occuring during this page load
+        // Add basic messages occurring during this page load
         $baseMessages = $quoteItem->getMessage(false);
         if ($baseMessages) {
             foreach ($baseMessages as $message) {

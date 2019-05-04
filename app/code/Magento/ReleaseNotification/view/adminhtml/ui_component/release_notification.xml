@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">release_notification.release_notification_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Release Notification</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <namespace>release_notification</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>release_notification.release_notification_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="release_notification_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="data" xsi:type="array">
+                        <item name="logAction" xsi:type="url" path="releaseNotification/notification/markUserNotified"/>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <dataProvider class="Magento\ReleaseNotification\Ui\DataProvider\NotificationDataProvider" name="release_notification_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <modal name="notification_modal_1" component="Magento_ReleaseNotification/js/modal/component">
+        <settings>
+            <onCancel>actionCancel</onCancel>
+            <state>true</state>
+            <options>
+                <option name="modalClass" xsi:type="string">release-notification-modal</option>
+                <option name="title" xsi:type="string" translate="true">Sorry, we had a problem loading our “What’s new” content.</option>
+                <option name="type" xsi:type="string">popup</option>
+                <option name="responsive" xsi:type="boolean">true</option>
+                <option name="innerScroll" xsi:type="boolean">true</option>
+                <option name="autoOpen" xsi:type="boolean">true</option>
+            </options>
+        </settings>
+        <fieldset name="notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="notification_text" template="ui/form/components/complex">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                        <item name="additionalClasses" xsi:type="string">release-notification-text</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[
+                        <p>We’ll try to show it again the next time you sign in to Magento Admin.</p>
+                        <p>To learn more about new features, see our latest Release Notes in
+                        <a href="https://devdocs.magento.com/magento-release-information.html"
+                        target="_blank">DevDocs' Release Information</a>.
+                        </p>]]></item>
+                    </item>
+                </argument>
+            </container>
+            <container name="notification_buttons">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                    </item>
+                </argument>
+                <button name="notification_button_next" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_1</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_2</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[Next >]]></title>
+                    </settings>
+                </button>
+            </container>
+        </fieldset>
+    </modal>
+    <modal name="notification_modal_2" component="Magento_ReleaseNotification/js/modal/component">
+        <settings>
+            <onCancel>actionCancel</onCancel>
+            <options>
+                <option name="modalClass" xsi:type="string">release-notification-modal</option>
+                <option name="title" xsi:type="string" translate="true">Sorry, we had a problem loading our “What’s new” content.</option>
+                <option name="type" xsi:type="string">popup</option>
+                <option name="responsive" xsi:type="boolean">true</option>
+                <option name="innerScroll" xsi:type="boolean">true</option>
+                <option name="autoOpen" xsi:type="boolean">false</option>
+            </options>
+        </settings>
+        <fieldset name="notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="notification_text" template="ui/form/components/complex">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                        <item name="additionalClasses" xsi:type="string">release-notification-text</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[
+                        <p>We’ll try to show it again the next time you sign in to Magento Admin.</p>
+                        <p>To learn more about new features, see our latest Release Notes in
+                        <a href="https://devdocs.magento.com/magento-release-information.html"
+                        target="_blank">DevDocs' Release Information</a>.
+                        </p>]]></item>
+                    </item>
+                </argument>
+            </container>
+            <container name="notification_buttons">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                    </item>
+                </argument>
+                <button name="notification_button_back" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_2</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_1</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[< Back]]></title>
+                    </settings>
+                </button>
+                <button name="notification_button_next" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_2</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_3</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[Next >]]></title>
+                    </settings>
+                </button>
+            </container>
+        </fieldset>
+    </modal>
+    <modal name="notification_modal_3" component="Magento_ReleaseNotification/js/modal/component">
+        <settings>
+            <onCancel>actionCancel</onCancel>
+            <options>
+                <option name="modalClass" xsi:type="string">release-notification-modal</option>
+                <option name="title" xsi:type="string" translate="true">Sorry, we had a problem loading our “What’s new” content.</option>
+                <option name="type" xsi:type="string">popup</option>
+                <option name="responsive" xsi:type="boolean">true</option>
+                <option name="innerScroll" xsi:type="boolean">true</option>
+                <option name="autoOpen" xsi:type="boolean">false</option>
+            </options>
+        </settings>
+        <fieldset name="notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="notification_text" template="ui/form/components/complex">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                        <item name="additionalClasses" xsi:type="string">release-notification-text</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[
+                        <p>We’ll try to show it again the next time you sign in to Magento Admin.</p>
+                        <p>To learn more about new features, see our latest Release Notes in
+                        <a href="https://devdocs.magento.com/magento-release-information.html"
+                        target="_blank">DevDocs' Release Information</a>.
+                        </p>]]></item>
+                    </item>
+                </argument>
+            </container>
+            <container name="notification_buttons">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                    </item>
+                </argument>
+                <button name="notification_button_back" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_3</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_2</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[< Back]]></title>
+                    </settings>
+                </button>
+                <button name="notification_button_next" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_3</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_4</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[Next >]]></title>
+                    </settings>
+                </button>
+            </container>
+        </fieldset>
+    </modal>
+    <modal name="notification_modal_4" component="Magento_ReleaseNotification/js/modal/component">
+        <settings>
+            <onCancel>actionCancel</onCancel>
+            <options>
+                <option name="modalClass" xsi:type="string">release-notification-modal</option>
+                <option name="title" xsi:type="string" translate="true">Sorry, we had a problem loading our “What’s new” content.</option>
+                <option name="type" xsi:type="string">popup</option>
+                <option name="responsive" xsi:type="boolean">true</option>
+                <option name="innerScroll" xsi:type="boolean">true</option>
+                <option name="autoOpen" xsi:type="boolean">false</option>
+            </options>
+        </settings>
+        <fieldset name="notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="notification_text" template="ui/form/components/complex">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                        <item name="additionalClasses" xsi:type="string">release-notification-text</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[
+                        <p>We’ll try to show it again the next time you sign in to Magento Admin.</p>
+                        <p>To learn more about new features, see our latest Release Notes in
+                        <a href="https://devdocs.magento.com/magento-release-information.html"
+                        target="_blank">DevDocs' Release Information</a>.
+                        </p>]]></item>
+                    </item>
+                </argument>
+            </container>
+            <container name="notification_buttons">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                    </item>
+                </argument>
+                <button name="notification_button_back" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_4</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_3</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[< Back]]></title>
+                    </settings>
+                </button>
+                <button name="notification_button_next" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_4</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title>Done</title>
+                    </settings>
+                </button>
+            </container>
+        </fieldset>
+    </modal>
+</form>

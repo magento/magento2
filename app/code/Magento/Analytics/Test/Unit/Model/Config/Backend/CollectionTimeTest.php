@@ -11,10 +11,7 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class CollectionTimeTest
- */
-class CollectionTimeTest extends \PHPUnit_Framework_TestCase
+class CollectionTimeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject

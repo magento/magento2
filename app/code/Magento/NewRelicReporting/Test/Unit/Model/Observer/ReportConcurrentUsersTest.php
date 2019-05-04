@@ -12,7 +12,7 @@ use Magento\NewRelicReporting\Model\Observer\ReportConcurrentUsers;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReportConcurrentUsersTest extends \PHPUnit_Framework_TestCase
+class ReportConcurrentUsersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReportConcurrentUsers

@@ -198,8 +198,10 @@ class Calculator implements BundleCalculatorInterface
     }
 
     /**
+     * Get selection price list provider.
+     *
      * @return SelectionPriceListProviderInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getSelectionPriceListProvider()
     {
@@ -217,7 +219,7 @@ class Calculator implements BundleCalculatorInterface
      * @param \Magento\Bundle\Model\Option $option
      * @param bool $canSkipRequiredOption
      * @return bool
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected function canSkipOption($option, $canSkipRequiredOption)
     {
@@ -229,7 +231,7 @@ class Calculator implements BundleCalculatorInterface
      *
      * @param Product $bundleProduct
      * @return bool
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected function hasRequiredOption($bundleProduct)
     {
@@ -247,7 +249,7 @@ class Calculator implements BundleCalculatorInterface
      *
      * @param Product $saleableItem
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected function getBundleOptions(Product $saleableItem)
     {
@@ -271,9 +273,8 @@ class Calculator implements BundleCalculatorInterface
     {
         if ($bundleProduct->getPriceType() == Price::PRICE_TYPE_FIXED) {
             return $this->calculateFixedBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude);
-        } else {
-            return $this->calculateDynamicBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude);
         }
+        return $this->calculateDynamicBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude);
     }
 
     /**
@@ -282,7 +283,7 @@ class Calculator implements BundleCalculatorInterface
      * @param float $basePriceValue
      * @param Product $bundleProduct
      * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
-     * @param null|bool|string|arrayy $exclude
+     * @param null|bool|string|array $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     protected function calculateFixedBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude)

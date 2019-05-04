@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="BraintreeCreditCardOnCheckoutTest">
+        <annotations>
+            <features value="Braintree"/>
+            <stories value="MAGETWO-91624 - Braintree saved cards use billing address the same as shipping"/>
+            <title value="Use saved for Braintree credit card on checkout with selecting billing address"/>
+            <description value="Use saved for Braintree credit card on checkout with selecting billing address"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-93767"/>
+            <group value="braintree"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <createData entity="BraintreeConfig" stepKey="BraintreeConfigurationData"/>
+            <createData entity="CustomBraintreeConfigurationData" stepKey="CustomBraintreeConfigurationData"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="product" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <createData entity="DefaultBraintreeConfig" stepKey="DefaultBraintreeConfig"/>
+            <createData entity="RollBackCustomBraintreeConfigurationData" stepKey="RollBackCustomBraintreeConfigurationData"/>
+            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="StorefrontSignOutActionGroup"/>
+        </after>
+        <!--Go to storefront-->
+        <amOnPage url="" stepKey="DoToStorefront"/>
+        <!--Create account-->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUserFromStorefrontActionGroup">
+            <argument name="Customer" value="Simple_US_Customer"/>
+        </actionGroup>
+
+        <!--Add product to cart-->
+        <amOnPage url="$$product.sku$$.html" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <!--Proceed to checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup"/>
+
+        <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="LoggedInCheckoutFillNewBillingAddressActionGroup">
+            <argument name="Address" value="US_Address_CA"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <!--Fill cart data-->
+        <click selector="{{BraintreeConfigurationPaymentSection.creditCart}}" stepKey="SelectBraintreePaymentMethod"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <scrollTo selector="{{BraintreeConfigurationPaymentSection.creditCart}}" stepKey="ScrollToCreditCardSection"/>
+        <actionGroup ref="StorefrontFillCartDataActionGroup" stepKey="StorefrontFillCartDataActionGroup"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <!--Place order-->
+        <click selector="{{BraintreeConfigurationPaymentSection.paymentMethodContainer}}{{CheckoutPaymentSection.placeOrder}}"
+               stepKey="PlaceOrder"/>
+        <waitForPageLoad stepKey="waitForPageLoad5"/>
+
+        <!--Add product to cart again-->
+        <amOnPage url="$$product.sku$$.html" stepKey="goToProductPage1"/>
+        <waitForPageLoad stepKey="waitForPageLoad6"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart1"/>
+        <waitForPageLoad stepKey="waitForPageLoad7"/>
+        <!--Proceed to checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup1"/>
+        <click selector="{{CheckoutPaymentSection.addressAction('New Address')}}" stepKey="clickOnNewAddress"/>
+        <waitForPageLoad stepKey="waitForPageLoad8"/>
+        <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="LoggedInCheckoutFillNewBillingAddressActionGroup1">
+            <argument name="Address" value="US_Address_NY"/>
+        </actionGroup>
+        <click selector="{{CheckoutPaymentSection.addressAction('Ship here')}}" stepKey="SaveAddress"/>
+        <waitForPageLoad stepKey="waitForPageLoad9"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext1"/>
+        <waitForPageLoad stepKey="waitForPageLoad10"/>
+        <click selector="{{BraintreeConfigurationPaymentSection.paymentMethod}}" stepKey="SelectBraintreePaymentMethod1"/>
+        <waitForPageLoad stepKey="waitForPageLoad11"/>
+        <!--Place order-->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="PlaceOrder1"/>
+        <waitForPageLoad stepKey="waitForPageLoad13"/>
+
+        <click selector="{{CheckoutOrderSummarySection.orderNumber}}" stepKey="ClickOnOrderNumber"/>
+        <waitForPageLoad stepKey="waitForPageLoad14"/>
+        <!--Check billing and shipping addresses also additional Address info-->
+        <click selector="{{CheckoutPaymentSection.addressBook}}" stepKey="goToAddressBook"/>
+        <grabTextFrom selector="{{CheckoutOrderSummarySection.shippingAddress}}" stepKey="shippingAddr"/>
+        <grabTextFrom selector="{{CheckoutOrderSummarySection.billingAddress}}" stepKey="billingAddr"/>
+        <grabTextFrom selector="{{CheckoutOrderSummarySection.additionalAddress}}" stepKey="additionalAddress"/>
+        <see userInput="Shipping Address" stepKey="seeShippingAddress"/>
+        <see userInput="Billing Address" stepKey="seeBillingAddress"/>
+        <assertEquals stepKey="assertValuesAreEqual" actual="$billingAddr" expected="$shippingAddr"/>
+        <assertNotEquals stepKey="assertValuesAreNotEqual" actual="$billingAddr" expected="$additionalAddress"/>
+    </test>
+</tests>

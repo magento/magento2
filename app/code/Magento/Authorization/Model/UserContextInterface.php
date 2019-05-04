@@ -10,6 +10,7 @@ namespace Magento\Authorization\Model;
  * Interface for current user identification.
  *
  * @api
+ * @since 100.0.2
  */
 interface UserContextInterface
 {

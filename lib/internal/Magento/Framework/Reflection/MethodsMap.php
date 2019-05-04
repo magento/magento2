@@ -94,6 +94,8 @@ class MethodsMap
      *  'validatePassword' => 'boolean'
      * ]
      * </pre>
+     * @throws \InvalidArgumentException if methods don't have annotation
+     * @throws \ReflectionException for missing DocBock or invalid reflection class
      */
     public function getMethodsMap($interfaceName)
     {
@@ -148,6 +150,8 @@ class MethodsMap
      *
      * @param string $interfaceName
      * @return array
+     * @throws \ReflectionException for missing DocBock or invalid reflection class
+     * @throws \InvalidArgumentException if methods don't have annotation
      */
     private function getMethodMapViaReflection($interfaceName)
     {
@@ -228,7 +232,7 @@ class MethodsMap
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

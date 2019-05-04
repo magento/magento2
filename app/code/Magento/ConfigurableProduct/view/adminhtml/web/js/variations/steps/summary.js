@@ -53,7 +53,8 @@ define([
             attributes: [],
             attributesName: [$.mage.__('Images'), $.mage.__('SKU'), $.mage.__('Quantity'), $.mage.__('Price')],
             sections: [],
-            gridTemplate: 'Magento_ConfigurableProduct/variations/steps/summary-grid'
+            gridTemplate: 'Magento_ConfigurableProduct/variations/steps/summary-grid',
+            quantityFieldName: 'quantity'
         },
 
         /** @inheritdoc */
@@ -91,6 +92,7 @@ define([
             var productSku = this.variationsComponent().getProductValue('sku'),
                 productPrice = this.variationsComponent().getProductPrice(),
                 productWeight = this.variationsComponent().getProductValue('weight'),
+                productName = this.variationsComponent().getProductValue('name'),
                 variationsKeys = [],
                 gridExisting = [],
                 gridNew = [],
@@ -98,7 +100,7 @@ define([
 
             this.variations = [];
             _.each(variations, function (options) {
-                var product, images, sku, quantity, price, variation,
+                var product, images, sku, name, quantity, price, variation,
                     productId = this.variationsComponent().getProductIdByOptions(options);
 
                 if (productId) {
@@ -110,10 +112,13 @@ define([
                 sku = productSku + _.reduce(options, function (memo, option) {
                     return memo + '-' + option.label;
                 }, '');
-                quantity = getSectionValue('quantity', options);
+                name = productName + _.reduce(options, function (memo, option) {
+                    return memo + '-' + option.label;
+                }, '');
+                quantity = getSectionValue(this.quantityFieldName, options);
 
                 if (!quantity && productId) {
-                    quantity = product.quantity;
+                    quantity = product[this.quantityFieldName];
                 }
                 price = getSectionValue('price', options);
 
@@ -128,13 +133,13 @@ define([
                     options: options,
                     images: images,
                     sku: sku,
-                    name: sku,
-                    quantity: quantity,
+                    name: name,
                     price: price,
                     productId: productId,
                     weight: productWeight,
                     editable: true
                 };
+                variation[this.quantityFieldName] = quantity;
 
                 if (productId) {
                     variation.sku = product.sku;
@@ -159,7 +164,6 @@ define([
             this.variationsExisting = gridExisting;
             this.variationsNew = gridNew;
             this.variationsDeleted = gridDeleted;
-
         },
 
         /**
@@ -191,7 +195,7 @@ define([
                 images: []
             }, variation.images));
             row.push(variation.sku);
-            row.push(variation.quantity);
+            row.push(variation[this.quantityFieldName]);
             _.each(variation.options, function (option) {
                 row.push(option.label);
             });

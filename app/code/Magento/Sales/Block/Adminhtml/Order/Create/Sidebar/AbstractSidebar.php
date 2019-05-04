@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -70,7 +71,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     }
 
     /**
-     * Retrieve disply item qty availablity
+     * Retrieve display item qty availability
      *
      * @return false
      */
@@ -195,7 +196,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     }
 
     /**
-     * Retrieve disply price availablity
+     * Retrieve display price availability
      *
      * @return true
      */

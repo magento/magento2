@@ -19,7 +19,7 @@ class Uploader extends \Magento\Framework\File\Uploader
     }
 
     /**
-     * Explicitly set the the file attributes instead of setting it via constructor
+     * Explicitly set the file attributes instead of setting it via constructor
      *
      * @param array $fileAttributes
      * @return void

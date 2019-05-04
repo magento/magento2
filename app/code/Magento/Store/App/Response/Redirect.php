@@ -7,8 +7,9 @@
  */
 namespace Magento\Store\App\Response;
 
-use Magento\Store\Api\StoreResolverInterface;
-
+/**
+ * Class Redirect computes redirect urls responses.
+ */
 class Redirect implements \Magento\Framework\App\Response\RedirectInterface
 {
     /**
@@ -76,22 +77,24 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     }
 
     /**
+     * Get the referrer url.
+     *
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _getUrl()
     {
         $refererUrl = $this->_request->getServer('HTTP_REFERER');
-        $url = (string)$this->_request->getParam(self::PARAM_NAME_REFERER_URL);
-        if ($url) {
-            $refererUrl = $url;
-        }
-        $url = $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_BASE64_URL);
-        if ($url) {
-            $refererUrl = $this->_urlCoder->decode($url);
-        }
-        $url = $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED);
-        if ($url) {
-            $refererUrl = $this->_urlCoder->decode($url);
+        $encodedUrl = $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED)
+            ?: $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_BASE64_URL);
+
+        if ($encodedUrl) {
+            $refererUrl = $this->_urlCoder->decode($encodedUrl);
+        } else {
+            $url = (string)$this->_request->getParam(self::PARAM_NAME_REFERER_URL);
+            if ($url) {
+                $refererUrl = $url;
+            }
         }
 
         if (!$this->_isUrlInternal($refererUrl)) {
@@ -164,23 +167,10 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param array $arguments
-     * @return array
+     * @inheritdoc
      */
     public function updatePathParams(array $arguments)
     {
-        if ($this->_session->getCookieShouldBeReceived()
-            && $this->_sidResolver->getUseSessionInUrl()
-            && $this->_canUseSessionIdInParam
-        ) {
-            $arguments += [
-                '_query' => [
-                    $this->_sidResolver->getSessionIdQueryParam($this->_session) => $this->_session->getSessionId(),
-                ]
-            ];
-        }
         return $arguments;
     }
 
@@ -258,10 +248,10 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         $store = $this->_storeManager->getStore();
 
         if ($store
-            && !empty($refererQuery[StoreResolverInterface::PARAM_NAME])
-            && ($refererQuery[StoreResolverInterface::PARAM_NAME] !== $store->getCode())
+            && !empty($refererQuery[\Magento\Store\Model\StoreManagerInterface::PARAM_NAME])
+            && ($refererQuery[\Magento\Store\Model\StoreManagerInterface::PARAM_NAME] !== $store->getCode())
         ) {
-            $refererQuery[StoreResolverInterface::PARAM_NAME] = $store->getCode();
+            $refererQuery[\Magento\Store\Model\StoreManagerInterface::PARAM_NAME] = $store->getCode();
         }
 
         return $refererQuery;

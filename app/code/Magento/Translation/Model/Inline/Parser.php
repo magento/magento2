@@ -134,7 +134,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     /**
      * @return \Magento\Translation\Model\Inline\CacheManager
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getCacheManger()
     {

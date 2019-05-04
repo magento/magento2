@@ -9,7 +9,7 @@
  */
 namespace Magento\Eav\Test\Unit\Model;
 
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Form

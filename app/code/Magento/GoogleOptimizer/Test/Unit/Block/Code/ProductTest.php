@@ -5,7 +5,7 @@
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Block\Code;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\GoogleOptimizer\Block\Code\Product
@@ -20,7 +20,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
         $this->block = $objectManager->getObject(
             \Magento\GoogleOptimizer\Block\Code\Product::class,
             ['registry' => $this->registry]
@@ -35,7 +35,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testGetIdentities()
     {
         $productTags = ['catalog_product_1'];
-        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
         $this->registry->expects(
             $this->once()

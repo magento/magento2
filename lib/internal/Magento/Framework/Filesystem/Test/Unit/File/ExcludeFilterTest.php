@@ -11,7 +11,7 @@ use Magento\Framework\Filesystem\Filter\ExcludeFilter;
 /**
  * Class ExcludeFilterTest
  */
-class ExcludeFilterTest extends \PHPUnit_Framework_TestCase
+class ExcludeFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Iterator
@@ -39,6 +39,9 @@ class ExcludeFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(!in_array(BP . '/var/session/', $result), 'Filtered path should not be in array');
     }
 
+    /**
+     * @return \Generator
+     */
     private function getFilesIterator()
     {
         $files = [

@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
  * Export entity product type abstract model
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractType
 {

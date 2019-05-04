@@ -26,7 +26,7 @@ class Option extends \Magento\Backend\Block\Widget
     /**
      * @var string
      */
-    protected $_template = 'product/edit/bundle/option.phtml';
+    protected $_template = 'Magento_Bundle::product/edit/bundle/option.phtml';
 
     /**
      * Core registry

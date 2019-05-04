@@ -36,70 +36,111 @@ class AfterImportDataObserver implements ObserverInterface
      */
     const URL_KEY_ATTRIBUTE_CODE = 'url_key';
 
-    /** @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService
+     */
     protected $storeViewService;
 
-    /** @var \Magento\Catalog\Model\Product */
+    /**
+     * @var \Magento\Catalog\Model\Product
+     */
     protected $product;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $productsWithStores;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $products = [];
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory
+     */
     protected $objectRegistryFactory;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry
+     */
     protected $productCategories;
 
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     */
     protected $urlFinder;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
-    /** @var UrlPersistInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
+     */
     protected $urlPersist;
 
-    /** @var UrlRewriteFactory */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     */
     protected $urlRewriteFactory;
 
-    /** @var \Magento\CatalogImportExport\Model\Import\Product */
+    /**
+     * @var \Magento\CatalogImportExport\Model\Import\Product
+     */
     protected $import;
 
-    /** @var \Magento\Catalog\Model\ProductFactory $catalogProductFactory */
+    /**
+     * @var \Magento\Catalog\Model\ProductFactory
+     */
     protected $catalogProductFactory;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $acceptableCategories;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+     */
     protected $productUrlPathGenerator;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $websitesToStoreIds;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $storesCache = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $categoryCache = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $websiteCache = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $vitalForGenerationFields = [
         'sku',
         'url_key',
         'url_path',
         'name',
         'visibility',
+        'save_rewrites_history'
     ];
 
-    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    /**
+     * @var \Magento\UrlRewrite\Model\MergeDataProvider
+     */
     private $mergeDataProviderPrototype;
 
     /**
@@ -159,6 +200,7 @@ class AfterImportDataObserver implements ObserverInterface
 
     /**
      * Action after data import.
+     *
      * Save new url rewrites and remove old if exist.
      *
      * @param Observer $observer
@@ -221,12 +263,15 @@ class AfterImportDataObserver implements ObserverInterface
         if ($this->isGlobalScope($product->getStoreId())) {
             $this->populateGlobalProduct($product);
         } else {
+            $this->storesCache[$product->getStoreId()] = true;
             $this->addProductToImport($product, $product->getStoreId());
         }
         return $this;
     }
 
     /**
+     * Add store id to product data.
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $rowData
      * @return void
@@ -396,6 +441,8 @@ class AfterImportDataObserver implements ObserverInterface
     }
 
     /**
+     * Generate url-rewrite for outogenerated url-rewirte.
+     *
      * @param UrlRewrite $url
      * @param Category $category
      * @return array
@@ -430,6 +477,8 @@ class AfterImportDataObserver implements ObserverInterface
     }
 
     /**
+     * Generate url-rewrite for custom url-rewirte.
+     *
      * @param UrlRewrite $url
      * @param Category $category
      * @return array
@@ -463,6 +512,8 @@ class AfterImportDataObserver implements ObserverInterface
     }
 
     /**
+     * Retrieve category from url metadata.
+     *
      * @param UrlRewrite $url
      * @return Category|null|bool
      */
@@ -477,6 +528,8 @@ class AfterImportDataObserver implements ObserverInterface
     }
 
     /**
+     * Check, category suited for url-rewrite generation.
+     *
      * @param \Magento\Catalog\Model\Category $category
      * @param int $storeId
      * @return bool

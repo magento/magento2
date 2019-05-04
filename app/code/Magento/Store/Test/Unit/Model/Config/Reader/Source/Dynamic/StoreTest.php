@@ -21,7 +21,7 @@ use Magento\Framework\DataObject;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StoreTest extends \PHPUnit_Framework_TestCase
+class StoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScopedFactory|\PHPUnit_Framework_MockObject_MockObject

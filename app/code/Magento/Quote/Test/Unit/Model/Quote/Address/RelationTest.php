@@ -7,7 +7,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Address;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class RelationTest extends \PHPUnit_Framework_TestCase
+class RelationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\AbstractModel | \PHPUnit_Framework_MockObject_MockObject
@@ -22,36 +22,22 @@ class RelationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->modelMock = $this->getMock(
-            \Magento\Framework\Model\AbstractModel::class,
-            [
+        $this->modelMock = $this->createPartialMock(\Magento\Framework\Model\AbstractModel::class, [
                 'getItemsCollection',
                 'getShippingRatesCollection',
                 'itemsCollectionWasSet',
                 'shippingRatesCollectionWasSet'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->relation = $objectManager->getObject(\Magento\Quote\Model\Quote\Address\Relation::class, []);
     }
 
     public function testProcessRelation()
     {
-        $itemsCollection = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class,
-            [],
-            [],
-            '',
-            false
+        $itemsCollection = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class
         );
-        $shippingRatesCollection = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class,
-            [],
-            [],
-            '',
-            false
+        $shippingRatesCollection = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class
         );
         $this->modelMock->expects($this->once())->method('itemsCollectionWasSet')->willReturn(true);
         $this->modelMock->expects($this->once())->method('getItemsCollection')->willReturn($itemsCollection);

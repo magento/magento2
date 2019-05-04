@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Profiler\Driver\Standard;
 
+/**
+ * Interface \Magento\Framework\Profiler\Driver\Standard\OutputInterface
+ *
+ */
 interface OutputInterface
 {
     /**

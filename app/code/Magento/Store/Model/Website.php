@@ -9,8 +9,6 @@ namespace Magento\Store\Model;
  * Core Website model
  *
  * @api
- * @method \Magento\Store\Model\ResourceModel\Website _getResource()
- * @method \Magento\Store\Model\ResourceModel\Website getResource()
  * @method string getGroupTitle()
  * @method string getStoreTitle()
  * @method int getStoreId()
@@ -23,6 +21,7 @@ namespace Magento\Store\Model;
  * @method \Magento\Store\Model\Website setIsDefault($value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Website extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Framework\DataObject\IdentityInterface,
@@ -161,6 +160,11 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     protected $_currencyFactory;
 
     /**
+     * @var \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface
+     */
+    private $pillPut;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -175,6 +179,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface|null $pillPut
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -191,7 +196,8 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
     ) {
         parent::__construct(
             $context,
@@ -209,10 +215,12 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
         $this->_websiteFactory = $websiteFactory;
         $this->_storeManager = $storeManager;
         $this->_currencyFactory = $currencyFactory;
+        $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class);
     }
 
     /**
-     * init model
+     * Init model
      *
      * @return void
      */
@@ -496,6 +504,8 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
+     * Get default group id
+     *
      * @return mixed
      */
     public function getDefaultGroupId()
@@ -512,6 +522,8 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
+     * Get code
+     *
      * @return mixed
      */
     public function getCode()
@@ -544,7 +556,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * @return $this
+     * @inheritdoc
      */
     public function beforeDelete()
     {
@@ -569,6 +581,21 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
         $this->_storeManager->reinitStores();
         parent::afterDelete();
         return $this;
+    }
+
+    /**
+     * Clear configuration cache after creation website
+     *
+     * @return $this
+     * @since 100.2.0
+     */
+    public function afterSave()
+    {
+        if ($this->isObjectNew()) {
+            $this->_storeManager->reinitStores();
+        }
+        $this->pillPut->put();
+        return parent::afterSave();
     }
 
     /**
@@ -621,8 +648,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * Retrieve default stores select object
-     * Select fields website_id, store_id
+     * Retrieve default stores select object, select fields website_id, store_id
      *
      * @param bool $withDefault include/exclude default admin website
      * @return \Magento\Framework\DB\Select
@@ -657,7 +683,8 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @since 100.1.0
      */
     public function getScopeType()
     {
@@ -665,7 +692,8 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @since 100.1.0
      */
     public function getScopeTypeName()
     {
@@ -673,7 +701,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -681,7 +709,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\WebsiteExtensionInterface $extensionAttributes

@@ -74,7 +74,7 @@ abstract class Quote extends \Magento\Backend\App\Action
     /**
      * Initiate action
      *
-     * @return this
+     * @return $this
      */
     protected function _initAction()
     {

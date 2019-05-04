@@ -10,7 +10,7 @@ namespace Magento\Framework\Validator\Test\Unit;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Validator\Config
@@ -51,7 +51,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function _initConfig(array $files = null)
     {
         if (null === $files) {
-            $files = glob(__DIR__ . '/_files/validation/positive/*/validation.xml');
+            $files = glob(__DIR__ . '/_files/validation/positive/*/validation.xml', GLOB_NOSORT);
         }
         $configFiles = [];
         foreach ($files as $path) {
@@ -66,7 +66,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\Validator\UniversalFactory $universalFactory */
         $universalFactory = $appObjectManager->get(\Magento\Framework\Validator\UniversalFactory::class);
         /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
-        $urnResolverMock = $this->getMock(\Magento\Framework\Config\Dom\UrnResolver::class, [], [], '', false);
+        $urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
         $urnResolverMock->expects($this->any())
             ->method('getRealPath')
             ->with('urn:magento:framework:Validator/etc/validation.xsd')
@@ -117,8 +117,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateValidatorInvalidConstraintClass()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Constraint class "stdClass" must implement \Magento\Framework\Validator\ValidatorInterface'
         );
         $this->_initConfig([__DIR__ . '/_files/validation/negative/invalid_constraint.xml']);

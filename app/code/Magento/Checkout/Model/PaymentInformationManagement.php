@@ -3,18 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
+ * Payment information management
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInformationManagementInterface
 {
     /**
      * @var \Magento\Quote\Api\BillingAddressManagementInterface
-     * @deprecated This call was substituted to eliminate extra quote::save call
+     * @deprecated 100.2.0 This call was substituted to eliminate extra quote::save call
      */
     protected $billingAddressManagement;
 
@@ -71,7 +74,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function savePaymentInformationAndPlaceOrder(
         $cartId,
@@ -89,7 +92,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         } catch (\Exception $e) {
             $this->getLogger()->critical($e);
             throw new CouldNotSaveException(
-                __('An error occurred on the server. Please try to place the order again.'),
+                __('A server error stopped your order from being placed. Please try to place your order again.'),
                 $e
             );
         }
@@ -97,7 +100,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function savePaymentInformation(
         $cartId,
@@ -114,9 +117,10 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             $quote->setDataChanges(true);
             $shippingAddress = $quote->getShippingAddress();
             if ($shippingAddress && $shippingAddress->getShippingMethod()) {
-                $shippingDataArray = explode('_', $shippingAddress->getShippingMethod());
-                $shippingCarrier = array_shift($shippingDataArray);
-                $shippingAddress->setLimitCarrier($shippingCarrier);
+                $shippingRate = $shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod());
+                $shippingAddress->setLimitCarrier(
+                    $shippingRate ? $shippingRate->getCarrier() : $shippingAddress->getShippingMethod()
+                );
             }
         }
         $this->paymentMethodManagement->set($cartId, $paymentMethod);
@@ -124,7 +128,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getPaymentInformation($cartId)
     {
@@ -139,7 +143,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * Get logger instance
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getLogger()
     {
@@ -153,7 +157,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * Get Cart repository
      *
      * @return \Magento\Quote\Api\CartRepositoryInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getCartRepository()
     {

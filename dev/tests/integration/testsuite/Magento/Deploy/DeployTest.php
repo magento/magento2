@@ -23,7 +23,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DeployTest extends \PHPUnit_Framework_TestCase
+class DeployTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Filesystem
@@ -284,7 +284,7 @@ class DeployTest extends \PHPUnit_Framework_TestCase
      */
     private function splitPath($path)
     {
-        if (strpos($path, '::') > 0) {
+        if (strpos($path, '::') !== false) {
             list($module, $path) = explode('::', $path);
             return [
                 'module' => $module != 'Lib' ? $module : null,

@@ -16,10 +16,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-/**
- * Class ExportDataHandlerTest
- */
-class ExportDataHandlerTest extends \PHPUnit_Framework_TestCase
+class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
@@ -194,7 +191,7 @@ class ExportDataHandlerTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $archiveSource,
                 $archiveAbsolutePath,
-                $isArchiveSourceDirectory ? true : false
+                $isArchiveSourceDirectory
             );
 
         $fileContent = 'Some text';
@@ -225,7 +222,7 @@ class ExportDataHandlerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'Data source for archive is directory' => [true],
-            'Data source for archive doesn\'t directory' => [false],
+            'Data source for archive isn\'t directory' => [false],
         ];
     }
 

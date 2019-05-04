@@ -45,6 +45,8 @@
             <block name="customer.customer.data"
                    class="Magento\Customer\Block\CustomerData"
                    template="Magento_Customer::js/customer-data.phtml"/>
+            <block name="customer.data.invalidation.rules" class="Magento\Customer\Block\CustomerScopeData"
+                   template="Magento_Customer::js/customer-data/invalidation-rules.phtml"/>
         </referenceContainer>
     </body>
 </page>

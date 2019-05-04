@@ -21,11 +21,7 @@ class Graph
 
     /**#@-*/
 
-    /**
-     * Registry of nodes
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $_nodes = [];
 
     /**

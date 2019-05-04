@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Block\Cart;
 
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 
 /**
+ * Totals cart block.
+ *
  * @api
  */
 class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
@@ -62,6 +65,8 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Retrieve encoded js layout.
+     *
      * @return string
      */
     public function getJsLayout()
@@ -69,10 +74,13 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
         foreach ($this->layoutProcessors as $processor) {
             $this->jsLayout = $processor->process($this->jsLayout);
         }
-        return parent::getJsLayout();
+
+        return json_encode($this->jsLayout, JSON_HEX_TAG);
     }
 
     /**
+     * Retrieve totals from cache.
+     *
      * @return array
      */
     public function getTotals()
@@ -84,6 +92,8 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Set totals to cache.
+     *
      * @param array $value
      * @return $this
      * @codeCoverageIgnore
@@ -95,6 +105,8 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Create totals block and set totals.
+     *
      * @param string $code
      * @return BlockInterface
      */
@@ -120,6 +132,8 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Get totals html.
+     *
      * @param mixed $total
      * @param int|null $area
      * @param int $colspan
@@ -176,7 +190,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
-     * Get formated in base currency base grand total value
+     * Get formatted in base currency base grand total value
      *
      * @return string
      */

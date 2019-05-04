@@ -24,7 +24,7 @@ class AssertCreditCardNotPresentOnCheckout extends AbstractConstraint
         CheckoutOnepage $checkoutOnepage,
         $deletedCreditCard
     ) {
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $checkoutOnepage->getVaultPaymentBlock()->isSavedCreditCardPresent($deletedCreditCard),
             'Credit card is present on checkout.'
         );

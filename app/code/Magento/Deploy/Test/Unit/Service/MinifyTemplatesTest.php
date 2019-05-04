@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 /**
  * Minify Templates service class unit tests
  */
-class MinifyTemplatesTest extends \PHPUnit_Framework_TestCase
+class MinifyTemplatesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MinifyTemplates
@@ -37,13 +37,7 @@ class MinifyTemplatesTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->filesUtils = $this->getMock(
-            Files::class,
-            ['getPhtmlFiles'],
-            [],
-            '',
-            false
-        );
+        $this->filesUtils = $this->createPartialMock(Files::class, ['getPhtmlFiles']);
 
         $this->htmlMinifier = $this->getMockForAbstractClass(
             MinifierInterface::class,

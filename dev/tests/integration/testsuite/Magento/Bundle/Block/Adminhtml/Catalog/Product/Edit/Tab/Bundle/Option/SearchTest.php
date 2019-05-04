@@ -5,7 +5,7 @@
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
 
-class SearchTest extends \PHPUnit_Framework_TestCase
+class SearchTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

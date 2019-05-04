@@ -11,6 +11,7 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Order extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
 {
@@ -23,8 +24,6 @@ class Order extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
     protected function _prepareForm()
     {
         parent::_prepareForm();
-        $form = $this->getForm();
-        $htmlIdPrefix = $form->getHtmlIdPrefix();
         /** @var \Magento\Framework\Data\Form\Element\Fieldset $fieldset */
         $fieldset = $this->getForm()->getElement('base_fieldset');
 

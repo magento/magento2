@@ -24,7 +24,7 @@ class Container extends \Magento\Eav\Model\Entity\Attribute\Source\Config
         if (sizeof($options) > 0) {
             foreach ($options as $option) {
                 if (isset($option['value']) && $option['value'] == $value) {
-                    return $option['label'];
+                    return __($option['label']);
                 }
             }
         }

@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Test\Unit\Observer;
 
 use Magento\Framework\DataObject;
@@ -14,7 +12,7 @@ use Magento\Framework\DataObject;
 /**
  * Class RestrictAdminBillingAgreementUsageObserverTest
  */
-class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit_Framework_TestCase
+class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Paypal\Observer\RestrictAdminBillingAgreementUsageObserver
@@ -48,6 +46,9 @@ class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit_Framework_
         $this->_model = new \Magento\Paypal\Observer\RestrictAdminBillingAgreementUsageObserver($this->_authorization);
     }
 
+    /**
+     * @return array
+     */
     public function restrictAdminBillingAgreementUsageDataProvider()
     {
         return [
@@ -87,12 +88,12 @@ class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit_Framework_
         $this->_authorization->expects(
             $this->any()
         )->method(
-                'isAllowed'
-            )->with(
-                'Magento_Paypal::use'
-            )->will(
-                $this->returnValue($isAllowed)
-            );
+            'isAllowed'
+        )->with(
+            'Magento_Paypal::use'
+        )->will(
+            $this->returnValue($isAllowed)
+        );
         $result = new DataObject();
         $result->setData('is_available', true);
         $this->_event->setResult($result);

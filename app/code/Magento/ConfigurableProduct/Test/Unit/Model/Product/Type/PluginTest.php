@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Type;
 
 /**
  * Class \Magento\ConfigurableProduct\Test\Unit\Model\Product\Type\PluginTest
  */
-class PluginTest extends \PHPUnit_Framework_TestCase
+class PluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $expected
@@ -20,9 +18,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterGetOptionArray(array $expected, array $data)
     {
-        $moduleManagerMock = $this->getMock(
-            \Magento\Framework\Module\Manager::class, ['isOutputEnabled'], [], '', false
-        );
+        $moduleManagerMock = $this->createPartialMock(\Magento\Framework\Module\Manager::class, ['isOutputEnabled']);
         $moduleManagerMock->expects($this->once())
             ->method('isOutputEnabled')
             ->with('Magento_ConfigurableProduct')
@@ -40,7 +36,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      */
     public function afterGetOptionArrayDataProvider()
     {
-        $productTypeMock = $this->getMock(\Magento\Catalog\Model\Product\Type::class, [], [], '', false);
+        $productTypeMock = $this->createMock(\Magento\Catalog\Model\Product\Type::class);
         return [
             [
                 [

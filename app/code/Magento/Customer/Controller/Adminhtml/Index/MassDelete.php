@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
@@ -15,8 +16,15 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class MassDelete
  */
-class MassDelete extends AbstractMassAction
+class MassDelete extends AbstractMassAction implements HttpPostActionInterface
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::delete';
+
     /**
      * @var CustomerRepositoryInterface
      */
@@ -39,8 +47,7 @@ class MassDelete extends AbstractMassAction
     }
 
     /**
-     * @param AbstractCollection $collection
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @inheritdoc
      */
     protected function massAction(AbstractCollection $collection)
     {

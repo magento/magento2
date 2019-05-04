@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Search\Request;
 
-class MapperTest extends \PHPUnit_Framework_TestCase
+class MapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Search\Request\Mapper

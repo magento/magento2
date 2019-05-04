@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/column.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/datetime/default.xsd"/>
+
+    <xs:complexType name="datetime">
+        <xs:complexContent>
+            <xs:extension base="abstractColumnType">
+                <xs:annotation>
+                    <xs:documentation>
+                        This format is used to save date (year, month, day).
+                        Probably your SQL engine will save date in this format: 'YYYY-MM-DD HH:MM::SS'
+                        Date time in invalid format will be converted to '0000-00-00 00:00:00' string
+                        Supported range is '1000-01-01 00:00:00' to '9999-12-31 23:59:59'
+                        DateTime format save date and time in your local time zone
+                    </xs:documentation>
+                </xs:annotation>
+
+                <xs:attributeGroup ref="default" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

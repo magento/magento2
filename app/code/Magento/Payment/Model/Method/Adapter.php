@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Model\Method;
 
 use Magento\Framework\App\ObjectManager;
@@ -27,6 +28,7 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api Use this class as a base for virtual types declaration
+ * @since 100.0.2
  */
 class Adapter implements MethodInterface
 {
@@ -316,7 +318,7 @@ class Adapter implements MethodInterface
      */
     public function isActive($storeId = null)
     {
-        return $this->getConfiguredValue('active', $storeId);
+        return (bool)$this->getConfiguredValue('active', $storeId);
     }
 
     /**
@@ -397,7 +399,6 @@ class Adapter implements MethodInterface
         try {
             $validator = $this->getValidatorPool()->get('global');
         } catch (\Exception $e) {
-            $this->logger->critical($e);
             return $this;
         }
 
@@ -419,7 +420,7 @@ class Adapter implements MethodInterface
      */
     public function fetchTransactionInfo(InfoInterface $payment, $transactionId)
     {
-        $this->executeCommand(
+        return $this->executeCommand(
             'fetch_transaction_information',
             ['payment' => $payment, 'transactionId' => $transactionId]
         );
@@ -538,7 +539,7 @@ class Adapter implements MethodInterface
         }
 
         if ($this->commandPool === null) {
-            throw new \DomainException('Command pool is not configured for use.');
+            throw new \DomainException("The command pool isn't configured for use.");
         }
 
         $command = $this->commandPool->get($commandCode);

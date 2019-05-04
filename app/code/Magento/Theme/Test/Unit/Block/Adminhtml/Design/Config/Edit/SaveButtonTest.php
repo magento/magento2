@@ -8,7 +8,7 @@ namespace Magento\Theme\Test\Unit\Block\Adminhtml\Design\Config\Edit;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Theme\Block\Adminhtml\Design\Config\Edit\SaveButton;
 
-class SaveButtonTest extends \PHPUnit_Framework_TestCase
+class SaveButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SaveButton

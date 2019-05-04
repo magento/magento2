@@ -4,19 +4,30 @@
  * See COPYING.txt for license details.
  */
 
-$pathList[] = dirname(__DIR__) . '/code/*/*/cli_commands.php';
-$pathList[] = dirname(__DIR__) . '/code/*/*/registration.php';
-$pathList[] = dirname(__DIR__) . '/design/*/*/*/registration.php';
-$pathList[] = dirname(__DIR__) . '/i18n/*/*/registration.php';
-$pathList[] = dirname(dirname(__DIR__)) . '/lib/internal/*/*/registration.php';
-$pathList[] = dirname(dirname(__DIR__)) . '/lib/internal/*/*/*/registration.php';
-foreach ($pathList as $path) {
-    // Sorting is disabled intentionally for performance improvement
-    $files = glob($path, GLOB_NOSORT);
-    if ($files === false) {
-        throw new \RuntimeException('glob() returned error while searching in \'' . $path . '\'');
-    }
-    foreach ($files as $file) {
-        include $file;
+//Register components (via a list of glob patterns)
+namespace Magento\NonComposerComponentRegistration;
+
+use RuntimeException;
+
+/**
+ * Include files from a list of glob patterns
+ *
+ * @throws RuntimeException
+ * @return void
+ */
+function main()
+{
+    $globPatterns = require __DIR__ . '/registration_globlist.php';
+    $baseDir = dirname(dirname(__DIR__)) . '/';
+
+    foreach ($globPatterns as $globPattern) {
+        // Sorting is disabled intentionally for performance improvement
+        $files = glob($baseDir . $globPattern, GLOB_NOSORT);
+        if ($files === false) {
+            throw new RuntimeException("glob(): error with '$baseDir$globPattern'");
+        }
+        array_map(function ($file) { require_once $file; }, $files);
     }
 }
+
+main();

@@ -7,6 +7,10 @@ namespace Magento\Framework\Crontab;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Interface \Magento\Framework\Crontab\CrontabManagerInterface
+ *
+ */
 interface CrontabManagerInterface
 {
     /**#@+

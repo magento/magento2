@@ -6,9 +6,6 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Config\Test\Fixture\ConfigData;
-use Magento\Customer\Test\Constraint\AssertChangingWebsiteChangeCountries;
-use Magento\Framework\App\ObjectManager;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestCase\Injectable;
@@ -16,6 +13,9 @@ use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew;
+use Magento\User\Test\Fixture\User;
+use Magento\User\Test\Page\Adminhtml\UserEdit;
+use Magento\User\Test\Page\Adminhtml\UserIndex;
 
 /**
  * Steps:
@@ -68,37 +68,64 @@ class CreateCustomerBackendEntityTest extends Injectable
     private $fixtureFactory;
 
     /**
+     * @var UserEdit
+     */
+    private $userEdit;
+
+    /**
+     * @var UserIndex
+     */
+    private $userIndex;
+
+    /**
+     * Array of steps.
+     *
+     * @var array
+     */
+    private $steps;
+
+    /**
      * Inject customer pages.
      *
      * @param CustomerIndex $pageCustomerIndex
      * @param CustomerIndexNew $pageCustomerIndexNew
+     * @param FixtureFactory $fixtureFactory
+     * @param UserEdit $userEdit
+     * @param UserIndex $userIndex
      * @return void
      */
     public function __inject(
         CustomerIndex $pageCustomerIndex,
         CustomerIndexNew $pageCustomerIndexNew,
-        \Magento\Mtf\Fixture\FixtureFactory $fixtureFactory
+        \Magento\Mtf\Fixture\FixtureFactory $fixtureFactory,
+        UserEdit $userEdit,
+        UserIndex $userIndex
     ) {
         $this->pageCustomerIndex = $pageCustomerIndex;
         $this->pageCustomerIndexNew = $pageCustomerIndexNew;
         $this->fixtureFactory = $fixtureFactory;
+        $this->userEdit = $userEdit;
+        $this->userIndex = $userIndex;
     }
 
     /**
      * Create customer on backend.
      *
      * @param Customer $customer
-     * @param string $customerAction
-     * @param Address $address
-     * @return void
+     * @param null $customerAction
+     * @param Address|null $address
+     * @param array $steps
+     * @param array $beforeActionCallback
+     * @throws \Exception
      */
     public function test(
         Customer $customer,
-        $customerAction,
+        $customerAction = null,
         Address $address = null,
         array $steps = [],
         array $beforeActionCallback = []
     ) {
+        $this->steps = $steps;
         ///Process initialize steps
         foreach ($steps as $methodName => $stepData) {
             if (method_exists($this, $methodName)) {
@@ -108,7 +135,12 @@ class CreateCustomerBackendEntityTest extends Injectable
 
         $this->pageCustomerIndex->open();
         $this->pageCustomerIndex->getPageActionsBlock()->addNew();
-        $this->pageCustomerIndexNew->getCustomerForm()->fillCustomer($customer, $address);
+        $this->pageCustomerIndexNew->getCustomerForm()->fillCustomer($customer);
+        if (null !== $address) {
+            $this->pageCustomerIndexNew->getPageActionsBlock()->saveAndContinue();
+            $this->pageCustomerIndexNew->getMessagesBlock()->waitSuccessMessage();
+            $this->pageCustomerIndexNew->getCustomerForm()->fillCustomerAddress($address);
+        }
         $this->address = $address;
         $this->customer = $customer;
 
@@ -117,8 +149,9 @@ class CreateCustomerBackendEntityTest extends Injectable
                 call_user_func([$this, $methodName]);
             }
         }
-
-        $this->pageCustomerIndexNew->getPageActionsBlock()->$customerAction();
+        if (null !== $customerAction) {
+            $this->pageCustomerIndexNew->getPageActionsBlock()->$customerAction();
+        }
     }
 
     /**
@@ -227,6 +260,49 @@ class CreateCustomerBackendEntityTest extends Injectable
                 'website' => $websiteFixture,
                 'countries' => explode(",", $countries)
             ];
+        }
+    }
+
+    /**
+     * Change Admin locale.
+     *
+     * @param array $userData
+     */
+    protected function changeAdminLocale(array $userData)
+    {
+        /** @var User $adminUser */
+        $adminUser = $this->fixtureFactory->createByCode('user', ['data' => $userData]);
+        $this->userIndex->open();
+        $this->userIndex->getUserGrid()->searchAndOpen(['username' => $adminUser->getUsername()]);
+        $this->userEdit->getUserForm()->fill($adminUser);
+        $this->userEdit->getPageActions()->save();
+    }
+
+    /**
+     * Revert Admin locale.
+     */
+    protected function changeAdminLocaleRollback()
+    {
+        /** @var User $defaultAdminUser */
+        $defaultAdminUser = $this->fixtureFactory->createByCode('user');
+        $adminUserData = $defaultAdminUser->getData();
+        unset($adminUserData['user_id']);
+        $defaultAdminUser = $this->fixtureFactory->createByCode('user', ['data' => $adminUserData]);
+        $this->userIndex->open();
+        $this->userIndex->getUserGrid()->searchAndOpen(['username' => $defaultAdminUser->getUsername()]);
+        $this->userEdit->getUserForm()->fill($defaultAdminUser);
+        $this->userEdit->getPageActions()->save();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        foreach ($this->steps as $key => $stepData) {
+            if (method_exists($this, $key . 'Rollback')) {
+                call_user_func_array([$this, $key . 'Rollback'], $stepData);
+            }
         }
     }
 }

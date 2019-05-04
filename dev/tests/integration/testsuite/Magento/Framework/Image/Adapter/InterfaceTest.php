@@ -5,12 +5,10 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 /**
  * @magentoAppIsolation enabled
  */
-class InterfaceTest extends \PHPUnit_Framework_TestCase
+class InterfaceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Adapter classes for test
@@ -340,6 +338,97 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test if alpha transparency is correctly handled
+     *
+     * @param string $image
+     * @param string $watermark
+     * @param int $alphaPercentage
+     * @param array $comparePoint1
+     * @param array $comparePoint2
+     * @param string $adapterType
+     *
+     * @dataProvider imageWatermarkWithAlphaTransparencyDataProvider
+     * @depends testOpen
+     * @depends testImageSize
+     */
+    public function testWatermarkWithAlphaTransparency(
+        $image,
+        $watermark,
+        $alphaPercentage,
+        $comparePoint1,
+        $comparePoint2,
+        $adapterType
+    ) {
+        $imageAdapter = $this->_getAdapter($adapterType);
+        $imageAdapter->open($image);
+
+        $watermarkAdapter = $this->_getAdapter($adapterType);
+        $watermarkAdapter->open($watermark);
+
+        list($comparePoint1X, $comparePoint1Y) = $comparePoint1;
+        list($comparePoint2X, $comparePoint2Y) = $comparePoint2;
+
+        $imageAdapter
+            ->setWatermarkImageOpacity($alphaPercentage)
+            ->setWatermarkPosition(\Magento\Framework\Image\Adapter\AbstractAdapter::POSITION_TOP_LEFT)
+            ->watermark($watermark);
+
+        $comparePoint1Color = $imageAdapter->getColorAt($comparePoint1X, $comparePoint1Y);
+        unset($comparePoint1Color['alpha']);
+
+        $comparePoint2Color = $imageAdapter->getColorAt($comparePoint2X, $comparePoint2Y);
+        unset($comparePoint2Color['alpha']);
+
+        $result = $this->_compareColors($comparePoint1Color, $comparePoint2Color);
+        $message = sprintf(
+            '%s should be different to %s due to alpha transparency',
+            join(',', $comparePoint1Color),
+            join(',', $comparePoint2Color)
+        );
+        $this->assertFalse($result, $message);
+    }
+
+    public function imageWatermarkWithAlphaTransparencyDataProvider()
+    {
+        return $this->_prepareData(
+            [
+                // Watermark with alpha channel, 25%
+                [
+                    $this->_getFixture('watermark_alpha_base_image.jpg'),
+                    $this->_getFixture('watermark_alpha.png'),
+                    25,
+                    [ 23, 3 ],
+                    [ 23, 30 ]
+                ],
+                // Watermark with alpha channel, 50%
+                [
+                    $this->_getFixture('watermark_alpha_base_image.jpg'),
+                    $this->_getFixture('watermark_alpha.png'),
+                    50,
+                    [ 23, 3 ],
+                    [ 23, 30 ]
+                ],
+                // Watermark with no alpha channel, 50%
+                [
+                    $this->_getFixture('watermark_alpha_base_image.jpg'),
+                    $this->_getFixture('watermark.png'),
+                    50,
+                    [ 3, 3 ],
+                    [ 23,3 ]
+                ],
+                // Watermark with no alpha channel, 100%
+                [
+                    $this->_getFixture('watermark_alpha_base_image.jpg'),
+                    $this->_getFixture('watermark.png'),
+                    100,
+                    [ 3, 3 ],
+                    [ 3, 60 ]
+                ],
+            ]
+        );
+    }
+
+    /**
      * Checks if watermark exists on the right position
      *
      * @param string $image
@@ -352,10 +441,10 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
      * @param int $colorY
      * @param string $adapterType
      *
-     * @dataProvider imageWatermarkDataProvider
+     * @dataProvider imageWatermarkPositionDataProvider
      * @depends testOpen
      */
-    public function testWatermark(
+    public function testWatermarkPosition(
         $image,
         $watermark,
         $width,
@@ -389,7 +478,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($result, $message);
     }
 
-    public function imageWatermarkDataProvider()
+    public function imageWatermarkPositionDataProvider()
     {
         return $this->_prepareData(
             [
@@ -547,11 +636,6 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreatePngFromString($pixel1, $expectedColor1, $pixel2, $expectedColor2, $adapterType)
     {
-        if (!function_exists('imagettfbbox')
-            || (getenv('TRAVIS') && getenv('TRAVIS_PHP_VERSION') == '7.1')
-        ) {
-            $this->markTestSkipped('Workaround for problem with imagettfbbox() function on Travis');
-        }
         $adapter = $this->_getAdapter($adapterType);
 
         /** @var \Magento\Framework\Filesystem\Directory\ReadFactory readFactory */
@@ -564,9 +648,11 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
         $adapter->refreshImageDimensions();
 
         $color1 = $adapter->getColorAt($pixel1['x'], $pixel1['y']);
+        unset($color1['alpha']);
         $this->assertEquals($expectedColor1, $color1);
 
         $color2 = $adapter->getColorAt($pixel2['x'], $pixel2['y']);
+        unset($color2['alpha']);
         $this->assertEquals($expectedColor2, $color2);
     }
 
@@ -580,30 +666,30 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 ['x' => 5, 'y' => 8],
-                'expectedColor1' => ['red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 0],
-                ['x' => 0, 'y' => 15],
-                'expectedColor2' => ['red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 127],
+                'expectedColor1' => ['red' => 0, 'green' => 0, 'blue' => 0],
+                ['x' => 0, 'y' => 14],
+                'expectedColor2' => ['red' => 255, 'green' => 255, 'blue' => 255],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2,
             ],
             [
-                ['x' => 4, 'y' => 7],
-                'expectedColor1' => ['red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 0],
-                ['x' => 0, 'y' => 15],
-                'expectedColor2' => ['red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 127],
+                ['x' => 5, 'y' => 12],
+                'expectedColor1' => ['red' => 0, 'green' => 0, 'blue' => 0],
+                ['x' => 0, 'y' => 20],
+                'expectedColor2' => ['red' => 255, 'green' => 255, 'blue' => 255],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_IM
             ],
             [
                 ['x' => 1, 'y' => 14],
-                'expectedColor1' => ['red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 127],
+                'expectedColor1' => ['red' => 255, 'green' => 255, 'blue' => 255],
                 ['x' => 5, 'y' => 12],
-                'expectedColor2' => ['red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 0],
+                'expectedColor2' => ['red' => 0, 'green' => 0, 'blue' => 0],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2
             ],
             [
-                ['x' => 1, 'y' => 14],
-                'expectedColor1' => ['red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 127],
-                ['x' => 4, 'y' => 10],
-                'expectedColor2' => ['red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 0],
+                ['x' => 1, 'y' => 20],
+                'expectedColor1' => ['red' => 255, 'green' => 255, 'blue' => 255],
+                ['x' => 5, 'y' => 16],
+                'expectedColor2' => ['red' => 0, 'green' => 0, 'blue' => 0],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_IM
             ]
         ];

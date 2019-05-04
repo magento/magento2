@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Tests Magento\Framework\ComposerInformation
  */
-class ComposerInformationTest extends \PHPUnit_Framework_TestCase
+class ComposerInformationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

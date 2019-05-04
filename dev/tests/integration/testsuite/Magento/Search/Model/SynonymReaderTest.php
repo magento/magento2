@@ -9,7 +9,7 @@ namespace Magento\Search\Model;
  * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/Search/_files/synonym_reader.php
  */
-class SynonymReaderTest extends \PHPUnit_Framework_TestCase
+class SynonymReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Search\Model\SynonymReader
@@ -48,7 +48,22 @@ class SynonymReaderTest extends \PHPUnit_Framework_TestCase
                 ['synonyms' => 'queen,monarch', 'store_id' => 1, 'website_id' => 0],
                 ['synonyms' => 'british,english', 'store_id' => 1, 'website_id' => 0]
                 ]
-            ]
+            ],
+            [
+                'query_value', []
+            ],
+            [
+                'query_value+', []
+            ],
+            [
+                'query_value-', []
+            ],
+            [
+                'query_@value', []
+            ],
+            [
+                'query_value+@', []
+            ],
         ];
     }
 

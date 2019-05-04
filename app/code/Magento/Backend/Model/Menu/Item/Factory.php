@@ -7,6 +7,7 @@ namespace Magento\Backend\Model\Menu\Item;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Factory
 {

@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\View\Tab;
 /**
  * Order transactions tab test
  */
-class TransactionsTest extends \PHPUnit_Framework_TestCase
+class TransactionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -44,10 +44,10 @@ class TransactionsTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->authorizationMock = $this->getMock(\Magento\Framework\Authorization::class, [], [], '', false);
-        $this->coreRegistryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $this->orderMock = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
-        $this->paymentMock = $this->getMock(\Magento\Sales\Model\Order\Payment::class, [], [], '', false);
+        $this->authorizationMock = $this->createMock(\Magento\Framework\Authorization::class);
+        $this->coreRegistryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
+        $this->paymentMock = $this->createMock(\Magento\Sales\Model\Order\Payment::class);
 
         $this->coreRegistryMock->expects($this->any())
             ->method('registry')

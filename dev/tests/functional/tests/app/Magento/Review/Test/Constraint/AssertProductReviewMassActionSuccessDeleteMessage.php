@@ -36,7 +36,7 @@ class AssertProductReviewMassActionSuccessDeleteMessage extends AbstractConstrai
     {
         $reviews = is_array($review) ? $review : [$review];
         $deleteMessage = sprintf(self::SUCCESS_DELETE_MESSAGE, count($reviews));
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $deleteMessage,
             $reviewIndex->getMessagesBlock()->getSuccessMessage(),
             'Wrong success message is displayed.'

@@ -10,7 +10,7 @@ use Magento\Sales\Model\Order;
 /**
  * Class CanRefundTest
  */
-class CanRefundTest extends \PHPUnit_Framework_TestCase
+class CanRefundTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Validation\CanRefund|\PHPUnit_Framework_MockObject_MockObject

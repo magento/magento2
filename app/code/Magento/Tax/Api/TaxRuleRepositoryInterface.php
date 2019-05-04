@@ -9,6 +9,7 @@ namespace Magento\Tax\Api;
 /**
  * Tax rule CRUD interface.
  * @api
+ * @since 100.0.2
  */
 interface TaxRuleRepositoryInterface
 {
@@ -54,7 +55,7 @@ interface TaxRuleRepositoryInterface
      * Search TaxRules
      *
      * This call returns an array of objects, but detailed information about each object’s attributes might not be
-     * included. See http://devdocs.magento.com/codelinks/attributes.html#TaxRuleRepositoryInterface to
+     * included. See https://devdocs.magento.com/codelinks/attributes.html#TaxRuleRepositoryInterface to
      * determine which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria

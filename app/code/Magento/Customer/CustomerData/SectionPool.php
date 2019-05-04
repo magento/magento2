@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
  * Section pool
  *
  * @api
+ * @since 100.0.2
  */
 class SectionPool implements SectionPoolInterface
 {
@@ -52,12 +53,12 @@ class SectionPool implements SectionPoolInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function getSectionsData(array $sectionNames = null, $updateIds = false)
+    public function getSectionsData(array $sectionNames = null, $forceNewTimestamp = false)
     {
         $sectionsData = $sectionNames ? $this->getSectionDataByNames($sectionNames) : $this->getAllSectionData();
-        $sectionsData = $this->identifier->markSections($sectionsData, $sectionNames, $updateIds);
+        $sectionsData = $this->identifier->markSections($sectionsData, $sectionNames, $forceNewTimestamp);
         return $sectionsData;
     }
 
@@ -73,7 +74,7 @@ class SectionPool implements SectionPoolInterface
         $data = [];
         foreach ($sectionNames as $sectionName) {
             if (!isset($this->sectionSourceMap[$sectionName])) {
-                throw new LocalizedException(__('"%1" section source is not supported', $sectionName));
+                throw new LocalizedException(__('The "%1" section source isn\'t supported.', $sectionName));
             }
             $data[$sectionName] = $this->get($this->sectionSourceMap[$sectionName])->getSectionData();
         }

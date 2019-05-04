@@ -9,6 +9,7 @@ namespace Magento\Catalog\Api\Data;
 /**
  * Tier price interface.
  * @api
+ * @since 101.1.0
  */
 interface TierPriceInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -30,6 +31,7 @@ interface TierPriceInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param float $price
      * @return $this
+     * @since 101.1.0
      */
     public function setPrice($price);
 
@@ -37,6 +39,7 @@ interface TierPriceInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Get tier price.
      *
      * @return float
+     * @since 101.1.0
      */
     public function getPrice();
 
@@ -45,6 +48,7 @@ interface TierPriceInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param string $type
      * @return $this
+     * @since 101.1.0
      */
     public function setPriceType($type);
 
@@ -52,6 +56,7 @@ interface TierPriceInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Get tier price type.
      *
      * @return string
+     * @since 101.1.0
      */
     public function getPriceType();
 
@@ -60,6 +65,7 @@ interface TierPriceInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param int $websiteId
      * @return $this
+     * @since 101.1.0
      */
     public function setWebsiteId($websiteId);
 
@@ -67,6 +73,7 @@ interface TierPriceInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Get website id.
      *
      * @return int
+     * @since 101.1.0
      */
     public function getWebsiteId();
 
@@ -75,6 +82,7 @@ interface TierPriceInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param string $sku
      * @return $this
+     * @since 101.1.0
      */
     public function setSku($sku);
 
@@ -82,6 +90,7 @@ interface TierPriceInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Get SKU.
      *
      * @return string
+     * @since 101.1.0
      */
     public function getSku();
 
@@ -90,6 +99,7 @@ interface TierPriceInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param string $group
      * @return $this
+     * @since 101.1.0
      */
     public function setCustomerGroup($group);
 
@@ -97,6 +107,7 @@ interface TierPriceInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Get customer group.
      *
      * @return string
+     * @since 101.1.0
      */
     public function getCustomerGroup();
 
@@ -105,6 +116,7 @@ interface TierPriceInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param float $quantity
      * @return $this
+     * @since 101.1.0
      */
     public function setQuantity($quantity);
 
@@ -112,6 +124,7 @@ interface TierPriceInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Get quantity.
      *
      * @return float
+     * @since 101.1.0
      */
     public function getQuantity();
 
@@ -119,6 +132,7 @@ interface TierPriceInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Catalog\Api\Data\TierPriceExtensionInterface|null
+     * @since 101.1.0
      */
     public function getExtensionAttributes();
 
@@ -127,6 +141,7 @@ interface TierPriceInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param \Magento\Catalog\Api\Data\TierPriceExtensionInterface $extensionAttributes
      * @return $this
+     * @since 101.1.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\TierPriceExtensionInterface $extensionAttributes

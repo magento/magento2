@@ -10,7 +10,7 @@ namespace Magento\Catalog\Block\Product\ProductList;
  *
  * @magentoDataFixture Magento/Catalog/_files/products_crosssell.php
  */
-class CrosssellTest extends \PHPUnit_Framework_TestCase
+class CrosssellTest extends \PHPUnit\Framework\TestCase
 {
     public function testAll()
     {

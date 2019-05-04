@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 
-class ConfigurationScannerTest extends \PHPUnit_Framework_TestCase
+class ConfigurationScannerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Config\FileResolver | \PHPUnit_Framework_MockObject_MockObject

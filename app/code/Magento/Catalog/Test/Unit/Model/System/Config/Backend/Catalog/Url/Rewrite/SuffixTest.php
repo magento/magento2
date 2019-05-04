@@ -5,7 +5,11 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\System\Config\Backend\Catalog\Url\Rewrite;
 
-class SuffixTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class SuffixTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class SuffixTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\Context
@@ -70,8 +74,8 @@ class SuffixTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->context->method('getEventDispatcher')->willReturn($this->eventDispatcher);
         
-        $this->registry = $this->getMock(\Magento\Framework\Registry::class);
-        $this->config = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
+        $this->config = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->cacheTypeList = $this->getMockBuilder(\Magento\Framework\App\Cache\TypeList::class)
             ->disableOriginalConstructor()
             ->setMethods(['invalidate'])

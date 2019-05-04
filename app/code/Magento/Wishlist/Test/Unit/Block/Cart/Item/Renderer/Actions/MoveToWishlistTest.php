@@ -9,7 +9,7 @@ use Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Wishlist\Helper\Data;
 
-class MoveToWishlistTest extends \PHPUnit_Framework_TestCase
+class MoveToWishlistTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MoveToWishlist

@@ -9,7 +9,7 @@ namespace Magento\Indexer\Test\Unit\Controller\Adminhtml\Indexer;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
+class MassOnTheFlyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Indexer\Controller\Adminhtml\Indexer\MassOnTheFly
@@ -87,9 +87,7 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->contextMock = $this->getMock(
-            \Magento\Backend\App\Action\Context::class,
-            [
+        $this->contextMock = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
                 'getAuthorization',
                 'getSession',
                 'getActionFlag',
@@ -104,21 +102,14 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
                 'getResponse',
                 'getObjectManager',
                 'getMessageManager'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
-        $this->response = $this->getMock(
+        $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
-            ['setRedirect', 'sendResponse'],
-            [],
-            '',
-            false
+            ['setRedirect', 'sendResponse']
         );
 
-        $this->view = $this->getMock(
+        $this->view = $this->createPartialMock(
             \Magento\Framework\App\ViewInterface::class,
             [
                 'loadLayout',
@@ -135,22 +126,16 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
                 'addActionLayoutHandles',
                 'setIsLayoutLoaded',
                 'isLayoutLoaded'
-            ],
-            [],
-            '',
-            false
+            ]
         );
 
-        $this->session = $this->getMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice'], [], '', false);
+        $this->session = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
         $this->session->expects($this->any())->method('setIsUrlNotice')->willReturn($this->objectManager);
-        $this->actionFlag = $this->getMock(\Magento\Framework\App\ActionFlag::class, ['get'], [], '', false);
+        $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
         $this->actionFlag->expects($this->any())->method("get")->willReturn($this->objectManager);
-        $this->objectManager = $this->getMock(
+        $this->objectManager = $this->createPartialMock(
             \Magento\Framework\TestFramework\Unit\Helper\ObjectManager::class,
-            ['get'],
-            [],
-            '',
-            false
+            ['get']
         );
         $this->request = $this->getMockForAbstractClass(
             \Magento\Framework\App\RequestInterface::class,
@@ -160,9 +145,9 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->response->expects($this->any())->method("setRedirect")->willReturn(1);
-        $this->page = $this->getMock(\Magento\Framework\View\Result\Page::class, [], [], '', false);
-        $this->config = $this->getMock(\Magento\Framework\View\Result\Page::class, [], [], '', false);
-        $this->title = $this->getMock(\Magento\Framework\View\Page\Title::class, [], [], '', false);
+        $this->page = $this->createMock(\Magento\Framework\View\Result\Page::class);
+        $this->config = $this->createMock(\Magento\Framework\View\Result\Page::class);
+        $this->title = $this->createMock(\Magento\Framework\View\Page\Title::class);
         $this->messageManager = $this->getMockForAbstractClass(
             \Magento\Framework\Message\ManagerInterface::class,
             ['addError', 'addSuccess'],
@@ -170,14 +155,11 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->indexReg = $this->getMock(
+        $this->indexReg = $this->createPartialMock(
             \Magento\Framework\Indexer\IndexerRegistry::class,
-            ['get', 'setScheduled'],
-            [],
-            '',
-            false
+            ['get', 'setScheduled']
         );
-        $this->helper = $this->getMock(\Magento\Backend\Helper\Data::class, ['getUrl'], [], '', false);
+        $this->helper = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
         $this->contextMock->expects($this->any())->method("getObjectManager")->willReturn($this->objectManager);
         $this->contextMock->expects($this->any())->method("getRequest")->willReturn($this->request);
         $this->contextMock->expects($this->any())->method("getResponse")->willReturn($this->response);
@@ -241,7 +223,8 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
         $this->helper->expects($this->any())->method("getUrl")->willReturn("magento.com");
         $this->response->expects($this->any())->method("setRedirect")->willReturn(1);
 
-        $this->model->execute();
+        $result = $this->model->execute();
+        $this->assertNull($result);
     }
 
     /**

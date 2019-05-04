@@ -33,7 +33,7 @@ class AssertOrderGraphImageIsVisible extends AbstractConstraint
             ['argumentsList' => $argumentsList]
         )->run();
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $dashboard->getMainBlock()->isGraphImageVisible(),
             'Graph image is not visible on admin dashboard.'
         );
