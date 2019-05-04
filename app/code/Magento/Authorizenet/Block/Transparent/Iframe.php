@@ -77,7 +77,7 @@ class Iframe extends TransparentIframe
     {
         $params = $this->getParams();
         if (isset($params['redirect_parent'])) {
-            $this->messageManager->addSuccess(__('You created the order.'));
+            $this->messageManager->addSuccessMessage(__('You created the order.'));
         }
     }
 }

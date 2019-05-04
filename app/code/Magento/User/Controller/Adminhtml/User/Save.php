@@ -59,7 +59,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
         /** @var $model \Magento\User\Model\User */
         $model = $this->_userFactory->create()->load($userId);
         if ($userId && $model->isObjectNew()) {
-            $this->messageManager->addError(__('This user no longer exists.'));
+            $this->messageManager->addErrorMessage(__('This user no longer exists.'));
             $this->_redirect('adminhtml/*/');
             return;
         }
@@ -95,7 +95,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
             $currentUser->performIdentityCheck($data[$currentUserPasswordField]);
             $model->save();
 
-            $this->messageManager->addSuccess(__('You saved the user.'));
+            $this->messageManager->addSuccessMessage(__('You saved the user.'));
             $this->_getSession()->setUserData(false);
             $this->_redirect('adminhtml/*/');
 
@@ -109,7 +109,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
         } catch (NotificationExceptionInterface $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
         } catch (\Magento\Framework\Exception\AuthenticationException $e) {
-            $this->messageManager->addError(
+            $this->messageManager->addErrorMessage(
                 __('The password entered for the current user is invalid. Verify the password and try again.')
             );
             $this->redirectToEdit($model, $data);
@@ -119,7 +119,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
             $this->redirectToEdit($model, $data);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($e->getMessage()) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
             $this->redirectToEdit($model, $data);
         }

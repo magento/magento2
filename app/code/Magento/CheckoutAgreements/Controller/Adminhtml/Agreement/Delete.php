@@ -43,20 +43,20 @@ class Delete extends Agreement implements HttpPostActionInterface
         $id = (int)$this->getRequest()->getParam('id');
         $agreement = $this->agreementRepository->get($id);
         if (!$agreement->getAgreementId()) {
-            $this->messageManager->addError(__('This condition no longer exists.'));
+            $this->messageManager->addErrorMessage(__('This condition no longer exists.'));
             $this->_redirect('checkout/*/');
             return;
         }
 
         try {
             $this->agreementRepository->delete($agreement);
-            $this->messageManager->addSuccess(__('You deleted the condition.'));
+            $this->messageManager->addSuccessMessage(__('You deleted the condition.'));
             $this->_redirect('checkout/*/');
             return;
         } catch (LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('Something went wrong  while deleting this condition.'));
+            $this->messageManager->addErrorMessage(__('Something went wrong  while deleting this condition.'));
         }
 
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));

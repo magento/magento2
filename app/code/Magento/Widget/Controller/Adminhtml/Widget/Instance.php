@@ -104,7 +104,7 @@ abstract class Instance extends \Magento\Backend\App\Action
         if ($instanceId) {
             $widgetInstance->load($instanceId)->setCode($code);
             if (!$widgetInstance->getId()) {
-                $this->messageManager->addError(__('Please specify a correct widget.'));
+                $this->messageManager->addErrorMessage(__('Please specify a correct widget.'));
                 return false;
             }
         } else {

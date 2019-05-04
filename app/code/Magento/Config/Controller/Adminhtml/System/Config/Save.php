@@ -164,14 +164,14 @@ class Save extends AbstractConfig implements HttpPostActionInterface
                 'configData' => $configData,
                 'request' => $this->getRequest()
             ]);
-            $this->messageManager->addSuccess(__('You saved the configuration.'));
+            $this->messageManager->addSuccessMessage(__('You saved the configuration.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());
             foreach ($messages as $message) {
-                $this->messageManager->addError($message);
+                $this->messageManager->addErrorMessage($message);
             }
         } catch (\Exception $e) {
-            $this->messageManager->addException(
+            $this->messageManager->addExceptionMessage(
                 $e,
                 __('Something went wrong while saving this configuration:') . ' ' . $e->getMessage()
             );

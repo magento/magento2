@@ -128,7 +128,7 @@ class Redirect extends Create implements HttpGetActionInterface, HttpPostActionI
             $this->_getSession()->clearStorage();
             $directpostSession->removeCheckoutOrderIncrementId($redirectParams['x_invoice_num']);
             $this->_objectManager->get(\Magento\Backend\Model\Session::class)->clearStorage();
-            $this->messageManager->addSuccess(__('You created the order.'));
+            $this->messageManager->addSuccessMessage(__('You created the order.'));
         }
 
         if (!empty($redirectParams['error_msg'])) {

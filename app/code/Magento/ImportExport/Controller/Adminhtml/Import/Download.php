@@ -89,7 +89,7 @@ class Download extends ImportController
         try {
             $fileContents = $this->sampleFileProvider->getFileContents($entityName);
         } catch (NoSuchEntityException $e) {
-            $this->messageManager->addError(__('There is no sample file for this entity.'));
+            $this->messageManager->addErrorMessage(__('There is no sample file for this entity.'));
 
             return $this->getResultRedirect();
         }

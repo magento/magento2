@@ -58,7 +58,7 @@ class CheckConfig implements ObserverInterface
         if ($this->config->isNewRelicEnabled()) {
             if (!$this->newRelicWrapper->isExtensionInstalled()) {
                 $this->config->disableModule();
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __(
                         'The New Relic integration requires the newrelic-php5 agent, which is not installed. More 
                         information on installing the agent is available <a target="_blank" href="%1">here</a>.',

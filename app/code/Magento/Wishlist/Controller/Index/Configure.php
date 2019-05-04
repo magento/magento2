@@ -102,11 +102,11 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex
 
             return $resultPage;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $resultRedirect->setPath('*');
             return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t configure the product right now.'));
+            $this->messageManager->addErrorMessage(__('We can\'t configure the product right now.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $resultRedirect->setPath('*');
             return $resultRedirect;

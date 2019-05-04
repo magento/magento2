@@ -125,7 +125,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
                 \Magento\Multishipping\Helper\Data::class
             )->isMultishippingCheckoutAvailable()) {
                 $error = $this->_getCheckout()->getMinimumAmountError();
-                $this->messageManager->addError($error);
+                $this->messageManager->addErrorMessage($error);
                 $this->getResponse()->setRedirect($this->_getHelper()->getCartUrl());
                 $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
                 return parent::dispatch($request);
@@ -180,7 +180,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
     {
         if (!$this->_getCheckout()->validateMinimumAmount()) {
             $error = $this->_getCheckout()->getMinimumAmountError();
-            $this->messageManager->addError($error);
+            $this->messageManager->addErrorMessage($error);
             $this->_forward('backToAddresses');
             return false;
         }

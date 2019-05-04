@@ -46,7 +46,7 @@ class IgnoreTaxNotification extends \Magento\Tax\Controller\Adminhtml\Tax
                 $this->_objectManager->get(\Magento\Config\Model\ResourceModel\Config::class)
                     ->saveConfig($path, 1, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         }
 

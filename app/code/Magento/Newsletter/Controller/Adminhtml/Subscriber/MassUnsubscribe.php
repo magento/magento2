@@ -42,7 +42,7 @@ class MassUnsubscribe extends Subscriber
     {
         $subscribersIds = $this->getRequest()->getParam('subscriber');
         if (!is_array($subscribersIds)) {
-            $this->messageManager->addError(__('Please select one or more subscribers.'));
+            $this->messageManager->addErrorMessage(__('Please select one or more subscribers.'));
         } else {
             try {
                 foreach ($subscribersIds as $subscriberId) {
@@ -51,9 +51,9 @@ class MassUnsubscribe extends Subscriber
                     );
                     $subscriber->unsubscribe();
                 }
-                $this->messageManager->addSuccess(__('A total of %1 record(s) were updated.', count($subscribersIds)));
+                $this->messageManager->addSuccessMessage(__('A total of %1 record(s) were updated.', count($subscribersIds)));
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         }
 

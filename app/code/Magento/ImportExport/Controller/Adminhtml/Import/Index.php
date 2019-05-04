@@ -18,7 +18,7 @@ class Index extends ImportController implements HttpGetActionInterface
      */
     public function execute()
     {
-        $this->messageManager->addNotice(
+        $this->messageManager->addNoticeMessage(
             $this->_objectManager->get(\Magento\ImportExport\Helper\Data::class)->getMaxUploadSizeMessage()
         );
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */

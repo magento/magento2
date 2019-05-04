@@ -47,7 +47,7 @@ class Edit extends Agreement implements HttpGetActionInterface
         if ($id) {
             $agreementModel->load($id);
             if (!$agreementModel->getId()) {
-                $this->messageManager->addError(__('This condition no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This condition no longer exists.'));
                 $this->_redirect('checkout/*/');
                 return;
             }

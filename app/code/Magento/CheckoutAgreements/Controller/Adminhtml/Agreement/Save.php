@@ -50,18 +50,18 @@ class Save extends Agreement implements HttpPostActionInterface
                 $validationResult = $model->validateData(new DataObject($postData));
                 if ($validationResult !== true) {
                     foreach ($validationResult as $message) {
-                        $this->messageManager->addError($message);
+                        $this->messageManager->addErrorMessage($message);
                     }
                 } else {
                     $model->save();
-                    $this->messageManager->addSuccess(__('You saved the condition.'));
+                    $this->messageManager->addSuccessMessage(__('You saved the condition.'));
                     $this->_redirect('checkout/*/');
                     return;
                 }
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('Something went wrong while saving this condition.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong while saving this condition.'));
             }
 
             $this->_session->setAgreementData($postData);

@@ -26,7 +26,7 @@ class Edit extends \Magento\Tax\Controller\Adminhtml\Rule implements HttpGetActi
                 $pageTitle = sprintf("%s", $taxRule->getCode());
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 $backendSession->unsRuleData();
-                $this->messageManager->addError(__('This rule no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This rule no longer exists.'));
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
                 return $resultRedirect->setPath('tax/*/');

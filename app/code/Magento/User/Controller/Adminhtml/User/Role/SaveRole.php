@@ -87,7 +87,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
 
         $role = $this->_initRole('role_id');
         if (!$role->getId() && $rid) {
-            $this->messageManager->addError(__('This role no longer exists.'));
+            $this->messageManager->addErrorMessage(__('This role no longer exists.'));
             return $resultRedirect->setPath('adminhtml/*/');
         }
 

@@ -69,19 +69,19 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
             );
             $this->_redirect('*');
         } catch (\Magento\Framework\Exception\AuthenticationException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->_getSession()->setIntegrationData($this->getRequest()->getPostValue());
             $this->_redirectOnSaveError();
         } catch (IntegrationException $e) {
-            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
+            $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
             $this->_getSession()->setIntegrationData($integrationData);
             $this->_redirectOnSaveError();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
+            $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirectOnSaveError();
         } catch (\Exception $e) {
             $this->_logger->critical($e);
-            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
+            $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirectOnSaveError();
         }
     }
@@ -115,12 +115,12 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
         try {
             $integrationData = $this->_integrationService->get($integrationId)->getData();
         } catch (IntegrationException $e) {
-            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
+            $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirect('*/*/');
             return null;
         } catch (\Exception $e) {
             $this->_logger->critical($e);
-            $this->messageManager->addError(__('Internal error. Check exception log for details.'));
+            $this->messageManager->addErrorMessage(__('Internal error. Check exception log for details.'));
             $this->_redirect('*/*');
             return null;
         }
@@ -164,7 +164,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
                 $integration = $this->_integrationService->update($integrationData);
             }
             if (!$this->getRequest()->isXmlHttpRequest()) {
-                $this->messageManager->addSuccess(
+                $this->messageManager->addSuccessMessage(
                     __(
                         'The integration \'%1\' has been saved.',
                         $this->escaper->escapeHtml($integration->getName())
@@ -180,7 +180,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
                 );
             }
         } else {
-            $this->messageManager->addError(__('The integration was not saved.'));
+            $this->messageManager->addErrorMessage(__('The integration was not saved.'));
         }
     }
 }
