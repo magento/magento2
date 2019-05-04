@@ -372,7 +372,7 @@
             <resource ref="self" />
         </resources>
         <data>
-            <parameter name="cartId" force="true">%cart_id%</parameter>
+            <parameter name="cartId" force="true">%cartId%</parameter>
         </data>
     </route>
 
