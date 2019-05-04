@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+use Magento\Framework\App\Action\Action;
 // @codingStandardsIgnoreFile
 
 ?>
@@ -53,36 +53,32 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                                         <?= $block->escapeHtml($_item->getName()) ?>
                                     </a>
                                 </strong>
-                                <?php
-                                echo $block->getProductPriceHtml($_item, $type);
-                                ?>
 
                                 <?php if ($templateType): ?>
                                     <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
                                 <?php endif; ?>
 
+                                <?= $block->getProductPriceHtml($_item, $type) ?>
+
+                                <?= $block->getProductDetailsHtml($_item) ?>
+
                                 <?php if ($showWishlist || $showCompare || $showCart): ?>
+                                <div class="product-item-inner">
                                     <div class="product-item-actions">
                                         <?php if ($showCart): ?>
                                             <div class="actions-primary">
                                                 <?php if ($_item->isSaleable()): ?>
-                                                    <?php if (!$_item->getTypeInstance()->isPossibleBuyFromList($_item)): ?>
-                                                        <button class="action tocart primary"
-                                                                data-mage-init='{"redirectUrl":{"url":"<?= /* @escapeNotVerified */ $block->getAddToCartUrl($_item) ?>"}}'
-                                                                type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>">
+                                                    <?php $postParams = $block->getAddToCartPostParams($_item); ?>
+                                                    <form data-role="tocart-form" data-product-sku="<?= $block->escapeHtml($_item->getSku()) ?>" action="<?= /* @NoEscape */ $postParams['action'] ?>" method="post">
+                                                        <input type="hidden" name="product" value="<?= /* @escapeNotVerified */ $postParams['data']['product'] ?>">
+                                                        <input type="hidden" name="<?= /* @escapeNotVerified */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?= /* @escapeNotVerified */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
+                                                        <?= $block->getBlockHtml('formkey') ?>
+                                                        <button type="submit"
+                                                                title="<?= $block->escapeHtml(__('Add to Cart')) ?>"
+                                                                class="action tocart primary">
                                                             <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
                                                         </button>
-                                                    <?php else: ?>
-                                                        <?php
-                                                            $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
-                                                            $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
-                                                        ?>
-                                                        <button class="action tocart primary"
-                                                                data-post='<?= /* @escapeNotVerified */ $postData ?>'
-                                                                type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>">
-                                                            <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
-                                                        </button>
-                                                    <?php endif; ?>
+                                                    </form>
                                                 <?php else: ?>
                                                     <?php if ($_item->getIsSalable()): ?>
                                                         <div class="stock available"><span><?= /* @escapeNotVerified */ __('In stock') ?></span></div>
@@ -113,6 +109,7 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                                             </div>
                                         <?php endif; ?>
                                     </div>
+                                </div>
                                 <?php endif; ?>
                             </div>
                         </div>

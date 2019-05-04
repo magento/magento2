@@ -5,6 +5,12 @@
  */
 namespace Magento\Catalog\Block\Product\Widget;
 
+use Magento\Catalog\Model\Product;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\LayoutFactory;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\Url\EncoderInterface;
+
 /**
  * New products widget
  */
@@ -50,6 +56,21 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     private $serializer;
 
     /**
+     * @var LayoutFactory
+     */
+    private $layoutFactory;
+
+    /**
+     * @var \Magento\Framework\Url\EncoderInterface|null
+     */
+    private $urlEncoder;
+
+    /**
+     * @var \Magento\Framework\View\Element\RendererList
+     */
+    private $rendererListBlock;
+
+    /**
      * NewWidget constructor.
      *
      * @param \Magento\Catalog\Block\Product\Context $context
@@ -65,6 +86,8 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = [],
+        LayoutFactory $layoutFactory = null,
+        EncoderInterface $urlEncoder = null,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct(
@@ -76,6 +99,8 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         );
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->urlEncoder = $urlEncoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
+        $this->layoutFactory = $layoutFactory ?: ObjectManager::getInstance()->get(LayoutFactory::class);
     }
 
     /**
@@ -143,6 +168,41 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
                 $this->serializer->serialize($this->getRequest()->getParams())
             ]
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getDetailsRendererList()
+    {
+        if (empty($this->rendererListBlock)) {
+            /** @var $layout \Magento\Framework\View\LayoutInterface */
+            $layout = $this->layoutFactory->create(['cacheable' => false]);
+            $layout->getUpdate()->addHandle('catalog_widget_new_product_list')->load();
+            $layout->generateXml();
+            $layout->generateElements();
+
+            $this->rendererListBlock = $layout->getBlock('category.new.product.type.widget.details.renderers');
+        }
+        return $this->rendererListBlock;
+    }
+
+    /**
+     * Get post parameters.
+     *
+     * @param Product $product
+     * @return array
+     */
+    public function getAddToCartPostParams(Product $product)
+    {
+        $url = $this->getAddToCartUrl($product);
+        return [
+            'action' => $url,
+            'data' => [
+                'product' => $product->getEntityId(),
+                ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($url),
+            ]
+        ];
     }
 
     /**
