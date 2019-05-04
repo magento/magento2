@@ -33,4 +33,22 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }
+
+    /**
+     * Join table sales_order_grid to select order currency  code.
+     *
+     * @return $this
+     */
+    protected function _renderFiltersBefore()
+    {
+        $joinTable = $this->getTable('sales_order_grid');
+        $this->getSelect()->join(
+            $joinTable.' as cgf',
+            'main_table.order_id = cgf.entity_id',
+            [
+                'order_currency_code'=>'order_currency_code'
+            ]
+        );
+        parent::_renderFiltersBefore();
+    }
 }
