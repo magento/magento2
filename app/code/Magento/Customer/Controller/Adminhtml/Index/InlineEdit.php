@@ -123,34 +123,42 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-        $resultJson = $this->resultJsonFactory->create();
+        try {
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            $resultJson = $this->resultJsonFactory->create();
 
-        $postItems = $this->getRequest()->getParam('items', []);
-        if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
+            $postItems = $this->getRequest()->getParam('items', []);
+            if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
+                return $resultJson->setData([
+                    'messages' => [__('Please correct the data sent.')],
+                    'error' => true,
+                ]);
+            }
+
+            foreach (array_keys($postItems) as $customerId) {
+                $this->setCustomer($this->customerRepository->getById($customerId));
+                $currentCustomer = clone $this->getCustomer();
+
+                if ($this->getCustomer()->getDefaultBilling()) {
+                    $this->updateDefaultBilling($this->getData($postItems[$customerId]));
+                }
+                $this->updateCustomer($this->getData($postItems[$customerId], true));
+                $this->saveCustomer($this->getCustomer());
+
+                $this->getEmailNotification()->credentialsChanged($this->getCustomer(), $currentCustomer->getEmail());
+            }
+
             return $resultJson->setData([
-                'messages' => [__('Please correct the data sent.')],
-                'error' => true,
+                'messages' => $this->getErrorMessages(),
+                'error' => $this->isErrorExists()
+            ]);
+        } catch (\Exception $e) {
+            $this->getMessageManager()->addErrorMessage($e->getMessage());
+            return $resultJson->setData([
+                'messages' => $this->getErrorMessages(),
+                'error' => $this->isErrorExists()
             ]);
         }
-
-        foreach (array_keys($postItems) as $customerId) {
-            $this->setCustomer($this->customerRepository->getById($customerId));
-            $currentCustomer = clone $this->getCustomer();
-
-            if ($this->getCustomer()->getDefaultBilling()) {
-                $this->updateDefaultBilling($this->getData($postItems[$customerId]));
-            }
-            $this->updateCustomer($this->getData($postItems[$customerId], true));
-            $this->saveCustomer($this->getCustomer());
-
-            $this->getEmailNotification()->credentialsChanged($this->getCustomer(), $currentCustomer->getEmail());
-        }
-
-        return $resultJson->setData([
-            'messages' => $this->getErrorMessages(),
-            'error' => $this->isErrorExists()
-        ]);
     }
 
     /**
