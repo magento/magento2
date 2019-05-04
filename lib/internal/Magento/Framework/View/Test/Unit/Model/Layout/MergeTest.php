@@ -29,9 +29,19 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     private $scope;
 
     /**
+     * @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cache;
+
+    /**
      * @var \Magento\Framework\View\Model\Layout\Update\Validator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $layoutValidator;
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
 
     /**
      * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -53,10 +63,12 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerHelper = new ObjectManager($this);
 
         $this->scope = $this->getMockForAbstractClass(\Magento\Framework\Url\ScopeInterface::class);
+        $this->cache = $this->getMockForAbstractClass(\Magento\Framework\Cache\FrontendInterface::class);
         $this->layoutValidator = $this->getMockBuilder(\Magento\Framework\View\Model\Layout\Update\Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
+        $this->serializer = $this->getMockForAbstractClass(\Magento\Framework\Serialize\SerializerInterface::class);
         $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -70,10 +82,12 @@ class MergeTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\Model\Layout\Merge::class,
             [
                 'scope' => $this->scope,
+                'cache' => $this->cache,
                 'layoutValidator' => $this->layoutValidator,
                 'logger' => $this->logger,
                 'appState' => $this->appState,
                 'layoutCacheKey' => $this->layoutCacheKeyMock,
+                'serializer' => $this->serializer,
             ]
         );
     }
