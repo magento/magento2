@@ -126,6 +126,11 @@
                     display: block;
                 }
             }
+            &.active {
+                &:before {
+                    content: @icon-expand-open__content;
+                }
+            }
         }
 
         td.admin__collapsible-block-wrapper {
