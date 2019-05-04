@@ -153,15 +153,8 @@ class AddSimpleProductToCart
     private function extractDownloadableLinks(array $cartItemData): array
     {
         $downloadableLinks = $this->arrayManager->get('downloadable_product_links', $cartItemData, []);
-
-        $linksData = [];
-        foreach ($downloadableLinks as $downloadableLink) {
-            $linkId = (string)$downloadableLink['link_id'];
-            if (!in_array($linkId, $linksData)) {
-                $linksData[] = $linkId;
-            }
-        }
-        return $linksData;
+        
+        return array_unique(array_column($downloadableLinks, 'link_id'));
     }
 
     /**
