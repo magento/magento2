@@ -309,7 +309,7 @@ class Attributes extends AbstractModifier
                         'immediateUpdateBySelection' => true,
                         'behaviourType' => 'edit',
                         'externalFilterMode' => true,
-                        'dataLinks' => ['imports' => false, 'exports' => true],
+                        'dataLinks' => ['imports' => false, 'exports' => false],
                         'formProvider' => 'ns = ${ $.namespace }, index = product_form',
                         'groupCode' => static::GROUP_CODE,
                         'groupName' => static::GROUP_NAME,
