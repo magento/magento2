@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Assert Estimate Shipping and Tax Data in Cart -->
+    <actionGroup name="StorefrontAssertCartEstimateShippingAndTaxActionGroup">
+        <arguments>
+            <argument name="customerData" defaultValue="Simple_US_CA_Customer_For_Shipment"/>
+        </arguments>
+        <seeInField selector="{{CheckoutCartSummarySection.country}}" userInput="{{customerData.country}}" stepKey="assertCountryFieldInCartEstimateShippingAndTaxSection"/>
+        <seeInField selector="{{CheckoutCartSummarySection.stateProvinceInput}}" userInput="{{customerData.region}}" stepKey="assertStateProvinceInCartEstimateShippingAndTaxSection"/>
+        <seeInField selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{customerData.postcode}}" stepKey="assertZipPostalCodeInCartEstimateShippingAndTaxSection"/>
+    </actionGroup>
+</actionGroups>
