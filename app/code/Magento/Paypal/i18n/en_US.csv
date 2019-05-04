@@ -458,9 +458,9 @@ Manage,Manage
 "Required PayPal Settings","Required PayPal Settings"
 "Email Associated with PayPal Merchant Account (Optional)","Email Associated with PayPal Merchant Account (Optional)"
 "
-                        <a href=""http://www.magentocommerce.com/paypal"">Start accepting payments via PayPal!</a>
+                        <a href=""https://www.paypal.com/us/smarthelp/article/how-do-i-integrate-paypal-payments-standard-with-magento-2.0-ts2104"">How to integrate paypal payments standard!</a>
                     ","
-                        <a href=""http://www.magentocommerce.com/paypal"">Start accepting payments via PayPal!</a>
+                        <a href=""https://www.paypal.com/us/smarthelp/article/how-do-i-integrate-paypal-payments-standard-with-magento-2.0-ts2104"">How to integrate paypal payments standard!</a>
                     "
 "Don't have a PayPal account? Simply enter your email address.","Don't have a PayPal account? Simply enter your email address."
 "API Authentication Methods","API Authentication Methods"

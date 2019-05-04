@@ -596,7 +596,7 @@
                             <label>Email Associated with PayPal Merchant Account (Optional)</label>
                             <frontend_class>not-required</frontend_class>
                             <comment>
-                                <![CDATA[<a href="http://www.magentocommerce.com/paypal">Start accepting payments via PayPal!</a>]]>
+                                <![CDATA[<a href="https://www.paypal.com/us/smarthelp/article/how-do-i-integrate-paypal-payments-standard-with-magento-2.0-ts2104">How to integrate paypal payments standard!</a>]]>
                             </comment>
                             <tooltip>Don't have a PayPal account? Simply enter your email address.</tooltip>
                             <config_path>paypal/general/business_account</config_path>
