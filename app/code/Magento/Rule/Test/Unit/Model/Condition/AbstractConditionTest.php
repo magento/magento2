@@ -30,7 +30,6 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
     {
         $this->_condition->setAttribute('category_ids');
         $this->assertEquals([], $this->_condition->getTablesToJoin());
-        $this->_condition->setAttribute('gdsjkfghksldjfg');
         $this->assertEmpty($this->_condition->getTablesToJoin());
     }
 
