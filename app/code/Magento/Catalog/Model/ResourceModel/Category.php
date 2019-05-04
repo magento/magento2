@@ -1132,9 +1132,15 @@ class Category extends AbstractResource
         }
         return $this->aggregateCount;
     }
-    public function getImmediateChildren($category,$active = false)
+    /**
+     * Return  next level children ids of category
+     *
+     * @param \Magento\Catalog\Model\Category $category
+     * @param boolean $active
+     * @return array
+     */
+    public function getNextLevelChildren($category, $active = false)
     {
-
         $linkField = $this->getLinkField();
         $attributeId = $this->getIsActiveAttributeId();
         $backendTable = $this->getTable([$this->getEntityTablePrefix(), 'int']);
@@ -1161,7 +1167,7 @@ class Category extends AbstractResource
             $checkSql . ' = :scope'
         )->where(
             $connection->quoteIdentifier('parent_id') . ' = :parent_id'
-        );
+        )->order('m.position ' . \Magento\Framework\DB\Select::SQL_ASC);
 
         return $connection->fetchCol($select, $bind);
     }

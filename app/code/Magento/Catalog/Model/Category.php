@@ -813,10 +813,9 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             $newChildCategoryIds = explode(',', $children);
         }
 
-        $oldChildCategoryIds = $this->_getResource()->getImmediateChildren($this, $active = true);
+        $oldChildCategoryIds = $this->_getResource()->getNextLevelChildren($this, $active = true);
         if (!empty($oldChildCategoryIds)) {
-            $lastId = array_pop($oldChildCategoryIds);
-            $afterId = ($afterId === null || $afterId > $lastId) ? $lastId : $afterId;
+            $afterId = array_pop($oldChildCategoryIds);
         }
         $deleteCategoriesIds = array_diff($oldChildCategoryIds, $newChildCategoryIds);
         $insertNewCategoriesIds = array_diff($newChildCategoryIds, $oldChildCategoryIds);
@@ -829,10 +828,18 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             );
         }
 
+        if (!$this->getId() && !empty($insertNewCategoriesIds)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __(
+                    'We can\'t assign a child category during Category Creation.'
+                )
+            );
+        }
         /**
-         * During new Category ,it will not work
+         * During new Category creation ,it will not work
          */
         if (!empty($insertNewCategoriesIds) && $this->getId()) {
+            arsort($insertNewCategoriesIds);
             foreach ($insertNewCategoriesIds as $newChildId) {
                 $children = $this->categoryRepository->get($newChildId, $this->getStoreId());
                 $children->move($this->getId(), $afterId);
