@@ -443,7 +443,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 
         $cacheId = $this->getCacheId() . '_' . self::PAGE_LAYOUT_MERGED_CACHE_SUFFIX;
         $result = $this->_loadCache($cacheId);
-        if ($result !== false) {
+        if ($result !== false && $result !== null) {
             $data = $this->serializer->unserialize($result);
             $this->pageLayout = $data["pageLayout"];
             $this->addUpdate($data["layout"]);
