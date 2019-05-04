@@ -118,4 +118,33 @@ class MergeTest extends \PHPUnit\Framework\TestCase
 
         $this->model->load();
     }
+
+    /**
+     * Test that merged layout is saved to cache if it wasn't cached before.
+     */
+    public function testSaveToCache()
+    {
+        $this->scope->expects($this->once())->method('getId')->willReturn(1);
+        $this->cache->expects($this->once())->method('save');
+
+        $this->model->load();
+    }
+
+    /**
+     * Test that merged layout is not re-saved to cache when it was loaded from cache.
+     */
+    public function testNoSaveToCacheWhenCachePresent()
+    {
+        $cacheValue = [
+            "pageLayout" => "1column",
+            "layout"     => "<body></body>"
+        ];
+
+        $this->scope->expects($this->once())->method('getId')->willReturn(1);
+        $this->cache->expects($this->once())->method('load')->willReturn(json_encode($cacheValue));
+        $this->serializer->expects($this->once())->method('unserialize')->willReturn($cacheValue);
+        $this->cache->expects($this->never())->method('save');
+
+        $this->model->load();
+    }
 }
