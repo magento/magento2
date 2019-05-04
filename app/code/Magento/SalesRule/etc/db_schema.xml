@@ -68,7 +68,7 @@
                 comment="Usage Per Customer"/>
         <column xsi:type="int" name="times_used" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Times Used"/>
-        <column xsi:type="timestamp" name="expiration_date" on_update="false" nullable="true"
+        <column xsi:type="datetime" name="expiration_date" on_update="false" nullable="true"
                 comment="Expiration Date"/>
         <column xsi:type="smallint" name="is_primary" padding="5" unsigned="true" nullable="true" identity="false"
                 comment="Is Primary"/>
