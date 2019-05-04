@@ -1547,5 +1547,10 @@ class EavSetup
 
             throw new LocalizedException(__($errorMessage));
         }
+        if($attributeCode=="product_type"){
+        	$errorMessage = __("Attribute Code Already Exist"
+        	);
+        	throw new LocalizedException($errorMessage);
+        }
     }
 }
