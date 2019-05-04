@@ -168,8 +168,8 @@ class ShipOrder implements ShipOrderInterface
             $order->setState(
                 $this->orderStateResolver->getStateForOrder($order, [OrderStateResolverInterface::IN_PROGRESS])
             );
-            $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
             $this->shipmentRepository->save($shipment);
+            $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
             $this->orderRepository->save($order);
             $connection->commit();
         } catch (\Exception $e) {
