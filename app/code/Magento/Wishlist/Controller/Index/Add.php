@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -117,8 +116,6 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
             $resultRedirect->setPath('*/');
             return $resultRedirect;
         }
-
-        $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
         $productStock = $this->_stockItemRepository->get($productId);
         if (!$productStock->getIsInStock() || $productStock->getIsInStock() == 0) {
             $this->messageManager->addErrorMessage(__('Out of stock items can not be added to wishlist.'));
@@ -149,6 +146,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
             }
 
             $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
+
             $this->messageManager->addComplexSuccessMessage(
                 'addProductSuccessMessage',
                 [
