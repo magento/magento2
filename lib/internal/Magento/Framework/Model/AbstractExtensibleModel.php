@@ -128,8 +128,8 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
                     $customAttributes[$customAttributeCode] = $customAttribute;
                 }
             }
-            $this->_data[self::CUSTOM_ATTRIBUTES] = $customAttributes;
             $this->customAttributesChanged = false;
+            return $customAttributes;
         }
     }
 
@@ -140,9 +140,9 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      */
     public function getCustomAttributes()
     {
-        $this->initializeCustomAttributes();
+        $data = $this->initializeCustomAttributes();
         // Returning as a sequential array (instead of stored associative array) to be compatible with the interface
-        return array_values($this->_data[self::CUSTOM_ATTRIBUTES]);
+        return array_values($data);
     }
 
     /**
@@ -153,8 +153,8 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      */
     public function getCustomAttribute($attributeCode)
     {
-        $this->initializeCustomAttributes();
-        return $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode] ?? null;
+        $data = $this->initializeCustomAttributes();
+        return $data[$attributeCode] ?? null;
     }
 
     /**
