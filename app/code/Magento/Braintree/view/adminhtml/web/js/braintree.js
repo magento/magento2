@@ -300,10 +300,10 @@ define([
         submitOrder: function () {
             this.$selector.validate().form();
             this.$selector.trigger('afterValidate.beforeSubmit');
-            $('body').trigger('processStop');
-
+            
             // validate parent form
             if (this.$selector.validate().errorList.length) {
+                $('body').trigger('processStop');
                 return false;
             }
 
