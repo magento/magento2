@@ -466,6 +466,26 @@ class ListProduct extends AbstractProduct implements IdentityInterface
 
         $this->addToolbarBlock($collection);
 
+        $restrictedIds = [];
+        $prodCollcetion = clone $collection;
+        $attributeToSelect = [];
+        foreach ($layer->getState()->getFilters() as $filterItem) {
+            $attributeToSelect[] = $filterItem->getFilter()->getRequestVar();
+        }
+        foreach ($prodCollcetion as $ke => $product) {
+            if (in_array($product->getTypeId(), ['configurable', 'group', 'bundle'])) {
+                $_children = $product->getTypeInstance()->getUsedProductCollection($product)
+                                    ->addAttributeToSelect($attributeToSelect);
+                foreach ($layer->getState()->getFilters() as $filterItem) {
+                     $_children->addAttributeToFilter($filterItem->getFilter()->getRequestVar(), $filterItem->getValueString());
+                }
+                if (count($_children) < 1) {
+                    $restrictedIds[] = $product->getId();
+                }
+            }
+        } 
+        $collection->addAttributeToFilter('entity_id', ['nin' => $restrictedIds]);
+        
         $this->_eventManager->dispatch(
             'catalog_block_product_list_collection',
             ['collection' => $collection]
