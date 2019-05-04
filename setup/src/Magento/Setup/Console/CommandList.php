@@ -66,6 +66,7 @@ class CommandList
             \Magento\Setup\Console\Command\ModuleDisableCommand::class,
             \Magento\Setup\Console\Command\ModuleStatusCommand::class,
             \Magento\Setup\Console\Command\ModuleUninstallCommand::class,
+            \Magento\Setup\Console\Command\ModuleConfigStatusCommand::class,
             \Magento\Setup\Console\Command\MaintenanceAllowIpsCommand::class,
             \Magento\Setup\Console\Command\MaintenanceDisableCommand::class,
             \Magento\Setup\Console\Command\MaintenanceEnableCommand::class,
