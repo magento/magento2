@@ -11,7 +11,6 @@ use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\GraphQl\CatalogInventory\ProductStockStatusTest;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -39,32 +38,24 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
     protected $formKeyValidator;
 
     /**
-     * @var ProductStockStatusTest
-     */
-    protected $_stockItemRepository;
-
-    /**
      * @param Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param ProductRepositoryInterface $productRepository
      * @param Validator $formKeyValidator
-     * @param \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository
      */
     public function __construct(
         Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
         ProductRepositoryInterface $productRepository,
-        Validator $formKeyValidator,
-        \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository
+        Validator $formKeyValidator
     )
     {
         $this->_customerSession = $customerSession;
         $this->wishlistProvider = $wishlistProvider;
         $this->productRepository = $productRepository;
         $this->formKeyValidator = $formKeyValidator;
-        $this->_stockItemRepository = $stockItemRepository;
         parent::__construct($context);
     }
 
@@ -116,13 +107,14 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
             $resultRedirect->setPath('*/');
             return $resultRedirect;
         }
-        $productStock = $this->_stockItemRepository->get($productId);
-        if (!$productStock->getIsInStock() || $productStock->getIsInStock() == 0) {
+
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $stockData = $stockItem->getIsInStock();
+        if (!$stockData || $stockData == 0) {
             $this->messageManager->addErrorMessage(__('Out of stock items can not be added to wishlist.'));
             $resultRedirect->setUrl($this->_redirect->getRefererUrl());
             return $resultRedirect;
         }
-
         try {
             $buyRequest = new \Magento\Framework\DataObject($requestParams);
 
