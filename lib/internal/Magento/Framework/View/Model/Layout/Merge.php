@@ -442,15 +442,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $this->addHandle($handles);
 
         $cacheId = $this->getCacheId() . '_' . self::PAGE_LAYOUT_MERGED_CACHE_SUFFIX;
-
         $result = $this->_loadCache($cacheId);
         if ($result !== false) {
-
             $data = $this->serializer->unserialize($result);
-
             $this->pageLayout = $data["pageLayout"];
             $this->addUpdate($data["layout"]);
-
             foreach ($this->getHandles() as $handle) {
                 $this->allHandles[$handle] = $this->handleProcessed;
             }
