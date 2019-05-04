@@ -17,7 +17,8 @@
         "magento/module-eav": "101.0.*",
         "magento/module-tax": "100.2.*",
         "magento/module-catalog-inventory": "100.2.*",
-        "magento/framework": "101.0.*"
+        "magento/framework": "101.0.*",
+        "magento/module-configurable-product": "100.2.*"
     },
     "suggest": {
         "magento/module-webapi": "100.2.*"

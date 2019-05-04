@@ -12,6 +12,8 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\DataObject;
 use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Catalog\Model\Product\Type as ProductType;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 
 /**
  * Class Processor
@@ -95,9 +97,14 @@ class Processor
             $item->setData(CartItemInterface::KEY_QTY, 0);
         }
         $item->addQty($candidate->getCartQty());
-
+        $parentItem = $item->getParentItem();
+        if ($parentItem && $item->getProductType() == ProductType::TYPE_SIMPLE
+            && $parentItem->getProductType() == ConfigurableType::TYPE_CODE) {
+            $item->setPrice(0);
+        } else {
+            $item->setPrice($candidate->getFinalPrice());
+        }
         $customPrice = $request->getCustomPrice();
-        $item->setPrice($candidate->getFinalPrice());
         if (!empty($customPrice)) {
             $item->setCustomPrice($customPrice);
             $item->setOriginalCustomPrice($customPrice);
