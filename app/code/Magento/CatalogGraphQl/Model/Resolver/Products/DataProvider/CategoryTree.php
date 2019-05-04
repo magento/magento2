@@ -102,6 +102,7 @@ class CategoryTree
         $collection->addFieldToFilter('level', ['gt' => $level]);
         $collection->addFieldToFilter('level', ['lteq' => $level + $depth - self::DEPTH_OFFSET]);
         $collection->addAttributeToFilter('is_active', 1, "left");
+        $collection->addAttributeToFilter('parent_id', $rootCategoryId);
         $collection->setOrder('level');
         $collection->setOrder(
             'position',
