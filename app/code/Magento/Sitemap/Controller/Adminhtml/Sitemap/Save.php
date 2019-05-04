@@ -120,7 +120,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap implements Http
     protected function clearSiteMap(\Magento\Sitemap\Model\Sitemap $model)
     {
         /** @var \Magento\Framework\Filesystem $directory */
-        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::PUB);
 
         if ($this->getRequest()->getParam('sitemap_id')) {
             $model->load($this->getRequest()->getParam('sitemap_id'));
