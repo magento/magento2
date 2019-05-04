@@ -11,6 +11,7 @@
     <test name="StoreViewLanguageCorrectSwitchTest">
         <annotations>
             <features value="Cms"/>
+            <stories value="Store view language"/>
             <title value="Check that Store View(language) switches correct"/>
             <description value="Check that Store View(language) switches correct"/>
             <severity value="MAJOR"/>
