@@ -13,6 +13,5 @@
         <element name="quantity" type="input" selector="#product_composite_configure_input_qty"/>
         <element name="ok" type="button" selector=".modal-header .page-actions button[data-role='action']" timeout="30"/>
         <element name="attributeSelect" type="select" selector="//div[contains(@class, 'product-options')]//select" timeout="30"/>
-        <element name="bundleProductCheckbox" type="checkbox" selector="(//input[contains(@class, 'admin__control-checkbox') and contains(@class, 'bundle-option')])[{{row}}]" parameterized="true"/>
     </section>
 </sections>
