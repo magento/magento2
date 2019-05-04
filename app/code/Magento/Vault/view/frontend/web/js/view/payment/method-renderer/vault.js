@@ -24,8 +24,17 @@ define(
             initObservable: function () {
                 this._super()
                     .observe([]);
-
+                this.selectSavedCard();
                 return this;
+            },
+
+            /**
+             * @returns {Void}
+             */
+            selectSavedCard: function () {
+                if (checkoutData.getSelectedPaymentMethod() == this.getId()) {
+                    this.selectPaymentMethod();
+                }
             },
 
             /**
