@@ -594,7 +594,12 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             } else {
                 $defaultShipping = $this->customerRepository->getById($customer->getId())->getDefaultShipping();
                 if ($defaultShipping) {
-                    $shippingAddress = $this->addressRepository->getById($defaultShipping);
+                    try {
+                        $shippingAddress = $this->addressRepository->getById($defaultShipping);
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                    } catch (LocalizedException $e) {
+                        // no address
+                    }
                 }
             }
             if (isset($shippingAddress)) {
@@ -623,7 +628,12 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             } else {
                 $defaultBilling = $this->customerRepository->getById($customer->getId())->getDefaultBilling();
                 if ($defaultBilling) {
-                    $billingAddress = $this->addressRepository->getById($defaultBilling);
+                    try {
+                        $billingAddress = $this->addressRepository->getById($defaultBilling);
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                    } catch (LocalizedException $e) {
+                        // no address
+                    }
                 }
             }
             if (isset($billingAddress)) {
