@@ -13,6 +13,7 @@ use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Quote\Model\Quote;
 
 /**
@@ -20,6 +21,11 @@ use Magento\Quote\Model\Quote;
  */
 class AddSimpleProductToCart
 {
+    /**
+     * @var ArrayManager
+     */
+    private $arrayManager;
+
     /**
      * @var DataObjectFactory
      */
@@ -31,13 +37,16 @@ class AddSimpleProductToCart
     private $productRepository;
 
     /**
+     * @param ArrayManager $arrayManager
      * @param DataObjectFactory $dataObjectFactory
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
+        ArrayManager $arrayManager,
         DataObjectFactory $dataObjectFactory,
         ProductRepositoryInterface $productRepository
     ) {
+        $this->arrayManager = $arrayManager;
         $this->dataObjectFactory = $dataObjectFactory;
         $this->productRepository = $productRepository;
     }
@@ -57,19 +66,15 @@ class AddSimpleProductToCart
         $sku = $this->extractSku($cartItemData);
         $quantity = $this->extractQuantity($cartItemData);
         $customizableOptions = $this->extractCustomizableOptions($cartItemData);
-        $downloadableLinks = [];
 
         try {
             $product = $this->productRepository->get($sku);
-            if ($product->getLinksPurchasedSeparately()) {
-                $downloadableLinks = $this->extractDownloadableLinks($cartItemData);
-            }
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__('Could not find a product with SKU "%sku"', ['sku' => $sku]));
         }
 
         try {
-            $result = $cart->addProduct($product, $this->createBuyRequest($quantity, $customizableOptions, $downloadableLinks));
+            $result = $cart->addProduct($product, $this->createBuyRequest($quantity, $customizableOptions, $this->extractDownloadableLinks($product, $cartItemData)));
         } catch (\Exception $e) {
             throw new GraphQlInputException(
                 __(
@@ -145,16 +150,20 @@ class AddSimpleProductToCart
     }
 
     /**
-     * Extract Downloadable Links from cart item data
-     *
+     * @param $product
      * @param array $cartItemData
      * @return array
      */
-    private function extractDownloadableLinks(array $cartItemData): array
+    private function extractDownloadableLinks($product, array $cartItemData): array
     {
-        $downloadableLinks = $this->arrayManager->get('downloadable_product_links', $cartItemData, []);
+        $linksData = [];
 
-        return array_unique(array_column($downloadableLinks, 'link_id'));
+        if ($product->getLinksPurchasedSeparately()) {
+            $downloadableLinks = $this->arrayManager->get('downloadable_product_links', $cartItemData, []);
+            $linksData = array_unique(array_column($downloadableLinks, 'link_id'));
+        }
+
+        return $linksData;
     }
 
     /**

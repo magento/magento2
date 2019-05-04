@@ -5,6 +5,25 @@ type Query {
     customerDownloadableProducts: CustomerDownloadableProducts @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\CustomerDownloadableProducts") @doc(description: "The query returns the contents of a customer's downloadable products") @cache(cacheable: false)
 }
 
+type Mutation {
+    addDownloadableProductsToCart(input: AddDownloadableProductsToCartInput): AddDownloadableProductsToCartOutput @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\AddDownloadbleProductToCart")
+}
+
+input AddDownloadableProductsToCartInput {
+    cart_id: String!
+    cart_items: [DownloadableProductCartItemInput!]!
+}
+
+input DownloadableProductCartItemInput {
+    data: CartItemInput!
+    downloadable_product_links: [DownloadableProductLinksInput!]
+    customizable_options:[CustomizableOptionInput!]
+}
+
+type AddDownloadableProductsToCartOutput {
+    cart: Cart!
+}
+
 type CustomerDownloadableProducts {
     items: [CustomerDownloadableProduct] @doc(description: "List of purchased downloadable items")
 }
