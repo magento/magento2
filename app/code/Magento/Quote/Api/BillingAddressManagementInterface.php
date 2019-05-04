@@ -15,7 +15,7 @@ interface BillingAddressManagementInterface
     /**
      * Assigns a specified billing address to a specified cart.
      *
-     * @param int $cartId The cart ID.
+     * @param string $cartId The cart ID.
      * @param \Magento\Quote\Api\Data\AddressInterface $address Billing address data.
      * @param bool $useForShipping
      * @return int Address ID.
