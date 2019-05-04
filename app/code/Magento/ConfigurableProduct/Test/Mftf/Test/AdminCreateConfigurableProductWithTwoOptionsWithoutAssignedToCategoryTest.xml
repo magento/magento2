@@ -126,7 +126,7 @@
         <waitForPageLoad stepKey="waitForStoreFrontPageLoad"/>
 
         <!-- Quick search the storefront for the first attribute option -->
-        <submitForm selector="{{StorefrontQuickSearchSection.searchMiniForm}}" parameterArray="['q' => {{colorConfigurableProductAttribute1.sku}}]" stepKey="searchStorefrontFistChildProduct"/>
+        <submitForm selector="{{StorefrontQuickSearchSection.searchMiniForm}}" parameterArray="['q' => {{colorConfigurableProductAttribute1.sku}}]" stepKey="searchStorefrontFirstChildProduct"/>
         <dontSee selector="{{StorefrontCategoryProductSection.ProductTitleByName(colorConfigurableProductAttribute1.name)}}" stepKey="dontSeeConfigurableProductFirstChild"/>
 
         <!-- Quick search the storefront for the second attribute option -->
