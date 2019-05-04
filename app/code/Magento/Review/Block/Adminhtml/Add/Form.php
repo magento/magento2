@@ -58,7 +58,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
-        $fieldset = $form->addFieldset('add_review_form', ['legend' => __('Review Details')]);
+        $fieldset = $form->addFieldset('add_review_form', ['legend' => __('Review Details')],'class' => 'no-display');
 
         $fieldset->addField('product_name', 'note', ['label' => __('Product'), 'text' => 'product_name']);
 
