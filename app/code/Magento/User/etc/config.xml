@@ -20,6 +20,7 @@
                 <lockout_threshold>30</lockout_threshold>
                 <password_lifetime>90</password_lifetime>
                 <password_is_forced>1</password_is_forced>
+                <password_allow_reuse>0</password_allow_reuse>
             </security>
         </admin>
     </default>

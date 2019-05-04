@@ -34,6 +34,10 @@
                     <label>Password Change</label>
                     <source_model>Magento\User\Model\System\Config\Source\Password</source_model>
                 </field>
+                <field id="password_allow_reuse" translate="label" sortOrder="140" type="select" showInDefault="1" canRestore="1">
+                    <label>Allow to Re-use Previous Passwords</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
         </section>
     </system>

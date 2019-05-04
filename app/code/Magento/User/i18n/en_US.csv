@@ -75,6 +75,7 @@ Permissions,Permissions
 Recommended,Recommended
 Forced,Forced
 "Sorry, but this password has already been used. Please create another.","Sorry, but this password has already been used. Please create another."
+"Sorry, but this password is being used now. Please create another.","Sorry, but this password is being used now. Please create another."
 email,email
 password,password
 username,username
@@ -130,6 +131,7 @@ Resources,Resources
 "Password Lifetime (days)","Password Lifetime (days)"
 "We will disable this feature if the value is empty. ","We will disable this feature if the value is empty. "
 "Password Change","Password Change"
+"Allow to Re-use Previous Passwords","Allow to Re-use Previous Passwords"
 Unlock,Unlock
 ID,ID
 Username,Username

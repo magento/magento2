@@ -80,4 +80,14 @@ class ObserverConfig
     {
         return (int)$this->backendConfig->getValue('admin/security/lockout_failures');
     }
+
+    /**
+     * Check whether password re-use is allowed
+     *
+     * @return bool
+     */
+    public function isPasswordReuseAllowed()
+    {
+        return (bool)(int)$this->backendConfig->getValue('admin/security/password_allow_reuse');
+    }
 }

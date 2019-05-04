@@ -12,6 +12,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\User\Api\Data\UserInterface;
+use Magento\User\Model\Backend\Config\ObserverConfig;
 use Magento\User\Model\Spi\NotificationExceptionInterface;
 use Magento\User\Model\Spi\NotificatorInterface;
 use Magento\Framework\App\DeploymentConfig;
@@ -140,6 +141,11 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     private $notificator;
 
     /**
+     * @var ObserverConfig
+     */
+    private $observerConfig;
+
+    /**
      * @deprecated
      */
     private $deploymentConfig;
@@ -161,6 +167,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param Json $serializer
      * @param DeploymentConfig|null $deploymentConfig
      * @param NotificatorInterface|null $notificator
+     * @param ObserverConfig|null $observerConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -179,7 +186,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         array $data = [],
         Json $serializer = null,
         DeploymentConfig $deploymentConfig = null,
-        ?NotificatorInterface $notificator = null
+        ?NotificatorInterface $notificator = null,
+        ObserverConfig $observerConfig = null
     ) {
         $this->_encryptor = $encryptor;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -196,6 +204,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
             ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->notificator = $notificator
             ?: ObjectManager::getInstance()->get(NotificatorInterface::class);
+        $this->observerConfig = $observerConfig
+            ?: ObjectManager::getInstance()->get(ObserverConfig::class);
     }
 
     /**
@@ -236,7 +246,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
                 'validationRules',
                 'serializer',
                 'deploymentConfig',
-                'notificator'
+                'notificator',
+                'observerConfig'
             ]
         );
     }
@@ -268,6 +279,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         $this->validationRules = $objectManager->get(UserValidationRules::class);
         $this->deploymentConfig = $objectManager->get(DeploymentConfig::class);
         $this->notificator = $objectManager->get(NotificatorInterface::class);
+        $this->observerConfig = $objectManager->get(ObserverConfig::class);
     }
 
     /**
@@ -358,15 +370,21 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         $password = $this->getPassword();
         if ($password && !$this->getForceNewPassword() && $this->getId()) {
             $errorMessage = __('Sorry, but this password has already been used. Please create another.');
+            $isPasswordReuseAllowed = $this->observerConfig->isPasswordReuseAllowed();
             // Check if password is equal to the current one
             if ($this->_encryptor->isValidHash($password, $this->getOrigData('password'))) {
-                return [$errorMessage];
+                return [
+                    $isPasswordReuseAllowed ?
+                        __('Sorry, but this password is being used now. Please create another.') : $errorMessage
+                ];
             }
 
-            // Check whether password was used before
-            foreach ($this->getResource()->getOldPasswords($this) as $oldPasswordHash) {
-                if ($this->_encryptor->isValidHash($password, $oldPasswordHash)) {
-                    return [$errorMessage];
+            if (!$isPasswordReuseAllowed) {
+                // Check whether password was used before
+                foreach ($this->getResource()->getOldPasswords($this) as $oldPasswordHash) {
+                    if ($this->_encryptor->isValidHash($password, $oldPasswordHash)) {
+                        return [$errorMessage];
+                    }
                 }
             }
         }
