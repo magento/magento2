@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Quote;
+namespace Magento\GraphQl\DownloadableProduct;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Quote\Model\Quote;
@@ -73,7 +73,7 @@ mutation {
     addDownloadableProductsToCart(
         input: {
             cart_id: "{$maskedQuoteId}", 
-            cartItems: [
+            cart_items: [
                 {
                     data: {
                         qty: {$qty}, 
@@ -142,7 +142,7 @@ mutation {
     addDownloadableProductsToCart(
         input: {
             cart_id: "{$maskedQuoteId}", 
-            cartItems: [
+            cart_items: [
                 {
                     data: {
                         qty: {$qty}, 
@@ -212,7 +212,7 @@ mutation {
     addDownloadableProductsToCart(
         input: {
             cart_id: "{$maskedQuoteId}", 
-            cartItems: [
+            cart_items: [
                 {
                     data: {
                         qty: {$qty}, 
@@ -272,7 +272,7 @@ mutation {
     addDownloadableProductsToCart(
         input: {
             cart_id: "{$maskedQuoteId}", 
-            cartItems: [
+            cart_items: [
                 {
                     data: {
                         qty: {$qty}, 
