@@ -156,7 +156,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * On customer loggin merge visitor/customer index
+     * On customer login merge visitor/customer index
      *
      * @return $this
      */
@@ -230,7 +230,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
             $this->calculate();
         }
 
-        return $this->_getSession()->getData($this->_countCacheKey);
+        return $this->_getSession()->getData($this->_countCacheKey);app
     }
 
     /**
