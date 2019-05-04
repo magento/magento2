@@ -28,16 +28,10 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
 
         $this->buttonList->update('save', 'label', __('Save Review'));
         $this->buttonList->update('save', 'id', 'save_button');
+        $this->buttonList->update('save', 'class', 'save primary no-display-custom');
 
-        $this->buttonList->update('reset', 'id', 'reset_button');
-
-        $this->_formScripts[] = '
-            require(["prototype"], function(){
-                toggleParentVis("add_review_form");
-                toggleVis("save_button");
-                toggleVis("reset_button");
-            });
-        ';
+        $this->buttonList->update('reset', 'id', 'reset_button');    
+        $this->buttonList->update('reset', 'class', 'reset no-display-custom');
 
         // @codingStandardsIgnoreStart
         $this->_formInitScripts[] = '
@@ -67,10 +61,10 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                         });
                     },
                     showForm : function() {
-                        toggleParentVis("add_review_form");
-                        toggleVis("productGrid");
-                        toggleVis("save_button");
-                        toggleVis("reset_button");
+                        toggleVis("productGrid");                        
+                        $(\'add_review_form\').toggleClassName("no-display");
+                        $(\'save_button\').toggleClassName("no-display-custom");
+                        $(\'reset_button\').toggleClassName("no-display-custom");
                     },
                     updateRating: function() {
                         elements = [$("select_stores"), $("rating_detail").getElementsBySelector("input[type=\'radio\']")].flatten();
