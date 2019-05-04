@@ -158,7 +158,7 @@ class AddSimpleProductToCart
     }
 
     /**
-     * Convert custom options vakue
+     * Convert custom options value
      *
      * @param string $value
      * @return string|array
