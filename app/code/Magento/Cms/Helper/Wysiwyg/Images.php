@@ -118,7 +118,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getStorageRootSubpath()
     {
-        return '';
+        return \Magento\Cms\Model\Wysiwyg\Config::IMAGE_DIRECTORY;
     }
 
     /**
