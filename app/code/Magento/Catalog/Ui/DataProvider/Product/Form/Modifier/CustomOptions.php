@@ -922,9 +922,6 @@ class CustomOptions extends AbstractModifier
                         'addbefore' => $this->getCurrencySymbol(),
                         'addbeforePool' => $this->productOptionsPrice->prefixesToOptionArray(),
                         'sortOrder' => $sortOrder,
-                        'validation' => [
-                            'validate-number' => true
-                        ],
                     ],
                 ],
             ],
