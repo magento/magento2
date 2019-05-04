@@ -345,6 +345,26 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 
         return $connection->fetchOne($select, $bind);
     }
+	
+    /**
+     * Get customer Group id
+     *
+     * @param int $customerId
+     * @return int
+     */
+    public function getGroupId($customerId)
+    {
+        $connection = $this->getConnection();
+        $bind = ['entity_id' => (int)$customerId];
+        $select = $connection->select()->from(
+            $this->getTable('customer_entity'),
+            'group_id'
+        )->where(
+            'entity_id = :entity_id'
+        );
+
+        return $connection->fetchOne($select, $bind);
+    }
 
     /**
      * Custom setter of increment ID if its needed
