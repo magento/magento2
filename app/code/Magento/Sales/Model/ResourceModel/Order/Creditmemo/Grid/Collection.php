@@ -35,9 +35,7 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
     }
 
     /**
-     * Join table sales_order_grid to select order currency  code.
-     *
-     * @return $this
+     * @inheritdoc
      */
     protected function _renderFiltersBefore()
     {
