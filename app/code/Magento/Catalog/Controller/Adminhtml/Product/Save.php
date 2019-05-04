@@ -114,6 +114,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
         $data = $this->getRequest()->getPostValue();
         $productAttributeSetId = $this->getRequest()->getParam('set');
         $productTypeId = $this->getRequest()->getParam('type');
+        $productData = $this->getRequest()->getParams();
+        if ($productData['product']['quantity_and_stock_status']['qty'] > 0) {
+            $productData['product']['quantity_and_stock_status']['is_in_stock'] = 1;
+        }
+        $this->getRequest()->setParams($productData);
         if ($data) {
             try {
                 $product = $this->initializationHelper->initialize(
