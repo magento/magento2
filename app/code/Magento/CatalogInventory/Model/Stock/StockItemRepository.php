@@ -163,8 +163,9 @@ class StockItemRepository implements StockItemRepositoryInterface
             $isQty = $this->stockConfiguration->isQty($typeId);
             if ($isQty) {
                 $isInStock = $this->stockStateProvider->verifyStock($stockItem);
-                if ($stockItem->getManageStock() && !$isInStock) {
-                    $stockItem->setIsInStock(false)->setStockStatusChangedAutomaticallyFlag(true);
+                if ($stockItem->getManageStock()) {
+                    $isInStockFlag = $isInStock ? true : false;
+                    $stockItem->setIsInStock($isInStockFlag)->setStockStatusChangedAutomaticallyFlag(true);
                 }
                 // if qty is below notify qty, update the low stock date to today date otherwise set null
                 $stockItem->setLowStockDate(null);
