@@ -93,6 +93,12 @@ class ToOrderItem
             \Magento\Sales\Api\Data\OrderItemInterface::class
         );
         $orderItem->setProductOptions($options);
+        $stockItem = $item->getProduct()->getExtensionAttributes()->getStockItem();
+        if(($orderItemData[OrderItemInterface::QTY_ORDERED] - $stockItem->getQty()) > 0 && $stockItem->getBackorders() > 0) {
+            $orderItem->setQtyBackordered(
+                $orderItemData[OrderItemInterface::QTY_ORDERED] - $stockItem->getQty()
+            );
+        }
         if ($item->getParentItem()) {
             $orderItem->setQtyOrdered(
                 $orderItemData[OrderItemInterface::QTY_ORDERED] * $item->getParentItem()->getQty()
