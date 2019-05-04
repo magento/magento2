@@ -44,16 +44,18 @@ class UpdateHandler implements ExtensionInterface
         $samples = $entity->getExtensionAttributes()->getDownloadableProductSamples() ?: [];
         $updatedSamples = [];
         $oldSamples = $this->sampleRepository->getList($entity->getSku());
-        foreach ($samples as $sample) {
-            if ($sample->getId()) {
-                $updatedSamples[$sample->getId()] = true;
+        if (!empty($samples)) {
+            foreach ($samples as $sample) {
+                if ($sample->getId()) {
+                    $updatedSamples[$sample->getId()] = true;
+                }
+                $this->sampleRepository->save($entity->getSku(), $sample, !(bool)$entity->getStoreId());
             }
-            $this->sampleRepository->save($entity->getSku(), $sample, !(bool)$entity->getStoreId());
-        }
-        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
-        foreach ($oldSamples as $sample) {
-            if (!isset($updatedSamples[$sample->getId()])) {
-                $this->sampleRepository->delete($sample->getId());
+            /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
+            foreach ($oldSamples as $sample) {
+                if (!isset($updatedSamples[$sample->getId()])) {
+                    $this->sampleRepository->delete($sample->getId());
+                }
             }
         }
 
