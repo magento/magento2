@@ -90,7 +90,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'note' => __('example: "/sitemap/" or "/" for base path (path must be writeable)'),
                 'value' => $model->getSitemapPath()
             ]
-        );
+        )->setAfterElementHtml("<script>
+        require(['jquery'], function ($) {
+          $('#generate').click(function(){
+            $('body').trigger('processStart');
+          });
+          $('#save').click(function(){
+            $('body').trigger('processStart');
+          });
+        });
+        </script>");
 
         if (!$this->_storeManager->hasSingleStore()) {
             $field = $fieldset->addField(
@@ -117,6 +126,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             );
             $model->setStoreId($this->_storeManager->getStore(true)->getId());
         }
+
 
         $form->setValues($model->getData());
         $form->setUseContainer(true);
