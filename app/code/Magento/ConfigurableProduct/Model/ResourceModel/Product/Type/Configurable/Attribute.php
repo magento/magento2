@@ -52,7 +52,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Inititalize connection and define tables
+     * Initialize connection and define tables
      *
      * @return void
      */
