@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\CatalogInventory;
+namespace Magento\GraphQl\Quote\Guest;
 
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Add simple product to cart testcases related to inventory
+ * Add simple product to cart testcases
  */
-class AddProductToCartTest extends GraphQlAbstract
+class AddSimpleProductToCartTest extends GraphQlAbstract
 {
     /**
      * @var GetMaskedQuoteIdByReservedOrderId
@@ -33,49 +33,32 @@ class AddProductToCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The requested qty is not available
      */
-    public function testAddProductIfQuantityIsNotAvailable()
+    public function testAddSimpleProductToCart()
     {
         $sku = 'simple';
-        $qty = 200;
+        $qty = 2;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $query = $this->getQuery($maskedQuoteId, $sku, $qty);
-        $this->graphQlMutation($query);
+        $response = $this->graphQlMutation($query);
+        self::assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
+
+        self::assertEquals($qty, $response['addSimpleProductsToCart']['cart']['items'][0]['qty']);
+        self::assertEquals($sku, $response['addSimpleProductsToCart']['cart']['items'][0]['product']['sku']);
     }
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @magentoConfigFixture default cataloginventory/item_options/max_sale_qty 5
+     *
      * @expectedException \Exception
-     * @expectedExceptionMessage The most you may purchase is 5.
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
-    public function testAddMoreProductsThatAllowed()
-    {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/167');
-
-        $sku = 'custom-design-simple-product';
-        $qty = 7;
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
-
-        $query = $this->getQuery($maskedQuoteId, $sku, $qty);
-        $this->graphQlMutation($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Catalog/_files/products.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Please enter a number greater than 0 in this field.
-     */
-    public function testAddSimpleProductToCartWithNegativeQty()
+    public function testAddProductToNonExistentCart()
     {
         $sku = 'simple';
-        $qty = -2;
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $qty = 1;
+        $maskedQuoteId = 'non_existent_masked_id';
 
         $query = $this->getQuery($maskedQuoteId, $sku, $qty);
         $this->graphQlMutation($query);
@@ -87,13 +70,13 @@ class AddProductToCartTest extends GraphQlAbstract
      * @param int $qty
      * @return string
      */
-    private function getQuery(string $maskedQuoteId, string $sku, int $qty) : string
+    private function getQuery(string $maskedQuoteId, string $sku, int $qty): string
     {
         return <<<QUERY
 mutation {  
   addSimpleProductsToCart(
     input: {
-      cart_id: "{$maskedQuoteId}", 
+      cart_id: "{$maskedQuoteId}"
       cartItems: [
         {
           data: {
@@ -107,6 +90,9 @@ mutation {
     cart {
       items {
         qty
+        product {
+          sku
+        }
       }
     }
   }

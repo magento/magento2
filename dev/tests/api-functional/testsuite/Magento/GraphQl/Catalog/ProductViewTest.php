@@ -671,6 +671,30 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
+     */
+    public function testProductFilterNfinset()
+    {
+        $productSku = 'search_product_1';
+
+        $query = <<<QUERY
+       {
+           products(filter: {sku: {nfinset: ["$productSku"]}})
+           {
+               items {
+                   id
+                  name
+                  sku
+               }
+           }
+       }
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertNotContains($productSku, array_column($response['products']['items'], 'sku'));
+    }
+
+    /**
      * @param ProductInterface $product
      * @param array $actualResponse
      */
