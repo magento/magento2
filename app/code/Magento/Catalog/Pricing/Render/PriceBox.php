@@ -102,10 +102,16 @@ class PriceBox extends PriceBoxRender
      * Format percent
      *
      * @param float $percent
+     *
      * @return string
      */
     public function formatPercent(float $percent): string
     {
-        return rtrim(number_format($percent, 2), '.0');
+        /*First rtrim - trim zeros. So, 10.00 -> 10.*/
+        /*Second rtrim - trim dot. So, 10. -> 10*/
+        return rtrim(
+            rtrim(number_format($percent, 2), '0'),
+            '.'
+        );
     }
 }
