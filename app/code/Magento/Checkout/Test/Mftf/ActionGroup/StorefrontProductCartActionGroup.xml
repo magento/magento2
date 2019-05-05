@@ -53,7 +53,6 @@
         <seeLink stepKey="assertLinkToShoppingCart" url="{{_ENV.MAGENTO_BASE_URL}}checkout/cart/" userInput="shopping cart" />
         <waitForText userInput="{{productCount}}" selector="{{StorefrontMinicartSection.productCount}}" time="30" stepKey="assertProductCount"/>
     </actionGroup>
-
     <!-- Open the Minicart and check Simple Product -->
     <actionGroup name="StorefrontOpenMinicartAndCheckSimpleProductActionGroup">
         <arguments>

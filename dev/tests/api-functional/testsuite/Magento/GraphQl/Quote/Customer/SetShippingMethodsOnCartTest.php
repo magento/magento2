@@ -67,10 +67,32 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
 
         self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals($carrierCode, $shippingAddress['selected_shipping_method']['carrier_code']);
+        self::assertEquals('flatrate', $shippingAddress['selected_shipping_method']['carrier_code']);
 
         self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
+        self::assertEquals('flatrate', $shippingAddress['selected_shipping_method']['method_code']);
+
+        self::assertArrayHasKey('carrier_title', $shippingAddress['selected_shipping_method']);
+        self::assertEquals('Flat Rate', $shippingAddress['selected_shipping_method']['carrier_title']);
+
+        self::assertArrayHasKey('method_title', $shippingAddress['selected_shipping_method']);
+        self::assertEquals('Fixed', $shippingAddress['selected_shipping_method']['method_title']);
+
+        self::assertArrayHasKey('amount', $shippingAddress['selected_shipping_method']);
+        $amount = $shippingAddress['selected_shipping_method']['amount'];
+
+        self::assertArrayHasKey('value', $amount);
+        self::assertEquals(10, $amount['value']);
+        self::assertArrayHasKey('currency', $amount);
+        self::assertEquals('USD', $amount['currency']);
+
+        self::assertArrayHasKey('base_amount', $shippingAddress['selected_shipping_method']);
+        $baseAmount = $shippingAddress['selected_shipping_method']['base_amount'];
+
+        self::assertArrayHasKey('value', $baseAmount);
+        self::assertEquals(10, $baseAmount['value']);
+        self::assertArrayHasKey('currency', $baseAmount);
+        self::assertEquals('USD', $baseAmount['currency']);
     }
 
     /**
@@ -347,6 +369,16 @@ mutation {
         selected_shipping_method {
           carrier_code
           method_code
+          carrier_title
+          method_title
+          amount {
+            value
+            currency
+          }
+          base_amount {
+            value
+            currency
+          }
         }
       }
     }
