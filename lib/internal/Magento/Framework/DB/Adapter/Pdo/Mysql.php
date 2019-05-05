@@ -2976,6 +2976,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 if (($key == 'in' || $key == 'nin') && is_string($value)) {
                     $value = explode(',', $value);
                 }
+                if (($key == 'finset' || $key == 'nfinset') && is_array($value)) {
+                    $value = implode(',', $value);
+                }
                 $query = $this->_prepareQuotedSqlCondition($conditionKeyMap[$key], $value, $fieldName);
             } else {
                 $queries = [];
