@@ -230,7 +230,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
             $this->calculate();
         }
 
-        return $this->_getSession()->getData($this->_countCacheKey);app
+        return $this->_getSession()->getData($this->_countCacheKey);
     }
 
     /**
