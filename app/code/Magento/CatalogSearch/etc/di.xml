@@ -364,4 +364,11 @@
     <type name="Magento\Config\Model\Config">
         <plugin name="config_enable_eav_indexer" type="Magento\CatalogSearch\Plugin\EnableEavIndexer" />
     </type>
+    <type name="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite">
+        <arguments>
+            <argument name="propertyMappers" xsi:type="array">
+                <item name="catalog_search" xsi:type="string">Magento\CatalogSearch\Model\ResourceModel\Setup\PropertyMapper</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

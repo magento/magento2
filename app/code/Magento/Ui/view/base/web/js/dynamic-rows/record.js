@@ -245,7 +245,7 @@ define([
                 label = _.findWhere(this.parentComponent().labels(), {
                     name: index
                 });
-                label.visible() !== state ? label.visible(state) : false;
+                label.defaultLabelVisible && label.visible(state);
             } else {
                 elems[curElem].visible(state);
             }

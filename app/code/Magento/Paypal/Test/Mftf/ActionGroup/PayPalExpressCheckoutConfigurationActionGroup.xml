@@ -8,18 +8,22 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="ConfigPayPalExpressCheckout">
+        <arguments>
+            <argument name="credentials" defaultValue="_CREDS"/>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn}}" stepKey="clickPayPalConfigureBtn"/>
-        <waitForElementVisible selector="{{PayPalAdvancedSettingConfigSection.advancedSettingTab}}" stepKey="waitForAdvancedSettingTab"/>
-        <fillField selector ="{{PayPalExpressCheckoutConfigSection.email}}" userInput="{{_CREDS.paypal_express_email}}" stepKey="inputEmailAssociatedWithPayPalMerchantAccount"/>
-        <selectOption selector ="{{PayPalExpressCheckoutConfigSection.apiMethod}}" userInput="API Signature" stepKey="inputAPIAuthenticationMethods"/>
-        <fillField selector ="{{PayPalExpressCheckoutConfigSection.username}}" userInput="{{_CREDS.paypal_express_api_username}}" stepKey="inputAPIUsername"/>
-        <fillField selector ="{{PayPalExpressCheckoutConfigSection.password}}" userInput="{{_CREDS.paypal_express_api_password}}" stepKey="inputAPIPassword"/>
-        <fillField selector ="{{PayPalExpressCheckoutConfigSection.signature}}" userInput="{{_CREDS.paypal_express_api_signature}}" stepKey="inputAPISignature"/>
-        <selectOption selector ="{{PayPalExpressCheckoutConfigSection.sandboxMode}}" userInput="Yes" stepKey="enableSandboxMode"/>
-        <selectOption selector="{{PayPalExpressCheckoutConfigSection.enableSolution}}" userInput="Yes" stepKey="enableSolution"/>
-        <fillField selector ="{{PayPalExpressCheckoutConfigSection.merchantID}}" userInput="{{_CREDS.paypal_express_merchantID}}" stepKey="inputMerchantID"/>
+        <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalConfigureBtn"/>
+        <waitForElementVisible selector="{{PayPalAdvancedSettingConfigSection.advancedSettingTab(countryCode)}}" stepKey="waitForAdvancedSettingTab"/>
+        <fillField selector ="{{PayPalExpressCheckoutConfigSection.email(countryCode)}}" userInput="{{credentials.paypal_express_email}}" stepKey="inputEmailAssociatedWithPayPalMerchantAccount"/>
+        <selectOption selector ="{{PayPalExpressCheckoutConfigSection.apiMethod(countryCode)}}" userInput="API Signature" stepKey="inputAPIAuthenticationMethods"/>
+        <fillField selector ="{{PayPalExpressCheckoutConfigSection.username(countryCode)}}" userInput="{{credentials.paypal_express_api_username}}" stepKey="inputAPIUsername"/>
+        <fillField selector ="{{PayPalExpressCheckoutConfigSection.password(countryCode)}}" userInput="{{credentials.paypal_express_api_password}}" stepKey="inputAPIPassword"/>
+        <fillField selector ="{{PayPalExpressCheckoutConfigSection.signature(countryCode)}}" userInput="{{credentials.paypal_express_api_signature}}" stepKey="inputAPISignature"/>
+        <selectOption selector ="{{PayPalExpressCheckoutConfigSection.sandboxMode(countryCode)}}" userInput="Yes" stepKey="enableSandboxMode"/>
+        <selectOption selector="{{PayPalExpressCheckoutConfigSection.enableSolution(countryCode)}}" userInput="Yes" stepKey="enableSolution"/>
+        <fillField selector ="{{PayPalExpressCheckoutConfigSection.merchantID(countryCode)}}" userInput="{{credentials.paypal_express_merchantID}}" stepKey="inputMerchantID"/>
         <!--Save configuration-->
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
     </actionGroup>

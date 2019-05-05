@@ -327,6 +327,11 @@ class Store extends AbstractExtensibleModel implements
     private $eventManager;
 
     /**
+     * @var \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface
+     */
+    private $pillPut;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -352,6 +357,7 @@ class Store extends AbstractExtensibleModel implements
      * @param bool $isCustomEntryPoint
      * @param array $data optional generic object data
      * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
+     * @param \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface|null $pillPut
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -380,7 +386,8 @@ class Store extends AbstractExtensibleModel implements
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $isCustomEntryPoint = false,
         array $data = [],
-        \Magento\Framework\Event\ManagerInterface $eventManager = null
+        \Magento\Framework\Event\ManagerInterface $eventManager = null,
+        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_config = $config;
@@ -401,6 +408,8 @@ class Store extends AbstractExtensibleModel implements
         $this->websiteRepository = $websiteRepository;
         $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Event\ManagerInterface::class);
+        $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class);
         parent::__construct(
             $context,
             $registry,
@@ -414,9 +423,14 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $properties = parent::__sleep();
         $properties = array_diff($properties, ['_coreFileStorageDatabase', '_config']);
         return $properties;
@@ -426,9 +440,14 @@ class Store extends AbstractExtensibleModel implements
      * Init not serializable fields
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         parent::__wakeup();
         $this->_coreFileStorageDatabase = ObjectManager::getInstance()
             ->get(\Magento\MediaStorage\Helper\File\Storage\Database::class);
@@ -707,7 +726,8 @@ class Store extends AbstractExtensibleModel implements
             if ($this->_isCustomEntryPoint()) {
                 $indexFileName = 'index.php';
             } else {
-                $indexFileName = basename($_SERVER['SCRIPT_FILENAME']);
+                $scriptFilename = $this->_request->getServer('SCRIPT_FILENAME');
+                $indexFileName = basename($scriptFilename);
             }
             $url .= $indexFileName . '/';
         }
@@ -1077,6 +1097,7 @@ class Store extends AbstractExtensibleModel implements
         $this->getResource()->addCommitCallback(function () use ($event, $store) {
             $this->eventManager->dispatch($event, ['store' => $store]);
         });
+        $this->pillPut->put();
         return parent::afterSave();
     }
 

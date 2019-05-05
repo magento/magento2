@@ -398,6 +398,17 @@
         &.orders-recent {
             &:extend(.abs-account-table-margin-mobile all);
             &:extend(.abs-no-border-top all);
+            .table-order-items {
+                &.table {
+                    tbody {
+                        > tr {
+                            > td.col {
+                                padding-left: 0;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
