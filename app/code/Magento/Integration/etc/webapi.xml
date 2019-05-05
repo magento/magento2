@@ -19,4 +19,10 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route url="/V1/integration/customer/authtoken" method="POST">
+        <service class="Magento\Integration\Api\CustomerAuthTokenServiceInterface" method="createCustomerAuthToken"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
 </routes>

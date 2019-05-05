@@ -103,13 +103,14 @@ interface AccountManagementInterface
     /**
      * Authenticate a customer by username and password
      *
+     * @deprecated This method is not intended for usage in child classes
+     * @see authenticate($price, $storeId, $websiteId)
      * @param string $email
      * @param string $password
-     * @param int|null $websiteId
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function authenticate($email, $password, $websiteId = null);
+    public function authenticate($email, $password);
 
     /**
      * Change customer password.

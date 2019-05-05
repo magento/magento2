@@ -17,13 +17,14 @@ interface CustomerTokenServiceInterface
     /**
      * Create access token for admin given the customer credentials.
      *
+     * @deprecated This method is not intended for usage in child classes
+     * @see createCustomerAuthToken($price, $storeId, $websiteId)
      * @param string $username
      * @param string $password
-     * @param int|null $websiteId
      * @return string Token created
      * @throws \Magento\Framework\Exception\AuthenticationException
      */
-    public function createCustomerAccessToken($username, $password, $websiteId = null);
+    public function createCustomerAccessToken($username, $password);
 
     /**
      * Revoke token by customer id.

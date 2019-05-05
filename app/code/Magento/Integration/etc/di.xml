@@ -13,6 +13,7 @@
     <preference for="Magento\Framework\Oauth\NonceGeneratorInterface" type="Magento\Integration\Model\Oauth\Nonce\Generator"/>
     <preference for="Magento\Framework\Oauth\TokenProviderInterface" type="Magento\Integration\Model\Oauth\Token\Provider"/>
     <preference for="Magento\Integration\Api\CustomerTokenServiceInterface" type="Magento\Integration\Model\CustomerTokenService" />
+    <preference for="Magento\Integration\Api\CustomerAuthTokenServiceInterface" type="Magento\Integration\Model\CustomerAuthTokenService" />
     <preference for="Magento\Integration\Api\AdminTokenServiceInterface" type="Magento\Integration\Model\AdminTokenService" />
     <preference for="Magento\Integration\Model\Oauth\Token\RequestLog\ReaderInterface" type="Magento\Integration\Model\ResourceModel\Oauth\Token\RequestLog" />
     <preference for="Magento\Integration\Model\Oauth\Token\RequestLog\WriterInterface" type="Magento\Integration\Model\ResourceModel\Oauth\Token\RequestLog" />

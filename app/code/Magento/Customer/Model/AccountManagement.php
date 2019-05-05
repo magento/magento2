@@ -540,7 +540,7 @@ class AccountManagement implements AccountManagementInterface
     /**
      * @inheritdoc
      */
-    public function authenticate($username, $password, $websiteId = null)
+    public function authenticate($username, $password)
     {
         try {
             $customer = $this->customerRepository->get($username, $websiteId);

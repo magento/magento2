@@ -35,6 +35,8 @@
                 type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Customer\Api\AccountManagementInterface"
                 type="Magento\Customer\Model\AccountManagement" />
+    <preference for="Magento\Customer\Api\AccountAuthManagementInterface"
+                type="Magento\Customer\Model\AccountAuthManagement" />
     <preference for="Magento\Customer\Api\CustomerMetadataInterface"
                 type="Magento\Customer\Model\Metadata\CustomerCachedMetadata" />
     <preference for="Magento\Customer\Api\AddressMetadataInterface"
