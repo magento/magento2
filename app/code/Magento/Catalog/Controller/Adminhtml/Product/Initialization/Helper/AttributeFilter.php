@@ -73,7 +73,7 @@ class AttributeFilter
             /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             $attribute = $attributeList[$attributeCode];
             $attributeType = $attribute->getBackendType();
-            // For non-numberic types set the attributeValue to 'false' to trigger their removal from the db
+            // For non-numeric types set the attributeValue to 'false' to trigger their removal from the db
             if ($attributeType === 'varchar' || $attributeType === 'text' || $attributeType === 'datetime') {
                 $attribute->setIsRequired(false);
                 $productData[$attributeCode] = false;
