@@ -18,7 +18,7 @@
     <div class="control">
         <div class="nested options-list">
             <?php if ($block->showSingle()): ?>
-                <?= $block->escapeHtml($block->getSelectionQtyTitlePrice($_selections[0])) ?>
+                <?= /* @noEscape */ $block->getSelectionQtyTitlePriceHtml($_selections[0]) ?>
                 <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selections[0]) ?>
                 <input type="hidden"
                        class="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>  product bundle option"
@@ -30,7 +30,7 @@
                         <input class="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?> checkbox product bundle option change-container-classname"
                                id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
                                type="checkbox"
-                               <?php if ($_option->getRequired()) echo $block->escapeHtmlAttr('data-validate="{\'validate-one-required-by-name\':\'input[name^=&quot;bundle_option[' . $_option->getId() . ']&quot;]:checked\'}"') ?>
+                               <?php if ($_option->getRequired()) echo 'data-validate="{\'validate-one-required-by-name\':\'input[name^=&quot;bundle_option[' . $block->escapeHtmlAttr($_option->getId()) . ']&quot;]:checked\'}"' ?>
                                name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>][<?= $block->escapeHtmlAttr($_selection->getId()) ?>]"
                                data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>][<?= $block->escapeHtmlAttr($_selection->getId()) ?>]"
                                <?php if ($block->isSelected($_selection)) echo ' checked="checked"' ?>
@@ -38,7 +38,7 @@
                                value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"/>
                         <label class="label"
                                for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>">
-                            <span><?= $block->escapeHtml($block->getSelectionQtyTitlePrice($_selection)) ?></span>
+                            <span><?= /* @noEscape */ $block->getSelectionQtyTitlePriceHtml($_selection) ?></span>
                             <br/>
                             <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selection) ?>
                         </label>

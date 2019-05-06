@@ -19,7 +19,7 @@
     </label>
     <div class="control">
         <?php if ($block->showSingle()): ?>
-            <?= $block->escapeHtml($block->getSelectionTitlePrice($_selections[0])) ?>
+            <?= /* @noEscape */ $block->getSelectionTitlePriceHtml($_selections[0]) ?>
             <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selections[0]) ?>
             <input type="hidden"
                    class="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>  product bundle option"
@@ -36,7 +36,7 @@
                     <option value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
                         <?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?>
                         <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>>
-                        <?= $block->escapeHtml($block->getSelectionTitlePrice($_selection, false)) ?>
+                        <?= /* @noEscape */ $block->getSelectionTitlePriceHtml($_selection, false) ?>
                     </option>
                 <?php endforeach; ?>
             </select>

@@ -15,7 +15,7 @@
     <label class="label admin__field-label"><span><?= $block->escapeHtml($_option->getTitle()) ?></span></label>
     <div class="control admin__field-control">
         <?php if (count($_selections) == 1 && $_option->getRequired()): ?>
-            <?= $block->escapeHtml($block->getSelectionQtyTitlePrice($_selections[0])) ?>
+            <?= /* @noEscape */ $block->getSelectionQtyTitlePriceHtml($_selections[0]) ?>
             <input type="hidden" name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                    value="<?= $block->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"
                    price="<?= $block->escapeHtmlAttr($block->getSelectionPrice($_selections[0])) ?>" />
@@ -32,7 +32,7 @@
                     <?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?>
                     <?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) echo ' disabled="disabled"' ?>
                     price="<?= $block->escapeHtmlAttr($block->getSelectionPrice($_selection)) ?>">
-                    <?= $block->escapeHtml($block->getSelectionQtyTitlePrice($_selection, false)) ?></option>
+                    <?= /* @noEscape */ $block->getSelectionQtyTitlePriceHtml($_selection, false) ?></option>
             <?php endforeach; ?>
             </select>
         <?php endif; ?>

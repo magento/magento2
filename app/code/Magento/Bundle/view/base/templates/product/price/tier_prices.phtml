@@ -19,11 +19,11 @@ $tierPrices = $tierPriceModel->getTierPriceList();
     <ul class="<?= $block->escapeHtmlAttr(($block->hasListClass() ? $block->getListClass() : 'prices-tier items')) ?>">
         <?php foreach ($tierPrices as $index => $price) : ?>
             <li class="item">
-                <?= $block->escapeHtml(__(
+                <?= /* @noEscape */ __(
                     'Buy %1 with %2 discount each',
                     $price['price_qty'],
                     '<strong class="benefit">' . round($price['percentage_value']) . '%</strong>'
-                )); ?>
+                ); ?>
             </li>
         <?php endforeach; ?>
     </ul>

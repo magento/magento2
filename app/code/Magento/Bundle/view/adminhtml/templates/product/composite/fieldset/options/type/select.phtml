@@ -20,7 +20,7 @@
     </label>
     <div class="control admin__field-control">
         <?php if ($block->showSingle()): ?>
-            <?= $block->escapeHtml($block->getSelectionTitlePrice($_selections[0])) ?>
+            <?= /* @noEscape */ $block->getSelectionTitlePriceHtml($_selections[0]) ?>
             <input type="hidden"
                    name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                    value="<?= $block->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"
@@ -38,7 +38,7 @@
                         <?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) echo ' disabled="disabled"' ?>
                         price="<?= $block->escapeHtmlAttr($block->getSelectionPrice($_selection)) ?>"
                         qtyId="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input">
-                        <?= $block->escapeHtml($block->getSelectionTitlePrice($_selection, false)) ?>
+                        <?= /* @noEscape */ $block->getSelectionTitlePriceHtml($_selection, false) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
