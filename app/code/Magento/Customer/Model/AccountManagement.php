@@ -543,7 +543,7 @@ class AccountManagement implements AccountManagementInterface
     public function authenticate($username, $password)
     {
         try {
-            $customer = $this->customerRepository->get($username, $websiteId);
+            $customer = $this->customerRepository->get($username);
         } catch (NoSuchEntityException $e) {
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
