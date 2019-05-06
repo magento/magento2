@@ -31,6 +31,9 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
     /** @var \Magento\Framework\Reflection\DataObjectProcessor */
     protected $dataProcessor;
 
+    /**
+     * phpcs:ignoreFile
+     */
     public static function setUpBeforeClass()
     {
         $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
@@ -343,7 +346,8 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
         $customerAddress->setRegionId(0);
 
         $address = $this->dataProcessor->buildOutputDataArray(
-            $customerAddress, \Magento\Customer\Api\Data\AddressInterface::class
+            $customerAddress,
+            \Magento\Customer\Api\Data\AddressInterface::class
         );
 
         $shippingAddress = $this->_quote->getShippingAddress();
