@@ -628,6 +628,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $collection->load();
 
         $collection->addCategoryIds();
+        $collection->addMediaGalleryData();
         $this->addExtensionAttributes($collection);
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
