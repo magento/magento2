@@ -12,8 +12,17 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
+/**
+ * Class Edit
+ * @package Magento\Catalog\Block\Adminhtml\Product
+ */
 class Edit extends \Magento\Backend\Block\Widget
 {
+    /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
     /**
      * @var string
      */
@@ -48,6 +57,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param array $data
+     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -55,12 +65,16 @@ class Edit extends \Magento\Backend\Block\Widget
         \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Product $productHelper,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->_productHelper = $productHelper;
         $this->_attributeSetFactory = $attributeSetFactory;
         $this->_coreRegistry = $registry;
         $this->jsonEncoder = $jsonEncoder;
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Escaper::class
+        );
         parent::__construct($context, $data);
     }
 
@@ -279,7 +293,8 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getSelectedTabId()
     {
-        return addslashes(htmlspecialchars($this->getRequest()->getParam('tab')));
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        return addslashes($this->escaper->escapeHtml($this->getRequest()->getParam('tab')));
     }
 
     /**

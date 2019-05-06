@@ -236,7 +236,9 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         SitemapConfigReaderInterface $configReader = null,
         \Magento\Sitemap\Model\SitemapItemInterfaceFactory $sitemapItemFactory = null
     ) {
-        $this->_escaper = $escaper;
+        $this->_escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Escaper::class
+        );
         $this->_sitemapData = $sitemapData;
         $documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(DocumentRoot::class);
         $this->_directory = $filesystem->getDirectoryWrite($documentRoot->getPath());
@@ -539,7 +541,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected function _getSitemapRow($url, $lastmod = null, $changefreq = null, $priority = null, $images = null)
     {
         $url = $this->_getUrl($url);
-        $row = '<loc>' . htmlspecialchars($url) . '</loc>';
+        $row = '<loc>' . $this->_escaper->escapeUrl($url) . '</loc>';
         if ($lastmod) {
             $row .= '<lastmod>' . $this->_getFormattedLastmodDate($lastmod) . '</lastmod>';
         }
@@ -553,17 +555,17 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             // Add Images to sitemap
             foreach ($images->getCollection() as $image) {
                 $row .= '<image:image>';
-                $row .= '<image:loc>' . htmlspecialchars($image->getUrl()) . '</image:loc>';
-                $row .= '<image:title>' . htmlspecialchars($images->getTitle()) . '</image:title>';
+                $row .= '<image:loc>' . $this->_escaper->escapeUrl($image->getUrl()) . '</image:loc>';
+                $row .= '<image:title>' . $this->_escaper->escapeHtml($images->getTitle()) . '</image:title>';
                 if ($image->getCaption()) {
-                    $row .= '<image:caption>' . htmlspecialchars($image->getCaption()) . '</image:caption>';
+                    $row .= '<image:caption>' . $this->_escaper->escapeHtml($image->getCaption()) . '</image:caption>';
                 }
                 $row .= '</image:image>';
             }
             // Add PageMap image for Google web search
             $row .= '<PageMap xmlns="http://www.google.com/schemas/sitemap-pagemap/1.0"><DataObject type="thumbnail">';
-            $row .= '<Attribute name="name" value="' . htmlspecialchars($images->getTitle()) . '"/>';
-            $row .= '<Attribute name="src" value="' . htmlspecialchars($images->getThumbnail()) . '"/>';
+            $row .= '<Attribute name="name" value="' . $this->_escaper->escapeHtmlAttr($images->getTitle()) . '"/>';
+            $row .= '<Attribute name="src" value="' . $this->_escaper->escapeHtmlAttr($images->getThumbnail()) . '"/>';
             $row .= '</DataObject></PageMap>';
         }
 
@@ -580,7 +582,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected function _getSitemapIndexRow($sitemapFilename, $lastmod = null)
     {
         $url = $this->getSitemapUrl($this->getSitemapPath(), $sitemapFilename);
-        $row = '<loc>' . htmlspecialchars($url) . '</loc>';
+        $row = '<loc>' . $this->_escaper->escapeUrl($url) . '</loc>';
         if ($lastmod) {
             $row .= '<lastmod>' . $this->_getFormattedLastmodDate($lastmod) . '</lastmod>';
         }
@@ -722,6 +724,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getDocumentRoot()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         return realpath($this->_request->getServer('DOCUMENT_ROOT'));
     }
 
@@ -732,6 +735,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getStoreBaseDomain()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $storeParsedUrl = parse_url($this->_getStoreBaseUrl());
         $url = $storeParsedUrl['scheme'] . '://' . $storeParsedUrl['host'];
 

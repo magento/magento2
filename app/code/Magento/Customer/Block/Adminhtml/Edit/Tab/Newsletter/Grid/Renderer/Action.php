@@ -11,6 +11,11 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Renderer;
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
@@ -21,13 +26,18 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\Registry $registry,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->_coreRegistry = $registry;
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Escaper::class
+        );
         parent::__construct($context, $data);
     }
 
@@ -62,7 +72,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      */
     protected function _getEscapedValue($value)
     {
-        return addcslashes(htmlspecialchars($value), '\\\'');
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        return addcslashes($this->escaper->escapeHtml($value), '\\\'');
     }
 
     /**

@@ -17,6 +17,11 @@ use Magento\Store\Model\ScopeInterface;
 class Country implements ValidatorInterface
 {
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @var Data
      */
     private $directoryData;
@@ -29,13 +34,18 @@ class Country implements ValidatorInterface
     /**
      * @param Data $directoryData
      * @param AllowedCountries $allowedCountriesReader
+     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         Data $directoryData,
-        AllowedCountries $allowedCountriesReader
+        AllowedCountries $allowedCountriesReader,
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->directoryData = $directoryData;
         $this->allowedCountriesReader = $allowedCountriesReader;
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Escaper::class
+        );
     }
 
     /**
@@ -67,7 +77,7 @@ class Country implements ValidatorInterface
             //Checking if such country exists.
             $errors[] = __(
                 'Invalid value of "%value" provided for the %fieldName field.',
-                ['fieldName' => 'countryId', 'value' => htmlspecialchars($countryId)]
+                ['fieldName' => 'countryId', 'value' => $this->escaper->escapeHtml($countryId)]
             );
         }
 
@@ -104,7 +114,7 @@ class Country implements ValidatorInterface
             //If a region is selected then checking if it exists.
             $errors[] = __(
                 'Invalid value of "%value" provided for the %fieldName field.',
-                ['fieldName' => 'regionId', 'value' => htmlspecialchars($regionId)]
+                ['fieldName' => 'regionId', 'value' => $this->escaper->escapeHtml($regionId)]
             );
         }
 
