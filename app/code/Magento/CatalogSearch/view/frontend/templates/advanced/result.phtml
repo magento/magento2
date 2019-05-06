@@ -15,15 +15,15 @@
 <?php if ($results = $block->getResultCount()): ?>
     <div class="search found">
         <?php if ($results == 1) : ?>
-            <?= /* @escapeNotVerified */ __('<strong>%1 item</strong> were found using the following search criteria', $results) ?>
+            <?= /* @noEscape */ __('<strong>%1 item</strong> were found using the following search criteria', $results) ?>
         <?php else: ?>
-            <?= /* @escapeNotVerified */ __('<strong>%1 items</strong> were found using the following search criteria', $results) ?>
+            <?= /* @noEscape */ __('<strong>%1 items</strong> were found using the following search criteria', $results) ?>
         <?php endif; ?>
     </div>
 <?php else: ?>
     <div role="alert" class="message error">
         <div>
-            <?= /* @escapeNotVerified */ __('We can\'t find any items matching these search criteria.') ?> <a href="<?= /* @escapeNotVerified */ $block->getFormUrl() ?>"><?= /* @escapeNotVerified */ __('Modify your search.') ?></a>
+            <?= $block->escapeHtml(__('We can\'t find any items matching these search criteria.')) ?> <a href="<?= $block->escapeUrl($block->getFormUrl()) ?>"><?= $block->escapeHtml(__('Modify your search.')) ?></a>
         </div>
     </div>
 <?php endif; ?>
@@ -43,12 +43,12 @@
 <?php if ($block->getResultCount()): ?>
     <div class="message notice">
         <div>
-            <?= /* @escapeNotVerified */ __("Don't see what you're looking for?") ?>
-            <a href="<?= /* @escapeNotVerified */ $block->getFormUrl() ?>"><?= /* @escapeNotVerified */ __('Modify your search.') ?></a>
+            <?= $block->escapeHtml(__("Don't see what you're looking for?")) ?>
+            <a href="<?= $block->escapeUrl($block->getFormUrl()) ?>"><?= $block->escapeHtml(__('Modify your search.')) ?></a>
         </div>
     </div>
 <?php endif; ?>
 <?php if ($block->getResultCount()): ?>
-    <div class="search results"><?= $block->getProductListHtml() ?></div>
+    <div class="search results"><?= /* @noEscape */ $block->getProductListHtml() ?></div>
 <?php endif; ?>
 <?php $block->getSearchCriterias(); ?>

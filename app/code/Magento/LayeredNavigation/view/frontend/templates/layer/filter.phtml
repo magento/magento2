@@ -20,17 +20,17 @@
         <li class="item">
             <?php if ($filterItem->getCount() > 0): ?>
                 <a href="<?= $block->escapeUrl($filterItem->getUrl()) ?>">
-                    <?= /* @escapeNotVerified */ $filterItem->getLabel() ?>
+                    <?= $block->escapeHtml($filterItem->getLabel()) ?>
                     <?php if ($this->helper('\Magento\Catalog\Helper\Data')->shouldDisplayProductCountOnLayer()): ?>
-                        <span class="count"><?= /* @escapeNotVerified */ $filterItem->getCount() ?><span class="filter-count-label">
-                            <?php if ($filterItem->getCount() == 1):?> <?= /* @escapeNotVerified */ __('item') ?><?php else:?> <?= /* @escapeNotVerified */ __('items') ?><?php endif;?></span></span>
+                        <span class="count"><?= /* @noEscape */ (int)$filterItem->getCount() ?><span class="filter-count-label">
+                            <?php if ($filterItem->getCount() == 1):?> <?= $block->escapeHtml(__('item')) ?><?php else:?> <?= $block->escapeHtml(__('items')) ?><?php endif;?></span></span>
                     <?php endif; ?>
                 </a>
             <?php else:?>
-                <?= /* @escapeNotVerified */ $filterItem->getLabel() ?>
+                <?= $block->escapeHtml($filterItem->getLabel()) ?>
                 <?php if ($this->helper('\Magento\Catalog\Helper\Data')->shouldDisplayProductCountOnLayer()): ?>
-                    <span class="count"><?= /* @escapeNotVerified */ $filterItem->getCount() ?><span class="filter-count-label">
-                        <?php if ($filterItem->getCount() == 1):?><?= /* @escapeNotVerified */ __('item') ?><?php else:?><?= /* @escapeNotVerified */ __('items') ?><?php endif;?></span></span>
+                    <span class="count"><?= /* @noEscape */ (int)$filterItem->getCount() ?><span class="filter-count-label">
+                        <?php if ($filterItem->getCount() == 1):?><?= $block->escapeHtml(__('item')) ?><?php else:?><?= $block->escapeHtml(__('items')) ?><?php endif;?></span></span>
                 <?php endif; ?>
             <?php endif; ?>
         </li>

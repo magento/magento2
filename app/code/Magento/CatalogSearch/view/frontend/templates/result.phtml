@@ -14,22 +14,22 @@
     <div class="message notice">
         <div>
             <?php foreach ($messages as $message):?>
-                <?= /* @escapeNotVerified */ $message ?><br />
+                <?= /* @noEscape */ $message ?><br />
             <?php endforeach;?>
         </div>
     </div>
     <?php endif; ?>
-    <?= $block->getProductListHtml() ?>
+    <?= /* @noEscape */ $block->getProductListHtml() ?>
 </div>
 <?php else: ?>
 
 <div class="message notice">
     <div>
-        <?= /* @escapeNotVerified */ ($block->getNoResultText()) ? $block->getNoResultText() : __('Your search returned no results.') ?>
-        <?= $block->getAdditionalHtml() ?>
+        <?= $block->escapeHtml($block->getNoResultText() ? $block->getNoResultText() : __('Your search returned no results.')) ?>
+        <?= /* @noEscape */ $block->getAdditionalHtml() ?>
         <?php if ($messages = $block->getNoteMessages()):?>
             <?php foreach ($messages as $message):?>
-                <br /><?= /* @escapeNotVerified */ $message ?>
+                <br /><?= /* @noEscape */ $message ?>
             <?php endforeach;?>
         <?php endif; ?>
     </div>
