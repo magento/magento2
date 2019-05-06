@@ -9,6 +9,8 @@ use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
+ * Bse abstract form element.
+ *
  * @api
  * @since 100.1.0
  */
