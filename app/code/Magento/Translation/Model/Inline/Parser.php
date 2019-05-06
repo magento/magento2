@@ -247,8 +247,8 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     /**
      * Apply input filter to values of translation parameters
      *
-     * @param array &$translateParams
-     * @param array $fieldNames
+     * @param  array &$translateParams
+     * @param  array $fieldNames
      * @return void
      */
     protected function _filterTranslationParams(array &$translateParams, array $fieldNames)
@@ -396,13 +396,13 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     /**
      * Get translate data by regexp
      *
-     * @param string       $regexp
-     * @param string       &$text
-     * @param string|array $locationCallback
-     * @param array $options
+     * @param  string   $regexp
+     * @param  string   &$text
+     * @param  callable $locationCallback
+     * @param  array    $options
      * @return array
      */
-    private function _getTranslateData($regexp, &$text, $locationCallback, $options = [])
+    private function _getTranslateData(string $regexp, string &$text, callable $locationCallback, array $options = [])
     {
         $trArr = [];
         $next = 0;
@@ -412,7 +412,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
                     'shown' => htmlspecialchars_decode($matches[1][0]),
                     'translated' => htmlspecialchars_decode($matches[2][0]),
                     'original' => htmlspecialchars_decode($matches[3][0]),
-                    'location' => htmlspecialchars_decode(call_user_func($locationCallback, $matches, $options)),
+                    'location' => htmlspecialchars_decode($locationCallback($matches, $options)),
                 ]
             );
             $text = substr_replace($text, $matches[1][0], $matches[0][1], strlen($matches[0][0]));
@@ -524,6 +524,10 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      */
     private function _specialTags()
     {
+        $this->_translateTags($this->_content, $this->_allowedTagsGlobal,
+            function ($tagHtml, $tagName, $trArr) {
+                $this->_applySpecialTagsFormat($tagHtml, $tagName, $trArr);
+            });
         $this->_translateTags($this->_content, $this->_allowedTagsGlobal, '_applySpecialTagsFormat');
         $this->_translateTags($this->_content, $this->_allowedTagsSimple, '_applySimpleTagsFormat');
     }
@@ -531,12 +535,12 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     /**
      * Prepare simple tags
      *
-     * @param string &$content
-     * @param array $tagsList
-     * @param string|array $formatCallback
+     * @param  string   &$content
+     * @param  array    $tagsList
+     * @param  callable $formatCallback
      * @return void
      */
-    private function _translateTags(&$content, $tagsList, $formatCallback)
+    private function _translateTags(string &$content, array $tagsList, callable $formatCallback): void
     {
         $nextTag = 0;
         $tagRegExpBody = '#<(body)(/?>| \s*[^>]*+/?>)#iSU';
@@ -587,10 +591,10 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
                     if (array_key_exists($tagName, $this->_allowedTagsGlobal)
                         && $tagBodyOpenStartPosition > $tagMatch[0][1]
                     ) {
-                        $tagHtmlHead = call_user_func([$this, $formatCallback], $tagHtml, $tagName, $trArr);
+                        $tagHtmlHead = $formatCallback($tagHtml, $tagName, $trArr);
                         $headTranslateTags .= substr($tagHtmlHead, strlen($tagHtml));
                     } else {
-                        $tagHtml = call_user_func([$this, $formatCallback], $tagHtml, $tagName, $trArr);
+                        $tagHtml = $formatCallback($tagHtml, $tagName, $trArr);
                     }
                 }
 

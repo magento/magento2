@@ -223,6 +223,8 @@ class Fault
     }
 
     /**
+     * Retrieve message
+     *
      * @return string
      */
     public function getMessage()
