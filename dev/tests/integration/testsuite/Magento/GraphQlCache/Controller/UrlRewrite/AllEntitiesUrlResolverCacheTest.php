@@ -64,30 +64,9 @@ class AllEntitiesUrlResolverCacheTest extends AbstractGraphqlCacheTest
             ]
         );
         $categoryId = $actualUrls->getEntityId();
-        $categoryQuery
-            = <<<QUERY
-{
-  urlResolver(url:"{$categoryUrlKey}")
-  {
-   id
-   relative_url,
-   canonical_url
-   type
-  }
-}
-QUERY;
+        $categoryQuery = $this->getQuery($categoryUrlKey);
 
-        $productQuery = <<<QUERY
-{
-  urlResolver(url:"{$productUrlKey}")
-  {
-   id
-   relative_url
-   canonical_url
-   type
-  }
-}
-QUERY;
+        $productQuery = $this->getQuery($productUrlKey);
 
         /** @var GetPageByIdentifierInterface $page */
         $page = $this->objectManager->get(GetPageByIdentifierInterface::class);
@@ -95,18 +74,8 @@ QUERY;
         $cmsPage = $page->execute('page100', 0);
         $cmsPageId = $cmsPage->getId();
         $requestPath = $cmsPage->getIdentifier();
-        $pageQuery
-            = <<<QUERY
-{
-  urlResolver(url:"{$requestPath}")
-  {
-   id
-   relative_url
-   canonical_url
-   type
-  }
-}
-QUERY;
+        $pageQuery = $this->getQuery($requestPath);
+
         // query category for MISS
         $request = $this->prepareRequest($categoryQuery);
         $response = $this->graphqlController->dispatch($request);
@@ -163,17 +132,7 @@ QUERY;
 
         $product->setUrlKey('something-else-that-invalidates-the-cache');
         $productRepository->save($product);
-        $productQuery = <<<QUERY
-{
-  urlResolver(url:"something-else-that-invalidates-the-cache.html")
-  {
-   id
-   relative_url
-   canonical_url
-   type
-  }
-}
-QUERY;
+        $productQuery = $this->getQuery('something-else-that-invalidates-the-cache.html');
 
         // query category for MISS
         $request = $this->prepareRequest($categoryQuery);
@@ -192,5 +151,27 @@ QUERY;
         $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
         $actualCacheTags = explode(',', $rawActualCacheTags);
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
+    }
+
+    /**
+     * Get urlResolver query
+     *
+     * @param string $id
+     * @return string
+     */
+    private function getQuery(string $requestPath) : string
+    {
+        $resolverQuery = <<<QUERY
+{
+  urlResolver(url:"{$requestPath}")
+  {
+   id
+   relative_url
+   canonical_url
+   type
+  }
+}
+QUERY;
+        return $resolverQuery;
     }
 }
