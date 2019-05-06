@@ -236,7 +236,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * @param bool $includeContainer
      * @return string
      */
-    public function getSelectionQtyTitlePrice($selection, $includeContainer = true)
+    public function getSelectionQtyTitlePriceHtml($selection, $includeContainer = true)
     {
         $this->setFormatProduct($selection);
         $priceTitle = '<span class="product-name">' . $selection->getSelectionQty() * 1 . ' x ' . $this->escapeHtml($selection->getName()) . '</span>';
@@ -277,7 +277,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * @param bool $includeContainer
      * @return string
      */
-    public function getSelectionTitlePrice($selection, $includeContainer = true)
+    public function getSelectionTitlePriceHtml($selection, $includeContainer = true)
     {
         $priceTitle = '<span class="product-name">' . $this->escapeHtml($selection->getName()) . '</span>';
         $priceTitle .= ' &nbsp; ' . ($includeContainer ? '<span class="price-notice">' : '') . '+'

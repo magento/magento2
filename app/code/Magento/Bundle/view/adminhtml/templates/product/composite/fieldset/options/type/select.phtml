@@ -18,21 +18,21 @@
     <label class="label admin__field-label"><span><?= $block->escapeHtml($_option->getTitle()) ?></span></label>
     <div class="control admin__field-control">
         <?php if ($block->showSingle()): ?>
-            <?= /* @escapeNotVerified */ $block->getSelectionTitlePrice($_selections[0]) ?>
-            <input type="hidden" name="bundle_option[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
-                   value="<?= /* @escapeNotVerified */ $_selections[0]->getSelectionId() ?>"
-                   price="<?= /* @escapeNotVerified */ $block->getSelectionPrice($_selections[0]) ?>" />
+            <?= /* @noEscape */ $block->getSelectionTitlePriceHtml($_selections[0]) ?>
+            <input type="hidden" name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                   value="<?= $block->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"
+                   price="<?= $block->escapeHtmlAttr($block->getSelectionPrice($_selections[0])) ?>" />
         <?php else:?>
-            <select id="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>"
-                    name="bundle_option[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
-                    class="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?><?php if ($_option->getRequired()) echo ' required-entry' ?> select admin__control-select change-container-classname"
+            <select id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>"
+                    name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                    class="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?><?php if ($_option->getRequired()) echo ' required-entry' ?> select admin__control-select change-container-classname"
                     onchange="ProductConfigure.bundleControl.changeSelection(this)">
-                <option value=""><?= /* @escapeNotVerified */ __('Choose a selection...') ?></option>
+                <option value=""><?= $block->escapeHtml(__('Choose a selection...')) ?></option>
                 <?php foreach ($_selections as $_selection): ?>
                     <option
-                        value="<?= /* @escapeNotVerified */ $_selection->getSelectionId() ?>"<?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?><?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) echo ' disabled="disabled"' ?>
-                        price="<?= /* @escapeNotVerified */ $block->getSelectionPrice($_selection) ?>"
-                        qtyId="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-qty-input"><?= /* @escapeNotVerified */ $block->getSelectionTitlePrice($_selection, false) ?></option>
+                        value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"<?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?><?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) echo ' disabled="disabled"' ?>
+                        price="<?= $block->escapeHtmlAttr($block->getSelectionPrice($_selection)) ?>"
+                        qtyId="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input"><?= /* @noEscape */ $block->getSelectionTitlePriceHtml($_selection, false) ?></option>
                 <?php endforeach; ?>
             </select>
         <?php endif; ?>
@@ -40,12 +40,12 @@
         <div class="nested">
             <div class="field admin__field qty">
                 <label class="label admin__field-label"
-                       for="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-qty-input"><span><?= /* @escapeNotVerified */ __('Quantity:') ?></span></label>
+                       for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input"><span><?= $block->escapeHtml(__('Quantity:')) ?></span></label>
                 <div class="control admin__field-control">
                     <input <?php if (!$_canChangeQty) echo ' disabled="disabled"' ?>
-                        id="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-qty-input"
+                        id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input"
                         class="input-text admin__control-text qty<?php if (!$_canChangeQty) echo ' qty-disabled' ?>" type="text"
-                        name="bundle_option_qty[<?= /* @escapeNotVerified */ $_option->getId() ?>]" value="<?= /* @escapeNotVerified */ $_defaultQty ?>" />
+                        name="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]" value="<?= $block->escapeHtmlAttr($_defaultQty) ?>" />
                 </div>
             </div>
         </div>
