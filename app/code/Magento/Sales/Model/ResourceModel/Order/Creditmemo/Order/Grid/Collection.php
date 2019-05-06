@@ -34,9 +34,10 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }
 
-
     /**
-     * @inheritdoc
+     * Join table sales_order_grid to select order currency code.
+     *
+     * @return void
      */
     protected function _renderFiltersBefore()
     {
@@ -48,6 +49,5 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
                 'order_currency_code'=>'order_currency_code'
             ]
         );
-        parent::_renderFiltersBefore();
     }
 }
