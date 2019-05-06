@@ -884,7 +884,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     public function getGroupId()
     {
 		if ($this->hasData('id') && !$this->hasData('group_id')) {
-			 $groupId=$customerDataObject= $this->_getResource()->getGroupId($this->getData('id'));			 
+			 $groupId=$this->_getResource()->getGroupId($this->getData('id'));			 
 			 if($groupId) {
 				 $this->setData('group_id', $groupId);
 			 }		 
