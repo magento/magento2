@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryUrlRewriteGeneratorTest extends TestCase
 {
