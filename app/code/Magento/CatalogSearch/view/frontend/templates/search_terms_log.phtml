@@ -10,7 +10,7 @@
     {
         "*": {
             "Magento_CatalogSearch/js/search-terms-log": {
-                "url": "<?= /* @escapeNotVerified */ $block->getUrl('catalogsearch/searchTermsLog/save') ?>"
+                "url": "<?= $block->escapeUrl($block->getUrl('catalogsearch/searchTermsLog/save')) ?>"
             }
         }
     }
