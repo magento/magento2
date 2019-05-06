@@ -10,7 +10,6 @@ namespace Magento\CmsGraphQl\Model\Resolver\DataProvider;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\GetPageByIdentifierInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Widget\Model\Template\FilterEmulate;
@@ -49,14 +48,14 @@ class Page
     public function __construct(
         PageRepositoryInterface $pageRepository,
         FilterEmulate $widgetFilter,
-        GetPageByIdentifierInterface $getPageByIdentifier = null,
-        StoreManagerInterface $storeManager = null
+        GetPageByIdentifierInterface $getPageByIdentifier,
+        StoreManagerInterface $storeManager
     ) {
 
         $this->pageRepository = $pageRepository;
         $this->widgetFilter = $widgetFilter;
-        $this->pageByIdentifier = $getPageByIdentifier ?: ObjectManager::getInstance()->get(GetPageByIdentifierInterface::class);
-        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->pageByIdentifier = $getPageByIdentifier;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -72,7 +71,7 @@ class Page
     public function getData(int $pageId): array
     {
         $page = $this->pageRepository->getById($pageId);
-        
+
         return $this->convertPageData($page);
     }
 
