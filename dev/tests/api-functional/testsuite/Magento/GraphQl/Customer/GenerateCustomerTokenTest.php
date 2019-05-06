@@ -10,8 +10,7 @@ namespace Magento\GraphQl\Customer;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Class GenerateCustomerTokenTest
- * @package Magento\GraphQl\Customer
+ * API-functional tests cases for generateCustomerToken mutation
  */
 class GenerateCustomerTokenTest extends GraphQlAbstract
 {
@@ -43,33 +42,11 @@ MUTATION;
     }
 
     /**
-     * Verify customer with invalid credentials
-     */
-    public function testGenerateCustomerTokenWithInvalidCredentials()
-    {
-        $email = 'customer@example.com';
-        $password = 'bad-password';
-
-        $mutation
-            = <<<MUTATION
-mutation {
-	generateCustomerToken(
-        email: "{$email}"
-        password: "{$password}"
-    ) {
-        token
-    }
-}
-MUTATION;
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: The account sign-in' . ' ' .
-            'was incorrect or your account is disabled temporarily. Please wait and try again later.');
-        $this->graphQlMutation($mutation);
-    }
-
-    /**
      * Verify customer with invalid email
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage GraphQL response contains errors: The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.
      */
     public function testGenerateCustomerTokenWithInvalidEmail()
     {
@@ -92,11 +69,13 @@ MUTATION;
 
     /**
      * Verify customer with empty email
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
     public function testGenerateCustomerTokenWithEmptyEmail()
     {
         $email = '';
-        $password = 'bad-password';
+        $password = 'password';
 
         $mutation
             = <<<MUTATION
@@ -116,9 +95,38 @@ MUTATION;
     }
 
     /**
-     * Verify customer with empty password
+     * Verify customer with invalid credentials
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage GraphQL response contains errors: The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.
      */
-    public function testGenerateCustomerTokenWithEmptyPassword()
+    public function testGenerateCustomerTokenWithIncorrectPassword()
+    {
+        $email = 'customer@example.com';
+        $password = 'bad-password';
+
+        $mutation
+            = <<<MUTATION
+mutation {
+	generateCustomerToken(
+        email: "{$email}"
+        password: "{$password}"
+    ) {
+        token
+    }
+}
+MUTATION;
+
+        $this->graphQlMutation($mutation);
+    }
+
+    /**
+     * Verify customer with empty password
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testGenerateCustomerTokenWithInvalidPassword()
     {
         $email = 'customer@example.com';
         $password = '';
@@ -138,5 +146,36 @@ MUTATION;
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('GraphQL response contains errors: Specify the "password" value.');
         $this->graphQlMutation($mutation);
+    }
+
+    /**
+     * Verify customer with empty password
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testRegenerateCustomerToken()
+    {
+        $email = 'customer@example.com';
+        $password = 'password';
+
+        $mutation
+            = <<<MUTATION
+mutation {
+	generateCustomerToken(
+        email: "{$email}"
+        password: "{$password}"
+    ) {
+        token
+    }
+}
+MUTATION;
+
+        $response1 = $this->graphQlMutation($mutation);
+        $token1 = $response1['generateCustomerToken']['token'];
+
+        $response2 = $this->graphQlMutation($mutation);
+        $token2 = $response2['generateCustomerToken']['token'];
+
+        $this->assertNotEquals($token1, $token2, 'Tokens should not be identical!');
     }
 }
