@@ -19,7 +19,7 @@
     <div class="control admin__field-control">
         <div class="nested<?php if ($_option->getDecoratedIsLast()):?> last<?php endif; ?>">
         <?php if ($block->showSingle()): ?>
-            <?= /* @noEscape */ $block->getSelectionTitlePriceHtml($_selections[0]) ?>
+            <?= /* @noEscape */ $block->getSelectionTitlePrice($_selections[0]) ?>
             <input type="hidden"
                    name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                    value="<?= $block->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"
@@ -52,7 +52,7 @@
                            qtyId="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input" />
                     <label class="admin__field-label"
                            for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>">
-                        <span><?= /* @noEscape */ $block->getSelectionTitlePriceHtml($_selection) ?></span>
+                        <span><?= /* @noEscape */ $block->getSelectionTitlePrice($_selection) ?></span>
                     </label>
                 <?php if ($_option->getRequired()): ?>
                     <?= $block->escapeHtml($block->setValidationContainer('bundle-option-'.$_option->getId().'-'.$_selection->getSelectionId(), 'bundle-option-'.$_option->getId().'-container')) ?>
