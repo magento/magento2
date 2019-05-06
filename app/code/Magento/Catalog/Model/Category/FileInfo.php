@@ -178,7 +178,7 @@ class FileInfo
         $mediaDirectoryPath = $this->getMediaDirectory()->getAbsolutePath();
 
         $mediaDirectoryRelativeSubpath = substr($mediaDirectoryPath, strlen($baseDirectoryPath));
-        $pubDirectory = DirectoryList::PUB . DIRECTORY_SEPARATOR;
+        $pubDirectory = 'pub' . DIRECTORY_SEPARATOR;
 
         if (strpos($mediaDirectoryRelativeSubpath, $pubDirectory) === 0 && strpos($filePath, $pubDirectory) !== 0) {
             $mediaDirectoryRelativeSubpath = substr($mediaDirectoryRelativeSubpath, strlen($pubDirectory));
