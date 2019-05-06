@@ -19,7 +19,7 @@
                 <order_status>processing</order_status>
                 <payment_action>authorize</payment_action>
                 <test>1</test>
-                <title>Credit Card Direct Post (Authorize.net)</title>
+                <title>Credit Card Direct Post (Authorize.Net)</title>
                 <trans_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <trans_md5 backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <allowspecific>0</allowspecific>

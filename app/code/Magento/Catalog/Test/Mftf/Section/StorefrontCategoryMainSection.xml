@@ -17,6 +17,7 @@
         <element name="ProductItemInfo" type="button" selector=".product-item-info"/>
         <element name="specifiedProductItemInfo" type="button" selector="//a[@class='product-item-link'][contains(text(), '{{var1}}')]" parameterized="true"/>
         <element name="AddToCartBtn" type="button" selector="button.action.tocart.primary"/>
+        <element name="addToCartProductBySku" type="button" selector="//form[@data-product-sku='{{productSku}}']//button[contains(@class, 'tocart')]" parameterized="true" />
         <element name="SuccessMsg" type="button" selector="div.message-success"/>
         <element name="productCount" type="text" selector="#toolbar-amount"/>
         <element name="CatalogDescription" type="text" selector="//div[@class='category-description']//p"/>
@@ -29,5 +30,7 @@
         <element name="categoryImage" type="text" selector=".category-image"/>
         <element name="emptyProductMessage" type="block" selector=".message.info.empty>div"/>
         <element name="lineProductName" type="text" selector=".products.list.items.product-items li:nth-of-type({{line}}) .product-item-link" timeout="30" parameterized="true"/>
+        <element name="asLowAs" type="input" selector="//*[@class='price-box price-final_price']/a/span[@class='price-container price-final_price tax weee']"/>
+        <element name="productsList" type="block" selector="#maincontent .column.main"/>
     </section>
 </sections>

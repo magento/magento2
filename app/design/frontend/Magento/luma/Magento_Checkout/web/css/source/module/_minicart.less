@@ -63,6 +63,13 @@
             }
         }
 
+        dl {
+            &.product.options.list {
+                display: inline-block;
+                vertical-align: top;
+            }
+        }
+
         .text {
             &.empty {
                 text-align: center;
@@ -287,6 +294,15 @@
 
             .details-qty {
                 margin-top: @indent__s;
+            }
+
+            .product {
+                .options {
+                    &.list {
+                        &:extend(.abs-product-options-list all);
+                        &:extend(.abs-add-clearfix all);
+                    }
+                }
             }
         }
 

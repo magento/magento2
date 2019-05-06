@@ -393,12 +393,26 @@ define([
                 this.formSaveParams = arguments;
                 this.attributeSetHandlerModal().openModal();
             } else {
+                if (this.validateForm(this.formElement())) {
+                    this.clearOutdatedData();
+                }
                 this.formElement().save(arguments[0], arguments[1]);
 
                 if (this.formElement().source.get('params.invalid')) {
                     this.unserializeData();
                 }
             }
+        },
+
+        /**
+         * @param {Object} formElement
+         *
+         * Validates each form element and returns true, if all elements are valid.
+         */
+        validateForm: function (formElement) {
+            formElement.validate();
+
+            return !formElement.additionalInvalid && !formElement.source.get('params.invalid');
         },
 
         /**
@@ -418,12 +432,27 @@ define([
             if (this.source.data['configurable-matrix']) {
                 this.source.data['configurable-matrix-serialized'] =
                     JSON.stringify(this.source.data['configurable-matrix']);
-                delete this.source.data['configurable-matrix'];
             }
 
             if (this.source.data['associated_product_ids']) {
                 this.source.data['associated_product_ids_serialized'] =
                     JSON.stringify(this.source.data['associated_product_ids']);
+            }
+        },
+
+        /**
+         * Clear outdated data for specific form fields
+         *
+         * Outdated fields:
+         *   - configurable-matrix;
+         *   - associated_product_ids.
+         */
+        clearOutdatedData: function () {
+            if (this.source.data['configurable-matrix']) {
+                delete this.source.data['configurable-matrix'];
+            }
+
+            if (this.source.data['associated_product_ids']) {
                 delete this.source.data['associated_product_ids'];
             }
         },

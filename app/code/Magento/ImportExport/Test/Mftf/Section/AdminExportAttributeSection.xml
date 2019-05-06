@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminExportAttributeSection">
+        <element name="filterByAttributeCode" type="input" selector="#export_filter_grid_filter_attribute_code"/>
+        <element name="resetFilter" type="button" selector="button[data-action='grid-filter-reset']" timeout="30"/>
+        <element name="search" type="button" selector="button[data-action=grid-filter-apply]" timeout="30"/>
+    </section>
+</sections>

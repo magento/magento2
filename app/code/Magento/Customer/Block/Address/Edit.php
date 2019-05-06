@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Block\Address;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -47,6 +48,11 @@ class Edit extends \Magento\Directory\Block\Data
     protected $dataObjectHelper;
 
     /**
+     * @var \Magento\Customer\Api\AddressMetadataInterface
+     */
+    private $addressMetadata;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -61,6 +67,7 @@ class Edit extends \Magento\Directory\Block\Data
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array $data
+     * @param \Magento\Customer\Api\AddressMetadataInterface|null $addressMetadata
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -76,13 +83,15 @@ class Edit extends \Magento\Directory\Block\Data
         \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        array $data = []
+        array $data = [],
+        \Magento\Customer\Api\AddressMetadataInterface $addressMetadata = null
     ) {
         $this->_customerSession = $customerSession;
         $this->_addressRepository = $addressRepository;
         $this->addressDataFactory = $addressDataFactory;
         $this->currentCustomer = $currentCustomer;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->addressMetadata = $addressMetadata;
         parent::__construct(
             $context,
             $directoryHelper,
@@ -103,6 +112,32 @@ class Edit extends \Magento\Directory\Block\Data
     {
         parent::_prepareLayout();
 
+        $this->initAddressObject();
+
+        $this->pageConfig->getTitle()->set($this->getTitle());
+
+        if ($postedData = $this->_customerSession->getAddressFormData(true)) {
+            $postedData['region'] = [
+                'region_id' => isset($postedData['region_id']) ? $postedData['region_id'] : null,
+                'region' => $postedData['region'],
+            ];
+            $this->dataObjectHelper->populateWithArray(
+                $this->_address,
+                $postedData,
+                \Magento\Customer\Api\Data\AddressInterface::class
+            );
+        }
+        $this->precheckRequiredAttributes();
+        return $this;
+    }
+
+    /**
+     * Initialize address object.
+     *
+     * @return void
+     */
+    private function initAddressObject()
+    {
         // Init address object
         if ($addressId = $this->getRequest()->getParam('id')) {
             try {
@@ -124,22 +159,26 @@ class Edit extends \Magento\Directory\Block\Data
             $this->_address->setLastname($customer->getLastname());
             $this->_address->setSuffix($customer->getSuffix());
         }
+    }
 
-        $this->pageConfig->getTitle()->set($this->getTitle());
-
-        if ($postedData = $this->_customerSession->getAddressFormData(true)) {
-            $postedData['region'] = [
-                'region_id' => isset($postedData['region_id']) ? $postedData['region_id'] : null,
-                'region' => $postedData['region'],
-            ];
-            $this->dataObjectHelper->populateWithArray(
-                $this->_address,
-                $postedData,
-                \Magento\Customer\Api\Data\AddressInterface::class
-            );
+    /**
+     * Precheck attributes that may be required in attribute configuration.
+     *
+     * @return void
+     */
+    private function precheckRequiredAttributes()
+    {
+        $precheckAttributes = $this->getData('check_attributes_on_render');
+        $requiredAttributesPrechecked = [];
+        if (!empty($precheckAttributes) && is_array($precheckAttributes)) {
+            foreach ($precheckAttributes as $attributeCode) {
+                $attributeMetadata = $this->addressMetadata->getAttributeMetadata($attributeCode);
+                if ($attributeMetadata && $attributeMetadata->isRequired()) {
+                    $requiredAttributesPrechecked[$attributeCode] = $attributeCode;
+                }
+            }
         }
-
-        return $this;
+        $this->setData('required_attributes_prechecked', $requiredAttributesPrechecked);
     }
 
     /**

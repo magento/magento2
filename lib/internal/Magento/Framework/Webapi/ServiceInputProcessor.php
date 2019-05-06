@@ -165,17 +165,25 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     }
 
     /**
+     * Retrieve constructor data
+     *
      * @param string $className
      * @param array $data
      * @return array
      * @throws \ReflectionException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getConstructorData(string $className, array $data): array
     {
         $preferenceClass = $this->config->getPreference($className);
         $class = new ClassReflection($preferenceClass ?: $className);
 
-        $constructor = $class->getConstructor();
+        try {
+            $constructor = $class->getMethod('__construct');
+        } catch (\ReflectionException $e) {
+            $constructor = null;
+        }
+
         if ($constructor === null) {
             return [];
         }
@@ -184,7 +192,15 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $parameters = $constructor->getParameters();
         foreach ($parameters as $parameter) {
             if (isset($data[$parameter->getName()])) {
-                $res[$parameter->getName()] = $data[$parameter->getName()];
+                $parameterType = $this->typeProcessor->getParamType($parameter);
+
+                try {
+                    $res[$parameter->getName()] = $this->convertValue($data[$parameter->getName()], $parameterType);
+                } catch (\ReflectionException $e) {
+                    // Parameter was not correclty declared or the class is uknown.
+                    // By not returing the contructor value, we will automatically fall back to the "setters" way.
+                    continue;
+                }
             }
         }
 

@@ -26,7 +26,7 @@ class Match implements QueryInterface
     /**
      * @var string
      */
-    const SPECIAL_CHARACTERS = '+~/\\<>\'":*$#@()!,.?`=%&^';
+    const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=%&^';
 
     const MINIMAL_CHARACTER_LENGTH = 3;
 

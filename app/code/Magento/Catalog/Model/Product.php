@@ -72,11 +72,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     const STORE_ID = 'store_id';
 
     /**
-     * Product Url path.
-     */
-    const URL_PATH = 'url_path';
-
-    /**
      * @var string
      */
     protected $_cacheTag = self::CACHE_TAG;

@@ -29,7 +29,7 @@ class DeclarativeInstallerTest extends SetupTestCase
     /**
      * @var CliCommand
      */
-    private $cliCommad;
+    private $cliCommand;
 
     /**
      * @var SchemaDiff
@@ -51,11 +51,14 @@ class DeclarativeInstallerTest extends SetupTestCase
      */
     private $describeTable;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
-        $this->cliCommad = $objectManager->get(CliCommand::class);
+        $this->cliCommand = $objectManager->get(CliCommand::class);
         $this->describeTable = $objectManager->get(DescribeTable::class);
         $this->schemaDiff = $objectManager->get(SchemaDiff::class);
         $this->schemaConfig = $objectManager->get(SchemaConfigInterface::class);
@@ -68,7 +71,7 @@ class DeclarativeInstallerTest extends SetupTestCase
      */
     public function testInstallation()
     {
-        $this->cliCommad->install(
+        $this->cliCommand->install(
             ['Magento_TestSetupDeclarationModule1']
         );
 
@@ -104,10 +107,11 @@ class DeclarativeInstallerTest extends SetupTestCase
     /**
      * @moduleName Magento_TestSetupDeclarationModule1
      * @dataProviderFromFile Magento/TestSetupDeclarationModule1/fixture/declarative_installer/column_modification.php
+     * @throws \Exception
      */
     public function testInstallationWithColumnsModification()
     {
-        $this->cliCommad->install(
+        $this->cliCommand->install(
             ['Magento_TestSetupDeclarationModule1']
         );
 
@@ -119,7 +123,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             'etc'
         );
 
-        $this->cliCommad->install(
+        $this->cliCommand->install(
             ['Magento_TestSetupDeclarationModule1']
         );
 
@@ -157,14 +161,15 @@ class DeclarativeInstallerTest extends SetupTestCase
     /**
      * @moduleName Magento_TestSetupDeclarationModule1
      * @dataProviderFromFile Magento/TestSetupDeclarationModule1/fixture/declarative_installer/column_removal.php
+     * @throws \Exception
      */
     public function testInstallationWithColumnsRemoval()
     {
-        $this->cliCommad->install(
+        $this->cliCommand->install(
             ['Magento_TestSetupDeclarationModule1']
         );
         $this->updateDbSchemaRevision('column_removals');
-        $this->cliCommad->install(
+        $this->cliCommand->install(
             ['Magento_TestSetupDeclarationModule1']
         );
 
@@ -195,14 +200,15 @@ class DeclarativeInstallerTest extends SetupTestCase
     /**
      * @moduleName Magento_TestSetupDeclarationModule1
      * @dataProviderFromFile Magento/TestSetupDeclarationModule1/fixture/declarative_installer/constraint_modification.php
+     * @throws \Exception
      */
     public function testInstallationWithConstraintsModification()
     {
-        $this->cliCommad->install(
+        $this->cliCommand->install(
             ['Magento_TestSetupDeclarationModule1']
         );
         $this->updateDbSchemaRevision('constraint_modifications');
-        $this->cliCommad->upgrade();
+        $this->cliCommand->upgrade();
 
         $diff = $this->schemaDiff->diff(
             $this->schemaConfig->getDeclarationConfig(),
@@ -216,10 +222,11 @@ class DeclarativeInstallerTest extends SetupTestCase
     /**
      * @moduleName Magento_TestSetupDeclarationModule1
      * @dataProviderFromFile Magento/TestSetupDeclarationModule1/fixture/declarative_installer/table_removal.php
+     * @throws \Exception
      */
     public function testInstallationWithDroppingTables()
     {
-        $this->cliCommad->install(
+        $this->cliCommand->install(
             ['Magento_TestSetupDeclarationModule1']
         );
 
@@ -231,7 +238,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             'etc'
         );
 
-        $this->cliCommad->upgrade();
+        $this->cliCommand->upgrade();
 
         $diff = $this->schemaDiff->diff(
             $this->schemaConfig->getDeclarationConfig(),
@@ -245,6 +252,7 @@ class DeclarativeInstallerTest extends SetupTestCase
     /**
      * @moduleName Magento_TestSetupDeclarationModule1
      * @dataProviderFromFile Magento/TestSetupDeclarationModule1/fixture/declarative_installer/rollback.php
+     * @throws \Exception
      */
     public function testInstallWithCodeBaseRollback()
     {
@@ -255,7 +263,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             'db_schema.xml',
             'etc'
         );
-        $this->cliCommad->install(
+        $this->cliCommand->install(
             ['Magento_TestSetupDeclarationModule1']
         );
         $beforeRollback = $this->describeTable->describeShard('default');
@@ -268,7 +276,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             'etc'
         );
 
-        $this->cliCommad->upgrade();
+        $this->cliCommand->upgrade();
         $afterRollback = $this->describeTable->describeShard('default');
         self::assertEquals($this->getData()['after'], $afterRollback);
     }
@@ -276,6 +284,7 @@ class DeclarativeInstallerTest extends SetupTestCase
     /**
      * @moduleName Magento_TestSetupDeclarationModule1
      * @dataProviderFromFile Magento/TestSetupDeclarationModule1/fixture/declarative_installer/table_rename.php
+     * @throws \Exception
      */
     public function testTableRename()
     {
@@ -287,7 +296,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             'db_schema.xml',
             'etc'
         );
-        $this->cliCommad->install(
+        $this->cliCommand->install(
             ['Magento_TestSetupDeclarationModule1']
         );
         $before = $this->describeTable->describeShard('default');
@@ -305,7 +314,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             'etc'
         );
 
-        $this->cliCommad->upgrade();
+        $this->cliCommand->upgrade();
         $after = $this->describeTable->describeShard('default');
         self::assertEquals($this->getData()['after'], $after['some_table_renamed']);
         $select = $adapter->select()
@@ -315,10 +324,11 @@ class DeclarativeInstallerTest extends SetupTestCase
 
     /**
      * @moduleName Magento_TestSetupDeclarationModule8
+     * @throws \Exception
      */
     public function testForeignKeyReferenceId()
     {
-        $this->cliCommad->install(
+        $this->cliCommand->install(
             ['Magento_TestSetupDeclarationModule8']
         );
         $this->moduleManager->updateRevision(
@@ -327,7 +337,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             'db_schema.xml',
             'etc'
         );
-        $this->cliCommad->upgrade();
+        $this->cliCommand->upgrade();
         $tableStatements = $this->describeTable->describeShard('default');
         $tableSql = $tableStatements['dependent'];
         $this->assertRegExp('/CONSTRAINT\s`DEPENDENT_PAGE_ID_ON_TEST_TABLE_PAGE_ID`/', $tableSql);
@@ -337,10 +347,11 @@ class DeclarativeInstallerTest extends SetupTestCase
     /**
      * @moduleName Magento_TestSetupDeclarationModule1
      * @moduleName Magento_TestSetupDeclarationModule8
+     * @throws \Exception
      */
     public function testDisableIndexByExternalModule()
     {
-        $this->cliCommad->install(
+        $this->cliCommand->install(
             ['Magento_TestSetupDeclarationModule1', 'Magento_TestSetupDeclarationModule8']
         );
         $this->moduleManager->updateRevision(
@@ -367,7 +378,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             'module.xml',
             'etc'
         );
-        $this->cliCommad->upgrade();
+        $this->cliCommand->upgrade();
         $tableStatements = $this->describeTable->describeShard('default');
         $tableSql = $tableStatements['test_table'];
         $this->assertNotRegExp(
@@ -375,5 +386,37 @@ class DeclarativeInstallerTest extends SetupTestCase
             $tableSql,
             'Index is not being disabled by external module'
         );
+    }
+
+    /**
+     * @moduleName Magento_TestSetupDeclarationModule8
+     * @moduleName Magento_TestSetupDeclarationModule9
+     * @dataProviderFromFile Magento/TestSetupDeclarationModule9/fixture/declarative_installer/disabling_tables.php
+     * @throws \Exception
+     */
+    public function testInstallationWithDisablingTables()
+    {
+        $modules = [
+            'Magento_TestSetupDeclarationModule8',
+            'Magento_TestSetupDeclarationModule9',
+        ];
+
+        foreach ($modules as $moduleName) {
+            $this->moduleManager->updateRevision(
+                $moduleName,
+                'disabling_tables',
+                'db_schema.xml',
+                'etc'
+            );
+        }
+        $this->cliCommand->install($modules);
+
+        $diff = $this->schemaDiff->diff(
+            $this->schemaConfig->getDeclarationConfig(),
+            $this->schemaConfig->getDbConfig()
+        );
+        self::assertNull($diff->getAll());
+        $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
+        self::assertEquals($this->getData(), $shardData);
     }
 }

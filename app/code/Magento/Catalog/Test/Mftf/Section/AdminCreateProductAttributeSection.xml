@@ -78,6 +78,7 @@
                  type="button" selector="#advanced_fieldset-wrapper"/>
         <element name="AttributeCode" type="text" selector="#attribute_code"/>
         <element name="Scope" type="select" selector="#is_global"/>
+        <element name="UniqueValue" type="select" selector="#is_unique"/>
         <element name="AddToColumnOptions" type="select" selector="#is_used_in_grid"/>
         <element name="UseInFilterOptions" type="select" selector="#is_filterable_in_grid"/>
         <element name="UseInProductListing" type="select" selector="#used_in_product_listing"/>

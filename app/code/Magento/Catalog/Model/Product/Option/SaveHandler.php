@@ -28,6 +28,8 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
+     * Perform action on relation/extension attribute
+     *
      * @param object $entity
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
@@ -35,6 +37,10 @@ class SaveHandler implements ExtensionInterface
      */
     public function execute($entity, $arguments = [])
     {
+        if ($entity->getOptionsSaved()) {
+            return $entity;
+        }
+
         $options = $entity->getOptions();
         $optionIds = [];
 

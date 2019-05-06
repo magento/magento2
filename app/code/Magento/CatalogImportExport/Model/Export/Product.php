@@ -351,6 +351,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
     /**
      * Product constructor.
+     *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -941,15 +942,17 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function loadCollection(): array
     {
         $data = [];
-
         $collection = $this->_getEntityCollection();
         foreach (array_keys($this->_storeIdToCode) as $storeId) {
+            $collection->setOrder('entity_id', 'asc');
+            $this->_prepareEntityCollection($collection);
             $collection->setStoreId($storeId);
+            $collection->load();
             foreach ($collection as $itemId => $item) {
                 $data[$itemId][$storeId] = $item;
             }
+            $collection->clear();
         }
-        $collection->clear();
 
         return $data;
     }

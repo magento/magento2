@@ -61,6 +61,7 @@ class AddSimpleProductToCart
      * @return void
      * @throws GraphQlNoSuchEntityException
      * @throws GraphQlInputException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(Quote $cart, array $cartItemData): void
     {

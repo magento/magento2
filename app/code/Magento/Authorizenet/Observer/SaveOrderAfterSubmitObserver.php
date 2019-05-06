@@ -3,11 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Model\Order;
 
+/**
+ * Class SaveOrderAfterSubmitObserver
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
+ */
 class SaveOrderAfterSubmitObserver implements ObserverInterface
 {
     /**

@@ -5,9 +5,6 @@
  */
 namespace Magento\Sales\Model\Order\Pdf\Items\Invoice;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Sales\Model\Order\Address\Renderer;
-
 /**
  * Sales Order Invoice Pdf default items renderer
  */
@@ -21,11 +18,6 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
     protected $string;
 
     /**
-     * @var \Magento\Sales\Model\Order\Address\Renderer
-     */
-    private $renderer;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
@@ -35,8 +27,6 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param \Magento\Sales\Model\Order\Address\Renderer $renderer
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -47,8 +37,7 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = [],
-        Renderer $renderer = null
+        array $data = []
     ) {
         $this->string = $string;
         parent::__construct(
@@ -61,7 +50,6 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
             $resourceCollection,
             $data
         );
-        $this->renderer = $renderer ?: ObjectManager::getInstance()->get(Renderer::class);
     }
 
     /**
@@ -78,16 +66,11 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
         $lines = [];
 
         // draw Product name
-        $lines[0] = [
-            [
-                'text' => $this->string->split($this->renderer->processArabicText($item->getName()), 35, true, true),
-                'feed' => 35
-            ]
-        ];
+        $lines[0] = [['text' => $this->string->split($item->getName(), 35, true, true), 'feed' => 35]];
 
         // draw SKU
         $lines[0][] = [
-            'text' => $this->string->split($this->renderer->processArabicText($item->getSku($item)), 17),
+            'text' => $this->string->split($this->getSku($item), 17),
             'feed' => 290,
             'align' => 'right',
         ];

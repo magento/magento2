@@ -147,3 +147,32 @@
         }
     }
 }
+
+//
+//  Tablet
+//  _____________________________________________
+
+@media only screen and (max-width: @screen__m) {
+    .field-tooltip .field-tooltip-content {
+        left: auto;
+        right: -10px;
+        top: 40px;
+    }
+    .field-tooltip .field-tooltip-content::before,
+    .field-tooltip .field-tooltip-content::after {
+        border: 10px solid transparent;
+        height: 0;
+        left: auto;
+        margin-top: -21px;
+        right: 10px;
+        top: 0;
+        width: 0;
+    }
+    .field-tooltip .field-tooltip-content::before {
+        border-bottom-color: @color-gray40;
+    }
+    .field-tooltip .field-tooltip-content::after {
+        border-bottom-color: @color-gray-light01;
+        top: 1px;
+    }
+}

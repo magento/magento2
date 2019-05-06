@@ -11,6 +11,9 @@
  */
 namespace Magento\Framework\HTTP\Adapter;
 
+/**
+ * Curl http adapter
+ */
 class Curl implements \Zend_Http_Client_Adapter_Interface
 {
     /**
@@ -139,8 +142,8 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     /**
      * Connect to the remote server
      *
-     * @param string  $host
-     * @param int     $port
+     * @param string $host
+     * @param int $port
      * @param boolean $secure
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -167,6 +170,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
 
         // set url to post to
         curl_setopt($this->_getResource(), CURLOPT_URL, $url);
+        curl_setopt($this->_getResource(), CURLOPT_HTTP_VERSION, $http_ver);
         curl_setopt($this->_getResource(), CURLOPT_RETURNTRANSFER, true);
         if ($method == \Zend_Http_Client::POST) {
             curl_setopt($this->_getResource(), CURLOPT_POST, true);
@@ -273,7 +277,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     }
 
     /**
-     * curl_multi_* requests support
+     * Curl_multi_* requests support
      *
      * @param array $urls
      * @param array $options

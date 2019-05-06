@@ -18,6 +18,7 @@
         <element name="currentVariationsQuantityCells" type="textarea" selector=".admin__control-fields[data-index='quantity_container']"/>
         <element name="currentVariationsAttributesCells" type="textarea" selector=".admin__control-fields[data-index='attributes']"/>
         <element name="currentVariationsStatusCells" type="textarea" selector="._no-header[data-index='status']"/>
+        <element name="firstSKUInConfigurableProductsGrid" type="input" selector="//input[@name='configurable-matrix[0][sku]']"/>
         <element name="actionsBtn" type="button" selector="(//button[@class='action-select']/span[contains(text(), 'Select')])[{{var1}}]" parameterized="true"/>
         <element name="removeProductBtn" type="button" selector="//a[text()='Remove Product']"/>
         <element name="disableProductBtn" type="button" selector="//a[text()='Disable Product']"/>

@@ -18,6 +18,4 @@
         <element name="admin" type="button" selector=".admin__action-dropdown-text"/>
         <element name="logout" type="button" selector="//*[contains(text(), 'Sign Out')]"/>
     </section>
-
 </sections>
-
