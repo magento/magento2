@@ -270,7 +270,6 @@
                     <rule name="validate-date" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>text</dataType>
-                
                 <visible>true</visible>
             </settings>
         </field>
