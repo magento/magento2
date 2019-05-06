@@ -46,7 +46,7 @@
                     </li>
                 </script>
                 <script data-template="bundle-option" type="text/x-magento-template">
-                    <div><?= $block->escapeHtml(__('%1 x %2', '<%- data._quantity_ %>', '<%- data._label_ %>')) ?></div>
+                    <div><?= /* @noEscape */ __('%1 x %2', '<%- data._quantity_ %>', '<%- data._label_ %>') ?></div>
                 </script>
             </div>
         </div>

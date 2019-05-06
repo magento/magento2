@@ -21,7 +21,7 @@
         <div class="nested <?php if ($_option->getDecoratedIsLast()):?> last<?php endif;?>">
 
             <?php if (count($_selections) == 1 && $_option->getRequired()): ?>
-                <?= /* @noEscape */ $block->getSelectionQtyTitlePriceHtml($_selections[0]) ?>
+                <?= /* @noEscape */ $block->getSelectionQtyTitlePrice($_selections[0]) ?>
                 <input type="hidden"
                        name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                        value="<?= $block->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"
@@ -47,7 +47,7 @@
 
                         <label class="admin__field-label"
                                for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>">
-                            <span><?= /* @noEscape */ $block->getSelectionQtyTitlePriceHtml($_selection) ?></span>
+                            <span><?= /* @noEscape */ $block->getSelectionQtyTitlePrice($_selection) ?></span>
                         </label>
 
                         <?php if ($_option->getRequired()): ?>
