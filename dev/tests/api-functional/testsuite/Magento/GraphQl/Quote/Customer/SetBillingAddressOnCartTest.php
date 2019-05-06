@@ -99,13 +99,13 @@ mutation {
           code
           label
         }
-        address_type
+        __typename
       }
     }
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
         $cartResponse = $response['setBillingAddressOnCart']['cart'];
@@ -159,7 +159,7 @@ mutation {
           code
           label
         }
-        address_type
+        __typename
       }
       shipping_addresses {
         firstname
@@ -173,13 +173,13 @@ mutation {
           code
           label
         }
-        address_type
+        __typename
       }
     }
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
         $cartResponse = $response['setBillingAddressOnCart']['cart'];
@@ -188,7 +188,7 @@ QUERY;
         self::assertArrayHasKey('shipping_addresses', $cartResponse);
         $shippingAddressResponse = current($cartResponse['shipping_addresses']);
         $this->assertNewAddressFields($billingAddressResponse);
-        $this->assertNewAddressFields($shippingAddressResponse, 'SHIPPING');
+        $this->assertNewAddressFields($shippingAddressResponse, 'ShippingCartAddress');
     }
 
     /**
@@ -230,7 +230,7 @@ mutation {
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
         $cartResponse = $response['setBillingAddressOnCart']['cart'];
@@ -270,7 +270,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -318,7 +318,7 @@ QUERY;
         self::expectExceptionMessage(
             'The billing address cannot contain "customer_address_id" and "address" at the same time.'
         );
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -355,7 +355,7 @@ QUERY;
             "The current user cannot perform operations on cart \"{$maskedQuoteId}\""
         );
 
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -390,7 +390,7 @@ QUERY;
             "The current user cannot perform operations on cart \"{$maskedQuoteId}\""
         );
 
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer@search.example.com'));
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer@search.example.com'));
     }
 
     /**
@@ -424,7 +424,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
     }
 
     /**
@@ -454,7 +454,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -490,7 +490,25 @@ mutation {
 QUERY;
 
         $this->expectExceptionMessage($message);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderSetWithoutRequiredParameters(): array
+    {
+        return [
+            'missed_billing_address' => [
+                'cart_id: "cart_id_value"',
+                'Field SetBillingAddressOnCartInput.billing_address of required type BillingAddressInput!'
+                . ' was not provided.',
+            ],
+            'missed_cart_id' => [
+                'billing_address: {}',
+                'Required parameter "cart_id" is missing'
+            ]
+        ];
     }
 
     /**
@@ -533,25 +551,7 @@ mutation {
 }
 QUERY;
         self::expectExceptionMessage('"Street Address" cannot contain more than 2 lines.');
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderSetWithoutRequiredParameters(): array
-    {
-        return [
-            'missed_billing_address' => [
-                'cart_id: "cart_id_value"',
-                'Field SetBillingAddressOnCartInput.billing_address of required type BillingAddressInput!'
-                . ' was not provided.',
-            ],
-            'missed_cart_id' => [
-                'billing_address: {}',
-                'Required parameter "cart_id" is missing'
-            ]
-        ];
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -560,7 +560,7 @@ QUERY;
      * @param array $addressResponse
      * @param string $addressType
      */
-    private function assertNewAddressFields(array $addressResponse, string $addressType = 'BILLING'): void
+    private function assertNewAddressFields(array $addressResponse, string $addressType = 'BillingCartAddress'): void
     {
         $assertionMap = [
             ['response_field' => 'firstname', 'expected_value' => 'test firstname'],
@@ -571,7 +571,7 @@ QUERY;
             ['response_field' => 'postcode', 'expected_value' => '887766'],
             ['response_field' => 'telephone', 'expected_value' => '88776655'],
             ['response_field' => 'country', 'expected_value' => ['code' => 'US', 'label' => 'US']],
-            ['response_field' => 'address_type', 'expected_value' => $addressType]
+            ['response_field' => '__typename', 'expected_value' => $addressType]
         ];
 
         $this->assertResponseFields($addressResponse, $assertionMap);
