@@ -114,12 +114,8 @@ define([
          * @override
          */
         placeOrder: function () {
-            var self = this;
+            if (this.validateHandler() && additionalValidators.validate()) {
 
-            if (this.validateHandler() &&
-                additionalValidators.validate() &&
-                this.isPlaceOrderActionAllowed() === true
-            ) {
                 fullScreenLoader.startLoader();
 
                 this.isPlaceOrderActionAllowed(false);
@@ -131,15 +127,8 @@ define([
                             method: this.getCode()
                         }
                     )
-                ).done(
-                    this.done.bind(this)
-                ).fail(
-                    this.fail.bind(this)
-                ).always(
-                    function () {
-                        self.isPlaceOrderActionAllowed(true);
-                    }
-                );
+                ).done(this.done.bind(this))
+                    .fail(this.fail.bind(this));
 
                 this.initTimeoutHandler();
             }
@@ -203,6 +192,7 @@ define([
          */
         fail: function () {
             fullScreenLoader.stopLoader();
+            this.isPlaceOrderActionAllowed(true);
 
             return this;
         },
