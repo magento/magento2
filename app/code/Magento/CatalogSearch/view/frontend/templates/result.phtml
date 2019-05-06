@@ -8,7 +8,7 @@
 
 ?>
 <?php if ($block->getResultCount()): ?>
-<?= $block->getChildHtml('tagged_product_list_rss_link') ?>
+<?= /* @noEscape */ $block->getChildHtml('tagged_product_list_rss_link') ?>
 <div class="search results">
     <?php if ($messages = $block->getNoteMessages()):?>
     <div class="message notice">
@@ -25,8 +25,8 @@
 
 <div class="message notice">
     <div>
-        <?= $block->escapeHtml($block->getNoResultText()) ? $block->getNoResultText() : __('Your search returned no results.') ?>
-        <?= $block->getAdditionalHtml() ?>
+        <?= $block->escapeHtml($block->getNoResultText() ? $block->getNoResultText() : __('Your search returned no results.')) ?>
+        <?= /* @noEscape */ $block->getAdditionalHtml() ?>
         <?php if ($messages = $block->getNoteMessages()):?>
             <?php foreach ($messages as $message):?>
                 <br /><?= /* @noEscape */ $message ?>
