@@ -524,12 +524,27 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      */
     private function _specialTags()
     {
-        $this->_translateTags($this->_content, $this->_allowedTagsGlobal,
+        $this->_translateTags(
+            $this->_content,
+            $this->_allowedTagsGlobal,
             function ($tagHtml, $tagName, $trArr) {
-                $this->_applySpecialTagsFormat($tagHtml, $tagName, $trArr);
-            });
-        $this->_translateTags($this->_content, $this->_allowedTagsGlobal, '_applySpecialTagsFormat');
-        $this->_translateTags($this->_content, $this->_allowedTagsSimple, '_applySimpleTagsFormat');
+                return $this->_applySpecialTagsFormat($tagHtml, $tagName, $trArr);
+            }
+        );
+        $this->_translateTags(
+            $this->_content,
+            $this->_allowedTagsGlobal,
+            function () {
+                return '_applySpecialTagsFormat';
+            }
+        );
+        $this->_translateTags(
+            $this->_content,
+            $this->_allowedTagsSimple,
+            function () {
+                return '_applySimpleTagsFormat';
+            }
+        );
     }
 
     /**
@@ -540,7 +555,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * @param  callable $formatCallback
      * @return void
      */
-    private function _translateTags(string &$content, array $tagsList, callable $formatCallback): void
+    private function _translateTags(string &$content, array $tagsList, callable $formatCallback)
     {
         $nextTag = 0;
         $tagRegExpBody = '#<(body)(/?>| \s*[^>]*+/?>)#iSU';
