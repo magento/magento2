@@ -21,7 +21,7 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Http implements \Magento\Framework\AppInterface
+class  Http implements \Magento\Framework\AppInterface
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -359,6 +359,19 @@ class Http implements \Magento\Framework\AppInterface
         }
         // phpcs:ignore Magento2.Security.IncludeFile
         require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/report.php');
+        return true;
+    }
+
+    /**
+     * Error Handler for Application Termination
+     *
+     * @return bool
+     */
+    public function handleTerminateError()
+    {
+        $this->_response->setHttpResponseCode(500);
+        $this->_response->setHeader('Content-Type', 'text/html; charset=UTF-8');
+        $this->_response->sendResponse();
         return true;
     }
 }
