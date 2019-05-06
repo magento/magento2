@@ -19,6 +19,12 @@ class DashboardTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->assertContains('dashboard-diagram', $actual);
     }
 
+    /**
+     * Tests tunnelAction.
+     *
+     * @return void
+     * @throws \Exception
+     */
     public function testTunnelAction()
     {
         $testUrl = \Magento\Backend\Block\Dashboard\Graph::API_URL . '?cht=p3&chd=t:60,40&chs=250x100&chl=Hello|World';
@@ -50,7 +56,7 @@ class DashboardTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
 
         /** @var $helper \Magento\Backend\Helper\Dashboard\Data */
         $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Helper\Dashboard\Data'
+            \Magento\Backend\Helper\Dashboard\Data::class
         );
         $hash = $helper->getChartDataHash($gaFixture);
         $this->getRequest()->setParam('ga', $gaFixture)->setParam('h', $hash);
