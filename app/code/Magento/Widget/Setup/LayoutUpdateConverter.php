@@ -95,7 +95,7 @@ class LayoutUpdateConverter extends SerializedToJson
      */
     protected function encodeJson($value)
     {
-        return $this->escaper->escapeJs(
+        return $this->escaper->escapeHtml(
             $this->normalizer->replaceReservedCharacters(parent::encodeJson($value))
         );
     }
