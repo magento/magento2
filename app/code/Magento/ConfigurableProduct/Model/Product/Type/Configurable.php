@@ -888,8 +888,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
                 if ($subProduct) {
                     $subProductLinkFieldId = $subProduct->getId();
+                    $productQty = $product->getQty();
+
                     $product->addCustomOption('attributes', $this->serializer->serialize($attributes));
-                    $product->addCustomOption('product_qty_' . $subProductLinkFieldId, 1, $subProduct);
+                    $product->addCustomOption('product_qty_' . $subProductLinkFieldId, $productQty, $subProduct);
                     $product->addCustomOption('simple_product', $subProductLinkFieldId, $subProduct);
 
                     $_result = $subProduct->getTypeInstance()->processConfiguration(
@@ -922,7 +924,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $_result[0]->setParentProductId($productLinkFieldId)
                         ->addCustomOption('parent_product_id', $productLinkFieldId);
                     if ($this->_isStrictProcessMode($processMode)) {
-                        $_result[0]->setCartQty(1);
+                        $_result[0]->setCartQty($productQty);
                     }
                     $result[] = $_result[0];
                     return $result;
