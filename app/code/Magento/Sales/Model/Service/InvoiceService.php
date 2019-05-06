@@ -182,8 +182,7 @@ class InvoiceService implements InvoiceManagementInterface
     }
 
     /**
-     * Prepare qty to invoice for parent and child products
-     * if theirs qty is not specified in initial request.
+     * Prepare qty to invoice for parent and child products if theirs qty is not specified in initial request.
      *
      * @param Order $order
      * @param array $orderItemsQtyToInvoice
@@ -200,7 +199,8 @@ class InvoiceService implements InvoiceManagementInterface
                 }
             } else {
                 if (isset($orderItemsQtyToInvoice[$orderItem->getParentItemId()])) {
-                    $orderItemsQtyToInvoice[$orderItem->getId()] = $orderItemsQtyToInvoice[$orderItem->getParentItemId()];
+                    $orderItemsQtyToInvoice[$orderItem->getId()] =
+                        $orderItemsQtyToInvoice[$orderItem->getParentItemId()];
                 }
             }
         }

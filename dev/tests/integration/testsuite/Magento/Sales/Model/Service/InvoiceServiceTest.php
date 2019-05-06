@@ -105,8 +105,7 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
         array $qtyToInvoice,
         array $qtyInvoiced,
         string $errorMsg
-    ): void
-    {
+    ): void {
         /** @var Order $order */
         $order = Bootstrap::getObjectManager()->create(Order::class)
             ->load('100000001', 'increment_id');
