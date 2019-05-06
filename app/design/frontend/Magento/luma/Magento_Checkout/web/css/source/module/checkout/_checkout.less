@@ -76,6 +76,36 @@
             display: none;
         }
     }
+
+    .abs-discount-code {
+        .actions-toolbar {
+            display: table-cell;
+            vertical-align: top;
+            width: 1%;
+
+            .primary { 
+                float: left;
+                .action {   
+                    &:extend(.abs-revert-to-action-secondary all);
+                    border-bottom-left-radius: 0;
+                    border-top-left-radius: 0;
+                    margin: 0 0 0 -2px; 
+                    white-space: nowrap;
+                    width: auto; 
+                }
+            }
+        }
+        .form-discount {   
+            display: table;
+            width: 100%;
+            
+            > .field {
+                > .label {
+                    display: none; 
+                }
+            }
+        }
+    }
 }
 
 //
