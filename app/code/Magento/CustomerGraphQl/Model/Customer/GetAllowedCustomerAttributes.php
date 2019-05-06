@@ -8,8 +8,11 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Customer;
 
 use Magento\Customer\Api\CustomerMetadataManagementInterface;
-use Magento\Eav\Model\Config;
+use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Get allowed address attributes
@@ -17,33 +20,55 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 class GetAllowedCustomerAttributes
 {
     /**
-     * @var Config
+     * @var AttributeRepository
      */
-    private $eavConfig;
+    private $attributeRepository;
 
     /**
-     * @param Config $eavConfig
+     * @var SearchCriteriaBuilder
      */
-    public function __construct(Config $eavConfig)
-    {
-        $this->eavConfig = $eavConfig;
+    private $searchCriteriaBuilder;
+
+    /**
+     * @param AttributeRepository $attributeRepository
+     */
+    public function __construct(
+        AttributeRepository $attributeRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder
+    ) {
+        $this->attributeRepository = $attributeRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
-     * Get allowed address attributes
+     * Get allowed customer attributes
      *
+     * @param array $attributeKeys
+     * @throws GraphQlInputException
      * @return AbstractAttribute[]
      */
-    public function execute(): array
+    public function execute($attributeKeys): array
     {
-        $attributes = $this->eavConfig->getEntityAttributes(
-            CustomerMetadataManagementInterface::ENTITY_TYPE_CUSTOMER
-        );
-        foreach ($attributes as $attributeCode => $attribute) {
+        $this->searchCriteriaBuilder->addFilter('attribute_code', $attributeKeys, 'in');
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        try {
+            $attributesSearchResult = $this->attributeRepository->getList(
+                CustomerMetadataManagementInterface::ENTITY_TYPE_CUSTOMER,
+                $searchCriteria
+            );
+        } catch (InputException $exception) {
+            throw new GraphQlInputException(__($exception->getMessage()));
+        }
+
+        /** @var AbstractAttribute[] $attributes */
+        $attributes = $attributesSearchResult->getItems();
+
+        foreach ($attributes as $index => $attribute) {
             if (false === $attribute->getIsVisibleOnFront()) {
-                unset($attributes[$attributeCode]);
+                unset($attributes[$index]);
             }
         }
+
         return $attributes;
     }
 }

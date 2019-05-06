@@ -45,9 +45,9 @@ class UpdateCustomerAccount
     private $changeSubscriptionStatus;
 
     /**
-     * @var GetAllowedCustomerAttributes
+     * @var ValidateCustomerData
      */
-    private $getAllowedCustomerAttributes;
+    private $validateCustomerData;
 
     /**
      * @var array
@@ -60,7 +60,7 @@ class UpdateCustomerAccount
      * @param CheckCustomerPassword $checkCustomerPassword
      * @param DataObjectHelper $dataObjectHelper
      * @param ChangeSubscriptionStatus $changeSubscriptionStatus
-     * @param GetAllowedCustomerAttributes $getAllowedCustomerAttributes
+     * @param ValidateCustomerData $validateCustomerData
      * @param array $restrictedKeys
      */
     public function __construct(
@@ -69,7 +69,7 @@ class UpdateCustomerAccount
         CheckCustomerPassword $checkCustomerPassword,
         DataObjectHelper $dataObjectHelper,
         ChangeSubscriptionStatus $changeSubscriptionStatus,
-        GetAllowedCustomerAttributes $getAllowedCustomerAttributes,
+        ValidateCustomerData $validateCustomerData,
         array $restrictedKeys = []
     ) {
         $this->saveCustomer = $saveCustomer;
@@ -78,18 +78,17 @@ class UpdateCustomerAccount
         $this->dataObjectHelper = $dataObjectHelper;
         $this->restrictedKeys = $restrictedKeys;
         $this->changeSubscriptionStatus = $changeSubscriptionStatus;
-        $this->getAllowedCustomerAttributes = $getAllowedCustomerAttributes;
+        $this->validateCustomerData = $validateCustomerData;
     }
 
     /**
-     * Update customer account data
-     *
      * @param CustomerInterface $customer
      * @param array $data
-     * @return void
      * @throws GraphQlAlreadyExistsException
      * @throws GraphQlAuthenticationException
      * @throws GraphQlInputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException
      */
     public function execute(CustomerInterface $customer, array $data): void
     {
@@ -101,7 +100,7 @@ class UpdateCustomerAccount
             $this->checkCustomerPassword->execute($data['password'], (int)$customer->getId());
             $customer->setEmail($data['email']);
         }
-        $this->validateData($data);
+        $this->validateCustomerData->execute($data);
         $filteredData = array_diff_key($data, array_flip($this->restrictedKeys));
         $this->dataObjectHelper->populateWithArray($customer, $filteredData, CustomerInterface::class);
 
@@ -111,31 +110,6 @@ class UpdateCustomerAccount
 
         if (isset($data['is_subscribed'])) {
             $this->changeSubscriptionStatus->execute((int)$customer->getId(), (bool)$data['is_subscribed']);
-        }
-    }
-
-    /**
-     * @param array $customerData
-     * @return void
-     * @throws GraphQlInputException
-     */
-    public function validateData(array $customerData): void
-    {
-        $attributes = $this->getAllowedCustomerAttributes->execute();
-        $errorInput = [];
-
-        foreach ($attributes as $attributeName => $attributeInfo) {
-            if ($attributeInfo->getIsRequired()
-                && (isset($customerData[$attributeName]) && empty($customerData[$attributeName]))
-            ) {
-                $errorInput[] = $attributeName;
-            }
-        }
-
-        if ($errorInput) {
-            throw new GraphQlInputException(
-                __('Required parameters are missing: %1', [implode(', ', $errorInput)])
-            );
         }
     }
 }

@@ -46,9 +46,9 @@ class CreateCustomerAccount
     private $changeSubscriptionStatus;
 
     /**
-     * @var GetAllowedCustomerAttributes
+     * @var ValidateCustomerData
      */
-    private $getAllowedCustomerAttributes;
+    private $validateCustomerData;
 
     /**
      * @param DataObjectHelper $dataObjectHelper
@@ -64,14 +64,14 @@ class CreateCustomerAccount
         StoreManagerInterface $storeManager,
         AccountManagementInterface $accountManagement,
         ChangeSubscriptionStatus $changeSubscriptionStatus,
-        GetAllowedCustomerAttributes $getAllowedCustomerAttributes
+        ValidateCustomerData $validateCustomerData
     ) {
         $this->dataObjectHelper = $dataObjectHelper;
         $this->customerFactory = $customerFactory;
         $this->accountManagement = $accountManagement;
         $this->storeManager = $storeManager;
         $this->changeSubscriptionStatus = $changeSubscriptionStatus;
-        $this->getAllowedCustomerAttributes = $getAllowedCustomerAttributes;
+        $this->validateCustomerData = $validateCustomerData;
     }
 
     /**
@@ -104,7 +104,7 @@ class CreateCustomerAccount
      */
     private function createAccount(array $data): CustomerInterface
     {
-        $this->validateData($data);
+        $this->validateCustomerData->execute($data);
         $customerDataObject = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $customerDataObject,
@@ -117,30 +117,5 @@ class CreateCustomerAccount
 
         $password = array_key_exists('password', $data) ? $data['password'] : null;
         return $this->accountManagement->createAccount($customerDataObject, $password);
-    }
-
-    /**
-     * @param array $customerData
-     * @return void
-     * @throws GraphQlInputException
-     */
-    public function validateData(array $customerData): void
-    {
-        $attributes = $this->getAllowedCustomerAttributes->execute();
-        $errorInput = [];
-
-        foreach ($attributes as $attributeName => $attributeInfo) {
-            if ($attributeInfo->getIsRequired()
-                && (isset($customerData[$attributeName]) && empty($customerData[$attributeName]))
-            ) {
-                $errorInput[] = $attributeName;
-            }
-        }
-
-        if ($errorInput) {
-            throw new GraphQlInputException(
-                __('Required parameters are missing: %1', [implode(', ', $errorInput)])
-            );
-        }
     }
 }
