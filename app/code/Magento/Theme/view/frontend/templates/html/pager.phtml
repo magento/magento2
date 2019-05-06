@@ -105,7 +105,7 @@
             <?php if (!$block->isLastPage()): ?>
                 <li class="item pages-item-next">
                     <?php $text = $block->getAnchorTextForNext() ? $block->getAnchorTextForNext() : '';?>
-                    <a class="<?= $block->escapeHtmlAttr($text ? 'link ' : 'action ') ?> next"
+                    <a class="<?= /* @noEscape */ $text ? 'link ' : 'action ' ?> next"
                        href="<?= $block->escapeUrl($block->getNextPageUrl()) ?>"
                        title="<?= $block->escapeHtmlAttr($text ? $text : __('Next')) ?>">
                         <span class="label"><?= $block->escapeHtml(__('Page')) ?></span>

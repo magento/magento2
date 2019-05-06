@@ -12,8 +12,8 @@
 ?>
 <?php if (!$block->getIsDisabled()) : ?>
 <li>
-    <a href="<?= $block->escapeHtml($block->getHref()) ?>"
-        <?php if ($title = $block->getTitle()) : ?> title="<?= $block->escapeHtml(__($title)) ?>"<?php endif;?>>
+    <a href="<?= $block->escapeUrl($block->getHref()) ?>"
+        <?php if ($title = $block->getTitle()) : ?> title="<?= $block->escapeHtmlAttr(__($title)) ?>"<?php endif;?>>
         <?= $block->escapeHtml(__($block->getLabel())) ?>
     </a>
 </li>
