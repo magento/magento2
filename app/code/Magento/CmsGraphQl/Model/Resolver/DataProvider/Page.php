@@ -72,11 +72,7 @@ class Page
     public function getData(int $pageId): array
     {
         $page = $this->pageRepository->getById($pageId);
-
-        if (false === $page->isActive()) {
-            throw new NoSuchEntityException();
-        }
-
+        
         return $this->convertPageData($page);
     }
 
