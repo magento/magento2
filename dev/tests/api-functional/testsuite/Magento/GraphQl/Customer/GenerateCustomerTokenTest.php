@@ -68,4 +68,54 @@ MUTATION;
             'was incorrect or your account is disabled temporarily. Please wait and try again later.');
         $this->graphQlMutation($mutation);
     }
+
+    /**
+     * Verify customer with empty email
+     */
+    public function testGenerateCustomerTokenWithEmptyEmail()
+    {
+        $email = '';
+        $password = 'bad-password';
+
+        $mutation
+            = <<<MUTATION
+mutation {
+	generateCustomerToken(
+        email: "{$email}"
+        password: "{$password}"
+    ) {
+        token
+    }
+}
+MUTATION;
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: Specify the "email" value.');
+        $this->graphQlMutation($mutation);
+    }
+
+    /**
+     * Verify customer with empty password
+     */
+    public function testGenerateCustomerTokenWithEmptyPassword()
+    {
+        $email = 'customer@example.com';
+        $password = '';
+
+        $mutation
+            = <<<MUTATION
+mutation {
+	generateCustomerToken(
+        email: "{$email}"
+        password: "{$password}"
+    ) {
+        token
+    }
+}
+MUTATION;
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: Specify the "password" value.');
+        $this->graphQlMutation($mutation);
+    }
 }
