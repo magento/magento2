@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php
@@ -44,7 +41,7 @@
 
         <div class="control">
             <div class="tree x-tree" data-role="resource-tree" data-mage-init='<?=
-                $block->escapeHtml($this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode([
+                $block->escapeHtml($block->toJson([
                     'rolesTree' => [
                         "treeInitData" => $block->getTree(),
                         "treeInitSelectedData" => $block->getSelectedResources(),
