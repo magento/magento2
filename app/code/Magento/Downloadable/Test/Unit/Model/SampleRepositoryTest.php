@@ -352,6 +352,8 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
             'id' => $sampleId,
             'title' => '',
             'sort_order' => 1,
+            'sample_type' => 'url',
+            'sample_url' => 'https://google.com',
         ];
         $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
             ->will($this->returnValue($this->productMock));
