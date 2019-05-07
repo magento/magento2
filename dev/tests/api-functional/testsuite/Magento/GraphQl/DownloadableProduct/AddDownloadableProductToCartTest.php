@@ -76,7 +76,7 @@ mutation {
             cart_items: [
                 {
                     data: {
-                        qty: {$qty}, 
+                        quantity: {$qty}, 
                         sku: "{$sku}"
                     },
                     downloadable_product_links: [
@@ -90,7 +90,7 @@ mutation {
     ) {
         cart {
             items {
-                qty
+                quantity
                 ... on DownloadableCartItem {
                     downloadable_product_links {
                         title
@@ -107,7 +107,7 @@ mutation {
     }
 }
 MUTATION;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
         self::assertArrayHasKey('items', $response['addDownloadableProductsToCart']['cart']);
         self::assertCount($qty, $response['addDownloadableProductsToCart']['cart']);
         self::assertEquals(
@@ -145,7 +145,7 @@ mutation {
             cart_items: [
                 {
                     data: {
-                        qty: {$qty}, 
+                        quantity: {$qty}, 
                         sku: "{$sku}"
                     },
                     downloadable_product_links: [
@@ -162,7 +162,7 @@ mutation {
     ) {
         cart {
             items {
-                qty
+                quantity
                 ... on DownloadableCartItem {
                     downloadable_product_links {
                         title
@@ -179,7 +179,7 @@ mutation {
     }
 }
 MUTATION;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
         self::assertArrayHasKey('items', $response['addDownloadableProductsToCart']['cart']);
         self::assertCount($qty, $response['addDownloadableProductsToCart']['cart']);
         self::assertEquals(
@@ -215,7 +215,7 @@ mutation {
             cart_items: [
                 {
                     data: {
-                        qty: {$qty}, 
+                        quantity: {$qty}, 
                         sku: "{$sku}"
                     }
                 }
@@ -224,7 +224,7 @@ mutation {
     ) {
         cart {
             items {
-                qty
+                quantity
                 ... on DownloadableCartItem {
                     downloadable_product_links {
                         title
@@ -237,7 +237,7 @@ mutation {
     }
 }
 MUTATION;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
         self::assertArrayHasKey('items', $response['addDownloadableProductsToCart']['cart']);
         self::assertCount($qty, $response['addDownloadableProductsToCart']['cart']);
         self::assertEquals(
@@ -275,7 +275,7 @@ mutation {
             cart_items: [
                 {
                     data: {
-                        qty: {$qty}, 
+                        quantity: {$qty}, 
                         sku: "{$sku}"
                     },
                     downloadable_product_links: [
@@ -289,7 +289,7 @@ mutation {
     ) {
         cart {
             items {
-                qty
+                quantity
                 ... on DownloadableCartItem {
                     downloadable_product_links {
                         title
@@ -302,7 +302,7 @@ mutation {
     }
 }
 MUTATION;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
         self::assertArrayHasKey('items', $response['addDownloadableProductsToCart']['cart']);
         self::assertCount($qty, $response['addDownloadableProductsToCart']['cart']);
         self::assertEquals(

@@ -55,10 +55,6 @@ input CustomizableOptionInput {
     value_string: String!
 }
 
-input DownloadableProductLinksInput {
-    link_id: Int!
-}
-
 input ApplyCouponToCartInput {
     cart_id: String!
     coupon_code: String!
@@ -291,12 +287,6 @@ type RemoveItemFromCartOutput {
 
 type SetGuestEmailOnCartOutput {
     cart: Cart!
-}
-
-type DownloadableCartItem implements CartItemInterface @doc(description: "Downloadable Cart Item") {
-    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
-    downloadable_product_links: [DownloadableProductLinks] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\DownloadableLinks") @doc(description: "An array containing information about the links for the added to cart downloadable product")
-    downloadable_product_samples: [DownloadableProductSamples] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\DownloadableLinks") @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product")
 }
 
 type SimpleCartItem implements CartItemInterface @doc(description: "Simple Cart Item") {
