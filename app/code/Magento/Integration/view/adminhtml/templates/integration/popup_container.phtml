@@ -18,11 +18,34 @@
     ], function ($, Confirm) {
 
         window.integration = new Integration(
-            '<?= $block->escapeUrl($block->getUrl('*/*/permissionsDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false])) ?>',
-            '<?= $block->escapeUrl($block->getUrl('*/*/tokensDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false])) ?>',
-            '<?= $block->escapeUrl($block->getUrl('*/*/tokensExchange', ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false])) ?>',
-            '<?= $block->escapeUrl($block->getUrl('*/*')) ?>',
-            '<?= $block->escapeUrl($block->getUrl('*/*/loginSuccessCallback')) ?>'
+            '<?= $block->escapeUrl(
+                $block->getUrl(
+                    '*/*/permissionsDialog',
+                    ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]
+                )
+            ) ?>',
+            '<?= $block->escapeUrl(
+                $block->getUrl(
+                    '*/*/tokensDialog',
+                    ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]
+                )
+            ) ?>',
+            '<?= $block->escapeUrl(
+                $block->getUrl(
+                    '*/*/tokensExchange',
+                    ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]
+                )
+            ) ?>',
+            '<?= $block->escapeUrl(
+                $block->getUrl(
+                    '*/*'
+                )
+            ) ?>',
+            '<?= $block->escapeUrl(
+                $block->getUrl(
+                    '*/*/loginSuccessCallback'
+                )
+            ) ?>'
         );
 
         /**

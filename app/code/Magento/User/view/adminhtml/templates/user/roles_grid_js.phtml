@@ -11,7 +11,7 @@ require([
 ], function(){
 
 <?php $myBlock = $block->getLayout()->getBlock('user.roles.grid'); ?>
-<?php if (is_object($myBlock) && $myBlock->getJsObjectName()): ?>
+<?php if (is_object($myBlock) && $myBlock->getJsObjectName()) : ?>
     var radioBoxes = $H({});
     var warning = false;
     var userRoles = $H(<?= $myBlock->escapeHtml($myBlock->getSelectedRoles(true)) ?>);
@@ -60,17 +60,19 @@ require([
         }
     }
 
-<?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.rowClickCallback = roleRowClick;
-<?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.initRowCallback = rolesRowInit;
-<?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.checkboxCheckCallback = registerUserRole;
-<?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.rows.each(function(row){rolesRowInit(<?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>, row)});
+    <?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.rowClickCallback = roleRowClick;
+    <?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.initRowCallback = rolesRowInit;
+    <?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.checkboxCheckCallback = registerUserRole;
+    <?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.rows.each(function(row){
+        rolesRowInit(<?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>, row)
+    });
 <?php endif; ?>
 
 });
 </script>
 
 <?php $editBlock = $block->getLayout()->getBlock('adminhtml.user.edit'); ?>
-<?php if (is_object($editBlock)): ?>
+<?php if (is_object($editBlock)) : ?>
     <script type="text/x-magento-init">
         {
             "[data-role=delete-user]" : {

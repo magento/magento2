@@ -9,9 +9,9 @@
  */
 ?>
 <fieldset class="admin__fieldset form-inline entry-edit">
-    <?php if ($block->isTreeEmpty()): ?>
+    <?php if ($block->isTreeEmpty()) : ?>
         <p class="empty"><?= $block->escapeHtml(__('No permissions requested')) ?></p>
-    <?php else: ?>
+    <?php else : ?>
         <div class="field" data-role="tree-resources-container">
             <div class="control">
                 <div id="resource-tree" class="tree x-tree" data-role="resource-tree"></div>
@@ -19,7 +19,7 @@
         </div>
     <?php endif ?>
 </fieldset>
-<?php if (!$block->isTreeEmpty()): ?>
+<?php if (!$block->isTreeEmpty()) : ?>
     <script>
         require(["jquery", "Magento_User/js/roles-tree"], function($){
             $.widget('mage.rolesTree', $.mage.rolesTree, {

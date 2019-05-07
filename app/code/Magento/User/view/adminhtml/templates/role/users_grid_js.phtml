@@ -14,7 +14,7 @@ require([
 ], function(jQuery, confirm, _){
 <!--
 <?php $myBlock = $block->getLayout()->getBlock('roleUsersGrid'); ?>
-<?php if (is_object($myBlock) && $myBlock->getJsObjectName()): ?>
+<?php if (is_object($myBlock) && $myBlock->getJsObjectName()) : ?>
     var checkBoxes = $H(<?= $myBlock->escapeHtml($myBlock->getUsers(true)) ?>);
     var warning = false;
     if (checkBoxes.size() > 0) {
