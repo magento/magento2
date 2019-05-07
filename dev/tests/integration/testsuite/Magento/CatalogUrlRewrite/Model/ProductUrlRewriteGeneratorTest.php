@@ -30,6 +30,7 @@ class ProductUrlRewriteGeneratorTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
+     * @magentoConfigFixture default/catalog/seo/generate_rewrites_on_save 1
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */

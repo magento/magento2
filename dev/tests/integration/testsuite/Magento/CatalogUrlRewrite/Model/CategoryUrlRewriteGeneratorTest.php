@@ -36,6 +36,7 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
+     * @magentoConfigFixture default/catalog/seo/generate_rewrites_on_save 1
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
@@ -109,6 +110,7 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
 
     /**
      * @magentoDbIsolation enabled
+     * @magentoConfigFixture default/catalog/seo/generate_rewrites_on_save 1
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
      * @magentoAppIsolation enabled
      */
