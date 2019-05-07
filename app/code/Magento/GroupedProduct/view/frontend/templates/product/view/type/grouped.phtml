@@ -40,7 +40,7 @@
                     <strong class="product-item-name"><?= $block->escapeHtml($_item->getName()) ?></strong>
                     <?php if ($block->getCanShowProductPrice($_product)): ?>
                         <?php if ($block->getCanShowProductPrice($_item)): ?>
-                            <?= $block->escapeHtml($block->getProductPrice($_item)) ?>
+                            <?= /* @noEscape */ $block->getProductPrice($_item) ?>
                         <?php endif; ?>
                      <?php endif; ?>
                 </td>
