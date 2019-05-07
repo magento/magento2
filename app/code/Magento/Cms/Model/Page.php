@@ -16,8 +16,8 @@ use Magento\Framework\Model\AbstractModel;
  * Cms Page Model
  *
  * @api
- * @method Page setStoreId(array $storeId)
- * @method array getStoreId()
+ * @method Page setStoreId(int $storeId)
+ * @method int getStoreId()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @since 100.0.2
  */
