@@ -98,6 +98,17 @@ class DataObjectHelper
      */
     public function populateWithArray(&$dataObject, array $data, $interfaceName)
     {
+        $hydratorStrategy = $this->dtoProcessor->getValuesHydratingStrategy($interfaceName, $data);
+
+        // Non immutable DTO (backward compatibility mode)
+        if (!empty($hydratorStrategy[DtoProcessor::HYDRATOR_STRATEGY_SETTER])) {
+            if ($dataObject instanceof ExtensibleDataInterface) {
+                $data = $this->joinProcessor->extractExtensionAttributes(get_class($dataObject), $data);
+            }
+            $this->_setDataValues($dataObject, $data, $interfaceName);
+            return $this;
+        }
+
         $dataObject = $this->dtoProcessor->createUpdatedObjectFromArray($dataObject, $data, $interfaceName);
         return $this;
     }
