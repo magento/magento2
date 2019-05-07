@@ -20,14 +20,14 @@
         <li class="item">
             <?php if ($filterItem->getCount() > 0): ?>
                 <a href="<?= $block->escapeUrl($filterItem->getUrl()) ?>">
-                    <?= $block->escapeHtml($filterItem->getLabel()) ?>
+                    <?= /* @noEscape */ $filterItem->getLabel() ?>
                     <?php if ($this->helper('\Magento\Catalog\Helper\Data')->shouldDisplayProductCountOnLayer()): ?>
                         <span class="count"><?= /* @noEscape */ (int)$filterItem->getCount() ?><span class="filter-count-label">
                             <?php if ($filterItem->getCount() == 1):?> <?= $block->escapeHtml(__('item')) ?><?php else:?> <?= $block->escapeHtml(__('items')) ?><?php endif;?></span></span>
                     <?php endif; ?>
                 </a>
             <?php else:?>
-                <?= $block->escapeHtml($filterItem->getLabel()) ?>
+                <?= /* @noEscape */ $filterItem->getLabel() ?>
                 <?php if ($this->helper('\Magento\Catalog\Helper\Data')->shouldDisplayProductCountOnLayer()): ?>
                     <span class="count"><?= /* @noEscape */ (int)$filterItem->getCount() ?><span class="filter-count-label">
                         <?php if ($filterItem->getCount() == 1):?><?= $block->escapeHtml(__('item')) ?><?php else:?><?= $block->escapeHtml(__('items')) ?><?php endif;?></span></span>
