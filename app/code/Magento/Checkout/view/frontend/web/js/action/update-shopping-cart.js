@@ -14,7 +14,8 @@ define([
     $.widget('mage.updateShoppingCart', {
         options: {
             validationURL: '',
-            eventName: 'updateCartItemQty'
+            eventName: 'updateCartItemQty',
+            updateCartActionContainer: ''
         },
 
         /** @inheritdoc */
@@ -31,7 +32,9 @@ define([
          * @return {Boolean}
          */
         onSubmit: function (event) {
-            if (!this.options.validationURL) {
+            var action = this.element.find(this.options.updateCartActionContainer).val();
+
+            if (!this.options.validationURL || action === 'empty_cart') {
                 return true;
             }
 

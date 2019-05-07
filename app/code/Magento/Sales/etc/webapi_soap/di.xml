@@ -18,7 +18,7 @@
     <type name="Magento\Framework\Reflection\DataObjectProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
-                <item name="\Magento\Sales\Model\Order\Item" xsi:type="object">Magento\Sales\Model\Order\Webapi\ChangeOutputArray\Proxy</item>
+                <item name="Magento\Sales\Model\Order\Item" xsi:type="object">Magento\Sales\Model\Order\Webapi\ChangeOutputArray\Proxy</item>
             </argument>
         </arguments>
     </type>

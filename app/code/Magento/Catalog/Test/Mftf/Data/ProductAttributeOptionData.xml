@@ -81,4 +81,9 @@
         <requiredEntity type="StoreLabel">Option9Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option10Store1</requiredEntity>
     </entity>
+    <entity name="ProductAttributeOption8" type="ProductAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label" unique="suffix">White</data>
+        <data key="value" unique="suffix">white</data>
+    </entity>
 </entities>

@@ -7,6 +7,8 @@
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
@@ -16,11 +18,10 @@ use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
+use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
-use Magento\Framework\Indexer\DimensionFactory;
 
 /**
  * Product collection
@@ -31,6 +32,7 @@ use Magento\Framework\Indexer\DimensionFactory;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
@@ -291,7 +293,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $dimensionFactory;
 
     /**
+     * @var \Magento\Framework\DataObject
+     */
+    private $emptyItem;
+
+    /**
      * Collection constructor
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -317,6 +325,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param TableMaintainer|null $tableMaintainer
      * @param PriceTableResolver|null $priceTableResolver
      * @param DimensionFactory|null $dimensionFactory
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -434,7 +443,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function getPriceExpression($select)
     {
-        //@todo: Add caching of price expresion
+        //@todo: Add caching of price expression
         $this->_preparePriceExpressionParameters($select);
         return $this->_priceExpression;
     }
@@ -550,7 +559,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function getNewEmptyItem()
     {
-        $object = parent::getNewEmptyItem();
+        if (null === $this->emptyItem) {
+            $this->emptyItem = parent::getNewEmptyItem();
+        }
+        $object = clone $this->emptyItem;
         if ($this->isEnabledFlat()) {
             $object->setIdFieldName($this->getEntity()->getIdFieldName());
         }
@@ -1429,7 +1441,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 'u.url_rewrite_id=cu.url_rewrite_id'
             )->where('cu.url_rewrite_id IS NULL');
         }
-        
+
         // more priority is data with category id
         $urlRewrites = [];
 
@@ -1965,6 +1977,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             }
             // Set additional field filters
             foreach ($this->_priceDataFieldFilters as $filterData) {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $select->where(call_user_func_array('sprintf', $filterData));
             }
         } else {
@@ -2210,7 +2223,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getLinkField() . ' IN(?)',
             $productIds
         )->order(
-            $this->getLinkField()
+            'qty'
         );
         return $select;
     }
@@ -2270,6 +2283,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     public function addPriceDataFieldFilter($comparisonFormat, $fields)
     {
         if (!preg_match('/^%s( (<|>|=|<=|>=|<>) %s)*$/', $comparisonFormat)) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Invalid comparison format.');
         }
 

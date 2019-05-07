@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateDefaultsTaxRuleTest">
+        <annotations>
+            <stories value="Create tax rule"/>
+            <title value="Create tax rule, defaults"/>
+            <description value="Test log in to Create Tax Rule and Create Defaults Tax Rule"/>
+            <testCaseId value="MC-5323"/>
+            <severity value="CRITICAL"/>
+            <group value="tax"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
+                <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}" />
+            </actionGroup>
+            <deleteData stepKey="deleteTaxRate" createDataKey="initialTaxRate" />
+        </after>
+
+        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex1"/>
+        <waitForPageLoad stepKey="waitForTaxRuleIndex1"/>
+        <click selector="{{AdminTaxRuleGridSection.add}}" stepKey="clickAddNewTaxRuleButton"/>
+        <waitForPageLoad stepKey="waitForTaxRuleIndex2"/>
+        <!-- Create a tax rule with defaults -->
+        <fillField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode1"/>
+        <fillField selector="{{AdminTaxRuleFormSection.taxRateSearch}}" userInput="$$initialTaxRate.code$$" stepKey="fillTaxRateSearch"/>
+        <wait stepKey="waitForSearch" time="5" />
+        <click selector="{{AdminTaxRuleFormSection.taxRateOption($$initialTaxRate.code$$)}}" stepKey="selectNeededItem"  />
+        <click selector="{{AdminTaxRuleFormSection.save}}" stepKey="saveTaxRule" />
+        <waitForPageLoad stepKey="waitForTaxRuleSaved" />
+        <!-- Verify we see success message -->
+        <see selector="{{AdminTaxRuleGridSection.successMessage}}" userInput="You saved the tax rule." stepKey="assertTaxRuleSuccessMessage" />
+
+        <!-- Verify we see created tax rule with defaults(from the above step) on the tax rule grid page -->
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
+        <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode2"/>
+        <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch2"/>
+        <waitForPageLoad stepKey="waitForTaxRuleSearch" />
+        <click selector="{{AdminTaxRuleGridSection.nthRow('1')}}" stepKey="clickFirstRow2"/>
+
+        <!-- Verify we see created tax rule with defaults on the tax rule form page -->
+        <seeInField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="seeInTaxRuleField" />
+        <seeElement selector="{{AdminTaxRuleFormSection.taxRateSelected($$initialTaxRate.code$$)}}" stepKey="seeTaxRateSelected"  />
+    </test>
+</tests>

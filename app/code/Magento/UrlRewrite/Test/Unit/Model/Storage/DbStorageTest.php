@@ -445,7 +445,6 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
         $urlSecond = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
 
         // delete
-
         $urlFirst->expects($this->any())
             ->method('getEntityType')
             ->willReturn('product');
@@ -479,10 +478,6 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->with(DbStorage::TABLE_NAME)
             ->will($this->returnValue('table_name'));
 
-        $this->connectionMock->expects($this->any())
-            ->method('query')
-            ->with('sql delete query');
-
         // insert
 
         $urlFirst->expects($this->any())
@@ -496,10 +491,6 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->method('getTableName')
             ->with(DbStorage::TABLE_NAME)
             ->will($this->returnValue('table_name'));
-
-        $this->connectionMock->expects($this->once())
-            ->method('insertMultiple')
-            ->with('table_name', [['row1'], ['row2']]);
 
         $this->storage->replace([$urlFirst, $urlSecond]);
     }

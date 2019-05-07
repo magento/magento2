@@ -45,7 +45,7 @@ void,void
 "Fraud Filters","Fraud Filters"
 "Place Order","Place Order"
 "Sorry, but something went wrong. Please contact the seller.","Sorry, but something went wrong. Please contact the seller."
-"Authorize.net Direct Post","Authorize.net Direct Post"
+"Authorize.Net Direct Post (Deprecated)","Authorize.Net Direct Post (Deprecated)"
 Enabled,Enabled
 "Payment Action","Payment Action"
 Title,Title

@@ -42,6 +42,7 @@ define([
 
     return {
         validateAddressTimeout: 0,
+        validateZipCodeTimeout: 0,
         validateDelay: 2000,
 
         /**
@@ -133,16 +134,20 @@ define([
                 });
             } else {
                 element.on('value', function () {
+                    clearTimeout(self.validateZipCodeTimeout);
+                    self.validateZipCodeTimeout = setTimeout(function () {
+                        if (element.index === postcodeElementName) {
+                            self.postcodeValidation(element);
+                        } else {
+                            $.each(postcodeElements, function (index, elem) {
+                                self.postcodeValidation(elem);
+                            });
+                        }
+                    }, delay);
+
                     if (!formPopUpState.isVisible()) {
                         clearTimeout(self.validateAddressTimeout);
                         self.validateAddressTimeout = setTimeout(function () {
-                            if (element.index === postcodeElementName) {
-                                self.postcodeValidation(element);
-                            } else {
-                                $.each(postcodeElements, function (index, elem) {
-                                    self.postcodeValidation(elem);
-                                });
-                            }
                             self.validateFields();
                         }, delay);
                     }
