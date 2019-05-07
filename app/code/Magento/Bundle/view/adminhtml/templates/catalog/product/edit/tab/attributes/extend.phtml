@@ -21,7 +21,7 @@ $isElementReadonly = $block->getElement()
 ?>
 
 <?php if (!($attributeCode === 'price' && $block->getCanReadPrice() === false)): ?>
-    <div class="<?= $block->escapeHtmlAttr($attributeCode) ?> "><?= $block->escapeHtml($elementHtml) ?></div>
+    <div class="<?= $block->escapeHtmlAttr($attributeCode) ?> "><?= /* @noEscape */ $elementHtml ?></div>
 <?php endif; ?>
 
 <?= $block->getExtendedElement($switchAttributeCode)->toHtml() ?>
