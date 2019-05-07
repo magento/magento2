@@ -40,11 +40,11 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
 <?php if ($block->showMinimalPrice()): ?>
     <?php if ($block->getUseLinkForAsLowAs()):?>
         <a href="<?= $block->escapeUrl($block->getSaleableItem()->getProductUrl()) ?>" class="minimal-price-link">
-            <?= $block->escapeHtml($block->renderAmountMinimal()) ?>
+            <?= /* @noEscape */ $block->renderAmountMinimal() ?>
         </a>
     <?php else:?>
         <span class="minimal-price-link">
-            <?= $block->escapeHtml($block->renderAmountMinimal()) ?>
+            <?= /* @noEscape */ $block->renderAmountMinimal() ?>
         </span>
     <?php endif?>
 <?php endif; ?>

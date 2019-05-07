@@ -45,7 +45,7 @@
                     <?php if ($block->getCanShowProductPrice($_product)): ?>
                     <td class="col-price">
                         <?php if ($block->getCanShowProductPrice($_item)): ?>
-                        <?= $block->escapeHtml($block->getProductPrice($_item)) ?>
+                        <?= /* @noEscape */ $block->getProductPrice($_item) ?>
                         <?php endif; ?>
                     </td>
                     <?php endif; ?>

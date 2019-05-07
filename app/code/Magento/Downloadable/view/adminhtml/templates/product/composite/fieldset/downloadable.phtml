@@ -42,9 +42,9 @@
                             </a>)
                         <?php endif; ?>
                         <?php if ($_linksPurchasedSeparately): ?>
-                        <?= $block->escapeHtml($block->getFormattedLinkPrice($_link)) ?>
+                        <?= /* @noEscape */ $block->getFormattedLinkPrice($_link) ?>
                             <br />
-                            <?= $block->escapeHtml($block->getLinkPrice($_link)) ?>
+                            <?= /* @noEscape */ $block->getLinkPrice($_link) ?>
                         <?php endif; ?>
                     </label>
                 <?php if ($_isRequired): ?>
