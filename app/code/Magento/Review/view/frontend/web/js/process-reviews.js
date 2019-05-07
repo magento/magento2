@@ -41,7 +41,11 @@ define([
             requiredReviewTabRole = 'tab';
 
         if (reviewTab.attr('role') === requiredReviewTabRole && reviewTab.hasClass('active')) {
-            processReviews(config.productReviewUrl);
+            if(location.hash=='#reviews') {
+                processReviews(config.productReviewUrl, true);
+            } else {
+                processReviews(config.productReviewUrl);
+            }
         } else {
             reviewTab.one('beforeOpen', function () {
                 processReviews(config.productReviewUrl);
