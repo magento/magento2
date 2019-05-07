@@ -121,7 +121,7 @@ require(["prototype"], function(){
                 freeMethod.insert(option);
 
                 option = new Element('option', {value:code}).update(originShipment[code]);
-                if (this.storedUpsType == 'UPS') {
+                if (this.storedUpsType == 'UPS_XML') {
                     if (originShipmentTitle != 'default' || inArray(this.storedAllowedMethods, code)) {
                         option.selected = true;
                     }
@@ -143,7 +143,7 @@ require(["prototype"], function(){
         setFormValues: function()
         {
             var a;
-            if ($F(this.carriersUpsTypeId) == 'UPS') {
+            if ($F(this.carriersUpsTypeId) == 'UPS_XML') {
                 for (a = 0; a < this.checkingUpsXmlId.length; a++) {
                     $(this.checkingUpsXmlId[a]).removeClassName('required-entry');
                 }
