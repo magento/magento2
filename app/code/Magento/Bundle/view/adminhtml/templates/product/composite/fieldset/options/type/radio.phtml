@@ -54,7 +54,7 @@
                         <span><?= /* @noEscape */ $block->getSelectionTitlePrice($_selection) ?></span>
                     </label>
                 <?php if ($_option->getRequired()): ?>
-                    <?= $block->escapeHtml($block->setValidationContainer('bundle-option-'.$_option->getId().'-'.$_selection->getSelectionId(), 'bundle-option-'.$_option->getId().'-container')) ?>
+                    <?= /* @noEscape */ $block->setValidationContainer('bundle-option-'.$_option->getId().'-'.$_selection->getSelectionId(), 'bundle-option-'.$_option->getId().'-container') ?>
                 <?php endif; ?>
                 </div>
             <?php endforeach; ?>

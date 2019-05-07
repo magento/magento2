@@ -282,12 +282,12 @@ bOption = new Bundle.Option(optionTemplate);
 <?php
     foreach ($block->getOptions() as $_option) {
         /** @var $_option \Magento\Bundle\Model\Option */
-        echo $block->escapeJs('optionIndex = bOption.add(', $_option->toJson(), ');', PHP_EOL);
+        /* @noEscape */ echo 'optionIndex = bOption.add(', $_option->toJson(), ');', PHP_EOL;
         if ($_option->getSelections()) {
             foreach ($_option->getSelections() as $_selection) {
                 /** @var $_selection \Magento\Catalog\Model\Product */
                 $_selection->setName($block->escapeHtml($_selection->getName()));
-                echo $block->escapeJs('bSelection.addRow(optionIndex,', $_selection->toJson(), ');', PHP_EOL);
+                /* @noEscape */ echo 'bSelection.addRow(optionIndex,', $_selection->toJson(), ');', PHP_EOL;
             }
         }
     }
