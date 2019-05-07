@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 ?>
 
 <section class="page-partners">
@@ -73,8 +71,8 @@
     {
         "*": {
             "Magento_Marketplace/default": {
-                "url": "<?= $block->getUrl('marketplace/partners/index',
-                    ['_current' => true, 'block' => '', 'period' => '']) ?>"
+                "url": "<?= $block->escapeUrl($block->getUrl('marketplace/partners/index',
+                    ['_current' => true, 'block' => '', 'period' => ''])) ?>"
             }
         }
     }
