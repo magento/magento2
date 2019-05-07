@@ -1550,6 +1550,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param string $joinType
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function addAttributeToFilter($attribute, $condition = null, $joinType = 'inner')
     {
@@ -1600,6 +1601,34 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                     break;
                 }
             }
+
+            return $this;
+        } elseif (is_string($attribute) && $attribute == 'tier_price') {
+            $attrCode = $attribute;
+            $connection = $this->getConnection();
+            $attrTable = $this->_getAttributeTableAlias($attrCode);
+            $entity = $this->getEntity();
+            $fKey = 'e.' . $this->getEntityPkName($entity);
+            $pKey = $attrTable . '.' . $this->getEntityPkName($entity);
+            $attribute = $entity->getAttribute($attrCode);
+            $attrFieldName = $attrTable . '.value';
+            $fKey = $connection->quoteColumnAs($fKey, null);
+            $pKey = $connection->quoteColumnAs($pKey, null);
+
+            $condArr = ["{$pKey} = {$fKey}"];
+            $joinMethod = 'join';
+            $this->getSelect()->{$joinMethod}(
+                [$attrTable => $this->getTable('catalog_product_entity_tier_price')],
+                '(' . implode(') AND (', $condArr) . ')',
+                [$attrCode => $attrFieldName]
+            );
+            $this->removeAttributeToSelect($attrCode);
+            $this->_filterAttributes[$attrCode] = $attribute->getId();
+            $this->_joinFields[$attrCode] = ['table' => '', 'field' => $attrFieldName];
+            $field = $this->_getAttributeTableAlias($attrCode) . '.value';
+            $conditionSql = $this->_getConditionSql($field, $condition);
+            $this->getSelect()->where($conditionSql, null, Select::TYPE_CONDITION);
+            $this->_totalRecords = null;
 
             return $this;
         } else {
