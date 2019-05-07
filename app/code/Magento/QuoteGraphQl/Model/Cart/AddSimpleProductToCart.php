@@ -74,7 +74,8 @@ class AddSimpleProductToCart
         }
 
         try {
-            $result = $cart->addProduct($product, $this->createBuyRequest($quantity, $customizableOptions, $this->extractDownloadableLinks($product, $cartItemData)));
+            $linksData = $this->extractDownloadableLinks($product, $cartItemData);
+            $result = $cart->addProduct($product, $this->createBuyRequest($quantity, $customizableOptions, $linksData));
         } catch (\Exception $e) {
             throw new GraphQlInputException(
                 __(

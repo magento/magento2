@@ -6,7 +6,7 @@ type Query {
 }
 
 type Mutation {
-    addDownloadableProductsToCart(input: AddDownloadableProductsToCartInput): AddDownloadableProductsToCartOutput @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\AddDownloadbleProductToCart")
+    addDownloadableProductsToCart(input: AddDownloadableProductsToCartInput): AddDownloadableProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
 }
 
 input AddDownloadableProductsToCartInput {
