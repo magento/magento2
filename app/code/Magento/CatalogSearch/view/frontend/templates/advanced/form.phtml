@@ -20,8 +20,8 @@
     <legend class="legend"><span><?= $block->escapeHtml(__('Search Settings')) ?></span></legend><br />
     <?php foreach ($block->getSearchableAttributes() as $_attribute): ?>
     <?php $_code = $_attribute->getAttributeCode() ?>
-        <div class="field <?= $block->escapeHtmlAttr($code) ?>">
-            <label class="label" for="<?= $block->escapeHtmlAttr($code) ?>">
+        <div class="field <?= $block->escapeHtmlAttr($_code) ?>">
+            <label class="label" for="<?= $block->escapeHtmlAttr($_code) ?>">
                 <span><?= $block->escapeHtml(__($block->getAttributeLabel($_attribute))) ?></span>
             </label>
             <div class="control">
@@ -31,25 +31,25 @@
                     <div class="field no-label">
                         <div class="control">
                             <input type="text"
-                                   name="<?= $block->escapeHtmlAttr($code) ?>[from]"
+                                   name="<?= $block->escapeHtmlAttr($_code) ?>[from]"
                                    value="<?= $block->escapeHtml($block->getAttributeValue($_attribute, 'from')) ?>"
-                                   id="<?= $block->escapeHtmlAttr($code) ?>"
+                                   id="<?= $block->escapeHtmlAttr($_code) ?>"
                                    title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
                                    class="input-text"
                                    maxlength="<?= $block->escapeHtmlAttr($maxQueryLength) ?>"
-                                   data-validate="{number:true, 'less-than-equals-to':'#<?= $block->escapeHtmlAttr($code) ?>_to'}" />
+                                   data-validate="{number:true, 'less-than-equals-to':'#<?= $block->escapeHtmlAttr($_code) ?>_to'}" />
                         </div>
                     </div>
                     <div class="field no-label">
                         <div class="control">
                             <input type="text"
-                                   name="<?= $block->escapeHtmlAttr($code) ?>[to]"
+                                   name="<?= $block->escapeHtmlAttr($_code) ?>[to]"
                                    value="<?= $block->escapeHtml($block->getAttributeValue($_attribute, 'to')) ?>"
-                                   id="<?= $block->escapeHtmlAttr($code) ?>_to"
+                                   id="<?= $block->escapeHtmlAttr($_code) ?>_to"
                                    title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
                                    class="input-text"
                                    maxlength="<?= $block->escapeHtmlAttr($maxQueryLength) ?>"
-                                   data-validate="{number:true, 'greater-than-equals-to':'#<?= $block->escapeHtmlAttr($code) ?>'}" />
+                                   data-validate="{number:true, 'greater-than-equals-to':'#<?= $block->escapeHtmlAttr($_code) ?>'}" />
                         </div>
                     </div>
                 </div>
@@ -58,29 +58,29 @@
                 <div class="range price fields group group-2">
                     <div class="field no-label">
                         <div class="control">
-                            <input name="<?= $block->escapeHtmlAttr($code) ?>[from]"
+                            <input name="<?= $block->escapeHtmlAttr($_code) ?>[from]"
                                    value="<?= $block->escapeHtml($block->getAttributeValue($_attribute, 'from')) ?>"
-                                   id="<?= $block->escapeHtmlAttr($code) ?>"
+                                   id="<?= $block->escapeHtmlAttr($_code) ?>"
                                    title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
                                    class="input-text"
                                    type="text"
                                    maxlength="<?= $block->escapeHtmlAttr($maxQueryLength) ?>"
-                                   data-validate="{number:true, 'less-than-equals-to':'#<?= $block->escapeHtmlAttr($code) ?>_to'}" />
+                                   data-validate="{number:true, 'less-than-equals-to':'#<?= $block->escapeHtmlAttr($_code) ?>_to'}" />
                         </div>
                     </div>
                     <div class="field with-addon no-label">
                         <div class="control">
                             <div class="addon">
-                                <input name="<?= $block->escapeHtmlAttr($code) ?>[to]"
+                                <input name="<?= $block->escapeHtmlAttr($_code) ?>[to]"
                                        value="<?= $block->escapeHtml($block->getAttributeValue($_attribute, 'to')) ?>"
-                                       id="<?= $block->escapeHtmlAttr($code) ?>_to"
+                                       id="<?= $block->escapeHtmlAttr($_code) ?>_to"
                                        title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
                                        class="input-text"
                                        type="text"
                                        maxlength="<?= $block->escapeHtmlAttr($maxQueryLength) ?>"
-                                       data-validate="{number:true, 'greater-than-equals-to':'#<?= $block->escapeHtmlAttr($code) ?>'}" />
+                                       data-validate="{number:true, 'greater-than-equals-to':'#<?= $block->escapeHtmlAttr($_code) ?>'}" />
                                 <label class="addafter"
-                                       for="<?= $block->escapeHtmlAttr($code) ?>_to">
+                                       for="<?= $block->escapeHtmlAttr($_code) ?>_to">
                                     <?= $block->escapeHtml($block->getCurrency($_attribute)) ?>
                                 </label>
                             </div>
@@ -110,8 +110,8 @@
                 <?php break;
                 default: ?>
                 <input type="text"
-                       name="<?= $block->escapeHtmlAttr($code) ?>"
-                       id="<?= $block->escapeHtmlAttr($code) ?>"
+                       name="<?= $block->escapeHtmlAttr($_code) ?>"
+                       id="<?= $block->escapeHtmlAttr($_code) ?>"
                        value="<?= $block->escapeHtml($block->getAttributeValue($_attribute)) ?>"
                        title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
                        class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass($_attribute)) ?>"
