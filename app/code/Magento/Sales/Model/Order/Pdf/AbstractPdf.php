@@ -14,6 +14,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @api
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @since 100.0.2
  */
 abstract class AbstractPdf extends \Magento\Framework\DataObject
