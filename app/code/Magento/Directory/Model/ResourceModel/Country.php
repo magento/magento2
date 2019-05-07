@@ -19,18 +19,29 @@ class Country extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $escaper;
 
     /**
-     * Resource initialization
-     *
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param null|string $connectionName
      * @param \Magento\Framework\Escaper|null $escaper
-     * @return void
      */
-    protected function _construct(
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        ?string $connectionName = null,
         \Magento\Framework\Escaper $escaper = null
     ) {
-        $this->_init('directory_country', 'country_id');
         $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
             \Magento\Framework\Escaper::class
         );
+        parent::__construct($context, $connectionName);
+    }
+
+    /**
+     * Resource initialization
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_init('directory_country', 'country_id');
     }
 
     /**
