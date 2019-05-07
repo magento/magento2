@@ -5,6 +5,16 @@ input PaymentMethodAdditionalDataInput {
     authorizenet_acceptjs: AuthorizenetInput
 }
 
+type SelectedPaymentMethodAdditionalData {
+    authorizenet_acceptjs: Authorizenet
+}
+
+type Authorizenet {
+    opaqueDataDescriptor: String!
+    opaqueDataValue: String!
+    ccLast4: Int!
+}
+
 input AuthorizenetInput {
     opaqueDataDescriptor: String!
     opaqueDataValue: String!

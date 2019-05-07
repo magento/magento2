@@ -219,6 +219,70 @@ QUERY;
     }
 
     /**
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/environment sandbox
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/login someusername
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_key somepassword
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_signature_key abc
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     */
+    public function testSetPaymentMethodOnCartWithAuthorizenet()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $methodCode = 'authorizenet_acceptjs';
+        $query =
+            <<<QUERY
+    mutation {
+    setPaymentMethodOnCart(
+        input: {
+            cart_id: "{$maskedQuoteId}",
+            payment_method: {
+                code:"{$methodCode}",
+                additional_data: {
+                    authorizenet_acceptjs: {
+                        opaqueDataDescriptor:
+                         "COMMON.ACCEPT.INAPP.PAYMENT",
+                         opaqueDataValue: "abx",
+                         ccLast4: 1111
+                         }
+                        }
+                       }
+                      }
+                     ) {
+                        cart {
+                            selected_payment_method { 
+                            code, 
+                            additional_data { 
+                                authorizenet_acceptjs { 
+                                    ccLast4,
+                                    opaqueDataValue,
+                                    opaqueDataDescriptor
+                                    } } } items {product {sku}}}}}
+QUERY;
+        $response = $this->graphQlMutation($query);
+
+        self::assertArrayHasKey('setPaymentMethodOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
+        self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
+        $selectedPaymentMethod = $response['setPaymentMethodOnCart']['cart']['selected_payment_method'];
+        self::assertArrayHasKey('code', $selectedPaymentMethod);
+        self::assertArrayHasKey('additional_data', $selectedPaymentMethod);
+        $additionalData = $selectedPaymentMethod['additional_data'];
+        self::assertArrayHasKey('ccLast4', $additionalData['authorizenet_acceptjs']);
+        self::assertArrayHasKey('opaqueDataDescriptor', $additionalData['authorizenet_acceptjs']);
+        self::assertArrayHasKey('opaqueDataValue', $additionalData['authorizenet_acceptjs']);
+        self::assertEquals($methodCode, $selectedPaymentMethod['code']);
+        self::assertEquals('1111', $additionalData['authorizenet_acceptjs']['ccLast4']);
+        self::assertEquals('abx', $additionalData['authorizenet_acceptjs']['opaqueDataValue']);
+        self::assertEquals(
+            'COMMON.ACCEPT.INAPP.PAYMENT',
+            $additionalData['authorizenet_acceptjs']['opaqueDataDescriptor']
+        );
+    }
+
+    /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
