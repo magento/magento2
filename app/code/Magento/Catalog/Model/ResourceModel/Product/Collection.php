@@ -21,6 +21,7 @@ use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 
 /**
  * Product collection
@@ -291,7 +292,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $dimensionFactory;
 
     /**
+     * @var \Magento\Framework\DataObject
+     */
+    private $emptyItem;
+
+    /**
      * Collection constructor
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -317,6 +324,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param TableMaintainer|null $tableMaintainer
      * @param PriceTableResolver|null $priceTableResolver
      * @param DimensionFactory|null $dimensionFactory
+     * @param ResourceModelPoolInterface|null $resourceModelPool
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -344,7 +353,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         MetadataPool $metadataPool = null,
         TableMaintainer $tableMaintainer = null,
         PriceTableResolver $priceTableResolver = null,
-        DimensionFactory $dimensionFactory = null
+        DimensionFactory $dimensionFactory = null,
+        ResourceModelPoolInterface $resourceModelPool = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -372,7 +382,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $resourceHelper,
             $universalFactory,
             $storeManager,
-            $connection
+            $connection,
+            $resourceModelPool
         );
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
         $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(PriceTableResolver::class);
@@ -550,7 +561,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function getNewEmptyItem()
     {
-        $object = parent::getNewEmptyItem();
+        if (null === $this->emptyItem) {
+            $this->emptyItem = parent::getNewEmptyItem();
+        }
+        $object = clone $this->emptyItem;
         if ($this->isEnabledFlat()) {
             $object->setIdFieldName($this->getEntity()->getIdFieldName());
         }
@@ -1429,7 +1443,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 'u.url_rewrite_id=cu.url_rewrite_id'
             )->where('cu.url_rewrite_id IS NULL');
         }
-        
+
         // more priority is data with category id
         $urlRewrites = [];
 
@@ -2210,7 +2224,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getLinkField() . ' IN(?)',
             $productIds
         )->order(
-            $this->getLinkField()
+            'qty'
         );
         return $select;
     }

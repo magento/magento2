@@ -28,7 +28,7 @@
         <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="WaitForWishList"/>
         <click selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="addProductToWishlistClickAddToWishlist" />
         <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addProductToWishlistWaitForSuccessMessage"/>
-        <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been added to your Wish List." stepKey="addProductToWishlistSeeProductNameAddedToWishlist"/>
+        <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been added to your Wish List. Click here to continue shopping." stepKey="addProductToWishlistSeeProductNameAddedToWishlist"/>
         <seeCurrentUrlMatches regex="~/wishlist_id/\d+/$~" stepKey="seeCurrentUrlMatches"/>
     </actionGroup>
 
@@ -87,5 +87,14 @@
         <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductAddAllToCart}}" stepKey="mouseOver"/>
         <click selector="{{StorefrontCustomerWishlistProductSection.ProductUpdateWishList}}" stepKey="submitUpdateWishlist"/>
         <see selector="{{StorefrontCustomerWishlistProductSection.ProductSuccessUpdateMessage}}" userInput="{{product.name}} has been updated in your Wish List." stepKey="successMessage"/>
+    </actionGroup>
+
+    <!-- Share wishlist -->
+    <actionGroup name="StorefrontCustomerShareWishlistActionGroup">
+        <click selector="{{StorefrontCustomerWishlistProductSection.productShareWishList}}" stepKey="clickMyWishListButton"/>
+        <fillField userInput="{{Wishlist.shareInfo_emails}}" selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistEmail}}" stepKey="fillEmailsForShare"/>
+        <fillField userInput="{{Wishlist.shareInfo_message}}" selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistTextMessage}}" stepKey="fillShareMessage"/>
+        <click selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistButton}}" stepKey="sendWishlist"/>
+        <see selector="{{StorefrontCustomerWishlistProductSection.productSuccessShareMessage}}" userInput="Your wish list has been shared." stepKey="successMessage"/>
     </actionGroup>
 </actionGroups>

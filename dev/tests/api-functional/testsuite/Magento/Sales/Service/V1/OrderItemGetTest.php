@@ -106,5 +106,7 @@ class OrderItemGetTest extends WebapiAbstract
         $this->assertTrue(is_array($response));
         $this->assertEquals(8.00, $response['row_total']);
         $this->assertEquals(8.00, $response['base_row_total']);
+        $this->assertEquals(9.00, $response['row_total_incl_tax']);
+        $this->assertEquals(9.00, $response['base_row_total_incl_tax']);
     }
 }

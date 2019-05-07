@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Category\CreateCategoryEntityTest" summary="Create Category from Category Page" ticketId="MAGETWO-23411">
         <variation name="CreateCategoryEntityTestVariation1_RootCategory_RequiredFields">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="description" xsi:type="string">Create root category with required fields only</data>
             <data name="addCategory" xsi:type="string">addRootCategory</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
@@ -16,7 +17,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation2_RootCategory_AllFields">
-            <data name="issue" xsi:type="string">MAGETWO-60635: [CE][Categories] Design update dates are incorrect after save</data>
             <data name="description" xsi:type="string">Create root category with all fields</data>
             <data name="addCategory" xsi:type="string">addRootCategory</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
@@ -57,7 +57,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation4_Subcategory_AllFields">
-            <data name="issue" xsi:type="string">MAGETWO-60635: [CE][Categories] Design update dates are incorrect after save</data>
             <data name="description" xsi:type="string">Create not anchor subcategory specifying all fields</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
@@ -95,6 +94,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation5_Anchor_MostOfFields">
+            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <data name="description" xsi:type="string">Create anchor subcategory with all fields</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
@@ -144,7 +144,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation8_WithProducts" summary="Assign Products at the Category Level" ticketId="MAGETWO-16351">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>

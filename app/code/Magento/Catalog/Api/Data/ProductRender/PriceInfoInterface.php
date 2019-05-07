@@ -8,6 +8,7 @@ namespace Magento\Catalog\Api\Data\ProductRender;
 
 /**
  * Price interface.
+ *
  * @api
  * @since 101.1.0
  */
@@ -23,6 +24,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
 
     /**
      * Set the final price: usually it calculated as minimal price of the product
+     *
      * Can be different depends on type of product
      *
      * @param float $finalPrice
@@ -33,6 +35,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
 
     /**
      * Retrieve max price of a product
+     *
      * E.g. for product with custom options is price with the most expensive custom option
      *
      * @return float
@@ -51,6 +54,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
 
     /**
      * Set max regular price
+     *
      * Max regular price is the same, as maximum price, except of excluding calculating special price and catalog rules
      * in it
      *
@@ -105,6 +109,8 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     public function getSpecialPrice();
 
     /**
+     * Retrieve minimal price
+     *
      * @return float
      * @since 101.1.0
      */
@@ -129,6 +135,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
 
     /**
      * Regular price - is price of product without discounts and special price with taxes and fixed product tax
+     *
      * Usually this price is corresponding to price in admin panel of product
      *
      * @param float $regularPrice
@@ -148,7 +155,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Set dto with formatted prices
      *
-     * @param string[] $formattedPriceInfo
+     * @param FormattedPriceInfoInterface $formattedPriceInfo
      * @return void
      * @since 101.1.0
      */

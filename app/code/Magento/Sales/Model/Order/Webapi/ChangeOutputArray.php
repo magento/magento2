@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\Order\Webapi;
 
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn;
+use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
 
 /**
  * Class for changing row total in response.
@@ -21,12 +22,20 @@ class ChangeOutputArray
     private $priceRenderer;
 
     /**
+     * @var DefaultRenderer
+     */
+    private $defaultRenderer;
+
+    /**
      * @param DefaultColumn $priceRenderer
+     * @param DefaultRenderer $defaultRenderer
      */
     public function __construct(
-        DefaultColumn $priceRenderer
+        DefaultColumn $priceRenderer,
+        DefaultRenderer $defaultRenderer
     ) {
         $this->priceRenderer = $priceRenderer;
+        $this->defaultRenderer = $defaultRenderer;
     }
 
     /**
@@ -42,6 +51,12 @@ class ChangeOutputArray
     ): array {
         $result[OrderItemInterface::ROW_TOTAL] = $this->priceRenderer->getTotalAmount($dataObject);
         $result[OrderItemInterface::BASE_ROW_TOTAL] = $this->priceRenderer->getBaseTotalAmount($dataObject);
+        $result[OrderItemInterface::ROW_TOTAL_INCL_TAX] = $this->defaultRenderer->getTotalAmount($dataObject);
+        $result[OrderItemInterface::BASE_ROW_TOTAL_INCL_TAX] = $dataObject->getBaseRowTotal()
+            + $dataObject->getBaseTaxAmount()
+            + $dataObject->getBaseDiscountTaxCompensationAmount()
+            + $dataObject->getBaseWeeeTaxAppliedAmount()
+            - $dataObject->getBaseDiscountAmount();
 
         return $result;
     }

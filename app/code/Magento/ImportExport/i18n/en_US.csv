@@ -18,6 +18,7 @@ Import,Import
 "Import Settings","Import Settings"
 "Import Behavior","Import Behavior"
 " "," "
+"Validation Strategy","Validation Strategy"
 "Stop on Error","Stop on Error"
 "Skip error entries","Skip error entries"
 "Allowed Errors Count","Allowed Errors Count"

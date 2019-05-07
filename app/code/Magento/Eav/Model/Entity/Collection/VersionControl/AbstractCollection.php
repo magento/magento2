@@ -5,10 +5,13 @@
  */
 namespace Magento\Eav\Model\Entity\Collection\VersionControl;
 
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
+
 /**
  * Class Abstract Collection
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
 {
@@ -27,8 +30,9 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot ,
      * @param mixed $connection
+     * @param ResourceModelPoolInterface|null $resourceModelPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
      */
@@ -43,7 +47,8 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
         \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ResourceModelPoolInterface $resourceModelPool = null
     ) {
         $this->entitySnapshot = $entitySnapshot;
 
@@ -57,7 +62,8 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
             $eavEntityFactory,
             $resourceHelper,
             $universalFactory,
-            $connection
+            $connection,
+            $resourceModelPool
         );
     }
 

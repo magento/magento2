@@ -4,4 +4,5 @@
  * See COPYING.txt for license details.
  */
 
+// phpcs:ignore Magento2.Security.InsecureFunction
 exec('rm -rf ../../../../generated/*');

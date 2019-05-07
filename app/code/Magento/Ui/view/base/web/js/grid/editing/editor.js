@@ -357,7 +357,7 @@ define([
 
         /**
          * Resets specific records' data
-         * to the data present in asscotiated row.
+         * to the data present in associated row.
          *
          * @param {(Number|String)} id - See 'getId' method.
          * @param {Boolean} [isIndex=false] - See 'getId' method.
@@ -403,7 +403,7 @@ define([
         /**
          * Disables editing of specified fields.
          *
-         * @param {Array} fields - An array of fields indeces to be disabled.
+         * @param {Array} fields - An array of fields indexes to be disabled.
          * @returns {Editor} Chainable.
          */
         disableFields: function (fields) {
