@@ -626,4 +626,28 @@ class DtoProcessorTest extends TestCase
 
         $this->assertEquals($expectedResult, $res);
     }
+
+    /**
+     * @return array
+     */
+    public function shouldIdentifyImmutableObjectsDataProvider(): array
+    {
+        return [
+            'dto' => [true, TestDto::class],
+            'dto2' => [true, TestDto2::class],
+            'hybrid' => [false, TestHybridDto::class],
+            'mutable' => [false, TestMutableDto::class],
+            'simple-object' => [true, TestSimpleObject::class],
+        ];
+    }
+
+    /**
+     * @param bool $isImmutable
+     * @param string $className
+     * @dataProvider shouldIdentifyImmutableObjectsDataProvider
+     */
+    public function testShouldIdentifyImmutableObjects(bool $isImmutable, string $className): void
+    {
+        $this->assertSame($isImmutable, $this->dataProcessor->isImmutable($className));
+    }
 }

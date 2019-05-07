@@ -246,6 +246,26 @@ class DtoProcessor
     }
 
     /**
+     * Return true if class is immutable
+     *
+     * @param string $className
+     * @return bool
+     */
+    public function isImmutable(string $className): bool
+    {
+        // TODO: Add a cache layer here
+        $methods = get_class_methods($className);
+
+        foreach ($methods as $method) {
+            if (preg_match('/^set[A-Z]/', $method)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Return the strategy for values injection.
      *
      *
