@@ -1295,16 +1295,15 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $meta = $dataProvider->getMeta();
         $this->assertNotEmpty($meta);
-        $this->assertEquals($this->getExpectationForVisibleAttributes(false), $meta);
+        $this->assertEquals($this->getExpectationForVisibleAttributes(), $meta);
     }
 
     /**
      * Retrieve all customer variations of attributes with all variations of visibility
      *
-     * @param bool $isRegistration
      * @return array
      */
-    private function getCustomerAttributeExpectations($isRegistration)
+    private function getCustomerAttributeExpectations()
     {
         return [
             self::ATTRIBUTE_CODE . "_1" => [
@@ -1314,7 +1313,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                             'dataType' => 'frontend_input',
                             'formElement' => 'frontend_input',
                             'options' => 'test-options',
-                            'visible' => !$isRegistration,
+                            'visible' => true,
                             'required' => 'is_required',
                             'label' => __('frontend_label'),
                             'sortOrder' => 'sort_order',
@@ -1351,7 +1350,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                         'config' => [
                             'dataType' => 'frontend_input',
                             'formElement' => 'frontend_input',
-                            'visible' => $isRegistration,
+                            'visible' => true,
                             'required' => 'is_required',
                             'label' => __('frontend_label'),
                             'sortOrder' => 'sort_order',
@@ -1374,7 +1373,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                         'config' => [
                             'dataType' => 'frontend_input',
                             'formElement' => 'frontend_input',
-                            'visible' => $isRegistration,
+                            'visible' => true,
                             'required' => 'is_required',
                             'label' => __('frontend_label'),
                             'sortOrder' => 'sort_order',
@@ -1397,14 +1396,13 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * Retrieve all variations of attributes with all variations of visibility
      *
-     * @param bool $isRegistration
      * @return  array
      */
-    private function getExpectationForVisibleAttributes($isRegistration = true)
+    private function getExpectationForVisibleAttributes()
     {
         return [
             'customer' => [
-                'children' => $this->getCustomerAttributeExpectations($isRegistration),
+                'children' => $this->getCustomerAttributeExpectations(),
             ],
             'address' => [
                 'children' => [

@@ -472,6 +472,10 @@ class ProductRepositoryTest extends WebapiAbstract
             'title' => 'sample2_updated',
             'sort_order' => 2,
             'sample_type' => 'file',
+            'sample_file_content' => [
+                'name' => 'sample2.jpg',
+                'file_data' => base64_encode(file_get_contents($this->testImagePath)),
+            ],
         ];
 
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"] =
