@@ -311,7 +311,7 @@ class DtoProcessor
             }
         }
 
-        // Fall back to setters
+        // Fall back to setters if defined
         foreach ($data as $propertyName => $propertyValue) {
             $camelCaseProperty = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName);
             try {
@@ -406,6 +406,46 @@ class DtoProcessor
     }
 
     /**
+     * Inject extension attributes from an array definition
+     *
+     * @param string $type
+     * @param array $data
+     * @return array
+     * @throws ReflectionException
+     */
+    private function injectExtensionAttributesByArray(string $type, array $data): array
+    {
+        $extensionAttributesType = $this->getPropertyTypeFromGetterMethod(
+            new ClassReflection($type),
+            ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY
+        );
+
+        $extensionAttributes = $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] ?? [];
+        foreach ($extensionAttributes as $attributeName => $attributeValue) {
+            if (!is_array($attributeValue) && !is_object($attributeValue)) {
+                continue;
+            }
+
+            $methodReturnType = $this->getPropertyTypeFromGetterMethod(
+                new ClassReflection($extensionAttributesType),
+                $attributeName
+            );
+            $attributeType = $this->typeProcessor->isArrayType($methodReturnType)
+                ? $this->typeProcessor->getArrayItemType($methodReturnType)
+                : $methodReturnType;
+
+            $extensionAttributes[$attributeName] = $this->createFromArray($attributeValue, $attributeType);
+        }
+
+        $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] = $this->extensionAttributesFactory->create(
+            $type,
+            ['data' => $extensionAttributes]
+        );
+
+        return $data;
+    }
+
+    /**
      * Populate data object using data in array format.
      *
      * @param array $data
@@ -429,10 +469,7 @@ class DtoProcessor
             if (!isset($data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]) ||
                 !is_object($data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY])
             ) {
-                $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] = $this->extensionAttributesFactory->create(
-                    $type,
-                    ['data' => $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] ?? []]
-                );
+                $data = $this->injectExtensionAttributesByArray($type, $data);
             }
 
             $data = $this->joinProcessor->extractExtensionAttributes($type, $data);
@@ -471,6 +508,12 @@ class DtoProcessor
             $methodName = $info['method'];
             $paramType = $info['type'];
             $resObject->$methodName($this->createObjectByType($data[$paramData], $paramType));
+        }
+
+        if ($resObject instanceof CustomAttributesDataInterface) {
+            foreach ($strategy[self::HYDRATOR_STRATEGY_ORPHAN] as $paramName) {
+                $resObject->setCustomAttribute($paramName, $data[$paramName]);
+            }
         }
 
         if ($this->isDataModel($interfaceName)) {
