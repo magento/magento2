@@ -231,8 +231,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'required' => false,
                 'class' => 'input-text',
                 'note' => __(
-                    'For Type "Local Server" use relative path to Magento installation,
-                                e.g. var/export, var/import, var/export/some/dir'
+                    $this->escapeHtml(
+                        'For Type "Local Server" use relative path to <Magento installation>/'
+                        .$this->_scopeConfig->getValue('general/file/import_images_base_dir')
+                        .', e.g. product_images, import_images/batch1'
+                    )
                 ),
             ]
         );

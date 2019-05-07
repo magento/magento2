@@ -6,9 +6,14 @@
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\ImportFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Controller responsible for initiating the import process
@@ -26,24 +31,49 @@ class Start extends ImportResultController implements HttpPostActionInterface
     private $exceptionMessageFactory;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $config;
+
+    /**
+     * @var ImportFactory
+     */
+    private $importFactory;
+
+    /**
+     * @var Filesystem
+     */
+    private $fileSystem;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor
      * @param \Magento\ImportExport\Model\History $historyModel
      * @param \Magento\ImportExport\Helper\Report $reportHelper
-     * @param \Magento\ImportExport\Model\Import $importModel
+     * @param Import $importModel
      * @param \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory
+     * @param ScopeConfigInterface|null $config
+     * @param ImportFactory|null $importFactory
+     * @param Filesystem|null $fileSystem
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor,
         \Magento\ImportExport\Model\History $historyModel,
         \Magento\ImportExport\Helper\Report $reportHelper,
-        \Magento\ImportExport\Model\Import $importModel,
-        \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory
+        Import $importModel,
+        \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory,
+        ?ScopeConfigInterface $config = null,
+        ?ImportFactory $importFactory = null,
+        ?Filesystem $fileSystem = null
     ) {
         parent::__construct($context, $reportProcessor, $historyModel, $reportHelper);
-        $this->importModel = $importModel;
+
         $this->exceptionMessageFactory = $exceptionMessageFactory;
+        $this->config = $config ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->importFactory = $importFactory ?? ObjectManager::getInstance()->get(ImportFactory::class);
+        $this->fileSystem = $fileSystem ?? ObjectManager::getInstance()->get(Filesystem::class);
     }
 
     /**
@@ -53,6 +83,12 @@ class Start extends ImportResultController implements HttpPostActionInterface
      */
     public function execute()
     {
+        $imagesDirectoryPath = $this->config->getValue('general/file/import_images_base_dir');
+        $imagesDirectory = $this->fileSystem->getDirectoryReadByPath(
+            $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath($imagesDirectoryPath)
+        );
+        $this->importModel = $this->importFactory->create(['imagesTempDirectoryBase' => $imagesDirectory]);
+
         $data = $this->getRequest()->getPostValue();
         if ($data) {
             /** @var \Magento\Framework\View\Result\Layout $resultLayout */

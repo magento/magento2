@@ -74,6 +74,27 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Check validation against temporary directory.
+     *
+     * @magentoAppIsolation enabled
+     * @return void
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testMoveWithFileOutsideTemp(): void
+    {
+        $tmpDir = $this->uploader->getTmpDir();
+        if (!$this->directory->create($newTmpDir = $tmpDir .'/test1')) {
+            throw new \RuntimeException('Failed to create temp dir');
+        }
+        $this->uploader->setTmpDir($newTmpDir);
+        $fileName = 'magento_additional_image_one.jpg';
+        $filePath = $this->directory->getAbsolutePath($tmpDir . '/' . $fileName);
+        copy(__DIR__ . '/_files/' . $fileName, $filePath);
+        $this->uploader->move('../' .$fileName);
+        $this->assertTrue($this->directory->isExist($tmpDir . '/' . $fileName));
+    }
+
+    /**
      * @magentoAppIsolation enabled
      * @return void
      * @expectedException \Exception

@@ -13,6 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Indexer\IndexerRegistry;
@@ -199,6 +200,11 @@ class Import extends AbstractModel
     private $random;
 
     /**
+     * @var Filesystem\Directory\Read|null
+     */
+    private $imagesTempDirectoryBase;
+
+    /**
      * @param LoggerInterface $logger
      * @param Filesystem $filesystem
      * @param DataHelper $importExportData
@@ -216,6 +222,7 @@ class Import extends AbstractModel
      * @param array $data
      * @param ManagerInterface|null $messageManager
      * @param Random|null $random
+     * @param Filesystem\Directory\Read|null $imagesTempDirectoryBase
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -235,7 +242,8 @@ class Import extends AbstractModel
         DateTime $localeDate,
         array $data = [],
         ManagerInterface $messageManager = null,
-        Random $random = null
+        Random $random = null,
+        ?Filesystem\Directory\Read $imagesTempDirectoryBase = null
     ) {
         $this->_importExportData = $importExportData;
         $this->_coreConfig = $coreConfig;
@@ -254,6 +262,7 @@ class Import extends AbstractModel
             ->get(ManagerInterface::class);
         $this->random = $random ?: ObjectManager::getInstance()
             ->get(Random::class);
+        $this->imagesTempDirectoryBase = $imagesTempDirectoryBase;
         parent::__construct($logger, $filesystem, $data);
     }
 
@@ -464,8 +473,24 @@ class Import extends AbstractModel
     {
         $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode());
         $this->setData('behavior', $this->getDataSourceModel()->getBehavior());
-        $this->importHistoryModel->updateReport($this);
+        //Validating images temporary directory path if the constraint has been provided
+        if ($this->imagesTempDirectoryBase) {
+            if (!$this->imagesTempDirectoryBase->isReadable()) {
+                $rootWrite = $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT);
+                $rootWrite->create($this->imagesTempDirectoryBase->getAbsolutePath());
+            }
+            try {
+                $this->setData(
+                    self::FIELD_NAME_IMG_FILE_DIR,
+                    $this->imagesTempDirectoryBase->getAbsolutePath($this->getData(self::FIELD_NAME_IMG_FILE_DIR))
+                );
+                $this->_getEntityAdapter()->setParameters($this->getData());
+            } catch (ValidatorException $exception) {
+                throw new LocalizedException(__('Images file directory is outside required directory'), $exception);
+            }
+        }
 
+        $this->importHistoryModel->updateReport($this);
         $this->addLogComment(__('Begin import of "%1" with "%2" behavior', $this->getEntity(), $this->getBehavior()));
 
         $result = $this->processImport();
