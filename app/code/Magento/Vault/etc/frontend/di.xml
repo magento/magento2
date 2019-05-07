@@ -23,4 +23,11 @@
         <plugin name="ProcessPaymentVaultConfiguration" type="Magento\Vault\Plugin\PaymentVaultConfigurationProcess"/>
         <plugin name="ProcessPaymentConfiguration" disabled="true"/>
     </type>
+    <type name="Magento\Framework\Url\SecurityInfo">
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="vault" xsi:type="string">/vault/</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

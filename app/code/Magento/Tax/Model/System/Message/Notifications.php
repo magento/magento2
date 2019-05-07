@@ -5,6 +5,8 @@
  */
 namespace Magento\Tax\Model\System\Message;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Notifications class
  */
@@ -54,21 +56,29 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     private $notifications = [];
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param NotificationInterface[] $notifications
+     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Tax\Model\Config $taxConfig,
-        $notifications = []
+        $notifications = [],
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->storeManager = $storeManager;
         $this->urlBuilder = $urlBuilder;
         $this->taxConfig = $taxConfig;
         $this->notifications = $notifications;
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
     }
 
     /**
@@ -135,7 +145,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      */
     public function getInfoUrl()
     {
-        return $this->taxConfig->getInfoUrl();
+        return $this->escaper->escapeUrl($this->taxConfig->getInfoUrl());
     }
 
     /**

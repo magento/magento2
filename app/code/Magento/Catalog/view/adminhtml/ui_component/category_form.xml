@@ -462,7 +462,7 @@
                 <dataType>string</dataType>
                 <label translate="true">Theme</label>
                 <imports>
-                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked</link>
+                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked || $.data.serviceDisabled</link>
                 </imports>
             </settings>
         </field>
@@ -471,7 +471,7 @@
                 <dataType>string</dataType>
                 <label translate="true">Layout</label>
                 <imports>
-                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked</link>
+                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked || $.data.serviceDisabled</link>
                 </imports>
             </settings>
         </field>
@@ -480,7 +480,7 @@
                 <dataType>string</dataType>
                 <label translate="true">Layout Update XML</label>
                 <imports>
-                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked</link>
+                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked || $.data.serviceDisabled</link>
                 </imports>
             </settings>
         </field>
@@ -497,7 +497,7 @@
                 <dataType>boolean</dataType>
                 <label translate="true">Apply Design to Products</label>
                 <imports>
-                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked</link>
+                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked || $.data.serviceDisabled</link>
                 </imports>
             </settings>
             <formElements>
@@ -540,7 +540,7 @@
                     <dataType>string</dataType>
                     <label translate="true">Schedule Update From</label>
                     <imports>
-                        <link name="disabled">ns = ${ $.ns }, index = custom_use_parent_settings :checked</link>
+                        <link name="serviceDisabled">ns = ${ $.ns }, index = custom_use_parent_settings :checked || $.data.serviceDisabled</link>
                     </imports>
                 </settings>
             </field>
@@ -553,7 +553,7 @@
                     <dataType>string</dataType>
                     <label translate="true">To</label>
                     <imports>
-                        <link name="disabled">ns = ${ $.ns }, index = custom_use_parent_settings :checked</link>
+                        <link name="serviceDisabled">ns = ${ $.ns }, index = custom_use_parent_settings :checked || $.data.serviceDisabled</link>
                     </imports>
                 </settings>
             </field>
