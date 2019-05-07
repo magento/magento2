@@ -79,6 +79,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Edit Product constructor
+     *
      * @return void
      */
     protected function _construct()
@@ -158,6 +160,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve back button html
+     *
      * @return string
      */
     public function getBackButtonHtml()
@@ -166,6 +170,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve cancel button html
+     *
      * @return string
      */
     public function getCancelButtonHtml()
@@ -174,6 +180,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve save button html
+     *
      * @return string
      */
     public function getSaveButtonHtml()
@@ -182,6 +190,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve save and edit button html
+     *
      * @return string
      */
     public function getSaveAndEditButtonHtml()
@@ -190,6 +200,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve delete button html
+     *
      * @return string
      */
     public function getDeleteButtonHtml()
@@ -208,6 +220,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve validation url
+     *
      * @return string
      */
     public function getValidationUrl()
@@ -216,6 +230,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve save url
+     *
      * @return string
      */
     public function getSaveUrl()
@@ -224,6 +240,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve save and continue url
+     *
      * @return string
      */
     public function getSaveAndContinueUrl()
@@ -235,6 +253,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve product id
+     *
      * @return mixed
      */
     public function getProductId()
@@ -243,6 +263,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve product set id
+     *
      * @return mixed
      */
     public function getProductSetId()
@@ -255,6 +277,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve duplicate url
+     *
      * @return string
      */
     public function getDuplicateUrl()
@@ -263,6 +287,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve product header
+     *
      * @deprecated 101.1.0
      * @return string
      */
@@ -277,6 +303,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get product attribute set name
+     *
      * @return string
      */
     public function getAttributeSetName()
@@ -289,6 +317,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve id of selected tab
+     *
      * @return string
      */
     public function getSelectedTabId()

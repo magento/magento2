@@ -42,6 +42,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     }
 
     /**
+     * Render actions
+     *
      * @param \Magento\Framework\DataObject $row
      * @return string
      */
@@ -67,6 +69,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     }
 
     /**
+     * Retrieve escaped value
+     *
      * @param string $value
      * @return string
      */
@@ -77,6 +81,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     }
 
     /**
+     * Actions to html
+     *
      * @param array $actions
      * @return string
      */
