@@ -72,7 +72,8 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
 
         $this->maliciousCode = $this->createPartialMock(
-            \Magento\Framework\Filter\Input\MaliciousCode::class, ['filter']
+            \Magento\Framework\Filter\Input\MaliciousCode::class,
+            ['filter']
         );
 
         $this->template->expects($this->once())
@@ -113,31 +114,22 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $appState->expects($this->any())
             ->method('emulateAreaCode')
-            ->with(\Magento\Email\Model\AbstractTemplate::DEFAULT_DESIGN_AREA, [$this->template, 'getProcessedTemplate'])
+            ->with(
+                \Magento\Email\Model\AbstractTemplate::DEFAULT_DESIGN_AREA,
+                [$this->template, 'getProcessedTemplate']
+            )
             ->willReturn($this->template->getProcessedTemplate());
 
         $context = $this->createPartialMock(
             \Magento\Backend\Block\Template\Context::class,
             ['getRequest', 'getEventManager', 'getScopeConfig', 'getDesignPackage', 'getStoreManager', 'getAppState']
         );
-        $context->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->request);
-        $context->expects($this->any())
-            ->method('getEventManager')
-            ->willReturn($eventManage);
-        $context->expects($this->any())
-            ->method('getScopeConfig')
-            ->willReturn($scopeConfig);
-        $context->expects($this->any())
-            ->method('getDesignPackage')
-            ->willReturn($design);
-        $context->expects($this->any())
-            ->method('getStoreManager')
-            ->willReturn($this->storeManager);
-        $context->expects($this->once())
-            ->method('getAppState')
-            ->willReturn($appState);
+        $context->expects($this->any())->method('getRequest')->willReturn($this->request);
+        $context->expects($this->any())->method('getEventManager')->willReturn($eventManage);
+        $context->expects($this->any())->method('getScopeConfig')->willReturn($scopeConfig);
+        $context->expects($this->any())->method('getDesignPackage')->willReturn($design);
+        $context->expects($this->any())->method('getStoreManager')->willReturn($this->storeManager);
+        $context->expects($this->once())->method('getAppState')->willReturn($appState);
 
         /** @var \Magento\Email\Block\Adminhtml\Template\Preview $preview */
         $this->preview = $this->objectManagerHelper->getObject(
@@ -180,7 +172,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testToHtmlWithException()
     {
@@ -190,7 +182,10 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $this->template
             ->expects($this->never())
             ->method('getDesignConfig');
-        $this->expectException(\Exception::class);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage(
+            (string)__('Wrong request.')
+        );
         $this->preview->toHtml();
     }
 

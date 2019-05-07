@@ -55,15 +55,15 @@ class Preview extends \Magento\Backend\Block\Widget
      * Prepare html output
      *
      * @return string
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _toHtml()
     {
         /** @var $request \Magento\Framework\App\Request\Http */
         $request = $this->getRequest();
 
-        if(!$request->isSafeMethod()) {
-            throw new \Exception('Wrong request.');
+        if (!$request->isSafeMethod()) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('Wrong request.'));
         }
 
         $storeId = $this->getAnyStoreView()->getId();
