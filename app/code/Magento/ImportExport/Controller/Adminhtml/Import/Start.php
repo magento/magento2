@@ -17,6 +17,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Controller responsible for initiating the import process
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Start extends ImportResultController implements HttpPostActionInterface
 {
