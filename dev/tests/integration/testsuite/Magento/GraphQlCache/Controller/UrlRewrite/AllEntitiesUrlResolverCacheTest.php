@@ -43,6 +43,7 @@ class AllEntitiesUrlResolverCacheTest extends AbstractGraphqlCacheTest
      *
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      * @magentoDataFixture Magento/Cms/_files/pages.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testAllEntitiesUrlResolverRequestHasCorrectTags()
     {

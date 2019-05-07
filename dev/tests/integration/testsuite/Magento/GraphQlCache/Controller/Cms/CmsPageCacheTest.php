@@ -11,7 +11,6 @@ use Magento\Cms\Model\GetPageByIdentifier;
 use Magento\Cms\Model\PageRepository;
 use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
-use Magento\Tests\NamingConvention\true\string;
 
 /**
  * Test caching works for CMS page
