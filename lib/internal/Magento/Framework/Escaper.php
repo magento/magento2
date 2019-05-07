@@ -79,6 +79,7 @@ class Escaper
                 $domDocument = new \DOMDocument('1.0', 'UTF-8');
                 set_error_handler(
                     function ($errorNumber, $errorString) {
+                        // phpcs:ignore Magento2.Exceptions.DirectThrow
                         throw new \Exception($errorString, $errorNumber);
                     }
                 );
@@ -88,6 +89,7 @@ class Escaper
                     $domDocument->loadHTML(
                         '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'
                     );
+                    // phpcs:disable Magento2.Exceptions.ThrowCatch
                 } catch (\Exception $e) {
                     restore_error_handler();
                     $this->getLogger()->critical($e);
