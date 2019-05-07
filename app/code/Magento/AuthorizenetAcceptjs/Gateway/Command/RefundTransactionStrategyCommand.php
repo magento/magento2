@@ -17,8 +17,15 @@ use Magento\Payment\Gateway\CommandInterface;
  */
 class RefundTransactionStrategyCommand implements CommandInterface
 {
-    const REFUND = 'refund_settled';
-    const VOID = 'void';
+    /**
+     * @var string
+     */
+    private static $refund = 'refund_settled';
+
+    /**
+     * @var string
+     */
+    private static $void = 'void';
 
     /**
      * @var CommandPoolInterface
@@ -67,11 +74,11 @@ class RefundTransactionStrategyCommand implements CommandInterface
             ->get();
 
         if ($details['transaction']['transactionStatus'] === 'capturedPendingSettlement') {
-            return self::VOID;
+            return self::$void;
         } elseif ($details['transaction']['transactionStatus'] !== 'settledSuccessfully') {
             throw new CommandException(__('This transaction cannot be refunded with its current status.'));
         }
 
-        return self::REFUND;
+        return self::$refund;
     }
 }

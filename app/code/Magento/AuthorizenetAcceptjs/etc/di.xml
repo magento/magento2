@@ -8,12 +8,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\AuthorizenetAcceptjs\Gateway\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="const">Magento\AuthorizenetAcceptjs\Gateway\Config::METHOD</argument>
+            <argument name="methodCode" xsi:type="string">authorizenet_acceptjs</argument>
         </arguments>
     </type>
     <virtualType name="AuthorizenetAcceptjsFacade" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
-            <argument name="code" xsi:type="const">Magento\AuthorizenetAcceptjs\Gateway\Config::METHOD</argument>
+            <argument name="code" xsi:type="string">authorizenet_acceptjs</argument>
             <argument name="formBlockType" xsi:type="string">Magento\AuthorizenetAcceptjs\Block\Form</argument>
             <argument name="infoBlockType" xsi:type="string">AuthorizenetAcceptjsInfoBlock</argument>
             <argument name="valueHandlerPool" xsi:type="object">AuthorizenetAcceptjsValueHandlerPool</argument>

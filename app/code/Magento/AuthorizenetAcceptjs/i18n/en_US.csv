@@ -19,3 +19,4 @@
 "This transaction cannot be refunded with its current status.","This transaction cannot be refunded with its current status."
 "Sandbox","Sandbox"
 "Production","Production"
+"There was an error while trying to process the request.","There was an error while trying to process the request."

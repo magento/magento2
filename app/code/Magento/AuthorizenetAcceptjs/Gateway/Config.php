@@ -16,22 +16,85 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
-    const METHOD = 'authorizenet_acceptjs';
-    const KEY_LOGIN_ID = 'login';
-    const KEY_TRANSACTION_KEY = 'trans_key';
-    const KEY_ENVIRONMENT = 'environment';
-    const KEY_LEGACY_TRANSACTION_HASH = 'trans_md5';
-    const KEY_SIGNATURE_KEY = 'trans_signature_key';
-    const KEY_PAYMENT_ACTION = 'payment_action';
-    const KEY_SHOULD_EMAIL_CUSTOMER = 'email_customer';
-    const KEY_ADDITIONAL_INFO_KEYS = 'paymentInfoKeys';
-    const KEY_CLIENT_KEY = 'public_client_key';
-    const KEY_CVV_ENABLED = 'cvv_enabled';
-    const KEY_TRANSACTION_SYNC_KEYS = 'transactionSyncKeys';
-    const ENDPOINT_URL_SANDBOX = 'https://apitest.authorize.net/xml/v1/request.api';
-    const ENDPOINT_URL_PRODUCTION = 'https://api.authorize.net/xml/v1/request.api';
-    const SOLUTION_ID_SANDBOX = 'AAA102993';
-    const SOLUTION_ID_PRODUCTION = 'AAA175350';
+    /**
+     * @var string
+     */
+    private static $keyLoginId = 'login';
+
+    /**
+     * @var string
+     */
+    private static $keyTransactionKey = 'trans_key';
+
+    /**
+     * @var string
+     */
+    private static $keyEnvironment = 'environment';
+
+    /**
+     * @var string
+     */
+    private static $keyLegacyTransactionHash = 'trans_md5';
+
+    /**
+     * @var string
+     */
+    private static $keySignatureKey = 'trans_signature_key';
+
+    /**
+     * @var string
+     */
+    private static $keyPaymentAction = 'payment_action';
+
+    /**
+     * @var string
+     */
+    private static $keyShouldEmailCustomer = 'email_customer';
+
+    /**
+     * @var string
+     */
+    private static $keyAdditionalInfoKeys = 'paymentInfoKeys';
+
+    /**
+     * @var string
+     */
+    private static $keyClientKey = 'public_client_key';
+
+    /**
+     * @var string
+     */
+    private static $keyCvvEnabled = 'cvv_enabled';
+
+    /**
+     * @var string
+     */
+    private static $keyTransactionSyncKeys = 'transactionSyncKeys';
+
+    /**
+     * @var string
+     */
+    private static $endpointUrlSandbox = 'https://apitest.authorize.net/xml/v1/request.api';
+
+    /**
+     * @var string
+     */
+    private static $endpointUrlProduction = 'https://api.authorize.net/xml/v1/request.api';
+
+    /**
+     * @var string
+     */
+    private static $solutionIdSandbox = 'AAA102993';
+
+    /**
+     * @var string
+     */
+    private static $solutionIdProduction = 'AAA175350';
+
+    /**
+     * @var string
+     */
+    private static $environmentSandbox = 'sandbox';
 
     /**
      * Gets the login id
@@ -41,7 +104,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getLoginId($storeId = null)
     {
-        return $this->getValue(Config::KEY_LOGIN_ID, $storeId);
+        return $this->getValue(Config::$keyLoginId, $storeId);
     }
 
     /**
@@ -52,7 +115,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getEnvironment($storeId = null): string
     {
-        return $this->getValue(Config::KEY_ENVIRONMENT, $storeId);
+        return $this->getValue(Config::$keyEnvironment, $storeId);
     }
 
     /**
@@ -63,7 +126,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getTransactionKey($storeId = null)
     {
-        return $this->getValue(Config::KEY_TRANSACTION_KEY, $storeId);
+        return $this->getValue(Config::$keyTransactionKey, $storeId);
     }
 
     /**
@@ -74,11 +137,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getApiUrl($storeId = null): string
     {
-        $environment = $this->getValue(Config::KEY_ENVIRONMENT, $storeId);
+        $environment = $this->getValue(Config::$keyEnvironment, $storeId);
 
-        return $environment === Environment::ENVIRONMENT_SANDBOX
-            ? self::ENDPOINT_URL_SANDBOX
-            : self::ENDPOINT_URL_PRODUCTION;
+        return $environment === self::$environmentSandbox
+            ? self::$endpointUrlSandbox
+            : self::$endpointUrlProduction;
     }
 
     /**
@@ -89,7 +152,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getTransactionSignatureKey($storeId = null)
     {
-        return $this->getValue(Config::KEY_SIGNATURE_KEY, $storeId);
+        return $this->getValue(Config::$keySignatureKey, $storeId);
     }
 
     /**
@@ -100,7 +163,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getLegacyTransactionHash($storeId = null)
     {
-        return $this->getValue(Config::KEY_LEGACY_TRANSACTION_HASH, $storeId);
+        return $this->getValue(Config::$keyLegacyTransactionHash, $storeId);
     }
 
     /**
@@ -111,7 +174,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getPaymentAction($storeId = null)
     {
-        return $this->getValue(Config::KEY_PAYMENT_ACTION, $storeId);
+        return $this->getValue(Config::$keyPaymentAction, $storeId);
     }
 
     /**
@@ -122,7 +185,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getClientKey($storeId = null)
     {
-        return $this->getValue(Config::KEY_CLIENT_KEY, $storeId);
+        return $this->getValue(Config::$keyClientKey, $storeId);
     }
 
     /**
@@ -133,7 +196,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function shouldEmailCustomer($storeId = null): bool
     {
-        return (bool)$this->getValue(Config::KEY_SHOULD_EMAIL_CUSTOMER, $storeId);
+        return (bool)$this->getValue(Config::$keyShouldEmailCustomer, $storeId);
     }
 
     /**
@@ -144,7 +207,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function isCvvEnabled($storeId = null): bool
     {
-        return (bool)$this->getValue(Config::KEY_CVV_ENABLED, $storeId);
+        return (bool)$this->getValue(Config::$keyCvvEnabled, $storeId);
     }
 
     /**
@@ -155,11 +218,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getSolutionId($storeId = null)
     {
-        $environment = $this->getValue(Config::KEY_ENVIRONMENT, $storeId);
+        $environment = $this->getValue(Config::$keyEnvironment, $storeId);
 
-        return $environment === Environment::ENVIRONMENT_SANDBOX
-            ? self::SOLUTION_ID_SANDBOX
-            : self::SOLUTION_ID_PRODUCTION;
+        return $environment === self::$environmentSandbox
+            ? self::$solutionIdSandbox
+            : self::$solutionIdProduction;
     }
 
     /**
@@ -170,7 +233,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getAdditionalInfoKeys($storeId = null): array
     {
-        return explode(',', $this->getValue(Config::KEY_ADDITIONAL_INFO_KEYS, $storeId) ?? '');
+        return explode(',', $this->getValue(Config::$keyAdditionalInfoKeys, $storeId) ?? '');
     }
 
     /**
@@ -181,6 +244,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getTransactionInfoSyncKeys($storeId = null): array
     {
-        return explode(',', $this->getValue(Config::KEY_TRANSACTION_SYNC_KEYS, $storeId) ?? '');
+        return explode(',', $this->getValue(Config::$keyTransactionSyncKeys, $storeId) ?? '');
     }
 }

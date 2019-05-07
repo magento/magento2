@@ -17,13 +17,20 @@ use Magento\Sales\Model\Order\Payment;
  */
 class PaymentReviewStatusHandler implements HandlerInterface
 {
-    const REVIEW_PENDING_STATUSES = [
+    /**
+     * @var array
+     */
+    private static $reviewPendingStatuses = [
         'FDSPendingReview',
-        'FDSAuthorizedPendingReview'
+        'FDSAuthorizedPendingReview',
     ];
-    const REVIEW_DECLINED_STATUSES = [
+
+    /**
+     * @var array
+     */
+    private static $reviewDeclinedStatuses = [
         'void',
-        'declined'
+        'declined',
     ];
 
     /**
@@ -53,8 +60,8 @@ class PaymentReviewStatusHandler implements HandlerInterface
 
             $status = $response['transaction']['transactionStatus'];
             // This data is only used when updating the order payment via Get Payment Update
-            if (!in_array($status, self::REVIEW_PENDING_STATUSES)) {
-                $denied = in_array($status, self::REVIEW_DECLINED_STATUSES);
+            if (!in_array($status, self::$reviewPendingStatuses)) {
+                $denied = in_array($status, self::$reviewDeclinedStatuses);
                 $payment->setData('is_transaction_denied', $denied);
                 $payment->setData('is_transaction_approved', !$denied);
             }

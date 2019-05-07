@@ -23,7 +23,7 @@ class TransactionHashValidator extends AbstractValidator
     /**
      * The error code for failed transaction hash verification
      */
-    const ERROR_TRANSACTION_HASH = 'ETHV';
+    private static $errorTransactionHash = 'ETHV';
 
     /**
      * @var SubjectReader
@@ -78,7 +78,7 @@ class TransactionHashValidator extends AbstractValidator
             );
         }
 
-        return $this->createResult(false, [self::ERROR_TRANSACTION_HASH]);
+        return $this->createResult(false, [self::$errorTransactionHash]);
     }
 
     /**
@@ -140,7 +140,7 @@ class TransactionHashValidator extends AbstractValidator
             return $this->createResult(true);
         }
 
-        return $this->createResult(false, [self::ERROR_TRANSACTION_HASH]);
+        return $this->createResult(false, [self::$errorTransactionHash]);
     }
 
     /**

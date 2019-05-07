@@ -20,8 +20,9 @@ class GeneralResponseValidator extends AbstractValidator
 {
     /**
      * The result code that authorize.net returns for a successful Api call
+     * @var string
      */
-    const RESULT_CODE_SUCCESS = 'Ok';
+    private static $resultCodeSuccess = 'Ok';
 
     /**
      * @var SubjectReader
@@ -47,7 +48,7 @@ class GeneralResponseValidator extends AbstractValidator
     {
         $response = $this->subjectReader->readResponse($validationSubject);
         $isValid = (isset($response['messages']['resultCode'])
-            && $response['messages']['resultCode'] === self::RESULT_CODE_SUCCESS);
+            && $response['messages']['resultCode'] === self::$resultCodeSuccess);
         $errorCodes = [];
 
         if (!$isValid) {

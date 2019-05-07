@@ -32,7 +32,7 @@ $shippingAddress->setId(null)
     ->setShippingMethod('flatrate_flatrate');
 
 $payment = $objectManager->create(Payment::class);
-$payment->setMethod(Config::METHOD);
+$payment->setMethod('authorizenet_acceptjs');
 $payment->setAuthorizationTransaction(true);
 $payment->setAdditionalInformation('ccLast4', '1111');
 $payment->setAdditionalInformation('opaqueDataDescriptor', 'mydescriptor');

@@ -17,6 +17,11 @@ use PHPUnit\Framework\TestCase;
 class RefundTransactionTypeDataBuilderTest extends TestCase
 {
     /**
+     * @var string
+     */
+    private $requestTypeRefund = 'refundTransaction';
+
+    /**
      * @return void
      */
     public function testBuild()
@@ -25,7 +30,7 @@ class RefundTransactionTypeDataBuilderTest extends TestCase
 
         $expected = [
             'transactionRequest' => [
-                'transactionType' => RefundTransactionTypeDataBuilder::REQUEST_TYPE_REFUND,
+                'transactionType' => $this->requestTypeRefund,
             ],
         ];
 

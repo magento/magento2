@@ -9,7 +9,7 @@
     <body>
         <referenceBlock name="order_create_billing_form">
             <action method="setMethodFormTemplate">
-                <argument name="method" xsi:type="const">Magento\AuthorizenetAcceptjs\Gateway\Config::METHOD</argument>
+                <argument name="method" xsi:type="string">authorizenet_acceptjs</argument>
                 <argument name="template" xsi:type="string">Magento_AuthorizenetAcceptjs::form/cc.phtml</argument>
             </action>
         </referenceBlock>

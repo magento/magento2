@@ -30,6 +30,11 @@ class ConfigTest extends TestCase
     private $scopeConfigMock;
 
     /**
+     * @var string
+     */
+    private $methodCode = 'authorizenet_acceptjs';
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -41,7 +46,7 @@ class ConfigTest extends TestCase
             Config::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
-                'methodCode' => Config::METHOD,
+                'methodCode' => $this->methodCode,
             ]
         );
     }
@@ -141,6 +146,6 @@ class ConfigTest extends TestCase
      */
     private function getPath(string $field): string
     {
-        return sprintf(Config::DEFAULT_PATH_PATTERN, Config::METHOD, $field);
+        return sprintf(Config::DEFAULT_PATH_PATTERN, $this->methodCode, $field);
     }
 }

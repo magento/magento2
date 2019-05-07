@@ -26,6 +26,11 @@ class PaymentResponseHandlerTest extends TestCase
     private $responseCodeApproved = 1;
 
     /**
+     * @var int
+     */
+    private $responseCodeHeld = 4;
+
+    /**
      * @var PaymentResponseHandler
      */
     private $builder;
@@ -113,7 +118,7 @@ class PaymentResponseHandlerTest extends TestCase
         $response = [
             'transactionResponse' => [
                 'avsResultCode' => 'avshurray',
-                'responseCode' => PaymentResponseHandler::RESPONSE_CODE_HELD,
+                'responseCode' => $this->responseCodeHeld,
             ],
         ];
         $subject = [

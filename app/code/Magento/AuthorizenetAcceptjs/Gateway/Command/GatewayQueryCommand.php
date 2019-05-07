@@ -78,7 +78,7 @@ class GatewayQueryCommand implements CommandInterface
 
         try {
             $response = $this->client->placeRequest($transferO);
-        } catch (\Throwable  $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
 
             throw new CommandException(__('There was an error while trying to process the request.'));

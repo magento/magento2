@@ -117,7 +117,7 @@ define([
                 }.bind(this))
                 .fail(function (messages) {
                     this.tokens = null;
-                    this._showErrors(messages);
+                    this.showErrors(messages);
                 }.bind(this));
         },
 
@@ -134,8 +134,9 @@ define([
          * Show error messages
          *
          * @param {String[]} errorMessages
+         * @private
          */
-        _showErrors: function (errorMessages) {
+        showErrors: function (errorMessages) {
             $.each(errorMessages, function (index, message) {
                 globalMessageList.addErrorMessage({
                     message: message

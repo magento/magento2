@@ -37,6 +37,11 @@ class VoidDataBuilderTest extends TestCase
     private $paymentDOMock;
 
     /**
+     * @var string
+     */
+    private $requestTypeVoid = 'voidTransaction';
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -66,7 +71,7 @@ class VoidDataBuilderTest extends TestCase
 
         $expected = [
             'transactionRequest' => [
-                'transactionType' =>VoidDataBuilder::REQUEST_TYPE_VOID,
+                'transactionType' => $this->requestTypeVoid,
                 'refTransId' => 'myref',
             ],
         ];

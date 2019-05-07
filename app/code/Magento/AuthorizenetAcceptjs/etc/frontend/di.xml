@@ -23,7 +23,7 @@
     <type name="Magento\Payment\Model\CcGenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
-                <item name="authorizenet_acceptjs" xsi:type="const">Magento\AuthorizenetAcceptjs\Gateway\Config::METHOD</item>
+                <item name="authorizenet_acceptjs" xsi:type="string">authorizenet_acceptjs</item>
             </argument>
         </arguments>
     </type>

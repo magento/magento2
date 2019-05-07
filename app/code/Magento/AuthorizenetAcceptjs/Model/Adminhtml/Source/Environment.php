@@ -13,8 +13,15 @@ namespace Magento\AuthorizenetAcceptjs\Model\Adminhtml\Source;
  */
 class Environment implements \Magento\Framework\Data\OptionSourceInterface
 {
-    const ENVIRONMENT_PRODUCTION = 'production';
-    const ENVIRONMENT_SANDBOX = 'sandbox';
+    /**
+     * @var string
+     */
+    private static $environmentProduction = 'production';
+
+    /**
+     * @var string
+     */
+    private static $environmentSandbox = 'sandbox';
 
     /**
      * @inheritdoc
@@ -23,11 +30,11 @@ class Environment implements \Magento\Framework\Data\OptionSourceInterface
     {
         return [
             [
-                'value' => self::ENVIRONMENT_SANDBOX,
+                'value' => self::$environmentSandbox,
                 'label' => __('Sandbox'),
             ],
             [
-                'value' => self::ENVIRONMENT_PRODUCTION,
+                'value' => self::$environmentProduction,
                 'label' => __('Production'),
             ],
         ];

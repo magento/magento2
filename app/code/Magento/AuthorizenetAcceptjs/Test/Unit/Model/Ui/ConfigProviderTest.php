@@ -36,6 +36,11 @@ class ConfigProviderTest extends TestCase
     private $provider;
 
     /**
+     * @var string
+     */
+    private $methodCode = 'authorizenet_acceptjs';
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -78,7 +83,7 @@ class ConfigProviderTest extends TestCase
 
         $expected = [
             'payment' => [
-                Config::METHOD => [
+                $this->methodCode => [
                     'clientKey' => 'foo',
                     'apiLoginID' => 'bar',
                     'environment' => 'baz',

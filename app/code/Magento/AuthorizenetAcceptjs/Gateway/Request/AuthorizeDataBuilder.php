@@ -18,7 +18,10 @@ use Magento\Sales\Model\Order\Payment;
  */
 class AuthorizeDataBuilder implements BuilderInterface
 {
-    const REQUEST_AUTH_ONLY = 'authOnlyTransaction';
+    /**
+     * @var string
+     */
+    private static $requestAuthOnly = 'authOnlyTransaction';
 
     /**
      * @var SubjectReader
@@ -54,7 +57,7 @@ class AuthorizeDataBuilder implements BuilderInterface
         if ($payment instanceof Payment) {
             $data = [
                 'transactionRequest' => [
-                    'transactionType' => self::REQUEST_AUTH_ONLY,
+                    'transactionType' => self::$requestAuthOnly,
                 ],
             ];
 

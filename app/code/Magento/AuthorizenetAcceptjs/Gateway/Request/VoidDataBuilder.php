@@ -17,7 +17,10 @@ use Magento\Sales\Model\Order\Payment;
  */
 class VoidDataBuilder implements BuilderInterface
 {
-    const REQUEST_TYPE_VOID = 'voidTransaction';
+    /**
+     * @var string
+     */
+    private static $requestTypeVoid = 'voidTransaction';
 
     /**
      * @var SubjectReader
@@ -50,7 +53,7 @@ class VoidDataBuilder implements BuilderInterface
             }
 
             $transactionData['transactionRequest'] = [
-                'transactionType' => self::REQUEST_TYPE_VOID,
+                'transactionType' => self::$requestTypeVoid,
                 'refTransId' => $refId,
             ];
         }

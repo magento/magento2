@@ -8,9 +8,8 @@ define([
 ], function (AuthorizenetAcceptjs, $) {
     'use strict';
 
-    return function (data, element) {
-        var $form = $(element),
-            config = data.config;
+    return function (config, element) {
+        var $form = $(element);
 
         config.active = $form.length > 0 && !$form.is(':hidden');
         new AuthorizenetAcceptjs(config);

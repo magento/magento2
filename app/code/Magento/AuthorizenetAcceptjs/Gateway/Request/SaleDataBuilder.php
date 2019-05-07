@@ -18,7 +18,10 @@ use Magento\Sales\Model\Order\Payment;
  */
 class SaleDataBuilder implements BuilderInterface
 {
-    const REQUEST_AUTH_AND_CAPTURE = 'authCaptureTransaction';
+    /**
+     * @var string
+     */
+    private static $requestAuthAndCapture = 'authCaptureTransaction';
 
     /**
      * @var SubjectReader
@@ -54,7 +57,7 @@ class SaleDataBuilder implements BuilderInterface
         if ($payment instanceof Payment) {
             $data = [
                 'transactionRequest' => [
-                    'transactionType' => self::REQUEST_AUTH_AND_CAPTURE,
+                    'transactionType' => self::$requestAuthAndCapture,
                 ],
             ];
 

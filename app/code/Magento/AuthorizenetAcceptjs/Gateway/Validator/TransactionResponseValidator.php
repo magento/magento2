@@ -17,11 +17,25 @@ use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
  */
 class TransactionResponseValidator extends AbstractValidator
 {
-    const RESPONSE_CODE_APPROVED = 1;
-    const RESPONSE_CODE_HELD = 4;
-    const RESPONSE_REASON_CODE_APPROVED = 1;
-    const RESPONSE_REASON_CODE_PENDING_REVIEW_AUTHORIZED = 252;
-    const RESPONSE_REASON_CODE_PENDING_REVIEW = 253;
+    /**
+     * @var int
+     */
+    private static $responseCodeApproved = 1;
+
+    /**
+     * @var int
+     */
+    private static $responseCodeHeld = 4;
+
+    /**
+     * @var int
+     */
+    private static $responseReasonCodePendingReviewAuthorized = 252;
+
+    /**
+     * @var int
+     */
+    private static $responseReasonCodePendingReview = 253;
 
     /**
      * @var SubjectReader
@@ -81,12 +95,12 @@ class TransactionResponseValidator extends AbstractValidator
             ?? null;
         $isErrorCode = !in_array(
             $transactionResponse['responseCode'],
-            [self::RESPONSE_CODE_APPROVED, self::RESPONSE_CODE_HELD]
+            [self::$responseCodeApproved, self::$responseCodeHeld]
         );
         $responseReasonCodes = [
-            self::RESPONSE_REASON_CODE_APPROVED,
-            self::RESPONSE_REASON_CODE_PENDING_REVIEW,
-            self::RESPONSE_REASON_CODE_PENDING_REVIEW_AUTHORIZED,
+            self::$responseCodeApproved,
+            self::$responseReasonCodePendingReview,
+            self::$responseReasonCodePendingReviewAuthorized,
         ];
 
         return $isErrorCode || (!$isErrorCode && $code && !in_array($code, $responseReasonCodes));

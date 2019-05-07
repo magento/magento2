@@ -18,7 +18,10 @@ use Magento\Sales\Model\Order\Payment;
  */
 class CaptureDataBuilder implements BuilderInterface
 {
-    const REQUEST_TYPE_PRIOR_AUTH_CAPTURE = 'priorAuthCaptureTransaction';
+    /**
+     * @var string
+     */
+    private static $requestTypePriorAuthCapture = 'priorAuthCaptureTransaction';
 
     /**
      * @var SubjectReader
@@ -57,7 +60,7 @@ class CaptureDataBuilder implements BuilderInterface
 
             $data = [
                 'transactionRequest' => [
-                    'transactionType' => self::REQUEST_TYPE_PRIOR_AUTH_CAPTURE,
+                    'transactionType' => self::$requestTypePriorAuthCapture,
                     'refTransId' => $refId,
                 ],
             ];

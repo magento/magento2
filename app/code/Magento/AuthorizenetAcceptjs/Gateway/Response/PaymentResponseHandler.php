@@ -17,7 +17,10 @@ use Magento\Sales\Model\Order\Payment;
  */
 class PaymentResponseHandler implements HandlerInterface
 {
-    const RESPONSE_CODE_HELD = 4;
+    /**
+     * @var int
+     */
+    private static $responseCodeHeld = 4;
 
     /**
      * @var SubjectReader
@@ -46,7 +49,7 @@ class PaymentResponseHandler implements HandlerInterface
             $payment->setCcAvsStatus($transactionResponse['avsResultCode']);
             $payment->setIsTransactionClosed(false);
 
-            if ($transactionResponse['responseCode'] == self::RESPONSE_CODE_HELD) {
+            if ($transactionResponse['responseCode'] == self::$responseCodeHeld) {
                 $payment->setIsTransactionPending(true)
                     ->setIsFraudDetected(true);
             }

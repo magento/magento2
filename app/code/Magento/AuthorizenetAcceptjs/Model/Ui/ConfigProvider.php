@@ -28,6 +28,11 @@ class ConfigProvider implements ConfigProviderInterface
     private $cart;
 
     /**
+     * @var string
+     */
+    private static $methodCode = 'authorizenet_acceptjs';
+
+    /**
      * @param Config $config
      * @param CartInterface $cart
      */
@@ -48,7 +53,7 @@ class ConfigProvider implements ConfigProviderInterface
 
         return [
             'payment' => [
-                Config::METHOD => [
+                self::$methodCode => [
                     'clientKey' => $this->config->getClientKey($storeId),
                     'apiLoginID' => $this->config->getLoginId($storeId),
                     'environment' => $this->config->getEnvironment($storeId),

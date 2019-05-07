@@ -142,7 +142,7 @@ define([
                     this.tokens = null;
 
                     if (messages.length > 0) {
-                        this._showError(messages[0]);
+                        this.showError(messages[0]);
                     }
                 }.bind(this));
 
@@ -170,8 +170,9 @@ define([
          * Show alert message
          *
          * @param {String} message
+         * @private
          */
-        _showError: function (message) {
+        showError: function (message) {
             alert({
                 content: message
             });

@@ -23,8 +23,15 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
  */
 class CaptureStrategyCommand implements CommandInterface
 {
-    const SALE = 'sale';
-    const CAPTURE = 'settle';
+    /**
+     * @var string
+     */
+    private static $sale= 'sale';
+
+    /**
+     * @var string
+     */
+    private static $capture = 'settle';
 
     /**
      * @var CommandPoolInterface
@@ -99,10 +106,10 @@ class CaptureStrategyCommand implements CommandInterface
         // If auth transaction does not exist then execute authorize&capture command
         $captureExists = $this->captureTransactionExists($payment);
         if (!$payment->getAuthorizationTransaction() && !$captureExists) {
-            return self::SALE;
+            return self::$sale;
         }
 
-        return self::CAPTURE;
+        return self::$capture;
     }
 
     /**
@@ -126,7 +133,7 @@ class CaptureStrategyCommand implements CommandInterface
             [
                 $this->filterBuilder
                     ->setField('txn_type')
-                    ->setValue(TransactionInterface::TYPE_CAPTURE)
+                    ->setValue(self::$capture)
                     ->create(),
             ]
         );

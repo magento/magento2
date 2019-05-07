@@ -15,7 +15,10 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
  */
 class RefundTransactionTypeDataBuilder implements BuilderInterface
 {
-    const REQUEST_TYPE_REFUND = 'refundTransaction';
+    /**
+     * @var string
+     */
+    private static $requestTypeRefund = 'refundTransaction';
 
     /**
      * @inheritdoc
@@ -24,7 +27,7 @@ class RefundTransactionTypeDataBuilder implements BuilderInterface
     {
         return [
             'transactionRequest' => [
-                'transactionType' => self::REQUEST_TYPE_REFUND,
+                'transactionType' => self::$requestTypeRefund,
             ],
         ];
     }

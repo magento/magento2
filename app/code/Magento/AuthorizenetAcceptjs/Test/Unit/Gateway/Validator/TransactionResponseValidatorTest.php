@@ -37,6 +37,31 @@ class TransactionResponseValidatorTest extends TestCase
     private $resultMock;
 
     /**
+     * @var int
+     */
+    private $responseCodeApproved = 1;
+
+    /**
+     * @var int
+     */
+    private $responseCodeHeld = 4;
+
+    /**
+     * @var int
+     */
+    private $responseReasonCodeApproved = 1;
+
+    /**
+     * @var int
+     */
+    private $responseReasonCodePendingReviewAuthorized = 252;
+
+    /**
+     * @var int
+     */
+    private $responseReasonCodePendingReview = 253;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -104,10 +129,10 @@ class TransactionResponseValidatorTest extends TestCase
             // Test for acceptable reason codes
             [
                 [
-                    'responseCode' => TransactionResponseValidator::RESPONSE_CODE_APPROVED,
+                    'responseCode' => $this->responseCodeApproved,
                     'messages' => [
                         'message' => [
-                            'code' => TransactionResponseValidator::RESPONSE_REASON_CODE_APPROVED,
+                            'code' => $this->responseReasonCodeApproved,
                         ],
                     ],
                 ],
@@ -116,10 +141,10 @@ class TransactionResponseValidatorTest extends TestCase
             ],
             [
                 [
-                    'responseCode' => TransactionResponseValidator::RESPONSE_CODE_APPROVED,
+                    'responseCode' => $this->responseCodeApproved,
                     'messages' => [
                         'message' => [
-                            'code' => TransactionResponseValidator::RESPONSE_REASON_CODE_PENDING_REVIEW,
+                            'code' => $this->responseReasonCodePendingReview,
                         ],
                     ],
                 ],
@@ -128,10 +153,10 @@ class TransactionResponseValidatorTest extends TestCase
             ],
             [
                 [
-                    'responseCode' => TransactionResponseValidator::RESPONSE_CODE_APPROVED,
+                    'responseCode' => $this->responseCodeApproved,
                     'messages' => [
                         'message' => [
-                            'code' => TransactionResponseValidator::RESPONSE_REASON_CODE_PENDING_REVIEW_AUTHORIZED,
+                            'code' => $this->responseReasonCodePendingReviewAuthorized,
                         ],
                     ],
                 ],
@@ -140,10 +165,10 @@ class TransactionResponseValidatorTest extends TestCase
             ],
             [
                 [
-                    'responseCode' => TransactionResponseValidator::RESPONSE_CODE_HELD,
+                    'responseCode' => $this->responseCodeHeld,
                     'messages' => [
                         'message' => [
-                            'code' => TransactionResponseValidator::RESPONSE_REASON_CODE_APPROVED,
+                            'code' => $this->responseReasonCodeApproved,
                         ],
                     ],
                 ],
@@ -152,10 +177,10 @@ class TransactionResponseValidatorTest extends TestCase
             ],
             [
                 [
-                    'responseCode' => TransactionResponseValidator::RESPONSE_CODE_HELD,
+                    'responseCode' => $this->responseCodeHeld,
                     'messages' => [
                         'message' => [
-                            'code' => TransactionResponseValidator::RESPONSE_REASON_CODE_PENDING_REVIEW,
+                            'code' => $this->responseReasonCodePendingReview,
                         ],
                     ],
                 ],
@@ -164,10 +189,10 @@ class TransactionResponseValidatorTest extends TestCase
             ],
             [
                 [
-                    'responseCode' => TransactionResponseValidator::RESPONSE_CODE_HELD,
+                    'responseCode' => $this->responseCodeHeld,
                     'messages' => [
                         'message' => [
-                            'code' => TransactionResponseValidator::RESPONSE_REASON_CODE_PENDING_REVIEW_AUTHORIZED,
+                            'code' => $this->responseReasonCodePendingReviewAuthorized,
                         ],
                     ],
                 ],
@@ -178,7 +203,7 @@ class TransactionResponseValidatorTest extends TestCase
             // Test for reason codes that aren't acceptable
             [
                 [
-                    'responseCode' => TransactionResponseValidator::RESPONSE_CODE_APPROVED,
+                    'responseCode' => $this->responseCodeApproved,
                     'messages' => [
                         'message' => [
                             [
@@ -193,7 +218,7 @@ class TransactionResponseValidatorTest extends TestCase
             ],
             [
                 [
-                    'responseCode' => TransactionResponseValidator::RESPONSE_CODE_APPROVED,
+                    'responseCode' => $this->responseCodeApproved,
                     'messages' => [
                         'message' => [
                             // Alternate, non-array sytax

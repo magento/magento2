@@ -21,9 +21,20 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class InstallData implements InstallDataInterface
 {
-    const DIRECTPOST_PATH = 'payment/authorizenet_directpost';
-    const ACCEPTJS_PATH = 'payment/authorizenet_acceptjs';
-    const PAYMENT_PATH_FORMAT = '%s/%s';
+    /**
+     * @var string
+     */
+    private static $directpostPath = 'payment/authorizenet_directpost';
+
+    /**
+     * @var string
+     */
+    private static $acceptjsPath = 'payment/authorizenet_acceptjs';
+
+    /**
+     * @var string
+     */
+    private static $paymentPathFormat = '%s/%s';
 
     /**
      * @var ScopeConfigInterface
@@ -172,7 +183,7 @@ class InstallData implements InstallDataInterface
         int $scopeId = null
     ) {
         return $this->scopeConfig->getValue(
-            sprintf(self::PAYMENT_PATH_FORMAT, self::DIRECTPOST_PATH, $field),
+            sprintf(self::$paymentPathFormat, self::$directpostPath, $field),
             $scope,
             $scopeId
         );
@@ -198,7 +209,7 @@ class InstallData implements InstallDataInterface
         $value = $isEncrypted ? $this->encryptor->encrypt($value) : $value;
 
         $this->resourceConfig->saveConfig(
-            sprintf(self::PAYMENT_PATH_FORMAT, self::ACCEPTJS_PATH, $field),
+            sprintf(self::$paymentPathFormat, self::$acceptjsPath, $field),
             $value,
             $scope,
             $scopeId

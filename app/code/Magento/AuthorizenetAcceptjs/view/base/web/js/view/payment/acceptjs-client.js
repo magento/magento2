@@ -37,12 +37,12 @@ define([
             var deferred = $.Deferred();
 
             if (this.acceptjsClient) {
-                this._createTokens(deferred, data);
+                this.createTokensFromPaymentInformation(deferred, data);
             } else {
                 acceptjsFactory(this.environment)
                     .done(function (client) {
                         this.acceptjsClient = client;
-                        this._createTokens(deferred, data);
+                        this.createTokensFromPaymentInformation(deferred, data);
                     }.bind(this));
             }
 
@@ -54,8 +54,9 @@ define([
          *
          * @param {jQuery.Deferred} deferred
          * @param {Object} data
+         * @private
          */
-        _createTokens: function (deferred, data) {
+        createTokensFromPaymentInformation: function (deferred, data) {
             this.acceptjsClient.dispatchData(data, function (response) {
                 validatorHandler.validate(response, function (valid, messages) {
                     if (valid) {
