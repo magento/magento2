@@ -247,7 +247,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     /**
      * Apply input filter to values of translation parameters
      *
-     * @param array &$translateParams
+     * @param array $translateParams
      * @param array $fieldNames
      * @return void
      */
@@ -397,7 +397,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * Get translate data by regexp
      *
      * @param string $regexp
-     * @param string &$text
+     * @param string $text
      * @param callable $locationCallback
      * @param array $options
      * @return array
@@ -550,7 +550,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     /**
      * Prepare simple tags
      *
-     * @param string &$content
+     * @param string $content
      * @param array $tagsList
      * @param callable $formatCallback
      * @return void
