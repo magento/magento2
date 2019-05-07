@@ -245,10 +245,10 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
         \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
     ) {
         return $collection
+            ->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
             ->addMinimalPrice()
             ->addFinalPrice()
             ->addTaxPercents()
-            ->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
             ->addUrlRewrite();
     }
 
