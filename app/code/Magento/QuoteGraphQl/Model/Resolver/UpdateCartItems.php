@@ -116,17 +116,17 @@ class UpdateCartItems implements ResolverInterface
             if (!isset($item['quantity'])) {
                 throw new GraphQlInputException(__('Required parameter "quantity" for "cart_items" is missing.'));
             }
-            $qty = (float)$item['quantity'];
+            $quantity = (float)$item['quantity'];
 
-            if ($qty <= 0.0) {
+            if ($quantity <= 0.0) {
                 $this->cartItemRepository->deleteById((int)$cart->getId(), $itemId);
             } else {
                 $customizableOptions = $item['customizable_options'] ?? null;
 
                 if ($customizableOptions === null) { // Update only item's qty
-                    $this->updateItemQty($itemId, $cart, $qty);
+                    $this->updateItemQty($itemId, $cart, $quantity);
                 } else { // Update customizable options (and QTY if changed)
-                    $this->updateCartItem->execute($cart, $itemId, $qty, $customizableOptions);
+                    $this->updateCartItem->execute($cart, $itemId, $quantity, $customizableOptions);
                     $this->quoteRepository->save($cart);
                 }
             }
