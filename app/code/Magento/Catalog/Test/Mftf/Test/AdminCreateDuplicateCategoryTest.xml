@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateDuplicateCategoryTest">
+        <annotations>
+            <stories value="Create category"/>
+            <title value="Create Duplicate Category With Already Existed UrlKey"/>
+            <description value="Login as admin and create duplicate category"/>
+            <testCaseId value="MC-14702"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+        </before>
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Open Category Page and select Add category -->
+        <actionGroup ref="goToCreateCategoryPage" stepKey="goToCategoryPage"/>
+
+        <!-- Fill the Category form with same name and urlKey as initially created category(SimpleSubCategory) -->
+        <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillCategoryForm">
+             <argument name="categoryName" value="$$category.name$$"/>
+             <argument name="categoryUrlKey" value="$$category.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!-- Assert error message -->
+        <see selector="{{AdminCategoryMessagesSection.errorMessage}}" userInput="The value specified in the URL Key field would generate a URL that already exists." stepKey="seeErrorMessage"/>
+    </test>
+</tests>

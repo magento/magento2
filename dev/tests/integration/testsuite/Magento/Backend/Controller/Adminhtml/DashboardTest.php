@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Controller\Adminhtml;
 
 /**
@@ -19,8 +21,15 @@ class DashboardTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->assertContains('dashboard-diagram', $actual);
     }
 
+    /**
+     * Tests tunnelAction
+     *
+     * @throws \Exception
+     * @return void
+     */
     public function testTunnelAction()
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $testUrl = \Magento\Backend\Block\Dashboard\Graph::API_URL . '?cht=p3&chd=t:60,40&chs=250x100&chl=Hello|World';
         $handle = curl_init();
         curl_setopt($handle, CURLOPT_URL, $testUrl);
@@ -34,6 +43,7 @@ class DashboardTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             curl_close($handle);
             throw $e;
         }
+        // phpcs:enable
 
         $gaData = [
             'cht' => 'lc',

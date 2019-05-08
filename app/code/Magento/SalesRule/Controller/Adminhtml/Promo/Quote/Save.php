@@ -7,6 +7,7 @@
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
@@ -20,6 +21,11 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
      * @var TimezoneInterface
      */
     private $timezone;
+    
+    /**
+     * @var DataPersistorInterface
+     */
+    private $dataPersistor;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
@@ -27,17 +33,22 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param TimezoneInterface $timezone
+     * @param DataPersistorInterface $dataPersistor
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        TimezoneInterface $timezone = null
+        TimezoneInterface $timezone = null,
+        DataPersistorInterface $dataPersistor = null
     ) {
         parent::__construct($context, $coreRegistry, $fileFactory, $dateFilter);
         $this->timezone =  $timezone ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
             TimezoneInterface::class
+        );
+        $this->dataPersistor = $dataPersistor ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            DataPersistorInterface::class
         );
     }
 
@@ -73,12 +84,8 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                     $data
                 );
                 $data = $inputFilter->getUnescaped();
-                $id = $this->getRequest()->getParam('rule_id');
-                if ($id) {
-                    $model->load($id);
-                    if ($id != $model->getId()) {
-                        throw new \Magento\Framework\Exception\LocalizedException(__('The wrong rule is specified.'));
-                    }
+                if (!$this->checkRuleExists($model)) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__('The wrong rule is specified.'));
                 }
 
                 $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
@@ -89,6 +96,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                         $this->messageManager->addErrorMessage($errorMessage);
                     }
                     $session->setPageData($data);
+                    $this->dataPersistor->set('sale_rule', $data);
                     $this->_redirect('sales_rule/*/edit', ['id' => $model->getId()]);
                     return;
                 }
@@ -146,5 +154,23 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
             }
         }
         $this->_redirect('sales_rule/*/');
+    }
+
+    /**
+     * Check if Cart Price Rule with provided id exists.
+     *
+     * @param \Magento\SalesRule\Model\Rule $model
+     * @return bool
+     */
+    private function checkRuleExists(\Magento\SalesRule\Model\Rule $model): bool
+    {
+        $id = $this->getRequest()->getParam('rule_id');
+        if ($id) {
+            $model->load($id);
+            if ($model->getId() != $id) {
+                return false;
+            }
+        }
+        return true;
     }
 }

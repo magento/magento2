@@ -33,7 +33,7 @@
             <argument name="userInput" type="string"/>
         </arguments>
         <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationAlgorithm}}" visible="false" stepKey="openTaxCalcSettingsSection"/>
-        <scrollTo selector="{{AdminConfigureTaxSection.taxCalculationApplyTaxOnInherit}}" stepKey="goToCheckbox"/>
+        <scrollTo selector="{{AdminConfigureTaxSection.taxCalculationApplyTaxOnInherit}}" x="0" y="-80" stepKey="goToCheckbox"/>
         <uncheckOption selector="{{AdminConfigureTaxSection.taxCalculationApplyTaxOnInherit}}" stepKey="enableApplyTaxOnSetting"/>
         <selectOption selector="{{AdminConfigureTaxSection.taxCalculationApplyTaxOn}}" userInput="{{userInput}}" stepKey="setApplyTaxOn"/>
         <scrollTo selector="{{SalesConfigSection.TaxClassesTab}}" stepKey="scrollToTop"/>
@@ -49,11 +49,11 @@
         <amOnPage url="{{AdminSalesTaxClassPage.url}}" stepKey="navigateToSalesTaxPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationAlgorithm}}" visible="false" stepKey="openTaxCalcSettingsSection"/>
-        <scrollTo selector="{{AdminConfigureTaxSection.taxCalculationApplyTaxOnInherit}}" stepKey="goToCheckbox"/>
+        <scrollTo selector="{{AdminConfigureTaxSection.taxCalculationApplyTaxOnInherit}}" x="0" y="-80" stepKey="goToCheckbox"/>
         <selectOption selector="{{AdminConfigureTaxSection.taxCalculationApplyTaxOn}}" userInput="{{userInput}}" stepKey="setApplyTaxOff"/>
         <checkOption selector="{{AdminConfigureTaxSection.taxCalculationApplyTaxOnInherit}}" stepKey="disableApplyTaxOnSetting"/>
         <click selector="{{AdminConfigureTaxSection.save}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForConfigSaved"/>
         <see userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
     </actionGroup>
-    </actionGroups>
+</actionGroups>

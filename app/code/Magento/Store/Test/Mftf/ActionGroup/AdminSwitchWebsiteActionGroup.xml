@@ -11,6 +11,7 @@
         <arguments>
             <argument name="website"/>
         </arguments>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
         <click selector="{{AdminMainActionsSection.storeViewDropdown}}" stepKey="clickWebsiteSwitchDropdown"/>
         <waitForElementVisible selector="{{AdminMainActionsSection.websiteByName('Main Website')}}" stepKey="waitForWebsiteAreVisible"/>
         <click selector="{{AdminMainActionsSection.websiteByName(website.name)}}" stepKey="clickWebsiteByName"/>

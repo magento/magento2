@@ -6,9 +6,12 @@
 
 namespace Magento\Quote\Test\Unit\Model;
 
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Quote\Model\CustomerManagement;
+use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 
 /**
@@ -138,6 +141,21 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     private $quoteFactoryMock;
 
     /**
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $requestMock;
+
+    /**
+     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $remoteAddressMock;
+
+    /**
+     * @var \Magento\Quote\Model\QuoteIdMaskFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $quoteIdMaskFactoryMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -178,18 +196,20 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, [
-                'getId',
-                'getCheckoutMethod',
-                'setCheckoutMethod',
-                'setCustomerId',
-                'setCustomerEmail',
-                'getBillingAddress',
-                'setCustomerIsGuest',
-                'setCustomerGroupId',
-                'assignCustomer',
-                'getPayment',
-                'collectTotals'
-            ]);
+            'assignCustomer',
+            'collectTotals',
+            'getBillingAddress',
+            'getCheckoutMethod',
+            'getPayment',
+            'setCheckoutMethod',
+            'setCustomerEmail',
+            'setCustomerGroupId',
+            'setCustomerId',
+            'setCustomerIsGuest',
+            'setRemoteIp',
+            'setXForwardedFor',
+            'getId',
+        ]);
 
         $this->quoteAddressFactory = $this->createPartialMock(
             \Magento\Quote\Model\Quote\AddressFactory::class,
@@ -237,8 +257,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
         // Set the new dependency
         $this->quoteIdMock = $this->createMock(\Magento\Quote\Model\QuoteIdMask::class);
-        $quoteIdFactoryMock = $this->createPartialMock(\Magento\Quote\Model\QuoteIdMaskFactory::class, ['create']);
-        $this->setPropertyValue($this->model, 'quoteIdMaskFactory', $quoteIdFactoryMock);
+        $this->quoteIdMaskFactoryMock = $this->createPartialMock(QuoteIdMaskFactory::class, ['create']);
+        $this->setPropertyValue($this->model, 'quoteIdMaskFactory', $this->quoteIdMaskFactoryMock);
+
+        $this->requestMock = $this->createPartialMockForAbstractClass(RequestInterface::class, ['getServer']);
+        $this->remoteAddressMock = $this->createMock(RemoteAddress::class);
     }
 
     public function testCreateEmptyCartAnonymous()
@@ -645,7 +668,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
         $addressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['getEmail']);
         $addressMock->expects($this->once())->method('getEmail')->willReturn($email);
-        $this->quoteMock->expects($this->once())->method('getBillingAddress')->with()->willReturn($addressMock);
+        $this->quoteMock->expects($this->any())->method('getBillingAddress')->with()->willReturn($addressMock);
 
         $this->quoteMock->expects($this->once())->method('setCustomerIsGuest')->with(true)->willReturnSelf();
         $this->quoteMock->expects($this->once())
@@ -676,7 +699,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                     'checkoutSession' => $this->checkoutSessionMock,
                     'customerSession' => $this->customerSessionMock,
                     'accountManagement' => $this->accountManagementMock,
-                    'quoteFactory' => $this->quoteFactoryMock
+                    'quoteFactory' => $this->quoteFactoryMock,
+                    'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
+                    'addressRepository' => $this->addressRepositoryMock,
+                    'request' => $this->requestMock,
+                    'remoteAddress' => $this->remoteAddressMock,
                 ]
             )
             ->getMock();
@@ -709,13 +736,15 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $orderId = 332;
         $orderIncrementId = 100003332;
         $orderStatus = 'status1';
+        $remoteAddress = '192.168.1.10';
+        $forwardedForIp = '192.168.1.11';
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\QuoteManagement $service */
         $service = $this->getMockBuilder(\Magento\Quote\Model\QuoteManagement::class)
             ->setMethods(['submit'])
             ->setConstructorArgs(
                 [
-                'eventManager' => $this->eventManager,
+                    'eventManager' => $this->eventManager,
                     'quoteValidator' => $this->quoteValidator,
                     'orderFactory' => $this->orderFactory,
                     'orderManagement' => $this->orderManagement,
@@ -734,7 +763,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                     'checkoutSession' => $this->checkoutSessionMock,
                     'customerSession' => $this->customerSessionMock,
                     'accountManagement' => $this->accountManagementMock,
-                    'quoteFactory' => $this->quoteFactoryMock
+                    'quoteFactory' => $this->quoteFactoryMock,
+                    'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
+                    'addressRepository' => $this->addressRepositoryMock,
+                    'request' => $this->requestMock,
+                    'remoteAddress' => $this->remoteAddressMock,
                 ]
             )
             ->getMock();
@@ -761,6 +794,17 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $this->quoteMock->expects($this->never())
             ->method('setCustomerIsGuest')
             ->with(true);
+
+        $this->remoteAddressMock
+            ->method('getRemoteAddress')
+            ->willReturn($remoteAddress);
+
+        $this->requestMock
+            ->method('getServer')
+            ->willReturn($forwardedForIp);
+
+        $this->quoteMock->expects($this->once())->method('setRemoteIp')->with($remoteAddress);
+        $this->quoteMock->expects($this->once())->method('setXForwardedFor')->with($forwardedForIp);
 
         $service->expects($this->once())->method('submit')->willReturn($orderMock);
 

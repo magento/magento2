@@ -11,6 +11,7 @@
     <test name="AdminCorrectnessInvoicedItemInBundleProductTest">
         <annotations>
             <features value="Sales"/>
+            <stories value="Product invoice"/>
             <title value="Check correctness of invoiced items in a Bundle Product"/>
             <description value="Check correctness of invoiced items in a Bundle Product"/>
             <severity value="CRITICAL"/>
@@ -81,7 +82,7 @@
         <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="5" stepKey="ChangeQtyToInvoice"/>
         <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQunatity"/>
         <waitForPageLoad stepKey="waitPageToBeLoaded"/>
-        <actionGroup ref="submitInvoiceIntoOrder" stepKey="submitInvoice"/>
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
 
         <!--Verify invoiced items qty in ship tab-->
         <actionGroup ref="goToShipmentIntoOrder" stepKey="goToShipment"/>

@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Model\Payflow\Service\Response;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Payment\Model\Method\Logger;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
 use Magento\Framework\Session\Generic;
@@ -18,6 +21,7 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
  * Class Transaction
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Transaction
 {
@@ -52,12 +56,18 @@ class Transaction
     private $logger;
 
     /**
+     * @var DateTimeFactory
+     */
+    private $dateTimeFactory;
+
+    /**
      * @param Generic $sessionTransparent
      * @param CartRepositoryInterface $quoteRepository
      * @param Transparent $transparent
      * @param PaymentMethodManagementInterface $paymentManagement
      * @param HandlerInterface $errorHandler
      * @param Logger $logger
+     * @param DateTimeFactory $dateTimeFactory
      */
     public function __construct(
         Generic $sessionTransparent,
@@ -65,7 +75,8 @@ class Transaction
         Transparent $transparent,
         PaymentMethodManagementInterface $paymentManagement,
         HandlerInterface $errorHandler,
-        Logger $logger
+        Logger $logger,
+        DateTimeFactory $dateTimeFactory
     ) {
         $this->sessionTransparent = $sessionTransparent;
         $this->quoteRepository = $quoteRepository;
@@ -73,6 +84,7 @@ class Transaction
         $this->paymentManagement = $paymentManagement;
         $this->errorHandler = $errorHandler;
         $this->logger = $logger;
+        $this->dateTimeFactory = $dateTimeFactory;
     }
 
     /**
@@ -114,8 +126,45 @@ class Transaction
         $payment->setData(OrderPaymentInterface::CC_TYPE, $response->getData(OrderPaymentInterface::CC_TYPE));
         $payment->setAdditionalInformation(Payflowpro::PNREF, $response->getData(Payflowpro::PNREF));
 
+        $expDate = $response->getData('expdate');
+        $expMonth = $this->getCcExpMonth($expDate);
+        $payment->setCcExpMonth($expMonth);
+        $expYear = $this->getCcExpYear($expDate);
+        $payment->setCcExpYear($expYear);
+
         $this->errorHandler->handle($payment, $response);
 
         $this->paymentManagement->set($quote->getId(), $payment);
+    }
+
+    /**
+     * Extracts expiration month from PayPal response expiration date.
+     *
+     * @param string $expDate format {MMYY}
+     * @return int
+     */
+    private function getCcExpMonth(string $expDate): int
+    {
+        return (int)substr($expDate, 0, 2);
+    }
+
+    /**
+     * Extracts expiration year from PayPal response expiration date.
+     *
+     * @param string $expDate format {MMYY}
+     * @return int
+     */
+    private function getCcExpYear(string $expDate): int
+    {
+        $last2YearDigits = (int)substr($expDate, 2, 2);
+        $currentDate = $this->dateTimeFactory->create('now', new \DateTimeZone('UTC'));
+        $first2YearDigits = (int)substr($currentDate->format('Y'), 0, 2);
+
+        // case when credit card expires at next century
+        if ((int)$currentDate->format('y') > $last2YearDigits) {
+            $first2YearDigits++;
+        }
+
+        return 100 * $first2YearDigits + $last2YearDigits;
     }
 }
