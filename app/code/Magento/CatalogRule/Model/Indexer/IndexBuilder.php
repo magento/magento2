@@ -16,6 +16,8 @@ use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
 
 /**
+ * Catalog rule index builder
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -538,7 +540,7 @@ class IndexBuilder
      * Calculate rule product price
      *
      * @param array $ruleData
-     * @param null $productData
+     * @param array $productData
      * @return float
      * @deprecated 100.2.0
      * @see ProductPriceCalculator::calculate
