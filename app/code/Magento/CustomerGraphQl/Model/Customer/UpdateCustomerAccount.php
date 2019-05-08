@@ -74,7 +74,6 @@ class UpdateCustomerAccount
      * @throws GraphQlAlreadyExistsException
      * @throws GraphQlAuthenticationException
      * @throws GraphQlInputException
-     * @throws \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException
      */
     public function execute(CustomerInterface $customer, array $data, int $storeId): void
     {
