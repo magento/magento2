@@ -15,6 +15,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Bundle product view test
+ */
 class BundleProductViewTest extends GraphQlAbstract
 {
     const KEY_PRICE_TYPE_FIXED = 'FIXED';
