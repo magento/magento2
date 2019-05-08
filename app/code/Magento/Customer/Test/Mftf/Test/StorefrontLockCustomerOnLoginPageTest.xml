@@ -13,7 +13,8 @@
             <features value="Customer"/>
             <title value="Lock customer on Storefront with after many attempts to log in with incorrect credentials"/>
             <description value="Lock customer on Storefront with after many attempts to log in with incorrect credentials"/>
-            <group value="Customer"/>
+            <testCaseId value="MC-14388" />
+            <group value="customer"/>
             <group value="security"/>
             <group value="mtf_migrated"/>
         </annotations>
