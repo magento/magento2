@@ -265,6 +265,11 @@ abstract class AbstractEntity
     private $serializer;
 
     /**
+     * @var string $uniqueField
+     */
+    private $uniqueField;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -273,6 +278,7 @@ abstract class AbstractEntity
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @param string $uniqueField
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -283,7 +289,8 @@ abstract class AbstractEntity
         ResourceConnection $resource,
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Stdlib\StringUtils $string,
-        ProcessingErrorAggregatorInterface $errorAggregator
+        ProcessingErrorAggregatorInterface $errorAggregator,
+        $uniqueField = 'sku'
     ) {
         $this->jsonHelper = $jsonHelper;
         $this->_importExportData = $importExportData;
@@ -300,6 +307,7 @@ abstract class AbstractEntity
         $this->_entityTypeId = $entityType->getEntityTypeId();
         $this->_dataSourceModel = $importData;
         $this->_connection = $resource->getConnection();
+        $this->uniqueField = $uniqueField;
     }
 
     /**
@@ -391,8 +399,7 @@ abstract class AbstractEntity
         $nextRowBackup = [];
         $maxDataSize = $this->_resourceHelper->getMaxDataSize();
         $bunchSize = $this->_importExportData->getBunchSize();
-        $skuSet = [];
-
+        $uniqueFieldSet = [];
         $source->rewind();
         $this->_dataSourceModel->cleanBunches();
 
@@ -408,8 +415,8 @@ abstract class AbstractEntity
             if ($source->valid()) {
                 try {
                     $rowData = $source->current();
-                    if (array_key_exists('sku', $rowData)) {
-                        $skuSet[$rowData['sku']] = true;
+                    if ($this->uniqueField !== null) {
+                        $uniqueFieldSet[$rowData[$this->uniqueField]] = true;
                     }
                 } catch (\InvalidArgumentException $e) {
                     $this->addRowError($e->getMessage(), $this->_processedRowsCount);
@@ -438,7 +445,9 @@ abstract class AbstractEntity
                 $source->next();
             }
         }
-        $this->_processedEntitiesCount = (count($skuSet)) ? : $this->_processedRowsCount;
+        if ($this->uniqueField !== null) {
+            $this->_processedEntitiesCount = count($uniqueFieldSet);
+        }
 
         return $this;
     }
