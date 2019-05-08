@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Create order account form
