@@ -13,6 +13,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 
+/**
+ * Delete customer address tests
+ */
 class DeleteCustomerAddressTest extends GraphQlAbstract
 {
     /**
@@ -55,7 +58,7 @@ mutation {
   deleteCustomerAddress(id: {$addressId})
 }
 MUTATION;
-        $response = $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('deleteCustomerAddress', $response);
         $this->assertEquals(true, $response['deleteCustomerAddress']);
     }
@@ -73,7 +76,7 @@ mutation {
   deleteCustomerAddress(id: {$addressId})
 }
 MUTATION;
-        $this->graphQlQuery($mutation);
+        $this->graphQlMutation($mutation);
     }
 
     /**
@@ -99,7 +102,7 @@ mutation {
   deleteCustomerAddress(id: {$addressId})
 }
 MUTATION;
-        $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**
@@ -125,14 +128,14 @@ mutation {
   deleteCustomerAddress(id: {$addressId})
 }
 MUTATION;
-        $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      *
      * @expectedException \Exception
-     * @expectedExceptionMessage Address id 9999 does not exist.
+     * @expectedExceptionMessage Could not find a address with ID "9999"
      */
     public function testDeleteNonExistCustomerAddress()
     {
@@ -144,7 +147,7 @@ mutation {
   deleteCustomerAddress(id: 9999)
 }
 MUTATION;
-        $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**

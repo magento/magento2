@@ -1263,7 +1263,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->linkProcessor->process($this, $this->getProductEntityLinkField());
         return $this;
     }
-
+  
     /**
      * Save product attributes.
      *
@@ -1497,6 +1497,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @throws LocalizedException
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     protected function _saveProducts()
     {
@@ -1687,7 +1688,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 $uploadedImages[$columnImage] = $uploadedFile;
                             } else {
                                 unset($rowData[$column]);
-                                $this->skipRow($rowNum, ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE);
+                                $this->addRowError(
+                                    ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
+                                    $rowNum,
+                                    null,
+                                    null,
+                                    ProcessingError::ERROR_LEVEL_NOT_CRITICAL
+                                );
                             }
                         } else {
                             $uploadedFile = $uploadedImages[$columnImage];
@@ -1863,6 +1870,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         return $this;
     }
+    // phpcs:enable
 
     /**
      * Prepare array with image states (visible or hidden from product page)

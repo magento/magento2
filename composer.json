@@ -82,15 +82,16 @@
         "zendframework/zend-view": "~2.10.0"
     },
     "require-dev": {
+        "allure-framework/allure-phpunit": "~1.2.0",
         "friendsofphp/php-cs-fixer": "~2.13.0",
         "lusitanian/oauth": "~0.8.10",
-        "magento/magento2-functional-testing-framework": "~2.3.14",
+        "magento/magento-coding-standard": "~1.0.0",
+        "magento/magento2-functional-testing-framework": "~2.4.0",
         "pdepend/pdepend": "2.5.2",
         "phpmd/phpmd": "@stable",
         "phpunit/phpunit": "~6.5.0",
         "sebastian/phpcpd": "~3.0.0",
-        "squizlabs/php_codesniffer": "3.3.1",
-        "allure-framework/allure-phpunit": "~1.2.0"
+        "squizlabs/php_codesniffer": "3.3.1"
     },
     "suggest": {
         "ext-pcntl": "Need for run processes in parallel mode"
@@ -158,6 +159,7 @@
         "magento/module-google-analytics": "*",
         "magento/module-google-optimizer": "*",
         "magento/module-graph-ql": "*",
+        "magento/module-graph-ql-cache": "*",
         "magento/module-catalog-graph-ql": "*",
         "magento/module-catalog-url-rewrite-graph-ql": "*",
         "magento/module-configurable-product-graph-ql": "*",
@@ -181,6 +183,8 @@
         "magento/module-media-storage": "*",
         "magento/module-message-queue": "*",
         "magento/module-msrp": "*",
+        "magento/module-msrp-configurable-product": "*",
+        "magento/module-msrp-grouped-product": "*",
         "magento/module-multishipping": "*",
         "magento/module-mysql-mq": "*",
         "magento/module-new-relic-reporting": "*",
@@ -190,6 +194,7 @@
         "magento/module-page-cache": "*",
         "magento/module-payment": "*",
         "magento/module-paypal": "*",
+        "magento/module-paypal-captcha": "*",
         "magento/module-persistent": "*",
         "magento/module-product-alert": "*",
         "magento/module-product-video": "*",

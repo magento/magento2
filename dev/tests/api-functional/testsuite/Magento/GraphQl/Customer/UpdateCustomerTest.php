@@ -13,6 +13,9 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Tests for update customer
+ */
 class UpdateCustomerTest extends GraphQlAbstract
 {
     /**
@@ -87,15 +90,19 @@ mutation {
     }
 }
 QUERY;
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
 
         $this->assertEquals($newPrefix, $response['updateCustomer']['customer']['prefix']);
         $this->assertEquals($newFirstname, $response['updateCustomer']['customer']['firstname']);
         $this->assertEquals($newMiddlename, $response['updateCustomer']['customer']['middlename']);
         $this->assertEquals($newLastname, $response['updateCustomer']['customer']['lastname']);
         $this->assertEquals($newSuffix, $response['updateCustomer']['customer']['suffix']);
-        $newDobDate = new \DateTime($newDob);
-        $this->assertEquals($newDobDate->format('Y-m-d'), $response['updateCustomer']['customer']['dob']);
+        $this->assertEquals($newDob, $response['updateCustomer']['customer']['dob']);
         $this->assertEquals($newTaxVat, $response['updateCustomer']['customer']['taxvat']);
         $this->assertEquals($newEmail, $response['updateCustomer']['customer']['email']);
         $this->assertEquals($newGender, $response['updateCustomer']['customer']['gender']);
@@ -124,7 +131,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
     }
 
     /**
@@ -148,7 +155,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -177,7 +184,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
     }
 
     /**
@@ -204,7 +211,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
     }
 
     /**
@@ -233,7 +240,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
     }
 
     /**
@@ -261,7 +268,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
     }
 
     /**

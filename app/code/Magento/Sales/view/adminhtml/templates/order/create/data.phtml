@@ -47,15 +47,17 @@
             </div>
         </section>
 
-        <section id="shipping-methods" class="admin__page-section order-methods">
-            <div id="order-shipping_method" class="admin__page-section-item order-shipping-method">
-                <?= $block->getChildHtml('shipping_method') ?>
+        <section id="order-methods" class="admin__page-section order-methods">
+            <div class="admin__page-section-title">
+                <span class="title"><?= /* @escapeNotVerified */ __('Payment &amp; Shipping Information') ?></span>
             </div>
-        </section>
-
-        <section id="payment-methods" class="admin__page-section payment-methods">
-            <div id="order-billing_method" class="admin__page-section-item order-billing-method">
-                <?= $block->getChildHtml('billing_method') ?>
+            <div class="admin__page-section-content">
+                <div id="order-billing_method" class="admin__page-section-item order-billing-method">
+                    <?= $block->getChildHtml('billing_method') ?>
+                </div>
+                <div id="order-shipping_method" class="admin__page-section-item order-shipping-method">
+                    <?= $block->getChildHtml('shipping_method') ?>
+                </div>
             </div>
         </section>
 

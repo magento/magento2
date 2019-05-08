@@ -13,6 +13,14 @@
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\Converter" />
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter" />
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\CompositeFieldProvider" />
+    <type name="Magento\Elasticsearch\Model\Config">
+        <arguments>
+            <argument name="engineList" xsi:type="array">
+                <item name="elasticsearch" xsi:type="string">elasticsearch</item>
+                <item name="elasticsearch5" xsi:type="string">elasticsearch5</item>
+            </argument>
+        </arguments>
+    </type>
 
     <virtualType name="Magento\Elasticsearch\Model\Layer\Search\Context" type="Magento\Catalog\Model\Layer\Search\Context">
         <arguments>
@@ -529,6 +537,24 @@
             <argument name="pageSizeBySearchEngine" xsi:type="array">
                 <item name="elasticsearch" xsi:type="number">10000</item>
                 <item name="elasticsearch5" xsi:type="number">10000</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool">
+        <arguments>
+            <argument name="valueTransformers" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\TextTransformer</item>
+                <item name="date" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\DateTransformer</item>
+                <item name="float" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\FloatTransformer</item>
+                <item name="integer" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\IntegerTransformer</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\TextTransformer">
+        <arguments>
+            <argument name="preprocessors" xsi:type="array">
+                <item name="stopwordsPreprocessor" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\Stopwords</item>
+                <item name="synonymsPreprocessor" xsi:type="object">Magento\Search\Adapter\Query\Preprocessor\Synonyms</item>
             </argument>
         </arguments>
     </type>

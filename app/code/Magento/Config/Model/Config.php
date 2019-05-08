@@ -115,6 +115,11 @@ class Config extends \Magento\Framework\DataObject
     private $scopeTypeNormalizer;
 
     /**
+     * @var \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface
+     */
+    private $pillPut;
+
+    /**
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Config\Model\Config\Structure $configStructure
@@ -126,6 +131,7 @@ class Config extends \Magento\Framework\DataObject
      * @param array $data
      * @param ScopeResolverPool|null $scopeResolverPool
      * @param ScopeTypeNormalizer|null $scopeTypeNormalizer
+     * @param \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface|null $pillPut
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -139,7 +145,8 @@ class Config extends \Magento\Framework\DataObject
         SettingChecker $settingChecker = null,
         array $data = [],
         ScopeResolverPool $scopeResolverPool = null,
-        ScopeTypeNormalizer $scopeTypeNormalizer = null
+        ScopeTypeNormalizer $scopeTypeNormalizer = null,
+        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
     ) {
         parent::__construct($data);
         $this->_eventManager = $eventManager;
@@ -155,6 +162,8 @@ class Config extends \Magento\Framework\DataObject
             ?? ObjectManager::getInstance()->get(ScopeResolverPool::class);
         $this->scopeTypeNormalizer = $scopeTypeNormalizer
             ?? ObjectManager::getInstance()->get(ScopeTypeNormalizer::class);
+        $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class);
     }
 
     /**
@@ -223,6 +232,8 @@ class Config extends \Magento\Framework\DataObject
             $this->_appConfig->reinit();
             throw $e;
         }
+
+        $this->pillPut->put();
 
         return $this;
     }
@@ -525,24 +536,29 @@ class Config extends \Magento\Framework\DataObject
         if ($path === '') {
             throw new \UnexpectedValueException('Path must not be empty');
         }
+
         $pathParts = explode('/', $path);
         $keyDepth = count($pathParts);
-        if ($keyDepth !== 3) {
+        if ($keyDepth < 3) {
             throw new \UnexpectedValueException(
-                "Allowed depth of configuration is 3 (<section>/<group>/<field>). Your configuration depth is "
-                . $keyDepth . " for path '$path'"
+                'Minimal depth of configuration is 3. Your configuration depth is ' . $keyDepth
             );
         }
+
+        $section = array_shift($pathParts);
         $data = [
-            'section' => $pathParts[0],
-            'groups' => [
-                $pathParts[1] => [
-                    'fields' => [
-                        $pathParts[2] => ['value' => $value],
-                    ],
-                ],
+            'fields' => [
+                array_pop($pathParts) => ['value' => $value],
             ],
         ];
+        while ($pathParts) {
+            $data = [
+                'groups' => [
+                    array_pop($pathParts) => $data,
+                ],
+            ];
+        }
+        $data['section'] = $section;
         $this->addData($data);
     }
 
