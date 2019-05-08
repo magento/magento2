@@ -41,7 +41,6 @@ use Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplie
  * @method \Magento\CatalogRule\Model\Rule setFromDate(string $value)
  * @method \Magento\CatalogRule\Model\Rule setToDate(string $value)
  * @method \Magento\CatalogRule\Model\Rule setCustomerGroupIds(string $value)
- * @method string getWebsiteIds()
  * @method \Magento\CatalogRule\Model\Rule setWebsiteIds(string $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
