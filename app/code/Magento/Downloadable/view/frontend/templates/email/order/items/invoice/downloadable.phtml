@@ -28,7 +28,7 @@
             <?php foreach ($links as $link): ?>
                 <dd>
                     <?= $block->escapeHtml($link->getLinkTitle()) ?>&nbsp;
-                    (<a href="<?= $block->escapeHtml($block->getPurchasedLinkUrl($link)) ?>"><?= $block->escapeHtml(__('download')) ?></a>)
+                    (<a href="<?= $block->escapeUrl($block->getPurchasedLinkUrl($link)) ?>"><?= $block->escapeHtml(__('download')) ?></a>)
                 </dd>
             <?php endforeach; ?>
         </dl>

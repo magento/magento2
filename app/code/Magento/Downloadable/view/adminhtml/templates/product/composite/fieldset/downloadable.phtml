@@ -32,7 +32,7 @@
                     <label for="links_<?= $block->escapeHtmlAttr($_link->getId()) ?>" class="label admin__field-label">
                         <?= $block->escapeHtml($_link->getTitle()) ?>
                         <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
-                            &nbsp;(<a href="<?= $block->escapeUrl($block->getLinkSampleUrl($_link)) ?>" <?= $block->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':'' ?>><?= $block->escapeHtmlAttr(__('sample')) ?></a>)
+                            &nbsp;(<a href="<?= $block->escapeUrl($block->getLinkSampleUrl($_link)) ?>" <?= /* @noEscape */ $block->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':'' ?>><?= $block->escapeHtmlAttr(__('sample')) ?></a>)
                         <?php endif; ?>
                         <?php if ($_linksPurchasedSeparately): ?>
                         <?= /* @noEscape */ $block->getFormattedLinkPrice($_link) ?>

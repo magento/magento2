@@ -10,7 +10,7 @@
 
 <?php if ($_item = $block->getItem()): ?>
     <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
-    <div><strong><?= $block->escapeHtml(__('SKU')) ?>:</strong> <?= $block->escapeHtml(implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->getSku()))) ?></div>
+    <div><strong><?= $block->escapeHtml(__('SKU')) ?>:</strong> <?= /* @noEscape */ implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->getSku())) ?></div>
     <?php if ($block->getOrderOptions()): ?>
         <dl class="item-options">
         <?php foreach ($block->getOrderOptions() as $_option): ?>
@@ -41,7 +41,7 @@ require(['prototype'], function(){
         <dl class="item-options">
             <dt><?= $block->escapeHtml($block->getLinksTitle()) ?></dt>
             <?php foreach ($block->getLinks()->getPurchasedItems() as $_link): ?>
-                <dd><?= $block->escapeHtml($_link->getLinkTitle()) ?> (<?= $block->escapeJs($_link->getNumberOfDownloadsBought() ? $_link->getNumberOfDownloadsBought() : __('Unlimited')) ?>)</dd>
+                <dd><?= $block->escapeHtml($_link->getLinkTitle()) ?> (<?= $block->escapeHtml($_link->getNumberOfDownloadsBought() ? $_link->getNumberOfDownloadsBought() : __('Unlimited')) ?>)</dd>
             <?php endforeach; ?>
         </dl>
     <?php endif; ?>

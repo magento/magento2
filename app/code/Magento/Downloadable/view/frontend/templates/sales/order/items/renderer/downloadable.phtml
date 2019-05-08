@@ -19,19 +19,19 @@
                     <?php if (!$block->getPrintStatus()): ?>
                         <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
                         <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
-                            <?= $block->escapeHtml($_formatedOptionValue['value']) ?>
+                            <?= /* @noEscape */ $_formatedOptionValue['value'] ?>
                             <?php if (isset($_formatedOptionValue['full_view'])): ?>
                                 <div class="tooltip content">
                                     <dl class="item options">
                                         <dt><?= $block->escapeHtml($_option['label']) ?></dt>
-                                        <dd><?= $block->escapeHtml($_formatedOptionValue['full_view']) ?></dd>
+                                        <dd><?= /* @noEscape */ $_formatedOptionValue['full_view'] ?></dd>
                                     </dl>
                                 </div>
                             <?php endif; ?>
                         </dd>
                     <?php else: ?>
                         <dd>
-                            <?= $block->escapeHtml(nl2br((isset($_option['print_value']) ? $_option['print_value'] : $_option['value']))) ?>
+                            <?= /* @noEscape */ nl2br((isset($_option['print_value']) ? $_option['print_value'] : $_option['value'])) ?>
                         </dd>
                     <?php endif; ?>
                 <?php endforeach; ?>
@@ -53,7 +53,7 @@
         <?php endif; ?>
         <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>"><?= $block->escapeHtml($block->prepareSku($block->getSku())) ?></td>
+    <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>"><?= /* @noEscape */ $block->prepareSku($block->getSku()) ?></td>
     <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
         <?= $block->getItemPriceHtml() ?>
     </td>

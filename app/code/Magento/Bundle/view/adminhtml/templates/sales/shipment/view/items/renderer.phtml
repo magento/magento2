@@ -41,7 +41,7 @@
             <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
             <div class="product-sku-block">
                 <span><?= $block->escapeHtml(__('SKU')) ?>:</span>
-                <?= $block->escapeHtml(implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($_item->getSku()))) ?>
+                <?= /* @noEscape */ implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($_item->getSku())) ?>
             </div>
         </td>
         <?php else: ?>
