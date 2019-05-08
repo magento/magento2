@@ -59,23 +59,6 @@ class Page
     }
 
     /**
-     * @deprecated
-     * @see getDataByPageId(int $pageId)
-     *
-     * Get the page data
-     *
-     * @param int $pageId
-     * @return array
-     * @throws NoSuchEntityException
-     */
-    public function getData(int $pageId): array
-    {
-        $page = $this->pageRepository->getById($pageId);
-
-        return $this->convertPageData($page);
-    }
-
-    /**
      * Returns page data by page_id
      *
      * @param int $pageId
@@ -86,7 +69,7 @@ class Page
     {
         $page = $this->pageRepository->getById($pageId);
 
-        return $this->convertPageData($page, false, true);
+        return $this->convertPageData($page);
     }
 
     /**
@@ -101,17 +84,15 @@ class Page
         $storeId = (int)$this->storeManager->getStore()->getId();
         $page = $this->pageByIdentifier->execute($pageIdentifier, $storeId);
 
-        return $this->convertPageData($page, false, true);
+        return $this->convertPageData($page);
     }
 
     /**
      * @param PageInterface $page
-     * @param bool $includePageId
-     * @param bool $includePageIdentifier
      * @return array
      * @throws NoSuchEntityException
      */
-    private function convertPageData(PageInterface $page, $includePageId = true, $includePageIdentifier = false)
+    private function convertPageData(PageInterface $page)
     {
         if (false === $page->isActive()) {
             throw new NoSuchEntityException();
@@ -128,16 +109,9 @@ class Page
             PageInterface::META_TITLE => $page->getMetaTitle(),
             PageInterface::META_DESCRIPTION => $page->getMetaDescription(),
             PageInterface::META_KEYWORDS => $page->getMetaKeywords(),
+            PageInterface::PAGE_ID => $page->getId(),
+            PageInterface::IDENTIFIER => $page->getIdentifier(),
         ];
-
-        if ($includePageId) {
-            $pageData[PageInterface::PAGE_ID] = $page->getId();
-        }
-
-        if ($includePageIdentifier) {
-            $pageData[PageInterface::IDENTIFIER] = $page->getIdentifier();
-        }
-
         return $pageData;
     }
 }

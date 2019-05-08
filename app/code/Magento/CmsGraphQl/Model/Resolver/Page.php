@@ -45,7 +45,7 @@ class Page implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($args['id']) && !isset($args['identifier'])) {
+        if (!isset($args['id'], $args['identifier'])) {
             throw new GraphQlInputException(__('"Page id/identifier should be specified'));
         }
 
@@ -53,52 +53,13 @@ class Page implements ResolverInterface
 
         try {
             if (isset($args['id'])) {
-                $pageData = $this->getPageDataById($this->getPageId($args));
+                $pageData = $this->pageDataProvider->getDataByPageId((int)$args['id']);
             } elseif (isset($args['identifier'])) {
-                $pageData = $this->getPageDataByIdentifier($this->getPageIdentifier($args));
+                $pageData = $this->pageDataProvider->getDataByPageIdentifier((string)$args['identifier']);
             }
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         }
-
         return $pageData;
-    }
-
-    /**
-     * @param array $args
-     * @return int
-     */
-    private function getPageId(array $args): int
-    {
-        return isset($args['id']) ? (int)$args['id'] : 0;
-    }
-
-    /**
-     * @param array $args
-     * @return string
-     */
-    private function getPageIdentifier(array $args): string
-    {
-        return isset($args['identifier']) ? (string)$args['identifier'] : '';
-    }
-
-    /**
-     * @param int $pageId
-     * @return array
-     * @throws GraphQlNoSuchEntityException
-     */
-    private function getPageDataById(int $pageId): array
-    {
-        return $this->pageDataProvider->getDataByPageId($pageId);
-    }
-
-    /**
-     * @param string $pageIdentifier
-     * @return array
-     * @throws GraphQlNoSuchEntityException
-     */
-    private function getPageDataByIdentifier(string $pageIdentifier): array
-    {
-        return $this->pageDataProvider->getDataByPageIdentifier($pageIdentifier);
     }
 }
