@@ -42,12 +42,13 @@ class RelatedProductDataProvider
     {
         $relatedProducts = $this->getRelatedProducts($product, $fields, $linkType);
 
-        $data = [];
+        $productsData = [];
         foreach ($relatedProducts as $relatedProduct) {
-            $relatedProductData = $relatedProduct->getData();
-            $relatedProductData['model'] = $relatedProduct;
+            $productData = $relatedProduct->getData();
+            $productData['model'] = $relatedProduct;
+            $productsData[] = $productData;
         }
-        return $data;
+        return $productsData;
     }
 
     /**

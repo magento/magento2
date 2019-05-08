@@ -9,10 +9,8 @@ namespace Magento\CatalogGraphQl\Model\Resolver;
 
 use Magento\CatalogGraphQl\Model\Resolver\Product\ProductFieldsSelector;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product as ProductDataProvider;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Query\FieldTranslator;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -33,12 +31,6 @@ class Product implements ResolverInterface
     private $valueFactory;
 
     /**
-     * @deprecated
-     * @var FieldTranslator
-     */
-    private $fieldTranslator;
-
-    /**
      * @var ProductFieldsSelector
      */
     private $productFieldsSelector;
@@ -46,20 +38,16 @@ class Product implements ResolverInterface
     /**
      * @param ProductDataProvider $productDataProvider
      * @param ValueFactory $valueFactory
-     * @param FieldTranslator $fieldTranslator
      * @param ProductFieldsSelector $productFieldsSelector
      */
     public function __construct(
         ProductDataProvider $productDataProvider,
         ValueFactory $valueFactory,
-        FieldTranslator $fieldTranslator,
         ProductFieldsSelector $productFieldsSelector
     ) {
         $this->productDataProvider = $productDataProvider;
         $this->valueFactory = $valueFactory;
-        $this->fieldTranslator = $fieldTranslator;
-        $this->productFieldsSelector = $productFieldsSelector
-            ?? ObjectManager::getInstance()->get(ProductFieldsSelector::class);
+        $this->productFieldsSelector = $productFieldsSelector;
     }
 
     /**

@@ -31,7 +31,6 @@ class GetRelatedProductsTest extends GraphQlAbstract
                 sku
                 name
                 url_key
-                id
                 created_at
             }
         }
@@ -67,7 +66,6 @@ QUERY;
                 sku
                 name
                 url_key
-                id
                 created_at
             }
         }
@@ -87,13 +85,11 @@ QUERY;
         self::assertArrayHasKey('sku', $crossSellProduct);
         self::assertArrayHasKey('name', $crossSellProduct);
         self::assertArrayHasKey('url_key', $crossSellProduct);
-        self::assertArrayHasKey('id', $crossSellProduct);
         self::assertArrayHasKey('created_at', $crossSellProduct);
         self::assertEquals($crossSellProduct['sku'], 'simple');
         self::assertEquals($crossSellProduct['name'], 'Simple Cross Sell');
         self::assertEquals($crossSellProduct['url_key'], 'simple-cross-sell');
         self::assertNotEmpty($crossSellProduct['created_at']);
-        self::assertNotEmpty($crossSellProduct['id']);
     }
 
     /**
@@ -113,7 +109,6 @@ QUERY;
                 sku
                 name
                 url_key
-                id
                 created_at
             }
         }
@@ -133,13 +128,11 @@ QUERY;
         self::assertArrayHasKey('sku', $upSellProduct);
         self::assertArrayHasKey('name', $upSellProduct);
         self::assertArrayHasKey('url_key', $upSellProduct);
-        self::assertArrayHasKey('id', $upSellProduct);
         self::assertArrayHasKey('created_at', $upSellProduct);
         self::assertEquals($upSellProduct['sku'], 'simple');
         self::assertEquals($upSellProduct['name'], 'Simple Up Sell');
         self::assertEquals($upSellProduct['url_key'], 'simple-up-sell');
         self::assertNotEmpty($upSellProduct['created_at']);
-        self::assertNotEmpty($upSellProduct['id']);
     }
 
     /**
@@ -163,7 +156,6 @@ QUERY;
             self::assertArrayHasKey('sku', $product);
             self::assertArrayHasKey('name', $product);
             self::assertArrayHasKey('url_key', $product);
-            self::assertArrayHasKey('id', $product);
             self::assertArrayHasKey('created_at', $product);
 
             self::assertArrayHasKey($product['sku'], $expectedData);
@@ -172,7 +164,6 @@ QUERY;
             self::assertEquals($product['name'], $productExpectedData['name']);
             self::assertEquals($product['url_key'], $productExpectedData['url_key']);
             self::assertNotEmpty($product['created_at']);
-            self::assertNotEmpty($product['id']);
         }
     }
 }
