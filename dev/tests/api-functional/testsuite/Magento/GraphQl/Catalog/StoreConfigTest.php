@@ -30,20 +30,13 @@ class StoreConfigTest extends GraphQlAbstract
   storeConfig{
     product_url_suffix,
     category_url_suffix,
-    product_use_categories,
-    save_rewrites_history,
     title_separator,
-    category_canonical_tag,
-    product_canonical_tag,
     list_mode,
     grid_per_page_values,
     list_per_page_values,
     grid_per_page,
     list_per_page,
-    flat_catalog_category,
-    catalog_default_sort_by,
-    parse_url_directives,
-    remember_pagination
+    catalog_default_sort_by
   }
 }
 QUERY;

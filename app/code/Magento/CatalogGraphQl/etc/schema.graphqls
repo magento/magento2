@@ -405,18 +405,11 @@ type SortFields @doc(description: "SortFields contains a default value for sort 
 type StoreConfig @doc(description: "The type contains information about a store config") {
     product_url_suffix : String @doc(description: "Product URL Suffix")
     category_url_suffix : String @doc(description: "Category URL Suffix")
-    product_use_categories : Int @doc(description: "Use Categories Path for Product URLs")
-    save_rewrites_history : Int @doc(description: "Create Permanent Redirect for URLs if URL Key Changed")
     title_separator : String @doc(description: "Page Title Separator")
-    category_canonical_tag : Int @doc(description: "Use Canonical Link Meta Tag For Categories")
-    product_canonical_tag : Int @doc(description: "Use Canonical Link Meta Tag For Products")
     list_mode : String @doc(description: "List Mode")
     grid_per_page_values : String @doc(description: "Products per Page on Grid Allowed Values")
     list_per_page_values : String @doc(description: "Products per Page on List Allowed Values")
     grid_per_page : Int @doc(description: "Products per Page on Grid Default Value")
     list_per_page : Int @doc(description: "Products per Page on List Default Value")
-    flat_catalog_category : Int @doc(description: "Use Flat Catalog Category")
     catalog_default_sort_by : String @doc(description: "Default Sort By")
-    parse_url_directives : Int @doc(description: "Parse URL directives")
-    remember_pagination : Int @doc(description: "Remember Pagination")
 }
