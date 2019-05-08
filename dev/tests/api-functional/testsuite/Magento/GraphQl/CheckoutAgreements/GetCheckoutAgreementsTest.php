@@ -68,8 +68,8 @@ class GetCheckoutAgreementsTest extends GraphQlAbstract
         self::assertEquals('Checkout agreement content: <b>HTML</b>', $agreements[0]['content']);
         self::assertEquals('200px', $agreements[0]['content_height']);
         self::assertEquals('Checkout agreement checkbox text.', $agreements[0]['checkbox_text']);
-        self::assertEquals(true, $agreements[0]['is_html']);
-        self::assertEquals(0, $agreements[0]['mode']);
+        self::assertTrue($agreements[0]['is_html']);
+        self::assertEquals('AUTO', $agreements[0]['mode']);
     }
 
     /**
@@ -95,8 +95,8 @@ class GetCheckoutAgreementsTest extends GraphQlAbstract
         self::assertEquals('Checkout agreement content: <b>HTML</b>', $agreements[0]['content']);
         self::assertEquals('200px', $agreements[0]['content_height']);
         self::assertEquals('Checkout agreement checkbox text.', $agreements[0]['checkbox_text']);
-        self::assertEquals(true, $agreements[0]['is_html']);
-        self::assertEquals(0, $agreements[0]['mode']);
+        self::assertTrue($agreements[0]['is_html']);
+        self::assertEquals('AUTO', $agreements[0]['mode']);
     }
 
     /**
@@ -116,7 +116,7 @@ class GetCheckoutAgreementsTest extends GraphQlAbstract
 
         self::assertArrayHasKey('checkoutAgreements', $response);
         $agreements = $response['checkoutAgreements'];
-        self::assertCount(0, $agreements);
+        self::assertEmpty($agreements);
     }
 
     public function testGetAgreementNotSet()
@@ -127,7 +127,7 @@ class GetCheckoutAgreementsTest extends GraphQlAbstract
 
         self::assertArrayHasKey('checkoutAgreements', $response);
         $agreements = $response['checkoutAgreements'];
-        self::assertCount(0, $agreements);
+        self::assertEmpty($agreements);
     }
 
     /**
@@ -143,7 +143,7 @@ class GetCheckoutAgreementsTest extends GraphQlAbstract
 
         self::assertArrayHasKey('checkoutAgreements', $response);
         $agreements = $response['checkoutAgreements'];
-        self::assertCount(0, $agreements);
+        self::assertEmpty($agreements);
     }
 
     /**

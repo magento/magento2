@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CheckoutAgreementsGraphQl\Model\Resolver;
 
+use Magento\CheckoutAgreements\Model\AgreementModeOptions;
+use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -65,9 +67,10 @@ class CheckoutAgreements implements ResolverInterface
             return [];
         }
 
+        /** @var Collection $agreementsCollection */
         $agreementsCollection = $this->agreementCollectionFactory->create();
         $agreementsCollection->addStoreFilter($this->storeManager->getStore()->getId());
-        $agreementsCollection->addFieldToFilter('is_active', 1);
+        $agreementsCollection->addFieldToFilter(AgreementInterface::IS_ACTIVE, 1);
 
         $checkoutAgreementData = [];
         /** @var AgreementInterface $checkoutAgreement */
@@ -79,7 +82,8 @@ class CheckoutAgreements implements ResolverInterface
                 AgreementInterface::CONTENT_HEIGHT => $checkoutAgreement->getContentHeight(),
                 AgreementInterface::CHECKBOX_TEXT => $checkoutAgreement->getCheckboxText(),
                 AgreementInterface::IS_HTML => $checkoutAgreement->getIsHtml(),
-                AgreementInterface::MODE => $checkoutAgreement->getMode(),
+                AgreementInterface::MODE =>
+                    AgreementModeOptions::MODE_AUTO === $checkoutAgreement->getMode() ? 'AUTO' : 'MANUAL',
             ];
         }
         return $checkoutAgreementData;
