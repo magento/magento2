@@ -10,6 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSubmitOrderActionGroup">
         <click selector="{{OrdersGridSection.submitOrder}}" stepKey="submitOrder"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <see stepKey="seeSuccessMessageForOrder" userInput="You created the order."/>
     </actionGroup>
 </actionGroups>
