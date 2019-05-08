@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Guest;
 
 use Exception;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\OfflinePayments\Model\Cashondelivery;
 use Magento\OfflinePayments\Model\Checkmo;
@@ -219,10 +220,7 @@ QUERY;
     }
 
     /**
-     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/environment sandbox
-     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/login someusername
-     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_key somepassword
-     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_signature_key abc
+     *
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -230,6 +228,23 @@ QUERY;
      */
     public function testSetPaymentMethodOnCartWithAuthorizenet()
     {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var \Magento\Config\Model\ResourceModel\Config $config */
+        $config = $objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
+        $config->saveConfig('payment/authorizenet_acceptjs/active',
+            1, ScopeConfigInterface::SCOPE_TYPE_DEFAULT,0);
+        $config->saveConfig('payment/authorizenet_acceptjs/environment',
+                              'sandbox', ScopeConfigInterface::SCOPE_TYPE_DEFAULT,0);
+        $config->saveConfig('payment/authorizenet_acceptjs/login',
+            'someusername', ScopeConfigInterface::SCOPE_TYPE_DEFAULT,0);
+        $config->saveConfig('payment/authorizenet_acceptjs/trans_key',
+            'somepassword', ScopeConfigInterface::SCOPE_TYPE_DEFAULT,0);
+        $config->saveConfig('payment/authorizenet_acceptjs/trans_signature_key',
+            'abc', ScopeConfigInterface::SCOPE_TYPE_DEFAULT,0);
+        $config->saveConfig('payment/authorizenet_acceptjs/public_client_key',
+            'xyz', ScopeConfigInterface::SCOPE_TYPE_DEFAULT,0);
+        //$config->rollBack();
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $methodCode = 'authorizenet_acceptjs';
         $query =
