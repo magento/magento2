@@ -134,6 +134,9 @@ define([
 
             if (this.isExpandable) {
                 this.element.attr('aria-expanded', isActive);
+                let searchValue = this.element.val();
+                this.element.val("");
+                this.element.val(searchValue);
             }
         },
 
