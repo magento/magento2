@@ -63,6 +63,7 @@ class CheckoutAgreementsListTest extends GraphQlAbstract
         $this->assertEquals('200px', $agreements[0]['content_height']);
         $this->assertEquals('Checkout agreement checkbox text.', $agreements[0]['checkbox_text']);
         $this->assertEquals(true, $agreements[0]['is_html']);
+        $this->assertEquals(0, $agreements[0]['mode']);
     }
 
     /**
@@ -89,6 +90,7 @@ class CheckoutAgreementsListTest extends GraphQlAbstract
         $this->assertEquals('200px', $agreements[0]['content_height']);
         $this->assertEquals('Checkout agreement checkbox text.', $agreements[0]['checkbox_text']);
         $this->assertEquals(true, $agreements[0]['is_html']);
+        $this->assertEquals(0, $agreements[0]['mode']);
     }
 
     /**
@@ -153,6 +155,7 @@ class CheckoutAgreementsListTest extends GraphQlAbstract
     content_height
     checkbox_text
     is_html
+    mode
   }
 }
 QUERY;

@@ -12,4 +12,5 @@ type CheckoutAgreement @doc(description: "Defines all Checkout Agreement informa
     content_height: String @doc(description: "Checkout Agreement content height")
     checkbox_text: String @doc(description: "Checkout Agreement checkbox tex")
     is_html: Boolean @doc(description: "Is Checkout Agreement content in HTML format")
+    mode: Int @doc(description: "Is Checkout Agreement content in HTML format")
 }

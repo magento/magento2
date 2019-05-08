@@ -73,6 +73,7 @@ class CheckoutAgreements
                 AgreementInterface::CONTENT_HEIGHT => $checkoutAgreement->getContentHeight(),
                 AgreementInterface::CHECKBOX_TEXT => $checkoutAgreement->getCheckboxText(),
                 AgreementInterface::IS_HTML => $checkoutAgreement->getIsHtml(),
+                AgreementInterface::MODE => $checkoutAgreement->getMode(),
             ];
         }
 
