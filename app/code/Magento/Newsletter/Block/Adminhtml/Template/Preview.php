@@ -14,11 +14,6 @@ namespace Magento\Newsletter\Block\Adminhtml\Template;
 class Preview extends \Magento\Backend\Block\Widget
 {
     /**
-     * @var \Magento\Framework\Escaper
-     */
-    private $escaper;
-
-    /**
      * Name for profiler
      *
      * @var string
@@ -40,20 +35,15 @@ class Preview extends \Magento\Backend\Block\Widget
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param array $data
-     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
-        array $data = [],
-        \Magento\Framework\Escaper $escaper = null
+        array $data = []
     ) {
         $this->_templateFactory = $templateFactory;
         $this->_subscriberFactory = $subscriberFactory;
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Escaper::class
-        );
         parent::__construct($context, $data);
     }
 
@@ -94,7 +84,7 @@ class Preview extends \Magento\Backend\Block\Widget
         $template->revertDesign();
 
         if ($template->isPlain()) {
-            $templateProcessed = "<pre>" . $this->escaper->escapeHtml($templateProcessed) . "</pre>";
+            $templateProcessed = "<pre>" . $this->escapeHtml($templateProcessed) . "</pre>";
         }
 
         \Magento\Framework\Profiler::stop($this->profilerName);

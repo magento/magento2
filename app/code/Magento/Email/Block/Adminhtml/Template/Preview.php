@@ -12,6 +12,8 @@
 namespace Magento\Email\Block\Adminhtml\Template;
 
 /**
+ * Template Preview Block
+ *
  * @api
  * @since 100.0.2
  */
