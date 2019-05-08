@@ -7,6 +7,7 @@
 
 <?php
 /** @var $block \Magento\User\Block\Role\Tab\Edit */
+$serializer = new \Magento\Framework\Serialize\Serializer\Json();
 ?>
 
 <?= $block->getChildHtml() ?>
@@ -40,17 +41,13 @@
         <label class="label"><span><?= $block->escapeHtml(__('Resources')) ?></span></label>
 
         <div class="control">
-            <div class="tree x-tree" data-role="resource-tree"
-                 data-mage-init='<?= $block->escapeHtml(
-                     $block->toJson(
-                         [
-                             'rolesTree' => [
-                                 "treeInitData" => $block->getTree(),
-                                 "treeInitSelectedData" => $block->getSelectedResources(),
-                             ],
-                         ]
-                     )
-                 ); ?>'>
+            <div class="tree x-tree" data-role="resource-tree" data-mage-init='<?=
+                $serializer->serialize([
+                    'rolesTree' => [
+                        "treeInitData" => $block->getTree(),
+                        "treeInitSelectedData" => $block->getSelectedResources(),
+                    ],
+                ]); ?>'>
             </div>
         </div>
     </div>
