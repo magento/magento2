@@ -253,6 +253,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * instantly.
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function isStartCustomization()
     {
