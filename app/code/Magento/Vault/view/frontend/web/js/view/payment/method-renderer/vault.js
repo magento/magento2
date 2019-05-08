@@ -29,12 +29,14 @@ define(
             },
 
             /**
-             * @returns {Void}
+             * @returns
              */
             selectSavedCard: function () {
-                if (checkoutData.getSelectedPaymentMethod() == this.getId()) {
+                if (checkoutData.getSelectedPaymentMethod() === this.getId()) {
                     this.selectPaymentMethod();
                 }
+
+                return true;
             },
 
             /**
