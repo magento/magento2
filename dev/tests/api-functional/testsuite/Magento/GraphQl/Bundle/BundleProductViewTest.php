@@ -108,7 +108,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_with_not_visible_children.php
      */
-    public function testBundleProdutWithNotVisibleChildren()
+    public function testBundleProductWithNotVisibleChildren()
     {
         $productSku = 'bundle-product-1';
         $query
