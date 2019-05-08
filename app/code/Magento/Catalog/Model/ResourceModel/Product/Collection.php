@@ -1550,7 +1550,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param string $joinType
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function addAttributeToFilter($attribute, $condition = null, $joinType = 'inner')
     {
@@ -1583,54 +1582,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_allIdsCache = null;
 
         if (is_string($attribute) && $attribute == 'is_saleable') {
-            $columns = $this->getSelect()->getPart(\Magento\Framework\DB\Select::COLUMNS);
-            foreach ($columns as $columnEntry) {
-                list($correlationName, $column, $alias) = $columnEntry;
-                if ($alias == 'is_saleable') {
-                    if ($column instanceof \Zend_Db_Expr) {
-                        $field = $column;
-                    } else {
-                        $connection = $this->getSelect()->getConnection();
-                        if (empty($correlationName)) {
-                            $field = $connection->quoteColumnAs($column, $alias, true);
-                        } else {
-                            $field = $connection->quoteColumnAs([$correlationName, $column], $alias, true);
-                        }
-                    }
-                    $this->getSelect()->where("{$field} = ?", $condition);
-                    break;
-                }
-            }
-
-            return $this;
+            $this->addIsSaleableAttributeToFilter($attribute, $condition);
         } elseif (is_string($attribute) && $attribute == 'tier_price') {
-            $attrCode = $attribute;
-            $connection = $this->getConnection();
-            $attrTable = $this->_getAttributeTableAlias($attrCode);
-            $entity = $this->getEntity();
-            $fKey = 'e.' . $this->getEntityPkName($entity);
-            $pKey = $attrTable . '.' . $this->getEntityPkName($entity);
-            $attribute = $entity->getAttribute($attrCode);
-            $attrFieldName = $attrTable . '.value';
-            $fKey = $connection->quoteColumnAs($fKey, null);
-            $pKey = $connection->quoteColumnAs($pKey, null);
-
-            $condArr = ["{$pKey} = {$fKey}"];
-            $joinMethod = 'join';
-            $this->getSelect()->{$joinMethod}(
-                [$attrTable => $this->getTable('catalog_product_entity_tier_price')],
-                '(' . implode(') AND (', $condArr) . ')',
-                [$attrCode => $attrFieldName]
-            );
-            $this->removeAttributeToSelect($attrCode);
-            $this->_filterAttributes[$attrCode] = $attribute->getId();
-            $this->_joinFields[$attrCode] = ['table' => '', 'field' => $attrFieldName];
-            $field = $this->_getAttributeTableAlias($attrCode) . '.value';
-            $conditionSql = $this->_getConditionSql($field, $condition);
-            $this->getSelect()->where($conditionSql, null, Select::TYPE_CONDITION);
-            $this->_totalRecords = null;
-
-            return $this;
+            $this->addTierPriceAttributeToFilter($attribute, $condition);
         } else {
             return parent::addAttributeToFilter($attribute, $condition, $joinType);
         }
@@ -2515,5 +2469,72 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         return $this->_pricesCount;
+    }
+
+    /**
+     * Add is_saleable attribute to filter
+     *
+     * @param array|null $condition
+     * @return $this
+     */
+    private function addIsSaleableAttributeToFilter(?array $condition): self
+    {
+        $columns = $this->getSelect()->getPart(Select::COLUMNS);
+        foreach ($columns as $columnEntry) {
+            list($correlationName, $column, $alias) = $columnEntry;
+            if ($alias == 'is_saleable') {
+                if ($column instanceof \Zend_Db_Expr) {
+                    $field = $column;
+                } else {
+                    $connection = $this->getSelect()->getConnection();
+                    if (empty($correlationName)) {
+                        $field = $connection->quoteColumnAs($column, $alias, true);
+                    } else {
+                        $field = $connection->quoteColumnAs([$correlationName, $column], $alias, true);
+                    }
+                }
+                $this->getSelect()->where("{$field} = ?", $condition);
+                break;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add tier price attribute to filter
+     *
+     * @param string $attribute
+     * @param array|null $condition
+     * @return $this
+     */
+    private function addTierPriceAttributeToFilter(string $attribute, ?array $condition): self
+    {
+        $attrCode = $attribute;
+        $connection = $this->getConnection();
+        $attrTable = $this->_getAttributeTableAlias($attrCode);
+        $entity = $this->getEntity();
+        $fKey = 'e.' . $this->getEntityPkName($entity);
+        $pKey = $attrTable . '.' . $this->getEntityPkName($entity);
+        $attribute = $entity->getAttribute($attrCode);
+        $attrFieldName = $attrTable . '.value';
+        $fKey = $connection->quoteColumnAs($fKey, null);
+        $pKey = $connection->quoteColumnAs($pKey, null);
+
+        $condArr = ["{$pKey} = {$fKey}"];
+        $this->getSelect()->join(
+            [$attrTable => $this->getTable('catalog_product_entity_tier_price')],
+            '(' . implode(') AND (', $condArr) . ')',
+            [$attrCode => $attrFieldName]
+        );
+        $this->removeAttributeToSelect($attrCode);
+        $this->_filterAttributes[$attrCode] = $attribute->getId();
+        $this->_joinFields[$attrCode] = ['table' => '', 'field' => $attrFieldName];
+        $field = $this->_getAttributeTableAlias($attrCode) . '.value';
+        $conditionSql = $this->_getConditionSql($field, $condition);
+        $this->getSelect()->where($conditionSql, null, Select::TYPE_CONDITION);
+        $this->_totalRecords = null;
+
+        return $this;
     }
 }
