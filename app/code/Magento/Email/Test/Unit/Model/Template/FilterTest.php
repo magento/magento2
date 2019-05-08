@@ -104,9 +104,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->escaper = $this->objectManager->getObject(\Magento\Framework\Escaper::class);
 
         $this->assetRepo = $this->getMockBuilder(\Magento\Framework\View\Asset\Repository::class)
             ->disableOriginalConstructor()

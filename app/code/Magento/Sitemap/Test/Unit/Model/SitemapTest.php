@@ -598,6 +598,9 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
+        $escaper = $objectManager->getObject(
+            \Magento\Framework\Escaper::class
+        );
         $constructArguments = $objectManager->getConstructArguments(
             Sitemap::class,
             [
@@ -609,6 +612,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
                 'filesystem' => $this->filesystemMock,
                 'itemProvider' => $this->itemProviderMock,
                 'configReader' => $this->configReaderMock,
+                'escaper' => $escaper
             ]
         );
         $constructArguments['resource'] = null;

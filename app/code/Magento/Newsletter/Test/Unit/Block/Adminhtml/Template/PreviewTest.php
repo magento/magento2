@@ -54,6 +54,9 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $escaper = $this->objectManagerHelper->getObject(
+            \Magento\Framework\Escaper::class
+        );
         $this->preview = $this->objectManagerHelper->getObject(
             \Magento\Newsletter\Block\Adminhtml\Template\Preview::class,
             [
@@ -61,7 +64,8 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
                 'storeManager' => $this->storeManager,
                 'request' => $this->request,
                 'templateFactory' => $templateFactory,
-                'subscriberFactory' => $this->subscriberFactory
+                'subscriberFactory' => $this->subscriberFactory,
+                'escaper' => $escaper
             ]
         );
     }

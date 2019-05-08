@@ -26,8 +26,14 @@ class SenderTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $escaper = $this->objectManagerHelper->getObject(
+            \Magento\Framework\Escaper::class
+        );
         $this->sender = $this->objectManagerHelper->getObject(
-            \Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer\Sender::class
+            \Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer\Sender::class,
+            [
+                'escaper' => $escaper
+            ]
         );
     }
 
