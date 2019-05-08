@@ -257,10 +257,10 @@ QUERY;
                 code:"{$methodCode}",
                 additional_data: {
                     authorizenet_acceptjs: {
-                        opaqueDataDescriptor:
+                        opaque_data_descriptor:
                          "COMMON.ACCEPT.INAPP.PAYMENT",
-                         opaqueDataValue: "abx",
-                         ccLast4: 1111
+                         opaque_data_value: "abx",
+                         cc_last_4: 1111
                          }
                         }
                        }
@@ -271,9 +271,9 @@ QUERY;
                             code, 
                             additional_data { 
                                 authorizenet_acceptjs { 
-                                    ccLast4,
-                                    opaqueDataValue,
-                                    opaqueDataDescriptor
+                                    cc_last_4,
+                                    opaque_data_value,
+                                    opaque_data_descriptor
                                     } } } items {product {sku}}}}}
 QUERY;
         $response = $this->graphQlMutation($query);
@@ -285,15 +285,15 @@ QUERY;
         self::assertArrayHasKey('code', $selectedPaymentMethod);
         self::assertArrayHasKey('additional_data', $selectedPaymentMethod);
         $additionalData = $selectedPaymentMethod['additional_data'];
-        self::assertArrayHasKey('ccLast4', $additionalData['authorizenet_acceptjs']);
-        self::assertArrayHasKey('opaqueDataDescriptor', $additionalData['authorizenet_acceptjs']);
-        self::assertArrayHasKey('opaqueDataValue', $additionalData['authorizenet_acceptjs']);
+        self::assertArrayHasKey('cc_last_4', $additionalData['authorizenet_acceptjs']);
+        self::assertArrayHasKey('opaque_data_descriptor', $additionalData['authorizenet_acceptjs']);
+        self::assertArrayHasKey('opaque_data_value', $additionalData['authorizenet_acceptjs']);
         self::assertEquals($methodCode, $selectedPaymentMethod['code']);
-        self::assertEquals('1111', $additionalData['authorizenet_acceptjs']['ccLast4']);
-        self::assertEquals('abx', $additionalData['authorizenet_acceptjs']['opaqueDataValue']);
+        self::assertEquals('1111', $additionalData['authorizenet_acceptjs']['cc_last_4']);
+        self::assertEquals('abx', $additionalData['authorizenet_acceptjs']['opaque_data_value']);
         self::assertEquals(
             'COMMON.ACCEPT.INAPP.PAYMENT',
-            $additionalData['authorizenet_acceptjs']['opaqueDataDescriptor']
+            $additionalData['authorizenet_acceptjs']['opaque_data_descriptor']
         );
     }
 
