@@ -83,7 +83,7 @@ class CheckoutAgreements implements ResolverInterface
                 AgreementInterface::CHECKBOX_TEXT => $checkoutAgreement->getCheckboxText(),
                 AgreementInterface::IS_HTML => $checkoutAgreement->getIsHtml(),
                 AgreementInterface::MODE =>
-                    AgreementModeOptions::MODE_AUTO === $checkoutAgreement->getMode() ? 'AUTO' : 'MANUAL',
+                    AgreementModeOptions::MODE_AUTO === (int)$checkoutAgreement->getMode() ? 'AUTO' : 'MANUAL',
             ];
         }
         return $checkoutAgreementData;
