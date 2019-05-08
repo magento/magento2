@@ -168,7 +168,7 @@ QUERY;
         $customOptionsValues = $this->getCustomOptionsValuesForQuery($sku);
 
         /* Add nonexistent option to the query */
-        $customOptionsValues[] = ['id' => -10, 'value' => 'value'];
+        $customOptionsValues[] = ['id' => -10, 'value_string' => 'value'];
 
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $customizableOptionsQuery = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($customOptionsValues));
@@ -259,13 +259,13 @@ QUERY;
             if ($optionType == 'field' || $optionType == 'area') {
                 $customOptionsValues[] = [
                     'id' => (int) $customOption->getOptionId(),
-                    'value' => 'test'
+                    'value_string' => 'test'
                 ];
             } elseif ($optionType == 'drop_down') {
                 $optionSelectValues = $customOption->getValues();
                 $customOptionsValues[] = [
                     'id' => (int) $customOption->getOptionId(),
-                    'value' => reset($optionSelectValues)->getOptionTypeId()
+                    'value_string' => reset($optionSelectValues)->getOptionTypeId()
                 ];
             }
         }

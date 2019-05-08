@@ -47,7 +47,7 @@ class UpdateCartItem
     {
         $customizableOptions = [];
         foreach ($customizableOptionsData as $customizableOption) {
-            $customizableOptions[$customizableOption['id']] = $customizableOption['value'];
+            $customizableOptions[$customizableOption['id']] = $customizableOption['value_string'];
         }
 
         try {
