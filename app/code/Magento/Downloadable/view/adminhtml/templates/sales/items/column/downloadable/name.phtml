@@ -12,7 +12,7 @@
     <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
     <div class="product-sku-block">
         <span><?= $block->escapeHtml(__('SKU')) ?>:</span>
-        <?= $block->escapeHtml(implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->getSku()))) ?>
+        <?= /* @noEscape */ implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->getSku())) ?>
     </div>
     <?php if ($block->getOrderOptions()): ?>
         <dl class="item-options">

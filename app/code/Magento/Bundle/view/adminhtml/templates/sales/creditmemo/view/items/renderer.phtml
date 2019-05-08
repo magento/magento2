@@ -50,7 +50,7 @@
             <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
             <div class="product-sku-block">
                 <span><?= $block->escapeHtml(__('SKU')) ?>:</span>
-                <?= $block->escapeHtml(implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($_item->getSku()))) ?>
+                <?= /* @noEscape */ implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($_item->getSku())) ?>
             </div>
         </td>
         <?php else: ?>
@@ -79,14 +79,14 @@
         </td>
         <td class="col-tax">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?= $block->escapeHtml($block->displayPriceAttribute('tax_amount')) ?>
+                <?= /* @noEscape */ $block->displayPriceAttribute('tax_amount') ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-discount">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?= $block->escapeHtml($block->displayPriceAttribute('discount_amount')) ?>
+                <?= /* @noEscape */ $block->displayPriceAttribute('discount_amount') ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>

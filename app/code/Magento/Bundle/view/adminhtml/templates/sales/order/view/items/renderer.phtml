@@ -55,7 +55,7 @@
             </div>
             <div class="product-sku-block">
                 <span><?= $block->escapeHtml(__('SKU')) ?>:</span>
-                <?= $block->escapeHtml(implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($_item->getSku()))) ?>
+                <?= /* @noEscape */ implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($_item->getSku())) ?>
             </div>
         </td>
         <?php else: ?>
@@ -72,7 +72,7 @@
         </td>
         <td class="col-price-original">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?= $block->escapeHtml($block->displayPriceAttribute('original_price')) ?>
+                <?= /* @noEscape */ $block->displayPriceAttribute('original_price') ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
@@ -142,14 +142,14 @@
         </td>
         <td class="col-tax-amount">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?= $block->escapeHtml($block->displayPriceAttribute('tax_amount')) ?>
+                <?= /* @noEscape */ $block->displayPriceAttribute('tax_amount') ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-tax-percent">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?= $block->escapeHtml($block->displayTaxPercent($_item)) ?>
+                <?= /* @noEscape */ $block->displayTaxPercent($_item) ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
