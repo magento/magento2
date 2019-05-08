@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\RelatedProductGraphQl\Model\DataProvider\Products;
+namespace Magento\RelatedProductGraphQl\Model\DataProvider;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Link;
@@ -14,7 +14,7 @@ use Magento\Catalog\Model\Product\LinkFactory;
 /**
  * Related Products Data Provider
  */
-class LinkedProductsDataProvider
+class RelatedProductDataProvider
 {
     /**
      * @var LinkFactory
@@ -24,24 +24,45 @@ class LinkedProductsDataProvider
     /**
      * @param LinkFactory $linkFactory
      */
-    public function __construct(LinkFactory $linkFactory)
-    {
+    public function __construct(
+        LinkFactory $linkFactory
+    ) {
         $this->linkFactory = $linkFactory;
     }
 
     /**
-     * Get Related Products by Product and Link Type
+     * Related Products Data
+     *
+     * @param Product $product
+     * @param array $fields
+     * @param int $linkType
+     * @return array
+     */
+    public function getData(Product $product, array $fields, int $linkType): array
+    {
+        $relatedProducts = $this->getRelatedProducts($product, $fields, $linkType);
+
+        $data = [];
+        foreach ($relatedProducts as $relatedProduct) {
+            $relatedProductData = $relatedProduct->getData();
+            $relatedProductData['model'] = $relatedProduct;
+        }
+        return $data;
+    }
+
+    /**
+     * Get Related Products
      *
      * @param Product $product
      * @param array $fields
      * @param int $linkType
      * @return Product[]
      */
-    public function getRelatedProducts(Product $product, array $fields, int $linkType): array
+    private function getRelatedProducts(Product $product, array $fields, int $linkType): array
     {
         /** @var Link $link */
         $link = $this->linkFactory->create([ 'data' => [
-            'link_type_id' => $linkType
+            'link_type_id' => $linkType,
         ]]);
 
         $collection = $link->getProductCollection();

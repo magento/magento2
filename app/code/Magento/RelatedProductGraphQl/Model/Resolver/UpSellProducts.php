@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\RelatedProductGraphQl\Model\Resolver;
 
-use Magento\RelatedProductGraphQl\Model\DataProvider\RelatedDataProvider;
+use Magento\Catalog\Model\Product\Link;
+use Magento\CatalogGraphQl\Model\Resolver\Product\ProductFieldsSelector;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\RelatedProductGraphQl\Model\DataProvider\RelatedProductDataProvider;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -18,18 +21,25 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 class UpSellProducts implements ResolverInterface
 {
     /**
-     * @see module di.xml
-     * @var RelatedDataProvider
+     * @var ProductFieldsSelector
      */
-    private $dataProvider;
+    private $productFieldsSelector;
 
     /**
-     * @param RelatedDataProvider $dataProvider
+     * @var RelatedProductDataProvider
+     */
+    private $relatedProductDataProvider;
+
+    /**
+     * @param ProductFieldsSelector $productFieldsSelector
+     * @param RelatedProductDataProvider $relatedProductDataProvider
      */
     public function __construct(
-        RelatedDataProvider $dataProvider
+        ProductFieldsSelector $productFieldsSelector,
+        RelatedProductDataProvider $relatedProductDataProvider
     ) {
-        $this->dataProvider = $dataProvider;
+        $this->productFieldsSelector = $productFieldsSelector;
+        $this->relatedProductDataProvider = $relatedProductDataProvider;
     }
 
     /**
@@ -37,8 +47,13 @@ class UpSellProducts implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $data = $this->dataProvider->getProducts($info, $value);
+        if (!isset($value['model'])) {
+            throw new LocalizedException(__('"model" value should be specified'));
+        }
+        $product = $value['model'];
+        $fields = $this->productFieldsSelector->getProductFieldsFromInfo($info, 'upsell_products');
 
+        $data = $this->relatedProductDataProvider->getData($product, $fields, Link::LINK_TYPE_UPSELL);
         return $data;
     }
 }
