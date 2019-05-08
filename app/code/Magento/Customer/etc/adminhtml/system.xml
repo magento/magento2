@@ -86,6 +86,11 @@
                     <comment>To show VAT number on Storefront, set Show VAT Number on Storefront option to Yes.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="email_required_create_order" translate="label comment" type="select" sortOrder="58" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Email is required field for Admin order creation</label>
+                    <comment>If set YES Email field will be required during Admin order creation for new Customer.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <field id="email_domain" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Email Domain</label>
                 </field>
