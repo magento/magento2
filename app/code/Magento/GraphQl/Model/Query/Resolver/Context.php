@@ -74,7 +74,7 @@ class Context extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Framework\GraphQl\Query\Resolver\ContextExtensionInterface
      */
@@ -84,7 +84,7 @@ class Context extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Framework\GraphQl\Query\Resolver\ContextExtensionInterface $extensionAttributes
      * @return ContextInterface
