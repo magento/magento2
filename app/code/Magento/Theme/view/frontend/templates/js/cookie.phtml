@@ -19,7 +19,7 @@
                 "expires": null,
                 "path": "<?= /* @escapeNotVerified */ $block->getPath() ?>",
                 "domain": "<?= /* @escapeNotVerified */ $block->getDomain() ?>",
-                "secure": false,
+                "secure": <?= /* @escapeNotVerified */ $block->isSecure() ? 'true' : 'false' ?>,
                 "lifetime": "<?= /* @escapeNotVerified */ $block->getLifetime() ?>"
             }
         }

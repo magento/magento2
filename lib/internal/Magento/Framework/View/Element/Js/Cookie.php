@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\Template\Context;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Cookie extends Template
 {
@@ -80,5 +81,12 @@ class Cookie extends Template
     public function getLifetime()
     {
         return $this->sessionConfig->getCookieLifetime();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSecure() {
+        return $this->sessionConfig->getCookieSecure();
     }
 }
