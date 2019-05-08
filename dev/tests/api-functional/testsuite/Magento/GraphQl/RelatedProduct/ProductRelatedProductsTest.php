@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Catalog;
+namespace Magento\GraphQl\RelatedProduct;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 

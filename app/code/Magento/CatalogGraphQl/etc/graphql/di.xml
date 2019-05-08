@@ -78,28 +78,6 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Related\CrossSellDataProvider" type="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Related\RelatedDataProvider">
-        <arguments>
-            <argument name="linkType" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL</argument>
-            <argument name="schemaNodeName" xsi:type="string">crosssell_products</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\Related\CrossSellProducts">
-        <arguments>
-            <argument name="dataProvider" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Related\CrossSellDataProvider</argument>
-        </arguments>
-    </type>
-    <virtualType name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Related\UpSellDataProvider" type="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Related\RelatedDataProvider">
-        <arguments>
-            <argument name="linkType" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL</argument>
-            <argument name="schemaNodeName" xsi:type="string">upsell_products</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\Related\UpSellProducts">
-        <arguments>
-            <argument name="dataProvider" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Related\UpSellDataProvider</argument>
-        </arguments>
-    </type>
     <preference for="Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match"
                 type="Magento\CatalogGraphQl\Model\Search\Adapter\Mysql\Query\Builder\Match" />
 </config>

@@ -5,12 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Related;
+namespace Magento\RelatedProductGraphQl\Model\DataProvider;
 
 use Magento\Catalog\Model\Product\Link;
 use Magento\Catalog\Model\Product\LinkFactory;
 use Magento\CatalogGraphQl\Model\Resolver\Product\ProductFieldsSelector;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Related\Products\LinkedProductsDataProvider;
+use Magento\RelatedProductGraphQl\Model\DataProvider\Products\LinkedProductsDataProvider;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**

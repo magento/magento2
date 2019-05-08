@@ -5,20 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Product\Related;
+namespace Magento\RelatedProductGraphQl\Model\Resolver;
 
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Related\RelatedDataProvider;
+use Magento\RelatedProductGraphQl\Model\DataProvider\RelatedDataProvider;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
- * CrossSell Products Resolver
+ * Related Products Resolver
  */
-class CrossSellProducts implements ResolverInterface
+class RelatedProducts implements ResolverInterface
 {
     /**
-     * @see module di.xml
      * @var RelatedDataProvider
      */
     private $dataProvider;

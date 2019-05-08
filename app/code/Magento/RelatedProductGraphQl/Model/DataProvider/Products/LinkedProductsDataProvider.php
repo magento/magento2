@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Related\Products;
+namespace Magento\RelatedProductGraphQl\Model\DataProvider\Products;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Link;
