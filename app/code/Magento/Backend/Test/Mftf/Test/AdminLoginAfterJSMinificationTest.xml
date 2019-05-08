@@ -13,6 +13,7 @@
             <features value="Backend"/>
             <title value="Admin panel should be accessible with JS minification enabled"/>
             <description value="Admin panel should be accessible with JS minification enabled"/>
+            <testCaseId value="MC-14104" />
             <group value="backend"/>
             <group value="mtf_migrated"/>
         </annotations>
