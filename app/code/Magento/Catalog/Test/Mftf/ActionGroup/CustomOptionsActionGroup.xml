@@ -37,6 +37,7 @@
         <waitForElementVisible selector="{{AdminProductCustomizableOptionsImportModalSection.nameFilter}}" stepKey="waitForNameField"/>
         <fillField selector="{{AdminProductCustomizableOptionsImportModalSection.nameFilter}}" userInput="{{productName}}" stepKey="fillProductName"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForElementVisible selector="{{AdminDataGridTableSection.rowCheckbox('1')}}" stepKey="waitForFilterToApply"/>
         <checkOption selector="{{AdminDataGridTableSection.rowCheckbox('1')}}"  stepKey="checkProductCheckbox"/>
         <click selector="{{AdminProductCustomizableOptionsImportModalSection.importButton}}" stepKey="clickImport"/>
     </actionGroup>
