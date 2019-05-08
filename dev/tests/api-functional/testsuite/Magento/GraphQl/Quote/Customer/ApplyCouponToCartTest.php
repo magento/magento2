@@ -174,7 +174,6 @@ class ApplyCouponToCartTest extends GraphQlAbstract
      */
     public function testApplyExpiredCoupon()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/574');
         $couponCode = '2?ds5!2d';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
