@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Model\Layout;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Abstract totals processor.
@@ -35,12 +37,14 @@ abstract class AbstractTotalsProcessor
     }
 
     /**
+     * Sort total information based on configuration settings.
+     *
      * @param array $totals
      * @return array
      */
     public function sortTotals($totals)
     {
-        $configData = $this->scopeConfig->getValue('sales/totals_sort', \Magento\Store\Model\ScopeInterface::SCOPE_STORES);
+        $configData = $this->scopeConfig->getValue('sales/totals_sort', ScopeInterface::SCOPE_STORES);
         foreach ($totals as $code => &$total) {
             //convert JS naming style to config naming style
             $code = str_replace('-', '_', $code);
