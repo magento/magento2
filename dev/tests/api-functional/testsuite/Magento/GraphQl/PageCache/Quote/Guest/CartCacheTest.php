@@ -79,7 +79,7 @@ QUERY;
         addSimpleProductsToCart(
           input: {
             cart_id: "{$maskedCartId}"
-            cartItems: [
+            cart_items: [
               {
                 data: {
                   qty: $qty
