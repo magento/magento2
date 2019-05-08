@@ -106,6 +106,7 @@
         "magento/module-authorization": "*",
         "magento/module-authorizenet": "*",
         "magento/module-authorizenet-acceptjs": "*",
+        "magento/module-authorizenet-graph-ql": "*",
         "magento/module-advanced-search": "*",
         "magento/module-backend": "*",
         "magento/module-backup": "*",
