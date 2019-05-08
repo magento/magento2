@@ -15,6 +15,9 @@ use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
  */
 class Identity implements IdentityInterface
 {
+    /** @var string */
+    private $cacheTag = \Magento\Cms\Model\Block::CACHE_TAG;
+
     /**
      * Get block identities from resolved data
      *
@@ -27,9 +30,13 @@ class Identity implements IdentityInterface
         $items = $resolvedData['items'] ?? [];
         foreach ($items as $item) {
             if (is_array($item) && !empty($item[BlockInterface::BLOCK_ID])) {
-                $ids[] = $item[BlockInterface::BLOCK_ID];
-                $ids[] = $item[BlockInterface::IDENTIFIER];
+                $ids[] = sprintf('%s_%s', $this->cacheTag, $item[BlockInterface::BLOCK_ID]);
+                $ids[] = sprintf('%s_%s', $this->cacheTag, $item[BlockInterface::IDENTIFIER]);
             }
+        }
+
+        if (!empty($ids)) {
+            array_unshift($ids, $this->cacheTag);
         }
 
         return $ids;
