@@ -194,7 +194,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 break;
             default:
                 return false;
-                break;
         }
 
         $attribute = $this->_getAttribute($attributeCode);
