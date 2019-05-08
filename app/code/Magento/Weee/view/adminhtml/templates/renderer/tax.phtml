@@ -63,7 +63,7 @@ $data = ['fptAttribute' => [
                         name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[<%- data.index %>][country]"
                         class="<?= /* @escapeNotVerified */ $block->getElement()->getClass() ?> country required-entry" data-role="select-country">
                     <?php foreach ($block->getCountries() as $_country): ?>
-                    <option value="<?= /* @escapeNotVerified */ $_country['value'] ?>"><?= /* @escapeNotVerified */ htmlspecialchars($_country['label']) ?></option>
+                    <option value="<?= /* @escapeNotVerified */ $_country['value'] ?>"><?= /* @escapeNotVerified */ $block->escapeHtml($_country['label']) ?></option>
                     <?php endforeach ?>
                 </select>
                 <select id="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_weee_tax_row_<%- data.index %>_state"
