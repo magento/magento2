@@ -74,7 +74,7 @@ class UpdateCartItem
         if ($result->getHasError()) {
             throw new GraphQlInputException(__(
                 'Could not update cart item: %message',
-                ['message' => $result->getMessage()]
+                ['message' => $result->getMessage(true)]
             ));
         }
     }
