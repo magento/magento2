@@ -160,6 +160,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Get rating summary
      *
+     * @deprecated
      * @return array
      */
     public function getRatingSummary()
@@ -198,25 +199,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     public function dateFormat($date)
     {
         return $this->formatDate($date, \IntlDateFormatter::LONG);
-    }
-
-    /**
-     * Get product reviews summary
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param bool $templateType
-     * @param bool $displayIfNoReviews
-     * @return string
-     */
-    public function getReviewsSummaryHtml(
-        \Magento\Catalog\Model\Product $product,
-        $templateType = false,
-        $displayIfNoReviews = false
-    ) {
-        if (!$product->getRatingSummary()) {
-            $this->_reviewFactory->create()->getEntitySummary($product, $this->_storeManager->getStore()->getId());
-        }
-        return parent::getReviewsSummaryHtml($product, $templateType, $displayIfNoReviews);
     }
 
     /**
