@@ -8,6 +8,9 @@ namespace Magento\Newsletter\Test\Unit\Block\Adminhtml\Template;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Test for \Magento\Newsletter\Block\Adminhtml\Template\Preview
+ */
 class PreviewTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Newsletter\Block\Adminhtml\Template\Preview */
