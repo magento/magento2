@@ -13,7 +13,6 @@
         "magento/module-customer-graph-ql": "*",
         "magento/module-sales": "*",
         "magento/module-directory": "*"
-        "magento/module-downloadable": "*"
     },
     "suggest": {
         "magento/module-graph-ql": "*",
