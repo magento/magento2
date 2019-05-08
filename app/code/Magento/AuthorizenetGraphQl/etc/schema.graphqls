@@ -6,17 +6,17 @@ input PaymentMethodAdditionalDataInput {
 }
 
 type SelectedPaymentMethodAdditionalData {
-    authorizenet_acceptjs: Authorizenet
+    authorizenet_acceptjs: Authorizenet @resolver(class: "Magento\\AuthorizenetGraphQl\\Model\\Resolver\\AdditionalData")
 }
 
 type Authorizenet {
-    opaqueDataDescriptor: String!
-    opaqueDataValue: String!
-    ccLast4: Int!
+    opaque_data_descriptor: String!
+    opaque_data_value: String!
+    cc_last_4: Int!
 }
 
 input AuthorizenetInput {
-    opaqueDataDescriptor: String!
-    opaqueDataValue: String!
-    ccLast4: Int!
+    opaque_data_descriptor: String!
+    opaque_data_value: String!
+    cc_last_4: Int!
 }

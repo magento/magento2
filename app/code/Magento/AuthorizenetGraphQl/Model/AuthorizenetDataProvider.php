@@ -9,6 +9,7 @@ namespace Magento\AuthorizenetGraphQl\Model;
 
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\GraphQL\DataObjectConverter;
 
 /**
  * Class AuthorizenetDataProvider
@@ -42,6 +43,11 @@ class AuthorizenetDataProvider implements AdditionalDataProviderInterface
      */
     public function getData(array $args): array
     {
-        return $this->arrayManager->get(static::PATH_ADDITIONAL_DATA, $args) ?? [];
+        $additionalData = $this->arrayManager->get(static::PATH_ADDITIONAL_DATA, $args) ?? [];
+        foreach ($additionalData as $key => $value) {
+            $additionalData[DataObjectConverter::snakeCaseToCamelCase($key)] = $value;
+            unset($additionalData[$key]);
+        }
+        return $additionalData;
     }
 }
