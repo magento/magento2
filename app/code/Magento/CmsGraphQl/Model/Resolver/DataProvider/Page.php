@@ -88,6 +88,8 @@ class Page
     }
 
     /**
+     * Convert page data
+     *
      * @param PageInterface $page
      * @return array
      * @throws NoSuchEntityException

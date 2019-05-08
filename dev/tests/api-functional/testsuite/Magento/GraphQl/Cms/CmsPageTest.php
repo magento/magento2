@@ -11,6 +11,9 @@ use Magento\Cms\Model\GetPageByIdentifier;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Get CMS Page test
+ */
 class CmsPageTest extends GraphQlAbstract
 {
     /**

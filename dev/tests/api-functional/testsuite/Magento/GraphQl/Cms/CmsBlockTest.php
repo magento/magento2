@@ -13,6 +13,9 @@ use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Widget\Model\Template\FilterEmulate;
 
+/**
+ * Get CMS Block test
+ */
 class CmsBlockTest extends GraphQlAbstract
 {
     /**
