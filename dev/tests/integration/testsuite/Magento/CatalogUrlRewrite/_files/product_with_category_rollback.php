@@ -21,7 +21,6 @@ $registry->register('isSecureArea', true);
 
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
-//$productRepository->deleteById('p002');
 $product = $productRepository->get('p002', false, null, true);
 $productRepository->delete($product);
 
