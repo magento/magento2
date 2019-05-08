@@ -50,7 +50,7 @@ type ProductPrices @doc(description: "The ProductPrices object contains the regu
 type ProductLinks implements ProductLinksInterface @doc(description: "ProductLinks is an implementation of ProductLinksInterface.") {
 }
 
-interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductLinkTypeResolverComposite") @doc(description:"Related contains information about linked products, including the link type and product type of each item.") {
+interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductLinkTypeResolverComposite") @doc(description:"ProductLinks contains information about linked products, including the link type and product type of each item.") {
     sku: String @doc(description: "The identifier of the linked product")
     link_type: String @doc(description: "One of related, associated, upsell, or crosssell")
     linked_product_sku: String @doc(description: "The SKU of the linked product")
