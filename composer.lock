@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "442a108524a23e16cbb70c8957cd3097",
+    "content-hash": "4f20e93e274aba4b8965b3da66b59a1b",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -6235,16 +6235,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.3.13",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "2c8a4c3557c9a8412eb2ea50ce3f69abc2f47ba1"
+                "reference": "ef534dbcb3aeea68f9254dfd018165c546ad2edb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/2c8a4c3557c9a8412eb2ea50ce3f69abc2f47ba1",
-                "reference": "2c8a4c3557c9a8412eb2ea50ce3f69abc2f47ba1",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/ef534dbcb3aeea68f9254dfd018165c546ad2edb",
+                "reference": "ef534dbcb3aeea68f9254dfd018165c546ad2edb",
                 "shasum": ""
             },
             "require": {
@@ -6257,12 +6257,12 @@
                 "fzaninotto/faker": "^1.6",
                 "monolog/monolog": "^1.0",
                 "mustache/mustache": "~2.5",
-                "php": "7.0.2|7.0.4|~7.0.6|~7.1.0|~7.2.0",
+                "php": "7.0.2||7.0.4||~7.0.6||~7.1.0||~7.2.0||~7.3.0",
                 "symfony/process": "^2.8 || ^3.1 || ^4.0",
                 "vlucas/phpdotenv": "^2.4"
             },
             "require-dev": {
-                "brainmaestro/composer-git-hooks": "^2.3",
+                "brainmaestro/composer-git-hooks": "^2.3.1",
                 "codacy/coverage": "^1.4",
                 "codeception/aspect-mock": "^3.0",
                 "doctrine/cache": "<1.7.0",
@@ -6304,7 +6304,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2019-01-29T15:31:14+00:00"
+            "time": "2019-04-29T20:56:26+00:00"
         },
         {
             "name": "moontoast/math",
