@@ -3,11 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
 
-<?php
 /** @var $block \Magento\User\Block\Role\Tab\Edit */
-$serializer = new \Magento\Framework\Serialize\Serializer\Json();
 ?>
 
 <?= $block->getChildHtml() ?>
@@ -42,7 +39,7 @@ $serializer = new \Magento\Framework\Serialize\Serializer\Json();
 
         <div class="control">
             <div class="tree x-tree" data-role="resource-tree" data-mage-init='<?= /* @noEscape */
-                $serializer->serialize([
+                $block->getJsonSerializer()->serialize([
                     'rolesTree' => [
                         "treeInitData" => $block->getTree(),
                         "treeInitSelectedData" => $block->getSelectedResources(),
