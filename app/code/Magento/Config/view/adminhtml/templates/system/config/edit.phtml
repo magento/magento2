@@ -32,12 +32,14 @@
 require([
     "jquery",
     "uiRegistry",
+    "Magento_Ui/js/modal/confirm",
+    "mage/translate",
     "mage/mage",
     "prototype",
     "mage/adminhtml/form",
     "domReady!",
     "jquery/ui"
-], function(jQuery, registry){
+], function(jQuery, registry, confirmation, $t){
 
     var adminSystemConfig = {
         navigateToElement: function (searchRequest) {
@@ -384,5 +386,25 @@ require([
     registry.set('adminSystemConfig', adminSystemConfig);
 
     adminSystemConfig.navigateToElement(<?php echo /* @noEscape */ $block->getConfigSearchParamsJson(); ?>);
+
+    //confirmation for removing category/product URL rewrites
+    jQuery('select.generate_rewrites_on_save').on('change', function(event){
+        if (this.value == 0) {
+            confirmation({
+                title: $t('Turn off automatic generation of products with categories path URL rewrites?'),
+                content: $t('Turning off automatic generation of products with categories path URL rewrites will ' +
+                    'result in permanent removal of all the currently existing “category/product” type URL rewrites ' +
+                    'without an ability to restore them back. This may potentially cause unresolved “category/product”' +
+                    ' type URL conflicts which you have to resolve by creating a URL rewrite manually.'),
+                actions: {
+                    cancel: function () {
+                        jQuery('select.generate_rewrites_on_save').val(1);
+                        return false;
+                    },
+                }
+            })
+        }
+    });
+
 });
 </script>

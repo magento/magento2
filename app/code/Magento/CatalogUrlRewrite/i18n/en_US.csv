@@ -5,4 +5,6 @@
 "Product URL Suffix","Product URL Suffix"
 "Use Categories Path for Product URLs","Use Categories Path for Product URLs"
 "Create Permanent Redirect for URLs if URL Key Changed","Create Permanent Redirect for URLs if URL Key Changed"
-"Generate URL Rewrites for Products on Category Save","Generate URL Rewrites for Products on Category Save"
+"Generate URL Rewrites for Products in Categories","Generate URL Rewrites for Products in Categories"
+"Turn off automatic generation of products with categories path URL rewrites?","Turn off automatic generation of products with categories path URL rewrites?"
+"Turning off automatic generation of products with categories path URL rewrites will result in permanent removal of all the currently existing “category/product” type URL rewrites without an ability to restore them back. This may potentially cause unresolved “category/product” type URL conflicts which you have to resolve by creating a URL rewrite manually.","Turning off automatic generation of products with categories path URL rewrites will result in permanent removal of all the currently existing “category/product” type URL rewrites without an ability to restore them back. This may potentially cause unresolved “category/product” type URL conflicts which you have to resolve by creating a URL rewrite manually."
