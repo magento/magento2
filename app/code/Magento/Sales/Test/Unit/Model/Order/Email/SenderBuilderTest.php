@@ -165,9 +165,6 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
         $transportMock = $this->createMock(
             \Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock::class
         );
-        $this->identityContainerMock->expects($this->once())
-            ->method('getCopyMethod')
-            ->will($this->returnValue('copy'));
         $this->identityContainerMock->expects($this->never())
             ->method('getCustomerEmail');
         $this->identityContainerMock->expects($this->never())

@@ -65,7 +65,7 @@ class SenderBuilder
 
         $copyTo = $this->identityContainer->getEmailCopyTo();
 
-        if (!empty($copyTo) && $this->identityContainer->getCopyMethod() == 'bcc') {
+        if (!empty($copyTo) && $this->identityContainer->getCopyMethod() == Sender::COPY_METHOD_BCC) {
             foreach ($copyTo as $email) {
                 $this->transportBuilder->addBcc($email);
             }
@@ -84,7 +84,7 @@ class SenderBuilder
     {
         $copyTo = $this->identityContainer->getEmailCopyTo();
 
-        if (!empty($copyTo) && $this->identityContainer->getCopyMethod() == 'copy') {
+        if (!empty($copyTo)) {
             foreach ($copyTo as $email) {
                 $this->configureEmailTemplate();
 
