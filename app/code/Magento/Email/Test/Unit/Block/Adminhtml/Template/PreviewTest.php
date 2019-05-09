@@ -146,9 +146,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
      * Check of processing email templates
      *
      * @param array $requestParamMap
-     *
      * @dataProvider toHtmlDataProvider
-     * @param $requestParamMap
      */
     public function testToHtml($requestParamMap)
     {

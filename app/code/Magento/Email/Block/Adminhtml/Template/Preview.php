@@ -62,7 +62,7 @@ class Preview extends \Magento\Backend\Block\Widget
         /** @var $request \Magento\Framework\App\Request\Http */
         $request = $this->getRequest();
 
-        if (!$request->isSafeMethod()) {
+        if (!$request instanceof \Magento\Framework\App\RequestSafetyInterface || !$request->isSafeMethod()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Wrong request.'));
         }
 
