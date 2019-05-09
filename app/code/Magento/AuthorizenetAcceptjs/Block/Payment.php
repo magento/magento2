@@ -32,11 +32,6 @@ class Payment extends Template
     private $json;
 
     /**
-     * @var string
-     */
-    private static $methodCode = 'authorizenet_acceptjs';
-
-    /**
      * @param Context $context
      * @param ConfigProviderInterface $config
      * @param Json $json
@@ -74,6 +69,6 @@ class Payment extends Template
      */
     public function getMethodCode(): string
     {
-        return self::$methodCode;
+        return 'authorizenet_acceptjs';
     }
 }
