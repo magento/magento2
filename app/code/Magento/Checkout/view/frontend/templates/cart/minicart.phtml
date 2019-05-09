@@ -4,15 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Checkout\Block\Cart\Sidebar */
 ?>
 
 <div data-block="minicart" class="minicart-wrapper">
-    <a class="action showcart" href="<?= /* @escapeNotVerified */ $block->getShoppingCartUrl() ?>"
+    <a class="action showcart" href="<?= $block->escapeUrl($block->getShoppingCartUrl()) ?>"
        data-bind="scope: 'minicart_content'">
-        <span class="text"><?= /* @escapeNotVerified */ __('My Cart') ?></span>
+        <span class="text"><?= $block->escapeHtml(__('My Cart')) ?></span>
         <span class="counter qty empty"
               data-bind="css: { empty: !!getCartParam('summary_count') == false }, blockLoader: isLoading">
             <span class="counter-number"><!-- ko text: getCartParam('summary_count') --><!-- /ko --></span>
@@ -24,7 +22,7 @@
             </span>
         </span>
     </a>
-    <?php if ($block->getIsNeedToDisplaySideBar()): ?>
+    <?php if ($block->getIsNeedToDisplaySideBar()) :?>
         <div class="block block-minicart"
              data-role="dropdownDialog"
              data-mage-init='{"dropdownDialog":{
@@ -41,7 +39,7 @@
             </div>
             <?= $block->getChildHtml('minicart.addons') ?>
         </div>
-    <?php else: ?>
+    <?php else :?>
         <script>
             require(['jquery'], function ($) {
                 $('a.action.showcart').click(function() {
@@ -51,15 +49,17 @@
         </script>
     <?php endif ?>
     <script>
-        window.checkout = <?= /* @escapeNotVerified */ $block->getSerializedConfig() ?>;
+        window.checkout = <?= /* @noEscape */ $block->getSerializedConfig() ?>;
     </script>
     <script type="text/x-magento-init">
     {
         "[data-block='minicart']": {
-            "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout() ?>
+            "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
         },
         "*": {
-            "Magento_Ui/js/block-loader": "<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-1.gif') ?>"
+            "Magento_Ui/js/block-loader": "<?= $block->escapeJs(
+                $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))
+            ) ?>"
         }
     }
     </script>
