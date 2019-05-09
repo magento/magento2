@@ -6,12 +6,13 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Tax Rate AjaxSave Controller
  */
-class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate
+class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Escaper
