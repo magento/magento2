@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\AuthorizenetAcceptjs;
 
-
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
@@ -54,7 +53,6 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
      */
     private $authorizenetPublicClientKeyPath = 'payment/authorizenet_acceptjs/public_client_key';
 
-
     /**
      * @inheritdoc
      */
@@ -64,10 +62,20 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
         /** @var \Magento\Config\Model\ResourceModel\Config $config */
         $config = $objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
         $config->saveConfig($this->authorizenetStatusPath, 1, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
-        $config->saveConfig($this->authorizenetLoginPath,'someusername', ScopeConfigInterface::SCOPE_TYPE_DEFAULT,0);
-        $config->saveConfig($this->authorizenetTransactionKeyPath,'somepassword', ScopeConfigInterface::SCOPE_TYPE_DEFAULT,0);
-        $config->saveConfig($this->authorizenetTransSignatureKeyPath,'abc', ScopeConfigInterface::SCOPE_TYPE_DEFAULT,0);
-        $config->saveConfig($this->authorizenetPublicClientKeyPath,'xyz', ScopeConfigInterface::SCOPE_TYPE_DEFAULT,0);
+        $config->saveConfig($this->authorizenetLoginPath, 'someusername', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
+        $config->saveConfig(
+            $this->authorizenetTransactionKeyPath,
+            'somepassword',
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            0
+        );
+        $config->saveConfig(
+            $this->authorizenetTransSignatureKeyPath,
+            'abc',
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            0
+        );
+        $config->saveConfig($this->authorizenetPublicClientKeyPath, 'xyz', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
         /** @var ReinitableConfigInterface $config */
         $config =$objectManager->get(ReinitableConfigInterface::class);
         $config->reinit();
@@ -79,12 +87,12 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Config\Model\ResourceModel\Config $config */
         $config = $objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
-        $config->deleteConfig($this->authorizenetStatusPath,ScopeConfigInterface::SCOPE_TYPE_DEFAULT,0);
-        $config->deleteConfig($this->authorizenetEnvironmentPath,ScopeConfigInterface::SCOPE_TYPE_DEFAULT,0);
-        $config->deleteConfig($this->authorizenetLoginPath,ScopeConfigInterface::SCOPE_TYPE_DEFAULT,0);
-        $config->deleteConfig($this->authorizenetTransactionKeyPath,ScopeConfigInterface::SCOPE_TYPE_DEFAULT,0);
-        $config->deleteConfig($this->authorizenetTransSignatureKeyPath,ScopeConfigInterface::SCOPE_TYPE_DEFAULT,0);
-        $config->deleteConfig($this->authorizenetPublicClientKeyPath,ScopeConfigInterface::SCOPE_TYPE_DEFAULT,0);
+        $config->deleteConfig($this->authorizenetStatusPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
+        $config->deleteConfig($this->authorizenetEnvironmentPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
+        $config->deleteConfig($this->authorizenetLoginPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
+        $config->deleteConfig($this->authorizenetTransactionKeyPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
+        $config->deleteConfig($this->authorizenetTransSignatureKeyPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
+        $config->deleteConfig($this->authorizenetPublicClientKeyPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
     }
 
     /**
@@ -199,7 +207,6 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
                                     opaque_data_descriptor
                                     } } } items {product {sku}}}}}
 QUERY;
-
     }
 
     public function tearDown()
