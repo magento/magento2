@@ -66,7 +66,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
         $this->getSelect()->reset()->from(
             ['order_items' => $this->getTable('sales_order_item')],
             [
-                'ordered_qty' => 'order_items.qty_ordered',
+                'ordered_qty' => 'SUM(order_items.qty_ordered)',
                 'order_items_name' => 'order_items.name',
                 'order_items_sku' => 'order_items.sku'
             ]
@@ -76,8 +76,10 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
             []
         )->where(
             'order_items.parent_item_id IS NULL'
+        )->group(
+            'order_items.product_id'
         )->having(
-            'order_items.qty_ordered > ?',
+            'SUM(order_items.qty_ordered) > ?',
             0
         );
         return $this;
