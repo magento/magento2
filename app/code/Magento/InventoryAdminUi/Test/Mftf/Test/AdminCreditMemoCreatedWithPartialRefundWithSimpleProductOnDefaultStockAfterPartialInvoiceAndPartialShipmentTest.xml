@@ -41,13 +41,10 @@
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
 
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
-            <createData entity="SimpleProductQty100" stepKey="simpleProduct">
-                <!--<field key="quantity">100.00</field>-->
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
                 <requiredEntity createDataKey="simpleCategory"/>
             </createData>
-
             <createData entity="MsiCustomer1" stepKey="createCustomer"/>
-
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
