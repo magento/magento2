@@ -7,7 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\View\Element\UiComponent\ContainerInterface" type="Magento\Ui\Component\Wrapper\UiComponent" />
-    <preference for="Magento\Framework\View\Element\UiComponent\ContainerInterface" type="Magento\Ui\Component\Wrapper\UiComponent" />
     <preference for="Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface" type="Magento\Ui\Component\Control\ActionPool" />
     <preference for="Magento\Framework\Data\Argument\InterpreterInterface" type="Magento\Framework\Data\Argument\Interpreter\Composite" />
     <preference for="Magento\Framework\Config\ConverterInterface" type="Magento\Framework\View\Element\UiComponent\Config\Converter" />
