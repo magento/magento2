@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCmsPageMassActionTest">
+        <annotations>
+            <features value="Cms"/>
+            <title value="Create two CMS Pages and perform mass disable action"/>
+            <description value="Admin should be able to perform mass actions to CMS pages"/>
+            <group value="backend"/>
+            <group value="cMSContent"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCmsPage" stepKey="firstCMSPage" />
+            <createData entity="_duplicatedCMSPage" stepKey="secondCMSPage" />
+        </before>
+        <after>
+            <deleteData createDataKey="firstCMSPage" stepKey="deleteFirstCMSPage" />
+            <deleteData createDataKey="secondCMSPage" stepKey="deleteSecondCMSPage" />
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Go to Grid page-->
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCMSPageGrid"/>
+        <!--Select pages in Grid-->
+        <actionGroup ref="AdminSelectCMSPageInGridActionGroup" stepKey="selectFirstCMSPage">
+            <argument name="identifier" value="$$firstCMSPage.identifier$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectCMSPageInGridActionGroup" stepKey="selectSecondCMSPage">
+            <argument name="identifier" value="$$secondCMSPage.identifier$$"/>
+        </actionGroup>
+        <!-- Disable Pages-->
+        <actionGroup ref="AdminCMSPageMassActionDisableActionGroup" stepKey="disablePages"/>
+        <!--Verify pages in Grid-->
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="openCMSPagesGridActionGroup"/>
+        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilters"/>
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortGridByIdDescending"/>
+        <actionGroup ref="AdminSelectCMSPageFromGridActionGroup" stepKey="verifyFirstPageInGrid">
+            <argument name="identifier" value="$$firstCMSPage.identifier$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectCMSPageFromGridActionGroup" stepKey="verifySecondPageInGrid">
+            <argument name="identifier" value="$$secondCMSPage.identifier$$"/>
+        </actionGroup>
+        <!--Verify first page is disabled on Frontend-->
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="goToFirstCMSPageOnStorefront">
+            <argument name="identifier" value="$$firstCMSPage.identifier$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertCMSPageNotFoundOnStorefrontActionGroup" stepKey="seeNotFoundErrorForFirstPage"/>
+        <!--Verify second page is disabled on Frontend-->
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="goToSecondCMSPageOnStorefront">
+            <argument name="identifier" value="$$secondCMSPage.identifier$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertCMSPageNotFoundOnStorefrontActionGroup" stepKey="seeNotFoundErrorForSecondPage"/>
+    </test>
+</tests>

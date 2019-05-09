@@ -27,5 +27,8 @@
         <element name="savePageSuccessMessage" type="text" selector=".message-success"/>
         <element name="delete" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//a[text()='Delete']" parameterized="true"/>
         <element name="deleteConfirm" type="button" selector=".action-primary.action-accept" timeout="60"/>
+        <element name="pageRowCheckboxByIdentifier" type="block" selector="//div[@data-bind=&quot;scope: 'cms_page_listing.cms_page_listing'&quot;]//td[count(../../..//th[./*[.='URL Key']]/preceding-sibling::th) + 1][./*[.='{{identifier}}']]/../td//input[@data-action='select-row']"  parameterized="true" />
+        <element name="massActionsButton" type="button" selector="div.admin__data-grid-header-row.row div.action-select-wrap button.action-select"/>
+        <element name="massActionsOption" type="button" selector="//div[contains(@class,'admin__data-grid-header-row') and contains(@class, 'row')]//div[contains(@class, 'action-select-wrap')]//ul/li/span[text() = '{{label}}']" parameterized="true"/>
     </section>
 </sections>
