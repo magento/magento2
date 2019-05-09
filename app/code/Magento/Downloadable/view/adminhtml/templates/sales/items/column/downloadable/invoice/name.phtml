@@ -25,9 +25,9 @@
                     <script>
                         require(['prototype'], function(){
                             <?php $escapedId = $block->escapeJs($_id) ?>
-                            $('<?= $escapedId ?>').hide();
-                            $('<?= $escapedId ?>').up().observe('mouseover', function(){$('<?= $escapedId ?>').show();});
-                            $('<?= $escapedId ?>').up().observe('mouseout',  function(){$('<?= $escapedId ?>').hide();});
+                            $('<?= /* @noEscape */ $escapedId ?>').hide();
+                            $('<?= /* @noEscape */ $escapedId ?>').up().observe('mouseover', function(){$('<?= /* @noEscape */ $escapedId ?>').show();});
+                            $('<?= /* @noEscape */ $escapedId ?>').up().observe('mouseout',  function(){$('<?= /* @noEscape */ $escapedId ?>').hide();});
                         });
                     </script>
                 <?php endif;?>
