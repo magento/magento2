@@ -533,16 +533,9 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         );
         $this->_translateTags(
             $this->_content,
-            $this->_allowedTagsGlobal,
-            function () {
-                return '_applySpecialTagsFormat';
-            }
-        );
-        $this->_translateTags(
-            $this->_content,
             $this->_allowedTagsSimple,
-            function () {
-                return '_applySimpleTagsFormat';
+            function ($tagHtml, $tagName, $trArr) {
+                return $this->_applySimpleTagsFormat($tagHtml, $tagName, $trArr);
             }
         );
     }
