@@ -7,8 +7,10 @@ namespace Magento\Reports\Model\Product\Index;
 
 /**
  * Reports Product Index Abstract Model
+ *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
 {
@@ -156,7 +158,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * On customer loggin merge visitor/customer index
+     * On customer login merge visitor/customer index
      *
      * @return $this
      */
