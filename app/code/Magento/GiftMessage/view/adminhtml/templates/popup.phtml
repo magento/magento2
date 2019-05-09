@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php if ($block->getChildHtml()) :?>
@@ -15,8 +12,8 @@
             <?= $block->getChildHtml() ?>
         </div>
         <div class="ui-dialog-buttonset">
-            <button type="button" class="action-close" id="gift_options_cancel_button"><span><?= /* @escapeNotVerified */ __('Cancel') ?></span></button>
-            <button type="button" class="action-primary" id="gift_options_ok_button"><span><?= /* @escapeNotVerified */ __('OK') ?></span></button>
+            <button type="button" class="action-close" id="gift_options_cancel_button"><span><?= $block->escapeHtml(__('Cancel')) ?></span></button>
+            <button type="button" class="action-primary" id="gift_options_ok_button"><span><?= $block->escapeHtml(__('OK')) ?></span></button>
         </div>
     </div>
 </div>

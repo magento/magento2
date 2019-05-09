@@ -19,7 +19,6 @@ return [
     'Magento_ConfigurableProduct',
     'Magento_CurrencySymbol',
     'Magento_Downloadable',
-    'Magento_GiftMessage',
     'Magento_GoogleAdwords',
     'Magento_GoogleAnalytics',
     'Magento_GroupedProduct',
