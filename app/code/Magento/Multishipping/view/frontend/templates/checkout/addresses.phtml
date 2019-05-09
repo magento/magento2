@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Files.LineLength
 
 ?>
 <?php
@@ -43,7 +43,7 @@
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($block->getItems() as $_index => $_item): ?>
+            <?php foreach ($block->getItems() as $_index => $_item) : ?>
                 <?php if ($_item->getQuoteItem()) : ?>
                     <tr>
                         <td class="col product" data-th="<?= $block->escapeHtml(__('Product')) ?>">
@@ -68,11 +68,11 @@
                             </div>
                         </td>
                         <td class="col address" data-th="<?= $block->escapeHtml(__('Send To')) ?>">
-                            <?php if ($_item->getProduct()->getIsVirtual()): ?>
+                            <?php if ($_item->getProduct()->getIsVirtual()) : ?>
                                 <div class="applicable">
                                     <?= $block->escapeHtml(__('A shipping selection is not applicable.')) ?>
                                 </div>
-                            <?php else: ?>
+                            <?php else : ?>
                                 <div class="field address">
                                     <label for="ship_<?= $block->escapeHtml($_index) ?>_<?= $block->escapeHtml($_item->getQuoteItemId()) ?>_address"
                                            class="label">
@@ -102,10 +102,10 @@
         <div class="primary">
             <button type="submit"
                     title="<?= $block->escapeHtml(__('Go to Shipping Information')) ?>"
-                    class="action primary continue<?php if ($block->isContinueDisabled()):?> disabled<?php endif; ?>"
+                    class="action primary continue<?= $block->isContinueDisabled() ? ' disabled' : '' ?>"
                     data-role="can-continue"
                     data-flag="1"
-                <?php if ($block->isContinueDisabled()):?>
+                <?php if ($block->isContinueDisabled()) : ?>
                     disabled="disabled"
                 <?php endif; ?>>
                 <span><?= $block->escapeHtml(__('Go to Shipping Information')) ?></span>

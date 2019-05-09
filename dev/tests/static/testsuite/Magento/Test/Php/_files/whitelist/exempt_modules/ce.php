@@ -28,7 +28,6 @@ return [
     'Magento_Marketplace',
     'Magento_MediaStorage',
     'Magento_Msrp',
-    'Magento_Multishipping',
     'Magento_PageCache',
     'Magento_Paypal',
     'Magento_ProductVideo',
