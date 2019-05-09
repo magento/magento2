@@ -11,7 +11,6 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQL\DataObjectConverter;
-use Magento\AuthorizenetAcceptjs\Gateway\Config;
 
 /**
  * @inheritdoc
@@ -23,14 +22,12 @@ class AdditionalData implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $authorizeNet = $value[Config::METHOD];
-        if (!isset($authorizeNet)) {
+        if (!isset($value['additional_data'])) {
             return [];
         }
         $additionalData = [];
-        foreach ($authorizeNet as $key => $value) {
+        foreach ($value['additional_data'] as $key => $value) {
             $additionalData[DataObjectConverter::camelCaseToSnakeCase($key)] = $value;
-            unset($additionalData[$key]);
         }
         return $additionalData;
     }

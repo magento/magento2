@@ -131,6 +131,10 @@ input SetPaymentMethodOnCartInput {
 input PaymentMethodInput {
     code: String! @doc(description:"Payment method code")
     purchase_order_number: String @doc(description:"Purchase order number")
+    additional_data: PaymentMethodAdditionalDataInput @doc(description: "Additional payment data")
+}
+
+input PaymentMethodAdditionalDataInput {
 }
 
 input SetGuestEmailOnCartInput {
@@ -255,6 +259,10 @@ type SelectedPaymentMethod {
     code: String! @doc(description: "The payment method code")
     title: String! @doc(description: "The payment method title.")
     purchase_order_number: String @doc(description: "The purchase order number.")
+    additional_data: SelectedPaymentMethodAdditionalData @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\PaymentMethod\\AdditionalData")
+}
+
+type SelectedPaymentMethodAdditionalData {
 }
 
 type AppliedCoupon {
