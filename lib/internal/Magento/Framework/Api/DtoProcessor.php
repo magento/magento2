@@ -442,6 +442,13 @@ class DtoProcessor
         );
 
         $extensionAttributes = $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] ?? [];
+        if ($this->isExtensibleObject($type)) {
+            $extensionAttributes = array_replace(
+                $extensionAttributes,
+                $this->injectorProcessor->execute($type, $extensionAttributes)
+            );
+        }
+
         foreach ($extensionAttributes as $attributeName => $attributeValue) {
             if (!is_array($attributeValue) && !is_object($attributeValue)) {
                 continue;
@@ -539,14 +546,6 @@ class DtoProcessor
 
         if ($this->isDataModel($interfaceName)) {
             $resObject->setDataChanges(true);
-        }
-
-        if ($this->isExtensibleObject($type)) {
-            $this->injectorProcessor->execute(
-                $type,
-                $resObject,
-                $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]
-            );
         }
 
         return $resObject;

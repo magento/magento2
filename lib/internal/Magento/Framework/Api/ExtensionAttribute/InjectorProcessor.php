@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace Magento\Framework\Api\ExtensionAttribute;
 
 use LogicException;
-use Magento\Framework\Api\ExtensibleDataInterface;
-use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -43,16 +41,15 @@ class InjectorProcessor
      * Process object for injections
      *
      * @param string $type
-     * @param ExtensibleDataInterface $object
-     * @param ExtensionAttributesInterface $extensionAttributes
-     * @return void
+     * @param array $objectData
+     * @return array
      */
-    public function execute(string $type, ExtensibleDataInterface $object, $extensionAttributes): void
+    public function execute(string $type, array $objectData): array
     {
         $config = $this->injectorConfig->get();
 
         if (!isset($config[$type])) {
-            return;
+            return [];
         }
 
         foreach ($config[$type] as $injectorClassName) {
@@ -64,7 +61,9 @@ class InjectorProcessor
                 );
             }
 
-            $injector->execute($type, $object, $extensionAttributes);
+            $objectData = array_replace($objectData, $injector->execute($type, $objectData));
         }
+
+        return $objectData;
     }
 }

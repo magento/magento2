@@ -13,7 +13,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
-use ReflectionException;
 
 /**
  * Data object helper.
@@ -92,23 +91,28 @@ class DataObjectHelper
      * @param array $data
      * @param string $interfaceName
      * @return $this
-     * @throws ReflectionException
      * @deprecated
      * @see \Magento\Framework\Api\DtoProcessor::createFromArray
      */
-    public function populateWithArray(&$dataObject, array $data, $interfaceName)
+    public function populateWithArray($dataObject, array $data, $interfaceName)
     {
-//        // Non immutable DTO (backward compatibility mode)
-//        if (!$this->dtoProcessor->isImmutable($interfaceName)) {
-//            if ($dataObject instanceof ExtensibleDataInterface) {
-//                $data = $this->joinProcessor->extractExtensionAttributes(get_class($dataObject), $data);
-//            }
-//            $this->_setDataValues($dataObject, $data, $interfaceName);
-//            return $this;
-//        }
-
-        $dataObject = $this->dtoProcessor->createUpdatedObjectFromArray($dataObject, $data, $interfaceName);
+        if ($dataObject instanceof ExtensibleDataInterface) {
+            $data = $this->joinProcessor->extractExtensionAttributes(get_class($dataObject), $data);
+        }
+        $this->_setDataValues($dataObject, $data, $interfaceName);
         return $this;
+    }
+
+    /**
+     * Proxy for dto processor - create from array
+     *
+     * @param array $data
+     * @param string $interfaceName
+     * @return mixed
+     */
+    public function createFromArray(array $data, string $interfaceName)
+    {
+        return $this->dtoProcessor->createFromArray($data, $interfaceName);
     }
 
     /**
