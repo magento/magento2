@@ -15,9 +15,8 @@
             <description value="Credit Memo created with partial refund with Simple product on Default stock after partial invoice and partial shipment"/>
             <testCaseId value="MSI-1977"/>
             <severity value="BLOCKER"/>
-            <group value = "1977"/>
-            <!--<group value="msi"/>-->
-            <!--<group value="multi_mode"/>-->
+            <group value="msi"/>
+            <group value="multi_mode"/>
         </annotations>
 
         <before>
@@ -42,8 +41,8 @@
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
 
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
-            <createData entity="SimpleProduct" stepKey="simpleProduct">
-                <field key="qty">100.00</field>
+            <createData entity="SimpleProductQty100" stepKey="simpleProduct">
+                <!--<field key="quantity">100.00</field>-->
                 <requiredEntity createDataKey="simpleCategory"/>
             </createData>
 
@@ -74,7 +73,7 @@
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
         <clearField selector="{{StorefrontMinicartSection.itemQuantity($$simpleProduct.name$$)}}" stepKey="clearField"/>
-        <fillField selector="{{StorefrontMinicartSection.itemQuantity($$simpleProduct.name$$)}}" userInput="5" stepKey="setProductQtyToFiftyInMiniCart"/>
+        <fillField selector="{{StorefrontMinicartSection.itemQuantity($$simpleProduct.name$$)}}" userInput="10" stepKey="setProductQtyToFiftyInMiniCart"/>
         <click selector="{{StorefrontMinicartSection.itemQuantityUpdate($$simpleProduct.name$$)}}" stepKey="updateQtyInMiniCart"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForPaymentSelectionPageLoad"/>
@@ -97,7 +96,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitFilteredOrderListPageLoad"/>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPage"/>
         <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" stepKey="waitForViewOrderedQuantity"/>
-        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 15" stepKey="orderedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 10" stepKey="orderedQuantity"/>
 
         <!--Admin Area Check source quantity and salable quantity-->
         <comment userInput="Admin - Check Source quantity and salable quantity after order placed" stepKey="AdminCheckQuantityAfterOrderPlaced"/>
@@ -107,7 +106,7 @@
             <argument name="value" value="$$simpleProduct.sku$$"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="100" stepKey="checkProductSourceQtyAfterPlaceOrder"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="85" stepKey="checkSalableQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="90" stepKey="checkSalableQtyAfterPlaceOrder"/>
 
         <!--Admin Area Process Partial Invoice-->
         <comment userInput="Admin - Process partial invoice" stepKey="InvoicePartialOrder"/>
@@ -119,8 +118,9 @@
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRowInvoice"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
         <scrollTo selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="scrollToQty"/>
-        <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice(1)}}" userInput="5" stepKey="InvoiceQuantityPartial" />
+        <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" userInput="7" stepKey="InvoiceQuantityPartial" />
         <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="clickUpdateQty" />
+        <waitForPageLoad stepKey="WaitForInvoiceQtyUpdate"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
         <waitForPageLoad time="60" stepKey="waitForPageLoadSubmitInvoice"/>
         <scrollToTopOfPage stepKey="scrollToTopMessage"/>
@@ -149,7 +149,7 @@
             <argument name="value" value="$$simpleProduct.sku$$"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="97" stepKey="checkProductSourceQtyAfterPartialShipment"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="85" stepKey="checkSalableQtyAfterPartialShipment"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="90" stepKey="checkSalableQtyAfterPartialShipment"/>
 
 
         <!--Admin Area Create Partial Credit Memo-->
@@ -176,7 +176,7 @@
             <argument name="value" value="$$simpleProduct.sku$$"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="98" stepKey="checkProductSourceQtyAfterCreditMemo"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="90" stepKey="checkSalableQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="95" stepKey="checkSalableQtyAfterCreditMemo"/>
 
     </test>
 </tests>
