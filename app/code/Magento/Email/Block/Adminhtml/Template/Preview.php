@@ -59,7 +59,6 @@ class Preview extends \Magento\Backend\Block\Widget
      */
     protected function _toHtml()
     {
-        /** @var $request \Magento\Framework\App\Request\Http */
         $request = $this->getRequest();
 
         if (!$request instanceof \Magento\Framework\App\RequestSafetyInterface || !$request->isSafeMethod()) {
