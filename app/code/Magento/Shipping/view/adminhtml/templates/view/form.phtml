@@ -3,11 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 /**
  * @var \Magento\Shipping\Block\Adminhtml\View\Form $block
  */
+//phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+//phpcs:disable Magento2.Files.LineLength.MaxExceeded
 $order = $block->getShipment()->getOrder();
 ?>
 <?= $block->getChildHtml('order_info'); ?>
@@ -34,7 +34,7 @@ $order = $block->getShipment()->getOrder();
             </div>
             <div class="admin__page-section-item-content">
                 <div class="shipping-description-wrapper">
-                    <?php if ($block->getShipment()->getTracksCollection()->count()): ?>
+                    <?php if ($block->getShipment()->getTracksCollection()->count()) : ?>
                         <p>
                             <a href="#" id="linkId" onclick="popWin('<?= $block->escapeUrl($this->helper(\Magento\Shipping\Helper\Data::class)->getTrackingPopupUrlBySalesModel($block->getShipment())); ?>','trackshipment','width=800,height=600,resizable=yes,scrollbars=yes')"
                                title="<?= $block->escapeHtml(__('Track this shipment')); ?>">
@@ -48,27 +48,27 @@ $order = $block->getShipment()->getOrder();
 
                     <?= $block->escapeHtml(__('Total Shipping Charges')); ?>:
 
-                    <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingPriceIncludingTax()): ?>
+                    <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingPriceIncludingTax()) : ?>
                         <?php $excl = $block->displayShippingPriceInclTax($order); ?>
-                    <?php else: ?>
+                    <?php else : ?>
                         <?php $excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
                     <?php endif; ?>
                     <?php $incl = $block->displayShippingPriceInclTax($order); ?>
 
                     <?= /* @noEscape */ $excl; ?>
-                    <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingBothPrices() && $incl != $excl): ?>
+                    <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingBothPrices() && $incl != $excl) : ?>
                         (<?= $block->escapeHtml(__('Incl. Tax')); ?> <?= /* @noEscape */ $incl; ?>)
                     <?php endif; ?>
                 </div>
 
                 <p>
-                    <?php if ($block->canCreateShippingLabel()): ?>
+                    <?php if ($block->canCreateShippingLabel()) : ?>
                         <?= /* @noEscape */ $block->getCreateLabelButton(); ?>
                     <?php endif ?>
-                    <?php if ($block->getShipment()->getShippingLabel()): ?>
+                    <?php if ($block->getShipment()->getShippingLabel()) : ?>
                         <?= /* @noEscape */ $block->getPrintLabelButton(); ?>
                     <?php endif ?>
-                    <?php if ($block->getShipment()->getPackages()): ?>
+                    <?php if ($block->getShipment()->getPackages()) : ?>
                         <?= /* @noEscape */ $block->getShowPackagesButton(); ?>
                     <?php endif ?>
                 </p>
@@ -85,10 +85,7 @@ $order = $block->getShipment()->getOrder();
                                 window.packaging.sendCreateLabelRequest();
                             });
                             window.packaging.setLabelCreatedCallback(function () {
-                                setLocation("<?php echo $block->escapeUrl($block->getUrl(
-                                    'adminhtml/order_shipment/view',
-                                    ['shipment_id' => $block->getShipment()->getId()])
-                                ); ?>");
+                                setLocation("<?php $block->escapeUrl($block->getUrl('adminhtml/order_shipment/view', ['shipment_id' => $block->getShipment()->getId()])); ?>");
                             });
                         };
 
