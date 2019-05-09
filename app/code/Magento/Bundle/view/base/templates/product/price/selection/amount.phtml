@@ -10,4 +10,4 @@
 
 <?php /** @var \Magento\Framework\Pricing\Render\Amount $block */ ?>
 
-<?= $block->escapeHtml($block->formatCurrency($block->getDisplayValue(), (bool) $block->getIncludeContainer())) ?>
+<?= /* @noEscape */ $block->formatCurrency($block->getDisplayValue(), (bool) $block->getIncludeContainer()) ?>
