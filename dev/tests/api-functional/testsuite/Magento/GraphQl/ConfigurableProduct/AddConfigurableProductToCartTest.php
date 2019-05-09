@@ -93,7 +93,7 @@ mutation {
   addConfigurableProductsToCart(
     input: {
       cart_id: "{$maskedQuoteId}"
-      cartItems: [
+      cart_items: [
         {
           variant_sku: "{$variantSku}"
           data: {
