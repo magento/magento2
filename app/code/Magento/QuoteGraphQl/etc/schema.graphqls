@@ -259,10 +259,6 @@ type SelectedPaymentMethod {
     code: String! @doc(description: "The payment method code")
     title: String! @doc(description: "The payment method title.")
     purchase_order_number: String @doc(description: "The purchase order number.")
-    additional_data: SelectedPaymentMethodAdditionalData @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\PaymentMethod\\AdditionalData")
-}
-
-type SelectedPaymentMethodAdditionalData {
 }
 
 type AppliedCoupon {

@@ -118,18 +118,6 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
         self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
         $selectedPaymentMethod = $response['setPaymentMethodOnCart']['cart']['selected_payment_method'];
         self::assertArrayHasKey('code', $selectedPaymentMethod);
-        self::assertArrayHasKey('additional_data', $selectedPaymentMethod);
-        $additionalData = $selectedPaymentMethod['additional_data'];
-        self::assertArrayHasKey('cc_last_4', $additionalData['authorizenet_acceptjs']);
-        self::assertArrayHasKey('opaque_data_descriptor', $additionalData['authorizenet_acceptjs']);
-        self::assertArrayHasKey('opaque_data_value', $additionalData['authorizenet_acceptjs']);
-        self::assertEquals($methodCode, $selectedPaymentMethod['code']);
-        self::assertEquals('1111', $additionalData['authorizenet_acceptjs']['cc_last_4']);
-        self::assertEquals('abx', $additionalData['authorizenet_acceptjs']['opaque_data_value']);
-        self::assertEquals(
-            'COMMON.ACCEPT.INAPP.PAYMENT',
-            $additionalData['authorizenet_acceptjs']['opaque_data_descriptor']
-        );
     }
 
     /**
@@ -156,18 +144,6 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
         self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
         $selectedPaymentMethod = $response['setPaymentMethodOnCart']['cart']['selected_payment_method'];
         self::assertArrayHasKey('code', $selectedPaymentMethod);
-        self::assertArrayHasKey('additional_data', $selectedPaymentMethod);
-        $additionalData = $selectedPaymentMethod['additional_data'];
-        self::assertArrayHasKey('cc_last_4', $additionalData['authorizenet_acceptjs']);
-        self::assertArrayHasKey('opaque_data_descriptor', $additionalData['authorizenet_acceptjs']);
-        self::assertArrayHasKey('opaque_data_value', $additionalData['authorizenet_acceptjs']);
-        self::assertEquals($methodCode, $selectedPaymentMethod['code']);
-        self::assertEquals('1111', $additionalData['authorizenet_acceptjs']['cc_last_4']);
-        self::assertEquals('abx', $additionalData['authorizenet_acceptjs']['opaque_data_value']);
-        self::assertEquals(
-            'COMMON.ACCEPT.INAPP.PAYMENT',
-            $additionalData['authorizenet_acceptjs']['opaque_data_descriptor']
-        );
     }
 
     /**
@@ -199,13 +175,8 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
                      ) {
                         cart {
                             selected_payment_method { 
-                            code, 
-                            additional_data { 
-                                authorizenet_acceptjs { 
-                                    cc_last_4,
-                                    opaque_data_value,
-                                    opaque_data_descriptor
-                                    } } } items {product {sku}}}}}
+                            code
+                            } items {product {sku}}}}}
 QUERY;
     }
 
@@ -220,6 +191,7 @@ QUERY;
      * @param string $username
      * @param string $password
      * @return array
+     * @throws \Magento\Framework\Exception\AuthenticationException
      */
     private function getHeaderMap(string $username = 'customer@example.com', string $password = 'password'): array
     {
