@@ -186,7 +186,7 @@
                                 require(['prototype'], function(){
                                     <?php $escapedId = $block->escapeJs($_id) ?>
                                     $('<?= /* @noEscape */ $escapedId ?>').hide();
-                                    $('<?= /* @noEscape */ $escapedId ?>').up().observe('mouseover', function(){$('<?= $escapedId?>').show();});
+                                    $('<?= /* @noEscape */ $escapedId ?>').up().observe('mouseover', function(){$('<?= /* @noEscape */ $escapedId?>').show();});
                                     $('<?= /* @noEscape */ $escapedId ?>').up().observe('mouseout',  function(){$('<?= /* @noEscape */ $escapedId ?>').hide();});
 
                                 });
