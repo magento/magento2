@@ -15,7 +15,6 @@ return [
     'Magento_CatalogRule',
     'Magento_CatalogSearch',
     'Magento_Checkout',
-    'Magento_CheckoutAgreements',
     'Magento_Config',
     'Magento_ConfigurableProduct',
     'Magento_CurrencySymbol',
