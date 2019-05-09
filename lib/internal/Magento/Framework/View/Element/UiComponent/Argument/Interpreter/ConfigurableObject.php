@@ -61,7 +61,10 @@ class ConfigurableObject implements InterpreterInterface
                 throw new \InvalidArgumentException('Node "argument" with name "class" is required for this type.');
             }
 
-            if (in_array(ltrim($arguments['class'], '\\'), $this->classBlacklist)) {
+            if (in_array(
+                ltrim(strtolower($arguments['class']), '\\'),
+                array_map('strtolower', $this->classBlacklist)
+            )) {
                 throw new \InvalidArgumentException(sprintf(
                     'Class argument is invalid: %s',
                     $arguments['class']
