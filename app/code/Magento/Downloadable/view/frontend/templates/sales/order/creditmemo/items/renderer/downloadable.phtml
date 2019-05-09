@@ -61,7 +61,7 @@
     <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
         <?= $block->getItemRowTotalHtml() ?>
     </td>
-    <td class="col discount" data-th="<?= $block->escapeHtml(__('Discount Amount')) ?>"><?= $block->escapeHtml($_order->formatPrice(-$_item->getDiscountAmount())) ?></td>
+    <td class="col discount" data-th="<?= $block->escapeHtml(__('Discount Amount')) ?>"><?= /* @noEscape */ $_order->formatPrice(-$_item->getDiscountAmount()) ?></td>
     <td class="col total" data-th="<?= $block->escapeHtml(__('Row Total')) ?>">
         <?= $block->getItemRowTotalAfterDiscountHtml() ?>
     </td>
