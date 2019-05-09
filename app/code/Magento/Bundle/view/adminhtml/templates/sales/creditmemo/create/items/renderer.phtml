@@ -188,14 +188,13 @@
                         <?php if ($_remainder):?>
                             ... <span id="<?= $block->escapeHtmlAttr($_id = 'id' . uniqid()) ?>"><?= $block->escapeHtml($_remainder) ?></span>
                             <script>
-require(['prototype'], function(){
-
-    $('<?= $block->escapeJs($_id) ?>').hide();
-    $('<?= $block->escapeJs($_id) ?>').up().observe('mouseover', function(){$('<?= $block->escapeJs($_id) ?>').show();});
-    $('<?= $block->escapeJs($_id) ?>').up().observe('mouseout',  function(){$('<?= $block->escapeJs($_id) ?>').hide();});
-
-});
-</script>
+                                require(['prototype'], function(){
+                                    <?php $escapedId = $block->escapeJs($_id) ?>
+                                    $('<?= $escapedId ?>').hide();
+                                    $('<?= $escapedId ?>').up().observe('mouseover', function(){$('<?= $escapedId ?>').show();});
+                                    $('<?= $escapedId ?>').up().observe('mouseout',  function(){$('<?= $escapedId ?>').hide();});
+                                });
+                            </script>
                         <?php endif;?>
                     <?php endif;?>
                     </dd>
