@@ -35,5 +35,6 @@
         <element name="nthRow" type="block" selector=".data-row:nth-of-type({{var}})" parameterized="true" timeout="30"/>
         <element name="productCount" type="text" selector="#catalog_category_products-total-count"/>
         <element name="productPerPage" type="select" selector="#catalog_category_products_page-limit"/>
+        <element name="storeViewDropdown" type="text" selector="//select[@name='store_id']/option[contains(.,'{{storeView}}')]" parameterized="true"/>
     </section>
 </sections>
