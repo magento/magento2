@@ -18,9 +18,12 @@ class ByFixed extends AbstractDiscount
         /** @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */
         $discountData = $this->discountFactory->create();
 
+        $itemPrice = $this->validator->getItemPrice($item);
+        $baseItemPrice = $this->validator->getItemBasePrice($item);
+
         $quoteAmount = $this->priceCurrency->convert($rule->getDiscountAmount(), $item->getQuote()->getStore());
-        $discountData->setAmount($qty * $quoteAmount);
-        $discountData->setBaseAmount($qty * $rule->getDiscountAmount());
+        $discountData->setAmount(min($itemPrice * $qty, $quoteAmount));
+        $discountData->setBaseAmount(min($baseItemPrice * $qty, $rule->getDiscountAmount()));
 
         return $discountData;
     }
