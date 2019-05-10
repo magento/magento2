@@ -10,12 +10,15 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerAddressesSection">
         <element name="defaultBillingAddress" type="text" selector=".box-address-billing" />
+        <element name="billingAddressBlock" type="text" selector=".box-address-billing address" />
         <element name="editDefaultBillingAddress" type="text" selector="//div[@class='box-actions']//span[text()='Change Billing Address']" timeout="30"/>
         <element name="defaultShippingAddress" type="text" selector=".box-address-shipping" />
+        <element name="shippingAddressBlock" type="text" selector=".box-address-shipping address" />
         <element name="editDefaultShippingAddress" type="text" selector="//div[@class='box-actions']//span[text()='Change Shipping Address']" timeout="30"/>
         <element name="addressesList" type="text" selector=".additional-addresses" />
         <element name="deleteAdditionalAddress" type="button" selector="//tbody//tr[{{var}}]//a[@class='action delete']" parameterized="true"/>
         <element name="editAdditionalAddress" type="button" selector="//tbody//tr[{{var}}]//a[@class='action edit']" parameterized="true" timeout="30"/>
         <element name="addNewAddress" type="button" selector="//span[text()='Add New Address']"/>
+        <element name="numberOfAddresses" type="text" selector=".toolbar-number"/>
     </section>
 </sections>

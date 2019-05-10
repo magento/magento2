@@ -197,6 +197,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             $this->httpContext->getValue(\Magento\Customer\Model\Context::CONTEXT_GROUP),
             (int) $this->getRequest()->getParam($this->getData('page_var_name'), 1),
             $this->getProductsPerPage(),
+            $this->getProductsCount(),
             $conditions,
             $this->json->serialize($this->getRequest()->getParams()),
             $this->getTemplate(),

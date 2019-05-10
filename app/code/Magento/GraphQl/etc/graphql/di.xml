@@ -27,9 +27,9 @@
     </type>
     <type name="Magento\GraphQl\Controller\HttpRequestProcessor">
         <arguments>
-            <argument name="graphQlHeaders" xsi:type="array">
-                <item name="Content-Type" xsi:type="object">Magento\GraphQl\Controller\HttpHeaderProcessor\ContentTypeProcessor</item>
-                <item name="Store" xsi:type="object">Magento\GraphQl\Controller\HttpHeaderProcessor\StoreProcessor</item>
+            <argument name="requestValidators" xsi:type="array">
+                <item name="ContentTypeValidator" xsi:type="object">Magento\GraphQl\Controller\HttpRequestValidator\ContentTypeValidator</item>
+                <item name="VerbValidator" xsi:type="object">Magento\GraphQl\Controller\HttpRequestValidator\HttpVerbValidator</item>
             </argument>
         </arguments>
     </type>

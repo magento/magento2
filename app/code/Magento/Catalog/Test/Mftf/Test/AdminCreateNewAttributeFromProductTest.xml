@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateNewAttributeFromProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product attributes"/>
+            <title value="Check that New Attribute from Product is create"/>
+            <description value="Check that New Attribute from Product is create"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-12296"/>
+            <useCaseId value="MAGETWO-59055"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+
+            <!--Create product-->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+        </before>
+        <after>
+            <!--Delete create data-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+
+            <!--Delete store views-->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteFirstStoreView">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteSecondStoreView">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+
+            <!--Delete Attribute-->
+            <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
+                <argument name="ProductAttribute" value="productDropDownAttribute"/>
+            </actionGroup>
+
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Create 2 store views-->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createFirstStoreView">
+            <argument name="customStore" value="customStoreEN"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+            <argument name="customStore" value="customStoreFR"/>
+        </actionGroup>
+
+        <!--Go to created product page and create new attribute-->
+        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="openAdminEditPage"/>
+        <actionGroup ref="AdminCreateAttributeWithValueWithTwoStoreViesFromProductPage" stepKey="createAttribute">
+            <argument name="attributeName" value="{{productDropDownAttribute.attribute_code}}"/>
+            <argument name="attributeType" value="Dropdown"/>
+            <argument name="firstStoreViewName" value="{{customStoreEN.name}}"/>
+            <argument name="secondStoreViewName" value="{{customStoreFR.name}}"/>
+        </actionGroup>
+
+        <!--Check attribute existence in product page attribute section-->
+        <conditionalClick selector="{{AdminProductAttributeSection.attributeSectionHeader}}" dependentSelector="{{AdminProductAttributeSection.attributeSection}}" visible="false" stepKey="openAttributeSection"/>
+        <seeElement selector="{{AdminProductAttributeSection.dropDownAttribute(productDropDownAttribute.attribute_code)}}" stepKey="seeNewAttributeInProductPage"/>
+    </test>
+</tests>

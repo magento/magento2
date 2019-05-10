@@ -72,6 +72,7 @@
     <preference for="Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface" type="Magento\Catalog\Model\Indexer\Product\Price\InvalidateIndex" />
     <preference for="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface" type="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactory" />
     <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite" />
+    <preference for="Magento\Catalog\Api\Data\MassActionInterface" type="\Magento\Catalog\Model\MassAction" />
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -1161,6 +1162,14 @@
         <arguments>
             <argument name="indexers" xsi:type="array">
                 <item name="catalog_product_price" xsi:type="string">catalog_product_price</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Option\Type\Select">
+        <arguments>
+            <argument name="singleSelectionTypes" xsi:type="array">
+                <item name="drop_down" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN</item>
+                <item name="radio" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO</item>
             </argument>
         </arguments>
     </type>
