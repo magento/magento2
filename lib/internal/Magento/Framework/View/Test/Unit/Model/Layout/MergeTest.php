@@ -28,9 +28,19 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     private $scope;
 
     /**
+     * @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cache;
+
+    /**
      * @var \Magento\Framework\View\Model\Layout\Update\Validator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $layoutValidator;
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
 
     /**
      * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -47,10 +57,12 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerHelper = new ObjectManager($this);
 
         $this->scope = $this->getMockForAbstractClass(\Magento\Framework\Url\ScopeInterface::class);
+        $this->cache = $this->getMockForAbstractClass(\Magento\Framework\Cache\FrontendInterface::class);
         $this->layoutValidator = $this->getMockBuilder(\Magento\Framework\View\Model\Layout\Update\Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
+        $this->serializer = $this->getMockForAbstractClass(\Magento\Framework\Serialize\SerializerInterface::class);
         $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -59,9 +71,11 @@ class MergeTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\Model\Layout\Merge::class,
             [
                 'scope' => $this->scope,
+                'cache' => $this->cache,
                 'layoutValidator' => $this->layoutValidator,
                 'logger' => $this->logger,
                 'appState' => $this->appState,
+                'serializer' => $this->serializer,
             ]
         );
     }
@@ -89,6 +103,35 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->appState->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_DEVELOPER);
+
+        $this->model->load();
+    }
+
+    /**
+     * Test that merged layout is saved to cache if it wasn't cached before.
+     */
+    public function testSaveToCache()
+    {
+        $this->scope->expects($this->once())->method('getId')->willReturn(1);
+        $this->cache->expects($this->once())->method('save');
+
+        $this->model->load();
+    }
+
+    /**
+     * Test that merged layout is not re-saved to cache when it was loaded from cache.
+     */
+    public function testNoSaveToCacheWhenCachePresent()
+    {
+        $cacheValue = [
+            "pageLayout" => "1column",
+            "layout"     => "<body></body>"
+        ];
+
+        $this->scope->expects($this->once())->method('getId')->willReturn(1);
+        $this->cache->expects($this->once())->method('load')->willReturn(json_encode($cacheValue));
+        $this->serializer->expects($this->once())->method('unserialize')->willReturn($cacheValue);
+        $this->cache->expects($this->never())->method('save');
 
         $this->model->load();
     }
