@@ -9,9 +9,8 @@
 <script>
     //<![CDATA[
     require(
-        [
-            'Magento_AuthorizenetAcceptjs/js/payment-form'
-        ], function(Authorizenet) {
+        ['Magento_AuthorizenetAcceptjs/js/payment-form'],
+        function(Authorizenet) {
             var config = <?= /* @noEscape */ $block->getPaymentConfig() ?>,
                 form = "#payment_form_<?= $block->escapeJs($block->escapeHtml($block->getMethodCode())) ?>";
 
