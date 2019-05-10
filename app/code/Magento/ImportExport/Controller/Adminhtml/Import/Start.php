@@ -12,8 +12,9 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\ImportExport\Model\Import;
 
 /**
- * Controller responsible for initiating the import process
+ * Controller responsible for initiating the import process.
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Start extends ImportResultController implements HttpPostActionInterface
 {
@@ -40,7 +41,6 @@ class Start extends ImportResultController implements HttpPostActionInterface
      * @param Import $importModel
      * @param \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory
      * @param Import\ImageDirectoryBaseProvider|null $imageDirectoryBaseProvider
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
