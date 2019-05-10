@@ -122,7 +122,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             [$optionsArray, false, 'US', ['US', 'AD', 'ES', 'BZ']],
             [$optionsArray, false, ['US', 'BZ'], ['US', 'BZ', 'AD', 'ES']],
             [$optionsArray, ' ', 'US', [' ', 'US', ' ', 'AD', 'ES', 'BZ']],
-            [$optionsArray, ' ', [], [' ', 'AD', 'US', 'ES', 'BZ']]
+            [$optionsArray, ' ', [], [' ', 'AD', 'US', 'ES', 'BZ']],
+            [$optionsArray, ' ', 'UA', [' ', 'AD', ' ', 'US', 'ES', 'BZ']],
+            [$optionsArray, ' ', ['AF', 'UA'], [' ', 'AD', 'US', ' ', 'ES', 'BZ']],
         ];
     }
 }
