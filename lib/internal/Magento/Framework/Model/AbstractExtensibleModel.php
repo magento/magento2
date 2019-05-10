@@ -205,7 +205,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      * {@inheritdoc} Unset customAttributesChanged flag
      *
      * @param null|string|array $key
-     * @return $thi
+     * @return $this
      */
     public function unsetData($key = null)
     {
