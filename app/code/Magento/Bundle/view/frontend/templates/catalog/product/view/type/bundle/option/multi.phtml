@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php /* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Multi */ ?>
 <?php $_option = $block->getOption() ?>
@@ -15,26 +12,26 @@
         <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
     <div class="control">
-        <?php if ($block->showSingle()): ?>
+        <?php if ($block->showSingle()) : ?>
             <?= /* @noEscape */ $block->getSelectionQtyTitlePrice($_selections[0]) ?>
             <input type="hidden"
                    name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                    value="<?= $block->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"/>
-        <?php else: ?>
+        <?php else : ?>
             <select multiple="multiple"
                     size="5"
                     id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>"
                     name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>][]"
                     data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>][]"
                     class="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?> multiselect product bundle option change-container-classname"
-                    <?php if ($_option->getRequired()) echo 'data-validate={required:true}' ?>>
-                <?php if(!$_option->getRequired()): ?>
+                    <?php if ($_option->getRequired()) { echo 'data-validate={required:true}'; } ?>>
+                <?php if (!$_option->getRequired()) : ?>
                     <option value=""><?= $block->escapeHtml(__('None')) ?></option>
                 <?php endif; ?>
-                <?php foreach ($_selections as $_selection): ?>
+                <?php foreach ($_selections as $_selection) : ?>
                     <option value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
-                            <?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?>
-                            <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>>
+                            <?php if ($block->isSelected($_selection)) { echo ' selected="selected"'; } ?>
+                            <?php if (!$_selection->isSaleable()) { echo ' disabled="disabled"'; } ?>>
                         <?= /* @noEscape */ $block->getSelectionQtyTitlePrice($_selection, false) ?>
                     </option>
                 <?php endforeach; ?>

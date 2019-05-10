@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend */
 $elementHtml = $block->getParentElementHtml();
 
@@ -20,7 +18,7 @@ $isElementReadonly = $block->getElement()
     ->getReadonly();
 ?>
 
-<?php if (!($attributeCode === 'price' && $block->getCanReadPrice() === false)): ?>
+<?php if (!($attributeCode === 'price' && $block->getCanReadPrice() === false)) : ?>
     <div class="<?= $block->escapeHtmlAttr($attributeCode) ?> "><?= /* @noEscape */ $elementHtml ?></div>
 <?php endif; ?>
 
@@ -43,10 +41,10 @@ $isElementReadonly = $block->getElement()
                 } else {
                     if ($attribute) {
                         <?php if ($attributeCode === 'price' && !$block->getCanEditPrice() && $block->getCanReadPrice()
-                                && $block->getProduct()->isObjectNew()): ?>
-                            <?php $defaultProductPrice = $block->getDefaultProductPrice() ?: "''"; ?>
+                                && $block->getProduct()->isObjectNew()) : ?>
+                                        <?php $defaultProductPrice = $block->getDefaultProductPrice() ?: "''"; ?>
                             $attribute.value = <?= $block->escapeJs($defaultProductPrice) ?>;
-                        <?php else: ?>
+                        <?php else : ?>
                             $attribute.disabled = false;
                             $attribute.addClassName('required-entry');
                         <?php endif; ?>
@@ -58,7 +56,7 @@ $isElementReadonly = $block->getElement()
             }
 
             <?php if (!($attributeCode === 'price' && !$block->getCanEditPrice()
-                    && !$block->getProduct()->isObjectNew())): ?>
+                    && !$block->getProduct()->isObjectNew())) : ?>
                 $('<?= $block->escapeJs($switchAttributeCode) ?>').observe('change', <?= $block->escapeJs($switchAttributeCode) ?>_change);
             <?php endif; ?>
             Event.observe(window, 'load', function(){

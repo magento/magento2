@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php
@@ -29,21 +26,21 @@ $regularPriceAttributes = [
 ];
 $renderMinimalRegularPrice = $block->renderAmount($minimalRegularPrice, $regularPriceAttributes);
 ?>
-<?php if ($block->getSaleableItem()->getPriceView()): ?>
+<?php if ($block->getSaleableItem()->getPriceView()) : ?>
     <p class="minimal-price">
         <?= /* @noEscape */ $block->renderAmount($minimalPrice, [
             'display_label'     => __('As low as'),
             'price_id'          => $block->getPriceId('from-'),
             'include_container' => true
         ]); ?>
-        <?php if ($minimalPrice < $minimalRegularPrice): ?>
+        <?php if ($minimalPrice < $minimalRegularPrice) : ?>
             <span class="old-price">
                 <?= /* @noEscape */ $renderMinimalRegularPrice ?>
             </span>
         <?php endif ?>
     </p>
-<?php else: ?>
-    <?php if ($block->showRangePrice()): ?>
+<?php else : ?>
+    <?php if ($block->showRangePrice()) : ?>
         <p class="price-from">
             <?= /* @noEscape */ $block->renderAmount($minimalPrice, [
                 'display_label'     => __('From'),
@@ -51,7 +48,7 @@ $renderMinimalRegularPrice = $block->renderAmount($minimalRegularPrice, $regular
                 'price_type'        => 'minPrice',
                 'include_container' => true
             ]); ?>
-            <?php if ($minimalPrice < $minimalRegularPrice): ?>
+            <?php if ($minimalPrice < $minimalRegularPrice) : ?>
                 <span class="old-price">
                     <?= /* @noEscape */ $renderMinimalRegularPrice ?>
                 </span>
@@ -64,18 +61,18 @@ $renderMinimalRegularPrice = $block->renderAmount($minimalRegularPrice, $regular
                 'price_type'        => 'maxPrice',
                 'include_container' => true
             ]); ?>
-            <?php if ($maximalPrice < $maximalRegularPrice): ?>
+            <?php if ($maximalPrice < $maximalRegularPrice) : ?>
                 <span class="old-price">
                     <?= /* @noEscape */ $block->renderAmount($maximalRegularPrice, $regularPriceAttributes); ?>
                 </span>
             <?php endif ?>
         </p>
-    <?php else: ?>
+    <?php else : ?>
         <?= /* @noEscape */ $block->renderAmount($minimalPrice, [
             'price_id'          => $block->getPriceId('product-price-'),
             'include_container' => true
         ]); ?>
-        <?php if ($minimalPrice < $minimalRegularPrice): ?>
+        <?php if ($minimalPrice < $minimalRegularPrice) : ?>
             <span class="old-price">
                 <?= /* @noEscape */ $renderMinimalRegularPrice ?>
             </span>

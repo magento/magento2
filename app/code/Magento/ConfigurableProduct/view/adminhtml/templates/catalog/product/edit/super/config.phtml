@@ -4,9 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
- /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config */
+/** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config */
 ?>
 <div class="entry-edit form-inline" id="<?= $block->escapeHtmlAttr($block->getId()) ?>" data-panel="product-variations">
     <div data-bind="scope: 'variation-steps-wizard'" class="product-create-configuration">
@@ -24,7 +22,7 @@
                     <?= $block->escapeHtml($block->isHasVariations()
                         ? __('Edit Configurations')
                         : __('Create Configurations'))
-                    ?>
+?>
                 </span>
                 </button>
             </div>

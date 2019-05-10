@@ -5,8 +5,6 @@
  */
 
 // @deprecated
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -23,7 +21,7 @@ $block->getConfigJson();
         <label class="admin__field-label" for="downloadable_samples_title"><span><?= $block->escapeHtml(__('Title')) ?></span></label>
         <div class="admin__field-control">
             <input type="text" class="admin__control-text" id="downloadable_samples_title" name="product[samples_title]" value="<?= $block->escapeHtml($block->getSamplesTitle()) ?>" <?= /* @noEscape */ ($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
-            <?php if ($_product->getStoreId()): ?>
+            <?php if ($_product->getStoreId()) : ?>
                 <div class="admin__field admin__field-option">
                     <input id="sample_title_default" class="admin__control-checkbox" type="checkbox" name="use_default[]" value="samples_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?= /* @noEscape */ $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
                     <label class="admin__field-label" for="sample_title_default"><span>Use Default Value</span></label>
@@ -77,7 +75,7 @@ require([
                 '<input type="hidden" class="__delete__" name="downloadable[sample][<%- data.id %>][is_delete]" value="" />'+
                 '<input type="hidden" name="downloadable[sample][<%- data.id %>][sample_id]" value="<%- data.sample_id %>" />'+
                 '<input type="text" class="required-entry input-text admin__control-text" name="downloadable[sample][<%- data.id %>][title]" value="<%- data.title %>" />'+
-                <?php if($_product->getStoreId()): ?>
+                <?php if ($_product->getStoreId()) : ?>
                     '<div class="admin__field admin__field-option">'+
                         '<input type="checkbox" id="downloadable_sample_<%- data.id %>_title" name="downloadable[sample][<%- data.id %>][use_default_title]" value="1" class="admin__control-checkbox" />'+
                         '<label for="downloadable_link_<%- data.id %>_price" class="admin__field-label"><span><?= $block->escapeJs($block->escapeHtml(__('Use Default Value'))) ?></span></label>'+
@@ -289,7 +287,7 @@ require([
             Event.observe('add_sample_item', 'click', sampleItems.add.bind(sampleItems));
         }
 
-        <?php foreach ($block->getSampleData() as $item): ?>
+        <?php foreach ($block->getSampleData() as $item) : ?>
             sampleItems.add(<?= /* @noEscape */ $item->toJson() ?>);
         <?php endforeach; ?>
 

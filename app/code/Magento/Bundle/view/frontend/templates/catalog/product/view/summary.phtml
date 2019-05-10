@@ -3,15 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php
     $_product = $block->getProduct();
 ?>
-<?php if ($_product->isSaleable() && $block->hasOptions()): ?>
+<?php if ($_product->isSaleable() && $block->hasOptions()) : ?>
 <div id="bundleSummary"
      class="block-bundle-summary"
      data-mage-init='{"sticky":{"container": ".product-add-form"}}'>
@@ -23,11 +20,11 @@
             <?= $block->getImage($_product, 'bundled_product_customization_page')->toHtml() ?>
             <div class="product-details">
                 <strong class="product name"><?= $block->escapeHtml($_product->getName()) ?></strong>
-                <?php if ($_product->getIsSalable()): ?>
+                <?php if ($_product->getIsSalable()) : ?>
                     <p class="available stock" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
                         <span><?= $block->escapeHtml(__('In stock')) ?></span>
                     </p>
-                <?php else: ?>
+                <?php else : ?>
                     <p class="unavailable stock" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
                         <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
                     </p>
@@ -61,7 +58,7 @@
                 "slideBackSelector": ".action.customization.back",
                 "bundleProductSelector": "#bundleProduct",
                 "bundleOptionsContainer": ".product-add-form"
-                <?php if ($block->isStartCustomization()): ?>
+                <?php if ($block->isStartCustomization()) : ?>
                 ,"autostart": true
                 <?php endif;?>
             }

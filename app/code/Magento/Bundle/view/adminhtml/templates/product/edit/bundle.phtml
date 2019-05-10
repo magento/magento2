@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle */
 ?>
 <script>
@@ -21,13 +19,13 @@ if(typeof Bundle=='undefined') {
         <div class="field field-ship-bundle-items">
             <label for="shipment_type" class="label"><?= $block->escapeHtml(__('Ship Bundle Items')) ?></label>
             <div class="control">
-                <select <?php if ($block->isReadonly()): ?>disabled="disabled" <?php endif;?>
+                <select <?php if ($block->isReadonly()) : ?>disabled="disabled" <?php endif;?>
                         id="shipment_type"
                         name="<?= $block->escapeHtmlAttr($block->getFieldSuffix()) ?>[shipment_type]"
                         class="select">
                     <option value="1"><?= $block->escapeHtml(__('Separately')) ?></option>
                     <option value="0"
-                        <?php if ($block->getProduct()->getShipmentType() == 0): ?>
+                        <?php if ($block->getProduct()->getShipmentType() == 0) : ?>
                             selected="selected"
                         <?php endif; ?>
                     >
@@ -54,7 +52,7 @@ require(["prototype", "mage/adminhtml/form"], function(){
     // re-bind form elements onchange
     varienWindowOnload(true);
 
-    <?php if ($block->isReadonly()):?>
+    <?php if ($block->isReadonly()) :?>
     $('product_bundle_container').select('input', 'select', 'textarea', 'button').each(function(input){
         input.disabled = true;
         if (input.tagName.toLowerCase() == 'button') {

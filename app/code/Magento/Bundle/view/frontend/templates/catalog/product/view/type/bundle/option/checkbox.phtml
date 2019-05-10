@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php /* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox */ ?>
@@ -17,24 +14,24 @@
     </label>
     <div class="control">
         <div class="nested options-list">
-            <?php if ($block->showSingle()): ?>
+            <?php if ($block->showSingle()) : ?>
                 <?= /* @noEscape */ $block->getSelectionQtyTitlePrice($_selections[0]) ?>
                 <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selections[0]) ?>
                 <input type="hidden"
                        class="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>  product bundle option"
                        name="bundle_option[<?= $block->escapeHtml($_option->getId()) ?>]"
                        value="<?= $block->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"/>
-            <?php else:?>
-                <?php foreach($_selections as $_selection): ?>
+            <?php else :?>
+                <?php foreach ($_selections as $_selection) : ?>
                     <div class="field choice">
                         <input class="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?> checkbox product bundle option change-container-classname"
                                id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
                                type="checkbox"
-                               <?php if ($_option->getRequired()) echo 'data-validate="{\'validate-one-required-by-name\':\'input[name^=&quot;bundle_option[' . $block->escapeHtmlAttr($_option->getId()) . ']&quot;]:checked\'}"' ?>
+                               <?php if ($_option->getRequired()) { echo 'data-validate="{\'validate-one-required-by-name\':\'input[name^=&quot;bundle_option[' . $block->escapeHtmlAttr($_option->getId()) . ']&quot;]:checked\'}"'; } ?>
                                name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>][<?= $block->escapeHtmlAttr($_selection->getId()) ?>]"
                                data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>][<?= $block->escapeHtmlAttr($_selection->getId()) ?>]"
-                               <?php if ($block->isSelected($_selection)) echo ' checked="checked"' ?>
-                               <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>
+                               <?php if ($block->isSelected($_selection)) { echo ' checked="checked"'; } ?>
+                               <?php if (!$_selection->isSaleable()) { echo ' disabled="disabled"'; } ?>
                                value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"/>
                         <label class="label"
                                for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>">

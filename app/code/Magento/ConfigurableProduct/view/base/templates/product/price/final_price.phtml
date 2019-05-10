@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox$block */
 /** @var \Magento\Framework\Pricing\Price\PriceInterface $priceModel */
 $priceModel = $block->getPriceType('regular_price');
@@ -22,10 +20,10 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
         'include_container' => true,
         'schema' => $schema,
     ]);
-    ?>
+?>
 </span>
 
-<?php if (!$block->isProductList() && $block->hasSpecialPrice()): ?>
+<?php if (!$block->isProductList() && $block->hasSpecialPrice()) : ?>
     <span class="old-price sly-old-price no-display">
         <?= /* @noEscape */ $block->renderAmount($priceModel->getAmount(), [
             'display_label'     => __('Regular Price'),
@@ -37,12 +35,12 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
     </span>
 <?php endif; ?>
 
-<?php if ($block->showMinimalPrice()): ?>
-    <?php if ($block->getUseLinkForAsLowAs()):?>
+<?php if ($block->showMinimalPrice()) : ?>
+    <?php if ($block->getUseLinkForAsLowAs()) :?>
         <a href="<?= $block->escapeUrl($block->getSaleableItem()->getProductUrl()) ?>" class="minimal-price-link">
             <?= /* @noEscape */ $block->renderAmountMinimal() ?>
         </a>
-    <?php else:?>
+    <?php else :?>
         <span class="minimal-price-link">
             <?= /* @noEscape */ $block->renderAmountMinimal() ?>
         </span>
