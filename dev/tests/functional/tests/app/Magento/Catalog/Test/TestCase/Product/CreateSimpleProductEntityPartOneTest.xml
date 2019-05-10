@@ -25,6 +25,8 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInventoryMaxAllowedQty" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation13">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+            <data name="issue" xsi:type="string">MAGETWO-48850: Filtering Category Products using scope selector</data>
             <data name="description" xsi:type="string">Create simple product and check search by sku</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -42,6 +44,8 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation14">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+            <data name="issue" xsi:type="string">MC-6220: Add products to wishlist from Category page with multiple wishlist enabled</data>
             <data name="description" xsi:type="string">Create simple product and check visibility in category</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>

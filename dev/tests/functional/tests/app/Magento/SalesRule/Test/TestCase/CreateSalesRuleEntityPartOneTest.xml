@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\SalesRule\Test\TestCase\CreateSalesRuleEntityPartOneTest" summary="Create Cart Price Rule" ticketId="MAGETWO-24855">
         <variation name="CreateSalesRuleEntityTestVariation7">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="address/data/country_id" xsi:type="string">United States</data>
             <data name="address/data/region_id" xsi:type="string">California</data>
             <data name="address/data/postcode" xsi:type="string">95814</data>
@@ -37,6 +38,7 @@
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleFreeShippingIsApplied" />
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation8">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="address/data/country_id" xsi:type="string">United States</data>
             <data name="address/data/region_id" xsi:type="string">California</data>
             <data name="address/data/postcode" xsi:type="string">95814</data>
@@ -66,6 +68,7 @@
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation9">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule9 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
             <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
@@ -85,6 +88,7 @@
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsNotApplied" />
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation10">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule10 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
             <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
@@ -110,6 +114,7 @@
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation11">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule11 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
             <data name="salesRule/data/is_active" xsi:type="string">Yes</data>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontDownloadableProductSection">
+        <element name="downloadableLinkBlock" type="text" selector="//div[contains(@class, 'field downloads required')]//span[text()='Downloadable Links']"/>
+        <element name="downloadableLinkLabel" type="text" selector="//label[contains(., '{{title}}')]" parameterized="true" timeout="30"/>
+        <element name="downloadableLinkByTitle" type="input" selector="//*[@id='downloadable-links-list']/*[contains(.,'{{title}}')]//input" parameterized="true" timeout="30"/>
+    </section>
+</sections>
