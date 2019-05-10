@@ -709,10 +709,24 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
         if (($hasDueAmount || $paidAmtIsRefunded) ||
             (!$checkAmtTotalPaid &&
-            abs($totalRefunded - $this->getAdjustmentNegative()) < .0001)) {
+            abs($totalRefunded - $this->getAdjustmentNegative()) < .0001) || 
+            $this->canCreditmemoForZeroAll()) {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Retrieve credit memo for zero all.
+     *
+     * @return bool
+     */
+    public function canCreditmemoForZeroAll()
+    {
+        $totalDue = $this->getTotalDue();
+        $totalRefunded = $this->getTotalRefunded();
+        $totalPaid = $this->getTotalPaid();
+        return is_numeric($totalRefunded) && $totalDue == 0 && $totalPaid == 0;
     }
 
     /**
