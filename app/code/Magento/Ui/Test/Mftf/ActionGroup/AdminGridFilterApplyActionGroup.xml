@@ -5,12 +5,11 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminSelectCMSPageFromGridActionGroup">
-        <arguments>
-            <argument name="identifier" defaultValue=""/>
-        </arguments>
-        <click selector="{{CmsPagesPageActionsSection.select(identifier)}}" stepKey="clickSelectCMSPage" />
+    <actionGroup name="AdminGridFilterApplyActionGroup">
+        <click selector="{{AdminDataGridFilterSection.apply}}" stepKey="applyFilters" />
+        <waitForPageLoad stepKey="waitForFiltersReset" />
     </actionGroup>
 </actionGroups>

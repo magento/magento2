@@ -11,7 +11,7 @@
         <arguments>
             <argument name="identifier" type="string"/>
         </arguments>
-        <amOnPage url="{{StorefrontHomePage.url}}/{{identifier}}" stepKey="amOnCmsPageOnStorefront"/>
+        <amOnPage url="{{StorefrontHomePage.url}}{{identifier}}" stepKey="amOnCmsPageOnStorefront"/>
         <waitForPageLoad stepKey="waitForPageLoadOnStorefront"/>
     </actionGroup>
 </actionGroups>

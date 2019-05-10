@@ -7,9 +7,12 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminCMSPageMassActionDisableActionGroup">
+    <actionGroup name="AdminCMSPageMassActionSelectActionGroup">
+        <arguments>
+            <argument name="action" type="string" />
+        </arguments>
         <click selector="{{CmsPagesPageActionsSection.massActionsButton}}" stepKey="clickMassActionDropdown"/>
-        <click selector="{{CmsPagesPageActionsSection.massActionsOption('Disable')}}" stepKey="clickDisableAction"/>
+        <click selector="{{CmsPagesPageActionsSection.massActionsOption(action)}}" stepKey="clickAction"/>
         <waitForPageLoad stepKey="waitForPageToReload"/>
     </actionGroup>
 </actionGroups>

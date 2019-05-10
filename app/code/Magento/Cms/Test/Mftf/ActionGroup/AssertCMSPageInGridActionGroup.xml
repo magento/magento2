@@ -7,19 +7,12 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertCMSPageInGrid">
+    <actionGroup name="AssertCMSPageInGridActionGroup">
         <arguments>
-            <argument name="identifier" defaultValue=""/>
+            <argument name="cmsPage" type="entity" />
         </arguments>
-        <amOnPage url="{{CmsPagesPage.url}}" stepKey="navigateToCMSPagesGrid"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <conditionalClick selector="//div[contains(@data-role, 'grid-wrapper')]/table/thead/tr/th/span[contains(text(), 'ID')]" dependentSelector="//span[contains(text(), 'ID')]/parent::th[not(contains(@class, '_descend'))]/parent::tr/parent::thead/parent::table/parent::div[contains(@data-role, 'grid-wrapper')]" stepKey="clickToAttemptSortByIdDescending" visible="true"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForFirstIdSortDescendingToFinish" />
-        <!-- Conditional Click again in case it goes from default state to ascending on first click -->
-        <conditionalClick selector="//div[contains(@data-role, 'grid-wrapper')]/table/thead/tr/th/span[contains(text(), 'ID')]" dependentSelector="//span[contains(text(), 'ID')]/parent::th[not(contains(@class, '_descend'))]/parent::tr/parent::thead/parent::table/parent::div[contains(@data-role, 'grid-wrapper')]" stepKey="secondClickToAttemptSortByIdDescending" visible="true"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSecondIdSortDescendingToFinish" />
-        <click selector="{{CmsPagesPageActionsSection.select(identifier)}}" stepKey="clickSelectCMSPage" />
+
+        <seeElement stepKey="seeElementByCmsPageIdentifier" selector="{{AdminDataGridTableSection.rowTemplateStrict(cmsPage.identifier)}}" />
+        <see userInput="{{cmsPage.title}}" stepKey="seeCmsPageTitle" selector="{{AdminDataGridTableSection.rowTemplateStrict(cmsPage.identifier)}}" />
     </actionGroup>
 </actionGroups>

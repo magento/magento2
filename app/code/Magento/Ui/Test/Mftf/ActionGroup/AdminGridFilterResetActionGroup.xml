@@ -5,10 +5,12 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenCMSPagesGridActionGroup">
-        <amOnPage url="{{CmsPagesPage.url}}" stepKey="navigateToCMSPagesGrid"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+    <actionGroup name="AdminGridFilterResetActionGroup">
+        <scrollToTopOfPage stepKey="scrollToTop" />
+        <conditionalClick selector="{{AdminDataGridFilterSection.clear}}" dependentSelector="{{AdminDataGridFilterSection.clear}}" visible="true" stepKey="clearExistingFilters" />
+        <waitForPageLoad stepKey="waitForFiltersReset" />
     </actionGroup>
 </actionGroups>

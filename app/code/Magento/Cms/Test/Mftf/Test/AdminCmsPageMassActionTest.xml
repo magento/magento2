@@ -9,11 +9,14 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCmsPageMassActionTest">
         <annotations>
-            <features value="Cms"/>
+            <features value="CmsPage"/>
             <title value="Create two CMS Pages and perform mass disable action"/>
             <description value="Admin should be able to perform mass actions to CMS pages"/>
+            <stories value="Admin Grid Mass Action" />
+            <testCaseId value="MC-14659" />
+            <severity value="CRITICAL"/>
             <group value="backend"/>
-            <group value="cMSContent"/>
+            <group value="CMSContent"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
@@ -26,8 +29,11 @@
             <deleteData createDataKey="secondCMSPage" stepKey="deleteSecondCMSPage" />
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+
         <!--Go to Grid page-->
         <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCMSPageGrid"/>
+        <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearPossibleGridFilters"/>
+
         <!--Select pages in Grid-->
         <actionGroup ref="AdminSelectCMSPageInGridActionGroup" stepKey="selectFirstCMSPage">
             <argument name="identifier" value="$$firstCMSPage.identifier$$"/>
@@ -35,24 +41,42 @@
         <actionGroup ref="AdminSelectCMSPageInGridActionGroup" stepKey="selectSecondCMSPage">
             <argument name="identifier" value="$$secondCMSPage.identifier$$"/>
         </actionGroup>
+
         <!-- Disable Pages-->
-        <actionGroup ref="AdminCMSPageMassActionDisableActionGroup" stepKey="disablePages"/>
+        <actionGroup ref="AdminCMSPageMassActionSelectActionGroup" stepKey="disablePages">
+            <argument name="action" value="Disable" />
+        </actionGroup>
+
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="A total of 2 record(s) have been disabled." />
+        </actionGroup>
+
         <!--Verify pages in Grid-->
-        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="openCMSPagesGridActionGroup"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilters"/>
-        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortGridByIdDescending"/>
-        <actionGroup ref="AdminSelectCMSPageFromGridActionGroup" stepKey="verifyFirstPageInGrid">
-            <argument name="identifier" value="$$firstCMSPage.identifier$$"/>
+        <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFilters"/>
+        <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="filterGridByFirstCmsPageIdentifier">
+            <argument name="filterInputName" value="identifier" />
+            <argument name="filterValue" value="$$firstCMSPage.identifier$$" />
         </actionGroup>
-        <actionGroup ref="AdminSelectCMSPageFromGridActionGroup" stepKey="verifySecondPageInGrid">
-            <argument name="identifier" value="$$secondCMSPage.identifier$$"/>
+        <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyFirstGridFilters"/>
+        <actionGroup ref="AssertCMSPageInGridActionGroup" stepKey="assertFirstCmsPageInGrid">
+            <argument name="cmsPage" value="$$firstCMSPage$$" />
         </actionGroup>
-        <!--Verify first page is disabled on Frontend-->
+
+        <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="filterGridBySecondCmsPageIdentifier">
+            <argument name="filterInputName" value="identifier" />
+            <argument name="filterValue" value="$$secondCMSPage.identifier$$" />
+        </actionGroup>
+        <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applySecondGridFilters"/>
+        <actionGroup ref="AssertCMSPageInGridActionGroup" stepKey="assertSecondCmsPageInGrid">
+            <argument name="cmsPage" value="$$secondCMSPage$$" />
+        </actionGroup>
+        <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersToIsolateTest"/>
+
+        <!--Verify pages are disabled on Storefront-->
         <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="goToFirstCMSPageOnStorefront">
             <argument name="identifier" value="$$firstCMSPage.identifier$$"/>
         </actionGroup>
         <actionGroup ref="AssertCMSPageNotFoundOnStorefrontActionGroup" stepKey="seeNotFoundErrorForFirstPage"/>
-        <!--Verify second page is disabled on Frontend-->
         <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="goToSecondCMSPageOnStorefront">
             <argument name="identifier" value="$$secondCMSPage.identifier$$"/>
         </actionGroup>
