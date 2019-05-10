@@ -1,0 +1,54 @@
+namespace Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\Scope;
+
+/**
+ * Interceptor class for @see \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item
+ */
+class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        switch(ObjectManager::getInstance()->get(Scope::class)->getCurrentScope()){
+        	case 'global':
+        	case 'emptyscope':
+        		$result = parent::getName();
+        		return $this->_get_plugin_simple_plugin()->afterGetName($this, $result);
+        	case 'backend':
+        		$this->_get_plugin_advanced_plugin()->beforeGetName($this);
+        		$result = $this->_get_plugin_advanced_plugin()->aroundGetName($this, function(){
+        			$result = parent::getName();
+        			return $this->_get_plugin_simple_plugin()->afterGetName($this, $result);
+        		});
+        		return $this->_get_plugin_advanced_plugin()->afterGetName($this, $result);
+        	default:
+        		return parent::getName();
+        }
+    }
+
+    /**
+     * plugin "simple_plugin"
+     * @return \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple
+     */
+    public function _get_plugin_simple_plugin()
+    {
+        static $cache = null;
+        if ($cache === null) $cache = ObjectManager::getInstance()->get(\Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple::class);
+        return $cache;
+    }
+
+    /**
+     * plugin "advanced_plugin"
+     * @return \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced
+     */
+    public function _get_plugin_advanced_plugin()
+    {
+        static $cache = null;
+        if ($cache === null) $cache = ObjectManager::getInstance()->get(\Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class);
+        return $cache;
+    }
+}

@@ -1,0 +1,142 @@
+namespace Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItemTyped;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\Scope;
+
+/**
+ * Interceptor class for @see \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItemTyped
+ */
+class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItemTyped
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function returnVoid() : void
+    {
+        switch(ObjectManager::getInstance()->get(Scope::class)->getCurrentScope()){
+        	case 'backend':
+        		parent::returnVoid();
+        		(($tmp = $this->_get_plugin_complex_plugin()->afterReturnVoid($this, $result)) !== null) ? $tmp : $result;
+        	default:
+        		parent::returnVoid();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNullableValue() : string
+    {
+        switch(ObjectManager::getInstance()->get(Scope::class)->getCurrentScope()){
+        	case 'backend':
+        		$result = parent::getNullableValue();
+        		return $this->_get_plugin_complex_plugin()->afterGetNullableValue($this, $result);
+        	default:
+        		return parent::getNullableValue();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName() : string
+    {
+        switch(ObjectManager::getInstance()->get(Scope::class)->getCurrentScope()){
+        	case 'backend':
+        		$this->_get_plugin_advanced_plugin()->beforeGetName($this);
+        		$result = $this->_get_plugin_advanced_plugin()->aroundGetName($this, function(){
+        			$result = $this->_get_plugin_complex_plugin()->aroundGetName($this, function(){
+        				return parent::getName();
+        			});
+        			return $this->_get_plugin_complex_plugin()->afterGetName($this, $result);
+        		});
+        		return $this->_get_plugin_advanced_plugin()->afterGetName($this, $result);
+        	default:
+        		return parent::getName();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValue(string $value)
+    {
+        switch(ObjectManager::getInstance()->get(Scope::class)->getCurrentScope()){
+        	case 'backend':
+        		$beforeResult = $this->_get_plugin_complex_plugin()->beforeSetValue($this, $value);
+        		if ($beforeResult !== null) list($value) = (array)$beforeResult;
+        		return $this->_get_plugin_complex_plugin()->aroundSetValue($this, function($value){
+        			return parent::setValue($value);
+        		}, $value);
+        	default:
+        		return parent::setValue($value);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function firstVariadicParameter(string ... $variadicValue)
+    {
+        switch(ObjectManager::getInstance()->get(Scope::class)->getCurrentScope()){
+        	case 'backend':
+        		return $this->_get_plugin_complex_plugin()->aroundFirstVariadicParameter($this, function($variadicValue){
+        			return parent::firstVariadicParameter($variadicValue);
+        		}, $variadicValue);
+        	default:
+        		return parent::firstVariadicParameter($variadicValue);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function secondVariadicParameter(string $value, string ... $variadicValue)
+    {
+        switch(ObjectManager::getInstance()->get(Scope::class)->getCurrentScope()){
+        	case 'backend':
+        		return $this->_get_plugin_complex_plugin()->aroundSecondVariadicParameter($this, function($value, $variadicValue){
+        			return parent::secondVariadicParameter($value, $variadicValue);
+        		}, $value, $variadicValue);
+        	default:
+        		return parent::secondVariadicParameter($value, $variadicValue);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function byRefVariadic(string &... $variadicValue)
+    {
+        switch(ObjectManager::getInstance()->get(Scope::class)->getCurrentScope()){
+        	case 'backend':
+        		return $this->_get_plugin_complex_plugin()->aroundByRefVariadic($this, function(&$variadicValue){
+        			return parent::byRefVariadic($variadicValue);
+        		}, $variadicValue);
+        	default:
+        		return parent::byRefVariadic($variadicValue);
+        }
+    }
+
+    /**
+     * plugin "complex_plugin"
+     * @return \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Complex
+     */
+    public function _get_plugin_complex_plugin()
+    {
+        static $cache = null;
+        if ($cache === null) $cache = ObjectManager::getInstance()->get(\Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Complex::class);
+        return $cache;
+    }
+
+    /**
+     * plugin "advanced_plugin"
+     * @return \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced
+     */
+    public function _get_plugin_advanced_plugin()
+    {
+        static $cache = null;
+        if ($cache === null) $cache = ObjectManager::getInstance()->get(\Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class);
+        return $cache;
+    }
+}
