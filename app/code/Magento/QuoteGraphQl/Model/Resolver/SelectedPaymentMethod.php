@@ -37,7 +37,7 @@ class SelectedPaymentMethod implements ResolverInterface
         return [
             'code' => $payment->getMethod(),
             'title' => $payment->getMethodInstance()->getTitle(),
-            'purchase_order_number' => $payment->getPoNumber()
+            'purchase_order_number' => $payment->getPoNumber(),
         ];
     }
 }
