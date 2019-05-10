@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateCategoryWithProductsTest">
+        <annotations>
+            <stories value="Update categories"/>
+            <title value="Update category, sort products by default sorting"/>
+            <description value="Login as admin, update category and sort products"/>
+            <testCaseId value="MC-6059"/>
+            <severity value="CRITICAL"/>
+            <group value="Catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct" />
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData  createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Open Category Page-->
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoaded"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
+        <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
+
+        <!--Update Product Display Setting-->
+        <scrollTo selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" x="0" y="-80" stepKey="scrollToDisplaySetting"/>
+        <click selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" stepKey="selectDisplaySetting"/>
+        <scrollToTopOfPage stepKey="scfrollToTop"/>
+        <click selector="{{CategoryDisplaySettingsSection.productListCheckBox}}" stepKey="enableTheAvailableProductList"/>
+        <selectOption selector="{{CategoryDisplaySettingsSection.productList}}" parameterArray="['Product Name', 'Price']" stepKey="selectPrice"/>
+        <scrollTo selector="{{CategoryDisplaySettingsSection.defaultProductLisCheckBox}}" x="0" y="-80" stepKey="scrollToDefaultProductList"/>
+        <click selector="{{CategoryDisplaySettingsSection.defaultProductLisCheckBox}}" stepKey="enableTheDefaultProductList"/>
+        <selectOption selector="{{CategoryDisplaySettingsSection.defaultProductList}}" userInput="name" stepKey="selectProductName"/>
+
+        <!--Add Products in Category-->
+        <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
+        <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
+        <scrollToTopOfPage stepKey="scrollOnTopOfPage"/>
+        <click selector="{{CatalogProductsSection.resetFilter}}" stepKey="clickOnResetFilter"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="$$simpleProduct.name$$"  stepKey="selectProduct1"/>
+        <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitFroPageToLoad1"/>
+        <scrollTo  selector="{{AdminCategoryContentSection.productTableRow}}"  stepKey="scrollToTableRow"/>
+        <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProduct1FromTableRow"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForCategorySaved"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
+        <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
+
+        <!--Verify Category Title-->
+        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
+
+        <!--Verify Category in store front page-->
+        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name)}}" stepKey="seeDefaultProductPage"/>
+        <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
+        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeCategoryOnNavigation"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="selectCategory"/>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+
+        <!--Verify Product in Category-->
+        <seeElement stepKey="seeProductsInCategory" selector="{{StorefrontCategoryMainSection.productLink}}"/>
+        <click selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="openSearchedProduct"/>
+        <waitForPageLoad  stepKey="waitForProductToLoad1"/>
+
+        <!--Verify product name and price on Store Front-->
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="assertProductName"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{defaultSimpleProduct.price}}" stepKey="assertProductPrice"/>
+    </test>
+</tests>
+

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Check configurable product attribute options on the category page -->
+    <actionGroup name="SelectStorefrontSideBarAttributeOption">
+        <arguments>
+            <argument name="categoryName" type="string"/>
+            <argument name="attributeDefaultLabel" type="string"/>
+        </arguments>
+        <amOnPage url="{{categoryName}}" stepKey="openCategoryStoreFrontPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(categoryName)}}" stepKey="seeCategoryInFrontPage"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(categoryName)}}" stepKey="clickOnCategory"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad1"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.filterOptionsTitle(attributeDefaultLabel)}}" stepKey="seeAttributeOptionsTitle"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionsTitle(attributeDefaultLabel)}}" stepKey="clickAttributeOptions"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+    </actionGroup>
+</actionGroups>

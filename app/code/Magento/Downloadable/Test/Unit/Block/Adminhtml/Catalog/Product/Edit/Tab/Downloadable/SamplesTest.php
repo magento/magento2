@@ -5,6 +5,14 @@
  */
 namespace Magento\Downloadable\Test\Unit\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
+/**
+ * Class SamplesTest
+ *
+ * @package Magento\Downloadable\Test\Unit\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable
+ *
+ * @deprecated
+ * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Samples
+ */
 class SamplesTest extends \PHPUnit\Framework\TestCase
 {
     /**

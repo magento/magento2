@@ -124,6 +124,7 @@
 
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage1"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderProcessing"/>
 
         <!--Create Credit Memo-->
         <comment userInput="Admin creates credit memo" stepKey="createCreditMemoComment"/>

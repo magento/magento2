@@ -12,7 +12,8 @@
         "magento/module-catalog": "*",
         "magento/module-eav": "*",
         "magento/module-media-storage": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [

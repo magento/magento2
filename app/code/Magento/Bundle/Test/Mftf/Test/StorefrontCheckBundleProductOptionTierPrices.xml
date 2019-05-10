@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckBundleProductOptionTierPrices">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="View bundle products"/>
+            <title value="Check tier prices for bundle options"/>
+            <description value="Check tier prices for bundle options"/>
+            <testCaseId value="MAGETWO-98968"/>
+            <useCaseId value="MAGETWO-98603"/>
+            <severity value="AVERAGE"/>
+            <group value="catalog"/>
+            <group value="bundle"/>
+        </annotations>
+        <before>
+            <!-- Create Dynamic Bundle product -->
+            <actionGroup ref="AdminCreateApiDynamicBundleProductAllOptionTypesActionGroup" stepKey="createBundleProduct"/>
+
+            <!-- Add tier prices to simple products -->
+            <!-- Simple product 1 -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <amOnPage url="{{AdminProductEditPage.url($$simpleProduct1CreateBundleProduct.id$$)}}" stepKey="openAdminEditPageProduct1"/>
+            <actionGroup ref="ProductSetAdvancedPricing" stepKey="addTierPriceProduct1">
+                <argument name="group" value="ALL GROUPS"/>
+                <argument name="quantity" value="5"/>
+                <argument name="price" value="Discount"/>
+                <argument name="amount" value="50"/>
+            </actionGroup>
+            <!-- Simple product 2 -->
+            <amOnPage url="{{AdminProductEditPage.url($$simpleProduct2CreateBundleProduct.id$$)}}" stepKey="openAdminEditPageProduct2"/>
+            <actionGroup ref="ProductSetAdvancedPricing" stepKey="addTierPriceProduct2">
+                <argument name="group" value="ALL GROUPS"/>
+                <argument name="quantity" value="7"/>
+                <argument name="price" value="Discount"/>
+                <argument name="amount" value="25"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutAsAdmin"/>
+
+            <!-- Run reindex -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createBundleProductCreateBundleProduct" stepKey="deleteDynamicBundleProduct"/>
+            <deleteData createDataKey="simpleProduct1CreateBundleProduct" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2CreateBundleProduct" stepKey="deleteSimpleProduct2"/>
+        </after>
+
+        <!-- Go to storefront product page -->
+        <amOnPage url="{{StorefrontProductPage.url($$createBundleProductCreateBundleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToBundleProductPage"/>
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
+
+        <!--"Drop-down" type option-->
+        <!-- Check Tier Prices for product 1 -->
+        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Drop-down Option')}}" userInput="$$simpleProduct1CreateBundleProduct.sku$$ +$$$simpleProduct1CreateBundleProduct.price$$.00" stepKey="selectDropDownOptionProduct1"/>
+        <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Drop-down Option')}}" userInput="$$simpleProduct1CreateBundleProduct.sku$$ +$$$simpleProduct1CreateBundleProduct.price$$.00" stepKey="checkDropDownOptionProduct1"/>
+        <grabTextFrom selector="{{StorefrontBundledSection.dropDownOptionTierPrices('Drop-down Option')}}" stepKey="DropDownTierPriceTextProduct1"/>
+        <assertContains stepKey="assertDropDownTierPriceTextProduct1">
+            <expectedResult type="string">Buy 5 for $5.00 each and save 50%</expectedResult>
+            <actualResult type="variable">DropDownTierPriceTextProduct1</actualResult>
+        </assertContains>
+        <!-- Check Tier Prices for product 2 -->
+        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Drop-down Option')}}" userInput="$$simpleProduct2CreateBundleProduct.sku$$ +$$$simpleProduct2CreateBundleProduct.price$$.00" stepKey="selectDropDownOptionProduct2"/>
+        <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Drop-down Option')}}" userInput="$$simpleProduct2CreateBundleProduct.sku$$ +$$$simpleProduct2CreateBundleProduct.price$$.00" stepKey="checkDropDownOptionProduct2"/>
+        <grabTextFrom selector="{{StorefrontBundledSection.dropDownOptionTierPrices('Drop-down Option')}}" stepKey="dropDownTierPriceTextProduct2"/>
+        <assertContains stepKey="assertDropDownTierPriceTextProduct2">
+            <expectedResult type="string">Buy 7 for $15.00 each and save 25%</expectedResult>
+            <actualResult type="variable">dropDownTierPriceTextProduct2</actualResult>
+        </assertContains>
+
+        <!--"Radio Buttons" type option-->
+        <!-- Check Tier Prices for product 1 -->
+        <grabTextFrom selector="{{StorefrontBundledSection.radioButtonOptionLabel('Radio Buttons Option', '$$simpleProduct1CreateBundleProduct.sku$$')}}" stepKey="radioButtonsOptionTierPriceTextProduct1"/>
+        <assertContains stepKey="assertRadioButtonsOptionTierPriceTextProduct1">
+            <expectedResult type="string">Buy 5 for $5.00 each and save 50%</expectedResult>
+            <actualResult type="variable">radioButtonsOptionTierPriceTextProduct1</actualResult>
+        </assertContains>
+        <!-- Check Tier Prices for product 2 -->
+        <grabTextFrom selector="{{StorefrontBundledSection.radioButtonOptionLabel('Radio Buttons Option', '$$simpleProduct2CreateBundleProduct.sku$$')}}" stepKey="radioButtonsOptionTierPriceTextProduct2"/>
+        <assertContains stepKey="assertRadioButtonsOptionTierPriceTextProduct2">
+            <expectedResult type="string">Buy 7 for $15.00 each and save 25%</expectedResult>
+            <actualResult type="variable">radioButtonsOptionTierPriceTextProduct2</actualResult>
+        </assertContains>
+
+        <!--"Checkbox" type option-->
+        <!-- Check Tier Prices for product 1 -->
+        <grabTextFrom selector="{{StorefrontBundledSection.checkboxOptionLabel('Checkbox Option', '$$simpleProduct1CreateBundleProduct.sku$$')}}" stepKey="checkBoxOptionTierPriceTextProduct1"/>
+        <assertContains stepKey="assertCheckBoxOptionTierPriceTextProduct1">
+            <expectedResult type="string">Buy 5 for $5.00 each and save 50%</expectedResult>
+            <actualResult type="variable">checkBoxOptionTierPriceTextProduct1</actualResult>
+        </assertContains>
+        <!-- Check Tier Prices for product 2 -->
+        <grabTextFrom selector="{{StorefrontBundledSection.checkboxOptionLabel('Checkbox Option', '$$simpleProduct2CreateBundleProduct.sku$$')}}" stepKey="checkBoxOptionTierPriceTextProduct2"/>
+        <assertContains stepKey="assertCheckBoxOptionTierPriceTextProduct2">
+            <expectedResult type="string">Buy 7 for $15.00 each and save 25%</expectedResult>
+            <actualResult type="variable">checkBoxOptionTierPriceTextProduct2</actualResult>
+        </assertContains>
+    </test>
+</tests>
