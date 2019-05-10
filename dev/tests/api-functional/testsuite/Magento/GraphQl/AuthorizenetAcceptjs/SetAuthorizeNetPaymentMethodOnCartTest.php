@@ -102,6 +102,7 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
+     * @expectedException \Exception
      */
     public function testSetAuthorizeNetPaymentOnCartForGuest()
     {
@@ -128,6 +129,7 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @expectedException \Exception
      */
     public function testSetAuthorizeNetPaymentOnCartForRegisteredCustomer()
     {
