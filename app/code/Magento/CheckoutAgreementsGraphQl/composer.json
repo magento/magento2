@@ -1,18 +1,15 @@
 {
-    "name": "magento/module-cms-graph-ql",
+    "name": "magento/module-checkout-agreements-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
     "require": {
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
-        "magento/module-cms": "*",
         "magento/module-store": "*",
-        "magento/module-widget": "*"
+        "magento/module-checkout-agreements": "*"
     },
     "suggest": {
-        "magento/module-graph-ql": "*",
-        "magento/module-graph-ql-cache": "*",
-        "magento/module-store-graph-ql": "*"
+        "magento/module-graph-ql": "*"
     },
     "license": [
         "OSL-3.0",
@@ -23,7 +20,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\CmsGraphQl\\": ""
+            "Magento\\CheckoutAgreementsGraphQl\\": ""
         }
     }
 }
