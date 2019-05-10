@@ -1,0 +1,24 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Mutation {
+    createPaypalExpressToken(input: PaypalExpressTokenInput): PaypalExpressToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PaypalExpressToken") @doc(description:"")
+}
+
+input PaypalExpressTokenInput {
+    cart_id: String!
+}
+
+type PaypalExpressToken implements PaymentTokenInterface {
+    token: String
+    redirect_url: String
+}
+
+input PaymentMethodAdditionalDataInput {
+    paypal_express: PaypalExpressInput
+}
+
+input PaypalExpressInput {
+    payer_id: String!
+    token: String!
+}

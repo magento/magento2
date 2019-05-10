@@ -121,6 +121,11 @@ input ShippingMethodInput {
 
 input PlaceOrderInput {
     cart_id: String!
+    payment_details: PlaceOrderPaymentDetails
+}
+
+input PlaceOrderPaymentDetails {
+    code: String!
 }
 
 input SetPaymentMethodOnCartInput {
@@ -131,6 +136,10 @@ input SetPaymentMethodOnCartInput {
 input PaymentMethodInput {
     code: String! @doc(description:"Payment method code")
     purchase_order_number: String @doc(description:"Purchase order number")
+    additional_data: PaymentMethodAdditionalDataInput @doc(description: "Additional payment data")
+}
+
+input PaymentMethodAdditionalDataInput {
 }
 
 input SetGuestEmailOnCartInput {
@@ -326,4 +335,8 @@ type CartItemSelectedOptionValuePrice {
 
 type Order {
     order_id: String
+}
+
+interface PaymentTokenInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PaymentTokenTypeResolver"){
+    method: String
 }
