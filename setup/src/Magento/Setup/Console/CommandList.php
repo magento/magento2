@@ -92,6 +92,7 @@ class CommandList
             if (class_exists($class)) {
                 $commands[] = $this->serviceManager->get($class);
             } else {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception('Class ' . $class . ' does not exist');
             }
         }

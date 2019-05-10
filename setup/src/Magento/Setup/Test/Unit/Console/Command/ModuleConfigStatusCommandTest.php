@@ -13,6 +13,9 @@ use Magento\Setup\Console\Command\ModuleConfigStatusCommand;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * Tests for module config status command.
+ */
 class ModuleConfigStatusCommandTest extends TestCase
 {
     /**
@@ -49,7 +52,8 @@ class ModuleConfigStatusCommandTest extends TestCase
     public function executeDataProvider()
     {
         $successMessage = 'The modules configuration is up to date.' . PHP_EOL;
-        $failureMessage = 'The modules configuration in the \'app/etc/config.php\' file is outdated. Run \'setup:upgrade\' to fix it.' . PHP_EOL;
+        $failureMessage = 'The modules configuration in the \'app/etc/config.php\' '
+            . 'file is outdated. Run \'setup:upgrade\' to fix it.' . PHP_EOL;
 
         return [
             [
