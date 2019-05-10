@@ -4,17 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 $attributes = $block->getCssClass() ? ' class="' . $block->escapeHtmlAttr($block->getCssClass()) . '"' : '';
 $attr = $block->getAttributes();
-if (!empty($attr)) {
-    foreach ($block->getAttributes() as $attribute => $value) {
-        $attributes .= ' ' . $block->escapeHtml($attribute) . '="' . $block->escapeHtmlAttr($value) . '"';
-    }
-}
-?>
-<?php /* @noEscape */ echo '<'
+$textHtml = '<'
     . $block->escapeHtml($block->getTag())
     . $attributes
     . '>'
@@ -22,3 +14,10 @@ if (!empty($attr)) {
     . '</'
     . $block->escapeHtml($block->getTag())
     . '>';
+if (!empty($attr)) {
+    foreach ($block->getAttributes() as $attribute => $value) {
+        $attributes .= ' ' . $block->escapeHtml($attribute) . '="' . $block->escapeHtmlAttr($value) . '"';
+    }
+}
+?>
+<?= /* @noEscape */ $textHtml ?>
