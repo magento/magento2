@@ -121,7 +121,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     public function testGenerationForGlobalScope()
     {
         $this->configMock->expects($this->any())->method('getValue')
-            ->with('catalog/seo/generate_rewrites_on_save')
+            ->with('catalog/seo/generate_category_product_rewrites')
             ->willReturn('1');
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product->expects($this->any())->method('getStoreId')->will($this->returnValue(null));

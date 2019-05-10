@@ -125,9 +125,9 @@
             <group value="urlRewrite"/>
         </annotations>
         <before>
-            <!-- Set the configuration to generate URL rewrie for Products on Category Save to Yes (default)-->
-            <comment userInput="Enable SEO configuration setting to generate URL Rewrite on Category save " stepKey="commentEnableUrlRewriteConfig" />
-            <magentoCLI command="config:set catalog/seo/generate_rewrites_on_save 1" stepKey="enableGenerateUrlRewrite"/>
+            <!-- Set the configuration for Generate "category/product" URL Rewrites to Yes (default)-->
+            <comment userInput="Enable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentEnableUrlRewriteConfig" />
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
 
@@ -144,9 +144,9 @@
                 <field key="name">category-admin</field>
             </createData>
 
-            <!-- Set the configuration to generate URL rewrie for Products on Category Save to No-->
-            <comment userInput="Disable SEO configuration setting to generate URL Rewrite on Category save " stepKey="commentDisableUrlRewriteConfig" />
-            <magentoCLI command="config:set catalog/seo/generate_rewrites_on_save 0" stepKey="disableGenerateUrlRewrite"/>
+            <!-- Set the configuration for Generate "category/product" URL Rewrites to No-->
+            <comment userInput="Disable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentDisableUrlRewriteConfig" />
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache"/>
         </before>
@@ -164,7 +164,7 @@
                 <argument name="customStore" value="customStoreNLNotUnique"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
-            <magentoCLI command="config:set catalog/seo/generate_rewrites_on_save 1" stepKey="resetConfigurationSetting"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="resetConfigurationSetting"/>
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache2"/>
         </after>

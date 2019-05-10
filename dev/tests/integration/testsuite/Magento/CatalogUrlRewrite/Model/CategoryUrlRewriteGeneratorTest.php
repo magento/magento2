@@ -36,7 +36,7 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
-     * @magentoConfigFixture default/catalog/seo/generate_rewrites_on_save 1
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
@@ -110,7 +110,7 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @magentoConfigFixture default/catalog/seo/generate_rewrites_on_save 1
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
      * @magentoAppIsolation enabled
      */
@@ -261,7 +261,7 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
     }
 
     /**
-     * @magentoConfigFixture default/catalog/seo/generate_rewrites_on_save 0
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 0
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
@@ -290,9 +290,8 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
     }
 
     /**
-     * @magentoConfigFixture default/catalog/seo/generate_rewrites_on_save 0
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 0
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
-     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
     public function testGenerateUrlRewritesWithoutGenerateProductRewrites()

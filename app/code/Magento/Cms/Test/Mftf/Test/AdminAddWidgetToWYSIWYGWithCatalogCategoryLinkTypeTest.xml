@@ -64,7 +64,7 @@
         <see userInput="Hello CMS Page!" stepKey="seeContent"/>
         <!--see widget on Storefront-->
         <see userInput="$$createPreReqCategory.name$$" stepKey="seeCategoryLink"/>
-        <magentoCLI command="config:set catalog/seo/generate_rewrites_on_save 0" stepKey="disableGenerateUrlRewrite"/>
+        <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
         <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage2"/>
         <waitForPageLoad stepKey="wait6" />
         <see userInput="Hello CMS Page!" stepKey="seeContent2"/>
@@ -76,7 +76,7 @@
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
-            <magentoCLI command="config:set catalog/seo/generate_rewrites_on_save 1" stepKey="enableGenerateUrlRewrite"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </test>

@@ -18,7 +18,7 @@ use Magento\Framework\Registry;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewrite;
 
 /**
- * Table Cleaner in case of switching generate_rewrites_on_save off
+ * Table Cleaner in case of switching generate_category_product_rewrites off
  */
 class TableCleaner extends ConfigValue
 {

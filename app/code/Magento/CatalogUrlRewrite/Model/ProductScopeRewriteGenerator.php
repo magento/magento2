@@ -259,12 +259,12 @@ class ProductScopeRewriteGenerator
     }
 
     /**
-     * Check config value of generate_rewrites_on_save
+     * Check config value of generate_category_product_rewrites
      *
      * @return bool
      */
     private function isCategoryRewritesEnabled()
     {
-        return (bool)$this->config->getValue('catalog/seo/generate_rewrites_on_save');
+        return (bool)$this->config->getValue('catalog/seo/generate_category_product_rewrites');
     }
 }

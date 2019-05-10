@@ -22,7 +22,7 @@
         <element name="flatCatalogProduct" type="select" selector="#catalog_frontend_flat_catalog_product"/>
         <element name="seo" type="button" selector="#catalog_seo-head"/>
         <element name="CheckIfSeoTabExpand" type="button" selector="#catalog_seo-head:not(.open)"/>
-        <element name="GenerateUrlRewrites" type="select" selector="#catalog_seo_generate_rewrites_on_save"/>
+        <element name="GenerateUrlRewrites" type="select" selector="#catalog_seo_generate_category_product_rewrites"/>
         <element name="successMessage" type="text" selector="#messages"/>
     </section>
     <section name="GenerateUrlRewritesConfirm">

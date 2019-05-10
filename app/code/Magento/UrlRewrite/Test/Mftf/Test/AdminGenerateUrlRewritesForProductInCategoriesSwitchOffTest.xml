@@ -20,9 +20,9 @@
 
         <!-- Preconditions-->
         <before>
-            <!-- Set the configuration to generate URL rewrie for Products on Category Save-->
-            <comment userInput="Enable config to generate URL Rewrite on Category save " stepKey="commentEnableConfig" />
-            <magentoCLI command="config:set catalog/seo/generate_rewrites_on_save 1" stepKey="enableGenerateUrlRewrite"/>
+            <!-- Set the configuration for Generate "category/product" URL Rewrites-->
+            <comment userInput="Enable config to generate category/product URL Rewrites" stepKey="commentEnableConfig" />
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
             <!-- Create 4 categories -->
@@ -73,7 +73,7 @@
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessageAfterSaved"/>
 
-        <!-- 5. Set the configuration to generate URL rewrie for Products on Category Save to No-->
+        <!-- 5. Set the configuration for Generate "category/product" URL Rewrites to No-->
         <amOnPage url="{{CatalogConfigPage.url}}" stepKey="amOnCatalogConfigPage"/>
         <conditionalClick selector="{{CatalogSection.seo}}" dependentSelector="{{CatalogSection.CheckIfSeoTabExpand}}" visible="true" stepKey="expandSeoTab" />
         <waitForElementVisible  selector="{{CatalogSection.GenerateUrlRewrites}}" stepKey="GenerateUrlRewritesSelect"/>
