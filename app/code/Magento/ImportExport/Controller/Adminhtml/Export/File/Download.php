@@ -36,6 +36,11 @@ class Download extends ExportController implements HttpGetActionInterface
     private $filesystem;
 
     /**
+     * @inheritdoc
+     */
+    protected $_publicActions = ['download'];
+
+    /**
      * DownloadFile constructor.
      * @param Action\Context $context
      * @param FileFactory $fileFactory

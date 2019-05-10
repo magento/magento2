@@ -8,6 +8,9 @@ declare(strict_types=1);
 namespace Magento\ImportExport\Controller\Adminhtml\Export\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\ImportExport\Controller\Adminhtml\Export\File\Delete;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test for \Magento\ImportExport\Controller\Adminhtml\Export\File\Delete class.
@@ -15,7 +18,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class DeleteTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\ImportExport\Controller\Adminhtml\Export\File\Delete
+     * @var Delete
      */
     private $model;
 
@@ -35,7 +38,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     private $fileName = 'catalog_product.csv';
 
     /**
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem
      */
     private $filesystem;
 
@@ -49,15 +52,15 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->varDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->varDirectory->create($this->varDirectory->getRelativePath('export'));
         $this->fullDirectoryPath = $this->varDirectory->getAbsolutePath('export');
         $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
         $fixtureDir = realpath(__DIR__ . '/../../Import/_files');
         copy($fixtureDir . '/' . $this->fileName, $filePath);
-        $this->model = $this->objectManager->get(\Magento\ImportExport\Controller\Adminhtml\Export\File\Delete::class);
+        $this->model = $this->objectManager->get(Delete::class);
     }
 
     /**
@@ -71,9 +74,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->model->execute();
 
         $this->assertFalse(
-            $this->varDirectory->isExist(
-                $this->varDirectory->getRelativePath( 'export/' . $this->fileName)
-            )
+            $this->varDirectory->isExist($this->varDirectory->getRelativePath('export/' . $this->fileName))
         );
     }
 
@@ -82,8 +83,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
      */
     public static function tearDownAfterClass()
     {
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get(\Magento\Framework\Filesystem::class);
+        $filesystem = Bootstrap::getObjectManager()->get(Filesystem::class);
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $directory */
         $directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         if ($directory->isExist('export')) {

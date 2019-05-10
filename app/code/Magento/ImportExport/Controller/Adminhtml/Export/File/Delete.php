@@ -38,6 +38,11 @@ class Delete extends ExportController implements HttpGetActionInterface
     private $file;
 
     /**
+     * @inheritdoc
+     */
+    protected $_publicActions = ['delete'];
+
+    /**
      * Delete constructor.
      * @param Action\Context $context
      * @param Filesystem $filesystem

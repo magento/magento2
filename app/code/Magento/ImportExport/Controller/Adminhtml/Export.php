@@ -18,9 +18,4 @@ abstract class Export extends Action
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_ImportExport::export';
-
-    /**
-     * @inheritdoc
-     */
-    protected $_publicActions = ['download', 'delete'];
 }
