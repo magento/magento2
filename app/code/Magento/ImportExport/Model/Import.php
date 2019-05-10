@@ -73,6 +73,11 @@ class Import extends AbstractModel
     const FIELD_NAME_IMG_FILE_DIR = 'import_images_file_dir';
 
     /**
+     * ReadInterface of the directory constraint for images.
+     */
+    const IMAGES_BASE_DIR = 'images_base_directory';
+
+    /**
      * Allowed errors count field name
      */
     const FIELD_NAME_ALLOWED_ERROR_COUNT = 'allowed_error_count';
@@ -200,11 +205,6 @@ class Import extends AbstractModel
     private $random;
 
     /**
-     * @var Filesystem\Directory\Read|null
-     */
-    private $imagesTempDirectoryBase;
-
-    /**
      * @param LoggerInterface $logger
      * @param Filesystem $filesystem
      * @param DataHelper $importExportData
@@ -222,7 +222,6 @@ class Import extends AbstractModel
      * @param array $data
      * @param ManagerInterface|null $messageManager
      * @param Random|null $random
-     * @param Filesystem\Directory\Read|null $imagesTempDirectoryBase
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -242,8 +241,7 @@ class Import extends AbstractModel
         DateTime $localeDate,
         array $data = [],
         ManagerInterface $messageManager = null,
-        Random $random = null,
-        ?Filesystem\Directory\Read $imagesTempDirectoryBase = null
+        Random $random = null
     ) {
         $this->_importExportData = $importExportData;
         $this->_coreConfig = $coreConfig;
@@ -262,7 +260,6 @@ class Import extends AbstractModel
             ->get(ManagerInterface::class);
         $this->random = $random ?: ObjectManager::getInstance()
             ->get(Random::class);
-        $this->imagesTempDirectoryBase = $imagesTempDirectoryBase;
         parent::__construct($logger, $filesystem, $data);
     }
 
@@ -474,15 +471,19 @@ class Import extends AbstractModel
         $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode());
         $this->setData('behavior', $this->getDataSourceModel()->getBehavior());
         //Validating images temporary directory path if the constraint has been provided
-        if ($this->imagesTempDirectoryBase) {
-            if (!$this->imagesTempDirectoryBase->isReadable()) {
+        if ($this->hasData(self::IMAGES_BASE_DIR)
+            && $this->getData(self::IMAGES_BASE_DIR) instanceof Filesystem\Directory\ReadInterface
+        ) {
+            /** @var Filesystem\Directory\ReadInterface $imagesDirectory */
+            $imagesDirectory = $this->getData(self::IMAGES_BASE_DIR);
+            if (!$imagesDirectory->isReadable()) {
                 $rootWrite = $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT);
-                $rootWrite->create($this->imagesTempDirectoryBase->getAbsolutePath());
+                $rootWrite->create($imagesDirectory->getAbsolutePath());
             }
             try {
                 $this->setData(
                     self::FIELD_NAME_IMG_FILE_DIR,
-                    $this->imagesTempDirectoryBase->getAbsolutePath($this->getData(self::FIELD_NAME_IMG_FILE_DIR))
+                    $imagesDirectory->getAbsolutePath($this->getData(self::FIELD_NAME_IMG_FILE_DIR))
                 );
                 $this->_getEntityAdapter()->setParameters($this->getData());
             } catch (ValidatorException $exception) {

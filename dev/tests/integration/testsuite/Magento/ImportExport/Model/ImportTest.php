@@ -5,10 +5,9 @@
  */
 namespace Magento\ImportExport\Model;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Phrase;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\Import\ImageDirectoryBaseProvider;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -24,7 +23,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\ImportExport\Model\Import\Config
+     * @var Import\Config
      */
     protected $_importConfig;
 
@@ -69,17 +68,17 @@ class ImportTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->_importConfig = Bootstrap::getObjectManager()->create(
-            \Magento\ImportExport\Model\Import\Config::class
+            Import\Config::class
         );
-        /** @var Filesystem $fileSystem */
-        $fileSystem = Bootstrap::getObjectManager()->get(Filesystem::class);
+        /** @var ImageDirectoryBaseProvider $provider */
+        $provider = Bootstrap::getObjectManager()->get(ImageDirectoryBaseProvider::class);
         $this->_model = Bootstrap::getObjectManager()->create(
             Import::class,
             [
-                'importConfig' => $this->_importConfig,
-                'imagesTempDirectoryBase' => $fileSystem->getDirectoryRead(DirectoryList::VAR_DIR)
+                'importConfig' => $this->_importConfig
             ]
         );
+        $this->_model->setData(Import::IMAGES_BASE_DIR, $provider->getDirectory());
     }
 
     /**

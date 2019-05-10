@@ -10,15 +10,10 @@ use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\ImportExport\Model\Import;
-use Magento\ImportExport\Model\ImportFactory;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Controller responsible for initiating the import process
  *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Start extends ImportResultController implements HttpPostActionInterface
 {
@@ -33,19 +28,9 @@ class Start extends ImportResultController implements HttpPostActionInterface
     private $exceptionMessageFactory;
 
     /**
-     * @var ScopeConfigInterface
+     * @var Import\ImageDirectoryBaseProvider
      */
-    private $config;
-
-    /**
-     * @var ImportFactory
-     */
-    private $importFactory;
-
-    /**
-     * @var Filesystem
-     */
-    private $fileSystem;
+    private $imagesDirProvider;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
@@ -54,9 +39,7 @@ class Start extends ImportResultController implements HttpPostActionInterface
      * @param \Magento\ImportExport\Helper\Report $reportHelper
      * @param Import $importModel
      * @param \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory
-     * @param ScopeConfigInterface|null $config
-     * @param ImportFactory|null $importFactory
-     * @param Filesystem|null $fileSystem
+     * @param Import\ImageDirectoryBaseProvider|null $imageDirectoryBaseProvider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -66,16 +49,14 @@ class Start extends ImportResultController implements HttpPostActionInterface
         \Magento\ImportExport\Helper\Report $reportHelper,
         Import $importModel,
         \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory,
-        ?ScopeConfigInterface $config = null,
-        ?ImportFactory $importFactory = null,
-        ?Filesystem $fileSystem = null
+        ?Import\ImageDirectoryBaseProvider $imageDirectoryBaseProvider = null
     ) {
         parent::__construct($context, $reportProcessor, $historyModel, $reportHelper);
 
+        $this->importModel = $importModel;
         $this->exceptionMessageFactory = $exceptionMessageFactory;
-        $this->config = $config ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
-        $this->importFactory = $importFactory ?? ObjectManager::getInstance()->get(ImportFactory::class);
-        $this->fileSystem = $fileSystem ?? ObjectManager::getInstance()->get(Filesystem::class);
+        $this->imagesDirProvider = $imageDirectoryBaseProvider
+            ?? ObjectManager::getInstance()->get(Import\ImageDirectoryBaseProvider::class);
     }
 
     /**
@@ -85,12 +66,6 @@ class Start extends ImportResultController implements HttpPostActionInterface
      */
     public function execute()
     {
-        $imagesDirectoryPath = $this->config->getValue('general/file/import_images_base_dir');
-        $imagesDirectory = $this->fileSystem->getDirectoryReadByPath(
-            $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath($imagesDirectoryPath)
-        );
-        $this->importModel = $this->importFactory->create(['imagesTempDirectoryBase' => $imagesDirectory]);
-
         $data = $this->getRequest()->getPostValue();
         if ($data) {
             /** @var \Magento\Framework\View\Result\Layout $resultLayout */
@@ -104,6 +79,8 @@ class Start extends ImportResultController implements HttpPostActionInterface
                 ->addAction('hide', ['edit_form', 'upload_button', 'messages']);
 
             $this->importModel->setData($data);
+            //Images can be read only from given directory.
+            $this->importModel->setData(Import::IMAGES_BASE_DIR, $this->imagesDirProvider->getDirectory());
             $errorAggregator = $this->importModel->getErrorAggregator();
             $errorAggregator->initValidationStrategy(
                 $this->importModel->getData(Import::FIELD_NAME_VALIDATION_STRATEGY),
