@@ -15,7 +15,9 @@
                attr="'aria-labelledby': 'label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code,
                     'checked': element.rates().length == 1 || element.isSelected" />
     </td>
-    <td class="col col-price">
+    <td class="col col-price"
+        attr="'id': 'label_price_' + method.method_code + '_' + method.carrier_code"
+    >
         <each args="element.getRegion('price')" render="" />
     </td>
     <td class="col col-method"
