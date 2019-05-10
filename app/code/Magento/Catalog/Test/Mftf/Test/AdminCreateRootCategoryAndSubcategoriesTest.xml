@@ -22,12 +22,10 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin2"/>
             <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnPageAdminSystemStore"/>
             <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
-            <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
-            <waitForPageLoad  time="10" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
-            <fillField selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"  stepKey="fillFieldOnWebsiteStore"/>
-            <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickOnSearchButton"/>
-            <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterSearchButton"/>
-            <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickOnstoreGrpNameInFirstRow"/>
+            <actionGroup ref="filterStoresGridByStore" stepKey="enterStoreGroup1Name">
+                <argument name="store" value="Main Website Store"/>
+            </actionGroup>
+            <click selector="{{AdminStoresGridSection.storeInFirstRow}}" stepKey="clickOnstoreInFirstRow"/>
             <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad1" />
             <selectOption userInput="Default Category" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectOptionDefaultCategory"/>
             <click selector="{{AdminStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
@@ -59,12 +57,11 @@
         <!--Assign new created root category to store-->
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnPageAdminSystemStore"/>
         <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
-        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
-        <waitForPageLoad  time="10" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
-        <fillField selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"  stepKey="fillFieldOnWebsiteStore"/>
-        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickOnSearchButton"/>
+        <actionGroup ref="filterStoresGridByStore" stepKey="enterStoreGroup1Name">
+            <argument name="store" value="Main Website Store"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterSearchButton"/>
-        <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickOnstoreGrpNameInFirstRow"/>
+        <click selector="{{AdminStoresGridSection.storeInFirstRow}}" stepKey="clickOnstoreInFirstRow"/>
         <waitForPageLoad stepKey="waitForPageAdminStoresGroupEditLoad" />
         <selectOption userInput="{{NewRootCategory.name}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectOptionCreatedNewRootCategory"/>
         <click selector="{{AdminStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>

@@ -21,5 +21,6 @@
         <element name="productTierPricePercentageError" type="text" selector="div[data-index='percentage_value'] label.admin__field-error" />
         <element name="specialPrice" type="input" selector="input[name='product[special_price]']"/>
         <element name="doneButton" type="button" selector=".product_form_product_form_advanced_pricing_modal button.action-primary" timeout="5"/>
+        <element name="useDefaultPrice" type="checkbox" selector="input[name='use_default[special_price]']"/>
     </section>
 </sections>

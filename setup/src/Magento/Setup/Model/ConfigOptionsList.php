@@ -44,7 +44,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private $configOptionsListClasses = [
         \Magento\Setup\Model\ConfigOptionsList\Session::class,
         \Magento\Setup\Model\ConfigOptionsList\Cache::class,
-        \Magento\Setup\Model\ConfigOptionsList\PageCache::class
+        \Magento\Setup\Model\ConfigOptionsList\PageCache::class,
+        \Magento\Setup\Model\ConfigOptionsList\Lock::class,
     ];
 
     /**

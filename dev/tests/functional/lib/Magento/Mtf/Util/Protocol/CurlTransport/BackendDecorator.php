@@ -81,7 +81,9 @@ class BackendDecorator implements CurlInterface
         $urls[] = $url2;
         if (strpos($originalUrl, 'https') !== false) {
             $urls[] = str_replace('https', 'http', $originalUrl);
+            $urls[] = str_replace('https', 'http', $url2);
         } else {
+            $urls[] = str_replace('http', 'https', $originalUrl);
             $urls[] = str_replace('http', 'https', $url2);
         }
 

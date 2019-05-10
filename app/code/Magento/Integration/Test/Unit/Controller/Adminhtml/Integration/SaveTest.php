@@ -17,6 +17,15 @@ use Magento\Framework\Exception\AuthenticationException;
 
 class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest
 {
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->_requestMock->expects($this->any())->method('isPost')->willReturn(true);
+    }
+
     public function testSaveAction()
     {
         // Use real translate model

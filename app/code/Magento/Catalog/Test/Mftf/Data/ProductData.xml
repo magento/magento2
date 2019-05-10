@@ -277,6 +277,10 @@
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionDropDownWithLongValuesTitle</requiredEntity>
     </entity>
+    <entity name="ProductWithFileOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionFile</requiredEntity>
+    </entity>
     <entity name="SimpleProductWithCustomAttributeSet" type="product">
         <data key="sku" unique="suffix">testSku</data>
         <data key="type_id">simple</data>
@@ -301,5 +305,10 @@
     <entity name="ApiSimpleWithQty100" extends="ApiSimpleOne">
         <data key="quantity">100</data>
         <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
+    </entity>
+    <entity name="ProductWithFieldOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionField</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField2</requiredEntity>
     </entity>
 </entities>

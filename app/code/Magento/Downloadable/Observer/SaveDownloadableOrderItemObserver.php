@@ -92,9 +92,15 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
         if ($purchasedLink->getId()) {
             return $this;
         }
+        $storeId = $orderItem->getOrder()->getStoreId();
+        $orderStatusToEnableItem = $this->_scopeConfig->getValue(
+            \Magento\Downloadable\Model\Link\Purchased\Item::XML_PATH_ORDER_ITEM_STATUS,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
         if (!$product) {
             $product = $this->_createProductModel()->setStoreId(
-                $orderItem->getOrder()->getStoreId()
+                $storeId
             )->load(
                 $orderItem->getProductId()
             );
@@ -150,6 +156,8 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
                         )->setNumberOfDownloadsBought(
                             $numberOfDownloads
                         )->setStatus(
+                            \Magento\Sales\Model\Order\Item::STATUS_PENDING == $orderStatusToEnableItem ?
+                            \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_AVAILABLE :
                             \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_PENDING
                         )->setCreatedAt(
                             $orderItem->getCreatedAt()

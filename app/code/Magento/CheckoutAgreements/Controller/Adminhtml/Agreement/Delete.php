@@ -9,6 +9,7 @@ namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
 use Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Registry;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
@@ -36,9 +37,14 @@ class Delete extends Agreement
     }
     /**
      * @return void
+     * @throws NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         $id = (int)$this->getRequest()->getParam('id');
         $agreement = $this->agreementRepository->get($id);
         if (!$agreement->getAgreementId()) {

@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Catalog product custom option resource model
@@ -154,21 +155,25 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             $scope = (int)$this->_config->getValue(
                 \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
 
             if ($object->getStoreId() != '0' && $scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE) {
-                $baseCurrency = $this->_config->getValue(
+                $website  = $this->_storeManager->getStore($object->getStoreId())->getWebsite();
+
+                $websiteBaseCurrency = $this->_config->getValue(
                     \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                    'default'
+                    ScopeInterface::SCOPE_WEBSITE,
+                    $website
                 );
 
-                $storeIds = $this->_storeManager->getStore($object->getStoreId())->getWebsite()->getStoreIds();
+                $storeIds = $website->getStoreIds();
                 if (is_array($storeIds)) {
                     foreach ($storeIds as $storeId) {
                         if ($object->getPriceType() == 'fixed') {
                             $storeCurrency = $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
-                            $rate = $this->_currencyFactory->create()->load($baseCurrency)->getRate($storeCurrency);
+                            $rate = $this->_currencyFactory->create()->load($websiteBaseCurrency)
+                                ->getRate($storeCurrency);
                             if (!$rate) {
                                 $rate = 1;
                             }

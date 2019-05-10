@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportCustomizableOptionToProductWithSKUTest">
+        <annotations>
+            <features value="Catalog"/>
+            <title value="Import customizable options to a product with existing SKU"/>
+            <description value="Import customizable options to a product with existing SKU"/>
+            <stories value="Import customizable options"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-15740"/>
+            <useCaseId value="MAGETWO-73157"/>
+            <skip>
+                <issueId value="MC-16313"/>
+            </skip>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createFirstProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createSecondProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <updateData createDataKey="createFirstProduct" entity="ProductWithFieldOptions" stepKey="updateProductCustomOptions" />
+            <magentoCLI stepKey="reindex" command="indexer:reindex"/>
+            <magentoCLI stepKey="flushCache" command="cache:flush"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteProductByName" stepKey="deleteSecondProduct">
+                <argument name="product" value="$$createSecondProduct.name$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!--Change second product sku to first product sku-->
+        <amOnPage url="{{AdminProductEditPage.url($$createSecondProduct.id$$)}}" stepKey="goToSecondProductEditPage"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="$$createFirstProduct.sku$$" stepKey="fillProductSku"/>
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
+
+        <!--Import customizable options and check-->
+        <actionGroup ref="ImportProductCustomizableOptions" stepKey="importProductCustomOptions">
+            <argument name="productName" value="$$createFirstProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="CheckCustomizableOptionImport" stepKey="checkFirstOptionImport">
+            <argument name="option" value="ProductOptionField"/>
+            <argument name="optionIndex" value="0"/>
+        </actionGroup>
+        <actionGroup ref="CheckCustomizableOptionImport" stepKey="checkSecondOptionImport">
+            <argument name="option" value="ProductOptionField2"/>
+            <argument name="optionIndex" value="1"/>
+        </actionGroup>
+
+        <!--Save product and check sku changed message-->
+        <actionGroup ref="saveProductForm" stepKey="saveSecondProduct"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.noticeMessage}}" stepKey="waitForSkuChangedMessage"/>
+        <see selector="{{AdminMessagesSection.noticeMessage}}" userInput="SKU for product $$createSecondProduct.name$$ has been changed to $$createFirstProduct.sku$$-1." stepKey="seeSkuChangedMessage"/>
+
+        <!-- Check that custom options are present on Admin product page in Customizable Option section after Product save -->
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSectionAfterProductSave"/>
+        <actionGroup ref="CheckCustomizableOptionImport" stepKey="checkFirstCustomOptionAfterProductSave">
+            <argument name="option" value="ProductOptionField"/>
+            <argument name="optionIndex" value="0"/>
+        </actionGroup>
+        <actionGroup ref="CheckCustomizableOptionImport" stepKey="checkSecondCustomOptionAfterProductSave">
+            <argument name="option" value="ProductOptionField2"/>
+            <argument name="optionIndex" value="1"/>
+        </actionGroup>
+    </test>
+</tests>

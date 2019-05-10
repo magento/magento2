@@ -38,6 +38,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $this->_collectionFactoryMock =
             $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
         $this->_escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $this->_escaperMock->method('escapeHtml')->willReturnArgument(0);
 
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,
@@ -423,9 +424,6 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddElementValues(array $initialData, $expectedValue)
     {
-        $this->_escaperMock->expects($this->any())
-            ->method('escapeHtml')
-            ->will($this->returnArgument(0));
         $this->_model->setValues($initialData['initial_values']);
         $this->_model->addElementValues($initialData['add_values'], $initialData['overwrite']);
 

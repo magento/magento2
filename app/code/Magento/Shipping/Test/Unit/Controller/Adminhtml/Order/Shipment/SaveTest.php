@@ -135,7 +135,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create', 'get']);
-        $this->messageManager = $this->createPartialMock(\Magento\Framework\Message\Manager::class, ['addSuccess', 'addError']);
+        $this->messageManager = $this->createPartialMock(\Magento\Framework\Message\Manager::class, ['addSuccessMessage', 'addErrorMessage']);
         $this->session = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice', 'getCommentText']);
         $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
         $this->helper = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
@@ -216,7 +216,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         if (!$formKeyIsValid || !$isPost) {
             $this->messageManager->expects($this->once())
-                ->method('addError');
+                ->method('addErrorMessage');
 
             $this->resultRedirect->expects($this->once())
                 ->method('setPath')

@@ -78,7 +78,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address)
@@ -94,7 +94,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
         $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
         $customerAddressId = $address->getCustomerAddressId();
-        $this->addressValidator->validate($address);
+        $this->addressValidator->validateForCart($quote, $address);
         $quote->setShippingAddress($address);
         $address = $quote->getShippingAddress();
 
@@ -122,7 +122,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function get($cartId)
     {

@@ -36,12 +36,16 @@ class MassDeleteTest extends AbstractMassActionTest
         $this->blockCollectionMock =
             $this->createMock(\Magento\Cms\Model\ResourceModel\Block\Collection::class);
 
+        $requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $requestMock->expects($this->any())->method('isPost')->willReturn(true);
+        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($requestMock);
+
         $this->massDeleteController = $this->objectManager->getObject(
             \Magento\Cms\Controller\Adminhtml\Block\MassDelete::class,
             [
                 'context' => $this->contextMock,
                 'filter' => $this->filterMock,
-                'collectionFactory' => $this->collectionFactoryMock
+                'collectionFactory' => $this->collectionFactoryMock,
             ]
         );
     }

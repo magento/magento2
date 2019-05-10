@@ -32789,7 +32789,15 @@ vars.put("new_parent_category_id", props.get("admin_category_ids_list").get(cate
       <hashTree/>
       <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Delete category" enabled="true">
         <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-          <collectionProp name="Arguments.arguments"/>
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="form_key" elementType="HTTPArgument">
+              <boolProp name="HTTPArgument.always_encode">true</boolProp>
+              <stringProp name="Argument.value">${admin_form_key}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+              <boolProp name="HTTPArgument.use_equals">true</boolProp>
+              <stringProp name="Argument.name">form_key</stringProp>
+            </elementProp>
+          </collectionProp>
         </elementProp>
         <stringProp name="HTTPSampler.domain"/>
         <stringProp name="HTTPSampler.port"/>
@@ -32798,7 +32806,7 @@ vars.put("new_parent_category_id", props.get("admin_category_ids_list").get(cate
         <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}${admin_path}/catalog/category/delete/id/${admin_category_id}/</stringProp>
-        <stringProp name="HTTPSampler.method">GET</stringProp>
+        <stringProp name="HTTPSampler.method">POST</stringProp>
         <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
         <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
         <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
