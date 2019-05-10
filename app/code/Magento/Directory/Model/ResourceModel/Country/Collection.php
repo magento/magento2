@@ -269,18 +269,15 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function toOptionArray($emptyLabel = ' ')
     {
         $options = $this->_toOptionArray('country_id', 'name', ['title' => 'iso2_code']);
-        $sort = [];
-        foreach ($options as $data) {
-            $name = (string)$this->_localeLists->getCountryTranslation($data['value']);
-            if (!empty($name)) {
-                $sort[$name] = $data['value'];
-            }
-        }
+        $sort = $this->getSort($options);
+
         $this->_arrayUtils->ksortMultibyte($sort, $this->_localeResolver->getLocale());
         foreach (array_reverse($this->_foregroundCountries) as $foregroundCountry) {
             $name = array_search($foregroundCountry, $sort);
-            unset($sort[$name]);
-            $sort = [$name => $foregroundCountry] + $sort;
+            if ($name) {
+                unset($sort[$name]);
+                $sort = [$name => $foregroundCountry] + $sort;
+            }
         }
         $isRegionVisible = (bool)$this->helperData->isShowNonRequiredState();
 
@@ -365,5 +362,24 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             }
         }
         return $countries;
+    }
+
+    /**
+     * Get sort
+     *
+     * @param array $options
+     * @return array
+     */
+    private function getSort(array $options): array
+    {
+        $sort = [];
+        foreach ($options as $data) {
+            $name = (string)$this->_localeLists->getCountryTranslation($data['value']);
+            if (!empty($name)) {
+                $sort[$name] = $data['value'];
+            }
+        }
+
+        return $sort;
     }
 }
