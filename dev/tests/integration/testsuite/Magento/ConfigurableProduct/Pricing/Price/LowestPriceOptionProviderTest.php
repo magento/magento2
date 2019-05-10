@@ -95,6 +95,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoAppIsolation enabled
      */
     public function testGetProductsIfOneOfChildIsOutOfStock()
     {
