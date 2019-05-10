@@ -339,7 +339,7 @@ class Queue
         if ($this->isCanBeParalleled()) {
             if ($package->getState() === null) {
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                $pid = pcntl_waitpid($this->getPid($package), $status, WNOHANG);
+                $pid = pcntl_waitpid($this->getPid($package) ?? 0, $status, WNOHANG);
                 if ($pid === $this->getPid($package)) {
                     $package->setState(Package::STATE_COMPLETED);
 
@@ -361,7 +361,7 @@ class Queue
      */
     private function getPid(Package $package)
     {
-        return isset($this->processIds[$package->getPath()]) ?? null;
+        return $this->processIds[$package->getPath()] ?? null;
     }
 
     /**
