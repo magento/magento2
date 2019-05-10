@@ -8,6 +8,7 @@ namespace Magento\Reports\Model\Product\Index;
 /**
  * Reports Product Index Abstract Model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
