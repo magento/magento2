@@ -41,7 +41,7 @@ foreach ($files as $file) {
     include $file;
 }
 
-if (!$settings->get('TESTS_PARALLEL_THREAD', 0)) {
+if ((int)$settings->get('TESTS_PARALLEL_RUN') !== 1) {
     // Only delete modules if we are not using parallel executions
     register_shutdown_function(
         'deleteTestModules',
