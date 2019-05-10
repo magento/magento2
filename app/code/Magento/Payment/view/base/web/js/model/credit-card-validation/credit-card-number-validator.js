@@ -36,7 +36,7 @@ define([
             return resultWrapper(null, false, false);
         }
 
-        value = value.replace(/|\s/g, '');
+        value = value.replace(/\s+/g, '');
 
         if (!/^\d*$/.test(value)) {
             return resultWrapper(null, false, false);
