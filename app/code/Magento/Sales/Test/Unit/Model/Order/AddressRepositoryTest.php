@@ -135,7 +135,6 @@ class AddressRepositoryTest extends TestCase
             $this->expectException(InputException::class);
             $this->subject->get($id);
         } else {
-
             $this->orderAddress->expects($this->once())
                 ->method('load')
                 ->with($id)
