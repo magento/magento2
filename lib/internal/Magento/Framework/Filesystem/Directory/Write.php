@@ -9,6 +9,9 @@ namespace Magento\Framework\Filesystem\Directory;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\ValidatorException;
 
+/**
+ * Write Interface implementation
+ */
 class Write extends Read implements WriteInterface
 {
     /**
@@ -175,6 +178,7 @@ class Write extends Read implements WriteInterface
      */
     public function delete($path = null)
     {
+        $exceptionMessages = [];
         $this->validatePath($path);
         if (!$this->isExist($path)) {
             return true;
@@ -183,9 +187,57 @@ class Write extends Read implements WriteInterface
         if ($this->driver->isFile($absolutePath)) {
             $this->driver->deleteFile($absolutePath);
         } else {
-            $this->driver->deleteDirectory($absolutePath);
+            try {
+                $this->deleteFilesRecursively($absolutePath);
+            } catch (FileSystemException $e) {
+                $exceptionMessages[] = $e->getMessage();
+            }
+            try {
+                $this->driver->deleteDirectory($absolutePath);
+            } catch (FileSystemException $e) {
+                $exceptionMessages[] = $e->getMessage();
+            }
+
+            if (!empty($exceptionMessages)) {
+                throw new FileSystemException(
+                    new \Magento\Framework\Phrase(
+                        \implode(' ', $exceptionMessages)
+                    )
+                );
+            }
         }
         return true;
+    }
+
+    /**
+     * Delete files recursively
+     *
+     * Implemented in order to delete as much files as possible and collect all exceptions
+     *
+     * @param string $path
+     * @return void
+     * @throws FileSystemException
+     */
+    private function deleteFilesRecursively(string $path)
+    {
+        $exceptionMessages = [];
+        $entitiesList = $this->driver->readDirectoryRecursively($path);
+        foreach ($entitiesList as $entityPath) {
+            if ($this->driver->isFile($entityPath)) {
+                try {
+                    $this->driver->deleteFile($entityPath);
+                } catch (FileSystemException $e) {
+                    $exceptionMessages[] = $e->getMessage();
+                }
+            }
+        }
+        if (!empty($exceptionMessages)) {
+            throw new FileSystemException(
+                new \Magento\Framework\Phrase(
+                    \implode(' ', $exceptionMessages)
+                )
+            );
+        }
     }
 
     /**
@@ -245,7 +297,7 @@ class Write extends Read implements WriteInterface
     /**
      * Check if given path is writable
      *
-     * @param null $path
+     * @param string|null $path
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws ValidatorException

@@ -11,23 +11,17 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class OnlyXLeftInStockResolver implements ResolverInterface
 {
-    /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
     /**
      * @var ScopeConfigInterface
      */
@@ -39,42 +33,31 @@ class OnlyXLeftInStockResolver implements ResolverInterface
     private $stockRegistry;
 
     /**
-     * @param ValueFactory $valueFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param StockRegistryInterface $stockRegistry
      */
     public function __construct(
-        ValueFactory $valueFactory,
         ScopeConfigInterface $scopeConfig,
         StockRegistryInterface $stockRegistry
     ) {
-        $this->valueFactory = $valueFactory;
         $this->scopeConfig = $scopeConfig;
         $this->stockRegistry = $stockRegistry;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null): Value
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         if (!array_key_exists('model', $value) || !$value['model'] instanceof ProductInterface) {
-            $result = function () {
-                return null;
-            };
-
-            return $this->valueFactory->create($result);
+            throw new LocalizedException(__('"model" value should be specified'));
         }
 
         /* @var $product ProductInterface */
         $product = $value['model'];
         $onlyXLeftQty = $this->getOnlyXLeftQty($product);
 
-        $result = function () use ($onlyXLeftQty) {
-            return $onlyXLeftQty;
-        };
-
-        return $this->valueFactory->create($result);
+        return $onlyXLeftQty;
     }
 
     /**
@@ -109,7 +92,7 @@ class OnlyXLeftInStockResolver implements ResolverInterface
         );
 
         if ($stockCurrentQty > 0 && $stockLeft <= $thresholdQty) {
-            return $stockLeft;
+            return (float)$stockLeft;
         }
 
         return null;

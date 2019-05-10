@@ -6,11 +6,12 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\App\ObjectManager;
 
-class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
+class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpGetActionInterface
 {
     /**
      * @var Initialization\StockDataFilter

@@ -7,9 +7,20 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
+use Magento\Catalog\Controller\Adminhtml\Product\Attribute as AttributeAction;
+use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\Serializer\FormData;
 
-class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
+/**
+ * Product attribute validate controller.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Validate extends AttributeAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     const DEFAULT_MESSAGE_KEY = 'message';
 
@@ -29,6 +40,16 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     private $multipleAttributeList;
 
     /**
+     * @var FormData|null
+     */
+    private $formDataSerializer;
+
+    /**
+     * @var AttributeCodeValidator
+     */
+    private $attributeCodeValidator;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
@@ -38,6 +59,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param array $multipleAttributeList
+     * @param FormData|null $formDataSerializer
+     * @param AttributeCodeValidator|null $attributeCodeValidator
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -46,15 +69,24 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        array $multipleAttributeList = []
+        array $multipleAttributeList = [],
+        FormData $formDataSerializer = null,
+        AttributeCodeValidator $attributeCodeValidator = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
         $this->multipleAttributeList = $multipleAttributeList;
+        $this->formDataSerializer = $formDataSerializer ?: ObjectManager::getInstance()
+            ->get(FormData::class);
+        $this->attributeCodeValidator = $attributeCodeValidator ?: ObjectManager::getInstance()->get(
+            AttributeCodeValidator::class
+        );
     }
 
     /**
+     * @inheritdoc
+     *
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -63,6 +95,15 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     {
         $response = new DataObject();
         $response->setError(false);
+        try {
+            $optionsData = $this->formDataSerializer
+                ->unserialize($this->getRequest()->getParam('serialized_options', '[]'));
+        } catch (\InvalidArgumentException $e) {
+            $message = __("The attribute couldn't be validated due to an error. Verify your information and try again. "
+                . "If the error persists, please try again later.");
+            $this->setMessageToResponse($response, [$message]);
+            $response->setError(true);
+        }
 
         $attributeCode = $this->getRequest()->getParam('attribute_code');
         $frontendLabel = $this->getRequest()->getParam('frontend_label');
@@ -75,7 +116,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             $attributeCode
         );
 
-        if ($attribute->getId() && !$attributeId) {
+        if ($attribute->getId() && !$attributeId || $attributeCode === 'product_type' || $attributeCode === 'type_id') {
             $message = strlen($this->getRequest()->getParam('attribute_code'))
                 ? __('An attribute with this code already exists.')
                 : __('An attribute with the same code (%1) already exists.', $attributeCode);
@@ -85,6 +126,12 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             $response->setError(true);
             $response->setProductAttribute($attribute->toArray());
         }
+
+        if (!$this->attributeCodeValidator->isValid($attributeCode)) {
+            $this->setMessageToResponse($response, $this->attributeCodeValidator->getMessages());
+            $response->setError(true);
+        }
+
         if ($this->getRequest()->has('new_attribute_set_name')) {
             $setName = $this->getRequest()->getParam('new_attribute_set_name');
             /** @var $attributeSet \Magento\Eav\Model\Entity\Attribute\Set */
@@ -102,10 +149,10 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         }
 
         $multipleOption = $this->getRequest()->getParam("frontend_input");
-        $multipleOption = null == $multipleOption ? 'select' : $multipleOption;
+        $multipleOption = (null === $multipleOption) ? 'select' : $multipleOption;
 
-        if (isset($this->multipleAttributeList[$multipleOption]) && !(null == ($multipleOption))) {
-            $options = $this->getRequest()->getParam($this->multipleAttributeList[$multipleOption]);
+        if (isset($this->multipleAttributeList[$multipleOption])) {
+            $options = $optionsData[$this->multipleAttributeList[$multipleOption]] ?? null;
             $this->checkUniqueOption(
                 $response,
                 $options
@@ -123,7 +170,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     }
 
     /**
-     * Throws Exception if not unique values into options
+     * Throws Exception if not unique values into options.
+     *
      * @param array $optionsValues
      * @param array $deletedOptions
      * @return bool
@@ -132,7 +180,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     {
         $adminValues = [];
         foreach ($optionsValues as $optionKey => $values) {
-            if (!(isset($deletedOptions[$optionKey]) and $deletedOptions[$optionKey] === '1')) {
+            if (!(isset($deletedOptions[$optionKey]) && $deletedOptions[$optionKey] === '1')) {
                 $adminValues[] = reset($values);
             }
         }
@@ -157,6 +205,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     }
 
     /**
+     * Performs checking the uniqueness of the attribute options.
+     *
      * @param DataObject $response
      * @param array|null $options
      * @return $this

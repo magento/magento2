@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Data;
 
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
@@ -285,7 +286,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         if ($this->_totalRecords === null) {
             $this->_totalRecords = count($this->getItems());
         }
-        return intval($this->_totalRecords);
+        return (int)$this->_totalRecords;
     }
 
     /**
@@ -391,7 +392,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Adding item to item array
      *
-     * @param   \Magento\Framework\DataObject $item
+     * @param \Magento\Framework\DataObject $item
      * @return $this
      * @throws \Exception
      */
@@ -401,6 +402,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
 
         if ($itemId !== null) {
             if (isset($this->_items[$itemId])) {
+                //phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception(
                     'Item (' . get_class($item) . ') with the same ID "' . $item->getId() . '" already exists.'
                 );
@@ -452,7 +454,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Remove item from collection by item key
      *
-     * @param   mixed $key
+     * @param mixed $key
      * @return $this
      */
     public function removeItemByKey($key)
@@ -483,12 +485,12 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     {
         $this->_setIsLoaded(false);
         $this->_items = [];
+        $this->_totalRecords = null;
         return $this;
     }
 
     /**
-     * Walk through the collection and run model method or external callback
-     * with optional arguments
+     * Walk through the collection and run model method or external callback with optional arguments
      *
      * Returns array with results of callback for each item
      *
@@ -540,8 +542,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Setting data for all collection items
      *
-     * @param   mixed $key
-     * @param   mixed $value
+     * @param mixed $key
+     * @param mixed $value
      * @return $this
      */
     public function setDataToAll($key, $value = null)
@@ -561,7 +563,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Set current page
      *
-     * @param   int $page
+     * @param int $page
      * @return $this
      */
     public function setCurPage($page)
@@ -573,7 +575,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Set collection page size
      *
-     * @param   int $size
+     * @param int $size
      * @return $this
      */
     public function setPageSize($size)
@@ -585,8 +587,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Set select order
      *
-     * @param   string $field
-     * @param   string $direction
+     * @param string $field
+     * @param string $direction
      * @return $this
      */
     public function setOrder($field, $direction = self::SORT_ORDER_DESC)
@@ -598,7 +600,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Set collection item class name
      *
-     * @param  string $className
+     * @param string $className
      * @return $this
      * @throws \InvalidArgumentException
      */
@@ -743,7 +745,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Convert items array to array for select options
      *
-     * return items array
+     * Return items array
      * array(
      *      $index => array(
      *          'value' => mixed
@@ -772,6 +774,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     }
 
     /**
+     * Returns option array
+     *
      * @return array
      */
     public function toOptionArray()
@@ -780,6 +784,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     }
 
     /**
+     * Returns options hash
+     *
      * @return array
      */
     public function toOptionHash()
@@ -790,12 +796,12 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Convert items array to hash for select options
      *
-     * return items hash
+     * Return items hash
      * array($value => $label)
      *
-     * @param   string $valueField
-     * @param   string $labelField
-     * @return  array
+     * @param string $valueField
+     * @param string $labelField
+     * @return array
      */
     protected function _toOptionHash($valueField = 'id', $labelField = 'name')
     {
@@ -809,8 +815,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Retrieve item by id
      *
-     * @param   mixed $idValue
-     * @return  \Magento\Framework\DataObject
+     * @param mixed $idValue
+     * @return \Magento\Framework\DataObject
      */
     public function getItemById($idValue)
     {
@@ -879,11 +885,18 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     }
 
     /**
+     * Sleep handler
+     *
      * @return string[]
      * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $properties = array_keys(get_object_vars($this));
         $properties = array_diff(
             $properties,
@@ -899,9 +912,14 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @return void
      * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_entityFactory = $objectManager->get(EntityFactoryInterface::class);
     }

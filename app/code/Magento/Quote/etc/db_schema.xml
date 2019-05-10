@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="quote" resource="checkout" engine="innodb" comment="Sales Flat Quote">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity Id"/>
+                comment="Entity ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Store Id"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
@@ -37,9 +37,9 @@
                 comment="Store Currency Code"/>
         <column xsi:type="varchar" name="quote_currency_code" nullable="true" length="255"
                 comment="Quote Currency Code"/>
-        <column xsi:type="decimal" name="grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Grand Total"/>
-        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Base Grand Total"/>
         <column xsi:type="varchar" name="checkout_method" nullable="true" length="255" comment="Checkout Method"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
@@ -68,36 +68,36 @@
         <column xsi:type="varchar" name="coupon_code" nullable="true" length="255" comment="Coupon Code"/>
         <column xsi:type="varchar" name="global_currency_code" nullable="true" length="255"
                 comment="Global Currency Code"/>
-        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base To Global Rate"/>
-        <column xsi:type="decimal" name="base_to_quote_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_to_quote_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base To Quote Rate"/>
         <column xsi:type="varchar" name="customer_taxvat" nullable="true" length="255" comment="Customer Taxvat"/>
         <column xsi:type="varchar" name="customer_gender" nullable="true" length="255" comment="Customer Gender"/>
-        <column xsi:type="decimal" name="subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal"/>
-        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Subtotal"/>
-        <column xsi:type="decimal" name="subtotal_with_discount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="subtotal_with_discount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Subtotal With Discount"/>
-        <column xsi:type="decimal" name="base_subtotal_with_discount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_with_discount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Subtotal With Discount"/>
         <column xsi:type="int" name="is_changed" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Is Changed"/>
         <column xsi:type="smallint" name="trigger_recollect" padding="6" unsigned="false" nullable="false"
                 identity="false" default="0" comment="Trigger Recollect"/>
         <column xsi:type="text" name="ext_shipping_info" nullable="true" comment="Ext Shipping Info"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUOTE_STORE_ID_STORE_STORE_ID" table="quote" column="store_id"
+        <constraint xsi:type="foreign" referenceId="QUOTE_STORE_ID_STORE_STORE_ID" table="quote" column="store_id"
                     referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
-        <index name="QUOTE_CUSTOMER_ID_STORE_ID_IS_ACTIVE" indexType="btree">
+        <index referenceId="QUOTE_CUSTOMER_ID_STORE_ID_IS_ACTIVE" indexType="btree">
             <column name="customer_id"/>
             <column name="store_id"/>
             <column name="is_active"/>
         </index>
-        <index name="QUOTE_STORE_ID" indexType="btree">
+        <index referenceId="QUOTE_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
@@ -108,7 +108,7 @@
                 default="0" comment="Quote Id"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="0"
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Customer Id"/>
@@ -143,57 +143,57 @@
                 comment="Shipping Description"/>
         <column xsi:type="decimal" name="weight" scale="4" precision="12" unsigned="false" nullable="false" default="0"
                 comment="Weight"/>
-        <column xsi:type="decimal" name="subtotal" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Subtotal"/>
-        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Base Subtotal"/>
-        <column xsi:type="decimal" name="subtotal_with_discount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="subtotal_with_discount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Subtotal With Discount"/>
-        <column xsi:type="decimal" name="base_subtotal_with_discount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_with_discount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Base Subtotal With Discount"/>
-        <column xsi:type="decimal" name="tax_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="tax_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Tax Amount"/>
-        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Base Tax Amount"/>
-        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Shipping Amount"/>
-        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Base Shipping Amount"/>
-        <column xsi:type="decimal" name="shipping_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Tax Amount"/>
-        <column xsi:type="decimal" name="base_shipping_tax_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_tax_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Tax Amount"/>
-        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Discount Amount"/>
-        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Base Discount Amount"/>
-        <column xsi:type="decimal" name="grand_total" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="grand_total" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Grand Total"/>
-        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Base Grand Total"/>
         <column xsi:type="text" name="customer_notes" nullable="true" comment="Customer Notes"/>
         <column xsi:type="text" name="applied_taxes" nullable="true" comment="Applied Taxes"/>
         <column xsi:type="varchar" name="discount_description" nullable="true" length="255"
                 comment="Discount Description"/>
-        <column xsi:type="decimal" name="shipping_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="shipping_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Shipping Discount Amount"/>
-        <column xsi:type="decimal" name="base_shipping_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Discount Amount"/>
-        <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal Incl Tax"/>
-        <column xsi:type="decimal" name="base_subtotal_total_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_total_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Subtotal Total Incl Tax"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="shipping_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="shipping_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Shipping Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_shipping_discount_tax_compensation_amnt" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_shipping_discount_tax_compensation_amnt" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Shipping Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="shipping_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Incl Tax"/>
-        <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Incl Tax"/>
         <column xsi:type="text" name="vat_id" nullable="true" comment="Vat Id"/>
         <column xsi:type="smallint" name="vat_is_valid" padding="6" unsigned="false" nullable="true" identity="false"
@@ -202,12 +202,14 @@
         <column xsi:type="text" name="vat_request_date" nullable="true" comment="Vat Request Date"/>
         <column xsi:type="smallint" name="vat_request_success" padding="6" unsigned="false" nullable="true"
                 identity="false" comment="Vat Request Success"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <column xsi:type="text" name="validated_country_code" nullable="true" comment="Validated Country Code"/>
+        <column xsi:type="text" name="validated_vat_number" nullable="true" comment="Validated Vat Number"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="address_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUOTE_ADDRESS_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_address"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ADDRESS_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_address"
                     column="quote_id" referenceTable="quote" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="QUOTE_ADDRESS_QUOTE_ID" indexType="btree">
+        <index referenceId="QUOTE_ADDRESS_QUOTE_ID" indexType="btree">
             <column name="quote_id"/>
         </index>
     </table>
@@ -218,7 +220,7 @@
                 default="0" comment="Quote Id"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="0"
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Product Id"/>
@@ -249,65 +251,65 @@
                 comment="Custom Price"/>
         <column xsi:type="decimal" name="discount_percent" scale="4" precision="12" unsigned="false" nullable="true"
                 default="0" comment="Discount Percent"/>
-        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Discount Amount"/>
-        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" default="0" comment="Base Discount Amount"/>
         <column xsi:type="decimal" name="tax_percent" scale="4" precision="12" unsigned="false" nullable="true"
                 default="0" comment="Tax Percent"/>
-        <column xsi:type="decimal" name="tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Tax Amount"/>
-        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Base Tax Amount"/>
-        <column xsi:type="decimal" name="row_total" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="row_total" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Row Total"/>
-        <column xsi:type="decimal" name="base_row_total" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="base_row_total" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Base Row Total"/>
-        <column xsi:type="decimal" name="row_total_with_discount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="row_total_with_discount" scale="4" precision="20" unsigned="false"
                 nullable="true" default="0" comment="Row Total With Discount"/>
         <column xsi:type="decimal" name="row_weight" scale="4" precision="12" unsigned="false" nullable="true"
                 default="0" comment="Row Weight"/>
         <column xsi:type="varchar" name="product_type" nullable="true" length="255" comment="Product Type"/>
-        <column xsi:type="decimal" name="base_tax_before_discount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_tax_before_discount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Tax Before Discount"/>
-        <column xsi:type="decimal" name="tax_before_discount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_before_discount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Before Discount"/>
         <column xsi:type="decimal" name="original_custom_price" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Original Custom Price"/>
         <column xsi:type="varchar" name="redirect_url" nullable="true" length="255" comment="Redirect Url"/>
         <column xsi:type="decimal" name="base_cost" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Base Cost"/>
-        <column xsi:type="decimal" name="price_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="price_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Price Incl Tax"/>
-        <column xsi:type="decimal" name="base_price_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_price_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Price Incl Tax"/>
-        <column xsi:type="decimal" name="row_total_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="row_total_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Row Total Incl Tax"/>
-        <column xsi:type="decimal" name="base_row_total_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_row_total_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Row Total Incl Tax"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Amount"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="item_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUOTE_ITEM_PARENT_ITEM_ID_QUOTE_ITEM_ITEM_ID" table="quote_item"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ITEM_PARENT_ITEM_ID_QUOTE_ITEM_ITEM_ID" table="quote_item"
                     column="parent_item_id" referenceTable="quote_item" referenceColumn="item_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="QUOTE_ITEM_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_item" column="quote_id"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ITEM_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_item" column="quote_id"
                     referenceTable="quote" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="QUOTE_ITEM_STORE_ID_STORE_STORE_ID" table="quote_item" column="store_id"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ITEM_STORE_ID_STORE_STORE_ID" table="quote_item" column="store_id"
                     referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
-        <index name="QUOTE_ITEM_PARENT_ITEM_ID" indexType="btree">
+        <index referenceId="QUOTE_ITEM_PARENT_ITEM_ID" indexType="btree">
             <column name="parent_item_id"/>
         </index>
-        <index name="QUOTE_ITEM_PRODUCT_ID" indexType="btree">
+        <index referenceId="QUOTE_ITEM_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
         </index>
-        <index name="QUOTE_ITEM_QUOTE_ID" indexType="btree">
+        <index referenceId="QUOTE_ITEM_QUOTE_ID" indexType="btree">
             <column name="quote_id"/>
         </index>
-        <index name="QUOTE_ITEM_STORE_ID" indexType="btree">
+        <index referenceId="QUOTE_ITEM_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
@@ -322,7 +324,7 @@
                 default="0" comment="Quote Item Id"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="0"
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
         <column xsi:type="text" name="applied_rule_ids" nullable="true" comment="Applied Rule Ids"/>
         <column xsi:type="text" name="additional_data" nullable="true" comment="Additional Data"/>
@@ -330,19 +332,19 @@
                 comment="Weight"/>
         <column xsi:type="decimal" name="qty" scale="4" precision="12" unsigned="false" nullable="false" default="0"
                 comment="Qty"/>
-        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Discount Amount"/>
-        <column xsi:type="decimal" name="tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Tax Amount"/>
-        <column xsi:type="decimal" name="row_total" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="row_total" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Row Total"/>
-        <column xsi:type="decimal" name="base_row_total" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="base_row_total" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Base Row Total"/>
-        <column xsi:type="decimal" name="row_total_with_discount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="row_total_with_discount" scale="4" precision="20" unsigned="false"
                 nullable="true" default="0" comment="Row Total With Discount"/>
-        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" default="0" comment="Base Discount Amount"/>
-        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Base Tax Amount"/>
         <column xsi:type="decimal" name="row_weight" scale="4" precision="12" unsigned="false" nullable="true"
                 default="0" comment="Row Weight"/>
@@ -352,6 +354,8 @@
                 comment="Super Product Id"/>
         <column xsi:type="int" name="parent_product_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Parent Product Id"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+                comment="Store Id"/>
         <column xsi:type="varchar" name="sku" nullable="true" length="255" comment="Sku"/>
         <column xsi:type="varchar" name="image" nullable="true" length="255" comment="Image"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
@@ -370,38 +374,41 @@
                 comment="Base Price"/>
         <column xsi:type="decimal" name="base_cost" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Base Cost"/>
-        <column xsi:type="decimal" name="price_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="price_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Price Incl Tax"/>
-        <column xsi:type="decimal" name="base_price_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_price_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Price Incl Tax"/>
-        <column xsi:type="decimal" name="row_total_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="row_total_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Row Total Incl Tax"/>
-        <column xsi:type="decimal" name="base_row_total_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_row_total_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Row Total Incl Tax"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Amount"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="address_item_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUOTE_ADDRESS_ITEM_QUOTE_ADDRESS_ID_QUOTE_ADDRESS_ADDRESS_ID"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ADDRESS_ITEM_QUOTE_ADDRESS_ID_QUOTE_ADDRESS_ADDRESS_ID"
                     table="quote_address_item" column="quote_address_id" referenceTable="quote_address"
                     referenceColumn="address_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="QUOTE_ADDR_ITEM_PARENT_ITEM_ID_QUOTE_ADDR_ITEM_ADDR_ITEM_ID"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ADDR_ITEM_PARENT_ITEM_ID_QUOTE_ADDR_ITEM_ADDR_ITEM_ID"
                     table="quote_address_item" column="parent_item_id" referenceTable="quote_address_item"
                     referenceColumn="address_item_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID_QUOTE_ITEM_ITEM_ID"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID_QUOTE_ITEM_ITEM_ID"
                     table="quote_address_item" column="quote_item_id" referenceTable="quote_item"
                     referenceColumn="item_id" onDelete="CASCADE"/>
-        <index name="QUOTE_ADDRESS_ITEM_QUOTE_ADDRESS_ID" indexType="btree">
+        <index referenceId="QUOTE_ADDRESS_ITEM_QUOTE_ADDRESS_ID" indexType="btree">
             <column name="quote_address_id"/>
         </index>
-        <index name="QUOTE_ADDRESS_ITEM_PARENT_ITEM_ID" indexType="btree">
+        <index referenceId="QUOTE_ADDRESS_ITEM_PARENT_ITEM_ID" indexType="btree">
             <column name="parent_item_id"/>
         </index>
-        <index name="QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID" indexType="btree">
+        <index referenceId="QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID" indexType="btree">
             <column name="quote_item_id"/>
+        </index>
+        <index referenceId="QUOTE_ADDRESS_ITEM_STORE_ID" indexType="btree">
+            <column name="store_id"/>
         </index>
     </table>
     <table name="quote_item_option" resource="checkout" engine="innodb" comment="Sales Flat Quote Item Option">
@@ -413,12 +420,12 @@
                 comment="Product Id"/>
         <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
         <column xsi:type="text" name="value" nullable="true" comment="Value"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="option_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUOTE_ITEM_OPTION_ITEM_ID_QUOTE_ITEM_ITEM_ID" table="quote_item_option"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ITEM_OPTION_ITEM_ID_QUOTE_ITEM_ITEM_ID" table="quote_item_option"
                     column="item_id" referenceTable="quote_item" referenceColumn="item_id" onDelete="CASCADE"/>
-        <index name="QUOTE_ITEM_OPTION_ITEM_ID" indexType="btree">
+        <index referenceId="QUOTE_ITEM_OPTION_ITEM_ID" indexType="btree">
             <column name="item_id"/>
         </index>
     </table>
@@ -429,7 +436,7 @@
                 default="0" comment="Quote Id"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="0"
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
         <column xsi:type="varchar" name="method" nullable="true" length="255" comment="Method"/>
         <column xsi:type="varchar" name="cc_type" nullable="true" length="255" comment="Cc Type"/>
@@ -449,12 +456,12 @@
         <column xsi:type="text" name="additional_data" nullable="true" comment="Additional Data"/>
         <column xsi:type="varchar" name="cc_ss_issue" nullable="true" length="255" comment="Cc Ss Issue"/>
         <column xsi:type="text" name="additional_information" nullable="true" comment="Additional Information"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="payment_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUOTE_PAYMENT_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_payment"
+        <constraint xsi:type="foreign" referenceId="QUOTE_PAYMENT_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_payment"
                     column="quote_id" referenceTable="quote" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="QUOTE_PAYMENT_QUOTE_ID" indexType="btree">
+        <index referenceId="QUOTE_PAYMENT_QUOTE_ID" indexType="btree">
             <column name="quote_id"/>
         </index>
     </table>
@@ -465,43 +472,43 @@
                 default="0" comment="Address Id"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="0"
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
         <column xsi:type="varchar" name="carrier" nullable="true" length="255" comment="Carrier"/>
         <column xsi:type="varchar" name="carrier_title" nullable="true" length="255" comment="Carrier Title"/>
         <column xsi:type="varchar" name="code" nullable="true" length="255" comment="Code"/>
         <column xsi:type="varchar" name="method" nullable="true" length="255" comment="Method"/>
         <column xsi:type="text" name="method_description" nullable="true" comment="Method Description"/>
-        <column xsi:type="decimal" name="price" scale="4" precision="12" unsigned="false" nullable="false" default="0"
+        <column xsi:type="decimal" name="price" scale="4" precision="20" unsigned="false" nullable="false" default="0"
                 comment="Price"/>
         <column xsi:type="text" name="error_message" nullable="true" comment="Error Message"/>
         <column xsi:type="text" name="method_title" nullable="true" comment="Method Title"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rate_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUOTE_SHIPPING_RATE_ADDRESS_ID_QUOTE_ADDRESS_ADDRESS_ID"
+        <constraint xsi:type="foreign" referenceId="QUOTE_SHIPPING_RATE_ADDRESS_ID_QUOTE_ADDRESS_ADDRESS_ID"
                     table="quote_shipping_rate" column="address_id" referenceTable="quote_address"
                     referenceColumn="address_id" onDelete="CASCADE"/>
-        <index name="QUOTE_SHIPPING_RATE_ADDRESS_ID" indexType="btree">
+        <index referenceId="QUOTE_SHIPPING_RATE_ADDRESS_ID" indexType="btree">
             <column name="address_id"/>
         </index>
     </table>
     <table name="quote_id_mask" resource="checkout" engine="innodb" comment="Quote ID and masked ID mapping">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity Id"/>
+                comment="Entity ID"/>
         <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Quote ID"/>
         <column xsi:type="varchar" name="masked_id" nullable="true" length="32" comment="Masked ID"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
             <column name="quote_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUOTE_ID_MASK_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_id_mask"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ID_MASK_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_id_mask"
                     column="quote_id" referenceTable="quote" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="QUOTE_ID_MASK_QUOTE_ID" indexType="btree">
+        <index referenceId="QUOTE_ID_MASK_QUOTE_ID" indexType="btree">
             <column name="quote_id"/>
         </index>
-        <index name="QUOTE_ID_MASK_MASKED_ID" indexType="btree">
+        <index referenceId="QUOTE_ID_MASK_MASKED_ID" indexType="btree">
             <column name="masked_id"/>
         </index>
     </table>

@@ -6,7 +6,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
-class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute implements HttpGetActionInterface
 {
     /**
      * @return \Magento\Framework\Controller\ResultInterface

@@ -76,8 +76,8 @@ class Integer implements DbDefinitionProcessorInterface
     }
 
     /**
-     * @param \Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Integer $column
      * @inheritdoc
+     * @param \Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Integer $column
      */
     public function toDefinition(ElementInterface $column)
     {
@@ -89,7 +89,7 @@ class Integer implements DbDefinitionProcessorInterface
             $this->unsigned->toDefinition($column),
             $this->nullable->toDefinition($column),
             $column->getDefault() !== null ?
-                sprintf('DEFAULT %s', (string) intval($column->getDefault())) : '',
+                sprintf('DEFAULT %s', (string) (int)$column->getDefault()) : '',
             $this->identity->toDefinition($column),
             $this->comment->toDefinition($column)
         );

@@ -10,48 +10,36 @@ namespace Magento\CatalogInventoryGraphQl\Model\Resolver;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class StockStatusProvider implements ResolverInterface
 {
-    /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
     /**
      * @var StockStatusRepositoryInterface
      */
     private $stockStatusRepository;
 
     /**
-     * @param ValueFactory $valueFactory
      * @param StockStatusRepositoryInterface $stockStatusRepository
      */
-    public function __construct(ValueFactory $valueFactory, StockStatusRepositoryInterface $stockStatusRepository)
+    public function __construct(StockStatusRepositoryInterface $stockStatusRepository)
     {
-        $this->valueFactory = $valueFactory;
         $this->stockStatusRepository = $stockStatusRepository;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null): Value
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         if (!array_key_exists('model', $value) || !$value['model'] instanceof ProductInterface) {
-            $result = function () {
-                return null;
-            };
-
-            return $this->valueFactory->create($result);
+            throw new LocalizedException(__('"model" value should be specified'));
         }
 
         /* @var $product ProductInterface */
@@ -60,10 +48,6 @@ class StockStatusProvider implements ResolverInterface
         $stockStatus = $this->stockStatusRepository->get($product->getId());
         $productStockStatus = (int)$stockStatus->getStockStatus();
 
-        $result = function () use ($productStockStatus) {
-            return $productStockStatus === StockStatusInterface::STATUS_IN_STOCK ? 'IN_STOCK' : 'OUT_OF_STOCK';
-        };
-
-        return $this->valueFactory->create($result);
+        return $productStockStatus === StockStatusInterface::STATUS_IN_STOCK ? 'IN_STOCK' : 'OUT_OF_STOCK';
     }
 }

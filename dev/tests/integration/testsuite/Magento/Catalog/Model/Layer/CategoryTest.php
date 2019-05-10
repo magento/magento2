@@ -38,8 +38,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $collection = $this->_model->getProductCollection();
         $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, $collection);
-        $ids = $collection->getAllIds();
-        $this->assertEquals(2, count($ids));
+        $this->assertEquals(2, $collection->count());
         $this->assertSame($collection, $this->_model->getProductCollection());
     }
 

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Captcha\Observer;
 
 use Magento\Customer\Model\AuthenticationInterface;
@@ -11,7 +12,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
+ * Check captcha on user login page observer.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CheckUserLoginObserver implements ObserverInterface
 {
@@ -140,7 +144,7 @@ class CheckUserLoginObserver implements ObserverInterface
                     $customer = $this->getCustomerRepository()->get($login);
                     $this->getAuthentication()->processAuthenticationFailure($customer->getId());
                 } catch (NoSuchEntityException $e) {
-                    //do nothing as customer existance is validated later in authenticate method
+                    //do nothing as customer existence is validated later in authenticate method
                 }
                 $this->messageManager->addError(__('Incorrect CAPTCHA'));
                 $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);

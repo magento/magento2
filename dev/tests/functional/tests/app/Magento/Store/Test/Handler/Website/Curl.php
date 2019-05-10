@@ -119,7 +119,7 @@ class Curl extends AbstractCurl implements WebsiteInterface
             throw new \Exception('Cannot find website id.');
         }
 
-        return intval($matches[1]);
+        return (int)$matches[1];
     }
 
     /**

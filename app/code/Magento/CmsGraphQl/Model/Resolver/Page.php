@@ -12,8 +12,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -28,20 +26,13 @@ class Page implements ResolverInterface
     private $pageDataProvider;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
+     *
      * @param PageDataProvider $pageDataProvider
-     * @param ValueFactory $valueFactory
      */
     public function __construct(
-        PageDataProvider $pageDataProvider,
-        ValueFactory $valueFactory
+        PageDataProvider $pageDataProvider
     ) {
         $this->pageDataProvider = $pageDataProvider;
-        $this->valueFactory = $valueFactory;
     }
 
     /**
@@ -53,40 +44,19 @@ class Page implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ) : Value {
-
-        $result = function () use ($args) {
-            $pageId = $this->getPageId($args);
-            $pageData = $this->getPageData($pageId);
-
-            return $pageData;
-        };
-        return $this->valueFactory->create($result);
-    }
-
-    /**
-     * @param array $args
-     * @return int
-     * @throws GraphQlInputException
-     */
-    private function getPageId(array $args): int
-    {
-        if (!isset($args['id'])) {
-            throw new GraphQlInputException(__('"Page id should be specified'));
+    ) {
+        if (!isset($args['id']) && !isset($args['identifier'])) {
+            throw new GraphQlInputException(__('"Page id/identifier should be specified'));
         }
 
-        return (int)$args['id'];
-    }
+        $pageData = [];
 
-    /**
-     * @param int $pageId
-     * @return array
-     * @throws GraphQlNoSuchEntityException
-     */
-    private function getPageData(int $pageId): array
-    {
         try {
-            $pageData = $this->pageDataProvider->getData($pageId);
+            if (isset($args['id'])) {
+                $pageData = $this->pageDataProvider->getDataByPageId((int)$args['id']);
+            } elseif (isset($args['identifier'])) {
+                $pageData = $this->pageDataProvider->getDataByPageIdentifier((string)$args['identifier']);
+            }
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         }

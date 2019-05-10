@@ -9,15 +9,19 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin;
 use Magento\Catalog\Model\ResourceModel\Product as ResourceProduct;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * Catalog search indexer plugin for catalog product.
+ */
 class Product extends AbstractPlugin
 {
     /**
-     * Reindex on product save
+     * Reindex on product save.
      *
      * @param ResourceProduct $productResource
      * @param \Closure $proceed
      * @param AbstractModel $product
      * @return ResourceProduct
+     * @throws \Exception
      */
     public function aroundSave(ResourceProduct $productResource, \Closure $proceed, AbstractModel $product)
     {
@@ -31,6 +35,7 @@ class Product extends AbstractPlugin
      * @param \Closure $proceed
      * @param AbstractModel $product
      * @return ResourceProduct
+     * @throws \Exception
      */
     public function aroundDelete(ResourceProduct $productResource, \Closure $proceed, AbstractModel $product)
     {
@@ -38,6 +43,8 @@ class Product extends AbstractPlugin
     }
 
     /**
+     * Reindex catalog search.
+     *
      * @param ResourceProduct $productResource
      * @param \Closure $proceed
      * @param AbstractModel $product

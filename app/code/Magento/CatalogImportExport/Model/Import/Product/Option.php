@@ -334,6 +334,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $optionTypeTitles;
 
     /**
+     * @var array
+     */
+    private $lastOptionTitle;
+
+    /**
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
      * @param ResourceConnection $resource
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
@@ -426,7 +431,10 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_TYPE,
-            __('Value for \'type\' sub attribute in \'custom_options\' attribute contains incorrect value, acceptable values are: \'dropdown\', \'checkbox\'')
+            __(
+                'Value for \'type\' sub attribute in \'custom_options\' attribute contains incorrect value, acceptable values are: %1',
+                '\''.implode('\', \'', array_keys($this->_specificTypes)).'\''
+            )
         );
         $this->_productEntity->addMessageTemplate(self::ERROR_EMPTY_TITLE, __('Please enter a value for title.'));
         $this->_productEntity->addMessageTemplate(
@@ -624,7 +632,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_addRowsErrors(self::ERROR_AMBIGUOUS_NEW_NAMES, $errorRows);
             return false;
         }
-        if ($this->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
+        if ($this->getBehavior() == Import::BEHAVIOR_APPEND) {
             $errorRows = $this->_findOldOptionsWithTheSameTitles();
             if ($errorRows) {
                 $this->_addRowsErrors(self::ERROR_AMBIGUOUS_OLD_NAMES, $errorRows);
@@ -962,11 +970,10 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         return false;
                     }
                 }
-                return true;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -1117,6 +1124,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Process option row.
+     *
      * @param string $name
      * @param array $optionRow
      * @return array
@@ -1198,6 +1207,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * Import data rows.
+     *
      * Additional store view data (option titles) will be sought in store view specified import file rows
      *
      * @return boolean
@@ -1206,7 +1216,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _importData()
     {
         $this->_initProductsSku();
-
         $nextOptionId = $this->_resourceHelper->getNextAutoincrement($this->_tables['catalog_product_option']);
         $nextValueId = $this->_resourceHelper->getNextAutoincrement(
             $this->_tables['catalog_product_option_type_value']
@@ -1225,7 +1234,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $parentCount = [];
             $childCount = [];
             $optionsToRemove = [];
-
             foreach ($bunch as $rowNumber => $rowData) {
                 if (isset($optionId, $valueId) && empty($rowData[PRODUCT::COL_STORE_VIEW_CODE])) {
                     $nextOptionId = $optionId;
@@ -1273,17 +1281,26 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         $parentCount,
                         $childCount
                     );
+
                     $this->_collectOptionTitle($combinedData, $prevOptionId, $titles);
+                    $this->checkOptionTitles(
+                        $options,
+                        $titles,
+                        $combinedData,
+                        $prevOptionId,
+                        $optionId,
+                        $products,
+                        $prices
+                    );
                 }
             }
-
             $this->removeExistingOptions($products, $optionsToRemove);
-
             $types = [
                 'values' => $typeValues,
                 'prices' => $typePrices,
                 'titles' => $typeTitles,
             ];
+            $this->setLastOptionTitle($titles);
             //Save prepared custom options data.
             $this->savePreparedCustomOptions(
                 $products,
@@ -1293,11 +1310,69 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $types
             );
         }
-
         return true;
     }
 
     /**
+     * Check options titles.
+     *
+     * If products were split up between bunches,
+     * this function will add needed option for option titles
+     *
+     * @param array $options
+     * @param array $titles
+     * @param array $combinedData
+     * @param int $prevOptionId
+     * @param int $optionId
+     * @param array $products
+     * @param array $prices
+     * @return void
+     */
+    private function checkOptionTitles(
+        array &$options,
+        array &$titles,
+        array $combinedData,
+        int &$prevOptionId,
+        int &$optionId,
+        array $products,
+        array $prices
+    ) : void {
+        $titlesCount = count($titles);
+        if ($titlesCount > 0 && count($options) !== $titlesCount) {
+            $combinedData[Product::COL_STORE_VIEW_CODE] = '';
+            $optionId--;
+            $option = $this->_collectOptionMainData(
+                $combinedData,
+                $prevOptionId,
+                $optionId,
+                $products,
+                $prices
+            );
+            if ($option) {
+                $options[] = $option;
+            }
+        }
+    }
+
+    /**
+     * Setting last Custom Option Title
+     * to use it later in _collectOptionTitle
+     * to set correct title for default store view
+     *
+     * @param array $titles
+     */
+    private function setLastOptionTitle(array &$titles) : void
+    {
+        if (count($titles) > 0) {
+            end($titles);
+            $key = key($titles);
+            $this->lastOptionTitle[$key] = $titles[$key];
+        }
+    }
+
+    /**
+     * Remove existing options.
+     *
      * Remove all existing options if import behaviour is APPEND
      * in other case remove options for products with empty "custom_options" row only.
      *
@@ -1308,7 +1383,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function removeExistingOptions(array $products, array $optionsToRemove): void
     {
-        if ($this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
+        if ($this->getBehavior() != Import::BEHAVIOR_APPEND) {
             $this->_deleteEntities(array_keys($products));
         } elseif (!empty($optionsToRemove)) {
             // Remove options for products with empty "custom_options" row
@@ -1447,8 +1522,12 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $defaultStoreId = Store::DEFAULT_STORE_ID;
         if (!empty($rowData[self::COLUMN_TITLE])) {
             if (!isset($titles[$prevOptionId][$defaultStoreId])) {
-                // ensure default title is set
-                $titles[$prevOptionId][$defaultStoreId] = $rowData[self::COLUMN_TITLE];
+                if (isset($this->lastOptionTitle[$prevOptionId])) {
+                     $titles[$prevOptionId] = $this->lastOptionTitle[$prevOptionId];
+                     unset($this->lastOptionTitle);
+                } else {
+                    $titles[$prevOptionId][$defaultStoreId] = $rowData[self::COLUMN_TITLE];
+                }
             }
             $titles[$prevOptionId][$this->_rowStoreId] = $rowData[self::COLUMN_TITLE];
         }
@@ -1547,6 +1626,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Rarse required data.
+     *
      * Parse required data from current row and store to class internal variables some data
      * for underlying dependent rows
      *
@@ -1715,7 +1796,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             ];
 
             $priceData = false;
-            if (!empty($rowData[self::COLUMN_ROW_PRICE])) {
+            $customOptionRowPrice = $rowData[self::COLUMN_ROW_PRICE];
+            if (!empty($customOptionRowPrice) || $customOptionRowPrice === '0') {
                 $priceData = [
                     'price' => (double)rtrim($rowData[self::COLUMN_ROW_PRICE], '%'),
                     'price_type' => 'fixed',
@@ -2028,7 +2110,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         array $types
     ): void {
         if ($this->_isReadyForSaving($options, $titles, $types['values'])) {
-            if ($this->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
+            if ($this->getBehavior() == Import::BEHAVIOR_APPEND) {
                 $this->_compareOptionsWithExisting($options, $titles, $prices, $types['values']);
                 $this->restoreOriginalOptionTypeIds($types['values'], $types['prices'], $types['titles']);
             }

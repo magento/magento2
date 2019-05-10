@@ -38,7 +38,10 @@
             .lib-css(box-shadow, @button__shadow);
             border-radius: 3px;
         }
-
+        .sorter-action {
+            position: relative;
+            top: -2px;
+        }
         &-amount {
             left: 0;
             line-height: @toolbar-mode-icon-font-size + 2;
@@ -81,7 +84,7 @@
 
         .page-products & {
             position: absolute;
-            right: @indent__s;
+            right: 0;
             top: 0;
             z-index: 1;
         }

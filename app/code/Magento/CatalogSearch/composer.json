@@ -1,6 +1,6 @@
 {
     "name": "magento/module-catalog-search",
-    "description": "N/A",
+    "description": "Catalog search",
     "config": {
         "sort-packages": true
     },

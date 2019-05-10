@@ -5,6 +5,9 @@
  */
 namespace Magento\NewRelicReporting\Model;
 
+/**
+ * NewRelic configuration model
+ */
 class Config
 {
     /**#@+
@@ -88,7 +91,7 @@ class Config
      */
     public function isNewRelicEnabled()
     {
-        return (bool)$this->scopeConfig->getValue('newrelicreporting/general/enable');
+        return $this->scopeConfig->isSetFlag('newrelicreporting/general/enable');
     }
 
     /**
@@ -162,13 +165,23 @@ class Config
     }
 
     /**
+     * Returns configured separate apps value
+     *
+     * @return bool
+     */
+    public function isSeparateApps()
+    {
+        return (bool)$this->scopeConfig->getValue('newrelicreporting/general/separate_apps');
+    }
+
+    /**
      * Returns config setting for overall cron to be enabled
      *
      * @return bool
      */
     public function isCronEnabled()
     {
-        return (bool)$this->scopeConfig->getValue('newrelicreporting/cron/enable_cron');
+        return $this->scopeConfig->isSetFlag('newrelicreporting/cron/enable_cron');
     }
 
     /**

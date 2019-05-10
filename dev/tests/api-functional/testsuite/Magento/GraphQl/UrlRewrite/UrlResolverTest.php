@@ -12,6 +12,10 @@ use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\Cms\Helper\Page as PageHelper;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\UrlRewrite\Model\UrlRewrite;
 
 /**
  * Test the GraphQL endpoint's URLResolver query to verify canonical URL's are correctly returned.
@@ -28,7 +32,7 @@ class UrlResolverTest extends GraphQlAbstract
     }
 
     /**
-     * Tests if target_path(canonical_url) is resolved for Product entity
+     * Tests if target_path(relative_url) is resolved for Product entity
      *
      * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      */
@@ -57,7 +61,7 @@ class UrlResolverTest extends GraphQlAbstract
   urlResolver(url:"{$urlPath}")
   {
    id
-   canonical_url
+   relative_url
    type
   }
 }
@@ -65,12 +69,12 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('urlResolver', $response);
         $this->assertEquals($product->getEntityId(), $response['urlResolver']['id']);
-        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
+        $this->assertEquals($targetPath, $response['urlResolver']['relative_url']);
         $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
     }
 
     /**
-     * Tests the use case where canonical_url is provided as resolver input in the Query
+     * Tests the use case where relative_url is provided as resolver input in the Query
      *
      * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      */
@@ -101,7 +105,7 @@ QUERY;
   urlResolver(url:"{$canonicalPath}")
   {
    id
-   canonical_url
+   relative_url
    type
   }
 }
@@ -109,7 +113,7 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('urlResolver', $response);
         $this->assertEquals($product->getEntityId(), $response['urlResolver']['id']);
-        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
+        $this->assertEquals($targetPath, $response['urlResolver']['relative_url']);
         $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
     }
 
@@ -144,7 +148,7 @@ QUERY;
   urlResolver(url:"{$urlPath2}")
   {
    id
-   canonical_url
+   relative_url
    type
   }
 }
@@ -152,7 +156,7 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('urlResolver', $response);
         $this->assertEquals($categoryId, $response['urlResolver']['id']);
-        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
+        $this->assertEquals($targetPath, $response['urlResolver']['relative_url']);
         $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
     }
 
@@ -180,14 +184,14 @@ QUERY;
   urlResolver(url:"{$requestPath}")
   {
    id
-   canonical_url
+   relative_url
    type
   }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals($cmsPageId, $response['urlResolver']['id']);
-        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
+        $this->assertEquals($targetPath, $response['urlResolver']['relative_url']);
         $this->assertEquals(strtoupper(str_replace('-', '_', $expectedEntityType)), $response['urlResolver']['type']);
     }
 
@@ -223,7 +227,7 @@ QUERY;
   urlResolver(url:"{$urlPath}")
   {
    id
-   canonical_url
+   relative_url
    type
   }
 }
@@ -231,7 +235,7 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('urlResolver', $response);
         $this->assertEquals($product->getEntityId(), $response['urlResolver']['id']);
-        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
+        $this->assertEquals($targetPath, $response['urlResolver']['relative_url']);
         $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
     }
 
@@ -263,7 +267,7 @@ QUERY;
   urlResolver(url:"{$urlPath}")
   {
    id
-   canonical_url
+   relative_url
    type
   }
 }
@@ -304,7 +308,7 @@ QUERY;
   urlResolver(url:"/{$urlPath}")
   {
    id
-   canonical_url
+   relative_url
    type
   }
 }
@@ -312,7 +316,7 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('urlResolver', $response);
         $this->assertEquals($categoryId, $response['urlResolver']['id']);
-        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
+        $this->assertEquals($targetPath, $response['urlResolver']['relative_url']);
         $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
     }
 
@@ -321,22 +325,99 @@ QUERY;
      */
     public function testResolveSlash()
     {
+        /** @var \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface */
+        $scopeConfigInterface = $this->objectManager->get(ScopeConfigInterface::class);
+        $homePageIdentifier = $scopeConfigInterface->getValue(
+            PageHelper::XML_PATH_HOME_PAGE,
+            ScopeInterface::SCOPE_STORE
+        );
+        /** @var \Magento\Cms\Model\Page $page */
+        $page = $this->objectManager->get(\Magento\Cms\Model\Page::class);
+        $page->load($homePageIdentifier);
+        $homePageId = $page->getId();
+        /** @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator $urlPathGenerator */
+        $urlPathGenerator = $this->objectManager->get(\Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator::class);
+        /** @param \Magento\Cms\Api\Data\PageInterface $page */
+        $targetPath = $urlPathGenerator->getCanonicalUrlPath($page);
         $query
             = <<<QUERY
 {
   urlResolver(url:"/")
   {
    id
-   canonical_url
+   relative_url
    type
   }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
-
         $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals(2, $response['urlResolver']['id']);
-        $this->assertEquals('cms/page/view/page_id/2', $response['urlResolver']['canonical_url']);
+        $this->assertEquals($homePageId, $response['urlResolver']['id']);
+        $this->assertEquals($targetPath, $response['urlResolver']['relative_url']);
         $this->assertEquals('CMS_PAGE', $response['urlResolver']['type']);
+    }
+
+    /**
+     * Test for custom type which point to the valid product/category/cms page.
+     *
+     * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
+     */
+    public function testGetNonExistentUrlRewrite()
+    {
+        $urlPath = 'non-exist-product.html';
+        /** @var UrlRewrite $urlRewrite */
+        $urlRewrite = $this->objectManager->create(UrlRewrite::class);
+        $urlRewrite->load($urlPath, 'request_path');
+
+        /** @var  UrlFinderInterface $urlFinder */
+        $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
+        $actualUrls = $urlFinder->findOneByData(
+            [
+                'request_path' => $urlPath,
+                'store_id' => 1
+            ]
+        );
+        $targetPath = $actualUrls->getTargetPath();
+
+        $query = <<<QUERY
+{
+  urlResolver(url:"{$urlPath}")
+  {
+   id
+   relative_url
+   type
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayHasKey('urlResolver', $response);
+        $this->assertEquals('PRODUCT', $response['urlResolver']['type']);
+        $this->assertEquals($targetPath, $response['urlResolver']['relative_url']);
+    }
+
+    /**
+     * Test for custom type which point to the invalid product/category/cms page.
+     *
+     * @magentoApiDataFixture Magento/UrlRewrite/_files/url_rewrite_not_existing_entity.php
+     */
+    public function testNonExistentEntityUrlRewrite()
+    {
+        $urlPath = 'non-exist-entity.html';
+
+        $query = <<<QUERY
+{
+  urlResolver(url:"{$urlPath}")
+  {
+   id
+   relative_url
+   type
+  }
+}
+QUERY;
+
+        $this->expectExceptionMessage(
+            "No such entity found with matching URL key: " . $urlPath
+        );
+        $this->graphQlQuery($query);
     }
 }

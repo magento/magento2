@@ -13,7 +13,7 @@
         <column xsi:type="varchar" name="class_name" nullable="false" length="255" comment="Class Name"/>
         <column xsi:type="varchar" name="class_type" nullable="false" length="8" default="CUSTOMER"
                 comment="Class Type"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="class_id"/>
         </constraint>
     </table>
@@ -27,14 +27,14 @@
                 comment="Position"/>
         <column xsi:type="int" name="calculate_subtotal" padding="11" unsigned="false" nullable="false" identity="false"
                 comment="Calculate off subtotal option"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="tax_calculation_rule_id"/>
         </constraint>
-        <index name="TAX_CALCULATION_RULE_PRIORITY_POSITION" indexType="btree">
+        <index referenceId="TAX_CALCULATION_RULE_PRIORITY_POSITION" indexType="btree">
             <column name="priority"/>
             <column name="position"/>
         </index>
-        <index name="TAX_CALCULATION_RULE_CODE" indexType="btree">
+        <index referenceId="TAX_CALCULATION_RULE_CODE" indexType="btree">
             <column name="code"/>
         </index>
     </table>
@@ -54,18 +54,18 @@
                 comment="Zip From"/>
         <column xsi:type="int" name="zip_to" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Zip To"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="tax_calculation_rate_id"/>
         </constraint>
-        <index name="TAX_CALCULATION_RATE_TAX_COUNTRY_ID_TAX_REGION_ID_TAX_POSTCODE" indexType="btree">
+        <index referenceId="TAX_CALCULATION_RATE_TAX_COUNTRY_ID_TAX_REGION_ID_TAX_POSTCODE" indexType="btree">
             <column name="tax_country_id"/>
             <column name="tax_region_id"/>
             <column name="tax_postcode"/>
         </index>
-        <index name="TAX_CALCULATION_RATE_CODE" indexType="btree">
+        <index referenceId="TAX_CALCULATION_RATE_CODE" indexType="btree">
             <column name="code"/>
         </index>
-        <index name="IDX_CA799F1E2CB843495F601E56C84A626D" indexType="btree">
+        <index referenceId="IDX_CA799F1E2CB843495F601E56C84A626D" indexType="btree">
             <column name="tax_calculation_rate_id"/>
             <column name="tax_country_id"/>
             <column name="tax_region_id"/>
@@ -84,31 +84,31 @@
                 identity="false" comment="Customer Tax Class Id"/>
         <column xsi:type="smallint" name="product_tax_class_id" padding="6" unsigned="false" nullable="false"
                 identity="false" comment="Product Tax Class Id"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="tax_calculation_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="TAX_CALCULATION_PRODUCT_TAX_CLASS_ID_TAX_CLASS_CLASS_ID"
+        <constraint xsi:type="foreign" referenceId="TAX_CALCULATION_PRODUCT_TAX_CLASS_ID_TAX_CLASS_CLASS_ID"
                     table="tax_calculation" column="product_tax_class_id" referenceTable="tax_class"
                     referenceColumn="class_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="TAX_CALCULATION_CUSTOMER_TAX_CLASS_ID_TAX_CLASS_CLASS_ID"
+        <constraint xsi:type="foreign" referenceId="TAX_CALCULATION_CUSTOMER_TAX_CLASS_ID_TAX_CLASS_CLASS_ID"
                     table="tax_calculation" column="customer_tax_class_id" referenceTable="tax_class"
                     referenceColumn="class_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="TAX_CALC_TAX_CALC_RATE_ID_TAX_CALC_RATE_TAX_CALC_RATE_ID"
+        <constraint xsi:type="foreign" referenceId="TAX_CALC_TAX_CALC_RATE_ID_TAX_CALC_RATE_TAX_CALC_RATE_ID"
                     table="tax_calculation" column="tax_calculation_rate_id" referenceTable="tax_calculation_rate"
                     referenceColumn="tax_calculation_rate_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="TAX_CALC_TAX_CALC_RULE_ID_TAX_CALC_RULE_TAX_CALC_RULE_ID"
+        <constraint xsi:type="foreign" referenceId="TAX_CALC_TAX_CALC_RULE_ID_TAX_CALC_RULE_TAX_CALC_RULE_ID"
                     table="tax_calculation" column="tax_calculation_rule_id" referenceTable="tax_calculation_rule"
                     referenceColumn="tax_calculation_rule_id" onDelete="CASCADE"/>
-        <index name="TAX_CALCULATION_TAX_CALCULATION_RULE_ID" indexType="btree">
+        <index referenceId="TAX_CALCULATION_TAX_CALCULATION_RULE_ID" indexType="btree">
             <column name="tax_calculation_rule_id"/>
         </index>
-        <index name="TAX_CALCULATION_CUSTOMER_TAX_CLASS_ID" indexType="btree">
+        <index referenceId="TAX_CALCULATION_CUSTOMER_TAX_CLASS_ID" indexType="btree">
             <column name="customer_tax_class_id"/>
         </index>
-        <index name="TAX_CALCULATION_PRODUCT_TAX_CLASS_ID" indexType="btree">
+        <index referenceId="TAX_CALCULATION_PRODUCT_TAX_CLASS_ID" indexType="btree">
             <column name="product_tax_class_id"/>
         </index>
-        <index name="TAX_CALC_TAX_CALC_RATE_ID_CSTR_TAX_CLASS_ID_PRD_TAX_CLASS_ID" indexType="btree">
+        <index referenceId="TAX_CALC_TAX_CALC_RATE_ID_CSTR_TAX_CLASS_ID_PRD_TAX_CLASS_ID" indexType="btree">
             <column name="tax_calculation_rate_id"/>
             <column name="customer_tax_class_id"/>
             <column name="product_tax_class_id"/>
@@ -122,24 +122,24 @@
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Store Id"/>
         <column xsi:type="varchar" name="value" nullable="false" length="255" comment="Value"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="tax_calculation_rate_title_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="TAX_CALCULATION_RATE_TITLE_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="TAX_CALCULATION_RATE_TITLE_STORE_ID_STORE_STORE_ID"
                     table="tax_calculation_rate_title" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="FK_37FB965F786AD5897BB3AE90470C42AB" table="tax_calculation_rate_title"
+        <constraint xsi:type="foreign" referenceId="FK_37FB965F786AD5897BB3AE90470C42AB" table="tax_calculation_rate_title"
                     column="tax_calculation_rate_id" referenceTable="tax_calculation_rate"
                     referenceColumn="tax_calculation_rate_id" onDelete="CASCADE"/>
-        <index name="TAX_CALCULATION_RATE_TITLE_TAX_CALCULATION_RATE_ID_STORE_ID" indexType="btree">
+        <index referenceId="TAX_CALCULATION_RATE_TITLE_TAX_CALCULATION_RATE_ID_STORE_ID" indexType="btree">
             <column name="tax_calculation_rate_id"/>
             <column name="store_id"/>
         </index>
-        <index name="TAX_CALCULATION_RATE_TITLE_STORE_ID" indexType="btree">
+        <index referenceId="TAX_CALCULATION_RATE_TITLE_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
-    <table name="tax_order_aggregated_created" resource="default" engine="innodb" comment="Tax Order Aggregation">
+    <table name="tax_order_aggregated_created" resource="sales" engine="innodb" comment="Tax Order Aggregation">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
         <column xsi:type="date" name="period" comment="Period"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
@@ -151,24 +151,24 @@
                 default="0" comment="Orders Count"/>
         <column xsi:type="float" name="tax_base_amount_sum" unsigned="false" nullable="true"
                 comment="Tax Base Amount Sum"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="TAX_ORDER_AGGREGATED_CREATED_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="TAX_ORDER_AGGREGATED_CREATED_STORE_ID_STORE_STORE_ID"
                     table="tax_order_aggregated_created" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="TAX_ORDER_AGGRED_CREATED_PERIOD_STORE_ID_CODE_PERCENT_ORDER_STS">
+        <constraint xsi:type="unique" referenceId="TAX_ORDER_AGGRED_CREATED_PERIOD_STORE_ID_CODE_PERCENT_ORDER_STS">
             <column name="period"/>
             <column name="store_id"/>
             <column name="code"/>
             <column name="percent"/>
             <column name="order_status"/>
         </constraint>
-        <index name="TAX_ORDER_AGGREGATED_CREATED_STORE_ID" indexType="btree">
+        <index referenceId="TAX_ORDER_AGGREGATED_CREATED_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
-    <table name="tax_order_aggregated_updated" resource="default" engine="innodb"
+    <table name="tax_order_aggregated_updated" resource="sales" engine="innodb"
            comment="Tax Order Aggregated Updated">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
         <column xsi:type="date" name="period" comment="Period"/>
@@ -181,20 +181,20 @@
                 default="0" comment="Orders Count"/>
         <column xsi:type="float" name="tax_base_amount_sum" unsigned="false" nullable="true"
                 comment="Tax Base Amount Sum"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="TAX_ORDER_AGGREGATED_UPDATED_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="TAX_ORDER_AGGREGATED_UPDATED_STORE_ID_STORE_STORE_ID"
                     table="tax_order_aggregated_updated" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="TAX_ORDER_AGGRED_UPDATED_PERIOD_STORE_ID_CODE_PERCENT_ORDER_STS">
+        <constraint xsi:type="unique" referenceId="TAX_ORDER_AGGRED_UPDATED_PERIOD_STORE_ID_CODE_PERCENT_ORDER_STS">
             <column name="period"/>
             <column name="store_id"/>
             <column name="code"/>
             <column name="percent"/>
             <column name="order_status"/>
         </constraint>
-        <index name="TAX_ORDER_AGGREGATED_UPDATED_STORE_ID" indexType="btree">
+        <index referenceId="TAX_ORDER_AGGREGATED_UPDATED_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>

@@ -9,8 +9,6 @@ namespace Magento\TestModuleGraphQlQueryExtension\Model\Resolver;
 
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
@@ -19,20 +17,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class IntegerList implements ResolverInterface
 {
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
-     * @param ValueFactory $valueFactory
-     */
-    public function __construct(ValueFactory $valueFactory)
-    {
-        $this->valueFactory = $valueFactory;
-    }
-
-    /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -40,21 +25,14 @@ class IntegerList implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ) {
         if (!isset($value['item_id'])) {
-            return $this->valueFactory->create(function () {
-                return null;
-            });
+            return null;
         }
 
         $itemId = $value['item_id'];
 
         $resultData = [$itemId + 1, $itemId + 2, $itemId + 3];
-
-        $result = function () use ($resultData) {
-            return $resultData;
-        };
-
-        return $this->valueFactory->create($result);
+        return $resultData;
     }
 }

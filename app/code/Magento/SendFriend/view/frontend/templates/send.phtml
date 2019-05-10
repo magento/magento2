@@ -17,13 +17,13 @@
         <div class="secondary">
             <button type="button" id="btn-remove<%- data._index_ %>" class="action remove"
                title="<?= $block->escapeHtmlAttr(__('Remove Recipent')) ?>">
-               <span><?= $block->escapeJs($block->escapeHtml(__('Remove'))) ?></span>
+               <span><?= $block->escapeHtml(__('Remove')) ?></span>
             </button>
         </div>
     </div>
     <fieldset class="fieldset">
         <div class="field name required">
-            <label for="recipients-name<%- data._index_ %>" class="label"><span><?= $block->escapeJs($block->escapeHtml(__('Name'))) ?></span></label>
+            <label for="recipients-name<%- data._index_ %>" class="label"><span><?= $block->escapeHtml(__('Name')) ?></span></label>
             <div class="control">
                 <input name="recipients[name][<%- data._index_ %>]" type="text" title="<?= $block->escapeHtmlAttr(__('Name')) ?>" class="input-text"
                        id="recipients-name<%- data._index_ %>" data-validate="{required:true}"/>
@@ -31,7 +31,7 @@
         </div>
 
         <div class="field email required">
-            <label for="recipients-email<%- data._index_ %>" class="label"><span><?= $block->escapeJs($block->escapeHtml(__('Email'))) ?></span></label>
+            <label for="recipients-email<%- data._index_ %>" class="label"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
             <div class="control">
                 <input name="recipients[email][<%- data._index_ %>]" title="<?= $block->escapeHtmlAttr(__('Email')) ?>"
                        id="recipients-email<%- data._index_ %>" type="email" class="input-text"
@@ -108,6 +108,7 @@
         </div>
         <?= $block->getChildHtml('form_additional_info') ?>
     </fieldset>
+    <?= $block->getChildHtml('captcha'); ?>
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit"
@@ -123,7 +124,7 @@
 <script type="text/x-magento-init">
     {
         "a[role='back']": {
-            "Magento_SendFriend/back-event": {}
+            "Magento_SendFriend/js/back-event": {}
         }
     }
 </script>

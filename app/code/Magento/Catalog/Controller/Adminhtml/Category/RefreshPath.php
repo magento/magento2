@@ -1,12 +1,16 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+/**
+ * Class RefreshPath
+ */
+class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -42,6 +46,7 @@ class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category
                 'id' => $categoryId,
                 'path' => $category->getPath(),
                 'parentId' => $category->getParentId(),
+                'level' => $category->getLevel()
             ]);
         }
     }

@@ -16,6 +16,8 @@ use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
 
 /**
+ * Metadata for form image field
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Image extends File
@@ -32,7 +34,7 @@ class Image extends File
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param null $value
+     * @param null|string $value
      * @param string $entityTypeCode
      * @param bool $isAjax
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
@@ -78,6 +80,7 @@ class Image extends File
 
     /**
      * Validate file by attribute validate rules
+     *
      * Return array of errors
      *
      * @param array $value
@@ -133,7 +136,7 @@ class Image extends File
 
         $maxImageHeight = ArrayObjectSearch::getArrayElementByName(
             $rules,
-            'max_image_heght'
+            'max_image_height'
         );
         if ($maxImageHeight !== null) {
             if ($maxImageHeight < $imageProp[1]) {

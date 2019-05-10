@@ -13,12 +13,11 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable as Type;
 use Magento\ConfigurableProductGraphQl\Model\Options\Collection as OptionCollection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class Options implements ResolverInterface
 {
@@ -55,9 +54,9 @@ class Options implements ResolverInterface
     /**
      * Fetch and format configurable variants.
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         if ($value['type_id'] !== Type::TYPE_CODE || !isset($value[$linkField])) {

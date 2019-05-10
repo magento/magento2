@@ -12,8 +12,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -28,20 +26,12 @@ class Blocks implements ResolverInterface
     private $blockDataProvider;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
      * @param BlockDataProvider $blockDataProvider
-     * @param ValueFactory $valueFactory
      */
     public function __construct(
-        BlockDataProvider $blockDataProvider,
-        ValueFactory $valueFactory
+        BlockDataProvider $blockDataProvider
     ) {
         $this->blockDataProvider = $blockDataProvider;
-        $this->valueFactory = $valueFactory;
     }
 
     /**
@@ -53,21 +43,20 @@ class Blocks implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ) : Value {
+    ) {
 
-        $result = function () use ($args) {
-            $blockIdentifiers = $this->getBlockIdentifiers($args);
-            $blocksData = $this->getBlocksData($blockIdentifiers);
+        $blockIdentifiers = $this->getBlockIdentifiers($args);
+        $blocksData = $this->getBlocksData($blockIdentifiers);
 
-            $resultData = [
-                'items' => $blocksData,
-            ];
-            return $resultData;
-        };
-        return $this->valueFactory->create($result);
+        $resultData = [
+            'items' => $blocksData,
+        ];
+        return $resultData;
     }
 
     /**
+     * Get block identifiers
+     *
      * @param array $args
      * @return string[]
      * @throws GraphQlInputException
@@ -82,6 +71,8 @@ class Blocks implements ResolverInterface
     }
 
     /**
+     * Get blocks data
+     *
      * @param array $blockIdentifiers
      * @return array
      * @throws GraphQlNoSuchEntityException
@@ -89,12 +80,12 @@ class Blocks implements ResolverInterface
     private function getBlocksData(array $blockIdentifiers): array
     {
         $blocksData = [];
-        try {
-            foreach ($blockIdentifiers as $blockIdentifier) {
+        foreach ($blockIdentifiers as $blockIdentifier) {
+            try {
                 $blocksData[$blockIdentifier] = $this->blockDataProvider->getData($blockIdentifier);
+            } catch (NoSuchEntityException $e) {
+                $blocksData[$blockIdentifier] = new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
             }
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         }
         return $blocksData;
     }

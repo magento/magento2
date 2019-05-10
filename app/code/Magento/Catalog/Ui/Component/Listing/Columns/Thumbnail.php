@@ -9,6 +9,8 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
+ * Class Thumbnail
+ *
  * @api
  * @since 100.0.2
  */
@@ -67,6 +69,8 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
     }
 
     /**
+     * Get Alt
+     *
      * @param array $row
      *
      * @return null|string
@@ -74,6 +78,6 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
     protected function getAlt($row)
     {
         $altField = $this->getData('config/altField') ?: self::ALT_FIELD;
-        return isset($row[$altField]) ? $row[$altField] : null;
+        return $row[$altField] ?? null;
     }
 }

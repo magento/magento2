@@ -13,12 +13,12 @@
             <stories value="Delete a persist wishlist for a customer"/>
             <title value="Customer should be able to delete a persistent wishlist"/>
             <description value="Customer should be able to delete a persistent wishlist"/>
+            <severity value="AVERAGE"/>
             <group value="wishlist"/>
-            <group value="skip"/>
+            <testCaseId value="MC-4110"/>
             <skip>
                 <issueId value="MQE-1145"/>
             </skip>
-            <severity value="AVERAGE"/>
         </annotations>
         <before>
             <createData stepKey="category" entity="SimpleSubCategory"/>

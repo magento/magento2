@@ -101,6 +101,8 @@ class Elasticsearch implements ClientInterface
     }
 
     /**
+     * Build config.
+     *
      * @param array $options
      * @return array
      */
@@ -207,9 +209,10 @@ class Elasticsearch implements ClientInterface
     }
 
     /**
+     * Exists alias.
+     *
      * @param string $alias
      * @param string $index
-     *
      * @return bool
      */
     public function existsAlias($alias, $index = '')
@@ -222,8 +225,9 @@ class Elasticsearch implements ClientInterface
     }
 
     /**
-     * @param string $alias
+     * Get alias.
      *
+     * @param string $alias
      * @return array
      */
     public function getAlias($alias)
@@ -268,7 +272,7 @@ class Elasticsearch implements ClientInterface
                                 'match_mapping_type' => 'string',
                                 'mapping' => $this->prepareFieldInfo([
                                     'type' => 'text',
-                                    'index' => 'no',
+                                    'index' => false,
                                 ]),
                             ],
                         ],
@@ -293,8 +297,7 @@ class Elasticsearch implements ClientInterface
     }
 
     /**
-     * Fix backward compatibility of field definition.
-     * Allow to run both 2.x and 5.x servers.
+     * Fix backward compatibility of field definition. Allow to run both 2.x and 5.x servers.
      *
      * @param array $fieldInfo
      *
@@ -346,8 +349,7 @@ class Elasticsearch implements ClientInterface
     }
 
     /**
-     * Fix backward compatibility of the search queries.
-     * Allow to run both 2.x and 5.x servers.
+     * Fix backward compatibility of the search queries. Allow to run both 2.x and 5.x servers.
      *
      * @param array $query
      *

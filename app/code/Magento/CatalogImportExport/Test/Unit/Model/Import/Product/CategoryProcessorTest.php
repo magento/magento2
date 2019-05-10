@@ -34,41 +34,49 @@ class CategoryProcessorTest extends \PHPUnit\Framework\TestCase
      */
     protected $product;
 
+    /**
+     * @var \Magento\Catalog\Model\Category
+     */
+    private $childCategory;
+
+    /**
+     * \Magento\Catalog\Model\Category
+     */
+    private $parentCategory;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $childCategory = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+        $this->childCategory = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $childCategory->method('getId')->will($this->returnValue(self::CHILD_CATEGORY_ID));
-        $childCategory->method('getName')->will($this->returnValue(self::CHILD_CATEGORY_NAME));
-        $childCategory->method('getPath')->will($this->returnValue(
+        $this->childCategory->method('getId')->will($this->returnValue(self::CHILD_CATEGORY_ID));
+        $this->childCategory->method('getName')->will($this->returnValue(self::CHILD_CATEGORY_NAME));
+        $this->childCategory->method('getPath')->will($this->returnValue(
             self::PARENT_CATEGORY_ID . CategoryProcessor::DELIMITER_CATEGORY
             . self::CHILD_CATEGORY_ID
         ));
 
-        $childCategory->method('save')->willThrowException(new \Exception());
-
-        $parentCategory = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+        $this->parentCategory = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $parentCategory->method('getId')->will($this->returnValue(self::PARENT_CATEGORY_ID));
-        $parentCategory->method('getName')->will($this->returnValue('Parent'));
-        $parentCategory->method('getPath')->will($this->returnValue(self::PARENT_CATEGORY_ID));
+        $this->parentCategory->method('getId')->will($this->returnValue(self::PARENT_CATEGORY_ID));
+        $this->parentCategory->method('getName')->will($this->returnValue('Parent'));
+        $this->parentCategory->method('getPath')->will($this->returnValue(self::PARENT_CATEGORY_ID));
 
         $categoryCollection =
             $this->objectManagerHelper->getCollectionMock(
                 \Magento\Catalog\Model\ResourceModel\Category\Collection::class,
                 [
-                    self::PARENT_CATEGORY_ID => $parentCategory,
-                    self::CHILD_CATEGORY_ID => $childCategory,
+                    self::PARENT_CATEGORY_ID => $this->parentCategory,
+                    self::CHILD_CATEGORY_ID => $this->childCategory,
                 ]
             );
         $map = [
-            [self::PARENT_CATEGORY_ID, $parentCategory],
-            [self::CHILD_CATEGORY_ID, $childCategory],
+            [self::PARENT_CATEGORY_ID, $this->parentCategory],
+            [self::CHILD_CATEGORY_ID, $this->childCategory],
         ];
         $categoryCollection->expects($this->any())
             ->method('getItemById')
@@ -91,7 +99,7 @@ class CategoryProcessorTest extends \PHPUnit\Framework\TestCase
 
         $categoryFactory = $this->createPartialMock(\Magento\Catalog\Model\CategoryFactory::class, ['create']);
 
-        $categoryFactory->method('create')->will($this->returnValue($childCategory));
+        $categoryFactory->method('create')->will($this->returnValue($this->childCategory));
 
         $this->categoryProcessor =
             new \Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor(
@@ -110,11 +118,13 @@ class CategoryProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests case when newly created category save throws exception.
      */
-    public function testCreateCategoryException()
+    public function testUpsertCategoriesWithAlreadyExistsException()
     {
-        $method = new \ReflectionMethod(CategoryProcessor::class, 'createCategory');
-        $method->setAccessible(true);
-        $method->invoke($this->categoryProcessor, self::CHILD_CATEGORY_NAME, self::PARENT_CATEGORY_ID);
+        $exception = new \Magento\Framework\Exception\AlreadyExistsException();
+        $categoriesSeparator = '/';
+        $categoryName = 'Exception Category';
+        $this->childCategory->method('save')->willThrowException($exception);
+        $this->categoryProcessor->upsertCategories($categoryName, $categoriesSeparator);
         $this->assertNotEmpty($this->categoryProcessor->getFailedCategories());
     }
 

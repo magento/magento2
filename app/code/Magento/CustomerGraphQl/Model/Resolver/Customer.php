@@ -7,16 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\Authorization\Model\UserContextInterface;
+use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\CustomerGraphQl\Model\Resolver\Customer\CustomerDataProvider;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
@@ -25,29 +19,29 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class Customer implements ResolverInterface
 {
     /**
-     * @var CustomerDataProvider
+     * @var GetCustomer
      */
-    private $customerResolver;
+    private $getCustomer;
 
     /**
-     * @var ValueFactory
+     * @var ExtractCustomerData
      */
-    private $valueFactory;
+    private $extractCustomerData;
 
     /**
-     * @param CustomerDataProvider $customerResolver
-     * @param ValueFactory $valueFactory
+     * @param GetCustomer $getCustomer
+     * @param ExtractCustomerData $extractCustomerData
      */
     public function __construct(
-        CustomerDataProvider $customerResolver,
-        ValueFactory $valueFactory
+        GetCustomer $getCustomer,
+        ExtractCustomerData $extractCustomerData
     ) {
-        $this->customerResolver = $customerResolver;
-        $this->valueFactory = $valueFactory;
+        $this->getCustomer = $getCustomer;
+        $this->extractCustomerData = $extractCustomerData;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -55,25 +49,9 @@ class Customer implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ) : Value {
-        /** @var ContextInterface $context */
-        if ((!$context->getUserId()) || $context->getUserType() == UserContextInterface::USER_TYPE_GUEST) {
-            throw new GraphQlAuthorizationException(
-                __(
-                    'Current customer does not have access to the resource "%1"',
-                    [\Magento\Customer\Model\Customer::ENTITY]
-                )
-            );
-        }
+    ) {
+        $customer = $this->getCustomer->execute($context);
 
-        try {
-            $data = $this->customerResolver->getCustomerById($context->getUserId());
-            $result = function () use ($data) {
-                return !empty($data) ? $data : [];
-            };
-            return $this->valueFactory->create($result);
-        } catch (NoSuchEntityException $exception) {
-            throw new GraphQlNoSuchEntityException(__('Customer id %1 does not exist.', [$context->getUserId()]));
-        }
+        return $this->extractCustomerData->execute($customer);
     }
 }

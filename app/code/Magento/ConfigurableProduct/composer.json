@@ -22,9 +22,11 @@
         "magento/module-msrp": "*",
         "magento/module-webapi": "*",
         "magento/module-sales": "*",
+        "magento/module-sales-rule": "*",
         "magento/module-product-video": "*",
         "magento/module-configurable-sample-data": "*",
-        "magento/module-product-links-sample-data": "*"
+        "magento/module-product-links-sample-data": "*",
+        "magento/module-tax": "*"
     },
     "type": "magento2-module",
     "license": [

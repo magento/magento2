@@ -12,10 +12,10 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class IntrospectionQueryTest extends GraphQlAbstract
 {
     /**
-     * Tests that Introspection is disabled when not in developer mode
+     * Tests that Introspection is allowed by default
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testIntrospectionQueryWithFieldArgs()
+    public function testIntrospectionQuery()
     {
         $query
             = <<<QUERY
@@ -54,11 +54,6 @@ fragment InputValue on __InputValue {
 }
 QUERY;
 
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'GraphQL response contains errors: GraphQL introspection is not allowed, but ' .
-            'the query contained __schema or __type'
-        );
-        $this->graphQlQuery($query);
+        $this->assertArrayHasKey('__schema', $this->graphQlQuery($query));
     }
 }

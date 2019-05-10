@@ -31,10 +31,8 @@ class CryptKeyGenerator implements CryptKeyGeneratorInterface
 
     /**
      * Generates & returns a string to be used as crypt key.
-     * The key length is not a parameter, but an implementation detail.
      *
      * @return string
-     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function generate()

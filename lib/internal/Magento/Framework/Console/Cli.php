@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Console;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ProductMetadata;
-use Magento\Framework\App\State;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Console\Exception\GenerationDirectoryAccessException;
 use Magento\Framework\Filesystem\Driver\File;
@@ -23,9 +24,10 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Magento 2 CLI Application.
+ *
  * This is the hood for all command line tools supported by Magento.
  *
- * {@inheritdoc}
+ * @inheritdoc
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Cli extends Console\Application
@@ -62,11 +64,11 @@ class Cli extends Console\Application
     /**
      * @param string $name the application name
      * @param string $version the application version
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
     {
         try {
+            // phpcs:ignore Magento2.Security.IncludeFile
             $configuration = require BP . '/setup/config/application.config.php';
             $bootstrapApplication = new Application();
             $application = $bootstrapApplication->bootstrap($configuration);
@@ -74,13 +76,12 @@ class Cli extends Console\Application
 
             $this->assertCompilerPreparation();
             $this->initObjectManager();
-            $this->assertGenerationPermissions();
         } catch (\Exception $exception) {
             $output = new \Symfony\Component\Console\Output\ConsoleOutput();
             $output->writeln(
                 '<error>' . $exception->getMessage() . '</error>'
             );
-
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit(static::RETURN_FAILURE);
         }
 
@@ -95,7 +96,7 @@ class Cli extends Console\Application
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @throws \Exception The exception in case of unexpected error
      */
@@ -111,7 +112,7 @@ class Cli extends Console\Application
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getDefaultCommands()
     {
@@ -174,33 +175,6 @@ class Cli extends Console\Application
     }
 
     /**
-     * Checks whether generation directory is read-only.
-     * Depends on the current mode:
-     *      production - application will proceed
-     *      default - application will be terminated
-     *      developer - application will be terminated
-     *
-     * @return void
-     * @throws GenerationDirectoryAccessException If generation directory is read-only in developer mode
-     */
-    private function assertGenerationPermissions()
-    {
-        /** @var GenerationDirectoryAccess $generationDirectoryAccess */
-        $generationDirectoryAccess = $this->objectManager->create(
-            GenerationDirectoryAccess::class,
-            ['serviceManager' => $this->serviceManager]
-        );
-        /** @var State $state */
-        $state = $this->objectManager->get(State::class);
-
-        if ($state->getMode() !== State::MODE_PRODUCTION
-            && !$generationDirectoryAccess->check()
-        ) {
-            throw new GenerationDirectoryAccessException();
-        }
-    }
-
-    /**
      * Checks whether compiler is being prepared.
      *
      * @return void
@@ -246,8 +220,7 @@ class Cli extends Console\Application
     }
 
     /**
-     * Provides updated configuration in
-     * accordance to document root settings.
+     * Provides updated configuration in accordance to document root settings.
      *
      * @param array $config
      * @return array

@@ -91,7 +91,11 @@
                     <container name="product.info.social" label="Product social links container" htmlTag="div" htmlClass="product-social-links">
                         <block class="Magento\Catalog\Block\Product\View" name="product.info.addto" as="addto" template="Magento_Catalog::product/view/addto.phtml">
                             <block class="Magento\Catalog\Block\Product\View\AddTo\Compare" name="view.addto.compare" after="view.addto.wishlist"
-                                   template="Magento_Catalog::product/view/addto/compare.phtml" />
+                                   template="Magento_Catalog::product/view/addto/compare.phtml" >
+                                <arguments>
+                                    <argument name="addToCompareViewModel" xsi:type="object">Magento\Catalog\ViewModel\Product\Checker\AddToCompareAvailability</argument>
+                                </arguments>
+                            </block>
                         </block>
                         <block class="Magento\Catalog\Block\Product\View" name="product.info.mailto" template="Magento_Catalog::product/view/mailto.phtml"/>
                     </container>
@@ -121,7 +125,12 @@
                         </arguments>
                     </block>
                 </container>
-                <block class="Magento\Catalog\Block\Product\View\Gallery" name="product.info.media.image" template="Magento_Catalog::product/view/gallery.phtml"/>
+                <block class="Magento\Catalog\Block\Product\View\Gallery" name="product.info.media.image" template="Magento_Catalog::product/view/gallery.phtml">
+                    <arguments>
+                        <argument name="gallery_options" xsi:type="object">Magento\Catalog\Block\Product\View\GalleryOptions</argument>
+                        <argument name="imageHelper" xsi:type="object">Magento\Catalog\Helper\Image</argument>
+                    </arguments>
+                </block>
                 <container name="skip_gallery_after.wrapper" htmlTag="div" htmlClass="action-skip-wrapper">
                     <block class="Magento\Framework\View\Element\Template" after="product.info.media.image" name="skip_gallery_after" template="Magento_Theme::html/skip.phtml">
                         <arguments>
@@ -136,7 +145,7 @@
                     </arguments>
                 </block>
             </container>
-            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.details" template="Magento_Catalog::product/view/details.phtml" after="product.info.media">
+            <block class="Magento\Catalog\Block\Product\View\Details" name="product.info.details" template="Magento_Catalog::product/view/details.phtml" after="product.info.media">
                 <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.description" as="description" template="Magento_Catalog::product/view/attribute.phtml" group="detailed_info">
                     <arguments>
                         <argument name="at_call" xsi:type="string">getDescription</argument>
@@ -144,11 +153,13 @@
                         <argument name="css_class" xsi:type="string">description</argument>
                         <argument name="at_label" xsi:type="string">none</argument>
                         <argument name="title" translate="true" xsi:type="string">Details</argument>
+                        <argument name="sort_order" xsi:type="string">10</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Catalog\Block\Product\View\Attributes" name="product.attributes" as="additional" template="Magento_Catalog::product/view/attributes.phtml" group="detailed_info">
                     <arguments>
                         <argument translate="true" name="title" xsi:type="string">More Information</argument>
+                        <argument name="sort_order" xsi:type="string">20</argument>
                     </arguments>
                 </block>
             </block>

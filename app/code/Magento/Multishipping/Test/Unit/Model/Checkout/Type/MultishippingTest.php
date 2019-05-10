@@ -167,13 +167,18 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      */
     private $sessionMock;
 
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfigMock;
+
     protected function setUp()
     {
         $this->checkoutSessionMock = $this->createSimpleMock(Session::class);
         $this->customerSessionMock = $this->createSimpleMock(CustomerSession::class);
         $this->orderFactoryMock = $this->createSimpleMock(OrderFactory::class);
         $eventManagerMock = $this->createSimpleMock(ManagerInterface::class);
-        $scopeConfigMock = $this->createSimpleMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createSimpleMock(ScopeConfigInterface::class);
         $this->sessionMock = $this->createSimpleMock(Generic::class);
         $addressFactoryMock = $this->createSimpleMock(AddressFactory::class);
         $this->toOrderMock = $this->createSimpleMock(ToOrder::class);
@@ -224,7 +229,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             $this->orderFactoryMock,
             $this->addressRepositoryMock,
             $eventManagerMock,
-            $scopeConfigMock,
+            $this->scopeConfigMock,
             $this->sessionMock,
             $addressFactoryMock,
             $this->toOrderMock,
@@ -277,6 +282,10 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             ->willReturn(null);
 
         $this->quoteMock->expects($this->atLeastOnce())->method('getAllItems')->willReturn([]);
+        $this->quoteMock->expects($this->once())
+            ->method('__call')
+            ->with('setTotalsCollectedFlag', [false])
+            ->willReturnSelf();
 
         $this->filterBuilderMock->expects($this->atLeastOnce())->method('setField')->willReturnSelf();
         $this->filterBuilderMock->expects($this->atLeastOnce())->method('setValue')->willReturnSelf();
@@ -416,6 +425,10 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $addressMock->expects($this->once())->method('getId')->willReturn($addressId);
         $this->quoteMock->expects($this->once())->method('getAllShippingAddresses')->willReturn([$addressMock]);
         $addressMock->expects($this->once())->method('setShippingMethod')->with($methodsArray[$addressId]);
+        $this->quoteMock->expects($this->once())
+            ->method('__call')
+            ->with('setTotalsCollectedFlag', [false])
+            ->willReturnSelf();
 
         $this->mockShippingAssignment();
 
@@ -659,11 +672,13 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
                     'getId',
                     'getCanSendNewEmailFlag',
                     'getItems',
+                    'setShippingMethod',
                 ]
             )->getMock();
         $orderMock->method('setQuote')->with($this->quoteMock);
         $orderMock->method('setBillingAddress')->with($orderAddressMock)->willReturnSelf();
         $orderMock->method('setShippingAddress')->with($orderAddressMock)->willReturnSelf();
+        $orderMock->expects($this->once())->method('setShippingMethod')->with('carrier')->willReturnSelf();
         $orderMock->method('setPayment')->with($orderPaymentMock)->willReturnSelf();
         $orderMock->method('addItem')->with($orderItemMock)->willReturnSelf();
         $orderMock->method('getIncrementId')->willReturn('1');
@@ -806,5 +821,38 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         return $this->getMockBuilder($className)
             ->disableOriginalConstructor()
             ->getMock();
+    }
+
+    public function testValidateMinimumAmountMultiAddressTrue()
+    {
+        $this->scopeConfigMock->expects($this->exactly(2))->method('isSetFlag')->withConsecutive(
+            ['sales/minimum_order/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
+            ['sales/minimum_order/multi_address', \Magento\Store\Model\ScopeInterface::SCOPE_STORE]
+        )->willReturnOnConsecutiveCalls(true, true);
+
+        $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuote')->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('validateMinimumAmount')->willReturn(false);
+        $this->assertFalse($this->model->validateMinimumAmount());
+    }
+
+    public function testValidateMinimumAmountMultiAddressFalse()
+    {
+        $addressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $this->scopeConfigMock->expects($this->exactly(2))->method('isSetFlag')->withConsecutive(
+            ['sales/minimum_order/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
+            ['sales/minimum_order/multi_address', \Magento\Store\Model\ScopeInterface::SCOPE_STORE]
+        )->willReturnOnConsecutiveCalls(true, false);
+
+        $this->scopeConfigMock->expects($this->exactly(2))->method('getValue')->withConsecutive(
+            ['sales/minimum_order/amount', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
+            ['sales/minimum_order/tax_including', \Magento\Store\Model\ScopeInterface::SCOPE_STORE]
+        )->willReturnOnConsecutiveCalls(100, false);
+
+        $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuote')->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn(1);
+        $this->quoteMock->expects($this->once())->method('getAllAddresses')->willReturn([$addressMock]);
+        $addressMock->expects($this->once())->method('getBaseSubtotalWithDiscount')->willReturn(101);
+
+        $this->assertTrue($this->model->validateMinimumAmount());
     }
 }

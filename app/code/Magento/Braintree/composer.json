@@ -6,7 +6,7 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0",
-        "braintree/braintree_php": "3.34.0",
+        "braintree/braintree_php": "3.35.0",
         "magento/framework": "*",
         "magento/magento-composer-installer": "*",
         "magento/module-catalog": "*",
@@ -21,7 +21,8 @@
         "magento/module-quote": "*",
         "magento/module-sales": "*",
         "magento/module-ui": "*",
-        "magento/module-vault": "*"
+        "magento/module-vault": "*",
+        "magento/module-multishipping": "*"
     },
     "suggest": {
         "magento/module-checkout-agreements": "*",

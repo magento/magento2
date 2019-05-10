@@ -63,7 +63,7 @@ class Result extends Template
     }
 
     /**
-     * @return AbstractBlock
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {
@@ -125,6 +125,8 @@ class Result extends Template
     }
 
     /**
+     * Initialize list collection.
+     *
      * @return void
      */
     public function setListCollection()
@@ -133,6 +135,8 @@ class Result extends Template
     }
 
     /**
+     * Get product collection.
+     *
      * @return Collection
      */
     protected function _getProductCollection()
@@ -141,6 +145,8 @@ class Result extends Template
     }
 
     /**
+     * Set search model.
+     *
      * @return Advanced
      */
     public function getSearchModel()
@@ -149,6 +155,8 @@ class Result extends Template
     }
 
     /**
+     * Get result count.
+     *
      * @return mixed
      */
     public function getResultCount()
@@ -161,6 +169,8 @@ class Result extends Template
     }
 
     /**
+     * Get product list HTML.
+     *
      * @return string
      */
     public function getProductListHtml()
@@ -169,6 +179,8 @@ class Result extends Template
     }
 
     /**
+     * Get form URL.
+     *
      * @return string
      */
     public function getFormUrl()
@@ -182,6 +194,8 @@ class Result extends Template
     }
 
     /**
+     * Get search criteria.
+     *
      * @return array
      */
     public function getSearchCriterias()

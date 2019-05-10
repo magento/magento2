@@ -6,10 +6,11 @@
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
-class AddAttribute extends Action
+class AddAttribute extends Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertRefundOrderStatusCommentsHistoryActionGroup">
+        <arguments>
+            <argument name="orderStatus" type="string"/>
+            <argument name="refundMessage" type="string"/>
+        </arguments>
+        <!-- Assert refund order status in Comments History -->
+        <click selector="{{AdminOrderDetailsOrderViewSection.commentsHistory}}" stepKey="clickOnTabCommentsHistory"/>
+        <waitForPageLoad stepKey="waitForComments"/>
+        <see userInput="{{orderStatus}}" selector="{{ViewOrderSection.orderStatus}}" stepKey="assertRefundOrderStatusInCommentsHistory"/>
+        <see userInput="{{refundMessage}}" selector="{{ViewOrderSection.capturedAmountTextUnsubmitted}}" stepKey="assertOrderStatus"/>
+    </actionGroup>
+</actionGroups>

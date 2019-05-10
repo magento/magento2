@@ -7,12 +7,20 @@ namespace Magento\Catalog\Plugin\Model\Attribute\Backend;
 
 use Magento\Store\Model\Store;
 
+/**
+ * Attribute validation
+ */
 class AttributeValidation
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
+
+    /**
+     * @var array
+     */
+    private $allowedEntityTypes;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -27,9 +35,12 @@ class AttributeValidation
     }
 
     /**
+     * Around validate
+     *
      * @param \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend $subject
      * @param \Closure $proceed
      * @param \Magento\Framework\DataObject $entity
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return bool
      */
     public function aroundValidate(
@@ -41,7 +52,7 @@ class AttributeValidation
             return $entity instanceof $allowedEntity;
         }, $this->allowedEntityTypes)));
 
-        if ($isAllowedType && $this->storeManager->getStore()->getId() !== Store::DEFAULT_STORE_ID) {
+        if ($isAllowedType && (int) $this->storeManager->getStore()->getId() !== Store::DEFAULT_STORE_ID) {
             $attrCode = $subject->getAttribute()->getAttributeCode();
             // Null is meaning "no value" which should be overridden by value from default scope
             if (array_key_exists($attrCode, $entity->getData()) && $entity->getData($attrCode) === null) {

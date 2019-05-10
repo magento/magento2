@@ -5,14 +5,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Router;
 
 /**
+ * Base router implementation.
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Base implements \Magento\Framework\App\RouterInterface
 {
+    /**
+     * No route constant used for request
+     */
+    const NO_ROUTE = 'noroute';
+
     /**
      * @var \Magento\Framework\App\ActionFactory
      */
@@ -303,7 +312,7 @@ class Base implements \Magento\Framework\App\RouterInterface
             if ($actionInstance === null) {
                 return null;
             }
-            $action = 'noroute';
+            $action = self::NO_ROUTE;
         }
 
         // set values only after all the checks are done
@@ -333,12 +342,12 @@ class Base implements \Magento\Framework\App\RouterInterface
 
     /**
      * Check that request uses https protocol if it should.
+     *
      * Function redirects user to correct URL if needed.
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @param string $path
      * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     protected function _checkShouldBeSecure(\Magento\Framework\App\RequestInterface $request, $path = '')
     {
@@ -353,6 +362,7 @@ class Base implements \Magento\Framework\App\RouterInterface
             }
 
             $this->_responseFactory->create()->setRedirect($url)->sendResponse();
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit;
         }
     }

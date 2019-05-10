@@ -3,9 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Model\ResourceModel\Quote\Item;
 
-use \Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Quote\Model\ResourceModel\Quote\Item as ResourceQuoteItem;
 
 /**
  * Quote item resource collection
@@ -49,6 +56,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * @var \Magento\Store\Model\StoreManagerInterface|null
      */
     private $storeManager;
+
+    /**
+     * @var bool $recollectQuote
+     */
+    private $recollectQuote = false;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -102,7 +114,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Quote\Model\Quote\Item::class, \Magento\Quote\Model\ResourceModel\Quote\Item::class);
+        $this->_init(QuoteItem::class, ResourceQuoteItem::class);
     }
 
     /**
@@ -110,7 +122,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @return int
      */
-    public function getStoreId()
+    public function getStoreId(): int
     {
         // Fallback to current storeId if no quote is provided
         // (see https://github.com/magento/magento2/commit/9d3be732a88884a66d667b443b3dc1655ddd0721)
@@ -119,12 +131,12 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
-     * Set Quote object to Collection
+     * Set Quote object to Collection.
      *
-     * @param \Magento\Quote\Model\Quote $quote
+     * @param Quote $quote
      * @return $this
      */
-    public function setQuote($quote)
+    public function setQuote($quote): self
     {
         $this->_quote = $quote;
         $quoteId = $quote->getId();
@@ -138,14 +150,15 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
-     * Reset the collection and inner join it to quotes table
+     * Reset the collection and inner join it to quotes table.
+     *
      * Optionally can select items with specified product id only
      *
      * @param string $quotesTableName
      * @param int $productId
      * @return $this
      */
-    public function resetJoinQuotes($quotesTableName, $productId = null)
+    public function resetJoinQuotes($quotesTableName, $productId = null): self
     {
         $this->getSelect()->reset()->from(
             ['qi' => $this->getResource()->getMainTable()],
@@ -162,11 +175,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
-     * After load processing
+     * After load processing.
      *
      * @return $this
      */
-    protected function _afterLoad()
+    protected function _afterLoad(): self
     {
         parent::_afterLoad();
 
@@ -195,11 +208,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
-     * Add options to items
+     * Add options to items.
      *
      * @return $this
      */
-    protected function _assignOptions()
+    protected function _assignOptions(): self
     {
         $itemIds = array_keys($this->_items);
         $optionCollection = $this->_itemOptionCollectionFactory->create()->addItemFilter($itemIds);
@@ -213,12 +226,12 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
-     * Add products to items and item options
+     * Add products to items and item options.
      *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _assignProducts()
+    protected function _assignProducts(): self
     {
         \Magento\Framework\Profiler::start('QUOTE:' . __METHOD__, ['group' => 'QUOTE', 'method' => __METHOD__]);
         $productCollection = $this->_productCollectionFactory->create()->setStoreId(
@@ -230,7 +243,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         );
         $this->skipStockStatusFilter($productCollection);
         $productCollection->addOptionsToResult()->addStoreFilter()->addUrlRewrite();
-        $this->addTierPriceData($productCollection);
 
         $this->_eventManager->dispatch(
             'prepare_catalog_product_collection_prices',
@@ -241,51 +253,85 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
             ['collection' => $productCollection]
         );
 
-        $recollectQuote = false;
         foreach ($this as $item) {
+            /** @var ProductInterface $product */
             $product = $productCollection->getItemById($item->getProductId());
-            if ($product) {
+            $qtyOptions = [];
+            if ($product && $this->isValidProduct($product)) {
                 $product->setCustomOptions([]);
-                $qtyOptions = [];
-                $optionProductIds = [];
-                foreach ($item->getOptions() as $option) {
-                    /**
-                     * Call type-specific logic for product associated with quote item
-                     */
-                    $product->getTypeInstance()->assignProductToOption(
-                        $productCollection->getItemById($option->getProductId()),
-                        $option,
-                        $product
-                    );
-
-                    if (is_object($option->getProduct()) && $option->getProduct()->getId() != $product->getId()) {
-                        $optionProductIds[$option->getProduct()->getId()] = $option->getProduct()->getId();
+                $optionProductIds = $this->getOptionProductIds($item, $product, $productCollection);
+                foreach ($optionProductIds as $optionProductId) {
+                    $qtyOption = $item->getOptionByCode('product_qty_' . $optionProductId);
+                    if ($qtyOption) {
+                        $qtyOptions[$optionProductId] = $qtyOption;
                     }
                 }
-
-                if ($optionProductIds) {
-                    foreach ($optionProductIds as $optionProductId) {
-                        $qtyOption = $item->getOptionByCode('product_qty_' . $optionProductId);
-                        if ($qtyOption) {
-                            $qtyOptions[$optionProductId] = $qtyOption;
-                        }
-                    }
-                }
-
-                $item->setQtyOptions($qtyOptions)->setProduct($product);
             } else {
                 $item->isDeleted(true);
-                $recollectQuote = true;
+                $this->recollectQuote = true;
             }
-            $item->checkData();
+            if (!$item->isDeleted()) {
+                $item->setQtyOptions($qtyOptions)->setProduct($product);
+                $item->checkData();
+            }
         }
-
-        if ($recollectQuote && $this->_quote) {
+        if ($this->recollectQuote && $this->_quote) {
             $this->_quote->collectTotals();
         }
         \Magento\Framework\Profiler::stop('QUOTE:' . __METHOD__);
 
         return $this;
+    }
+
+    /**
+     * Get product Ids from option.
+     *
+     * @param QuoteItem $item
+     * @param ProductInterface $product
+     * @param ProductCollection $productCollection
+     * @return array
+     */
+    private function getOptionProductIds(
+        QuoteItem $item,
+        ProductInterface $product,
+        ProductCollection $productCollection
+    ): array {
+        $optionProductIds = [];
+        foreach ($item->getOptions() as $option) {
+            /**
+             * Call type-specific logic for product associated with quote item
+             */
+            $product->getTypeInstance()->assignProductToOption(
+                $productCollection->getItemById($option->getProductId()),
+                $option,
+                $product
+            );
+
+            if (is_object($option->getProduct()) && $option->getProduct()->getId() != $product->getId()) {
+                $isValidProduct = $this->isValidProduct($option->getProduct());
+                if (!$isValidProduct && !$item->isDeleted()) {
+                    $item->isDeleted(true);
+                    $this->recollectQuote = true;
+                    continue;
+                }
+                $optionProductIds[$option->getProduct()->getId()] = $option->getProduct()->getId();
+            }
+        }
+
+        return $optionProductIds;
+    }
+
+    /**
+     * Check is valid product.
+     *
+     * @param ProductInterface $product
+     * @return bool
+     */
+    private function isValidProduct(ProductInterface $product): bool
+    {
+        $result = ($product && (int)$product->getStatus() !== ProductStatus::STATUS_DISABLED);
+
+        return $result;
     }
 
     /**
@@ -296,24 +342,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @see \Magento\CatalogInventory\Helper\Stock::addIsInStockFilterToCollection
      */
-    private function skipStockStatusFilter(ProductCollection $productCollection)
+    private function skipStockStatusFilter(ProductCollection $productCollection): void
     {
         $productCollection->setFlag('has_stock_status_filter', true);
-    }
-
-    /**
-     * Add tier prices to product collection.
-     *
-     * @param ProductCollection $productCollection
-     * @return void
-     */
-    private function addTierPriceData(ProductCollection $productCollection)
-    {
-        if (empty($this->_quote)) {
-            $productCollection->addTierPriceData();
-        } else {
-            $productCollection->addTierPriceDataByGroupId($this->_quote->getCustomerGroupId());
-        }
     }
 
     /**
@@ -321,7 +352,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @return void
      */
-    private function removeItemsWithAbsentProducts()
+    private function removeItemsWithAbsentProducts(): void
     {
         if (count($this->_productIds) === 0) {
             return;
