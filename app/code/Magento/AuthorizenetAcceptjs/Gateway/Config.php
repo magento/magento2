@@ -8,9 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Gateway;
 
-use Magento\AuthorizenetAcceptjs\Model\Adminhtml\Source\Environment;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-
 /**
  * Houses configuration for this gateway
  */
@@ -92,11 +89,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private static $solutionIdProduction = 'AAA175350';
 
     /**
-     * @var string
-     */
-    private static $environmentSandbox = 'sandbox';
-
-    /**
      * Gets the login id
      *
      * @param int|null $storeId
@@ -104,7 +96,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getLoginId($storeId = null)
     {
-        return $this->getValue(Config::$keyLoginId, $storeId);
+        return $this->getValue(self::$keyLoginId, $storeId);
     }
 
     /**
@@ -115,7 +107,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getEnvironment($storeId = null): string
     {
-        return $this->getValue(Config::$keyEnvironment, $storeId);
+        return $this->getValue(self::$keyEnvironment, $storeId);
     }
 
     /**
@@ -126,7 +118,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getTransactionKey($storeId = null)
     {
-        return $this->getValue(Config::$keyTransactionKey, $storeId);
+        return $this->getValue(self::$keyTransactionKey, $storeId);
     }
 
     /**
@@ -137,9 +129,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getApiUrl($storeId = null): string
     {
-        $environment = $this->getValue(Config::$keyEnvironment, $storeId);
+        $environment = $this->getValue(self::$keyEnvironment, $storeId);
 
-        return $environment === self::$environmentSandbox
+        return $environment === 'sandbox'
             ? self::$endpointUrlSandbox
             : self::$endpointUrlProduction;
     }
@@ -152,7 +144,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getTransactionSignatureKey($storeId = null)
     {
-        return $this->getValue(Config::$keySignatureKey, $storeId);
+        return $this->getValue(self::$keySignatureKey, $storeId);
     }
 
     /**
@@ -163,7 +155,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getLegacyTransactionHash($storeId = null)
     {
-        return $this->getValue(Config::$keyLegacyTransactionHash, $storeId);
+        return $this->getValue(self::$keyLegacyTransactionHash, $storeId);
     }
 
     /**
@@ -174,7 +166,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getPaymentAction($storeId = null)
     {
-        return $this->getValue(Config::$keyPaymentAction, $storeId);
+        return $this->getValue(self::$keyPaymentAction, $storeId);
     }
 
     /**
@@ -185,7 +177,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getClientKey($storeId = null)
     {
-        return $this->getValue(Config::$keyClientKey, $storeId);
+        return $this->getValue(self::$keyClientKey, $storeId);
     }
 
     /**
@@ -196,7 +188,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function shouldEmailCustomer($storeId = null): bool
     {
-        return (bool)$this->getValue(Config::$keyShouldEmailCustomer, $storeId);
+        return (bool)$this->getValue(self::$keyShouldEmailCustomer, $storeId);
     }
 
     /**
@@ -207,7 +199,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function isCvvEnabled($storeId = null): bool
     {
-        return (bool)$this->getValue(Config::$keyCvvEnabled, $storeId);
+        return (bool)$this->getValue(self::$keyCvvEnabled, $storeId);
     }
 
     /**
@@ -218,9 +210,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getSolutionId($storeId = null)
     {
-        $environment = $this->getValue(Config::$keyEnvironment, $storeId);
+        $environment = $this->getValue(self::$keyEnvironment, $storeId);
 
-        return $environment === self::$environmentSandbox
+        return $environment === 'sandbox'
             ? self::$solutionIdSandbox
             : self::$solutionIdProduction;
     }
@@ -233,7 +225,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getAdditionalInfoKeys($storeId = null): array
     {
-        return explode(',', $this->getValue(Config::$keyAdditionalInfoKeys, $storeId) ?? '');
+        return explode(',', $this->getValue(self::$keyAdditionalInfoKeys, $storeId) ?? '');
     }
 
     /**
@@ -244,6 +236,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getTransactionInfoSyncKeys($storeId = null): array
     {
-        return explode(',', $this->getValue(Config::$keyTransactionSyncKeys, $storeId) ?? '');
+        return explode(',', $this->getValue(self::$keyTransactionSyncKeys, $storeId) ?? '');
     }
 }
