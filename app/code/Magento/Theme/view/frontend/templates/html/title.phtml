@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * @var $block \Magento\Theme\Block\Html\Title
  */
@@ -19,11 +17,11 @@ if (trim($block->getPageHeading())) {
         . '</span>';
 }
 ?>
-<?php if ($titleHtml): ?>
+<?php if ($titleHtml) : ?>
 <div class="page-title-wrapper<?= $block->escapeHtmlAttr($cssClass) ?>">
     <h1 class="page-title"
-        <?php if ($block->getId()): ?> id="<?= $block->escapeHtmlAttr($block->getId()) ?>" <?php endif; ?>
-        <?php if ($block->getAddBaseAttributeAria()): ?>
+        <?php if ($block->getId()) : ?> id="<?= $block->escapeHtmlAttr($block->getId()) ?>" <?php endif; ?>
+        <?php if ($block->getAddBaseAttributeAria()) : ?>
             aria-labelledby="<?= $block->escapeHtmlAttr($block->getAddBaseAttributeAria()) ?>"
         <?php endif; ?>>
         <?= /* @noEscape */ $titleHtml ?>

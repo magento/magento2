@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * @var $block \Magento\Theme\Block\Html\Notices
  */
 ?>
-<?php if ($block->displayNoscriptNotice()): ?>
+<?php if ($block->displayNoscriptNotice()) : ?>
     <noscript>
         <div class="message global noscript">
             <div class="content">
@@ -22,7 +20,7 @@
         </div>
     </noscript>
 <?php endif; ?>
-<?php if ($block->displayNoLocalStorageNotice()): ?>
+<?php if ($block->displayNoLocalStorageNotice()) : ?>
     <div class="notice global site local_storage" style="display: none;">
         <div class="content">
             <p>
@@ -49,7 +47,7 @@ require(['jquery'], function(jQuery){
 });
 </script>
 <?php endif; ?>
-<?php if ($block->displayDemoNotice()): ?>
+<?php if ($block->displayDemoNotice()) : ?>
     <div class="message global demo">
         <div class="content">
             <p><?= $block->escapeHtml(__('This is a demo store. No orders will be fulfilled.')) ?></p>

@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 ?>
 <?php if ($crumbs && is_array($crumbs)) : ?>
 <div class="breadcrumbs">
@@ -18,7 +16,7 @@
                 </a>
             <?php elseif ($crumbInfo['last']) : ?>
                 <strong><?= $block->escapeHtml($crumbInfo['label']) ?></strong>
-            <?php else: ?>
+            <?php else : ?>
                 <?= $block->escapeHtml($crumbInfo['label']) ?>
             <?php endif; ?>
             </li>
