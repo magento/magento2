@@ -174,9 +174,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                             $storeCurrency = $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
                             $rate = $this->_currencyFactory->create()->load($websiteBaseCurrency)
                                 ->getRate($storeCurrency);
-                            if (!$rate) {
-                                $rate = 1;
-                            }
+                            $rate ?: $rate = 1;
                             $newPrice = $object->getPrice() * $rate;
                         } else {
                             $newPrice = $object->getPrice();
@@ -587,6 +585,8 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Returns metadata poll.
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
