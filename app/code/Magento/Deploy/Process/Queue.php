@@ -10,9 +10,9 @@ namespace Magento\Deploy\Process;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Service\DeployPackage;
 use Magento\Framework\App\ResourceConnection;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
+use Psr\Log\LoggerInterface;
 
 /**
  * Deployment Queue
@@ -165,6 +165,7 @@ class Queue
         $packages = $this->packages;
         while (count($packages) && $this->checkTimeout()) {
             foreach ($packages as $name => $packageJob) {
+                // Unsets each member of $packages array (passed by reference) as each is executed
                 $this->assertAndExecute($name, $packages, $packageJob);
             }
             $this->logger->info('.');
@@ -224,12 +225,8 @@ class Queue
      * @param bool $dependenciesNotFinished
      * @return void
      */
-    private function executePackage(
-        Package $package,
-        string $name,
-        array &$packages,
-        bool $dependenciesNotFinished
-    ) {
+    private function executePackage(Package $package, string $name, array &$packages, bool $dependenciesNotFinished)
+    {
         if (!$dependenciesNotFinished
             && !$this->isDeployed($package)
             && ($this->maxProcesses < 2 || (count($this->inProgress) < $this->maxProcesses))
@@ -338,14 +335,38 @@ class Queue
     {
         if ($this->isCanBeParalleled()) {
             if ($package->getState() === null) {
+                $pid = $this->getPid($package);
+
+                // When $pid comes back as null the child process for this package has not yet started; prevents both
+                // hanging until timeout expires (which was behaviour in 2.2.x) and the type error from strict_types
+                if ($pid === null) {
+                    return false;
+                }
+
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                $pid = pcntl_waitpid($this->getPid($package), $status, WNOHANG);
-                if ($pid === $this->getPid($package)) {
+                $result = pcntl_waitpid($pid, $status, WNOHANG);
+                if ($result === $pid) {
                     $package->setState(Package::STATE_COMPLETED);
+                    $exitStatus = pcntl_wexitstatus($status);
+
+                    $this->logger->info(
+                        "Exited: " . $package->getPath() . "(status: $exitStatus)",
+                        [
+                            'process' => $package->getPath(),
+                            'status' => $exitStatus,
+                        ]
+                    );
 
                     unset($this->inProgress[$package->getPath()]);
                     // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     return pcntl_wexitstatus($status) === 0;
+                } elseif ($result === -1) {
+                    $errno = pcntl_errno();
+                    $strerror = pcntl_strerror($errno);
+
+                    throw new \RuntimeException(
+                        "Error encountered checking child process status (PID: $pid): $strerror (errno: $errno)"
+                    );
                 }
                 return false;
             }
@@ -361,7 +382,7 @@ class Queue
      */
     private function getPid(Package $package)
     {
-        return isset($this->processIds[$package->getPath()]) ?? null;
+        return $this->processIds[$package->getPath()] ?? null;
     }
 
     /**
@@ -385,10 +406,22 @@ class Queue
     public function __destruct()
     {
         foreach ($this->inProgress as $package) {
+            $pid = $this->getPid($package);
+            $this->logger->info(
+                "Reaping child process: {$package->getPath()} (PID: $pid)",
+                [
+                    'process' => $package->getPath(),
+                    'pid' => $pid,
+                ]
+            );
+
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            if (pcntl_waitpid($this->getPid($package), $status) === -1) {
+            if (pcntl_waitpid($pid, $status) === -1) {
+                $errno = pcntl_errno();
+                $strerror = pcntl_strerror($errno);
+
                 throw new \RuntimeException(
-                    'Error while waiting for package deployed: ' . $this->getPid($package) . '; Status: ' . $status
+                    "Error encountered waiting for child process (PID: $pid): $strerror (errno: $errno)"
                 );
             }
         }
