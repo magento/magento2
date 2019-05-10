@@ -3,27 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
-<?php if ($_item = $block->getItem()): ?>
+<?php if ($_item = $block->getItem()) : ?>
     <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
     <div class="product-sku-block">
         <span><?= $block->escapeHtml(__('SKU')) ?>:</span>
-        <?= /* @noEscape */ implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->getSku())) ?>
+        <?= /* @noEscape */ implode('<br />', $this->helper(Magento\Catalog\Helper\Data::class)->splitSku($block->getSku())) ?>
     </div>
-    <?php if ($block->getOrderOptions()): ?>
+    <?php if ($block->getOrderOptions()) : ?>
         <dl class="item-options">
-        <?php foreach ($block->getOrderOptions() as $_option): ?>
+        <?php foreach ($block->getOrderOptions() as $_option) : ?>
             <dt><?= $block->escapeHtml($_option['label']) ?>:</dt>
             <dd>
-            <?php if (isset($_option['custom_view']) && $_option['custom_view']): ?>
+            <?php if (isset($_option['custom_view']) && $_option['custom_view']) : ?>
                 <?= $block->escapeHtml($_option['value']) ?>
-            <?php else: ?>
+            <?php else : ?>
                 <?= $block->escapeHtml($block->truncateString($_option['value'], 55, '', $_remainder)) ?>
-                <?php if ($_remainder):?>
+                <?php if ($_remainder) :?>
                     ... <span id="<?= $block->escapeHtmlAttr($_id = 'id' . uniqid()) ?>"><?= $block->escapeHtml($_remainder) ?></span>
                     <script>
                         require(['prototype'], function(){
@@ -39,10 +36,10 @@
         <?php endforeach; ?>
         </dl>
     <?php endif; ?>
-    <?php if ($block->getLinks()): ?>
+    <?php if ($block->getLinks()) : ?>
         <dl class="item-options">
             <dt><?= $block->escapeHtml($block->getLinksTitle()) ?>:</dt>
-            <?php foreach ($block->getLinks()->getPurchasedItems() as $_link): ?>
+            <?php foreach ($block->getLinks()->getPurchasedItems() as $_link) : ?>
                 <dd><?= $block->escapeHtml($_link->getLinkTitle()) ?> (<?= $block->escapeHtml($_link->getNumberOfDownloadsUsed() . ' / ' . ($_link->getNumberOfDownloadsBought() ? $_link->getNumberOfDownloadsBought() : __('U'))) ?>)</dd>
             <?php endforeach; ?>
         </dl>

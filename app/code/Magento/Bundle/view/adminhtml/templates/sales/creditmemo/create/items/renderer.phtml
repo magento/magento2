@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -21,17 +18,17 @@
 
 <?php $_prevOptionId = '' ?>
 
-<?php if ($block->getOrderOptions() || $_item->getDescription()): ?>
+<?php if ($block->getOrderOptions() || $_item->getDescription()) : ?>
     <?php $_showlastRow = true ?>
-<?php else: ?>
+<?php else : ?>
     <?php $_showlastRow = false ?>
 <?php endif; ?>
 
-<?php foreach ($items as $_item): ?>
+<?php foreach ($items as $_item) : ?>
     <?php $block->setPriceDataObject($_item) ?>
     <?php $attributes = $block->getSelectionAttributes($_item) ?>
-    <?php if ($_item->getOrderItem()->getParentItem()): ?>
-        <?php if ($_prevOptionId != $attributes['option_id']): ?>
+    <?php if ($_item->getOrderItem()->getParentItem()) : ?>
+        <?php if ($_prevOptionId != $attributes['option_id']) : ?>
         <tr>
             <td class="col-product"><div class="option-label"><?= $block->escapeHtml($attributes['option_label']) ?></div></td>
             <td>&nbsp;</td>
@@ -43,149 +40,149 @@
             <td>&nbsp;</td>
             <td class="last">&nbsp;</td>
         </tr>
-        <?php $_prevOptionId = $attributes['option_id'] ?>
+            <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
     <tr<?= (++$_index == $_count && !$_showlastRow) ? ' class="border"' : '' ?>>
-        <?php if (!$_item->getOrderItem()->getParentItem()): ?>
+        <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
         <td class="col-product">
             <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
             <div class="product-sku-block">
                 <span><?= $block->escapeHtml(__('SKU')) ?>:</span>
-                <?= /* @noEscape */ implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($_item->getSku())) ?>
+                <?= /* @noEscape */ implode('<br />', $this->helper(Magento\Catalog\Helper\Data::class)->splitSku($_item->getSku())) ?>
             </div>
         </td>
-        <?php else: ?>
+        <?php else : ?>
         <td class="col-product"><div class="option-value"><?= $block->getValueHtml($_item) ?></div></td>
         <?php endif; ?>
         <td class="col-price">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item)) : ?>
                 <?= $block->getColumnHtml($_item, 'price') ?>
-            <?php else: ?>
+            <?php else : ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-ordered-qty">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item)) : ?>
                 <table class="qty-table">
                     <tr>
                         <th><?= $block->escapeHtml(__('Ordered')) ?></th>
                         <td><?= $block->escapeHtml($_item->getOrderItem()->getQtyOrdered()*1) ?></td>
                     </tr>
-                    <?php if ((float) $_item->getOrderItem()->getQtyInvoiced()): ?>
+                    <?php if ((float) $_item->getOrderItem()->getQtyInvoiced()) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('Invoiced')) ?></th>
                         <td><?= $block->escapeHtml($_item->getOrderItem()->getQtyInvoiced()*1) ?></td>
                     </tr>
                     <?php endif; ?>
-                    <?php if ((float) $_item->getOrderItem()->getQtyShipped() && $block->isShipmentSeparately($_item)): ?>
+                    <?php if ((float) $_item->getOrderItem()->getQtyShipped() && $block->isShipmentSeparately($_item)) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('Shipped')) ?></th>
                         <td><?= $block->escapeHtml($_item->getOrderItem()->getQtyShipped()*1) ?></td>
                     </tr>
                     <?php endif; ?>
-                    <?php if ((float) $_item->getOrderItem()->getQtyRefunded()): ?>
+                    <?php if ((float) $_item->getOrderItem()->getQtyRefunded()) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('Refunded')) ?></th>
                         <td><?= $block->escapeHtml($_item->getOrderItem()->getQtyRefunded()*1) ?></td>
                     </tr>
                     <?php endif; ?>
-                    <?php if ((float) $_item->getOrderItem()->getQtyCanceled()): ?>
+                    <?php if ((float) $_item->getOrderItem()->getQtyCanceled()) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('Canceled')) ?></th>
                         <td><?= $block->escapeHtml($_item->getOrderItem()->getQtyCanceled()*1) ?></td>
                     </tr>
                     <?php endif; ?>
                 </table>
-            <?php elseif ($block->isShipmentSeparately($_item)): ?>
+            <?php elseif ($block->isShipmentSeparately($_item)) : ?>
                 <table class="qty-table">
                     <tr>
                         <th><?= $block->escapeHtml(__('Ordered')) ?></th>
                         <td><?= $block->escapeHtml($_item->getOrderItem()->getQtyOrdered()*1) ?></td>
                     </tr>
-                    <?php if ((float) $_item->getOrderItem()->getQtyShipped()): ?>
+                    <?php if ((float) $_item->getOrderItem()->getQtyShipped()) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('Shipped')) ?></th>
                         <td><?= $block->escapeHtml($_item->getOrderItem()->getQtyShipped()*1) ?></td>
                     </tr>
                     <?php endif; ?>
                 </table>
-            <?php else: ?>
+            <?php else : ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <?php if ($block->canParentReturnToStock($_item)) : ?>
         <td class="col-return-to-stock">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item)) : ?>
                 <?php if ($block->canReturnItemToStock($_item)) : ?>
                     <input type="checkbox"
                            class="admin__control-checkbox"
                            name="creditmemo[items][<?= $block->escapeHtmlAttr($_item->getOrderItemId()) ?>][back_to_stock]"
-                           value="1"<?php if ($_item->getBackToStock()):?> checked="checked"<?php endif;?> />
+                           value="1"<?php if ($_item->getBackToStock()) :?> checked="checked"<?php endif;?> />
                     <label class="admin__field-label"></label>
                 <?php endif; ?>
-            <?php else: ?>
+            <?php else : ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <?php endif; ?>
         <td class="col-refund col-qty">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item)) : ?>
                 <?php if ($block->canEditQty()) : ?>
                     <input type="text"
                            class="input-text admin__control-text qty-input"
                            name="creditmemo[items][<?= $block->escapeHtmlAttr($_item->getOrderItemId()) ?>][qty]"
                            value="<?= $block->escapeHtmlAttr($_item->getQty()*1) ?>" />
-                <?php else: ?>
+                <?php else : ?>
                     <?= $block->escapeHtml($_item->getQty()*1) ?>
                 <?php endif; ?>
-            <?php else: ?>
+            <?php else : ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-subtotal">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item)) : ?>
                 <?= $block->getColumnHtml($_item, 'subtotal') ?>
-            <?php else: ?>
+            <?php else : ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-tax-amount">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item)) : ?>
                 <?= /* @noEscape */ $block->displayPriceAttribute('tax_amount') ?>
-            <?php else: ?>
+            <?php else : ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-discont">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item)) : ?>
                 <?= /* @noEscape */ $block->displayPriceAttribute('discount_amount') ?>
-            <?php else: ?>
+            <?php else : ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-total last">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item)) : ?>
                 <?= $block->getColumnHtml($_item, 'total') ?>
-            <?php else: ?>
+            <?php else : ?>
                 &nbsp;
             <?php endif; ?>
         </td>
     </tr>
 <?php endforeach; ?>
-<?php if ($_showlastRow): ?>
+<?php if ($_showlastRow) : ?>
     <tr class="border">
         <td class="col-product">
-            <?php if ($block->getOrderOptions($_item->getOrderItem())): ?>
+            <?php if ($block->getOrderOptions($_item->getOrderItem())) : ?>
                 <dl class="item-options">
-                <?php foreach ($block->getOrderOptions($_item->getOrderItem()) as $option): ?>
+                <?php foreach ($block->getOrderOptions($_item->getOrderItem()) as $option) : ?>
                     <dt><?= $block->escapeHtml($option['label']) ?></dt>
                     <dd>
-                    <?php if (isset($option['custom_view']) && $option['custom_view']): ?>
+                    <?php if (isset($option['custom_view']) && $option['custom_view']) : ?>
                         <?= $block->escapeHtml($option['value']) ?>
-                    <?php else: ?>
+                    <?php else : ?>
                         <?= $block->escapeHtml($block->truncateString($option['value'], 55, '', $_remainder)) ?>
-                        <?php if ($_remainder):?>
+                        <?php if ($_remainder) :?>
                             ... <span id="<?= $block->escapeHtmlAttr($_id = 'id' . uniqid()) ?>"><?= $block->escapeHtml($_remainder) ?></span>
                             <script>
                                 require(['prototype'], function(){
@@ -200,7 +197,7 @@
                     </dd>
                 <?php endforeach; ?>
                 </dl>
-            <?php else: ?>
+            <?php else : ?>
                 &nbsp;
             <?php endif; ?>
             <?= $block->escapeHtml($_item->getDescription()) ?>

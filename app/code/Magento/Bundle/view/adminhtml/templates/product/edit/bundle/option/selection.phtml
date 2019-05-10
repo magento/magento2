@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Selection */
 ?>
 <script id="bundle-option-selection-box-template" type="text/x-magento-template">
@@ -16,7 +14,7 @@
                 <th class="col-default"><?= $block->escapeHtml(__('Default')) ?></th>
                 <th class="col-name"><?= $block->escapeHtml(__('Name')) ?></th>
                 <th class="col-sku"><?= $block->escapeHtml(__('SKU')) ?></th>
-            <?php if ($block->getCanReadPrice() !== false): ?>
+            <?php if ($block->getCanReadPrice() !== false) : ?>
                 <th class="col-price price-type-box"><?= $block->escapeHtml(__('Price')) ?></th>
                 <th class="col-price price-type-box"><?= $block->escapeHtml(__('Price Type')) ?></th>
             <?php endif; ?>
@@ -51,13 +49,13 @@
     </td>
     <td class="col-name"><%- data.name %></td>
     <td class="col-sku"><%- data.sku %></td>
-<?php if ($block->getCanReadPrice() !== false): ?>
+<?php if ($block->getCanReadPrice() !== false) : ?>
     <td class="col-price price-type-box">
         <input id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_value"
                class="input-text required-entry validate-zero-or-greater" type="text"
                name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_value]"
                value="<%- data.selection_price_value %>"
-            <?php if ($block->getCanEditPrice() === false): ?>
+            <?php if ($block->getCanEditPrice() === false) : ?>
                disabled="disabled"
             <?php endif; ?>/>
     </td>
@@ -65,12 +63,12 @@
         <?= $block->getPriceTypeSelectHtml() ?>
         <div><?= $block->getCheckboxScopeHtml() ?></div>
     </td>
-<?php else: ?>
+<?php else : ?>
     <input type="hidden" id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_value"
            name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_value]" value="0" />
     <input type="hidden" id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_type"
            name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_type]" value="0" />
-    <?php if ($block->isUsedWebsitePrice()): ?>
+    <?php if ($block->isUsedWebsitePrice()) : ?>
     <input type="hidden" id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_scope"
            name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][default_price_scope]" value="1" />
     <?php endif; ?>

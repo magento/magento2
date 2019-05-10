@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php /** @var $block \Magento\Downloadable\Block\Sales\Order\Email\Items\Downloadable */ ?>
 <?php $_item = $block->getItem() ?>
@@ -14,18 +11,18 @@
     <td class="item-info has-extra">
         <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
         <p class="sku"><?= $block->escapeHtml(__('SKU')) ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
-        <?php if ($block->getItemOptions()): ?>
+        <?php if ($block->getItemOptions()) : ?>
         <dl>
-            <?php foreach ($block->getItemOptions() as $option): ?>
+            <?php foreach ($block->getItemOptions() as $option) : ?>
             <dt><strong><em><?= $block->escapeHtml($option['label']) ?></em></strong></dt>
             <dd><?= $block->escapeHtml($option['value']) ?></dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
-        <?php if ($links = $block->getLinks()->getPurchasedItems()): ?>
+        <?php if ($links = $block->getLinks()->getPurchasedItems()) : ?>
         <dl>
             <dt><strong><em><?= $block->escapeHtml($block->getLinksTitle()) ?></em></strong></dt>
-            <?php foreach ($links as $link): ?>
+            <?php foreach ($links as $link) : ?>
                 <dd>
                     <?= $block->escapeHtml($link->getLinkTitle()) ?>&nbsp;
                     (<a href="<?= $block->escapeUrl($block->getPurchasedLinkUrl($link)) ?>"><?= $block->escapeHtml(__('download')) ?></a>)

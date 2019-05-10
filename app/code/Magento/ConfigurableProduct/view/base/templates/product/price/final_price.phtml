@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php
@@ -31,12 +28,12 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
         ];
 
         /* @noEscape */ echo $block->renderAmount($finalPriceModel->getAmount(), $arguments);
-    ?>
+        ?>
 </span>
 
-<?php if (!$block->isProductList() && $block->hasSpecialPrice()): ?>
+<?php if (!$block->isProductList() && $block->hasSpecialPrice()) : ?>
     <span class="old-price sly-old-price no-display">
-        <?php /* @noEscape */ echo $block->renderAmount($priceModel->getAmount(), [
+        <?= /* @noEscape */ $block->renderAmount($priceModel->getAmount(), [
             'display_label'     => __('Regular Price'),
             'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
             'price_type'        => 'oldPrice',
@@ -46,12 +43,12 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
     </span>
 <?php endif; ?>
 
-<?php if ($block->showMinimalPrice()): ?>
-    <?php if ($block->getUseLinkForAsLowAs()):?>
+<?php if ($block->showMinimalPrice()) : ?>
+    <?php if ($block->getUseLinkForAsLowAs()) :?>
         <a href="<?= $block->escapeUrl($block->getSaleableItem()->getProductUrl()) ?>" class="minimal-price-link">
             <?= /* @noEscape */ $block->renderAmountMinimal() ?>
         </a>
-    <?php else:?>
+    <?php else :?>
         <span class="minimal-price-link">
             <?= /* @noEscape */ $block->renderAmountMinimal() ?>
         </span>

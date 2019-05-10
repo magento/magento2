@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend */
 $elementHtml = $block->getParentElementHtml();
 
@@ -43,7 +41,7 @@ $isElementReadonly = $block->getElement()
                     if ($attribute) {
                         <?php if ($attributeCode === 'price' && !$block->getCanEditPrice() && $block->getCanReadPrice()
                                 && $block->getProduct()->isObjectNew()) { ?>
-                            <?php $defaultProductPrice = $block->escapeJs($block->getDefaultProductPrice() ?: "''") ?>
+                                        <?php $defaultProductPrice = $block->escapeJs($block->getDefaultProductPrice() ?: "''") ?>
                             $attribute.value = <?= $block->escapeJs($defaultProductPrice) ?>;
                         <?php } else { ?>
                             $attribute.disabled = false;

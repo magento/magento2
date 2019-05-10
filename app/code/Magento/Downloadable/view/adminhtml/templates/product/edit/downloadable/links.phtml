@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 
@@ -22,7 +19,7 @@
         <label class="admin__field-label" for="downloadable_links_title"><span><?= $block->escapeHtml(__('Title')) ?></span></label>
         <div class="admin__field-control">
             <input type="text" class="admin__control-text" id="downloadable_links_title" name="product[links_title]" value="<?= $block->escapeHtml($block->getLinksTitle()) ?>" <?= ($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
-            <?php if ($_product->getStoreId()): ?>
+            <?php if ($_product->getStoreId()) : ?>
                 <div class="admin__field admin__field-option">
                     <input id="link_title_default" class="admin__control-checkbox" type="checkbox" name="use_default[]" value="links_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?= $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
                     <label class="admin__field-label" for="link_title_default"><span><?= $block->escapeHtml(__('Use Default Value')) ?></span></label>
@@ -40,9 +37,9 @@
                         <input type="radio" name="product[links_purchased_separately]" value="1"
                                class="admin__control-radio"
                                id="link-switcher1"
-                           <?php if($block->isProductLinksCanBePurchasedSeparately()): ?>
+                            <?php if ($block->isProductLinksCanBePurchasedSeparately()) : ?>
                                checked="checked"
-                           <?php endif; ?>
+                            <?php endif; ?>
                             >
                         <label class="admin__field-label" for="link-switcher1">
                             <span>Yes</span>
@@ -52,7 +49,7 @@
                         <input type="radio" name="product[links_purchased_separately]" value="0"
                                 class="admin__control-radio"
                                 id="link-switcher0"
-                            <?php if(!$block->isProductLinksCanBePurchasedSeparately()): ?>
+                            <?php if (!$block->isProductLinksCanBePurchasedSeparately()) : ?>
                                 checked="checked"
                             <?php endif; ?>
                             >
@@ -120,7 +117,7 @@ require([
                 '<input type="hidden" class="__delete__" name="downloadable[link][<%- data.id %>][is_delete]" value="" />'+
                 '<input type="hidden" name="downloadable[link][<%- data.id %>][link_id]" value="<%- data.link_id %>" />'+
                 '<input type="text" class="required-entry input-text admin__control-text" name="downloadable[link][<%- data.id %>][title]" value="<%- data.title %>" />'+
-                <?php if($_product->getStoreId()): ?>
+                <?php if ($_product->getStoreId()) : ?>
                     '<div class="admin__field admin__field-option">'+
                     '<input type="checkbox" id="downloadable_link_<%- data.id %>_title" name="downloadable[link][<%- data.id %>][use_default_title]" value="1" class="admin__control-checkbox" />'+
                     '<label for="downloadable_link_<%- data.id %>_title" class="admin__field-label"><span><?= $block->escapeJs($block->escapeHtml(__('Use Default Value'))) ?></span></label>'+
@@ -478,7 +475,7 @@ require([
             Event.observe('add_link_item', 'click', linkItems.add.bind(linkItems));
         }
 
-        <?php foreach ($block->getLinkData() as $item): ?>
+        <?php foreach ($block->getLinkData() as $item) : ?>
             linkItems.add(<?= /* @noEscape */ $item->toJson() ?>);
         <?php endforeach; ?>
 

@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php
@@ -113,7 +110,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
             this.idName = idName;
             this.config = config;
             uploaderTemplate = new Template(this.uploaderText, this.uploaderSyntax);
-            <?php if (!$block->isReadonly()):?>
+            <?php if (!$block->isReadonly()) :?>
             Element.insert(
                 elmContainer,
                 {'top' : uploaderTemplate.evaluate({
@@ -220,7 +217,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
 <div style="display:none">
     <div id="custom-advice-container"></div>
 </div>
-<?php if ($block->isReadonly()): ?>
+<?php if ($block->isReadonly()) : ?>
     <script>
         require(['prototype'], function(){
 

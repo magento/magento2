@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes */
 ?>
 <div class="select-attributes-block <?= /* @noEscape */ $block->getData('config/dataScope') ?>" data-role="select-attributes-step">
@@ -13,8 +11,8 @@
         <?= /* @noEscape */  $block->getAddNewAttributeButton() ?>
     </div>
     <h2 class="steps-wizard-title"><?= $block->escapeHtml(
-            __('Step 1: Select Attributes')
-        ); ?></h2>
+        __('Step 1: Select Attributes')
+    ); ?></h2>
     <div class="selected-attributes" data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'">
         <?= $block->escapeHtml(
             __('Selected Attributes:')

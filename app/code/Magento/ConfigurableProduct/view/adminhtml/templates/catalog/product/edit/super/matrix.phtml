@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix */
 ?>
 <?php
@@ -240,7 +238,7 @@ $currencySymbol = $block->getCurrencySymbol();
             'attributes' => $attributes,
             'configurations' => $productMatrix
         ]);
-        ?>
+?>
     </div>
 </div>
 
@@ -251,8 +249,8 @@ $currencySymbol = $block->getCurrencySymbol();
                 "components": {
                     "configurableVariations": {
                         "component": "Magento_ConfigurableProduct/js/variations/variations",
-                        "variations": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($productMatrix) ?>,
-                        "productAttributes": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributes) ?>,
+                        "variations": <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($productMatrix) ?>,
+                        "productAttributes": <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($attributes) ?>,
                         "productUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
                         "currencySymbol": "<?= /* @noEscape */ $currencySymbol ?>",
                         "configurableProductGrid": "configurableProductGrid"

@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php /* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select */ ?>
@@ -18,30 +15,30 @@
         <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
     <div class="control">
-        <?php if ($block->showSingle()): ?>
+        <?php if ($block->showSingle()) : ?>
             <?= /* @noEscape */ $block->getSelectionTitlePrice($_selections[0]) ?>
             <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selections[0]) ?>
             <input type="hidden"
                    class="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>  product bundle option"
                    name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                    value="<?= $block->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"/>
-        <?php else:?>
+        <?php else :?>
             <select id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>"
                     name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                     data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                     class="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?> product bundle option bundle-option-select change-container-classname"
-                <?php if ($_option->getRequired()) echo 'data-validate = {required:true}' ?>>
+                <?php if ($_option->getRequired()) { echo 'data-validate = {required:true}'; } ?>>
                 <option value=""><?= $block->escapeHtml(__('Choose a selection...')) ?></option>
-                <?php foreach ($_selections as $_selection): ?>
+                <?php foreach ($_selections as $_selection) : ?>
                     <option value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
-                        <?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?>
-                        <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>>
+                        <?php if ($block->isSelected($_selection)) { echo ' selected="selected"'; } ?>
+                        <?php if (!$_selection->isSaleable()) { echo ' disabled="disabled"'; } ?>>
                         <?= /* @noEscape */ $block->getSelectionTitlePrice($_selection, false) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
             <div id="option-tier-prices-<?= $block->escapeHtml($_option->getId()) ?>" class="option-tier-prices">
-                <?php foreach ($_selections as $_selection): ?>
+                <?php foreach ($_selections as $_selection) : ?>
                     <div data-role="selection-tier-prices"
                          data-selection-id="<?= $block->escapeHtml($_selection->getSelectionId()) ?>"
                          class="selection-tier-prices">
@@ -56,9 +53,9 @@
                     <span><?= $block->escapeHtml(__('Quantity')) ?></span>
                 </label>
                 <div class="control">
-                    <input <?php if (!$_canChangeQty) echo ' disabled="disabled"' ?>
+                    <input <?php if (!$_canChangeQty) { echo ' disabled="disabled"'; } ?>
                            id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input"
-                           class="input-text qty<?php if (!$_canChangeQty) echo ' qty-disabled' ?>"
+                           class="input-text qty<?php if (!$_canChangeQty) { echo ' qty-disabled'; } ?>"
                            type="number"
                            name="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                            data-selector="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"

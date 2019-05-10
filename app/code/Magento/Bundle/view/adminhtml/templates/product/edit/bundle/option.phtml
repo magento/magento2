@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option */
 ?>
 <script id="bundle-option-template" type="text/x-magento-template">
@@ -28,14 +26,14 @@
                                 <?= $block->escapeHtml(__('Option Title')) ?>
                             </label>
                             <div class="control">
-                                <?php if ($block->isDefaultStore()): ?>
+                                <?php if ($block->isDefaultStore()) : ?>
                                 <input class="input-text required-entry"
                                        type="text"
                                        name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][title]"
                                        id="id_<?= $block->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_title"
                                        value="<%- data.title %>"
                                        data-original-value="<%- data.title %>" />
-                                <?php else: ?>
+                                <?php else : ?>
                                 <input class="input-text required-entry"
                                        type="text"
                                        name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][default_title]"
@@ -53,7 +51,7 @@
                                        data-state="deleted" />
                             </div>
                         </div>
-                        <?php if (!$block->isDefaultStore()): ?>
+                        <?php if (!$block->isDefaultStore()) : ?>
                         <div class="field field-option-store-view required">
                             <label class="label" for="id_<?= $block->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_title_store">
                                 <?= $block->escapeHtml(__('Store View Title')) ?>
@@ -150,7 +148,7 @@ Bundle.Option.prototype = {
 
     add : function(data) {
         if (!data) {
-            data = <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(['default_title' => __('New Option')]) ?>;
+            data = <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode(['default_title' => __('New Option')]) ?>;
         } else {
             data.title = data.title.replace(/</g, "&lt;");
             data.title = data.title.replace(/"/g, "&quot;");
@@ -280,17 +278,17 @@ Bundle.Option.prototype = {
 var optionIndex = 0;
 bOption = new Bundle.Option(optionTemplate);
 <?php
-    foreach ($block->getOptions() as $_option) {
-        /** @var $_option \Magento\Bundle\Model\Option */
-        /* @noEscape */ echo 'optionIndex = bOption.add(', $_option->toJson(), ');', PHP_EOL;
-        if ($_option->getSelections()) {
-            foreach ($_option->getSelections() as $_selection) {
-                /** @var $_selection \Magento\Catalog\Model\Product */
-                $_selection->setName($block->escapeHtml($_selection->getName()));
-                /* @noEscape */ echo 'bSelection.addRow(optionIndex,', $_selection->toJson(), ');', PHP_EOL;
-            }
+foreach ($block->getOptions() as $_option) {
+    /** @var $_option \Magento\Bundle\Model\Option */
+    /* @noEscape */ echo 'optionIndex = bOption.add(', $_option->toJson(), ');', PHP_EOL;
+    if ($_option->getSelections()) {
+        foreach ($_option->getSelections() as $_selection) {
+            /** @var $_selection \Magento\Catalog\Model\Product */
+            $_selection->setName($block->escapeHtml($_selection->getName()));
+            /* @noEscape */ echo 'bSelection.addRow(optionIndex,', $_selection->toJson(), ');', PHP_EOL;
         }
     }
+}
 ?>
 function togglePriceType() {
     bOption['priceType' + ($('price_type').value == '1' ? 'Fixed' : 'Dynamic')]();

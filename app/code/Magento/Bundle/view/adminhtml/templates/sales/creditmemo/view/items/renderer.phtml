@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -21,17 +18,17 @@
 
 <?php $_prevOptionId = '' ?>
 
-<?php if ($block->getOrderOptions() || $_item->getDescription()): ?>
+<?php if ($block->getOrderOptions() || $_item->getDescription()) : ?>
     <?php $_showlastRow = true ?>
-<?php else: ?>
+<?php else : ?>
     <?php $_showlastRow = false ?>
 <?php endif; ?>
 
-<?php foreach ($items as $_item): ?>
+<?php foreach ($items as $_item) : ?>
     <?php $block->setPriceDataObject($_item) ?>
     <?php $attributes = $block->getSelectionAttributes($_item) ?>
-    <?php if ($_item->getOrderItem()->getParentItem()): ?>
-        <?php if ($_prevOptionId != $attributes['option_id']): ?>
+    <?php if ($_item->getOrderItem()->getParentItem()) : ?>
+        <?php if ($_prevOptionId != $attributes['option_id']) : ?>
         <tr>
             <td class="col-product"><div class="option-label"><?= $block->escapeHtml($attributes['option_label']) ?></div></td>
             <td>&nbsp;</td>
@@ -41,78 +38,78 @@
             <td>&nbsp;</td>
             <td class="last">&nbsp;</td>
         </tr>
-        <?php $_prevOptionId = $attributes['option_id'] ?>
+            <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
     <tr<?= (++$_index == $_count && !$_showlastRow) ? ' class="border"' : '' ?>>
-        <?php if (!$_item->getOrderItem()->getParentItem()): ?>
+        <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
         <td class="col-product">
             <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
             <div class="product-sku-block">
                 <span><?= $block->escapeHtml(__('SKU')) ?>:</span>
-                <?= /* @noEscape */ implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($_item->getSku())) ?>
+                <?= /* @noEscape */ implode('<br />', $this->helper(Magento\Catalog\Helper\Data::class)->splitSku($_item->getSku())) ?>
             </div>
         </td>
-        <?php else: ?>
+        <?php else : ?>
         <td class="col-product"><div class="option-value"><?= $block->getValueHtml($_item) ?></div></td>
         <?php endif; ?>
         <td class="col-price">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item)) : ?>
                 <?= $block->getColumnHtml($_item, 'price') ?>
-            <?php else: ?>
+            <?php else : ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-qty">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item)) : ?>
                 <?= $block->escapeHtml($_item->getQty()*1) ?>
-            <?php else: ?>
+            <?php else : ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-subtotal">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item)) : ?>
                 <?= $block->getColumnHtml($_item, 'subtotal') ?>
-            <?php else: ?>
+            <?php else : ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-tax">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item)) : ?>
                 <?= /* @noEscape */ $block->displayPriceAttribute('tax_amount') ?>
-            <?php else: ?>
+            <?php else : ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-discount">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item)) : ?>
                 <?= /* @noEscape */ $block->displayPriceAttribute('discount_amount') ?>
-            <?php else: ?>
+            <?php else : ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-total last">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item)) : ?>
                 <?= $block->getColumnHtml($_item, 'total') ?>
-            <?php else: ?>
+            <?php else : ?>
                 &nbsp;
             <?php endif; ?>
         </td>
     </tr>
 <?php endforeach; ?>
-<?php if ($_showlastRow): ?>
+<?php if ($_showlastRow) : ?>
     <tr class="border">
         <td class="col-product">
-            <?php if ($block->getOrderOptions()): ?>
+            <?php if ($block->getOrderOptions()) : ?>
                 <dl class="item-options">
-                <?php foreach ($block->getOrderOptions() as $option): ?>
+                <?php foreach ($block->getOrderOptions() as $option) : ?>
                     <dt><?= $block->escapeHtml($option['label']) ?></dt>
                     <dd>
-                    <?php if (isset($option['custom_view']) && $option['custom_view']): ?>
+                    <?php if (isset($option['custom_view']) && $option['custom_view']) : ?>
                         <?= $block->escapeHtml($option['value']) ?>
-                    <?php else: ?>
+                    <?php else : ?>
                         <?= $block->escapeHtml($block->truncateString($option['value'], 55, '', $_remainder)) ?>
-                        <?php if ($_remainder):?>
+                        <?php if ($_remainder) :?>
                             ... <span id="<?= $block->escapeHtmlAttr($_id = 'id' . uniqid()) ?>"><?= $block->escapeHtml($_remainder) ?></span>
                             <script>
                                 require(['prototype'], function(){

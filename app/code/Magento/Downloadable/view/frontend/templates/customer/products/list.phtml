@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -13,7 +10,7 @@
  */
 ?>
 <?php $_items = $block->getItems(); ?>
-<?php if (count($_items)): ?>
+<?php if (count($_items)) : ?>
     <div class="table-wrapper downloadable-products">
         <table id="my-downloadable-products-table" class="data table table-downloadable-products">
             <caption class="table-caption"><?= $block->escapeHtml(__('Downloadable Products')) ?></caption>
@@ -27,7 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-            <?php foreach ($_items as $_item): ?>
+            <?php foreach ($_items as $_item) : ?>
                 <tr>
                     <td data-th="<?= $block->escapeHtml(__('Order #')) ?>" class="col id">
                         <a href="<?= $block->escapeUrl($block->getOrderViewUrl($_item->getPurchased()->getOrderId())) ?>"
@@ -38,7 +35,7 @@
                     <td data-th="<?= $block->escapeHtml(__('Date')) ?>" class="col date"><?= $block->escapeHtml($block->formatDate($_item->getPurchased()->getCreatedAt())) ?></td>
                     <td data-th="<?= $block->escapeHtml(__('Title')) ?>" class="col title">
                         <strong class="product-name"><?= $block->escapeHtml($_item->getPurchased()->getProductName()) ?></strong>
-                        <?php if ($_item->getStatus() == \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_AVAILABLE): ?>
+                        <?php if ($_item->getStatus() == \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_AVAILABLE) : ?>
                         <a href="<?= $block->escapeUrl($block->getDownloadUrl($_item)) ?>" title="<?= $block->escapeHtmlAttr(__('Start Download')) ?>" class="action download" <?= /* @noEscape */ $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : '' ?>><?= $block->escapeHtml($_item->getLinkTitle()) ?></a>
                         <?php endif; ?>
                     </td>
@@ -49,12 +46,12 @@
             </tbody>
         </table>
     </div>
-    <?php if ($block->getChildHtml('pager')): ?>
+    <?php if ($block->getChildHtml('pager')) : ?>
         <div class="toolbar downloadable-products-toolbar bottom">
             <?= $block->getChildHtml('pager') ?>
         </div>
     <?php endif; ?>
-<?php else: ?>
+<?php else : ?>
     <div class="message info empty"><span><?= $block->escapeHtml(__('You have not purchased any downloadable products yet.')) ?></span></div>
 <?php endif; ?>
 
