@@ -3,17 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+/** @noinspection PhpUnusedParameterInspection */
 declare(strict_types=1);
 
 namespace Magento\InventorySourceSelectionApi\Model\Algorithms\Result;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventorySourceSelectionApi\Model\GetInStockSourceItemsBySkusAndSortedSource;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
-use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterfaceFactory;
+use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterfaceFactory;
+use Magento\InventorySourceSelectionApi\Model\GetInStockSourceItemsBySkusAndSortedSource;
+use Magento\InventorySourceSelectionApi\Model\GetSourceItemQtyAvailableInterface;
 
 /**
  * Return a default response for sorted source algorithms
@@ -36,24 +38,34 @@ class GetDefaultSortedSourcesResult
     private $getInStockSourceItemsBySkusAndSortedSource;
 
     /**
+     * @var GetSourceItemQtyAvailableInterface
+     */
+    private $getSourceItemQtyAvailable;
+
+    /**
      * @param SourceSelectionItemInterfaceFactory $sourceSelectionItemFactory
      * @param SourceSelectionResultInterfaceFactory $sourceSelectionResultFactory
      * @param null $searchCriteriaBuilder @deprecated
      * @param null $sourceItemRepository @deprecated
      * @param GetInStockSourceItemsBySkusAndSortedSource $getInStockSourceItemsBySkusAndSortedSource = null
+     * @param GetSourceItemQtyAvailableInterface|null $getSourceItemQtyAvailable
      * @SuppressWarnings(PHPMD.LongVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         SourceSelectionItemInterfaceFactory $sourceSelectionItemFactory,
         SourceSelectionResultInterfaceFactory $sourceSelectionResultFactory,
         $searchCriteriaBuilder,
         $sourceItemRepository,
-        GetInStockSourceItemsBySkusAndSortedSource $getInStockSourceItemsBySkusAndSortedSource = null
+        GetInStockSourceItemsBySkusAndSortedSource $getInStockSourceItemsBySkusAndSortedSource = null,
+        GetSourceItemQtyAvailableInterface $getSourceItemQtyAvailable = null
     ) {
         $this->sourceSelectionItemFactory = $sourceSelectionItemFactory;
         $this->sourceSelectionResultFactory = $sourceSelectionResultFactory;
         $this->getInStockSourceItemsBySkusAndSortedSource = $getInStockSourceItemsBySkusAndSortedSource ?:
             ObjectManager::getInstance()->get(GetInStockSourceItemsBySkusAndSortedSource::class);
+        $this->getSourceItemQtyAvailable = $getSourceItemQtyAvailable ??
+            ObjectManager::getInstance()->get(GetSourceItemQtyAvailableInterface::class);
     }
 
     /**
@@ -98,13 +110,14 @@ class GetDefaultSortedSourcesResult
             );
 
         foreach ($sourceItems as $sourceItem) {
-            $qtyToDeduct = min($sourceItem->getQuantity(), $itemsTdDeliver[$sourceItem->getSku()] ?? 0.0);
+            $sourceItemQtyAvailable = $this->getSourceItemQtyAvailable->execute($sourceItem);
+            $qtyToDeduct = min($sourceItemQtyAvailable, $itemsTdDeliver[$sourceItem->getSku()] ?? 0.0);
 
             $sourceItemSelections[] = $this->sourceSelectionItemFactory->create([
                 'sourceCode' => $sourceItem->getSourceCode(),
                 'sku' => $sourceItem->getSku(),
                 'qtyToDeduct' => $qtyToDeduct,
-                'qtyAvailable' => $sourceItem->getQuantity()
+                'qtyAvailable' => $sourceItemQtyAvailable
             ]);
 
             $itemsTdDeliver[$sourceItem->getSku()] -= $qtyToDeduct;
