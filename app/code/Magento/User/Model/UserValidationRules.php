@@ -125,4 +125,32 @@ class UserValidationRules
         $validator->addRule($passwordConfirmation, 'password');
         return $validator;
     }
+
+    /**
+     * Adds validation rule for expiration date.
+     * @param \Magento\Framework\Validator\DataObject $validator
+     * @return \Magento\Framework\Validator\DataObject
+     */
+    public function addExpiresAtRule(\Magento\Framework\Validator\DataObject $validator)
+    {
+        $expiresValidator = new \Zend_Validate_Date(
+            [
+                'format' => \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT,
+            ]
+        );
+        $expiresValidator->setMessage(
+            __('"Expiration date" invalid type entered.'),
+            \Zend_Validate_Date::INVALID
+        );
+        $expiresValidator->setMessage(
+            __('"Expiration date" is not a valid date.'),
+            \Zend_Validate_Date::INVALID_DATE
+        );
+        $expiresValidator->setMessage(
+            __('"Expiration date" does not fit the required date format.'),
+            \Zend_Validate_Date::FALSEFORMAT
+        );
+        $validator->addRule($expiresValidator, 'expires_at');
+        return $validator;
+    }
 }

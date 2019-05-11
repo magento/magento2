@@ -322,6 +322,10 @@ class User extends AbstractModel implements StorageInterface, UserInterface
                 $this->validationRules->addPasswordConfirmationRule($validator, $this->getPasswordConfirmation());
             }
         }
+
+        if ($this->hasExpiresAt()) {
+            $this->validationRules->addExpiresAtRule($validator);
+        }
         return $validator;
     }
 

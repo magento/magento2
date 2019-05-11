@@ -170,6 +170,34 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
             );
         }
 
+        $baseFieldset->addField(
+            'expires_at',
+            'date',
+            [
+                'name' => 'expires_at',
+                'label' => __('Expiration Date'),
+                'title' => __('Expiration Date'),
+                'date_format' => 'yyyy-MM-dd',
+                'time_format' => 'hh:mm:ss',
+                'class' => 'validate-date',
+            ]
+        )
+//            ->setAfterElementHtml("<script type=\"text/javascript\">
+//                //<![CDATA[
+//                  require([
+//                  'jquery',
+//                  'mage/calendar'
+//                    ], function($){
+//                           $('#expires_at').calendar({
+//                           hideIfNoPrevNext: true,
+//                           minDate: new Date(),
+//                           showOn: 'button',
+//                           dateFormat: 'yyyy-MM-dd'
+//                        });    });
+//                //]]>
+//                </script>")
+        ;
+
         $baseFieldset->addField('user_roles', 'hidden', ['name' => 'user_roles', 'id' => '_user_roles']);
 
         $currentUserVerificationFieldset = $form->addFieldset(
