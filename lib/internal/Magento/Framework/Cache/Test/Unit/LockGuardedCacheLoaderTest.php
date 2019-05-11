@@ -81,7 +81,6 @@ class LockGuardedCacheLoaderTest extends TestCase
         $this->assertEquals(['cached'], $result);
     }
 
-
     /** @test */
     public function blockingLoaderWaitsForLockReleaseBeforeLoadingUnCachedData()
     {
@@ -251,17 +250,14 @@ class LockGuardedCacheLoaderTest extends TestCase
                 function () {
                     return ['uncached'];
                 },
-                function () {
-                    throw new \Exception('Something went wrong');
-                }
+                $this->throwError()
             );
         } catch (\Exception $exception) {
-
+            // Ignore error
         }
 
         $this->assertFalse($this->lockManager->isLocked('lock1'));
     }
-
 
     private function addLoadSequence(callable $loadOperation): void
     {
@@ -288,4 +284,10 @@ class LockGuardedCacheLoaderTest extends TestCase
         };
     }
 
+    private function throwError(): callable
+    {
+        return function () {
+            throw new \Exception('Something went wrong');
+        };
+    }
 }
