@@ -11,6 +11,7 @@
     <test name="StorefrontUpdateShoppingCartSimpleWithCustomOptionsProductQtyTest">
         <annotations>
             <features value="Checkout"/>
+            <stories value="Shopping Cart update on Item qty update"/>
             <title value="Check updating shopping cart while updating qty of items with custom options"/>
             <description value="Check updating shopping cart while updating qty of items with custom options"/>
             <testCaseId value="MC-14732" />
