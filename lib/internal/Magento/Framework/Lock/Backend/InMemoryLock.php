@@ -22,7 +22,6 @@ class InMemoryLock implements LockManagerInterface
      */
     private $locks = [];
 
-
     /**
      * Sets a lock
      *

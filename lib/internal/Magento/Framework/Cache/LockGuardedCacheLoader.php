@@ -54,7 +54,6 @@ class LockGuardedCacheLoader
     /**
      * Loads cache data by blocking till lock is released
      *
-     *
      * @param string $lockName
      * @param callable $dataLoader
      * @param callable $dataCollector
@@ -93,7 +92,6 @@ class LockGuardedCacheLoader
 
         return $cachedData;
     }
-
 
     /**
      * Loads cached data in non blocking way

@@ -114,5 +114,4 @@ class InMemoryLockTest extends TestCase
             $this->lockManager->unlock('lock3')
         );
     }
-
 }
