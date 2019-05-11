@@ -36,7 +36,9 @@
                 default="0" comment="Failure Number"/>
         <column xsi:type="timestamp" name="first_failure" on_update="false" nullable="true" comment="First Failure"/>
         <column xsi:type="timestamp" name="lock_expires" on_update="false" nullable="true"
-                comment="Expiration Lock Dates"/>
+                comment="Expiration Lock Date"/>
+        <column xsi:type="timestamp" name="expires_at" on_update="false" nullable="true"
+                comment="User Expiration Date"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="user_id"/>
         </constraint>
