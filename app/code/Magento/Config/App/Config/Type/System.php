@@ -229,11 +229,14 @@ class System implements ConfigTypeInterface
             return $data;
         };
 
-        return $this->lockQuery->lockedLoadData(
+        return $this->lockQuery->nonBlockingLockedLoadData(
             self::$lockName,
             $loadAction,
             \Closure::fromCallable([$this, 'readData']),
-            \Closure::fromCallable([$this, 'cacheData'])
+            function ($data) {
+                $this->cacheData($data);
+                return $data;
+            }
         );
     }
 
@@ -254,11 +257,14 @@ class System implements ConfigTypeInterface
             return $scopeData;
         };
 
-        return $this->lockQuery->lockedLoadData(
+        return $this->lockQuery->nonBlockingLockedLoadData(
             self::$lockName,
             $loadAction,
             \Closure::fromCallable([$this, 'readData']),
-            \Closure::fromCallable([$this, 'cacheData'])
+            function ($data) use ($scopeType) {
+                $this->cacheData($data);
+                return $data[$scopeType] ?? [];
+            }
         );
     }
 
@@ -293,11 +299,14 @@ class System implements ConfigTypeInterface
             return $scopeData;
         };
 
-        return $this->lockQuery->lockedLoadData(
+        return $this->lockQuery->nonBlockingLockedLoadData(
             self::$lockName,
             $loadAction,
             \Closure::fromCallable([$this, 'readData']),
-            \Closure::fromCallable([$this, 'cacheData'])
+            function ($data) use ($scopeType, $scopeId) {
+                $this->cacheData($data);
+                return $data[$scopeType][$scopeId];
+            }
         );
     }
 

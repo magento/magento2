@@ -52,7 +52,8 @@ class LockGuardedCacheLoader
     }
 
     /**
-     * Load data.
+     * Loads cache data by blocking till lock is released
+     *
      *
      * @param string $lockName
      * @param callable $dataLoader
@@ -87,6 +88,45 @@ class LockGuardedCacheLoader
             if ($cachedData === false) {
                 usleep($this->delayTimeout * 1000);
                 $cachedData = $dataLoader();
+            }
+        }
+
+        return $cachedData;
+    }
+
+
+    /**
+     * Loads cached data in non blocking way
+     *
+     * When data is not cached it will try to grab a lock.
+     * If lock is not obtainable it just returns back uncached data,
+     * so connection is not going into cyclic deadlock
+     *
+     * @param string $lockName
+     * @param callable $dataLoader
+     * @param callable $dataCollector
+     * @param callable $dataSaver
+     * @return mixed
+     */
+    public function nonBlockingLockedLoadData(
+        string $lockName,
+        callable $dataLoader,
+        callable $dataCollector,
+        callable $dataSaver
+    ) {
+        $cachedData = $dataLoader();
+
+        if ($cachedData !== false) {
+            return $cachedData;
+        }
+
+        $cachedData = $dataCollector();
+
+        if ($this->locker->lock($lockName, $this->lockTimeout / 1000)) {
+            try {
+                $cachedData = $dataSaver($cachedData);
+            } finally {
+                $this->locker->unlock($lockName);
             }
         }
 
