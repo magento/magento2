@@ -472,7 +472,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         foreach ($layer->getState()->getFilters() as $filterItem) {
             $attributeToSelect[] = $filterItem->getFilter()->getRequestVar();
         }
-        foreach ($prodCollcetion as $ke => $product) {
+        foreach ($prodCollcetion as $product) {
             if (in_array($product->getTypeId(), ['configurable', 'group', 'bundle'])) {
                 $_children = $product->getTypeInstance()->getUsedProductCollection($product)
                                     ->addAttributeToSelect($attributeToSelect);
