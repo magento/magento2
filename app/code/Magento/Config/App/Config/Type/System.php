@@ -305,7 +305,7 @@ class System implements ConfigTypeInterface
             \Closure::fromCallable([$this, 'readData']),
             function ($data) use ($scopeType, $scopeId) {
                 $this->cacheData($data);
-                return $data[$scopeType][$scopeId];
+                return $data[$scopeType][$scopeId] ?? [];
             }
         );
     }
