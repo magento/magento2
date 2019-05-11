@@ -26,7 +26,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * @var \Magento\Catalog\Model\Product[]
      */
-    private $products;
+    private $products = [];
 
     /**
      * Assign link table name
