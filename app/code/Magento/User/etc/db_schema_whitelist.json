@@ -19,7 +19,8 @@
             "interface_locale": true,
             "failures_num": true,
             "first_failure": true,
-            "lock_expires": true
+            "lock_expires": true,
+            "expires_at": true
         },
         "constraint": {
             "PRIMARY": true,
