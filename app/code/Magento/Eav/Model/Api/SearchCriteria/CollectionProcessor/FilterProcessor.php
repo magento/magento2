@@ -65,22 +65,17 @@ class FilterProcessor implements CollectionProcessorInterface
             $isApplied = false;
             $customFilter = $this->getCustomFilterForField($filter->getField());
             if ($customFilter) {
-                if( $filter->getConditionType() == "eq" ) {
-                    $isApplied = true;
-
-                    if( !empty($customFilterArr[$filter->getField()]) && !empty($customFilterArr[$filter->getField()]['filter']) && isset($customFilterArr[$filter->getField()]['value']) ){
-                        $customFilterArr[$filter->getField()]['value'][] = $filter->getValue();
-                        $newFilter = clone $customFilterArr[$filter->getField()]['filter'];
-                        $newFilter->setValue($customFilterArr[$filter->getField()]['value']);
-                        $newFilter->setConditionType('in');
-                        $customFilterArr[$filter->getField()]['filter'] = $newFilter;
-                    } else {
-                        $customFilterArr[$filter->getField()]['filter'] = $filter;
-                        $customFilterArr[$filter->getField()]['value'][] = $filter->getValue();
-                    }
-                }else {
-                    $isApplied = $customFilter->apply($filter, $collection);
+                if ($filter->getConditionType() == "eq") {
+                    $customFilterArr[$filter->getField()]['value'][] = $filter->getValue();
+                    /** @var \Magento\Framework\Api\Filter $newFilter */
+                    $newFilter = clone $filter;
+                    $newFilter->setValue($customFilterArr[$filter->getField()]['value']);
+                    $newFilter->setConditionType('in');
+                    $customFilterArr[$filter->getField()]['filter'] = $newFilter;
+                    continue;
                 }
+
+                $isApplied = $customFilter->apply($filter, $collection);
             }
 
             if (!$isApplied) {
@@ -88,16 +83,11 @@ class FilterProcessor implements CollectionProcessorInterface
                 $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
                 $fields[] = ['attribute' => $field, $condition => $filter->getValue()];
             }
-
         }
 
-        if( !empty($customFilterArr) ){
-            foreach( $customFilterArr as $field => $val ){
-                $customFilter = $this->getCustomFilterForField($field);
-                if ($customFilter) {
-                    $customFilter->apply($val['filter'], $collection);
-                }
-            }
+        foreach ($customFilterArr as $field => $val) {
+            $customFilter = $this->getCustomFilterForField($field);
+            $customFilter->apply($val['filter'], $collection);
         }
 
         if ($fields) {
