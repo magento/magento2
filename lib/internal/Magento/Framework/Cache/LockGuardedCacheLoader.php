@@ -118,9 +118,12 @@ class LockGuardedCacheLoader
             return $cachedData;
         }
 
+        $isLocked = $this->locker->isLocked($lockName);
+
         $cachedData = $dataCollector();
 
-        if ($this->locker->lock($lockName, $this->lockTimeout / 1000)) {
+        if (!$isLocked
+            && $this->locker->lock($lockName, $this->lockTimeout / 1000)) {
             try {
                 $cachedData = $dataSaver($cachedData);
             } finally {
