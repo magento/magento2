@@ -14,6 +14,7 @@
             <title value="Check updating shopping cart while updating qty of items with custom options"/>
             <description value="Check updating shopping cart while updating qty of items with custom options"/>
             <testCaseId value="MC-14732" />
+            <severity value="CRITICAL"/>
             <group value="shoppingCart"/>
             <group value="mtf_migrated"/>
         </annotations>
