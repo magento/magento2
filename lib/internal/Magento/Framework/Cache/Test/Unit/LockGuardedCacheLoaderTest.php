@@ -239,6 +239,27 @@ class LockGuardedCacheLoaderTest extends TestCase
     }
 
     /** @test */
+    public function nonBlockingLoaderDoesNotTryStoreCachedDataWhenDataWasLocked()
+    {
+        $result = $this->lockGuard->nonBlockingLockedLoadData(
+            'lock1',
+            function () {
+                $this->lockManager->lock('lock1');
+                return false;
+            },
+            function () {
+                $this->lockManager->unlock('lock1');
+                return ['uncached'];
+            },
+            function ($data) {
+                return [current($data), 'cached'];
+            }
+        );
+
+        $this->assertEquals(['uncached'], $result);
+    }
+
+    /** @test */
     public function nonBlockingLoaderReleasesLockWhenErrorHappens()
     {
         try {
