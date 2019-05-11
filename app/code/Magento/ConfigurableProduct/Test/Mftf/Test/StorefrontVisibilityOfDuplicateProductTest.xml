@@ -114,7 +114,6 @@
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="$$createConfigProduct.name$$-Updated" stepKey="fillProductName"/>
         <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="1" stepKey="selectInStock"/>
         <!--Change product image-->
-        <comment userInput="Change product image" stepKey="commentChangeImage"/>
         <comment userInput="Change product image" stepKey="commentChangeProductImage"/>
         <actionGroup ref="removeProductImage" stepKey="removeProductImage"/>
         <actionGroup ref="addProductImage" stepKey="addImageForProduct">
