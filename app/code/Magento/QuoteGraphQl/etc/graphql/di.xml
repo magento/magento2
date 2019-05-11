@@ -13,7 +13,7 @@
     <type name="Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder">
         <arguments>
             <argument name="providers" xsi:type="array">
-                <item name="default" xsi:type="object">Magento\QuoteGraphQl\Model\Cart\BuyRequest\DefaultDataProvider</item>
+                <item name="quantity" xsi:type="object">Magento\QuoteGraphQl\Model\Cart\BuyRequest\QuantityDataProvider</item>
                 <item name="customizable_options" xsi:type="object">Magento\QuoteGraphQl\Model\Cart\BuyRequest\CustomizableOptionsDataProvider</item>
             </argument>
         </arguments>

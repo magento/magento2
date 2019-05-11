@@ -22,4 +22,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="super_attribute" xsi:type="object">Magento\ConfigurableProductGraphQl\Model\Cart\BuyRequest\SuperAttributeDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

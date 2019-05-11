@@ -10,7 +10,7 @@ namespace Magento\QuoteGraphQl\Model\Cart\BuyRequest;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Stdlib\ArrayManager;
 
-class DefaultDataProvider implements BuyRequestDataProviderInterface
+class QuantityDataProvider implements BuyRequestDataProviderInterface
 {
     /**
      * @var ArrayManager
@@ -31,11 +31,19 @@ class DefaultDataProvider implements BuyRequestDataProviderInterface
      */
     public function execute(array $cartItemData): array
     {
-        $qty = $this->arrayManager->get('data/quantity', $cartItemData);
-        if (!isset($qty)) {
+        $quantity = $this->arrayManager->get('data/quantity', $cartItemData);
+        if (!isset($quantity)) {
             throw new GraphQlInputException(__('Missing key "quantity" in cart item data'));
         }
 
-        return ['qty' => (float)$qty];
+        $quantity = (float) $quantity;
+
+        if ($quantity <= 0) {
+            throw new GraphQlInputException(
+                __('Please enter a number greater than 0 in this field.')
+            );
+        }
+
+        return ['qty' => $quantity];
     }
 }
