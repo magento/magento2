@@ -316,17 +316,4 @@
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
     </actionGroup>
-    <actionGroup name="AddProductToCategory">
-        <arguments>
-            <argument name="productSku" type="string"/>
-        </arguments>
-        <conditionalClick selector="{{AdminCategoryProductsSection.sectionHeader}}" dependentSelector="{{AdminCategoryProductsSection.addProducts}}" visible="false" stepKey="openProductsInCategorySection"/>
-        <click selector="{{AdminCategoryProductsSection.addProducts}}" stepKey="clickAddProductsToCategory"/>
-        <waitForElementVisible selector="{{AdminCategoryAddProductsModalSection.filters}}" stepKey="waitForModalOpen" time="30"/>
-        <click selector="{{AdminCategoryAddProductsModalSection.addProductBySku}}" stepKey="clickAddBySkuTab"/>
-        <fillField selector="{{AdminCategoryAddProductsModalSection.productSkuInput}}" userInput="{{productSku}}" stepKey="enterSku"/>
-        <click selector="{{AdminCategoryAddProductsModalSection.assign}}" stepKey="assignSku"/>
-        <waitForAjaxLoad stepKey="waitForAjax"/>
-        <click selector="{{AdminCategoryAddProductsModalSection.saveClose}}" stepKey="saveCloseModal"/>
-    </actionGroup>
 </actionGroups>
