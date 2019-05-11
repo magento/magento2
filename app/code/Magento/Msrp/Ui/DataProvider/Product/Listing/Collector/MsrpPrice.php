@@ -18,7 +18,7 @@ use Magento\Msrp\Helper\Data;
 use Magento\Msrp\Model\Config;
 
 /**
- * Collects all information about Manufacture Advertise Price of product
+ * Collects all information about Manufacturer Advertised Price of product
  * This price will be used on front and will be rendered by JS.
  */
 class MsrpPrice implements ProductRenderCollectorInterface

@@ -11,8 +11,9 @@
     <test name="StorefrontSpecialPriceForDifferentTimezonesForWebsitesTest">
         <annotations>
             <features value="Catalog"/>
-            <title value="Check that special price displayed when 'default config' scope timezone does not match 'website' scope timezone"/>
-            <description value="Check that special price displayed when 'default config' scope timezone does not match 'website' scope timezone"/>
+            <stories value="Special Price with inconsistent Timezone"/>
+            <title value="Special Price should be visible when 'Default config' and 'Website' scope timezone are different"/>
+            <description value="Check that Special Price is displayed when 'Default config' scope timezone does not match 'website' scope timezone"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-97508"/>
             <useCaseId value="MAGETWO-96847"/>

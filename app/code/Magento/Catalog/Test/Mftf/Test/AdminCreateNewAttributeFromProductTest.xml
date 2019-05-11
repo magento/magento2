@@ -11,8 +11,9 @@
     <test name="AdminCreateNewAttributeFromProductTest">
         <annotations>
             <features value="Catalog"/>
-            <title value="Check that New Attribute from Product is create"/>
-            <description value="Check that New Attribute from Product is create"/>
+            <stories value="Creating Product Attributes"/>
+            <title value="Creating new Product Attribute from Product Edit page"/>
+            <description value="After adding new Attribute from Product Edit page, it should be visible in grid with proper label for specific Store View (language)"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-12296"/>
             <useCaseId value="MAGETWO-59055"/>

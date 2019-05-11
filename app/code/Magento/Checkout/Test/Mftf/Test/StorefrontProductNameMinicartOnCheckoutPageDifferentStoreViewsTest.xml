@@ -11,8 +11,9 @@
     <test name="StorefrontProductNameMinicartOnCheckoutPageDifferentStoreViewsTest">
         <annotations>
             <features value="Checkout"/>
-            <title value="Checking Product name in Minicart and on Checkout page with different store views"/>
-            <description value="Checking Product name in Minicart and on Checkout page with different store views"/>
+            <stories value="Product Name in different Store Views"/>
+            <title value="Product Name in Minicart and on Checkout page for different store views"/>
+            <description value="Checking that Product Name in Minicart and on Checkout page is correct for different store views (languages)"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-96466"/>
             <useCaseId value="MAGETWO-96421"/>

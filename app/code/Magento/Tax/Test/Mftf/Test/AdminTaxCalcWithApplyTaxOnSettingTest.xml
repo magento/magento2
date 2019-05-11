@@ -11,6 +11,7 @@
     <test name="AdminTaxCalcWithApplyTaxOnSettingTest">
         <annotations>
             <features value="AdminTaxCalcWithApplyTaxOnSettingTest"/>
+            <stories value="Tax calculation depending on Settings"/>
             <title value="Tax calculation process following 'Apply Tax On' setting"/>
             <description value="Tax calculation process following 'Apply Tax On' setting"/>
             <severity value="MAJOR"/>

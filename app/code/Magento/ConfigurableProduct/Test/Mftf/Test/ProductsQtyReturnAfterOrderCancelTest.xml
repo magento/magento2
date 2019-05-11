@@ -9,11 +9,11 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="ProductsQtyReturnAfterOrderCancel">
-
         <annotations>
             <features value="ConfigurableProduct"/>
-            <title value="Product qunatity return after order cancel"/>
-            <description value="Check Product qunatity return after order cancel"/>
+            <stories value="Product Quantity on Order cancel"/>
+            <title value="Rollback Quantity reduction when Order is cancelled"/>
+            <description value="Check Product quantity is increased after the Order is cancelled"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-97228"/>
             <useCaseId value="MAGETWO-82221"/>

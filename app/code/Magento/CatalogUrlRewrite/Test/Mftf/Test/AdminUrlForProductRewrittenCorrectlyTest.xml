@@ -10,8 +10,9 @@
     <test name="AdminUrlForProductRewrittenCorrectlyTest">
         <annotations>
             <features value="CatalogUrlRewrite"/>
-            <title value="Check that URL for product rewritten correctly"/>
-            <description value="Check that URL for product rewritten correctly"/>
+            <stories value="Product URL in Admin Panel"/>
+            <title value="Product URL changed after change of URL Key"/>
+            <description value="When URL Key changed in Product Edit Page, product URL is regenerated to use new URL key."/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-97224"/>
             <useCaseId value="MAGETWO-64191"/>

@@ -11,8 +11,9 @@
     <test name="StoreViewLanguageCorrectSwitchTest">
         <annotations>
             <features value="Cms"/>
-            <title value="Check that Store View(language) switches correct"/>
-            <description value="Check that Store View(language) switches correct"/>
+            <stories value="Store View switch changes language"/>
+            <title value="Check that Store View switches store id and language"/>
+            <description value="After switching the Store View I should see the language assigned to store I choosed."/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-96388"/>
             <useCaseId value="MAGETWO-57337"/>

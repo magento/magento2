@@ -10,8 +10,9 @@
     <test name="DeleteProductAttributeTest">
         <annotations>
             <features value="Catalog"/>
-            <title value="Delete Product Attribute"/>
-            <description value="Admin should able to delete a product attribute"/>
+            <stories value="Deleting Product Attributes"/>
+            <title value="Delete Product Attribute from Admin Panel"/>
+            <description value="Admin should be able to delete Product Attribute from Admin Panel"/>
             <testCaseId value="MC-10887"/>
             <severity value="MAJOR"/>
             <group value="mtf_migrated"/>

@@ -11,8 +11,9 @@
     <test name="ProductAvailableAfterEnablingSubCategoriesTest">
         <annotations>
             <features value="Catalog"/>
-            <title value="Check that parent categories are showing products after enabling subcategories after fully reindex"/>
-            <description value="Check that parent categories are showing products after enabling subcategories after fully reindex"/>
+            <stories value="Product Visibility on Category listing"/>
+            <title value="Parent Category display products after enabling subcategories"/>
+            <description value="After enabling subcategories and full reindex, parent category should display products."/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-97370"/>
             <useCaseId value="MAGETWO-96846"/>

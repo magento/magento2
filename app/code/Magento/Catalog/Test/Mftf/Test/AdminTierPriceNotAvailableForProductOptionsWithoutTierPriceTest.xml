@@ -11,8 +11,9 @@
     <test name="AdminTierPriceNotAvailableForProductOptionsWithoutTierPriceTest">
         <annotations>
             <features value="Catalog"/>
-            <title value="Check that 'trie price' block not available for simple product from options without 'trie price'"/>
-            <description value="Check that 'trie price' block not available for simple product from options without 'trie price'"/>
+            <stories value="Tier Price for Simple Product"/>
+            <title value="Tier Price is not visible when Simple Product has no option with Tier Price"/>
+            <description value="Verification whether Tier Price block is not available in Simple Product edit page when there is not option with Tier Price"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-97050"/>
             <useCaseId value="MAGETWO-96842"/>
