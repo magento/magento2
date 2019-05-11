@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\AddProductsToShoppingCartEntityTest" summary="Add Products to Shopping Cart" ticketId="MAGETWO-25382">
         <variation name="AddProductsToShoppingCartEntityTestVariation1" ticketId="MAGETWO-42677">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
             <data name="productsData/0" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
             <data name="cart/data/grand_total" xsi:type="string">210</data>
             <data name="cart/data/subtotal" xsi:type="string">200</data>
@@ -58,7 +58,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation5">
-            <data name="tag" xsi:type="string">severity:S0</data>
+            <data name="tag" xsi:type="string">severity:S0, mftf_migrated:yes</data>
             <data name="productsData/0" xsi:type="string">configurableProduct::default</data>
             <data name="cart/data/grand_total" xsi:type="string">135</data>
             <data name="cart/data/subtotal" xsi:type="string">120</data>
@@ -71,7 +71,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation6">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
             <data name="productsData/0" xsi:type="string">downloadableProduct::with_two_separately_links</data>
             <data name="cart/data/grand_total" xsi:type="string">22.43</data>
             <data name="cart/data/subtotal" xsi:type="string">22.43</data>
@@ -84,7 +84,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation7">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
             <data name="productsData/0" xsi:type="string">groupedProduct::three_simple_products</data>
             <data name="cart/data/grand_total" xsi:type="string">1950</data>
             <data name="cart/data/subtotal" xsi:type="string">1920</data>
@@ -119,6 +119,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation9" summary="Add dynamic bundle product to shopping cart with disabled mini shoping cart sidebar" ticketId="MAGETWO-35535">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="configData" xsi:type="string">disable_display_shopping_cart_sidebar</data>
             <data name="flushCache" xsi:type="boolean">true</data>
             <data name="productsData/0" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
@@ -132,6 +133,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertMyCartLinkRedirect" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation10" summary="Verify Top Destinations for Country Options configuration applied in shopping cart" ticketId="MAGETWO-38700">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="configData" xsi:type="string">top_destinations_DE_ES_GB</data>
             <data name="cart/data/grand_total" xsi:type="string">15.00</data>
@@ -145,7 +147,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertTopDestinationsInSelect" />
         </variation>
         <variation name="VariationWithCartItemsDisplayDefaultLimitation" summary="Verify visible items count in minicart and checkout summary block according to configuration" ticketId="MAGETWO-63442">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/1" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/2" xsi:type="string">catalogProductSimple::default</data>
@@ -166,7 +168,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInMiniShoppingCart" />
         </variation>
         <variation name="VariationWithCartItemsDisplayDefaultLimitationAndDefaultTotalQty" summary="Verify visible items count in minicart and checkout summary block according to configuration" ticketId="MAGETWO-63441">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/1" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/2" xsi:type="string">catalogProductSimple::default</data>
@@ -186,7 +188,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInMiniShoppingCart" />
         </variation>
         <variation name="VariationWithCartItemsDisplayDefaultLimitationOnCheckoutAndDefaultTotalQty" summary="Verify visible items count in minicart and checkout summary block according to configuration" ticketId="MAGETWO-63447">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/1" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/2" xsi:type="string">catalogProductSimple::default</data>
@@ -207,7 +209,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertLinkGoToCartNotPresentInSummaryBlock" />
         </variation>
         <variation name="VariationWithCartItemsDisplayDefaultLimitationOnCheckout" summary="Verify visible items count in minicart and checkout summary block according to configuration" ticketId="MAGETWO-63448">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/1" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/2" xsi:type="string">catalogProductSimple::default</data>
@@ -229,7 +231,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertLinkGoToCartPresentInSummaryBlock" />
         </variation>
         <variation name="VariationWithCartItemsDisplayCustomLimitations" summary="Verify visible items count in minicart and checkout summary block according to configuration" ticketId="MAGETWO-63445, MAGETWO-63449, MAGETWO-63452">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
             <data name="productsData/0" xsi:type="string">catalogProductVirtual::default</data>
             <data name="productsData/1" xsi:type="string">catalogProductVirtual::default</data>
             <data name="productsData/2" xsi:type="string">catalogProductVirtual::default</data>
@@ -248,6 +250,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertLinkGoToCartPresentInSummaryBlock" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation11" summary="Create product with all types of custom options that are required and trigger JS validation" ticketId="MAGETWO-45389">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::with_all_required_custom_option</data>
             <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
             <data name="isValidationFailed" xsi:type="boolean">true</data>
@@ -255,12 +258,14 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductsAbsentInShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation12" summary="Create product with all types of custom options that are required and check that item options for product(s) display with correct information" ticketId="MAGETWO-45389">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::with_all_required_custom_option</data>
             <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
             <data name="isValidationFailed" xsi:type="boolean">true</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation13" summary="Check Bundle on Cart Configuration Page." ticketId="MAGETWO-71634">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="productsData/0" xsi:type="string">bundleProduct::bundle_with_multiselect_option_one_selection</data>
             <data name="cart/data/grand_total" xsi:type="string">105</data>
             <data name="cart/data/subtotal" xsi:type="string">100</data>
@@ -273,6 +278,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation14" summary="Check Bundle on Cart Configuration Page." ticketId="MAGETWO-71634">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="productsData/0" xsi:type="string">bundleProduct::bundle_with_multiselect_option_two_selections</data>
             <data name="cart/data/grand_total" xsi:type="string">665</data>
             <data name="cart/data/subtotal" xsi:type="string">660</data>

@@ -44,11 +44,11 @@ class GenerateCustomerToken implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($args['email'])) {
+        if (!isset($args['email']) || empty($args['email'])) {
             throw new GraphQlInputException(__('Specify the "email" value.'));
         }
 
-        if (!isset($args['password'])) {
+        if (!isset($args['password']) || empty($args['password'])) {
             throw new GraphQlInputException(__('Specify the "password" value.'));
         }
 
