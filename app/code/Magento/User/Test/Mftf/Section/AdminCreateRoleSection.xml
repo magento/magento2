@@ -12,6 +12,9 @@
         <element name="create" type="button" selector="#add"/>
         <element name="name" type="button" selector="#role_name"/>
         <element name="password" type="input" selector="#current_password"/>
+        <element name="resourceAccess" type="select" selector="[data-ui-id='adminhtml-user-editroles-tab-content-account'] [name='all']"/>
+        <element name="resourceTree" type="block" selector="[data-ui-id='adminhtml-user-editroles-tab-content-account'] [data-role='resource-tree']"/>
+
         <element name="roleResources" type="button" selector="#role_info_tabs_account"/>
         <element name="roleResource" type="button" selector="#gws_is_all"/>
         <element name="resourceValue" type="button" selector="//*[text()='{{arg1}}']" parameterized="true"/>
