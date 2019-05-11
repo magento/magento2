@@ -159,7 +159,6 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_custom_options_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product_with_options.php
-     * @group recent
      */
     public function testOptionSetPersistsOnExtraOptionWithIncorrectId()
     {

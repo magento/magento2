@@ -15,7 +15,6 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CartItemRepositoryInterface;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\QuoteGraphQl\Model\Cart\UpdateCartItem;
@@ -25,11 +24,6 @@ use Magento\QuoteGraphQl\Model\Cart\UpdateCartItem;
  */
 class UpdateCartItems implements ResolverInterface
 {
-    /**
-     * @var CartRepositoryInterface
-     */
-    private $quoteRepository;
-
     /**
      * @var UpdateCartItem
      */
@@ -49,18 +43,15 @@ class UpdateCartItems implements ResolverInterface
      * @param GetCartForUser $getCartForUser
      * @param CartItemRepositoryInterface $cartItemRepository
      * @param UpdateCartItem $updateCartItem
-     * @param CartRepositoryInterface $quoteRepository
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         CartItemRepositoryInterface $cartItemRepository,
-        UpdateCartItem $updateCartItem,
-        CartRepositoryInterface $quoteRepository
+        UpdateCartItem $updateCartItem
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartItemRepository = $cartItemRepository;
         $this->updateCartItem = $updateCartItem;
-        $this->quoteRepository = $quoteRepository;
     }
 
     /**
@@ -112,8 +103,9 @@ class UpdateCartItems implements ResolverInterface
                 throw new GraphQlInputException(__('Required parameter "cart_item_id" for "cart_items" is missing.'));
             }
             $itemId = (int)$item['cart_item_id'];
+            $customizableOptions = $item['customizable_options'] ?? [];
 
-            if (!isset($item['quantity'])) {
+            if (count($customizableOptions) === 0 && !isset($item['quantity'])) {
                 throw new GraphQlInputException(__('Required parameter "quantity" for "cart_items" is missing.'));
             }
             $quantity = (float)$item['quantity'];
@@ -121,37 +113,8 @@ class UpdateCartItems implements ResolverInterface
             if ($quantity <= 0.0) {
                 $this->cartItemRepository->deleteById((int)$cart->getId(), $itemId);
             } else {
-                $customizableOptions = $item['customizable_options'] ?? null;
-
-                if ($customizableOptions === null) { // Update only item's qty
-                    $this->updateItemQty($itemId, $cart, $quantity);
-                } else { // Update customizable options (and QTY if changed)
-                    $this->updateCartItem->execute($cart, $itemId, $quantity, $customizableOptions);
-                    $this->quoteRepository->save($cart);
-                }
+                $this->updateCartItem->execute($cart, $itemId, $quantity, $customizableOptions);
             }
         }
-    }
-
-    /**
-     * Updates item qty for the specified cart
-     *
-     * @param int $itemId
-     * @param Quote $cart
-     * @param float $qty
-     * @throws GraphQlNoSuchEntityException
-     * @throws NoSuchEntityException
-     * @throws GraphQlNoSuchEntityException
-     */
-    private function updateItemQty(int $itemId, Quote $cart, float $qty)
-    {
-        $cartItem = $cart->getItemById($itemId);
-        if ($cartItem === false) {
-            throw new GraphQlNoSuchEntityException(
-                __('Could not find cart item with id: %1.', $itemId)
-            );
-        }
-        $cartItem->setQty($qty);
-        $this->cartItemRepository->save($cartItem);
     }
 }
