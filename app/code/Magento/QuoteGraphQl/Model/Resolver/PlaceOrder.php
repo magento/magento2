@@ -17,6 +17,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\QuoteGraphQl\Model\Cart\CheckCartCheckoutAllowance;
 
 /**
  * @inheritdoc
@@ -39,18 +40,26 @@ class PlaceOrder implements ResolverInterface
     private $orderRepository;
 
     /**
+     * @var CheckCartCheckoutAllowance
+     */
+    private $checkCartCheckoutAllowance;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param CartManagementInterface $cartManagement
      * @param OrderRepositoryInterface $orderRepository
+     * @param CheckCartCheckoutAllowance $checkCartCheckoutAllowance
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         CartManagementInterface $cartManagement,
-        OrderRepositoryInterface $orderRepository
+        OrderRepositoryInterface $orderRepository,
+        CheckCartCheckoutAllowance $checkCartCheckoutAllowance
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartManagement = $cartManagement;
         $this->orderRepository = $orderRepository;
+        $this->checkCartCheckoutAllowance = $checkCartCheckoutAllowance;
     }
 
     /**
@@ -74,6 +83,7 @@ class PlaceOrder implements ResolverInterface
 
         try {
             $orderId = $this->cartManagement->placeOrder($cart->getId());
+            $this->checkCartCheckoutAllowance->execute($cart);
             $order = $this->orderRepository->get($orderId);
 
             return [

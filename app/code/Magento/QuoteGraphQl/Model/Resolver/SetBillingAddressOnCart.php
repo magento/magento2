@@ -13,6 +13,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\QuoteGraphQl\Model\Cart\SetBillingAddressOnCart as SetBillingAddressOnCartModel;
+use Magento\QuoteGraphQl\Model\Cart\CheckCartCheckoutAllowance;
 
 /**
  * Mutation resolver for setting billing address for shopping cart
@@ -30,15 +31,23 @@ class SetBillingAddressOnCart implements ResolverInterface
     private $setBillingAddressOnCart;
 
     /**
+     * @var CheckCartCheckoutAllowance
+     */
+    private $checkCartCheckoutAllowance;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param SetBillingAddressOnCartModel $setBillingAddressOnCart
+     * @param CheckCartCheckoutAllowance $checkCartCheckoutAllowance
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        SetBillingAddressOnCartModel $setBillingAddressOnCart
+        SetBillingAddressOnCartModel $setBillingAddressOnCart,
+        CheckCartCheckoutAllowance $checkCartCheckoutAllowance
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->setBillingAddressOnCart = $setBillingAddressOnCart;
+        $this->checkCartCheckoutAllowance = $checkCartCheckoutAllowance;
     }
 
     /**
@@ -57,6 +66,7 @@ class SetBillingAddressOnCart implements ResolverInterface
         $billingAddress = $args['input']['billing_address'];
 
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $this->checkCartCheckoutAllowance->execute($cart);
         $this->setBillingAddressOnCart->execute($context, $cart, $billingAddress);
 
         return [

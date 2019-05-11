@@ -355,6 +355,32 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/disable_guest_checkout.php
+     * @magentoConfigFixture default_store checkout/options/guest_checkout 0
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Guest checkout is not allowed.
+     */
+    public function testSetShippingMethodOnCartWithGuestCheckoutDisabled()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $carrierCode = 'flatrate';
+        $methodCode = 'flatrate';
+
+        $query = $this->getQuery(
+            $maskedQuoteId,
+            $methodCode,
+            $carrierCode
+        );
+        $this->graphQlMutation($query);
+    }
+
+
+    /**
      * @param string $maskedQuoteId
      * @param string $shippingMethodCode
      * @param string $shippingCarrierCode

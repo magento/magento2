@@ -18,6 +18,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\Quote\Api\Data\PaymentInterfaceFactory;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
+use Magento\QuoteGraphQl\Model\Cart\CheckCartCheckoutAllowance;
 
 /**
  * Mutation resolver for setting payment method for shopping cart
@@ -40,18 +41,26 @@ class SetPaymentMethodOnCart implements ResolverInterface
     private $paymentFactory;
 
     /**
+     * @var CheckCartCheckoutAllowance
+     */
+    private $checkCartCheckoutAllowance;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param PaymentMethodManagementInterface $paymentMethodManagement
      * @param PaymentInterfaceFactory $paymentFactory
+     * @param CheckCartCheckoutAllowance $checkCartCheckoutAllowance
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         PaymentMethodManagementInterface $paymentMethodManagement,
-        PaymentInterfaceFactory $paymentFactory
+        PaymentInterfaceFactory $paymentFactory,
+        CheckCartCheckoutAllowance $checkCartCheckoutAllowance
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentFactory = $paymentFactory;
+        $this->checkCartCheckoutAllowance = $checkCartCheckoutAllowance;
     }
 
     /**
@@ -73,6 +82,7 @@ class SetPaymentMethodOnCart implements ResolverInterface
         $additionalData = $args['input']['payment_method']['additional_data'] ?? [];
 
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $this->checkCartCheckoutAllowance->execute($cart);
         $payment = $this->paymentFactory->create([
             'data' => [
                 PaymentInterface::KEY_METHOD => $paymentMethodCode,

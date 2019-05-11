@@ -13,6 +13,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\QuoteGraphQl\Model\Cart\SetShippingAddressesOnCartInterface;
+use Magento\QuoteGraphQl\Model\Cart\CheckCartCheckoutAllowance;
 
 /**
  * Mutation resolver for setting shipping addresses for shopping cart
@@ -30,15 +31,23 @@ class SetShippingAddressesOnCart implements ResolverInterface
     private $setShippingAddressesOnCart;
 
     /**
+     * @var CheckCartCheckoutAllowance
+     */
+    private $checkCartCheckoutAllowance;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param SetShippingAddressesOnCartInterface $setShippingAddressesOnCart
+     * @param CheckCartCheckoutAllowance $checkCartCheckoutAllowance
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        SetShippingAddressesOnCartInterface $setShippingAddressesOnCart
+        SetShippingAddressesOnCartInterface $setShippingAddressesOnCart,
+        CheckCartCheckoutAllowance $checkCartCheckoutAllowance
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->setShippingAddressesOnCart = $setShippingAddressesOnCart;
+        $this->checkCartCheckoutAllowance = $checkCartCheckoutAllowance;
     }
 
     /**
@@ -57,6 +66,7 @@ class SetShippingAddressesOnCart implements ResolverInterface
         $shippingAddresses = $args['input']['shipping_addresses'];
 
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $this->checkCartCheckoutAllowance->execute($cart);
         $this->setShippingAddressesOnCart->execute($context, $cart, $shippingAddresses);
 
         return [

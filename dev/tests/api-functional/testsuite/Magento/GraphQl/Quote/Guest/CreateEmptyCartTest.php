@@ -64,6 +64,25 @@ class CreateEmptyCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/disable_guest_checkout.php
+     * @magentoConfigFixture default_store checkout/options/guest_checkout 0
+     */
+    public function testCreateEmptyCartIfGuestCheckoutIsDisabled()
+    {
+        $query = $this->getQuery();
+        $response = $this->graphQlMutation($query);
+
+        self::assertArrayHasKey('createEmptyCart', $response);
+        self::assertNotEmpty($response['createEmptyCart']);
+
+        $guestCart = $this->guestCartRepository->get($response['createEmptyCart']);
+
+        self::assertNotNull($guestCart->getId());
+        self::assertNull($guestCart->getCustomer()->getId());
+        self::assertEquals('default', $guestCart->getStore()->getCode());
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      */
     public function testCreateEmptyCartWithNotDefaultStore()

@@ -117,6 +117,23 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/disable_guest_checkout.php
+     * @magentoConfigFixture default_store checkout/options/guest_checkout 0
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Guest checkout is not allowed.
+     */
+    public function testSetGuestEmailOnCartWithGuestCheckoutDisabled()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $email = 'some@user.com';
+
+        $query = $this->getQuery($maskedQuoteId, $email);
+        $this->graphQlMutation($query);
+    }
+
+    /**
      * Returns GraphQl mutation query for setting email address for a guest
      *
      * @param string $maskedQuoteId
