@@ -918,6 +918,22 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getExpiresAt()
+    {
+        return $this->_getData('expires_at');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setExpiresAt($expiresAt)
+    {
+        return $this->setData('expires_at', $expiresAt);
+    }
+
+    /**
      * Security check for admin user
      *
      * @param string $passwordString
