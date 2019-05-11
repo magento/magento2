@@ -67,7 +67,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $this->cacheStateMock = $this->getMockForAbstractClass(CacheStateInterface::class);
         $this->lockQuery = $this->getMockBuilder(LockGuardedCacheLoader::class)
             ->disableOriginalConstructor()
-            ->setMethods(['lockedLoadData'])
+            ->setMethods(['nonBlockingLockedLoadData'])
             ->getMockForAbstractClass();
         $this->sidResolverMock = $this->getMockForAbstractClass(SidResolverInterface::class);
         $this->sessionMock = $this->getMockForAbstractClass(SessionManagerInterface::class);
@@ -251,7 +251,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
             ->with(AbstractBlock::CACHE_GROUP)
             ->willReturn(true);
         $this->lockQuery->expects($this->any())
-            ->method('lockedLoadData')
+            ->method('nonBlockingLockedLoadData')
             ->willReturn($dataFromCache);
         $this->sidResolverMock->expects($this->any())
             ->method('getSessionIdQueryParam')
