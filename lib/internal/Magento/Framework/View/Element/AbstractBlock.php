@@ -1094,16 +1094,19 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             }
 
             $this->_beforeToHtml();
-            return $this->_toHtml();
-        };
+            $data = $this->_toHtml();
 
-        if ($this->getCacheLifetime() === null || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
-            $html = $collectAction();
             if ($this->hasData('translate_inline')) {
                 $this->inlineTranslation->resume();
             }
-            return $html;
+
+            return $data;
+        };
+
+        if ($this->getCacheLifetime() === null || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
+            return $collectAction();
         }
+
         $loadAction = function () {
             $cacheKey = $this->getCacheKey();
             $cacheData = $this->_cache->load($cacheKey);
@@ -1121,12 +1124,10 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
 
         $saveAction = function ($data) {
             $this->_saveCache($data);
-            if ($this->hasData('translate_inline')) {
-                $this->inlineTranslation->resume();
-            }
+            return $data;
         };
 
-        return (string)$this->lockQuery->lockedLoadData(
+        return (string)$this->lockQuery->nonBlockingLockedLoadData(
             $this->getCacheKey(),
             $loadAction,
             $collectAction,
