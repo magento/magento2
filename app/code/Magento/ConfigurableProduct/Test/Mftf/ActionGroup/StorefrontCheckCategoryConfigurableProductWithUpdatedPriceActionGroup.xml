@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCheckCategoryConfigurableProductWithUpdatedPriceActionGroup">
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="expectedPrice" type="string"/>
+        </arguments>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName(productName)}}" stepKey="assertProductName"/>
+        <see userInput="{{expectedPrice}}" selector="{{StorefrontCategoryProductSection.ProductPriceByName(productName)}}" stepKey="AssertProductPrice"/>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productName)}}" stepKey="moveMouseOverProduct"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(productName)}}" stepKey="AssertAddToCart"/>
+    </actionGroup>
+</actionGroups>

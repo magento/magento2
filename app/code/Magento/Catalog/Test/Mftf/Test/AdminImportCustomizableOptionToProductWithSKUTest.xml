@@ -11,6 +11,7 @@
     <test name="AdminImportCustomizableOptionToProductWithSKUTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Customizable options"/>
             <title value="Import customizable options to a product with existing SKU"/>
             <description value="Import customizable options to a product with existing SKU"/>
             <severity value="MAJOR"/>
