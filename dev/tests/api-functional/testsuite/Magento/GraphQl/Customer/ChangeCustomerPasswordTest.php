@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -34,11 +36,17 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
      */
     private $customerRegistry;
 
+    /**
+     * @var CustomerAuthUpdate
+     */
+    private $customerAuthUpdate;
+
     protected function setUp()
     {
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
         $this->accountManagement = Bootstrap::getObjectManager()->get(AccountManagementInterface::class);
         $this->customerRegistry = Bootstrap::getObjectManager()->get(CustomerRegistry::class);
+        $this->customerAuthUpdate = Bootstrap::getObjectManager()->get(CustomerAuthUpdate::class);
     }
 
     /**
@@ -144,6 +152,54 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
 
         $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentCustomerPassword);
         $this->graphQlMutation($query, [], '', $headerMap);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Account is not confirmed.
+     */
+    public function testChangeCustomerAddressIfAccountIsNotConfirmed()
+    {
+        $customerEmail = 'customer@example.com';
+        $currentCustomerPassword = 'password';
+        $newCustomerPassword = '';
+
+        $query = $this->getChangePassQuery($currentCustomerPassword, $newCustomerPassword);
+
+        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentCustomerPassword);
+        $this->graphQlMutation($query, [], '', $headerMap);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The account is locked.
+     */
+    public function testChangePasswordIfCustomerIsLocked()
+    {
+        $customerEmail = 'customer@example.com';
+        $currentCustomerPassword = 'password';
+        $newCustomerPassword = 'anotherPassword1';
+
+        $this->lockCustomer(1);
+        $query = $this->getChangePassQuery($currentCustomerPassword, $newCustomerPassword);
+
+        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentCustomerPassword);
+        $this->graphQlMutation($query, [], '', $headerMap);
+    }
+
+    /**
+     * @param int $customerId
+     *
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    private function lockCustomer(int $customerId): void
+    {
+        $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
+        $customerSecure->setLockExpires('2030-12-31 00:00:00');
+        $this->customerAuthUpdate->saveAuth($customerId);
     }
 
     private function getChangePassQuery($currentPassword, $newPassword)
