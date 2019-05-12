@@ -207,5 +207,7 @@
         <element name="textAttributeByName" type="text" selector="//div[@data-index='attributes']//fieldset[contains(@class, 'admin__field') and .//*[contains(.,'{{var}}')]]//input" parameterized="true"/>
         <element name="dropDownAttribute" type="select" selector="//select[@name='product[{{arg}}]']" parameterized="true" timeout="30"/>
         <element name="attributeSection" type="block" selector="//div[@data-index='attributes']/div[contains(@class, 'admin__collapsible-content _show')]" timeout="30"/>
+        <element name="attributeGroupByName" type="button" selector="//div[@class='fieldset-wrapper-title']//span[text()='{{group}}']" parameterized="true"/>
+        <element name="attributeByGroupAndName" type="text" selector="//div[@class='fieldset-wrapper-title']//span[text()='{{group}}']/../../following-sibling::div//span[contains(text(),'attribute')]" parameterized="true"/>
     </section>
 </sections>
