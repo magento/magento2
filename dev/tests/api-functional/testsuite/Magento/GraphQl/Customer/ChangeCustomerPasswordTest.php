@@ -121,11 +121,28 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
         $customerEmail = 'customer@example.com';
         $oldCustomerPassword = 'password';
         $newCustomerPassword = 'anotherPassword1';
-        $incorrectPassword = '';
+        $currentCustomerPassword = '';
 
-        $query = $this->getChangePassQuery($incorrectPassword, $newCustomerPassword);
+        $query = $this->getChangePassQuery($currentCustomerPassword, $newCustomerPassword);
 
         $headerMap = $this->getCustomerAuthHeaders($customerEmail, $oldCustomerPassword);
+        $this->graphQlMutation($query, [], '', $headerMap);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Specify the "newPassword" value.
+     */
+    public function testChangePasswordIfNewPasswordIsEmpty()
+    {
+        $customerEmail = 'customer@example.com';
+        $currentCustomerPassword = 'password';
+        $newCustomerPassword = '';
+
+        $query = $this->getChangePassQuery($currentCustomerPassword, $newCustomerPassword);
+
+        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentCustomerPassword);
         $this->graphQlMutation($query, [], '', $headerMap);
     }
 
