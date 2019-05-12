@@ -9,10 +9,10 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AllowedCountriesRestrictionApplyOnBackendTest">
         <annotations>
+            <features value="Customer"/>
             <stories value="Country filter"/>
             <title value="Country filter on Customers page when allowed countries restriction for a default website is applied"/>
             <description value="Country filter on Customers page when allowed countries restriction for a default website is applied"/>
-            <features value="Customer"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-6441"/>
             <useCaseId value="MAGETWO-91523"/>
