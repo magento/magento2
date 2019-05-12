@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenUserEditPageActionGroup">
+        <arguments>
+            <argument name="adminUser" type="string" defaultValue="DefaultAdminUser.username"/>
+        </arguments>
+
+        <amOnPage url="{{AdminUsersPage.url}}" stepKey="openAdminUsersPage"/>
+        <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{adminUser}}" stepKey="fillSearchUsernameFilter"/>
+        <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearch" />
+        <waitForPageLoad stepKey="waitForGridToLoad"/>
+        <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{adminUser}}" stepKey="seeUser" />
+        <click selector="{{AdminUserGridSection.searchResultFirstRow}}" stepKey="openUserEdit"/>
+        <waitForPageLoad stepKey="waitForUserEditPageLoad"/>
+
+    </actionGroup>
+</actionGroups>

@@ -7,7 +7,7 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminEditUserActionGroup">
+    <actionGroup name="AdminUserEditFillRequiredFieldsActionGroup">
         <arguments>
             <argument name="adminUser" type="string" />
             <argument name="adminFirstname" type="string" />
@@ -15,20 +15,8 @@
             <argument name="adminEmail" type="string" />
             <argument name="adminPassword" type="string" />
             <argument name="adminPasswordConfirmation" type="string" />
-            <argument name="currentAdminPassword" type="string" />
-            <argument name="adminUserRole" type="string"/>
-            <argument name="message" type="string" defaultValue="You saved the user." />
-            <argument name="messageSelector" type="string" defaultValue="{{AdminMessagesSection.success}}" />
+            <argument name="currentAdminPassword" type="string" defaultValue="DefaultAdminUser.password" />
         </arguments>
-
-        <!-- Navigate to edit user page -->
-        <amOnPage url="{{AdminUsersPage.url}}" stepKey="openAdminUsersPage"/>
-        <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{adminUser}}" stepKey="fillSearchUsernameFilter"/>
-        <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearch" />
-        <waitForPageLoad stepKey="waitForGridToLoad"/>
-        <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{adminUser}}" stepKey="seeUser" />
-        <click selector="{{AdminUserGridSection.searchResultFirstRow}}" stepKey="openUserEdit"/>
-        <waitForPageLoad stepKey="waitForUserEditPageLoad"/>
 
         <!-- Edit admin User data -->
         <fillField selector="{{AdminEditUserSection.usernameTextField}}" userInput="{{adminUser}}" stepKey="fillUser"/>
@@ -39,15 +27,6 @@
         <fillField selector="{{AdminEditUserSection.pwConfirmationTextField}}" userInput="{{adminPasswordConfirmation}}" stepKey="fillPasswordConfirmation"/>
         <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{currentAdminPassword}}" stepKey="fillCurrentUserPassword"/>
         <scrollToTopOfPage stepKey="ScrollToTopOfPage"/>
-
-        <!-- Set admin User Role -->
-        <click selector="{{AdminEditUserSection.userRoleTab}}" stepKey="openUserRoleTab"/>
-        <click selector="{{AdminEditUserSection.administratorRoleRadio(adminUserRole)}}" stepKey="assignRole"/>
-
-        <!-- Save User -->
-        <click selector="{{AdminEditUserSection.saveButton}}" stepKey="saveUser"/>
-        <waitForPageLoad stepKey="waitForSaveResultLoad"/>
-        <see userInput="{{message}}" selector="{{messageSelector}}" stepKey="verifyMessage" />
 
     </actionGroup>
 </actionGroups>
