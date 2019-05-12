@@ -114,6 +114,13 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
 
         if ($this->hasData('buttons')) {
             $this->getContext()->addButtons($this->getData('buttons'), $this);
+        } else {
+            if (isset($this->_data['config']['sticky'])) {
+                $toolbar = $this->getContext()->getPageLayout()->getBlock('page.actions.toolbar');
+                if ($toolbar) {
+                    $toolbar->setData('is_sticky', $this->_data['config']['sticky']);
+                }
+            }
         }
         $this->context->getProcessor()->register($this);
         $this->getContext()->getProcessor()->notify($this->getComponentName());
