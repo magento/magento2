@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Customer;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -202,6 +203,12 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
         $this->customerAuthUpdate->saveAuth($customerId);
     }
 
+    /**
+     * @param $currentPassword
+     * @param $newPassword
+     *
+     * @return string
+     */
     private function getChangePassQuery($currentPassword, $newPassword)
     {
         $query = <<<QUERY
@@ -224,7 +231,9 @@ QUERY;
     /**
      * @param string $email
      * @param string $password
+     *
      * @return array
+     * @throws AuthenticationException
      */
     private function getCustomerAuthHeaders(string $email, string $password): array
     {
