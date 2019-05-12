@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="QuickSearchWithTwoCharsEmptyResults" extends="QuickSearchEmptyResults">
+        <annotations>
+            <stories value="Search Product on Storefront"/>
+            <title value="User should not get search results on query that only contains two characters"/>
+            <description value="Use of 2 character query to return no products"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14794"/>
+            <group value="CatalogSearch"/>
+            <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-15827"/>
+            </skip>
+        </annotations>
+        <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,2); return ret;" stepKey="getFirstTwoLetters" before="searchStorefront"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
+            <argument name="phrase" value="{$getFirstTwoLetters}"/>
+        </actionGroup>
+    </test>
+</tests>

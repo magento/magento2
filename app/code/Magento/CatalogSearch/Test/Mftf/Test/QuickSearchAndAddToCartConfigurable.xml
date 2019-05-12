@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="QuickSearchAndAddToCartConfigurable">
+        <annotations>
+            <stories value="Search Product on Storefront"/>
+            <title value="User should be able to use Quick Search to find a configurable product and add it to cart"/>
+            <description value="Use Quick Search to find configurable Product and Add to Cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14786"/>
+            <group value="CatalogSearch"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+        </after>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
+            <argument name="phrase" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductFromQuickSearch" stepKey="openAndCheckProduct">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+            <argument name="productUrlKey" value="{{_defaultProduct.urlKey}}"/>
+        </actionGroup>
+        <actionGroup ref="SelectSingleAttributeAndAddToCart" stepKey="addProductToCart">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+            <argument name="attributeCode" value="{{colorProductAttribute.default_label}}"/>
+            <argument name="optionName" value="{{colorProductAttribute1.name}}"/>
+        </actionGroup>
+    </test>
+</tests>

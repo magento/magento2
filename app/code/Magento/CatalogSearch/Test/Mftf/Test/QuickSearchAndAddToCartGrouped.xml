@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="QuickSearchAndAddToCartGrouped">
+        <annotations>
+            <stories value="Search Product on Storefront"/>
+            <title value="User should be able to use Quick Search to find a grouped product and add it to cart"/>
+            <description value="Use Quick Search to find grouped Product and Add to Cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14788"/>
+            <group value="CatalogSearch"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="ApiProductWithDescription" stepKey="simple1"/>
+            <createData entity="ApiGroupedProduct" stepKey="createProduct"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="createProduct"/>
+                <requiredEntity createDataKey="simple1"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+        </after>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
+            <argument name="phrase" value="$createProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToCartFromQuickSearch" stepKey="addProductToCart">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+    </test>
+</tests>
