@@ -79,10 +79,14 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
             $groupId = $this->getRequest()->getParam('customer_group_id');
 
             $customerGroupCode = $data['customer_group_code'];
-            $group = $this->groupRepository->getById($groupId);
-            if (!$group->getCode() && $groupId) {
-                $this->messageManager->addErrorMessage(__('This Customer Group no longer exists.'));
-                return $resultRedirect->setPath('*/*/');
+            if (isset($groupId)) {
+                $group = $this->groupRepository->getById($groupId);
+                if (!$group->getCode()) {
+                    $this->messageManager->addErrorMessage(__('This Customer Group no longer exists.'));
+                    return $resultRedirect->setPath('*/*/');
+                }
+            } else {
+                $group = $this->groupDataFactory->create();
             }
 
             $customerGroupCode = $customerGroupCode ?: $group->getCode();
@@ -91,7 +95,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
             $group->setTaxClassId($data['tax_class_id']);
 
             try {
-                $this->groupRepository->save($group);
+                $group = $this->groupRepository->save($group);
                 $this->messageManager->addSuccessMessage(__('You saved the Customer Group.'));
                 $this->dataPersistor->clear('customer_group');
 
