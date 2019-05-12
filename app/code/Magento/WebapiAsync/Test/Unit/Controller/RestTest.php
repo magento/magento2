@@ -141,7 +141,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
         $this->storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
-        $this->requestProcessorPool = $this->getRequestProccessotPoolMock();
+        $this->requestProcessorPool = $this->getRequestProcessotPoolMock();
 
         $this->restController =
             $objectManager->getObject(
@@ -239,7 +239,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
     /**
      * @return object|\Magento\Webapi\Controller\Rest\RequestProcessorPool
      */
-    private function getRequestProccessotPoolMock()
+    private function getRequestProcessotPoolMock()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

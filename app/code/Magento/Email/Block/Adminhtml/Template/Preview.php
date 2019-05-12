@@ -30,7 +30,7 @@ class Preview extends \Magento\Backend\Block\Widget
     /**
      * @var string
      */
-    protected $profilerName = 'email_template_proccessing';
+    protected $profilerName = 'email_template_processing';
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context

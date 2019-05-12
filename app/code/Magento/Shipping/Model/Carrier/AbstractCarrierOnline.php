@@ -307,7 +307,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
+    public function processAdditionalValidation(\Magento\Framework\DataObject $request)
     {
         return $this->processAdditionalValidation($request);
     }

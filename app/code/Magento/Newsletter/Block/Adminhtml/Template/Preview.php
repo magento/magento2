@@ -18,7 +18,7 @@ class Preview extends \Magento\Backend\Block\Widget
      *
      * @var string
      */
-    protected $profilerName = "newsletter_template_proccessing";
+    protected $profilerName = "newsletter_template_processing";
 
     /**
      * @var \Magento\Newsletter\Model\TemplateFactory
