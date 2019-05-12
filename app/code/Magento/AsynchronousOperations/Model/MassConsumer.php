@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\MessageQueue\MessageLockException;
 use Magento\Framework\MessageQueue\ConnectionLostException;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Framework\MessageQueue\CallbackInvoker;
+use Magento\Framework\MessageQueue\CallbackInvokerInterface;
 use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
@@ -30,7 +30,7 @@ use Magento\Framework\MessageQueue\ConsumerInterface;
 class MassConsumer implements ConsumerInterface
 {
     /**
-     * @var \Magento\Framework\MessageQueue\CallbackInvoker
+     * @var CallbackInvokerInterface
      */
     private $invoker;
 
@@ -67,7 +67,7 @@ class MassConsumer implements ConsumerInterface
     /**
      * Initialize dependencies.
      *
-     * @param CallbackInvoker $invoker
+     * @param CallbackInvokerInterface $invoker
      * @param ResourceConnection $resource
      * @param MessageController $messageController
      * @param ConsumerConfigurationInterface $configuration
@@ -76,7 +76,7 @@ class MassConsumer implements ConsumerInterface
      * @param Registry $registry
      */
     public function __construct(
-        CallbackInvoker $invoker,
+        CallbackInvokerInterface $invoker,
         ResourceConnection $resource,
         MessageController $messageController,
         ConsumerConfigurationInterface $configuration,

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Ups\Model;
 
@@ -77,7 +78,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      *
      * @var string
      */
-    protected $_defaultCgiGatewayUrl = 'http://www.ups.com:80/using/services/rave/qcostcgi.cgi';
+    protected $_defaultCgiGatewayUrl = 'https://www.ups.com/using/services/rave/qcostcgi.cgi';
 
     /**
      * Test urls for shipment
@@ -454,7 +455,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     {
         $rowRequest = $this->_rawRequest;
         if (self::USA_COUNTRY_ID == $rowRequest->getDestCountry()) {
-            $destPostal = substr($rowRequest->getDestPostal(), 0, 5);
+            $destPostal = substr((string)$rowRequest->getDestPostal(), 0, 5);
         } else {
             $destPostal = $rowRequest->getDestPostal();
         }
@@ -472,7 +473,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             '47_rate_chart' => $rowRequest->getPickup(),
             '48_container' => $rowRequest->getContainer(),
             '49_residential' => $rowRequest->getDestType(),
-            'weight_std' => strtolower($rowRequest->getUnitMeasure()),
+            'weight_std' => strtolower((string)$rowRequest->getUnitMeasure()),
         ];
         $params['47_rate_chart'] = $params['47_rate_chart']['label'];
 
@@ -536,7 +537,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $priceArr = [];
         if (strlen(trim($response)) > 0) {
             $rRows = explode("\n", $response);
-            $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
+            $allowedMethods = explode(",", (string)$this->getConfigData('allowed_methods'));
             foreach ($rRows as $rRow) {
                 $row = explode('%', $rRow);
                 switch (substr($row[0], -1)) {
@@ -612,7 +613,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
 
         $rowRequest = $this->_rawRequest;
         if (self::USA_COUNTRY_ID == $rowRequest->getDestCountry()) {
-            $destPostal = substr($rowRequest->getDestPostal(), 0, 5);
+            $destPostal = substr((string)$rowRequest->getDestPostal(), 0, 5);
         } else {
             $destPostal = $rowRequest->getDestPostal();
         }
@@ -832,76 +833,15 @@ XMLRequest;
 
                 $allowedCurrencies = $this->_currencyFactory->create()->getConfigAllowCurrencies();
                 foreach ($arr as $shipElement) {
-                    $code = (string)$shipElement->Service->Code;
-                    if (in_array($code, $allowedMethods)) {
-                        //The location of tax information is in a different place
-                        // depending on whether we are using negotiated rates or not
-                        if ($negotiatedActive) {
-                            $includeTaxesArr = $xml->getXpath(
-                                "//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates"
-                                . "/NetSummaryCharges/TotalChargesWithTaxes"
-                            );
-                            $includeTaxesActive = $this->getConfigFlag('include_taxes') && !empty($includeTaxesArr);
-                            if ($includeTaxesActive) {
-                                $cost = $shipElement->NegotiatedRates
-                                    ->NetSummaryCharges
-                                    ->TotalChargesWithTaxes
-                                    ->MonetaryValue;
-
-                                $responseCurrencyCode = $this->mapCurrencyCode(
-                                    (string)$shipElement->NegotiatedRates
-                                        ->NetSummaryCharges
-                                        ->TotalChargesWithTaxes
-                                        ->CurrencyCode
-                                );
-                            } else {
-                                $cost = $shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->MonetaryValue;
-                                $responseCurrencyCode = $this->mapCurrencyCode(
-                                    (string)$shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->CurrencyCode
-                                );
-                            }
-                        } else {
-                            $includeTaxesArr = $xml->getXpath(
-                                "//RatingServiceSelectionResponse/RatedShipment/TotalChargesWithTaxes"
-                            );
-                            $includeTaxesActive = $this->getConfigFlag('include_taxes') && !empty($includeTaxesArr);
-                            if ($includeTaxesActive) {
-                                $cost = $shipElement->TotalChargesWithTaxes->MonetaryValue;
-                                $responseCurrencyCode = $this->mapCurrencyCode(
-                                    (string)$shipElement->TotalChargesWithTaxes->CurrencyCode
-                                );
-                            } else {
-                                $cost = $shipElement->TotalCharges->MonetaryValue;
-                                $responseCurrencyCode = $this->mapCurrencyCode(
-                                    (string)$shipElement->TotalCharges->CurrencyCode
-                                );
-                            }
-                        }
-
-                        //convert price with Origin country currency code to base currency code
-                        $successConversion = true;
-                        if ($responseCurrencyCode) {
-                            if (in_array($responseCurrencyCode, $allowedCurrencies)) {
-                                $cost = (double)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
-                            } else {
-                                $errorTitle = __(
-                                    'We can\'t convert a rate from "%1-%2".',
-                                    $responseCurrencyCode,
-                                    $this->_request->getPackageCurrency()->getCode()
-                                );
-                                $error = $this->_rateErrorFactory->create();
-                                $error->setCarrier('ups');
-                                $error->setCarrierTitle($this->getConfigData('title'));
-                                $error->setErrorMessage($errorTitle);
-                                $successConversion = false;
-                            }
-                        }
-
-                        if ($successConversion) {
-                            $costArr[$code] = $cost;
-                            $priceArr[$code] = $this->getMethodPrice((float)$cost, $code);
-                        }
-                    }
+                    $this->processShippingRateForItem(
+                        $shipElement,
+                        $allowedMethods,
+                        $allowedCurrencies,
+                        $costArr,
+                        $priceArr,
+                        $negotiatedActive,
+                        $xml
+                    );
                 }
             } else {
                 $arr = $xml->getXpath("//RatingServiceSelectionResponse/Response/Error/ErrorDescription/text()");
@@ -942,6 +882,99 @@ XMLRequest;
         }
 
         return $result;
+    }
+
+    /**
+     * Processing rate for ship element
+     *
+     * @param \Magento\Framework\Simplexml\Element $shipElement
+     * @param array $allowedMethods
+     * @param array $allowedCurrencies
+     * @param array $costArr
+     * @param array $priceArr
+     * @param bool $negotiatedActive
+     * @param \Magento\Framework\Simplexml\Config $xml
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function processShippingRateForItem(
+        \Magento\Framework\Simplexml\Element $shipElement,
+        array $allowedMethods,
+        array $allowedCurrencies,
+        array &$costArr,
+        array &$priceArr,
+        bool $negotiatedActive,
+        \Magento\Framework\Simplexml\Config $xml
+    ): void {
+        $code = (string)$shipElement->Service->Code;
+        if (in_array($code, $allowedMethods)) {
+            //The location of tax information is in a different place
+            // depending on whether we are using negotiated rates or not
+            if ($negotiatedActive) {
+                $includeTaxesArr = $xml->getXpath(
+                    "//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates"
+                    . "/NetSummaryCharges/TotalChargesWithTaxes"
+                );
+                $includeTaxesActive = $this->getConfigFlag('include_taxes') && !empty($includeTaxesArr);
+                if ($includeTaxesActive) {
+                    $cost = $shipElement->NegotiatedRates
+                        ->NetSummaryCharges
+                        ->TotalChargesWithTaxes
+                        ->MonetaryValue;
+
+                    $responseCurrencyCode = $this->mapCurrencyCode(
+                        (string)$shipElement->NegotiatedRates
+                            ->NetSummaryCharges
+                            ->TotalChargesWithTaxes
+                            ->CurrencyCode
+                    );
+                } else {
+                    $cost = $shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->MonetaryValue;
+                    $responseCurrencyCode = $this->mapCurrencyCode(
+                        (string)$shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->CurrencyCode
+                    );
+                }
+            } else {
+                $includeTaxesArr = $xml->getXpath(
+                    "//RatingServiceSelectionResponse/RatedShipment/TotalChargesWithTaxes"
+                );
+                $includeTaxesActive = $this->getConfigFlag('include_taxes') && !empty($includeTaxesArr);
+                if ($includeTaxesActive) {
+                    $cost = $shipElement->TotalChargesWithTaxes->MonetaryValue;
+                    $responseCurrencyCode = $this->mapCurrencyCode(
+                        (string)$shipElement->TotalChargesWithTaxes->CurrencyCode
+                    );
+                } else {
+                    $cost = $shipElement->TotalCharges->MonetaryValue;
+                    $responseCurrencyCode = $this->mapCurrencyCode(
+                        (string)$shipElement->TotalCharges->CurrencyCode
+                    );
+                }
+            }
+
+            //convert price with Origin country currency code to base currency code
+            $successConversion = true;
+            if ($responseCurrencyCode) {
+                if (in_array($responseCurrencyCode, $allowedCurrencies)) {
+                    $cost = (double)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
+                } else {
+                    $errorTitle = __(
+                        'We can\'t convert a rate from "%1-%2".',
+                        $responseCurrencyCode,
+                        $this->_request->getPackageCurrency()->getCode()
+                    );
+                    $error = $this->_rateErrorFactory->create();
+                    $error->setCarrier('ups');
+                    $error->setCarrierTitle($this->getConfigData('title'));
+                    $error->setErrorMessage($errorTitle);
+                    $successConversion = false;
+                }
+            }
+
+            if ($successConversion) {
+                $costArr[$code] = $cost;
+                $priceArr[$code] = $this->getMethodPrice((float)$cost, $code);
+            }
+        }
     }
 
     /**
@@ -1100,54 +1133,7 @@ XMLAuth;
                 if ($activityTags) {
                     $index = 1;
                     foreach ($activityTags as $activityTag) {
-                        $addressArr = [];
-                        if (isset($activityTag->ActivityLocation->Address->City)) {
-                            $addressArr[] = (string)$activityTag->ActivityLocation->Address->City;
-                        }
-                        if (isset($activityTag->ActivityLocation->Address->StateProvinceCode)) {
-                            $addressArr[] = (string)$activityTag->ActivityLocation->Address->StateProvinceCode;
-                        }
-                        if (isset($activityTag->ActivityLocation->Address->CountryCode)) {
-                            $addressArr[] = (string)$activityTag->ActivityLocation->Address->CountryCode;
-                        }
-                        $dateArr = [];
-                        $date = (string)$activityTag->Date;
-                        //YYYYMMDD
-                        $dateArr[] = substr($date, 0, 4);
-                        $dateArr[] = substr($date, 4, 2);
-                        $dateArr[] = substr($date, -2, 2);
-
-                        $timeArr = [];
-                        $time = (string)$activityTag->Time;
-                        //HHMMSS
-                        $timeArr[] = substr($time, 0, 2);
-                        $timeArr[] = substr($time, 2, 2);
-                        $timeArr[] = substr($time, -2, 2);
-
-                        if ($index === 1) {
-                            $resultArr['status'] = (string)$activityTag->Status->StatusType->Description;
-                            $resultArr['deliverydate'] = implode('-', $dateArr);
-                            //YYYY-MM-DD
-                            $resultArr['deliverytime'] = implode(':', $timeArr);
-                            //HH:MM:SS
-                            $resultArr['deliverylocation'] = (string)$activityTag->ActivityLocation->Description;
-                            $resultArr['signedby'] = (string)$activityTag->ActivityLocation->SignedForByName;
-                            if ($addressArr) {
-                                $resultArr['deliveryto'] = implode(', ', $addressArr);
-                            }
-                        } else {
-                            $tempArr = [];
-                            $tempArr['activity'] = (string)$activityTag->Status->StatusType->Description;
-                            $tempArr['deliverydate'] = implode('-', $dateArr);
-                            //YYYY-MM-DD
-                            $tempArr['deliverytime'] = implode(':', $timeArr);
-                            //HH:MM:SS
-                            if ($addressArr) {
-                                $tempArr['deliverylocation'] = implode(', ', $addressArr);
-                            }
-                            $packageProgress[] = $tempArr;
-                        }
-                        $index++;
+                        $this->processActivityTagInfo($activityTag, $index, $resultArr, $packageProgress);
                     }
                     $resultArr['progressdetail'] = $packageProgress;
                 }
@@ -1178,6 +1164,70 @@ XMLAuth;
         }
 
         return $this->_result;
+    }
+
+    /**
+     * Process tracking info from activity tag
+     *
+     * @param \Magento\Framework\Simplexml\Element $activityTag
+     * @param int $index
+     * @param array $resultArr
+     * @param array $packageProgress
+     */
+    private function processActivityTagInfo(
+        \Magento\Framework\Simplexml\Element $activityTag,
+        int &$index,
+        array &$resultArr,
+        array &$packageProgress
+    ) {
+        $addressArr = [];
+        if (isset($activityTag->ActivityLocation->Address->City)) {
+            $addressArr[] = (string)$activityTag->ActivityLocation->Address->City;
+        }
+        if (isset($activityTag->ActivityLocation->Address->StateProvinceCode)) {
+            $addressArr[] = (string)$activityTag->ActivityLocation->Address->StateProvinceCode;
+        }
+        if (isset($activityTag->ActivityLocation->Address->CountryCode)) {
+            $addressArr[] = (string)$activityTag->ActivityLocation->Address->CountryCode;
+        }
+        $dateArr = [];
+        $date = (string)$activityTag->Date;
+        //YYYYMMDD
+        $dateArr[] = substr($date, 0, 4);
+        $dateArr[] = substr($date, 4, 2);
+        $dateArr[] = substr($date, -2, 2);
+
+        $timeArr = [];
+        $time = (string)$activityTag->Time;
+        //HHMMSS
+        $timeArr[] = substr($time, 0, 2);
+        $timeArr[] = substr($time, 2, 2);
+        $timeArr[] = substr($time, -2, 2);
+
+        if ($index === 1) {
+            $resultArr['status'] = (string)$activityTag->Status->StatusType->Description;
+            $resultArr['deliverydate'] = implode('-', $dateArr);
+            //YYYY-MM-DD
+            $resultArr['deliverytime'] = implode(':', $timeArr);
+            //HH:MM:SS
+            $resultArr['deliverylocation'] = (string)$activityTag->ActivityLocation->Description;
+            $resultArr['signedby'] = (string)$activityTag->ActivityLocation->SignedForByName;
+            if ($addressArr) {
+                $resultArr['deliveryto'] = implode(', ', $addressArr);
+            }
+        } else {
+            $tempArr = [];
+            $tempArr['activity'] = (string)$activityTag->Status->StatusType->Description;
+            $tempArr['deliverydate'] = implode('-', $dateArr);
+            //YYYY-MM-DD
+            $tempArr['deliverytime'] = implode(':', $timeArr);
+            //HH:MM:SS
+            if ($addressArr) {
+                $tempArr['deliverylocation'] = implode(', ', $addressArr);
+            }
+            $packageProgress[] = $tempArr;
+        }
+        $index++;
     }
 
     /**
@@ -1478,6 +1528,7 @@ XMLAuth;
             $shippingLabelContent = (string)$response->ShipmentResults->PackageResults->LabelImage->GraphicImage;
             $trackingNumber = (string)$response->ShipmentResults->PackageResults->TrackingNumber;
 
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $result->setShippingLabelContent(base64_decode($shippingLabelContent));
             $result->setTrackingNumber($trackingNumber);
         }

@@ -1,0 +1,68 @@
+sudo: required
+dist: trusty
+group: edge
+addons:
+  apt:
+    packages:
+    - mysql-server-5.6
+    - mysql-client-core-5.6
+    - mysql-client-5.6
+    - postfix
+  firefox: "46.0"
+  hosts:
+      - magento2.travis
+services:
+  - rabbitmq
+  - elasticsearch
+language: php
+php:
+  - 7.1
+  - 7.2
+env:
+  global:
+    - COMPOSER_BIN_DIR=~/bin
+    - INTEGRATION_SETS=3
+    - NODE_JS_VERSION=8
+    - MAGENTO_HOST_NAME="magento2.travis"
+  matrix:
+    - TEST_SUITE=unit
+    - TEST_SUITE=static
+    - TEST_SUITE=js GRUNT_COMMAND=spec
+    - TEST_SUITE=js GRUNT_COMMAND=static
+    - TEST_SUITE=integration INTEGRATION_INDEX=1
+    - TEST_SUITE=integration INTEGRATION_INDEX=2
+    - TEST_SUITE=integration INTEGRATION_INDEX=3
+    - TEST_SUITE=functional
+    - TEST_SUITE=graphql-api-functional
+matrix:
+  exclude:
+    - php: 7.1
+      env: TEST_SUITE=static
+    - php: 7.1
+      env: TEST_SUITE=js GRUNT_COMMAND=spec
+    - php: 7.1
+      env: TEST_SUITE=js GRUNT_COMMAND=static
+    - php: 7.1
+      env: TEST_SUITE=functional
+    - php: 7.1
+      env: TEST_SUITE=graphql-api-functional
+cache:
+  apt: true
+  directories:
+    - $HOME/.composer/cache
+    - $HOME/.nvm
+    - $HOME/node_modules
+    - $HOME/yarn.lock
+before_install:
+  - ./dev/travis/before_install.sh
+install: composer install --no-interaction
+before_script: ./dev/travis/before_script.sh
+script:
+  # Set arguments for variants of phpunit based tests; '|| true' prevents failing script when leading test fails
+  - test $TEST_SUITE = "functional" && TEST_FILTER='dev/tests/functional/testsuites/Magento/Mtf/TestSuite/InjectableTests.php' || true
+
+  # The scripts for grunt/phpunit type tests
+  - if [ $TEST_SUITE == "functional" ]; then dev/tests/functional/vendor/phpunit/phpunit/phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER; fi
+  - if [ $TEST_SUITE != "functional" ] && [ $TEST_SUITE != "js" ] && [ $TEST_SUITE != "graphql-api-functional" ]; then phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER; fi
+  - if [ $TEST_SUITE == "js" ]; then grunt $GRUNT_COMMAND; fi
+  - if [ $TEST_SUITE == "graphql-api-functional" ]; then phpunit -c dev/tests/api-functional; fi

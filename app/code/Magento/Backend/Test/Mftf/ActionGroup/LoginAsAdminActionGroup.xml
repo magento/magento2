@@ -10,11 +10,11 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="LoginAsAdmin">
         <arguments>
-            <argument name="adminUser" defaultValue="_ENV"/>
+            <argument name="adminUser" type="entity" defaultValue="DefaultAdminUser"/>
         </arguments>
         <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
-        <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{adminUser.MAGENTO_ADMIN_USERNAME}}" stepKey="fillUsername"/>
-        <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{adminUser.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillPassword"/>
+        <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{adminUser.username}}" stepKey="fillUsername"/>
+        <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{adminUser.password}}" stepKey="fillPassword"/>
         <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
         <closeAdminNotification stepKey="closeAdminNotification"/>
     </actionGroup>

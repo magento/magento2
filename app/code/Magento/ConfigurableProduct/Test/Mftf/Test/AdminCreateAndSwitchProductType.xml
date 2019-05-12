@@ -53,9 +53,6 @@
             <testCaseId value="MC-10930"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MAGETWO-62808"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
@@ -79,6 +76,115 @@
         <actionGroup ref="saveConfiguredProduct" stepKey="saveProductForm"/>
         <see selector="{{AdminProductGridSection.productGridCell('2', 'Type')}}" userInput="Configurable Product"  stepKey="seeProductTypeInGrid"/>
         <actionGroup ref="VerifyOptionInProductStorefront" stepKey="verifyConfigurableOption" after="AssertProductInStorefrontProductPage">
+            <argument name="attributeCode" value="$createConfigProductAttribute.default_frontend_label$"/>
+            <argument name="optionName" value="$createConfigProductAttributeOption1.option[store_labels][1][label]$"/>
+        </actionGroup>
+    </test>
+    <test name="AdminCreateSimpleProductSwitchToConfigurableTest" extends="AdminCreateSimpleProductSwitchToVirtualTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Type Switching"/>
+            <title value="Admin should be able to switch a new product from simple to configurable"/>
+            <description value="After selecting a simple product when adding Admin should be switch to configurable implicitly"/>
+            <severity value="CRITICAL"/>
+            <useCaseId value="MAGETWO-44165"/>
+            <testCaseId value="MAGETWO-29398"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData stepKey="deleteAttribute" createDataKey="createConfigProductAttribute"/>
+        </after>
+        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="openProductFillForm">
+            <argument name="productType" value="simple"/>
+        </actionGroup>
+        <!-- Create configurable product from simple product page-->
+        <comment userInput="Create configurable product" stepKey="commentCreateProduct"/>
+        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <comment before="createConfiguration" stepKey="beforeCreateConfiguration" userInput="Adding Configuration to Product"/>
+        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="createConfiguration" after="fillProductForm">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="saveConfiguredProduct" stepKey="saveProductForm"/>
+        <see selector="{{AdminProductGridSection.productGridCell('2', 'Type')}}" userInput="Configurable Product"  stepKey="seeProductTypeInGrid"/>
+        <!-- Verify product on store front -->
+        <comment userInput="Verify product on store front" stepKey="commentVerifyProductGrid"/>
+        <actionGroup ref="VerifyOptionInProductStorefront" stepKey="verifyConfigurableOption" after="AssertProductInStorefrontProductPage">
+            <argument name="attributeCode" value="$createConfigProductAttribute.default_frontend_label$"/>
+            <argument name="optionName" value="$createConfigProductAttributeOption1.option[store_labels][1][label]$"/>
+        </actionGroup>
+    </test>
+    <test name="AdminCreateDownloadableProductSwitchToConfigurableTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Type Switching"/>
+            <title value="Admin should be able to switch a new product from downloadable to configurable"/>
+            <description value="After selecting a downloadable product when adding Admin should be switch to configurable implicitly"/>
+            <severity value="CRITICAL"/>
+            <useCaseId value="MAGETWO-44165"/>
+            <testCaseId value="MAGETWO-29398"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="GoToProductCatalogPage" stepKey="goToProductCatalogPage"/>
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteConfigurableProduct">
+                <argument name="product" value="_defaultProduct"/>
+            </actionGroup>
+            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetSearch"/>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <deleteData stepKey="deleteAttribute" createDataKey="createConfigProductAttribute"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!-- Create configurable product from downloadable product page-->
+        <comment userInput="Create configurable product" stepKey="commentCreateProduct"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <!-- Open Dropdown and select downloadable product option -->
+        <comment stepKey="beforeOpenProductFillForm" userInput="Selecting Product from the Add Product Dropdown"/>
+        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="openProductFillForm">
+            <argument name="productType" value="downloadable"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="scrollToDownloadableInfo" />
+        <uncheckOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkIsDownloadable"/>
+        <!-- Fill form for Downloadable Product Type -->
+        <comment stepKey="beforeFillProductForm" userInput="Filling Product Form"/>
+        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <actionGroup ref="SetProductUrlKey" stepKey="setProductUrl">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <comment before="createConfiguration" stepKey="beforeCreateConfiguration" userInput="Adding Configuration to Product"/>
+        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="createConfiguration">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="saveConfiguredProduct" stepKey="saveProductForm"/>
+        <!-- Check that product was added with implicit type change -->
+        <comment stepKey="beforeVerify" userInput="Verify Product Type Assigned Correctly"/>
+        <actionGroup ref="GoToProductCatalogPage" stepKey="goToProductCatalogPage"/>
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetSearch"/>
+        <actionGroup ref="filterProductGridByName" stepKey="searchForProduct">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productGridCell('2', 'Type')}}" userInput="Configurable Product"  stepKey="seeProductTypeInGrid"/>
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="assertProductInStorefrontProductPage">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <actionGroup ref="VerifyOptionInProductStorefront" stepKey="verifyConfigurableOption">
             <argument name="attributeCode" value="$createConfigProductAttribute.default_frontend_label$"/>
             <argument name="optionName" value="$createConfigProductAttributeOption1.option[store_labels][1][label]$"/>
         </actionGroup>
