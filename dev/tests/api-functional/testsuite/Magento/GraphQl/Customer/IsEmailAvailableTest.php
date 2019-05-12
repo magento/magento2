@@ -47,4 +47,55 @@ QUERY;
         self::assertArrayHasKey('is_email_available', $response['isEmailAvailable']);
         self::assertTrue($response['isEmailAvailable']['is_email_available']);
     }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage GraphQL response contains errors: Email should be specified
+     */
+    public function testEmailAvailableEmptyValue()
+    {
+        $query =
+            <<<QUERY
+{
+  isEmailAvailable(email: "") {
+    is_email_available
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage GraphQL response contains errors: Field "isEmailAvailable" argument "email" of type "String!" is required but not provided.
+     */
+    public function testEmailAvailableMissingValue()
+    {
+        $query =
+            <<<QUERY
+{
+  isEmailAvailable {
+    is_email_available
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage GraphQL response contains errors: Email is invalid
+     */
+    public function testEmailAvailableInvalidValue()
+    {
+        $query =
+            <<<QUERY
+{
+  isEmailAvailable(email: "invalid-email") {
+    is_email_available
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+    }
 }
