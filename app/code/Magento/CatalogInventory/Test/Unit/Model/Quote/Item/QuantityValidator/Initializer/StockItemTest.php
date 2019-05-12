@@ -186,7 +186,7 @@ class StockItemTest extends \PHPUnit\Framework\TestCase
 
     public function testInitializeWithoutSubitem()
     {
-        $qty = 3;
+        $qty = 0;
         $websiteId = 1;
         $productId = 1;
 
@@ -225,7 +225,6 @@ class StockItemTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn($productId);
         $quoteItem->expects($this->once())->method('getParentItem')->will($this->returnValue(false));
-        $quoteItem->expects($this->once())->method('getQtyToAdd')->will($this->returnValue(false));
         $quoteItem->expects($this->any())->method('getProduct')->will($this->returnValue($product));
         $quoteItem->expects($this->once())->method('getId')->will($this->returnValue('quote_item_id'));
         $quoteItem->expects($this->once())->method('getQuoteId')->will($this->returnValue('quote_id'));

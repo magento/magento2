@@ -9,6 +9,9 @@ use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
 
+/**
+ * Class StockItem
+ */
 class StockItem
 {
     /**
@@ -64,21 +67,15 @@ class StockItem
          */
         if ($quoteItem->getParentItem()) {
             $rowQty = $quoteItem->getParentItem()->getQty() * $qty;
-            /**
-             * we are using 0 because original qty was processed
-             */
-            $qtyForCheck = $this->quoteItemQtyList
-                ->getQty($product->getId(), $quoteItem->getId(), $quoteItem->getQuoteId(), 0);
         } else {
-            $increaseQty = $quoteItem->getQtyToAdd() ? $quoteItem->getQtyToAdd() : $qty;
             $rowQty = $qty;
-            $qtyForCheck = $this->quoteItemQtyList->getQty(
-                $product->getId(),
-                $quoteItem->getId(),
-                $quoteItem->getQuoteId(),
-                $increaseQty
-            );
         }
+        
+        /**
+         * we are using 0 because original qty was processed
+         */
+        $qtyForCheck = $this->quoteItemQtyList
+            ->getQty($product->getId(), $quoteItem->getId(), $quoteItem->getQuoteId(), 0);
 
         $productTypeCustomOption = $product->getCustomOption('product_type');
         if ($productTypeCustomOption !== null) {
