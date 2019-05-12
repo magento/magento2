@@ -9,7 +9,9 @@ use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Api\GroupRepositoryInterface;
 
 /**
- * Customer groups controller
+ * Class Group
+ *
+ * @package Magento\Customer\Controller\Adminhtml
  */
 abstract class Group extends \Magento\Backend\App\Action
 {
@@ -26,7 +28,6 @@ abstract class Group extends \Magento\Backend\App\Action
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
-
     /**
      * @var GroupRepositoryInterface
      */
@@ -34,6 +35,7 @@ abstract class Group extends \Magento\Backend\App\Action
 
     /**
      * @var GroupInterfaceFactory
+     * @deprecated 102.0.0
      */
     protected $groupDataFactory;
 
@@ -71,5 +73,19 @@ abstract class Group extends \Magento\Backend\App\Action
         parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
         $this->resultPageFactory = $resultPageFactory;
+    }
+
+    /**
+     * Init page
+     *
+     * @param \Magento\Backend\Model\View\Result\Page $resultPage
+     * @return \Magento\Backend\Model\View\Result\Page
+     */
+    public function initPage($resultPage)
+    {
+        $resultPage->setActiveMenu(self::ADMIN_RESOURCE)
+            ->addBreadcrumb(__('Customers'), __('Customers'))
+            ->addBreadcrumb(__('Customer Group'), __('Customer Group'));
+        return $resultPage;
     }
 }

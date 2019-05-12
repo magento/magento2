@@ -8,7 +8,7 @@ namespace Magento\Customer\Block\Adminhtml\Group\Edit;
 use Magento\Customer\Controller\RegistryConstants;
 
 /**
- * Adminhtml customer groups edit form
+ * @deprecated 102.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -63,6 +63,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare form for render
      *
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _prepareLayout()
     {

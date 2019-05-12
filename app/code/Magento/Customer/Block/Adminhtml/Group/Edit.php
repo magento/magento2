@@ -10,7 +10,7 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Controller\RegistryConstants;
 
 /**
- * Customer group edit block
+ * @deprecated 102.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -57,6 +57,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Update Save and Delete buttons. Remove Delete button if group can't be deleted.
      *
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _construct()
     {
@@ -79,6 +81,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve the header text, either editing an existing group or creating a new one.
      *
      * @return \Magento\Framework\Phrase
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getHeaderText()
     {

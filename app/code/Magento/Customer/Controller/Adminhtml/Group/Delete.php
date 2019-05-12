@@ -1,38 +1,41 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class Delete
+ *
+ * @package Magento\Customer\Controller\Adminhtml\Group
+ */
 class Delete extends \Magento\Customer\Controller\Adminhtml\Group implements HttpPostActionInterface
 {
+
     /**
      * Delete customer group.
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('id');
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        if ($id) {
+        $groupId = $this->getRequest()->getParam('id');
+        if ($groupId) {
             try {
-                $this->groupRepository->deleteById($id);
-                $this->messageManager->addSuccess(__('You deleted the customer group.'));
-            } catch (NoSuchEntityException $e) {
-                $this->messageManager->addError(__('The customer group no longer exists.'));
-                return $resultRedirect->setPath('customer/*/');
+                $this->groupRepository->deleteById($groupId);
+                $this->messageManager->addSuccessMessage(__('You deleted the Group.'));
+                return $resultRedirect->setPath('*/*/');
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
-                return $resultRedirect->setPath('customer/group/edit', ['id' => $id]);
+                $this->messageManager->addErrorMessage($e->getMessage());
+                return $resultRedirect->setPath('*/*/edit', ['group_id' => $groupId]);
             }
         }
-        return $resultRedirect->setPath('customer/group');
+        $this->messageManager->addErrorMessage(__('We can\'t find a Group to delete.'));
+        return $resultRedirect->setPath('*/*/');
     }
 }

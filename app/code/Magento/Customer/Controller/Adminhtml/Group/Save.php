@@ -1,25 +1,36 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\Data\GroupInterfaceFactory;
-use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
+/**
+ * Class Save
+ *
+ * @package Magento\Customer\Controller\Adminhtml\Group
+ */
 class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
+     * deprecated 102.0.0
      */
     protected $dataObjectProcessor;
 
     /**
-     *
+     * @var DataPersistorInterface
+     */
+    protected $dataPersistor;
+
+    /**
+     * Save constructor.
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param GroupRepositoryInterface $groupRepository
@@ -27,6 +38,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param DataPersistorInterface|null $dataPersistor
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -35,9 +47,9 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
         GroupInterfaceFactory $groupDataFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        DataPersistorInterface $dataPersistor = null
     ) {
-        $this->dataObjectProcessor = $dataObjectProcessor;
         parent::__construct(
             $context,
             $coreRegistry,
@@ -46,11 +58,63 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
             $resultForwardFactory,
             $resultPageFactory
         );
+        $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->dataPersistor = $dataPersistor ?:
+            $this->_objectManager->get(DataPersistorInterface::class);
+    }
+
+    /**
+     * Save customer group.
+     *
+     * @return \Magento\Framework\Controller\ResultInterface
+     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function execute()
+    {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $data = $this->getRequest()->getPostValue();
+        if ($data) {
+            $groupId = $this->getRequest()->getParam('customer_group_id');
+
+            $customerGroupCode = $data['customer_group_code'];
+            $group = $this->groupRepository->getById($groupId);
+            if (!$group->getCode() && $groupId) {
+                $this->messageManager->addErrorMessage(__('This Customer Group no longer exists.'));
+                return $resultRedirect->setPath('*/*/');
+            }
+
+            $customerGroupCode = $customerGroupCode ?: $group->getCode();
+
+            $group->setCode(!empty($customerGroupCode) ? $customerGroupCode : null);
+            $group->setTaxClassId($data['tax_class_id']);
+
+            try {
+                $this->groupRepository->save($group);
+                $this->messageManager->addSuccessMessage(__('You saved the Customer Group.'));
+                $this->dataPersistor->clear('customer_group');
+
+                if ($this->getRequest()->getParam('back')) {
+                    return $resultRedirect->setPath('*/*/edit', ['id' => $group->getId()]);
+                }
+                return $resultRedirect->setPath('*/*/');
+            } catch (LocalizedException $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
+            } catch (\Exception $e) {
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Customer Group.'));
+            }
+
+            $this->dataPersistor->set('customer_group', $data);
+            return $resultRedirect->setPath('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
+        }
+        return $resultRedirect->setPath('*/*/');
     }
 
     /**
      * Store Customer Group Data to session
      *
+     * @deprecated 102.0.0
      * @param array $customerGroupData
      * @return void
      */
@@ -61,52 +125,5 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
             unset($customerGroupData['code']);
         }
         $this->_getSession()->setCustomerGroupData($customerGroupData);
-    }
-
-    /**
-     * Create or save customer group.
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Backend\Model\View\Result\Forward
-     */
-    public function execute()
-    {
-        $taxClass = (int)$this->getRequest()->getParam('tax_class');
-
-        /** @var \Magento\Customer\Api\Data\GroupInterface $customerGroup */
-        $customerGroup = null;
-        if ($taxClass) {
-            $id = $this->getRequest()->getParam('id');
-            $resultRedirect = $this->resultRedirectFactory->create();
-            try {
-                $customerGroupCode = (string)$this->getRequest()->getParam('code');
-                if ($id !== null) {
-                    $customerGroup = $this->groupRepository->getById((int)$id);
-                    $customerGroupCode = $customerGroupCode ?: $customerGroup->getCode();
-                } else {
-                    $customerGroup = $this->groupDataFactory->create();
-                }
-                $customerGroup->setCode(!empty($customerGroupCode) ? $customerGroupCode : null);
-                $customerGroup->setTaxClassId($taxClass);
-
-                $this->groupRepository->save($customerGroup);
-
-                $this->messageManager->addSuccess(__('You saved the customer group.'));
-                $resultRedirect->setPath('customer/group');
-            } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
-                if ($customerGroup != null) {
-                    $this->storeCustomerGroupDataToSession(
-                        $this->dataObjectProcessor->buildOutputDataArray(
-                            $customerGroup,
-                            \Magento\Customer\Api\Data\GroupInterface::class
-                        )
-                    );
-                }
-                $resultRedirect->setPath('customer/group/edit', ['id' => $id]);
-            }
-            return $resultRedirect;
-        } else {
-            return $this->resultForwardFactory->create()->forward('new');
-        }
     }
 }
