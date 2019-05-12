@@ -23,7 +23,7 @@
         </referenceContainer>
         <referenceContainer name="content">
             <block class="Magento\Reports\Block\Adminhtml\Sales\Bestsellers" template="Magento_Reports::report/grid/container.phtml" name="sales.report.grid.container">
-                <block class="Magento\Sales\Block\Adminhtml\Report\Filter\Form" name="grid.filter.form">
+                <block class="Magento\Sales\Block\Adminhtml\Report\Bestsellers\Filter\Form" name="grid.filter.form">
                     <action method="setFieldVisibility">
                         <argument name="field" xsi:type="string">report_type</argument>
                         <argument name="visibility" xsi:type="string">0</argument>

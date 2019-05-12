@@ -40,6 +40,15 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function _addCustomFilter($collection, $filterData)
+    {
+        $collection->setRatingLimit((int)$filterData->getRatingLimit());
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function _prepareColumns()
