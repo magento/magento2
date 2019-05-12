@@ -159,16 +159,24 @@ class ImageResize
 
         $productImages = $this->productImage->getAllProductImages();
         $viewImages = $this->getViewImages($themes ?? $this->getThemesInUse());
-
+        $notFoundImages = [];
         foreach ($productImages as $image) {
             $originalImageName = $image['filepath'];
             $originalImagePath = $this->mediaDirectory->getAbsolutePath(
                 $this->imageConfig->getMediaPath($originalImageName)
             );
-            foreach ($viewImages as $viewImage) {
-                $this->resize($viewImage, $originalImagePath, $originalImageName);
+            try {
+                foreach ($viewImages as $viewImage) {
+                    $this->resize($viewImage, $originalImagePath, $originalImageName);
+                }
+                yield $originalImageName => $count;
+            } catch (\Exception $e) {
+                $notFoundImages[] = $originalImagePath;
             }
-            yield $originalImageName => $count;
+        }
+        
+        if (!empty($notFoundImages)) {
+            throw new \Exception(PHP_EOL.__("These files does not exists.").PHP_EOL . implode(PHP_EOL, $notFoundImages) );
         }
     }
 
