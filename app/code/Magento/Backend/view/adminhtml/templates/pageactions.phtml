@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php if ($block->getChildHtml()):?>
+<?php if ($block->getChildHtml() || $block->getIsSticky()):?>
     <div data-mage-init='{"floatingHeader": {}}' class="page-actions floating-header" <?= /* @escapeNotVerified */ $block->getUiId('content-header') ?>>
         <?= $block->getChildHtml() ?>
     </div>
