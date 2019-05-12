@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\Model\Context;
@@ -1526,7 +1527,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $this->orderStateResolver->expects($this->once())->method('getStateForOrder')
             ->with($this->order)
             ->willReturn(Order::STATE_CLOSED);
-        $this->mockGetDefaultStatus(Order::STATE_CLOSED, $status);
+        $this->mockGetDefaultStatus(Order::STATE_CLOSED, $status, ['first, second']);
         $this->assertOrderUpdated(Order::STATE_PROCESSING, $status, $message);
 
         static::assertSame($this->payment, $this->payment->refund($this->creditMemoMock));
