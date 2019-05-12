@@ -57,6 +57,18 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
     }
 
     /**
+     * Set rating limit
+     *
+     * @param int $ratingLimit
+     * @return $this
+     */
+    public function setRatingLimit($ratingLimit)
+    {
+        $this->_ratingLimit = $ratingLimit;
+        return $this;
+    }
+
+    /**
      * Return ordered filed
      *
      * @return string
