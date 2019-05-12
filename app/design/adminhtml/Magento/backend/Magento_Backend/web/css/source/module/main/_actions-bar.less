@@ -24,6 +24,14 @@
     padding: @page-main-actions__padding;
 }
 
+.page-main-actions:not(button) {
+    background: unset !important;
+    border-bottom: unset !important;
+    border-top: unset !important;
+    margin: 0;
+    padding: 0 !important;
+}
+
 .page-main-actions {
     margin: 0 0 @indent__l;
 
@@ -144,6 +152,10 @@
             }
         }
     }
+}
+
+page-actions:not(button) {
+    padding: 1.68rem;
 }
 
 .page-actions-buttons {
