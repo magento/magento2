@@ -153,7 +153,7 @@
                         </imports>
                     </settings>
                 </field>
-                <field name="actionDelete" formElement="actionDelete" sortOrder="90" template="Magento_InventoryCatalogAdminUi/stock/assign-sources/action-delete">
+                <field name="actionDelete" formElement="actionDelete" sortOrder="90" template="Magento_InventoryCatalogAdminUi/product/form/stock/assign-sources/action-delete">
                     <settings>
                         <label translate="true"></label>
                     </settings>
