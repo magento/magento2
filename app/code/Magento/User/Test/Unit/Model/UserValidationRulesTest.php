@@ -42,4 +42,10 @@ class UserValidationRulesTest extends \PHPUnit\Framework\TestCase
         $this->validator->expects($this->once())->method('addRule')->willReturn($this->validator);
         $this->assertSame($this->validator, $this->rules->addPasswordConfirmationRule($this->validator, ''));
     }
+
+    public function testAddExpiresAtRule()
+    {
+        $this->validator->expects($this->once())->method('addRule')->willReturn($this->validator);
+        $this->assertSame($this->validator, $this->rules->addExpiresAtRule($this->validator));
+    }
 }

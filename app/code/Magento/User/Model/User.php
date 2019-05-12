@@ -323,7 +323,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
             }
         }
 
-        if ($this->hasExpiresAt()) {
+        if (!empty($this->getExpiresAt())) {
             $this->validationRules->addExpiresAtRule($validator);
         }
         return $validator;
