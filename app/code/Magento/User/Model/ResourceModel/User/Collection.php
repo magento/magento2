@@ -13,9 +13,9 @@ namespace Magento\User\Model\ResourceModel\User;
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
+
     /**
      * Define resource model
-     *
      * @return void
      */
     protected function _construct()
@@ -40,5 +40,22 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'user_role.parent_id = detail_role.role_id',
             ['role_name']
         );
+    }
+
+    /**
+     * Filter users by expires_at.
+     * @param string|null $now
+     * @return $this
+     */
+    public function addExpiresAtFilter($now = null)
+    {
+        if ($now === null) {
+            $now = new \DateTime();
+            $now->format('Y-m-d H:i:s');
+        }
+
+        $this->addFieldToFilter('expires_at', ['lt' => $now]);
+
+        return $this;
     }
 }

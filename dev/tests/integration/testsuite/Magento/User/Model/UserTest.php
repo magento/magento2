@@ -388,6 +388,17 @@ class UserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage The expiration date must be later than the current date.
+     * @magentoDbIsolation enabled
+     */
+    public function testBeforeSaveExpireDateBeforeNow()
+    {
+        $this->_model->setExpiresAt('2010-01-01 00:00:00');
+        $this->_model->save();
+    }
+
+    /**
      * @dataProvider beforeSavePasswordInsecureDataProvider
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Your password must include both numeric and alphabetic characters.
