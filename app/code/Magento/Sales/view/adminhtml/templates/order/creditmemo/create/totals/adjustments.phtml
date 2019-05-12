@@ -3,9 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
+/**
+ * @var \Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Adjustments $block
+ * @codingStandardsIgnoreFile
+ */
 ?>
 <?php $_source  = $block->getSource() ?>
 <?php if ($_source): ?>
@@ -39,7 +40,6 @@
                    id="adjustment_negative"/>
             <script>
                 require(['prototype'], function(){
-
                 //<![CDATA[
                 Validation.addAllThese([
                     ['not-negative-amount', '<?= /* @escapeNotVerified */ __('Please enter a positive number in this field.') ?>', function(v) {
@@ -49,7 +49,6 @@
                             return true;
                     }]
                 ]);
-
                 if ($('shipping_amount')) {
                     $('shipping_amount').advaiceContainer = $('shipping_amount_adv');
                     unblockSubmit('shipping_amount');
@@ -62,7 +61,6 @@
                     $('adjustment_negative').advaiceContainer = $('adjustment_negative_adv');
                     unblockSubmit('adjustment_negative');
                 }
-
                 function unblockSubmit(id) {
                     $(id).observe('focus', function(event) {
                         if ($$('button[class="scalable update-button disabled"]').size() > 0) {
@@ -71,7 +69,6 @@
                     });
                 }
                 //]]>
-
                 });
             </script>
         </td>
