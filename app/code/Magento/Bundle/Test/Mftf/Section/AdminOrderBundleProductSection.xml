@@ -9,6 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
 <section name="AdminOrderBundleProductSection">
-    <element name="bundleProductCheckbox" type="checkbox" selector="(//input[contains(@class, 'admin__control-checkbox') and contains(@class, 'bundle-option')])[{{row}}]" parameterized="true"/>
+    <element name="bundleProductCheckbox" type="checkbox" selector="(//input[contains(@class, 'admin__control-checkbox') and contains(@class, 'bundle-option')])[{{productNumber}}]" parameterized="true"/>
 </section>
 </sections>
