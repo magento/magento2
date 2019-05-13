@@ -33,7 +33,7 @@ $options = $block->decorateArray($block->getOptions($stripSelection));
                 if (!$option->getSelections()) {
                     continue;
                 } else {
-                    $block->getOptionHtml($option);
+                    echo $block->getOptionHtml($option);
                 }
                 ?>
             <?php endforeach; ?>
