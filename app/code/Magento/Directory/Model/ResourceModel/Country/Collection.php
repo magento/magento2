@@ -127,24 +127,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_foregroundCountries = [];
 
     /**
-     * Add top destinition countries to head of option array
-     *
-     * @param string $emptyLabel
-     * @param array $options
-     * @return array
-     */
-    private function addForegroundCountriesToOptionArray($emptyLabel, $options)
-    {
-        if ($emptyLabel !== false && count($this->_foregroundCountries) !== 0 &&
-            count($options) === count($this->_foregroundCountries)
-        ) {
-            $options[] = ['value' => '', 'label' => $emptyLabel];
-            return $options;
-        }
-        return $options;
-    }
-
-    /**
      * Define main table
      *
      * @return void
@@ -283,7 +265,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         $options = [];
         foreach ($sort as $label => $value) {
-            $options = $this->addForegroundCountriesToOptionArray($emptyLabel, $options);
             $option = ['value' => $value, 'label' => $label];
             if ($this->helperData->isRegionRequired($value)) {
                 $option['is_region_required'] = true;
