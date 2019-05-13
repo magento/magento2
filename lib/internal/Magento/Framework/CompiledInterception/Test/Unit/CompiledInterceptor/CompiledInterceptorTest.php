@@ -60,7 +60,6 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
         $interceptor->method('_validateData')->willReturn(true);
 
         $generated = $interceptor->generate();
-
         $this->assertEquals($fileName . '.php', $generated, 'Generated interceptor is invalid.');
     }
 
