@@ -176,7 +176,7 @@ class ImageResize
         }
         
         if (!empty($notFoundImages)) {
-            throw new \Exception(PHP_EOL.__("These files does not exists.").PHP_EOL . implode(PHP_EOL, $notFoundImages) );
+            throw new \Exception(PHP_EOL.__('The following files do not exist:').PHP_EOL . implode(PHP_EOL, $notFoundImages) );
         }
     }
 
