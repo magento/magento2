@@ -81,6 +81,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $queueFactory->expects($this->any())->method('create')->will($this->returnValue($this->queue));
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $escaper = $this->objectManager->getObject(\Magento\Framework\Escaper::class);
         $this->preview = $this->objectManager->getObject(
             \Magento\Newsletter\Block\Adminhtml\Queue\Preview::class,
             [
@@ -88,6 +89,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
                 'templateFactory' => $templateFactory,
                 'subscriberFactory' => $subscriberFactory,
                 'queueFactory' => $queueFactory,
+                'escaper' => $escaper
             ]
         );
     }
