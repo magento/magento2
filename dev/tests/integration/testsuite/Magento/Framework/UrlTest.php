@@ -494,6 +494,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
     public function testUseSessionIdForUrl()
     {
+        // phpcs:ignore
         $_SERVER['HTTP_HOST'] = 'localhost';
         $this->assertFalse($this->model->useSessionIdForUrl(true));
         $this->assertFalse($this->model->useSessionIdForUrl(false));
