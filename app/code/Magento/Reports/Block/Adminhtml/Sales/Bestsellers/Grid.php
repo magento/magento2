@@ -40,7 +40,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _addCustomFilter($collection, $filterData)
     {

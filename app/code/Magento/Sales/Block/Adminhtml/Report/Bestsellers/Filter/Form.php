@@ -8,15 +8,13 @@ namespace Magento\Sales\Block\Adminhtml\Report\Bestsellers\Filter;
 /**
  * Sales Adminhtml report bestseller filter form
  *
- * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 100.1.0
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareForm()
     {
