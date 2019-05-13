@@ -7,6 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Ups\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
+use Magento\Framework\HTTP\AsyncClient\Request;
+use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\HTTP\ClientFactory;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
@@ -135,6 +141,11 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     private $httpClientFactory;
 
     /**
+     * @var AsyncClientInterface
+     */
+    private $asyncHttpClient;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -154,6 +165,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @param Config $configHelper
      * @param ClientFactory $httpClientFactory
      * @param array $data
+     * @param AsyncClientInterface|null $asyncHttpClient
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -176,7 +188,8 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         Config $configHelper,
         ClientFactory $httpClientFactory,
-        array $data = []
+        array $data = [],
+        ?AsyncClientInterface $asyncHttpClient = null
     ) {
         parent::__construct(
             $scopeConfig,
@@ -199,6 +212,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $this->httpClientFactory = $httpClientFactory;
         $this->_localeFormat = $localeFormat;
         $this->configHelper = $configHelper;
+        $this->asyncHttpClient = $asyncHttpClient ?? ObjectManager::getInstance()->get(AsyncClientInterface::class);
     }
 
     /**
@@ -1493,6 +1507,8 @@ XMLAuth;
      *
      * @param Element $shipmentConfirmResponse
      * @return \Magento\Framework\DataObject
+     * @deprecated New asynchronous methods introduced.
+     * @see requestToShipment
      */
     protected function _sendShipmentAcceptRequest(Element $shipmentConfirmResponse)
     {
@@ -1555,13 +1571,65 @@ XMLAuth;
     }
 
     /**
+     * Send request to UPS to get the quote.
+     *
+     * @param DataObject $request Packages info.
+     * @return HttpResponseDeferredInterface
+     */
+    private function requestQuote(DataObject $request): HttpResponseDeferredInterface
+    {
+        $this->_prepareShipmentRequest($request);
+        $rawXmlRequest = $this->_formShipmentRequest($request);
+        $this->setXMLAccessRequest();
+        $xmlRequest = $this->_xmlAccessRequest . $rawXmlRequest;
+
+        return $this->asyncHttpClient->request(new Request(
+            $this->getShipConfirmUrl(),
+            Request::METHOD_POST,
+            ['Content-Type' => 'application/xml'],
+            $xmlRequest
+        ));
+    }
+
+    /**
+     * Request UPS to ship items based on quote.
+     *
+     * @param Element $quoteXml
+     * @return HttpResponseDeferredInterface
+     */
+    private function requestShipment(Element $quoteXml): HttpResponseDeferredInterface
+    {
+        /** @var Element $xmlRequest */
+        $xmlRequest = $this->_xmlElFactory->create(
+            ['data' => '<?xml version = "1.0" ?><ShipmentAcceptRequest/>']
+        );
+        $request = $xmlRequest->addChild('Request');
+        $request->addChild('RequestAction', 'ShipAccept');
+        $xmlRequest->addChild('ShipmentDigest', $quoteXml->ShipmentDigest);
+
+        return $this->asyncHttpClient->request(new Request(
+            $this->getShipAcceptUrl(),
+            Request::METHOD_POST,
+            ['Content-Type' => 'application/xml'],
+            $this->_xmlAccessRequest . $xmlRequest->asXml()
+        ));
+    }
+
+    /**
      * Do shipment request to carrier web service, obtain Print Shipping Labels and process errors in response
      *
-     * @param \Magento\Framework\DataObject $request
-     * @return \Magento\Framework\DataObject
+     * @param DataObject $request
+     * @return DataObject
+     * @deprecated New asynchronous methods introduced.
+     * @see requestToShipment
      */
-    protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
+    protected function _doShipmentRequest(DataObject $request)
     {
+        if ($request->getCheckDefaultImpl()) {
+            //In case a developer redefines this method - use it, otherwise use the asynchronous methods.
+            return new DataObject(['is_default_impl' => true]);
+        }
+
         $this->_prepareShipmentRequest($request);
         $result = new \Magento\Framework\DataObject();
         $rawXmlRequest = $this->_formShipmentRequest($request);
@@ -1626,6 +1694,103 @@ XMLAuth;
         }
 
         return $url;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function requestToShipment($request)
+    {
+        $request->setCheckDefaultImpl(true);
+
+        $packages = $request->getPackages();
+        if (!is_array($packages) || !$packages) {
+            throw new LocalizedException(__('No packages for request'));
+        }
+        if ($request->getStoreId() != null) {
+            $this->setStore($request->getStoreId());
+        }
+        /** @var HttpResponseDeferredInterface[] $quotesRequests */
+        $quotesRequests = [];
+        /** @var DataObject[] $results */
+        $results = [];
+        //Getting quotes
+        foreach ($packages as $packageId => $package) {
+            $request->setPackageId($packageId);
+            $request->setPackagingType($package['params']['container']);
+            $request->setPackageWeight($package['params']['weight']);
+            $request->setPackageParams(new DataObject($package['params']));
+            $request->setPackageItems($package['items']);
+            $result = $this->_doShipmentRequest($request);
+            //doShipmentRequest is redefined, using it's result.
+            if (!$result->getIsDefaultImpl()) {
+                $result->setLabelContent($result->getShippingLabelContent());
+                $results[] = $result;
+            } else {
+                $quotesRequests[] = $this->requestQuote($request);
+            }
+        }
+        //Processing quote responses
+        /** @var HttpResponseDeferredInterface[] $shippingRequests */
+        $shippingRequests = [];
+        foreach ($quotesRequests as $quotesRequest) {
+            $httpResponse = $quotesRequest->get();
+            if ($httpResponse->getStatusCode() >= 400) {
+                return new DataObject(['errors' => __('Failed to get the quote')]);
+            }
+            try {
+                /** @var Element $response */
+                $response = $this->_xmlElFactory->create(['data' => $httpResponse->getBody()]);
+                if (isset($response->Response->Error)
+                    && in_array($response->Response->Error->ErrorSeverity, ['Hard', 'Transient'])
+                ) {
+                    return new DataObject(['errors' => (string)$response->Response->Error->ErrorDescription]);
+                }
+            } catch (\Throwable $e) {
+                return new DataObject(['errors' => $e->getMessage()]);
+            }
+
+            //Sending shipment requests.
+            $shippingRequests[] = $this->requestShipment($response);
+        }
+
+        //Processing shipment requests
+        foreach ($shippingRequests as $shippingRequest) {
+            $result = new DataObject();
+            $httpResponse = $shippingRequest->get();
+
+            if ($httpResponse->getStatusCode() >= 400) {
+                return new DataObject(['errors' => __('Failed to send the package')]);
+            }
+            try {
+                /** @var Element $response */
+                $response = $this->_xmlElFactory->create(['data' => $httpResponse->getBody()]);
+            } catch (\Throwable $e) {
+                return new DataObject(['errors' => $e->getMessage()]);
+            }
+            if (isset($response->Error)) {
+                return new DataObject(['errors' => (string)$response->Error->ErrorDescription]);
+            } else {
+                $shippingLabelContent = (string)$response->ShipmentResults->PackageResults->LabelImage->GraphicImage;
+                $trackingNumber = (string)$response->ShipmentResults->PackageResults->TrackingNumber;
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                $result->setLabelContent(base64_decode($shippingLabelContent));
+                $result->setTrackingNumber($trackingNumber);
+            }
+            $results[] = $result;
+        }
+
+        return new DataObject(['info' => $results]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function returnOfShipment($request)
+    {
+        $request->setIsReturn(true);
+
+        return $this->requestToShipment($request);
     }
 
     /**
