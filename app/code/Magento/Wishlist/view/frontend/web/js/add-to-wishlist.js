@@ -112,7 +112,9 @@ define([
                 self = this;
 
             if (sku !== '') {
-                parentClass = $('body').hasClass('catalog-product-view') ? '.product-info-main' : '.product-item-actions';
+                parentClass = $('body').hasClass('catalog-product-view') ?
+                                '.product-info-main' :
+                                '.product-item-actions';
                 addToWishlistBtn = $('form[data-product-sku="' + sku + '"]')
                                     .closest(parentClass)
                                     .find('[data-action="add-to-wishlist"]');
