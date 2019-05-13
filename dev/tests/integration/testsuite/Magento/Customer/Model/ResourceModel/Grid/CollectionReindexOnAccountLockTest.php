@@ -6,7 +6,6 @@
 
 namespace Magento\Customer\Model\ResourceModel\Grid;
 
-use LogicException;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
@@ -17,23 +16,11 @@ use Magento\Tests\NamingConvention\true\mixed;
 
 /**
  * Test if customer account lock on too many failed authentication attempts triggers customer grid reindex
+ *
+ * @SuppressWarnings(PHPMD)
  */
 class CollectionReindexOnAccountLockTest extends TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        $db = Bootstrap::getInstance()
-            ->getBootstrap()
-            ->getApplication()
-            ->getDbInstance();
-        if (!$db->isDbDumpExists()) {
-            throw new LogicException('DB dump does not exist.');
-        }
-        $db->restoreFromDbDump();
-
-        parent::setUpBeforeClass();
-    }
-
     /**
      * Trigger customer account lock by making 10 failed authentication attempts
      */
@@ -44,7 +31,7 @@ class CollectionReindexOnAccountLockTest extends TestCase
 
         for ($i = 0; $i < 10; $i++) {
             try {
-                $accountManagement->authenticate('roni_cost@example.com', 'wrongPassword');
+                $accountManagement->authenticate('customer@example.com', 'wrongPassword');
             } catch (InvalidEmailOrPasswordException $e) {
             }
         }
@@ -59,6 +46,7 @@ class CollectionReindexOnAccountLockTest extends TestCase
         /** @var CustomerRegistry $customerRegistry */
         $customerRegistry = Bootstrap::getObjectManager()->create(CustomerRegistry::class);
         $customerModel = $customerRegistry->retrieve(1);
+        $this->assertNotEmpty($customerModel);
 
         return $customerModel->getData('lock_expires');
     }
@@ -71,12 +59,15 @@ class CollectionReindexOnAccountLockTest extends TestCase
         /** @var Collection */
         $gridCustomerCollection = Bootstrap::getObjectManager()->create(Collection::class);
         $gridCustomerItem = $gridCustomerCollection->getItemById(1);
+        $this->assertNotEmpty($gridCustomerItem);
 
         return $gridCustomerItem->getData('lock_expires');
     }
 
     /**
      * Test if customer account lock on too many failed authentication attempts triggers customer grid reindex
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     public function testCustomerAccountReindexOnLock()
     {
@@ -91,13 +82,5 @@ class CollectionReindexOnAccountLockTest extends TestCase
             $this->getCustomerGridLockExpire(),
             $this->getCustomerLockExpire()
         );
-    }
-
-    /**
-     * teardown
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
     }
 }
