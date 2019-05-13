@@ -26,32 +26,32 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
     /**
      * @var string
      */
-    private $authorizenetStatusPath = 'payment/authorizenet_acceptjs/active';
+   // private $authorizenetStatusPath = 'payment/authorizenet_acceptjs/active';
 
     /**
      * @var string
      */
-    private $authorizenetEnvironmentPath = 'payment/authorizenet_acceptjs/environment';
+   // private $authorizenetEnvironmentPath = 'payment/authorizenet_acceptjs/environment';
 
     /**
      * @var string
      */
-    private $authorizenetLoginPath = 'payment/authorizenet_acceptjs/login';
+    //private $authorizenetLoginPath = 'payment/authorizenet_acceptjs/login';
 
     /**
      * @var string
      */
-    private $authorizenetTransactionKeyPath = 'payment/authorizenet_acceptjs/trans_key';
+    //private $authorizenetTransactionKeyPath = 'payment/authorizenet_acceptjs/trans_key';
 
     /**
      * @var string
      */
-    private $authorizenetTransSignatureKeyPath = 'payment/authorizenet_acceptjs/trans_signature_key';
+    //private $authorizenetTransSignatureKeyPath = 'payment/authorizenet_acceptjs/trans_signature_key';
 
     /**
      * @var string
      */
-    private $authorizenetPublicClientKeyPath = 'payment/authorizenet_acceptjs/public_client_key';
+   // private $authorizenetPublicClientKeyPath = 'payment/authorizenet_acceptjs/public_client_key';
 
     /**
      * @inheritdoc
@@ -60,7 +60,7 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Config\Model\ResourceModel\Config $config */
-        $config = $objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
+        /*$config = $objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
         $config->saveConfig($this->authorizenetStatusPath, 1, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
         $config->saveConfig($this->authorizenetLoginPath, 'someusername', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
         $config->saveConfig(
@@ -75,24 +75,24 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             0
         );
-        $config->saveConfig($this->authorizenetPublicClientKeyPath, 'xyz', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
+        $config->saveConfig($this->authorizenetPublicClientKeyPath, 'xyz', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);*/
         /** @var ReinitableConfigInterface $config */
-        $config =$objectManager->get(ReinitableConfigInterface::class);
-        $config->reinit();
+       // $config =$objectManager->get(ReinitableConfigInterface::class);
+       // $config->reinit();
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
     private function resetAuthorizeNetConfig() : void
     {
-        $objectManager = Bootstrap::getObjectManager();
+      //  $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Config\Model\ResourceModel\Config $config */
-        $config = $objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
+        /*$config = $objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
         $config->deleteConfig($this->authorizenetStatusPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
         $config->deleteConfig($this->authorizenetEnvironmentPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
         $config->deleteConfig($this->authorizenetLoginPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
         $config->deleteConfig($this->authorizenetTransactionKeyPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
         $config->deleteConfig($this->authorizenetTransSignatureKeyPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
-        $config->deleteConfig($this->authorizenetPublicClientKeyPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
+        $config->deleteConfig($this->authorizenetPublicClientKeyPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);*/
     }
 
     /**
@@ -102,7 +102,7 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
-     *
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
      */
     public function testSetAuthorizeNetPaymentOnCartForGuest()
     {
@@ -114,19 +114,13 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
         $maskedQuoteId = $getMaskedQuoteIdByReservedOrderIdForGuest->execute('test_quote');
         $methodCode = 'authorizenet_acceptjs';
         $query = $this->getSetPaymentMethodQuery($maskedQuoteId, $methodCode);
-        try{
-            $this->graphQlMutation($query);
-        } catch(\Exception $e){
-            $this->assertEquals(1,2, $e->getMessage());
-            //$output->writeln('<error>' . $e->getMessage() . '</error>');
-            //$e->getMessage();
-        }
-        //$response = $this->graphQlMutation($query);
-        /*self::assertArrayHasKey('setPaymentMethodOnCart', $response);
+
+        $response = $this->graphQlMutation($query);
+        self::assertArrayHasKey('setPaymentMethodOnCart', $response);
         self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
         self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
         $selectedPaymentMethod = $response['setPaymentMethodOnCart']['cart']['selected_payment_method'];
-        self::assertArrayHasKey('code', $selectedPaymentMethod);*/
+        self::assertArrayHasKey('code', $selectedPaymentMethod);
     }
 
     /**
