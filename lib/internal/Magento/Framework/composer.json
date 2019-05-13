@@ -36,7 +36,8 @@
         "zendframework/zend-mvc": "~2.7.0",
         "zendframework/zend-stdlib": "^2.7.7",
         "zendframework/zend-uri": "^2.5.1",
-        "zendframework/zend-validator": "^2.6.0"
+        "zendframework/zend-validator": "^2.6.0",
+        "guzzlehttp/guzzle": "^6.3.3"
     },
     "archive": {
         "exclude": [
