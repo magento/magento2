@@ -91,4 +91,20 @@
         <requiredEntity type="custom_attribute">CustomAttributeFixPrice</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributePriceView</requiredEntity>
     </entity>
+    <entity name="BundleProductPriceViewRange" type="product2">
+        <data key="name" unique="suffix">BundleProduct</data>
+        <data key="sku" unique="suffix">bundle-product</data>
+        <data key="type_id">bundle</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="urlKey" unique="suffix">bundle-product</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeCategoryIds</requiredEntity>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">ApiProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute">ApiProductShortDescription</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeDynamicPrice</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributePriceViewRange</requiredEntity>
+    </entity>
 </entities>

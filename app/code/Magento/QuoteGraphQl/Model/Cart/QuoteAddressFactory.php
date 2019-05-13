@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
+use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddress;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
@@ -31,15 +32,23 @@ class QuoteAddressFactory
     private $getCustomerAddress;
 
     /**
+     * @var AddressHelper
+     */
+    private $addressHelper;
+
+    /**
      * @param BaseQuoteAddressFactory $quoteAddressFactory
      * @param GetCustomerAddress $getCustomerAddress
+     * @param AddressHelper $addressHelper
      */
     public function __construct(
         BaseQuoteAddressFactory $quoteAddressFactory,
-        GetCustomerAddress $getCustomerAddress
+        GetCustomerAddress $getCustomerAddress,
+        AddressHelper $addressHelper
     ) {
         $this->quoteAddressFactory = $quoteAddressFactory;
         $this->getCustomerAddress = $getCustomerAddress;
+        $this->addressHelper = $addressHelper;
     }
 
     /**
@@ -47,10 +56,18 @@ class QuoteAddressFactory
      *
      * @param array $addressInput
      * @return QuoteAddress
+     * @throws GraphQlInputException
      */
     public function createBasedOnInputData(array $addressInput): QuoteAddress
     {
         $addressInput['country_id'] = $addressInput['country_code'] ?? '';
+
+        $maxAllowedLineCount = $this->addressHelper->getStreetLines();
+        if (is_array($addressInput['street']) && count($addressInput['street']) > $maxAllowedLineCount) {
+            throw new GraphQlInputException(
+                __('"Street Address" cannot contain more than %1 lines.', $maxAllowedLineCount)
+            );
+        }
 
         $quoteAddress = $this->quoteAddressFactory->create();
         $quoteAddress->addData($addressInput);
