@@ -16,6 +16,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use \Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Url\DecoderInterface;
 use \Magento\Framework\App\ActionInterface;
+use Magento\Store\Model\StoreSwitcher\HashGenerator\HashData;
 
 /**
  * Builds correct url to target store and performs redirect.
@@ -78,7 +79,12 @@ class SwitchRequest extends \Magento\Framework\App\Action\Action implements Http
         $error = null;
         $encodedUrl = (string)$this->_request->getParam(ActionInterface::PARAM_NAME_URL_ENCODED);
         $targetUrl = $this->urlDecoder->decode($encodedUrl);
-        $data=[$customerId, $timeStamp, $fromStoreCode];
+
+        $data = new HashData([
+            "customer_id" => $customerId,
+            "time_stamp" => $timeStamp,
+            "___from_store" => $fromStoreCode
+        ]);
 
         if ($targetUrl && $this->hashGenerator->validateHash($signature, $data)) {
             try {

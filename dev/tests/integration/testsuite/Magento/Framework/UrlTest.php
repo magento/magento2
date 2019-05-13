@@ -23,6 +23,13 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->model = Bootstrap::getObjectManager()->create(\Magento\Framework\Url::class);
     }
 
+    public function testSetGetUseSession()
+    {
+        $this->assertFalse((bool)$this->model->getUseSession());
+        $this->model->setUseSession(false);
+        $this->assertFalse($this->model->getUseSession());
+    }
+
     public function testSetRouteFrontName()
     {
         $value = 'route';
@@ -483,6 +490,13 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         )->getSessionId();
         $sessionUrl = $this->model->sessionUrlVar('<a href="http://example.com/?___SID=U">www.example.com</a>');
         $this->assertEquals('<a href="http://example.com/?SID=' . $sessionId . '">www.example.com</a>', $sessionUrl);
+    }
+
+    public function testUseSessionIdForUrl()
+    {
+        $_SERVER['HTTP_HOST'] = 'localhost';
+        $this->assertFalse($this->model->useSessionIdForUrl(true));
+        $this->assertFalse($this->model->useSessionIdForUrl(false));
     }
 
     /**

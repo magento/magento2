@@ -14,6 +14,7 @@ use Magento\Framework\Url\Helper\Data as UrlHelper;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Authorization\Model\UserContextInterface;
 use \Magento\Framework\App\ActionInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Generate one time token and build redirect url
@@ -99,14 +100,16 @@ class HashGenerator implements StoreSwitcherInterface
      * Validates one time token
      *
      * @param string $signature
-     * @param array $data
+     * @param DataObject $hashData
      * @return bool
      */
-    public function validateHash(string $signature, array $data): bool
+    public function validateHash(string $signature, DataObject $hashData): bool
     {
-        if (!empty($signature) && !empty($data)) {
-            $timeStamp = $data[1] ?? 0;
-            $value = implode(",", $data);
+        if (!empty($signature) && !empty($hashData)) {
+            $timeStamp = $hashData->getTimestamp();
+            $fromStoreCode = $hashData->getFromStoreCode();
+            $customerId = $hashData->getCustomerId();
+            $value = implode(",", [$customerId, $timeStamp, $fromStoreCode]);
             $key = (string)$this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
 
             if (time() - $timeStamp <= 5 && hash_equals($signature, hash_hmac('sha256', $value, $key))) {

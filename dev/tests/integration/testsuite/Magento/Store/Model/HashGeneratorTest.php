@@ -11,11 +11,11 @@ use Magento\Framework\ObjectManagerInterface as ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\StoreSwitcher\HashGenerator;
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Session as CustomerSession;
 use \Magento\Framework\App\DeploymentConfig as DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use \Magento\Framework\App\ActionInterface;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
+use Magento\Store\Model\StoreSwitcher\HashGenerator\HashData;
 
 /**
  * Test class for \Magento\Store\Model\StoreSwitcher\HashGenerator
@@ -62,6 +62,16 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
     private $urlHelper;
 
     /**
+     * @var HashData
+     */
+    private $hashData;
+
+    /**
+     * @var CustomerSession
+     */
+    private $customerSession;
+
+    /**
      * Class dependencies initialization
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -69,15 +79,15 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $session = $this->objectManager->create(
-            Session::class
+        $this->customerSession = $this->objectManager->create(
+            CustomerSession::class
         );
         $this->accountManagement = $this->objectManager->create(AccountManagementInterface::class);
         $customer = $this->accountManagement->authenticate('customer@example.com', 'password');
-        $session->setCustomerDataAsLoggedIn($customer);
+        $this->customerSession->setCustomerDataAsLoggedIn($customer);
         $this->customerSessionUserContext = $this->objectManager->create(
             \Magento\Customer\Model\Authorization\CustomerSessionUserContext::class,
-            ['customerSession' => $session]
+            ['customerSession' => $this->customerSession]
         );
         $this->hashGenerator = $this->objectManager->create(
             StoreSwitcher\HashGenerator::class,
@@ -87,46 +97,53 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfig = $this->objectManager->get(DeploymentConfig::class);
         $this->key = (string)$this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
         $this->urlHelper=$this->objectManager->create(UrlHelper::class);
+        $this->hashData=$this->objectManager->create(HashData::class);
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $this->customerSession->logout();
+        parent:tearDown();
+    }
+
+    /**
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Store/_files/store.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @return void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testSwitch(): void
     {
         $redirectUrl = "http://domain.com/";
         $fromStoreCode = 'test';
-        $toStoreCode = 'fixture_second_store';
-        $encodedUrl=$this->urlHelper->getEncodedUrl($redirectUrl);
-        /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
-        $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
-        $fromStore = $storeRepository->get($fromStoreCode);
-        $toStore = $storeRepository->get($toStoreCode);
+        $fromStore  = $this->createPartialMock(Store::class, ['getCode']);
+        $toStore = $this->createPartialMock(Store::class, ['getCode']);
+        $fromStore->expects($this->once())->method('getCode')->willReturn($fromStoreCode);
         $timeStamp = time();
-        $data = implode(',', [$this->customerId, $timeStamp, $fromStoreCode]);
-        $signature = hash_hmac('sha256', $data, $this->key);
-        $customerId = $this->customerId;
+        $targetUrl=$this->hashGenerator->switch($fromStore, $toStore, $redirectUrl);
+        // phpcs:ignore
+        $urlParts=parse_url($targetUrl, PHP_URL_QUERY);
+        $signature='';
+        // phpcs:ignore
+        parse_str($urlParts, $params);
 
-        $expectedUrl = "http://domain.com/stores/store/switchrequest";
-        $expectedUrl = $this->urlHelper->addRequestParam(
-            $expectedUrl,
-            ['customer_id' => $customerId]
-        );
-        $expectedUrl = $this->urlHelper->addRequestParam($expectedUrl, ['time_stamp' => $timeStamp]);
-        $expectedUrl = $this->urlHelper->addRequestParam($expectedUrl, ['signature' => $signature]);
-        $expectedUrl = $this->urlHelper->addRequestParam($expectedUrl, ['___from_store' => $fromStoreCode]);
-        $expectedUrl = $this->urlHelper->addRequestParam(
-            $expectedUrl,
-            [ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl]
-        );
-        $this->assertEquals($expectedUrl, $this->hashGenerator->switch($fromStore, $toStore, $redirectUrl));
+        if (isset($params['signature'])) {
+            $signature=$params['signature'];
+        }
+        $this->assertTrue($this->hashGenerator->validateHash($signature, new HashData([
+            "customer_id" => $this->customerId,
+            "time_stamp" => $timeStamp,
+            "___from_store" => $fromStoreCode
+        ])));
     }
 
     /**
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/customer.php
      * @return void
      */
     public function testValidateHashWithCorrectData(): void
@@ -134,12 +151,18 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
         $timeStamp = time();
         $customerId = $this->customerId;
         $fromStoreCode = 'test';
-        $data = implode(',', [$customerId, $timeStamp, $fromStoreCode]);
-        $signature = hash_hmac('sha256', $data, $this->key);
-        $this->assertTrue($this->hashGenerator->validateHash($signature, [$customerId, $timeStamp, $fromStoreCode]));
+        $data = new HashData([
+            "customer_id" => $customerId,
+            "time_stamp" => $timeStamp,
+            "___from_store" => $fromStoreCode
+        ]);
+        $signature = hash_hmac('sha256', implode(',', [$this->customerId, $timeStamp, $fromStoreCode]), $this->key);
+        $this->assertTrue($this->hashGenerator->validateHash($signature, $data));
     }
 
     /**
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/customer.php
      * @return void
      */
     public function testValidateHashWithInCorrectData(): void
@@ -147,8 +170,12 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
         $timeStamp = 0;
         $customerId = 8;
         $fromStoreCode = 'test';
-        $data = implode(',', [$customerId, $timeStamp, $fromStoreCode]);
-        $signature = hash_hmac('sha256', $data, $this->key);
-        $this->assertFalse($this->hashGenerator->validateHash($signature, [$customerId, $timeStamp, $fromStoreCode]));
+        $data = new HashData([
+            "customer_id" => $customerId,
+            "time_stamp" => $timeStamp,
+            "___from_store" => $fromStoreCode
+        ]);
+        $signature = hash_hmac('sha256', implode(',', [$this->customerId, $timeStamp, $fromStoreCode]), $this->key);
+        $this->assertFalse($this->hashGenerator->validateHash($signature, $data));
     }
 }
