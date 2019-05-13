@@ -4,13 +4,10 @@
  * See COPYING.txt for license details.
  */
 
+// phpcs:disable Magento2.Files.LineLengthß
 ?>
 <div class="product details">
-    <strong class="product name">
-        <a href="<?= $block->escapeUrl($block->getProductUrl()) ?>">
-            <?= $block->escapeHtml($block->getProductName()) ?>
-        </a>
-    </strong>
+    <strong class="product name"><a href="<?= $block->escapeUrl($block->getProductUrl()) ?>"><?= $block->escapeHtml($block->getProductName()) ?></a></strong>
     <?php if ($_options = $block->getOptionList()) : ?>
         <dl class="item options">
             <?php foreach ($_options as $_option) : ?>
