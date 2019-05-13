@@ -13,6 +13,7 @@ use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Test for authorizeNet payment methods on cart by guest and customer
@@ -109,13 +110,16 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
         $objectManager = Bootstrap::getObjectManager();
         /** @var GetMaskedQuoteIdByReservedOrderId $getMaskedQuoteIdByReservedOrderIdForGuest */
         $getMaskedQuoteIdByReservedOrderIdForGuest = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+        /** @var OutputInterface $output */
+        $output = $objectManager->get(OutputInterface::class);
         $maskedQuoteId = $getMaskedQuoteIdByReservedOrderIdForGuest->execute('test_quote');
         $methodCode = 'authorizenet_acceptjs';
         $query = $this->getSetPaymentMethodQuery($maskedQuoteId, $methodCode);
         try{
             $this->graphQlMutation($query);
         } catch(\Exception $e){
-            $e->getMessage();
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
+            //$e->getMessage();
         }
         //$response = $this->graphQlMutation($query);
         /*self::assertArrayHasKey('setPaymentMethodOnCart', $response);
