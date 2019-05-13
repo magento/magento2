@@ -23,3 +23,4 @@ Database,Database
 "Select Media Database","Select Media Database"
 "After selecting a new media storage location, press the Synchronize button to transfer all media to that location. Media will not be available in the new location until the synchronization process is complete.","After selecting a new media storage location, press the Synchronize button to transfer all media to that location. Media will not be available in the new location until the synchronization process is complete."
 "Environment Update Time","Environment Update Time"
+"The following files do not exist:","The following files do not exist:"
