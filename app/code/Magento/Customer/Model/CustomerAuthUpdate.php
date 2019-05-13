@@ -6,31 +6,43 @@
 
 namespace Magento\Customer\Model;
 
+use Magento\Customer\Model\ResourceModel\Customer as CustomerResourceModel;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
+
 /**
  * Customer Authentication update model.
  */
 class CustomerAuthUpdate
 {
     /**
-     * @var \Magento\Customer\Model\CustomerRegistry
+     * @var CustomerRegistry
      */
     protected $customerRegistry;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Customer
+     * @var CustomerResourceModel
      */
     protected $customerResourceModel;
 
     /**
-     * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
-     * @param \Magento\Customer\Model\ResourceModel\Customer $customerResourceModel
+     * @var Customer
+     */
+    private $customerModel;
+
+    /**
+     * @param CustomerRegistry $customerRegistry
+     * @param CustomerResourceModel $customerResourceModel
+     * @param Customer|null $customerModel
      */
     public function __construct(
-        \Magento\Customer\Model\CustomerRegistry $customerRegistry,
-        \Magento\Customer\Model\ResourceModel\Customer $customerResourceModel
+        CustomerRegistry $customerRegistry,
+        CustomerResourceModel $customerResourceModel,
+        Customer $customerModel = null
     ) {
         $this->customerRegistry = $customerRegistry;
         $this->customerResourceModel = $customerResourceModel;
+        $this->customerModel = $customerModel ?: ObjectManager::getInstance()->get(Customer::class);
     }
 
     /**
@@ -38,6 +50,7 @@ class CustomerAuthUpdate
      *
      * @param int $customerId
      * @return $this
+     * @throws NoSuchEntityException
      */
     public function saveAuth($customerId)
     {
@@ -52,6 +65,9 @@ class CustomerAuthUpdate
             ],
             $this->customerResourceModel->getConnection()->quoteInto('entity_id = ?', $customerId)
         );
+
+        $this->customerResourceModel->load($this->customerModel, $customerId);
+        $this->customerModel->reindex();
 
         return $this;
     }
