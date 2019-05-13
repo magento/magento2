@@ -45,6 +45,7 @@
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveCustomStock"/>
         </before>
         <after>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="reenableManageStock"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
         </after>

@@ -21,6 +21,7 @@
 
         <before>
             <magentoCLI stepKey="enableGuestCheckoutForDownloadable" command="config:set catalog/downloadable/disable_guest_checkout 0" />
+            <magentoCLI stepKey="enableStockManagement" command="config:set cataloginventory/item_options/manage_stock 1"/>
             <createData entity="FullSource1" stepKey="createSource"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock"/>
             <createData entity="SourceStockLinked1" stepKey="linkSourceStock">
