@@ -37,9 +37,9 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected $eventManager;
 
     /**
-     * @var QuoteValidator
+     * @var SubmitQuoteValidator
      */
-    protected $quoteValidator;
+    private $submitQuoteValidator;
 
     /**
      * @var OrderFactory
@@ -158,7 +158,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
     /**
      * @param EventManager $eventManager
-     * @param QuoteValidator $quoteValidator
+     * @param SubmitQuoteValidator $submitQuoteValidator
      * @param OrderFactory $orderFactory
      * @param OrderManagement $orderManagement
      * @param CustomerManagement $customerManagement
@@ -185,7 +185,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      */
     public function __construct(
         EventManager $eventManager,
-        QuoteValidator $quoteValidator,
+        SubmitQuoteValidator $submitQuoteValidator,
         OrderFactory $orderFactory,
         OrderManagement $orderManagement,
         CustomerManagement $customerManagement,
@@ -210,7 +210,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress = null
     ) {
         $this->eventManager = $eventManager;
-        $this->quoteValidator = $quoteValidator;
+        $this->submitQuoteValidator = $submitQuoteValidator;
         $this->orderFactory = $orderFactory;
         $this->orderManagement = $orderManagement;
         $this->customerManagement = $customerManagement;
@@ -299,7 +299,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             throw new StateException(
                 __("The customer can't be assigned to the cart because the customer already has an active cart.")
             );
-            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
         }
 
@@ -484,7 +484,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected function submitQuote(QuoteEntity $quote, $orderData = [])
     {
         $order = $this->orderFactory->create();
-        $this->quoteValidator->validateBeforeSubmit($quote);
+        $this->submitQuoteValidator->validateQuote($quote);
         if (!$quote->getCustomerIsGuest()) {
             if ($quote->getCustomerId()) {
                 $this->_prepareCustomerQuote($quote);
@@ -539,6 +539,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $order->setCustomerFirstname($quote->getCustomerFirstname());
         $order->setCustomerMiddlename($quote->getCustomerMiddlename());
         $order->setCustomerLastname($quote->getCustomerLastname());
+        $this->submitQuoteValidator->validateOrder($order);
 
         $this->eventManager->dispatch(
             'sales_model_service_quote_submit_before',
@@ -654,13 +655,12 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                     'exception' => $e,
                 ]
             );
-            // phpcs:ignore Magento2.Exceptions.ThrowCatch
+        // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $consecutiveException) {
             $message = sprintf(
                 "An exception occurred on 'sales_model_service_quote_submit_failure' event: %s",
                 $consecutiveException->getMessage()
             );
-
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception($message, 0, $e);
         }
