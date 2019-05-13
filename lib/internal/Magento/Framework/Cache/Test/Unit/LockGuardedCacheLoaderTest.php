@@ -140,9 +140,7 @@ class LockGuardedCacheLoaderTest extends TestCase
             function () {
                 return ['uncached'];
             },
-            function ($data) {
-                return $data;
-            }
+            $this->returnPassedDataWithMergedValue([])
         );
 
         $this->assertEquals(
@@ -186,9 +184,7 @@ class LockGuardedCacheLoaderTest extends TestCase
             function () {
                 return ['uncached'];
             },
-            function ($data) {
-                return [current($data), 'cached'];
-            }
+            $this->returnPassedDataWithMergedValue(['cached'])
         );
 
         $this->assertEquals(
@@ -208,9 +204,7 @@ class LockGuardedCacheLoaderTest extends TestCase
             function () {
                 return ['uncached'];
             },
-            function ($data) {
-                return [current($data), 'cached'];
-            }
+            $this->returnPassedDataWithMergedValue(['cached'])
         );
 
         $this->assertEquals(
@@ -230,9 +224,7 @@ class LockGuardedCacheLoaderTest extends TestCase
             function () {
                 return ['uncached'];
             },
-            function ($data) {
-                return [current($data), 'cached'];
-            }
+            $this->returnPassedDataWithMergedValue(['cached'])
         );
 
         $this->assertFalse($this->lockManager->isLocked('lock1'));
@@ -251,9 +243,7 @@ class LockGuardedCacheLoaderTest extends TestCase
                 $this->lockManager->unlock('lock1');
                 return ['uncached'];
             },
-            function ($data) {
-                return [current($data), 'cached'];
-            }
+            $this->returnPassedDataWithMergedValue(['cached'])
         );
 
         $this->assertEquals(['uncached'], $result);
@@ -278,6 +268,50 @@ class LockGuardedCacheLoaderTest extends TestCase
         }
 
         $this->assertFalse($this->lockManager->isLocked('lock1'));
+    }
+
+    /** @test */
+    public function nonBlockingLoaderAllowsToSpecifyStaleContentLoader()
+    {
+        $this->lockManager->lock('lock1');
+
+        $result = $this->lockGuard->nonBlockingLockedLoadData(
+            'lock1',
+            function () {
+                return false;
+            },
+            function () {
+                return ['uncached'];
+            },
+            $this->returnPassedDataWithMergedValue(['cached']),
+            function () {
+                return ['stale_data'];
+            }
+        );
+
+        $this->assertEquals(['stale_data'], $result);
+    }
+
+    /** @test */
+    public function nonBlockingLoaderUsesUncachedDataWhenStaleCacheLoaderReturnsFalse()
+    {
+        $this->lockManager->lock('lock1');
+
+        $result = $this->lockGuard->nonBlockingLockedLoadData(
+            'lock1',
+            function () {
+                return false;
+            },
+            function () {
+                return ['uncached'];
+            },
+            $this->returnPassedDataWithMergedValue(['cached']),
+            function () {
+                return false;
+            }
+        );
+
+        $this->assertEquals(['uncached'], $result);
     }
 
     private function addLoadSequence(callable $loadOperation): void
@@ -309,6 +343,13 @@ class LockGuardedCacheLoaderTest extends TestCase
     {
         return function () {
             throw new \Exception('Something went wrong');
+        };
+    }
+
+    private function returnPassedDataWithMergedValue($valueToMerge): callable
+    {
+        return function ($data) use ($valueToMerge) {
+            return array_merge($data, $valueToMerge);
         };
     }
 }

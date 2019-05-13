@@ -40,6 +40,7 @@ class System implements ConfigTypeInterface
      * System config type.
      */
     const CONFIG_TYPE = 'system';
+    const STALE_CACHE_PREFIX = 'stale';
 
     /**
      * @var string
@@ -220,23 +221,15 @@ class System implements ConfigTypeInterface
      */
     private function loadAllData()
     {
-        $loadAction = function () {
-            $cachedData = $this->cache->load($this->configType);
-            $data = false;
-            if ($cachedData !== false) {
-                $data = $this->serializer->unserialize($this->encryptor->decrypt($cachedData));
-            }
-            return $data;
-        };
-
         return $this->lockQuery->nonBlockingLockedLoadData(
             self::$lockName,
-            $loadAction,
+            \Closure::fromCallable([$this, 'loadAllDataFromCache']),
             \Closure::fromCallable([$this, 'readData']),
             function ($data) {
                 $this->cacheData($data);
                 return $data;
-            }
+            },
+            \Closure::fromCallable([$this, 'loadAllStaleDataFromCache'])
         );
     }
 
@@ -249,12 +242,7 @@ class System implements ConfigTypeInterface
     private function loadDefaultScopeData($scopeType)
     {
         $loadAction = function () use ($scopeType) {
-            $cachedData = $this->cache->load($this->configType . '_' . $scopeType);
-            $scopeData = false;
-            if ($cachedData !== false) {
-                $scopeData = [$scopeType => $this->serializer->unserialize($this->encryptor->decrypt($cachedData))];
-            }
-            return $scopeData;
+            return $this->loadDataFromCacheForScopeType($scopeType);
         };
 
         return $this->lockQuery->nonBlockingLockedLoadData(
@@ -263,9 +251,80 @@ class System implements ConfigTypeInterface
             \Closure::fromCallable([$this, 'readData']),
             function ($data) use ($scopeType) {
                 $this->cacheData($data);
-                return $data[$scopeType] ?? [];
+                return [$scopeType => $data[$scopeType] ?? []];
+            },
+            function () use ($scopeType) {
+                $scopeData = $this->loadAllStaleDataFromCache()[$scopeType] ?? false;
+                return $scopeData ? [$scopeType => $scopeData] : false;
             }
         );
+    }
+
+
+    /**
+     * Loads all cache data for configuration
+     *
+     * @return array|bool
+     */
+    private function loadAllDataFromCache()
+    {
+        return $this->loadFromCacheAndDecode($this->configType);
+    }
+
+    /**
+     * Loads all cache data for configuration
+     *
+     * @return array|bool
+     */
+    private function loadAllStaleDataFromCache()
+    {
+        return $this->loadFromCacheAndDecode(self::STALE_CACHE_PREFIX . '_' . $this->configType);
+    }
+
+    /**
+     * Loads data from cache for a specified scope type
+     *
+     * @param string $scopeType
+     * @return array|bool
+     */
+    private function loadDataFromCacheForScopeType($scopeType)
+    {
+        $scopeData = $this->loadFromCacheAndDecode(
+            $this->configType . '_' . $scopeType,
+            function ($cacheData) use ($scopeType) {
+                return [$scopeType => $cacheData];
+            }
+        );
+
+        if ($scopeData === false) {
+            $scopeData = $this->loadAllDataFromCache()[$scopeType] ?? false;
+        }
+
+        return $scopeData;
+    }
+
+    /**
+     * Loads data from cache by key and decodes it into ready to use data
+     *
+     * @param string $cacheKey
+     * @param callable|null $dataFormatter
+     * @return array|bool
+     */
+    private function loadFromCacheAndDecode(string $cacheKey, callable $dataFormatter = null)
+    {
+        $cachedData = $this->cache->load($cacheKey);
+
+        if ($cachedData === false) {
+            return false;
+        }
+
+        $decodedData = $this->serializer->unserialize($this->encryptor->decrypt($cachedData));
+
+        if ($dataFormatter) {
+            $decodedData = $dataFormatter($decodedData);
+        }
+
+        return $decodedData;
     }
 
     /**
@@ -278,22 +337,28 @@ class System implements ConfigTypeInterface
     private function loadScopeData($scopeType, $scopeId)
     {
         $loadAction = function () use ($scopeType, $scopeId) {
-            $cachedData = $this->cache->load($this->configType . '_' . $scopeType . '_' . $scopeId);
-            $scopeData = false;
-            if ($cachedData === false) {
-                if ($this->availableDataScopes === null) {
-                    $cachedScopeData = $this->cache->load($this->configType . '_scopes');
-                    if ($cachedScopeData !== false) {
-                        $serializedCachedData = $this->encryptor->decrypt($cachedScopeData);
-                        $this->availableDataScopes = $this->serializer->unserialize($serializedCachedData);
+            $scopeData = $this->loadFromCacheAndDecode(
+                $this->configType . '_' . $scopeType . '_' . $scopeId,
+                function ($cachedData) use ($scopeType, $scopeId) {
+                    return [$scopeType => [$scopeId => $cachedData]];
+                }
+            );
+
+            if ($scopeData !== false) {
+                return $scopeData;
+            }
+
+            $availableScopes = $this->getAvailableDataScopes();
+
+            if ($availableScopes && !isset($availableScopes[$scopeType][$scopeId])) {
+                $scopeData = $this->loadFromCacheAndDecode(
+                    $this->configType,
+                    function ($cachedData) use ($scopeType, $scopeId) {
+                        return $cachedData[$scopeType][$scopeId] ?? [];
                     }
-                }
-                if (is_array($this->availableDataScopes) && !isset($this->availableDataScopes[$scopeType][$scopeId])) {
-                    $scopeData = [$scopeType => [$scopeId => []]];
-                }
-            } else {
-                $serializedCachedData = $this->encryptor->decrypt($cachedData);
-                $scopeData = [$scopeType => [$scopeId => $this->serializer->unserialize($serializedCachedData)]];
+                );
+
+                return [$scopeType => [$scopeId => $scopeData]];
             }
 
             return $scopeData;
@@ -305,9 +370,29 @@ class System implements ConfigTypeInterface
             \Closure::fromCallable([$this, 'readData']),
             function ($data) use ($scopeType, $scopeId) {
                 $this->cacheData($data);
-                return $data[$scopeType][$scopeId] ?? [];
+                return [$scopeType => [$scopeId => [$data[$scopeType][$scopeId] ?? []]]];
+            },
+            function () use ($scopeType, $scopeId) {
+                $staleData = $this->loadAllStaleDataFromCache();
+
+                if ($staleData) {
+                    return $staleData[$scopeType][$scopeId] ?? [];
+                }
+
+                return false;
             }
         );
+    }
+
+    private function getAvailableDataScopes(): array
+    {
+        if ($this->availableDataScopes === null) {
+            $this->loadFromCacheAndDecode($this->configType . '_scopes', function ($scopes) {
+                $this->availableDataScopes = $scopes;
+            });
+        }
+
+        return $this->availableDataScopes ?? [];
     }
 
     /**
@@ -320,32 +405,38 @@ class System implements ConfigTypeInterface
      */
     private function cacheData(array $data)
     {
-        $this->cache->save(
-            $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($data)),
-            $this->configType,
-            [self::CACHE_TAG]
+        $this->saveToCache($this->configType, $data);
+        $this->saveToCache($this->configType . '_default', $data['default']);
+
+        $this->saveToCacheWithCacheTag(
+            self::STALE_CACHE_PREFIX . '_' .  $this->configType,
+            $data,
+            []
         );
-        $this->cache->save(
-            $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($data['default'])),
-            $this->configType . '_default',
-            [self::CACHE_TAG]
-        );
+
         $scopes = [];
         foreach ([StoreScope::SCOPE_WEBSITES, StoreScope::SCOPE_STORES] as $curScopeType) {
             foreach ($data[$curScopeType] ?? [] as $curScopeId => $curScopeData) {
                 $scopes[$curScopeType][$curScopeId] = 1;
-                $this->cache->save(
-                    $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($curScopeData)),
-                    $this->configType . '_' . $curScopeType . '_' . $curScopeId,
-                    [self::CACHE_TAG]
-                );
+                $this->saveToCache($this->configType . '_' . $curScopeType . '_' . $curScopeId, $curScopeData);
             }
         }
-        $this->cache->save(
-            $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($scopes)),
-            $this->configType . '_scopes',
-            [self::CACHE_TAG]
-        );
+
+        $this->saveToCache($this->configType . '_scopes', $scopes);
+    }
+
+    /**
+     * Saves data by encoding it for a storage
+     *
+     * Automatically adds a cache key
+     *
+     * @param string $cacheKey
+     * @param array $data
+     */
+    private function saveToCache(string $cacheKey, array $data)
+    {
+        $cacheTags = [self::CACHE_TAG];
+        $this->saveToCacheWithCacheTag($cacheKey, $data, $cacheTags);
     }
 
     /**
@@ -405,6 +496,20 @@ class System implements ConfigTypeInterface
         $this->lockQuery->lockedCleanData(
             self::$lockName,
             $cleanAction
+        );
+    }
+
+    /**
+     * @param string $cacheKey
+     * @param array $data
+     * @param array $cacheTags
+     */
+    private function saveToCacheWithCacheTag(string $cacheKey, array $data, array $cacheTags)
+    {
+        $this->cache->save(
+            $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($data)),
+            $cacheKey,
+            $cacheTags
         );
     }
 }
