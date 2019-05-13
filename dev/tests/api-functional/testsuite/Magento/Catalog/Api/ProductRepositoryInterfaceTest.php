@@ -663,6 +663,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     public function testProductWithMediaGallery()
     {
         $testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $encodedImage = base64_encode(file_get_contents($testImagePath));
         //create a product with media gallery
         $filename1 = 'tiny1' . time() . '.jpg';
@@ -787,7 +788,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     protected function updateProduct($product)
     {
         if (isset($product['custom_attributes'])) {
-            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $size = sizeof($product['custom_attributes']);
+            for ($i=0; $i < $size; $i++) {
                 if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
                     && !is_array($product['custom_attributes'][$i]['value'])
                 ) {
@@ -1208,7 +1211,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     protected function saveProduct($product, $storeCode = null)
     {
         if (isset($product['custom_attributes'])) {
-            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $size = sizeof($product['custom_attributes']);
+            for ($i=0; $i< $size; $i++) {
                 if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
                     && !is_array($product['custom_attributes'][$i]['value'])
                 ) {
@@ -1609,9 +1614,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $productData = $this->getSimpleProductData();
 
-        $multiselectValue = ["{$option1Value}", "{$option2Value}"];
         $productData['custom_attributes'] = [
-            ['attribute_code' => $multiselectAttributeCode, 'value' => $multiselectValue]
+            ['attribute_code' => $multiselectAttributeCode, 'value' => [$option1Value, $option2Value]]
         ];
         $this->saveProduct($productData, 'all');
 
