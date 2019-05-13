@@ -104,13 +104,15 @@ class LockGuardedCacheLoader
      * @param callable $dataLoader
      * @param callable $dataCollector
      * @param callable $dataSaver
+     * @param callable $staleDataLoader
      * @return mixed
      */
     public function nonBlockingLockedLoadData(
         string $lockName,
         callable $dataLoader,
         callable $dataCollector,
-        callable $dataSaver
+        callable $dataSaver,
+        callable $staleDataLoader = null
     ) {
         $cachedData = $dataLoader();
 
@@ -120,12 +122,18 @@ class LockGuardedCacheLoader
 
         $isLocked = $this->locker->isLocked($lockName);
 
-        $cachedData = $dataCollector();
+        $staleDataLoader = $staleDataLoader ?? $dataCollector;
+
+        if ($isLocked) {
+            return $staleDataLoader() ?: $dataCollector();
+        }
+
+        $dataToCache = $dataCollector();
 
         if (!$isLocked
             && $this->locker->lock($lockName, 0)) {
             try {
-                $cachedData = $dataSaver($cachedData);
+                $cachedData = $dataSaver($dataToCache);
             } finally {
                 $this->locker->unlock($lockName);
             }
