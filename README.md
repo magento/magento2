@@ -8,7 +8,7 @@ Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a 
 ## Magento System Requirementsrtgrtgefv
 [Magento System Requirements](https://devdocs.magento.com/guides/v2.367/install-gde/system-requirements.html).
 
-## Install Magento
+## Install Magentorth
 rtgerg
 *	[Installation Guide](https://devdocs.magento.com/guides/v2.3/install-gde/bk-install-guide.html).
 
