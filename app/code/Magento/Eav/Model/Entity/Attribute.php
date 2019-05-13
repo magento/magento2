@@ -238,22 +238,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
             );
         }
 
-        /**
-         * Check for maximum attribute_code length
-         */
-        if (isset(
-            $this->_data['attribute_code']
-        ) && !\Zend_Validate::is(
-            $this->_data['attribute_code'],
-            'StringLength',
-            ['max' => self::ATTRIBUTE_CODE_MAX_LENGTH]
-        )
-        ) {
-            throw new LocalizedException(
-                __('An attribute code must not be more than %1 characters.', self::ATTRIBUTE_CODE_MAX_LENGTH)
-            );
-        }
-
         $defaultValue = $this->getDefaultValue();
         $hasDefaultValue = (string)$defaultValue != '';
 

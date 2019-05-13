@@ -189,26 +189,6 @@ class Save extends Attribute
                 ? $model->getAttributeCode()
                 : $this->getRequest()->getParam('attribute_code');
             $attributeCode = $attributeCode ?: $this->generateCode($this->getRequest()->getParam('frontend_label')[0]);
-            if (strlen($attributeCode) > 0) {
-                $validatorAttrCode = new \Zend_Validate_Regex(
-                    ['pattern' => '/^[a-z\x{600}-\x{6FF}][a-z\x{600}-\x{6FF}_0-9]{0,30}$/u']
-                );
-                if (!$validatorAttrCode->isValid($attributeCode)) {
-                    $this->messageManager->addErrorMessage(
-                        __(
-                            'Attribute code "%1" is invalid. Please use only letters (a-z), ' .
-                            'numbers (0-9) or underscore(_) in this field, first character should be a letter.',
-                            $attributeCode
-                        )
-                    );
-
-                    return $this->returnResult(
-                        'catalog/*/edit',
-                        ['attribute_id' => $attributeId, '_current' => true],
-                        ['error' => true]
-                    );
-                }
-            }
             $data['attribute_code'] = $attributeCode;
 
             //validate frontend_input

@@ -5,6 +5,7 @@
  */
 namespace Magento\Eav\Setup;
 
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
@@ -782,13 +783,18 @@ class EavSetup
         );
 
         if (!$isAllowedLength) {
-            $errorMessage = __(
+            throw new LocalizedException(__(
                 'An attribute code must not be less than %1 and more than %2 characters.',
                 $minLength,
                 $maxLength
-            );
+            ));
+        }
 
-            throw new LocalizedException($errorMessage);
+        if (strpos($attributeCode, AbstractModifier::CONTAINER_PREFIX) === 0) {
+            throw new LocalizedException(__(
+                '"%1" prefix is reserved by the system and cannot be used in attribute code names.',
+                AbstractModifier::CONTAINER_PREFIX
+            ));
         }
 
         return true;

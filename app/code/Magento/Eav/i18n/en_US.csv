@@ -143,3 +143,6 @@ hello,hello
 "The value of attribute not valid","The value of attribute not valid"
 "EAV types and attributes","EAV types and attributes"
 "Entity types declaration cache","Entity types declaration cache"
+"Attribute code ""%1"" is invalid. Please use only letters (a-z), numbers (0-9) or underscore(_) in this field, first character should be a letter.","Attribute code ""%1"" is invalid. Please use only letters (a-z), numbers (0-9) or underscore(_) in this field, first character should be a letter."
+"An attribute code must not be less than %1 and more than %2 characters.","An attribute code must not be less than %1 and more than %2 characters."
+"""%1"" prefix is reserved by the system and cannot be used in attribute code names.","""%1"" prefix is reserved by the system and cannot be used in attribute code names."
