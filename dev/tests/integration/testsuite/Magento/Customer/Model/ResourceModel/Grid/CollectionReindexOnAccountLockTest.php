@@ -69,6 +69,8 @@ class CollectionReindexOnAccountLockTest extends TestCase
      * Test if customer account lock on too many failed authentication attempts triggers customer grid reindex
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testCustomerAccountReindexOnLock()
     {
