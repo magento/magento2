@@ -80,7 +80,7 @@ class Start extends ImportResultController implements HttpPostActionInterface
 
             $this->importModel->setData($data);
             //Images can be read only from given directory.
-            $this->importModel->setData(Import::IMAGES_BASE_DIR, $this->imagesDirProvider->getDirectory());
+            $this->importModel->setData('images_base_directory', $this->imagesDirProvider->getDirectory());
             $errorAggregator = $this->importModel->getErrorAggregator();
             $errorAggregator->initValidationStrategy(
                 $this->importModel->getData(Import::FIELD_NAME_VALIDATION_STRATEGY),

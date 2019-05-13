@@ -471,11 +471,11 @@ class Import extends AbstractModel
         $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode());
         $this->setData('behavior', $this->getDataSourceModel()->getBehavior());
         //Validating images temporary directory path if the constraint has been provided
-        if ($this->hasData(self::IMAGES_BASE_DIR)
-            && $this->getData(self::IMAGES_BASE_DIR) instanceof Filesystem\Directory\ReadInterface
+        if ($this->hasData('images_base_directory')
+            && $this->getData('images_base_directory') instanceof Filesystem\Directory\ReadInterface
         ) {
             /** @var Filesystem\Directory\ReadInterface $imagesDirectory */
-            $imagesDirectory = $this->getData(self::IMAGES_BASE_DIR);
+            $imagesDirectory = $this->getData('images_base_directory');
             if (!$imagesDirectory->isReadable()) {
                 $rootWrite = $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT);
                 $rootWrite->create($imagesDirectory->getAbsolutePath());

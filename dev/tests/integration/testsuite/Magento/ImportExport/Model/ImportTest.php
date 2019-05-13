@@ -78,7 +78,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
                 'importConfig' => $this->_importConfig
             ]
         );
-        $this->_model->setData(Import::IMAGES_BASE_DIR, $provider->getDirectory());
+        $this->_model->setData('images_base_directory', $provider->getDirectory());
     }
 
     /**
