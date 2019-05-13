@@ -137,6 +137,8 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
 
     /**
      * @var ClientFactory
+     * @deprecated Use async client.
+     * @see $asyncHttpClient
      */
     private $httpClientFactory;
 
@@ -763,20 +765,13 @@ XMLRequest;
 
         $xmlRequest .= $xmlParams;
 
-        $xmlResponse = $this->_getCachedQuotes($xmlRequest);
-        if ($xmlResponse === null) {
-            $debugData['request'] = $xmlParams;
-            try {
-                $client = $this->httpClientFactory->create();
-                $client->post($url, $xmlRequest);
-                $xmlResponse = $client->getBody();
-                $debugData['result'] = $xmlResponse;
-                $this->_setCachedQuotes($xmlRequest, $xmlResponse);
-            } catch (\Throwable $e) {
-                $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
-                $xmlResponse = '';
-            }
-            $this->_debug($debugData);
+        $httpResponse = $this->asyncHttpClient->request(
+            new Request($url, Request::METHOD_POST, ['Content-Type' => 'application/xml'], $xmlRequest)
+        )->get();
+        if ($httpResponse->getStatusCode() >= 400) {
+            $xmlResponse = '';
+        } else {
+            $xmlResponse = $httpResponse->getBody();
         }
 
         return $this->_parseXmlResponse($xmlResponse);
@@ -1074,6 +1069,8 @@ XMLAuth;
     {
         $url = $this->getConfigData('tracking_xml_url');
 
+        /** @var HttpResponseDeferredInterface[] $trackingResponses */
+        $trackingResponses = [];
         foreach ($trackings as $tracking) {
             /**
              * RequestOption==>'1' to request all activities
@@ -1089,18 +1086,22 @@ XMLAuth;
     <IncludeFreight>01</IncludeFreight>
 </TrackRequest>
 XMLAuth;
-            $debugData['request'] = $this->filterDebugData($this->_xmlAccessRequest) . $xmlRequest;
-            try {
-                $client = $this->httpClientFactory->create();
-                $client->post($url, $this->_xmlAccessRequest . $xmlRequest);
-                $xmlResponse = $client->getBody();
-                $debugData['result'] = $xmlResponse;
-            } catch (\Throwable $e) {
-                $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
+
+            $trackingResponses[] = $this->asyncHttpClient->request(new Request(
+                $url,
+                Request::METHOD_POST,
+                ['Content-Type' => 'application/xml'],
+                $this->_xmlAccessRequest . $xmlRequest
+            ));
+        }
+        foreach ($trackingResponses as $response) {
+            $httpResponse = $response->get();
+            if ($httpResponse->getStatusCode() >= 400) {
                 $xmlResponse = '';
+            } else {
+                $xmlResponse = $httpResponse->getBody();
             }
 
-            $this->_debug($debugData);
             $this->_parseXmlTrackingResponse($tracking, $xmlResponse);
         }
 
