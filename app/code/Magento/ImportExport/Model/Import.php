@@ -73,11 +73,6 @@ class Import extends AbstractModel
     const FIELD_NAME_IMG_FILE_DIR = 'import_images_file_dir';
 
     /**
-     * ReadInterface of the directory constraint for images.
-     */
-    const IMAGES_BASE_DIR = 'images_base_directory';
-
-    /**
      * Allowed errors count field name
      */
     const FIELD_NAME_ALLOWED_ERROR_COUNT = 'allowed_error_count';
