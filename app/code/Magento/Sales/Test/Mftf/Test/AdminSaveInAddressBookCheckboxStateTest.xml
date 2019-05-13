@@ -10,8 +10,8 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminSaveInAddressBookCheckboxStateTest">
         <annotations>
-            <title value="'Save in address book' check-box inside 'Shipping Address' section on 'create Order' Admin page"/>
-            <description value="'Save in address book' check-box inside 'Shipping Address' section on 'create Order' Admin page"/>
+            <title value="The state of 'Save in address book' check-box inside 'Shipping Address' section on 'create Order' Admin page"/>
+            <description value="The state of 'Save in address book' check-box inside 'Shipping Address' section on 'create Order' Admin page"/>
             <features value="Sales"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-36337"/>
