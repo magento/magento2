@@ -173,14 +173,14 @@ class QuoteUpdater extends AbstractHelper
      */
     private function updateAddressData(Address $address, array $addressData)
     {
-        $extendedAddress = isset($addressData['extendedAddress'])
-            ? $addressData['extendedAddress']
+        $extendedAddress = isset($addressData['line2'])
+            ? $addressData['line2']
             : null;
 
-        $address->setStreet([$addressData['streetAddress'], $extendedAddress]);
-        $address->setCity($addressData['locality']);
-        $address->setRegionCode($addressData['region']);
-        $address->setCountryId($addressData['countryCodeAlpha2']);
+        $address->setStreet([$addressData['line1'], $extendedAddress]);
+        $address->setCity($addressData['city']);
+        $address->setRegionCode($addressData['state']);
+        $address->setCountryId($addressData['countryCode']);
         $address->setPostcode($addressData['postalCode']);
 
         // PayPal's address supposes not saving against customer account

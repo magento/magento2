@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Model\Ui;
 
 use Magento\Braintree\Gateway\Config\Config;
@@ -124,6 +126,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                     'isActive' => true,
                     'getCcTypesMapper' => ['visa' => 'VI', 'american-express'=> 'AE'],
                     'getSdkUrl' => self::SDK_URL,
+                    'getHostedFieldsSdkUrl' => 'https://sdk.com/test.js',
                     'getCountrySpecificCardTypeConfig' => [
                         'GB' => ['VI', 'AE'],
                         'US' => ['DI', 'JCB']
@@ -134,7 +137,6 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                     'getThresholdAmount' => 20,
                     'get3DSecureSpecificCountries' => ['GB', 'US', 'CA'],
                     'getEnvironment' => 'test-environment',
-                    'getKountMerchantId' => 'test-kount-merchant-id',
                     'getMerchantId' => 'test-merchant-id',
                     'hasFraudProtection' => true,
                 ],
@@ -145,6 +147,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'clientToken' => self::CLIENT_TOKEN,
                             'ccTypesMapper' => ['visa' => 'VI', 'american-express' => 'AE'],
                             'sdkUrl' => self::SDK_URL,
+                            'hostedFieldsSdkUrl' => 'https://sdk.com/test.js',
                             'countrySpecificCardTypes' =>[
                                 'GB' => ['VI', 'AE'],
                                 'US' => ['DI', 'JCB']
@@ -152,7 +155,6 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'availableCardTypes' => ['AE', 'VI', 'MC', 'DI', 'JCB'],
                             'useCvv' => true,
                             'environment' => 'test-environment',
-                            'kountMerchantId' => 'test-kount-merchant-id',
                             'merchantId' => 'test-merchant-id',
                             'hasFraudProtection' => true,
                             'ccVaultCode' => ConfigProvider::CC_VAULT_CODE
