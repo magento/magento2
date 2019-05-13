@@ -13,7 +13,7 @@
             <stories value="Sales-Shipments"/>
             <title value="Admin user created shipment for whole order with Simple product in single stock mode and main website"/>
             <description value="You should be able to create shipment for whole order in Single Stock mode."/>
-            <testCaseId value="MSI-1137"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/913950/scenarios/1841125"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>

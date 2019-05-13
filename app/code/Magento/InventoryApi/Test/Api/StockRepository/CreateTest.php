@@ -39,6 +39,9 @@ class CreateTest extends WebapiAbstract
         $this->stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
     }
 
+    /**
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/529092/scenarios/1820372
+     */
     public function testCreate()
     {
         $expectedData = [
@@ -72,6 +75,8 @@ class CreateTest extends WebapiAbstract
     /**
      * @param int $stockId
      * @return array
+     *
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/529092/scenarios/1849390
      */
     private function getStockDataById(int $stockId): array
     {

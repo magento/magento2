@@ -13,7 +13,7 @@
             <stories value="Create invoice for virtual product in Single Stock mode."/>
             <title value="Create invoice for virtual product in Single Stock mode."/>
             <description value="Check, admin user able to create invoice for virtual product in Single Stock mode."/>
-            <testCaseId value="MSI-1128"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/913972/scenarios/1855420"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>

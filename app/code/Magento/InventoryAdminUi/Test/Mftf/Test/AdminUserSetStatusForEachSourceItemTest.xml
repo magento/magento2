@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Admin user set for Product stock status for each Source"/>
             <title value="Admin user set for Product stock status for each Source"/>
-            <description value="Admin user set for Product stock status for each Source"/>
-            <testCaseId value="MSI-860"/>
+            <description value="Admin user set for Product stock status for each Source."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/911726/scenarios/1408759"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

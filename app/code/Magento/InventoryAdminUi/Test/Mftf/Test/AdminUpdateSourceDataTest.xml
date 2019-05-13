@@ -13,7 +13,7 @@
             <stories value="Update Source"/>
             <title value="Source data updated by Admin user"/>
             <description value="You should be able to update a Sources data via the Admin."/>
-            <testCaseId value="MSI-492"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/910317/scenarios/1408732"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

@@ -13,7 +13,7 @@
             <stories value="Sales-Shipments"/>
             <title value="Admin user created shipment for whole order with Simple product from Test source and Main Website"/>
             <description value="You should be able to create shipment for whole order from Custom Source."/>
-            <testCaseId value="MSI-1136"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735286/scenarios/1479129"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

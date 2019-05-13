@@ -13,7 +13,7 @@
             <stories value="Stock Assignment"/>
             <title value="New Website should be assigned to the Default Stock automatically"/>
             <description value="You should see new Websites automatically added to the Default Stock after they are created."/>
-            <testCaseId value="MSI-740"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/409121/scenarios/1410207"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

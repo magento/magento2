@@ -13,7 +13,7 @@
             <stories value="Configuration-Catalog-Products-Simple product"/>
             <title value="Manage Stock on Product page turned off for Simple Product in admin"/>
             <description value="You should be able to turn off Manage Stock option on Product page."/>
-            <testCaseId value="MSI-957"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457014/scenarios/1524718"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

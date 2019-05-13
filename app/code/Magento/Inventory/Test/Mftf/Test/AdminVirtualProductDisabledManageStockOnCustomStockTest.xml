@@ -13,7 +13,7 @@
             <stories value="Manage Stock on Configuration page turned off for Virtual Product in admin"/>
             <title value="Manage Stock on Configuration page turned off for Virtual Product in admin"/>
             <description value="Manage Stock on Configuration page turned off for Virtual Product in admin."/>
-            <testCaseId value="MSI-1577"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457015/scenarios/1547784"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

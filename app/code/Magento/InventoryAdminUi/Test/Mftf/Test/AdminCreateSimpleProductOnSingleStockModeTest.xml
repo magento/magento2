@@ -13,7 +13,7 @@
             <stories value="Add Simple Product"/>
             <title value="Simple Product created and visible on frontend"/>
             <description value="You should be able to create a New Product via the Admin, and see it on frontend as in stock."/>
-            <testCaseId value="MSI-953"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457014/scenarios/1698179"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>

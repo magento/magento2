@@ -13,7 +13,7 @@
             <stories value="Source Selection Algorithm by source priority with simple product on custom stock."/>
             <title value="Source Selection Algorithm by source priority with simple product on custom stock."/>
             <description value="Check, 'Source Selection Algorithm' by source priority select corrects source for simple product on custom stock."/>
-            <testCaseId value="MSI-1126"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/790998/scenarios/1624282"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

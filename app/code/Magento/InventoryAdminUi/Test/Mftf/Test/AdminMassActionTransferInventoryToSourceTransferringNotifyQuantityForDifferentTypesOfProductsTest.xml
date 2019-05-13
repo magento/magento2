@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Transfer inventory to source"/>
             <title value="Notify Quantity transferring when admin user apply mass action 'Transfer Inventory To Source' on Products grid to different types of products"/>
-            <description value="You should be able use mass action 'Transfer inventory to source' to transfer notify quantity via mass action on products grid"/>
-            <testCaseId value="MSI-1523"/>
+            <description value="You should be able use mass action 'Transfer inventory to source' to transfer notify quantity via mass action on products grid."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/611878/scenarios/2101091"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
