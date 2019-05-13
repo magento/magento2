@@ -246,6 +246,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $quoteItemQty = 6.5;
 
         $this->setStockItemConfigIsDecimal($sku, $stockId);
+        $this->setStockItemManageStockFalse($sku, $stockId);
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
         $cartItem = $this->getCartItem($product, $quoteItemQty, (int)$cart->getId());
@@ -335,6 +336,18 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
     {
         $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
         $stockItemConfiguration->setIsQtyDecimal(true);
+        $this->saveStockItemConfiguration->execute($sku, $stockId, $stockItemConfiguration);
+    }
+
+    /**
+     * @param $sku
+     * @param $stockId
+     */
+    private function setStockItemManageStockFalse(string $sku, int $stockId): void
+    {
+        $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
+        $stockItemConfiguration->setManageStock(false);
+        $stockItemConfiguration->setUseConfigManageStock(false);
         $this->saveStockItemConfiguration->execute($sku, $stockId, $stockItemConfiguration);
     }
 
