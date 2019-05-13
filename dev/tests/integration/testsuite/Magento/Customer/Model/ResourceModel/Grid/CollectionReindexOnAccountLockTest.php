@@ -32,6 +32,7 @@ class CollectionReindexOnAccountLockTest extends TestCase
         for ($i = 0; $i < 10; $i++) {
             try {
                 $accountManagement->authenticate('customer@example.com', 'wrongPassword');
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (InvalidEmailOrPasswordException $e) {
             }
         }
