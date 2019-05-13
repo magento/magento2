@@ -10,8 +10,8 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOrderConfigureConfigurableProduct">
         <arguments>
-            <argument name="optionName" type="string"/>
-            <argument name="productQty" type="string"/>
+            <argument name="optionName" type="string" defaultValue="option1"/>
+            <argument name="productQty" type="string" defaultValue="1"/>
         </arguments>
         <click selector="{{AdminOrderFormItemsOrderedSection.configureButtonBySku}}" stepKey="clickConfigure"/>
         <waitForPageLoad stepKey="waitForConfigurePageLoad"/>
