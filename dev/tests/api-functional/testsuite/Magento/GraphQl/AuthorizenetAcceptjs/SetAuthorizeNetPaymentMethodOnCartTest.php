@@ -118,7 +118,8 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
         try{
             $this->graphQlMutation($query);
         } catch(\Exception $e){
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
+            $this->assertEquals(1,2, $e->getMessage());
+            //$output->writeln('<error>' . $e->getMessage() . '</error>');
             //$e->getMessage();
         }
         //$response = $this->graphQlMutation($query);
