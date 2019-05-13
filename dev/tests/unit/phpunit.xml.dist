@@ -44,6 +44,9 @@
                 <string>var/allure-results</string> <!-- XML files output directory -->
                 <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
                 <array> <!-- A list of custom annotations to ignore (optional) -->
+                    <element key="codingStandardsIgnoreFile">
+                        <string>codingStandardsIgnoreFile</string>
+                    </element>
                     <element key="codingStandardsIgnoreStart">
                         <string>codingStandardsIgnoreStart</string>
                     </element>
