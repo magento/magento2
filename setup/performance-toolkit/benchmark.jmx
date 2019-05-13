@@ -1569,6 +1569,7 @@ props.put("cms_pages", cmsPages);
           <stringProp name="BeanShellSampler.query">import java.util.ArrayList;
 import java.util.HashMap;
 import org.apache.commons.codec.binary.Base64;
+ArrayList productList;
 
 // If it is first iteration of cycle then recreate productList
 if (1 == Integer.parseInt(vars.get("configurable_products_counter"))) {
@@ -1707,12 +1708,13 @@ productList.add(productMap);</stringProp>
           <stringProp name="BeanShellSampler.query">import java.util.ArrayList;
 import java.util.HashMap;
 import org.apache.commons.codec.binary.Base64;
+ArrayList editProductList;
 
 if (1 == Integer.parseInt(vars.get("configurable_products_counter_for_edit"))) {
     editProductList = new ArrayList();
     props.put("configurable_products_list_for_edit", editProductList);
 } else {
-    productList = props.get("configurable_products_list_for_edit");
+    editProductList = props.get("configurable_products_list_for_edit");
 }
 
 String productUrl = vars.get("request_protocol") + "://" + vars.get("host") + vars.get("base_path") + vars.get("configurable_products_for_edit_url_keys_" + vars.get("configurable_products_counter_for_edit"))+ vars.get("url_suffix");
@@ -1851,6 +1853,7 @@ editProductList.add(editProductMap);</stringProp>
           <stringProp name="BeanShellSampler.query">import java.util.ArrayList;
 import java.util.HashMap;
 import org.apache.commons.codec.binary.Base64;
+ArrayList productList;
 
 // If it is first iteration of cycle then recreate productList
 if (1 == Integer.parseInt(vars.get("simple_products_counter"))) {
@@ -2002,12 +2005,13 @@ productList.add(productMap);</stringProp>
           <stringProp name="BeanShellSampler.query">import java.util.ArrayList;
 import java.util.HashMap;
 import org.apache.commons.codec.binary.Base64;
+ArrayList editProductList;
 
 if (1 == Integer.parseInt(vars.get("simple_products_counter_for_edit"))) {
     editProductList = new ArrayList();
     props.put("simple_products_list_for_edit", editProductList);
 } else {
-    productList = props.get("simple_products_counter_for_edit");
+    editProductList = props.get("simple_products_list_for_edit");
 }
 
 String productUrl = vars.get("request_protocol") + "://" + vars.get("host") + vars.get("base_path") + vars.get("simple_products_for_edit_url_keys_" + vars.get("simple_products_counter_for_edit"))+ vars.get("url_suffix");
