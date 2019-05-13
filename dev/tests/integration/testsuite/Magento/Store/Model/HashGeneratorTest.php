@@ -111,8 +111,6 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Store/_files/store.php
-     * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @return void
      */
@@ -120,8 +118,8 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $redirectUrl = "http://domain.com/";
         $fromStoreCode = 'test';
-        $fromStore  = $this->createMock(Store::class);
-        $toStore = $this->createMock(Store::class);
+        $fromStore  = $this->createPartialMock(Store::class, ['getCode']);
+        $toStore = $this->createPartialMock(Store::class, ['getCode']);
         $fromStore->expects($this->once())->method('getCode')->willReturn($fromStoreCode);
         $timeStamp = time();
         $targetUrl=$this->hashGenerator->switch($fromStore, $toStore, $redirectUrl);
