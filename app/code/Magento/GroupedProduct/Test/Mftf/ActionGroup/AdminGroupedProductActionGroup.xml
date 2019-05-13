@@ -52,4 +52,22 @@
         </arguments>
         <fillField selector="{{AdminAddedProductsToGroupGrid.inputByProductName(productName)}}" userInput="{{qty}}" stepKey="fillDefaultQtyForLinkedProduct"/>
     </actionGroup>
+
+    <!-- Assign Specified Product To Grouped Product -->
+    <!-- Assumes web client is on grouped product edit page -->
+    <actionGroup name="AdminAssignProductToGroup">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+
+        <scrollTo selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" x="0" y="-100" stepKey="scrollToGroupedSection"/>
+        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
+        <conditionalClick selector="{{AdminAddProductsToGroupPanel.clearFilters}}" dependentSelector="{{AdminAddProductsToGroupPanel.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <click selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="showFiltersPanel"/>
+        <fillField userInput="{{product.name}}" selector="{{AdminAddProductsToGroupPanel.nameFilter}}" stepKey="fillNameFilter"/>
+        <click selector="{{AdminAddProductsToGroupPanel.applyFilters}}" stepKey="clickApplyFilters"/>
+        <click selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="selectProduct"/>
+        <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts"/>
+    </actionGroup>
 </actionGroups>

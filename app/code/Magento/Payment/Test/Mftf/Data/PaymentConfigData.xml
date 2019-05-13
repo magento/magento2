@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="EnablePaymentCheckMOConfigData">
         <data key="path">payment/checkmo/active</data>
         <data key="scope_id">0</data>
@@ -28,6 +28,18 @@
     </entity>
     <entity name="DisablePaymentBankTransferConfigData">
         <data key="path">payment/banktransfer/active</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnablePaymentCashOnDeliveryData">
+        <data key="path">payment/cashondelivery/active</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisablePaymentCashOnDeliveryData">
+        <data key="path">payment/cashondelivery/active</data>
         <data key="scope_id">0</data>
         <data key="label">No</data>
         <data key="value">0</data>
