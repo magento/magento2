@@ -92,7 +92,11 @@ class IndexerHandler implements IndexerInterface
         $dimension = current($dimensions);
         $scopeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
         foreach ($this->batch->getItems($documents, $this->batchSize) as $documentsBatch) {
-            $docs = $this->adapter->prepareDocsPerStore($documentsBatch, $scopeId);
+            $docs = $this->adapter->prepareDocsPerStore(
+                $documentsBatch,
+                $scopeId,
+                $this->getIndexerId()
+            );
             $this->adapter->addDocs($docs, $scopeId, $this->getIndexerId());
         }
         $this->adapter->updateAlias($scopeId, $this->getIndexerId());

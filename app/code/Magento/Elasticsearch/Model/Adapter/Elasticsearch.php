@@ -145,15 +145,19 @@ class Elasticsearch
      *
      * @param array $documentData
      * @param int $storeId
+     * @param string $mappedIndexerId
      * @return array
      */
-    public function prepareDocsPerStore(array $documentData, $storeId)
+    public function prepareDocsPerStore(array $documentData, $storeId, $mappedIndexerId)
     {
         $documents = [];
         if (count($documentData)) {
             $documents = $this->batchDocumentDataMapper->map(
                 $documentData,
-                $storeId
+                $storeId,
+                [
+                    'entityType' => $mappedIndexerId,
+                ]
             );
         }
         return $documents;
