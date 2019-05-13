@@ -106,7 +106,7 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
     protected function tearDown()
     {
         $this->customerSession->logout();
-        parent:tearDown();
+        parent::tearDown();
     }
 
     /**
