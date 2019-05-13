@@ -61,10 +61,11 @@ define([
         _updateWishlistData: function (event) {
             var dataToAdd = {},
                 isFileUploaded = false,
+                sku = '',
                 self = this;
 
             if (event.handleObj.selector == this.options.qtyInfo) { //eslint-disable-line eqeqeq
-                this._updateAddToWishlistButton({});
+                this._updateAddToWishlistButton({}, sku);
                 event.stopPropagation();
 
                 return;
@@ -79,7 +80,10 @@ define([
                     $(element).is('textarea') ||
                     $('#' + element.id + ' option:selected').length
                 ) {
-                    dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
+                    if ($(element).val() !== '') {
+                        sku = $(element).closest('form').data('product-sku');
+                        dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
+                    }
 
                     return;
                 }
@@ -92,19 +96,28 @@ define([
             if (isFileUploaded) {
                 this.bindFormSubmit();
             }
-            this._updateAddToWishlistButton(dataToAdd);
+            this._updateAddToWishlistButton(dataToAdd, sku);
             event.stopPropagation();
         },
 
         /**
          * @param {Object} dataToAdd
+         * @param {String} sku
          * @private
          */
-        _updateAddToWishlistButton: function (dataToAdd) {
-            var self = this;
+        _updateAddToWishlistButton: function (dataToAdd, sku) {
+            var parentClass = '',
+                addToWishlistBtn = '',
+                params = '',
+                self = this;
 
-            $('[data-action="add-to-wishlist"]').each(function (index, element) {
-                var params = $(element).data('post');
+            if (sku !== '') {
+                parentClass = $('body').hasClass('catalog-product-view') ? '.product-info-main' : '.product-item-actions';
+                addToWishlistBtn = $('form[data-product-sku="' + sku + '"]')
+                                    .closest(parentClass)
+                                    .find('[data-action="add-to-wishlist"]');
+
+                params = addToWishlistBtn.data('post');
 
                 if (!params) {
                     params = {
@@ -115,8 +128,24 @@ define([
                 params.data = $.extend({}, params.data, dataToAdd, {
                     'qty': $(self.options.qtyInfo).val()
                 });
-                $(element).data('post', params);
-            });
+                addToWishlistBtn.data('post', params);
+            } else {
+                $('[data-action="add-to-wishlist"]').each(function (index, element) {
+                    params = $(element).data('post');
+
+                    if (!params) {
+                        params = {
+                            'data': {}
+                        };
+                    }
+
+                    params.data = $.extend({}, params.data, dataToAdd, {
+                        'qty': $(self.options.qtyInfo).val()
+                    });
+                    $(element).data('post', params);
+                });
+            }
+
         },
 
         /**
