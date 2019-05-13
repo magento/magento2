@@ -816,7 +816,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Processs adding product website names to result collection
+     * Process adding product website names to result collection
      *
      * @return $this
      */
