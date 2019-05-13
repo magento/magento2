@@ -26,10 +26,10 @@
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
         </before>
         <after>
-            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
-            <actionGroup ref="AdminResetFilterInCustomerAddressGrid" stepKey="clearCustomerGridFilter"/>
             <deleteData createDataKey="createFirstCustomer" stepKey="deleteFirstCustomer"/>
             <deleteData createDataKey="createSecondCustomer" stepKey="deleteSecondCustomer"/>
+            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
+            <actionGroup ref="AdminResetFilterInCustomerAddressGrid" stepKey="clearCustomerGridFilter"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Step 1: Go to Customers > All Customers-->
