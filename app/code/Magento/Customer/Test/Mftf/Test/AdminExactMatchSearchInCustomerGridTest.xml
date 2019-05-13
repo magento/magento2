@@ -9,13 +9,13 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminExactMatchSearchInCustomerGridTest">
         <annotations>
+            <features value="Customer"/>
+            <stories value="Customer Search"/>
             <title value="Admin customer grid exact match searching"/>
             <description value="Admin customer grid exact match searching with quotes in keyword"/>
-            <features value="Module/ Customer"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-16335"/>
             <useCaseId value="MAGETWO-99605"/>
-            <stories value="Customer Search"/>
             <group value="customer"/>
         </annotations>
         <before>
@@ -26,6 +26,8 @@
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
         </before>
         <after>
+            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
+            <actionGroup ref="AdminResetFilterInCustomerAddressGrid" stepKey="clearCustomerGridFilter"/>
             <deleteData createDataKey="createFirstCustomer" stepKey="deleteFirstCustomer"/>
             <deleteData createDataKey="createSecondCustomer" stepKey="deleteSecondCustomer"/>
             <actionGroup ref="logout" stepKey="logout"/>
@@ -33,7 +35,7 @@
         <!--Step 1: Go to Customers > All Customers-->
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
         <!--Step 2: On Customers grid page search customer by keyword with quotes-->
-        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchOrder">
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomer">
             <argument name="keyword" value="$$createSecondCustomer.firstname$$"/>
         </actionGroup>
         <!--Step 3: Check if customer is placed in a first row and clear grid filter-->
@@ -41,6 +43,5 @@
             <argument name="text" value="$$createSecondCustomer.fullname$$"/>
             <argument name="row" value="1"/>
         </actionGroup>
-        <actionGroup ref="AdminResetFilterInCustomerAddressGrid" stepKey="clearCustomerGridFilter"/>
     </test>
 </tests>
