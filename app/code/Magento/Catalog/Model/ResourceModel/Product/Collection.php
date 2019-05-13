@@ -330,7 +330,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param TableMaintainer|null $tableMaintainer
      * @param PriceTableResolver|null $priceTableResolver
      * @param DimensionFactory|null $dimensionFactory
-     * @param DbStorage|null $urlFinder
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -359,8 +358,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         MetadataPool $metadataPool = null,
         TableMaintainer $tableMaintainer = null,
         PriceTableResolver $priceTableResolver = null,
-        DimensionFactory $dimensionFactory = null,
-        DbStorage $urlFinder = null
+        DimensionFactory $dimensionFactory = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -394,7 +392,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(PriceTableResolver::class);
         $this->dimensionFactory = $dimensionFactory
             ?: ObjectManager::getInstance()->get(DimensionFactory::class);
-        $this->urlFinder = $urlFinder ?: ObjectManager::getInstance()->get(DbStorage::class);
+    }
+
+    /**
+     * Retrieve urlFinder
+     *
+     * @return GalleryReadHandler
+     */
+    private function getUrlFinder()
+    {
+        if ($this->urlFinder === null) {
+            $this->urlFinder = ObjectManager::getInstance()->get(DbStorage::class);
+        }
+        return $this->urlFinder;
     }
 
     /**
@@ -1437,7 +1447,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $filter['metadata']['category_id'] = $this->_urlRewriteCategory;
         }
 
-        $rewrites = $this->urlFinder->findAllByData($filter);
+        $rewrites = $this->getUrlFinder()->findAllByData($filter);
         foreach ($rewrites as $rewrite) {
             if ($item = $this->getItemById($rewrite->getEntityId())) {
                 $item->setData('request_path', $rewrite->getRequestPath());

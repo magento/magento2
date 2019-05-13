@@ -113,7 +113,6 @@ class DynamicStorage extends BaseDbStorage
      */
     protected function doFindAllByData(array $data)
     {
-
         $rewrites = parent::doFindAllByData($data);
 
         $remainingProducts = [];
