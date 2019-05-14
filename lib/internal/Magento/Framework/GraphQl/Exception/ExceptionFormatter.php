@@ -62,8 +62,7 @@ class ExceptionFormatter
 
         return \GraphQL\Error\FormattedError::createFromException(
             $exception,
-            $this->shouldShowDetail()
-                ? \GraphQL\Error\Debug::INCLUDE_DEBUG_MESSAGE | \GraphQL\Error\Debug::INCLUDE_TRACE : false,
+            \GraphQL\Error\Debug::INCLUDE_DEBUG_MESSAGE | \GraphQL\Error\Debug::INCLUDE_TRACE,
             $internalErrorMessage
         );
     }

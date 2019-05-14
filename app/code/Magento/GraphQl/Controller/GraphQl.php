@@ -150,7 +150,7 @@ class GraphQl implements FrontControllerInterface
         } catch (\Exception $error) {
             $result['errors'] = isset($result) && isset($result['errors']) ? $result['errors'] : [];
             $result['errors'][] = $this->graphQlError->create($error);
-            $statusCode = ExceptionFormatter::HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS;
+            //$statusCode = ExceptionFormatter::HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS;
         }
 
         $jsonResult->setHttpResponseCode($statusCode);
