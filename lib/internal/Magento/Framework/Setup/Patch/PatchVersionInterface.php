@@ -18,7 +18,6 @@ interface PatchVersionInterface
      * this patch will be added to registry, but will not be applied, because it is already applied
      * by old mechanism of UpgradeData.php script
      *
-     *
      * @return string
      * @deprecated since appearance, required for backward compatibility
      */
