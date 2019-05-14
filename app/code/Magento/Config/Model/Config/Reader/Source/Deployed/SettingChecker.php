@@ -65,6 +65,12 @@ class SettingChecker
         );
 
         if (null === $config) {
+            $config = $this->config->get(
+                $this->resolvePath(ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null) . "/" . $path
+            );
+        }
+
+        if (null === $config) {
             $config = $this->config->get($this->resolvePath($scope, $scopeCode) . "/" . $path);
         }
 
