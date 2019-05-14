@@ -149,7 +149,7 @@ class GraphQl implements FrontControllerInterface
             );
         } catch (\Exception $error) {
             $result['errors'] = isset($result) && isset($result['errors']) ? $result['errors'] : [];
-            $result['errors'][] = $this->graphQlError->create($error);
+            $result['errors'][] = $this->graphQlError->create(new \GraphQL\Error\UserError($error->getMessage()));
             //$statusCode = ExceptionFormatter::HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS;
         }
 

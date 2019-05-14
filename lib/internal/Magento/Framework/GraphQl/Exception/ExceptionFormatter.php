@@ -52,7 +52,7 @@ class ExceptionFormatter
      */
     public function create(\Throwable $exception, $internalErrorMessage = null) : array
     {
-        if (!$this->shouldShowDetail()) {
+        if(true) {
             $reportId = uniqid("graph-ql-");
             $message = "Report ID: {$reportId}; Message: {$exception->getMessage()}";
             $code = $exception->getCode();
