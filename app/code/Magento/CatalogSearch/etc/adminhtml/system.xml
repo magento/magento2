@@ -34,6 +34,11 @@
                     <comment>Number of popular search terms to be cached for faster response. Use “0” to cache all results after a term is searched for the second time.</comment>
                     <validate>validate-digits</validate>
                 </field>
+                <field id="default_sort_by" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Search Result Sort by</label>
+                    <comment>Applies to catalog search result pages</comment>
+                    <source_model>Magento\CatalogSearch\Model\Config\Source\ListSort</source_model>
+                </field>
                 <field id="autocomplete_limit" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Autocomplete Limit</label>
                     <validate>validate-digits</validate>

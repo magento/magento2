@@ -143,7 +143,7 @@ class Result extends Template
         )->setDefaultDirection(
             'desc'
         )->setDefaultSortBy(
-            'relevance'
+            $this->catalogSearchData->getDefaultSearchSortBy()
         );
 
         return $this;
