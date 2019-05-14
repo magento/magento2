@@ -12,6 +12,8 @@
 namespace Magento\Reports\Model\ResourceModel\Report;
 
 /**
+ * Class Collection
+ *
  * @api
  * @since 100.0.2
  */
@@ -100,6 +102,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Set period
+     *
      * @codeCoverageIgnore
      *
      * @param int $period
@@ -113,6 +116,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Set interval
+     *
      * @codeCoverageIgnore
      *
      * @param \DateTimeInterface $fromDate
@@ -275,6 +279,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Set store ids
+     *
      * @codeCoverageIgnore
      *
      * @param array $storeIds
@@ -288,6 +293,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Get store ids
+     *
      * @codeCoverageIgnore
      *
      * @return array
@@ -309,6 +315,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Set page size
+     *
      * @codeCoverageIgnore
      *
      * @param int $size
@@ -322,6 +329,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Get page size
+     *
      * @codeCoverageIgnore
      *
      * @return int
