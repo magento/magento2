@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /* @var $block \Magento\Reports\Block\Product\Widget\Viewed */
 ?>
 
@@ -15,12 +13,12 @@ $type = $block->getType() . '-' . $mode;
 $class = 'widget viewed' . ' ' . $mode;
 $title = __('Recently Viewed');
 ?>
-<div class="block <?= /* @escapeNotVerified */ $class ?>" id="recently_viewed_container" data-mage-init='{"recentlyViewedProducts":{}}' data-count="<?= /* @escapeNotVerified */ $block->getCount() ?>" style="display: none;">
+<div class="block <?= $block->escapeHtml($class) ?>" id="recently_viewed_container" data-mage-init='{"recentlyViewedProducts":{}}' data-count="<?= $block->escapeHtml($block->getCount()) ?>" style="display: none;">
     <div class="title">
-        <strong><?= /* @escapeNotVerified */ $title ?></strong>
+        <strong><?= $block->escapeHtml($title) ?></strong>
     </div>
     <div class="content">
-        <ol class="products list items <?= /* @escapeNotVerified */ $type ?>">
+        <ol class="products list items <?= $block->escapeHtml($type) ?>">
         </ol>
     </div>
 </div>

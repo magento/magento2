@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 if ($exist = $block->getRecentlyComparedProducts()) {
@@ -26,43 +23,43 @@ if ($exist = $block->getRecentlyComparedProducts()) {
 }
 ?>
 <?php if ($exist): ?>
-<div class="block widget block-compared-products-<?= /* @escapeNotVerified */ $mode ?>">
+<div class="block widget block-compared-products-<?= $block->escapeHtml($mode) ?>">
     <div class="block-title">
-        <strong><?= /* @escapeNotVerified */ $title ?></strong>
+        <strong><?= $block->escapeHtml($title) ?></strong>
     </div>
     <div class="block-content">
         <?php $suffix = $block->getNameInLayout(); ?>
-        <ol class="product-items" id="widget-compared-<?= /* @escapeNotVerified */ $suffix ?>">
+        <ol class="product-items" id="widget-compared-<?= $block->escapeHtml($suffix) ?>">
             <?php foreach ($items as $_product): ?>
                 <li class="product-item">
                     <div class="product-item-info">
-                        <a class="product-item-photo" href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>"
-                           title="<?= /* @escapeNotVerified */ $block->stripTags($_product->getName(), null, true) ?>">
+                        <a class="product-item-photo" href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
+                           title="<?= $block->escapeHtml($block->stripTags($_product->getName(), null, true)) ?>">
                             <?= $block->getImage($_product, $image)->toHtml() ?>
                         </a>
                         <div class="product-item-details">
                             <strong class="product-item-name">
-                                <a href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>"
-                                   title="<?= /* @escapeNotVerified */ $block->stripTags($_product->getName(), null, true) ?>)">
-                                    <?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
+                                <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
+                                   title="<?= $block->escapeHtml($block->stripTags($_product->getName(), null, true)) ?>)">
+                                    <?= $block->escapeHtml($this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name')) ?>
                                 </a>
                             </strong>
-                            <?php /* @escapeNotVerified */ echo $block->getProductPriceHtml(
+                            <?php echo $block->escapeHtml($block->getProductPriceHtml(
                                 $_product,
                                 \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                                 \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
                                 [
                                     'price_id_suffix' => '-widget-compared-' . $suffix
                                 ]
-                            ) ?>
+                            )) ?>
                             <div class="product-item-actions">
                             <?php if ($_product->isSaleable()): ?>
                                 <div class="actions-primary">
                                 <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
                                     <button class="action tocart primary"
-                                            data-mage-init='{"redirectUrl": {"url": "<?= /* @escapeNotVerified */ $block->getAddToCartUrl($_product) ?>"}}'
-                                            type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>">
-                                        <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
+                                            data-mage-init='{"redirectUrl": {"url": "<?= $block->escapeUrl($block->getAddToCartUrl($_product)) ?>"}}'
+                                            type="button" title="<?= $block->escapeHtml(__('Add to Cart')) ?>">
+                                        <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                     </button>
                                 <?php else: ?>
                                     <?php
@@ -70,17 +67,17 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                                     $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_product), ['product' => $_product->getEntityId()])
                                     ?>
                                     <button class="action tocart primary"
-                                            data-post='<?= /* @escapeNotVerified */ $postData ?>'
-                                            type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>">
-                                        <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
+                                            data-post='<?= $block->escapeHtml($postData) ?>'
+                                            type="button" title="<?= $block->escapeHtml(__('Add to Cart')) ?>">
+                                        <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                     </button>
                                 <?php endif; ?>
                                 </div>
                             <?php else: ?>
                                 <?php if ($_product->getIsSalable()): ?>
-                                    <div class="stock available"><span><?= /* @escapeNotVerified */ __('In stock') ?></span></div>
+                                    <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
                                 <?php else: ?>
-                                    <div class="stock unavailable"><span><?= /* @escapeNotVerified */ __('Out of stock') ?></span></div>
+                                    <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
                                 <?php endif; ?>
                             <?php endif; ?>
                             </div>

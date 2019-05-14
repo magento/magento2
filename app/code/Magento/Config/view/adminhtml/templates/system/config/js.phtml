@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <script>
 require([
@@ -71,7 +68,7 @@ originModel.prototype = {
     {
         this.reload = false;
         this.loader = new varienLoader(true);
-        this.regionsUrl = "<?= /* @escapeNotVerified */ $block->getUrl('directory/json/countryRegion') ?>";
+        this.regionsUrl = "<?= $block->escapeUrl($block->getUrl('directory/json/countryRegion')) ?>";
 
         this.bindCountryRegionRelation();
     },
@@ -146,11 +143,14 @@ originModel.prototype = {
             var value = this.regionElement.value;
             var disabled = this.regionElement.disabled;
             if (data.length) {
-                var html = '<select name="'+this.regionElement.name+'" id="'+this.regionElement.id+'" class="required-entry select" title="'+this.regionElement.title+'"'+(disabled?" disabled":"")+'>';
+                var html = '<select name="'+this.regionElement.name+'" id="'+this.regionElement.id+'" ' +
+                    'class="required-entry select" title="'+this.regionElement.title+'"'+(disabled?" disabled":"")+'>';
                 for (var i in data) {
                     if (data[i].label) {
                         html+= '<option value="'+data[i].value+'"';
-                        if (this.regionElement.value && (this.regionElement.value == data[i].value || this.regionElement.value == data[i].label)) {
+                        if (this.regionElement.value &&
+                            (this.regionElement.value == data[i].value || this.regionElement.value == data[i].label)
+                        ) {
                             html+= ' selected';
                         }
                         html+='>'+data[i].label+'<\/option>';
@@ -168,7 +168,8 @@ originModel.prototype = {
         }
     },
     clearRegionField: function(disabled) {
-        var html = '<input type="text" name="' + this.regionElement.name + '" id="' + this.regionElement.id + '" class="input-text" title="' + this.regionElement.title + '"' + (disabled ? " disabled" : "") + '>';
+        var html = '<input type="text" name="' + this.regionElement.name + '" id="' + this.regionElement.id + '" ' +
+            'class="input-text" title="' + this.regionElement.title + '"' + (disabled ? " disabled" : "") + '>';
         var parentNode = this.regionElement.parentNode;
         var regionElementId = this.regionElement.id;
         parentNode.innerHTML = html;

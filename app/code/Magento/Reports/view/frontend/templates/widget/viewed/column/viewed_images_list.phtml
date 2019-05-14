@@ -4,10 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-?>
-<?php
 /**
  * @var $block \Magento\Reports\Block\Product\Viewed
  */
@@ -30,14 +26,14 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
 <?php if ($exist): ?>
     <div class="block widget block-viewed-products-images">
         <div class="block-title">
-            <strong><?= /* @escapeNotVerified */ $title ?></strong>
+            <strong><?= $block->escapeHtml($title) ?></strong>
         </div>
         <div class="block-content">
             <?php $suffix = $block->getNameInLayout(); ?>
-            <ol id="widget-viewed-<?= /* @escapeNotVerified */ $suffix ?>" class="product-items product-items-images">
+            <ol id="widget-viewed-<?= $block->escapeHtml($suffix) ?>" class="product-items product-items-images">
                 <?php foreach ($items as $_product): ?>
                     <li class="product-item">
-                        <a class="product-item-photo" href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>" title="<?= /* @escapeNotVerified */ $block->stripTags($_product->getName(), null, true) ?>">
+                        <a class="product-item-photo" href="<?= $block->escapeUrl($_product->getProductUrl()) ?>" title="<?= $block->escapeHtml($block->stripTags($_product->getName(), null, true)) ?>">
                             <?= $block->getImage($_product, $image)->toHtml() ?>
                         </a>
                     </li>
