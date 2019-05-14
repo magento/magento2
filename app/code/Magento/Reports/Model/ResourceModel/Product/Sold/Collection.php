@@ -14,6 +14,8 @@ namespace Magento\Reports\Model\ResourceModel\Product\Sold;
 use Magento\Framework\DB\Select;
 
 /**
+ * Class Collection
+ *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @api
  * @since 100.0.2
@@ -118,6 +120,8 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
     }
 
     /**
+     * Get count request
+     *
      * @return Select
      * @since 100.2.0
      */
