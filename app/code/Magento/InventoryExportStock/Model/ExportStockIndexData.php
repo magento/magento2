@@ -7,14 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventoryExportStock\Model;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryExportStock\Model\ResourceModel\StockIndexDumpProcessor;
-use Magento\InventoryExportStockApi\Api\Data\ProductStockIndexDataInterface;
-use Magento\InventoryExportStockApi\Api\Data\ProductStockIndexDataInterfaceFactory;
 use Magento\InventoryExportStockApi\Api\ExportStockIndexDataInterface;
-use Magento\InventorySales\Model\ResourceModel\GetWebsiteIdByWebsiteCode;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
-use Magento\InventorySalesApi\Api\StockResolverInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 
 /**
  * Class ExportStockIndexData provides stock index export
@@ -22,63 +17,42 @@ use Magento\InventorySalesApi\Api\StockResolverInterface;
 class ExportStockIndexData implements ExportStockIndexDataInterface
 {
     /**
-     * @var StockIndexDumpProcessor
+     * @var SalesChannelInterfaceFactory
      */
-    private $stockIndexDumpProcessor;
+    private $salesChannelInterfaceFactory;
 
     /**
-     * @var GetWebsiteIdByWebsiteCode
+     * @var ExportStockIndexDataBySalesChannel
      */
-    private $getWebsiteIdByWebsiteCode;
+    private $exportStockIndexDataBySalesChannel;
 
     /**
-     * @var StockResolverInterface
-     */
-    private $stockResolver;
-
-    /**
-     * @var ProductStockIndexDataMapper
-     */
-    private $productStockIndexDataMapper;
-
-    /**
-     * ExportStockIndexData constructor
-     *
-     * @param StockIndexDumpProcessor $stockIndexDumpProcessor
-     * @param GetWebsiteIdByWebsiteCode $getWebsiteIdByWebsiteCode
-     * @param StockResolverInterface $stockResolver
-     * @param ProductStockIndexDataMapper $productStockIndexDataMapper
+     * @param SalesChannelInterfaceFactory $salesChannelInterfaceFactory
+     * @param ExportStockIndexDataBySalesChannel $exportStockIndexDataBySalesChannel
      */
     public function __construct(
-        StockIndexDumpProcessor $stockIndexDumpProcessor,
-        GetWebsiteIdByWebsiteCode $getWebsiteIdByWebsiteCode,
-        StockResolverInterface $stockResolver,
-        ProductStockIndexDataMapper $productStockIndexDataMapper
+        SalesChannelInterfaceFactory $salesChannelInterfaceFactory,
+        ExportStockIndexDataBySalesChannel $exportStockIndexDataBySalesChannel
     ) {
-        $this->stockIndexDumpProcessor = $stockIndexDumpProcessor;
-        $this->getWebsiteIdByWebsiteCode = $getWebsiteIdByWebsiteCode;
-        $this->stockResolver = $stockResolver;
-        $this->productStockIndexDataMapper = $productStockIndexDataMapper;
+
+        $this->salesChannelInterfaceFactory = $salesChannelInterfaceFactory;
+        $this->exportStockIndexDataBySalesChannel = $exportStockIndexDataBySalesChannel;
     }
 
     /**
-     * Provides stock index export from inventory_stock_% table
-     *
-     * @param string $websiteCode
-     * @return ProductStockIndexDataInterface[]
-     * @throws LocalizedException
+     * @inheritDoc
      */
-    public function execute(string $websiteCode): array
+    public function execute(string $salesChannelCode): array
     {
-        $websiteId = $this->getWebsiteIdByWebsiteCode->execute($websiteCode);
-        $stockId = $this->stockResolver
-            ->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
-        $items = $this->stockIndexDumpProcessor->execute($websiteId, $stockId);
-        $productsData = [];
-        foreach ($items as $item) {
-            $productsData[] = $this->productStockIndexDataMapper->execute($item);
-        }
+        $salesChannel = $this->salesChannelInterfaceFactory->create(
+            [
+                'data' => [
+                    SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
+                    SalesChannelInterface::CODE => $salesChannelCode
+                ]
+            ]
+        );
 
-        return $productsData;
+        return $this->exportStockIndexDataBySalesChannel->execute($salesChannel);
     }
 }
