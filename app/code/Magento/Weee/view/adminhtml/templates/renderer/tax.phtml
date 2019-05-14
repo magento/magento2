@@ -16,7 +16,7 @@ $data = ['fptAttribute' => [
 ?>
 <div id="attribute-<?= $block->getElement()->getHtmlId() ?>-container" class="field"
      data-attribute-code="<?= $block->getElement()->getHtmlId() ?>"
-     data-mage-init="<?= $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data)) ?>">
+     data-mage-init="<?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data) ?>">
     <label class="label"><span><?= $block->escapeHtml($block->getElement()->getLabel()) ?></span></label>
 
     <div class="control">
