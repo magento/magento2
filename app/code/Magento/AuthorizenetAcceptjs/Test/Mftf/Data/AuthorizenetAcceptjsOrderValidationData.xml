@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AuthorizenetAcceptjsSimpleProductOrderValidationData" type="AuthorizenetAcceptjsCredentials">
+        <data key="amount">$128.00</data>
+        <data key="status">Processing</data>
+        <data key="captureStatus">Capture</data>
+        <data key="closedStatus">No</data>
+    </entity>
+    <entity name="AuthorizenetAcceptjsVirtualProductOrderValidationData" extends="AuthorizenetAcceptjsSimpleProductOrderValidationData">
+        <data key="amount">$24.68</data>
+    </entity>
+</entities>
