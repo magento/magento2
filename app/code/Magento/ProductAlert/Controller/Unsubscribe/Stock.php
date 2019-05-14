@@ -12,6 +12,7 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\ProductAlert\Model\StockFactory;
 
 class Stock extends UnsubscribeController
 {
@@ -21,16 +22,33 @@ class Stock extends UnsubscribeController
     protected $productRepository;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @var Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var \Magento\ProductAlert\Model\StockFactory
+     */
+    private $stockFactory;
+
+    /**
+     * Stock constructor.
+     * @param Context $context
+     * @param CustomerSession $customerSession
+     * @param ProductRepositoryInterface $productRepository
+     * @param StoreManagerInterface|null $storeManager
+     * @param StockFactory|null $stockFactory
      */
     public function __construct(
         Context $context,
         CustomerSession $customerSession,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        StoreManagerInterface $storeManager = null,
+        StockFactory $stockFactory = null
     ) {
         $this->productRepository = $productRepository;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->stockFactory = $stockFactory ?: ObjectManager::getInstance()->get(StockFactory::class);
         parent::__construct($context, $customerSession);
     }
 
@@ -53,13 +71,17 @@ class Stock extends UnsubscribeController
                 throw new NoSuchEntityException();
             }
 
-            $model = $this->_objectManager->create(\Magento\ProductAlert\Model\Stock::class)
+            $model = $this->stockFactory->create()
                 ->setCustomerId($this->customerSession->getCustomerId())
                 ->setProductId($product->getId())
                 ->setWebsiteId(
-                    $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
+                    $this->storeManager
                         ->getStore()
                         ->getWebsiteId()
+                )->setStoreId(
+                    $this->storeManager
+                        ->getStore()
+                        ->getStoreId()
                 )
                 ->loadByParam();
             if ($model->getId()) {
