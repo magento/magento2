@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
+
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+
 /**
  * Credit memo adjustments block
  *
