@@ -224,7 +224,9 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getId'
             ]
         );
-        $customerModel = $this->createPartialMock(\Magento\Customer\Model\Customer::class, [
+        $customerModel = $this->createPartialMock(
+            \Magento\Customer\Model\Customer::class,
+            [
                 'getId',
                 'setId',
                 'setStoreId',
@@ -239,7 +241,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
                 'setFirstFailure',
                 'setLockExpires',
                 'save',
-            ]);
+            ]
+        );
 
         $origCustomer = $this->customer;
 
@@ -362,16 +365,20 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $customerModel->expects($this->once())
             ->method('setRpToken')
-            ->willReturnMap([
-                ['rpToken', $customerModel],
-                [null, $customerModel],
-            ]);
+            ->willReturnMap(
+                [
+                    ['rpToken', $customerModel],
+                    [null, $customerModel],
+                ]
+            );
         $customerModel->expects($this->once())
             ->method('setRpTokenCreatedAt')
-            ->willReturnMap([
-                ['rpTokenCreatedAt', $customerModel],
-                [null, $customerModel],
-            ]);
+            ->willReturnMap(
+                [
+                    ['rpTokenCreatedAt', $customerModel],
+                    [null, $customerModel],
+                ]
+            );
 
         $customerModel->expects($this->once())
             ->method('setPasswordHash')
@@ -432,14 +439,17 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $storeId = 2;
         $passwordHash = 'ukfa4sdfa56s5df02asdf4rt';
 
-        $customerSecureData = $this->createPartialMock(\Magento\Customer\Model\Data\CustomerSecure::class, [
+        $customerSecureData = $this->createPartialMock(
+            \Magento\Customer\Model\Data\CustomerSecure::class,
+            [
                 'getRpToken',
                 'getRpTokenCreatedAt',
                 'getPasswordHash',
                 'getFailuresNum',
                 'getFirstFailure',
                 'getLockExpires',
-            ]);
+            ]
+        );
         $region = $this->getMockForAbstractClass(
             \Magento\Customer\Api\Data\RegionInterface::class,
             [],
@@ -481,7 +491,9 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('__toArray')
             ->willReturn(['default_billing', 'default_shipping']);
 
-        $customerModel = $this->createPartialMock(\Magento\Customer\Model\Customer::class, [
+        $customerModel = $this->createPartialMock(
+            \Magento\Customer\Model\Customer::class,
+            [
                 'getId',
                 'setId',
                 'setStoreId',
@@ -493,7 +505,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getDataModel',
                 'setPasswordHash',
                 'save',
-            ]);
+            ]
+        );
         $customerAttributesMetaData = $this->getMockForAbstractClass(
             \Magento\Framework\Api\CustomAttributesDataInterface::class,
             [],
@@ -521,7 +534,6 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->customerRegistry->expects($this->atLeastOnce())
             ->method('remove')
             ->with($customerId);
-
         $this->customerRegistry->expects($this->once())
             ->method('retrieveSecureData')
             ->with($customerId)
@@ -544,7 +556,6 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $customerSecureData->expects($this->once())
             ->method('getLockExpires')
             ->willReturn('lockExpires');
-
         $this->customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
