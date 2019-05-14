@@ -52,7 +52,7 @@ class ExceptionFormatter
      */
     public function create(\Throwable $exception, $internalErrorMessage = null) : array
     {
-        if(true) {
+        if (!$this->shouldShowDetail()) {
             $reportId = uniqid("graph-ql-");
             $message = "Report ID: {$reportId}; Message: {$exception->getMessage()}";
             $code = $exception->getCode();
@@ -62,7 +62,8 @@ class ExceptionFormatter
 
         return \GraphQL\Error\FormattedError::createFromException(
             $exception,
-            \GraphQL\Error\Debug::INCLUDE_DEBUG_MESSAGE | \GraphQL\Error\Debug::INCLUDE_TRACE,
+            $this->shouldShowDetail()
+                ? \GraphQL\Error\Debug::INCLUDE_DEBUG_MESSAGE | \GraphQL\Error\Debug::INCLUDE_TRACE : false,
             $internalErrorMessage
         );
     }
