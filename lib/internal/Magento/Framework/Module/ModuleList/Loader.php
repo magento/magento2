@@ -92,9 +92,15 @@ class Loader
             }
 
             $data = $this->converter->convert($this->parser->getDom());
-            $name = key($data);
-            if (!in_array($name, $exclude)) {
-                $result[$name] = $data[$name];
+            foreach ($data as $name => $datum) {
+                if (in_array($name, $exclude)) {
+                    continue;
+                }
+                if (isset($result[$name])) {
+                    $result[$name] = array_replace_recursive($result[$name], $datum);
+                } else {
+                    $result[$name] = $datum;
+                }
             }
         }
         return $this->sortBySequence($result);
