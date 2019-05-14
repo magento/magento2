@@ -207,7 +207,7 @@ class Elasticsearch
         // prepare new index name and increase version
         $indexPattern = $this->indexNameResolver->getIndexPattern($storeId, $mappedIndexerId);
         $version = (int)(str_replace($indexPattern, '', $indexName));
-        $newIndexName = $indexPattern . ++$version;
+        $newIndexName = $indexPattern . (++$version);
 
         // remove index if already exists
         if ($this->client->indexExists($newIndexName)) {

@@ -206,7 +206,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareDocsPerStoreEmpty()
     {
-        $this->assertEquals([], $this->model->prepareDocsPerStore([], 1));
+        $this->assertEquals([], $this->model->prepareDocsPerStore([], 1, 'product'));
     }
 
     /**
@@ -227,7 +227,8 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                         'name' => 'Product Name',
                     ],
                 ],
-                1
+                1,
+                'product'
             )
         );
     }
