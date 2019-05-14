@@ -165,18 +165,18 @@ class ImageResize
             $originalImagePath = $this->mediaDirectory->getAbsolutePath(
                 $this->imageConfig->getMediaPath($originalImageName)
             );
-            try {
+            if (file_exists($originalImagePath)) {
                 foreach ($viewImages as $viewImage) {
                     $this->resize($viewImage, $originalImagePath, $originalImageName);
                 }
                 yield $originalImageName => $count;
-            } catch (\Exception $e) {
+            } else {
                 $notFoundImages[] = $originalImagePath;
             }
         }
         
         if (!empty($notFoundImages)) {
-            throw new \Exception(PHP_EOL.__('The following files do not exist:').PHP_EOL . implode(PHP_EOL, $notFoundImages) );
+            throw new NotFoundException(__(PHP_EOL . 'The following files do not exist:'. PHP_EOL . implode(PHP_EOL, $notFoundImages)));
         }
     }
 
