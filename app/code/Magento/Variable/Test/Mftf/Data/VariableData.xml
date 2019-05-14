@@ -17,4 +17,7 @@
         <data key="html"> Sample Variable </data>
         <data key="plain">variable-plain-</data>
     </entity>
+    <entity name="customVariableV2" type="system_variable" extends="customVariable">
+        <data key="code" unique="suffix">variable-code-</data>
+    </entity>
 </entities>

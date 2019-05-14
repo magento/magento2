@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateCustomVariable" dataType="system_variable" type="create" auth="adminFormKey"
+               url="/admin/system_variable/save" method="POST" successRegex="/messages-message-success/">
+        <contentType>application/x-www-form-urlencoded</contentType>
+        <object dataType="system_variable" key="variable">
+            <field key="code">string</field>
+            <field key="name">string</field>
+            <field key="html">string</field>
+            <field key="plain">string</field>
+        </object>
+    </operation>
+</operations>
