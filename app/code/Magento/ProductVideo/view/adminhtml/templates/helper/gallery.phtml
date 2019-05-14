@@ -9,13 +9,13 @@
 
 /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
 $elementNameEscaped = $block->escapeHtmlAttr($block->getElement()->getName()) . '[images]';
-$formNameEscaped = $block->escapeHtmlAttr($block->getFormName());
+/* @noEscape */ $formNameEscaped = $block->escapeHtmlAttr($block->getFormName());
 ?>
 
 <div class="row">
     <div class="add-video-button-container">
         <button id="add_video_button"
-                title="<?= $block->escapeHtml(__('Add Video')) ?>"
+                title="<?= $block->escapeHtmlAttr(__('Add Video')) ?>"
                 data-role="add-video-button"
                 type="button"
                 class="action-secondary"
@@ -30,18 +30,14 @@ $formNameEscaped = $block->escapeHtmlAttr($block->getFormName());
 $element = $block->getElement();
 $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'toggleValueElements(this, this.parentNode.parentNode.parentNode)';
 ?>
-
-<div id="<?= $block->getHtmlId() ?>"
+<div id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>"
      class="gallery"
      data-mage-init='{"openVideoModal":{}}'
      data-parent-component="<?= $block->escapeHtml($block->getData('config/parentComponent')) ?>"
      data-images="<?= $block->escapeHtmlAttr($block->getImagesJson()) ?>"
-     data-types="<?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getImageTypes()) ?>"
+     data-types='<?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getImageTypes()) ?>'
 >
-
-    <?php
-    if (!$block->getElement()->getReadonly()) :
-        ?>
+    <?php if (!$block->getElement()->getReadonly()) : ?>
         <div class="image image-placeholder">
             <?= $block->getUploaderHtml(); ?>
             <div class="product-image-wrapper">
@@ -51,15 +47,13 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
             </div>
         </div>
         <?= $block->getChildHtml('additional_buttons') ?>
-        <?php
-    endif;
-    ?>
+    <?php endif; ?>
     <?php foreach ($block->getImageTypes() as $typeData) : ?>
-        <input name="<?= $block->escapeHtml($typeData['name']) ?>"
+        <input name="<?= $block->escapeHtmlAttr($typeData['name']) ?>"
                data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"
-               class="image-<?= $block->escapeHtml($typeData['code']) ?>"
+               class="image-<?= $block->escapeHtmlAttr($typeData['code']) ?>"
                type="hidden"
-               value="<?= $block->escapeHtml($typeData['value']) ?>"/>
+               value="<?= $block->escapeHtmlAttr($typeData['value']) ?>"/>
     <?php endforeach; ?>
     <script id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>-template" data-template="image" type="text/x-magento-template">
         <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>  <% if (data.video_url) { %>video-item<% } %>"
@@ -134,31 +128,21 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                 <div class="actions">
                     <div class="tooltip">
                         <span class="delete-tooltiptext">
-                            <?= $block->escapeHtml(
-                                __('Delete image in all store views')
-                            ); ?>
+                            <?= $block->escapeHtml(__('Delete image in all store views')); ?>
                         </span>
                         <button type="button"
                                 class="action-remove"
                                 data-role="delete-button"
                                 title="<% if (data.media_type == 'external-video') {%>
-                                <?= $block->escapeHtml(
-                                    __('Delete video')
-                                ); ?>
+                                <?= $block->escapeHtmlAttr(__('Delete video')); ?>
                             <%} else {%>
-                                <?= $block->escapeHtml(
-                                    __('Delete image')
-                                ); ?>
+                                <?= $block->escapeHtmlAttr(__('Delete image')); ?>
                             <%}%>">
                         <span>
                             <% if (data.media_type == 'external-video') { %>
-                            <?= $block->escapeHtml(
-                                __('Delete video')
-                            ); ?>
+                            <?= $block->escapeHtml(__('Delete video')); ?>
                             <% } else {%>
-                            <?= $block->escapeHtml(
-                                __('Delete image')
-                            ); ?>
+                            <?= $block->escapeHtml(__('Delete image')); ?>
                             <%} %>
                         </span>
                         </button>
@@ -211,7 +195,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                             <textarea data-role="image-description"
                                       rows="3"
                                       class="admin__control-textarea"
-                                      name="<?=/* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][label]"><%- data.label %></textarea>
+                                      name="<?= /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][label]"><%- data.label %></textarea>
                     </div>
                 </div>
 
@@ -235,9 +219,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                                         <?= $block->escapeHtml($attribute->getFrontendLabel()) ?>
                                     </label>
                                 </li>
-                                <?php
-                            endforeach;
-                            ?>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                 </div>
@@ -269,9 +251,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                             <% if (data.disabled == 1) { %>checked="checked"<% } %> />
 
                             <label for="hide-from-product-page" class="admin__field-label">
-                                <?= $block->escapeHtml(
-                                    __('Hide from Product Page')
-                                ); ?>
+                                <?= $block->escapeHtml(__('Hide from Product Page')); ?>
                             </label>
                         </div>
                     </div>
