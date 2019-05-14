@@ -92,9 +92,15 @@ class Topmenu extends Template implements IdentityInterface
         $this->getMenu()->setOutermostClass($outermostClass);
         $this->getMenu()->setChildrenWrapClass($childrenWrapClass);
 
-        $transportObject = new DataObject([
-            'html' => $this->_getHtml($this->getMenu(), $childrenWrapClass, $limit)
-        ]);
+        $transportObject = new DataObject(
+            [
+                'html' => $this->_getHtml(
+                    $this->getMenu(),
+                    $childrenWrapClass,
+                    $limit
+                )
+            ]
+        );
 
         $this->_eventManager->dispatch(
             'page_block_html_topmenu_gethtml_after',
@@ -211,8 +217,8 @@ class Topmenu extends Template implements IdentityInterface
         $html = '';
 
         $children = $menuTree->getChildren();
-        $this->removeChildrenWithoutActiveParent($children);
         $childLevel = $this->getChildLevel($menuTree->getLevel());
+        $this->removeChildrenWithoutActiveParent($children, $childLevel);
 
         $counter = 1;
         $childrenCount = $children->count();
@@ -387,14 +393,14 @@ class Topmenu extends Template implements IdentityInterface
      * Remove children from collection when the parent is not active
      *
      * @param Collection $children
-     *
+     * @param int $childLevel
      * @return void
      */
-    private function removeChildrenWithoutActiveParent(Collection $children)
+    private function removeChildrenWithoutActiveParent(Collection $children, int $childLevel): void
     {
         /** @var Node $child */
         foreach ($children as $child) {
-            if ($child->getData('is_parent_active') === false) {
+            if ($childLevel === 0 && $child->getData('is_parent_active') === false) {
                 $children->delete($child);
             }
         }
@@ -407,7 +413,7 @@ class Topmenu extends Template implements IdentityInterface
      *
      * @return int
      */
-    private function getChildLevel($parentLevel)
+    private function getChildLevel($parentLevel): int
     {
         return $parentLevel === null ? 0 : $parentLevel + 1;
     }
