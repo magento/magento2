@@ -185,35 +185,31 @@ define([
          */
         saveOptions: function () {
             var newOptions = [],
-                errorsInAttributes = [],
-                allOptions = [];
+                allOptions = [],
+                attributesWithDuplicateOptions = [];
 
             this.attributes.each(function (attribute) {
+                allOptions[attribute.id] = [];
 
                 attribute.options.each(function (element) {
                     var option = attribute.options.findWhere({
                         id: element.id
                     });
 
-                    if (option.is_new === true) {
+                    if (option['is_new'] === true) {
                         newOptions.push(option);
                     }
 
-                    if (typeof allOptions[option.attribute_id] === 'undefined') {
-                        allOptions[option.attribute_id] = [];
+                    if (typeof allOptions[attribute.id][option.label] !== 'undefined') {
+                        attributesWithDuplicateOptions.push(attribute);
                     }
 
-                    if (typeof allOptions[option.attribute_id][option.label] !== 'undefined') {
-                        errorsInAttributes.push(attribute);
-                    }
-
-                    allOptions[option.attribute_id][option.label] = option.label;
+                    allOptions[attribute.id][option.label] = option.label;
                 });
             });
 
-            if (errorsInAttributes.length) {
-                var errorMessage = $.mage.__('Attributes must have unique option values');
-                throw new Error(errorMessage);
+            if (attributesWithDuplicateOptions.length) {
+                throw new Error($.mage.__('Attributes must have unique option values'));
             }
 
             if (!newOptions.length) {
@@ -231,6 +227,7 @@ define([
                 if (savedOptions.error) {
                     this.notificationMessage.error = savedOptions.error;
                     this.notificationMessage.text = savedOptions.message;
+
                     return;
                 }
 
