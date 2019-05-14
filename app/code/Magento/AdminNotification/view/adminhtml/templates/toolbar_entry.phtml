@@ -4,18 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+/** @var $this \Magento\AdminNotification\Block\ToolbarEntry */
 
-?>
-<?php /** @var $this \Magento\AdminNotification\Block\ToolbarEntry */ ?>
-<?php
-    $notificationCount = $block->escapeHtml($block->getUnreadNotificationCount());
-    $notificationCounterMax = $block->escapeHtml($block->getNotificationCounterMax());
+    $notificationCount = $block->getUnreadNotificationCount();
+    $notificationCounterMax = $block->getNotificationCounterMax();
 ?>
 <div
     data-mage-init='{"toolbarEntry": {}}'
     class="notifications-wrapper admin__action-dropdown-wrap"
-    data-notification-count="<?= $notificationCount ?>">
+    data-notification-count="<?= $block->escapeHtml($notificationCount) ?>">
     <?php if ($notificationCount > 0) : ?>
         <a
             href="<?= $block->escapeUrl($block->getUrl('adminhtml/notification/index')) ?>"
@@ -24,7 +21,7 @@
             title="<?= $block->escapeHtml(__('Notifications')) ?>"
             data-toggle="dropdown">
             <span class="notifications-counter">
-                <?= ($notificationCount > $notificationCounterMax) ? $notificationCounterMax . '+' : $notificationCount ?>
+                <?= ($notificationCount > $notificationCounterMax) ? $block->escapeHtml($notificationCounterMax) . '+' : $block->escapeHtml($notificationCount) ?>
             </span>
         </a>
         <ul
@@ -36,7 +33,7 @@
                 data-notification-id="<?= $block->escapeHtml($notification->getId()) ?>"
                 data-notification-severity="<?php if ($notification->getSeverity() == 1): ?>1<?php endif; ?>">
                 <?php
-                    $notificationDescription = $block->escapeHtml($notification->getDescription());
+                    $notificationDescription = $notification->getDescription();
                     $notificationDescriptionLength = $block->getNotificationDescriptionLength();
                 ?>
                 <strong class="notifications-entry-title">
@@ -45,19 +42,19 @@
                 <?php if (strlen($notificationDescription) > $notificationDescriptionLength) : ?>
                     <p class="notifications-entry-description _cutted">
                         <span class="notifications-entry-description-start">
-                            <?= substr($notificationDescription, 0, $notificationDescriptionLength) ?>
+                            <?= $block->escapeHtml(substr($notificationDescription, 0, $notificationDescriptionLength)) ?>
                         </span>
                         <span class="notifications-entry-description-end">
-                            <?= substr($notificationDescription, $notificationDescriptionLength) ?>
+                            <?= $block->escapeHtml(substr($notificationDescription, $notificationDescriptionLength)) ?>
                         </span>
                     </p>
                 <?php else : ?>
                     <p class="notifications-entry-description">
-                        <?= $notificationDescription ?>
+                        <?= $block->escapeHtml($notificationDescription) ?>
                     </p>
                 <?php endif; ?>
                 <time class="notifications-entry-time">
-                    <?= $block->formatNotificationDate($notification->getDateAdded()) ?>
+                    <?= $block->escapeHtml($block->formatNotificationDate($notification->getDateAdded())) ?>
                 </time>
                 <button
                     type="button"
@@ -70,7 +67,7 @@
                 <a
                     href="<?= $block->escapeUrl($block->getUrl('adminhtml/notification/index')) ?>"
                     class="action-tertiary action-more">
-                    <?= $block->escapeHtml(__('See All (')) ?><span class="notifications-counter"><?= $notificationCount ?></span><?= $block->escapeHtml(__(' unread)')) ?>
+                    <?= $block->escapeHtml(__('See All (')) ?><span class="notifications-counter"><?= $block->escapeHtml($notificationCount) ?></span><?= $block->escapeHtml(__(' unread)')) ?>
                 </a>
             </li>
         </ul>

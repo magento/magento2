@@ -22,23 +22,14 @@ class Reset extends \Magento\Config\Block\System\Config\Form\Field
     const XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS = 'design/search_engine_robots/default_custom_instructions';
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
-     */
-    private $jsonSerializer;
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Serialize\Serializer\Json $jsonSerializer
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Serialize\Serializer\Json $jsonSerializer = null,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->jsonSerializer = $jsonSerializer ?? \Magento\Framework\App\ObjectManager::getInstance()
-                ->create(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
