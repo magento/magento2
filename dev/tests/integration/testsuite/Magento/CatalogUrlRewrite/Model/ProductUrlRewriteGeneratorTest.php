@@ -46,10 +46,13 @@ class ProductUrlRewriteGeneratorTest extends TestCase
         $generator = $this->objectManager->get(ProductUrlRewriteGenerator::class);
         $urls = $generator->generate($product);
 
-        $actualUrls = array_map(function ($url) {
-            /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite $url */
-            return $url->getRequestPath();
-        }, $urls);
+        $actualUrls = array_map(
+            function ($url) {
+                /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite $url */
+                return $url->getRequestPath();
+            },
+            $urls
+        );
 
         self::assertTrue(in_array('p002.html', $actualUrls));
         self::assertTrue(in_array('cat-1/p002.html', $actualUrls));

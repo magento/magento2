@@ -105,9 +105,12 @@ class CompositeUrlFinder implements UrlFinderInterface
      */
     private function getChildren(): array
     {
-        uasort($this->children, function ($first, $second) {
-            return (int)$first['sortOrder'] <=> (int)$second['sortOrder'];
-        });
+        uasort(
+            $this->children,
+            function ($first, $second) {
+                return (int)$first['sortOrder'] <=> (int)$second['sortOrder'];
+            }
+        );
         return $this->children;
     }
 }

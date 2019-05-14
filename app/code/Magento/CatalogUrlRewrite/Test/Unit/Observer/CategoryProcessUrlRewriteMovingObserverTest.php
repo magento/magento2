@@ -98,12 +98,15 @@ class CategoryProcessUrlRewriteMovingObserverTest extends \PHPUnit\Framework\Tes
             ->disableOriginalConstructor()
             ->setMethods(['getCategory'])
             ->getMock();
-        $categoryMock = $this->createPartialMock(Category::class, [
-            'dataHasChangedFor',
-            'getEntityId',
-            'getStoreId',
-            'setData'
-        ]);
+        $categoryMock = $this->createPartialMock(
+            Category::class,
+            [
+                'dataHasChangedFor',
+                'getEntityId',
+                'getStoreId',
+                'setData'
+            ]
+        );
 
         $categoryMock->expects($this->once())->method('dataHasChangedFor')->with('parent_id')
             ->willReturn(true);

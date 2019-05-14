@@ -61,9 +61,14 @@ class UrlRewriteHandlerTest extends TestCase
             ->setAnchorsAbove(false);
 
         $generatedUrls = $this->handler->generateProductUrlRewrites($category);
-        $actual = array_values(array_map(function (UrlRewrite $urlRewrite) {
-            return $urlRewrite->getRequestPath();
-        }, $generatedUrls));
+        $actual = array_values(
+            array_map(
+                function (UrlRewrite $urlRewrite) {
+                    return $urlRewrite->getRequestPath();
+                },
+                $generatedUrls
+            )
+        );
 
         $expected = [
             'store-1-key.html', // the Default store

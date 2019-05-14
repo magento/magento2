@@ -67,9 +67,11 @@ class DynamicStorage extends BaseDbStorage
             unset($data[UrlRewrite::METADATA]);
         }
         $select = $this->connection->select();
-        $select->from([
-            'url_rewrite' => $this->resource->getTableName(self::TABLE_NAME)
-        ]);
+        $select->from(
+            [
+                'url_rewrite' => $this->resource->getTableName(self::TABLE_NAME)
+            ]
+        );
         $select->joinLeft(
             ['relation' => $this->resource->getTableName(Product::TABLE_NAME)],
             'url_rewrite.url_rewrite_id = relation.url_rewrite_id'

@@ -76,13 +76,16 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
             \Magento\Framework\Event\Observer::class,
             ['getEvent', 'getData']
         );
-        $this->category = $this->createPartialMock(Category::class, [
-            'hasData',
-            'getParentId',
-            'getStoreId',
-            'dataHasChangedFor',
-            'getChangedProductIds',
-        ]);
+        $this->category = $this->createPartialMock(
+            Category::class,
+            [
+                'hasData',
+                'getParentId',
+                'getStoreId',
+                'dataHasChangedFor',
+                'getChangedProductIds',
+            ]
+        );
         $this->observer->expects($this->any())
             ->method('getEvent')
             ->willReturnSelf();
