@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Service\V1;
 
 use Magento\Framework\Webapi\Rest\Request;
@@ -74,6 +76,48 @@ class ShipmentAddTrackTest extends WebapiAbstract
         self::assertNotEmpty($result[ShipmentTrackInterface::ENTITY_ID]);
         self::assertEquals($shipment->getId(), $result[ShipmentTrackInterface::PARENT_ID]);
     }
+
+    /**
+     * Shipment Tracking throw an error if order doesn't exist.
+     *
+     * @magentoApiDataFixture Magento/Sales/_files/shipment.php
+     */
+    public function testShipmentTrackWithFailedOrderId()
+    {
+        /** @var \Magento\Sales\Model\Order $order */
+        $orderCollection = $this->objectManager->get(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
+        $order = $orderCollection->getLastItem();
+        $failedOrderId = $order->getId() + 999999;
+        $shipmentCollection = $this->objectManager->get(Collection::class);
+        /** @var \Magento\Sales\Model\Order\Shipment $shipment */
+        $shipment = $shipmentCollection->getFirstItem();
+        $trackData = [
+            ShipmentTrackInterface::ENTITY_ID => null,
+            ShipmentTrackInterface::ORDER_ID => $failedOrderId,
+            ShipmentTrackInterface::PARENT_ID => $shipment->getId(),
+            ShipmentTrackInterface::WEIGHT => 20,
+            ShipmentTrackInterface::QTY => 5,
+            ShipmentTrackInterface::TRACK_NUMBER => 2,
+            ShipmentTrackInterface::DESCRIPTION => 'Shipment description',
+            ShipmentTrackInterface::TITLE => 'Shipment title',
+            ShipmentTrackInterface::CARRIER_CODE => Track::CUSTOM_CARRIER_CODE,
+        ];
+        $expectedMessage = 'The entity that was requested doesn\'t exist. Verify the entity and try again.';
+
+        try {
+            $this->_webApiCall($this->getServiceInfo(), ['entity' => $trackData]);
+        } catch (\SoapFault $e) {
+            $this->assertContains(
+                $expectedMessage,
+                $e->getMessage(),
+                'SoapFault does not contain expected message.'
+            );
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
+    }
+
     /**
      * Returns details about API endpoints and services.
      *
