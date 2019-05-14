@@ -7,7 +7,7 @@ Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a 
 
 ## Magento system requirements
 [Magento system requirements](http://devdocs.magento.com/guides/v2.2/install-gde/system-requirements2.html)
-wsdvsfv
+wsdvsfvergerg
 ## Install Magento
 To install Magento, see either:
 
