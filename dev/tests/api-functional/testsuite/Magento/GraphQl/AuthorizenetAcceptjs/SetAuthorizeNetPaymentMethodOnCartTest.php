@@ -22,6 +22,10 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
 
     /** @var  CustomerTokenServiceInterface */
     private $customerTokenService;
+    /**
+     * @var GetMaskedQuoteIdByReservedOrderId
+     */
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
      * @var string
@@ -59,6 +63,7 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         /** @var \Magento\Config\Model\ResourceModel\Config $config */
         /*$config = $objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
         $config->saveConfig($this->authorizenetStatusPath, 1, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
@@ -106,14 +111,9 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
      */
     public function testSetAuthorizeNetPaymentOnCartForGuest()
     {
-        $objectManager = Bootstrap::getObjectManager();
-        /** @var GetMaskedQuoteIdByReservedOrderId $getMaskedQuoteIdByReservedOrderIdForGuest */
-        $getMaskedQuoteIdByReservedOrderIdForGuest = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-
-       // $output = $objectManager->get(OutputInterface::class);
-        $maskedQuoteId = $getMaskedQuoteIdByReservedOrderIdForGuest->execute('test_quote');
+        $maskedQuoteIdForGuest = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $methodCode = 'authorizenet_acceptjs';
-        $query = $this->getSetPaymentMethodQuery($maskedQuoteId, $methodCode);
+        $query = $this->getSetPaymentMethodQuery($maskedQuoteIdForGuest, $methodCode);
 
         $response = $this->graphQlMutation($query);
         self::assertArrayHasKey('setPaymentMethodOnCart', $response);
