@@ -683,10 +683,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
         $hasAdjustmentFee = abs($totalRefunded - $this->getAdjustmentNegative()) < .0001;
         $hasActionFlag = $this->getActionFlag(self::ACTION_FLAG_EDIT) === false;
-        if ($isRefundZero || $hasAdjustmentFee || $hasActionFlag) {
+        $creditmemos = ($this->getCreditmemosCollection() === false) ?
+             true : (count($this->getCreditmemosCollection()) > 0);
+        if (($isRefundZero || $hasAdjustmentFee || $hasActionFlag) 
+            && (($this->isAllInvoicedRefunded() && $creditmemos) || !$creditmemos)) {
             return false;
         }
-
         return true;
     }
 
@@ -706,10 +708,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         //case when paid amount is refunded and order has creditmemo created
         $creditmemos = ($this->getCreditmemosCollection() === false) ?
              true : (count($this->getCreditmemosCollection()) > 0);
-        $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
-        if (($hasDueAmount || $paidAmtIsRefunded) ||
+        $totalRefunded = $this->getTotalRefunded();
+        $paidAmtIsRefunded = $totalRefunded == $totalPaid && $creditmemos && $this->getTotalDue()!=0 && $totalPaid!=0;
+        if ((($hasDueAmount && $this->isAllInvoicedRefunded()) || $paidAmtIsRefunded) ||
             (!$checkAmtTotalPaid &&
-            abs($totalRefunded - $this->getAdjustmentNegative()) < .0001) || 
+            abs($totalRefunded - $this->getAdjustmentNegative()) < .0001) ||
             $this->canCreditmemoForZeroAll()) {
             return false;
         }
@@ -723,10 +726,24 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function canCreditmemoForZeroAll()
     {
-        $totalDue = $this->getTotalDue();
-        $totalRefunded = $this->getTotalRefunded();
-        $totalPaid = $this->getTotalPaid();
-        return is_numeric($totalRefunded) && $totalDue == 0 && $totalPaid == 0;
+        return is_numeric($this->getTotalRefunded()) && $this->isAllInvoicedRefunded()
+            && $this->getTotalDue() == 0 && $this->getTotalPaid() == 0;
+    }
+
+    /**
+     * Check if all invoiced item refunded
+     *
+     * @return bool
+     */
+    public function isAllInvoicedRefunded()
+    {
+        foreach ($this->getAllItems() as $item) {
+            if($item->getQtyInvoiced() && $item->getQtyRefunded() != $item->getQtyInvoiced())
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
