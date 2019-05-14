@@ -13,10 +13,10 @@
             <argument name="total" type="string"/>
         </arguments>
         <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
-        <waitForPageLoad stepKey="waitForCartPage"/>
-        <see userInput="{{subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <see userInput="{{total}}" selector="{{CheckoutCartSummarySection.total}}" stepKey="assertTotal"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="waitForSubtotalVisible"/>
+        <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="{{subtotal}}" stepKey="assertSubtotal"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForTotalVisible"/>
+        <see selector="{{CheckoutCartSummarySection.total}}" userInput="{{total}}" stepKey="assertTotal"/>
         <seeElement  selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="seeProceedToCheckoutButton"/>
     </actionGroup>
 </actionGroups>
