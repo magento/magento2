@@ -326,7 +326,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function afterSave()
     {
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
-        if ($indexer->getState()->getStatus() == StateInterface::STATUS_VALID) {
+        if ($indexer->getState()->getStatus() != StateInterface::STATUS_VALID) {
             $this->_getResource()->addCommitCallback([$this, 'reindex']);
         }
         return parent::afterSave();

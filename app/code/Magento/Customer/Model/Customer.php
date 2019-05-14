@@ -1073,7 +1073,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     public function afterSave()
     {
         $indexer = $this->indexerRegistry->get(self::CUSTOMER_GRID_INDEXER_ID);
-        if ($indexer->getState()->getStatus() == StateInterface::STATUS_VALID) {
+        if ($indexer->getState()->getStatus() != StateInterface::STATUS_VALID) {
             $this->_getResource()->addCommitCallback([$this, 'reindex']);
         }
         return parent::afterSave();
