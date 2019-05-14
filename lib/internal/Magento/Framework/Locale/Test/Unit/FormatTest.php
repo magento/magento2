@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Locale\Test\Unit;
 
+/**
+ * Tests class for Number locale format
+ */
 class FormatTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -68,15 +71,17 @@ class FormatTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $localeCode
+     * @param string $currencyCode
      * @param array $expectedResult
      * @dataProvider getPriceFormatDataProvider
      */
-    public function testGetPriceFormat($localeCode, array $expectedResult): void
+    public function testGetPriceFormat($localeCode, $currencyCode, array $expectedResult): void
     {
         $this->scope->expects($this->once())
             ->method('getCurrentCurrency')
             ->willReturn($this->currency);
 
+        $this->currency->method('getCode')->willReturn($currencyCode);
         $result = $this->formatModel->getPriceFormat($localeCode);
         $intersection = array_intersect_assoc($result, $expectedResult);
         $this->assertCount(count($expectedResult), $intersection);
@@ -88,22 +93,27 @@ class FormatTest extends \PHPUnit\Framework\TestCase
      */
     public function getPriceFormatDataProvider(): array
     {
+        $swissGroupSymbol = INTL_ICU_VERSION >= 59.1 ? '’' : '\'';
         return [
-            ['en_US', ['decimalSymbol' => '.', 'groupSymbol' => ',']],
-            ['de_DE', ['decimalSymbol' => ',', 'groupSymbol' => '.']],
-            ['de_CH', ['decimalSymbol' => '.', 'groupSymbol' => '\'']],
-            ['uk_UA', ['decimalSymbol' => ',', 'groupSymbol' => ' ']]
+            ['en_US', 'USD', ['decimalSymbol' => '.', 'groupSymbol' => ',']],
+            ['de_DE', 'EUR', ['decimalSymbol' => ',', 'groupSymbol' => '.']],
+            ['de_CH', 'CHF', ['decimalSymbol' => '.', 'groupSymbol' => $swissGroupSymbol]],
+            ['uk_UA', 'UAH', ['decimalSymbol' => ',', 'groupSymbol' => ' ']]
         ];
     }
 
     /**
      *
-     * @param        mixed $value
-     * @param        float $expected
+     * @param mixed $value
+     * @param float $expected
+     * @param string $locale
      * @dataProvider provideNumbers
      */
-    public function testGetNumber($value, $expected): void
+    public function testGetNumber(string $value, float $expected, string $locale = null): void
     {
+        if ($locale !== null) {
+            $this->localeResolver->method('getLocale')->willReturn($locale);
+        }
         $this->assertEquals($expected, $this->formatModel->getNumber($value));
     }
 
@@ -124,6 +134,8 @@ class FormatTest extends \PHPUnit\Framework\TestCase
             ['2 054.52', 2054.52],
             ['2,46 GB', 2.46],
             ['2,054.00', 2054],
+            ['4,000', 4000.0, 'ja_JP'],
+            ['4,000', 4.0, 'en_US'],
         ];
     }
 }
