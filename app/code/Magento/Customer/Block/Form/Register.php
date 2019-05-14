@@ -218,7 +218,8 @@ class Register extends \Magento\Directory\Block\Data
     /**
      * Address fields availability
      */
-    public function getShowAddressFields(){
+    public function getShowAddressFields()
+    {
         $_company = $this->getLayout()->createBlock(
             \Magento\Customer\Block\Widget\Company::class
         );
@@ -228,7 +229,8 @@ class Register extends \Magento\Directory\Block\Data
         $_fax = $this->getLayout()->createBlock(
             \Magento\Customer\Block\Widget\Fax::class
         );
-        return ($this->getData('show_address_fields') || 
-            $_company->isEnabled() || $_telephone->isEnabled() || $_fax->isEnabled())?true:false;
+        
+        return ($this->getData('show_address_fields') ||
+            $_company->isEnabled() || $_telephone->isEnabled() || $_fax->isEnabled())? true : false;
     }
 }
