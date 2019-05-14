@@ -67,6 +67,7 @@ require(["prototype"], function(){
     upsXml.prototype = {
         initialize: function()
         {
+            this.carriersUpsActiveId = 'carriers_ups_active';
             this.carriersUpsTypeId = 'carriers_ups_type';
             if (!$(this.carriersUpsTypeId)) {
                 return;
@@ -94,6 +95,7 @@ require(["prototype"], function(){
 
             this.setFormValues();
             Event.observe($(this.carriersUpsTypeId), 'change', this.setFormValues.bind(this));
+            Event.observe($(this.carriersUpsActiveId), 'change', this.setFormValues.bind(this));
         },
         updateAllowedMethods: function(originShipmentTitle)
         {
@@ -121,7 +123,7 @@ require(["prototype"], function(){
                 freeMethod.insert(option);
 
                 option = new Element('option', {value:code}).update(originShipment[code]);
-                if (this.storedUpsType == 'UPS_XML') {
+                if (this.storedUpsType == 'UPS') {
                     if (originShipmentTitle != 'default' || inArray(this.storedAllowedMethods, code)) {
                         option.selected = true;
                     }
@@ -143,7 +145,7 @@ require(["prototype"], function(){
         setFormValues: function()
         {
             var a;
-            if ($F(this.carriersUpsTypeId) == 'UPS_XML') {
+            if ($F(this.carriersUpsTypeId) == 'UPS') {
                 for (a = 0; a < this.checkingUpsXmlId.length; a++) {
                     $(this.checkingUpsXmlId[a]).removeClassName('required-entry');
                 }
@@ -156,7 +158,15 @@ require(["prototype"], function(){
                 this.changeOriginShipment(null, 'default');
             } else {
                 for (a = 0; a < this.checkingUpsXmlId.length; a++) {
-                    $(this.checkingUpsXmlId[a]).addClassName('required-entry');
+                    if ($F(this.carriersUpsActiveId) === '1') {
+                        $(this.checkingUpsXmlId[a]).addClassName('required-entry').disabled = false;
+                    } else {
+                        $(this.checkingUpsXmlId[a]).removeClassName('required-entry').disabled = true;
+                        if ($(this.checkingUpsXmlId[a]).next() !== undefined) {
+                            $(this.checkingUpsXmlId[a]).removeClassName('mage-error').next().remove();
+                            $(this.checkingUpsXmlId[a]).removeAttribute('style');
+                        }
+                    }
                 }
                 for (a = 0; a < this.checkingUpsId.length; a++) {
                     $(this.checkingUpsXmlId[a]).removeClassName('required-entry');
