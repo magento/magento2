@@ -59,6 +59,9 @@
                     <element key="expectedExceptionMessageRegExp">
                         <string>expectedExceptionMessageRegExp</string>
                     </element>
+                    <element key="security">
+                        <string>security</string>
+                    </element>
                 </array>
             </arguments>
         </listener>
