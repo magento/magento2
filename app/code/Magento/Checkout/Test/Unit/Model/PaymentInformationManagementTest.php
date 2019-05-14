@@ -179,7 +179,7 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
             ['setLimitCarrier', 'getShippingMethod', 'getShippingRateByCode']
         );
         $this->cartRepositoryMock->expects($this->any())->method('getActive')->with($cartId)->willReturn($quoteMock);
-        $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($quoteBillingAddress);
+        $quoteMock->method('getBillingAddress')->willReturn($quoteBillingAddress);
         $quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($quoteShippingAddress);
         $quoteBillingAddress->expects($this->once())->method('getId')->willReturn($billingAddressId);
         $quoteMock->expects($this->once())->method('removeAddress')->with($billingAddressId);
