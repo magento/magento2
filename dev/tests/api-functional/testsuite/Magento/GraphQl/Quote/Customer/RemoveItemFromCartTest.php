@@ -55,7 +55,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
         $itemId = $this->getQuoteItemIdByReservedQuoteIdAndSku->execute('test_quote', 'simple_product');
 
         $query = $this->getQuery($maskedQuoteId, $itemId);
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         $this->assertArrayHasKey('removeItemFromCart', $response);
         $this->assertArrayHasKey('cart', $response['removeItemFromCart']);
@@ -70,7 +70,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     public function testRemoveItemFromNonExistentCart()
     {
         $query = $this->getQuery('non_existent_masked_id', 1);
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -87,7 +87,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
         $this->expectExceptionMessage("Cart doesn't contain the {$notExistentItemId} item.");
 
         $query = $this->getQuery($maskedQuoteId, $notExistentItemId);
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -107,14 +107,14 @@ mutation {
   ) {
     cart {
       items {
-        qty
+        quantity
       }
     }
   }
 }
 QUERY;
         $this->expectExceptionMessage($message);
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -153,7 +153,7 @@ QUERY;
         $this->expectExceptionMessage("Cart doesn't contain the {$secondQuoteItemId} item.");
 
         $query = $this->getQuery($firstQuoteMaskedId, $secondQuoteItemId);
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -173,7 +173,7 @@ QUERY;
         );
 
         $query = $this->getQuery($guestQuoteMaskedId, $guestQuoteItemId);
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -196,7 +196,7 @@ QUERY;
         );
 
         $query = $this->getQuery($anotherCustomerQuoteMaskedId, $anotherCustomerQuoteItemId);
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
     }
 
     /**
@@ -216,7 +216,7 @@ mutation {
   ) {
     cart {
       items {
-        qty
+        quantity
       }
     }
   }

@@ -28,5 +28,7 @@
         <element name="notifyBelowQty" type="input" selector="//*[@name='product[stock_data][notify_stock_qty]']"/>
         <element name="advancedInventoryQty" type="input" selector="//div[@class='modal-inner-wrap']//input[@name='product[quantity_and_stock_status][qty]']"/>
         <element name="advancedInventoryStockStatus" type="select" selector="//div[@class='modal-inner-wrap']//select[@name='product[quantity_and_stock_status][is_in_stock]']"/>
+        <element name="outOfStockThreshold" type="select" selector="//*[@name='product[stock_data][min_qty]']" timeout="30"/>
+        <element name="minQtyConfigSetting" type="checkbox" selector="//input[@name='product[stock_data][use_config_min_qty]']" timeout="30"/>
     </section>
 </sections>
