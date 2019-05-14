@@ -14,7 +14,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Tests\NamingConvention\true\string;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\Storage\DbStorage as BaseDbStorage;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
