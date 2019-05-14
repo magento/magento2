@@ -9,11 +9,16 @@ namespace Magento\Sitemap\Model\ResourceModel\Catalog;
  * Test class for \Magento\Sitemap\Model\ResourceModel\Catalog\Product.
  * - test products collection generation for sitemap
  *
- * @magentoDataFixtureBeforeTransaction Magento/CatalogSearch/_files/full_reindex.php
+ * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixture Magento/Sitemap/_files/sitemap_products.php
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Base product image path
+     */
+    const BASE_IMAGE_PATH = '#http\:\/\/localhost\/pub\/media\/catalog\/product\/cache\/[a-z0-9]{32}:path:#';
+    
     /**
      * Test getCollection None images
      * 1) Check that image attributes were not loaded
@@ -24,7 +29,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testGetCollectionNone()
     {
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sitemap\Model\ResourceModel\Catalog\Product'
+            \Magento\Sitemap\Model\ResourceModel\Catalog\Product::class
         );
         $products = $model->getCollection(\Magento\Store\Model\Store::DISTRO_STORE_ID);
 
@@ -51,7 +56,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testGetCollectionAll()
     {
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sitemap\Model\ResourceModel\Catalog\Product'
+            \Magento\Sitemap\Model\ResourceModel\Catalog\Product::class
         );
         $products = $model->getCollection(\Magento\Store\Model\Store::DISTRO_STORE_ID);
 
@@ -119,7 +124,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testGetCollectionBase()
     {
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sitemap\Model\ResourceModel\Catalog\Product'
+            \Magento\Sitemap\Model\ResourceModel\Catalog\Product::class
         );
         $products = $model->getCollection(\Magento\Store\Model\Store::DISTRO_STORE_ID);
 

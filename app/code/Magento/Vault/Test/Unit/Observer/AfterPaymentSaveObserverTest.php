@@ -18,6 +18,9 @@ use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Observer\AfterPaymentSaveObserver;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * Test for payment observer.
+ */
 class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -61,7 +64,7 @@ class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
     protected $salesOrderPaymentMock;
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function setUp()
     {
@@ -69,6 +72,10 @@ class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
         $encryptorRandomGenerator = $this->getMock(Random::class, [], [], '', false);
         /** @var DeploymentConfig|MockObject $deploymentConfigMock */
         $deploymentConfigMock = $this->getMock(DeploymentConfig::class, [], [], '', false);
+        $deploymentConfigMock->expects($this->any())
+            ->method('get')
+            ->with(Encryptor::PARAM_CRYPT_KEY)
+            ->willReturn('g9mY9KLrcuAVJfsmVUSRkKFLDdUPVkaZ');
         $this->encryptorModel = new Encryptor($encryptorRandomGenerator, $deploymentConfigMock);
 
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
@@ -117,12 +124,14 @@ class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Case when payment successfully made.
+     *
      * @param int $customerId
      * @param string $createdAt
      * @param string $token
      * @param bool $isActive
      * @param string $method
-     * @dataProvider testPositiveCaseDataProvider
+     * @dataProvider positiveCaseDataProvider
      */
     public function testPositiveCase($customerId, $createdAt, $token, $isActive, $method)
     {
@@ -161,9 +170,11 @@ class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Data for positiveCase test.
+     *
      * @return array
      */
-    public function testPositiveCaseDataProvider()
+    public function positiveCaseDataProvider()
     {
         return [
             [
