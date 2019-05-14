@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
     $_order  = $block->getOrder();
@@ -22,16 +19,16 @@
                 $baseAmount = $info['base_tax_amount'];
                 $title      = $info['title'];
             ?>
-            <tr class="totals tax details details-<?= /* @escapeNotVerified */ $taxIter ?> <?= ($block->getIsPlaneMode()) ? ' plane' : '' ?>">
-                <td <?= /* @escapeNotVerified */ $block->getLabelProperties() ?>>
+            <tr class="totals tax details details-<?= /* @noEscape */ $taxIter ?> <?= ($block->getIsPlaneMode()) ? ' plane' : '' ?>">
+                <td <?= /* @noEscape */ $block->getLabelProperties() ?>>
                     <?= $block->escapeHtml($title) ?>
                     <?php if (!is_null($percent)): ?>
                         (<?= (float)$percent ?>%)
                     <?php endif; ?>
                     <br />
                 </td>
-                <td <?= /* @escapeNotVerified */ $block->getValueProperties() ?> rowspan="1">
-                    <?= /* @escapeNotVerified */ $_order->formatPrice($amount) ?>
+                <td <?= /* @noEscape */ $block->getValueProperties() ?> rowspan="1">
+                    <?= /* @noEscape */ $_order->formatPrice($amount) ?>
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -44,14 +41,14 @@
 <?php else: ?>
 <tr class="totals-tax">
 <?php endif; ?>
-    <th <?= /* @escapeNotVerified */ $block->getLabelProperties() ?> scope="row">
+    <th <?= /* @noEscape */ $block->getLabelProperties() ?> scope="row">
         <?php if ($block->displayFullSummary()): ?>
-            <div class="detailed"><?= /* @escapeNotVerified */ __('Tax') ?></div>
+            <div class="detailed"><?= $block->escapeHtml(__('Tax')) ?></div>
         <?php else: ?>
-            <?= /* @escapeNotVerified */ __('Tax') ?>
+            <?= $block->escapeHtml(__('Tax')) ?>
         <?php endif;?>
     </th>
-    <td <?= /* @escapeNotVerified */ $block->getValueProperties() ?> data-th="<?= $block->escapeHtml(__('Tax')) ?>">
-        <?= /* @escapeNotVerified */ $_order->formatPrice($_source->getTaxAmount()) ?>
+    <td <?= /* @noEscape */ $block->getValueProperties() ?> data-th="<?= $block->escapeHtml(__('Tax')) ?>">
+        <?= /* @noEscape */ $_order->formatPrice($_source->getTaxAmount()) ?>
     </td>
 </tr>

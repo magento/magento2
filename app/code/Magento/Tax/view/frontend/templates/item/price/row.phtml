@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Tax\Block\Item\Price\Renderer */
 
 $_item = $block->getItem();
@@ -13,7 +11,7 @@ $_item = $block->getItem();
 <?php if (($block->displayPriceInclTax() || $block->displayBothPrices()) && !$_item->getNoSubtotal()): ?>
     <span class="price-including-tax" data-label="<?= $block->escapeHtml(__('Incl. Tax')) ?>">
         <span class="cart-price">
-            <?= /* @escapeNotVerified */ $block->formatPrice($_item->getRowTotalInclTax()) ?>
+            <?= /* @noEscape */ $block->formatPrice($_item->getRowTotalInclTax()) ?>
         </span>
     </span>
 <?php endif; ?>
@@ -21,7 +19,7 @@ $_item = $block->getItem();
 <?php if (($block->displayPriceExclTax() || $block->displayBothPrices()) && !$_item->getNoSubtotal()): ?>
     <span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
         <span class="cart-price">
-            <?= /* @escapeNotVerified */ $block->formatPrice($_item->getRowTotal()) ?>
+            <?= /* @noEscape */ $block->formatPrice($_item->getRowTotal()) ?>
         </span>
     </span>
 <?php endif; ?>
