@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace Magento\CatalogUrlRewrite\Plugin;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Api\StoreResolverInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\Storage\DynamicStorage;
 use Magento\CatalogUrlRewrite\Model\Storage\DbStorage;
@@ -30,23 +28,15 @@ class DynamicCategoryRewrites
     private $dynamicStorage;
 
     /**
-     * @var StoreResolverInterface
-     */
-    private $storeResolver;
-
-    /**
      * @param ScopeConfigInterface|null $config
-     * @param StoreResolverInterface $storeResolver
      * @param DynamicStorage $dynamicStorage
      */
     public function __construct(
         ScopeConfigInterface $config,
-        StoreResolverInterface $storeResolver,
         DynamicStorage $dynamicStorage
     ) {
         $this->config = $config;
         $this->dynamicStorage = $dynamicStorage;
-        $this->storeResolver = $storeResolver;
     }
 
     /**
@@ -54,7 +44,7 @@ class DynamicCategoryRewrites
      *
      * @return bool
      */
-    private function isCategoryRewritesEnabled()
+    private function isCategoryRewritesEnabled(): bool
     {
         return (bool)$this->config->getValue('catalog/seo/generate_category_product_rewrites');
     }

@@ -9,10 +9,7 @@ namespace Magento\UrlRewrite\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Api\StoreResolverInterface;
-use Magento\Store\Model\ScopeInterface;
-use \Magento\UrlRewrite\Model\MergeDataProviderFactory;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 
 /**
  * Class CompositeUrlFinder
@@ -33,35 +30,28 @@ class CompositeUrlFinder implements UrlFinderInterface
      * @var MergeDataProviderFactory
      */
     private $mergeDataProviderFactory;
+
     /**
      * @var ScopeConfigInterface
      */
     private $config;
 
     /**
-     * @var StoreResolverInterface
-     */
-    private $storeResolver;
-
-    /**
      * @param array $children
      * @param ObjectManagerInterface $objectManager
      * @param MergeDataProviderFactory $mergeDataProviderFactory
      * @param ScopeConfigInterface $config
-     * @param StoreResolverInterface $storeResolver
      */
     public function __construct(
         array $children,
         ObjectManagerInterface $objectManager,
         MergeDataProviderFactory $mergeDataProviderFactory,
-        ScopeConfigInterface $config,
-        StoreResolverInterface $storeResolver
+        ScopeConfigInterface $config
     ) {
         $this->children = $children;
         $this->objectManager = $objectManager;
         $this->mergeDataProviderFactory = $mergeDataProviderFactory;
         $this->config = $config;
-        $this->storeResolver = $storeResolver;
     }
 
     /**
@@ -69,7 +59,7 @@ class CompositeUrlFinder implements UrlFinderInterface
      *
      * @return bool
      */
-    private function isCategoryRewritesEnabled()
+    private function isCategoryRewritesEnabled(): bool
     {
         return (bool)$this->config->getValue('catalog/seo/generate_category_product_rewrites');
     }
@@ -113,7 +103,7 @@ class CompositeUrlFinder implements UrlFinderInterface
      *
      * @return array
      */
-    private function getChildren()
+    private function getChildren(): array
     {
         uasort($this->children, function ($first, $second) {
             return (int)$first['sortOrder'] <=> (int)$second['sortOrder'];

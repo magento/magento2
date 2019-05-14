@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Tests\NamingConvention\true\string;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\Storage\DbStorage as BaseDbStorage;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
@@ -140,7 +141,7 @@ class DynamicStorage extends BaseDbStorage
      * @param int $storeId
      * @return string
      */
-    private function getCategoryUrlSuffix($storeId = null)
+    private function getCategoryUrlSuffix($storeId = null): string
     {
         return $this->config->getValue(
             CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX,
@@ -155,7 +156,7 @@ class DynamicStorage extends BaseDbStorage
      * @param array $data
      * @return array|null
      */
-    private function findProductRewriteByRequestPath(array $data)
+    private function findProductRewriteByRequestPath(array $data): ?array
     {
         $requestPath = $data[UrlRewrite::REQUEST_PATH] ?? null;
 
@@ -210,7 +211,7 @@ class DynamicStorage extends BaseDbStorage
      * @param array $data
      * @return array
      */
-    private function findProductRewritesByFilter(array $data)
+    private function findProductRewritesByFilter(array $data): array
     {
         if (empty($data[UrlRewrite::ENTITY_TYPE])) {
             return [];
@@ -248,9 +249,9 @@ class DynamicStorage extends BaseDbStorage
      * Return base name for path
      *
      * @param string|null $string
-     * @return mixed
+     * @return string
      */
-    private function getBaseName($string)
+    private function getBaseName($string): string
     {
         return preg_replace('|.*?([^/]+)$|', '\1', $string, 1);
     }
