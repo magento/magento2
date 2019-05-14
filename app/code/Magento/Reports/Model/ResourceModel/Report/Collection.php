@@ -252,7 +252,7 @@ class Collection extends \Magento\Framework\Data\Collection
             ? $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-m-d 00:00:00'))
             : $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-01-01 00:00:00'));
 
-        $interval['end'] = $dateStart->format('Y') == $dateEnd->format('Y')
+        $interval['end'] = $dateStart->format('Y') === $dateEnd->format('Y')
             ? $this->_localeDate->convertConfigTimeToUtc(
                 $dateStart->setDate($dateStart->format('Y'), $dateEnd->format('m'), $dateEnd->format('d'))
                     ->format('Y-m-d 23:59:59')
