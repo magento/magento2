@@ -9,7 +9,7 @@ namespace Magento\Framework\CompiledInterception\Test\Unit\CompiledInterceptor;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\CompiledInterception\Generator\CompiledInterceptor;
 
-use Magento\Framework\CompiledInterception\Test\Unit\PluginList\CompiledPluginListTest;
+use Magento\Framework\CompiledInterception\Test\Unit\CompiledPluginList\CompiledPluginListTest;
 use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase

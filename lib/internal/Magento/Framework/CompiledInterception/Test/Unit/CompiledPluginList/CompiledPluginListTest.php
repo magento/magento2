@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\CompiledInterception\Test\Unit\PluginList;
+namespace Magento\Framework\CompiledInterception\Test\Unit\CompiledPluginList;
 
 use Magento\Framework\CompiledInterception\Generator\CompiledPluginList;
 use Magento\Framework\ObjectManagerInterface;

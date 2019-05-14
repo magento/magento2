@@ -10,7 +10,7 @@ use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\Interception\DefinitionInterface;
 use Magento\Framework\Interception\PluginListInterface as InterceptionPluginList;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
-use Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy;
+use Magento\Framework\ObjectManager\Config\Reader\Dom;
 use Magento\Framework\ObjectManager\RelationsInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface as ClassDefinitions;
 
@@ -121,7 +121,7 @@ class CompiledPluginList implements InterceptionPluginList
             $this->_omConfig = $omConfig;
         } else {
             $objectManager = ObjectManager::getInstance();
-            $this->_reader = $objectManager->get(Proxy::class);
+            $this->_reader = $objectManager->get(Dom::class);
             $this->_omConfig = $objectManager->get(ConfigInterface::class);
         }
         $this->_relations = new \Magento\Framework\ObjectManager\Relations\Runtime();

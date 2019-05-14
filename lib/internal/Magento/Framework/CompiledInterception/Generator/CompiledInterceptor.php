@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\CompiledInterception\Generator;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Code\Generator\EntityAbstract;
 use Magento\Framework\Config\Scope;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
@@ -64,21 +64,14 @@ class CompiledInterceptor extends Interceptor
             $this->_classGenerator->setExtendedClass($typeName);
         }
 
-        $this->_classGenerator->addUse(ObjectManager::class);
-        $this->_classGenerator->addUse(Scope::class);
-
         $this->classMethods = [];
         $this->classProperties = [];
+        $this->injectPropertiesSettersToConstructor($reflection->getConstructor(), [
+            Scope::class => '____scope',
+            ObjectManagerInterface::class => '____om',
+        ]);
         $this->overrideMethodsAndGeneratePluginGetters($reflection);
 
-        array_unshift($this->classMethods, $this->_getConstructorInfo($reflection->getConstructor()));
-        array_unshift($this->classProperties, [
-            'name' => '____scope',
-            'visibility' => 'private',
-            'docblock' => [
-                'tags' => [['name' => 'var', 'description' => 'Scope']],
-            ]
-        ]);
         //return parent::_generateCode();
         return EntityAbstract::_generateCode();
     }
@@ -104,6 +97,59 @@ class CompiledInterceptor extends Interceptor
         }
     }
 
+    protected function injectPropertiesSettersToConstructor(\ReflectionMethod $parentConstructor = null, $properties = [])
+    {
+        if ($parentConstructor == null) {
+            $parameters = [];
+            $body = [];
+        } else {
+            $parameters = $parentConstructor->getParameters();
+            foreach ($parameters as $parameter) {
+                $parentCallParams[] = '$' . $parameter->getName();
+            }
+            $body = ["parent::__construct(" . implode(', ', $parentCallParams) .");"];
+        }
+        foreach ($properties as $type => $name) {
+            $this->_classGenerator->addUse($type);
+            $this->classProperties[] = [
+                'name' => $name,
+                'visibility' => 'private',
+                'docblock' => [
+                    'tags' => [['name' => 'var', 'description' => substr(strrchr($type, "\\"), 1)]],
+                ]
+            ];
+        }
+        $extraParams = $properties;
+        $extraSetters = array_combine($properties, $properties);
+        foreach ($parameters as $parameter) {
+            if ($parameter->getType()) {
+                $type = $parameter->getType()->getName();
+                if (isset($properties[$type])) {
+                    $extraSetters[$properties[$type]] = $parameter->getName();
+                    unset($extraParams[$type]);
+                }
+            }
+        }
+        $parameters = array_map(array($this, '_getMethodParameterInfo'), $parameters);
+        foreach ($extraParams as $type => $name) {
+            array_unshift($parameters, [
+                'name' => $name,
+                'type' => $type
+            ]);
+        }
+        foreach ($extraSetters as $name => $paramName) {
+            array_unshift($body, "\$this->$name = \$$paramName;");
+        }
+
+        $this->classMethods[] = [
+            'name' => '__construct',
+            'parameters' => $parameters,
+            'body' => implode("\n", $body),
+            'docblock' => ['shortDescription' => '{@inheritdoc}'],
+        ];
+
+    }
+
     protected function _getClassMethods()
     {
         return $this->classMethods;
@@ -112,45 +158,6 @@ class CompiledInterceptor extends Interceptor
     protected function _getClassProperties()
     {
         return $this->classProperties;
-    }
-
-    protected function _getConstructorInfo(\ReflectionMethod $parentConstructor = null)
-    {
-        if ($parentConstructor == null) {
-            $parameters = [[
-                'name' => 'scope',
-                'type' => Scope::class
-            ]];
-            $body = ["\$this->____scope = \$scope;"];
-        } else {
-            $parameters = $parentConstructor->getParameters();
-            $addScopeParam = true;
-            $scopeParamName = '____scope';
-            foreach ($parameters as $parameter) {
-                $parentCallParams[] = '$' . $parameter->getName();
-                if ($parameter->getType() == Scope::class) {
-                    $scopeParamName = $parameter->getName();
-                    $addScopeParam = false;
-                }
-            }
-
-            $parameters = array_map(array($this, '_getMethodParameterInfo'), $parameters);
-            $addScopeParam && array_unshift($parameters, [
-                'name' => $scopeParamName,
-                'type' => Scope::class
-            ]);
-            $body = [
-                "\$this->____scope = \$$scopeParamName;",
-                "parent::__construct(" . implode(', ', $parentCallParams) .");"
-            ];
-        }
-
-        return [
-            'name' => '__construct',
-            'parameters' => $parameters,
-            'body' => implode("\n", $body),
-            'docblock' => ['shortDescription' => '{@inheritdoc}'],
-        ];
     }
 
     private function addCodeSubBlock(&$body, $sub, $indent = 1)
@@ -211,7 +218,7 @@ class CompiledInterceptor extends Interceptor
             }
         }
         foreach ($chain as $lp => $piece) {
-            //if ($first) $first = false; else $body[] = "";
+            if ($first) $first = false; else $body[] = "";
             if (!$returnVoid) {
                 $piece[0] = (($lp + 1 == count($chain)) ? "return " : "\$result = ") . $piece[0];
             }
@@ -278,7 +285,7 @@ class CompiledInterceptor extends Interceptor
         $varName = "\$this->____plugin_" . $plugin['clean_name'];
 
         $body[] = "if ($varName === null) {";
-        $body[] = "\t$varName = ObjectManager::getInstance()->get(\\" . "{$plugin['class']}::class);";
+        $body[] = "\t$varName = \$this->____om->get(\\" . "{$plugin['class']}::class);";
         $body[] = "}";
         $body[] = "return $varName;";
 

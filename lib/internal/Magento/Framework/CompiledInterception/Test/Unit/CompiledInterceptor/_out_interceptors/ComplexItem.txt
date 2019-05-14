@@ -1,7 +1,7 @@
 namespace Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItem;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\Scope;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Interceptor class for @see \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItem
@@ -12,6 +12,11 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
      * @var Scope
      */
     private $____scope = null;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $____om = null;
 
     /**
      * @var \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced
@@ -26,9 +31,10 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
     /**
      * {@inheritdoc}
      */
-    public function __construct(\Magento\Framework\Config\Scope $scope)
+    public function __construct(\Magento\Framework\ObjectManagerInterface $____om, \Magento\Framework\Config\Scope $____scope)
     {
-        $this->____scope = $scope;
+        $this->____om = $____om;
+        $this->____scope = $____scope;
     }
 
     /**
@@ -41,18 +47,23 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
         	case 'frontend':
         	case 'emptyscope':
         		$this->____plugin_advanced_plugin()->beforeGetName($this);
+        		
         		$result = $this->____plugin_advanced_plugin()->aroundGetName($this, function(){
         			return parent::getName();
         		});
+        		
         		return $this->____plugin_advanced_plugin()->afterGetName($this, $result);
         	case 'backend':
         		$this->____plugin_advanced_plugin()->beforeGetName($this);
+        		
         		$result = $this->____plugin_advanced_plugin()->aroundGetName($this, function(){
         			$result = $this->____plugin_complex_plugin()->aroundGetName($this, function(){
         				return parent::getName();
         			});
+        			
         			return $this->____plugin_complex_plugin()->afterGetName($this, $result);
         		});
+        		
         		return $this->____plugin_advanced_plugin()->afterGetName($this, $result);
         	default:
         		return parent::getName();
@@ -68,6 +79,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
         	case 'backend':
         		$beforeResult = $this->____plugin_complex_plugin()->beforeSetValue($this, $value);
         		if ($beforeResult !== null) list($value) = (array)$beforeResult;
+        		
         		return $this->____plugin_complex_plugin()->aroundSetValue($this, function($value){
         			return parent::setValue($value);
         		}, $value);
@@ -143,7 +155,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
     public function ____plugin_advanced_plugin()
     {
         if ($this->____plugin_advanced_plugin === null) {
-        	$this->____plugin_advanced_plugin = ObjectManager::getInstance()->get(\Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class);
+        	$this->____plugin_advanced_plugin = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class);
         }
         return $this->____plugin_advanced_plugin;
     }
@@ -155,7 +167,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
     public function ____plugin_complex_plugin()
     {
         if ($this->____plugin_complex_plugin === null) {
-        	$this->____plugin_complex_plugin = ObjectManager::getInstance()->get(\Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Complex::class);
+        	$this->____plugin_complex_plugin = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Complex::class);
         }
         return $this->____plugin_complex_plugin;
     }
