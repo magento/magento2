@@ -62,7 +62,14 @@ class Client
         ];
         $postData = $this->json->jsonEncode($requestArray);
 
-        $responseBody = $this->curlClient->post($url, $postData, $headers);
+        //$responseBody = $this->curlClient->post($url, $postData, $headers);
+        try {
+            $responseBody = $this->curlClient->post($url, $postData, $headers);
+        } catch (\Exception $e) {
+            // if response code > 400 then response is the exception message
+            $responseBody = $e->getMessage();
+        }
+
         return $this->processResponse($responseBody);
     }
 
