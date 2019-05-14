@@ -163,9 +163,9 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends GraphQlAbstract
     mutation {
     setPaymentMethodOnCart(
         input: {
-            cart_id: "{$maskedQuoteId}",
+            cart_id: "$maskedQuoteId",
             payment_method: {
-                code:"{$methodCode}",
+                code:"$methodCode",
                 additional_data: {
                     authorizenet_acceptjs: {
                         opaque_data_descriptor:
