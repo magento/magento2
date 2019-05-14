@@ -56,18 +56,23 @@ class CustomerAuthUpdate
     {
         $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
 
+        $this->customerResourceModel->load($this->customerModel, $customerId);
+        $currentLockExpiresVal = $this->customerModel->getData('lock_expires');
+        $newLockExpiresVal = $customerSecure->getData('lock_expires');
+
         $this->customerResourceModel->getConnection()->update(
             $this->customerResourceModel->getTable('customer_entity'),
             [
                 'failures_num' => $customerSecure->getData('failures_num'),
                 'first_failure' => $customerSecure->getData('first_failure'),
-                'lock_expires' => $customerSecure->getData('lock_expires'),
+                'lock_expires' => $newLockExpiresVal,
             ],
             $this->customerResourceModel->getConnection()->quoteInto('entity_id = ?', $customerId)
         );
 
-        $this->customerResourceModel->load($this->customerModel, $customerId);
-        $this->customerModel->reindex();
+        if ($currentLockExpiresVal !== $newLockExpiresVal) {
+            $this->customerModel->reindex();
+        }
 
         return $this;
     }
