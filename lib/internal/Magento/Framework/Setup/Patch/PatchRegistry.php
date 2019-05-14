@@ -68,7 +68,7 @@ class PatchRegistry implements \IteratorAggregate
     /**
      * Register all dependents to patch
      *
-     * @param string | DependentPatchInterface $patchName
+     * @param string|DependentPatchInterface $patchName
      */
     private function registerDependents(string $patchName)
     {
@@ -130,6 +130,8 @@ class PatchRegistry implements \IteratorAggregate
     }
 
     /**
+     * Get patch dependencies.
+     *
      * @param string $patch
      * @return string[]
      */
