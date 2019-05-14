@@ -14,6 +14,7 @@
             <data name="searchTerm/data/popularity" xsi:type="string">20</data>
             <data name="searchTerm/data/redirect" xsi:type="string">http://example.com/</data>
             <data name="searchTerm/data/display_in_terms" xsi:type="string">No</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessSaveMessage" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermForm" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermInGrid" />
