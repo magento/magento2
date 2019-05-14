@@ -352,6 +352,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @var FilterProductCustomAttribute|null
      */
     private $filterCustomAttribute;
+        
+    /**
+     * @var \Magento\Catalog\Model\Product\Gallery\CreateHandler
+     */
+    protected $mediaGalleryHandler;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -2775,6 +2780,40 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function setStockData($stockData)
     {
         $this->setData('stock_data', $stockData);
+        return $this;
+    }
+        
+
+    /**
+     * @return Product\Gallery\CreateHandler
+     */
+    private function getMediaGalleryHandler()
+    {
+        if (null === $this->mediaGalleryHandler) {
+            $this->mediaGalleryHandler = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\Product\Gallery\CreateHandler::class);
+        }
+        return $this->mediaGalleryHandler;
+    }
+     
+    /**
+     * @return $this
+     */
+    public function deleteMediaGalleryImages() {
+        $attrCode = $this->getMediaGalleryHandler()->getAttribute()->getAttributeCode();
+        
+        $mediaGalleryData = $this->getData($attrCode);
+
+        if (!isset($mediaGalleryData['images']) || !is_array($mediaGalleryData['images'])) {
+            return $this;
+        }
+
+        foreach ($mediaGalleryData['images'] as &$image) {
+            $image['removed'] = 1;
+        }
+
+        $this->setData($attrCode, $mediaGalleryData);
+        $this->getMediaGalleryHandler()->execute($this)->save();
         return $this;
     }
 }
