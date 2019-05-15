@@ -32,10 +32,4 @@
     <rule ref="PEAR.ControlStructures.ControlSignature">
         <exclude-pattern>*.phtml</exclude-pattern>
     </rule>
-    <rule ref="Squiz.WhiteSpace.ScopeClosingBrace">
-        <exclude-pattern>*.phtml</exclude-pattern>
-    </rule>
-    <rule ref="Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace">
-        <exclude-pattern>*.phtml</exclude-pattern>
-    </rule>
 </ruleset>
