@@ -11,7 +11,7 @@
 ?>
 <?php
     $_value = $block->getTotal()->getValue();
-    $_style = $block->getTotal()->getStyle();
+    $_style = $block->escapeHtmlAttr($block->getTotal()->getStyle());
 ?>
 <?php global $taxIter; $taxIter++; ?>
 
@@ -23,14 +23,14 @@
 ?>
 
 <tr <?= /* @noEscape */ $attributes ?>>
-    <th style="<?= /* @noEscape */ $_style ?>" class="mark" colspan="<?= /* @noEscape */ $block->getColspan() ?>" scope="row">
+    <th style="<?= /* @noEscape */ $_style ?>" class="mark" colspan="<?= (int)$block->getColspan() ?>" scope="row">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
             <span class="detailed"><?= $block->escapeHtml($block->getTotal()->getTitle()) ?></span>
         <?php else: ?>
             <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
         <?php endif;?>
     </th>
-    <td style="<?= /* @noEscape */ $_style ?>" class="amount" data-th="<?= $block->escapeHtml($block->getTotal()->getTitle()) ?>">
+    <td style="<?= /* @noEscape */ $_style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
         <?= /* @noEscape */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_value) ?>
     </td>
 </tr>
@@ -47,7 +47,7 @@
 
         <?php foreach ($rates as $rate): ?>
             <tr class="totals-tax-details details-<?= /* @noEscape */ $taxIter ?>">
-                <th class="mark" style="<?= /* @noEscape */ $_style ?>" colspan="<?= /* @noEscape */ $block->getColspan() ?>" scope="row">
+                <th class="mark" style="<?= /* @noEscape */ $_style ?>" colspan="<?= (int)$block->getColspan() ?>" scope="row">
                     <?= $block->escapeHtml($rate['title']) ?>
                     <?php if (!is_null($rate['percent'])): ?>
                         (<?= (float)$rate['percent'] ?>%)
@@ -55,7 +55,7 @@
                 </th>
                 <?php if ($isFirst): ?>
                     <td style="<?= /* @noEscape */ $_style ?>" class="amount" rowspan="<?= count($rates) ?>"
-                       data-th="<?= $block->escapeHtml($rate['title']) ?><?php if (!is_null($rate['percent'])): ?>(<?= (float)$rate['percent'] ?>%)<?php endif; ?>">
+                       data-th="<?= $block->escapeHtmlAttr($rate['title']) ?><?php if (!is_null($rate['percent'])): ?>(<?= (float)$rate['percent'] ?>%)<?php endif; ?>">
                         <?= /* @noEscape */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($amount) ?>
                     </td>
                 <?php endif; ?>

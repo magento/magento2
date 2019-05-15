@@ -16,7 +16,7 @@
                     class="admin__control-text<?php if ($_store->getId() == 0): ?> required-entry<?php endif; ?>"
                     type="text"
                     name="title[<?= (int)$_store->getId() ?>]"
-                    value="<?= $block->escapeHtml($_labels[$_store->getId()]) ?>" />
+                    value="<?= $block->escapeHtmlAttr($_labels[$_store->getId()]) ?>" />
             </div>
         </div>
     <?php endforeach; ?>

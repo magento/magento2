@@ -14,7 +14,7 @@ $block->setZone(\Magento\Framework\Pricing\Render::ZONE_CART);
 ?>
 
 <?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
-    <span class="price-including-tax" data-label="<?= $block->escapeHtml(__('Incl. Tax')) ?>">
+    <span class="price-including-tax" data-label="<?= $block->escapeHtmlAttr(__('Incl. Tax')) ?>">
     <?php if ($block->displayPriceWithWeeeDetails()): ?>
         <span class="minicart-tax-total">
     <?php else: ?>
@@ -27,7 +27,7 @@ $block->setZone(\Magento\Framework\Pricing\Render::ZONE_CART);
         <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($item)): ?>
             <span class="minicart-tax-info">
             <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($item) as $tax): ?>
-                <span class="weee" data-label="<?= $block->escapeHtml($tax['title']) ?>">
+                <span class="weee" data-label="<?= $block->escapeHtmlAttr($tax['title']) ?>">
                     <?= /* @noEscape */ $block->formatPrice($tax['amount_incl_tax'], true, true) ?>
                 </span>
             <?php endforeach; ?>
@@ -35,7 +35,7 @@ $block->setZone(\Magento\Framework\Pricing\Render::ZONE_CART);
 
             <?php if ($block->displayFinalPrice()): ?>
                 <span class="minicart-tax-total">
-                    <span class="weee" data-label="<?= $block->escapeHtml(__('Total Incl. Tax')) ?>">
+                    <span class="weee" data-label="<?= $block->escapeHtmlAttr(__('Total Incl. Tax')) ?>">
                         <?= /* @noEscape */ $block->formatPrice($block->getFinalUnitDisplayPriceInclTax()) ?>
                     </span>
                 </span>
@@ -46,7 +46,7 @@ $block->setZone(\Magento\Framework\Pricing\Render::ZONE_CART);
 <?php endif; ?>
 
 <?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
-    <span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
+    <span class="price-excluding-tax" data-label="<?= $block->escapeHtmlAttr(__('Excl. Tax')) ?>">
     <?php if ($block->displayPriceWithWeeeDetails()): ?>
         <span class="minicart-tax-total">
     <?php else: ?>
@@ -59,7 +59,7 @@ $block->setZone(\Magento\Framework\Pricing\Render::ZONE_CART);
         <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($item)): ?>
             <span class="minicart-tax-info">
             <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($item) as $tax): ?>
-                <span class="weee" data-label="<?= $block->escapeHtml($tax['title']) ?>">
+                <span class="weee" data-label="<?= $block->escapeHtmlAttr($tax['title']) ?>">
                     <?= /* @noEscape */ $block->formatPrice($tax['amount'], true, true) ?>
                 </span>
             <?php endforeach; ?>
@@ -67,7 +67,7 @@ $block->setZone(\Magento\Framework\Pricing\Render::ZONE_CART);
 
             <?php if ($block->displayFinalPrice()): ?>
                 <span class="minicart-tax-total">
-                    <span class="weee" data-label="<?= $block->escapeHtml(__('Total')) ?>">
+                    <span class="weee" data-label="<?= $block->escapeHtmlAttr(__('Total')) ?>">
                         <?= /* @noEscape */ $block->formatPrice($block->getFinalUnitDisplayPriceExclTax()) ?>
                     </span>
                 </span>

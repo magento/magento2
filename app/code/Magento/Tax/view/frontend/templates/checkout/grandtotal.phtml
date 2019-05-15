@@ -9,29 +9,33 @@
  */
 ?>
 <?php if ($block->includeTax() && $block->getTotalExclTax() >= 0):?>
+<?php
+    $style = $block->escapeHtmlAttr($block->getStyle());
+    $colspan = (int)$block->getColspan();
+?>
 <tr class="grand totals excl">
-    <th style="<?= /* @noEscape */ $block->getStyle() ?>" class="mark" colspan="<?= /* @noEscape */ $block->getColspan() ?>" scope="row">
+    <th style="<?= /* @noEscape */ $style ?>" class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
         <strong><?= $block->escapeHtml(__('Grand Total Excl. Tax')) ?></strong>
     </th>
-    <td style="<?= /* @noEscape */ $block->getStyle() ?>" class="amount" data-th="<?= $block->escapeHtml(__('Grand Total Excl. Tax')) ?>">
+    <td style="<?= /* @noEscape */ $style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr(__('Grand Total Excl. Tax')) ?>">
         <strong><?= /* @noEscape */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotalExclTax()) ?></strong>
     </td>
 </tr>
-<?= /* @noEscape */ $block->renderTotals('taxes', $block->getColspan()) ?>
+<?= /* @noEscape */ $block->renderTotals('taxes', $colspan) ?>
 <tr class="grand totals incl">
-    <th style="<?= /* @noEscape */ $block->getStyle() ?>" class="mark" colspan="<?= /* @noEscape */ $block->getColspan() ?>" scope="row">
+    <th style="<?= /* @noEscape */ $style ?>" class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
         <strong><?= $block->escapeHtml(__('Grand Total Incl. Tax')) ?></strong>
     </th>
-    <td style="<?= /* @noEscape */ $block->getStyle() ?>" class="amount" data-th="<?= $block->escapeHtml(__('Grand Total Incl. Tax')) ?>">
+    <td style="<?= /* @noEscape */ $style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr(__('Grand Total Incl. Tax')) ?>">
         <strong><?= /* @noEscape */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()->getValue()) ?></strong>
     </td>
 </tr>
 <?php else:?>
 <tr class="grand totals">
-    <th style="<?= /* @noEscape */ $block->getStyle() ?>" class="mark" colspan="<?= /* @noEscape */ $block->getColspan() ?>" scope="row">
+    <th style="<?= /* @noEscape */ $style ?>" class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
         <strong><?= $block->escapeHtml($block->getTotal()->getTitle()) ?></strong>
     </th>
-    <td style="<?= /* @noEscape */ $block->getStyle() ?>" class="amount" data-th="<?= $block->escapeHtml($block->getTotal()->getTitle()) ?>">
+    <td style="<?= /* @noEscape */ $style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
         <strong><?= /* @noEscape */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()->getValue()) ?></strong>
     </td>
 </tr>

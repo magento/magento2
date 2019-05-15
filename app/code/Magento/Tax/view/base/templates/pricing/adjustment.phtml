@@ -9,7 +9,7 @@
 
 <?php if ($block->displayBothPrices()): ?>
     <span id="<?= /* @noEscape */ $block->buildIdWithPrefix('price-excluding-tax-') ?>"
-          data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>"
+          data-label="<?= $block->escapeHtmlAttr(__('Excl. Tax')) ?>"
           data-price-amount="<?= /* @noEscape */ $block->getRawAmount() ?>"
           data-price-type="basePrice"
           class="price-wrapper price-excluding-tax">

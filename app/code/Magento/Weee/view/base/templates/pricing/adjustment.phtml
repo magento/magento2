@@ -17,24 +17,27 @@ $priceDisplay = $block->isPriceIncludesTax();
 
 <?php if ($block->showInclDescr() || $block->showExclDescrIncl()): // incl. + weee ||  excl. + weee + final ?>
     <?php foreach ($block->getWeeeTaxAttributes() as $weeeTaxAttribute): ?>
+        <?php
+            $attributeName = $block->escapeHtmlAttr($block->renderWeeeTaxAttributeName($weeeTaxAttribute));
+        ?>
         <?php if ($taxDisplay == Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX): ?>
             <span class="weee"
                   data-price-type="weee"
-                  data-label="<?= $block->escapeHtml($block->renderWeeeTaxAttributeName($weeeTaxAttribute)) ?>">
+                  data-label="<?= /* @noEscape */ $attributeName ?>">
                             <?= /* @noEscape */ $block->renderWeeeTaxAttributeWithTax($weeeTaxAttribute) ?></span>
         <?php elseif ($taxDisplay == Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX): ?>
             <span class="weee"
                   data-price-type="weee"
-                  data-label="<?= $block->escapeHtml($block->renderWeeeTaxAttributeName($weeeTaxAttribute)) ?>">
+                  data-label="<?= /* @noEscape */ $attributeName ?>">
                             <?= /* @noEscape */ $block->renderWeeeTaxAttributeWithoutTax($weeeTaxAttribute) ?></span>
         <?php elseif ($taxDisplay == Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH): ?>
             <span class="weee"
                   data-price-type="weee"
-                  data-label="<?= $block->escapeHtml($block->renderWeeeTaxAttributeName($weeeTaxAttribute) . ' ' . __('Incl. Tax')) ?>">
+                  data-label="<?= /* @noEscape */ $attributeName . ' ' . $block->escapeHtmlAttr(__('Incl. Tax')) ?>">
                             <?= /* @noEscape */ $block->renderWeeeTaxAttributeWithTax($weeeTaxAttribute) ?></span>
             <span class="weee"
                   data-price-type="weee"
-                  data-label="<?= $block->escapeHtml($block->renderWeeeTaxAttributeName($weeeTaxAttribute) . ' ' . __('Excl. Tax')) ?>">
+                  data-label="<?= /* @noEscape */ $attributeName . ' ' . $block->escapeHtmlAttr(__('Excl. Tax')) ?>">
                             <?= /* @noEscape */ $block->renderWeeeTaxAttributeWithoutTax($weeeTaxAttribute) ?></span>
         <?php endif; ?>
     <?php endforeach; ?>
@@ -44,5 +47,5 @@ $priceDisplay = $block->isPriceIncludesTax();
     <span class="price-final price-final_price"
           data-price-type="weeePrice"
           data-price-amount="<?= /* @noEscape */ $block->getRawFinalAmount() ?>"
-          data-label="<?= $block->escapeHtml(__('Final Price')) ?>"><?= /* @noEscape */ $block->getFinalAmount() ?></span>
+          data-label="<?= $block->escapeHtmlAttr(__('Final Price')) ?>"><?= /* @noEscape */ $block->getFinalAmount() ?></span>
 <?php endif; ?>

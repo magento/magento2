@@ -41,11 +41,9 @@ return [
     'Magento_Store',
     'Magento_Swagger',
     'Magento_Swatches',
-    'Magento_Tax',
     'Magento_TaxImportExport',
     'Magento_Theme',
     'Magento_Translation',
     'Magento_Ui',
     'Magento_User',
-    'Magento_Weee',
 ];

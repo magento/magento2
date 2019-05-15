@@ -14,8 +14,8 @@ $data = ['fptAttribute' => [
     'bundlePriceType' => '#price_type',
 ]];
 ?>
-<div id="attribute-<?= $block->getElement()->getHtmlId() ?>-container" class="field"
-     data-attribute-code="<?= $block->getElement()->getHtmlId() ?>"
+<div id="attribute-<?= /* @noEscape */ $block->getElement()->getHtmlId() ?>-container" class="field"
+     data-attribute-code="<?= /* @noEscape */ $block->getElement()->getHtmlId() ?>"
      data-mage-init="<?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data) ?>">
     <label class="label"><span><?= $block->escapeHtml($block->getElement()->getLabel()) ?></span></label>
 
@@ -45,37 +45,41 @@ $data = ['fptAttribute' => [
     </div>
 
     <script data-role="row-template" type="text/x-magento-template">
-        <tr id="<?= $block->getElement()->getHtmlId() ?>_weee_tax_row_<%- data.index %>" data-role="fpt-item-row">
+        <?php
+            $elementName = $block->escapeHtmlAttr($block->getElement()->getName());
+            $elementClass = $block->escapeHtmlAttr($block->getElement()->getClass());
+        ?>
+        <tr id="<?= /* @noEscape */ $block->getElement()->getHtmlId() ?>_weee_tax_row_<%- data.index %>" data-role="fpt-item-row">
             <td class="col-website" <?php if (!$block->isMultiWebsites()): ?>style="display: none"<?php endif; ?>>
-                <select id="<?= $block->escapeHtml($block->getElement()->getName()) ?>_weee_tax_row_<%- data.index %>_website"
-                        name="<?= $block->escapeHtml($block->getElement()->getName()) ?>[<%- data.index %>][website_id]"
-                        class="<?= $block->escapeHtml($block->getElement()->getClass()) ?> website required-entry" data-role="select-website">
+                <select id="<?= /* @noEscape */ $elementName ?>_weee_tax_row_<%- data.index %>_website"
+                        name="<?= /* @noEscape */ $elementName ?>[<%- data.index %>][website_id]"
+                        class="<?= /* @noEscape */ $elementClass ?> website required-entry" data-role="select-website">
                     <?php foreach ($block->getWebsites() as $_websiteId => $_info): ?>
                     <option value="<?= /* @noEscape */ $_websiteId ?>"><?= $block->escapeHtml($_info['name']) ?><?php if (!empty($_info['currency'])): ?>[<?= /* @noEscape */ $_info['currency'] ?>]<?php endif; ?></option>
                     <?php endforeach ?>
                 </select>
             </td>
             <td class="col-country">
-                <select id="<?= $block->escapeHtml($block->getElement()->getName()) ?>_weee_tax_row_<%- data.index %>_country"
-                        name="<?= $block->escapeHtml($block->getElement()->getName()) ?>[<%- data.index %>][country]"
-                        class="<?= $block->escapeHtml($block->getElement()->getClass()) ?> country required-entry" data-role="select-country">
+                <select id="<?= /* @noEscape */ $elementName ?>_weee_tax_row_<%- data.index %>_country"
+                        name="<?= /* @noEscape */ $elementName ?>[<%- data.index %>][country]"
+                        class="<?= /* @noEscape */ $elementClass ?> country required-entry" data-role="select-country">
                     <?php foreach ($block->getCountries() as $_country): ?>
-                    <option value="<?= $block->escapeHtml($_country['value']) ?>"><?= $block->escapeHtml($_country['label']) ?></option>
+                    <option value="<?= $block->escapeHtmlAttr($_country['value']) ?>"><?= $block->escapeHtml($_country['label']) ?></option>
                     <?php endforeach ?>
                 </select>
-                <select id="<?= $block->escapeHtml($block->getElement()->getName()) ?>_weee_tax_row_<%- data.index %>_state"
-                        name="<?= $block->escapeHtml($block->getElement()->getName()) ?>[<%- data.index %>][state]"
-                        class="<?= $block->escapeHtml($block->getElement()->getClass()) ?> state" disabled="" data-role="select-state">
+                <select id="<?= /* @noEscape */ $elementName ?>_weee_tax_row_<%- data.index %>_state"
+                        name="<?= /* @noEscape */ $elementName ?>[<%- data.index %>][state]"
+                        class="<?= /* @noEscape */ $elementClass ?> state" disabled="" data-role="select-state">
                     <option value="0">*</option>
                 </select>
             </td>
             <td class="col-tax">
-                <input name="<?= $block->escapeHtml($block->getElement()->getName()) ?>[<%- data.index %>][price]"
-                       class="<?= $block->escapeHtml($block->getElement()->getClass()) ?> required-entry validate-greater-than-zero"
+                <input name="<?= /* @noEscape */ $elementName ?>[<%- data.index %>][price]"
+                       class="<?= /* @noEscape */ $elementClass ?> required-entry validate-greater-than-zero"
                        type="text" value="<%- data.value %>"/>
             </td>
             <td class="col-action">
-                <input name="<?= $block->escapeHtml($block->getElement()->getName()) ?>[<%- data.index %>][delete]" class="delete" type="hidden" value="" data-role="delete-fpt-item"/>
+                <input name="<?= /* @noEscape */ $elementName ?>[<%- data.index %>][delete]" class="delete" type="hidden" value="" data-role="delete-fpt-item"/>
                 <?= $block->getChildHtml('delete_button') ?>
             </td>
         </tr>

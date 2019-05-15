@@ -48,7 +48,7 @@
             <?= $block->escapeHtml(__('Tax')) ?>
         <?php endif;?>
     </th>
-    <td <?= /* @noEscape */ $block->getValueProperties() ?> data-th="<?= $block->escapeHtml(__('Tax')) ?>">
+    <td <?= /* @noEscape */ $block->getValueProperties() ?> data-th="<?= $block->escapeHtmlAttr(__('Tax')) ?>">
         <?= /* @noEscape */ $_order->formatPrice($_source->getTaxAmount()) ?>
     </td>
 </tr>
