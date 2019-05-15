@@ -64,7 +64,7 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                                                     <?php if ($_item->isSaleable()): ?>
                                                         <?php if ($_item->getTypeInstance()->hasRequiredOptions($_item)): ?>
                                                             <button class="action tocart primary"
-                                                                    data-mage-init='{"redirectUrl": {"url": "<?= $block->escapeHtml($block->getAddToCartUrl($_item) ?>"}}'
+                                                                    data-mage-init='{"redirectUrl": {"url": "<?= $block->escapeHtml($block->getAddToCartUrl($_item)) ?>"}}'
                                                                     type="button" title="<?= $block->escapeHtml(__('Add to Cart')) ?>">
                                                                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                             </button>
