@@ -43,7 +43,7 @@ class ConfigurableObject implements InterpreterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function evaluate(array $data)
     {
