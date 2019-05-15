@@ -48,6 +48,7 @@ class UrlRewriteHandlerTest extends TestCase
      * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/CatalogUrlRewrite/Fixtures/product_custom_url_key.php
      * @magentoConfigFixture admin_store catalog/seo/product_use_categories 1
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      */
     public function testGenerateProductUrlRewrites()
     {
@@ -60,9 +61,14 @@ class UrlRewriteHandlerTest extends TestCase
             ->setAnchorsAbove(false);
 
         $generatedUrls = $this->handler->generateProductUrlRewrites($category);
-        $actual = array_values(array_map(function (UrlRewrite $urlRewrite) {
-            return $urlRewrite->getRequestPath();
-        }, $generatedUrls));
+        $actual = array_values(
+            array_map(
+                function (UrlRewrite $urlRewrite) {
+                    return $urlRewrite->getRequestPath();
+                },
+                $generatedUrls
+            )
+        );
 
         $expected = [
             'store-1-key.html', // the Default store
