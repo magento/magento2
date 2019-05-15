@@ -15,22 +15,22 @@ $taxDisplay = $block->getTaxDisplayConfig();
 $priceDisplay = $block->isPriceIncludesTax();
 ?>
 
-<?php if ($block->showInclDescr() || $block->showExclDescrIncl()): // incl. + weee ||  excl. + weee + final ?>
-    <?php foreach ($block->getWeeeTaxAttributes() as $weeeTaxAttribute): ?>
+<?php if ($block->showInclDescr() || $block->showExclDescrIncl()) : // incl. + weee ||  excl. + weee + final ?>
+    <?php foreach ($block->getWeeeTaxAttributes() as $weeeTaxAttribute) : ?>
         <?php
             $attributeName = $block->escapeHtmlAttr($block->renderWeeeTaxAttributeName($weeeTaxAttribute));
         ?>
-        <?php if ($taxDisplay == Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX): ?>
+        <?php if ($taxDisplay == Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX) : ?>
             <span class="weee"
                   data-price-type="weee"
                   data-label="<?= /* @noEscape */ $attributeName ?>">
                             <?= /* @noEscape */ $block->renderWeeeTaxAttributeWithTax($weeeTaxAttribute) ?></span>
-        <?php elseif ($taxDisplay == Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX): ?>
+        <?php elseif ($taxDisplay == Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX) : ?>
             <span class="weee"
                   data-price-type="weee"
                   data-label="<?= /* @noEscape */ $attributeName ?>">
                             <?= /* @noEscape */ $block->renderWeeeTaxAttributeWithoutTax($weeeTaxAttribute) ?></span>
-        <?php elseif ($taxDisplay == Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH): ?>
+        <?php elseif ($taxDisplay == Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH) : ?>
             <span class="weee"
                   data-price-type="weee"
                   data-label="<?= /* @noEscape */ $attributeName . ' ' . $block->escapeHtmlAttr(__('Incl. Tax')) ?>">
@@ -43,7 +43,7 @@ $priceDisplay = $block->isPriceIncludesTax();
     <?php endforeach; ?>
 <?php endif; ?>
 
-<?php if ($block->showExclDescrIncl()): // excl. + weee + final ?>
+<?php if ($block->showExclDescrIncl()) : // excl. + weee + final ?>
     <span class="price-final price-final_price"
           data-price-type="weeePrice"
           data-price-amount="<?= /* @noEscape */ $block->getRawFinalAmount() ?>"

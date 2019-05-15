@@ -8,7 +8,7 @@
 
 $_item = $block->getItem();
 ?>
-<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
+<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()) : ?>
     <span class="price-including-tax" data-label="<?= $block->escapeHtmlAttr(__('Incl. Tax')) ?>">
         <?php $_incl = $_item->getPriceInclTax(); ?>
         <span class="cart-price">
@@ -17,7 +17,7 @@ $_item = $block->getItem();
     </span>
 <?php endif; ?>
 
-<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
+<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()) : ?>
     <span class="price-excluding-tax" data-label="<?= $block->escapeHtmlAttr(__('Excl. Tax')) ?>">
         <span class="cart-price">
             <?= /* @noEscape */ $block->formatPrice($block->getItemDisplayPriceExclTax()) ?>

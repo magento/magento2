@@ -6,14 +6,14 @@
 ?>
 <fieldset id="tax-rate-titles-table" class="admin__fieldset">
     <?php $_labels = $block->getTitles() ?>
-    <?php foreach ($block->getStores() as $_store): ?>
+    <?php foreach ($block->getStores() as $_store) : ?>
         <div class="admin__field">
             <label class="admin__field-label">
                 <span><?= $block->escapeHtml($_store->getName()) ?></span>
             </label>
             <div class="admin__field-control">
                 <input
-                    class="admin__control-text<?php if ($_store->getId() == 0): ?> required-entry<?php endif; ?>"
+                    class="admin__control-text<?php if ($_store->getId() == 0) : ?> required-entry<?php endif; ?>"
                     type="text"
                     name="title[<?= (int)$_store->getId() ?>]"
                     value="<?= $block->escapeHtmlAttr($_labels[$_store->getId()]) ?>" />

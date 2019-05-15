@@ -113,7 +113,7 @@ require([
                 toggleAddButton:false,
                 addText: '<?= $block->escapeJs($block->escapeHtml(__('Add New Tax Rate'))) ?>',
                 parse: null,
-                nextPageUrl: '<?php echo $block->escapeHtml($block->getTaxRatesPageUrl())?>',
+                nextPageUrl: '<?= $block->escapeHtml($block->getTaxRatesPageUrl())?>',
                 selectedValues: this.settings.selected_values,
                 mselectInputSubmitCallback: function (value, options) {
                     var select = $('#tax_rate');

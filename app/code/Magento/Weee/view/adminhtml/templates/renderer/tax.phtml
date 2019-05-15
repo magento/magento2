@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
 ?>
 <?php
 /** @var $block \Magento\Weee\Block\Renderer\Weee\Tax */
 $data = ['fptAttribute' => [
-    'region' => $this->helper('Magento\Framework\Json\Helper\Data')->jsonDecode(
-        $this->helper('Magento\Directory\Helper\Data')->getRegionJson()
+    'region' => $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonDecode(
+        $this->helper(\Magento\Directory\Helper\Data::class)->getRegionJson()
     ),
     'itemsData' => $block->getValues(),
     'bundlePriceType' => '#price_type',
@@ -16,14 +18,14 @@ $data = ['fptAttribute' => [
 ?>
 <div id="attribute-<?= /* @noEscape */ $block->getElement()->getHtmlId() ?>-container" class="field"
      data-attribute-code="<?= /* @noEscape */ $block->getElement()->getHtmlId() ?>"
-     data-mage-init="<?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data) ?>">
+     data-mage-init="<?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($data) ?>">
     <label class="label"><span><?= $block->escapeHtml($block->getElement()->getLabel()) ?></span></label>
 
     <div class="control">
         <table class="data-table">
             <thead>
                 <tr>
-                    <th class="col-website" <?php if (!$block->isMultiWebsites()): ?>style="display: none;"<?php endif; ?>><?= $block->escapeHtml(__('Website')) ?></th>
+                    <th class="col-website" <?php if (!$block->isMultiWebsites()) : ?>style="display: none;"<?php endif; ?>><?= $block->escapeHtml(__('Website')) ?></th>
                     <th class="col-country required"><?= $block->escapeHtml(__('Country/State')) ?></th>
                     <th class="col-tax required"><?= $block->escapeHtml(__('Tax')) ?></th>
                     <th class="col-action"><?= $block->escapeHtml(__('Action')) ?></th>
@@ -50,12 +52,12 @@ $data = ['fptAttribute' => [
             $elementClass = $block->escapeHtmlAttr($block->getElement()->getClass());
         ?>
         <tr id="<?= /* @noEscape */ $block->getElement()->getHtmlId() ?>_weee_tax_row_<%- data.index %>" data-role="fpt-item-row">
-            <td class="col-website" <?php if (!$block->isMultiWebsites()): ?>style="display: none"<?php endif; ?>>
+            <td class="col-website" <?php if (!$block->isMultiWebsites()) : ?>style="display: none"<?php endif; ?>>
                 <select id="<?= /* @noEscape */ $elementName ?>_weee_tax_row_<%- data.index %>_website"
                         name="<?= /* @noEscape */ $elementName ?>[<%- data.index %>][website_id]"
                         class="<?= /* @noEscape */ $elementClass ?> website required-entry" data-role="select-website">
-                    <?php foreach ($block->getWebsites() as $_websiteId => $_info): ?>
-                    <option value="<?= /* @noEscape */ $_websiteId ?>"><?= $block->escapeHtml($_info['name']) ?><?php if (!empty($_info['currency'])): ?>[<?= /* @noEscape */ $_info['currency'] ?>]<?php endif; ?></option>
+                    <?php foreach ($block->getWebsites() as $_websiteId => $_info) : ?>
+                    <option value="<?= /* @noEscape */ $_websiteId ?>"><?= $block->escapeHtml($_info['name']) ?><?php if (!empty($_info['currency'])) : ?>[<?= /* @noEscape */ $_info['currency'] ?>]<?php endif; ?></option>
                     <?php endforeach ?>
                 </select>
             </td>
@@ -63,7 +65,7 @@ $data = ['fptAttribute' => [
                 <select id="<?= /* @noEscape */ $elementName ?>_weee_tax_row_<%- data.index %>_country"
                         name="<?= /* @noEscape */ $elementName ?>[<%- data.index %>][country]"
                         class="<?= /* @noEscape */ $elementClass ?> country required-entry" data-role="select-country">
-                    <?php foreach ($block->getCountries() as $_country): ?>
+                    <?php foreach ($block->getCountries() as $_country) : ?>
                     <option value="<?= $block->escapeHtmlAttr($_country['value']) ?>"><?= $block->escapeHtml($_country['label']) ?></option>
                     <?php endforeach ?>
                 </select>

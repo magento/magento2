@@ -4,22 +4,24 @@
  * See COPYING.txt for license details.
  */
 
+// phpcs:disable Magento2.Templates.ThisInTemplate
+
 /**
  * @var $block \Magento\Tax\Block\Checkout\Subtotal
  * @see \Magento\Tax\Block\Checkout\Subtotal
  */
 ?>
-<?php if ($block->displayBoth()) :?>
-<?php
-    $style = $block->escapeHtmlAttr($block->getStyle());
-    $colspan = (int)$block->getColspan();
-?>
+<?php if ($block->displayBoth()) : ?>
+    <?php
+        $style = $block->escapeHtmlAttr($block->getStyle());
+        $colspan = (int)$block->getColspan();
+    ?>
 <tr class="totals sub excl">
     <th style="<?= /* @noEscape */ $style ?>" class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
         <?= $block->escapeHtml(__('Subtotal (Excl. Tax)')) ?>
     </th>
     <td style="<?= /* @noEscape */ $style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr(__('Subtotal (Excl. Tax)')) ?>">
-        <?= /* @noEscape */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()->getValueExclTax()) ?>
+        <?= /* @noEscape */ $this->helper(\Magento\Checkout\Helper\Data::class)->formatPrice($block->getTotal()->getValueExclTax()) ?>
     </td>
 </tr>
 <tr class="totals sub incl">
@@ -27,7 +29,7 @@
         <?= $block->escapeHtml(__('Subtotal (Incl. Tax)')) ?>
     </th>
     <td style="<?= /* @noEscape */ $style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr(__('Subtotal (Incl. Tax)')) ?>">
-        <?= /* @noEscape */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()->getValueInclTax()) ?>
+        <?= /* @noEscape */ $this->helper(\Magento\Checkout\Helper\Data::class)->formatPrice($block->getTotal()->getValueInclTax()) ?>
     </td>
 </tr>
 <?php else : ?>
@@ -36,7 +38,7 @@
         <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
     </th>
     <td style="<?= /* @noEscape */ $style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
-        <?= /* @noEscape */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()->getValue()) ?>
+        <?= /* @noEscape */ $this->helper(\Magento\Checkout\Helper\Data::class)->formatPrice($block->getTotal()->getValue()) ?>
     </td>
 </tr>
 <?php endif;?>

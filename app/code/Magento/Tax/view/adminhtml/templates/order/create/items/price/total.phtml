@@ -10,17 +10,17 @@
 $_item = $block->getItem();
 ?>
 
-<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
+<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()) : ?>
     <?php $_rowTotalWithoutDiscount = $_item->getRowTotal() - $_item->getTotalDiscountAmount(); ?>
-    <?php if ($block->displayBothPrices()): ?>
+    <?php if ($block->displayBothPrices()) : ?>
         <span class="label"><?= $block->escapeHtml(__('Excl. Tax')) ?>:</span>
     <?php endif; ?>
     <?= /* @noEscape */ $block->formatPrice(max(0, $_rowTotalWithoutDiscount)) ?>
 <?php endif; ?>
 
 
-<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
-    <?php if ($block->displayBothPrices($block->getStore())): ?>
+<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()) : ?>
+    <?php if ($block->displayBothPrices($block->getStore())) : ?>
         <br /><span class="label"><?= $block->escapeHtml(__('Incl. Tax')) ?>:</span>
     <?php endif; ?>
     <?php $_incl = $block->getTotalAmount($_item); ?>

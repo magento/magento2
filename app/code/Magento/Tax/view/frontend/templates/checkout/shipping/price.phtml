@@ -8,17 +8,17 @@
 
 <?php $_excl = $block->getShippingPriceExclTax(); ?>
 <?php $_incl = $block->getShippingPriceInclTax(); ?>
-<?php if ($block->displayShippingPriceExclTax()): ?>
+<?php if ($block->displayShippingPriceExclTax()) : ?>
     <span class="price"><?= /* @noEscape */ $_excl ?></span>
-<?php else: ?>
-<?php if ($block->displayShippingBothPrices() && $_incl != $_excl): ?>
-    <span class="price-including-tax" data-label="<?= $block->escapeHtmlAttr(__('Incl. Tax')) ?>">
-<?php endif; ?>
+<?php else : ?>
+    <?php if ($block->displayShippingBothPrices() && $_incl != $_excl) : ?>
+        <span class="price-including-tax" data-label="<?= $block->escapeHtmlAttr(__('Incl. Tax')) ?>">
+    <?php endif; ?>
     <span class="price"><?= /* @noEscape */ $_incl ?></span>
-<?php if ($block->displayShippingBothPrices() && $_incl != $_excl): ?>
-    </span>
+    <?php if ($block->displayShippingBothPrices() && $_incl != $_excl) : ?>
+        </span>
+    <?php endif; ?>
 <?php endif; ?>
-<?php endif; ?>
-<?php if ($block->displayShippingBothPrices() && $_incl != $_excl): ?>
+<?php if ($block->displayShippingBothPrices() && $_incl != $_excl) : ?>
     <span class="price-excluding-tax" data-label="<?= $block->escapeHtmlAttr(__('Excl. Tax')) ?>"><span class="price"><?= /* @noEscape */ $_excl ?></span></span>
 <?php endif; ?>
