@@ -169,8 +169,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
     }
 
     /**
-     * Get JSON encoded configuration array which can be used for JS dynamic
-     * price calculation depending on product options
+     * Get JSON encoded configuration which can be used for JS dynamic price calculation depending on product options
      *
      * @return string
      */
@@ -254,6 +253,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * instantly.
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function isStartCustomization()
     {
@@ -262,6 +262,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
 
     /**
      * Get default qty - either as preconfigured, or as 1.
+     *
      * Also restricts it by minimal qty.
      *
      * @param null|\Magento\Catalog\Model\Product $product
@@ -323,10 +324,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
     public function getIdentities()
     {
         $identities = $this->getProduct()->getIdentities();
-        $category = $this->_coreRegistry->registry('current_category');
-        if ($category) {
-            $identities[] = Category::CACHE_TAG . '_' . $category->getId();
-        }
+
         return $identities;
     }
 
