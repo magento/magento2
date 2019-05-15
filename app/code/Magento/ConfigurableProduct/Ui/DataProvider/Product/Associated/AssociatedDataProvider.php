@@ -60,10 +60,10 @@ class AssociatedDataProvider extends \Magento\Catalog\Ui\DataProvider\Product\Pr
      * @param LocatorInterface $locator
      * @param StoreRepositoryInterface $storeRepository
      * @param RequestInterface $request
-     * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[] $addFieldStrategies
-     * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
      * @param array $data
+     * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[] $addFieldStrategies
+     * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      */
     public function __construct(
         $name,
@@ -79,8 +79,7 @@ class AssociatedDataProvider extends \Magento\Catalog\Ui\DataProvider\Product\Pr
         array $data = [],
         array $addFieldStrategies = [],
         array $addFilterStrategies = []
-    )
-    {
+    ) {
         $this->_configurableType = $configurableType;
         $this->productData = $productFactory;
         $this->locator = $locator;
@@ -96,36 +95,36 @@ class AssociatedDataProvider extends \Magento\Catalog\Ui\DataProvider\Product\Pr
             $meta,
             $data
         );
-
     }
 
-
     /**
+     * Filtered Collection
+     *
      * @return Collection|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getCollection()
     {
-        /** @var Collection $collection */
         $collection = parent::getCollection();
         $collection->addAttributeToSelect('status');
-
 
         if ($this->getStore()) {
             $collection->setStore($this->getStore());
         }
 
-        $collection->addFieldToFilter('type_id',
+        $collection->addFieldToFilter(
+            'type_id',
             ['in' => [
                 \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
                 \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,
                 \Magento\Catalog\Model\Product\Type::TYPE_DOWNLOADABLE
-            ]]);
+            ]]
+        );
 
         $product = $this->_getProduct();
         foreach ((array)$this->_configurableType->getConfigurableAttributesAsArray($product) as $attribute) {
             $collection->addAttributeToSelect($attribute['attribute_code']);
-            $collection->addAttributeToFilter($attribute['attribute_code'], array('notnull' => 1));
+            $collection->addAttributeToFilter($attribute['attribute_code'], ['notnull' => 1]);
         }
 
         return $collection;
