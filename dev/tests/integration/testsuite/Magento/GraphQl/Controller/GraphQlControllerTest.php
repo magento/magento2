@@ -115,7 +115,6 @@ QUERY;
 
     /**
      * Test request is dispatched and response generated when using GET request with query string
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
      * @return void
      */
     public function testDispatchWithGet() : void
