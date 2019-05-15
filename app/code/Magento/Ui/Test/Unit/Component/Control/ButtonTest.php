@@ -10,6 +10,9 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Ui\Component\Control\Button;
 
+/**
+ * Class ButtonTest
+ */
 class ButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
