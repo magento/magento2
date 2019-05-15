@@ -17,7 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-6421"/>
             <group value="Search"/>
-            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <!-- Login as admin -->
