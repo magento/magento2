@@ -12,6 +12,7 @@
         "magento/module-config": "*",
         "magento/module-store": "*",
         "magento/module-theme": "*",
+        "magento/module-media-storage": "*",
         "magento/module-variable": "*"
     },
     "suggest": {
