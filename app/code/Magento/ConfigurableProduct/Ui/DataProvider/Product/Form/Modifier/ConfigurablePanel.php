@@ -207,7 +207,7 @@ class ConfigurablePanel extends AbstractModifier
                                             . $this->associatedListingPrefix
                                             . static::ASSOCIATED_PRODUCT_LISTING . '.product_columns.ids',
                                         'ns' => $this->associatedListingPrefix . static::ASSOCIATED_PRODUCT_LISTING,
-                                        'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
+                                        'render_url' => $this->urlBuilder->getUrl('mui/index/render', ['id' => $this->locator->getProduct()->getId()]),
                                         'realTimeLink' => true,
                                         'behaviourType' => 'simple',
                                         'externalFilterMode' => false,
