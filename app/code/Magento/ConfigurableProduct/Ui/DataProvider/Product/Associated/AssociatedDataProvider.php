@@ -6,22 +6,18 @@
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Associated;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Ui\DataProvider\Modifier\ModifierInterface;
-use Magento\Ui\DataProvider\Modifier\PoolInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Model\ProductFactory;
 
 /**
-* Class AssociatedDataProvider
-*
-* @api
-* @since 100.0.2
-*/
+ * Class AssociatedDataProvider
+ *
+ * @api
+ * @since 100.0.2
+ */
 class AssociatedDataProvider extends \Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider
 {
 
@@ -29,11 +25,6 @@ class AssociatedDataProvider extends \Magento\Catalog\Ui\DataProvider\Product\Pr
      * @var Magento\Catalog\Model\ProductFactory
      */
     protected $productData;
-
-    /**
-     * @var ProductInterface
-     */
-    private $product;
 
     /**
      * Product collection
@@ -53,58 +44,65 @@ class AssociatedDataProvider extends \Magento\Catalog\Ui\DataProvider\Product\Pr
     protected $addFilterStrategies;
 
     /**
-     * @var PoolInterface
-     */
-    private $modifiersPool;
-
-    /**
      * @var StoreInterface
      */
     private $store;
 
     /**
+     * Construct
+     *
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
+     * @param Configurable $configurableType
+     * @param ProductFactory $productFactory
+     * @param LocatorInterface $locator
+     * @param StoreRepositoryInterface $storeRepository
+     * @param RequestInterface $request
      * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[] $addFieldStrategies
      * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
      * @param array $data
-     * @param PoolInterface|null $modifiersPool
      */
     public function __construct(
-        Configurable $configurableType,
-        ProductFactory $productFactory,
         $name,
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
-        \Magento\Framework\Registry $registry,
-        array $addFieldStrategies = [],
-        array $addFilterStrategies = [],
+        Configurable $configurableType,
+        ProductFactory $productFactory,
+        LocatorInterface $locator,
+        StoreRepositoryInterface $storeRepository,
+        RequestInterface $request,
         array $meta = [],
         array $data = [],
-        LocatorInterface $locator,
-        PoolInterface $modifiersPool = null,
-        StoreRepositoryInterface $storeRepository,
-        ProductRepositoryInterface $productRepository,
-        RequestInterface $request
+        array $addFieldStrategies = [],
+        array $addFilterStrategies = []
     )
     {
         $this->_configurableType = $configurableType;
         $this->productData = $productFactory;
         $this->locator = $locator;
-        $this->_coreRegistry = $registry;
         $this->request = $request;
         $this->storeRepository = $storeRepository;
-        $this->productRepository = $productRepository;
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $collectionFactory, $addFieldStrategies, $addFilterStrategies, $meta, $data);
+        parent::__construct(
+            $name,
+            $primaryFieldName,
+            $requestFieldName,
+            $collectionFactory,
+            $addFieldStrategies,
+            $addFilterStrategies,
+            $meta,
+            $data
+        );
+
     }
 
+
     /**
-     * {@inheritdoc}
-     * @since 101.0.0
+     * @return Collection|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getCollection()
     {
@@ -147,8 +145,8 @@ class AssociatedDataProvider extends \Magento\Catalog\Ui\DataProvider\Product\Pr
     /**
      * Retrieve store
      *
-     * @return StoreInterface|null
-     * @since 101.0.0
+     * @return StoreInterface|\Magento\Store\Api\Data\StoreInterface|null
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function getStore()
     {
