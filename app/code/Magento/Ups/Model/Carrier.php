@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Ups\Model;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Async\CallbackDeferred;
+use Magento\Framework\Async\ProxyDeferredFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
@@ -148,6 +150,11 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     private $asyncHttpClient;
 
     /**
+     * @var ProxyDeferredFactory
+     */
+    private $deferredProxyFactory;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -168,6 +175,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @param ClientFactory $httpClientFactory
      * @param array $data
      * @param AsyncClientInterface|null $asyncHttpClient
+     * @param ProxyDeferredFactory|null $proxyDeferredFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -191,7 +199,8 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         Config $configHelper,
         ClientFactory $httpClientFactory,
         array $data = [],
-        ?AsyncClientInterface $asyncHttpClient = null
+        ?AsyncClientInterface $asyncHttpClient = null,
+        ?ProxyDeferredFactory $proxyDeferredFactory
     ) {
         parent::__construct(
             $scopeConfig,
@@ -215,6 +224,8 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $this->_localeFormat = $localeFormat;
         $this->configHelper = $configHelper;
         $this->asyncHttpClient = $asyncHttpClient ?? ObjectManager::getInstance()->get(AsyncClientInterface::class);
+        $this->deferredProxyFactory = $proxyDeferredFactory
+            ?? ObjectManager::getInstance()->get(ProxyDeferredFactory::class);
     }
 
     /**
@@ -231,10 +242,17 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         }
 
         $this->setRequest($request);
-        $this->_result = $this->_getQuotes();
-        $this->_updateFreeMethodQuote($request);
+        //To use the correct result in the callback.
+        $this->_result = $result = $this->_getQuotes();
 
-        return $this->getResult();
+        return $this->deferredProxyFactory->createFor(
+            Result::class,
+            new CallbackDeferred(function () use ($request, $result) {
+                $this->_result = $result;
+                $this->_updateFreeMethodQuote($request);
+                return $this->getResult();
+            })
+        );
     }
 
     /**
@@ -767,14 +785,20 @@ XMLRequest;
 
         $httpResponse = $this->asyncHttpClient->request(
             new Request($url, Request::METHOD_POST, ['Content-Type' => 'application/xml'], $xmlRequest)
-        )->get();
-        if ($httpResponse->getStatusCode() >= 400) {
-            $xmlResponse = '';
-        } else {
-            $xmlResponse = $httpResponse->getBody();
-        }
+        );
 
-        return $this->_parseXmlResponse($xmlResponse);
+        return $this->deferredProxyFactory->createFor(
+            Result::class,
+            new CallbackDeferred(function () use ($httpResponse) {
+                if ($httpResponse->get()->getStatusCode() >= 400) {
+                    $xmlResponse = '';
+                } else {
+                    $xmlResponse = $httpResponse->get()->getBody();
+                }
+
+                return $this->_parseXmlResponse($xmlResponse);
+            })
+        );
     }
 
     /**

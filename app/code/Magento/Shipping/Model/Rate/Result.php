@@ -17,7 +17,7 @@ class Result
     /**
      * Shipping method rates
      *
-     * @var array
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\AbstractResult[]
      */
     protected $_rates = [];
 

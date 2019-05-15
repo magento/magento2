@@ -7,6 +7,10 @@
 namespace Magento\Usps\Model;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Async\CallbackDeferred;
+use Magento\Framework\Async\ProxyDeferredFactory;
+use Magento\Framework\HTTP\AsyncClient\Request;
+use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
@@ -118,6 +122,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * @var \Magento\Framework\HTTP\ZendClientFactory
+     * @deprecated Use asynchronous client.
+     * @see $httpClient
      */
     protected $_httpClientFactory;
 
@@ -132,6 +138,16 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @var DataHelper
      */
     private $dataHelper;
+
+    /**
+     * @var AsyncClientInterface
+     */
+    private $httpClient;
+
+    /**
+     * @var ProxyDeferredFactory
+     */
+    private $proxyDeferredFactory;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -153,6 +169,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param array $data
+     * @param AsyncClientInterface|null $httpClient
+     * @param ProxyDeferredFactory|null $proxyDeferredFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -175,7 +193,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         CarrierHelper $carrierHelper,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
-        array $data = []
+        array $data = [],
+        ?AsyncClientInterface $httpClient = null,
+        ?ProxyDeferredFactory $proxyDeferredFactory = null
     ) {
         $this->_carrierHelper = $carrierHelper;
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -198,6 +218,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $stockRegistry,
             $data
         );
+        $this->httpClient = $httpClient ?? ObjectManager::getInstance()->get(AsyncClientInterface::class);
+        $this->proxyDeferredFactory = $proxyDeferredFactory
+            ?? ObjectManager::getInstance()->get(ProxyDeferredFactory::class);
     }
 
     /**
@@ -213,10 +236,18 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         $this->setRequest($request);
-        $this->_result = $this->_getQuotes();
-        $this->_updateFreeMethodQuote($request);
+        //Saving current result to use the right one in the callback.
+        $this->_result = $result = $this->_getQuotes();
 
-        return $this->getResult();
+        return $this->proxyDeferredFactory->createFor(
+            Result::class,
+            new CallbackDeferred(function () use ($request, $result) {
+                $this->_result = $result;
+                $this->_updateFreeMethodQuote($request);
+
+                return $this->getResult();
+            })
+        );
     }
 
     /**
@@ -509,26 +540,28 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $responseBody = $this->_getCachedQuotes($request);
         if ($responseBody === null) {
             $debugData = ['request' => $this->filterDebugData($request)];
-            try {
-                $url = $this->getConfigData('gateway_url');
-                if (!$url) {
-                    $url = $this->_defaultGatewayUrl;
-                }
-                $client = $this->_httpClientFactory->create();
-                $client->setUri($url);
-                $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
-                $client->setParameterGet('API', $api);
-                $client->setParameterGet('XML', $request);
-                $response = $client->request();
-                $responseBody = $response->getBody();
-
-                $debugData['result'] = $responseBody;
-                $this->_setCachedQuotes($request, $responseBody);
-            } catch (\Exception $e) {
-                $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
-                $responseBody = '';
+            $url = $this->getConfigData('gateway_url');
+            if (!$url) {
+                $url = $this->_defaultGatewayUrl;
             }
-            $this->_debug($debugData);
+            $deferredResponse = $this->httpClient->request(new Request(
+                $url . '?API=' . urlencode($api) . '&XML=' . urlencode($request),
+                Request::METHOD_GET,
+                [],
+                null
+            ));
+
+            return $this->proxyDeferredFactory->createFor(
+                Result::class,
+                new CallbackDeferred(function () use ($deferredResponse, $request, $debugData) {
+                    $responseBody = $deferredResponse->get()->getBody();
+                    $debugData['result'] = $responseBody;
+                    $this->_setCachedQuotes($request, $responseBody);
+                    $this->_debug($debugData);
+
+                    return $this->_parseXmlResponse($responseBody);
+                })
+            );
         }
 
         return $this->_parseXmlResponse($responseBody);
@@ -1039,23 +1072,18 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $request = $xml->asXML();
             $debugData = ['request' => $this->filterDebugData($request)];
 
-            try {
-                $url = $this->getConfigData('gateway_url');
-                if (!$url) {
-                    $url = $this->_defaultGatewayUrl;
-                }
-                $client = $this->_httpClientFactory->create();
-                $client->setUri($url);
-                $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
-                $client->setParameterGet('API', $api);
-                $client->setParameterGet('XML', $request);
-                $response = $client->request();
-                $responseBody = $response->getBody();
-                $debugData['result'] = $responseBody;
-            } catch (\Exception $e) {
-                $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
-                $responseBody = '';
+            $url = $this->getConfigData('gateway_url');
+            if (!$url) {
+                $url = $this->_defaultGatewayUrl;
             }
+            $responseDeferred = $this->httpClient->request(new Request(
+                $url . '?API=' . urlencode($api) . '&XML=' . urlencode($request),
+                Request::METHOD_GET,
+                [],
+                null
+            ));
+            $responseBody = $responseDeferred->get()->getBody();
+            $debugData['result'] = $responseBody;
 
             $this->_debug($debugData);
             $this->_parseXmlTrackingResponse($tracking, $responseBody);

@@ -9,6 +9,11 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote\Address\RateCollectorInterface;
 use Magento\Quote\Model\Quote\Address\RateRequestFactory;
 use Magento\Sales\Model\Order\Shipment;
+use Magento\Shipping\Model\Rate\CarrierResult;
+use Magento\Shipping\Model\Rate\CarrierResultFactory;
+use Magento\Shipping\Model\Rate\PackageResult;
+use Magento\Shipping\Model\Rate\PackageResultFactory;
+use Magento\Shipping\Model\Rate\Result;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -59,7 +64,7 @@ class Shipping implements RateCollectorInterface
     protected $_carrierFactory;
 
     /**
-     * @var \Magento\Shipping\Model\Rate\ResultFactory
+     * @var CarrierResultFactory
      */
     protected $_rateResultFactory;
 
@@ -89,16 +94,23 @@ class Shipping implements RateCollectorInterface
     private $rateRequestFactory;
 
     /**
+     * @var PackageResultFactory
+     */
+    private $packageResultFactory;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Shipping\Model\Config $shippingConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
-     * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
+     * @param \Magento\Shipping\Model\Rate\CarrierResultFactory $rateResultFactory
      * @param \Magento\Shipping\Model\Shipment\RequestFactory $shipmentRequestFactory
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Framework\Math\Division $mathDivision
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param RateRequestFactory $rateRequestFactory
+     * @param PackageResultFactory|null $packageResultFactory
+     * @param CarrierResultFactory|null $carrierResultFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -112,24 +124,29 @@ class Shipping implements RateCollectorInterface
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Framework\Math\Division $mathDivision,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        RateRequestFactory $rateRequestFactory = null
+        RateRequestFactory $rateRequestFactory = null,
+        ?PackageResultFactory $packageResultFactory = null,
+        ?CarrierResultFactory $carrierResultFactory = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_shippingConfig = $shippingConfig;
         $this->_storeManager = $storeManager;
         $this->_carrierFactory = $carrierFactory;
+        $rateResultFactory = $carrierResultFactory ?? ObjectManager::getInstance()->get(CarrierResultFactory::class);
         $this->_rateResultFactory = $rateResultFactory;
         $this->_shipmentRequestFactory = $shipmentRequestFactory;
         $this->_regionFactory = $regionFactory;
         $this->mathDivision = $mathDivision;
         $this->stockRegistry = $stockRegistry;
         $this->rateRequestFactory = $rateRequestFactory ?: ObjectManager::getInstance()->get(RateRequestFactory::class);
+        $this->packageResultFactory = $packageResultFactory
+            ?? ObjectManager::getInstance()->get(PackageResultFactory::class);
     }
 
     /**
      * Get shipping rate result model
      *
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return \Magento\Shipping\Model\Rate\Result|CarrierResult
      */
     public function getResult()
     {
@@ -270,32 +287,15 @@ class Shipping implements RateCollectorInterface
                 if ($carrier->getConfigData('shipment_requesttype')) {
                     $packages = $this->composePackagesForCarrier($carrier, $request);
                     if (!empty($packages)) {
-                        $sumResults = [];
+                        /** @var PackageResult $result */
+                        $result = $this->packageResultFactory->create();
                         foreach ($packages as $weight => $packageCount) {
                             $request->setPackageWeight($weight);
-                            $result = $carrier->collectRates($request);
-                            if (!$result) {
+                            $packageResult = $carrier->collectRates($request);
+                            if (!$packageResult) {
                                 return $this;
                             } else {
-                                $result->updateRatePrice($packageCount);
-                            }
-                            $sumResults[] = $result;
-                        }
-                        if (!empty($sumResults) && count($sumResults) > 1) {
-                            $result = [];
-                            foreach ($sumResults as $res) {
-                                if (empty($result)) {
-                                    $result = $res;
-                                    continue;
-                                }
-                                foreach ($res->getAllRates() as $method) {
-                                    foreach ($result->getAllRates() as $resultMethod) {
-                                        if ($method->getMethod() == $resultMethod->getMethod()) {
-                                            $resultMethod->setPrice($method->getPrice() + $resultMethod->getPrice());
-                                            continue;
-                                        }
-                                    }
-                                }
+                                $result->appendPackageResult($packageResult, $packageCount);
                             }
                         }
                     } else {
@@ -308,14 +308,11 @@ class Shipping implements RateCollectorInterface
                     return $this;
                 }
             }
-            if ($carrier->getConfigData('showmethod') == 0 && $result->getError()) {
-                return $this;
+            if ($result instanceof Result) {
+                $this->getResult()->appendResult($result, $carrier->getConfigData('showmethod') != 0);
+            } else {
+                $this->getResult()->append($result);
             }
-            // sort rates by price
-            if (method_exists($result, 'sortRatesByPrice') && is_callable([$result, 'sortRatesByPrice'])) {
-                $result->sortRatesByPrice();
-            }
-            $this->getResult()->append($result);
         }
         return $this;
     }
