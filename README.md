@@ -13,7 +13,7 @@ To install Magento, see either:
 
 *	[Installation guide](http://devdocs.magento.com/guides/v2.2/install-gde/bk-install-guide.html)
 
-<h2>Contributing to the Magento 2 code base</h2>
+<h2>Contributing to the Magento 2 code base</h2>erf
 Contributions can take the form of new components or features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations, or just good suggestions.
 
 To learn about how to make a contribution, click [here][1].
