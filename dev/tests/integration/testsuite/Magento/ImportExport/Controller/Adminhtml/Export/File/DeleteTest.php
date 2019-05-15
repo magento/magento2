@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\ImportExport\Controller\Adminhtml\Export\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -47,45 +47,32 @@ class DeleteTest extends AbstractBackendController
         parent::setUp();
 
         $this->filesystem = $this->_objectManager->get(Filesystem::class);
+        $baseDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->varDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->varDirectory->create($this->varDirectory->getRelativePath('export'));
         $this->fullDirectoryPath = $this->varDirectory->getAbsolutePath('export');
         $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
         $fixtureDir = realpath(__DIR__ . '/../../Import/_files');
-        copy($fixtureDir . '/' . $this->fileName, $filePath);
+        $baseDirectory->copyFile($fixtureDir . '/' . $this->fileName, $filePath);
     }
 
     /**
      * Check that file can be removed under var/export directory.
      *
      * @return void
+     * @magentoConfigFixture default_store admin/security/use_form_key 1
      */
     public function testExecute(): void
     {
         $uri = 'backend/admin/export_file/delete/filename/' . $this->fileName;
-        $this->prepareRequest($uri);
+        $request = $this->getRequest();
+        $request->setMethod(Http::METHOD_POST);
+        $request->setRequestUri($uri);
         $this->dispatch($uri);
 
         $this->assertFalse(
             $this->varDirectory->isExist($this->varDirectory->getRelativePath('export/' . $this->fileName))
         );
-    }
-
-    /**
-     * Prepares GET request for file deletion.
-     *
-     * @param string $uri
-     * @return void
-     */
-    private function prepareRequest(string $uri): void
-    {
-        /** @var FormKey $formKey */
-        $formKey = $this->_objectManager->get(FormKey::class);
-        $request = $this->getRequest();
-        $request->setMethod('GET');
-        $request->setParam('form_key', $formKey->getFormKey());
-        $request->setRequestUri($uri);
-        $request->setParams(['filename' => 'catalog_product.csv']);
     }
 
     /**
