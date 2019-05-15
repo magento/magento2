@@ -64,26 +64,6 @@
 
     <actionGroup name="deleteAllExportedFiles">
         <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
-
-<!--        This is better one sive it use selectors substitutions. But for now we cant use it because of bug in MFTF.-->
-<!--        It makes double quotes escaping and brake code. I will provide fix for this in nearest future.-->
-<!--        <executeInSelenium-->
-<!--                function="-->
-<!--                function ($webdriver) use ($I) {-->
-<!--                    $buttons = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::xpath(&quot;{{AdminExportAttributeSection.selectByIndex('0')}}&quot;));-->
-<!--                    while(!empty($buttons)) {-->
-<!--                        $buttons[0]->click();-->
-<!--                        $I->waitForElementVisible(&quot;{{AdminExportAttributeSection.delete('0')}}&quot;, 10);-->
-<!--                        $deleteButton = $webdriver->findElement(\Facebook\WebDriver\WebDriverBy::xpath(&quot;{{AdminExportAttributeSection.delete('0')}}&quot;));-->
-<!--                        $deleteButton->click();-->
-<!--                        $I->waitForElementVisible(&quot;{{AdminProductGridConfirmActionSection.ok}}&quot;, 10);-->
-<!--                        $I->click(&quot;{{AdminProductGridConfirmActionSection.ok}}&quot;);-->
-<!--                        $I->waitForPageLoad(60);-->
-<!--                        $buttons = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::xpath(&quot;{{AdminExportAttributeSection.selectByIndex('0')}}&quot;));-->
-<!--                    }-->
-<!--                }"-->
-<!--                stepKey="deleteAllExportedFilesOneByOne"/>-->
-
         <executeInSelenium
             function="
                 function ($webdriver) use ($I) {
@@ -100,7 +80,6 @@
                     }
                 }"
             stepKey="deleteAllExportedFilesOneByOne"/>
-
         <waitForElementVisible selector="{{AdminDataGridTableSection.dataGridEmpty}}" stepKey="waitDataGridEmptyMessageAppears"/>
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
     </actionGroup>
