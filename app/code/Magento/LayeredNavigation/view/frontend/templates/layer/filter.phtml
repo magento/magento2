@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate
 ?>
 <?php
 /**
@@ -16,21 +15,21 @@
 ?>
 
 <ol class="items">
-    <?php foreach ($filterItems as $filterItem): ?>
+    <?php foreach ($filterItems as $filterItem) : ?>
         <li class="item">
-            <?php if ($filterItem->getCount() > 0): ?>
+            <?php if ($filterItem->getCount() > 0) : ?>
                 <a href="<?= $block->escapeUrl($filterItem->getUrl()) ?>">
                     <?= /* @noEscape */ $filterItem->getLabel() ?>
-                    <?php if ($this->helper('\Magento\Catalog\Helper\Data')->shouldDisplayProductCountOnLayer()): ?>
+                    <?php if ($this->helper(\Magento\Catalog\Helper\Data::class)->shouldDisplayProductCountOnLayer()) : ?>
                         <span class="count"><?= /* @noEscape */ (int)$filterItem->getCount() ?><span class="filter-count-label">
-                            <?php if ($filterItem->getCount() == 1):?> <?= $block->escapeHtml(__('item')) ?><?php else:?> <?= $block->escapeHtml(__('items')) ?><?php endif;?></span></span>
+                            <?php if ($filterItem->getCount() == 1) :?> <?= $block->escapeHtml(__('item')) ?><?php else :?> <?= $block->escapeHtml(__('items')) ?><?php endif;?></span></span>
                     <?php endif; ?>
                 </a>
-            <?php else:?>
+            <?php else :?>
                 <?= /* @noEscape */ $filterItem->getLabel() ?>
-                <?php if ($this->helper('\Magento\Catalog\Helper\Data')->shouldDisplayProductCountOnLayer()): ?>
+                <?php if ($this->helper(\Magento\Catalog\Helper\Data::class)->shouldDisplayProductCountOnLayer()) : ?>
                     <span class="count"><?= /* @noEscape */ (int)$filterItem->getCount() ?><span class="filter-count-label">
-                        <?php if ($filterItem->getCount() == 1):?><?= $block->escapeHtml(__('item')) ?><?php else:?><?= $block->escapeHtml(__('items')) ?><?php endif;?></span></span>
+                        <?php if ($filterItem->getCount() == 1) :?><?= $block->escapeHtml(__('item')) ?><?php else :?><?= $block->escapeHtml(__('items')) ?><?php endif;?></span></span>
                 <?php endif; ?>
             <?php endif; ?>
         </li>

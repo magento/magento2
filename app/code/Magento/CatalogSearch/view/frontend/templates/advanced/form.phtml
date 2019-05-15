@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate
 ?>
 <?php
 /**
@@ -14,19 +13,20 @@
  * @var $block \Magento\CatalogSearch\Block\Advanced\Form
  */
 ?>
-<?php $maxQueryLength = (int)$this->helper('Magento\CatalogSearch\Helper\Data')->getMaxQueryLength();?>
+<?php $maxQueryLength = (int)$this->helper(\Magento\CatalogSearch\Helper\Data::class)->getMaxQueryLength();?>
 <form class="form search advanced" action="<?= $block->escapeUrl($block->getSearchPostUrl()) ?>" method="get" id="form-validate">
 <fieldset class="fieldset">
     <legend class="legend"><span><?= $block->escapeHtml(__('Search Settings')) ?></span></legend><br />
-    <?php foreach ($block->getSearchableAttributes() as $_attribute): ?>
+    <?php foreach ($block->getSearchableAttributes() as $_attribute) : ?>
     <?php $_code = $_attribute->getAttributeCode() ?>
         <div class="field <?= $block->escapeHtmlAttr($_code) ?>">
             <label class="label" for="<?= $block->escapeHtmlAttr($_code) ?>">
                 <span><?= $block->escapeHtml(__($block->getAttributeLabel($_attribute))) ?></span>
             </label>
             <div class="control">
-            <?php switch ($block->getAttributeInputType($_attribute)):
-                case 'number': ?>
+            <?php switch ($block->getAttributeInputType($_attribute)) :
+                case 'number':
+                            ?>
                 <div class="range fields group group-2">
                     <div class="field no-label">
                         <div class="control">
@@ -53,8 +53,10 @@
                         </div>
                     </div>
                 </div>
-                <?php break;
-                case 'price': ?>
+                <?php
+                          break;
+                case 'price':
+                            ?>
                 <div class="range price fields group group-2">
                     <div class="field no-label">
                         <div class="control">
@@ -87,14 +89,20 @@
                         </div>
                     </div>
                 </div>
-                <?php break;
-                case 'select': ?>
+                <?php
+                          break;
+                case 'select':
+                            ?>
                     <?= /* @noEscape */ $block->getAttributeSelectElement($_attribute) ?>
-                <?php break;
-                case 'yesno': ?>
+                <?php
+                          break;
+                case 'yesno':
+                            ?>
                     <?= /* @noEscape */ $block->getAttributeYesNoElement($_attribute) ?>
-                <?php break;
-                case 'date': ?>
+                <?php
+                          break;
+                case 'date':
+                            ?>
                 <div class="range dates fields group group-2">
                     <div class="field date no-label">
                         <div class="control">
@@ -107,8 +115,10 @@
                         </div>
                     </div>
                 </div>
-                <?php break;
-                default: ?>
+                <?php
+                          break;
+                default:
+                            ?>
                 <input type="text"
                        name="<?= $block->escapeHtmlAttr($_code) ?>"
                        id="<?= $block->escapeHtmlAttr($_code) ?>"

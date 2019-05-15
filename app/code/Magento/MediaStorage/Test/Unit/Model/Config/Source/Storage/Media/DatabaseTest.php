@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\MediaStorage\Test\Unit\Model\Config\Source\Storage\Media;
 
 use Magento\MediaStorage\Model\Config\Source\Storage\Media\Database;

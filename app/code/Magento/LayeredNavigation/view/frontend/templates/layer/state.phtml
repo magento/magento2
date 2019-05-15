@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -15,21 +12,21 @@
  */
 ?>
 <?php $_filters = $block->getActiveFilters() ?>
-<?php if (!empty($_filters)): ?>
+<?php if (!empty($_filters)) : ?>
 <div class="filter-current">
     <strong class="block-subtitle filter-current-subtitle"
             role="heading"
             aria-level="2"
             data-count="<?= count($_filters) ?>"><?= $block->escapeHtmlAttr(__('Now Shopping by')) ?></strong>
     <ol class="items">
-        <?php foreach ($_filters as $_filter): ?>
+        <?php foreach ($_filters as $_filter) : ?>
             <li class="item">
                 <span class="filter-label"><?= $block->escapeHtml(__($_filter->getName())) ?></span>
                 <span class="filter-value"><?= $block->escapeHtml($block->stripTags($_filter->getLabel())) ?></span>
                 <?php
                 $clearLinkUrl = $_filter->getClearLinkUrl();
                 $currentFilterName = $block->escapeHtml(__($_filter->getName()) . " " . $block->stripTags($_filter->getLabel()));
-                if ($clearLinkUrl):
+                if ($clearLinkUrl) :
                     ?>
                     <a class="action previous" href="<?= $block->escapeUrl($_filter->getRemoveUrl()) ?>"
                        title="<?= $block->escapeHtmlAttr(__('Previous')) ?>">
@@ -40,7 +37,7 @@
                        href="<?= $block->escapeUrl($clearLinkUrl) ?>">
                         <span><?= $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></span>
                     </a>
-                <?php else: ?>
+                <?php else : ?>
                     <a class="action remove" href="<?= $block->escapeUrl($_filter->getRemoveUrl()) ?>"
                        title="<?= /* @noEscape */ $block->escapeHtml(__('Remove')) . " " . $currentFilterName ?>">
                         <span><?= $block->escapeHtml(__('Remove This Item')) ?></span>
