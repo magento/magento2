@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\Store\Model\StoreSwitcher;
 
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreSwitcher\HashGenerator\HashData;
 use Magento\Store\Model\StoreSwitcherInterface;
 use \Magento\Framework\App\DeploymentConfig as DeploymentConfig;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Authorization\Model\UserContextInterface;
 use \Magento\Framework\App\ActionInterface;
-use Magento\Framework\DataObject;
 
 /**
  * Generate one time token and build redirect url
@@ -100,10 +100,10 @@ class HashGenerator implements StoreSwitcherInterface
      * Validates one time token
      *
      * @param string $signature
-     * @param DataObject $hashData
+     * @param HashData $hashData
      * @return bool
      */
-    public function validateHash(string $signature, DataObject $hashData): bool
+    public function validateHash(string $signature, HashData $hashData): bool
     {
         if (!empty($signature) && !empty($hashData)) {
             $timeStamp = $hashData->getTimestamp();

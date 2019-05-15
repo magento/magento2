@@ -121,7 +121,6 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
         $fromStore  = $this->createPartialMock(Store::class, ['getCode']);
         $toStore = $this->createPartialMock(Store::class, ['getCode']);
         $fromStore->expects($this->once())->method('getCode')->willReturn($fromStoreCode);
-        $timeStamp = time();
         $targetUrl=$this->hashGenerator->switch($fromStore, $toStore, $redirectUrl);
         // phpcs:ignore
         $urlParts=parse_url($targetUrl, PHP_URL_QUERY);
@@ -132,30 +131,14 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
         if (isset($params['signature'])) {
             $signature=$params['signature'];
         }
+        $this->assertEquals($params['customer_id'], $this->customerId);
+        $this->assertEquals($params['___from_store'], $fromStoreCode);
+
         $this->assertTrue($this->hashGenerator->validateHash($signature, new HashData([
             "customer_id" => $this->customerId,
-            "time_stamp" => $timeStamp,
+            "time_stamp" => $params['time_stamp'],
             "___from_store" => $fromStoreCode
         ])));
-    }
-
-    /**
-     * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @return void
-     */
-    public function testValidateHashWithCorrectData(): void
-    {
-        $timeStamp = time();
-        $customerId = $this->customerId;
-        $fromStoreCode = 'test';
-        $data = new HashData([
-            "customer_id" => $customerId,
-            "time_stamp" => $timeStamp,
-            "___from_store" => $fromStoreCode
-        ]);
-        $signature = hash_hmac('sha256', implode(',', [$this->customerId, $timeStamp, $fromStoreCode]), $this->key);
-        $this->assertTrue($this->hashGenerator->validateHash($signature, $data));
     }
 
     /**
@@ -167,13 +150,26 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $timeStamp = 0;
         $customerId = 8;
-        $fromStoreCode = 'test';
+        $fromStoreCode = 'store1';
         $data = new HashData([
             "customer_id" => $customerId,
             "time_stamp" => $timeStamp,
             "___from_store" => $fromStoreCode
         ]);
-        $signature = hash_hmac('sha256', implode(',', [$this->customerId, $timeStamp, $fromStoreCode]), $this->key);
+        $redirectUrl = "http://domain.com/";
+        $fromStore = $this->createPartialMock(Store::class, ['getCode']);
+        $toStore = $this->createPartialMock(Store::class, ['getCode']);
+        $fromStore->expects($this->once())->method('getCode')->willReturn($fromStoreCode);
+        $targetUrl = $this->hashGenerator->switch($fromStore, $toStore, $redirectUrl);
+        // phpcs:ignore
+        $urlParts = parse_url($targetUrl,PHP_URL_QUERY);
+        $signature = '';
+        // phpcs:ignore
+        parse_str($urlParts, $params);
+
+        if (isset($params['signature'])) {
+            $signature = $params['signature'];
+        }
         $this->assertFalse($this->hashGenerator->validateHash($signature, $data));
     }
 }

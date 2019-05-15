@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Model\StoreSwitcher\HashGenerator;
 
 use Magento\Framework\DataObject;
@@ -17,9 +19,9 @@ class HashData extends DataObject
      *
      * @return int
      */
-    public function getCustomerId()
+    public function getCustomerId(): int
     {
-        return $this->getData('customer_id');
+        return (int)$this->getData('customer_id');
     }
 
     /**
@@ -27,9 +29,9 @@ class HashData extends DataObject
      *
      * @return int
      */
-    public function getTimestamp()
+    public function getTimestamp(): int
     {
-        return $this->getData('time_stamp');
+        return (int)$this->getData('time_stamp');
     }
 
     /**
@@ -37,8 +39,8 @@ class HashData extends DataObject
      *
      * @return string
      */
-    public function getFromStoreCode()
+    public function getFromStoreCode(): string
     {
-        return $this->getData('___from_store');
+        return (string)$this->getData('___from_store');
     }
 }
