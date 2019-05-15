@@ -15,9 +15,12 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Phrase;
 use Magento\Paypal\Model\Express\Checkout\Factory as CheckoutFactory;
 use Magento\PaypalGraphQl\Model\PaypalExpressAdditionalDataProvider;
+use Magento\Framework\Stdlib\ArrayManager;
 
 class SetPaymentMethodOnCart
 {
+    private const PATH_CODE = 'input/payment_method/code';
+
     /**
      * @var CheckoutFactory
      */
@@ -27,6 +30,11 @@ class SetPaymentMethodOnCart
      * @var PaypalExpressAdditionalDataProvider
      */
     private $paypalExpressAdditionalDataProvider;
+
+    /**
+     * @var ArrayManager
+     */
+    private $arrayManager;
 
     /**
      * Express configuration
@@ -47,15 +55,18 @@ class SetPaymentMethodOnCart
     /**
      * @param CheckoutFactory $checkoutFactory
      * @param PaypalExpressAdditionalDataProvider $paypalExpressAdditionalDataProvider
+     * @param ArrayManager $arrayManager
      * @param array $expressConfig
      */
     public function __construct(
         CheckoutFactory $checkoutFactory,
         PaypalExpressAdditionalDataProvider $paypalExpressAdditionalDataProvider,
+        ArrayManager $arrayManager,
         $expressConfig = []
     ) {
         $this->checkoutFactory = $checkoutFactory;
         $this->paypalExpressAdditionalDataProvider = $paypalExpressAdditionalDataProvider;
+        $this->arrayManager = $arrayManager;
         $this->expressConfig = $expressConfig;
     }
 
@@ -81,15 +92,16 @@ class SetPaymentMethodOnCart
         array $value = null,
         array $args = null
     ) {
+        $code = $this->arrayManager->get(self::PATH_CODE, $args) ?? '';
+
         $paypalAdditionalData = $this->paypalExpressAdditionalDataProvider->getData($args);
         if (empty($paypalAdditionalData)
             || empty($paypalAdditionalData['payer_id'])
             || empty($paypalAdditionalData['token'])
+            || empty($code)
         ) {
             return $resolvedValue;
         }
-
-        $code = 'payflow_express';
 
         // validate and get payment code method
         $config = $this->getExpressConfig($code);
