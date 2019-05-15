@@ -28,40 +28,40 @@
             class="admin__action-dropdown-menu"
             data-mark-as-read-url="<?= $block->escapeUrl($block->getUrl('adminhtml/notification/ajaxMarkAsRead')) ?>">
             <?php foreach ($block->getLatestUnreadNotifications() as $notification) : ?>
-            <?php /** @var $notification \Magento\AdminNotification\Model\Inbox */ ?>
-            <li class="notifications-entry<?php if ($notification->getSeverity() == 1): ?> notifications-critical<?php endif; ?>"
-                data-notification-id="<?= $block->escapeHtml($notification->getId()) ?>"
-                data-notification-severity="<?php if ($notification->getSeverity() == 1): ?>1<?php endif; ?>">
-                <?php
-                    $notificationDescription = $notification->getDescription();
-                    $notificationDescriptionLength = $block->getNotificationDescriptionLength();
-                ?>
-                <strong class="notifications-entry-title">
-                    <?= $block->escapeHtml($notification->getTitle()) ?>
-                </strong>
-                <?php if (strlen($notificationDescription) > $notificationDescriptionLength) : ?>
-                    <p class="notifications-entry-description _cutted">
-                        <span class="notifications-entry-description-start">
-                            <?= $block->escapeHtml(substr($notificationDescription, 0, $notificationDescriptionLength)) ?>
-                        </span>
-                        <span class="notifications-entry-description-end">
-                            <?= $block->escapeHtml(substr($notificationDescription, $notificationDescriptionLength)) ?>
-                        </span>
-                    </p>
-                <?php else : ?>
-                    <p class="notifications-entry-description">
-                        <?= $block->escapeHtml($notificationDescription) ?>
-                    </p>
-                <?php endif; ?>
-                <time class="notifications-entry-time">
-                    <?= $block->escapeHtml($block->formatNotificationDate($notification->getDateAdded())) ?>
-                </time>
-                <button
-                    type="button"
-                    class="notifications-close"
-                    title="<?= $block->escapeHtml(__('Close')) ?>"
-                    ></button>
-            </li>
+                <?php /** @var $notification \Magento\AdminNotification\Model\Inbox */ ?>
+                <li class="notifications-entry<?php if ($notification->getSeverity() == 1) : ?> notifications-critical<?php endif; ?>"
+                    data-notification-id="<?= $block->escapeHtml($notification->getId()) ?>"
+                    data-notification-severity="<?php if ($notification->getSeverity() == 1) : ?>1<?php endif; ?>">
+                    <?php
+                        $notificationDescription = $notification->getDescription();
+                        $notificationDescriptionLength = $block->getNotificationDescriptionLength();
+                    ?>
+                    <strong class="notifications-entry-title">
+                        <?= $block->escapeHtml($notification->getTitle()) ?>
+                    </strong>
+                    <?php if (strlen($notificationDescription) > $notificationDescriptionLength) : ?>
+                        <p class="notifications-entry-description _cutted">
+                            <span class="notifications-entry-description-start">
+                                <?= $block->escapeHtml(substr($notificationDescription, 0, $notificationDescriptionLength)) ?>
+                            </span>
+                            <span class="notifications-entry-description-end">
+                                <?= $block->escapeHtml(substr($notificationDescription, $notificationDescriptionLength)) ?>
+                            </span>
+                        </p>
+                    <?php else : ?>
+                        <p class="notifications-entry-description">
+                            <?= $block->escapeHtml($notificationDescription) ?>
+                        </p>
+                    <?php endif; ?>
+                    <time class="notifications-entry-time">
+                        <?= $block->escapeHtml($block->formatNotificationDate($notification->getDateAdded())) ?>
+                    </time>
+                    <button
+                        type="button"
+                        class="notifications-close"
+                        title="<?= $block->escapeHtml(__('Close')) ?>"
+                        ></button>
+                </li>
             <?php endforeach; ?>
             <li class="notifications-entry notifications-entry-last">
                 <a

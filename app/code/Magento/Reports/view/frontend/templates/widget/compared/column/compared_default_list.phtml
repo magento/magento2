@@ -22,7 +22,7 @@ if ($exist = $block->getRecentlyComparedProducts()) {
     $description = false;
 }
 ?>
-<?php if ($exist): ?>
+<?php if ($exist) : ?>
 <div class="block widget block-compared-products-<?= $block->escapeHtml($mode) ?>">
     <div class="block-title">
         <strong><?= $block->escapeHtml($title) ?></strong>
@@ -30,7 +30,7 @@ if ($exist = $block->getRecentlyComparedProducts()) {
     <div class="block-content">
         <?php $suffix = $block->getNameInLayout(); ?>
         <ol class="product-items" id="widget-compared-<?= $block->escapeHtml($suffix) ?>">
-            <?php foreach ($items as $_product): ?>
+            <?php foreach ($items as $_product) : ?>
                 <li class="product-item">
                     <div class="product-item-info">
                         <a class="product-item-photo" href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
@@ -44,7 +44,7 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                                     <?= $block->escapeHtml($this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name')) ?>
                                 </a>
                             </strong>
-                            <?php echo $block->escapeHtml($block->getProductPriceHtml(
+                            <?= $block->escapeHtml($block->getProductPriceHtml(
                                 $_product,
                                 \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                                 \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
@@ -53,15 +53,15 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                                 ]
                             )) ?>
                             <div class="product-item-actions">
-                            <?php if ($_product->isSaleable()): ?>
+                            <?php if ($_product->isSaleable()) : ?>
                                 <div class="actions-primary">
-                                <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
+                                <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)) : ?>
                                     <button class="action tocart primary"
                                             data-mage-init='{"redirectUrl": {"url": "<?= $block->escapeUrl($block->getAddToCartUrl($_product)) ?>"}}'
                                             type="button" title="<?= $block->escapeHtml(__('Add to Cart')) ?>">
                                         <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                     </button>
-                                <?php else: ?>
+                                <?php else : ?>
                                     <?php
                                     $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
                                     $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_product), ['product' => $_product->getEntityId()])
@@ -73,10 +73,10 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                                     </button>
                                 <?php endif; ?>
                                 </div>
-                            <?php else: ?>
-                                <?php if ($_product->getIsSalable()): ?>
+                            <?php else : ?>
+                                <?php if ($_product->getIsSalable()) : ?>
                                     <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
-                                <?php else: ?>
+                                <?php else : ?>
                                     <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
                                 <?php endif; ?>
                             <?php endif; ?>

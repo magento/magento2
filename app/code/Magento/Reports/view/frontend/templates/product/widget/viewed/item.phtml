@@ -3,10 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/* @var $block \Magento\Reports\Block\Product\Widget\Viewed\Item */
-?>
 
-<?php
+/* @var $block \Magento\Reports\Block\Product\Widget\Viewed\Item */
+
 $type = $block->getType() . '-' . $block->getViewMode();
 
 $item = $block->getProduct();
@@ -26,7 +25,7 @@ $rating = 'short';
                     <?= $block->escapeHtml($item->getName()) ?></a>
                 </strong>
 
-                <?php echo $block->escapeHtml($block->getProductPriceHtml(
+                <?= $block->escapeHtml($block->getProductPriceHtml(
                     $item,
                     \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                     \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
@@ -35,18 +34,18 @@ $rating = 'short';
                     ]
                 )) ?>
 
-                <?php if ($rating): ?>
+                <?php if ($rating) : ?>
                     <?= $block->getReviewsSummaryHtml($item, $rating) ?>
                 <?php endif; ?>
 
                 <div class="product actions">
                     <div class="primary">
-                        <?php if ($item->isSaleable()): ?>
-                            <?php if ($item->getTypeInstance()->hasRequiredOptions($item)): ?>
+                        <?php if ($item->isSaleable()) : ?>
+                            <?php if ($item->getTypeInstance()->hasRequiredOptions($item)) : ?>
                                 <button class="action tocart" data-mage-init='{"redirectUrl": {"url": "<?= $block->escapeUrl($block->getAddToCartUrl($item)) ?>"}}' type="button" title="<?= $block->escapeHtml(__('Add to Cart')) ?>">
                                     <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                 </button>
-                            <?php else: ?>
+                            <?php else : ?>
                                 <?php $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
                                 $postData = $postDataHelper->getPostData($block->getAddToCartUrl($item), ['product' => $item->getEntityId()])
                                 ?>
@@ -56,22 +55,22 @@ $rating = 'short';
                                     <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                 </button>
                             <?php endif; ?>
-                        <?php else: ?>
-                            <?php if ($item->getIsSalable()): ?>
+                        <?php else : ?>
+                            <?php if ($item->getIsSalable()) : ?>
                                 <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
-                            <?php else: ?>
+                            <?php else : ?>
                                 <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
                             <?php endif; ?>
                         <?php endif; ?>
                     </div>
 
                     <div class="secondary-addto-links" data-role="add-to-links">
-                        <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()): ?>
+                        <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
                             <a href="#" data-post='<?= $block->escapeHtml($block->getAddToWishlistParams($item)) ?>'  class="action towishlist" data-action="add-to-wishlist" title="<?= $block->escapeHtml(__('Add to Wish List')) ?>">
                                 <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
                             </a>
                         <?php endif; ?>
-                        <?php if ($block->getAddToCompareUrl()): ?>
+                        <?php if ($block->getAddToCompareUrl()) : ?>
                             <?php
                             $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
                             ?>

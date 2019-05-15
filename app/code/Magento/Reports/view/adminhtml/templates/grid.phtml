@@ -6,18 +6,18 @@
 ?>
 <?php
 /** @var $block \Magento\Reports\Block\Adminhtml\Grid */
-$numColumns = sizeof($block->getColumns());
+$numColumns = count($block->getColumns());
 ?>
-<?php if ($block->getCollection()): ?>
-    <?php if ($block->canDisplayContainer()): ?>
+<?php if ($block->getCollection()) : ?>
+    <?php if ($block->canDisplayContainer()) : ?>
     <div id="<?= $block->escapeHtml($block->getId()) ?>">
-        <?php else: ?>
+        <?php else : ?>
             <?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
         <?php endif; ?>
-        <?php if ($block->getStoreSwitcherVisibility() || $block->getDateFilterVisibility()): ?>
+        <?php if ($block->getStoreSwitcherVisibility() || $block->getDateFilterVisibility()) : ?>
             <div class="admin__data-grid-header admin__data-grid-toolbar">
                 <div class="admin__data-grid-header-row">
-                    <?php if ($block->getDateFilterVisibility()): ?>
+                    <?php if ($block->getDateFilterVisibility()) : ?>
                         <div class="admin__filter-actions" data-role="filter-form" id="<?= $block->escapeHtml($block->getSuffixId('period_date_range')) ?>">
                             <span class="field-row">
                                 <label for="<?= $block->escapeHtml($block->getSuffixId('period_date_from')) ?>"
@@ -51,8 +51,8 @@ $numColumns = sizeof($block->getColumns());
                                      <span><?= $block->escapeHtml(__('Show By')) ?>:</span>
                                  </label>
                                 <select name="report_period" id="<?= $block->escapeHtml($block->getSuffixId('report_period')) ?>" class="admin__control-select">
-                                    <?php foreach ($block->getPeriods() as $_value => $_label): ?>
-                                        <option value="<?= $block->escapeHtml($_value) ?>" <?php if ($block->getFilter('report_period') == $_value): ?> selected<?php endif; ?>><?= $block->escapeHtml($_label) ?></option>
+                                    <?php foreach ($block->getPeriods() as $_value => $_label) : ?>
+                                        <option value="<?= $block->escapeHtml($_value) ?>" <?php if ($block->getFilter('report_period') == $_value) : ?> selected<?php endif; ?>><?= $block->escapeHtml($_label) ?></option>
                                     <?php endforeach; ?>
                                 </select>
                                 <?= $block->getRefreshButtonHtml() ?>
@@ -77,7 +77,7 @@ $numColumns = sizeof($block->getColumns());
                             </script>
                         </div>
                     <?php endif; ?>
-                    <?php if ($block->getChildBlock('grid.export')): ?>
+                    <?php if ($block->getChildBlock('grid.export')) : ?>
                         <?= $block->getChildHtml('grid.export') ?>
                     <?php endif; ?>
                 </div>
@@ -89,7 +89,7 @@ $numColumns = sizeof($block->getColumns());
             </table>
         </div>
     </div>
-    <?php if ($block->canDisplayContainer()): ?>
+    <?php if ($block->canDisplayContainer()) : ?>
         <script>
             require([
                 "jquery",
@@ -100,28 +100,30 @@ $numColumns = sizeof($block->getColumns());
 
                 //<![CDATA[
                 <?= $block->escapeHtml($block->getJsObjectName()) ?> = new varienGrid('<?= $block->escapeHtml($block->getId()) ?>', '<?= $block->escapeUrl($block->getGridUrl()) ?>', '<?= $block->escapeHtml($block->getVarNamePage()) ?>', '<?= $block->escapeHtml($block->getVarNameSort()) ?>', '<?= $block->escapeHtml($block->getVarNameDir()) ?>', '<?= $block->escapeHtml($block->getVarNameFilter()) ?>');
-                <?= $block->escapeHtml($block->getJsObjectName()) ?>.useAjax = '<?php if ($block->getUseAjax()): echo $block->escapeHtml($block->getUseAjax()); endif; ?>';
-                <?php if ($block->getDateFilterVisibility()): ?>
-                <?= $block->escapeHtml($block->getJsObjectName()) ?>.doFilterCallback = validateFilterDate;
-                var period_date_from = $('<?= $block->escapeHtml($block->getSuffixId('period_date_from')) ?>');
-                var period_date_to = $('<?= $block->escapeHtml($block->getSuffixId('period_date_to')) ?>');
-                period_date_from.adviceContainer = $('<?= $block->escapeHtml($block->getSuffixId('period_date_from_advice')) ?>');
-                period_date_to.adviceContainer = $('<?= $block->escapeHtml($block->getSuffixId('period_date_to_advice')) ?>');
+                <?= $block->escapeHtml($block->getJsObjectName()) ?>.useAjax = '<?php if ($block->getUseAjax()) :
+                        echo $block->escapeHtml($block->getUseAjax());
+                    endif; ?>';
+                <?php if ($block->getDateFilterVisibility()) : ?>
+                    <?= $block->escapeHtml($block->getJsObjectName()) ?>.doFilterCallback = validateFilterDate;
+                    var period_date_from = $('<?= $block->escapeHtml($block->getSuffixId('period_date_from')) ?>');
+                    var period_date_to = $('<?= $block->escapeHtml($block->getSuffixId('period_date_to')) ?>');
+                    period_date_from.adviceContainer = $('<?= $block->escapeHtml($block->getSuffixId('period_date_from_advice')) ?>');
+                    period_date_to.adviceContainer = $('<?= $block->escapeHtml($block->getSuffixId('period_date_to_advice')) ?>');
 
-                var validateFilterDate = function() {
-                    if (period_date_from && period_date_to) {
-                        var valid = true;
-                        jQuery(period_date_from).add(period_date_to).each(function() {
-                            valid = Validation.validate(this) && valid;
-                        });
-                        return valid;
+                    var validateFilterDate = function() {
+                        if (period_date_from && period_date_to) {
+                            var valid = true;
+                            jQuery(period_date_from).add(period_date_to).each(function() {
+                                valid = Validation.validate(this) && valid;
+                            });
+                            return valid;
+                        }
+                        else {
+                            return true;
+                        }
                     }
-                    else {
-                        return true;
-                    }
-                }
                 <?php endif;?>
-                <?php if ($block->getStoreSwitcherVisibility()): ?>
+                <?php if ($block->getStoreSwitcherVisibility()) : ?>
                 /* Overwrite function from switcher.phtml widget*/
                 switchStore = function(obj) {
                     if (obj.options[obj.selectedIndex].getAttribute('website') == 'true') {
