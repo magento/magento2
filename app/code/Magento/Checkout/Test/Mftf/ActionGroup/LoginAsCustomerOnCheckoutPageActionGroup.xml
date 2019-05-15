@@ -22,6 +22,6 @@
         <doubleClick selector="{{CheckoutShippingSection.loginButton}}" stepKey="clickLoginBtn"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear3"/>
         <waitForPageLoad stepKey="waitToBeLoggedIn"/>
-        <waitForElementNotVisible selector="{{CheckoutShippingSection.email}}" userInput="{{customer.email}}" stepKey="waitForEmailInvisible" time ="60"/>
+        <waitForElementNotVisible selector="{{CheckoutShippingSection.email}}" stepKey="waitForEmailInvisible" time ="60"/>
     </actionGroup>
 </actionGroups>
