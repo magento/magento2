@@ -36,7 +36,7 @@ class Response
     public function __construct(int $statusCode, array $headers, string $body)
     {
         $this->statusCode = $statusCode;
-        $this->headers = $headers;
+        $this->headers = array_change_key_case($headers, CASE_LOWER);
         $this->body = $body;
     }
 
@@ -54,6 +54,7 @@ class Response
      * With header names as keys (case preserved) and values as header values.
      *
      * If a header's value had multiple values they will be shown like "val1, val2, val3".
+     * Header names are all lower-case.
      *
      * @return string[]
      */

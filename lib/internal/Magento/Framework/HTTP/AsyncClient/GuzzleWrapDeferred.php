@@ -87,6 +87,8 @@ class GuzzleWrapDeferred implements HttpResponseDeferredInterface
             } else {
                 $this->exception = new HttpException($requestException->getMessage(), 0, $requestException);
             }
+        } catch (\Throwable $exception) {
+            $this->exception = $exception;
         }
     }
 
