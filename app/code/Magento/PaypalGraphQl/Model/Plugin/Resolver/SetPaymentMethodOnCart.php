@@ -98,15 +98,19 @@ class SetPaymentMethodOnCart
         $token = $paypalAdditionalData['token'];
         $cart = $resolvedValue['cart']['model'];
 
-        $checkout = $this->checkoutFactory->create(
-            $this->expressConfig[$code]['checkoutType'],
-            [
-                'params' => [
-                    'quote' => $cart,
-                    'config' => $config,
-                ],
-            ]
-        );
+        try {
+            $checkout = $this->checkoutFactory->create(
+                $this->expressConfig[$code]['checkoutType'],
+                [
+                    'params' => [
+                        'quote' => $cart,
+                        'config' => $config,
+                    ],
+                ]
+            );
+        } catch (\Exception $e) {
+            throw new GraphQlInputException(__("Express Checkout class not found"));
+        }
 
         try {
             $checkout->returnFromPaypal($token, $payerId);
