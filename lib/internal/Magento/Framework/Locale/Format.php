@@ -11,6 +11,11 @@ namespace Magento\Framework\Locale;
 class Format implements \Magento\Framework\Locale\FormatInterface
 {
     /**
+     * Japan locale code
+     */
+    private static $japanLocaleCode = 'ja_JP';
+
+    /**
      * @var \Magento\Framework\App\ScopeResolverInterface
      */
     protected $_scopeResolver;
@@ -81,7 +86,16 @@ class Format implements \Magento\Framework\Locale\FormatInterface
                 $value = str_replace(',', '', $value);
             }
         } elseif ($separatorComa !== false) {
-            $value = str_replace(',', '.', $value);
+            $locale = $this->_localeResolver->getLocale();
+            /**
+             * It's hard code for Japan locale.
+             * The comma separator uses as group separator: 4,000 saves as 4,000.00
+             */
+            $value = str_replace(
+                ',',
+                $locale === self::$japanLocaleCode ? '' : '.',
+                $value
+            );
         }
 
         return (float)$value;

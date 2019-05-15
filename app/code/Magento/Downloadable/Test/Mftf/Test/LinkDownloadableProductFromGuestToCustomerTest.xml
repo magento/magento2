@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="LinkDownloadableProductFromGuestToCustomerTest">
+        <annotations>
+            <features value="Downloadable"/>
+            <stories value="Downloadable products in customer account"/>
+            <title value="Customer should see downloadable products after place order as guest and registering after that"/>
+            <description value="Verify that in 'My Downloadable Products' section in customer account user can see products."/>
+            <severity value="AVERAGE"/>
+            <useCaseId value="MAGETWO-98655"/>
+            <testCaseId value="MC-16148"/>
+            <group value="catalog"/>
+            <group value="downloadable"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableGuestCheckoutWithDownloadableItems.path}} {{EnableGuestCheckoutWithDownloadableItems.value}}" stepKey="enableGuestCheckoutWithDownloadableItems" />
+            <createData entity="ApiDownloadableProduct" stepKey="createProduct"/>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink">
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{DisableGuestCheckoutWithDownloadableItems.path}} {{DisableGuestCheckoutWithDownloadableItems.value}}" stepKey="disableGuestCheckoutWithDownloadableItems" />
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+            <actionGroup ref="RemoveCustomerFromAdminActionGroup" stepKey="deleteCustomer">
+                <argument name="customer" value="Simple_US_NY_Customer"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Step 1: Go to Storefront as Guest-->
+        <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="logoutCustomer"/>
+        <!--Step 2: Add downloadable product to shopping cart-->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontProductPage"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <!--Step 3: Go to checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
+        <!--Step 4: Select Check/Money Order payment, fill required fields and click Update and Place Order-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <actionGroup ref="GuestCheckoutFillNewBillingAddressActionGroup" stepKey="changeAddress">
+            <argument name="customerVar" value="Simple_US_NY_Customer"/>
+            <argument name="customerAddressVar" value="US_Address_NY"/>
+        </actionGroup>
+        <click selector="{{CheckoutPaymentSection.update}}"  stepKey="clickUpdateButton" />
+        <waitForPageLoad stepKey="waitUpdateAddress"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+        <!--Step 5: Create customer account after placing order-->
+        <actionGroup ref="StorefrontRegisterCustomerFromOrderSuccessPage" stepKey="createCustomerAfterPlaceOrder">
+            <argument name="customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <!--Step 6: Go To My Account -> My Downloadable Products and check if downloadable product link exist-->
+        <actionGroup ref="StorefrontAssertDownloadableProductIsPresentInCustomerAccount" stepKey="seeStorefontMyDownloadableProductsProductName">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+    </test>
+</tests>
