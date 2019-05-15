@@ -15,6 +15,7 @@
             <property name="lineLimit" value="120"/>
             <property name="absoluteLineLimit" value="120"/>
         </properties>
+        <exclude-pattern>*.phtml</exclude-pattern>
     </rule>
     <rule ref="Magento.LiteralNamespaces.LiteralNamespaces">
         <exclude-pattern>*/_files/*</exclude-pattern>
@@ -28,9 +29,6 @@
     <rule ref="Squiz.Operators.ValidLogicalOperators"/>
     <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing"/>
 
-    <rule ref="Magento2.Files.LineLength.MaxExceeded">
-        <exclude-pattern>*.phtml</exclude-pattern>
-    </rule>
     <rule ref="Squiz.Operators.IncrementDecrementUsage">
         <exclude-pattern>*.phtml</exclude-pattern>
     </rule>
@@ -44,9 +42,6 @@
         <exclude-pattern>*.phtml</exclude-pattern>
     </rule>
     <rule ref="Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace">
-        <exclude-pattern>*.phtml</exclude-pattern>
-    </rule>
-    <rule ref="Magento2.Security.LanguageConstruct.DirectOutput">
         <exclude-pattern>*.phtml</exclude-pattern>
     </rule>
 </ruleset>
