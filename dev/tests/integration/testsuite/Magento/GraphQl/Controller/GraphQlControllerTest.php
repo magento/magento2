@@ -115,6 +115,7 @@ QUERY;
 
     /**
      * Test request is dispatched and response generated when using GET request with query string
+     *
      * @return void
      */
     public function testDispatchWithGet() : void
