@@ -12,7 +12,6 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -29,10 +28,6 @@ class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
 
     /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
-
-    /** @var  GetMaskedQuoteIdByReservedOrderId */
-    private $getMaskedQuoteIdByReservedOrderId;
-
 
     /** @var GraphQl */
     private $graphql;
@@ -66,7 +61,6 @@ class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
         $this->metadataPool = $this->objectManager->get(MetadataPool::class);
         $this->request = $this->objectManager->get(Http::class);
-        $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
     }
 
     /**
