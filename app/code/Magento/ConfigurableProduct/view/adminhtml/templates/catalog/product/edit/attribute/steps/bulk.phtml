@@ -28,9 +28,7 @@
                                value="single"
                                data-bind="checked:type">
                         <label for="apply-single-set-radio" class="admin__field-label">
-                            <span><?= $block->escapeHtml(
-                                __('Apply single set of images to all SKUs')
-                            ); ?></span>
+                            <span><?= $block->escapeHtml(__('Apply single set of images to all SKUs')); ?></span>
                         </label>
                     </div>
                 </li>
@@ -67,10 +65,7 @@
                 <div data-role="gallery"
                      class="gallery"
                      data-images="[]"
-                     data-types="<?= $block->escapeHtml(
-                         $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getImageTypes())
-                     ) ?>"
-                >
+                     data-types="<?= $block->escapeHtml($this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getImageTypes())) ?>">
                     <div class="image image-placeholder">
                         <div data-role="uploader" class="uploader">
                             <div class="image-browse">
@@ -88,15 +83,12 @@
                         </div>
                     </div>
 
-                    <?php foreach ($block->getImageTypes() as $typeData) :
-                        ?>
+                    <?php foreach ($block->getImageTypes() as $typeData) : ?>
                         <input name="<?= $block->escapeHtml($typeData['name']) ?>"
                                class="image-<?= $block->escapeHtml($typeData['code']) ?>"
                                type="hidden"
                                value="<?= $block->escapeHtml($typeData['value']) ?>"/>
-                        <?php
-                    endforeach;
-                    ?>
+                        <?php endforeach; ?>
 
                     <script data-template="uploader" type="text/x-magento-template">
                         <div id="<%- data.id %>" class="file-row">
@@ -151,16 +143,12 @@
                                 </div>
                             </div>
                             <ul class="item-roles" data-role="roles-labels">
-                                <?php
-                                foreach ($block->getMediaAttributes() as $attribute) :
-                                    ?>
+                                <?php foreach ($block->getMediaAttributes() as $attribute) :?>
                                     <li data-role-code="<?= $block->escapeHtml($attribute->getAttributeCode()) ?>"
                                         class="item-role item-role-<?= $block->escapeHtml($attribute->getAttributeCode()) ?>">
                                         <?= /* @noEscape */ $attribute->getFrontendLabel() ?>
                                     </li>
-                                    <?php
-                                endforeach;
-                                ?>
+                                    <?php endforeach; ?>
                             </ul>
                         </div>
                     </script>
@@ -239,9 +227,7 @@
                                                         <?= $block->escapeHtml($attribute->getFrontendLabel()); ?>
                                                     </label>
                                                 </li>
-                                                <?php
-                                            endforeach;
-                                            ?>
+                                                <?php endforeach; ?>
                                         </ul>
                                     </div>
                                 </div>
@@ -314,10 +300,7 @@
                         <div data-role="gallery"
                              class="gallery"
                              data-images="[]"
-                             data-types="<?= $block->escapeHtml(
-                                 $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getImageTypes())
-                             ) ?>"
-                        >
+                             data-types="<?= $block->escapeHtml($this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getImageTypes())) ?>">
                             <div class="image image-placeholder">
                                 <div data-role="uploader" class="uploader">
                                     <div class="image-browse">
@@ -335,15 +318,12 @@
                                 </div>
                             </div>
 
-                            <?php foreach ($block->getImageTypes() as $typeData) :
-                                ?>
+                            <?php foreach ($block->getImageTypes() as $typeData) :?>
                                 <input name="<?= $block->escapeHtml($typeData['name']) ?>"
                                        class="image-<?= $block->escapeHtml($typeData['code']) ?>"
                                        type="hidden"
                                        value="<?= $block->escapeHtml($typeData['value']) ?>"/>
-                                <?php
-                            endforeach;
-                            ?>
+                                <?php endforeach; ?>
 
                             <script data-template="uploader" type="text/x-magento-template">
                                 <div id="<%- data.id %>" class="file-row">
@@ -400,16 +380,12 @@
                                         </div>
                                     </div>
                                     <ul class="item-roles" data-role="roles-labels">
-                                        <?php
-                                        foreach ($block->getMediaAttributes() as $attribute) :
-                                            ?>
+                                        <?php foreach ($block->getMediaAttributes() as $attribute) :?>
                                             <li data-role-code="<?= $block->escapeHtml($attribute->getAttributeCode()) ?>"
                                                 class="item-role item-role-<?= $block->escapeHtml($attribute->getAttributeCode()) ?>">
                                                 <?= $block->escapeHtml($attribute->getFrontendLabel()) ?>
                                             </li>
-                                            <?php
-                                        endforeach;
-                                        ?>
+                                            <?php endforeach; ?>
                                     </ul>
                                 </div>
                             </script>
@@ -472,9 +448,7 @@
                                             </label>
                                             <div class="admin__field-control">
                                                 <ul class="multiselect-alt">
-                                                    <?php
-                                                    foreach ($block->getMediaAttributes() as $attribute) :
-                                                        ?>
+                                                    <?php foreach ($block->getMediaAttributes() as $attribute) :?>
                                                         <li class="item">
                                                             <label>
                                                                 <input class="image-type"
@@ -485,9 +459,7 @@
                                                                 <?= $block->escapeHtml($attribute->getFrontendLabel()) ?>
                                                             </label>
                                                         </li>
-                                                        <?php
-                                                    endforeach;
-                                                    ?>
+                                                        <?php endforeach; ?>
                                                 </ul>
                                             </div>
                                         </div>
@@ -518,9 +490,7 @@
                                                     <% if (data.disabled == 1) { %>checked="checked"<% } %> />
 
                                                     <label for="hide-from-product-page" class="admin__field-label">
-                                                        <?= $block->escapeHtml(
-                                                            __('Hide from Product Page')
-                                                        ); ?>
+                                                        <?= $block->escapeHtml(__('Hide from Product Page')); ?>
                                                     </label>
                                                 </div>
                                             </div>
