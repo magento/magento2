@@ -26,6 +26,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AddressTest extends TestCase
 {
     /**
@@ -121,7 +124,7 @@ class AddressTest extends TestCase
             ->willReturn($this->store);
         $this->quoteSession->expects($this->any())
             ->method('getCustomerId')
-            ->willReturn($this->customerId );
+            ->willReturn($this->customerId);
         $this->directoryHelper = $this->getMockBuilder(DirectoryHelper::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDefaultCountry'])
