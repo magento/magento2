@@ -41,7 +41,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
      * Test case: get available shipping methods from current customer quote
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
@@ -58,15 +58,27 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
         self::assertCount(1, $response['cart']['shipping_addresses'][0]['available_shipping_methods']);
 
         $expectedAddressData = [
-            'amount' => 10,
-            'base_amount' => 10,
+            'amount' => [
+                'value' => 10,
+                'currency' => 'USD',
+            ],
+            'base_amount' => [
+                'value' => 10,
+                'currency' => 'USD',
+            ],
             'carrier_code' => 'flatrate',
             'carrier_title' => 'Flat Rate',
             'error_message' => '',
             'method_code' => 'flatrate',
             'method_title' => 'Fixed',
-            'price_incl_tax' => 10,
-            'price_excl_tax' => 10,
+            'price_incl_tax' => [
+                'value' => 10,
+                'currency' => 'USD',
+            ],
+            'price_excl_tax' => [
+                'value' => 10,
+                'currency' => 'USD',
+            ],
         ];
         self::assertEquals(
             $expectedAddressData,
@@ -77,7 +89,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     /**
      * _security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
@@ -98,7 +110,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
      *
      * _security
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
@@ -118,7 +130,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
      * Test case: get available shipping methods when all shipping methods are disabled
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
@@ -158,15 +170,27 @@ query {
   cart (cart_id: "{$maskedQuoteId}") {
     shipping_addresses {
         available_shipping_methods {
-          amount
-          base_amount
+          amount {
+            value
+            currency
+          }
+          base_amount {
+            value
+            currency
+          }
           carrier_code
           carrier_title
           error_message
           method_code
           method_title
-          price_excl_tax
-          price_incl_tax
+          price_excl_tax {
+            value
+            currency
+          }
+          price_incl_tax {
+            value
+            currency
+          }
         }
     }
   }
