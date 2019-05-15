@@ -81,8 +81,8 @@ class SenderTest extends \PHPUnit\Framework\TestCase
                     'sender_email' => "<br>'email@example.com'</br>",
                 ],
                 [
-                    'sender' => "&lt;br&gt;'Sender'&lt;/br&gt;",
-                    'sender_email' => "&lt;br&gt;'email@example.com'&lt;/br&gt;",
+                    'sender' => "&lt;br&gt;&#039;Sender&#039;&lt;/br&gt;",
+                    'sender_email' => "&lt;br&gt;&#039;email@example.com&#039;&lt;/br&gt;",
                 ],
             ],
             [
