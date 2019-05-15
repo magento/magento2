@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\CompiledInterception\Generator;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Code\Generator\EntityAbstract;
 use Magento\Framework\Config\Scope;
@@ -40,7 +41,7 @@ class CompiledInterceptor extends Interceptor
         } else {
             $this->plugins = [];
             foreach (['primary', 'frontend', 'adminhtml', 'crontab', 'webapi_rest', 'webapi_soap'] as $scope) {
-                $this->plugins[$scope] = new CompiledPluginList($scope);
+                $this->plugins[$scope] = new CompiledPluginList(ObjectManager::getInstance(), $scope);
             }
         }
     }
@@ -172,6 +173,8 @@ class CompiledInterceptor extends Interceptor
      * @param $conf
      * @param $parameters
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getMethodSourceFromConfig(\ReflectionMethod $method, $conf, $parameters, $returnVoid)
     {

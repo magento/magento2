@@ -5,8 +5,10 @@
  */
 namespace Magento\Framework\CompiledInterception\Test\Unit\CompiledPluginList;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\CompiledInterception\Generator\CompiledPluginList;
 use Magento\Framework\ObjectManagerInterface;
+use Psr\Log\NullLogger;
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';
@@ -34,6 +36,9 @@ class CompiledPluginListTest extends \PHPUnit\Framework\TestCase
         $readerMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class);
         $readerMock->expects($this->any())->method('read')->will($this->returnValueMap($readerMap));
 
+        $omMock = $this->createMock(ObjectManager::class);
+        $omMock->method('get')->with(\Psr\Log\LoggerInterface::class)->willReturn(new NullLogger());
+
         $omConfigMock =  $this->getMockForAbstractClass(
             \Magento\Framework\Interception\ObjectManager\ConfigInterface::class
         );
@@ -45,6 +50,7 @@ class CompiledPluginListTest extends \PHPUnit\Framework\TestCase
             $ret[$readerLine[0]] = $objectManagerHelper->getObject(
                 CompiledPluginList::class,
                 [
+                    'objectManager' => $omMock,
                     'scope' => $readerLine[0],
                     'reader' => $readerMock,
                     'omConfig' => $omConfigMock,
