@@ -159,7 +159,7 @@ class OrderStatus implements DataProviderInterface
         }
 
         $data = (string)$this->request->getParam('data');
-        if ((string)$this->request->getParam('signature') !== $this->signature->signData($data)) {
+        if (!$this->signature->isValid($data, (string)$this->request->getParam('signature'))) {
             return null;
         }
         // phpcs:ignore

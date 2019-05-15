@@ -17,7 +17,9 @@ use Magento\Framework\Encryption\Adapter\SodiumChachaIetf;
 use Magento\Framework\Encryption\Adapter\Mcrypt;
 
 /**
- * Class Encryptor provides basic logic for hashing strings and encrypting/decrypting misc data
+ * Class Encryptor provides basic logic for hashing strings and encrypting/decrypting misc data.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Encryptor implements EncryptorInterface
 {
@@ -219,7 +221,7 @@ class Encryptor implements EncryptorInterface
         if ($version === self::HASH_VERSION_ARGON2ID13) {
             $hash = $this->getArgonHash($password, $salt);
         } else {
-            $hash = $this->hash($salt . $password, $version);
+            $hash = $this->generateSimpleHash($salt . $password, $version);
         }
 
         return implode(
@@ -233,11 +235,27 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
+     * Generate simple hash for given string.
+     *
+     * @param string $data
+     * @param int $version
+     * @return string
+     */
+    private function generateSimpleHash(string $data, int $version): string
+    {
+        return hash($this->hashVersionMap[$version], (string)$data);
+    }
+
+    /**
      * @inheritdoc
      */
     public function hash($data, $version = self::HASH_VERSION_SHA256)
     {
-        return hash($this->hashVersionMap[$version], (string)$data);
+        if (empty($this->keys[$this->keyVersion])) {
+            throw new \RuntimeException('No key available');
+        }
+
+        return hash_hmac($this->hashVersionMap[$version], (string)$data, $this->keys[$this->keyVersion], false);
     }
 
     /**
@@ -253,19 +271,24 @@ class Encryptor implements EncryptorInterface
      */
     public function isValidHash($password, $hash)
     {
-        $this->explodePasswordHash($hash);
-
-        foreach ($this->getPasswordVersion() as $hashVersion) {
-            if ($hashVersion === self::HASH_VERSION_ARGON2ID13) {
-                $password = $this->getArgonHash($password, $this->getPasswordSalt());
-            } else {
-                $password = $this->hash($this->getPasswordSalt() . $password, $hashVersion);
+        try {
+            $this->explodePasswordHash($hash);
+            foreach ($this->getPasswordVersion() as $hashVersion) {
+                if ($hashVersion === self::HASH_VERSION_ARGON2ID13) {
+                    $recreated = $this->getArgonHash($password, $this->getPasswordSalt());
+                } else {
+                    $recreated = $this->generateSimpleHash($this->getPasswordSalt() . $password, $hashVersion);
+                }
+                $hash = $this->getPasswordHash();
             }
+        } catch (\RuntimeException $exception) {
+            //Hash is not a password hash.
+            $recreated = $this->hash($password);
         }
 
         return Security::compareStrings(
-            $password,
-            $this->getPasswordHash()
+            $recreated,
+            $hash
         );
     }
 
@@ -274,7 +297,12 @@ class Encryptor implements EncryptorInterface
      */
     public function validateHashVersion($hash, $validateCount = false)
     {
-        $this->explodePasswordHash($hash);
+        try {
+            $this->explodePasswordHash($hash);
+        } catch (\RuntimeException $exception) {
+            //Not a password hash.
+            return true;
+        }
         $hashVersions = $this->getPasswordVersion();
 
         return $validateCount
@@ -286,11 +314,15 @@ class Encryptor implements EncryptorInterface
      * Explode password hash
      *
      * @param string $hash
+     * @throws \RuntimeException When given hash cannot be processed.
      * @return array
      */
     private function explodePasswordHash($hash)
     {
         $explodedPassword = explode(self::DELIMITER, $hash, 3);
+        if (count($explodedPassword) !== 3) {
+            throw new \RuntimeException('Hash is not a password hash');
+        }
 
         foreach ($this->passwordHashMap as $key => $defaultValue) {
             $this->passwordHashMap[$key] = (isset($explodedPassword[$key])) ? $explodedPassword[$key] : $defaultValue;
