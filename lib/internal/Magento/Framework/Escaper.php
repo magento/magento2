@@ -16,7 +16,7 @@ class Escaper
     /**
      * HTML special characters flag
      */
-    const HTMLSPECIALCHARS_FLAG = ENT_QUOTES | ENT_SUBSTITUTE;
+    private const HTMLSPECIALCHARS_FLAG = ENT_QUOTES | ENT_SUBSTITUTE;
 
     /**
      * @var \Magento\Framework\ZendEscaper
