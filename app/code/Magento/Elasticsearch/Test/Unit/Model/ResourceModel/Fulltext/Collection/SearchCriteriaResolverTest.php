@@ -35,10 +35,10 @@ class SearchCriteriaResolverTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array|null $orders
-     * @param array $expected
+     * @param array|null $expected
      * @dataProvider resolveSortOrderDataProvider
      */
-    public function testResolve($orders, array $expected)
+    public function testResolve($orders, $expected)
     {
         $searchRequestName = 'test';
         $currentPage = 1;
@@ -93,11 +93,11 @@ class SearchCriteriaResolverTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 null,
-                ['relevance' => 'DESC'],
+                null,
             ],
             [
                 ['test' => 'ASC'],
-                ['relevance' => 'DESC', 'test' => 'ASC'],
+                ['test' => 'ASC'],
             ],
         ];
     }
