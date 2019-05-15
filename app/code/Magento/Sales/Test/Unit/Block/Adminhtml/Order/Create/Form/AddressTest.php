@@ -26,7 +26,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class FormTest extends TestCase
+class AddressTest extends TestCase
 {
     /**
      * @var QuoteSession|MockObject
