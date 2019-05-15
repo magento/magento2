@@ -35,13 +35,13 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                     <?php foreach ($items as $_item): ?>
                         <li class="product-item">
                             <div class="product-item-info">
-                                <a href="<?= $block->escapeUrl(block->getProductUrl($_item)) ?>" class="product-item-photo">
+                                <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>" class="product-item-photo">
                                     <?= $block->getImage($_item, $image)->toHtml() ?>
                                 </a>
                                 <div class="product-item-details">
                                     <strong class="product-item-name">
                                         <a title="<?= $block->escapeHtml($_item->getName()) ?>"
-                                           href="<?= /$block->escapeUrl($block->getProductUrl($_item)) ?>" class="product-item-link">
+                                           href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>" class="product-item-link">
                                             <?= $block->escapeHtml($_item->getName()) ?>
                                         </a>
                                     </strong>

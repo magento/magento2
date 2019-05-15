@@ -8,7 +8,7 @@
 ?>
 
 <?php if ($block->getTabs()): ?>
-    <div id="<?= $block->getId() ?>" class="config-nav">
+    <div id="<?= $block->escapeHtml($block->getId()) ?>" class="config-nav">
         <?php
         /** @var $_tab \Magento\Config\Model\Config\Structure\Element\Tab */
         foreach ($block->getTabs() as $_tab):
@@ -27,7 +27,7 @@
                 <?php if ($_tab->getClass()): ?>
                     <?= $block->escapeHtml($_tab->getClass()) ?>
                 <?php endif ?>"
-                 data-mage-init='{"collapsible":{"active": "<?= $activeCollapsible ?>",
+                 data-mage-init='{"collapsible":{"active": "<?= $block->escapeHtml($activeCollapsible) ?>",
                  "openedState": "_show",
                  "closedState": "_hide",
                  "collapsible": true,
