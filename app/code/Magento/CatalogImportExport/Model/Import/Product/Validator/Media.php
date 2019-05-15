@@ -17,7 +17,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
      */
     const URL_REGEXP = '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i';
 
-    const PATH_REGEXP = '#^(?!.*[\\/]\.{2}[\\/])(?!\.{2}[\\/])[-\w.\\/]+$#';
+    const PATH_REGEXP = '#^(?!.*[\\/]\.{2}[\\/])(?!\.{2}[\\/])[-\w.\s\\/]+$#';
 
     const ADDITIONAL_IMAGES = 'additional_images';
 
