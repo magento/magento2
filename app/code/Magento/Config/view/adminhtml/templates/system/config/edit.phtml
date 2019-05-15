@@ -32,6 +32,8 @@
 require([
     "jquery",
     "uiRegistry",
+    "Magento_Ui/js/modal/confirm",
+    "mage/translate",
     "mage/mage",
     "prototype",
     "mage/adminhtml/form",
@@ -384,5 +386,6 @@ require([
     registry.set('adminSystemConfig', adminSystemConfig);
 
     adminSystemConfig.navigateToElement(<?php echo /* @noEscape */ $block->getConfigSearchParamsJson(); ?>);
+
 });
 </script>
