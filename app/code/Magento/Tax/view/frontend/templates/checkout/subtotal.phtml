@@ -11,11 +11,11 @@
  * @see \Magento\Tax\Block\Checkout\Subtotal
  */
 ?>
+<?php
+$style = $block->escapeHtmlAttr($block->getStyle());
+$colspan = (int)$block->getColspan();
+?>
 <?php if ($block->displayBoth()) : ?>
-    <?php
-        $style = $block->escapeHtmlAttr($block->getStyle());
-        $colspan = (int)$block->getColspan();
-    ?>
 <tr class="totals sub excl">
     <th style="<?= /* @noEscape */ $style ?>" class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
         <?= $block->escapeHtml(__('Subtotal (Excl. Tax)')) ?>

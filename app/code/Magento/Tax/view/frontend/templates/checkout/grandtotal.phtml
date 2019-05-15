@@ -10,11 +10,11 @@
  * @var $block \Magento\Tax\Block\Checkout\Grandtotal
  */
 ?>
+<?php
+$style = $block->escapeHtmlAttr($block->getStyle());
+$colspan = (int)$block->getColspan();
+?>
 <?php if ($block->includeTax() && $block->getTotalExclTax() >= 0) : ?>
-    <?php
-        $style = $block->escapeHtmlAttr($block->getStyle());
-        $colspan = (int)$block->getColspan();
-    ?>
     <tr class="grand totals excl">
         <th style="<?= /* @noEscape */ $style ?>" class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
             <strong><?= $block->escapeHtml(__('Grand Total Excl. Tax')) ?></strong>
