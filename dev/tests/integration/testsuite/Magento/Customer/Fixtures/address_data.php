@@ -15,6 +15,10 @@ return [
         'lastname' => 'Smith',
         'firstname' => 'John',
         'region_id' => 12,
+        'prefix' => false,
+        'middlename' => false,
+        'suffix' => false,
+        'fax' => false
     ],
     [
         'telephone' => 845454465,
@@ -24,5 +28,9 @@ return [
         'street' => ['Tunnel Alexanderpl'],
         'lastname' => 'Smith',
         'firstname' => 'John',
+        'prefix' => false,
+        'middlename' => false,
+        'suffix' => false,
+        'fax' => false
     ]
 ];
