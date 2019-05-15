@@ -24,10 +24,10 @@
         </after>
         <!--Go to New CMS Page page-->
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
-        <!--Fill the CMS page form-->
-        <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageDataForDisabledPage"/>
         <!--Set page disabled-->
         <actionGroup ref="AdminDisableCMSPage" stepKey="setCMSPageDisabled"/>
+        <!--Fill the CMS page form-->
+        <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageDataForDisabledPage"/>
         <!--Verify successfully saved-->
         <actionGroup ref="saveCmsPage" stepKey="saveDisabledPage"/>
         <!--Check that page is disabled on frontend-->
