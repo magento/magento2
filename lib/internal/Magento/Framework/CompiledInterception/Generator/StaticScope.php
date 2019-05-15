@@ -1,12 +1,8 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: fwawrzak
- * Date: 15.05.19
- * @license http://creatuity.com/license
- * @copyright Copyright (c) 2008-2017 Creatuity Corp. (http://www.creatuity.com)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\CompiledInterception\Generator;
 
 use Magento\Framework\Config\ScopeInterface;
@@ -35,6 +31,7 @@ class StaticScope implements ScopeInterface
     /**
      * @param string $scope
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setCurrentScope($scope){
         throw new \Exception('readonly');

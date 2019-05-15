@@ -1,12 +1,8 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: fwawrzak
- * Date: 15.05.19
- * @license http://creatuity.com/license
- * @copyright Copyright (c) 2008-2017 Creatuity Corp. (http://www.creatuity.com)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\CompiledInterception\Generator;
 
 
@@ -18,12 +14,20 @@ class FileCache implements CacheInterface, SerializerInterface
 
     private $cachePath;
 
+    /**
+     * FileCache constructor.
+     * @param null $cachePath
+     */
     public function __construct($cachePath = null)
     {
         $this->cachePath = ($cachePath === null ? BP . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'cache' : $cachePath);
     }
 
 
+    /**
+     * @param $identifier
+     * @return string
+     */
     private function getCachePath($identifier)
     {
         return $this->cachePath . DIRECTORY_SEPARATOR . str_replace('|', '_', $identifier . '.php');
@@ -34,6 +38,7 @@ class FileCache implements CacheInterface, SerializerInterface
      *
      * @param string $identifier Cache id
      * @return int|bool Last modified time of cache entry if it is available, false otherwise
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function test($identifier)
     {
@@ -46,6 +51,7 @@ class FileCache implements CacheInterface, SerializerInterface
      * @param string $identifier
      * @return string|bool
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function load($identifier)
     {
@@ -61,6 +67,7 @@ class FileCache implements CacheInterface, SerializerInterface
      * @param int|bool|null $lifeTime
      * @return bool
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
@@ -78,6 +85,7 @@ class FileCache implements CacheInterface, SerializerInterface
      * @param string $identifier
      * @return bool
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function remove($identifier)
     {
@@ -91,6 +99,7 @@ class FileCache implements CacheInterface, SerializerInterface
      * @param array $tags
      * @return bool
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {

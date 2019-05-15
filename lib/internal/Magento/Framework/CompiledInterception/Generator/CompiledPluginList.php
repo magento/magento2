@@ -41,7 +41,7 @@ class CompiledPluginList extends PluginList
             $objectManager,
             new \Magento\Framework\ObjectManager\Definition\Runtime(),
             ['first' => 'global'],
-            $cacheId = 'compiled_plugins_' . $scope,
+            'compiled_plugins_' . $scope,
             new FileCache($cachePath)
         );
     }
@@ -52,6 +52,7 @@ class CompiledPluginList extends PluginList
      * @param string $type
      * @param string $code
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getPlugin($type, $code)
     {
