@@ -12,6 +12,7 @@
             <argument name="shipping" type="string"/>
         </arguments>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.shipping}}" time="30" after="assertSubtotal" stepKey="waitForShippingPriceToBeVisible"/>
-        <see userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" after="waitForShippingPriceToBeVisible" stepKey="assertShipping"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.shippingAmount(shipping)}}" time="30" after="waitForShippingPriceToBeVisible" stepKey="waitForShippingPriceAmountVisible"/>
+        <see userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" after="waitForShippingPriceAmountVisible" stepKey="assertShipping"/>
     </actionGroup>
 </actionGroups>

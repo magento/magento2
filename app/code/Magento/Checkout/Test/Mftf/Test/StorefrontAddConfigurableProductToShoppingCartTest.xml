@@ -131,8 +131,8 @@
         <!--Assert Shopping Cart Summary -->
         <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary" >
             <argument name="subtotal" value="$40.00"/>
-            <argument name="shipping" value="$10.00"/>
-            <argument name="total" value="$50.00"/>
+            <argument name="shipping" value="10.00"/>
+            <argument name="total" value="50.00"/>
         </actionGroup>
 
         <!--Assert Product Details In Checkout cart -->
