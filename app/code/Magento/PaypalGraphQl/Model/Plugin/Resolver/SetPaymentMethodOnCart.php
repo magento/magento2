@@ -13,9 +13,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Phrase;
-use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Express\Checkout\Factory as CheckoutFactory;
-use Magento\Paypal\Model\Express\Checkout;
 use Magento\PaypalGraphQl\Model\PaypalExpressAdditionalDataProvider;
 
 class SetPaymentMethodOnCart
@@ -31,23 +29,34 @@ class SetPaymentMethodOnCart
     private $paypalExpressAdditionalDataProvider;
 
     /**
-     * @var Config
+     * Express configuration
+     *
+     * @see \Magento\Paypal\Controller\Express\Start
+     * Example: ['paypal_express' =>
+     *   [
+     *    'configType' => '\Magento\Paypal\Model\Config',
+     *    'configMethod': 'paypal_express',
+     *    'checkoutType' => '\Magento\Paypal\Model\PayflowExpress\Checkout'
+     *   ]
+     * ]
+     *
+     * @var array
      */
-    private $config;
+    private $expressConfig;
 
     /**
      * @param CheckoutFactory $checkoutFactory
-     * @param Config $config
      * @param PaypalExpressAdditionalDataProvider $paypalExpressAdditionalDataProvider
+     * @param array $expressConfig
      */
     public function __construct(
         CheckoutFactory $checkoutFactory,
-        Config $config,
-        PaypalExpressAdditionalDataProvider $paypalExpressAdditionalDataProvider
+        PaypalExpressAdditionalDataProvider $paypalExpressAdditionalDataProvider,
+        $expressConfig = []
     ) {
         $this->checkoutFactory = $checkoutFactory;
-        $this->config = $config;
         $this->paypalExpressAdditionalDataProvider = $paypalExpressAdditionalDataProvider;
+        $this->expressConfig = $expressConfig;
     }
 
     /**
@@ -79,17 +88,22 @@ class SetPaymentMethodOnCart
         ) {
             return $resolvedValue;
         }
-        $this->config->setMethod(Config::METHOD_EXPRESS); //TODO dynamic, based on input maybe
+
+        $code = 'payflow_express';
+
+        // validate and get payment code method
+        $config = $this->getExpressConfig($code);
+
         $payerId = $paypalAdditionalData['payer_id'];
         $token = $paypalAdditionalData['token'];
         $cart = $resolvedValue['cart']['model'];
 
         $checkout = $this->checkoutFactory->create(
-            Checkout::class,
+            $this->expressConfig[$code]['checkoutType'],
             [
                 'params' => [
                     'quote' => $cart,
-                    'config' => $this->config,
+                    'config' => $config,
                 ],
             ]
         );
@@ -103,4 +117,45 @@ class SetPaymentMethodOnCart
         return $resolvedValue;
     }
 
+    /**
+     * Setup paypal express depending on the code: regular express, payflow, etc.
+     *
+     * @param $code
+     * @return \Magento\Paypal\Model\AbstractConfig
+     * @throws GraphQlInputException
+     */
+    private function getExpressConfig(string $code) : \Magento\Paypal\Model\AbstractConfig
+    {
+        //validate code string
+        if (empty($code)) {
+            throw new GraphQlInputException(__("TODO Missing code"));
+        }
+
+        //validate code string
+        if (!isset($this->expressConfig[$code]['configMethod'])) {
+            throw new GraphQlInputException(__("TODO configMethod"));
+        }
+
+        //validate code string
+        if ($code !== $this->expressConfig[$code]['configMethod']) {
+            throw new GraphQlInputException(__("TODO code is not equal to configMethod"));
+        }
+
+        // validate config class
+        if (!isset($this->expressConfig[$code]['configType'])
+            && !class_exists($this->expressConfig[$code]['configType'])) {
+            throw new GraphQlInputException(__("TODO Config not provided"));
+        }
+
+        /** @var \Magento\Paypal\Model\AbstractConfig $config */
+        $config = $this->expressConfig[$code]['configType'];
+
+        $config->setMethod($code);
+
+        if (!$config->isMethodAvailable($code)) {
+            throw new GraphQlInputException(__("TODO Payment method not available"));
+        }
+
+        return $config;
+    }
 }

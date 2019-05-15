@@ -163,8 +163,19 @@ class PaypalExpressToken implements ResolverInterface
             throw new GraphQlInputException(__("TODO Missing code"));
         }
 
+        //validate code string
+        if (!isset($this->expressConfig[$code]['configMethod'])) {
+            throw new GraphQlInputException(__("TODO configMethod"));
+        }
+
+        //validate code string
+        if ($code !== $this->expressConfig[$code]['configMethod']) {
+            throw new GraphQlInputException(__("TODO code is not equal to configMethod"));
+        }
+
         // validate config class
-        if (isset($this->expressConfig['configType']) && class_exists($this->expressConfig['configType'])) {
+        if (!isset($this->expressConfig[$code]['configType'])
+            && !class_exists($this->expressConfig[$code]['configType'])) {
             throw new GraphQlInputException(__("TODO Config not provided"));
         }
 
