@@ -310,29 +310,35 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $helper = $this->_sitemapData;
         $storeId = $this->getStoreId();
 
-        $this->addSitemapItem(new DataObject(
-            [
-                'changefreq' => $helper->getCategoryChangefreq($storeId),
-                'priority' => $helper->getCategoryPriority($storeId),
-                'collection' => $this->_categoryFactory->create()->getCollection($storeId),
-            ]
-        ));
+        $this->addSitemapItem(
+            new DataObject(
+                [
+                    'changefreq' => $helper->getCategoryChangefreq($storeId),
+                    'priority' => $helper->getCategoryPriority($storeId),
+                    'collection' => $this->_categoryFactory->create()->getCollection($storeId),
+                ]
+            )
+        );
 
-        $this->addSitemapItem(new DataObject(
-            [
-                'changefreq' => $helper->getProductChangefreq($storeId),
-                'priority' => $helper->getProductPriority($storeId),
-                'collection' => $this->_productFactory->create()->getCollection($storeId),
-            ]
-        ));
+        $this->addSitemapItem(
+            new DataObject(
+                [
+                    'changefreq' => $helper->getProductChangefreq($storeId),
+                    'priority' => $helper->getProductPriority($storeId),
+                    'collection' => $this->_productFactory->create()->getCollection($storeId),
+                ]
+            )
+        );
 
-        $this->addSitemapItem(new DataObject(
-            [
-                'changefreq' => $helper->getPageChangefreq($storeId),
-                'priority' => $helper->getPagePriority($storeId),
-                'collection' => $this->_cmsFactory->create()->getCollection($storeId),
-            ]
-        ));
+        $this->addSitemapItem(
+            new DataObject(
+                [
+                    'changefreq' => $helper->getPageChangefreq($storeId),
+                    'priority' => $helper->getPagePriority($storeId),
+                    'collection' => $this->_cmsFactory->create()->getCollection($storeId),
+                ]
+            )
+        );
     }
 
     /**
@@ -836,13 +842,15 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
 
         foreach ($this->_sitemapItems as $data) {
             foreach ($data->getCollection() as $item) {
-                $items[] = $this->sitemapItemFactory->create([
-                    'url' => $item->getUrl(),
-                    'updatedAt' => $item->getUpdatedAt(),
-                    'images' => $item->getImages(),
-                    'priority' => $data->getPriority(),
-                    'changeFrequency' => $data->getChangeFrequency(),
-                ]);
+                $items[] = $this->sitemapItemFactory->create(
+                    [
+                        'url' => $item->getUrl(),
+                        'updatedAt' => $item->getUpdatedAt(),
+                        'images' => $item->getImages(),
+                        'priority' => $data->getPriority(),
+                        'changeFrequency' => $data->getChangeFrequency(),
+                    ]
+                );
             }
         }
 

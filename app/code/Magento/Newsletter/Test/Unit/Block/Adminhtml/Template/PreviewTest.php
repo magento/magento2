@@ -39,7 +39,9 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->appState = $this->createMock(\Magento\Framework\App\State::class);
         $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->template = $this->createPartialMock(\Magento\Newsletter\Model\Template::class, [
+        $this->template = $this->createPartialMock(
+            \Magento\Newsletter\Model\Template::class,
+            [
                 'setTemplateType',
                 'setTemplateText',
                 'setTemplateStyles',
@@ -48,7 +50,8 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
                 'revertDesign',
                 'getProcessedTemplate',
                 'load'
-            ]);
+            ]
+        );
         $templateFactory = $this->createPartialMock(\Magento\Newsletter\Model\TemplateFactory::class, ['create']);
         $templateFactory->expects($this->once())->method('create')->willReturn($this->template);
         $this->subscriberFactory = $this->createPartialMock(

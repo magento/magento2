@@ -156,23 +156,25 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     protected function getModel($mockedMethods = null)
     {
         return $this->getMockBuilder(\Magento\Email\Model\Template\Filter::class)
-            ->setConstructorArgs([
-                $this->string,
-                $this->logger,
-                $this->escaper,
-                $this->assetRepo,
-                $this->scopeConfig,
-                $this->coreVariableFactory,
-                $this->storeManager,
-                $this->layout,
-                $this->layoutFactory,
-                $this->appState,
-                $this->backendUrlBuilder,
-                $this->emogrifier,
-                $this->configVariables,
-                [],
-                $this->cssInliner,
-            ])
+            ->setConstructorArgs(
+                [
+                    $this->string,
+                    $this->logger,
+                    $this->escaper,
+                    $this->assetRepo,
+                    $this->scopeConfig,
+                    $this->coreVariableFactory,
+                    $this->storeManager,
+                    $this->layout,
+                    $this->layoutFactory,
+                    $this->appState,
+                    $this->backendUrlBuilder,
+                    $this->emogrifier,
+                    $this->configVariables,
+                    [],
+                    $this->cssInliner,
+                ]
+            )
             ->setMethods($mockedMethods)
             ->getMock();
     }

@@ -429,10 +429,12 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
         if (count($expectedFile) == 1) {
             $this->directoryMock->expects($this->once())
                 ->method('renameFile')
-                ->willReturnCallback(function ($from, $to) {
-                    \PHPUnit\Framework\Assert::assertEquals('/sitemap-1-1.xml', $from);
-                    \PHPUnit\Framework\Assert::assertEquals('/sitemap.xml', $to);
-                });
+                ->willReturnCallback(
+                    function ($from, $to) {
+                        \PHPUnit\Framework\Assert::assertEquals('/sitemap-1-1.xml', $from);
+                        \PHPUnit\Framework\Assert::assertEquals('/sitemap.xml', $to);
+                    }
+                );
         }
 
         // Check robots txt
@@ -524,32 +526,36 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
 
         $this->itemProviderMock->expects($this->any())
             ->method('getItems')
-            ->willReturn([
-                new SitemapItem('category.html', '1.0', 'daily', '2012-12-21 00:00:00'),
-                new SitemapItem('/category/sub-category.html', '1.0', 'daily', '2012-12-21 00:00:00'),
-                new SitemapItem('product.html', '0.5', 'monthly', '0000-00-00 00:00:00'),
-                new SitemapItem(
-                    'product2.html',
-                    '0.5',
-                    'monthly',
-                    '2012-12-21 00:00:00',
-                    new DataObject([
-                        'collection' => [
-                            new DataObject(
-                                [
-                                    'url' => $storeBaseMediaUrl . 'i/m/image1.png',
-                                    'caption' => 'caption & > title < "'
-                                ]
-                            ),
-                            new DataObject(
-                                ['url' => $storeBaseMediaUrl . 'i/m/image_no_caption.png', 'caption' => null]
-                            ),
-                        ],
-                        'thumbnail' => $storeBaseMediaUrl . 't/h/thumbnail.jpg',
-                        'title' => 'Product & > title < "',
-                    ])
-                )
-            ]);
+            ->willReturn(
+                [
+                    new SitemapItem('category.html', '1.0', 'daily', '2012-12-21 00:00:00'),
+                    new SitemapItem('/category/sub-category.html', '1.0', 'daily', '2012-12-21 00:00:00'),
+                    new SitemapItem('product.html', '0.5', 'monthly', '0000-00-00 00:00:00'),
+                    new SitemapItem(
+                        'product2.html',
+                        '0.5',
+                        'monthly',
+                        '2012-12-21 00:00:00',
+                        new DataObject(
+                            [
+                                'collection' => [
+                                    new DataObject(
+                                        [
+                                            'url' => $storeBaseMediaUrl . 'i/m/image1.png',
+                                            'caption' => 'caption & > title < "'
+                                        ]
+                                    ),
+                                    new DataObject(
+                                        ['url' => $storeBaseMediaUrl . 'i/m/image_no_caption.png', 'caption' => null]
+                                    ),
+                                ],
+                                'thumbnail' => $storeBaseMediaUrl . 't/h/thumbnail.jpg',
+                                'title' => 'Product & > title < "',
+                            ]
+                        )
+                    )
+                ]
+            );
 
         /** @var $model Sitemap */
         $model = $this->getMockBuilder(Sitemap::class)
