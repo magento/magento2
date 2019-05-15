@@ -8,12 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\Framework\HTTP\AsyncClient;
 
-use Magento\Framework\Async\DeferredInterface;
+use Magento\Framework\Async\CancelableDeferredInterface;
 
 /**
  * Deferred HTTP response.
  */
-interface HttpResponseDeferredInterface extends DeferredInterface
+interface HttpResponseDeferredInterface extends CancelableDeferredInterface
 {
     /**
      * @inheritdoc

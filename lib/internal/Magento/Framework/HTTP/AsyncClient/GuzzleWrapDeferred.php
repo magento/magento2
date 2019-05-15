@@ -10,7 +10,9 @@ namespace Magento\Framework\HTTP\AsyncClient;
 
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\CancellationException;
 use GuzzleHttp\Promise\PromiseInterface;
+use Magento\Framework\Async\CancelingDeferredException;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -32,6 +34,11 @@ class GuzzleWrapDeferred implements HttpResponseDeferredInterface
      * @var HttpException
      */
     private $exception;
+
+    /**
+     * @var bool
+     */
+    private $canceled = false;
 
     /**
      * @param PromiseInterface $promise
@@ -88,15 +95,43 @@ class GuzzleWrapDeferred implements HttpResponseDeferredInterface
      */
     public function get(): Response
     {
+        if ($this->isCancelled()) {
+            throw new CancelingDeferredException('Deferred is canceled');
+        }
         if (!$this->isDone()) {
             $this->unwrap();
         }
 
-        if ($this->response) {
-            return $this->response;
-        }
         if ($this->exception) {
             throw $this->exception;
         }
+        return $this->response;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function cancel(bool $force = false): void
+    {
+        if ($force) {
+            $this->promise->cancel();
+            if ($this->promise->getState() === PromiseInterface::REJECTED) {
+                $this->unwrap();
+                if ($this->exception instanceof CancellationException) {
+                    $this->canceled = true;
+                    return;
+                }
+            }
+        }
+
+        throw new CancelingDeferredException('Failed to cancel HTTP request');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isCancelled(): bool
+    {
+        return $this->canceled;
     }
 }
