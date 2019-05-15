@@ -288,9 +288,12 @@ class Customer extends AbstractCustomer
     {
         $firstCustomer = reset($entitiesToUpdate);
         $columnsToUpdate = array_keys($firstCustomer);
-        $customerFieldsToUpdate = array_filter($this->customerFields, function ($field) use ($columnsToUpdate) {
-            return in_array($field, $columnsToUpdate);
-        });
+        $customerFieldsToUpdate = array_filter(
+            $this->customerFields,
+            function ($field) use ($columnsToUpdate) {
+                return in_array($field, $columnsToUpdate);
+            }
+        );
         return $customerFieldsToUpdate;
     }
 
@@ -523,9 +526,9 @@ class Customer extends AbstractCustomer
                             $attributesToSave[$tableName] = [];
                         }
                         $attributesToSave[$tableName] = array_diff_key(
-                            $attributesToSave[$tableName],
-                            $customerAttributes
-                        ) + $customerAttributes;
+                                $attributesToSave[$tableName],
+                                $customerAttributes
+                            ) + $customerAttributes;
                     }
                 }
             }
@@ -582,12 +585,12 @@ class Customer extends AbstractCustomer
             }
             // check password
             if (isset(
-                $rowData['password']
-            ) && strlen(
-                $rowData['password']
-            ) && $this->string->strlen(
-                $rowData['password']
-            ) < self::MIN_PASSWORD_LENGTH
+                    $rowData['password']
+                ) && strlen(
+                    $rowData['password']
+                ) && $this->string->strlen(
+                    $rowData['password']
+                ) < self::MIN_PASSWORD_LENGTH
             ) {
                 $this->addRowError(self::ERROR_PASSWORD_LENGTH, $rowNumber);
             }
