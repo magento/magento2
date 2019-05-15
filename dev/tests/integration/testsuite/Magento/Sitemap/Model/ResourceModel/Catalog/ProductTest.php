@@ -15,11 +15,6 @@ namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Base product image path
-     */
-    const BASE_IMAGE_PATH = '#http\:\/\/localhost\/pub\/media\/catalog\/product\/cache\/[a-z0-9]{32}:path:#';
-    
-    /**
      * Test getCollection None images
      * 1) Check that image attributes were not loaded
      * 2) Check no images were loaded

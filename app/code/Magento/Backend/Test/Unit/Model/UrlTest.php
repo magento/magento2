@@ -46,7 +46,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $_requestMock;
+    private $requestMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -64,7 +64,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     private $encryptor;
 
     /**
-     * @return void
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -144,8 +144,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
                 $this->getMock(\Magento\Framework\Url\RouteParamsResolver::class, [], [], '', false)
             );
 
-        $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->model->setRequest($this->_requestMock);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->model->setRequest($this->requestMock);
     }
 
     public function testFindFirstAvailableMenuDenied()
@@ -259,11 +259,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $keyFromParams = $this->model->getSecretKey($routeName, $controllerName, $actionName);
 
-        $this->_requestMock->expects($this->exactly(3))->method('getBeforeForwardInfo')->willReturn(null);
-        $this->_requestMock->expects($this->once())->method('getRouteName')->willReturn($routeName);
-        $this->_requestMock->expects($this->once())->method('getControllerName')->willReturn($controllerName);
-        $this->_requestMock->expects($this->once())->method('getActionName')->willReturn($actionName);
-        $this->model->setRequest($this->_requestMock);
+        $this->requestMock->expects($this->exactly(3))->method('getBeforeForwardInfo')->willReturn(null);
+        $this->requestMock->expects($this->once())->method('getRouteName')->willReturn($routeName);
+        $this->requestMock->expects($this->once())->method('getControllerName')->willReturn($controllerName);
+        $this->requestMock->expects($this->once())->method('getActionName')->willReturn($actionName);
+        $this->model->setRequest($this->requestMock);
 
         $keyFromRequest = $this->model->getSecretKey();
         $this->assertEquals($keyFromParams, $keyFromRequest);
@@ -280,32 +280,32 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $keyFromParams = $this->model->getSecretKey($routeName, $controllerName, $actionName);
 
-        $this->_requestMock->expects($this->at(0))
+        $this->requestMock->expects($this->at(0))
             ->method('getBeforeForwardInfo')
             ->with('route_name')
             ->willReturn('adminhtml');
-        $this->_requestMock->expects($this->at(1))
+        $this->requestMock->expects($this->at(1))
             ->method('getBeforeForwardInfo')
             ->with('route_name')
             ->willReturn('adminhtml');
-        $this->_requestMock->expects($this->at(2))
+        $this->requestMock->expects($this->at(2))
             ->method('getBeforeForwardInfo')
             ->with('controller_name')
             ->willReturn('catalog');
-        $this->_requestMock->expects($this->at(3))
+        $this->requestMock->expects($this->at(3))
             ->method('getBeforeForwardInfo')
             ->with('controller_name')
             ->willReturn('catalog');
-        $this->_requestMock->expects($this->at(4))
+        $this->requestMock->expects($this->at(4))
             ->method('getBeforeForwardInfo')
             ->with('action_name')
             ->willReturn('index');
-        $this->_requestMock->expects($this->at(5))
+        $this->requestMock->expects($this->at(5))
             ->method('getBeforeForwardInfo')
             ->with('action_name')
             ->willReturn('index');
 
-        $this->model->setRequest($this->_requestMock);
+        $this->model->setRequest($this->requestMock);
         $keyFromRequest = $this->model->getSecretKey();
         $this->assertEquals($keyFromParams, $keyFromRequest);
     }
