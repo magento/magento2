@@ -12,14 +12,11 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Phrase;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\GuestCartRepositoryInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Paypal\Model\Express\Checkout\Factory as CheckoutFactory;
-use Magento\Paypal\Model\Express\Checkout;
-use \Magento\Paypal\Model\Config;
-use \Magento\Framework\UrlInterface;
+use Magento\Framework\UrlInterface;
 
 /**
  * Resolver for generating Paypal token
@@ -47,37 +44,48 @@ class PaypalExpressToken implements ResolverInterface
     private $checkoutFactory;
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @var UrlInterface
      */
     private $url;
+
+    /**
+     * Express configuration
+     *
+     * @see \Magento\Paypal\Controller\Express\Start
+     * Example: ['paypal_express' =>
+     *   [
+     *    'configType' => '\Magento\Paypal\Model\Config',
+     *    'configMethod': 'paypal_express',
+     *    'checkoutType' => '\Magento\Paypal\Model\PayflowExpress\Checkout'
+     *   ]
+     * ]
+     *
+     * @var array
+     */
+    private $expressConfig;
 
     /**
      * @param CartRepositoryInterface $cartRepository
      * @param GuestCartRepositoryInterface $guestCartRepository
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param CheckoutFactory $checkoutFactory
-     * @param Config $config
      * @param UrlInterface $url
+     * @param array $expressConfig
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         GuestCartRepositoryInterface $guestCartRepository,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         CheckoutFactory $checkoutFactory,
-        Config $config,
-        UrlInterface $url
+        UrlInterface $url,
+        $expressConfig = []
     ) {
         $this->cartRepository = $cartRepository;
         $this->guestCartRepository = $guestCartRepository;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->checkoutFactory = $checkoutFactory;
-        $this->config = $config;
         $this->url = $url;
+        $this->expressConfig = $expressConfig;
     }
 
     /**
@@ -90,37 +98,29 @@ class PaypalExpressToken implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $cartId = $args['input']['cart_id'] ?? null;
+        $cartId = $args['input']['cart_id'] ?? '';
+        $code = $args['input']['code'] ?? '';
         $customerId = $context->getUserId();
 
-        if (empty($cartId)) {
-            throw new GraphQlInputException(new Phrase("TODO Missing cart id"));
-        }
+        // validate and get payment code method
+        $config = $this->getExpressConfig($code);
 
-        $this->config->setMethod(Config::METHOD_EXPRESS);
-        if (!$this->config->isMethodAvailable(Config::METHOD_EXPRESS)) {
-            throw new GraphQlInputException(new Phrase("TODO Payment method not available"));
-        }
+        // validate and get cart
+        $cart = $this->getCart($cartId, $customerId);
 
         try {
-            if ($customerId) {
-                $cart = $this->cartRepository->get($cartId);
-            } else {
-                $cart = $this->guestCartRepository->get($cartId);
-            }
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlInputException(new Phrase("TODO cart not found"));
+            $checkout = $this->checkoutFactory->create(
+                $this->expressConfig[$code]['checkoutType'],
+                [
+                    'params' => [
+                        'quote' => $cart,
+                        'config' => $config,
+                    ],
+                ]
+            );
+        } catch (\Exception $e) {
+            throw new GraphQlInputException(__("Express Checkout class not found"));
         }
-
-        $checkout = $this->checkoutFactory->create(
-            Checkout::class,
-            [
-                'params' => [
-                    'quote' => $cart,
-                    'config' => $this->config,
-                ],
-            ]
-        );
 
         if ($customerId) {
             $checkout->setCustomerWithAddressChange(
@@ -143,9 +143,67 @@ class PaypalExpressToken implements ResolverInterface
         $redirectUrl = $checkout->getRedirectUrl();
 
         return [
-            'method' => Config::METHOD_EXPRESS,
+            'method' => $code,
             'token' => $token,
             'redirect_url' => $redirectUrl
         ];
+    }
+
+    /**
+     * Setup paypal express depending on the code: regular express, payflow, etc.
+     *
+     * @param $code
+     * @return \Magento\Paypal\Model\AbstractConfig
+     * @throws GraphQlInputException
+     */
+    private function getExpressConfig(string $code) : \Magento\Paypal\Model\AbstractConfig
+    {
+        //validate code string
+        if (empty($code)) {
+            throw new GraphQlInputException(__("TODO Missing code"));
+        }
+
+        // validate config class
+        if (isset($this->expressConfig['configType']) && class_exists($this->expressConfig['configType'])) {
+            throw new GraphQlInputException(__("TODO Config not provided"));
+        }
+
+        /** @var \Magento\Paypal\Model\AbstractConfig $config */
+        $config = $this->expressConfig[$code]['configType'];
+
+        $config->setMethod($code);
+
+        if (!$config->isMethodAvailable($code)) {
+            throw new GraphQlInputException(__("TODO Payment method not available"));
+        }
+
+        return $config;
+    }
+
+    /**
+     * Get the guest cart or the customer cart
+     *
+     * @param $code
+     * @return \Magento\Quote\Api\Data\CartInterface
+     * @throws GraphQlInputException
+     */
+    private function getCart(string $cartId, int $customerId) : \Magento\Quote\Api\Data\CartInterface
+    {
+        // validate cartId code
+        if (empty($cartId)) {
+            throw new GraphQlInputException(__("TODO Missing cart id"));
+        }
+
+        try {
+            if ($customerId) {
+                $cart = $this->cartRepository->get($cartId);
+            } else {
+                $cart = $this->guestCartRepository->get($cartId);
+            }
+        } catch (NoSuchEntityException $e) {
+            throw new GraphQlInputException(__("TODO cart not found"));
+        }
+
+        return $cart;
     }
 }
