@@ -109,8 +109,8 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
 
     /**
      *
-     * @case #1 This conf parameters must return AbstractConfig::PAYMENT_ACTION_SALE (isWppApiAvailabe == false)
-     * @case #2 This conf parameters must return configValue (isWppApiAvailabe == true)
+     * @case #1 This conf parameters must return AbstractConfig::PAYMENT_ACTION_SALE (isWppApiAvailable == false)
+     * @case #2 This conf parameters must return configValue (isWppApiAvailable == true)
      * @case #3 This conf parameters must return configValue ($key != 'payment_action')
      * @case #4 This conf parameters must return configValue (configValue == 'Sale')
      * @case #5 This conf parameters must return configValue (shouldUseUnilateralPayments == false)
