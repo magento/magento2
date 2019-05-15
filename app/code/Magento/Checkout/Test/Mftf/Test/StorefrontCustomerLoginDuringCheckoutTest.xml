@@ -17,7 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13097"/>
             <group value="OnePageCheckout"/>
-            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <!-- Create simple product -->
