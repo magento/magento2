@@ -19,5 +19,6 @@
         <element name="shipHereButton" type="button" selector="//div/following-sibling::div/button[contains(@class, 'action-select-shipping-item')]"/>
         <element name="shippingMethodLoader" type="button" selector="//div[contains(@class, 'checkout-shipping-method')]/following-sibling::div[contains(@class, 'loading-mask')]"/>
         <element name="freeShippingShippingMethod" type="input" selector="#s_method_freeshipping_freeshipping" timeout="30"/>
+        <element name="noQuotesMsg" type="text" selector="#checkout-step-shipping_method div"/>
     </section>
 </sections>
