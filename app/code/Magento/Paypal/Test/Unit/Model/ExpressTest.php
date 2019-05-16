@@ -12,6 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Paypal\Model\Api\Nvp;
+use Magento\Paypal\Model\Api\ProcessableException;
 use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 use Magento\Paypal\Model\Express;
 use Magento\Paypal\Model\Pro;
@@ -19,7 +20,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class ExpressTest
@@ -28,9 +29,14 @@ use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 class ExpressTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * @var string
+     */
+    private static $authorizationExpiredCode = 10601;
+
+    /**
      * @var array
      */
-    protected $errorCodes = [
+    private $errorCodes = [
         ApiProcessableException::API_INTERNAL_ERROR,
         ApiProcessableException::API_UNABLE_PROCESS_PAYMENT_ERROR_CODE,
         ApiProcessableException::API_DO_EXPRESS_CHECKOUT_FAIL,
@@ -40,7 +46,7 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
         ApiProcessableException::API_COUNTRY_FILTER_DECLINE,
         ApiProcessableException::API_MAXIMUM_AMOUNT_FILTER_DECLINE,
         ApiProcessableException::API_OTHER_FILTER_DECLINE,
-        ApiProcessableException::API_ADDRESS_MATCH_FAIL
+        ApiProcessableException::API_ADDRESS_MATCH_FAIL,
     ];
 
     /**
@@ -80,6 +86,7 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+        $this->errorCodes[] = self::$authorizationExpiredCode;
         $this->checkoutSession = $this->createPartialMock(
             Session::class,
             ['getPaypalTransactionData', 'setPaypalTransactionData']
@@ -104,16 +111,20 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
         );
         $this->pro = $this->createPartialMock(
             Pro::class,
-            ['setMethod', 'getApi', 'importPaymentInfo', 'resetApi']
+            ['setMethod', 'getApi', 'importPaymentInfo', 'resetApi', 'void']
         );
         $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
             ->setMethods(['dispatch'])
             ->getMockForAbstractClass();
 
-        $this->pro->expects($this->any())->method('getApi')->will($this->returnValue($this->nvp));
+        $this->pro->method('getApi')
+            ->willReturn($this->nvp);
         $this->helper = new ObjectManager($this);
     }
 
+    /**
+     * Tests setting the list of processable errors.
+     */
     public function testSetApiProcessableErrors()
     {
         $this->nvp->expects($this->once())->method('setProcessableErrors')->with($this->errorCodes);
@@ -126,6 +137,32 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
                 'transactionBuilder' => $this->transactionBuilder
             ]
         );
+    }
+
+    /**
+     * Tests canceling order payment when expired authorization generates exception on a client.
+     */
+    public function testCancelWithExpiredAuthorizationTransaction()
+    {
+        $this->pro->method('void')
+            ->willThrowException(
+                new ProcessableException(__('PayPal gateway has rejected request.'), null, 10601)
+            );
+
+        $this->model = $this->helper->getObject(Express::class, ['data' => [$this->pro]]);
+        /** @var Payment|MockObject $paymentModel */
+        $paymentModel = $this->createMock(Payment::class);
+        $paymentModel->expects($this->once())
+            ->method('setTransactionId')
+            ->with(null);
+        $paymentModel->expects($this->once())
+            ->method('setIsTransactionClosed')
+            ->with(true);
+        $paymentModel->expects($this->once())
+            ->method('setShouldCloseParentTransaction')
+            ->with(true);
+
+        $this->model->cancel($paymentModel);
     }
 
     /**
@@ -162,6 +199,11 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($this->model, $this->model->order($paymentModel, 12.3));
     }
 
+    /**
+     * Tests data assigning.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testAssignData()
     {
         $transportValue = 'something';

@@ -15,6 +15,7 @@
             <property name="lineLimit" value="120"/>
             <property name="absoluteLineLimit" value="120"/>
         </properties>
+        <exclude-pattern>*.phtml</exclude-pattern>
     </rule>
     <rule ref="Magento.LiteralNamespaces.LiteralNamespaces">
         <exclude-pattern>*/_files/*</exclude-pattern>
@@ -27,4 +28,17 @@
     <rule ref="Squiz.Functions.GlobalFunction"/>
     <rule ref="Squiz.Operators.ValidLogicalOperators"/>
     <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing"/>
+
+    <rule ref="PEAR.ControlStructures.ControlSignature">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+    <rule ref="PEAR.WhiteSpace.ScopeClosingBrace">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.ScopeClosingBrace">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
 </ruleset>
