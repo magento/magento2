@@ -160,7 +160,8 @@ require(["prototype"], function(){
                 for (a = 0; a < this.checkingUpsXmlId.length; a++) {
                     if ($F(this.carriersUpsActiveId) === '1') {
                         if ($(this.checkingUpsXmlId[a] + '_inherit') !== null
-                            && $F(this.checkingUpsXmlId[a] + '_inherit') === '1') {
+                            && $F(this.checkingUpsXmlId[a] + '_inherit') === '1'
+                        ) {
                             continue;
                         }
                         $(this.checkingUpsXmlId[a]).addClassName('required-entry').disabled = false;
