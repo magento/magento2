@@ -6,6 +6,8 @@
 namespace Magento\Wishlist\Helper;
 
 use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 
 /**
@@ -101,6 +103,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $productRepository;
 
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
@@ -110,6 +117,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param WishlistProviderInterface $wishlistProvider
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param Escaper $escaper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -120,7 +128,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         \Magento\Customer\Helper\View $customerViewHelper,
         WishlistProviderInterface $wishlistProvider,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        Escaper $escaper = null
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_customerSession = $customerSession;
@@ -130,6 +139,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_customerViewHelper = $customerViewHelper;
         $this->wishlistProvider = $wishlistProvider;
         $this->productRepository = $productRepository;
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
         parent::__construct($context);
     }
 
@@ -323,10 +333,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $productId = null;
         if ($item instanceof \Magento\Catalog\Model\Product) {
-            $productId = $item->getEntityId();
+            $productId = (int) $item->getEntityId();
         }
         if ($item instanceof \Magento\Wishlist\Model\Item) {
-            $productId = $item->getProductId();
+            $productId = (int) $item->getProductId();
         }
 
         $url = $this->_getUrlStore($item)->getUrl('wishlist/index/add');
@@ -334,7 +344,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $params['product'] = $productId;
         }
 
-        return $this->_postDataHelper->getPostData($url, $params);
+        return $this->_postDataHelper->getPostData(
+            $this->escaper->escapeUrl($url),
+            $params
+        );
     }
 
     /**

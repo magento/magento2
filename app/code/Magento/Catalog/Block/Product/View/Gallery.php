@@ -114,7 +114,7 @@ class Gallery extends AbstractView
      */
     public function getMagnifier()
     {
-        return $this->jsonEncoder->encode($this->getVar('magnifier'));
+        return $this->jsonEncoder->encode($this->escapeJs($this->getVar('magnifier')));
     }
 
     /**

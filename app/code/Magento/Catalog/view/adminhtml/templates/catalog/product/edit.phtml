@@ -3,11 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
 /**
  * @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit
  */
@@ -17,11 +16,11 @@
         <div id="product-template-suggest-container" class="suggest-expandable">
             <div class="action-dropdown">
                 <button type="button" class="action-toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown">
-                    <span><?= /* @escapeNotVerified */ $block->getAttributeSetName() ?></span>
+                    <span><?= $block->escapeHtml($block->getAttributeSetName()) ?></span>
                 </button>
                 <ul class="dropdown-menu">
                     <li><input type="text" id="product-template-suggest" class="search"
-                           placeholder="<?= /* @noEscape */ __('start typing to search template') ?>"/></li>
+                           placeholder="<?= $block->escapeHtmlAttr(__('start typing to search template')) ?>"/></li>
                 </ul>
             </div>
         </div>
@@ -30,32 +29,32 @@
             <input type="checkbox" id="product-online-switcher" name="product-online-switcher" />
             <label class="switcher-label"
                    for="product-online-switcher"
-                   data-text-on="<?= /* @escapeNotVerified */ __('Product online') ?>"
-                   data-text-off="<?= /* @escapeNotVerified */ __('Product offline') ?>"
-                   title="<?= /* @escapeNotVerified */ __('Product online status') ?>"></label>
+                   data-text-on="<?= $block->escapeHtmlAttr(__('Product online')) ?>"
+                   data-text-off="<?= $block->escapeHtmlAttr(__('Product offline')) ?>"
+                   title="<?= $block->escapeHtmlAttr(__('Product online status')) ?>"></label>
         </div>
 
-        <?php if ($block->getProductId()): ?>
+        <?php if ($block->getProductId()) :?>
             <?= $block->getDeleteButtonHtml() ?>
         <?php endif; ?>
-        <?php if ($block->getProductSetId()): ?>
+        <?php if ($block->getProductSetId()) :?>
             <?= $block->getChangeAttributeSetButtonHtml() ?>
             <?= $block->getSaveSplitButtonHtml() ?>
         <?php endif; ?>
         <?= $block->getBackButtonHtml() ?>
     </div>
 </div>
-<?php if ($block->getUseContainer()): ?>
-<form action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>" method="post" enctype="multipart/form-data"
-      data-form="edit-product" data-product-id="<?= /* @escapeNotVerified */ $block->getProduct()->getId() ?>">
+<?php if ($block->getUseContainer()) :?>
+<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" enctype="multipart/form-data"
+      data-form="edit-product" data-product-id="<?= $block->escapeHtmlAttr($block->getProduct()->getId()) ?>">
 <?php endif; ?>
     <?= $block->getBlockHtml('formkey') ?>
     <div data-role="tabs" id="product-edit-form-tabs"></div> <?php /* @TODO: remove id after elimination of setDestElementId('product-edit-form-tabs') */?>
     <?= $block->getChildHtml('product-type-tabs') ?>
-    <input type="hidden" id="product_type_id" value="<?= /* @escapeNotVerified */ $block->getProduct()->getTypeId() ?>"/>
-    <input type="hidden" id="attribute_set_id" value="<?= /* @escapeNotVerified */ $block->getProduct()->getAttributeSetId() ?>"/>
+    <input type="hidden" id="product_type_id" value="<?= $block->escapeHtmlAttr($block->getProduct()->getTypeId()) ?>"/>
+    <input type="hidden" id="attribute_set_id" value="<?= $block->escapeHtmlAttr($block->getProduct()->getAttributeSetId()) ?>"/>
     <button type="submit" class="hidden"></button>
-<?php if ($block->getUseContainer()): ?>
+<?php if ($block->getUseContainer()) :?>
 </form>
 <?php endif; ?>
 <script>
@@ -130,10 +129,10 @@ require([
             }
         }
     });
-    $form.mage('validation', {validationUrl: '<?= /* @escapeNotVerified */ $block->getValidationUrl() ?>'});
+    $form.mage('validation', {validationUrl: '<?= $block->escapeJs($block->escapeUrl($block->getValidationUrl())) ?>'});
 
-    var masks = <?= /* @escapeNotVerified */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getFieldsAutogenerationMasks()) ?>;
-    var availablePlaceholders = <?= /* @escapeNotVerified */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getAttributesAllowedForAutogeneration()) ?>;
+    var masks = <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getFieldsAutogenerationMasks()) ?>;
+    var availablePlaceholders = <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getAttributesAllowedForAutogeneration()) ?>;
     var Autogenerator = function(masks) {
         this._masks = masks || {};
         this._fieldReverseIndex = this._buildReverseIndex(this._masks);

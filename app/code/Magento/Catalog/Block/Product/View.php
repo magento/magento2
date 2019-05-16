@@ -189,22 +189,22 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         $tierPrices = [];
         $tierPricesList = $product->getPriceInfo()->getPrice('tier_price')->getTierPriceList();
         foreach ($tierPricesList as $tierPrice) {
-            $tierPrices[] = $tierPrice['price']->getValue();
+            $tierPrices[] = $tierPrice['price']->getValue() * 1;
         }
         $config = [
-            'productId'   => $product->getId(),
+            'productId'   => (int)$product->getId(),
             'priceFormat' => $this->_localeFormat->getPriceFormat(),
             'prices'      => [
                 'oldPrice'   => [
-                    'amount'      => $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue(),
+                    'amount'      => $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue() * 1,
                     'adjustments' => []
                 ],
                 'basePrice'  => [
-                    'amount'      => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getBaseAmount(),
+                    'amount'      => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getBaseAmount() * 1,
                     'adjustments' => []
                 ],
                 'finalPrice' => [
-                    'amount'      => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue(),
+                    'amount'      => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue() * 1,
                     'adjustments' => []
                 ]
             ],

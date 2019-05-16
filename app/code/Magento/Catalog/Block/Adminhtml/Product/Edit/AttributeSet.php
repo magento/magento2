@@ -42,12 +42,14 @@ class AttributeSet extends \Magento\Backend\Block\Widget\Form
     public function getSelectorOptions()
     {
         return [
-            'source' => $this->getUrl('catalog/product/suggestAttributeSets'),
+            'source' => $this->escapeUrl($this->getUrl('catalog/product/suggestAttributeSets')),
             'className' => 'category-select',
             'showRecent' => true,
             'storageKey' => 'product-template-key',
             'minLength' => 0,
-            'currentlySelected' => $this->_coreRegistry->registry('product')->getAttributeSetId()
+            'currentlySelected' => $this->escapeHtml(
+                $this->_coreRegistry->registry('product')->getAttributeSetId()
+            )
         ];
     }
 }

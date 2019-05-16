@@ -115,7 +115,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
                 if ($size[0] > 600) {
                     return 600;
                 } else {
-                    return $size[0];
+                    return (int) $size[0];
                 }
             }
         }
