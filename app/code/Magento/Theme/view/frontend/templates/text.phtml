@@ -19,5 +19,4 @@ if (!empty($attr)) {
         $attributes .= ' ' . $block->escapeHtml($attribute) . '="' . $block->escapeHtmlAttr($value) . '"';
     }
 }
-?>
-<?= /* @noEscape */ $textHtml ?>
+echo /* @noEscape */ $textHtml;
