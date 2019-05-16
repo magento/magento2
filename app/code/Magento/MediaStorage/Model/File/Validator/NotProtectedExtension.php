@@ -97,7 +97,10 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
      */
     public function getProtectedFileExtensions($store = null)
     {
-        return $this->_scopeConfig->getValue(self::XML_PATH_PROTECTED_FILE_EXTENSIONS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $this->_scopeConfig->getValue(
+            self::XML_PATH_PROTECTED_FILE_EXTENSIONS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store
+        );
     }
 
     /**
