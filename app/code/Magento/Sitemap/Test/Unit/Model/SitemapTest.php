@@ -162,7 +162,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
      * Check not exists sitemap path validation
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please create the specified folder "" before saving the sitemap.
+     * @expectedExceptionMessage Please create the specified folder "/" before saving the sitemap.
      */
     public function testPathNotExists()
     {
