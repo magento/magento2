@@ -134,67 +134,67 @@
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
 
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct1">
-            <argument name="product" value="$$createProduct01$$"/>
+            <argument name="productName" value="$$createProduct01.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct2">
-            <argument name="product" value="$$createProduct02$$"/>
+            <argument name="productName" value="$$createProduct02.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct3">
-            <argument name="product" value="$$createProduct03$$"/>
+            <argument name="productName" value="$$createProduct03.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct4">
-            <argument name="product" value="$$createProduct04$$"/>
+            <argument name="productName" value="$$createProduct04.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct5">
-            <argument name="product" value="$$createProduct05$$"/>
+            <argument name="productName" value="$$createProduct05.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct6">
-            <argument name="product" value="$$createProduct06$$"/>
+            <argument name="productName" value="$$createProduct06.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct7">
-            <argument name="product" value="$$createProduct07$$"/>
+            <argument name="productName" value="$$createProduct07.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct8">
-            <argument name="product" value="$$createProduct08$$"/>
+            <argument name="productName" value="$$createProduct08.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct9">
-            <argument name="product" value="$$createProduct09$$"/>
+            <argument name="productName" value="$$createProduct09.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct10">
-            <argument name="product" value="$$createProduct10$$"/>
+            <argument name="productName" value="$$createProduct10.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct11">
-            <argument name="product" value="$$createProduct11$$"/>
+            <argument name="productName" value="$$createProduct11.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct12">
-            <argument name="product" value="$$createProduct12$$"/>
+            <argument name="productName" value="$$createProduct12.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct13">
-            <argument name="product" value="$$createProduct13$$"/>
+            <argument name="productName" value="$$createProduct13.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct14">
-            <argument name="product" value="$$createProduct14$$"/>
+            <argument name="productName" value="$$createProduct14.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct15">
-            <argument name="product" value="$$createProduct15$$"/>
+            <argument name="productName" value="$$createProduct15.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct16">
-            <argument name="product" value="$$createProduct16$$"/>
+            <argument name="productName" value="$$createProduct16.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct17">
-            <argument name="product" value="$$createProduct17$$"/>
+            <argument name="productName" value="$$createProduct17.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct18">
-            <argument name="product" value="$$createProduct18$$"/>
+            <argument name="productName" value="$$createProduct18.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct19">
-            <argument name="product" value="$$createProduct19$$"/>
+            <argument name="productName" value="$$createProduct19.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct20">
-            <argument name="product" value="$$createProduct20$$"/>
+            <argument name="productName" value="$$createProduct20.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct21">
-            <argument name="product" value="$$createProduct21$$"/>
+            <argument name="productName" value="$$createProduct21.name$$"/>
         </actionGroup>
 
         <!-- Place Order -->
@@ -203,7 +203,6 @@
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNextButton"/>
         <waitForLoadingMaskToDisappear stepKey="waitForCheckoutLoad"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForPlaceOrder"/>
         <waitForPageLoad stepKey="waitForSuccess"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
@@ -211,7 +210,6 @@
         <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="onMyAccount"/>
         <waitForPageLoad stepKey="waitForAccountPage"/>
         <click selector="{{StorefrontCustomerSidebarSection.sidebarTab('My Orders')}}" stepKey="clickOnMyOrders"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
         <waitForPageLoad stepKey="waitForOrdersLoad"/>
 
         <!-- Click 'View Order' link on order from preconditions -->

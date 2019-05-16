@@ -10,11 +10,11 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontAddProductToCartFromCategoryActionGroup">
         <arguments>
-            <argument name="product" type="entity"/>
+            <argument name="productName" type="string"/>
         </arguments>
-        <scrollTo selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="scroll"/>
-        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
-        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="clickAddToCart" />
+        <scrollTo selector="{{StorefrontCategoryProductSection.ProductInfoByName(productName)}}" stepKey="scroll"/>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productName)}}" stepKey="moveMouseOverProduct" />
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(productName)}}" stepKey="clickAddToCart" />
         <waitForAjaxLoad stepKey="waitForAjax"/>
     </actionGroup>
 </actionGroups>
