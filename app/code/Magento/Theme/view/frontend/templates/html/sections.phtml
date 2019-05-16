@@ -17,7 +17,7 @@ $groupBehavior = $block->getGroupBehaviour() ? $block->getGroupBehaviour() : '{"
         <?php $layout = $block->getLayout(); ?>
         <div class="section-items <?= $block->escapeHtmlAttr($groupCss) ?>-items"
              data-mage-init='<?= $block->escapeHtmlAttr($groupBehavior) ?>'>
-            <?php foreach ($detailedInfoGroup as $name) :?>
+            <?php foreach ($detailedInfoGroup as $name) : ?>
                 <?php
                 $html = $layout->renderElement($name);
                 if (!trim($html) && ($block->getUseForce() != true)) {
