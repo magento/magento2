@@ -53,11 +53,15 @@
         <actionGroup ref="addProductImage" stepKey="addImageForProduct1">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
-        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
-        <actionGroup ref="AdminCreateAttributeForConfigurableProduct" stepKey="createFirstProductAttribute">
+        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+        <actionGroup ref="AdminCreateAttributeFromProductPageWithSpecifiedVisibilityScope" stepKey="createAttributeForProduct">
             <argument name="attributeName" value="{{colorProductAttribute.default_label}}"/>
             <argument name="attributeType" value="{{colorProductAttribute.input_type}}"/>
+            <argument name="scope" value="Global"/>
         </actionGroup>
+        <reloadPage stepKey="reloadPage"/>
+        <waitForPageLoad stepKey="waitForProductPageReload"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
         <waitForPageLoad stepKey="waitForFilters"/>
         <actionGroup ref="createOptionsForAttribute" stepKey="createOptions">
             <argument name="attributeName" value="{{colorProductAttribute.default_label}}"/>
@@ -106,7 +110,7 @@
         <waitForPageLoad stepKey="waitForSummaryPageLoad"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButtonToGenerateConfigs"/>
         <waitForPageLoad stepKey="waitForConfigurableProductPageLoad"/>
-        <actionGroup ref="saveConfiguredProduct" stepKey="saveProductForm"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
         <!--Duplicate the product-->
         <comment userInput="Duplicate the product" stepKey="commentDuplicateProduct"/>
         <actionGroup ref="AdminFormSaveAndDuplicate" stepKey="saveAndDuplicateProductForm"/>
@@ -114,7 +118,6 @@
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="$$createConfigProduct.name$$-Updated" stepKey="fillProductName"/>
         <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="1" stepKey="selectInStock"/>
         <!--Change product image-->
-        <comment userInput="Change product image" stepKey="commentChangeImage"/>
         <comment userInput="Change product image" stepKey="commentChangeProductImage"/>
         <actionGroup ref="removeProductImage" stepKey="removeProductImage"/>
         <actionGroup ref="addProductImage" stepKey="addImageForProduct">
@@ -128,13 +131,17 @@
         <actionGroup ref="AdminConfigurableProductDisableConfigurationsActionGroup" stepKey="disableSecondConfig">
             <argument name="productName" value="{{colorConfigurableProductAttribute2.name}}"/>
         </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveDuplicatedProductForm"/>
         <!--Create new configurations with another attribute-->
         <comment userInput="Create new configurations with another attribute" stepKey="commentCreateNewConfigurations"/>
-        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurationsForDuplicatedProduct"/>
-        <actionGroup ref="AdminCreateAttributeForConfigurableProduct" stepKey="createFirstProductAttributeForDuplicatedProduct">
+        <actionGroup ref="AdminCreateAttributeFromProductPageWithSpecifiedVisibilityScope" stepKey="createAttributeForDuplicatedProduct">
             <argument name="attributeName" value="{{productAttributeColor.default_label}}"/>
+            <argument name="attributeType" value="{{productAttributeColor.input_type}}"/>
+            <argument name="scope" value="Global"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForFiltersForDuplicatedProduct"/>
+        <reloadPage stepKey="reloadDuplicatedProductPage"/>
+        <waitForPageLoad stepKey="waitForDuplicatedProductReload"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurationsForDuplicatedProduct"/>
         <actionGroup ref="createOptionsForAttribute" stepKey="createOptionsForDuplicatedProduct">
             <argument name="attributeName" value="{{productAttributeColor.default_label}}"/>
             <argument name="firstOptionName" value="{{colorConfigurableProductAttribute1.name}}"/>
@@ -176,7 +183,7 @@
         <waitForPageLoad stepKey="waitForSummaryPageLoadForDuplicatedProduct"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButtonToGenerateConfigsForDuplicatedProduct"/>
         <waitForPageLoad stepKey="waitForDuplicatedProductPageLoad"/>
-        <actionGroup ref="saveConfiguredProduct" stepKey="saveDuplicatedProductForm"/>
+        <actionGroup ref="saveProductForm" stepKey="saveDuplicatedProduct"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
         <!--Assert configurable product in category-->
