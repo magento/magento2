@@ -8,7 +8,7 @@
 <?php /** @var \Magento\Tax\Pricing\Render\Adjustment $block */ ?>
 
 <?php if ($block->displayBothPrices()) : ?>
-    <span id="<?= /* @noEscape */ $block->buildIdWithPrefix('price-excluding-tax-') ?>"
+    <span id="<?= $block->escapeHtmlAttr($block->buildIdWithPrefix('price-excluding-tax-')) ?>"
           data-label="<?= $block->escapeHtmlAttr(__('Excl. Tax')) ?>"
           data-price-amount="<?= /* @noEscape */ $block->getRawAmount() ?>"
           data-price-type="basePrice"
