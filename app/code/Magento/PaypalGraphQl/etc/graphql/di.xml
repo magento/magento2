@@ -9,7 +9,6 @@
     <type name="Magento\QuoteGraphQl\Model\Resolver\SetPaymentMethodOnCart">
         <plugin name="paypal_express_payment_method" type="Magento\PaypalGraphQl\Model\Plugin\Resolver\SetPaymentMethodOnCart"/>
     </type>
-
     <type name="Magento\PaypalGraphQl\Model\PaypalConfigProvider">
         <arguments>
             <argument name="configurations" xsi:type="array">
@@ -33,6 +32,10 @@
                     <item name="configMethod" xsi:type="const">\Magento\Paypal\Model\Config::METHOD_WPP_BML</item>
                     <item name="checkoutType" xsi:type="string">\Magento\Paypal\Model\Express\Checkout::class</item>
                 </item>
+            </argument>
+            <argument name="bmlCodeList" xsi:type="array">
+                <item name="paypal_express_bml" xsi:type="const">\Magento\Paypal\Model\Config::METHOD_WPP_BML</item>
+                <item name="payflow_express_bml" xsi:type="const">\Magento\Paypal\Model\Config::METHOD_WPP_PE_BML</item>
             </argument>
         </arguments>
     </type>
