@@ -33,7 +33,7 @@
         <data key="value">0</data>
     </entity>
     <entity name="EnableZeroSubtotalCheckoutConfigData">
-         <!--Default Data-->
+        <!--Default Data-->
         <data key="path">payment/free/active</data>
         <data key="scope_id">0</data>
         <data key="label">Yes</data>

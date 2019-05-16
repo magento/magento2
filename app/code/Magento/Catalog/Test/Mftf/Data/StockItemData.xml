@@ -32,4 +32,12 @@
         <data key="qty">1</data>
         <data key="is_in_stock">true</data>
     </entity>
+    <entity name="Qty_0" type="stock_item">
+        <data key="qty">0</data>
+        <data key="is_in_stock">true</data>
+    </entity>
+    <entity name="Qty_777" type="stock_item">
+        <data key="qty">777</data>
+        <data key="is_in_stock">true</data>
+    </entity>
 </entities>

@@ -14,6 +14,6 @@
         <waitForLoadingMaskToDisappear stepKey="waitForMaskToDisappear" after="assertSubtotal"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.shipping}}" time="60" stepKey="waitForElementToBeVisible" after="waitForMaskToDisappear"/>
         <wait time="5" stepKey="waitForShippingDetailsToLoad" after="waitForElementToBeVisible"/>
-        <see userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" stepKey="assertShipping" after="waitForShippingDetailsToLoad" />
+        <waitForText userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" time="120" stepKey="assertShipping" after="waitForShippingDetailsToLoad"/>
     </actionGroup>
 </actionGroups>
