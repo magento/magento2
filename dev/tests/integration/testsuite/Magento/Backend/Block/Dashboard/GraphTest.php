@@ -15,6 +15,9 @@ class GraphTest extends \PHPUnit\Framework\TestCase
      */
     protected $_block;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -25,8 +28,13 @@ class GraphTest extends \PHPUnit\Framework\TestCase
         $this->_block->setDataHelper($objectManager->get(\Magento\Backend\Helper\Dashboard\Order::class));
     }
 
+    /**
+     * Tests getChartUrl.
+     *
+     * @return void
+     */
     public function testGetChartUrl()
     {
-        $this->assertStringStartsWith('http://chart.apis.google.com/chart', $this->_block->getChartUrl());
+        $this->assertStringStartsWith('https://image-charts.com/chart', $this->_block->getChartUrl());
     }
 }

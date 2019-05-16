@@ -74,7 +74,8 @@
         "ramsey/uuid": "~3.7.3"
     },
     "require-dev": {
-        "magento/magento2-functional-testing-framework": "2.3.13",
+        "allure-framework/allure-phpunit": "~1.2.0",
+        "magento/magento2-functional-testing-framework": "2.4.0",
         "phpunit/phpunit": "~6.2.0",
         "squizlabs/php_codesniffer": "3.2.2",
         "phpmd/phpmd": "@stable",
