@@ -13,6 +13,6 @@
         <element name="orderState" type="select" selector="#state"/>
         <element name="orderStatusAsDefault" type="checkbox" selector="#is_default"/>
         <element name="visibleOnStorefront" type="checkbox" selector="#visible_on_front"/>
-        <element name="saveStatusAssignment" type="button" selector="#save"/>
+        <element name="saveStatusAssignment" type="button" selector="#save" timeout="30"/>
     </section>
 </sections>
