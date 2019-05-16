@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\View\Element\Template;
 
+use Magento\Framework\Cache\LockGuardedCacheLoader;
+
 /**
  * Constructor modification point for Magento\Framework\View\Element\Template.
  *
@@ -97,6 +99,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @param LockGuardedCacheLoader $lockQuery
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\View\TemplateEnginePool $enginePool
@@ -126,6 +129,7 @@ class Context extends \Magento\Framework\View\Element\Context
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
+        LockGuardedCacheLoader $lockQuery,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\View\TemplateEnginePool $enginePool,
@@ -152,7 +156,8 @@ class Context extends \Magento\Framework\View\Element\Context
             $escaper,
             $filterManager,
             $localeDate,
-            $inlineTranslation
+            $inlineTranslation,
+            $lockQuery
         );
         $this->resolver = $resolver;
         $this->validator = $validator;
@@ -246,6 +251,8 @@ class Context extends \Magento\Framework\View\Element\Context
     }
 
     /**
+     * Get page config.
+     *
      * @return \Magento\Framework\View\Page\Config
      */
     public function getPageConfig()

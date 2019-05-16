@@ -87,12 +87,14 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $contextMock->expects($this->once())
             ->method('getSession')
             ->willReturn($this->sessionMock);
+        $contextMock->expects($this->once())
+            ->method('getLockGuardedCacheLoader')
+            ->willReturn($this->lockQuery);
         $this->block = $this->getMockForAbstractClass(
             AbstractBlock::class,
             [
                 'context' => $contextMock,
                 'data' => [],
-                'lockQuery' => $this->lockQuery
             ]
         );
     }

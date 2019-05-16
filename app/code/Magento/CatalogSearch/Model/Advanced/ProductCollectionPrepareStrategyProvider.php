@@ -42,7 +42,7 @@ class ProductCollectionPrepareStrategyProvider
     public function getStrategy(): ProductCollectionPrepareStrategyInterface
     {
         if (!isset($this->strategies[$this->engineResolver->getCurrentSearchEngine()])) {
-            throw new \DomainException('Undefined strategy ' . $this->engineResolver->getCurrentSearchEngine());
+            return $this->strategies['default'];
         }
         return $this->strategies[$this->engineResolver->getCurrentSearchEngine()];
     }

@@ -6,7 +6,13 @@
 
 namespace Magento\Elasticsearch\SearchAdapter\Query;
 
+use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\RequestInterface;
+use Magento\Elasticsearch\Model\Config;
+use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
+use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation as AggregationBuilder;
+use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as Elasticsearch5Builder;
 
 /**
@@ -18,7 +24,36 @@ use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as Elastics
 class Builder extends Elasticsearch5Builder
 {
     /**
-     * Set initial settings for query
+     * @var Sort
+     */
+    private $sortBuilder;
+
+    /**
+     * @param Config $clientConfig
+     * @param SearchIndexNameResolver $searchIndexNameResolver
+     * @param AggregationBuilder $aggregationBuilder
+     * @param ScopeResolverInterface $scopeResolver
+     * @param Sort|null $sortBuilder
+     */
+    public function __construct(
+        Config $clientConfig,
+        SearchIndexNameResolver $searchIndexNameResolver,
+        AggregationBuilder $aggregationBuilder,
+        ScopeResolverInterface $scopeResolver,
+        Sort $sortBuilder = null
+    ) {
+        $this->sortBuilder = $sortBuilder ?: ObjectManager::getInstance()->get(Sort::class);
+        parent::__construct(
+            $clientConfig,
+            $searchIndexNameResolver,
+            $aggregationBuilder,
+            $scopeResolver,
+            $this->sortBuilder
+        );
+    }
+
+    /**
+     * Set initial settings for query.
      *
      * @param RequestInterface $request
      * @return array

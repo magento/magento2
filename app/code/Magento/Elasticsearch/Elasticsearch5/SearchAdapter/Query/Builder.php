@@ -49,7 +49,7 @@ class Builder
     /**
      * @var Sort
      */
-    protected $sortBuilder;
+    private $sortBuilder;
 
     /**
      * @param Config $clientConfig
