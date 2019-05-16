@@ -25,7 +25,6 @@
                        value="<?= $block->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"
                        price="<?= $block->escapeHtmlAttr($block->getSelectionPrice($_selections[0])) ?>" />
             <?php else :?>
-
                 <?php foreach ($_selections as $_selection) : ?>
                     <div class="field choice admin__field admin__field-option">
                         <input

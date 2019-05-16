@@ -25,13 +25,13 @@
                 <div class="field choice" data-role="link">
                     <?php if ($_linksPurchasedSeparately) : ?>
                         <input type="checkbox"
-                               <?php if ($_isRequired) : ?>
+                                <?php if ($_isRequired) : ?>
                                    data-validate="{'validate-one-checkbox-required-by-name':'downloadable-links-list'}"
                                 <?php endif; ?>
                                name="links[]"
                                id="links_<?= $block->escapeHtmlAttr($_link->getId()) ?>"
                                value="<?= $block->escapeHtmlAttr($_link->getId()) ?>"
-                               <?= $block->escapeHtml($block->getLinkCheckedValue($_link)) ?> />
+                                <?= $block->escapeHtml($block->getLinkCheckedValue($_link)) ?> />
                     <?php endif; ?>
                     <label class="label" for="links_<?= $block->escapeHtmlAttr($_link->getId()) ?>">
                         <span><?= $block->escapeHtml($_link->getTitle()) ?></span>

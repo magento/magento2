@@ -34,7 +34,7 @@
                                id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>"
                                name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                                data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                               <?= ($_default && $_default->isSalable())?'':' checked="checked" ' ?>
+                                <?= ($_default && $_default->isSalable())?'':' checked="checked" ' ?>
                                value=""/>
                         <label class="label" for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>">
                             <span><?= $block->escapeHtml(__('None')) ?></span>
@@ -46,11 +46,11 @@
                         <input type="radio"
                                class="radio product bundle option change-container-classname"
                                id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
-                               <?php if ($_option->getRequired()) { echo 'data-validate="{\'validate-one-required-by-name\':true}"'; }?>
+                                <?php if ($_option->getRequired()) { echo 'data-validate="{\'validate-one-required-by-name\':true}"'; }?>
                                name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                                data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                               <?php if ($block->isSelected($_selection)) { echo ' checked="checked"'; } ?>
-                               <?php if (!$_selection->isSaleable()) { echo ' disabled="disabled"'; } ?>
+                                <?php if ($block->isSelected($_selection)) { echo ' checked="checked"'; } ?>
+                                <?php if (!$_selection->isSaleable()) { echo ' disabled="disabled"'; } ?>
                                value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"/>
                         <label class="label"
                                for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>">

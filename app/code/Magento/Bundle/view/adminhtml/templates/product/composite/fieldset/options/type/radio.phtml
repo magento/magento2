@@ -42,7 +42,7 @@
                            class="radio admin__control-radio <?= $_option->getRequired() ? ' validate-one-required-by-name' : '' ?> change-container-classname"
                            id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
                            name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                           <?php if ($block->isSelected($_selection)) { echo ' checked="checked"'; } ?><?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) { echo ' disabled="disabled"'; } ?>
+                            <?php if ($block->isSelected($_selection)) { echo ' checked="checked"'; } ?><?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) { echo ' disabled="disabled"'; } ?>
                            value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
                            onclick="ProductConfigure.bundleControl.changeSelection(this)"
                            price="<?= $block->escapeHtmlAttr($block->getSelectionPrice($_selection)) ?>"

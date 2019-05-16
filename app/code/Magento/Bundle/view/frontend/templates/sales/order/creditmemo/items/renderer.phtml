@@ -15,7 +15,6 @@
 <?php $_prevOptionId = '' ?>
 
 <?php foreach ($items as $_item) : ?>
-
     <?php if ($block->getItemOptions() || $parentItem->getDescription() || $this->helper(Magento\GiftMessage\Helper\Message::class)->isMessagesAllowed('order_item', $parentItem) && $parentItem->getGiftMessageId()) : ?>
         <?php $_showlastRow = true ?>
     <?php else : ?>

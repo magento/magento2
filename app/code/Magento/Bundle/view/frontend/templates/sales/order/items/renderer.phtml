@@ -12,7 +12,6 @@ $prevOptionId = '';
 ?>
 
 <?php foreach ($items as $item) : ?>
-
     <?php if ($block->getItemOptions()
         || $parentItem->getDescription()
         || $this->helper(Magento\GiftMessage\Helper\Message::class)->isMessagesAllowed('order_item', $parentItem)

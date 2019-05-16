@@ -9,7 +9,6 @@
 <?php $_linksPurchasedSeparately = $block->getLinksPurchasedSeparately(); ?>
 <?php $_skipSaleableCheck = $this->helper(Magento\Catalog\Helper\Product::class)->getSkipSaleableCheck(); ?>
 <?php if (($block->getProduct()->isSaleable() || $_skipSaleableCheck) && $block->hasLinks()) :?>
-
 <fieldset id="catalog_product_composite_configure_fields_downloadable"
           class="fieldset admin__fieldset downloadable information<?= $block->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
     <legend class="legend admin__legend"><span><?= $block->escapeHtml(__('Downloadable Information')) ?></span></legend><br />

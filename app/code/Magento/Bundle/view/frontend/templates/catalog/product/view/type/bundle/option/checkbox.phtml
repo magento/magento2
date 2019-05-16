@@ -27,11 +27,11 @@
                         <input class="bundle-option-<?=$block->escapeHtmlAttr($_option->getId()) ?> checkbox product bundle option change-container-classname"
                                id="bundle-option-<?=$block->escapeHtmlAttr($_option->getId()) ?>-<?=$block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
                                type="checkbox"
-                               <?php if ($_option->getRequired()) { echo 'data-validate="{\'validate-one-required-by-name\':\'input[name^=&quot;bundle_option[' . $block->escapeHtmlAttr($_option->getId()) . ']&quot;]:checked\'}"'; }?>
+                                <?php if ($_option->getRequired()) { echo 'data-validate="{\'validate-one-required-by-name\':\'input[name^=&quot;bundle_option[' . $block->escapeHtmlAttr($_option->getId()) . ']&quot;]:checked\'}"'; }?>
                                name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>][<?= $block->escapeHtmlAttr($_selection->getId()) ?>]"
                                data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>][<?= $block->escapeHtmlAttr($_selection->getId()) ?>]"
-                               <?php if ($block->isSelected($_selection)) { echo ' checked="checked"'; } ?>
-                               <?php if (!$_selection->isSaleable()) { echo ' disabled="disabled"'; } ?>
+                                <?php if ($block->isSelected($_selection)) { echo ' checked="checked"'; } ?>
+                                <?php if (!$_selection->isSaleable()) { echo ' disabled="disabled"'; } ?>
                                value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"/>
                         <label class="label"
                                for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>">

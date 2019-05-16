@@ -21,7 +21,6 @@
 <?php $_prevOptionId = '' ?>
 
 <?php foreach ($items as $_item) : ?>
-
     <?php if ($_item->getParentItem()) : ?>
         <?php $attributes = $block->getSelectionAttributes($_item) ?>
         <?php if ($_prevOptionId != $attributes['option_id']) : ?>
