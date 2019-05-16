@@ -10,7 +10,7 @@ Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a 
 wsdvsfvergerg
 ## Install Magento
 To install Magento, see either:
-
+5t
 *	[Installation guide](http://devdocs.magento.com/guides/v2.2/install-gde/bk-install-guide.html)
 
 <h2>Contributing to the Magento 2 code base</h2>erf
