@@ -17,6 +17,7 @@ use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Customer\CredentialsValidator;
+use Magento\Customer\Model\ForgotPasswordToken\GetCustomerByToken;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
 use Magento\Directory\Model\AllowedCountries;
@@ -44,7 +45,6 @@ use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Math\Random;
-use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Registry;
 use Magento\Framework\Session\SaveHandlerInterface;
@@ -346,6 +346,11 @@ class AccountManagement implements AccountManagementInterface
     private $allowedCountriesReader;
 
     /**
+     * @var GetCustomerByToken
+     */
+    private $getByToken;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -377,10 +382,12 @@ class AccountManagement implements AccountManagementInterface
      * @param CollectionFactory|null $visitorCollectionFactory
      * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @param AddressRegistry|null $addressRegistry
+     * @param GetCustomerByToken|null $getByToken
      * @param AllowedCountries|null $allowedCountriesReader
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         CustomerFactory $customerFactory,
@@ -414,6 +421,7 @@ class AccountManagement implements AccountManagementInterface
         CollectionFactory $visitorCollectionFactory = null,
         SearchCriteriaBuilder $searchCriteriaBuilder = null,
         AddressRegistry $addressRegistry = null,
+        GetCustomerByToken $getByToken = null,
         AllowedCountries $allowedCountriesReader = null
     ) {
         $this->customerFactory = $customerFactory;
@@ -439,23 +447,26 @@ class AccountManagement implements AccountManagementInterface
         $this->customerModel = $customerModel;
         $this->objectFactory = $objectFactory;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
+        $objectManager = ObjectManager::getInstance();
         $this->credentialsValidator =
-            $credentialsValidator ?: ObjectManager::getInstance()->get(CredentialsValidator::class);
-        $this->dateTimeFactory = $dateTimeFactory ?: ObjectManager::getInstance()->get(DateTimeFactory::class);
-        $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
+            $credentialsValidator ?: $objectManager->get(CredentialsValidator::class);
+        $this->dateTimeFactory = $dateTimeFactory ?: $objectManager->get(DateTimeFactory::class);
+        $this->accountConfirmation = $accountConfirmation ?: $objectManager
             ->get(AccountConfirmation::class);
         $this->sessionManager = $sessionManager
-            ?: ObjectManager::getInstance()->get(SessionManagerInterface::class);
+            ?: $objectManager->get(SessionManagerInterface::class);
         $this->saveHandler = $saveHandler
-            ?: ObjectManager::getInstance()->get(SaveHandlerInterface::class);
+            ?: $objectManager->get(SaveHandlerInterface::class);
         $this->visitorCollectionFactory = $visitorCollectionFactory
-            ?: ObjectManager::getInstance()->get(CollectionFactory::class);
+            ?: $objectManager->get(CollectionFactory::class);
         $this->searchCriteriaBuilder = $searchCriteriaBuilder
-            ?: ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
+            ?: $objectManager->get(SearchCriteriaBuilder::class);
         $this->addressRegistry = $addressRegistry
-            ?: ObjectManager::getInstance()->get(AddressRegistry::class);
+            ?: $objectManager->get(AddressRegistry::class);
+        $this->getByToken = $getByToken
+            ?: $objectManager->get(GetCustomerByToken::class);
         $this->allowedCountriesReader = $allowedCountriesReader
-            ?: ObjectManager::getInstance()->get(AllowedCountries::class);
+            ?: $objectManager->get(AllowedCountries::class);
     }
 
     /**
@@ -521,8 +532,11 @@ class AccountManagement implements AccountManagementInterface
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $confirmationKey
      * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @throws \Magento\Framework\Exception\State\InvalidTransitionException
-     * @throws \Magento\Framework\Exception\State\InputMismatchException
+     * @throws InputException
+     * @throws InputMismatchException
+     * @throws InvalidTransitionException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     private function activateCustomer($customer, $confirmationKey)
     {
@@ -631,42 +645,6 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Match a customer by their RP token.
-     *
-     * @param string $rpToken
-     * @throws ExpiredException
-     * @throws NoSuchEntityException
-     * @return CustomerInterface
-     * @throws LocalizedException
-     */
-    private function matchCustomerByRpToken(string $rpToken): CustomerInterface
-    {
-        $this->searchCriteriaBuilder->addFilter(
-            'rp_token',
-            $rpToken
-        );
-        $this->searchCriteriaBuilder->setPageSize(1);
-        $found = $this->customerRepository->getList(
-            $this->searchCriteriaBuilder->create()
-        );
-        if ($found->getTotalCount() > 1) {
-            //Failed to generated unique RP token
-            throw new ExpiredException(
-                new Phrase('Reset password token expired.')
-            );
-        }
-        if ($found->getTotalCount() === 0) {
-            //Customer with such token not found.
-            throw NoSuchEntityException::singleField(
-                'rp_token',
-                $rpToken
-            );
-        }
-        //Unique customer found.
-        return $found->getItems()[0];
-    }
-
-    /**
      * Handle not supported template
      *
      * @param string $template
@@ -691,7 +669,7 @@ class AccountManagement implements AccountManagementInterface
     public function resetPassword($email, $resetToken, $newPassword)
     {
         if (!$email) {
-            $customer = $this->matchCustomerByRpToken($resetToken);
+            $customer = $this->getByToken->execute($resetToken);
             $email = $customer->getEmail();
         } else {
             $customer = $this->customerRepository->get($email);
@@ -830,6 +808,8 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws LocalizedException
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
@@ -852,6 +832,8 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws InputMismatchException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -987,6 +969,8 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws InvalidEmailOrPasswordException
      */
     public function changePassword($email, $currentPassword, $newPassword)
     {
@@ -1000,6 +984,8 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws InvalidEmailOrPasswordException
      */
     public function changePasswordById($customerId, $currentPassword, $newPassword)
     {
@@ -1137,12 +1123,14 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param int $customerId
      * @param string $resetPasswordLinkToken
+     *
      * @return bool
-     * @throws \Magento\Framework\Exception\State\InputMismatchException If token is mismatched
-     * @throws \Magento\Framework\Exception\State\ExpiredException If token is expired
-     * @throws \Magento\Framework\Exception\InputException If token or customer id is invalid
-     * @throws \Magento\Framework\Exception\NoSuchEntityException If customer doesn't exist
+     * @throws ExpiredException If token is expired
+     * @throws InputException If token or customer id is invalid
+     * @throws InputMismatchException If token is mismatched
      * @throws LocalizedException
+     * @throws NoSuchEntityException If customer doesn't exist
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
     {
@@ -1157,7 +1145,8 @@ class AccountManagement implements AccountManagementInterface
 
         if ($customerId === null) {
             //Looking for the customer.
-            $customerId = $this->matchCustomerByRpToken($resetPasswordLinkToken)
+            $customerId = $this->getByToken
+                ->execute($resetPasswordLinkToken)
                 ->getId();
         }
         if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {

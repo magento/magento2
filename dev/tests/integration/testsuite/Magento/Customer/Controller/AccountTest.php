@@ -15,17 +15,17 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Http;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\MessageInterface;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\Request;
-use Magento\TestFramework\Response;
-use Zend\Stdlib\Parameters;
-use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Mail\Template\TransportBuilderMock;
+use Magento\TestFramework\Request;
+use Magento\TestFramework\Response;
 use Magento\Theme\Controller\Result\MessagePlugin;
+use Zend\Stdlib\Parameters;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -169,6 +169,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $token = Bootstrap::getObjectManager()->get(\Magento\Framework\Math\Random::class)
             ->getUniqueHash();
         $customer->changeResetPasswordLinkToken($token);
+        $customer->setData('confirmation', 'confirmation');
         $customer->save();
 
         $this->getRequest()->setParam('token', $token);
@@ -187,6 +188,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $session = Bootstrap::getObjectManager()->get(Session::class);
         $this->assertEquals($token, $session->getRpToken());
         $this->assertNotContains($token, $response->getHeader('Location')->getFieldValue());
+        $this->assertCustomerConfirmationEquals(1, null);
     }
 
     /**
@@ -201,6 +203,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $token = Bootstrap::getObjectManager()->get(\Magento\Framework\Math\Random::class)
             ->getUniqueHash();
         $customer->changeResetPasswordLinkToken($token);
+        $customer->setData('confirmation', 'confirmation');
         $customer->save();
 
         /** @var \Magento\Customer\Model\Session $customer */
@@ -213,6 +216,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $response = $this->getResponse();
         $text = $response->getBody();
         $this->assertTrue((bool)preg_match('/' . $token . '/m', $text));
+        $this->assertCustomerConfirmationEquals(1, null);
     }
 
     /**
@@ -227,6 +231,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $token = Bootstrap::getObjectManager()->get(\Magento\Framework\Math\Random::class)
             ->getUniqueHash();
         $customer->changeResetPasswordLinkToken($token);
+        $customer->setData('confirmation', 'confirmation');
         $customer->save();
 
         $this->getRequest()->setParam('token', 'INVALIDTOKEN');
@@ -238,6 +243,19 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $response = $this->getResponse();
         $this->assertEquals(302, $response->getHttpResponseCode());
         $this->assertContains('customer/account/forgotpassword', $response->getHeader('Location')->getFieldValue());
+        $this->assertCustomerConfirmationEquals(1, 'confirmation');
+    }
+
+    /**
+     * @param int         $customerId
+     * @param string|null $confirmation
+     */
+    private function assertCustomerConfirmationEquals(int $customerId, string $confirmation = null)
+    {
+        /** @var \Magento\Customer\Model\Customer $customer */
+        $customer = Bootstrap::getObjectManager()
+                             ->create(\Magento\Customer\Model\Customer::class)->load($customerId);
+        $this->assertEquals($confirmation, $customer->getConfirmation());
     }
 
     /**
@@ -913,6 +931,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         if (preg_match('<a\s*href="(?<url>.*?)".*>', $content, $matches)) {
             $confirmationUrl = $matches['url'];
             $confirmationUrl = str_replace('http://localhost/index.php/', '', $confirmationUrl);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $confirmationUrl = html_entity_decode($confirmationUrl);
         }
 
