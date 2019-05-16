@@ -291,7 +291,7 @@ class Base implements \Magento\Framework\App\RouterInterface
         $action = null;
         $actionInstance = null;
 
-        $actionPath = $this->matchActionPath($request, $params['actionPath']);
+        $actionPath = strtolower($this->matchActionPath($request, $params['actionPath']));
         $action = $request->getActionName() ?: ($params['actionName'] ?: $this->_defaultPath->getPart('action'));
         $this->_checkShouldBeSecure($request, '/' . $moduleFrontName . '/' . $actionPath . '/' . $action);
 
