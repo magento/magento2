@@ -154,7 +154,7 @@ class Changelog implements ChangelogInterface
             (int)$toVersionId
         );
 
-        return $this->connection->fetchCol($select);
+        return array_map('intval', $this->connection->fetchCol($select));
     }
 
     /**
