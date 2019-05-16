@@ -18,6 +18,7 @@
                     </available>
                 </importexport_local_valid_paths>
                 <bunch_size>100</bunch_size>
+                <import_images_base_dir>var/import/images</import_images_base_dir>
             </file>
         </general>
         <import>
