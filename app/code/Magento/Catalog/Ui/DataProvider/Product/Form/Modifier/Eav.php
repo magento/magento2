@@ -20,8 +20,10 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory as GroupCollectionFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Filter\Translit;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Stdlib\ArrayManager;
@@ -202,6 +204,26 @@ class Eav extends AbstractModifier
     private $attributeCollectionFactory;
 
     /**
+     * @var AuthorizationInterface
+     */
+    private $authorization;
+
+    /**
+     * Product design attribute codes.
+     *
+     * @var array
+     */
+    private $designAttributeCodes = [
+        'custom_design',
+        'page_layout',
+        'options_container',
+        'custom_layout_update',
+        'custom_design_from',
+        'custom_design_to',
+        'custom_layout',
+    ];
+
+    /**
      * @param LocatorInterface $locator
      * @param CatalogEavValidationRules $catalogEavValidationRules
      * @param Config $eavConfig
@@ -222,6 +244,7 @@ class Eav extends AbstractModifier
      * @param array $attributesToDisable
      * @param array $attributesToEliminate
      * @param AttributeCollectionFactory $attributeCollectionFactory
+     * @param AuthorizationInterface|null $authorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -244,7 +267,8 @@ class Eav extends AbstractModifier
         DataPersistorInterface $dataPersistor,
         $attributesToDisable = [],
         $attributesToEliminate = [],
-        AttributeCollectionFactory $attributeCollectionFactory = null
+        AttributeCollectionFactory $attributeCollectionFactory = null,
+        AuthorizationInterface $authorization = null
     ) {
         $this->locator = $locator;
         $this->catalogEavValidationRules = $catalogEavValidationRules;
@@ -266,7 +290,8 @@ class Eav extends AbstractModifier
         $this->attributesToDisable = $attributesToDisable;
         $this->attributesToEliminate = $attributesToEliminate;
         $this->attributeCollectionFactory = $attributeCollectionFactory
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
+            ?: ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
+        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
     }
 
     /**
@@ -656,7 +681,7 @@ class Eav extends AbstractModifier
         // TODO: Refactor to $attribute->getOptions() when MAGETWO-48289 is done
         $attributeModel = $this->getAttributeModel($attribute);
         if ($attributeModel->usesSource()) {
-            $options = $attributeModel->getSource()->getAllOptions();
+            $options = $attributeModel->getSource()->getAllOptions(true, true);
             foreach ($options as &$option) {
                 $option['__disableTmpl'] = true;
             }
@@ -710,6 +735,22 @@ class Eav extends AbstractModifier
                 // Gallery attribute is being handled by "Images And Videos" section
                 $meta = [];
                 break;
+        }
+
+        //Checking access to design config.
+        if (in_array($attributeCode, $this->designAttributeCodes, true)) {
+            if (!$this->authorization->isAllowed('Magento_Catalog::edit_product_design')) {
+                $meta = $this->arrayManager->merge(
+                    $configPath,
+                    $meta,
+                    [
+                        'disabled' => true,
+                        'validation' => ['required' => false],
+                        'required' => false,
+                        'serviceDisabled' => true,
+                    ]
+                );
+            }
         }
 
         return $meta;

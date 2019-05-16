@@ -6,15 +6,21 @@
 
 namespace Magento\Catalog\Model;
 
+use Magento\Backend\Model\Auth;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\TestFramework\Bootstrap as TestBootstrap;
+use Magento\Framework\Acl\Builder;
 
 /**
  * Provide tests for ProductRepository model.
  *
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -31,21 +37,41 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     private $productResource;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
+
+    /**
+     * @var Auth
+     */
+    private $authorization;
+
+    /**
+     * @var Builder
+     */
+    private $aclBuilder;
 
     /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $this->productRepository = Bootstrap::getObjectManager()
-            ->get(ProductRepositoryInterface::class);
-        $this->productResource = Bootstrap::getObjectManager()
-            ->get(ProductResource::class);
-        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+        $this->authorization = Bootstrap::getObjectManager()->get(Auth::class);
+        $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
+        $this->productResource = Bootstrap::getObjectManager()->get(ProductResource::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $this->authorization->logout();
+        $this->aclBuilder->resetRuntimeAcl();
     }
 
     /**
@@ -245,5 +271,33 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('image', $images[0]['media_type']);
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('image'));
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('small_image'));
+    }
+
+    /**
+     * Test authorization when saving product's design settings.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoAppArea adminhtml
+     */
+    public function testSaveDesign()
+    {
+        $product = $this->productRepository->get('simple');
+        $this->authorization->login(TestBootstrap::ADMIN_NAME, TestBootstrap::ADMIN_PASSWORD);
+
+        //Admin doesn't have access to product's design.
+        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_product_design');
+
+        $product->setCustomAttribute('custom_design', 2);
+        $product = $this->productRepository->save($product);
+        $this->assertEmpty($product->getCustomAttribute('custom_design'));
+
+        //Admin has access to products' design.
+        $this->aclBuilder->getAcl()
+            ->allow(null, ['Magento_Catalog::products','Magento_Catalog::edit_product_design']);
+
+        $product->setCustomAttribute('custom_design', 2);
+        $product = $this->productRepository->save($product);
+        $this->assertNotEmpty($product->getCustomAttribute('custom_design'));
+        $this->assertEquals(2, $product->getCustomAttribute('custom_design')->getValue());
     }
 }
