@@ -215,10 +215,10 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->connectionMock->expects($this->once())
             ->method('fetchCol')
             ->with($selectMock)
-            ->will($this->returnValue(['some_data']));
+            ->will($this->returnValue([1]));
 
         $this->model->setViewId('viewIdtest');
-        $this->assertEquals(['some_data'], $this->model->getList(1, 2));
+        $this->assertEquals([1], $this->model->getList(1, 2));
     }
 
     public function testGetListWithException()
