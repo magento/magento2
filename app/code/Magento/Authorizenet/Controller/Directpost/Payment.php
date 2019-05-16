@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Authorizenet\Controller\Directpost;
 
 use Magento\Payment\Block\Transparent\Iframe;
@@ -11,6 +12,7 @@ use Magento\Payment\Block\Transparent\Iframe;
  * DirectPost Payment Controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 2.2.9 Authorize.net is removing all support for this payment method
  */
 abstract class Payment extends \Magento\Framework\App\Action\Action
 {
@@ -44,6 +46,8 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Get checkout model
+     *
      * @return \Magento\Checkout\Model\Session
      */
     protected function _getCheckout()
@@ -63,6 +67,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
 
     /**
      * Response action.
+     *
      * Action for Authorize.net SIM Relay Request.
      *
      * @param string $area

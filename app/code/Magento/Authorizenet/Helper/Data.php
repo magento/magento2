@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Authorizenet\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -17,6 +18,7 @@ use Magento\Authorizenet\Model\Authorizenet;
  *
  * @api
  * @since 100.0.2
+ * @deprecated 2.2.9 Authorize.net is removing all support for this payment method
  */
 class Data extends AbstractHelper
 {

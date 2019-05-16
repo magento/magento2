@@ -50,6 +50,11 @@ return [
                 'name' => 'Magento_Support',
                 'path' => 'Console/Command/AbstractBackupDumpCommand.php'
             ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Authorizenet',
+                'path' => 'Model/Directpost/Response.php',
+            ],
         ],
     ],
     'srand' => [
