@@ -1927,6 +1927,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $result->append($error);
             }
         }
+        $this->_errors = [];
 
         $this->_result = $result;
     }

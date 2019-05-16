@@ -35,16 +35,21 @@ class CarrierResult extends Result
      */
     public function getAllRates()
     {
+        $needsSorting = false;
         //Appending previously received results.
         while($resultData = array_shift($this->results)) {
             if ($resultData['result']->getError()) {
                 if ($resultData['appendFailed']) {
                     $this->append($resultData['result']);
+                    $needsSorting = true;
                 }
             } else {
-                $resultData['result']->sortRatesByPrice();
                 $this->append($resultData['result']);
+                $needsSorting = true;
             }
+        }
+        if ($needsSorting) {
+            parent::sortRatesByPrice();
         }
 
         return parent::getAllRates();

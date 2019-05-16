@@ -7,13 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Dhl\Model;
 
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\HTTP\AsyncClient\Response;
+use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\Simplexml\Element;
-use Magento\Shipping\Model\Tracking\Result\Error;
 use Magento\Shipping\Model\Tracking\Result\Status;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
 
+/**
+ * Test for DHL integration.
+ */
 class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -22,30 +24,28 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     private $dhlCarrier;
 
     /**
-     * @var ZendClient|MockObject
+     * @var AsyncClientInterfaceMock
      */
-    private $httpClientMock;
+    private $httpClient;
 
     /**
-     * @var \Zend_Http_Response|MockObject
+     * @inheritDoc
      */
-    private $httpResponseMock;
-
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->dhlCarrier = $objectManager->create(
-            \Magento\Dhl\Model\Carrier::class,
-            ['httpClientFactory' => $this->getHttpClientFactory()]
-        );
+        $this->dhlCarrier = $objectManager->get(\Magento\Dhl\Model\Carrier::class);
+        $this->httpClient = $objectManager->get(AsyncClientInterface::class);
     }
 
     /**
+     * Test sending tracking requests.
+     *
      * @magentoConfigFixture default_store carriers/dhl/id CustomerSiteID
      * @magentoConfigFixture default_store carriers/dhl/password CustomerPassword
      * @param string[] $trackingNumbers
      * @param string $responseXml
-     * @param $expectedTrackingData
+     * @param array $expectedTrackingData
      * @param string $expectedRequestXml
      * @dataProvider getTrackingDataProvider
      */
@@ -55,15 +55,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $expectedTrackingData,
         string $expectedRequestXml = ''
     ) {
-        $this->httpResponseMock->method('getBody')
-            ->willReturn($responseXml);
+        $this->httpClient->nextResponses([new Response(200, [], $responseXml)]);
         $trackingResult = $this->dhlCarrier->getTracking($trackingNumbers);
         $this->assertTrackingResult($expectedTrackingData, $trackingResult->getAllTrackings());
         if ($expectedRequestXml !== '') {
-            $method = new \ReflectionMethod($this->httpClientMock, '_prepareBody');
-            $method->setAccessible(true);
-            $requestXml = $method->invoke($this->httpClientMock);
-            $this->assertRequest($expectedRequestXml, $requestXml);
+            $this->assertRequest($expectedRequestXml, $this->httpClient->getLastRequest()->getBody());
         }
     }
 
@@ -168,32 +164,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 [$expectedTrackingDataE]
             ]
         ];
-    }
-
-    /**
-     * Get mocked Http Client Factory
-     *
-     * @return MockObject
-     */
-    private function getHttpClientFactory(): MockObject
-    {
-        $this->httpResponseMock = $this->getMockBuilder(\Zend_Http_Response::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->httpClientMock = $this->getMockBuilder(ZendClient::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['request'])
-            ->getMock();
-        $this->httpClientMock->method('request')
-            ->willReturn($this->httpResponseMock);
-        /** @var ZendClientFactory|MockObject $httpClientFactoryMock */
-        $httpClientFactoryMock = $this->getMockBuilder(ZendClientFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $httpClientFactoryMock->method('create')
-            ->willReturn($this->httpClientMock);
-
-        return $httpClientFactoryMock;
     }
 
     /**
