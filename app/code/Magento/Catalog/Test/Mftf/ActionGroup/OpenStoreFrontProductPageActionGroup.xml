@@ -15,4 +15,3 @@
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
     </actionGroup>
 </actionGroups>
-
