@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Shipping;
 
 /**
@@ -88,7 +90,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
             return !$save;
         }
         if ($shippingIsTheSameAsBilling) {
-            return !($this->getIsAsBilling() && $this->getIsShipping());
+            return !$shippingIsTheSameAsBilling;
         }
         return $this->getIsAsBilling();
     }
