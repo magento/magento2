@@ -4,12 +4,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Model\ForgotPasswordToken\ConfirmCustomerByToken;
 use Magento\Customer\Model\Session;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ObjectManager;
 
 class CreatePassword extends \Magento\Customer\Controller\AbstractAccount
 {
@@ -29,20 +33,30 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount
     protected $resultPageFactory;
 
     /**
-     * @param Context $context
-     * @param Session $customerSession
-     * @param PageFactory $resultPageFactory
-     * @param AccountManagementInterface $accountManagement
+     * @var \Magento\Customer\Model\ForgotPasswordToken\ConfirmCustomerByToken
+     */
+    private $confirmByToken;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
+     * @param \Magento\Customer\Model\ForgotPasswordToken\ConfirmCustomerByToken $confirmByToken
      */
     public function __construct(
         Context $context,
         Session $customerSession,
         PageFactory $resultPageFactory,
-        AccountManagementInterface $accountManagement
+        AccountManagementInterface $accountManagement,
+        ConfirmCustomerByToken $confirmByToken = null
     ) {
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
         $this->accountManagement = $accountManagement;
+        $this->confirmByToken = $confirmByToken
+            ?? ObjectManager::getInstance()->get(ConfirmCustomerByToken::class);
+
         parent::__construct($context);
     }
 
@@ -65,6 +79,8 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount
                 $resetPasswordToken
             );
 
+            $this->confirmByToken->execute($resetPasswordToken);
+
             if ($isDirectLink) {
                 $this->session->setRpToken($resetPasswordToken);
                 $resultRedirect = $this->resultRedirectFactory->create();
@@ -75,16 +91,17 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount
                 /** @var \Magento\Framework\View\Result\Page $resultPage */
                 $resultPage = $this->resultPageFactory->create();
                 $resultPage->getLayout()
-                    ->getBlock('resetPassword')
-                    ->setResetPasswordLinkToken($resetPasswordToken);
+                           ->getBlock('resetPassword')
+                           ->setResetPasswordLinkToken($resetPasswordToken);
 
                 return $resultPage;
             }
         } catch (\Exception $exception) {
-            $this->messageManager->addError(__('Your password reset link has expired.'));
+            $this->messageManager->addErrorMessage(__('Your password reset link has expired.'));
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('*/*/forgotpassword');
+
             return $resultRedirect;
         }
     }

@@ -11,28 +11,31 @@ namespace Magento\Customer\Controller;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Account\Redirect;
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Http;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Mail\Message;
+use Magento\Framework\Math\Random;
 use Magento\Framework\Message\MessageInterface;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\Request;
-use Magento\TestFramework\Response;
-use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\Theme\Controller\Result\MessagePlugin;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Mail\Template\TransportBuilderMock;
+use Magento\TestFramework\Request;
+use Magento\TestFramework\Response;
+use Magento\TestFramework\TestCase\AbstractController;
 use Zend\Stdlib\Parameters;
-use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
+class AccountTest extends AbstractController
 {
     /**
      * @var TransportBuilderMock
@@ -130,13 +133,14 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testCreatepasswordActionWithDirectLink()
     {
-        /** @var \Magento\Customer\Model\Customer $customer */
+        /** @var Customer $customer */
         $customer = Bootstrap::getObjectManager()
-            ->create(\Magento\Customer\Model\Customer::class)->load(1);
+                             ->create(Customer::class)->load(1);
 
-        $token = Bootstrap::getObjectManager()->get(\Magento\Framework\Math\Random::class)
+        $token = Bootstrap::getObjectManager()->get(Random::class)
             ->getUniqueHash();
         $customer->changeResetPasswordLinkToken($token);
+        $customer->setData('confirmation', 'confirmation');
         $customer->save();
 
         $this->getRequest()->setParam('token', $token);
@@ -155,6 +159,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $session = Bootstrap::getObjectManager()->get(Session::class);
         $this->assertEquals($token, $session->getRpToken());
         $this->assertNotContains($token, $response->getHeader('Location')->getFieldValue());
+        $this->assertCustomerConfirmationEquals(1, null);
     }
 
     /**
@@ -162,13 +167,14 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testCreatepasswordActionWithSession()
     {
-        /** @var \Magento\Customer\Model\Customer $customer */
+        /** @var Customer $customer */
         $customer = Bootstrap::getObjectManager()
-            ->create(\Magento\Customer\Model\Customer::class)->load(1);
+                             ->create(Customer::class)->load(1);
 
-        $token = Bootstrap::getObjectManager()->get(\Magento\Framework\Math\Random::class)
+        $token = Bootstrap::getObjectManager()->get(Random::class)
             ->getUniqueHash();
         $customer->changeResetPasswordLinkToken($token);
+        $customer->setData('confirmation', 'confirmation');
         $customer->save();
 
         /** @var Session $customer */
@@ -181,6 +187,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $response = $this->getResponse();
         $text = $response->getBody();
         $this->assertTrue((bool)preg_match('/' . $token . '/m', $text));
+        $this->assertCustomerConfirmationEquals(1, null);
     }
 
     /**
@@ -188,13 +195,14 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testCreatepasswordActionInvalidToken()
     {
-        /** @var \Magento\Customer\Model\Customer $customer */
+        /** @var Customer $customer */
         $customer = Bootstrap::getObjectManager()
-            ->create(\Magento\Customer\Model\Customer::class)->load(1);
+                             ->create(Customer::class)->load(1);
 
-        $token = Bootstrap::getObjectManager()->get(\Magento\Framework\Math\Random::class)
+        $token = Bootstrap::getObjectManager()->get(Random::class)
             ->getUniqueHash();
         $customer->changeResetPasswordLinkToken($token);
+        $customer->setData('confirmation', 'confirmation');
         $customer->save();
 
         $this->getRequest()->setParam('token', 'INVALIDTOKEN');
@@ -206,6 +214,19 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $response = $this->getResponse();
         $this->assertEquals(302, $response->getHttpResponseCode());
         $this->assertContains('customer/account/forgotpassword', $response->getHeader('Location')->getFieldValue());
+        $this->assertCustomerConfirmationEquals(1, 'confirmation');
+    }
+
+    /**
+     * @param int         $customerId
+     * @param string|null $confirmation
+     */
+    private function assertCustomerConfirmationEquals(int $customerId, string $confirmation = null)
+    {
+        /** @var Customer $customer */
+        $customer = Bootstrap::getObjectManager()
+                             ->create(Customer::class)->load($customerId);
+        $this->assertEquals($confirmation, $customer->getConfirmation());
     }
 
     /**
@@ -213,9 +234,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testConfirmActionAlreadyActive()
     {
-        /** @var \Magento\Customer\Model\Customer $customer */
+        /** @var Customer $customer */
         $customer = Bootstrap::getObjectManager()
-            ->create(\Magento\Customer\Model\Customer::class)->load(1);
+                             ->create(Customer::class)->load(1);
 
         $this->getRequest()->setParam('key', 'abc');
         $this->getRequest()->setParam('id', $customer->getId());
@@ -679,7 +700,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             MessageInterface::TYPE_SUCCESS
         );
 
-        /** @var $message \Magento\Framework\Mail\Message */
+        /** @var $message Message */
         $message = $this->transportBuilderMock->getSentMessage();
         $rawMessage = $message->getRawMessage();
 
@@ -859,6 +880,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         if (preg_match('<a\s*href="(?<url>.*?)".*>', $content, $matches)) {
             $confirmationUrl = $matches['url'];
             $confirmationUrl = str_replace('http://localhost/index.php/', '', $confirmationUrl);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $confirmationUrl = html_entity_decode($confirmationUrl);
         }
 
