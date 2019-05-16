@@ -347,6 +347,7 @@ class Queue
                 $result = pcntl_waitpid($pid, $status, WNOHANG);
                 if ($result === $pid) {
                     $package->setState(Package::STATE_COMPLETED);
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $exitStatus = pcntl_wexitstatus($status);
 
                     $this->logger->info(
@@ -361,7 +362,9 @@ class Queue
                     // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     return pcntl_wexitstatus($status) === 0;
                 } elseif ($result === -1) {
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $errno = pcntl_errno();
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $strerror = pcntl_strerror($errno);
 
                     throw new \RuntimeException(
@@ -401,6 +404,7 @@ class Queue
      * Protect against zombie process
      *
      * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @return void
      */
     public function __destruct()
@@ -417,7 +421,9 @@ class Queue
 
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             if (pcntl_waitpid($pid, $status) === -1) {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $errno = pcntl_errno();
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $strerror = pcntl_strerror($errno);
 
                 throw new \RuntimeException(
