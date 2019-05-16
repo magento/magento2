@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
+use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -96,8 +97,39 @@ class GetCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     */
+    public function testGetCartIfCartIdIsEmpty()
+    {
+        $maskedQuoteId = '';
+        $query = $this->getQuery($maskedQuoteId);
+
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException Exception
+     * @expectedExceptionMessage Field "cart" argument "cart_id" of type "String!" is required but not provided.
+     */
+    public function testGetCartIfCartIdIsMissed()
+    {
+        $query = <<<QUERY
+{
+  cart {
+    email
+  }
+}
+QUERY;
+
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      *
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testGetNonExistentCart()
@@ -113,7 +145,7 @@ class GetCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/make_cart_inactive.php
      *
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage Current user does not have an active cart.
      */
     public function testGetInactiveCart()
@@ -145,7 +177,7 @@ class GetCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      *
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage Wrong store code specified for cart
      */
     public function testGetCartWithWrongStore()
@@ -162,7 +194,7 @@ class GetCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote_customer_not_default_store.php
      *
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage Requested store is not found
      */
     public function testGetCartWithNotExistingStore()

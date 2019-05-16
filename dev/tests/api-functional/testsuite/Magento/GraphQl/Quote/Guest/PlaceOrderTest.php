@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
+use Exception;
 use Magento\Framework\Registry;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -74,6 +75,37 @@ class PlaceOrderTest extends GraphQlAbstract
         self::assertArrayHasKey('placeOrder', $response);
         self::assertArrayHasKey('order_id', $response['placeOrder']['order']);
         self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_id']);
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     */
+    public function testPlaceOrderIfCartIdIsEmpty()
+    {
+        $maskedQuoteId = '';
+        $query = $this->getQuery($maskedQuoteId);
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     */
+    public function testPlaceOrderIfCartIdIsMissed()
+    {
+        $query = <<<QUERY
+mutation {
+  placeOrder(input: {}) {
+    order {
+      order_id
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation($query);
     }
 
     /**
