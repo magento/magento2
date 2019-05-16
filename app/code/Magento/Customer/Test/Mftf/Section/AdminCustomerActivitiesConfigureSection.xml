@@ -9,8 +9,8 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCustomerActivitiesConfigureSection">
-        <element name="addAttribute" type="select" selector="[id*='attribute']" timeout="30"/>
-        <element name="dropdownProductSelection" type="select" selector="//select[contains(@id, 'bundle-option')]/option[contains(text(), '{{productName}}')]" parameterized="true" timeout="30"/>
+        <element name="addAttribute" type="select" selector="#attribute" timeout="30"/>
+        <element name="dropdownProductSelection" type="select" selector="//option[contains(text(), '{{productName}}')]" parameterized="true" timeout="30"/>
         <element name="okButton" type="button" selector="//button[contains(concat(' ',normalize-space(@class),' '),' action-primary ')]" timeout="30"/>
     </section>
 </sections>
