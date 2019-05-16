@@ -11,5 +11,6 @@
     <section name="StorefrontOrderInformationMainSection">
         <element name="orderTitle" type="span" selector="#page-title-wrapper"/>
         <element name="return" type="span" selector="//span[contains(text(), 'Return')]"/>
+        <element name="emptyMessage" type="text" selector="//div[contains(concat(' ',normalize-space(@class),' '),' message info empty ')]/span"/>
     </section>
 </sections>
