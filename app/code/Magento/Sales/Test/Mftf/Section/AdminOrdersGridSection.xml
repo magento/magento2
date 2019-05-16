@@ -31,5 +31,6 @@
         <element name="viewColumnCheckbox" type="checkbox" selector="//div[contains(@class,'admin__data-grid-action-columns')]//div[contains(@class, 'admin__field-option')]//label[text() = '{{column}}']/preceding-sibling::input" parameterized="true"/>
         <element name="customerInOrdersSection" type="button" selector="(//td[contains(text(),'{{customer}}')])[1]" parameterized="true"/>
         <element name="productForOrder" type="button" selector="//td[contains(text(),'{{var}}')]" parameterized="true"/>
+        <element name="viewLink" type="text" selector="//td/div[contains(.,'{{orderID}}')]/../..//a[@class='action-menu-item']" parameterized="true"/>
     </section>
 </sections>
