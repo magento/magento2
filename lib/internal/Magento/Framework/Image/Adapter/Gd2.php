@@ -415,6 +415,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Exception
      */
     public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false)
     {
@@ -433,7 +434,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         ) {
             $newWatermark = imagecreatetruecolor($this->getWatermarkWidth(), $this->getWatermarkHeight());
             imagealphablending($newWatermark, false);
-            $col = imagecolorallocate($newWatermark, 255, 255, 255);
+            $col = imagecolorallocatealpha($newWatermark, 255, 255, 255, 127);
             imagecolortransparent($newWatermark, $col);
             imagefilledrectangle($newWatermark, 0, 0, $this->getWatermarkWidth(), $this->getWatermarkHeight(), $col);
             imagesavealpha($newWatermark, true);
@@ -877,6 +878,8 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         if (imagefilter($tmpImg, IMG_FILTER_COLORIZE, 0, 0, 0, $transparency) === false) {
             return false;
         }
+
+        imagealphablending($destinationImage, true);
 
         $result = imagecopy(
             $destinationImage,
