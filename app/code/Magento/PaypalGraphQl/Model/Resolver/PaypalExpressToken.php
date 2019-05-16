@@ -101,8 +101,10 @@ class PaypalExpressToken implements ResolverInterface
         $cartId = $args['input']['cart_id'] ?? '';
         $code = $args['input']['code'] ?? '';
         $usePaypalCredit = isset($args['input']['paypal_credit']) ? $args['input']['paypal_credit'] : false;
+        $usedExpressButton = isset($args['input']['express_button']) ? $args['input']['express_button'] : false;
         $customerId = $context->getUserId();
         $cart = $this->getCart($cartId, $customerId);
+        $config = $this->paypalConfigProvider->getConfig($code);
         $checkout = $this->paypalConfigProvider->getCheckout($code, $cart);
 
         if ($cart->getIsMultiShipping()) {
@@ -131,14 +133,17 @@ class PaypalExpressToken implements ResolverInterface
 
         $token = $checkout->start(
             $this->url->getUrl('*/*/return'),
-            $this->url->getUrl('*/*/cancel')
+            $this->url->getUrl('*/*/cancel'),
+            $usedExpressButton
         );
-        $redirectUrl = $checkout->getRedirectUrl();
 
         return [
             'method' => $code,
             'token' => $token,
-            'redirect_url' => $redirectUrl
+            'paypal_urls' => [
+                'start' => $checkout->getRedirectUrl(),
+                'edit' => $config->getExpressCheckoutEditUrl($token)
+            ]
         ];
     }
 
