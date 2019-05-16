@@ -838,6 +838,8 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             );
         }
 
+        imagealphablending($destinationImage, true);
+
         if ($alphaPercentage >= 100) {
             return imagecopy(
                 $destinationImage,
@@ -878,8 +880,6 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         if (imagefilter($tmpImg, IMG_FILTER_COLORIZE, 0, 0, 0, $transparency) === false) {
             return false;
         }
-
-        imagealphablending($destinationImage, true);
 
         $result = imagecopy(
             $destinationImage,
