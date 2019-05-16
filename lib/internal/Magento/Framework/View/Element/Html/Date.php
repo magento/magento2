@@ -78,7 +78,7 @@ class Date extends \Magento\Framework\View\Element\Template
         if ($this->getFormat() && $this->getValue()) {
             return strftime($this->getFormat(), strtotime($this->getValue()));
         }
-        return htmlspecialchars($this->getValue());
+        return $this->escapeHtml($this->getValue());
     }
 
     /**
