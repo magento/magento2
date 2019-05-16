@@ -32,26 +32,18 @@ class PaypalConfigProvider
     private $checkoutFactory;
 
     /**
-     * @var string[]
-     */
-    private $bmlCodeList;
-
-    /**
      * @param ObjectManagerInterface $objectManager
      * @param CheckoutFactory $checkoutFactory
      * @param array $configurations
-     * @param array $bmlCodeList
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         CheckoutFactory $checkoutFactory,
-        array $configurations,
-        array $bmlCodeList = []
+        array $configurations
     ) {
         $this->objectManager = $objectManager;
         $this->checkoutFactory = $checkoutFactory;
         $this->configurations = $configurations;
-        $this->bmlCodeList = $bmlCodeList;
     }
 
     /**
@@ -104,10 +96,6 @@ class PaypalConfigProvider
                     ],
                 ]
             );
-
-            if (in_array($code, $this->bmlCodeList)) {
-                $checkoutObject->setIsBml(true);
-            }
         } catch (\Exception $e) {
             throw new GraphQlInputException(__("Express Checkout class not found"));
         }

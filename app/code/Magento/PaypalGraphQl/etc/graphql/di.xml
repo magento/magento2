@@ -22,20 +22,6 @@
                     <item name="configMethod" xsi:type="const">\Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS</item>
                     <item name="checkoutType" xsi:type="string">\Magento\Paypal\Model\PayflowExpress\Checkout</item>
                 </item>
-                <item name="payflow_express_bml" xsi:type="array">
-                    <item name="configType" xsi:type="string">\Magento\Paypal\Model\Config</item>
-                    <item name="configMethod" xsi:type="const">\Magento\Paypal\Model\Config::METHOD_WPP_PE_BML</item>
-                    <item name="checkoutType" xsi:type="string">\Magento\Paypal\Model\PayflowExpress\Checkout</item>
-                </item>
-                <item name="paypal_express_bml" xsi:type="array">
-                    <item name="configType" xsi:type="string">\Magento\Paypal\Model\Config</item>
-                    <item name="configMethod" xsi:type="const">\Magento\Paypal\Model\Config::METHOD_WPP_BML</item>
-                    <item name="checkoutType" xsi:type="string">\Magento\Paypal\Model\Express\Checkout</item>
-                </item>
-            </argument>
-            <argument name="bmlCodeList" xsi:type="array">
-                <item name="paypal_express_bml" xsi:type="const">\Magento\Paypal\Model\Config::METHOD_WPP_BML</item>
-                <item name="payflow_express_bml" xsi:type="const">\Magento\Paypal\Model\Config::METHOD_WPP_PE_BML</item>
             </argument>
         </arguments>
     </type>

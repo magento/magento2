@@ -100,6 +100,7 @@ class PaypalExpressToken implements ResolverInterface
     ) {
         $cartId = $args['input']['cart_id'] ?? '';
         $code = $args['input']['code'] ?? '';
+        $usePaypalCredit = isset($args['input']['paypal_credit']) ? $args['input']['paypal_credit'] : false;
         $customerId = $context->getUserId();
         $cart = $this->getCart($cartId, $customerId);
         $checkout = $this->paypalConfigProvider->getCheckout($code, $cart);
@@ -108,6 +109,7 @@ class PaypalExpressToken implements ResolverInterface
             $cart->setIsMultiShipping(false);
             $cart->removeAllAddresses();
         }
+        $checkout->setIsBml($usePaypalCredit);
 
         if ($customerId) {
             $checkout->setCustomerWithAddressChange(

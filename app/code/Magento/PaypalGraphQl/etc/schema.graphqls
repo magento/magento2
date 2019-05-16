@@ -8,6 +8,8 @@ type Mutation {
 input PaypalExpressTokenInput {
     cart_id: String! @doc(description:"Cart id code")
     code: String! @doc(description:"Payment method code")
+    request_billing_agreement: Boolean
+    use_paypal_credit: Boolean
 }
 
 type PaypalExpressToken implements PaymentTokenInterface {
