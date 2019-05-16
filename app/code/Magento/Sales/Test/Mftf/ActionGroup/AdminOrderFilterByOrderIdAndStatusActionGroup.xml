@@ -14,6 +14,7 @@
             <argument name="orderStatus" type="string"/>
         </arguments>
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderGridPage"/>
+        <waitForPageLoad stepKey="waitForLoadingPage"/>
         <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
         <click selector="{{AdminOrdersGridSection.filters}}" stepKey="openOrderGridFilters"/>
         <fillField selector="{{AdminOrdersGridSection.idFilter}}" userInput="{{orderId}}" stepKey="fillOrderIdFilter"/>
