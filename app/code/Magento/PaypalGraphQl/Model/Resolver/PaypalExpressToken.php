@@ -7,11 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver;
 
+use Magento\Checkout\Model\Type\Onepage;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\PaypalGraphQl\Model\PaypalConfigProvider;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\GuestCartRepositoryInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
@@ -49,20 +53,9 @@ class PaypalExpressToken implements ResolverInterface
     private $url;
 
     /**
-     * Express configuration
-     *
-     * @see \Magento\Paypal\Controller\Express\Start
-     * Example: ['paypal_express' =>
-     *   [
-     *    'configType' => '\Magento\Paypal\Model\Config',
-     *    'configMethod': 'paypal_express',
-     *    'checkoutType' => '\Magento\Paypal\Model\PayflowExpress\Checkout'
-     *   ]
-     * ]
-     *
-     * @var array
+     * @var PaypalConfigProvider
      */
-    private $expressConfig;
+    private $paypalConfigProvider;
 
     /**
      * @param CartRepositoryInterface $cartRepository
@@ -70,7 +63,7 @@ class PaypalExpressToken implements ResolverInterface
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param CheckoutFactory $checkoutFactory
      * @param UrlInterface $url
-     * @param array $expressConfig
+     * @param PaypalConfigProvider $paypalConfigProvider
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
@@ -78,14 +71,14 @@ class PaypalExpressToken implements ResolverInterface
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         CheckoutFactory $checkoutFactory,
         UrlInterface $url,
-        $expressConfig = []
+        PaypalConfigProvider $paypalConfigProvider
     ) {
         $this->cartRepository = $cartRepository;
         $this->guestCartRepository = $guestCartRepository;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->checkoutFactory = $checkoutFactory;
         $this->url = $url;
-        $this->expressConfig = $expressConfig;
+        $this->paypalConfigProvider = $paypalConfigProvider;
     }
 
     /**
@@ -101,25 +94,12 @@ class PaypalExpressToken implements ResolverInterface
         $cartId = $args['input']['cart_id'] ?? '';
         $code = $args['input']['code'] ?? '';
         $customerId = $context->getUserId();
-
-        // validate and get payment code method
-        $config = $this->getExpressConfig($code);
-
-        // validate and get cart
         $cart = $this->getCart($cartId, $customerId);
+        $checkout = $this->paypalConfigProvider->getCheckout($code, $cart);
 
-        try {
-            $checkout = $this->checkoutFactory->create(
-                $this->expressConfig[$code]['checkoutType'],
-                [
-                    'params' => [
-                        'quote' => $cart,
-                        'config' => $config,
-                    ],
-                ]
-            );
-        } catch (\Exception $e) {
-            throw new GraphQlInputException(__("Express Checkout class not found"));
+        if ($cart->getIsMultiShipping()) {
+            $cart->setIsMultiShipping(false);
+            $cart->removeAllAddresses();
         }
 
         if ($customerId) {
@@ -150,51 +130,10 @@ class PaypalExpressToken implements ResolverInterface
     }
 
     /**
-     * Setup paypal express depending on the code: regular express, payflow, etc.
-     *
-     * @param $code
-     * @return \Magento\Paypal\Model\AbstractConfig
-     * @throws GraphQlInputException
-     */
-    private function getExpressConfig(string $code) : \Magento\Paypal\Model\AbstractConfig
-    {
-        //validate code string
-        if (empty($code)) {
-            throw new GraphQlInputException(__("TODO Missing code"));
-        }
-
-        //validate code string
-        if (!isset($this->expressConfig[$code]['configMethod'])) {
-            throw new GraphQlInputException(__("TODO configMethod"));
-        }
-
-        //validate code string
-        if ($code !== $this->expressConfig[$code]['configMethod']) {
-            throw new GraphQlInputException(__("TODO code is not equal to configMethod"));
-        }
-
-        // validate config class
-        if (!isset($this->expressConfig[$code]['configType'])
-            && !class_exists($this->expressConfig[$code]['configType'])) {
-            throw new GraphQlInputException(__("TODO Config not provided"));
-        }
-
-        /** @var \Magento\Paypal\Model\AbstractConfig $config */
-        $config = $this->expressConfig[$code]['configType'];
-
-        $config->setMethod($code);
-
-        if (!$config->isMethodAvailable($code)) {
-            throw new GraphQlInputException(__("TODO Payment method not available"));
-        }
-
-        return $config;
-    }
-
-    /**
      * Get the guest cart or the customer cart
      *
-     * @param $code
+     * @param string $cartId
+     * @param int $customerId
      * @return \Magento\Quote\Api\Data\CartInterface
      * @throws GraphQlInputException
      */
