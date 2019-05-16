@@ -81,7 +81,7 @@ class CheckoutEndToEndTest extends GraphQlAbstract
      */
     public function testCheckoutWorkflow()
     {
-        $qty = 2;
+        $quantity = 2;
 
         $this->createCustomer();
         $token = $this->loginCustomer();
@@ -89,7 +89,7 @@ class CheckoutEndToEndTest extends GraphQlAbstract
 
         $sku = $this->findProduct();
         $cartId = $this->createEmptyCart();
-        $this->addProductToCart($cartId, $qty, $sku);
+        $this->addProductToCart($cartId, $quantity, $sku);
 
         $this->setBillingAddress($cartId);
         $shippingMethod = $this->setShippingAddress($cartId);
@@ -212,10 +212,10 @@ mutation {
   addSimpleProductsToCart(
     input: {
       cart_id: "{$cartId}"
-      cartItems: [
+      cart_items: [
         {
           data: {
-            qty: {$qty}
+            quantity: {$qty}
             sku: "{$sku}"
           }
         }
@@ -224,7 +224,7 @@ mutation {
   ) {
     cart {
       items {
-        qty
+        quantity
         product {
           sku
         }
@@ -266,7 +266,7 @@ mutation {
   ) {
     cart {
       billing_address {
-        address_type
+        __typename
       }
     }
   }
@@ -309,7 +309,9 @@ mutation {
         available_shipping_methods {
           carrier_code
           method_code
-          amount
+          amount {
+            value
+          }
         }
       }
     }
@@ -334,7 +336,8 @@ QUERY;
         self::assertNotEmpty($availableShippingMethod['method_code']);
 
         self::assertArrayHasKey('amount', $availableShippingMethod);
-        self::assertNotEmpty($availableShippingMethod['amount']);
+        self::assertArrayHasKey('value', $availableShippingMethod['amount']);
+        self::assertNotEmpty($availableShippingMethod['amount']['value']);
 
         return $availableShippingMethod;
     }
