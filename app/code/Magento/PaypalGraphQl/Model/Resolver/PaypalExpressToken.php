@@ -7,9 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver;
 
-use Magento\Checkout\Model\Type\Onepage;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -21,6 +18,8 @@ use Magento\Quote\Api\GuestCartRepositoryInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Paypal\Model\Express\Checkout\Factory as CheckoutFactory;
 use Magento\Framework\UrlInterface;
+use Magento\Checkout\Helper\Data as CheckoutHelper;
+use Magento\Quote\Api\Data\CartInterface;
 
 /**
  * Resolver for generating Paypal token
@@ -58,12 +57,18 @@ class PaypalExpressToken implements ResolverInterface
     private $paypalConfigProvider;
 
     /**
+     * @var CheckoutHelper
+     */
+    private $checkoutHelper;
+
+    /**
      * @param CartRepositoryInterface $cartRepository
      * @param GuestCartRepositoryInterface $guestCartRepository
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param CheckoutFactory $checkoutFactory
      * @param UrlInterface $url
      * @param PaypalConfigProvider $paypalConfigProvider
+     * @param CheckoutHelper $checkoutHelper
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
@@ -71,7 +76,8 @@ class PaypalExpressToken implements ResolverInterface
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         CheckoutFactory $checkoutFactory,
         UrlInterface $url,
-        PaypalConfigProvider $paypalConfigProvider
+        PaypalConfigProvider $paypalConfigProvider,
+        CheckoutHelper $checkoutHelper
     ) {
         $this->cartRepository = $cartRepository;
         $this->guestCartRepository = $guestCartRepository;
@@ -79,6 +85,7 @@ class PaypalExpressToken implements ResolverInterface
         $this->checkoutFactory = $checkoutFactory;
         $this->url = $url;
         $this->paypalConfigProvider = $paypalConfigProvider;
+        $this->checkoutHelper = $checkoutHelper;
     }
 
     /**
@@ -108,6 +115,10 @@ class PaypalExpressToken implements ResolverInterface
                 $cart->getBillingAddress(),
                 $cart->getShippingAddress()
             );
+        } else {
+            if (!$this->checkoutHelper->isAllowedGuestCheckout($cart)) {
+                throw new GraphQlInputException(__("Guest checkout is not allowed"));
+            }
         }
 
         $checkout->prepareGiropayUrls(
@@ -134,10 +145,10 @@ class PaypalExpressToken implements ResolverInterface
      *
      * @param string $cartId
      * @param int $customerId
-     * @return \Magento\Quote\Api\Data\CartInterface
+     * @return CartInterface
      * @throws GraphQlInputException
      */
-    private function getCart(string $cartId, int $customerId) : \Magento\Quote\Api\Data\CartInterface
+    private function getCart(string $cartId, int $customerId): CartInterface
     {
         // validate cartId code
         if (empty($cartId)) {

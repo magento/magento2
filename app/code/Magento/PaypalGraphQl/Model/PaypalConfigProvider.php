@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Paypal\Model\AbstractConfig;
 use Magento\Paypal\Model\Express\Checkout;
@@ -22,7 +22,7 @@ class PaypalConfigProvider
     private $configurations;
 
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -37,12 +37,13 @@ class PaypalConfigProvider
     private $bmlCodeList;
 
     /**
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param CheckoutFactory $checkoutFactory
      * @param array $configurations
+     * @param array $bmlCodeList
      */
     public function __construct(
-        ObjectManager $objectManager,
+        ObjectManagerInterface $objectManager,
         CheckoutFactory $checkoutFactory,
         array $configurations,
         array $bmlCodeList = []
