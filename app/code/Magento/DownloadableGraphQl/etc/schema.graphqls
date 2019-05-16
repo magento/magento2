@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
-    customerDownloadableProducts: CustomerDownloadableProducts @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\CustomerDownloadableProducts") @doc(description: "The query returns the contents of a customer's downloadable products")
+    customerDownloadableProducts: CustomerDownloadableProducts @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\CustomerDownloadableProducts") @doc(description: "The query returns the contents of a customer's downloadable products") @cache(cacheable: false)
 }
 
 type CustomerDownloadableProducts {
