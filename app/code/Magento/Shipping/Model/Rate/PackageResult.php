@@ -64,6 +64,9 @@ class PackageResult extends Result
             foreach ($result->getAllRates() as $currentRate) {
                 foreach ($this->_rates as $rate) {
                     if ($rate->getMethod() === $currentRate->getMethod()) {
+                        if ($rate === $currentRate) {
+                            throw new \InvalidArgumentException('Same object received from carrier.');
+                        }
                         $rate->setPrice($rate->getPrice() + $currentRate->getPrice());
                         continue 2;
                     }
