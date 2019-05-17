@@ -982,12 +982,14 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
             if ($responseBody === null) {
                 $deferredResponses[] = [
-                    'deferred' => $this->httpClient->request(new Request(
-                        (string)$this->getConfigData('gateway_url'),
-                        Request::METHOD_POST,
-                        ['Content-Type' => 'application/xml'],
-                        utf8_encode($request)
-                    )),
+                    'deferred' => $this->httpClient->request(
+                        new Request(
+                            (string)$this->getConfigData('gateway_url'),
+                            Request::METHOD_POST,
+                            ['Content-Type' => 'application/xml'],
+                            utf8_encode($request)
+                        )
+                    ),
                     'date' => $date,
                     'request' => $request
                 ];
@@ -1659,13 +1661,15 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         if ($responseBody === null) {
             $debugData = ['request' => $this->filterDebugData($request)];
             try {
-                $responseBody = $this->httpClient->request(new Request(
-                    (string)$this->getConfigData('gateway_url'),
-                    Request::METHOD_POST,
-                    ['Content-Type' => 'application/xml'],
-                    $request
-                ))->get()->getBody();
-                $responseBody = utf8_decode($responseBody);
+                $response = $this->httpClient->request(
+                    new Request(
+                        (string)$this->getConfigData('gateway_url'),
+                        Request::METHOD_POST,
+                        ['Content-Type' => 'application/xml'],
+                        $request
+                    )
+                );
+                $responseBody = utf8_decode($response->get()->getBody());
                 $debugData['result'] = $this->filterDebugData($responseBody);
                 $this->_setCachedQuotes($request, $responseBody);
             } catch (\Exception $e) {
@@ -1826,12 +1830,15 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         if ($responseBody === null) {
             $debugData = ['request' => $this->filterDebugData($request)];
             try {
-                $responseBody = $this->httpClient->request(new Request(
-                    (string)$this->getConfigData('gateway_url'),
-                    Request::METHOD_POST,
-                    ['Content-Type' => 'application/xml'],
-                    $request
-                ))->get()->getBody();
+                $response = $this->httpClient->request(
+                    new Request(
+                        (string)$this->getConfigData('gateway_url'),
+                        Request::METHOD_POST,
+                        ['Content-Type' => 'application/xml'],
+                        $request
+                    )
+                );
+                $responseBody = $response->get()->getBody();
                 $debugData['result'] = $this->filterDebugData($responseBody);
                 $this->_setCachedQuotes($request, $responseBody);
             } catch (\Exception $e) {

@@ -546,12 +546,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             if (!$url) {
                 $url = $this->_defaultGatewayUrl;
             }
-            $deferredResponse = $this->httpClient->request(new Request(
-                $url . '?API=' . urlencode($api) . '&XML=' . urlencode($request),
-                Request::METHOD_GET,
-                [],
-                null
-            ));
+            $deferredResponse = $this->httpClient->request(
+                new Request(
+                    $url . '?API=' . urlencode($api) . '&XML=' . urlencode($request),
+                    Request::METHOD_GET,
+                    [],
+                    null
+                )
+            );
 
             return $this->proxyDeferredFactory->createFor(
                 Result::class,

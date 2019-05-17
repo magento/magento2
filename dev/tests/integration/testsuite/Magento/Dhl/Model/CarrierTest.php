@@ -65,7 +65,9 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Get tracking data provider
+     *
      * @return array
+     * @SuppressWarnings(PHPMD.LongMethod)
      */
     public function getTrackingDataProvider() : array
     {

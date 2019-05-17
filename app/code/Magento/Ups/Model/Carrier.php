@@ -1108,12 +1108,14 @@ XMLAuth;
 </TrackRequest>
 XMLAuth;
 
-            $trackingResponses[] = $this->asyncHttpClient->request(new Request(
-                $url,
-                Request::METHOD_POST,
-                ['Content-Type' => 'application/xml'],
-                $this->_xmlAccessRequest . $xmlRequest
-            ));
+            $trackingResponses[] = $this->asyncHttpClient->request(
+                new Request(
+                    $url,
+                    Request::METHOD_POST,
+                    ['Content-Type' => 'application/xml'],
+                    $this->_xmlAccessRequest . $xmlRequest
+                )
+            );
         }
         foreach ($trackingResponses as $response) {
             $httpResponse = $response->get();
@@ -1543,12 +1545,15 @@ XMLAuth;
         $debugData = ['request' => $this->filterDebugData($this->_xmlAccessRequest) . $xmlRequest->asXML()];
 
         try {
-            $xmlResponse = $this->asyncHttpClient->request(new Request(
-                $this->getShipAcceptUrl(),
-                Request::METHOD_POST,
-                ['Content-Type' => 'application/xml'],
-                $this->_xmlAccessRequest . $xmlRequest->asXML()
-            ))->get()->getBody();
+            $deferredResponse = $this->asyncHttpClient->request(
+                new Request(
+                    $this->getShipAcceptUrl(),
+                    Request::METHOD_POST,
+                    ['Content-Type' => 'application/xml'],
+                    $this->_xmlAccessRequest . $xmlRequest->asXML()
+                )
+            );
+            $xmlResponse = $deferredResponse->get()->getBody();
             $debugData['result'] = $xmlResponse;
             $this->_setCachedQuotes($xmlRequest, $xmlResponse);
         } catch (\Throwable $e) {
@@ -1613,12 +1618,14 @@ XMLAuth;
             $rawXmlRequest = $this->_formShipmentRequest($package);
             $this->setXMLAccessRequest();
             $xmlRequest = $this->_xmlAccessRequest . $rawXmlRequest;
-            $quotesRequests[] = $this->asyncHttpClient->request(new Request(
-                $this->getShipConfirmUrl(),
-                Request::METHOD_POST,
-                ['Content-Type' => 'application/xml'],
-                $xmlRequest
-            ));
+            $quotesRequests[] = $this->asyncHttpClient->request(
+                new Request(
+                    $this->getShipConfirmUrl(),
+                    Request::METHOD_POST,
+                    ['Content-Type' => 'application/xml'],
+                    $xmlRequest
+                )
+            );
         }
         $ids = [];
         //Processing quote responses
@@ -1666,12 +1673,14 @@ XMLAuth;
             $request->addChild('RequestAction', 'ShipAccept');
             $xmlRequest->addChild('ShipmentDigest', $quoteId);
 
-            $shippingRequests[] = $this->asyncHttpClient->request(new Request(
-                $this->getShipAcceptUrl(),
-                Request::METHOD_POST,
-                ['Content-Type' => 'application/xml'],
-                $this->_xmlAccessRequest . $xmlRequest->asXml()
-            ));
+            $shippingRequests[] = $this->asyncHttpClient->request(
+                new Request(
+                    $this->getShipAcceptUrl(),
+                    Request::METHOD_POST,
+                    ['Content-Type' => 'application/xml'],
+                    $this->_xmlAccessRequest . $xmlRequest->asXml()
+                )
+            );
         }
         //Processing shipment requests
         /** @var DataObject[] $results */
@@ -1724,12 +1733,15 @@ XMLAuth;
             $debugData['request'] = $this->filterDebugData($this->_xmlAccessRequest) . $rawXmlRequest;
             $url = $this->getShipConfirmUrl();
             try {
-                $xmlResponse = $this->asyncHttpClient->request(new Request(
-                    $url,
-                    Request::METHOD_POST,
-                    ['Content-Type' => 'application/xml'],
-                    $xmlRequest
-                ))->get()->getBody();
+                $deferredResponse = $this->asyncHttpClient->request(
+                    new Request(
+                        $url,
+                        Request::METHOD_POST,
+                        ['Content-Type' => 'application/xml'],
+                        $xmlRequest
+                    )
+                );
+                $xmlResponse = $deferredResponse->get()->getBody();
                 $debugData['result'] = $xmlResponse;
                 $this->_setCachedQuotes($xmlRequest, $xmlResponse);
             } catch (\Throwable $e) {

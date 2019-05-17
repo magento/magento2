@@ -347,6 +347,7 @@ class Shipping implements RateCollectorInterface
 
     /**
      * Compose Packages For Carrier.
+     *
      * Divides order into items and items into parts if it's necessary
      *
      * @param \Magento\Shipping\Model\Carrier\AbstractCarrier $carrier
@@ -389,30 +390,25 @@ class Shipping implements RateCollectorInterface
                 && $item->getProductType() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
             ) {
                 $productId = $item->getProduct()->getId();
-
+                $itemWeightWhole = $itemWeight * $item->getQty();
                 $stockItem = $this->stockRegistry->getStockItem($productId, $item->getStore()->getWebsiteId());
                 if ($stockItem->getIsDecimalDivided()) {
                     if ($stockItem->getEnableQtyIncrements() && $stockItem->getQtyIncrements()) {
-                        $itemWeight = $itemWeight * $stockItem->getQtyIncrements();
-                        $qty = round($item->getWeight() / $itemWeight * $qty);
+                        $itemWeightWhole = $itemWeight * $stockItem->getQtyIncrements();
+                        $qty = round($item->getWeight() / $itemWeightWhole * $qty);
                         $changeQty = false;
-                    } else {
-                        $itemWeight = $itemWeight * $item->getQty();
-                        if ($itemWeight > $maxWeight) {
-                            $qtyItem = floor($itemWeight / $maxWeight);
-                            $decimalItems[] = ['weight' => $maxWeight, 'qty' => $qtyItem];
-                            $weightItem = $this->mathDivision->getExactDivision($itemWeight, $maxWeight);
-                            if ($weightItem) {
-                                $decimalItems[] = ['weight' => $weightItem, 'qty' => 1];
-                            }
-                            $checkWeight = false;
-                        } else {
-                            $itemWeight = $itemWeight * $item->getQty();
+                    } elseif ($itemWeightWhole > $maxWeight) {
+                        $itemWeightWhole = $itemWeight;
+                        $qtyItem = floor($itemWeight / $maxWeight);
+                        $decimalItems[] = ['weight' => $maxWeight, 'qty' => $qtyItem];
+                        $weightItem = $this->mathDivision->getExactDivision($itemWeight, $maxWeight);
+                        if ($weightItem) {
+                            $decimalItems[] = ['weight' => $weightItem, 'qty' => 1];
                         }
+                        $checkWeight = false;
                     }
-                } else {
-                    $itemWeight = $itemWeight * $item->getQty();
                 }
+                $itemWeight = $itemWeightWhole;
             }
 
             if ($checkWeight && $maxWeight && $itemWeight > $maxWeight) {
