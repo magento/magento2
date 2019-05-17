@@ -254,56 +254,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests that valid rates are returned when sending a quotes request.
-     */
-    public function testCollectRates()
-    {
-        $requestData = require __DIR__ . '/_files/dhl_quote_request_data.php';
-        $responseXml = file_get_contents(__DIR__ . '/_files/dhl_quote_response.xml');
-
-        $this->scope->method('getValue')
-            ->willReturnCallback([$this, 'scopeConfigGetValue']);
-
-        $this->scope->method('isSetFlag')
-            ->willReturn(true);
-
-        $this->httpResponse->method('getBody')
-            ->willReturn($responseXml);
-
-        $this->coreDateMock->method('date')
-            ->willReturnCallback(function () {
-                return date(\DATE_RFC3339);
-            });
-
-        $request = $this->objectManager->getObject(RateRequest::class, $requestData);
-
-        $reflectionClass = new \ReflectionObject($this->httpClient);
-        $rawPostData = $reflectionClass->getProperty('raw_post_data');
-        $rawPostData->setAccessible(true);
-
-        $this->logger->expects($this->once())
-            ->method('debug')
-            ->with($this->stringContains('<SiteID>****</SiteID><Password>****</Password>'));
-
-        $expectedRates = require __DIR__ . '/_files/dhl_quote_response_rates.php';
-        $actualRates = $this->model->collectRates($request)->getAllRates();
-
-        self::assertEquals(count($expectedRates), count($actualRates));
-
-        foreach ($actualRates as $i => $actualRate) {
-            $actualRate = $actualRate->getData();
-            unset($actualRate['method_title']);
-            self::assertEquals($expectedRates[$i], $actualRate);
-        }
-
-        $requestXml = $rawPostData->getValue($this->httpClient);
-        self::assertContains('<Weight>18.223</Weight>', $requestXml);
-        self::assertContains('<Height>0.630</Height>', $requestXml);
-        self::assertContains('<Width>0.630</Width>', $requestXml);
-        self::assertContains('<Depth>0.630</Depth>', $requestXml);
-    }
-
-    /**
      * Tests that an error is returned when attempting to collect rates for an inactive shipping method.
      */
     public function testCollectRatesErrorMessage()
