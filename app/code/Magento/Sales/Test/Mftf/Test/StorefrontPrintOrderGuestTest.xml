@@ -45,7 +45,6 @@
             <grabValueFrom selector="{{AdminProductDownloadableSection.addLinkTitleInput('0')}}" stepKey="grabLink"/>
             <click selector="{{AdminProductFormSection.save}}" stepKey="clickSave"/>
             <waitForLoadingMaskToDisappear stepKey="waitForSave"/>
-            <waitForPageLoad stepKey="waitForPage"/>
 
             <!-- Create configurable Product -->
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
@@ -245,7 +244,6 @@
         <!-- Click on the "Continue" button -->
         <click selector="{{StorefrontGuestOrderSearchSection.continue}}" stepKey="clickContinue"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOrderPage"/>
 
         <!--  Click on the "Print Order" button -->
         <click selector="{{StorefrontGuestOrderViewSection.printOrder}}" stepKey="printOrder"/>
