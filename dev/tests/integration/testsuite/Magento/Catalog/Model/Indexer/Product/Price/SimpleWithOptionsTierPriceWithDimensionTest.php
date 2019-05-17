@@ -11,7 +11,7 @@ use Magento\Catalog\Api\ScopedProductTierPriceManagementInterface;
 use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Pricing\Price\TierPrice;
-use Magento\Customer\Model\Group;
+use Magento\Customer\Model\Group as CustomerGroup;
 
 /**
  * @group indexer_dimension
@@ -54,7 +54,7 @@ class SimpleWithOptionsTierPriceWithDimensionTest extends \PHPUnit\Framework\Tes
 
         $tierPrice = $this->objectManager->create(ProductTierPriceInterfaceFactory::class)
             ->create();
-        $tierPrice->setCustomerGroupId(Group::CUST_GROUP_ALL);
+        $tierPrice->setCustomerGroupId(CustomerGroup::CUST_GROUP_ALL);
         $tierPrice->setQty(1.00);
         $tierPrice->setValue($tierPriceValue);
         $tierPriceManagement = $this->objectManager->create(ScopedProductTierPriceManagementInterface::class);
