@@ -10,6 +10,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCustomerMainActionsSection">
         <element name="saveButton" type="button" selector="#save" timeout="30"/>
+        <element name="saveAndContinue" type="button" selector="#save_and_continue" timeout="30"/>
         <element name="resetPassword" type="button" selector="#resetPassword" timeout="30"/>
         <element name="manageShoppingCart" type="button" selector="#manage_quote" timeout="30"/>
     </section>

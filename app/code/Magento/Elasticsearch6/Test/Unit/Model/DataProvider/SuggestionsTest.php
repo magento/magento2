@@ -67,7 +67,7 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->config = $this->getMockBuilder(\Magento\Elasticsearch6\Model\Config::class)
+        $this->config = $this->getMockBuilder(\Magento\Elasticsearch\Model\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['isElasticsearchEnabled'])
             ->getMock();

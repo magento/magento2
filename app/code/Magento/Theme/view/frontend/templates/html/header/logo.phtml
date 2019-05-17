@@ -12,7 +12,11 @@
 ?>
 <?php $storeName = $block->getThemeName() ? $block->getThemeName() : $block->getLogoAlt();?>
 <span data-action="toggle-nav" class="action nav-toggle"><span><?= /* @escapeNotVerified */ __('Toggle Nav') ?></span></span>
-<a class="logo" href="<?= $block->getUrl('') ?>" title="<?= /* @escapeNotVerified */ $storeName ?>">
+<a
+    class="logo"
+    href="<?= $block->getUrl('') ?>"
+    title="<?= /* @escapeNotVerified */ $storeName ?>"
+    aria-label="store logo">
     <img src="<?= /* @escapeNotVerified */ $block->getLogoSrc() ?>"
          title="<?= $block->escapeHtmlAttr($block->getLogoAlt()) ?>"
          alt="<?= $block->escapeHtmlAttr($block->getLogoAlt()) ?>"

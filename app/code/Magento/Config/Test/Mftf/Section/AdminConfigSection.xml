@@ -11,5 +11,7 @@
         <element name="generalTab" type="text" selector="//div[@class='admin__page-nav-title title _collapsible']//strong[text()='General']"/>
         <element name="generalTabClosed" type="text" selector="//div[@class='admin__page-nav-title title _collapsible' and @aria-expanded='false' or @aria-expanded='0']//strong[text()='General']"/>
         <element name="generalTabOpened" type="text" selector="//div[@class='admin__page-nav-title title _collapsible' and @aria-expanded='true' or @aria-expanded='1']//strong[text()='General']"/>
+        <element name="defaultConfigButton" type="button" selector="#store-change-button" timeout="30"/>
+        <element name="defaultConfigDropdown" type="button" selector="//ul[@class='dropdown-menu']" timeout="30"/>
     </section>
 </sections>

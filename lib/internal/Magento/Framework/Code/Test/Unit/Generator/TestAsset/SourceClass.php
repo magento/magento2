@@ -7,6 +7,9 @@ namespace Magento\Framework\Code\Test\Unit\Generator\TestAsset;
 
 use Zend\Code\Generator\ClassGenerator;
 
+/**
+ * phpcs:ignoreFile
+ */
 class SourceClass extends ParentClass
 {
     /**
@@ -111,10 +114,7 @@ class SourceClass extends ParentClass
     public static function publicChildStatic()
     {
     }
-
-    /**
-     * @SuppressWarnings(PHPMD.FinalImplementation) Suppressed as is a fixture but not a real code
-     */
+    
     final public function publicChildFinal()
     {
     }

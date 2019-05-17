@@ -209,3 +209,9 @@ Magento/Customer/Model/FileUploaderDataResolver.php
 Magento/Customer/Model/Customer/DataProvider.php
 Magento/InventoryShippingAdminUi/Ui/DataProvider
 Magento/Elasticsearch6/Model/Client
+Magento/CatalogSearch/Model/ResourceModel/Fulltext
+Magento/Elasticsearch/Model/Layer/Search
+Magento/Elasticsearch/Model/Adapter/FieldMapper/Product/FieldProvider/FieldName/Resolver
+Magento/Elasticsearch6/Model/Client
+Magento/Config/App/Config/Type
+Magento/InventoryReservationCli/Test/Integration

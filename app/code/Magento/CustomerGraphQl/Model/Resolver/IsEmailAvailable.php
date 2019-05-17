@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -42,11 +43,15 @@ class IsEmailAvailable implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $email = $args['email'] ?? null;
-        if (!$email) {
+        if (!isset($args['email']) || empty($args['email'])) {
             throw new GraphQlInputException(__('"Email should be specified'));
         }
-        $isEmailAvailable = $this->accountManagement->isEmailAvailable($email);
+
+        try {
+            $isEmailAvailable = $this->accountManagement->isEmailAvailable($args['email']);
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()), $e);
+        }
 
         return [
             'is_email_available' => $isEmailAvailable

@@ -11,9 +11,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\BillingAddressManagementInterface;
-use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
 /**
  * Set billing address for a specified shopping cart
@@ -38,22 +38,22 @@ class AssignBillingAddressToCart
      * Assign billing address to cart
      *
      * @param CartInterface $cart
-     * @param QuoteAddress $billingAddress
+     * @param AddressInterface $billingAddress
      * @param bool $useForShipping
      * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
      */
     public function execute(
         CartInterface $cart,
-        QuoteAddress $billingAddress,
+        AddressInterface $billingAddress,
         bool $useForShipping
     ): void {
         try {
             $this->billingAddressManagement->assign($cart->getId(), $billingAddress, $useForShipping);
         } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()));
+            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()));
+            throw new GraphQlInputException(__($e->getMessage()), $e);
         }
     }
 }

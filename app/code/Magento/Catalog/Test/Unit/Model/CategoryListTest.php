@@ -93,7 +93,7 @@ class CategoryListTest extends \PHPUnit\Framework\TestCase
 
         $collection = $this->getMockBuilder(Collection::class)->disableOriginalConstructor()->getMock();
         $collection->expects($this->once())->method('getSize')->willReturn($totalCount);
-        $collection->expects($this->once())->method('getItems')->willReturn([$categoryFirst, $categorySecond]);
+        $collection->expects($this->once())->method('getAllIds')->willReturn([$categoryIdFirst, $categoryIdSecond]);
 
         $this->collectionProcessorMock->expects($this->once())
             ->method('process')

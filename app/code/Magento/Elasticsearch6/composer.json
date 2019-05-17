@@ -9,7 +9,7 @@
         "magento/module-search": "*",
         "magento/module-store": "*",
         "magento/module-elasticsearch": "*",
-        "elasticsearch/elasticsearch": "~6.1"
+        "elasticsearch/elasticsearch": "~2.0|~5.1|~6.1"
     },
     "suggest": {
         "magento/module-config": "*"
