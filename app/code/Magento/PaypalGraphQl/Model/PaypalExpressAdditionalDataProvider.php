@@ -16,7 +16,7 @@ use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
 class PaypalExpressAdditionalDataProvider implements AdditionalDataProviderInterface
 {
 
-    private const PATH_ADDITIONAL_DATA = 'input/payment_method/additional_data/paypal_express';
+    private const PATH_ADDITIONAL_DATA = 'input/payment_method/additional_data';
 
     /**
      * @var ArrayManager
@@ -43,5 +43,4 @@ class PaypalExpressAdditionalDataProvider implements AdditionalDataProviderInter
 
         return $additionalData;
     }
-
 }

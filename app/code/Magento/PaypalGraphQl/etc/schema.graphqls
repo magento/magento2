@@ -19,6 +19,7 @@ type PaypalExpressToken implements PaymentTokenInterface {
 
 input PaymentMethodAdditionalDataInput {
     paypal_express: PaypalExpressInput
+    payflow_express: PaypalExpressInput
 }
 
 input PaypalExpressInput {

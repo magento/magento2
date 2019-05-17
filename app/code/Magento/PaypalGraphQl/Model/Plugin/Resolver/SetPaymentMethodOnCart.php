@@ -85,16 +85,17 @@ class SetPaymentMethodOnCart
 
         $paypalAdditionalData = $this->paypalExpressAdditionalDataProvider->getData($args);
         if (empty($paypalAdditionalData)
-            || empty($paypalAdditionalData['payer_id'])
-            || empty($paypalAdditionalData['token'])
+            || empty($paypalAdditionalData[$code])
+            || empty($paypalAdditionalData[$code]['payer_id'])
+            || empty($paypalAdditionalData[$code]['token'])
             || empty($code)
         ) {
             return $resolvedValue;
         }
 
         // validate and get payment code method
-        $payerId = $paypalAdditionalData['payer_id'];
-        $token = $paypalAdditionalData['token'];
+        $payerId = $paypalAdditionalData[$code]['payer_id'];
+        $token = $paypalAdditionalData[$code]['token'];
         $cart = $resolvedValue['cart']['model'];
         $checkout = $this->paypalConfigProvider->getCheckout($code, $cart);
 
