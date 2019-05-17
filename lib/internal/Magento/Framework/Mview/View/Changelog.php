@@ -8,6 +8,11 @@ namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\Phrase;
 
+/**
+ * Class Changelog
+ *
+ * @package Magento\Framework\Mview\View
+ */
 class Changelog implements ChangelogInterface
 {
     /**
@@ -159,6 +164,7 @@ class Changelog implements ChangelogInterface
 
     /**
      * Get maximum version_id from changelog
+     *
      * @return int
      * @throws ChangelogTableNotExistsException
      * @throws \Exception
@@ -216,6 +222,8 @@ class Changelog implements ChangelogInterface
     }
 
     /**
+     * Get view's identifier
+     *
      * @return string
      */
     public function getViewId()
