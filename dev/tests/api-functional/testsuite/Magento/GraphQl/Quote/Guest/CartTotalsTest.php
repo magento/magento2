@@ -87,7 +87,6 @@ class CartTotalsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @group recent
      */
     public function testGetCartTotalsWithNoAddressSet()
     {
@@ -126,6 +125,34 @@ class CartTotalsTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/cart_rule_discount_no_coupon.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @group recent
+     */
+    public function testGetDiscountInformation()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query);
+
+        $discountResponse = $response['cart']['prices']['discount'];
+        self::assertEquals(-20, $discountResponse['amount']['value']);
+        self::assertEquals('100% Off for all orders', $discountResponse['label']);
+    }
+
+    public function testGetDiscountInformationWithTwoRulesApplied()
+    {
+        self::fail();
+    }
+
+    public function testGetDiscountInformationForRuleWithNoLabel()
+    {
+        self::fail();
+    }
+
+    /**
      * Generates GraphQl query for retrieving cart totals
      *
      * @param string $maskedQuoteId
@@ -154,6 +181,13 @@ class CartTotalsTest extends GraphQlAbstract
         currency
       }
       applied_taxes {
+        label
+        amount {
+          value
+          currency
+        }
+      }
+      discount {
         label
         amount {
           value

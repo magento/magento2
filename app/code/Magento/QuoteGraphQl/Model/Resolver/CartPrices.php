@@ -56,6 +56,7 @@ class CartPrices implements ResolverInterface
                 'value' => $cartTotals->getSubtotalWithDiscount(), 'currency' => $currency
             ],
             'applied_taxes' => $this->getAppliedTaxes($cartTotals, $currency),
+            'discount' => $this->getDiscount($cartTotals, $currency),
             'model' => $quote
         ];
     }
@@ -83,5 +84,20 @@ class CartPrices implements ResolverInterface
             ];
         }
         return $appliedTaxesData;
+    }
+
+    /**
+     * Returns information about an applied discount
+     *
+     * @param Total $total
+     * @param string $currency
+     * @return array
+     */
+    private function getDiscount(Total $total, string $currency)
+    {
+        return [
+            'label' => $total->getDiscountDescription(),
+            'amount' => ['value' => $total->getDiscountAmount(), "currency" => $currency]
+        ];
     }
 }
