@@ -241,12 +241,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         return $this->proxyDeferredFactory->createFor(
             Result::class,
-            new CallbackDeferred(function () use ($request, $result) {
-                $this->_result = $result;
-                $this->_updateFreeMethodQuote($request);
+            new CallbackDeferred(
+                function () use ($request, $result) {
+                    $this->_result = $result;
+                    $this->_updateFreeMethodQuote($request);
 
-                return $this->getResult();
-            })
+                    return $this->getResult();
+                }
+            )
         );
     }
 
@@ -553,14 +555,16 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
             return $this->proxyDeferredFactory->createFor(
                 Result::class,
-                new CallbackDeferred(function () use ($deferredResponse, $request, $debugData) {
-                    $responseBody = $deferredResponse->get()->getBody();
-                    $debugData['result'] = $responseBody;
-                    $this->_setCachedQuotes($request, $responseBody);
-                    $this->_debug($debugData);
+                new CallbackDeferred(
+                    function () use ($deferredResponse, $request, $debugData) {
+                        $responseBody = $deferredResponse->get()->getBody();
+                        $debugData['result'] = $responseBody;
+                        $this->_setCachedQuotes($request, $responseBody);
+                        $this->_debug($debugData);
 
-                    return $this->_parseXmlResponse($responseBody);
-                })
+                        return $this->_parseXmlResponse($responseBody);
+                    }
+                )
             );
         }
 
@@ -581,63 +585,59 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $r = $this->_rawRequest;
         $costArr = [];
         $priceArr = [];
-        if (strlen(trim($response)) > 0) {
-            if (strpos(trim($response), '<?xml') === 0) {
-                if (strpos($response, '<?xml version="1.0"?>') !== false) {
-                    $response = str_replace(
-                        '<?xml version="1.0"?>',
-                        '<?xml version="1.0" encoding="ISO-8859-1"?>',
-                        $response
-                    );
-                }
-                $xml = $this->parseXml($response);
+        if (strlen(trim($response)) > 0 && strpos(trim($response), '<?xml') === 0) {
+            if (strpos($response, '<?xml version="1.0"?>') !== false) {
+                $response = str_replace(
+                    '<?xml version="1.0"?>',
+                    '<?xml version="1.0" encoding="ISO-8859-1"?>',
+                    $response
+                );
+            }
+            $xml = $this->parseXml($response);
 
-                if (is_object($xml)) {
-                    $allowedMethods = explode(',', $this->getConfigData('allowed_methods'));
-                    $serviceCodeToActualNameMap = [];
+            if (is_object($xml) && is_object($xml->Package)) {
+                $allowedMethods = explode(',', $this->getConfigData('allowed_methods'));
+                $serviceCodeToActualNameMap = [];
+                $isUS = $this->_isUSCountry($r->getDestCountryId());
+
+                if ($isUS && is_object($xml->Package->Postage)) {
                     /**
                      * US Rates
                      */
-                    if ($this->_isUSCountry($r->getDestCountryId())) {
-                        if (is_object($xml->Package) && is_object($xml->Package->Postage)) {
-                            foreach ($xml->Package->Postage as $postage) {
-                                $serviceName = $this->_filterServiceName((string)$postage->MailService);
-                                $_serviceCode = $this->getCode('method_to_code', $serviceName);
-                                $serviceCode = $_serviceCode ? $_serviceCode : (string)$postage->attributes()->CLASSID;
-                                $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
-                                if (in_array($serviceCode, $allowedMethods)) {
-                                    $costArr[$serviceCode] = (string)$postage->Rate;
-                                    $priceArr[$serviceCode] = $this->getMethodPrice(
-                                        (string)$postage->Rate,
-                                        $serviceCode
-                                    );
-                                }
-                            }
-                            asort($priceArr);
-                        }
-                    } else {
-                        /*
-                         * International Rates
-                         */
-                        if (is_object($xml->Package) && is_object($xml->Package->Service)) {
-                            foreach ($xml->Package->Service as $service) {
-                                $serviceName = $this->_filterServiceName((string)$service->SvcDescription);
-                                $serviceCode = 'INT_' . (string)$service->attributes()->ID;
-                                $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
-                                if (!$this->isServiceAvailable($service)) {
-                                    continue;
-                                }
-                                if (in_array($serviceCode, $allowedMethods)) {
-                                    $costArr[$serviceCode] = (string)$service->Postage;
-                                    $priceArr[$serviceCode] = $this->getMethodPrice(
-                                        (string)$service->Postage,
-                                        $serviceCode
-                                    );
-                                }
-                            }
-                            asort($priceArr);
+                    foreach ($xml->Package->Postage as $postage) {
+                        $serviceName = $this->_filterServiceName((string)$postage->MailService);
+                        $_serviceCode = $this->getCode('method_to_code', $serviceName);
+                        $serviceCode = $_serviceCode ? $_serviceCode : (string)$postage->attributes()->CLASSID;
+                        $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
+                        if (in_array($serviceCode, $allowedMethods)) {
+                            $costArr[$serviceCode] = (string)$postage->Rate;
+                            $priceArr[$serviceCode] = $this->getMethodPrice(
+                                (string)$postage->Rate,
+                                $serviceCode
+                            );
                         }
                     }
+                    asort($priceArr);
+                } elseif (!$isUS && is_object($xml->Package->Service)) {
+                    /*
+                     * International Rates
+                     */
+                    foreach ($xml->Package->Service as $service) {
+                        $serviceName = $this->_filterServiceName((string)$service->SvcDescription);
+                        $serviceCode = 'INT_' . (string)$service->attributes()->ID;
+                        $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
+                        if (!$this->isServiceAvailable($service)) {
+                            continue;
+                        }
+                        if (in_array($serviceCode, $allowedMethods)) {
+                            $costArr[$serviceCode] = (string)$service->Postage;
+                            $priceArr[$serviceCode] = $this->getMethodPrice(
+                                (string)$service->Postage,
+                                $serviceCode
+                            );
+                        }
+                    }
+                    asort($priceArr);
                 }
             }
         }
@@ -1076,12 +1076,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             if (!$url) {
                 $url = $this->_defaultGatewayUrl;
             }
-            $responseDeferred = $this->httpClient->request(new Request(
-                $url . '?API=' . urlencode($api) . '&XML=' . urlencode($request),
-                Request::METHOD_GET,
-                [],
-                null
-            ));
+            $responseDeferred = $this->httpClient->request(
+                new Request(
+                    $url . '?API=' . urlencode($api) . '&XML=' . urlencode($request),
+                    Request::METHOD_GET,
+                    [],
+                    null
+                )
+            );
             $responseBody = $responseDeferred->get()->getBody();
             $debugData['result'] = $responseBody;
 
@@ -1445,11 +1447,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     protected function _filterServiceName($name)
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $name = (string)preg_replace(
             ['~<[^/!][^>]+>.*</[^>]+>~sU', '~\<!--.*--\>~isU', '~<[^>]+>~is'],
             '',
             html_entity_decode($name)
         );
+        // phpcs:enable Magento2.Functions.DiscouragedFunction
         $name = str_replace('*', '', $name);
 
         return $name;
@@ -1560,7 +1564,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $serviceType = 'Library Mail';
                 break;
             default:
-                throw new \Exception(__('Service type does not match'));
+                throw new \InvalidArgumentException(__('Service type does not match'));
         }
         $packageParams = $request->getPackageParams();
         $packageWeight = $request->getPackageWeight();
@@ -1956,12 +1960,15 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $result->setErrors($debugData['result']['error']);
             } else {
                 if ($recipientUSCountry && $service == 'Priority Express') {
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $labelContent = base64_decode((string)$response->EMLabel);
                     $trackingNumber = (string)$response->EMConfirmationNumber;
                 } elseif ($recipientUSCountry) {
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $labelContent = base64_decode((string)$response->SignatureConfirmationLabel);
                     $trackingNumber = (string)$response->SignatureConfirmationNumber;
                 } else {
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $labelContent = base64_decode((string)$response->LabelImage);
                     $trackingNumber = (string)$response->BarcodeNumber;
                 }
@@ -2149,6 +2156,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
             $data = $xml->asXML();
         } catch (\Exception $e) {
+            return '*Failed to read XML*';
         }
 
         return $data;

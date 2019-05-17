@@ -26,7 +26,7 @@ class AsyncClientInterfaceMock implements AsyncClientInterface
     /**
      * @var Response[]
      */
-    private $mockResponses;
+    private $mockResponses = [];
 
     /**
      * @var Request|null

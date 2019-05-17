@@ -37,7 +37,7 @@ class CarrierResult extends Result
     {
         $needsSorting = false;
         //Appending previously received results.
-        while($resultData = array_shift($this->results)) {
+        while ($resultData = array_shift($this->results)) {
             if ($resultData['result']->getError()) {
                 if ($resultData['appendFailed']) {
                     $this->append($resultData['result']);

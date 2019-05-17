@@ -7,8 +7,10 @@ namespace Magento\Shipping\Model;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote\Address\RateCollectorInterface;
+use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateRequestFactory;
 use Magento\Sales\Model\Order\Shipment;
+use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Rate\CarrierResult;
 use Magento\Shipping\Model\Rate\CarrierResultFactory;
 use Magento\Shipping\Model\Rate\PackageResult;
@@ -16,6 +18,8 @@ use Magento\Shipping\Model\Rate\PackageResultFactory;
 use Magento\Shipping\Model\Rate\Result;
 
 /**
+ * @inheritDoc
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Shipping implements RateCollectorInterface
@@ -258,62 +262,86 @@ class Shipping implements RateCollectorInterface
     }
 
     /**
-     * Collect rates of given carrier
+     * Prepare carrier to find rates.
      *
      * @param string $carrierCode
-     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
-     * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @param RateRequest $request
+     * @return AbstractCarrier
+     * @throws \RuntimeException
      */
-    public function collectCarrierRates($carrierCode, $request)
+    private function prepareCarrier(string $carrierCode, RateRequest $request): AbstractCarrier
     {
-        /* @var $carrier \Magento\Shipping\Model\Carrier\AbstractCarrier */
+        /* @var AbstractCarrier $carrier */
         $carrier = $this->_carrierFactory->createIfActive($carrierCode, $request->getStoreId());
         if (!$carrier) {
-            return $this;
+            throw new \RuntimeException('Failed to initialize carrier');
         }
         $carrier->setActiveFlag($this->_availabilityConfigField);
         $result = $carrier->checkAvailableShipCountries($request);
         if (false !== $result && !$result instanceof \Magento\Quote\Model\Quote\Address\RateResult\Error) {
             $result = $carrier->processAdditionalValidation($request);
         }
-        /*
-         * Result will be false if the admin set not to show the shipping module
-         * if the delivery country is not within specific countries
-         */
-        if (false !== $result) {
-            if (!$result instanceof \Magento\Quote\Model\Quote\Address\RateResult\Error) {
-                if ($carrier->getConfigData('shipment_requesttype')) {
-                    $packages = $this->composePackagesForCarrier($carrier, $request);
-                    if (!empty($packages)) {
-                        /** @var PackageResult $result */
-                        $result = $this->packageResultFactory->create();
-                        foreach ($packages as $weight => $packageCount) {
-                            $request->setPackageWeight($weight);
-                            $packageResult = $carrier->collectRates($request);
-                            if (!$packageResult) {
-                                return $this;
-                            } else {
-                                $result->appendPackageResult($packageResult, $packageCount);
-                            }
-                        }
+        if (!$result) {
+            /*
+             * Result will be false if the admin set not to show the shipping module
+             * if the delivery country is not within specific countries
+             */
+            throw new \RuntimeException('Cannot collect rates for given request');
+        } elseif ($result instanceof \Magento\Quote\Model\Quote\Address\RateResult\Error) {
+            $this->getResult()->append($result);
+            throw new \RuntimeException('Error occurred while preparing a carrier');
+        }
+
+        return $carrier;
+    }
+
+    /**
+     * Collect rates of given carrier
+     *
+     * @param string $carrierCode
+     * @param RateRequest $request
+     * @return $this
+     */
+    public function collectCarrierRates($carrierCode, $request)
+    {
+        try {
+            $carrier = $this->prepareCarrier($carrierCode, $request);
+        } catch (\RuntimeException $exception) {
+            return $this;
+        }
+
+        /** @var Result|\Magento\Quote\Model\Quote\Address\RateResult\Error|null $result */
+        $result = null;
+        if ($carrier->getConfigData('shipment_requesttype')) {
+            $packages = $this->composePackagesForCarrier($carrier, $request);
+            if (!empty($packages)) {
+                //Multiple shipments
+                /** @var PackageResult $result */
+                $result = $this->packageResultFactory->create();
+                foreach ($packages as $weight => $packageCount) {
+                    $request->setPackageWeight($weight);
+                    $packageResult = $carrier->collectRates($request);
+                    if (!$packageResult) {
+                        return $this;
                     } else {
-                        $result = $carrier->collectRates($request);
+                        $result->appendPackageResult($packageResult, $packageCount);
                     }
-                } else {
-                    $result = $carrier->collectRates($request);
                 }
-                if (!$result) {
-                    return $this;
-                }
-            }
-            if ($result instanceof Result) {
-                $this->getResult()->appendResult($result, $carrier->getConfigData('showmethod') != 0);
-            } else {
-                $this->getResult()->append($result);
             }
         }
+        if (!$result) {
+            //One shipment for all items.
+            $result = $carrier->collectRates($request);
+        }
+
+        if (!$result) {
+            return $this;
+        } elseif ($result instanceof Result) {
+            $this->getResult()->appendResult($result, $carrier->getConfigData('showmethod') != 0);
+        } else {
+            $this->getResult()->append($result);
+        }
+
         return $this;
     }
 
@@ -417,6 +445,7 @@ class Shipping implements RateCollectorInterface
 
     /**
      * Make pieces
+     *
      * Compose packages list based on given items, so that each package is as heavy as possible
      *
      * @param array $items

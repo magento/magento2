@@ -49,5 +49,4 @@ class GuzzleAsyncClient implements AsyncClientInterface
             )
         );
     }
-
 }

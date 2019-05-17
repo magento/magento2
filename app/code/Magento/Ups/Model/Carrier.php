@@ -172,6 +172,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @param ProxyDeferredFactory|null $proxyDeferredFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -225,7 +226,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * Collect and get rates/errors
      *
      * @param RateRequest $request
-     * @return  Result|Error|bool
+     * @return Result|Error|bool
      */
     public function collectRates(RateRequest $request)
     {
@@ -240,11 +241,13 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
 
         return $this->deferredProxyFactory->createFor(
             Result::class,
-            new CallbackDeferred(function () use ($request, $result) {
-                $this->_result = $result;
-                $this->_updateFreeMethodQuote($request);
-                return $this->getResult();
-            })
+            new CallbackDeferred(
+                function () use ($request, $result) {
+                    $this->_result = $result;
+                    $this->_updateFreeMethodQuote($request);
+                    return $this->getResult();
+                }
+            )
         );
     }
 
@@ -781,15 +784,17 @@ XMLRequest;
 
         return $this->deferredProxyFactory->createFor(
             Result::class,
-            new CallbackDeferred(function () use ($httpResponse) {
-                if ($httpResponse->get()->getStatusCode() >= 400) {
-                    $xmlResponse = '';
-                } else {
-                    $xmlResponse = $httpResponse->get()->getBody();
-                }
+            new CallbackDeferred(
+                function () use ($httpResponse) {
+                    if ($httpResponse->get()->getStatusCode() >= 400) {
+                        $xmlResponse = '';
+                    } else {
+                        $xmlResponse = $httpResponse->get()->getBody();
+                    }
 
-                return $this->_parseXmlResponse($xmlResponse);
-            })
+                    return $this->_parseXmlResponse($xmlResponse);
+                }
+            )
         );
     }
 
@@ -1807,7 +1812,7 @@ XMLAuth;
         } catch (LocalizedException $exception) {
             return new DataObject(['errors' => [$exception->getMessage()]]);
         } catch (\RuntimeException $exception) {
-            throw new LocalizedException(__('Failed to send items'));
+            return new DataObject(['errors' => __('Failed to send items')]);
         }
 
         return new DataObject(['info' => $labels]);

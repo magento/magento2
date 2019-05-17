@@ -82,9 +82,11 @@ class PackageResultTest extends TestCase
         $rate1->expects($this->any())->method('getPrice')->willReturnReference($price1);
         $rate1->expects($this->any())
             ->method('setPrice')
-            ->willReturnCallback(function ($price) use (&$price1) {
-                $price1 = $price;
-            });
+            ->willReturnCallback(
+                function ($price) use (&$price1) {
+                    $price1 = $price;
+                }
+            );
         /** @var Result|MockObject $result1 */
         $result1 = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
@@ -93,9 +95,11 @@ class PackageResultTest extends TestCase
         $result1->expects($this->once())
             ->method('updateRatePrice')
             ->with(2)
-            ->willReturnCallback(function () use (&$price1) {
-                $price1 = $price1 * 2;
-            });
+            ->willReturnCallback(
+                function () use (&$price1) {
+                    $price1 = $price1 * 2;
+                }
+            );
 
         $rate2 = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
@@ -106,18 +110,22 @@ class PackageResultTest extends TestCase
         $rate2->expects($this->any())->method('getPrice')->willReturnReference($price2);
         $rate2->expects($this->any())
             ->method('setPrice')
-            ->willReturnCallback(function ($price) use (&$price2) {
-                $price2 = $price;
-            });
+            ->willReturnCallback(
+                function ($price) use (&$price2) {
+                    $price2 = $price;
+                }
+            );
         /** @var Result|MockObject $result2 */
         $result2 = $this->getMockBuilder(Result::class)->disableOriginalConstructor()->getMock();
         $result2->expects($this->any())->method('getAllRates')->willReturn([$rate2]);
         $result2->expects($this->once())
             ->method('updateRatePrice')
             ->with(3)
-            ->willReturnCallback(function () use (&$price2) {
-                $price2 = $price2 * 3;
-            });
+            ->willReturnCallback(
+                function () use (&$price2) {
+                    $price2 = $price2 * 3;
+                }
+            );
 
         $this->result->appendPackageResult($result1, 2);
         $this->result->appendPackageResult($result2, 3);
@@ -143,9 +151,11 @@ class PackageResultTest extends TestCase
         $rate1->expects($this->any())->method('getPrice')->willReturnReference($price1);
         $rate1->expects($this->any())
             ->method('setPrice')
-            ->willReturnCallback(function ($price) use (&$price1) {
-                $price1 = $price;
-            });
+            ->willReturnCallback(
+                function ($price) use (&$price1) {
+                    $price1 = $price;
+                }
+            );
         /** @var Result|MockObject $result1 */
         $result1 = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()

@@ -27,8 +27,8 @@ class PackageResult extends Result
     private $errorFactory;
 
     /**
-     * @inheritDoc
-     * @param Error $errorFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param ErrorFactory $errorFactory
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -56,7 +56,7 @@ class PackageResult extends Result
     public function getAllRates()
     {
         //Process results for packages
-        while($resultData = array_shift($this->packageResults)) {
+        while ($resultData = array_shift($this->packageResults)) {
             /** @var Result $result */
             $result = $resultData['result'];
             $result->updateRatePrice($resultData['packages']);

@@ -40,6 +40,7 @@ class ProxyDeferredFactoryTest extends TestCase
         $this->factory = Bootstrap::getObjectManager()->get(ProxyDeferredFactory::class);
         $this->callbackDeferredFactory = Bootstrap::getObjectManager()->get(CallbackDeferredFactory::class);
         $this->random = Bootstrap::getObjectManager()->get(Random::class);
+        //phpcs:ignore
         include_once __DIR__ .'/_files/test_class.php';
         \TestDeferred\TestClass::$created = 0;
     }
@@ -83,8 +84,10 @@ class ProxyDeferredFactoryTest extends TestCase
             \TestDeferred\TestClass::class,
             $this->callbackDeferredFactory->create(['callback' => $callback])
         );
+        //phpcs:disable
         /** @var \TestDeferred\TestClass $unserialized */
         $unserialized = unserialize(serialize($proxy));
+        //phpcs:enable
         $this->assertEquals($value, $unserialized->getValue());
         $this->assertEquals($value, $proxy->getValue());
         $this->assertEquals(1, \TestDeferred\TestClass::$created);

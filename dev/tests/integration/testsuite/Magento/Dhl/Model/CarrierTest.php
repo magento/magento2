@@ -69,12 +69,14 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     public function getTrackingDataProvider() : array
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $expectedMultiAWBRequestXml = file_get_contents(__DIR__ . '/../_files/TrackingRequest_MultipleAWB.xml');
         $multiAWBResponseXml = file_get_contents(__DIR__ . '/../_files/TrackingResponse_MultipleAWB.xml');
         $expectedSingleAWBRequestXml = file_get_contents(__DIR__ . '/../_files/TrackingRequest_SingleAWB.xml');
         $singleAWBResponseXml = file_get_contents(__DIR__ . '/../_files/TrackingResponse_SingleAWB.xml');
         $singleNoDataResponseXml = file_get_contents(__DIR__ . '/../_files/SingleknownTrackResponse-no-data-found.xml');
         $failedResponseXml = file_get_contents(__DIR__ . '/../_files/Track-res-XML-Parse-Err.xml');
+        //phpcs:enable Magento2.Functions.DiscouragedFunction
         $expectedTrackingDataA = [
             'carrier' => 'dhl',
             'carrier_title' => 'DHL',

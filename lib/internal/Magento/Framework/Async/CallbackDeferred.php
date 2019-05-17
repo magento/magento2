@@ -113,5 +113,4 @@ class CallbackDeferred implements CancelableDeferredInterface
     {
         return $this->done;
     }
-
 }

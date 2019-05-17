@@ -391,12 +391,14 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         //After quotes are loaded parsing the response.
         return $this->proxyDeferredFactory->createFor(
             Result::class,
-            new CallbackDeferred(function () use ($request, $result) {
-                $this->_result = $result;
-                $this->_updateFreeMethodQuote($request);
+            new CallbackDeferred(
+                function () use ($request, $result) {
+                    $this->_result = $result;
+                    $this->_updateFreeMethodQuote($request);
 
-                return $this->_result;
-            })
+                    return $this->_result;
+                }
+            )
         );
     }
 
@@ -744,6 +746,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     protected function _getAllItems()
     {
@@ -828,6 +831,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         return $fullItems;
     }
+    //phpcs:enable
 
     /**
      * Make pieces
@@ -999,55 +1003,57 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         return $this->proxyDeferredFactory->createFor(
             Result::class,
-            new CallbackDeferred(function () use ($deferredResponses, $responseBodies) {
-                //Loading rates not found in cache
-                foreach ($deferredResponses as $deferredResponseData) {
-                    $responseBodies[] = [
-                        'body' => $deferredResponseData['deferred']->get()->getBody(),
-                        'date' => $deferredResponseData['date'],
-                        'request' => $deferredResponseData['request'],
-                        'from_cache' => false
-                    ];
-                }
-                /** @var string $lastResponse */
-                $lastResponse = '';
-                //Processing different dates
-                foreach ($responseBodies as $responseData) {
-                    $debugPoint = [];
-                    $debugPoint['request'] = $this->filterDebugData($responseData['request']);
-                    $debugPoint['response'] = $this->filterDebugData($responseData['body']);
-                    $debugPoint['from_cache'] = $responseData['from_cache'];
-                    $unavailable = false;
-                    try {
-                        //Getting availability
-                        $bodyXml = $this->_xmlElFactory->create(['data' => $responseData['body']]);
-                        $code = $bodyXml->xpath('//GetQuoteResponse/Note/Condition/ConditionCode');
-                        if (isset($code[0]) && (int)$code[0] == self::CONDITION_CODE_SERVICE_DATE_UNAVAILABLE) {
-                            $debugPoint['info'] = sprintf(
-                                __("DHL service is not available at %s date"),
-                                $responseData['date']
-                            );
+            new CallbackDeferred(
+                function () use ($deferredResponses, $responseBodies) {
+                    //Loading rates not found in cache
+                    foreach ($deferredResponses as $deferredResponseData) {
+                        $responseBodies[] = [
+                            'body' => $deferredResponseData['deferred']->get()->getBody(),
+                            'date' => $deferredResponseData['date'],
+                            'request' => $deferredResponseData['request'],
+                            'from_cache' => false
+                        ];
+                    }
+                    /** @var string $lastResponse */
+                    $lastResponse = '';
+                    //Processing different dates
+                    foreach ($responseBodies as $responseData) {
+                        $debugPoint = [];
+                        $debugPoint['request'] = $this->filterDebugData($responseData['request']);
+                        $debugPoint['response'] = $this->filterDebugData($responseData['body']);
+                        $debugPoint['from_cache'] = $responseData['from_cache'];
+                        $unavailable = false;
+                        try {
+                            //Getting availability
+                            $bodyXml = $this->_xmlElFactory->create(['data' => $responseData['body']]);
+                            $code = $bodyXml->xpath('//GetQuoteResponse/Note/Condition/ConditionCode');
+                            if (isset($code[0]) && (int)$code[0] == self::CONDITION_CODE_SERVICE_DATE_UNAVAILABLE) {
+                                $debugPoint['info'] = sprintf(
+                                    __("DHL service is not available at %s date"),
+                                    $responseData['date']
+                                );
+                                $unavailable = true;
+                            }
+                        } catch (\Throwable $exception) {
+                            //Failed to read response
                             $unavailable = true;
+                            $this->_errors[$exception->getCode()] = $exception->getMessage();
                         }
-                    } catch (\Throwable $exception) {
-                        //Failed to read response
-                        $unavailable = true;
-                        $this->_errors[$exception->getCode()] = $exception->getMessage();
-                    }
-                    if ($unavailable) {
-                        //Cannot get rates.
+                        if ($unavailable) {
+                            //Cannot get rates.
+                            $this->_debug($debugPoint);
+                            break;
+                        }
+                        //Caching rates
+                        $this->_setCachedQuotes($responseData['request'], $responseData['body']);
                         $this->_debug($debugPoint);
-                        break;
+                        //Will only process rates available for the latest date possible.
+                        $lastResponse = $responseData['body'];
                     }
-                    //Caching rates
-                    $this->_setCachedQuotes($responseData['request'], $responseData['body']);
-                    $this->_debug($debugPoint);
-                    //Will only process rates available for the latest date possible.
-                    $lastResponse = $responseData['body'];
-                }
 
-                return $this->_parseResponse($lastResponse);
-            })
+                    return $this->_parseResponse($lastResponse);
+                }
+            )
         );
     }
 
@@ -2022,6 +2028,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             }
             $result->setTrackingNumber((string)$xml->AirwayBillNumber);
             $labelContent = (string)$xml->LabelImage->OutputImage;
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $result->setShippingLabelContent(base64_decode($labelContent));
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));

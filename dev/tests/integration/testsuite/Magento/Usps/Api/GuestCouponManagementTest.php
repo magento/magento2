@@ -68,9 +68,13 @@ class GuestCouponManagementTest extends TestCase
         $couponCode = 'IMPHBR852R61';
         $cartId = $this->createGuestCart();
 
-        $this->httpClient->nextResponses([
-            new Response(200, [], file_get_contents(__DIR__ . '/../Fixtures/rates_response.xml'))
-        ]);
+        //phpcs:disable
+        $this->httpClient->nextResponses(
+            [
+                new Response(200, [], file_get_contents(__DIR__ . '/../Fixtures/rates_response.xml'))
+            ]
+        );
+        //phpcs:enable
 
         self::assertTrue($this->management->set($cartId, $couponCode));
 
