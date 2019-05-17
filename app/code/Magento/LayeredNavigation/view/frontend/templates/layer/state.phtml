@@ -33,13 +33,13 @@
                         <span><?= $block->escapeHtml(__('Previous')) ?></span>
                     </a>
                     <a class="action remove"
-                       title="<?= $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>"
+                       title="<?= $block->escapeHtmlAttr($_filter->getFilter()->getClearLinkText()) ?>"
                        href="<?= $block->escapeUrl($clearLinkUrl) ?>">
                         <span><?= $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></span>
                     </a>
                 <?php else : ?>
                     <a class="action remove" href="<?= $block->escapeUrl($_filter->getRemoveUrl()) ?>"
-                       title="<?= /* @noEscape */ $block->escapeHtml(__('Remove')) . " " . $currentFilterName ?>">
+                       title="<?= /* @noEscape */ $block->escapeHtmlAttr(__('Remove')) . " " . $currentFilterName ?>">
                         <span><?= $block->escapeHtml(__('Remove This Item')) ?></span>
                     </a>
                 <?php endif; ?>
