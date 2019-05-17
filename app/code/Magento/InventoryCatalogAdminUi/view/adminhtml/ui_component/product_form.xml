@@ -62,13 +62,11 @@
                 </argument>
             </container>
         </container>
-        <dynamicRows name="assigned_sources" component="Magento_Ui/js/dynamic-rows/dynamic-rows-grid" sortOrder="20">
+        <dynamicRows name="assigned_sources" component="Magento_Ui/js/dynamic-rows/dynamic-rows-grid" template="ui/dynamic-rows/templates/grid" sortOrder="20">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="template" xsi:type="string">ui/dynamic-rows/templates/grid</item>
                     <item name="columnsHeaderAfterRender" xsi:type="boolean">true</item>
                     <item name="renderDefaultRecord" xsi:type="boolean">false</item>
-                    <item name="additionalClasses" xsi:type="string">admin__field-wide</item>
                     <item name="deleteButtonLabel" xsi:type="string">Unassign</item>
                     <item name="dataProvider" xsi:type="string">data.sources.assign_sources_grid</item>
                     <item name="map" xsi:type="array">
@@ -81,6 +79,9 @@
                 </item>
             </argument>
             <settings>
+                <additionalClasses>
+                    <class name="admin__field-wide">true</class>
+                </additionalClasses>
                 <defaultRecord>false</defaultRecord>
                 <addButton>false</addButton>
                 <deleteProperty>true</deleteProperty>
