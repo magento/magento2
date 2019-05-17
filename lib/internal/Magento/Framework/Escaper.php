@@ -16,7 +16,7 @@ class Escaper
     /**
      * HTML special characters flag
      */
-    private const HTMLSPECIALCHARS_FLAG = ENT_QUOTES | ENT_SUBSTITUTE;
+    private $htmlSpecialCharsFlag = ENT_QUOTES | ENT_SUBSTITUTE;
 
     /**
      * @var \Magento\Framework\ZendEscaper
@@ -105,7 +105,7 @@ class Escaper
                 preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
                 return !empty($matches) ? $matches[1] : '';
             } else {
-                $result = htmlspecialchars($data, self::HTMLSPECIALCHARS_FLAG, 'UTF-8', false);
+                $result = htmlspecialchars($data, $this->htmlSpecialCharsFlag, 'UTF-8', false);
             }
         } else {
             $result = $data;
@@ -224,7 +224,7 @@ class Escaper
         if ($escapeSingleQuote) {
             return $this->getEscaper()->escapeHtmlAttr((string) $string);
         }
-        return htmlspecialchars((string)$string, self::HTMLSPECIALCHARS_FLAG, 'UTF-8', false);
+        return htmlspecialchars((string)$string, $this->htmlSpecialCharsFlag, 'UTF-8', false);
     }
 
     /**
@@ -321,7 +321,7 @@ class Escaper
     {
         return htmlspecialchars(
             $this->escapeScriptIdentifiers((string)$data),
-            self::HTMLSPECIALCHARS_FLAG | ENT_HTML5 | ENT_HTML401,
+            $this->htmlSpecialCharsFlag | ENT_HTML5 | ENT_HTML401,
             'UTF-8',
             false
         );
@@ -358,7 +358,7 @@ class Escaper
         if ($addSlashes === true) {
             $data = addslashes($data);
         }
-        return htmlspecialchars($data, self::HTMLSPECIALCHARS_FLAG, null, false);
+        return htmlspecialchars($data, $this->htmlSpecialCharsFlag, null, false);
     }
 
     /**
