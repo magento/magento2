@@ -15,4 +15,25 @@
         <exclude-pattern>*/Test/*</exclude-pattern>
         <exclude-pattern>*Test.php</exclude-pattern>
     </rule>
+    <rule ref="Magento2.Files.LineLength.MaxExceeded">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.Operators.IncrementDecrementUsage">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+    <rule ref="PEAR.ControlStructures.ControlSignature">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.ScopeClosingBrace">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+    <rule ref="PEAR.Functions.FunctionCallSignature">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+    <rule ref="Magento2.Security.LanguageConstruct.DirectOutput">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
 </ruleset>
