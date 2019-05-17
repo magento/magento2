@@ -19,7 +19,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Indexer\DimensionFactory;
-use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
 
@@ -808,7 +807,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Processs adding product website names to result collection
+     * Process adding product website names to result collection
      *
      * @return $this
      */
