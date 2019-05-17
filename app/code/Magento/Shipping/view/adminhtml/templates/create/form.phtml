@@ -43,10 +43,10 @@
                             <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
                         <?php endif; ?>
                         <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
-                        <?= /** @noEscape */ $_excl ?>
+                        <?= /* @noEscape */ $_excl ?>
                         <?php if ($this->helper(Magento\Tax\Helper\Data::class)->displayShippingBothPrices()
                             && $_incl != $_excl) : ?>
-                        (<?= $block->escapeHtml(__('Incl. Tax')) ?> <?= /** @noEscape */ $_incl ?>)
+                        (<?= $block->escapeHtml(__('Incl. Tax')) ?> <?= /* @noEscape */ $_incl ?>)
                         <?php endif; ?>
                     </div>
                 </div>
