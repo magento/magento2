@@ -12,7 +12,7 @@ $group = $block->getGroupName();
 $groupCss = $block->getGroupCss();
 $groupBehavior = $block->getGroupBehaviour() ? $block->getGroupBehaviour() : '{"tabs":{"openedState":"active"}}';
 ?>
-<?php if ($detailedInfoGroup = $block->getGroupChildNames($group, 'getChildHtml')) :?>
+<?php if ($detailedInfoGroup = $block->getGroupChildNames($group, 'getChildHtml')) : ?>
     <div class="sections <?= $block->escapeHtmlAttr($groupCss) ?>">
         <?php $layout = $block->getLayout(); ?>
         <div class="section-items <?= $block->escapeHtmlAttr($groupCss) ?>-items"
