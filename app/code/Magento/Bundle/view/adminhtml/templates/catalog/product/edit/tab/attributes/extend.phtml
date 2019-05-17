@@ -27,9 +27,9 @@ $isElementReadonly = $block->getElement()
 <?php if (!$isElementReadonly && $block->getDisableChild()) { ?>
     <script>
         require(['prototype'], function () {
-            function <?= $block->escapeJs($switchAttributeCode) ?>_change() {
+            function <?= /* @noEscape */ $switchAttributeCode ?>_change() {
                 var $attribute = $('<?= $block->escapeJs($attributeCode) ?>');
-                if ($('<?= $block->escapeJs($switchAttributeCode) ?>').value == '<?= $block->escapeJs($block::DYNAMIC) ?>') {
+                if ($('<?= /* @noEscape */ $switchAttributeCode ?>').value == '<?= $block->escapeJs($block::DYNAMIC) ?>') {
                     if ($attribute) {
                         $attribute.disabled = true;
                         $attribute.value = '';
@@ -43,7 +43,7 @@ $isElementReadonly = $block->getElement()
                         <?php if ($attributeCode === 'price' && !$block->getCanEditPrice() && $block->getCanReadPrice()
                                 && $block->getProduct()->isObjectNew()) : ?>
                                         <?php $defaultProductPrice = $block->getDefaultProductPrice() ?: "''"; ?>
-                            $attribute.value = <?= $block->escapeJs($defaultProductPrice) ?>;
+                            $attribute.value = <?= /* @noEscape */ (string)$defaultProductPrice ?>;
                         <?php else : ?>
                             $attribute.disabled = false;
                             $attribute.addClassName('required-entry');
@@ -57,10 +57,10 @@ $isElementReadonly = $block->getElement()
 
             <?php if (!($attributeCode === 'price' && !$block->getCanEditPrice()
                     && !$block->getProduct()->isObjectNew())) : ?>
-                $('<?= $block->escapeJs($switchAttributeCode) ?>').observe('change', <?= $block->escapeJs($switchAttributeCode) ?>_change);
+                $('<?= /* @noEscape */ $switchAttributeCode ?>').observe('change', <?= /* @noEscape */ $switchAttributeCode ?>_change);
             <?php endif; ?>
             Event.observe(window, 'load', function(){
-                <?= $block->escapeJs($switchAttributeCode) ?>_change();
+                <?= /* @noEscape */ $switchAttributeCode ?>_change();
             });
         });
     </script>

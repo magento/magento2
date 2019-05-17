@@ -231,7 +231,7 @@ $currencySymbol = $block->getCurrencySymbol();
         <!-- /ko -->
     </div>
     <div data-role="step-wizard-dialog"
-         data-mage-init='{"Magento_Ui/js/modal/modal":{"type":"slide","title":"<?= $block->escapeHtml(__('Create Product Configurations')) ?>",
+         data-mage-init='{"Magento_Ui/js/modal/modal":{"type":"slide","title":"<?= $block->escapeJs(__('Create Product Configurations')) ?>",
          "buttons":[]}}'
          class="no-display">
         <?= /* @noEscape */ $block->getVariationWizard([

@@ -7,10 +7,10 @@
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option */
 ?>
 <script id="bundle-option-template" type="text/x-magento-template">
-    <div id="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldId())) ?>_<%- data.index %>" class="option-box">
-        <div class="fieldset-wrapper admin__collapsible-block-wrapper opened" id="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldId())) ?>_<%- data.index %>-wrapper">
+    <div id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>" class="option-box">
+        <div class="fieldset-wrapper admin__collapsible-block-wrapper opened" id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>-wrapper">
             <div class="fieldset-wrapper-title">
-                <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldId())) ?>_<%- data.index %>-content">
+                <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>-content">
                     <span><%- data.default_title %></span>
                 </strong>
                 <div class="actions">
@@ -18,56 +18,56 @@
                 </div>
                 <div data-role="draggable-handle" class="draggable-handle"></div>
             </div>
-            <div class="fieldset-wrapper-content in collapse" id="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldId())) ?>_<%- data.index %>-content">
+            <div class="fieldset-wrapper-content in collapse" id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>-content">
                 <fieldset class="fieldset">
                     <fieldset class="fieldset-alt">
                         <div class="field field-option-title required">
-                            <label class="label" for="id_<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>_<%- data.index %>_title">
-                                <?= $block->escapeJs($block->escapeHtml(__('Option Title'))) ?>
+                            <label class="label" for="id_<?= $block->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_title">
+                                <?= $block->escapeHtml(__('Option Title'))) ?>
                             </label>
                             <div class="control">
                                 <?php if ($block->isDefaultStore()) : ?>
                                 <input class="input-text required-entry"
                                        type="text"
-                                       name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.index %>][title]"
-                                       id="id_<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>_<%- data.index %>_title"
+                                       name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][title]"
+                                       id="id_<?= $block->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_title"
                                        value="<%- data.title %>"
                                        data-original-value="<%- data.title %>" />
                                 <?php else : ?>
                                 <input class="input-text required-entry"
                                        type="text"
-                                       name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.index %>][default_title]"
-                                       id="id_<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>_<%- data.index %>_default_title"
+                                       name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][default_title]"
+                                       id="id_<?= $block->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_default_title"
                                        value="<%- data.default_title %>"
                                        data-original-value="<%- data.default_title %>" />
                                 <?php endif; ?>
                                 <input type="hidden"
-                                       id="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldId())) ?>_id_<%- data.index %>"
-                                       name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.index %>][option_id]"
+                                       id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_id_<%- data.index %>"
+                                       name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][option_id]"
                                        value="<%- data.option_id %>" />
                                 <input type="hidden"
-                                       name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.index %>][delete]"
+                                       name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][delete]"
                                        value=""
                                        data-state="deleted" />
                             </div>
                         </div>
                         <?php if (!$block->isDefaultStore()) : ?>
                         <div class="field field-option-store-view required">
-                            <label class="label" for="id_<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>_<%- data.index %>_title_store">
-                                <?= $block->escapeJs($block->escapeHtml(__('Store View Title'))) ?>
+                            <label class="label" for="id_<?= $block->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_title_store">
+                                <?= $block->escapeHtml(__('Store View Title'))) ?>
                             </label>
                             <div class="control">
                                 <input class="input-text required-entry"
                                        type="text"
-                                       name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.index %>][title]"
-                                       id="id_<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>_<%- data.index %>_title_store"
+                                       name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][title]"
+                                       id="id_<?= $block->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_title_store"
                                        value="<%- data.title %>" />
                             </div>
                         </div>
                         <?php endif; ?>
                         <div class="field field-option-input-type required">
-                            <label class="label" for="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldId() . '_<%- data.index %>_type')) ?>">
-                                <?= $block->escapeJs($block->escapeHtml(__('Input Type'))) ?>
+                            <label class="label" for="<?= $block->escapeHtmlAttr($block->getFieldId() . '_<%- data.index %>_type')) ?>">
+                                <?= $block->escapeHtml(__('Input Type'))) ?>
                             </label>
                             <div class="control">
                                 <?= $block->getTypeSelectHtml() ?>
@@ -80,19 +80,19 @@
                                        checked="checked"
                                        id="field-option-req" />
                                 <label for="field-option-req">
-                                    <?= $block->escapeJs($block->escapeHtml(__('Required'))) ?>
+                                    <?= $block->escapeHtml(__('Required'))) ?>
                                 </label>
                                 <span style="display:none"><?= $block->getRequireSelectHtml() ?></span>
                             </div>
                         </div>
                         <div class="field field-option-position no-display">
                             <label class="label" for="field-option-position">
-                                <?= $block->escapeJs($block->escapeHtml(__('Position'))) ?>
+                                <?= $block->escapeHtml(__('Position'))) ?>
                             </label>
                             <div class="control">
                                 <input class="input-text validate-zero-or-greater"
                                        type="text"
-                                       name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.index %>][position]"
+                                       name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][position]"
                                        value="<%- data.position %>"
                                        id="field-option-position" />
                             </div>
@@ -100,13 +100,13 @@
                     </fieldset>
 
                     <div class="no-products-message">
-                        <?= $block->escapeJs($block->escapeHtml(__('There are no products in this option.'))) ?>
+                        <?= $block->escapeHtml(__('There are no products in this option.'))) ?>
                     </div>
                     <?= $block->getAddSelectionButtonHtml() ?>
                 </fieldset>
             </div>
         </div>
-        <div id="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldId())) ?>_search_<%- data.index %>" class="selection-search"></div>
+        <div id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_search_<%- data.index %>" class="selection-search"></div>
     </div>
 </script>
 
@@ -149,7 +149,7 @@ Bundle.Option.prototype = {
 
     add : function(data) {
         if (!data) {
-            data = <?= $block->escapeJs($this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode(['default_title' => __('New Option')])) ?>;
+            data = <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode(['default_title' => __('New Option')])) ?>;
         } else {
             data.title = data.title.replace(/</g, "&lt;");
             data.title = data.title.replace(/"/g, "&quot;");

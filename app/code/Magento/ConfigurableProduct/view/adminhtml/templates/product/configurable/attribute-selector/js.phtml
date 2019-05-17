@@ -8,10 +8,7 @@
 ?>
 <script>
 require(["jquery","mage/mage","mage/backend/suggest"], function($){
-    var options = <?= $block
-            ->escapeJs($this
-                ->helper(Magento\Framework\Json\Helper\Data::class)
-                ->jsonEncode($block->getSuggestWidgetOptions()))
+    var options = <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getSuggestWidgetOptions())
 ?>;
     $('#configurable-attribute-selector')
         .mage('suggest', options)

@@ -223,7 +223,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
     <script>
         require(['prototype'], function(){
 
-        $(<?= $block->escapeJs($block->getContentTabId()) ?>).select('input', 'select', 'textarea', 'button').each(function (item){
+        $(<?= /* @noEscape */ $block->getContentTabId() ?>).select('input', 'select', 'textarea', 'button').each(function (item){
             item.disabled = true;
             if (item.tagName.toLowerCase() == 'button') {
                 item.addClassName('disabled');

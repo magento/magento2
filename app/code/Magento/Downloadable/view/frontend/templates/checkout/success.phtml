@@ -5,5 +5,5 @@
  */
 ?>
 <?php if ($block->getOrderHasDownloadable()) : ?>
-    <?= $block->escapeHtml(__('Go to <a href="%1">My Downloadable Products</a>', $block->getDownloadableProductsUrl())) ?>
+    <?= /* @noEscape */ __('Go to <a href="%1">My Downloadable Products</a>', $block->escapeUrl($block->getDownloadableProductsUrl())) ?>
 <?php endif; ?>

@@ -11,16 +11,16 @@
         <thead>
             <tr class="headings">
                 <th class="col-draggable"></th>
-                <th class="col-default"><?= $block->escapeJs($block->escapeHtml(__('Default'))) ?></th>
-                <th class="col-name"><?= $block->escapeJs($block->escapeHtml(__('Name'))) ?></th>
-                <th class="col-sku"><?= $block->escapeJs($block->escapeHtml(__('SKU'))) ?></th>
+                <th class="col-default"><?= $block->escapeHtml(__('Default')) ?></th>
+                <th class="col-name"><?= $block->escapeHtml(__('Name')) ?></th>
+                <th class="col-sku"><?= $block->escapeHtml(__('SKU')) ?></th>
             <?php if ($block->getCanReadPrice() !== false) : ?>
-                <th class="col-price price-type-box"><?= $block->escapeJs($block->escapeHtml(__('Price'))) ?></th>
-                <th class="col-price price-type-box"><?= $block->escapeJs($block->escapeHtml(__('Price Type'))) ?></th>
+                <th class="col-price price-type-box"><?= $block->escapeHtml(__('Price')) ?></th>
+                <th class="col-price price-type-box"><?= $block->escapeHtml(__('Price Type')) ?></th>
             <?php endif; ?>
-                <th class="col-qty"><?= $block->escapeJs($block->escapeHtml(__('Default Quantity'))) ?></th>
-                <th class="col-uqty qty-box"><?= $block->escapeJs($block->escapeHtml(__('User Defined'))) ?></th>
-                <th class="col-order type-order" style="display:none"><?= $block->escapeJs($block->escapeHtml(__('Position'))) ?></th>
+                <th class="col-qty"><?= $block->escapeHtml(__('Default Quantity')) ?></th>
+                <th class="col-uqty qty-box"><?= $block->escapeHtml(__('User Defined')) ?></th>
+                <th class="col-order type-order" style="display:none"><?= $block->escapeHtml(__('Position')) ?></th>
                 <th class="col-actions"></th>
             </tr>
         </thead>
@@ -32,17 +32,17 @@
     <td class="col-draggable">
         <span data-role="draggable-handle" class="draggable-handle"></span>
         <input type="hidden"
-               id="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldId())) ?>_id<%- data.index %>"
-               name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_id]"
+               id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_id<%- data.index %>"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_id]"
                value="<%- data.selection_id %>"/>
         <input type="hidden"
-               name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.parentIndex %>][<%- data.index %>][option_id]"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][option_id]"
                value="<%- data.option_id %>"/>
         <input type="hidden"
                class="product"
-               name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.parentIndex %>][<%- data.index %>][product_id]"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][product_id]"
                value="<%- data.product_id %>"/>
-        <input type="hidden" name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.parentIndex %>][<%- data.index %>][delete]"
+        <input type="hidden" name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][delete]"
                value=""
                class="delete"/>
     </td>
@@ -50,17 +50,17 @@
         <input onclick="bSelection.checkGroup(event)"
                type="<%- data.option_type %>"
                class="default"
-               name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.parentIndex %>][<%- data.index %>][is_default]"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][is_default]"
                value="1" <%- data.checked %> />
     </td>
     <td class="col-name"><%- data.name %></td>
     <td class="col-sku"><%- data.sku %></td>
 <?php if ($block->getCanReadPrice() !== false) : ?>
     <td class="col-price price-type-box">
-        <input id="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldId())) ?>_<%- data.index %>_price_value"
+        <input id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_value"
                class="input-text required-entry validate-zero-or-greater"
                type="text"
-               name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_value]"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_value]"
                value="<%- data.selection_price_value %>"
             <?php if ($block->getCanEditPrice() === false) : ?>
                disabled="disabled"
@@ -72,21 +72,21 @@
     </td>
 <?php else : ?>
     <input type="hidden"
-           id="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldId())) ?>_<%- data.index %>_price_value"
-           name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_value]" value="0" />
+           id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_value"
+           name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_value]" value="0" />
     <input type="hidden"
-           id="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldId())) ?>_<%- data.index %>_price_type"
-           name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_type]" value="0" />
+           id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_type"
+           name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_type]" value="0" />
     <?php if ($block->isUsedWebsitePrice()) : ?>
     <input type="hidden"
-           id="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldId())) ?>_<%- data.index %>_price_scope"
-           name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.parentIndex %>][<%- data.index %>][default_price_scope]" value="1" />
+           id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_scope"
+           name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][default_price_scope]" value="1" />
     <?php endif; ?>
 <?php endif; ?>
     <td class="col-qty">
         <input class="input-text required-entry validate-greater-zero-based-on-option validate-zero-or-greater"
                type="text"
-               name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_qty]"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_qty]"
                value="<%- data.selection_qty %>" />
     </td>
     <td class="col-uqty qty-box">
@@ -96,7 +96,7 @@
     <td class="col-order type-order" style="display:none">
         <input class="input-text required-entry validate-zero-or-greater"
                type="text"
-               name="<?= $block->escapeJs($block->escapeHtmlAttr($block->getFieldName())) ?>[<%- data.parentIndex %>][<%- data.index %>][position]"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][position]"
                value="<%- data.position %>" />
     </td>
     <td class="col-actions">
@@ -125,7 +125,7 @@ Bundle.Selection.prototype = {
     gridSelection: new Hash(),
     gridRemoval: new Hash(),
     gridSelectedProductSkus: [],
-    selectionSearchUrl: '<?= $block->escapeJs($block->escapeUrl($block->getSelectionSearchUrl())) ?>',
+    selectionSearchUrl: '<?= $block->escapeUrl($block->getSelectionSearchUrl()) ?>',
 
     initialize : function() {
         this.templateBox = '<div class="tier form-list" id="' + this.idLabel + '_box_<%- data.parentIndex %>">' + bundleTemplateBox + '</div>';
