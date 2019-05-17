@@ -24,16 +24,6 @@ use Magento\TestFramework\Bootstrap as TestBootstrap;
 class DownloadTest extends AbstractBackendController
 {
     /**
-     * @var WriteInterface
-     */
-    private $varDirectory;
-
-    /**
-     * @var string
-     */
-    private $fullDirectoryPath;
-
-    /**
      * @var string
      */
     private $fileName = 'catalog_product.csv';
@@ -42,11 +32,6 @@ class DownloadTest extends AbstractBackendController
      * @var string
      */
     private $filesize;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
 
     /**
      * @var Auth
@@ -65,17 +50,20 @@ class DownloadTest extends AbstractBackendController
     {
         parent::setUp();
 
-        $this->filesystem = $this->_objectManager->get(Filesystem::class);
-        $this->auth = $this->_objectManager->get(Auth::class);
+        $filesystem = $this->_objectManager->get(Filesystem::class);
+        $auth = $this->_objectManager->get(Auth::class);
+        $auth->getAuthStorage()->setIsFirstPageAfterLogin(false);
         $this->backendUrl = $this->_objectManager->get(BackendUrl::class);
-        $baseDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $this->varDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->varDirectory->create($this->varDirectory->getRelativePath('export'));
-        $this->fullDirectoryPath = $this->varDirectory->getAbsolutePath('export');
-        $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
-        $fixtureDir = realpath(__DIR__ . '/../../Import/_files');
-        $baseDirectory->copyFile($fixtureDir . '/' . $this->fileName, $filePath);
-        $this->filesize = filesize($filePath);
+        $this->backendUrl->turnOnSecretKey();
+
+        $sourceFilePath = __DIR__ . '/../../Import/_files' . DIRECTORY_SEPARATOR . $this->fileName;
+        $destinationFilePath = 'export' . DIRECTORY_SEPARATOR . $this->fileName;
+        //Refers to tests 'var' directory
+        $varDirectory = $filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        //Refers to application root directory
+        $rootDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $rootDirectory->copyFile($sourceFilePath, $varDirectory->getAbsolutePath($destinationFilePath));
+        $this->filesize = $varDirectory->stat($destinationFilePath)['size'];
     }
 
     /**
@@ -87,10 +75,18 @@ class DownloadTest extends AbstractBackendController
      */
     public function testExecute(): void
     {
-        $uri = 'backend/admin/export_file/download/filename/' . $this->fileName;
-        $this->prepareRequest($uri);
+        $request = $this->getRequest();
+        list($routeName, $controllerName, $actionName) = explode('/', Download::URL);
+        $request->setMethod(Http::METHOD_GET)
+            ->setRouteName($routeName)
+            ->setControllerName($controllerName)
+            ->setActionName($actionName);
+        $request->setParam('filename', $this->fileName);
+        $request->setParam(BackendUrl::SECRET_KEY_PARAM_NAME, $this->backendUrl->getSecretKey());
 
-        $this->dispatch($uri);
+        ob_start();
+        $this->dispatch('backend/admin/export_file/download');
+        ob_end_clean();
 
         $contentType = $this->getResponse()->getHeader('content-type');
         $contentLength = $this->getResponse()->getHeader('content-length');
@@ -112,33 +108,6 @@ class DownloadTest extends AbstractBackendController
             $contentLength->getFieldValue(),
             'Incorrect response header "content-length"'
         );
-    }
-
-    /**
-     * Prepares GET request to download file.
-     *
-     * @param string $uri
-     * @return void
-     */
-    private function prepareRequest(string $uri): void
-    {
-        $authSession = $this->_objectManager->create(Session::class);
-        $authSession->setIsFirstPageAfterLogin(false);
-        $this->auth->login(
-            TestBootstrap::ADMIN_NAME,
-            TestBootstrap::ADMIN_PASSWORD
-        );
-        $this->auth->setAuthStorage($authSession);
-
-        list($routeName, $controllerName, $actionName) = explode('/', Download::URL);
-        $request = $this->getRequest();
-        $request->setMethod(Http::METHOD_GET)
-            ->setRouteName($routeName)
-            ->setControllerName($controllerName)
-            ->setActionName($actionName)
-            ->setParam(BackendUrl::SECRET_KEY_PARAM_NAME, $this->backendUrl->getSecretKey())
-            ->setRequestUri($uri);
-        $this->backendUrl->turnOnSecretKey();
     }
 
     /**

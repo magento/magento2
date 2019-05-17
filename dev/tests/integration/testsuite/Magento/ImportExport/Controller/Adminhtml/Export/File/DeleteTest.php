@@ -27,17 +27,7 @@ class DeleteTest extends AbstractBackendController
     /**
      * @var string
      */
-    private $fullDirectoryPath;
-
-    /**
-     * @var string
-     */
     private $fileName = 'catalog_product.csv';
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
 
     /**
      * @inheritdoc
@@ -46,14 +36,14 @@ class DeleteTest extends AbstractBackendController
     {
         parent::setUp();
 
-        $this->filesystem = $this->_objectManager->get(Filesystem::class);
-        $baseDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $this->varDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->varDirectory->create($this->varDirectory->getRelativePath('export'));
-        $this->fullDirectoryPath = $this->varDirectory->getAbsolutePath('export');
-        $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
-        $fixtureDir = realpath(__DIR__ . '/../../Import/_files');
-        $baseDirectory->copyFile($fixtureDir . '/' . $this->fileName, $filePath);
+        $filesystem = $this->_objectManager->get(Filesystem::class);
+        $sourceFilePath = __DIR__ . '/../../Import/_files' . DIRECTORY_SEPARATOR . $this->fileName;
+        $destinationFilePath = 'export' . DIRECTORY_SEPARATOR . $this->fileName;
+        //Refers to tests 'var' directory
+        $this->varDirectory = $filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        //Refers to application root directory
+        $rootDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $rootDirectory->copyFile($sourceFilePath, $this->varDirectory->getAbsolutePath($destinationFilePath));
     }
 
     /**
@@ -64,15 +54,17 @@ class DeleteTest extends AbstractBackendController
      */
     public function testExecute(): void
     {
-        $uri = 'backend/admin/export_file/delete/filename/' . $this->fileName;
         $request = $this->getRequest();
+        $request->setParam('filename', $this->fileName);
         $request->setMethod(Http::METHOD_POST);
-        $request->setRequestUri($uri);
-        $this->dispatch($uri);
 
-        $this->assertFalse(
-            $this->varDirectory->isExist($this->varDirectory->getRelativePath('export/' . $this->fileName))
-        );
+        if ($this->varDirectory->isExist('export/' . $this->fileName)) {
+            $this->dispatch('backend/admin/export_file/delete');
+        } else {
+            throw new \AssertionError('Export product file supposed to exist');
+        }
+
+        $this->assertFalse($this->varDirectory->isExist('export/' . $this->fileName));
     }
 
     /**
