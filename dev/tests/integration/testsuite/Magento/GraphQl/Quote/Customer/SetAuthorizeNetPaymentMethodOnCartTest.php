@@ -111,7 +111,7 @@ QUERY;
         ];
         $this->request->setPathInfo('/graphql');
         $this->request->setMethod('POST');
-        $this->request->setContent(json_encode($postData));
+        $this->request->setContent($this->jsonSerializer->serialize($postData));
         $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
         $bearerCustomerToken = 'Bearer ' . $customerToken;
         $contentType ='application/json';
