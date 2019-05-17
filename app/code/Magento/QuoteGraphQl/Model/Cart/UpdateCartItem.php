@@ -76,7 +76,9 @@ class UpdateCartItem
 
         $customizableOptions = [];
         foreach ($customizableOptionsData as $customizableOption) {
-            $customizableOptions[$customizableOption['id']] = $customizableOption['value_string'];
+            $customizableOptions[$customizableOption['id']] = $this->convertCustomOptionValue(
+                $customizableOption['value_string']
+            );
         }
 
         try {
@@ -173,5 +175,24 @@ class UpdateCartItem
                 'options' => $customOptions,
             ],
         ]);
+    }
+
+    // TODO: Refactor the code duplication with addCartItem
+    // TODO: Make a reusable logic that is shared between add to cart / change cart approaches
+
+    /**
+     * Convert custom options vakue
+     *
+     * @param string $value
+     * @return string|array
+     */
+    private function convertCustomOptionValue(string $value)
+    {
+        $value = trim($value);
+        if (substr($value, 0, 1) === "[" &&
+            substr($value, strlen($value) - 1, 1) === "]") {
+            return explode(',', substr($value, 1, -1));
+        }
+        return $value;
     }
 }
