@@ -13,7 +13,6 @@ return [
     'Magento_CatalogInventory',
     'Magento_CatalogRule',
     'Magento_CatalogSearch',
-    'Magento_Checkout',
     'Magento_Config',
     'Magento_ConfigurableProduct',
     'Magento_CurrencySymbol',
