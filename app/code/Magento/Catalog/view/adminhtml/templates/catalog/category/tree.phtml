@@ -389,7 +389,7 @@
                     containerScroll: true,
                     selModel: new Ext.tree.CheckNodeMultiSelectionModel(),
                     rootVisible: '<?= (bool)$block->getRoot()->getIsVisible() ?>',
-                    useAjax: <?= (bool)$block->getUseAjax() ?>,
+                    useAjax: <?= $block->escapeJs($block->getUseAjax()) ?>,
                     switchTreeUrl: '<?= $block->escapeJs($block->escapeUrl($block->getSwitchTreeUrl())) ?>',
                     editUrl: '<?= $block->escapeJs($block->escapeUrl($block->getEditUrl())) ?>',
                     currentNodeId: <?= (int)$block->getCategoryId() ?>,
