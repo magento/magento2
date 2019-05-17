@@ -172,7 +172,7 @@ define([
                     $('body').trigger('processStop');
                 })
                 .catch(function () {
-                    self.error('Braintree can\'t be initialized.');
+                    self.error($t('Braintree can\'t be initialized.'));
                 });
         },
 
@@ -308,7 +308,7 @@ define([
 
             self.hostedFieldsInstance.tokenize(function (err, payload) {
                 if (err) {
-                    self.error('Some payment input fields are invalid.');
+                    self.error($t('Some payment input fields are invalid.'));
 
                     return false;
                 }
