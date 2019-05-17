@@ -98,6 +98,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProductsIfOneOfChildIsOutOfStock()
     {
+        $this->markTestSkipped('Test skipped due to MAGETWO-99629');
         $configurableProduct = $this->productRepository->get('configurable', false, null, true);
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
         $this->assertCount(1, $lowestPriceChildrenProducts);
