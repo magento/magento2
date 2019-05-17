@@ -37,7 +37,7 @@
                                             <?php if (!$_product->getTypeInstance()->isPossibleBuyFromList($_product)) :?>
                                                 <button type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
                                                         class="action tocart primary"
-                                                        data-mage-init='{"redirectUrl":{"url":"<?= $block->escapeJs($block->escapeUrl($block->getAddToCartUrl($_product))) ?>"}}'>
+                                                        data-mage-init='{"redirectUrl":{"url":"<?= $block->escapeUrl($block->getAddToCartUrl($_product)) ?>"}}'>
                                                     <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                 </button>
                                             <?php else :?>

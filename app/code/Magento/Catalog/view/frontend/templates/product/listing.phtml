@@ -61,7 +61,7 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
 
                             if ($_product->isSaleable()) {
                                 $info['button'] = '<button type="button" title="' . $block->escapeHtmlAttr(__('Add to Cart')) . '" class="action tocart"'
-                                    . ' data-mage-init=\'{ "redirectUrl": { "event": "click", url: "' . $block->escapeJs($block->escapeUrl($block->getAddToCartUrl($_product))) . '"} }\'>'
+                                    . ' data-mage-init=\'{ "redirectUrl": { "event": "click", url: "' . $block->escapeUrl($block->getAddToCartUrl($_product)) . '"} }\'>'
                                     . '<span>' . $block->escapeHtml(__('Add to Cart')) . '</span></button>';
                             } else {
                                 $info['button'] = $_product->getIsSalable() ?   '<div class="stock available"><span>' . $block->escapeHtml(__('In stock')) . '</span></div>' :

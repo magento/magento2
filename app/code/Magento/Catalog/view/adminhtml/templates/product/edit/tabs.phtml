@@ -14,13 +14,13 @@
 
     <div id="<?= $block->escapeHtmlAttr($block->getId()) ?>"
          data-mage-init='{"tabs":{
-        "active": "<?= $block->escapeJs($block->escapeHtmlAttr($block->getActiveTabId())) ?>",
-        "destination": "#<?= $block->escapeJs($block->escapeHtmlAttr($block->getDestElementId())) ?>",
+        "active": "<?= $block->escapeHtmlAttr($block->getActiveTabId()) ?>",
+        "destination": "#<?= $block->escapeHtmlAttr($block->getDestElementId()) ?>",
         "shadowTabs": "<?= /* @noEscape */ $block->getAllShadowTabs() ?>",
-        "tabsBlockPrefix": "<?= $block->escapeJs($block->escapeHtmlAttr($block->getId())) ?>_",
+        "tabsBlockPrefix": "<?= $block->escapeHtmlAttr($block->getId()) ?>_",
         "tabIdArgument": "active_tab",
-        "tabPanelClass": "<?= $block->escapeJs($block->escapeHtmlAttr($block->getPanelsClass())) ?>",
-        "excludedPanel": "<?= $block->escapeJs($block->escapeHtmlAttr($block->getExcludedPanel())) ?>",
+        "tabPanelClass": "<?= $block->escapeHtmlAttr($block->getPanelsClass()) ?>",
+        "excludedPanel": "<?= $block->escapeHtmlAttr($block->getExcludedPanel()) ?>",
         "groups": "ul.tabs"
     }}'>
         <?php foreach ($tabGroups as $tabGroupCode) :?>
