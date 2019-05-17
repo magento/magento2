@@ -6,6 +6,8 @@
 
 namespace Magento\Framework;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Magento escape methods
  *
@@ -74,7 +76,7 @@ class Escaper
                 $domDocument = new \DOMDocument('1.0', 'UTF-8');
                 set_error_handler(
                     function ($errorNumber, $errorString) {
-                        throw new \Exception($errorString, $errorNumber);
+                        throw new LocalizedException($errorString, $errorNumber);
                     }
                 );
                 $data = $this->prepareUnescapedCharacters($data);
