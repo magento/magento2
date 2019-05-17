@@ -6,10 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Customer\Model\Customer;
-
 require 'customer.php';
 
 $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Customer');
@@ -29,12 +25,3 @@ $customer->setWebsiteId(1)
 
 $customer->isObjectNew(true);
 $customer->save();
-
-/** @var IndexerRegistry $indexerRegistry */
-$indexerRegistry = $objectManager->create(IndexerRegistry::class);
-/** @var IndexerInterface $indexer */
-$indexer = $indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
-try {
-    $indexer->reindexAll();
-} catch (\Exception $e) {
-}
