@@ -9,16 +9,17 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOpenUserEditPageActionGroup">
         <arguments>
-            <argument name="adminUser" type="string" defaultValue="DefaultAdminUser.username"/>
+            <argument name="user" type="entity" />
         </arguments>
 
         <amOnPage url="{{AdminUsersPage.url}}" stepKey="openAdminUsersPage"/>
-        <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{adminUser}}" stepKey="fillSearchUsernameFilter"/>
-        <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearch" />
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="resetFilters" />
+        <fillField selector="{{AdminLegacyDataGridFilterSection.inputFieldByNameAttr('username')}}" userInput="{{user.username}}" stepKey="fillSearchUsernameFilter"/>
+        <click selector="{{AdminLegacyDataGridFilterSection.apply}}" stepKey="clickSearch" />
         <waitForPageLoad stepKey="waitForGridToLoad"/>
-        <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{adminUser}}" stepKey="seeUser" />
-        <click selector="{{AdminUserGridSection.searchResultFirstRow}}" stepKey="openUserEdit"/>
-        <waitForPageLoad stepKey="waitForUserEditPageLoad"/>
 
+        <click selector="{{AdminLegacyDataGridTableSection.rowTemplateStrict(user.username)}}" stepKey="openUserEdit"/>
+        <waitForPageLoad stepKey="waitForUserEditPageLoad"/>
     </actionGroup>
 </actionGroups>

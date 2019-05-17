@@ -11,139 +11,95 @@
     <test name="AdminUserLockWhenEditingUserTest">
         <annotations>
             <features value="Security"/>
-            <stories value="Runs Lock admin user when creating new user test."/>
-            <title value="Lock admin user when creating new user"/>
-            <description value="Runs Lock admin user when creating new user test."/>
-            <severity value="MAJOR"/>
+            <stories value="Runs Lock admin user when editing existing user test."/>
+            <title value="Lock admin user when creating new user."/>
+            <description value="Runs Lock admin user when editing existing user test."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14372" />
             <group value="security"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <createData entity="Admin3" stepKey="user"/>
+            <!--
+                @TODO: Remove "executeJS" in scope of MQE-1561
+                Hack to be able to pass current admin user password without hardcoding it.
+            -->
+            <executeJS function="return '{{DefaultAdminUser.password}}'" stepKey="adminPassword" />
+            <createData entity="NewAdminUser" stepKey="user">
+                <field key="current_password">{$adminPassword}</field>
+            </createData>
             <!-- Log in to Admin Panel -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Unlock Admin user -->
             <magentoCLI command="admin:user:unlock {{DefaultAdminUser.username}}" stepKey="unlockAdminUser"/>
-            <!-- TODO Need to create delete operation for data entity="Admin3"
-            <deleteData createDataKey="user" stepKey="removeAdminUser"/>-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminDeleteUserViaCurlActionGroup" stepKey="deleteUser">
+                <argument name="user" value="$$user$$" />
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminOpenUserEditPageActionGroup" stepKey="openEditUserPageFirstAttempt">
-            <argument name="adminUser" value="$$user.username$$"/>
+            <argument name="user" value="$$user$$"/>
         </actionGroup>
-        <actionGroup ref="AdminUserEditFillRequiredFieldsActionGroup" stepKey="fillEditUserFieldsFirstAttempt">
-            <argument name="adminUser" value="$$user.username$$"/>
-            <argument name="adminFirstname" value="NEW$$user.firstname$$"/>
-            <argument name="adminLastname" value="NEW$$user.lastname$$"/>
-            <argument name="adminEmail" value="new$$user.email$$"/>
-            <argument name="adminPassword" value="NEW$$user.password$$"/>
-            <argument name="adminPasswordConfirmation" value="NEW$$user.password_confirmation$$"/>
-            <argument name="currentAdminPassword" value="{{DefaultAdminUser.password}}INVALID"/>
+
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillEditUserFieldsFirstAttempt">
+            <argument name="user" value="EditAdminUserWrongCurrentPassword" />
         </actionGroup>
-        <actionGroup ref="AdminUserEditAssignRoleActionGroup" stepKey="assignRoleFirstAttempt">
-            <argument name="adminUserRole" value="1"/>
-        </actionGroup>
-        <actionGroup ref="AdminUserEditSaveUserActionGroup" stepKey="saveUserFirstAttempt" />
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveFirstAttempt" />
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorFirstAttempt" >
             <argument name="messageType" value="error" />
             <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
         </actionGroup>
 
-        <actionGroup ref="AdminUserEditFillRequiredFieldsActionGroup" stepKey="fillEditUserFieldsSecondAttempt">
-            <argument name="adminUser" value="$$user.username$$"/>
-            <argument name="adminFirstname" value="NEW$$user.firstname$$"/>
-            <argument name="adminLastname" value="NEW$$user.lastname$$"/>
-            <argument name="adminEmail" value="new$$user.email$$"/>
-            <argument name="adminPassword" value="NEW$$user.password$$"/>
-            <argument name="adminPasswordConfirmation" value="NEW$$user.password_confirmation$$"/>
-            <argument name="currentAdminPassword" value="{{DefaultAdminUser.password}}INVALID"/>
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillEditUserFieldsSecondAttempt">
+            <argument name="user" value="EditAdminUserWrongCurrentPassword" />
         </actionGroup>
-        <actionGroup ref="AdminUserEditAssignRoleActionGroup" stepKey="assignRoleSecondAttempt">
-            <argument name="adminUserRole" value="1"/>
-        </actionGroup>
-        <actionGroup ref="AdminUserEditSaveUserActionGroup" stepKey="saveUserSecondAttempt" />
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveSecondAttempt" />
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorSecondAttempt" >
             <argument name="messageType" value="error" />
             <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
         </actionGroup>
 
-        <actionGroup ref="AdminUserEditFillRequiredFieldsActionGroup" stepKey="fillEditUserFieldsThirdAttempt">
-            <argument name="adminUser" value="$$user.username$$"/>
-            <argument name="adminFirstname" value="NEW$$user.firstname$$"/>
-            <argument name="adminLastname" value="NEW$$user.lastname$$"/>
-            <argument name="adminEmail" value="new$$user.email$$"/>
-            <argument name="adminPassword" value="NEW$$user.password$$"/>
-            <argument name="adminPasswordConfirmation" value="NEW$$user.password_confirmation$$"/>
-            <argument name="currentAdminPassword" value="{{DefaultAdminUser.password}}INVALID"/>
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillEditUserFieldsThirdAttempt">
+            <argument name="user" value="EditAdminUserWrongCurrentPassword" />
         </actionGroup>
-        <actionGroup ref="AdminUserEditAssignRoleActionGroup" stepKey="assignRoleThirdAttempt">
-            <argument name="adminUserRole" value="1"/>
-        </actionGroup>
-        <actionGroup ref="AdminUserEditSaveUserActionGroup" stepKey="saveUserThirdAttempt" />
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveThirdAttempt" />
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorThirdAttempt" >
             <argument name="messageType" value="error" />
             <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
         </actionGroup>
 
-        <actionGroup ref="AdminUserEditFillRequiredFieldsActionGroup" stepKey="fillEditUserFieldsFourthAttempt">
-            <argument name="adminUser" value="$$user.username$$"/>
-            <argument name="adminFirstname" value="NEW$$user.firstname$$"/>
-            <argument name="adminLastname" value="NEW$$user.lastname$$"/>
-            <argument name="adminEmail" value="new$$user.email$$"/>
-            <argument name="adminPassword" value="NEW$$user.password$$"/>
-            <argument name="adminPasswordConfirmation" value="NEW$$user.password_confirmation$$"/>
-            <argument name="currentAdminPassword" value="{{DefaultAdminUser.password}}INVALID"/>
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillEditUserFieldsFourthAttempt">
+            <argument name="user" value="EditAdminUserWrongCurrentPassword" />
         </actionGroup>
-        <actionGroup ref="AdminUserEditAssignRoleActionGroup" stepKey="assignRoleFourthAttempt">
-            <argument name="adminUserRole" value="1"/>
-        </actionGroup>
-        <actionGroup ref="AdminUserEditSaveUserActionGroup" stepKey="saveUserFourthAttempt" />
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveFourthAttempt" />
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorFourthAttempt" >
             <argument name="messageType" value="error" />
             <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
         </actionGroup>
 
-        <actionGroup ref="AdminUserEditFillRequiredFieldsActionGroup" stepKey="fillEditUserFieldsFifthAttempt">
-            <argument name="adminUser" value="$$user.username$$"/>
-            <argument name="adminFirstname" value="NEW$$user.firstname$$"/>
-            <argument name="adminLastname" value="NEW$$user.lastname$$"/>
-            <argument name="adminEmail" value="new$$user.email$$"/>
-            <argument name="adminPassword" value="NEW$$user.password$$"/>
-            <argument name="adminPasswordConfirmation" value="NEW$$user.password_confirmation$$"/>
-            <argument name="currentAdminPassword" value="{{DefaultAdminUser.password}}INVALID"/>
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillEditUserFieldsFifthAttempt">
+            <argument name="user" value="EditAdminUserWrongCurrentPassword" />
         </actionGroup>
-        <actionGroup ref="AdminUserEditAssignRoleActionGroup" stepKey="assignRoleFifthAttempt">
-            <argument name="adminUserRole" value="1"/>
-        </actionGroup>
-        <actionGroup ref="AdminUserEditSaveUserActionGroup" stepKey="saveUserFifthAttempt" />
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveFifthAttempt" />
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorFifthAttempt" >
             <argument name="messageType" value="error" />
             <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
         </actionGroup>
 
-        <actionGroup ref="AdminUserEditFillRequiredFieldsActionGroup" stepKey="fillEditUserFieldsLastAttempt">
-            <argument name="adminUser" value="$$user.username$$"/>
-            <argument name="adminFirstname" value="NEW$$user.firstname$$"/>
-            <argument name="adminLastname" value="NEW$$user.lastname$$"/>
-            <argument name="adminEmail" value="new$$user.email$$"/>
-            <argument name="adminPassword" value="NEW$$user.password$$"/>
-            <argument name="adminPasswordConfirmation" value="NEW$$user.password_confirmation$$"/>
-            <argument name="currentAdminPassword" value="{{DefaultAdminUser.password}}INVALID"/>
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillEditUserFieldsLastAttempt">
+            <argument name="user" value="EditAdminUserWrongCurrentPassword" />
         </actionGroup>
-        <actionGroup ref="AdminUserEditAssignRoleActionGroup" stepKey="assignRoleLastAttempt">
-            <argument name="adminUserRole" value="1"/>
-        </actionGroup>
-        <actionGroup ref="AdminUserEditSaveUserActionGroup" stepKey="saveUserLastAttempt" />
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveLastAttempt" />
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeErrorLastAttempt" >
             <argument name="message" value="Your account is temporarily disabled. Please try again later." />
         </actionGroup>
 
         <!-- Try to login as admin and check error -->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsLockedAdmin"/>
-        <waitForPageLoad stepKey="waitForError"/>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeLoginErrorMessage" />
-
     </test>
 </tests>
