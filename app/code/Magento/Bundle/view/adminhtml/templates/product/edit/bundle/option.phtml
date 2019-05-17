@@ -23,7 +23,7 @@
                     <fieldset class="fieldset-alt">
                         <div class="field field-option-title required">
                             <label class="label" for="id_<?= $block->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_title">
-                                <?= $block->escapeHtml(__('Option Title'))) ?>
+                                <?= $block->escapeHtml(__('Option Title')) ?>
                             </label>
                             <div class="control">
                                 <?php if ($block->isDefaultStore()) : ?>
@@ -54,7 +54,7 @@
                         <?php if (!$block->isDefaultStore()) : ?>
                         <div class="field field-option-store-view required">
                             <label class="label" for="id_<?= $block->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_title_store">
-                                <?= $block->escapeHtml(__('Store View Title'))) ?>
+                                <?= $block->escapeHtml(__('Store View Title')) ?>
                             </label>
                             <div class="control">
                                 <input class="input-text required-entry"
@@ -66,8 +66,8 @@
                         </div>
                         <?php endif; ?>
                         <div class="field field-option-input-type required">
-                            <label class="label" for="<?= $block->escapeHtmlAttr($block->getFieldId() . '_<%- data.index %>_type')) ?>">
-                                <?= $block->escapeHtml(__('Input Type'))) ?>
+                            <label class="label" for="<?= $block->escapeHtmlAttr($block->getFieldId() . '_<%- data.index %>_type') ?>">
+                                <?= $block->escapeHtml(__('Input Type')) ?>
                             </label>
                             <div class="control">
                                 <?= $block->getTypeSelectHtml() ?>
@@ -80,14 +80,14 @@
                                        checked="checked"
                                        id="field-option-req" />
                                 <label for="field-option-req">
-                                    <?= $block->escapeHtml(__('Required'))) ?>
+                                    <?= $block->escapeHtml(__('Required')) ?>
                                 </label>
                                 <span style="display:none"><?= $block->getRequireSelectHtml() ?></span>
                             </div>
                         </div>
                         <div class="field field-option-position no-display">
                             <label class="label" for="field-option-position">
-                                <?= $block->escapeHtml(__('Position'))) ?>
+                                <?= $block->escapeHtml(__('Position')) ?>
                             </label>
                             <div class="control">
                                 <input class="input-text validate-zero-or-greater"
@@ -100,7 +100,7 @@
                     </fieldset>
 
                     <div class="no-products-message">
-                        <?= $block->escapeHtml(__('There are no products in this option.'))) ?>
+                        <?= $block->escapeHtml(__('There are no products in this option.')) ?>
                     </div>
                     <?= $block->getAddSelectionButtonHtml() ?>
                 </fieldset>
@@ -149,7 +149,7 @@ Bundle.Option.prototype = {
 
     add : function(data) {
         if (!data) {
-            data = <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode(['default_title' => __('New Option')])) ?>;
+            data = <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode(['default_title' => __('New Option')]) ?>;
         } else {
             data.title = data.title.replace(/</g, "&lt;");
             data.title = data.title.replace(/"/g, "&quot;");
