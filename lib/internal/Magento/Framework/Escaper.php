@@ -135,7 +135,7 @@ class Escaper
             . '\']'
         );
         foreach ($nodes as $node) {
-            if ($node->nodeName != '#text' && $node->nodeName != '#comment') {
+            if ($node->nodeName != '#text') {
                 $node->parentNode->replaceChild($domDocument->createTextNode($node->textContent), $node);
             }
         }
