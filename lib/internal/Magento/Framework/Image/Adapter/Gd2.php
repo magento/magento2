@@ -426,8 +426,6 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $imagePath
         );
 
-        $merged = false;
-
         if ($this->getWatermarkWidth() &&
             $this->getWatermarkHeight() &&
             $this->getWatermarkPosition() != self::POSITION_STRETCH
@@ -543,7 +541,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             );
         }
 
-        if ($tile === false && $merged === false) {
+        if ($tile === false) {
             $this->copyImageWithAlphaPercentage(
                 $this->_imageHandler,
                 $watermark,
