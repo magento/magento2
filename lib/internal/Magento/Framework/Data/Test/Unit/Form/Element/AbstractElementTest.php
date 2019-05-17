@@ -3,12 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
 /**
  * Tests for \Magento\Framework\Data\Form\Element\AbstractElement
  */
-namespace Magento\Framework\Data\Test\Unit\Form\Element;
-
 class AbstractElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
