@@ -408,7 +408,9 @@ abstract class AbstractEntity
             if ($source->valid()) {
                 try {
                     $rowData = $source->current();
-                    $skuSet[$rowData['sku']] = true;
+                    if (array_key_exists('sku', $rowData)) {
+                        $skuSet[$rowData['sku']] = true;
+                    }
                 } catch (\InvalidArgumentException $e) {
                     $this->addRowError($e->getMessage(), $this->_processedRowsCount);
                     $this->_processedRowsCount++;
@@ -436,7 +438,7 @@ abstract class AbstractEntity
                 $source->next();
             }
         }
-        $this->_processedEntitiesCount = count($skuSet);
+        $this->_processedEntitiesCount = (count($skuSet)) ? : $this->_processedRowsCount;
 
         return $this;
     }
