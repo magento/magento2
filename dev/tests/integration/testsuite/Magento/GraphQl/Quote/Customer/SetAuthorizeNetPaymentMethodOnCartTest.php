@@ -8,12 +8,11 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Customer;
 
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Webapi\Request;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Zend\Http\Headers;
 
 /**
  * Tests SetPaymentMethod mutation for customer via authorizeNet payment
@@ -35,15 +34,11 @@ class SetAuthorizenetPaymentMethodOnCustomerCartTest extends \Magento\TestFramew
     /** @var SerializerInterface */
     private $jsonSerializer;
 
-    /** @var MetadataPool */
-    private $metadataPool;
-
     /** @var  CustomerTokenServiceInterface */
     private $customerTokenService;
 
     /**
-     * @var \Magento\Framework\App\Cache
-     */
+     * @var \Magento\Framework\App\Cache */
     private $appCache;
 
     /** @var Http */
@@ -64,17 +59,14 @@ class SetAuthorizenetPaymentMethodOnCustomerCartTest extends \Magento\TestFramew
 
     protected function setUp() : void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
+        $this->objectManager = Bootstrap::getObjectManager();
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
-        $this->metadataPool = $this->objectManager->get(MetadataPool::class);
         $this->request = $this->objectManager->get(Http::class);
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
     }
 
     /**
-     *
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/environment sandbox
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/login someusername
@@ -88,9 +80,6 @@ class SetAuthorizenetPaymentMethodOnCustomerCartTest extends \Magento\TestFramew
      */
     public function testDispatchToSetPaymentMethodWithAuthorizenet(): void
     {
-        if (!$this->cleanCache()) {
-            $this->fail('Cache could not be cleaned properly.');
-        }
         $methodCode = 'authorizenet_acceptjs';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query
@@ -126,11 +115,11 @@ QUERY;
         $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
         $bearerCustomerToken = 'Bearer ' . $customerToken;
         $contentType ='application/json';
-        $webApirequest = $this->objectManager->get(\Magento\Framework\Webapi\Request::class);
-        $webApirequest->getHeaders()->addHeaderLine('Content-Type', $contentType)
+        $webApiRequest = $this->objectManager->get(Request::class);
+        $webApiRequest->getHeaders()->addHeaderLine('Content-Type', $contentType)
             ->addHeaderLine('Accept', $contentType)
             ->addHeaderLine('Authorization', $bearerCustomerToken);
-        $this->request->setHeaders($webApirequest->getHeaders());
+        $this->request->setHeaders($webApiRequest->getHeaders());
         $graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
         $response = $graphql->dispatch($this->request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
@@ -138,27 +127,5 @@ QUERY;
         $this->assertArrayHasKey('setPaymentMethodOnCart', $output['data']);
         $selectedPaymentMethod = $output['data']['setPaymentMethodOnCart']['cart']['selected_payment_method'];
         $this->assertEquals($methodCode, $selectedPaymentMethod['code']);
-    }
-    /**
-     * Clear cache so integration test can alter cached GraphQL schema
-     *
-     * @return bool
-     */
-    protected function cleanCache()
-    {
-        return $this->getAppCache()->clean(\Magento\Framework\App\Config::CACHE_TAG);
-    }
-
-    /**
-     * Return app cache setup.
-     *
-     * @return \Magento\Framework\App\Cache
-     */
-    private function getAppCache()
-    {
-        if (null === $this->appCache) {
-            $this->appCache = $this->objectManager->get(\Magento\Framework\App\Cache::class);
-        }
-        return $this->appCache;
     }
 }

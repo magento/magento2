@@ -61,8 +61,6 @@ class Client
             'operationName' => !empty($operationName) ? $operationName : null
         ];
         $postData = $this->json->jsonEncode($requestArray);
-
-        //$responseBody = $this->curlClient->post($url, $postData, $headers);
         try {
             $responseBody = $this->curlClient->post($url, $postData, $headers);
         } catch (\Exception $e) {

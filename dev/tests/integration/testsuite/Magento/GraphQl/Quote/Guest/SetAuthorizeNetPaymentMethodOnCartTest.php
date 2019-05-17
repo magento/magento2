@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Guest;
 
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
@@ -31,15 +30,11 @@ class SetAuthorizeNetPaymentMethodOnGuestCartTest extends \Magento\TestFramework
     /** @var  GetMaskedQuoteIdByReservedOrderId */
     private $getMaskedQuoteIdByReservedOrderId;
 
-
     /** @var GraphQl */
     private $graphql;
 
     /** @var SerializerInterface */
     private $jsonSerializer;
-
-    /** @var MetadataPool */
-    private $metadataPool;
 
     /** @var Http */
     private $request;
@@ -59,16 +54,14 @@ class SetAuthorizeNetPaymentMethodOnGuestCartTest extends \Magento\TestFramework
 
     protected function setUp() : void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
         $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
-        $this->metadataPool = $this->objectManager->get(MetadataPool::class);
         $this->request = $this->objectManager->get(Http::class);
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
     }
 
     /**
-     *
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/environment sandbox
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/login someusername
