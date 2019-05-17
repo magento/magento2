@@ -8,7 +8,9 @@
         "magento/module-ui": "101.0.*",
         "magento/module-config": "101.0.*",
         "magento/module-media-storage": "100.2.*",
-        "magento/framework": "101.0.*"
+        "magento/framework": "101.0.*",
+        "magento/module-customer": "*",
+        "magento/module-authorization": "*"
     },
     "suggest": {
         "magento/module-deploy": "100.2.*"
