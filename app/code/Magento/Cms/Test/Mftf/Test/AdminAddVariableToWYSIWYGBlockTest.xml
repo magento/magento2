@@ -49,9 +49,9 @@
         <waitForLoadingMaskToDisappear stepKey="waitForPageLoad3"/>
         <!--see Insert Variable button disabled-->
         <see selector="{{VariableSection.InsertVariableBtnDisabled}}" userInput="Insert Variable" stepKey="seeInsertWidgetDisabled" />
-        <!--see Cancel button enabed-->
+        <!--see Cancel button enabled-->
         <see selector="{{VariableSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
-        <!--see 4 colums-->
+        <!--see 4 columns-->
         <see selector="{{VariableSection.ColName('Select')}}" userInput="Select" stepKey="selectCol" />
         <see selector="{{VariableSection.ColName('Variable Name')}}" userInput="Variable Name" stepKey="variableCol" />
         <see selector="{{VariableSection.ColName('Type')}}" userInput="Type" stepKey="typeCol" />
