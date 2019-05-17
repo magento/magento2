@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Mview\View;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Phrase;
 
 /**
@@ -58,12 +60,14 @@ class Changelog implements ChangelogInterface
      * Check DB connection
      *
      * @return void
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\SessionException
      */
     protected function checkConnection()
     {
         if (!$this->connection) {
-            throw new \Exception("The write connection to the database isn't available. Please try again later.");
+            throw new SessionException(
+                new Phrase("The write connection to the database isn't available. Please try again later.")
+            );
         }
     }
 
@@ -167,7 +171,7 @@ class Changelog implements ChangelogInterface
      *
      * @return int
      * @throws ChangelogTableNotExistsException
-     * @throws \Exception
+     * @throws LocalizedException
      */
     public function getVersion()
     {
@@ -179,7 +183,9 @@ class Changelog implements ChangelogInterface
         if (isset($row['Auto_increment'])) {
             return (int)$row['Auto_increment'] - 1;
         } else {
-            throw new \Exception("Table status for `{$changelogTableName}` is incorrect. Can`t fetch version id.");
+            throw new LocalizedException(
+                new Phrase("Table status for `{$changelogTableName}` is incorrect. Can`t fetch version id.")
+            );
         }
     }
 
@@ -188,13 +194,15 @@ class Changelog implements ChangelogInterface
      *
      * Build a changelog name by concatenating view identifier and changelog name suffix.
      *
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return string
      */
     public function getName()
     {
         if (strlen($this->viewId) == 0) {
-            throw new \Exception("View's identifier is not set");
+            throw new LocalizedException(
+                new Phrase("View's identifier is not set")
+            );
         }
         return $this->viewId . '_' . self::NAME_SUFFIX;
     }
