@@ -147,7 +147,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
      * @param null|array $allowedTags
      * @return string
      */
-    public function escapeHtmlWithLinks($data, $allowedTags = null)
+    public function oldEscapeHtmlWithLinks($data, $allowedTags = null)
     {
         if (!empty($data) && is_array($allowedTags) && in_array('a', $allowedTags)) {
             $links = [];
@@ -175,6 +175,11 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
             return vsprintf($data, $links);
         }
         return $this->escaper->escapeHtml($data, $allowedTags);
+    }
+
+    public function escapeHtmlWithLinks($data, $allowedTags = null)
+    {
+        ////////////
     }
 
     /**
