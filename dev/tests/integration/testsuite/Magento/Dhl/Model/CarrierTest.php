@@ -12,8 +12,10 @@ use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\AsyncClient\Response;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\Simplexml\Element;
+use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Shipment\Request;
 use Magento\Shipping\Model\Tracking\Result\Status;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
 use Magento\Shipping\Model\Simplexml\Element as ShippingElement;
 
@@ -379,5 +381,130 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $expectedRequestElement->RegionCode = $regionCode;
 
         return $expectedRequestElement->asXML();
+    }
+
+
+    /**
+     * Tests that valid rates are returned when sending a quotes request.
+     *
+     * @magentoConfigFixture default_store carriers/dhl/active 1
+     * @magentoConfigFixture default_store carriers/dhl/id some ID
+     * @magentoConfigFixture default_store carriers/dhl/shipment_days Mon,Tue,Wed,Thu,Fri,Sat
+     * @magentoConfigFixture default_store carriers/dhl/intl_shipment_days Mon,Tue,Wed,Thu,Fri,Sat
+     * @magentoConfigFixture default_store carriers/dhl/allowed_methods IE
+     * @magentoConfigFixture default_store carriers/dhl/international_service IE
+     * @magentoConfigFixture default_store carriers/dhl/gateway_url https://xmlpi-ea.dhl.com/XMLShippingServlet
+     * @magentoConfigFixture default_store carriers/dhl/id some ID
+     * @magentoConfigFixture default_store carriers/dhl/password some password
+     * @magentoConfigFixture default_store carriers/dhl/content_type N
+     * @magentoConfigFixture default_store carriers/dhl/nondoc_methods 1,3,4,8,P,Q,E,F,H,J,M,V,Y
+     * @magentoConfigFixture default_store carriers/dhl/showmethod' => 1,
+     * @magentoConfigFixture default_store carriers/dhl/title DHL Title
+     * @magentoConfigFixture default_store carriers/dhl/specificerrmsg dhl error message
+     * @magentoConfigFixture default_store carriers/dhl/unit_of_measure K
+     * @magentoConfigFixture default_store carriers/dhl/size 1
+     * @magentoConfigFixture default_store carriers/dhl/height 1.6
+     * @magentoConfigFixture default_store carriers/dhl/width 1.6
+     * @magentoConfigFixture default_store carriers/dhl/depth 1.6
+     * @magentoConfigFixture default_store carriers/dhl/debug 1
+     * @magentoConfigFixture default_store shipping/origin/country_id GB
+     */
+    public function testCollectRates()
+    {
+        $requestData = [
+            'data' => [
+                'dest_country_id' => 'DE',
+                'dest_region_id' => '82',
+                'dest_region_code' => 'BER',
+                'dest_street' => 'Turmstraße 17',
+                'dest_city' => 'Berlin',
+                'dest_postcode' => '10559',
+                'dest_postal' => '10559',
+                'package_value' => '5',
+                'package_value_with_discount' => '5',
+                'package_weight' => '8.2657',
+                'package_qty' => '1',
+                'package_physical_value' => '5',
+                'free_method_weight' => '5',
+                'store_id' => '1',
+                'website_id' => '1',
+                'free_shipping' => '0',
+                'limit_carrier' => null,
+                'base_subtotal_incl_tax' => '5',
+                'orig_country_id' => 'US',
+                'orig_region_id' => '12',
+                'orig_city' => 'Fremont',
+                'orig_postcode' => '94538',
+                'dhl_id' => 'MAGEN_8501',
+                'dhl_password' => 'QR2GO1U74X',
+                'dhl_account' => '799909537',
+                'dhl_shipping_intl_key' => '54233F2B2C4E5C4B4C5E5A59565530554B405641475D5659',
+                'girth' => null,
+                'height' => null,
+                'length' => null,
+                'width' => null,
+                'weight' => 1,
+                'dhl_shipment_type' => 'P',
+                'dhl_duitable' => 0,
+                'dhl_duty_payment_type' => 'R',
+                'dhl_content_desc' => 'Big Box',
+                'limit_method' => 'IE',
+                'ship_date' => '2014-01-09',
+                'action' => 'RateEstimate',
+                'all_items' => [],
+            ]
+        ];
+        $response = new Response(
+            200,
+            [],
+            $responseXml = file_get_contents(__DIR__ . '/../_files/dhl_quote_response.xml')
+        );
+        $this->httpClient->nextResponses(array_fill(0, Carrier::UNAVAILABLE_DATE_LOOK_FORWARD + 1, $response));
+        /** @var RateRequest $request */
+        $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
+        $expectedRates = [
+            [
+                'carrier' => 'dhl',
+                'carrier_title' => 'DHL Title',
+                'cost' => 45.85,
+                'method' => 'E',
+                'price' => 45.85
+            ],
+            [
+                'carrier' => 'dhl',
+                'carrier_title' => 'DHL Title',
+                'cost' => 35.26,
+                'method' => 'Q',
+                'price' => 35.26
+            ],
+            [
+                'carrier' => 'dhl',
+                'carrier_title' => 'DHL Title',
+                'cost' => 37.38,
+                'method' => 'Y',
+                'price' => 37.38
+            ],
+            [
+                'carrier' => 'dhl',
+                'carrier_title' => 'DHL Title',
+                'cost' => 35.26,
+                'method' => 'P',
+                'price' => 35.26
+            ]
+        ];
+
+        $actualRates = $this->dhlCarrier->collectRates($request)->getAllRates();
+
+        self::assertEquals(count($expectedRates), count($actualRates));
+        foreach ($actualRates as $i => $actualRate) {
+            $actualRate = $actualRate->getData();
+            unset($actualRate['method_title']);
+            self::assertEquals($expectedRates[$i], $actualRate);
+        }
+        $requestXml = $this->httpClient->getLastRequest()->getBody();
+        self::assertContains('<Weight>18.223</Weight>', $requestXml);
+        self::assertContains('<Height>0.630</Height>', $requestXml);
+        self::assertContains('<Width>0.630</Width>', $requestXml);
+        self::assertContains('<Depth>0.630</Depth>', $requestXml);
     }
 }
