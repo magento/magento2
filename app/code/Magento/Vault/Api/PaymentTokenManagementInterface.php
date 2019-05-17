@@ -56,6 +56,8 @@ interface PaymentTokenManagementInterface
     public function getByPublicHash($hash, $customerId);
 
     /**
+     * Save token with payment link
+     *
      * @param PaymentTokenInterface $token
      * @param OrderPaymentInterface $payment
      * @return bool
