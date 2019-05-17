@@ -50,10 +50,10 @@ class PaypalConfigProvider
      * Get Config model by payment method code
      *
      * @param string $code
-     * @return \Magento\Paypal\Model\AbstractConfig
+     * @return AbstractConfig
      * @throws GraphQlInputException
      */
-    public function getConfig(string $code): \Magento\Paypal\Model\AbstractConfig
+    public function getConfig(string $code): AbstractConfig
     {
         //validate code string
         if (empty($this->configurations[$code])
