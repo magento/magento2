@@ -9,8 +9,9 @@
 ?>
 <?php $_shipment = $block->getShipment() ?>
 <?php $_order = $block->getOrder() ?>
+<?php if ($_shipment && $_order): ?>
 <?php $trackCollection = $_order->getTracksCollection($_shipment->getId()) ?>
-<?php if ($_shipment && $_order && $trackCollection): ?>
+<?php if ($trackCollection): ?>
     <br />
     <table class="shipment-track">
         <thead>
@@ -28,4 +29,5 @@
         <?php endforeach ?>
         </tbody>
     </table>
+<?php endif; ?>
 <?php endif; ?>
