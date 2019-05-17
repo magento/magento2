@@ -174,6 +174,13 @@ class Processor
 
         $destinationFile = $this->mediaConfig->getTmpMediaPath($fileName);
 
+        // collecting image MimeType, Content, Base64, Name before move/copy file.
+        $absoluteFilePath = $this->mediaDirectory->getAbsolutePath($destinationFile);
+        $imageMimeType = $this->mime->getMimeType($absoluteFilePath);
+        $imageContent = $this->mediaDirectory->readFile($absoluteFilePath);
+        $imageBase64 = base64_encode($imageContent);
+        $imageName = $pathinfo['filename'];
+
         try {
             /** @var $storageHelper \Magento\MediaStorage\Helper\File\Storage\Database */
             $storageHelper = $this->fileStorageDb;
@@ -196,12 +203,6 @@ class Processor
         $attrCode = $this->getAttribute()->getAttributeCode();
         $mediaGalleryData = $product->getData($attrCode);
         $position = 0;
-
-        $absoluteFilePath = $this->mediaDirectory->getAbsolutePath($destinationFile);
-        $imageMimeType = $this->mime->getMimeType($absoluteFilePath);
-        $imageContent = $this->mediaDirectory->readFile($absoluteFilePath);
-        $imageBase64 = base64_encode($imageContent);
-        $imageName = $pathinfo['filename'];
 
         if (!is_array($mediaGalleryData)) {
             $mediaGalleryData = ['images' => []];
