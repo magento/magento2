@@ -6,6 +6,11 @@
 
 namespace Magento\Framework\Mview\Test\Unit\View;
 
+/**
+ * Class ChangelogTest
+ *
+ * @package Magento\Framework\Mview\Test\Unit\View
+ */
 class ChangelogTest extends \PHPUnit\Framework\TestCase
 {
     /**
