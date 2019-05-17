@@ -31,7 +31,7 @@
                                name="links[]"
                                id="links_<?= $block->escapeHtmlAttr($_link->getId()) ?>"
                                value="<?= $block->escapeHtmlAttr($_link->getId()) ?>"
-                                <?= $block->escapeHtml($block->getLinkCheckedValue($_link)) ?> />
+                                <?= /* @noEscape */ $block->getLinkCheckedValue($_link) ?> />
                     <?php endif; ?>
                     <label class="label" for="links_<?= $block->escapeHtmlAttr($_link->getId()) ?>">
                         <span><?= $block->escapeHtml($_link->getTitle()) ?></span>
