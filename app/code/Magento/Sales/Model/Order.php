@@ -685,8 +685,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $hasActionFlag = $this->getActionFlag(self::ACTION_FLAG_EDIT) === false;
         $creditmemos = ($this->getCreditmemosCollection() === false) ?
              true : (count($this->getCreditmemosCollection()) > 0);
-        if (($isRefundZero || $hasAdjustmentFee || $hasActionFlag) 
-            && (($this->isAllInvoicedRefunded() && $creditmemos) || !$creditmemos)) {
+        if (($isRefundZero || $hasAdjustmentFee || $hasActionFlag)
+            && (!$creditmemos || ($this->isAllInvoicedRefunded() && $creditmemos))) {
             return false;
         }
         return true;
@@ -709,8 +709,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $creditmemos = ($this->getCreditmemosCollection() === false) ?
              true : (count($this->getCreditmemosCollection()) > 0);
         $totalRefunded = $this->getTotalRefunded();
-        $paidAmtIsRefunded = $totalRefunded == $totalPaid && $creditmemos && $this->getTotalDue()!=0 && $totalPaid!=0;
-        if ((($hasDueAmount && $this->isAllInvoicedRefunded()) || $paidAmtIsRefunded) ||
+        if (($hasDueAmount && $this->isAllInvoicedRefunded()) ||
             (!$checkAmtTotalPaid &&
             abs($totalRefunded - $this->getAdjustmentNegative()) < .0001) ||
             $this->canCreditmemoForZeroAll()) {
@@ -738,8 +737,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function isAllInvoicedRefunded()
     {
         foreach ($this->getAllItems() as $item) {
-            if($item->getQtyInvoiced() && $item->getQtyRefunded() != $item->getQtyInvoiced())
-            {
+            if ($item->getQtyInvoiced() && $item->getQtyRefunded() != $item->getQtyInvoiced()) {
                 return false;
             }
         }
@@ -1534,7 +1532,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Get item by quote item id
      *
      * @param mixed $quoteItemId
-     * @return  \Magento\Framework\DataObject|null
+     * @return \Magento\Framework\DataObject|null
      */
     public function getItemByQuoteItemId($quoteItemId)
     {

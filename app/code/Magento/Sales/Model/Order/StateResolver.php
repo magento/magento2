@@ -21,11 +21,7 @@ class StateResolver implements OrderStateResolverInterface
      */
     private function isOrderComplete(OrderInterface $order)
     {
-        /** @var $order Order|OrderInterface */
-        if ((!$order->canCreditmemoForZeroAll() && 0 == $order->getBaseGrandTotal()) || $order->canCreditmemo()) {
-            return true;
-        }
-        return false;
+        return $order->canCreditmemo();
     }
 
     /**
@@ -39,7 +35,7 @@ class StateResolver implements OrderStateResolverInterface
     {
         /** @var $order Order|OrderInterface */
         $forceCreditmemo = in_array(self::FORCED_CREDITMEMO, $arguments);
-        if ((float)$order->getTotalRefunded() || !$order->getTotalRefunded() && $forceCreditmemo || 
+        if ((float)$order->getTotalRefunded() || !$order->getTotalRefunded() && $forceCreditmemo ||
             $order->canCreditmemoForZeroAll()) {
             return true;
         }
@@ -74,6 +70,8 @@ class StateResolver implements OrderStateResolverInterface
     }
 
     /**
+     * Returns state for order
+     * 
      * @param OrderInterface $order
      * @param array $arguments
      * @return string
