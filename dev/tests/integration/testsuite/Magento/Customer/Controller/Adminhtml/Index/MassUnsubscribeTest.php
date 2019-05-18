@@ -39,7 +39,7 @@ class MassUnsubscribeTest extends AbstractBackendController
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/two_customers.php
+     * @magentoDataFixture Magento/Customer/_files/two_customers_with_reindex.php
      */
     public function testMassUnsubscribAction()
     {

@@ -145,11 +145,18 @@ class OrderStatusTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Positive scenario.
+     */
     public function testGetRssData()
     {
         $this->orderFactory->expects($this->once())->method('create')->willReturn($this->order);
         $requestData = base64_encode('{"order_id":1,"increment_id":"100000001","customer_id":1}');
-        $this->signature->expects($this->any())->method('signData')->willReturn('signature');
+        $this->signature->expects($this->never())->method('signData');
+        $this->signature->expects($this->any())
+            ->method('isValid')
+            ->with($requestData, 'signature')
+            ->willReturn(true);
 
         $this->requestInterface->expects($this->any())
             ->method('getParam')
@@ -180,6 +187,8 @@ class OrderStatusTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Case when invalid data is provided.
+     *
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Order not found.
      */
@@ -187,7 +196,11 @@ class OrderStatusTest extends \PHPUnit_Framework_TestCase
     {
         $this->orderFactory->expects($this->once())->method('create')->willReturn($this->order);
         $requestData = base64_encode('{"order_id":"1","increment_id":true,"customer_id":true}');
-        $this->signature->expects($this->any())->method('signData')->willReturn('signature');
+        $this->signature->expects($this->never())->method('signData');
+        $this->signature->expects($this->any())
+            ->method('isValid')
+            ->with($requestData, 'signature')
+            ->willReturn(true);
         $this->requestInterface->expects($this->any())
             ->method('getParam')
             ->willReturnMap(
@@ -202,16 +215,20 @@ class OrderStatusTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Case when invalid signature is provided.
+     *
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Order not found.
      */
     public function testGetRssDataWithWrongSignature()
     {
         $requestData = base64_encode('{"order_id":"1","increment_id":true,"customer_id":true}');
+        $this->signature->expects($this->never())
+            ->method('signData');
         $this->signature->expects($this->any())
-            ->method('signData')
-            ->with($requestData)
-            ->willReturn('wrong_signature');
+            ->method('isValid')
+            ->with($requestData, 'signature')
+            ->willReturn(false);
         $this->requestInterface->expects($this->any())
             ->method('getParam')
             ->willReturnMap(
@@ -225,6 +242,9 @@ class OrderStatusTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->feedData, $this->model->getRssData());
     }
 
+    /**
+     * Testing allowed getter.
+     */
     public function testIsAllowed()
     {
         $this->scopeConfigInterface->expects($this->once())->method('getValue')
@@ -234,6 +254,8 @@ class OrderStatusTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test caching.
+     *
      * @param string $requestData
      * @param string $result
      * @dataProvider getCacheKeyDataProvider
@@ -245,12 +267,18 @@ class OrderStatusTest extends \PHPUnit_Framework_TestCase
                 ['data', null, $requestData],
                 ['signature', null, 'signature'],
             ]);
-        $this->signature->expects($this->any())->method('signData')->willReturn('signature');
+        $this->signature->expects($this->never())->method('signData');
+        $this->signature->expects($this->any())
+            ->method('isValid')
+            ->with($requestData, 'signature')
+            ->willReturn(true);
         $this->orderFactory->expects($this->once())->method('create')->will($this->returnValue($this->order));
         $this->assertEquals('rss_order_status_data_' . $result, $this->model->getCacheKey());
     }
 
     /**
+     * Test data for caching test.
+     *
      * @return array
      */
     public function getCacheKeyDataProvider()
@@ -261,6 +289,9 @@ class OrderStatusTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * Test for cache lifetime getter.
+     */
     public function testGetCacheLifetime()
     {
         $this->assertEquals(600, $this->model->getCacheLifetime());

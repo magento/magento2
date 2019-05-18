@@ -17,7 +17,7 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\DeploymentConfig
      */
-    private $deploymentConfigMock;
+    private $encryptorMock;
 
     /**
      * @var ObjectManagerHelper
@@ -34,19 +34,14 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->deploymentConfigMock = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig::class)
+        $this->encryptorMock = $this->getMockBuilder(\Magento\Framework\Encryption\EncryptorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->deploymentConfigMock->expects($this->any())
-            ->method('get')
-            ->with('crypt/key')
-            ->willReturn('1234567890abc');
-
+            ->getMockForAbstractClass();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             Signature::class,
             [
-                'deploymentConfig' => $this->deploymentConfigMock,
+                'encryptor' => $this->encryptorMock,
             ]
         );
     }
@@ -61,6 +56,7 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
      */
     public function testSignData($data, $expected)
     {
+        $this->encryptorMock->expects($this->any())->method('hash')->with($data)->willReturn($expected);
         $this->assertEquals($expected, $this->model->signData($data));
     }
 
@@ -73,6 +69,44 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
             [
                 'eyJvcmRlcl9pZCI6IjEiLCJjdXN0b21lcl9pZCI6IjEiLCJpbmNyZW1lbnRfaWQiOiIwMDAwMDAwMDEifQ==',
                 '651932dfc862406b72628d95623bae5ea18242be757b3493b337942d61f834be',
+            ],
+        ];
+    }
+
+    /**
+     * Test signature validation.
+     *
+     * @param string $data
+     * @param string $signature
+     * @param bool $expected
+     * @return void
+     * @dataProvider checkIsValidDataProvider
+     */
+    public function testIsValid($data, $signature, $expected)
+    {
+        $this->encryptorMock->expects($this->any())
+            ->method('validateHash')
+            ->with($data, $signature)
+            ->willReturn($expected);
+
+        $this->assertEquals($expected, $this->model->isValid($data, $signature));
+    }
+
+    /**
+     * @return array
+     */
+    public function checkIsValidDataProvider()
+    {
+        return [
+            [
+                'eyJvcmRlcl9pZCI6IjEiLCJjdXN0b21lcl9pZCI6IjEiLCJpbmNyZW1lbnRfaWQiOiIwMDAwMDAwMDEifQ==',
+                '651932dfc862406b72628d95623bae5ea18242be757b3493b337942d61f834be',
+                true,
+            ],
+            [
+                'eyJvcmRlcl9pZCI6IjEiLCJjdXN0b21lcl9pZCI6IjEiLCJpbmNyZW1lbnRfaWQiOiIwMDAwMDAwMDEifQ==',
+                'blabla',
+                false,
             ],
         ];
     }
