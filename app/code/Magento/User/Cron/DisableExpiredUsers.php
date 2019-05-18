@@ -28,6 +28,8 @@ class DisableExpiredUsers
 
     /**
      * Disable all expired user accounts.
+     * TODO: add plugin to authentication to disable since not everyone
+     * has cron running (see \Magento\Security\Model\AdminSessionsManager::processLogin?)
      */
     public function execute()
     {
