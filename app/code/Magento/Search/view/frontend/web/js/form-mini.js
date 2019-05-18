@@ -129,12 +129,13 @@ define([
          * @param {Boolean} isActive
          */
         setActiveState: function (isActive) {
+            var searchValue;
             this.searchForm.toggleClass('active', isActive);
             this.searchLabel.toggleClass('active', isActive);
 
             if (this.isExpandable) {
                 this.element.attr('aria-expanded', isActive);
-                let searchValue = this.element.val();
+                searchValue = this.element.val();
                 this.element.val("");
                 this.element.val(searchValue);
             }
