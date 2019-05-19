@@ -181,7 +181,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 $timestamp += 60 * 60 * $value['hour'] + 60 * $value['minute'];
             }
 
-            $date = (new \DateTime())->setTimestamp($timestamp);
+            $date = (new \DateTime('', new \DateTimeZone($this->_localeDate->getConfigTimezone())))->setTimestamp($timestamp);
             $result = $date->format('Y-m-d H:i:s');
 
             // Save date in internal format to avoid locale date bugs
