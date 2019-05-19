@@ -253,6 +253,10 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->willReturnSelf();
 
+        $this->authSessionMock->expects($this->once())
+            ->method('getUser')
+            ->willReturn($this->userMock);
+
         $this->model->processProlong();
     }
 

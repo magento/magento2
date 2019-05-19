@@ -154,6 +154,7 @@ class AdminSessionsManager
             $this->getCurrentSession()->save();
         }
 
+        // todo: don't necessarily have a user here
         if ($this->authSession->getUser()->getExpiresAt())
         {
             $this->revokeExpiredAdminUser();
