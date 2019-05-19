@@ -7,9 +7,12 @@ declare(strict_types=1);
 
 use Magento\Customer\Model\GroupManagement as CustomerGroupManagement;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\SalesRule\Api\Data\RuleLabelInterface;
 use Magento\SalesRule\Api\RuleRepositoryInterface;
 use Magento\SalesRule\Model\Data\Rule as RuleData;
-use Magento\Store\Model\StoreManagerInterface as StoreManagerInterface;
+use Magento\SalesRule\Model\Data\RuleLabelFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 
@@ -18,13 +21,13 @@ $objectManager = Bootstrap::getObjectManager();
 $ruleRepository = $objectManager->get(RuleRepositoryInterface::class);
 /** @var DataObjectHelper $dataObjectHelper */
 $dataObjectHelper = Bootstrap::getObjectManager()->get(DataObjectHelper::class);
-$ruleLabel = $objectManager->create(\Magento\SalesRule\Api\Data\RuleLabelInterface::class);
-$ruleLabelFactory = $objectManager->get(\Magento\SalesRule\Model\Data\RuleLabelFactory::class);
+$ruleLabel = $objectManager->create(RuleLabelInterface::class);
+$ruleLabelFactory = $objectManager->get(RuleLabelFactory::class);
 
 
 /** @var RuleData $salesRule */
 $salesRule = $objectManager->create(RuleData::class);
-/** @var \Magento\SalesRule\Api\Data\RuleLabelInterface $ruleLabel */
+/** @var RuleLabelInterface $ruleLabel */
 $ruleLabel = $ruleLabelFactory->create();
 $ruleLabel->setStoreId(0);
 $ruleLabel->setStoreLabel('50% Off for all orders');
@@ -45,8 +48,9 @@ $ruleData = [
         'discount_qty' => 0,
         'apply_to_shipping' => 1,
         'simple_free_shipping' => 1,
+        'stop_rules_processing' => 0
 ];
-$dataObjectHelper->populateWithArray($salesRule, $ruleData, \Magento\SalesRule\Api\Data\RuleInterface::class);
+$dataObjectHelper->populateWithArray($salesRule, $ruleData, RuleInterface::class);
 $salesRule->setStoreLabels([$ruleLabel]);
 
 $ruleRepository->save($salesRule);

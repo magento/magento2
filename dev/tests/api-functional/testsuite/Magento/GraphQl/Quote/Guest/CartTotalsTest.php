@@ -129,7 +129,6 @@ class CartTotalsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @group recent
      */
     public function testGetDiscountInformation()
     {
@@ -138,18 +137,27 @@ class CartTotalsTest extends GraphQlAbstract
         $response = $this->graphQlQuery($query);
 
         $discountResponse = $response['cart']['prices']['discount'];
-        self::assertEquals(-20, $discountResponse['amount']['value']);
-        self::assertEquals('100% Off for all orders', $discountResponse['label']);
+        self::assertEquals(-10, $discountResponse['amount']['value']);
+        self::assertEquals('50% Off for all orders', $discountResponse['label']);
     }
 
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/cart_rule_discount_no_coupon.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/apply_coupon.php
+     */
     public function testGetDiscountInformationWithTwoRulesApplied()
     {
-        self::fail();
-    }
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query);
 
-    public function testGetDiscountInformationForRuleWithNoLabel()
-    {
-        self::fail();
+        $discountResponse = $response['cart']['prices']['discount'];
+        self::assertEquals(-15, $discountResponse['amount']['value']);
+        self::assertEquals('50% Off for all orders, 5$ fixed discount on whole cart', $discountResponse['label']);
     }
 
     /**
