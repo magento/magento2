@@ -193,7 +193,7 @@ class System implements ConfigTypeInterface
 
         if ($scopeType === ScopeInterface::SCOPE_DEFAULT) {
             if (!isset($this->data[$scopeType])) {
-                $this->data = array_replace_recursive($this->loadDefaultScopeData($scopeType), $this->data);
+                $this->data[$scopeType] = $this->loadDefaultScopeData($scopeType);
             }
 
             return $this->getDataByPathParts($this->data[$scopeType], $pathParts);
@@ -203,10 +203,7 @@ class System implements ConfigTypeInterface
 
         if (!isset($this->data[$scopeType][$scopeId])) {
             $scopeData = $this->loadScopeData($scopeType, $scopeId);
-
-            if (!isset($this->data[$scopeType][$scopeId])) {
-                $this->data = array_replace_recursive($scopeData, $this->data);
-            }
+            $this->data[$scopeType][$scopeId] = $scopeData;
         }
 
         return isset($this->data[$scopeType][$scopeId])
@@ -248,14 +245,16 @@ class System implements ConfigTypeInterface
         return $this->lockQuery->nonBlockingLockedLoadData(
             self::$lockName,
             $loadAction,
-            \Closure::fromCallable([$this, 'readData']),
+            function () {
+                return \Closure::fromCallable([$this, 'readData'])();
+            },
             function ($data) use ($scopeType) {
                 $this->cacheData($data);
-                return [$scopeType => $data[$scopeType] ?? []];
+                return $data[$scopeType] ?? [];
             },
             function () use ($scopeType) {
                 $scopeData = $this->loadAllStaleDataFromCache()[$scopeType] ?? false;
-                return $scopeData ? [$scopeType => $scopeData] : false;
+                return $scopeData;
             }
         );
     }
@@ -290,14 +289,14 @@ class System implements ConfigTypeInterface
     private function loadDataFromCacheForScopeType($scopeType)
     {
         $scopeData = $this->loadFromCacheAndDecode(
-            $this->configType . '_' . $scopeType,
-            function ($cacheData) use ($scopeType) {
-                return [$scopeType => $cacheData];
-            }
+            $this->configType . '_' . $scopeType
         );
 
         if ($scopeData === false) {
-            $scopeData = $this->loadAllDataFromCache()[$scopeType] ?? false;
+            $scopeDataInAllScopes = $this->loadAllDataFromCache();
+            if (isset($scopeDataInAllScopes[$scopeType])) {
+                return $scopeDataInAllScopes[$scopeType];
+            }
         }
 
         return $scopeData;
@@ -307,7 +306,7 @@ class System implements ConfigTypeInterface
      * Loads data from cache by key and decodes it into ready to use data
      *
      * @param string $cacheKey
-     * @param callable|null $dataFormatter
+     * @param callable $dataFormatter
      * @return array|bool
      */
     private function loadFromCacheAndDecode(string $cacheKey, callable $dataFormatter = null)
@@ -340,7 +339,7 @@ class System implements ConfigTypeInterface
             $scopeData = $this->loadFromCacheAndDecode(
                 $this->configType . '_' . $scopeType . '_' . $scopeId,
                 function ($cachedData) use ($scopeType, $scopeId) {
-                    return [$scopeType => [$scopeId => $cachedData]];
+                    return $cachedData;
                 }
             );
 
@@ -352,13 +351,14 @@ class System implements ConfigTypeInterface
 
             if ($availableScopes && !isset($availableScopes[$scopeType][$scopeId])) {
                 $scopeData = $this->loadFromCacheAndDecode(
-                    $this->configType,
-                    function ($cachedData) use ($scopeType, $scopeId) {
-                        return $cachedData[$scopeType][$scopeId] ?? [];
-                    }
+                    $this->configType
                 );
 
-                return [$scopeType => [$scopeId => $scopeData]];
+                if (!isset($scopeData[$scopeType][$scopeId])) {
+                    return false;
+                }
+
+                return $scopeData[$scopeType][$scopeId];
             }
 
             return $scopeData;
@@ -370,7 +370,7 @@ class System implements ConfigTypeInterface
             \Closure::fromCallable([$this, 'readData']),
             function ($data) use ($scopeType, $scopeId) {
                 $this->cacheData($data);
-                return [$scopeType => [$scopeId => [$data[$scopeType][$scopeId] ?? []]]];
+                return $data[$scopeType][$scopeId] ?? [];
             },
             function () use ($scopeType, $scopeId) {
                 $staleData = $this->loadAllStaleDataFromCache();
