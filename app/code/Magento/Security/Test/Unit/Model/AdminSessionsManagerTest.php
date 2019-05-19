@@ -151,7 +151,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
             ->method('getSessionId')
             ->willReturn($sessionId);
 
-        $this->authSessionMock->expects($this->once())
+        $this->authSessionMock->expects($this->any())
             ->method('getUser')
             ->willReturn($this->userMock);
         $this->userMock->expects($this->once())
