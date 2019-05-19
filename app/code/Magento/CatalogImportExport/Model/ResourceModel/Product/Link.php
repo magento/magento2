@@ -1,9 +1,9 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\CatalogImportExport\Model\ResourceModel\Product;
-
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\ImportExport\Model\Import;
 
 class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
 {
@@ -29,7 +29,6 @@ class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
     public function fetchExistingLinks(
         $productId
     ): array {
-
         $productLinkKeys = [];
         $select = $this->getConnection()->select()->from(
             $this->getTable('catalog_product_link'),
@@ -112,5 +111,4 @@ class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
 
         return $nextLinkId;
     }
-
 }

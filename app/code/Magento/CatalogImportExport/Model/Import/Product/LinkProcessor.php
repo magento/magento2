@@ -6,12 +6,10 @@
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\CatalogImportExport\Model\ResourceModel\Product\LinkFactory;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Psr\Log\LoggerInterface;
-use Magento\CatalogImportExport\Model\ResourceModel\Product\LinkFactory;
 
 class LinkProcessor
 {
@@ -72,7 +70,7 @@ class LinkProcessor
      */
     public function addNameToIds($nameToIds)
     {
-       $this->linkNameToId = array_merge($nameToIds, $this->linkNameToId);
+        $this->linkNameToId = array_merge($nameToIds, $this->linkNameToId);
     }
 
     public function saveLinks($entityModel, $linkField)
@@ -88,7 +86,7 @@ class LinkProcessor
             $positionRows = [];
 
             foreach ($bunch as $rowNum => $rowData) {
-                if ( ! $this->entityModel->isRowAllowedToImport($rowData, $rowNum)) {
+                if (! $this->entityModel->isRowAllowedToImport($rowData, $rowNum)) {
                     continue;
                 }
 
@@ -109,7 +107,7 @@ class LinkProcessor
 
                     foreach ($linkSkus as $linkedKey => $linkedSku) {
                         $linkedSku = trim($linkedSku); //NOTE: why is trimming happening here and not for all cols in a general place?
-                        if ( ! $this->isProperLink($linkedSku, $sku)) {
+                        if (! $this->isProperLink($linkedSku, $sku)) {
                             continue;
                         }
 
@@ -123,7 +121,7 @@ class LinkProcessor
                             $productLinkKeys[$linkKey] = $nextLinkId;
                         }
 
-                        if ( ! isset($linkRows[$linkKey])) {
+                        if (! isset($linkRows[$linkKey])) {
                             $linkRows[$linkKey] = [
                                 'link_id' => $productLinkKeys[$linkKey],
                                 'product_id' => $productId,
@@ -131,7 +129,7 @@ class LinkProcessor
                                 'link_type_id' => $linkId,
                             ];
                         }
-                        if ( ! empty($linkPositions[$linkedKey])) {
+                        if (! empty($linkPositions[$linkedKey])) {
                             $positionRows[] = [
                                 'link_id' => $productLinkKeys[$linkKey],
                                 'product_link_attribute_id' => $positionAttrId[$linkId],
@@ -165,7 +163,6 @@ class LinkProcessor
     private function checkForEmptyLinkId($linkedId, $sku, $productId, string $linkedSku): bool
     {
         if ($linkedId == null) {
-
             $this->logger->critical(
                 new \Exception(
                     sprintf(
@@ -196,8 +193,6 @@ class LinkProcessor
             && strcasecmp($linkedSku, $sku) !== 0;
     }
 
-
-
     /**
      * @param $rowData
      * @param string $positionField
@@ -223,7 +218,7 @@ class LinkProcessor
     {
         $linkField = $linkName . 'sku';
 
-        if ( ! isset($rowData[$linkField])) {
+        if (! isset($rowData[$linkField])) {
             return false;
         }
 
@@ -238,11 +233,10 @@ class LinkProcessor
     private function getLinkedId(string $linkedSku)
     {
         $newSku = $this->skuProcessor->getNewSku($linkedSku);
-        if ( ! empty($newSku)) {
+        if (! empty($newSku)) {
             return $newSku['entity_id'];
         }
 
         return $this->entityModel->getExistingSku($linkedSku)['entity_id'];
     }
-
 }
