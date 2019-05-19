@@ -58,13 +58,7 @@ class LinkProcessor
         $this->logger = $logger;
         $this->dataSourceModel = $importData;
         $this->skuProcessor = $skuProcessor;
-
-        // arrays do not seem to support init_parameter,
-        // so we have to parse the constant by ourselves
-        $this->linkNameToId = [];
-        foreach($linkNameToId as $key=>$value) {
-            $this->linkNameToId[$key] = constant($value);
-        }
+        $this->linkNameToId = $linkNameToId;
 
         $this->resource = $this->linkFactory->create(['connectionName' => null]);
     }
