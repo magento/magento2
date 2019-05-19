@@ -36,9 +36,9 @@ class ValidateCustomerData
         $attributes = $this->getAllowedCustomerAttributes->execute(array_keys($customerData));
         $errorInput = [];
 
-        foreach ($attributes as $attributeName => $attributeInfo) {
-            if ($attributeInfo->getIsRequired() && empty($customerData[$attributeName])) {
-                $errorInput[] = $attributeName;
+        foreach ($attributes as $attributeInfo) {
+            if ($attributeInfo->getIsRequired() && empty($customerData[$attributeInfo->getAttributeCode()])) {
+                $errorInput[] = $attributeInfo->getDefaultFrontendLabel();
             }
         }
 
