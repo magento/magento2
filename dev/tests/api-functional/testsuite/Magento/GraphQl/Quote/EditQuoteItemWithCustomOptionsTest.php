@@ -19,7 +19,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 /**
  * Edit cart customizable options test
  */
-class EditQuoteItemCustomOptionsTest extends GraphQlAbstract
+class EditQuoteItemWithCustomOptionsTest extends GraphQlAbstract
 {
     /**
      * @var ProductRepositoryInterface

@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Framework\DataObject;
-use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -25,6 +23,11 @@ use Magento\Quote\Model\Quote\Item;
 class UpdateCartItem
 {
     /**
+     * @var CreateBuyRequest
+     */
+    private $createBuyRequest;
+
+    /**
      * @var CartRepositoryInterface
      */
     private $quoteRepository;
@@ -35,23 +38,18 @@ class UpdateCartItem
     private $cartItemRepository;
 
     /**
-     * @var DataObjectFactory
-     */
-    private $dataObjectFactory;
-
-    /**
-     * @param DataObjectFactory $dataObjectFactory
      * @param CartItemRepositoryInterface $cartItemRepository
      * @param CartRepositoryInterface $quoteRepository
+     * @param CreateBuyRequest $createBuyRequest
      */
     public function __construct(
-        DataObjectFactory $dataObjectFactory,
         CartItemRepositoryInterface $cartItemRepository,
-        CartRepositoryInterface $quoteRepository
+        CartRepositoryInterface $quoteRepository,
+        CreateBuyRequest $createBuyRequest
     ) {
-        $this->dataObjectFactory = $dataObjectFactory;
         $this->cartItemRepository = $cartItemRepository;
         $this->quoteRepository = $quoteRepository;
+        $this->createBuyRequest = $createBuyRequest;
     }
 
     /**
@@ -59,32 +57,25 @@ class UpdateCartItem
      *
      * @param Quote $cart
      * @param int $cartItemId
-     * @param float $qty
+     * @param float $quantity
      * @param array $customizableOptionsData
      * @return void
      * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
      * @throws NoSuchEntityException
      */
-    public function execute(Quote $cart, int $cartItemId, float $qty, array $customizableOptionsData): void
+    public function execute(Quote $cart, int $cartItemId, float $quantity, array $customizableOptionsData): void
     {
         if (count($customizableOptionsData) === 0) { // Update only item's qty
-            $this->updateItemQty($cartItemId, $cart, $qty);
+            $this->updateItemQuantity($cartItemId, $cart, $quantity);
 
             return;
-        }
-
-        $customizableOptions = [];
-        foreach ($customizableOptionsData as $customizableOption) {
-            $customizableOptions[$customizableOption['id']] = $this->convertCustomOptionValue(
-                $customizableOption['value_string']
-            );
         }
 
         try {
             $result = $cart->updateItem(
                 $cartItemId,
-                $this->createBuyRequest($qty, $customizableOptions)
+                $this->createBuyRequest->execute($quantity, $customizableOptionsData)
             );
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(
@@ -117,12 +108,12 @@ class UpdateCartItem
      *
      * @param int $itemId
      * @param Quote $cart
-     * @param float $qty
+     * @param float $quantity
      * @throws GraphQlNoSuchEntityException
      * @throws NoSuchEntityException
      * @throws GraphQlNoSuchEntityException
      */
-    private function updateItemQty(int $itemId, Quote $cart, float $qty)
+    private function updateItemQuantity(int $itemId, Quote $cart, float $quantity)
     {
         $cartItem = $cart->getItemById($itemId);
         if ($cartItem === false) {
@@ -130,7 +121,7 @@ class UpdateCartItem
                 __('Could not find cart item with id: %1.', $itemId)
             );
         }
-        $cartItem->setQty($qty);
+        $cartItem->setQty($quantity);
         $this->validateCartItem($cartItem);
         $this->cartItemRepository->save($cartItem);
     }
@@ -158,41 +149,5 @@ class UpdateCartItem
                 );
             }
         }
-    }
-
-    /**
-     * Format GraphQl input data to a shape that buy request has
-     *
-     * @param float $qty
-     * @param array $customOptions
-     * @return DataObject
-     */
-    private function createBuyRequest(float $qty, array $customOptions): DataObject
-    {
-        return $this->dataObjectFactory->create([
-            'data' => [
-                'qty' => $qty,
-                'options' => $customOptions,
-            ],
-        ]);
-    }
-
-    // TODO: Refactor the code duplication with addCartItem
-    // TODO: Make a reusable logic that is shared between add to cart / change cart approaches
-
-    /**
-     * Convert custom options vakue
-     *
-     * @param string $value
-     * @return string|array
-     */
-    private function convertCustomOptionValue(string $value)
-    {
-        $value = trim($value);
-        if (substr($value, 0, 1) === "[" &&
-            substr($value, strlen($value) - 1, 1) === "]") {
-            return explode(',', substr($value, 1, -1));
-        }
-        return $value;
     }
 }
