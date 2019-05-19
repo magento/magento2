@@ -34,7 +34,7 @@ $ruleLabel->setStoreLabel('50% Off for all orders');
 $ruleData = [
         'name' => '50% Off for all orders',
         'is_active' => 1,
-        'customer_group_ids' => [CustomerGroupManagement::NOT_LOGGED_IN_ID],
+        'customer_group_ids' => [CustomerGroupManagement::NOT_LOGGED_IN_ID, 1],
         'coupon_type' => RuleData::COUPON_TYPE_NO_COUPON,
         'conditions' => [],
         'simple_action' => 'by_percent',
