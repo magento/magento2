@@ -127,6 +127,41 @@ class SystemTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testClearingWebsiteCacheAndLockingItReturnsStaleCachedValue()
+    {
+        // First uncached call to configuration
+        $this->createSystemConfig()->get('websites/base/web/test/test_value_1');
+
+        $this->accessCacheFrontend()->remove('system_websites_base');
+        $this->accessLock()->lock('SYSTEM_CONFIG');
+        // Second call after cache data is stored
+        $configValue = $this->createSystemConfig()->get('websites/base/web/test/test_value_1');
+        $this->accessLock()->unlock('SYSTEM_CONFIG');
+
+        $this->assertEquals(
+            'value1.db.website_base.test',
+            $configValue
+        );
+    }
+
+    public function testClearingStoreCacheAndLockingItReturnsStaleCachedValue()
+    {
+        // First uncached call to configuration
+        $this->createSystemConfig()->get('stores/default/web/test/test_value_1');
+
+        $this->accessCacheFrontend()->remove('system_stores_default');
+        $this->accessLock()->lock('SYSTEM_CONFIG');
+        // Second call after cache data is stored
+        $configValue = $this->createSystemConfig()->get('stores/default/web/test/test_value_1');
+        $this->accessLock()->unlock('SYSTEM_CONFIG');
+
+        $this->assertEquals(
+            'value1.db.store_default.test',
+            $configValue
+        );
+    }
+
+
     private function accessCacheFrontend(): FrontendInterface
     {
         return $this->objectManager->get(Config::class);
