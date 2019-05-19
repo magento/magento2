@@ -9,6 +9,7 @@ namespace Magento\User\Cron;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
+ * TODO: test logging out sessions
  * @magentoAppArea adminhtml
  */
 class DisableExpiredUsersTest extends \PHPUnit\Framework\TestCase

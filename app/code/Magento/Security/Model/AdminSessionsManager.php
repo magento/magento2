@@ -28,6 +28,11 @@ class AdminSessionsManager
     const LOGOUT_REASON_USER_LOCKED = 10;
 
     /**
+     * User has been logged out due to an expired user account
+     */
+    const LOGOUT_REASON_USER_EXPIRED = 11;
+
+    /**
      * @var ConfigInterface
      * @since 100.1.0
      */
@@ -100,7 +105,7 @@ class AdminSessionsManager
     }
 
     /**
-     * Handle all others active sessions according Sharing Account Setting
+     * Handle all others active sessions according Sharing Account Setting and expired users.
      *
      * @return $this
      * @since 100.1.0
@@ -120,6 +125,11 @@ class AdminSessionsManager
             if ($result) {
                 $this->getCurrentSession()->setIsOtherSessionsTerminated(true);
             }
+        }
+
+        if ($this->authSession->getUser()->getExpiresAt())
+        {
+            $this->revokeExpiredAdminUser();
         }
 
         return $this;
@@ -142,6 +152,11 @@ class AdminSessionsManager
                 )
             );
             $this->getCurrentSession()->save();
+        }
+
+        if ($this->authSession->getUser()->getExpiresAt())
+        {
+            $this->revokeExpiredAdminUser();
         }
 
         return $this;
@@ -207,6 +222,11 @@ class AdminSessionsManager
             case self::LOGOUT_REASON_USER_LOCKED:
                 $reasonMessage = __(
                     'Your account is temporarily disabled. Please try again later.'
+                );
+                break;
+            case self::LOGOUT_REASON_USER_EXPIRED:
+                $reasonMessage = __(
+                    'Your account has expired.'
                 );
                 break;
             default:
@@ -352,5 +372,22 @@ class AdminSessionsManager
                 $this->maxIntervalBetweenConsecutiveProlongs
             )
         );
+    }
+
+    /**
+     * Check if the current user is expired and, if so, revoke their admin token.
+     */
+    private function revokeExpiredAdminUser()
+    {
+        $expiresAt = $this->dateTime->gmtTimestamp($this->authSession->getUser()->getExpiresAt());
+        if ($expiresAt < $this->dateTime->gmtTimestamp()) {
+            $currentSessions = $this->getSessionsForCurrentUser();
+            $currentSessions->setDataToAll('status', self::LOGOUT_REASON_USER_EXPIRED)
+                        ->save();
+            $this->authSession->getUser()
+                ->setIsActive(0)
+                ->setExpiresAt(null)
+                ->save();
+        }
     }
 }

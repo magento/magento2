@@ -43,18 +43,18 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Filter users by expires_at.
-     * @param string|null $now
+     * Filter for expired, active users.
+     * @param null $now
      * @return $this
      */
-    public function addExpiresAtFilter($now = null)
+    public function addActiveExpiredUsersFilter($now = null)
     {
         if ($now === null) {
             $now = new \DateTime();
             $now->format('Y-m-d H:i:s');
         }
-
-        $this->addFieldToFilter('expires_at', ['lt' => $now]);
+        $this->addFieldToFilter('expires_at', ['lt' => $now])
+            ->addFieldToFilter('is_active', 1);
 
         return $this;
     }

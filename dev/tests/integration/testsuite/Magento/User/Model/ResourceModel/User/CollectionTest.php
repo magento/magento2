@@ -35,9 +35,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/User/_files/expired_users.php
      */
-    public function testExpiresAtFilter()
+    public function testExpiredActiveUsersFilter()
     {
-        $this->collection->addExpiresAtFilter();
-        static::assertCount(1, $this->collection);
+        $this->collection->addActiveExpiredUsersFilter();
+        static::assertGreaterThan(1, $this->collection->getSize());
     }
 }
