@@ -81,65 +81,12 @@ class LinkProcessor
         $positionAttrId = $this->resource->loadPositionAttributes($this->linkNameToId);
 
         while ($bunch = $this->dataSourceModel->getNextBunch()) {
-            $productIds = [];
-            $linkRows = [];
-            $positionRows = [];
-
-            foreach ($bunch as $rowNum => $rowData) {
-                if (! $this->entityModel->isRowAllowedToImport($rowData, $rowNum)) {
-                    continue;
-                }
-
-                $sku = $rowData[Product::COL_SKU];
-
-                $productId = $this->skuProcessor->getNewSku($sku)[$linkField];
-                $productLinkKeys = $this->resource->fetchExistingLinks($productId);
-
-                foreach ($this->linkNameToId as $linkName => $linkId) {
-                    $productIds[] = $productId;
-
-                    $linkSkus = $this->getLinkSkus($rowData, $linkName);
-                    if ($linkSkus === false) {
-                        continue;
-                    }
-
-                    $linkPositions = $this->getLinkPositions($rowData, $linkName);
-
-                    foreach ($linkSkus as $linkedKey => $linkedSku) {
-                        $linkedSku = trim($linkedSku); //NOTE: why is trimming happening here and not for all cols in a general place?
-                        if (! $this->isProperLink($linkedSku, $sku)) {
-                            continue;
-                        }
-
-                        $linkedId = $this->getLinkedId($linkedSku);
-                        if ($this->checkForEmptyLinkId($linkedId, $sku, $productId, $linkedSku)) {
-                            continue;
-                        }
-
-                        $linkKey = "{$productId}-{$linkedId}-{$linkId}";
-                        if (empty($productLinkKeys[$linkKey])) {
-                            $productLinkKeys[$linkKey] = $nextLinkId;
-                        }
-
-                        if (! isset($linkRows[$linkKey])) {
-                            $linkRows[$linkKey] = [
-                                'link_id' => $productLinkKeys[$linkKey],
-                                'product_id' => $productId,
-                                'linked_product_id' => $linkedId,
-                                'link_type_id' => $linkId,
-                            ];
-                        }
-                        if (! empty($linkPositions[$linkedKey])) {
-                            $positionRows[] = [
-                                'link_id' => $productLinkKeys[$linkKey],
-                                'product_link_attribute_id' => $positionAttrId[$linkId],
-                                'value' => $linkPositions[$linkedKey],
-                            ];
-                        }
-                        $nextLinkId++;
-                    }
-                }
-            }
+            list($productIds, $linkRows, $positionRows, $nextLinkId) = $this->processBunch(
+                $bunch,
+                $linkField,
+                $positionAttrId,
+                $nextLinkId
+            );
 
             if (Import::BEHAVIOR_APPEND !== $this->entityModel->getBehavior() && $productIds) {
                 $this->resource->deleteExistingLinks($productIds);
@@ -238,5 +185,74 @@ class LinkProcessor
         }
 
         return $this->entityModel->getExistingSku($linkedSku)['entity_id'];
+    }
+
+    private function processBunch(
+        ?array $bunch,
+        $linkField,
+        array $positionAttrId,
+        int $nextLinkId
+    ): array {
+        $productIds = [];
+        $positionRows = [];
+        $linkRows = [];
+
+        foreach ($bunch as $rowNum => $rowData) {
+            if (! $this->entityModel->isRowAllowedToImport($rowData, $rowNum)) {
+                continue;
+            }
+
+            $sku = $rowData[Product::COL_SKU];
+
+            $productId = $this->skuProcessor->getNewSku($sku)[$linkField];
+            $productLinkKeys = $this->resource->fetchExistingLinks($productId);
+
+            foreach ($this->linkNameToId as $linkName => $linkId) {
+                $productIds[] = $productId;
+
+                $linkSkus = $this->getLinkSkus($rowData, $linkName);
+                if ($linkSkus === false) {
+                    continue;
+                }
+
+                $linkPositions = $this->getLinkPositions($rowData, $linkName);
+
+                foreach ($linkSkus as $linkedKey => $linkedSku) {
+                    $linkedSku = trim($linkedSku); //NOTE: why is trimming happening here and not for all cols in a general place?
+                    if (! $this->isProperLink($linkedSku, $sku)) {
+                        continue;
+                    }
+
+                    $linkedId = $this->getLinkedId($linkedSku);
+                    if ($this->checkForEmptyLinkId($linkedId, $sku, $productId, $linkedSku)) {
+                        continue;
+                    }
+
+                    $linkKey = "{$productId}-{$linkedId}-{$linkId}";
+                    if (empty($productLinkKeys[$linkKey])) {
+                        $productLinkKeys[$linkKey] = $nextLinkId;
+                    }
+
+                    if (! isset($linkRows[$linkKey])) {
+                        $linkRows[$linkKey] = [
+                            'link_id' => $productLinkKeys[$linkKey],
+                            'product_id' => $productId,
+                            'linked_product_id' => $linkedId,
+                            'link_type_id' => $linkId,
+                        ];
+                    }
+                    if (! empty($linkPositions[$linkedKey])) {
+                        $positionRows[] = [
+                            'link_id' => $productLinkKeys[$linkKey],
+                            'product_link_attribute_id' => $positionAttrId[$linkId],
+                            'value' => $linkPositions[$linkedKey],
+                        ];
+                    }
+                    $nextLinkId++;
+                }
+            }
+        }
+
+        return [$productIds, $linkRows, $positionRows, $nextLinkId];
     }
 }
