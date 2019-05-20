@@ -6,15 +6,12 @@
 
 namespace Magento\Framework\Mview\View;
 
-use DomainException;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Phrase;
 
 /**
- * Class Changelog for modifying the mview_state table
- *
- * @package Magento\Framework\Mview\View
+ * Class Changelog for manipulations with the mview_state table.
  */
 class Changelog implements ChangelogInterface
 {
@@ -48,8 +45,6 @@ class Changelog implements ChangelogInterface
     protected $resource;
 
     /**
-     * Changelog constructor
-     *
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @throws ConnectionException
      */
@@ -70,8 +65,7 @@ class Changelog implements ChangelogInterface
     {
         if (!$this->connection) {
             throw new ConnectionException(
-                new Phrase("The write connection to the database isn't available. Please try again later."),
-                E_USER_ERROR
+                new Phrase("The write connection to the database isn't available. Please try again later.")
             );
         }
     }
@@ -199,15 +193,14 @@ class Changelog implements ChangelogInterface
      *
      * Build a changelog name by concatenating view identifier and changelog name suffix.
      *
-     * @throws DomainException
+     * @throws \DomainException
      * @return string
      */
     public function getName()
     {
         if (strlen($this->viewId) == 0) {
-            throw new DomainException(
-                new Phrase("View's identifier is not set"),
-                E_USER_ERROR
+            throw new \DomainException(
+                new Phrase("View's identifier is not set")
             );
         }
         return $this->viewId . '_' . self::NAME_SUFFIX;
