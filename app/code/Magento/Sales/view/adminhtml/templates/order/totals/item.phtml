@@ -3,16 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
-<?php $_source  = $block->getSource() ?>
+<?php $_source = $block->getSource() ?>
 <?php $block->setPriceDataObject($_source) ?>
 
-<?php if ((float) $_source->getDataUsingMethod($block->getSourceField())): ?>
+<?php if ((float) $_source->getDataUsingMethod($block->getSourceField())) : ?>
     <tr>
-        <td class="label"><?php if ($block->getStrong()) : ?><strong><?php endif; ?><?= /* @escapeNotVerified */ __($block->getLabel()) ?><?php if ($block->getStrong()) : ?></strong><?php endif; ?></td>
-        <td <?= $block->getHtmlClass() ? ('class="' . $block->getHtmlClass() . '"') : '' ?>><?php if ($block->getStrong()) : ?><strong><?php endif; ?><?= /* @escapeNotVerified */ $block->displayPriceAttribute($block->getSourceField()) ?><?php if ($block->getStrong()) : ?></strong><?php endif; ?></td>
+        <td class="label">
+            <?php if ($block->getStrong()) : ?>
+                <strong>
+            <?php endif; ?>
+            <?= $block->escapeHtml(__($block->getLabel())) ?>
+            <?php if ($block->getStrong()) : ?>
+                </strong>
+            <?php endif; ?>
+        </td>
+        <td <?= $block->getHtmlClass() ? ('class="' . $block->escapeHtmlAttr($block->getHtmlClass()) . '"') : '' ?>>
+            <?php if ($block->getStrong()) : ?><strong><?php endif; ?>
+            <?= /* @noEscape */ $block->displayPriceAttribute($block->getSourceField()) ?>
+            <?php if ($block->getStrong()) : ?></strong><?php endif; ?>
+        </td>
     </tr>
 <?php endif; ?>

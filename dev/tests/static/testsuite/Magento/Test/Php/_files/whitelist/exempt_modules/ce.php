@@ -27,7 +27,6 @@ return [
     'Magento_PageCache',
     'Magento_Paypal',
     'Magento_Reports',
-    'Magento_Sales',
     'Magento_Search',
     'Magento_Store',
     'Magento_Swagger',
