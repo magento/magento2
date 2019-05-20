@@ -19,6 +19,8 @@ use Magento\Framework\Data\Collection;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\UrlInterface;
 
 /**
  * @inheritdoc
@@ -48,21 +50,31 @@ class DownloadableOptions implements ResolverInterface
     private $linkCollection;
 
     /**
+     * Downloadable file
+     *
+     * @var UrlInterface
+     */
+    private $urlBuilder;
+
+    /**
      * @param EnumLookup $enumLookup
      * @param DownloadableHelper $downloadableHelper
      * @param SampleCollection $sampleCollection
      * @param LinkCollection $linkCollection
+     * @param File $downloadableFile
      */
     public function __construct(
         EnumLookup $enumLookup,
         DownloadableHelper $downloadableHelper,
         SampleCollection $sampleCollection,
-        LinkCollection $linkCollection
+        LinkCollection $linkCollection,
+        UrlInterface $urlBuilder = null
     ) {
         $this->enumLookup = $enumLookup;
         $this->downloadableHelper = $downloadableHelper;
         $this->sampleCollection = $sampleCollection;
         $this->linkCollection = $linkCollection;
+        $this->urlBuilder = $urlBuilder ?: ObjectManager::getInstance()->get(UrlInterface::class);
     }
 
     /**
@@ -165,7 +177,7 @@ class DownloadableOptions implements ResolverInterface
             $resultData[$sampleKey]['sort_order'] = $sample->getSortOrder();
             $resultData[$sampleKey]['sample_type']
                 = $this->enumLookup->getEnumValueFromField('DownloadableFileTypeEnum', $sample->getSampleType());
-            $resultData[$sampleKey]['sample_file'] = $sample->getSampleFile();
+            $resultData[$sampleKey]['sample_file'] = $this->urlBuilder->getUrl('downloadable/download/sample', ['sample_id' => $sample->getId()]);
             $resultData[$sampleKey]['sample_url'] = $sample->getSampleUrl();
         }
         return $resultData;
