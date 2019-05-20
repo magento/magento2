@@ -14,7 +14,7 @@ namespace Magento\Reports\Model\ResourceModel\Product\Sold;
 use Magento\Framework\DB\Select;
 
 /**
- * Class Collection
+ * Report Sold Products collection
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @api
