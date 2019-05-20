@@ -50,7 +50,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException \Magento\Framework\DB\Adapter\ConnectionException
      * @expectedExceptionMessage The write connection to the database isn't available. Please try again later.
      */
     public function testCheckConnectionException()
@@ -79,7 +79,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException \DomainException
      * @expectedExceptionMessage View's identifier is not set
      */
     public function testGetNameWithException()
@@ -106,6 +106,10 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(10, $this->model->getVersion());
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\RuntimeException
+     * @expectedExceptionMessage Table status for viewIdtest_cl is incorrect. Can`t fetch version id.
+     */
     public function testGetVersionWithExceptionNoAutoincrement()
     {
         $changelogTableName = 'viewIdtest_cl';
@@ -116,8 +120,6 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
             ->method('fetchRow')
             ->will($this->returnValue([]));
 
-        $this->expectException('Exception');
-        $this->expectExceptionMessage("Table status for {$changelogTableName} is incorrect. Can`t fetch version id.");
         $this->model->setViewId('viewIdtest');
         $this->model->getVersion();
     }
