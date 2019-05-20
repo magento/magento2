@@ -6,7 +6,12 @@
  */
 namespace Magento\Paypal\Controller\Billing\Agreement;
 
-class Index extends \Magento\Paypal\Controller\Billing\Agreement
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+/**
+ * Index Controller.
+ */
+class Index extends \Magento\Paypal\Controller\Billing\Agreement implements HttpGetActionInterface
 {
     /**
      * View billing agreements
