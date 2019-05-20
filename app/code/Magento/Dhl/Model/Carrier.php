@@ -973,8 +973,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $responseBodies = [];
         /** @var HttpResponseDeferredInterface[][] $deferredResponses */
         $deferredResponses = [];
+        $requestXml = $this->_buildQuotesRequestXml();
         for ($offset = 0; $offset <= self::UNAVAILABLE_DATE_LOOK_FORWARD; $offset++) {
-            $requestXml = $this->_buildQuotesRequestXml();
             $date = date(self::REQUEST_DATE_FORMAT, strtotime($this->_getShipDate() . " +{$offset} days"));
             $this->_setQuotesRequestXmlDate($requestXml, $date);
             $request = $requestXml->asXML();
