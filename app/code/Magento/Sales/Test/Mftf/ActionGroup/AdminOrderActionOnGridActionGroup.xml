@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOrderActionOnGridActionGroup">
+        <annotations>
+            <description>Admin check order by OrderId in orders grid and select action by name</description>
+            <page>AdminOrdersPage</page>
+        </annotations>
         <arguments>
             <argument name="action" type="string"/>
             <argument name="orderId" type="string"/>
@@ -16,10 +20,14 @@
         <checkOption selector="{{AdminOrdersGridSection.selectOrderID(orderId)}}" stepKey="selectOrder"/>
         <waitForLoadingMaskToDisappear stepKey="waitForCheck"/>
         <click selector="{{AdminOrdersGridSection.selectActions}}" stepKey="openActions"/>
-        <click selector="{{AdminOrdersGridSection.dropdownActionItem(action)}}" stepKey="selectCancelAction"/>
+        <click selector="{{AdminOrdersGridSection.dropdownActionItem(action)}}" stepKey="selectAction"/>
         <waitForPageLoad stepKey="waitForResults"/>
     </actionGroup>
     <actionGroup name="AdminTwoOrderActionOnGridActionGroup" extends="AdminOrderActionOnGridActionGroup">
+        <annotations>
+            <description>Admin check 2 orders by OrderId in orders grid and select action by name</description>
+            <page>AdminOrdersPage</page>
+        </annotations>
         <arguments>
             <argument name="secondOrderId" type="string"/>
         </arguments>
