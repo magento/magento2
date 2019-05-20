@@ -92,6 +92,6 @@ class PreProcessor implements PreProcessorInterface
      */
     protected function replaceCallback($matches)
     {
-        return '"' . __($matches[1]) . '"';
+        return '\'' . __($matches['translate']) . '\'';
     }
 }
