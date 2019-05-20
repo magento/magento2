@@ -550,8 +550,12 @@ class MethodArgumentsSniff implements Sniff
         $numTokens = count($tokens);
         $previousCommentOpenPtr = $phpcsFile->findPrevious(T_DOC_COMMENT_OPEN_TAG, $stackPtr - 1, 0);
         $previousCommentClosePtr = $phpcsFile->findPrevious(T_DOC_COMMENT_CLOSE_TAG, $stackPtr - 1, 0);
-        if (!$this->validateCommentBlockExists($phpcsFile, $previousCommentClosePtr, $stackPtr)) {
-            $phpcsFile->addError('Comment block is missing', $stackPtr, 'MethodArguments');
+        if ($previousCommentClosePtr && $previousCommentOpenPtr) {
+            if (!$this->validateCommentBlockExists($phpcsFile, $previousCommentClosePtr, $stackPtr)) {
+                $phpcsFile->addError('Comment block is missing', $stackPtr, 'MethodArguments');
+                return;
+            }
+        } else {
             return;
         }
         $openParenthesisPtr = $phpcsFile->findNext(T_OPEN_PARENTHESIS, $stackPtr + 1, $numTokens);
@@ -663,6 +667,9 @@ class MethodArgumentsSniff implements Sniff
         foreach ($argumentPositions as $index => $argumentPosition) {
             $commentPosition = $commentPositions[$index];
             $type = $paramDefinitions[$index]['type'];
+            if ($type === null) {
+                continue;
+            }
             $paramName = $paramDefinitions[$index]['paramName'];
             if (($argumentPosition !== strlen($type) + 1) ||
                 (isset($commentPosition) && ($commentPosition !== $argumentPosition + strlen($paramName) + 1))) {
