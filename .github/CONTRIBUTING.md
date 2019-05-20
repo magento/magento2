@@ -45,4 +45,4 @@ The full text is available in the repository [Wiki](https://github.com/magento/m
 
 If you have any questions, join us in [#beginners](https://magentocommeng.slack.com/messages/CH8BGFX9D) Slack chat. If you are not on our slack, [click here](http://tinyurl.com/engcom-slack) to join.
 
-Need to find a project? Check out the [Slack Channels](https://github.com/magento/magento2/wiki/Slack-Channels) (with listed project info) and the [Open Source Portal](https://opensource.magento.com/).
+Need to find a project? Check out the [Slack Channels](https://github.com/magento/magento2/wiki/Slack-Channels) (with listed project info) and the [Magento Community Portal](https://opensource.magento.com/).
