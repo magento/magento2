@@ -126,8 +126,8 @@ type CustomerAddressRegion @doc(description: "CustomerAddressRegion defines the 
 }
 
 type CustomerAddressAttribute {
-     attribute_code: String  @doc(description: "Attribute code")
-     value: String  @doc(description: "Attribute value")
+     attribute_code: String @doc(description: "Attribute code")
+     value: String @doc(description: "Attribute value")
 }
 
 type IsEmailAvailableOutput {

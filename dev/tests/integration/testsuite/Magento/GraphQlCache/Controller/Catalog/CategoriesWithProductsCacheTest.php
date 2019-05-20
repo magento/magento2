@@ -91,6 +91,13 @@ QUERY;
             'operationName' => 'GetCategoryWithProducts'
         ];
 
+        /** @var \Magento\Framework\UrlInterface $urlInterface */
+        $urlInterface = $this->objectManager->create(\Magento\Framework\UrlInterface::class);
+        //set unique URL
+        $urlInterface->setQueryParam('query', $queryParams['query']);
+        $urlInterface->setQueryParam('variables', $queryParams['variables']);
+        $urlInterface->setQueryParam('operationName', $queryParams['operationName']);
+        $this->request->setUri($urlInterface->getUrl('graphql'));
         $this->request->setPathInfo('/graphql');
         $this->request->setMethod('GET');
         $this->request->setParams($queryParams);

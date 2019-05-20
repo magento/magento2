@@ -23,24 +23,24 @@ class FieldMetaReader
     private $docReader;
 
     /**
-     * @var CacheTagReader
+     * @var CacheAnnotationReader
      */
-    private $cacheTagReader;
+    private $cacheAnnotationReader;
 
     /**
      * @param TypeMetaWrapperReader $typeMetaReader
      * @param DocReader $docReader
-     * @param CacheTagReader|null $cacheTagReader
+     * @param CacheAnnotationReader|null $cacheAnnotationReader
      */
     public function __construct(
         TypeMetaWrapperReader $typeMetaReader,
         DocReader $docReader,
-        CacheTagReader $cacheTagReader = null
+        CacheAnnotationReader $cacheAnnotationReader = null
     ) {
         $this->typeMetaReader = $typeMetaReader;
         $this->docReader = $docReader;
-        $this->cacheTagReader = $cacheTagReader ?? \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(CacheTagReader::class);
+        $this->cacheAnnotationReader = $cacheAnnotationReader ?? \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(CacheAnnotationReader::class);
     }
 
     /**
@@ -73,7 +73,7 @@ class FieldMetaReader
         }
 
         if ($this->docReader->read($fieldMeta->astNode->directives)) {
-            $result['cache'] = $this->cacheTagReader->read($fieldMeta->astNode->directives);
+            $result['cache'] = $this->cacheAnnotationReader->read($fieldMeta->astNode->directives);
         }
 
         $arguments = $fieldMeta->args;

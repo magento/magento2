@@ -10,7 +10,7 @@ namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader;
 /**
  * Reads documentation from the annotation @cache of an AST node
  */
-class CacheTagReader
+class CacheAnnotationReader
 {
     /**
      * Read documentation annotation for a specific node if exists
@@ -24,12 +24,6 @@ class CacheTagReader
         foreach ($directives as $directive) {
             if ($directive->name->value == 'cache') {
                 foreach ($directive->arguments as $directiveArgument) {
-                    if ($directiveArgument->name->value == 'cacheTag') {
-                        $argMap = array_merge(
-                            $argMap,
-                            ["cacheTag" => $directiveArgument->value->value]
-                        );
-                    }
                     if ($directiveArgument->name->value == 'cacheable') {
                         $argMap = array_merge(
                             $argMap,
