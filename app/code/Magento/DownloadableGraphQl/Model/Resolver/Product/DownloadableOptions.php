@@ -50,8 +50,6 @@ class DownloadableOptions implements ResolverInterface
     private $linkCollection;
 
     /**
-     * Downloadable file
-     *
      * @var UrlInterface
      */
     private $urlBuilder;
@@ -61,7 +59,7 @@ class DownloadableOptions implements ResolverInterface
      * @param DownloadableHelper $downloadableHelper
      * @param SampleCollection $sampleCollection
      * @param LinkCollection $linkCollection
-     * @param File $downloadableFile
+     * @param UrlInterface|null $urlBuilder
      */
     public function __construct(
         EnumLookup $enumLookup,
