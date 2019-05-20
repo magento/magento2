@@ -13,9 +13,9 @@
             <features value="Checkout"/>
             <stories value="Checkout via Guest Checkout"/>
             <title value="Guest Checkout"/>
-            <description value="Should be able to place an order as a Guest."/>
+            <description value="Should be able to place an order as a Guest"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-72094"/>
+            <testCaseId value="MC-16490"/>
             <group value="checkout"/>
         </annotations>
         <before>
