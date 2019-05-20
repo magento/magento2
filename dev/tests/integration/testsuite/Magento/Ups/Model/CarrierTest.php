@@ -16,6 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Quote\Model\Quote\Address\RateRequestFactory;
 use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
 use PHPUnit\Framework\TestCase;
+use Magento\Shipping\Model\Shipment\Request;
 
 /**
  * Integration tests for Carrier model class
@@ -183,5 +184,66 @@ class CarrierTest extends TestCase
             [1, 1, 7, '11', 11.22 ],
             [1, 1, 8, '65', 41.61 ],
         ];
+    }
+
+    /**
+     * Test shipping a package.
+     *
+     *
+     * @magentoConfigFixture default_store shipping/origin/country_id GB
+     * @magentoConfigFixture default_store carriers/ups/type UPS_XML
+     * @magentoConfigFixture default_store carriers/ups/active 1
+     * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
+     * @magentoConfigFixture default_store carriers/ups/origin_shipment Shipments Originating in the European Union
+     * @magentoConfigFixture default_store carriers/ups/username user
+     * @magentoConfigFixture default_store carriers/ups/password pass
+     * @magentoConfigFixture default_store carriers/ups/access_license_number acn
+     * @magentoConfigFixture default_store currency/options/allow GBP,USD,EUR
+     * @magentoConfigFixture default_store currency/options/base GBP
+     * @magentoConfigFixture default_store carriers/ups/min_package_weight 2
+     * @magentoConfigFixture default_store carriers/ups/debug 1
+     */
+    public function testRequestToShipment(): void
+    {
+        $shipmentResponse = file_get_contents(__DIR__ .'/../_files/ShipmentConfirmResponse.xml');
+        $acceptResponse = file_get_contents(__DIR__ .'/../_files/ShipmentAcceptResponse.xml');
+        $this->httpClient->nextResponses(
+            [
+                new Response(200, [], $shipmentResponse),
+                new Response(200, [], $acceptResponse)
+            ]
+        );
+        $request = new Request(
+            [
+                'packages' => [
+                    'package' => [
+                        'params' => [
+                            'width' => '3',
+                            'length' => '3',
+                            'height' => '3',
+                            'dimension_units' => 'INCH',
+                            'weight_units' => 'POUND',
+                            'weight' => '0.454000000001',
+                            'customs_value' => '10.00',
+                            'container' => 'Small Express Box',
+                        ],
+                        'items' => [
+                            'item1' => [
+                                'name' => 'item_name',
+                            ],
+                        ],
+                    ],
+                ]
+            ]
+        );
+
+        $result = $this->carrier->requestToShipment($request);
+        $this->assertEmpty($result->getErrors());
+        $this->assertNotEmpty($result->getInfo());
+        $this->assertEquals(
+            '1Z207W886698856557',
+            $result->getInfo()[0]['tracking_number'],
+            'Tracking Number must match.'
+        );
     }
 }
