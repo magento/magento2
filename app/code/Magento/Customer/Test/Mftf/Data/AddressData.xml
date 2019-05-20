@@ -271,4 +271,17 @@
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionUT</requiredEntity>
     </entity>
+    <entity name="DE_Address_Berlin_Not_Default_Address" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>Augsburger Strabe 41</item>
+        </array>
+        <data key="city">Berlin</data>
+        <data key="country_id">DE</data>
+        <data key="postcode">10789</data>
+        <data key="telephone">333-33-333-33</data>
+        <data key="country">Germany</data>
+    </entity>
 </entities>
