@@ -118,9 +118,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue([]));
 
         $this->expectException('Exception');
-        $this->expectExceptionMessage(
-            __("Table status for %1 is incorrect. Can`t fetch version id.", [$changelogTableName])
-        );
+        $this->expectExceptionMessage("Table status for {$changelogTableName} is incorrect. Can`t fetch version id.");
         $this->model->setViewId('viewIdtest');
         $this->model->getVersion();
     }
@@ -132,7 +130,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->mockGetTableName();
 
         $this->expectException('Exception');
-        $this->expectExceptionMessage(__("Table %1 does not exist", [$changelogTableName]));
+        $this->expectExceptionMessage("Table {$changelogTableName} does not exist");
         $this->model->setViewId('viewIdtest');
         $this->model->getVersion();
     }
@@ -144,7 +142,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->mockGetTableName();
 
         $this->expectException('Exception');
-        $this->expectExceptionMessage(__("Table %1 does not exist", [$changelogTableName]));
+        $this->expectExceptionMessage("Table {$changelogTableName} does not exist");
         $this->model->setViewId('viewIdtest');
         $this->model->drop();
     }
@@ -236,7 +234,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->mockGetTableName();
 
         $this->expectException('Exception');
-        $this->expectExceptionMessage(__("Table %1 does not exist", [$changelogTableName]));
+        $this->expectExceptionMessage("Table {$changelogTableName} does not exist");
         $this->model->setViewId('viewIdtest');
         $this->model->getList(mt_rand(1, 200), mt_rand(201, 400));
     }
@@ -248,7 +246,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->mockGetTableName();
 
         $this->expectException('Exception');
-        $this->expectExceptionMessage(__("Table %1 does not exist", [$changelogTableName]));
+        $this->expectExceptionMessage("Table {$changelogTableName} does not exist");
         $this->model->setViewId('viewIdtest');
         $this->model->clear(mt_rand(1, 200));
     }
