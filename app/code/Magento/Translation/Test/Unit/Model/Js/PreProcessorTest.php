@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Translation\Test\Unit\Model\Js;
 
 use Magento\Translation\Model\Js\PreProcessor;
@@ -10,6 +12,9 @@ use Magento\Translation\Model\Js\Config;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\TranslateInterface;
 
+/**
+ * Class with unit tests for PreProcessor
+ */
 class PreProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -46,8 +51,8 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
         $chain = $this->createMock(\Magento\Framework\View\Asset\PreProcessor\Chain::class);
         $context = $this->createMock(\Magento\Framework\View\Asset\File\FallbackContext::class);
         $originalContent = 'content$.mage.__("hello1")content';
-        $translatedContent = 'content"hello1"content';
-        $patterns = ['~\$\.mage\.__\([\'|\"](.+?)[\'|\"]\)~'];
+        $translatedContent = 'content\'hello1\'content';
+        $patterns = ["~(?:\\$|jQuery)\\.mage\\.__\\((?s)[^'\\\")]*?(['\\\"])(?P<translate>.+?)(?<!\\\\)\\1(?s).*?\\)~"];
         $areaCode = 'adminhtml';
         $area = $this->createMock(\Magento\Framework\App\Area::class);
 
