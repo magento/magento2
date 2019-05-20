@@ -6,12 +6,13 @@
 
 namespace Magento\Framework\Mview\View;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\SessionException;
+use DomainException;
+use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Phrase;
 
 /**
- * Class Changelog
+ * Class Changelog for modifying the mview_state table
  *
  * @package Magento\Framework\Mview\View
  */
@@ -47,7 +48,10 @@ class Changelog implements ChangelogInterface
     protected $resource;
 
     /**
+     * Changelog constructor
+     *
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @throws ConnectionException
      */
     public function __construct(\Magento\Framework\App\ResourceConnection $resource)
     {
@@ -60,13 +64,14 @@ class Changelog implements ChangelogInterface
      * Check DB connection
      *
      * @return void
-     * @throws \Magento\Framework\Exception\SessionException
+     * @throws ConnectionException
      */
     protected function checkConnection()
     {
         if (!$this->connection) {
-            throw new SessionException(
-                new Phrase("The write connection to the database isn't available. Please try again later.")
+            throw new ConnectionException(
+                new Phrase("The write connection to the database isn't available. Please try again later."),
+                E_USER_ERROR
             );
         }
     }
@@ -171,7 +176,7 @@ class Changelog implements ChangelogInterface
      *
      * @return int
      * @throws ChangelogTableNotExistsException
-     * @throws LocalizedException
+     * @throws RuntimeException
      */
     public function getVersion()
     {
@@ -183,8 +188,8 @@ class Changelog implements ChangelogInterface
         if (isset($row['Auto_increment'])) {
             return (int)$row['Auto_increment'] - 1;
         } else {
-            throw new LocalizedException(
-                new Phrase("Table status for `{$changelogTableName}` is incorrect. Can`t fetch version id.")
+            throw new RuntimeException(
+                new Phrase("Table status for %1 is incorrect. Can`t fetch version id.", [$changelogTableName])
             );
         }
     }
@@ -194,14 +199,15 @@ class Changelog implements ChangelogInterface
      *
      * Build a changelog name by concatenating view identifier and changelog name suffix.
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws DomainException
      * @return string
      */
     public function getName()
     {
         if (strlen($this->viewId) == 0) {
-            throw new LocalizedException(
-                new Phrase("View's identifier is not set")
+            throw new DomainException(
+                new Phrase("View's identifier is not set"),
+                E_USER_ERROR
             );
         }
         return $this->viewId . '_' . self::NAME_SUFFIX;
