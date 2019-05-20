@@ -55,7 +55,7 @@ class PhpTest extends \PHPUnit\Framework\TestCase
      * Test the render() function with a nonexistent filename.
      *
      * Expect an exception if the specified file does not exist.
-     * @expectedException \Exception
+     * @expectedException PHPUnit\Framework\Exception
      */
     public function testRenderException()
     {
@@ -66,6 +66,7 @@ class PhpTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->getMock();
 
         $filename = 'This_is_not_a_file';
+
         $this->_phpEngine->render($blockMock, $filename);
     }
 

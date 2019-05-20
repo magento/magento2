@@ -52,6 +52,10 @@ class UnserializeTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnserializeObject($serialized)
     {
+        $this->expectException(\PHPUnit\Framework\Exception::class);
+        $this->expectExceptionMessage(
+            'String contains serialized object'
+        );
         $this->assertFalse($this->unserialize->unserialize($serialized));
     }
 
