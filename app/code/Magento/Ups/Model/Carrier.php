@@ -1818,6 +1818,7 @@ XMLAuth;
             $packageRequests[] = clone $request;
         }
 
+        // phpcs:disable
         try {
             $quoteIds = $this->requestQuotes($packageRequests);
             $labels = $this->requestShipments($quoteIds);
@@ -1826,6 +1827,7 @@ XMLAuth;
         } catch (\RuntimeException $exception) {
             return new DataObject(['errors' => __('Failed to send items')]);
         }
+        // phpcs:enable
 
         return new DataObject(['info' => $labels]);
     }

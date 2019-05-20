@@ -149,6 +149,7 @@ class CarrierTest extends TestCase
                 ]
             ]
         );
+        //phpcs:disable Magento2.Functions.DiscouragedFunction
         $this->httpClient->nextResponses(
             [
                 new Response(
@@ -158,6 +159,7 @@ class CarrierTest extends TestCase
                 )
             ]
         );
+        //phpcs:enable Magento2.Functions.DiscouragedFunction
         $this->config->setValue('carriers/ups/negotiated_active', $negotiable, 'store');
         $this->config->setValue('carriers/ups/include_taxes', $tax, 'store');
         $this->config->setValue('carriers/ups/allowed_methods', $method, 'store');

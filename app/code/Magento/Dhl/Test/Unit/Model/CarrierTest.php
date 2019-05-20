@@ -506,16 +506,18 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $rateMethodFactory->method('create')
-            ->willReturnCallback(function () {
-                $rateMethod = $this->getMockBuilder(Method::class)
-                    ->disableOriginalConstructor()
-                    ->setMethods(['setPrice'])
-                    ->getMock();
-                $rateMethod->method('setPrice')
-                    ->willReturnSelf();
+            ->willReturnCallback(
+                function () {
+                    $rateMethod = $this->getMockBuilder(Method::class)
+                        ->disableOriginalConstructor()
+                        ->setMethods(['setPrice'])
+                        ->getMock();
+                    $rateMethod->method('setPrice')
+                        ->willReturnSelf();
 
-                return $rateMethod;
-            });
+                    return $rateMethod;
+                }
+            );
 
         return $rateMethodFactory;
     }

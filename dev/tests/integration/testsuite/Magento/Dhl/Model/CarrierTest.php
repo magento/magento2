@@ -98,7 +98,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * Get tracking data provider
      *
      * @return array
-     * @SuppressWarnings(PHPMD.LongMethod)
      */
     public function getTrackingDataProvider() : array
     {
@@ -188,16 +187,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 [$expectedTrackingDataB],
                 $expectedSingleAWBRequestXml
             ],
-            'single-AWB-no-data' => [
-                ['4781585061'],
-                $singleNoDataResponseXml,
-                [$expectedTrackingDataD]
-            ],
-            'failed-response' => [
-                ['4781585060-failed'],
-                $failedResponseXml,
-                [$expectedTrackingDataE]
-            ]
+            'single-AWB-no-data' => [['4781585061'], $singleNoDataResponseXml, [$expectedTrackingDataD]],
+            'failed-response' => [['4781585060-failed'], $failedResponseXml, [$expectedTrackingDataE]]
         ];
     }
 
@@ -267,6 +258,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'store',
             null
         );
+        //phpcs:disable Magento2.Functions.DiscouragedFunction
         $this->httpClient->nextResponses(
             [
                 new Response(
@@ -276,6 +268,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 )
             ]
         );
+        //phpcs:enable Magento2.Functions.DiscouragedFunction
         $request = new Request(
             [
                 'packages' => [
@@ -305,11 +298,15 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 'free_method_weight' => '0.454000000001',
                 'recipient_address_street_1' => '15099 Some Blvd',
                 'shipper_address_street_1' => '4956 Some Way',
-                'order_shipment' => new DataObject([
-                    'order' => new DataObject([
-                        'subtotal' => '10.00'
-                    ])
-                ])
+                'order_shipment' => new DataObject(
+                    [
+                        'order' => new DataObject(
+                            [
+                                'subtotal' => '10.00'
+                            ]
+                        )
+                    ]
+                )
             ]
         );
 
@@ -360,8 +357,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @param string $regionCode
      * @return string
      */
-    private function getExpectedLabelRequestXml(string $origCountryId, string $destCountryId, string $regionCode): string
-    {
+    private function getExpectedLabelRequestXml(
+        string $origCountryId,
+        string $destCountryId,
+        string $regionCode
+    ): string {
         $countryNames = [
             'US' => 'United States of America',
             'SG' => 'Singapore',
@@ -372,6 +372,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ? '/../_files/domestic_shipment_request.xml'
             : '/../_files/shipment_request.xml';
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $expectedRequestElement = new ShippingElement(file_get_contents(__DIR__ . $requestXmlPath));
 
         $expectedRequestElement->Consignee->CountryCode = $destCountryId;
@@ -454,11 +455,13 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 'all_items' => [],
             ]
         ];
+        //phpcs:disable Magento2.Functions.DiscouragedFunction
         $response = new Response(
             200,
             [],
-            $responseXml = file_get_contents(__DIR__ . '/../_files/dhl_quote_response.xml')
+            file_get_contents(__DIR__ . '/../_files/dhl_quote_response.xml')
         );
+        //phpcs:enable Magento2.Functions.DiscouragedFunction
         $this->httpClient->nextResponses(array_fill(0, Carrier::UNAVAILABLE_DATE_LOOK_FORWARD + 1, $response));
         /** @var RateRequest $request */
         $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
