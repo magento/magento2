@@ -13,8 +13,6 @@ use Magento\Framework\GraphQL\DataObjectConverter;
 
 /**
  * DataProvider Model for Authorizenet
- *
- * @package Magento\AuthorizenetGraphQl\Model
  */
 class AuthorizenetDataProvider implements AdditionalDataProviderInterface
 {
