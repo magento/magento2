@@ -78,7 +78,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
     {
         if (!$this->_protectedFileExtensions) {
             $extensions = $this->getProtectedFileExtensions();
-            if (is_null($extensions)) {
+            if ($extensions === null) {
                 $extensions = [];
             }
             if (is_string($extensions)) {
