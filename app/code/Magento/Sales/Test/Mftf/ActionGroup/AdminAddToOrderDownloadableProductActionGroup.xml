@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAddToOrderDownloadableProductActionGroup">
+        <annotations>
+            <description>Configuration added Downloadable Product during creation order by Admin: select link and quantity</description>
+            <page>AdminOrderCreatePage</page>
+        </annotations>
         <arguments>
             <argument name="link" type="string"/>
             <argument name="quantity" type="string" defaultValue="1"/>

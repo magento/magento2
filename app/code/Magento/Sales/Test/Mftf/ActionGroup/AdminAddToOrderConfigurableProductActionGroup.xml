@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAddToOrderConfigurableProductActionGroup">
+        <annotations>
+            <description>Configuration added Configurable Product during creation order by Admin: select option by attribute and quantity</description>
+            <page>AdminOrderCreatePage</page>
+        </annotations>
         <arguments>
             <argument name="attribute" type="string"/>
             <argument name="option" type="string"/>

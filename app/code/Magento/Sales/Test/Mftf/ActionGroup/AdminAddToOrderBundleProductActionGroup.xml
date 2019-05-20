@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAddToOrderBundleProductActionGroup">
+        <annotations>
+            <description>Configuration added Bundle Product during creation order by Admin: select bundle option and product with quantity</description>
+            <page>AdminOrderCreatePage</page>
+        </annotations>
         <arguments>
             <argument name="option" type="string"/>
             <argument name="selectedProduct" type="entity"/>
