@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckConfigurableProductAttributeValueUniquenessTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Edit a configurable product in admin"/>
+            <title value="Check attribute value uniqueness in configurable products"/>
+            <description value="Check attribute value uniqueness in configurable products"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-99519"/>
+            <useCaseId value="MAGETWO-99443"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="dropdownProductAttribute" stepKey="createProductAttribute"/>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <comment userInput="Delete created data" stepKey="deleteCreatedData"/>
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteConfigurableProductAndOptions">
+                <argument name="product" value="$$createConfigProduct$$"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForProductIndexPage"/>
+            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="logout" stepKey="logOut"/>
+        </after>
+        <!--Create configurable product-->
+        <comment userInput="Create configurable product" stepKey="createConfProd"/>
+        <createData entity="ApiCategory" stepKey="createCategory"/>
+        <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+            <requiredEntity createDataKey="createCategory"/>
+        </createData>
+        <!--Go to created product page-->
+        <comment userInput="Go to created product page" stepKey="goToProdPage"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductGrid"/>
+        <waitForPageLoad stepKey="waitForProductPage1"/>
+        <actionGroup ref="filterProductGridByName2" stepKey="filterByName">
+            <argument name="name" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductName"/>
+        <waitForPageLoad stepKey="waitForProductEditPageToLoad"/>
+        <!--Create configurations for the product-->
+        <comment userInput="Create configurations for the product" stepKey="createConfigurations"/>
+        <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="expandConfigurationsTab1"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations1"/>
+        <waitForPageLoad stepKey="waitForSelectAttributesPage1"/>
+        <actionGroup ref="AdminSelectAttributeForConfigurableProductFromPage" stepKey="selectCreatedAttribute1">
+            <argument name="attributeName" value="$$createProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="createAnOptionForAttribute" stepKey="createOption1ForSelectedAttribute">
+            <argument name="optionName" value="opt1"/>
+        </actionGroup>
+        <actionGroup ref="createAnOptionForAttribute" stepKey="createOption2ForSelectedAttribute">
+            <argument name="optionName" value="opt2"/>
+        </actionGroup>
+        <!--Proceed generation-->
+        <comment userInput="Proceed generation" stepKey="proceedGeneration"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNext1"/>
+        <waitForPageLoad stepKey="waitForStep3Page"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNext2"/>
+        <waitForPageLoad stepKey="waitForStep4Page"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickGenerateProducts"/>
+        <waitForPageLoad stepKey="waitProductGeneration"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <waitForPageLoad stepKey="waitForProductSave"/>
+        <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
+        <waitForPageLoad stepKey="waitForProductPage2"/>
+        <seeInCurrentUrl url="{{ProductCatalogPage.url}}" stepKey="seeInProductUrl"/>
+        <!--Add an option with existing name-->
+        <comment userInput="Add an option with existing name" stepKey="addAnOptionWithExistingName"/>
+        <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="expandConfigurationsTab2"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations2"/>
+        <waitForPageLoad stepKey="waitForSelectAttributesPage2"/>
+        <actionGroup ref="AdminSelectAttributeForConfigurableProductFromPage" stepKey="selectCreatedAttribute2">
+            <argument name="attributeName" value="$$createProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="createAnOptionForAttribute" stepKey="createAnOptionWithExistingName">
+            <argument name="optionName" value="opt1"/>
+        </actionGroup>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextToSubmitOption"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!--Assert Error message-->
+        <comment userInput="Assert Error message" stepKey="assertErrorMsg"/>
+        <see userInput="Attributes must have unique option values" stepKey="verifyErrorMessage"/>
+    </test>
+</tests>

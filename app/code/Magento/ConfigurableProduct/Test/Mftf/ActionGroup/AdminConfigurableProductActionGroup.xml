@@ -205,7 +205,26 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnThirdNextButton"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnFourthNextButton"/>
     </actionGroup>
-
+    <actionGroup name="adminSelectAttributeForConfigurableProductFromPage">
+        <arguments>
+            <argument name="productAttributeCode" type="string" defaultValue="{{dropdownProductAttribute.attribute_code}}"/>
+        </arguments>
+        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickToFilterAttributeNames"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" stepKey="waitForAttributeCodeInputBeVisible"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" userInput="{{productAttributeCode}}" stepKey="fillAttributeName"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="applyFilter"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="selectFilteredAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
+    </actionGroup>
+    <actionGroup name="createAnOptionForAttribute">
+        <arguments>
+            <argument name="optionName" type="string" defaultValue="opt1"/>
+        </arguments>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateFirstNewValue"/>
+        <fillField userInput="{{optionName}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewOption"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
+    </actionGroup>
     <actionGroup name="changeProductConfigurationsInGrid">
         <arguments>
             <argument name="firstOption" type="entity"/>
