@@ -171,6 +171,8 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Returns region html select
+     * 
      * @return string
      * @deprecated
      * @see getRegionSelect() method for more configurations
