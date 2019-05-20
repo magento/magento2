@@ -18,4 +18,9 @@
         <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="doFilter"/>
         <click selector="{{AdminCartPriceRulesSection.rowByIndex('1')}}" stepKey="goToEditRulePage"/>
     </actionGroup>
+    <actionGroup name="AdminCartPriceRuleNotInGridActionGroup" extends="AdminFilterCartPriceRuleActionGroup">
+        <remove keyForRemoval="goToEditRulePage"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <see selector="{{AdminCartPriceRulesSection.emptyText}}" userInput="We couldn't find any records." stepKey="seeAssertCartPriceRuleIsNotPresentedInGrid"/>
+    </actionGroup>
 </actionGroups>

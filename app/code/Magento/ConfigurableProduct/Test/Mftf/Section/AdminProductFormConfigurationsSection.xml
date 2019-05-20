@@ -36,6 +36,8 @@
         <element name="variationsSkuInputByRow" selector="[data-index='configurable-matrix'] table > tbody > tr:nth-of-type({{row}}) input[name*='sku']" type="input" parameterized="true"/>
         <element name="variationsSkuInputErrorByRow" selector="[data-index='configurable-matrix'] table > tbody > tr:nth-of-type({{row}}) .admin__field-error" type="text" parameterized="true"/>
         <element name="variationLabel" type="text" selector="//div[@data-index='configurable-matrix']/label"/>
+        <element name="stepsWizardTitle" type="text" selector="div.content:not([style='display: none;']) .steps-wizard-title"/>
+        <element name="attributeEntityByName" type="text" selector="//div[@class='attribute-entity']//div[normalize-space(.)='{{attributeLabel}}']" parameterized="true"/>
     </section>
     <section name="AdminConfigurableProductFormSection">
         <element name="productWeight" type="input" selector=".admin__control-text[name='product[weight]']"/>
