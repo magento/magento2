@@ -129,6 +129,7 @@ define([
          */
         setActiveState: function (isActive) {
             var searchValue;
+            
             this.searchForm.toggleClass('active', isActive);
             this.searchLabel.toggleClass('active', isActive);
 
