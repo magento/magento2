@@ -15,6 +15,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Bundle product view test
+ */
 class BundleProductViewTest extends GraphQlAbstract
 {
     const KEY_PRICE_TYPE_FIXED = 'FIXED';
@@ -108,7 +111,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_with_not_visible_children.php
      */
-    public function testBundleProdutWithNotVisibleChildren()
+    public function testBundleProductWithNotVisibleChildren()
     {
         $productSku = 'bundle-product-1';
         $query
