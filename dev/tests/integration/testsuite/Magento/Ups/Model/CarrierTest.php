@@ -207,8 +207,10 @@ class CarrierTest extends TestCase
      */
     public function testRequestToShipment(): void
     {
+        //phpcs:disable Magento2.Functions.DiscouragedFunction
         $shipmentResponse = file_get_contents(__DIR__ .'/../_files/ShipmentConfirmResponse.xml');
         $acceptResponse = file_get_contents(__DIR__ .'/../_files/ShipmentAcceptResponse.xml');
+        //phpcs:enable Magento2.Functions.DiscouragedFunction
         $this->httpClient->nextResponses(
             [
                 new Response(200, [], $shipmentResponse),

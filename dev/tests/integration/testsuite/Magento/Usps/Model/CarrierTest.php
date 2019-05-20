@@ -53,8 +53,13 @@ class CarrierTest extends TestCase
      */
     public function testCollectRates(): void
     {
-        $requestXml = (new \SimpleXMLElement(file_get_contents(__DIR__ .'/../Fixtures/rates_request.xml')))
-            ->asXml();
+        $requestXml = '<?xml version="1.0" encoding="UTF-8"?><RateV4Request USERID="213MAGEN6752">'
+            .'<Revision>2</Revision><Package ID="0"><Service>ALL</Service><ZipOrigination>90034</ZipOrigination>'
+            .'<ZipDestination>90032</ZipDestination><Pounds>4</Pounds><Ounces>4.2512000000</Ounces>'
+            .'<Container>VARIABLE</Container><Size>REGULAR</Size><Machinable>true</Machinable></Package>'
+            .'</RateV4Request>';
+        $requestXml = (new \SimpleXMLElement($requestXml))->asXml();
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $responseBody = file_get_contents(__DIR__ .'/../Fixtures/success_usps_response_rates.xml');
         $this->httpClient->nextResponses([new Response(200, [], $responseBody)]);
         /** @var RateRequest $request */
@@ -98,6 +103,7 @@ class CarrierTest extends TestCase
         $rates = $this->carrier->collectRates($request);
         $httpRequest = $this->httpClient->getLastRequest();
         $this->assertNotEmpty($httpRequest);
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $uri = parse_url($httpRequest->getUrl(), PHP_URL_QUERY);
         $this->assertNotEmpty(preg_match('/API\=([A-z0-9]+)/', $uri, $matches));
         $apiV = $matches[1];
@@ -129,6 +135,7 @@ class CarrierTest extends TestCase
      */
     public function testCollectUnavailableRates(): void
     {
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $responseBody = file_get_contents(__DIR__ .'/../Fixtures/response_rates.xml');
         $this->httpClient->nextResponses([new Response(200, [], $responseBody)]);
         /** @var RateRequest $request */

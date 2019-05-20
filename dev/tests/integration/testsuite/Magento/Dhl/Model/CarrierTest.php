@@ -384,7 +384,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         return $expectedRequestElement->asXML();
     }
 
-
     /**
      * Tests that valid rates are returned when sending a quotes request.
      *
@@ -466,34 +465,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         /** @var RateRequest $request */
         $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
         $expectedRates = [
-            [
-                'carrier' => 'dhl',
-                'carrier_title' => 'DHL Title',
-                'cost' => 45.85,
-                'method' => 'E',
-                'price' => 45.85
-            ],
-            [
-                'carrier' => 'dhl',
-                'carrier_title' => 'DHL Title',
-                'cost' => 35.26,
-                'method' => 'Q',
-                'price' => 35.26
-            ],
-            [
-                'carrier' => 'dhl',
-                'carrier_title' => 'DHL Title',
-                'cost' => 37.38,
-                'method' => 'Y',
-                'price' => 37.38
-            ],
-            [
-                'carrier' => 'dhl',
-                'carrier_title' => 'DHL Title',
-                'cost' => 35.26,
-                'method' => 'P',
-                'price' => 35.26
-            ]
+            ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 45.85, 'method' => 'E', 'price' => 45.85],
+            ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 35.26, 'method' => 'Q', 'price' => 35.26],
+            ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 37.38, 'method' => 'Y', 'price' => 37.38],
+            ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 35.26, 'method' => 'P', 'price' => 35.26]
         ];
 
         $actualRates = $this->dhlCarrier->collectRates($request)->getAllRates();

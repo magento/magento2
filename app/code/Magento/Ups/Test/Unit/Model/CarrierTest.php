@@ -339,13 +339,15 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     {
         /** @var RateRequest $request */
         $request = $this->helper->getObject(RateRequest::class);
-        $request->setData([
-            'orig_country' => 'USA',
-            'orig_region_code' => 'CA',
-            'orig_post_code' => 90230,
-            'orig_city' => 'Culver City',
-            'dest_country_id' => $countryCode,
-        ]);
+        $request->setData(
+            [
+                'orig_country' => 'USA',
+                'orig_region_code' => 'CA',
+                'orig_post_code' => 90230,
+                'orig_city' => 'Culver City',
+                'dest_country_id' => $countryCode,
+            ]
+        );
 
         $this->country->expects($this->at(1))
             ->method('load')
