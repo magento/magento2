@@ -168,41 +168,15 @@ class Data extends \Magento\Framework\View\Element\Template
         }
         return $collection;
     }
-    
+
     /**
      * @return string
-     * 
      * @deprecated
-     * @see getRegionSelect() method for more configuration
+     * @see getRegionSelect() method for more configurations
      */
     public function getRegionHtmlSelect()
     {
-        \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
-        $cacheKey = 'DIRECTORY_REGION_SELECT_STORE' . $this->_storeManager->getStore()->getId();
-        $cache = $this->_configCacheType->load($cacheKey);
-        if ($cache) {
-            $options = $this->getSerializer()->unserialize($cache);
-        } else {
-            $options = $this->getRegionCollection()->toOptionArray();
-            $this->_configCacheType->save($this->getSerializer()->serialize($options), $cacheKey);
-        }
-        $html = $this->getLayout()->createBlock(
-            \Magento\Framework\View\Element\Html\Select::class
-        )->setName(
-            'region'
-        )->setTitle(
-            __('State/Province')
-        )->setId(
-            'state'
-        )->setClass(
-            'required-entry validate-state'
-        )->setValue(
-            intval($this->getRegionId())
-        )->setOptions(
-            $options
-        )->getHtml();
-        \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
-        return $html;
+        return $this->getRegionSelect();
     }
 
     /**
@@ -239,7 +213,7 @@ class Data extends \Magento\Framework\View\Element\Template
         )->setClass(
             'required-entry validate-state'
         )->setValue(
-            $value
+            (int)$value
         )->setOptions(
             $options
         )->getHtml();
