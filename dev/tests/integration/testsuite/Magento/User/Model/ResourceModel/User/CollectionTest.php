@@ -38,6 +38,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testExpiredActiveUsersFilter()
     {
         $this->collection->addActiveExpiredUsersFilter();
-        static::assertGreaterThan(1, $this->collection->getSize());
+        static::assertGreaterThanOrEqual(1, $this->collection->getSize());
     }
 }
