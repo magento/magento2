@@ -12,10 +12,10 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Checkout via Guest Checkout"/>
-            <title value="Guest Checkout"/>
+            <title value="Guest Checkout - guest should be able to place an order"/>
             <description value="Should be able to place an order as a Guest"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-16490"/>
+            <testCaseId value="MC-12825"/>
             <group value="checkout"/>
         </annotations>
         <before>
