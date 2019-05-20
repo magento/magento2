@@ -8,7 +8,7 @@
 ?>
 <div class="actions">
     <?php $_order = $block->getOrder() ?>
-    <?php if ($this->helper(Magento\Sales\Helper\Reorder::class)->canReorder($_order->getEntityId())) : ?>
+    <?php if ($this->helper(\Magento\Sales\Helper\Reorder::class)->canReorder($_order->getEntityId())) : ?>
         <a href="#" data-post='<?=
         /* @noEscape */ $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
             ->getPostData($block->getReorderUrl($_order))

@@ -36,8 +36,8 @@
             endif;
             ?>
                 <?= $block->getItemHtml($item) ?>
-                <?php if ($this->helper(Magento\GiftMessage\Helper\Message::class)->isMessagesAllowed('order_item', $item) && $item->getGiftMessageId()) : ?>
-                    <?php $giftMessage = $this->helper(Magento\GiftMessage\Helper\Message::class)->getGiftMessageForEntity($item); ?>
+                <?php if ($this->helper(\Magento\GiftMessage\Helper\Message::class)->isMessagesAllowed('order_item', $item) && $item->getGiftMessageId()) : ?>
+                    <?php $giftMessage = $this->helper(\Magento\GiftMessage\Helper\Message::class)->getGiftMessageForEntity($item); ?>
                     <tr>
                         <td class="col options" colspan="5">
                             <a href="#"
@@ -47,7 +47,7 @@
                                data-item-id="<?= (int) $item->getId() ?>">
                                 <?= $block->escapeHtml(__('Gift Message')) ?>
                             </a>
-                            <?php $giftMessage = $this->helper(Magento\GiftMessage\Helper\Message::class)->getGiftMessageForEntity($item); ?>
+                            <?php $giftMessage = $this->helper(\Magento\GiftMessage\Helper\Message::class)->getGiftMessageForEntity($item); ?>
                             <div class="order-gift-message" id="order-item-gift-message-<?= (int) $item->getId() ?>" role="region" aria-expanded="false" tabindex="-1">
                                 <a href="#"
                                    title="<?= $block->escapeHtml(__('Close')) ?>"
@@ -59,7 +59,7 @@
                                 <dl class="item-options">
                                     <dt class="item-sender"><strong class="label"><?= $block->escapeHtml(__('From')) ?></strong><?= $block->escapeHtml($giftMessage->getSender()) ?></dt>
                                     <dt class="item-recipient"><strong class="label"><?= $block->escapeHtml(__('To')) ?></strong><?= $block->escapeHtml($giftMessage->getRecipient()) ?></dt>
-                                    <dd class="item-message"><?= /* @noEscape */ $this->helper(Magento\GiftMessage\Helper\Message::class)->getEscapedGiftMessage($item) ?></dd>
+                                    <dd class="item-message"><?= /* @noEscape */ $this->helper(\Magento\GiftMessage\Helper\Message::class)->getEscapedGiftMessage($item) ?></dd>
                                 </dl>
                             </div>
                         </td>
