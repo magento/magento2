@@ -43,7 +43,7 @@
         <selectOption selector="{{AdminProductFormNewAttributeSection.attributeType}}" userInput="{{attributeType}}" stepKey="selectAttributeType"/>
         <click selector="{{AdminProductFormNewAttributeSection.saveAttribute}}" stepKey="saveAttribute"/>
     </actionGroup>
-    <actionGroup name="AdminCreateAttributeFromProductPageWithSpecifiedVisibilityScope" extends="AdminCreateAttributeFromProductPage" insertAfter="selectAttributeType">
+    <actionGroup name="AdminCreateAttributeFromProductPageWithScope" extends="AdminCreateAttributeFromProductPage" insertAfter="selectAttributeType">
         <arguments>
             <argument name="scope" type="string" defaultValue="Store View"/>
         </arguments>

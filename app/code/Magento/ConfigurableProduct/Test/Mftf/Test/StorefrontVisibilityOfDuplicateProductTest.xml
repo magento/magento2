@@ -54,7 +54,7 @@
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
         <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
-        <actionGroup ref="AdminCreateAttributeFromProductPageWithSpecifiedVisibilityScope" stepKey="createAttributeForProduct">
+        <actionGroup ref="AdminCreateAttributeFromProductPageWithScope" stepKey="createAttributeForProduct">
             <argument name="attributeName" value="{{colorProductAttribute.default_label}}"/>
             <argument name="attributeType" value="{{colorProductAttribute.input_type}}"/>
             <argument name="scope" value="Global"/>
@@ -134,14 +134,14 @@
         <actionGroup ref="saveProductForm" stepKey="saveDuplicatedProductForm"/>
         <!--Create new configurations with another attribute-->
         <comment userInput="Create new configurations with another attribute" stepKey="commentCreateNewConfigurations"/>
-        <actionGroup ref="AdminCreateAttributeFromProductPageWithSpecifiedVisibilityScope" stepKey="createAttributeForDuplicatedProduct">
+        <actionGroup ref="AdminCreateAttributeFromProductPageWithScope" stepKey="createAttributeForDuplicatedProduct">
             <argument name="attributeName" value="{{productAttributeColor.default_label}}"/>
             <argument name="attributeType" value="{{productAttributeColor.input_type}}"/>
             <argument name="scope" value="Global"/>
         </actionGroup>
         <reloadPage stepKey="reloadDuplicatedProductPage"/>
         <waitForPageLoad stepKey="waitForDuplicatedProductReload"/>
-        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurationsForDuplicatedProduct"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="createConfigurationsDuplicatedProduct"/>
         <actionGroup ref="createOptionsForAttribute" stepKey="createOptionsForDuplicatedProduct">
             <argument name="attributeName" value="{{productAttributeColor.default_label}}"/>
             <argument name="firstOptionName" value="{{colorConfigurableProductAttribute1.name}}"/>
@@ -149,39 +149,39 @@
         </actionGroup>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnFirstNextButtonForDuplicatedProduct"/>
         <waitForPageLoad stepKey="waitForBulkImagesPriceQuantityPageLoadForDuplicatedProduct"/>
-        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImageToConfigurableProductOptionOneForDuplicatedProduct">
+        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImgConfigProductOption1DuplicatedProduct">
             <argument name="image" value="MagentoLogo"/>
             <argument name="frontend_label" value="{{productAttributeColor.default_label}}"/>
             <argument name="label" value="{{colorConfigurableProductAttribute1.name}}"/>
         </actionGroup>
-        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImageToConfigurableProductOptionTwoForDuplicatedProduct">
+        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImgConfigProductOption2DuplicatedProduct">
             <argument name="image" value="MagentoLogo"/>
             <argument name="frontend_label" value="{{productAttributeColor.default_label}}"/>
             <argument name="label" value="{{colorConfigurableProductAttribute2.name}}"/>
         </actionGroup>
-        <actionGroup ref="addUniquePriceToConfigurableProductOption" stepKey="addPriceToConfigurableProductOptionFirstForDuplicatedProduct">
+        <actionGroup ref="addUniquePriceToConfigurableProductOption" stepKey="addPriceConfigProductOption1DuplicatedProduct">
             <argument name="frontend_label" value="{{productAttributeColor.default_label}}"/>
             <argument name="label" value="{{colorConfigurableProductAttribute1.name}}"/>
             <argument name="price" value="{{virtualProductWithRequiredFields.price}}"/>
         </actionGroup>
-        <actionGroup ref="addUniquePriceToConfigurableProductOption" stepKey="addPriceToConfigurableProductOptionSecondForDuplicatedProduct">
+        <actionGroup ref="addUniquePriceToConfigurableProductOption" stepKey="addPriceConfigProductOption2DuplicatedProduct">
             <argument name="frontend_label" value="{{productAttributeColor.default_label}}"/>
             <argument name="label" value="{{colorConfigurableProductAttribute2.name}}"/>
             <argument name="price" value="{{virtualProductWithRequiredFields.price}}"/>
         </actionGroup>
-        <actionGroup ref="addUniqueQuantityToConfigurableProductOption" stepKey="addUniqueQtyForFirstOptionForDuplicatedProduct">
+        <actionGroup ref="addUniqueQuantityToConfigurableProductOption" stepKey="addUniqueQtyOption1DuplicatedProduct">
             <argument name="frontend_label" value="{{productAttributeColor.default_label}}"/>
             <argument name="label" value="{{colorConfigurableProductAttribute1.name}}"/>
             <argument name="quantity" value="{{virtualProductBigQty.quantity}}"/>
         </actionGroup>
-        <actionGroup ref="addUniqueQuantityToConfigurableProductOption" stepKey="addUniqueQtyForSecondOptionForDuplicatedProduct">
+        <actionGroup ref="addUniqueQuantityToConfigurableProductOption" stepKey="addUniqueQtyOption2DuplicatedProduct">
             <argument name="frontend_label" value="{{productAttributeColor.default_label}}"/>
             <argument name="label" value="{{colorConfigurableProductAttribute2.name}}"/>
             <argument name="quantity" value="{{virtualProductBigQty.quantity}}"/>
         </actionGroup>
-        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnSecondNextButtonForDuplicatedProduct"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOn2NextButtonForDuplicatedProduct"/>
         <waitForPageLoad stepKey="waitForSummaryPageLoadForDuplicatedProduct"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButtonToGenerateConfigsForDuplicatedProduct"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateConfigsForDuplicatedProduct"/>
         <waitForPageLoad stepKey="waitForDuplicatedProductPageLoad"/>
         <actionGroup ref="saveProductForm" stepKey="saveDuplicatedProduct"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
