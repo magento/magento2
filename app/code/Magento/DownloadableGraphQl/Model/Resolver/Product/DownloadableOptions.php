@@ -50,8 +50,6 @@ class DownloadableOptions implements ResolverInterface
     private $linkCollection;
 
     /**
-     * Downloadable file
-     *
      * @var UrlInterface
      */
     private $urlBuilder;
