@@ -45,6 +45,6 @@ if ($_attributeType && $_attributeType == 'text') {
     <?php if ($renderLabel) :?>
         <strong class="type"><?= $block->escapeHtml($_attributeLabel) ?></strong>
     <?php endif; ?>
-    <div class="value" <?= /* @noEscape */ $_attributeAddAttribute ?>><?= $block->escapeHtmlAttr($_attributeValue) ?></div>
+    <div class="value" <?= /* @noEscape */ $_attributeAddAttribute ?>><?= /* @noEscape */ $_attributeValue ?></div>
 </div>
 <?php endif; ?>
