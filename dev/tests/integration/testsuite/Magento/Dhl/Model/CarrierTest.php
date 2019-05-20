@@ -78,7 +78,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @param string $responseXml
      * @param array $expectedTrackingData
      * @param string $expectedRequestXml
-     * @dataProvider getTrackingDataProvider
+     * @dataProvider trackingDataProvider
      */
     public function testGetTracking(
         $trackingNumbers,
@@ -99,7 +99,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getTrackingDataProvider() : array
+    public function trackingDataProvider() : array
     {
         // phpcs:disable Magento2.Functions.DiscouragedFunction
         $expectedMultiAWBRequestXml = file_get_contents(__DIR__ . '/../_files/TrackingRequest_MultipleAWB.xml');

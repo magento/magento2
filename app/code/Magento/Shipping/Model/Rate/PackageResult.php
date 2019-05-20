@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\Shipping\Model\Rate;
 
-use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Carriers rates for different packages.
@@ -27,11 +27,11 @@ class PackageResult extends Result
     private $errorFactory;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param ErrorFactory $errorFactory
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        StoreManagerInterface $storeManager,
         ErrorFactory $errorFactory
     ) {
         parent::__construct($storeManager);

@@ -964,6 +964,60 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     }
 
     /**
+     * Process response received from DHL's API for quotes.
+     *
+     * @param array $responsesData
+     * @return Error|Result
+     */
+    private function processQuotesResponses(array $responsesData)
+    {
+        usort(
+            $responsesData,
+            function (array $a, array $b): int {
+                return $a['date'] <=> $b['date'];
+            }
+        );
+        /** @var string $lastResponse */
+        $lastResponse = '';
+        //Processing different dates
+        foreach ($responsesData as $responseData) {
+            $debugPoint = [];
+            $debugPoint['request'] = $this->filterDebugData($responseData['request']);
+            $debugPoint['response'] = $this->filterDebugData($responseData['body']);
+            $debugPoint['from_cache'] = $responseData['from_cache'];
+            $unavailable = false;
+            try {
+                //Getting availability
+                $bodyXml = $this->_xmlElFactory->create(['data' => $responseData['body']]);
+                $code = $bodyXml->xpath('//GetQuoteResponse/Note/Condition/ConditionCode');
+                if (isset($code[0]) && (int)$code[0] == self::CONDITION_CODE_SERVICE_DATE_UNAVAILABLE) {
+                    $debugPoint['info'] = sprintf(
+                        __("DHL service is not available at %s date"),
+                        $responseData['date']
+                    );
+                    $unavailable = true;
+                }
+            } catch (\Throwable $exception) {
+                //Failed to read response
+                $unavailable = true;
+                $this->_errors[$exception->getCode()] = $exception->getMessage();
+            }
+            if ($unavailable) {
+                //Cannot get rates.
+                $this->_debug($debugPoint);
+                break;
+            }
+            //Caching rates
+            $this->_setCachedQuotes($responseData['request'], $responseData['body']);
+            $this->_debug($debugPoint);
+            //Will only process rates available for the latest date possible.
+            $lastResponse = $responseData['body'];
+        }
+
+        return $this->_parseResponse($lastResponse);
+    }
+
+    /**
      * Get shipping quotes
      *
      * @return \Magento\Framework\Model\AbstractModel|Result
@@ -1016,44 +1070,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                             'from_cache' => false
                         ];
                     }
-                    /** @var string $lastResponse */
-                    $lastResponse = '';
-                    //Processing different dates
-                    foreach ($responseBodies as $responseData) {
-                        $debugPoint = [];
-                        $debugPoint['request'] = $this->filterDebugData($responseData['request']);
-                        $debugPoint['response'] = $this->filterDebugData($responseData['body']);
-                        $debugPoint['from_cache'] = $responseData['from_cache'];
-                        $unavailable = false;
-                        try {
-                            //Getting availability
-                            $bodyXml = $this->_xmlElFactory->create(['data' => $responseData['body']]);
-                            $code = $bodyXml->xpath('//GetQuoteResponse/Note/Condition/ConditionCode');
-                            if (isset($code[0]) && (int)$code[0] == self::CONDITION_CODE_SERVICE_DATE_UNAVAILABLE) {
-                                $debugPoint['info'] = sprintf(
-                                    __("DHL service is not available at %s date"),
-                                    $responseData['date']
-                                );
-                                $unavailable = true;
-                            }
-                        } catch (\Throwable $exception) {
-                            //Failed to read response
-                            $unavailable = true;
-                            $this->_errors[$exception->getCode()] = $exception->getMessage();
-                        }
-                        if ($unavailable) {
-                            //Cannot get rates.
-                            $this->_debug($debugPoint);
-                            break;
-                        }
-                        //Caching rates
-                        $this->_setCachedQuotes($responseData['request'], $responseData['body']);
-                        $this->_debug($debugPoint);
-                        //Will only process rates available for the latest date possible.
-                        $lastResponse = $responseData['body'];
-                    }
 
-                    return $this->_parseResponse($lastResponse);
+                    return $this->processQuotesResponses($responseBodies);
                 }
             )
         );

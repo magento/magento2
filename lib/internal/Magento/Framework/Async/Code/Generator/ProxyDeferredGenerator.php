@@ -21,7 +21,7 @@ class ProxyDeferredGenerator extends EntityAbstract
     /**
      * Entity type
      */
-    const ENTITY_TYPE = 'proxyDeferred';
+    public const ENTITY_TYPE = 'proxyDeferred';
 
     /**
      * @inheritDoc

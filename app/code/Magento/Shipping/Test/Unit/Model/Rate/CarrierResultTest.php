@@ -51,10 +51,9 @@ class CarrierResultTest extends TestCase
             ->setMethods(['getMethod', 'getPrice', 'setPrice'])
             ->getMock();
         $price1 = 3;
-        $rate1->expects($this->any())->method('getMethod')->willReturn('method');
-        $rate1->expects($this->any())->method('getPrice')->willReturnReference($price1);
-        $rate1->expects($this->any())
-            ->method('setPrice')
+        $rate1->method('getMethod')->willReturn('method');
+        $rate1->method('getPrice')->willReturnReference($price1);
+        $rate1->method('setPrice')
             ->willReturnCallback(
                 function ($price) use (&$price1) {
                     $price1 = $price;
@@ -64,18 +63,17 @@ class CarrierResultTest extends TestCase
         $result1 = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $result1->expects($this->any())->method('getAllRates')->willReturn([$rate1]);
-        $result1->expects($this->any())->method('getError')->willReturn(false);
+        $result1->method('getAllRates')->willReturn([$rate1]);
+        $result1->method('getError')->willReturn(false);
 
         $rate2 = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMethod', 'getPrice', 'setPrice'])
             ->getMock();
         $price2 = 4;
-        $rate2->expects($this->any())->method('getMethod')->willReturn('method');
-        $rate2->expects($this->any())->method('getPrice')->willReturnReference($price2);
-        $rate2->expects($this->any())
-            ->method('setPrice')
+        $rate2->method('getMethod')->willReturn('method');
+        $rate2->method('getPrice')->willReturnReference($price2);
+        $rate2->method('setPrice')
             ->willReturnCallback(
                 function ($price) use (&$price2) {
                     $price2 = $price;
@@ -83,20 +81,20 @@ class CarrierResultTest extends TestCase
             );
         /** @var Result|MockObject $result2 */
         $result2 = $this->getMockBuilder(Result::class)->disableOriginalConstructor()->getMock();
-        $result2->expects($this->any())->method('getAllRates')->willReturn([$rate2]);
-        $result2->expects($this->any())->method('getError')->willReturn(false);
+        $result2->method('getAllRates')->willReturn([$rate2]);
+        $result2->method('getError')->willReturn(false);
 
         $rate3 = $this->getMockBuilder(Error::class)->disableOriginalConstructor()->getMock();
         /** @var Result|MockObject $result3 */
         $result3 = $this->getMockBuilder(Result::class)->disableOriginalConstructor()->getMock();
-        $result3->expects($this->any())->method('getAllRates')->willReturn([$rate3]);
-        $result3->expects($this->any())->method('getError')->willReturn(true);
+        $result3->method('getAllRates')->willReturn([$rate3]);
+        $result3->method('getError')->willReturn(true);
 
         $rate4 = $this->getMockBuilder(Error::class)->disableOriginalConstructor()->getMock();
         /** @var Result|MockObject $result4 */
         $result4 = $this->getMockBuilder(Result::class)->disableOriginalConstructor()->getMock();
-        $result4->expects($this->any())->method('getAllRates')->willReturn([$rate4]);
-        $result4->expects($this->any())->method('getError')->willReturn(true);
+        $result4->method('getAllRates')->willReturn([$rate4]);
+        $result4->method('getError')->willReturn(true);
 
         //Composing
         $this->result->appendResult($result1, false);
