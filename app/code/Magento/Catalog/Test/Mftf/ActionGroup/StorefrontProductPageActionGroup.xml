@@ -19,6 +19,14 @@
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
     </actionGroup>
 
+    <actionGroup name="AddProductWithQtyToCartFromStorefrontProductPage" extends="addToCartFromStorefrontProductPage">
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="productQty" type="string"/>
+        </arguments>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="{{productQty}}" stepKey="fillProductQuantity" before="addToCart"/>
+    </actionGroup>
+
     <!--Verify text length validation hint with multiple inputs-->
     <actionGroup name="testDynamicValidationHint">
         <arguments>

@@ -27,6 +27,7 @@
         <element name="ProductPriceByOption" type="text" selector="//*[contains(@class, 'item-options')]/dd[normalize-space(.)='{{var1}}']/ancestor::tr//td[contains(@class, 'price')]//span[@class='price']" parameterized="true"/>
         <element name="RemoveItem" type="button"
                  selector="//table[@id='shopping-cart-table']//tbody//tr[contains(@class,'item-actions')]//a[contains(@class,'action-delete')]"/>
+        <element name="removeProductByName" selector="//*[contains(text(), '{{productName}}')]/ancestor::tbody//a[@class='action action-delete']" parameterized="true" timeout="30"/>
         <element name="productName" type="text" selector="//tbody[@class='cart item']//strong[@class='product-item-name']"/>
         <element name="nthItemOption" type="block" selector=".item:nth-of-type({{numElement}}) .item-options" parameterized="true"/>
         <element name="nthEditButton" type="block" selector=".item:nth-of-type({{numElement}}) .action-edit" parameterized="true"/>
