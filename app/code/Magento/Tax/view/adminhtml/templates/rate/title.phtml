@@ -15,8 +15,8 @@
                 <input
                     class="admin__control-text<?php if ($_store->getId() == 0) : ?> required-entry<?php endif; ?>"
                     type="text"
-                    name="title[<?= (int)$_store->getId() ?>]"
-                    value="<?= $block->escapeHtmlAttr($_labels[$_store->getId()]) ?>" />
+                    name="title[<?= (int) $_store->getId() ?>]"
+                    value="<?= $block->escapeHtmlAttr($_labels[(int) $_store->getId()]) ?>" />
             </div>
         </div>
     <?php endforeach; ?>

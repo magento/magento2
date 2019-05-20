@@ -22,7 +22,7 @@ $_item = $block->getItem();
 <?php if ($block->displayBothPrices() || $block->displayPriceInclTax()) : ?>
     <div class="price-incl-tax">
         <?php if ($block->displayBothPrices()) : ?>
-            <span class="label"><?= $block->escapeHtml(('Incl. Tax')) ?>:</span>
+            <span class="label"><?= $block->escapeHtml(__('Incl. Tax')) ?>:</span>
         <?php endif; ?>
         <?php $_incl = $this->helper(\Magento\Checkout\Helper\Data::class)->getSubtotalInclTax($_item); ?>
         <?php $_baseIncl = $this->helper(\Magento\Checkout\Helper\Data::class)->getBaseSubtotalInclTax($_item); ?>

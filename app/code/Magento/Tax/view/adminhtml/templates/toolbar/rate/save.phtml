@@ -12,7 +12,7 @@
         "mage/mage"
     ], function($){
 
-        $('#<?= $block->escapeHtml($form->getForm()->getId()) ?>').mage('form').mage('validation');
+        $('#<?= $block->escapeJs($form->getForm()->getId()) ?>').mage('form').mage('validation');
 
         $(document).ready(function () {
             'use strict';

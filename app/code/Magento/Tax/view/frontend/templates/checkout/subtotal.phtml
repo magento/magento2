@@ -13,7 +13,7 @@
 ?>
 <?php
 $style = $block->escapeHtmlAttr($block->getStyle());
-$colspan = (int)$block->getColspan();
+$colspan = (int) $block->getColspan();
 ?>
 <?php if ($block->displayBoth()) : ?>
 <tr class="totals sub excl">
@@ -41,4 +41,4 @@ $colspan = (int)$block->getColspan();
         <?= /* @noEscape */ $this->helper(\Magento\Checkout\Helper\Data::class)->formatPrice($block->getTotal()->getValue()) ?>
     </td>
 </tr>
-<?php endif;?>
+<?php endif; ?>
