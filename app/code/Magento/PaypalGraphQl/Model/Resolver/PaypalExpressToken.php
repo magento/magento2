@@ -132,8 +132,8 @@ class PaypalExpressToken implements ResolverInterface
         );
 
         $token = $checkout->start(
-            $this->url->getUrl('*/*/return'),
-            $this->url->getUrl('*/*/cancel'),
+            $this->url->getUrl('paypal/express/return'),
+            $this->url->getUrl('paypal/express/cancel'),
             $usedExpressButton
         );
 
