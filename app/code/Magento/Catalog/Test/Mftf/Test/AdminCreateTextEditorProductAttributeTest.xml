@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateTextEditorProductAttributeTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create product Attribute"/>
+            <title value="Admin create text editor product attribute test"/>
+            <description value="Create text editor product attribute with TinyMCE4 enabled"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-6338"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Enable WYSIWYG editor -->
+            <magentoCLI command="config:set {{EnableWYSIWYG.path}} {{EnableWYSIWYG.value}}" stepKey="enableWYSIWYG"/>
+
+            <!-- Enable TinyMCE 4 -->
+            <magentoCLI command="config:set {{EnableTinyMCE4.path}} {{EnableTinyMCE4.value}}" stepKey="enableTinyMCE4"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete attribute -->
+            <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
+                <argument name="ProductAttribute" value="productTextEditorAttribute"/>
+            </actionGroup>
+
+            <!-- Delete product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="_defaultProduct"/>
+            </actionGroup>
+
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Go to Stores > Product -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="openProductAttributePage"/>
+
+        <!-- Create new product attribute -->
+        <click selector="{{AdminProductAttributeGridSection.createNewAttributeBtn}}" stepKey="createNewAttribute"/>
+        <actionGroup ref="AdminFillProductAttributePropertiesActionGroup" stepKey="fillAttributeProperties">
+            <argument name="attributeName" value="{{productTextEditorAttribute.attribute_code}}"/>
+            <argument name="attributeType" value="{{productTextEditorAttribute.frontend_input}}"/>
+        </actionGroup>
+
+        <!-- Update product attribute input type and assert WYSIWYG -->
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="{{productAttributeWysiwyg.frontend_input}}" stepKey="updateInputType"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
+        <dontSeeElement selector="{{StorefrontPropertiesSection.EnableWYSIWYG}}" stepKey="dontSeeWYSIWYGEnableField"/>
+
+        <!-- Change attribute visibility and input type -->
+        <selectOption selector="{{StorefrontPropertiesSection.visibleOnCatalogPagesOnStorefront}}" userInput="Yes" stepKey="enableVisibleOnStorefront"/>
+        <scrollToTopOfPage stepKey="scrollToPageTop"/>
+        <click selector="{{AttributePropertiesSection.propertiesTab}}" stepKey="clickPropertiesTab"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="{{productTextEditorAttribute.frontend_input}}" stepKey="returnInputType"/>
+        <actionGroup ref="saveProductAttribute" stepKey="saveAttribute"/>
+
+        <!-- Go to Store > Attribute Set -->
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+
+        <!-- Open Default attribute -->
+        <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
+
+        <!-- Add created attribute to Default attribute and save -->
+        <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="{{productTextEditorAttribute.attribute_code}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveAttributeSet" stepKey="saveAttributeSet"/>
+
+        <!-- Go Catalog > Product to create new product page -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndexPage"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+
+        <!-- Select attribute set: Default -->
+        <actionGroup ref="AdminProductPageSelectAttributeSet" stepKey="selectAttributeSet">
+            <argument name="attributeSetName" value="Default"/>
+        </actionGroup>
+
+        <!-- Created product attribute appear on product form -->
+        <seeElement selector="{{AdminProductFormSection.attributeLabelByText(productTextEditorAttribute.attribute_code)}}" stepKey="seeAttributeLabelInProductForm"/>
+
+        <!-- TinyMCE 4 is displayed in WYSIWYG content area -->
+        <seeElement selector="{{TinyMCESection.TinyMCE4}}" stepKey="seeTinyMCE4" />
+
+        <!-- Verify toolbar menu -->
+        <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyToolbarMenu"/>
+
+        <!-- Add content into attribute -->
+        <executeJS function="tinyMCE.get('product_form_{{productTextEditorAttribute.attribute_code}}').setContent('This content from product page');" stepKey="executeJSFillContent"/>
+
+        <!-- Click Show/Hide button and see Insert Image button -->
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{ProductAttributeWYSIWYGSection.showHideBtn(productTextEditorAttribute.attribute_code)}}" stepKey="clickShowHideBtn"/>
+        <waitForElementVisible selector="{{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImageBtn"/>
+
+        <!-- Fill and save product form -->
+        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+
+        <!-- Assert product attribute on Storefront -->
+        <actionGroup ref="OpenStorefrontProductPageByProductNameActionGroup" stepKey="openProductPage"/>
+        <actionGroup ref="StorefrontAssertProductAttributeOnProductPageActionGroup" stepKey="assertProductAttribute">
+            <argument name="attributeLabel" value="{{productTextEditorAttribute.attribute_code}}"/>
+            <argument name="attributeValue" value="This content from product page"/>
+        </actionGroup>
+    </test>
+</tests>
