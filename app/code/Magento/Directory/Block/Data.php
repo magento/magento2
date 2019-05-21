@@ -1,9 +1,10 @@
 <?php
-declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Block;
 
 /**
@@ -185,14 +186,18 @@ class Data extends \Magento\Framework\View\Element\Template
     /**
      * Returns region html select
      *
-     * @param null|string $value
+     * @param null|int $value
      * @param string $name
      * @param string $id
      * @param string $title
      * @return string
      */
-    public function getRegionSelect(int $value = null, string $name = 'region', string $id = 'state', string $title = 'State/Province'): string
-    {
+    public function getRegionSelect(
+        ?int $value = null,
+        string $name = 'region',
+        string $id = 'state',
+        string $title = 'State/Province'
+    ): string {
         \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
         if ($value === null) {
             $value = (int)$this->getRegionId();
@@ -216,7 +221,7 @@ class Data extends \Magento\Framework\View\Element\Template
         )->setClass(
             'required-entry validate-state'
         )->setValue(
-            (int)$value
+            $value
         )->setOptions(
             $options
         )->getHtml();
