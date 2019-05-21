@@ -62,7 +62,7 @@ class SetPaymentMethodOnCart implements ResolverInterface
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentFactory = $paymentFactory;
         $this->additionalDataProviderPool = $additionalDataProviderPool
-            ?? ObjectManager::getInstance(AdditionalDataProviderPool::class);
+            ?: ObjectManager::getInstance()->get(AdditionalDataProviderPool::class);
     }
 
     /**
