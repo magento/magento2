@@ -25,7 +25,7 @@ use Magento\Shipping\Model\Simplexml\Element as ShippingElement;
 class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Dhl\Model\Carrier
+     * @var Carrier
      */
     private $dhlCarrier;
 
@@ -49,8 +49,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->dhlCarrier = $objectManager->get(\Magento\Dhl\Model\Carrier::class);
+        $objectManager = Bootstrap::getObjectManager();
+        $this->dhlCarrier = $objectManager->get(Carrier::class);
         $this->httpClient = $objectManager->get(AsyncClientInterface::class);
         $this->config = $objectManager->get(ReinitableConfigInterface::class);
         $this->restoreCountry = $this->config->getValue('shipping/origin/country_id', 'store', 'default_store');

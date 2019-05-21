@@ -51,8 +51,8 @@ class PackageResultTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $errorMock = $this->getMockBuilder(Error::class)->disableOriginalConstructor()->getMock();
-        $errorMock->expects($this->any())->method('getErrorMessage')->willReturn('error message');
-        $this->errorFactory->expects($this->any())->method('create')->willReturn($errorMock);
+        $errorMock->method('getErrorMessage')->willReturn('error message');
+        $this->errorFactory->method('create')->willReturn($errorMock);
 
         $this->result = new PackageResult($this->storeManager, $this->errorFactory);
     }
@@ -78,10 +78,9 @@ class PackageResultTest extends TestCase
             ->setMethods(['getMethod', 'getPrice', 'setPrice'])
             ->getMock();
         $price1 = 3;
-        $rate1->expects($this->any())->method('getMethod')->willReturn('method');
-        $rate1->expects($this->any())->method('getPrice')->willReturnReference($price1);
-        $rate1->expects($this->any())
-            ->method('setPrice')
+        $rate1->method('getMethod')->willReturn('method');
+        $rate1->method('getPrice')->willReturnReference($price1);
+        $rate1->method('setPrice')
             ->willReturnCallback(
                 function ($price) use (&$price1) {
                     $price1 = $price;
@@ -91,7 +90,7 @@ class PackageResultTest extends TestCase
         $result1 = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $result1->expects($this->any())->method('getAllRates')->willReturn([$rate1]);
+        $result1->method('getAllRates')->willReturn([$rate1]);
         $result1->expects($this->once())
             ->method('updateRatePrice')
             ->with(2)
@@ -106,10 +105,9 @@ class PackageResultTest extends TestCase
             ->setMethods(['getMethod', 'getPrice', 'setPrice'])
             ->getMock();
         $price2 = 4;
-        $rate2->expects($this->any())->method('getMethod')->willReturn('method');
-        $rate2->expects($this->any())->method('getPrice')->willReturnReference($price2);
-        $rate2->expects($this->any())
-            ->method('setPrice')
+        $rate2->method('getMethod')->willReturn('method');
+        $rate2->method('getPrice')->willReturnReference($price2);
+        $rate2->method('setPrice')
             ->willReturnCallback(
                 function ($price) use (&$price2) {
                     $price2 = $price;
@@ -117,7 +115,7 @@ class PackageResultTest extends TestCase
             );
         /** @var Result|MockObject $result2 */
         $result2 = $this->getMockBuilder(Result::class)->disableOriginalConstructor()->getMock();
-        $result2->expects($this->any())->method('getAllRates')->willReturn([$rate2]);
+        $result2->method('getAllRates')->willReturn([$rate2]);
         $result2->expects($this->once())
             ->method('updateRatePrice')
             ->with(3)
@@ -147,10 +145,9 @@ class PackageResultTest extends TestCase
             ->setMethods(['getMethod', 'getPrice', 'setPrice'])
             ->getMock();
         $price1 = 3;
-        $rate1->expects($this->any())->method('getMethod')->willReturn('method');
-        $rate1->expects($this->any())->method('getPrice')->willReturnReference($price1);
-        $rate1->expects($this->any())
-            ->method('setPrice')
+        $rate1->method('getMethod')->willReturn('method');
+        $rate1->method('getPrice')->willReturnReference($price1);
+        $rate1->method('setPrice')
             ->willReturnCallback(
                 function ($price) use (&$price1) {
                     $price1 = $price;
@@ -160,7 +157,7 @@ class PackageResultTest extends TestCase
         $result1 = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $result1->expects($this->any())->method('getAllRates')->willReturn([$rate1]);
+        $result1->method('getAllRates')->willReturn([$rate1]);
 
         $this->result->appendPackageResult($result1, 1);
         $this->result->appendPackageResult($result1, 2);

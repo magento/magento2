@@ -9,6 +9,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote\Address\RateCollectorInterface;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateRequestFactory;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Rate\CarrierResult;
@@ -278,7 +279,7 @@ class Shipping implements RateCollectorInterface
         }
         $carrier->setActiveFlag($this->_availabilityConfigField);
         $result = $carrier->checkAvailableShipCountries($request);
-        if (false !== $result && !$result instanceof \Magento\Quote\Model\Quote\Address\RateResult\Error) {
+        if (false !== $result && !$result instanceof Error) {
             $result = $carrier->processAdditionalValidation($request);
         }
         if (!$result) {
@@ -287,7 +288,7 @@ class Shipping implements RateCollectorInterface
              * if the delivery country is not within specific countries
              */
             throw new \RuntimeException('Cannot collect rates for given request');
-        } elseif ($result instanceof \Magento\Quote\Model\Quote\Address\RateResult\Error) {
+        } elseif ($result instanceof Error) {
             $this->getResult()->append($result);
             throw new \RuntimeException('Error occurred while preparing a carrier');
         }
