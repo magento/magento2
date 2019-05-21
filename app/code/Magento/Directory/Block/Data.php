@@ -178,7 +178,7 @@ class Data extends \Magento\Framework\View\Element\Template
      * @deprecated
      * @see getRegionSelect() method for more configurations
      */
-    public function getRegionHtmlSelect(): string
+    public function getRegionHtmlSelect()
     {
         return $this->getRegionSelect();
     }
