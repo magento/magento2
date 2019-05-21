@@ -247,6 +247,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function setOrder($attribute, $dir = Select::SQL_DESC)
     {
+        /**
+         * This changes need in backward compatible reasons for support dynamic improved algorithm
+         * for price aggregation process.
+         */
         $this->setSearchOrder($attribute, $dir);
         if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
             parent::setOrder($attribute, $dir);
