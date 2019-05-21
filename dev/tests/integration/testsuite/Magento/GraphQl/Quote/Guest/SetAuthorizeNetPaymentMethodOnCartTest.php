@@ -39,6 +39,9 @@ class SetAuthorizeNetPaymentMethodOnGuestCartTest extends \Magento\TestFramework
     /** @var Http */
     private $request;
 
+    /**
+     * @inheritdoc
+     */
     public static function setUpBeforeClass()
     {
         $db = Bootstrap::getInstance()->getBootstrap()
