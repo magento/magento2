@@ -120,7 +120,7 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testAfterInitialize()
+    public function testBeforeInitialize()
     {
         $productMock = $this->getProductMock();
         $configurableMatrix = $this->getConfigurableMatrix();
@@ -177,7 +177,7 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertSame($productMock, $this->updateConfigurations->afterInitialize($this->subjectMock, $productMock));
+        $this->assertSame($productMock, $this->updateConfigurations->beforeInitialize($this->subjectMock, $productMock));
     }
 
     /**
@@ -214,7 +214,7 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for no exceptions if configurable matrix is empty string.
      */
-    public function testAfterInitializeEmptyMatrix()
+    public function testBeforeInitializeEmptyMatrix()
     {
         $productMock = $this->getProductMock();
 
@@ -232,7 +232,7 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
             ->with([])
             ->willReturn([]);
 
-        $this->updateConfigurations->afterInitialize($this->subjectMock, $productMock);
+        $this->updateConfigurations->beforeInitialize($this->subjectMock, $productMock);
 
         $this->assertEmpty($productMock->getData());
     }
