@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -176,7 +177,7 @@ class Data extends \Magento\Framework\View\Element\Template
      * @deprecated
      * @see getRegionSelect() method for more configurations
      */
-    public function getRegionHtmlSelect()
+    public function getRegionHtmlSelect(): string
     {
         return $this->getRegionSelect();
     }
@@ -190,7 +191,7 @@ class Data extends \Magento\Framework\View\Element\Template
      * @param string $title
      * @return string
      */
-    public function getRegionSelect($value = null, $name = 'region', $id = 'state', $title = 'State/Province')
+    public function getRegionSelect(string $value = null, string $name = 'region', string $id = 'state', string $title = 'State/Province'): string
     {
         \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
         if ($value === null) {
