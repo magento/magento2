@@ -224,11 +224,12 @@ class VariationHandler
      * Duplicate images for variations
      *
      * @param array $productsData
+     * @param bool $skipDuplicateImage
      *
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function duplicateImagesForVariations($productsData)
+    public function duplicateImagesForVariations($productsData, $skipDuplicateImage = true)
     {
         $imagesForCopy = [];
         foreach ($productsData as $variationId => $simpleProductData) {
@@ -238,7 +239,7 @@ class VariationHandler
 
             foreach ($simpleProductData['media_gallery']['images'] as $imageId => $image) {
                 $image['variation_id'] = $variationId;
-                if (isset($imagesForCopy[$imageId][0])) {
+                if (isset($imagesForCopy[$imageId][0]) && $skipDuplicateImage) {
                     // skip duplicate image for first product
                     unset($imagesForCopy[$imageId][0]);
                 }

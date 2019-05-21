@@ -62,15 +62,18 @@ class UpdateConfigurations
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject
      * @param \Magento\Catalog\Model\Product $configurableProduct
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterInitialize(
+    public function beforeInitialize(
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
         \Magento\Catalog\Model\Product $configurableProduct
     ) {
         $configurations = $this->getConfigurations();
-        $configurations = $this->variationHandler->duplicateImagesForVariations($configurations);
+        $skipDuplicateImage = $configurations['newProducts'] < 1;
+        unset($configurations['newProducts']);
+        $configurations = $this->variationHandler->duplicateImagesForVariations($configurations, $skipDuplicateImage);
         if (count($configurations)) {
             foreach ($configurations as $productId => $productData) {
                 /** @var \Magento\Catalog\Model\Product $product */
@@ -82,7 +85,7 @@ class UpdateConfigurations
                 }
             }
         }
-        return $configurableProduct;
+        return [$configurableProduct];
     }
 
     /**
@@ -92,7 +95,7 @@ class UpdateConfigurations
      */
     protected function getConfigurations()
     {
-        $result = [];
+        $result = ['newProducts' => 0];
         $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', "[]");
         if (isset($configurableMatrix) && $configurableMatrix != "") {
             $configurableMatrix = json_decode($configurableMatrix, true);
@@ -104,12 +107,14 @@ class UpdateConfigurations
                     unset($item['was_changed']);
                 }
 
-                if (!$item['newProduct']) {
-                    $result[$item['id']] = $this->mapData($item);
+                if ($item['newProduct']) {
+                    $result['newProducts']++;
+                    continue;
+                }
+                $result[$item['id']] = $this->mapData($item);
 
-                    if (isset($item['qty'])) {
-                        $result[$item['id']]['quantity_and_stock_status']['qty'] = $item['qty'];
-                    }
+                if (isset($item['qty'])) {
+                    $result[$item['id']]['quantity_and_stock_status']['qty'] = $item['qty'];
                 }
             }
         }
