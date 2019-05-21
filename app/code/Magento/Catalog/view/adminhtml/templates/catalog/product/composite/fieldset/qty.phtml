@@ -12,11 +12,7 @@
     <div class="field admin__field">
         <label class="label admin__field-label"><span><?= $block->escapeHtml(__('Quantity')) ?></span></label>
         <div class="control admin__field-control">
-            <input id="product_composite_configure_input_qty"
-                   class="input-text admin__control-text qty"
-                   type="text"
-                   name="qty"
-                   value="<?= $block->getQtyValue() * 1 ?>">
+            <input id="product_composite_configure_input_qty" class="input-text admin__control-text qty" type="text" name="qty" value="<?= $block->getQtyValue() * 1 ?>">
         </div>
     </div>
 </fieldset>

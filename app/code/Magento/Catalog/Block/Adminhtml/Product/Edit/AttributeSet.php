@@ -11,6 +11,9 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 
+/**
+ * Admin AttributeSet block
+ */
 class AttributeSet extends \Magento\Backend\Block\Widget\Form
 {
     /**

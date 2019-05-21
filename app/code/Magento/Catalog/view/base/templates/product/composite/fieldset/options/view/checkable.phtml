@@ -62,14 +62,14 @@ if ($option) : ?>
                        product-custom-option
                         <?= $block->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
                    name="options[<?= $block->escapeHtmlAttr($option->getId()) ?>]<?= /* @noEscape */ $arraySign ?>"
-                   id="options_<?= $block->escapeHtmlAttr($option->getId()) . '_' . $count ?>"
+                   id="options_<?= $block->escapeHtmlAttr($option->getId() . '_' . $count) ?>"
                    value="<?= $block->escapeHtmlAttr($value->getOptionTypeId()) ?>"
                 <?= $block->escapeHtml($checked) ?>
                    data-selector="<?= $block->escapeHtmlAttr($dataSelector) ?>"
                    price="<?= $block->escapeHtmlAttr($block->getCurrencyByStore($value)) ?>"
             />
             <label class="label admin__field-label"
-                   for="options_<?= $block->escapeHtmlAttr($option->getId()) . '_' . $count ?>">
+                   for="options_<?= $block->escapeHtmlAttr($option->getId() . '_' . $count) ?>">
                 <span>
                     <?= $block->escapeHtml($value->getTitle()) ?>
                 </span>

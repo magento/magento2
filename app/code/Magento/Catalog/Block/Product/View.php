@@ -187,7 +187,8 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         }
 
         $tierPrices = [];
-        $tierPricesList = $product->getPriceInfo()->getPrice('tier_price')->getTierPriceList();
+        $priceInfo = $product->getPriceInfo();
+        $tierPricesList = $priceInfo->getPrice('tier_price')->getTierPriceList();
         foreach ($tierPricesList as $tierPrice) {
             $tierPrices[] = $tierPrice['price']->getValue() * 1;
         }
@@ -196,15 +197,15 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
             'priceFormat' => $this->_localeFormat->getPriceFormat(),
             'prices'      => [
                 'oldPrice'   => [
-                    'amount'      => $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue() * 1,
+                    'amount'      => $priceInfo->getPrice('regular_price')->getAmount()->getValue() * 1,
                     'adjustments' => []
                 ],
                 'basePrice'  => [
-                    'amount'      => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getBaseAmount() * 1,
+                    'amount'      => $priceInfo->getPrice('final_price')->getAmount()->getBaseAmount() * 1,
                     'adjustments' => []
                 ],
                 'finalPrice' => [
-                    'amount'      => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue() * 1,
+                    'amount'      => $priceInfo->getPrice('final_price')->getAmount()->getValue() * 1,
                     'adjustments' => []
                 ]
             ],

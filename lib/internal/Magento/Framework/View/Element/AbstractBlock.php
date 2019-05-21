@@ -680,10 +680,13 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
                 'html' => $html,
             ]
         );
-        $this->_eventManager->dispatch('view_block_abstract_to_html_after', [
-            'block' => $this,
-            'transport' => $transportObject
-        ]);
+        $this->_eventManager->dispatch(
+            'view_block_abstract_to_html_after',
+            [
+                'block' => $this,
+                'transport' => $transportObject
+            ]
+        );
         $html = $transportObject->getHtml();
 
         return $html;
@@ -973,8 +976,8 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * Use $addSlashes = false for escaping js that inside html attribute (onClick, onSubmit etc)
      *
-     * @param  string $data
-     * @param  bool $addSlashes
+     * @param string $data
+     * @param bool $addSlashes
      * @return string
      * @deprecated 100.2.0
      */

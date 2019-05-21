@@ -117,7 +117,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param WishlistProviderInterface $wishlistProvider
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param Escaper $escaper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -128,8 +127,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         \Magento\Customer\Helper\View $customerViewHelper,
         WishlistProviderInterface $wishlistProvider,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        Escaper $escaper = null
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_customerSession = $customerSession;
@@ -139,7 +137,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_customerViewHelper = $customerViewHelper;
         $this->wishlistProvider = $wishlistProvider;
         $this->productRepository = $productRepository;
-        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
+        $this->escaper = ObjectManager::getInstance()->get(Escaper::class);
         parent::__construct($context);
     }
 
