@@ -94,7 +94,7 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
     public function contentForTranslateDataProvider()
     {
         return [
-            'previousError' => [
+            'i18n_js_file_error' => [
                 'setTranslateProp = function (el, original) {
             var location = $(el).prop(\'tagName\').toLowerCase(),
                 translated = $.mage.__(original),
@@ -132,10 +132,14 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
                 title: \$t(
                     'Original value for Magento_Store module'
                 );
+                title: jQuery.mage.__(
+                    'Original value for Magento_Store module'
+                );
 i18n
                 ,
                 <<<i18n
                 title: 'Translated value for Magento_Store module in en_AU',
+                title: 'Translated value for Magento_Store module in en_AU';
                 title: 'Translated value for Magento_Store module in en_AU';
 i18n
             ],
@@ -150,7 +154,7 @@ i18n
                 'The maximum you may purchase is %1.'.replace('%1', params.maxAllowed);
 i18n
             ],
-            'checkAvoidingMatching' => [
+            'checkAvoidingMatchingWithJsInString' => [
                 <<<i18n
                 \$t('Payment ' + this.getTitle() + ' can\'t be initialized')
                 \$t(
