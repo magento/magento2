@@ -13,6 +13,9 @@ use Magento\PaypalGraphQl\AbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
 
 /**
  * @magentoAppArea graphql
@@ -46,12 +49,7 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
     }
 
     /**
-     * @magentoConfigFixture default_store payment/paypal_express/active 1
-     * @magentoConfigFixture default_store payment/paypal_express/merchant_id test_merchant_id
-     * @magentoConfigFixture default_store payment/paypal_express/wpp/api_username test_username
-     * @magentoConfigFixture default_store payment/paypal_express/wpp/api_password test_password
-     * @magentoConfigFixture default_store payment/paypal_express/wpp/api_signature test_signature
-     * @magentoConfigFixture default_store payment/paypal_express/payment_action Authorization
+     * @dataProvider getPaypalCodesProvider
      * @magentoConfigFixture default_store paypal/wpp/sandbox_flag 1
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
@@ -60,13 +58,22 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      */
-    public function testResolveGuest()
+    public function testResolveGuest($paymentMethod)
     {
         $reservedQuoteId = 'test_quote';
         $payerId = 'SQFE93XKTSDRJ';
         $token = 'EC-TOKEN1234';
         $correlationId = 'c123456789';
-        $paymentMethod = "paypal_express";
+
+        $config = $this->objectManager->get(ConfigInterface::class);
+        $config->saveConfig('payment/' . $paymentMethod .'/active', '1');
+
+        if ($paymentMethod == 'payflow_express') {
+            $config = $this->objectManager->get(ConfigInterface::class);
+            $config->saveConfig('payment/payflow_link/active', '1');
+        }
+
+        $this->objectManager->get(ReinitableConfigInterface::class)->reinit();
 
         $cart = $this->getQuoteByReservedOrderId($reservedQuoteId);
 
@@ -93,6 +100,10 @@ mutation {
           code: "{$paymentMethod}",
           additional_data: {
             paypal_express: {
+              payer_id: "$payerId",
+              token: "$token"
+            }
+            payflow_express: {
               payer_id: "$payerId",
               token: "$token"
             }
@@ -124,6 +135,10 @@ QUERY;
             'ACK' => 'Success'
         ];
 
+        if ($paymentMethod == 'payflow_express') {
+            $paypalRequest['SOLUTIONTYPE'] = null;
+        }
+
         $this->nvpMock
             ->expects($this->at(0))
             ->method('call')
@@ -150,5 +165,18 @@ QUERY;
         $this->assertEquals($paypalResponse['TOKEN'], $createTokenData['token']);
         $this->assertEquals($paymentMethod, $createTokenData['method']);
         $this->assertArrayHasKey('paypal_urls', $createTokenData);
+    }
+
+    /**
+     * Paypal method codes provider
+     *
+     * @return array
+     */
+    public function getPaypalCodesProvider(): array
+    {
+        return [
+            ['paypal_express'],
+            ['payflow_express'],
+        ];
     }
 }

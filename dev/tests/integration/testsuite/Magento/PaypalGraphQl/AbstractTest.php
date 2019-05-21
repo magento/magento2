@@ -16,6 +16,8 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\GraphQl\Controller\GraphQl;
 use Magento\Payment\Model\Method\Logger;
 use Magento\Paypal\Model\Api\Nvp;
+use Magento\Paypal\Model\Api\PayflowNvp;
+use Magento\Paypal\Model\Api\AbstractApi;
 use Magento\Paypal\Model\Api\ProcessableExceptionFactory;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\TestFramework\ObjectManager;
@@ -31,7 +33,7 @@ use Psr\Log\LoggerInterface;
 abstract class AbstractTest extends TestCase
 {
     /**
-     * @var Nvp|MockObject
+     * @var AbstractApi|MockObject
      */
     protected $nvpMock;
 
@@ -54,8 +56,11 @@ abstract class AbstractTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
         $apiFactoryMock->method('create')
-            ->with(Nvp::class)
-            ->willReturn($this->getNvpMock());
+            ->willReturnMap([
+                [Nvp::class, [], $this->getNvpMock(Nvp::class)],
+                [PayflowNvp::class, [], $this->getNvpMock(PayflowNvp::class)]
+            ]);
+
         $this->objectManager->addSharedInstance($apiFactoryMock, ApiFactory::class);
 
         $this->graphqlController = $this->objectManager->get(GraphQl::class);
@@ -76,10 +81,10 @@ abstract class AbstractTest extends TestCase
         return $quote;
     }
 
-    private function getNvpMock()
+    private function getNvpMock(string $nvpClass)
     {
         if (empty($this->nvpMock)) {
-            $this->nvpMock = $this->getMockBuilder(Nvp::class)
+            $this->nvpMock = $this->getMockBuilder($nvpClass)
                 ->setConstructorArgs(
                     [
                     'customerAddress' => $this->objectManager->get(Address::class),
