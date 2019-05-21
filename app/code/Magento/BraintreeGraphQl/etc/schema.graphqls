@@ -3,16 +3,18 @@
 
 input PaymentMethodAdditionalDataInput {
     braintree: BraintreeInput
-    braintree_vault: BraintreeVaultInput
+    braintree_cc_vault: BraintreeCcVaultInput
 }
 
 input BraintreeInput {
     payment_method_nonce: String!
     is_active_payment_token_enabler: Boolean!
+    device_data: String
 }
 
-input BraintreeVaultInput {
+input BraintreeCcVaultInput {
     payment_method_nonce: String!
     public_hash: String!
     is_active_payment_token_enabler: Boolean!
+    device_data: String
 }

@@ -1,0 +1,353 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+namespace Magento\GraphQl\Braintree\Customer;
+
+use Magento\Braintree\Gateway\Command\GetPaymentNonceCommand;
+use Magento\Framework\Registry;
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Vault\Model\ResourceModel\PaymentToken;
+use Magento\Vault\Model\ResourceModel\PaymentToken\CollectionFactory as TokenCollectionFactory;
+
+class SetPaymentMethodTest extends GraphQlAbstract
+{
+    private const REQUIRED_CONSTS = [
+        'TESTS_BRAINTREE_MERCHANT_ID',
+        'TESTS_BRAINTREE_PUBLIC_KEY',
+        'TESTS_BRAINTREE_PRIVATE_KEY',
+    ];
+
+    /**
+     * @var CustomerTokenServiceInterface
+     */
+    private $customerTokenService;
+
+    /**
+     * @var GetMaskedQuoteIdByReservedOrderId
+     */
+    private $getMaskedQuoteIdByReservedOrderId;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $orderCollectionFactory;
+
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var Registry
+     */
+    private $registry;
+
+    /**
+     * @var TokenCollectionFactory
+     */
+    private $tokenCollectionFactory;
+
+    /**
+     * @var PaymentToken
+     */
+    private $tokenResource;
+
+    /**
+     * @var GetPaymentNonceCommand
+     */
+    private $getNonceCommand;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        foreach (static::REQUIRED_CONSTS as $const) {
+            if (!defined($const)) {
+                $this->markTestSkipped('Braintree sandbox credentials must be defined in phpunit_graphql.xml.dist');
+            }
+        }
+
+        $objectManager = Bootstrap::getObjectManager();
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->orderCollectionFactory = $objectManager->get(CollectionFactory::class);
+        $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
+        $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
+        $this->tokenCollectionFactory = Bootstrap::getObjectManager()->get(TokenCollectionFactory::class);
+        $this->tokenResource = Bootstrap::getObjectManager()->get(PaymentToken::class);
+        $this->getNonceCommand = Bootstrap::getObjectManager()->get(GetPaymentNonceCommand::class);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @magentoApiDataFixture Magento/Graphql/Braintree/_files/payments.php
+     */
+    public function testPlaceOrder()
+    {
+        $reservedOrderId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+
+        $setPaymentQuery = $this->getSetPaymentBraintreeQuery($maskedQuoteId);
+        $setPaymentResponse = $this->graphQlMutation($setPaymentQuery, [], '', $this->getHeaderMap());
+
+        $this->assertSetPaymentMethodResponse($setPaymentResponse, 'braintree');
+
+        $placeOrderQuery = $this->getPlaceOrderQuery($maskedQuoteId);
+        $placeOrderResponse = $this->graphQlMutation($placeOrderQuery, [], '', $this->getHeaderMap());
+
+        $this->assertPlaceOrderResponse($placeOrderResponse, $reservedOrderId);
+
+        $tokenQueryResult = $this->graphQlQuery($this->getPaymentTokenQuery(), [], '', $this->getHeaderMap());
+
+        self::assertArrayHasKey('customerPaymentTokens', $tokenQueryResult);
+        self::assertArrayHasKey('items', $tokenQueryResult['customerPaymentTokens']);
+        self::assertCount(0, $tokenQueryResult['customerPaymentTokens']['items']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Braintree/_files/add_simple_product_qty_one.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @magentoApiDataFixture Magento/Graphql/Braintree/_files/payments.php
+     */
+    public function testPlaceOrderSaveInVault()
+    {
+        $reservedOrderId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+
+        $setPaymentQuery = $this->getSetPaymentBraintreeQuery($maskedQuoteId, true);
+        $setPaymentResponse = $this->graphQlMutation($setPaymentQuery, [], '', $this->getHeaderMap());
+
+        $this->assertSetPaymentMethodResponse($setPaymentResponse, 'braintree');
+
+        $placeOrderQuery = $this->getPlaceOrderQuery($maskedQuoteId);
+        $placeOrderResponse = $this->graphQlMutation($placeOrderQuery, [], '', $this->getHeaderMap());
+
+        $this->assertPlaceOrderResponse($placeOrderResponse, $reservedOrderId);
+
+        $tokenQueryResult = $this->graphQlQuery($this->getPaymentTokenQuery(), [], '', $this->getHeaderMap());
+
+        self::assertArrayHasKey('customerPaymentTokens', $tokenQueryResult);
+        self::assertArrayHasKey('items', $tokenQueryResult['customerPaymentTokens']);
+        self::assertCount(1, $tokenQueryResult['customerPaymentTokens']['items']);
+        $token = current($tokenQueryResult['customerPaymentTokens']['items']);
+        self::assertArrayHasKey('payment_method_code', $token);
+        self::assertEquals('braintree', $token['payment_method_code']);
+        self::assertArrayHasKey('type', $token);
+        self::assertEquals('card', $token['type']);
+        self::assertArrayHasKey('details', $token);
+        self::assertArrayHasKey('public_hash', $token);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Braintree/_files/add_simple_product_qty_three.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @magentoApiDataFixture Magento/Graphql/Braintree/_files/payments.php
+     * @magentoApiDataFixture Magento/Graphql/Braintree/_files/token.php
+     */
+    public function testPlaceOrderWithVault()
+    {
+        $reservedOrderId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+
+        $nonceResult = $this->getNonceCommand->execute([
+            'customer_id' => 1,
+            'public_hash' => 'braintree_public_hash',
+        ]);
+        $nonce = $nonceResult->get()['paymentMethodNonce'];
+
+        $setPaymentQuery = $this->getSetPaymentBraintreeVaultQuery($maskedQuoteId, 'braintree_public_hash', $nonce, true);
+        $setPaymentResponse = $this->graphQlMutation($setPaymentQuery, [], '', $this->getHeaderMap());
+
+        $this->assertSetPaymentMethodResponse($setPaymentResponse, 'braintree_cc_vault');
+
+        $placeOrderQuery = $this->getPlaceOrderQuery($maskedQuoteId);
+        $placeOrderResponse = $this->graphQlMutation($placeOrderQuery, [], '', $this->getHeaderMap());
+
+        $this->assertPlaceOrderResponse($placeOrderResponse, $reservedOrderId);
+    }
+
+    private function assertPlaceOrderResponse(array $response, string $reservedOrderId): void
+    {
+        self::assertArrayHasKey('placeOrder', $response);
+        self::assertArrayHasKey('order', $response['placeOrder']);
+        self::assertArrayHasKey('order_id', $response['placeOrder']['order']);
+        self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_id']);
+    }
+
+    private function assertSetPaymentMethodResponse(array $response, string $methodCode): void
+    {
+        self::assertArrayHasKey('setPaymentMethodOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
+        self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
+        self::assertArrayHasKey('code', $response['setPaymentMethodOnCart']['cart']['selected_payment_method']);
+        self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @param bool $saveInVault
+     * @return string
+     */
+    private function getSetPaymentBraintreeQuery(string $maskedQuoteId, bool $saveInVault = false): string
+    {
+        $saveInVault = json_encode($saveInVault);
+        return <<<QUERY
+mutation {
+  setPaymentMethodOnCart(input:{
+    cart_id:"{$maskedQuoteId}"
+    payment_method:{
+      code:"braintree"
+      additional_data:{
+        braintree:{
+          is_active_payment_token_enabler:{$saveInVault}
+          payment_method_nonce:"fake-valid-nonce"
+        }
+      }
+    }
+  }) {
+    cart {
+      selected_payment_method {
+        code
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @param string $publicHash
+     * @param string $nonce
+     * @param bool $saveInVault
+     * @return string
+     */
+    private function getSetPaymentBraintreeVaultQuery(string $maskedQuoteId, string $publicHash, string $nonce, bool $saveInVault = false): string
+    {
+        $saveInVault = json_encode($saveInVault);
+        return <<<QUERY
+mutation {
+  setPaymentMethodOnCart(input:{
+    cart_id:"{$maskedQuoteId}"
+    payment_method:{
+      code:"braintree_cc_vault"
+      additional_data:{
+        braintree_cc_vault:{
+          is_active_payment_token_enabler:{$saveInVault}
+          payment_method_nonce:"{$nonce}"
+          public_hash:"{$publicHash}"
+        }
+      }
+    }
+  }) {
+    cart {
+      selected_payment_method {
+        code
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getPlaceOrderQuery(string $maskedQuoteId): string
+    {
+        return <<<QUERY
+mutation {
+  placeOrder(input: {cart_id: "{$maskedQuoteId}"}) {
+    order {
+      order_id
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @return string
+     */
+    private function getPaymentTokenQuery(): string
+    {
+        return <<<QUERY
+query {
+  customerPaymentTokens {
+    items {
+      details
+      payment_method_code
+      public_hash
+      type
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @param string $username
+     * @param string $password
+     * @return array
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
+    private function getHeaderMap(string $username = 'customer@example.com', string $password = 'password'): array
+    {
+        $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
+        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
+        return $headerMap;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function tearDown()
+    {
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
+
+        $orderCollection = $this->orderCollectionFactory->create();
+        foreach ($orderCollection as $order) {
+            $this->orderRepository->delete($order);
+        }
+
+        $tokenCollection = $this->tokenCollectionFactory->create();
+        foreach ($tokenCollection as $token) {
+            $this->tokenResource->delete($token);
+        }
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', false);
+
+        parent::tearDown();
+    }
+}

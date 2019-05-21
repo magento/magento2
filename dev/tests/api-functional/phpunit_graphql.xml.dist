@@ -47,6 +47,10 @@
         <const name="TESTS_MAGENTO_INSTALLATION" value="disabled"/>
         <!-- Magento mode for tests execution. Possible values are "default", "developer" and "production". -->
         <const name="TESTS_MAGENTO_MODE" value="default"/>
+        <!-- Credentials for testing Braintree -->
+        <!--<const name="TESTS_BRAINTREE_MERCHANT_ID" value="sandbox_merchant_id"/>-->
+        <!--<const name="TESTS_BRAINTREE_PUBLIC_KEY" value="sandbox_public_key"/>-->
+        <!--<const name="TESTS_BRAINTREE_PRIVATE_KEY" value="sandbox_private_key"/>-->
     </php>
 
     <!-- Test listeners -->

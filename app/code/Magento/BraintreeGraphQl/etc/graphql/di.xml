@@ -10,7 +10,7 @@
         <arguments>
             <argument name="dataProviders" xsi:type="array">
                 <item name="braintree" xsi:type="object">Magento\BraintreeGraphQl\Model\BraintreeDataProvider</item>
-                <item name="braintree_vault" xsi:type="object">Magento\BraintreeGraphQl\Model\BraintreeVaultDataProvider</item>
+                <item name="braintree_cc_vault" xsi:type="object">Magento\BraintreeGraphQl\Model\BraintreeVaultDataProvider</item>
             </argument>
         </arguments>
     </type>
