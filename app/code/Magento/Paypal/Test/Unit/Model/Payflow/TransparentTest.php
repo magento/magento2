@@ -120,8 +120,19 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
     {
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->setMethods([
-                'getCustomerId', 'getBillingAddress', 'getShippingAddress', 'getCustomerEmail',
-                'getId', 'getIncrementId', 'getBaseCurrencyCode'
+                'getCustomerId',
+                'getBillingAddress',
+                'getShippingAddress',
+                'getCustomerEmail',
+                'getId',
+                'getIncrementId',
+                'getBaseCurrencyCode',
+                'getBaseSubtotal',
+                'getBaseTaxAmount',
+                'getBaseDiscountTaxCompensationAmount',
+                'getBaseShippingDiscountTaxCompensationAmnt',
+                'getBaseShippingAmount',
+                'getBaseDiscountAmount',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -364,6 +375,13 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
     {
         $this->initializationAuthorizeMock();
         $this->buildRequestData();
+
+        $this->orderMock->expects($this->once())->method('getBaseSubtotal');
+        $this->orderMock->expects($this->once())->method('getBaseTaxAmount');
+        $this->orderMock->expects($this->once())->method('getBaseDiscountTaxCompensationAmount');
+        $this->orderMock->expects($this->once())->method('getBaseShippingDiscountTaxCompensationAmnt');
+        $this->orderMock->expects($this->once())->method('getBaseShippingAmount');
+        $this->orderMock->expects($this->once())->method('getBaseDiscountAmount');
 
         $paymentTokenMock = $this->createMock(PaymentTokenInterface::class);
         $extensionAttributes = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderPaymentExtensionInterface::class)
