@@ -11,7 +11,7 @@
     <section name="CheckoutSuccessRegisterSection">
         <element name="registerMessage" type="text" selector="#registration p:nth-child(1)"/>
         <element name="customerEmail" type="text" selector="#registration p:nth-child(2)"/>
-        <element name="createAccountButton" type="button" selector="#registration form input[type='submit']" timeout="30"/>
+        <element name="createAccountButton" type="button" selector="[data-bind*=&quot;i18n: 'Create an Account'&quot;]" timeout="30"/>
         <element name="orderNumber" type="text" selector="//p[text()='Your order # is: ']//span"/>
     </section>
 </sections>
