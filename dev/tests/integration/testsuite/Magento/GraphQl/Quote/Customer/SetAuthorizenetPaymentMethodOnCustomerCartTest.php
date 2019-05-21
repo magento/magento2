@@ -40,6 +40,9 @@ class SetAuthorizenetPaymentMethodOnCustomerCartTest extends \Magento\TestFramew
     /** @var Http */
     private $request;
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public static function setUpBeforeClass()
     {
         $db = Bootstrap::getInstance()->getBootstrap()
