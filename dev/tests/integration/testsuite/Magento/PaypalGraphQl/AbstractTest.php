@@ -104,4 +104,26 @@ abstract class AbstractTest extends TestCase
         }
         return $this->nvpMock;
     }
+
+    protected function getCreateTokenMutation($cartId, $paymentMethod)
+    {
+        return <<<QUERY
+mutation {
+    createPaypalExpressToken(input: {
+        cart_id: "{$cartId}",
+        code: "{$paymentMethod}",
+        express_button: true
+    })
+    {
+        __typename
+        token
+        paypal_urls{
+            start
+            edit
+        }
+        method
+    }
+}
+QUERY;
+    }
 }

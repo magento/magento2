@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -131,11 +132,15 @@ class PaypalExpressToken implements ResolverInterface
             $this->url->getUrl('checkout/onepage/success')
         );
 
-        $token = $checkout->start(
-            $this->url->getUrl('paypal/express/return'),
-            $this->url->getUrl('paypal/express/cancel'),
-            $usedExpressButton
-        );
+        try {
+            $token = $checkout->start(
+                $this->url->getUrl('paypal/express/return'),
+                $this->url->getUrl('paypal/express/cancel'),
+                $usedExpressButton
+            );
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()));
+        }
 
         return [
             'method' => $code,
