@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\PaypalGraphQl\Model\Resolver;
+namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
 use Magento\Framework\App\Request\Http;
 use Magento\Paypal\Model\Api\Nvp;
@@ -15,7 +15,6 @@ use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
 
 /**
  * @magentoAppArea graphql
@@ -128,7 +127,7 @@ QUERY;
             ->addHeaders(['Content-Type' => 'application/json']);
         $this->request->setHeaders($headers);
 
-        $paypalRequest = include __DIR__ . '/../../_files/guest_paypal_create_token_request.php';
+        $paypalRequest = include __DIR__ . '/../../../_files/guest_paypal_create_token_request.php';
         $paypalResponse = [
             'TOKEN' => $token,
             'CORRELATIONID' => $correlationId,
@@ -149,7 +148,7 @@ QUERY;
             'TOKEN' => $token,
         ];
 
-        $paypalRequestDetailsResponse = include __DIR__ . '/../../_files/guest_paypal_set_payer_id.php';
+        $paypalRequestDetailsResponse = include __DIR__ . '/../../../_files/guest_paypal_set_payer_id.php';
 
         $this->nvpMock
             ->expects($this->at(1))
