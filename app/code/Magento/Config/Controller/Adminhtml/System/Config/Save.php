@@ -56,6 +56,74 @@ class Save extends AbstractConfig
     }
 
     /**
+     * Check is allow modify system configuration
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return parent::_isAllowed()
+            && $this->isSectionAllowed();
+    }
+
+    /**
+     * Checks if user has access to section.
+     *
+     * @return bool
+     */
+    private function isSectionAllowed(): bool
+    {
+        $sectionId = $this->_request->getParam('section');
+        $isAllowed = $this->_configStructure->getElement($sectionId)->isAllowed();
+        if (!$isAllowed) {
+            $groups = $this->getRequest()->getPost('groups');
+            $fieldPath = $sectionId;
+            $fieldPath = $this->getFirstFieldPathAsString($groups, $fieldPath);
+
+            $fieldPaths = $this->_configStructure->getFieldPaths();
+            $currentFieldPath = $fieldPaths[$fieldPath][0] ?? $sectionId;
+            $explodedConfigPath = explode('/', $currentFieldPath);
+            $configSectionId = (is_array($explodedConfigPath) && $explodedConfigPath[0])
+                ? $explodedConfigPath[0]
+                : $sectionId;
+
+            $isAllowed = $this->_configStructure->getElement($configSectionId)->isAllowed();
+        }
+
+        return $isAllowed;
+    }
+
+    /**
+     * Return field path as string.
+     *
+     * @param array $elements
+     * @param string $fieldPath
+     * @return string
+     */
+    private function getFirstFieldPathAsString(array $elements, string $fieldPath): string
+    {
+        $groupData = [];
+        foreach ($elements as $elementName => $element) {
+            if (!empty($element)) {
+                $fieldPath .= '/' . $elementName;
+
+                if (!empty($element['fields'])) {
+                    $groupData = $element['fields'];
+                } elseif (!empty($element['groups'])) {
+                    $groupData = $element['groups'];
+                }
+
+                if (!empty($groupData)) {
+                    $fieldPath = $this->getFirstFieldPathAsString($groupData, $fieldPath);
+                }
+                break;
+            }
+        }
+
+        return $fieldPath;
+    }
+
+    /**
      * Get groups for save
      *
      * @return array|null
