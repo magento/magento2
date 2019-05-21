@@ -20,7 +20,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDbIsolation disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SetAuthorizeNetPaymentMethodOnGuestCartTest extends \Magento\TestFramework\Indexer\TestCase
+class SetAuthorizeNetPaymentMethodOnGuestCartTest extends \PHPUnit\Framework\TestCase
 {
     const CONTENT_TYPE = 'application/json';
 
@@ -38,22 +38,6 @@ class SetAuthorizeNetPaymentMethodOnGuestCartTest extends \Magento\TestFramework
 
     /** @var Http */
     private $request;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass()
-    {
-        $db = Bootstrap::getInstance()->getBootstrap()
-            ->getApplication()
-            ->getDbInstance();
-        if (!$db->isDbDumpExists()) {
-            throw new \LogicException('DB dump does not exist.');
-        }
-        $db->restoreFromDbDump();
-
-        parent::setUpBeforeClass();
-    }
 
     protected function setUp() : void
     {
