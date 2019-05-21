@@ -119,7 +119,11 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
     {
         $this->escaperMock->expects($this->once())
             ->method('escapeHtmlAttr')
-            ->willReturnCallback(function($string) {return $string;});
+            ->willReturnCallback(
+                function ($string) {
+                    return $string;
+                }
+            );
         $this->block->setNameInLayout($nameInLayout);
         $this->assertEquals($expectedResult, call_user_func_array([$this->block, 'getUiId'], $methodArguments));
     }
@@ -166,10 +170,12 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
 
         $config->expects($this->any())
             ->method('getVarValue')
-            ->willReturnMap([
-                ['Magento_Theme', 'v1', 'one'],
-                [$module, 'v2', 'two']
-            ]);
+            ->willReturnMap(
+                [
+                    ['Magento_Theme', 'v1', 'one'],
+                    [$module, 'v2', 'two']
+                ]
+            );
 
         $configManager = $this->createMock(ConfigInterface::class);
         $configManager->expects($this->exactly(2))->method('getViewConfig')->willReturn($config);

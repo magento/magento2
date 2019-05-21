@@ -13,10 +13,11 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use \Magento\Framework\View\Element\Messages;
-
-use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
 
+/**
+ * Unit test for \Magento\Framework\View\Element\Messages
+ */
 class MessagesTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -330,7 +331,11 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
 
         $this->escaperMock->expects($this->any())
             ->method('escapeHtmlAttr')
-            ->willReturnCallback(function($string) {return $string;});
+            ->willReturnCallback(
+                function ($string) {
+                    return $string;
+                }
+            );
 
         $this->assertEquals($resultHtml, $this->messages->getGroupedHtml());
     }
