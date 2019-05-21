@@ -56,14 +56,11 @@ class Save extends AbstractConfig
     }
 
     /**
-     * Check is allow modify system configuration
-     *
-     * @return bool
+     * @inheritdoc
      */
     protected function _isAllowed()
     {
-        return parent::_isAllowed()
-            && $this->isSectionAllowed();
+        return parent::_isAllowed() && $this->isSectionAllowed();
     }
 
     /**
@@ -77,15 +74,12 @@ class Save extends AbstractConfig
         $isAllowed = $this->_configStructure->getElement($sectionId)->isAllowed();
         if (!$isAllowed) {
             $groups = $this->getRequest()->getPost('groups');
-            $fieldPath = $sectionId;
-            $fieldPath = $this->getFirstFieldPathAsString($groups, $fieldPath);
+            $fieldPath = $this->getFirstFieldPath($groups, $sectionId);
 
             $fieldPaths = $this->_configStructure->getFieldPaths();
-            $currentFieldPath = $fieldPaths[$fieldPath][0] ?? $sectionId;
-            $explodedConfigPath = explode('/', $currentFieldPath);
-            $configSectionId = (is_array($explodedConfigPath) && $explodedConfigPath[0])
-                ? $explodedConfigPath[0]
-                : $sectionId;
+            $fieldPath = $fieldPaths[$fieldPath][0] ?? $sectionId;
+            $explodedConfigPath = explode('/', $fieldPath);
+            $configSectionId = $explodedConfigPath[0] ?? $sectionId;
 
             $isAllowed = $this->_configStructure->getElement($configSectionId)->isAllowed();
         }
@@ -100,7 +94,7 @@ class Save extends AbstractConfig
      * @param string $fieldPath
      * @return string
      */
-    private function getFirstFieldPathAsString(array $elements, string $fieldPath): string
+    private function getFirstFieldPath(array $elements, string $fieldPath): string
     {
         $groupData = [];
         foreach ($elements as $elementName => $element) {
@@ -114,7 +108,7 @@ class Save extends AbstractConfig
                 }
 
                 if (!empty($groupData)) {
-                    $fieldPath = $this->getFirstFieldPathAsString($groupData, $fieldPath);
+                    $fieldPath = $this->getFirstFieldPath($groupData, $fieldPath);
                 }
                 break;
             }
