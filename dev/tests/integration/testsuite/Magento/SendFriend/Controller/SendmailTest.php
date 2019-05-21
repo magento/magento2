@@ -26,6 +26,7 @@ class SendmailTest extends AbstractController
      *
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
+     * @magentoConfigFixture default_store sendfriend/email/enabled 1
      * @magentoDataFixture Magento/SendFriend/_files/disable_allow_guest_config.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Catalog/_files/products.php
