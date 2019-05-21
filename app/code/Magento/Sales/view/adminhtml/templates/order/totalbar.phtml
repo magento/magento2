@@ -5,11 +5,9 @@
  */
 
 // @deprecated
-// @codingStandardsIgnoreFile
-
 $totals = $block->getTotals();
 ?>
-<?php if ($totals && count($totals) > 0): ?>
+<?php if ($totals && count($totals) > 0) : ?>
 <table class="items-to-invoice">
     <tr>
     <?php foreach ($totals as $total): ?>
