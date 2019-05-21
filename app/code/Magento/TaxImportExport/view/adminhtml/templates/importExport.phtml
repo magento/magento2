@@ -50,7 +50,7 @@ require(['jquery', "mage/mage", "loadingPopup"], function(jQuery){
 </script>
     </div>
     <?php endif; ?>
-    <div class="export-tax-rates <?= ($block->getIsReadonly()) ? 'box-left' : 'box-right' ?>">
+    <div class="export-tax-rates <?= /* @noEscape */ ($block->getIsReadonly()) ? 'box-left' : 'box-right' ?>">
         <?php if ($block->getUseContainer()) :?>
         <form id="export_form"
               class="admin__fieldset"
