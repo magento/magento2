@@ -56,7 +56,7 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testReturnAction()
     {
         $payerId = 123;
-        $token = "EC-8F665944MJ782471F";
+        $token = 'EC-8F665944MJ782471F';
 
         $paymentMethodCode = \Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS;
 
@@ -64,7 +64,6 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var Quote $quote */
         $quote = $this->objectManager->create(Quote::class);
         $quote->load($orderId, 'reserved_order_id');
-
 
         $quoteIdMask = $this->objectManager->create(QuoteIdMask::class);
         $quoteIdMask->setQuoteId($quote->getId());
@@ -99,8 +98,8 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
             ->getMock();
 
         foreach ($nvpMethods as $method) {
-                $nvpMock->method($method)
-                    ->willReturnSelf();
+            $nvpMock->method($method)
+            ->willReturnSelf();
         }
 
         $apiFactoryMock = $this->getMockBuilder(ApiFactory::class)
@@ -113,7 +112,6 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
             ->willReturn($nvpMock);
 
         $this->objectManager->addSharedInstance($apiFactoryMock, ApiFactory::class);
-
 
         $payment = $quote->getPayment();
         $payment->setMethod($paymentMethodCode)
@@ -135,7 +133,7 @@ mutation {
             payment_method: {
               code: "$paymentMethodCode",
               additional_data: {
-                payflow_express: {
+                $paymentMethodCode: {
                   payer_id: "$payerId",
                   token: "$token"
                 }
@@ -163,7 +161,6 @@ QUERY;
             ->addHeaderLine('Accept', 'application/json')
             ->addHeaderLine('Authorization', 'Bearer ' . $customerToken);
         $this->request->setHeaders($webApiRequest->getHeaders());
-
         $this->request->setPathInfo('/graphql');
         $this->request->setMethod('POST');
         $this->request->setContent(json_encode(['query' => $query]));
