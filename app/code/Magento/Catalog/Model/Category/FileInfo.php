@@ -75,11 +75,11 @@ class FileInfo
      */
     private function getBaseDirectory()
     {
-        if (!isset($this->getBaseDirectory)) {
-            $this->getBaseDirectory = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
+        if (!isset($this->baseDirectory)) {
+            $this->baseDirectory = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
         }
 
-        return $this->getBaseDirectory;
+        return $this->baseDirectory;
     }
 
     /**
