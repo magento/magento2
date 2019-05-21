@@ -35,8 +35,8 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
 ?>
 
 <?php if ($amount): ?>
-    <span class="old-price map-old-price"><?= /* @escapeNotVerified */ $msrpPrice ?></span>
-    <span class="map-fallback-price normal-price"><?= /* @escapeNotVerified */ $msrpPrice ?></span>
+    <span class="old-price map-old-price"><?= /* @noEscape */ $msrpPrice ?></span>
+    <span class="map-fallback-price normal-price"><?= /* @noEscape */ $msrpPrice ?></span>
 <?php endif; ?>
 
 <?php if ($priceType->isShowPriceOnGesture()): ?>
@@ -83,26 +83,27 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
             (int) $productId));
     }
     ?>
-    <span id="<?= /* @escapeNotVerified */ $block->getPriceId() ? $block->getPriceId() : $priceElementId ?>" style="display:none"></span>
+    <span id="<?= $block->escapeHtmlAttr($block->getPriceId() ? $block->getPriceId() : $priceElementId) ?>" style="display:none"></span>
     <a href="javascript:void(0);"
-       id="<?= /* @escapeNotVerified */ ($popupId) ?>"
+       id="<?= /* @noEscape */ ($popupId) ?>"
        class="action map-show-info"
-       data-mage-init='<?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data) ?>'><?= /* @escapeNotVerified */ __('Click for price') ?>
+       data-mage-init='<?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data) ?>'>
+        <?= $block->escapeHtml(__('Click for price')) ?>
     </a>
 <?php else: ?>
     <span class="msrp-message">
-     <?= /* @escapeNotVerified */ $priceType->getMsrpPriceMessage() ?>
+     <?= $block->escapeHtml($priceType->getMsrpPriceMessage()) ?>
     </span>
 <?php endif; ?>
 
 <?php if ($block->getZone() == \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW): ?>
     <?php $helpLinkId = 'msrp-help-' . $productId . $block->getRandomString(20); ?>
     <a href="javascript:void(0);"
-       id="<?= /* @escapeNotVerified */ $helpLinkId ?>"
+       id="<?= /* @noEscape */ $helpLinkId ?>"
        class="action map-show-info"
        data-mage-init='{"addToCart":{"origin": "info",
-                                     "helpLinkId": "#<?= /* @escapeNotVerified */ $helpLinkId ?>",
+                                     "helpLinkId": "#<?= /* @noEscape */ $helpLinkId ?>",
                                      "productName": "<?= $block->escapeJs($block->escapeHtml($product->getName())) ?>",
-                                     "closeButtonId": "#map-popup-close"}}'><span><?= /* @escapeNotVerified */ __("What's this?") ?></span>
+                                     "closeButtonId": "#map-popup-close"}}'><span><?= $block->escapeHtml(__("What's this?")) ?></span>
     </a>
 <?php endif; ?>
