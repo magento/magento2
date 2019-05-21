@@ -181,7 +181,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         SearchResultApplierFactory $searchResultApplierFactory = null,
         TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
         EngineResolverInterface $engineResolver = null,
-        DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker
+        DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
