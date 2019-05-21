@@ -664,10 +664,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             if (is_string($image)) {
                 $store = $this->_storeManager->getStore();
 
-                $imagePath = \Magento\Framework\UrlInterface::URL_TYPE_MEDIA;
-                $isRelativeUrl = substr($image, 1, strlen($imagePath)) === $imagePath;
+                $isRelativeUrl = substr($image, 0, 1) === '/';
 
-                $mediaBaseUrl = $store->getBaseUrl($imagePath);
+                $mediaBaseUrl = $store->getBaseUrl(
+                    \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                );
 
                 if ($isRelativeUrl) {
                     $url = $image;
@@ -675,7 +676,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                     $url = $mediaBaseUrl
                         . ltrim(\Magento\Catalog\Model\Category\FileInfo::ENTITY_MEDIA_PATH, '/')
                         . '/'
-                        . ltrim($image, '/');
+                        . $image;
                 }
             } else {
                 throw new \Magento\Framework\Exception\LocalizedException(
