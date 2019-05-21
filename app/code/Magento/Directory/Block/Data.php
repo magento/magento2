@@ -191,7 +191,7 @@ class Data extends \Magento\Framework\View\Element\Template
      * @param string $title
      * @return string
      */
-    public function getRegionSelect(string $value = null, string $name = 'region', string $id = 'state', string $title = 'State/Province'): string
+    public function getRegionSelect(int $value = null, string $name = 'region', string $id = 'state', string $title = 'State/Province'): string
     {
         \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
         if ($value === null) {
