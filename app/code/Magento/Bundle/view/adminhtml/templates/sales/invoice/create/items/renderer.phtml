@@ -28,8 +28,17 @@
 <?php endif; ?>
 
 <?php foreach ($items as $_item): ?>
+    <?php
+    $shipTogether = ($_item->getOrderItem()->getProductType() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) ?
+        !$_item->getOrderItem()->isShipSeparately() : !$_item->getOrderItem()->getParentItem()->isShipSeparately()
+    ?>
     <?php $block->setPriceDataObject($_item) ?>
     <?php if ($_item->getOrderItem()->getParentItem()): ?>
+        <?php
+            if ($shipTogether) {
+                continue;
+            }
+        ?>
         <?php $attributes = $block->getSelectionAttributes($_item) ?>
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
         <tr>
@@ -60,14 +69,14 @@
         </td>
         <?php endif; ?>
         <td class="col-price">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item) || $shipTogether): ?>
                 <?= $block->getColumnHtml($_item, 'price') ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-qty">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item) || $shipTogether): ?>
                 <table class="qty-table">
                     <tr>
                         <th><?= /* @escapeNotVerified */ __('Ordered') ?></th>
@@ -116,7 +125,7 @@
                         <?php endif; ?>
         </td>
         <td class="col-qty-invoice">
-            <?php if ($block->canShowPriceInfo($_item)): ?>
+            <?php if ($block->canShowPriceInfo($_item) || $shipTogether): ?>
                 <?php if ($block->canEditQty()) : ?>
                     <input type="text"
                            class="input-text admin__control-text qty-input"

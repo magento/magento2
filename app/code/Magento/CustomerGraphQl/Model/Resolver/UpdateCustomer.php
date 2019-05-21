@@ -7,12 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\CustomerGraphQl\Model\Customer\ChangeSubscriptionStatus;
-use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
-use Magento\CustomerGraphQl\Model\Customer\UpdateCustomerData;
+use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
+use Magento\CustomerGraphQl\Model\Customer\UpdateCustomerAccount;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\CustomerGraphQl\Model\Customer\CustomerDataProvider;
+use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
@@ -22,41 +21,33 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class UpdateCustomer implements ResolverInterface
 {
     /**
-     * @var CheckCustomerAccount
+     * @var GetCustomer
      */
-    private $checkCustomerAccount;
+    private $getCustomer;
 
     /**
-     * @var UpdateCustomerData
+     * @var UpdateCustomerAccount
      */
-    private $updateCustomerData;
+    private $updateCustomerAccount;
 
     /**
-     * @var ChangeSubscriptionStatus
+     * @var ExtractCustomerData
      */
-    private $changeSubscriptionStatus;
+    private $extractCustomerData;
 
     /**
-     * @var CustomerDataProvider
-     */
-    private $customerDataProvider;
-
-    /**
-     * @param CheckCustomerAccount $checkCustomerAccount
-     * @param UpdateCustomerData $updateCustomerData
-     * @param ChangeSubscriptionStatus $changeSubscriptionStatus
-     * @param CustomerDataProvider $customerDataProvider
+     * @param GetCustomer $getCustomer
+     * @param UpdateCustomerAccount $updateCustomerAccount
+     * @param ExtractCustomerData $extractCustomerData
      */
     public function __construct(
-        CheckCustomerAccount $checkCustomerAccount,
-        UpdateCustomerData $updateCustomerData,
-        ChangeSubscriptionStatus $changeSubscriptionStatus,
-        CustomerDataProvider $customerDataProvider
+        GetCustomer $getCustomer,
+        UpdateCustomerAccount $updateCustomerAccount,
+        ExtractCustomerData $extractCustomerData
     ) {
-        $this->checkCustomerAccount = $checkCustomerAccount;
-        $this->updateCustomerData = $updateCustomerData;
-        $this->changeSubscriptionStatus = $changeSubscriptionStatus;
-        $this->customerDataProvider = $customerDataProvider;
+        $this->getCustomer = $getCustomer;
+        $this->updateCustomerAccount = $updateCustomerAccount;
+        $this->extractCustomerData = $extractCustomerData;
     }
 
     /**
@@ -73,19 +64,10 @@ class UpdateCustomer implements ResolverInterface
             throw new GraphQlInputException(__('"input" value should be specified'));
         }
 
-        $currentUserId = $context->getUserId();
-        $currentUserType = $context->getUserType();
+        $customer = $this->getCustomer->execute($context);
+        $this->updateCustomerAccount->execute($customer, $args['input']);
 
-        $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
-
-        $currentUserId = (int)$currentUserId;
-        $this->updateCustomerData->execute($currentUserId, $args['input']);
-
-        if (isset($args['input']['is_subscribed'])) {
-            $this->changeSubscriptionStatus->execute($currentUserId, (bool)$args['input']['is_subscribed']);
-        }
-
-        $data = $this->customerDataProvider->getCustomerById($currentUserId);
+        $data = $this->extractCustomerData->execute($customer);
         return ['customer' => $data];
     }
 }

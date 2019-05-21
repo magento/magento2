@@ -13,9 +13,11 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
- * Url rewrite generator for anchor categories.
+ * Generate url rewrites for anchor categories
  */
 class AnchorUrlRewriteGenerator
 {
@@ -55,7 +57,7 @@ class AnchorUrlRewriteGenerator
      * @param int $storeId
      * @param Product $product
      * @param ObjectRegistry $productCategories
-     * @return UrlRewrite[]
+     * @return UrlRewrite[]|array
      */
     public function generate($storeId, Product $product, ObjectRegistry $productCategories)
     {

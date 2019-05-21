@@ -24,6 +24,7 @@ use Magento\Framework\EntityManager\MetadataPool;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @api
  * @since 100.0.2
  */
@@ -1231,6 +1232,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Returns array of sub-products for specified configurable product
      *
+     * $requiredAttributeIds - one dimensional array, if provided
+     *
      * Result array contains all children for specified configurable product
      *
      * @param  \Magento\Catalog\Model\Product $product
@@ -1244,9 +1247,12 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             __METHOD__,
             $product->getData($metadata->getLinkField()),
             $product->getStoreId(),
-            $this->getCustomerSession()->getCustomerGroupId(),
-            $requiredAttributeIds
+            $this->getCustomerSession()->getCustomerGroupId()
         ];
+        if ($requiredAttributeIds !== null) {
+            sort($requiredAttributeIds);
+            $keyParts[] = implode('', $requiredAttributeIds);
+        }
         $cacheKey = $this->getUsedProductsCacheKey($keyParts);
         return $this->loadUsedProducts($product, $cacheKey);
     }
@@ -1385,7 +1391,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     private function getUsedProductsCacheKey($keyParts)
     {
-        return md5(implode('_', $keyParts));
+        return sha1(implode('_', $keyParts));
     }
 
     /**

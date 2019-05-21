@@ -282,15 +282,20 @@ $hints = [
                         tooltip-html-unsafe="<?= $hints['encrypt_key'] ?>"
                         tooltip-trigger="focus"
                         tooltip-append-to-body="true"
-                        ng-minlength="4"
+                        ng-minlength="32"
+                        ng-maxlength="32"
+                        ng-pattern="/^\S+$/"
                         required
                         >
                     <div class="error-container">
                         <span ng-show="webconfig.key.$error.required">
                             You must enter an encryption key.
                         </span>
-                        <span ng-show="webconfig.key.$error.minlength">
-                            Your encryption key must be longer and stronger.
+                        <span ng-show="webconfig.key.$error.minlength
+                                        || webconfig.key.$error.maxlength
+                                        || webconfig.key.$error.pattern"
+                        >
+                            Encryption key must be 32 character string without any white space.
                         </span>
                     </div>
                 </div>

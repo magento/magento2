@@ -26,9 +26,11 @@
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCategory"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+
         <!--Open Category Page-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
         <waitForPageLoad stepKey="waitForPageToLoaded"/>
+
         <!--Update Category name,description, urlKey, meta title and disable Include in Menu-->
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
@@ -45,18 +47,21 @@
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForCategorySaved"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
+
         <!--Open UrlRewrite Page-->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteIndexPage"/>
         <waitForPageLoad stepKey="waitForUrlRewritePage"/>
+
         <!--Verify Updated Category UrlKey-->
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{SimpleRootSubCategory.url_key}}" stepKey="fillUpdatedCategoryUrlKey"/>
         <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <see stepKey="seeCategoryUrlKey" selector="{{AdminUrlRewriteIndexSection.requestPathColumn(1)}}" userInput="{{SimpleRootSubCategory.url_key}}.html" />
+        <see stepKey="seeCategoryUrlKey" selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{SimpleRootSubCategory.url_key}}.html" />
         <!--Verify Updated Category UrlKey directs to category Store Front-->
         <amOnPage url="{{SimpleRootSubCategory.url_key}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
         <waitForPageLoad time="60" stepKey="waitForStoreFrontPageLoad"/>
         <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(SimpleRootSubCategory.name)}}" stepKey="seeUpdatedCategoryInStoreFrontPage"/>
+
         <!--Verify Updated fields in Category Page-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage1"/>
         <waitForPageLoad stepKey="waitForPageToLoaded1"/>

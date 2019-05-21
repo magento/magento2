@@ -18,6 +18,7 @@
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitingForInformationModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreSwitch"/>
         <waitForPageLoad stepKey="waitForStoreViewSwitched"/>
+        <scrollToTopOfPage stepKey="scrollToStoreSwitcher"/>
         <see userInput="{{storeView}}" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewName"/>
     </actionGroup>
     <actionGroup name="AdminSwitchToAllStoreViewActionGroup" extends="AdminSwitchStoreViewActionGroup">
