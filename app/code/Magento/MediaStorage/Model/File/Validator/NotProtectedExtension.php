@@ -96,7 +96,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
      * Return list with protected file extensions
      *
      * @param \Magento\Store\Model\Store|string|int $store
-     * @return mixed
+     * @return string|null
      */
     public function getProtectedFileExtensions($store = null)
     {
