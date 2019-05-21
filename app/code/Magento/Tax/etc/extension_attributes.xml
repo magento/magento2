@@ -20,4 +20,7 @@
     <extension_attributes for="Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface">
         <attribute code="tax_adjustments" type="Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface" />
     </extension_attributes>
+    <extension_attributes for="Magento\Tax\Api\Data\QuoteDetailsItemInterface">
+        <attribute code="price_for_tax_calculation" type="float" />
+    </extension_attributes>
 </config>

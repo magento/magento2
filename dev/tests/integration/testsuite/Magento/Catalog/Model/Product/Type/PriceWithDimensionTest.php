@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Type;
@@ -108,7 +109,7 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Get formated price
+     * Get formatted price
      */
     public function testGetFormatedPrice()
     {

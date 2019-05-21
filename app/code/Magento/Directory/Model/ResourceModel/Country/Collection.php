@@ -327,7 +327,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         foreach ($options as $key => $option) {
             if (isset($defaultCountry[$option['value']])) {
-                $options[$key]['is_default'] = $defaultCountry[$option['value']];
+                $options[$key]['is_default'] = !empty($defaultCountry[$option['value']]);
             }
         }
     }

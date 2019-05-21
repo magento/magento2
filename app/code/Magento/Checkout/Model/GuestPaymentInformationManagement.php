@@ -14,6 +14,8 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Model\Quote;
 
 /**
+ * Guest payment information management model.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPaymentInformationManagementInterface
@@ -66,7 +68,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
      * @param \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param CartRepositoryInterface $cartRepository
-     * @param ResourceConnection|null
+     * @param ResourceConnection $connectionPool
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -88,7 +90,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function savePaymentInformationAndPlaceOrder(
         $cartId,
@@ -129,7 +131,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function savePaymentInformation(
         $cartId,
@@ -156,7 +158,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getPaymentInformation($cartId)
     {
@@ -190,9 +192,8 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     {
         $shippingAddress = $quote->getShippingAddress();
         if ($shippingAddress && $shippingAddress->getShippingMethod()) {
-            $shippingDataArray = explode('_', $shippingAddress->getShippingMethod());
-            $shippingCarrier = array_shift($shippingDataArray);
-            $shippingAddress->setLimitCarrier($shippingCarrier);
+            $shippingRate = $shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod());
+            $shippingAddress->setLimitCarrier($shippingRate->getCarrier());
         }
     }
 }

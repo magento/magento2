@@ -59,7 +59,14 @@
         <!--Click Add to Wish List link-->
         <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addFirstPnroductToWishlist"/>
 
+        <waitForPageLoad stepKey="waitForLoading"/>
+
+        <!--Click "Add All to Cart" button-->
+        <click selector="{{StorefrontCustomerWishlistProductSection.ProductAddAllToCart}}" stepKey="addAllToCart"/>
+        <waitForElementVisible stepKey="waitForErrorAppears" selector="{{StorefrontMessagesSection.error}}"/>
+
         <!--Assert Correct Error Message-->
-        <see userInput="This is a required field" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsError}}" stepKey="seeError"/>
+        <see userInput="You need to choose options for your item for" stepKey="assertCorrectErrorMessage"/>
+        <dontSee userInput="1 product(s) have been added to shopping cart" stepKey="dontSeeSuccessMessage"/>
     </test>
 </tests>

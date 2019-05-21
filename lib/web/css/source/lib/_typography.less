@@ -11,7 +11,8 @@
     @family-name,
     @font-path,
     @font-weight: normal,
-    @font-style: normal
+    @font-style: normal,
+    @font-display: auto
 ) {
     @font-face {
         font-family: @family-name;
@@ -19,6 +20,7 @@
         url('@{font-path}.woff') format('woff');
         font-weight: @font-weight;
         font-style: @font-style;
+        font-display: @font-display;
     }
 }
 
