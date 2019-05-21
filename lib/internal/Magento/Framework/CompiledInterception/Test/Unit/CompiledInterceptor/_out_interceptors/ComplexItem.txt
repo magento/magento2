@@ -1,6 +1,6 @@
 namespace Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItem;
 
-use Magento\Framework\Config\Scope;
+use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -9,7 +9,7 @@ use Magento\Framework\ObjectManagerInterface;
 class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItem
 {
     /**
-     * @var Scope
+     * @var ScopeInterface
      */
     private $____scope = null;
 
@@ -31,8 +31,12 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
     /**
      * {@inheritdoc}
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $____om, \Magento\Framework\Config\Scope $____scope)
+    public function __construct()
     {
+        $____om = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\ObjectManagerInterface::class);
+        //TODO fix di in production mode
+        $____scope = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Config\ScopeInterface::class);
+        //TODO fix di in production mode
         $this->____om = $____om;
         $this->____scope = $____scope;
     }

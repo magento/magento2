@@ -72,8 +72,12 @@ class FileCache implements CacheInterface, SerializerInterface
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
         if ($this->cachePath) {
+            $path = $this->getCachePath($identifier);
+            if (!is_dir(dirname($path))) {
+                mkdir(dirname($path));
+            }
             file_put_contents(
-                $this->getCachePath($identifier),
+                $path,
                 '<?php return ' . var_export($data, true) . '?>'
             );
         }

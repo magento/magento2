@@ -9,7 +9,7 @@ namespace Magento\Framework\CompiledInterception\Generator;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Code\Generator\EntityAbstract;
-use Magento\Framework\Config\Scope;
+use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Framework\Interception\DefinitionInterface;
 
@@ -68,7 +68,7 @@ class CompiledInterceptor extends Interceptor
         $this->classMethods = [];
         $this->classProperties = [];
         $this->injectPropertiesSettersToConstructor($reflection->getConstructor(), [
-            Scope::class => '____scope',
+            ScopeInterface::class => '____scope',
             ObjectManagerInterface::class => '____om',
         ]);
         $this->overrideMethodsAndGeneratePluginGetters($reflection);
@@ -132,14 +132,18 @@ class CompiledInterceptor extends Interceptor
             }
         }
         $parameters = array_map(array($this, '_getMethodParameterInfo'), $parameters);
-        foreach ($extraParams as $type => $name) {
+        /* foreach ($extraParams as $type => $name) {
             array_unshift($parameters, [
                 'name' => $name,
                 'type' => $type
             ]);
-        }
+        } */
         foreach ($extraSetters as $name => $paramName) {
             array_unshift($body, "\$this->$name = \$$paramName;");
+        }
+        foreach ($extraParams as $type => $name) {
+            array_unshift($body, "//TODO fix di in production mode");
+            array_unshift($body, "\$$name = \\Magento\\Framework\\App\\ObjectManager::getInstance()->get(\\$type::class);");
         }
 
         $this->classMethods[] = [
