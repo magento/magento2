@@ -15,7 +15,7 @@ class ExportStockIndexDataTest extends WebapiAbstract
     const API_PATH = '/V1/inventory/dump-stock-index-data';
     const SERVICE_NAME = 'inventoryExportStockApiExportStockIndexDataV1';
 
-    const EXPORT_PRODUCT_COUNT = 1206;
+    const EXPORT_PRODUCT_COUNT = 6;
 
     /**
      * @return array
