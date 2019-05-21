@@ -7,6 +7,11 @@
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
+/**
+ * Class UpdateConfigurations
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class UpdateConfigurations
 {
     /**

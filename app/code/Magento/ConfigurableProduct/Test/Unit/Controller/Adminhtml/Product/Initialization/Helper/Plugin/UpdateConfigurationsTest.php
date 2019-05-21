@@ -177,7 +177,10 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertSame($productMock, $this->updateConfigurations->beforeInitialize($this->subjectMock, $productMock));
+        $this->assertSame(
+            [$productMock],
+            $this->updateConfigurations->beforeInitialize($this->subjectMock, $productMock)
+        );
     }
 
     /**
