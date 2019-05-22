@@ -180,10 +180,9 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     public function escapeHtmlWithLinks($data, $allowedTags = null)
     {
         if (!empty($data) && is_array($allowedTags) && in_array('a', $allowedTags)) {
-            $temporaryData = '';
             $domDocument = $this->domDocumentFactory->create();
             libxml_use_internal_errors(true);
-            @$domDocument->loadHTML($data, LIBXML_NOENT);
+            @$domDocument->loadHTML($data, LIBXML_HTML_NODEFDTD);
 
             foreach ($domDocument->getElementsByTagName('a') as $tag) {
                 $attributeNames = [];
@@ -198,11 +197,10 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
                 $hrefValue = $tag->getAttribute('href');
                 $hrefValue = $this->filterUrl($hrefValue);
 
-                $tag->setAttribute('href', htmlspecialchars_decode($this->escaper->escapeUrl($hrefValue)));
+                $tag->setAttribute('href', $this->escaper->escapeUrl($hrefValue));
                 $tag->nodeValue = $this->escaper->escapeHtml($tag->nodeValue);
-                $temporaryData .= $domDocument->saveHTML($tag);
             }
-            $data = $temporaryData;
+            $data = $domDocument->saveHTML();
         }
         return $this->escaper->escapeHtml($data, $allowedTags);
     }
