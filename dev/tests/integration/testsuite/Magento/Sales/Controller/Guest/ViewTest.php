@@ -16,13 +16,13 @@ use Magento\TestFramework\TestCase\AbstractController;
 class ViewTest extends AbstractController
 {
     /**
-     * Check that controller applied only POST requests.
+     * Check that controller applied GET requests.
      */
-    public function testExecuteWithNonPostRequest()
+    public function testExecuteWithGetRequest()
     {
         $this->getRequest()->setMethod(Request::METHOD_GET);
         $this->dispatch('sales/guest/view/');
 
-        $this->assert404NotFound();
+        $this->assertRedirect($this->stringContains('sales/guest/form'));
     }
 }
