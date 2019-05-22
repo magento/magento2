@@ -106,7 +106,7 @@ class UninstallDependencyCheck
             }
 
             return ['success' => true];
-        } catch (\RuntimeException $e) {
+        } catch (\Exception $e) {
             $message = str_replace(PHP_EOL, '<br/>', $this->escaper->escapeHtml($e->getMessage()));
             return ['success' => false, 'error' => $message];
         }
