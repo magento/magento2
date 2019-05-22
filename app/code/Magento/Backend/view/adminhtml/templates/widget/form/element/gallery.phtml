@@ -9,14 +9,14 @@
 ?>
 <tr>
 <td colspan="2">
-<label for="gallery"><?= /* @escapeNotVerified */ __('Images') ?></label>
+<label for="gallery"><?= $block->escapeHtml(__('Images')) ?></label>
 <table id="gallery" class="gallery" border="0" cellspacing="3" cellpadding="0">
 <thead id="gallery_thead" class="gallery">
     <tr class="gallery">
-        <td class="gallery" valign="middle" align="center"><?= /* @escapeNotVerified */ __('Big Image') ?></td>
-        <td class="gallery" valign="middle" align="center"><?= /* @escapeNotVerified */ __('Thumbnail') ?></td>
-        <td class="gallery" valign="middle" align="center"><?= /* @escapeNotVerified */ __('Sort Order') ?></td>
-        <td class="gallery" valign="middle" align="center"><?= /* @escapeNotVerified */ __('Delete') ?></td>
+        <td class="gallery" valign="middle" align="center"><?= $block->escapeHtml(__('Big Image')) ?></td>
+        <td class="gallery" valign="middle" align="center"><?= $block->escapeHtml(__('Thumbnail')) ?></td>
+        <td class="gallery" valign="middle" align="center"><?= $block->escapeHtml(__('Sort Order')) ?></td>
+        <td class="gallery" valign="middle" align="center"><?= $block->escapeHtml(__('Delete')) ?></td>
     </tr>
 </thead>
 

@@ -93,15 +93,15 @@ window.changeDiagramsPeriod = function(periodObj) {
     <div class="dashboard-secondary col-m-4 col-m-pull-8">
         <?= $block->getChildHtml('sales') ?>
         <div class="dashboard-item">
-            <div class="dashboard-item-title"><?= /* @escapeNotVerified */ __('Last Orders') ?></div>
+            <div class="dashboard-item-title"><?= $block->escapeHtml(__('Last Orders')) ?></div>
             <?= $block->getChildHtml('lastOrders') ?>
         </div>
         <div class="dashboard-item">
-            <div class="dashboard-item-title"><?= /* @escapeNotVerified */ __('Last Search Terms') ?></div>
+            <div class="dashboard-item-title"><?= $block->escapeHtml(__('Last Search Terms')) ?></div>
             <?= $block->getChildHtml('lastSearches') ?>
         </div>
         <div class="dashboard-item">
-            <div class="dashboard-item-title"><?= /* @escapeNotVerified */ __('Top Search Terms') ?></div>
+            <div class="dashboard-item-title"><?= $block->escapeHtml(__('Top Search Terms')) ?></div>
             <?= $block->getChildHtml('topSearches') ?>
         </div>
     </div>

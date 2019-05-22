@@ -39,7 +39,7 @@
                         href="<?= /* @escapeNotVerified */ $block->getUrl('adminhtml/system_account/index') ?>"
                         <?= /* @escapeNotVerified */ $block->getUiId('user', 'account', 'settings') ?>
                         title="<?= $block->escapeHtml(__('Account Setting')) ?>">
-                        <?= /* @escapeNotVerified */ __('Account Setting') ?> (<span class="admin-user-name"><?= $block->escapeHtml($block->getUser()->getUserName()) ?></span>)
+                        <?= $block->escapeHtml(__('Account Setting')) ?> (<span class="admin-user-name"><?= $block->escapeHtml($block->getUser()->getUserName()) ?></span>)
                     </a>
                 </li>
                 <?php endif; ?>
@@ -48,7 +48,7 @@
                         href="<?= /* @escapeNotVerified */ $block->getBaseUrl() ?>"
                         title="<?= $block->escapeHtml(__('Customer View')) ?>"
                         target="_blank" class="store-front">
-                        <?= /* @escapeNotVerified */ __('Customer View') ?>
+                        <?= $block->escapeHtml(__('Customer View')) ?>
                     </a>
                 </li>
                 <li>
@@ -56,7 +56,7 @@
                         href="<?= /* @escapeNotVerified */ $block->getLogoutLink() ?>"
                         class="account-signout"
                         title="<?= $block->escapeHtml(__('Sign Out')) ?>">
-                        <?= /* @escapeNotVerified */ __('Sign Out') ?>
+                        <?= $block->escapeHtml(__('Sign Out')) ?>
                     </a>
                 </li>
             </ul>

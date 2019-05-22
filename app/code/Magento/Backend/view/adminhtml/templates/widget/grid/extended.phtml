@@ -41,7 +41,7 @@ $numColumns = sizeof($block->getColumns());
                 <div class="admin__data-grid-export">
                     <label
                         class="admin__control-support-text"
-                        for="<?= $block->escapeHtml($block->getId()) ?>_export"><?= /* @escapeNotVerified */ __('Export to:') ?></label>
+                        for="<?= $block->escapeHtml($block->getId()) ?>_export"><?= $block->escapeHtml(__('Export to:')) ?></label>
                     <select name="<?= $block->escapeHtml($block->getId()) ?>_export" id="<?= $block->escapeHtml($block->getId()) ?>_export"
                             class="admin__control-select">
                         <?php foreach ($block->getExportTypes() as $_type): ?>
@@ -64,9 +64,9 @@ $numColumns = sizeof($block->getColumns());
                         <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>-total-count" <?= /* @escapeNotVerified */ $block->getUiId('total-count') ?>>
                             <?= /* @escapeNotVerified */ $countRecords ?>
                         </span>
-                    <?= /* @escapeNotVerified */ __('records found') ?>
+                    <?= $block->escapeHtml(__('records found')) ?>
                     <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>_massaction-count"
-                          class="mass-select-info _empty"><strong data-role="counter">0</strong> <span><?= /* @escapeNotVerified */ __('selected') ?></span></span>
+                          class="mass-select-info _empty"><strong data-role="counter">0</strong> <span><?= $block->escapeHtml(__('selected')) ?></span></span>
                 </div>
 
             <?php if ($block->getPagerVisibility()): ?>
@@ -92,7 +92,7 @@ $numColumns = sizeof($block->getColumns());
                         </option>
                     </select>
                     <label for="<?= $block->escapeHtml($block->getHtmlId()) ?><?= $block->escapeHtml($block->getHtmlId()) ?>_page-limit"
-                        class="admin__control-support-text"><?= /* @escapeNotVerified */ __('per page') ?></label>
+                        class="admin__control-support-text"><?= $block->escapeHtml(__('per page')) ?></label>
 
                     <div class="admin__data-grid-pager">
                         <?php $_curPage = $block->getCollection()->getCurPage() ?>
@@ -101,10 +101,10 @@ $numColumns = sizeof($block->getColumns());
                             <button class="action-previous"
                                     type="button"
                                     onclick="<?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.setPage('<?= /* @escapeNotVerified */ ($_curPage - 1) ?>');return false;">
-                                <span><?= /* @escapeNotVerified */ __('Previous page') ?></span>
+                                <span><?= $block->escapeHtml(__('Previous page')) ?></span>
                             </button>
                         <?php else: ?>
-                            <button type="button" class="action-previous disabled"><span><?= /* @escapeNotVerified */ __('Previous page') ?></span></button>
+                            <button type="button" class="action-previous disabled"><span><?= $block->escapeHtml(__('Previous page')) ?></span></button>
                         <?php endif; ?>
                         <input type="text"
                                id="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-current"
@@ -113,17 +113,17 @@ $numColumns = sizeof($block->getColumns());
                                class="admin__control-text"
                                onkeypress="<?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.inputPage(event, '<?= /* @escapeNotVerified */ $_lastPage ?>')" <?= /* @escapeNotVerified */ $block->getUiId('current-page') ?> />
                         <label class="admin__control-support-text" for="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-current">
-                            <?= /* @escapeNotVerified */ __('of %1', '<span>' . $block->getCollection()->getLastPageNumber() . '</span>') ?>
+                            <?= /* @noEscape */ __('of %1', '<span>' . $block->getCollection())->getLastPageNumber() . '</span>' ?>
                         </label>
                         <?php if ($_curPage < $_lastPage): ?>
                             <button type="button"
-                                    title="<?= /* @escapeNotVerified */ __('Next page') ?>"
+                                    title="<?= $block->escapeHtml(__('Next page')) ?>"
                                     class="action-next"
                                     onclick="<?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.setPage('<?= /* @escapeNotVerified */ ($_curPage + 1) ?>');return false;">
-                                <span><?= /* @escapeNotVerified */ __('Next page') ?></span>
+                                <span><?= $block->escapeHtml(__('Next page')) ?></span>
                             </button>
                         <?php else: ?>
-                        <button type="button" class="action-next disabled"><span><?= /* @escapeNotVerified */ __('Next page') ?></span></button>
+                        <button type="button" class="action-next disabled"><span><?= $block->escapeHtml(__('Next page')) ?></span></button>
                         <?php endif; ?>
                     </div>
                 </div>

@@ -34,7 +34,7 @@
     <?= $block->getChildHtml('form') ?>
     <div class="entry-edit">
         <div class="entry-edit-head">
-            <h4 class="icon-head head-edit-form fieldset-legend"><?= /* @escapeNotVerified */ __('Catalog') ?></h4>
+            <h4 class="icon-head head-edit-form fieldset-legend"><?= $block->escapeHtml(__('Catalog')) ?></h4>
         </div>
         <fieldset id="catalog">
             <table class="form-list">
@@ -66,16 +66,16 @@
 
     <div class="entry-edit">
         <div class="entry-edit-head">
-            <h4 class="icon-head head-edit-form fieldset-legend"><?= /* @escapeNotVerified */ __('JavaScript/CSS') ?></h4>
+            <h4 class="icon-head head-edit-form fieldset-legend"><?= $block->escapeHtml(__('JavaScript/CSS')) ?></h4>
         </div>
 
         <fieldset id="jscss">
             <table class="form-list">
                 <tbody>
                     <tr>
-                        <td class="label"><label><?= /* @escapeNotVerified */ __('JavaScript/CSS Cache') ?></label></td>
+                        <td class="label"><label><?= $block->escapeHtml(__('JavaScript/CSS Cache')) ?></label></td>
                         <td class="value">
-                            <button onclick="setCacheAction('jscss_action', this)" id='jscss_action' type="button" class="scalable"><span><span><span><?= /* @escapeNotVerified */ __('Clear') ?></span></span></span></button>
+                            <button onclick="setCacheAction('jscss_action', this)" id='jscss_action' type="button" class="scalable"><span><span><span><?= $block->escapeHtml(__('Clear')) ?></span></span></span></button>
                         </td>
                     </tr>
                 </tbody>

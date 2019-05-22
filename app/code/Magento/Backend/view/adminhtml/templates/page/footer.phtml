@@ -8,6 +8,6 @@
 
 ?>
 <p class="magento-version">
-    <strong><?= /* @escapeNotVerified */ __('Magento') ?></strong>
-    <?= /* @escapeNotVerified */ __('ver. %1', $block->getMagentoVersion()) ?>
+    <strong><?= $block->escapeHtml(__('Magento')) ?></strong>
+    <?= $block->escapeHtml(__('ver. %1', $block->getMagentoVersion())) ?>
 </p>

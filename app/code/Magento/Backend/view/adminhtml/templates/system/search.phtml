@@ -21,7 +21,7 @@
             <button
                 type="submit"
                 class="search-global-action"
-                title="<?= /* @escapeNotVerified */ __('Search') ?>"
+                title="<?= $block->escapeHtml(__('Search')) ?>"
                 ></button>
         </div>
     </form>
@@ -52,7 +52,7 @@
         <% } else { %>
             <li>
                 <span class="mage-suggest-no-records">
-                    <?= /* @escapeNotVerified */ __('No records found.') ?>
+                    <?= $block->escapeHtml(__('No records found.')) ?>
                 </span>
             </li>
         <% } %>

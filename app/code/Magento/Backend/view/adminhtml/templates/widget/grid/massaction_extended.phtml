@@ -17,7 +17,7 @@
             <select
                 id="<?= $block->getHtmlId() ?>-select"
                 class="required-entry local-validation admin__control-select">
-                <option class="admin__control-select-placeholder" value="" selected><?= /* @escapeNotVerified */ __('Actions') ?></option>
+                <option class="admin__control-select-placeholder" value="" selected><?= $block->escapeHtml(__('Actions')) ?></option>
                 <?php foreach ($block->getItems() as $_item): ?>
                     <option value="<?= /* @escapeNotVerified */ $_item->getId() ?>"<?= ($_item->getSelected() ? ' selected="selected"' : '') ?>><?= /* @escapeNotVerified */ $_item->getLabel() ?></option>
                 <?php endforeach; ?>
@@ -41,21 +41,21 @@
             id="<?= $block->getHtmlId() ?>-mass-select"
             class="action-select-multiselect"
             data-menu="grid-mass-select">
-            <optgroup label="<?= /* @escapeNotVerified */ __('Mass Actions') ?>">
+            <optgroup label="<?= $block->escapeHtml(__('Mass Actions')) ?>">
                 <option disabled selected></option>
             <?php if ($block->getUseSelectAll()):?>
                 <option value="selectAll">
-                    <?= /* @escapeNotVerified */ __('Select All') ?>
+                    <?= $block->escapeHtml(__('Select All')) ?>
                 </option>
                 <option value="unselectAll">
-                    <?= /* @escapeNotVerified */ __('Unselect All') ?>
+                    <?= $block->escapeHtml(__('Unselect All')) ?>
                 </option>
             <?php endif; ?>
                 <option value="selectVisible">
-                    <?= /* @escapeNotVerified */ __('Select Visible') ?>
+                    <?= $block->escapeHtml(__('Select Visible')) ?>
                 </option>
                 <option value="unselectVisible">
-                    <?= /* @escapeNotVerified */ __('Unselect Visible') ?>
+                    <?= $block->escapeHtml(__('Unselect Visible')) ?>
                 </option>
             </optgroup>
         </select>

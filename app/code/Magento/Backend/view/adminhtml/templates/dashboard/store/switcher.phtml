@@ -7,10 +7,10 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<p class="switcher"><label for="store_switcher"><?= /* @escapeNotVerified */ __('View Statistics For:') ?></label>
+<p class="switcher"><label for="store_switcher"><?= $block->escapeHtml(__('View Statistics For:')) ?></label>
 <?= $block->getHintHtml() ?>
 <select name="store_switcher" id="store_switcher" class="left-col-block" onchange="return switchStore(this);">
-    <option value=""><?= /* @escapeNotVerified */ __('All Websites') ?></option>
+    <option value=""><?= $block->escapeHtml(__('All Websites')) ?></option>
     <?php foreach ($block->getWebsiteCollection() as $_website): ?>
         <?php $showWebsite = false; ?>
         <?php foreach ($block->getGroupCollection($_website) as $_group): ?>

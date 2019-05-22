@@ -20,7 +20,7 @@
     }'
 >
     <div class="fileinput-button form-buttons button">
-        <span><?= /* @escapeNotVerified */ __('Browse Files...') ?></span>
+        <span><?= $block->escapeHtml(__('Browse Files...')) ?></span>
         <input id="fileupload" type="file" name="<?= /* @escapeNotVerified */ $block->getConfig()->getFileField() ?>"
             data-url="<?= /* @escapeNotVerified */ $block->getConfig()->getUrl() ?>" multiple="multiple" />
     </div>

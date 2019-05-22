@@ -14,5 +14,5 @@
         <?php endforeach; ?>
     </div>
 <?php else: ?>
-    <div class="empty-text"><?= /* @escapeNotVerified */ __('There are no search keywords.') ?></div>
+    <div class="empty-text"><?= $block->escapeHtml(__('There are no search keywords.')) ?></div>
 <?php endif; ?>
