@@ -7,6 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventoryExportStockApi\Api;
 
+/**
+ * Provides stock index export based on raw data contained in the stock index.
+ * @api
+ */
 interface ExportStockIndexDataBySalesChannelInterface
 {
     /**

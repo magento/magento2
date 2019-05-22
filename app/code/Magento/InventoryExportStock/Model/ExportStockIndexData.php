@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Magento\InventoryExportStock\Model;
 
 use Magento\InventoryExportStockApi\Api\ExportStockIndexDataInterface;
+use Magento\InventoryExportStockApi\Api\ExportStockIndexDataBySalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 
 /**
- * Class ExportStockIndexData provides stock index export
+ * @inheritDoc
  */
 class ExportStockIndexData implements ExportStockIndexDataInterface
 {
@@ -22,17 +23,17 @@ class ExportStockIndexData implements ExportStockIndexDataInterface
     private $salesChannelInterfaceFactory;
 
     /**
-     * @var ExportStockIndexDataBySalesChannel
+     * @var ExportStockIndexDataBySalesChannelInterface
      */
     private $exportStockIndexDataBySalesChannel;
 
     /**
      * @param SalesChannelInterfaceFactory $salesChannelInterfaceFactory
-     * @param ExportStockIndexDataBySalesChannel $exportStockIndexDataBySalesChannel
+     * @param ExportStockIndexDataBySalesChannelInterface $exportStockIndexDataBySalesChannel
      */
     public function __construct(
         SalesChannelInterfaceFactory $salesChannelInterfaceFactory,
-        ExportStockIndexDataBySalesChannel $exportStockIndexDataBySalesChannel
+        ExportStockIndexDataBySalesChannelInterface $exportStockIndexDataBySalesChannel
     ) {
 
         $this->salesChannelInterfaceFactory = $salesChannelInterfaceFactory;
@@ -42,12 +43,12 @@ class ExportStockIndexData implements ExportStockIndexDataInterface
     /**
      * @inheritDoc
      */
-    public function execute(string $salesChannelCode): array
+    public function execute(string $salesChannelType, string $salesChannelCode): array
     {
         $salesChannel = $this->salesChannelInterfaceFactory->create(
             [
                 'data' => [
-                    SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
+                    SalesChannelInterface::TYPE => $salesChannelType,
                     SalesChannelInterface::CODE => $salesChannelCode
                 ]
             ]

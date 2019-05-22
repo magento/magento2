@@ -74,7 +74,7 @@ class ExportStockSalableQtyBySalesChannel implements ExportStockSalableQtyBySale
      *
      * @throws LocalizedException
      */
-    public function getList(
+    public function execute(
         \Magento\InventorySalesApi\Api\Data\SalesChannelInterface $salesChannel,
         \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
     ): ExportStockSalableQtySearchResultInterface {

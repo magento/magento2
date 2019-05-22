@@ -15,7 +15,7 @@ use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 
 /**
- * Class ExportStockSalableQty provides product stock information by search criteria
+ * @inheritDoc
  */
 class ExportStockSalableQty implements ExportStockSalableQtyInterface
 {
@@ -45,19 +45,20 @@ class ExportStockSalableQty implements ExportStockSalableQtyInterface
     /**
      * @inheritDoc
      */
-    public function getList(
+    public function execute(
+        string $salesChannelType,
         string $salesChannelCode,
         SearchCriteriaInterface $searchCriteria
     ): ExportStockSalableQtySearchResultInterface {
         $salesChannel = $this->salesChannelInterfaceFactory->create(
             [
                 'data' => [
-                    SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
+                    SalesChannelInterface::TYPE => $salesChannelType,
                     SalesChannelInterface::CODE => $salesChannelCode
                 ]
             ]
         );
 
-        return $this->exportStockSalableQtyBySalesChannel->getList($salesChannel, $searchCriteria);
+        return $this->exportStockSalableQtyBySalesChannel->execute($salesChannel, $searchCriteria);
     }
 }
