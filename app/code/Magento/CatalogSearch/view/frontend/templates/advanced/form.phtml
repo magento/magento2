@@ -24,9 +24,10 @@
                 <span><?= $block->escapeHtml(__($block->getAttributeLabel($_attribute))) ?></span>
             </label>
             <div class="control">
-            <?php switch ($block->getAttributeInputType($_attribute)) :
-                case 'number':
-                    ?>
+                <?php
+                switch ($block->getAttributeInputType($_attribute)) :
+                    case 'number':
+                        ?>
                 <div class="range fields group group-2">
                     <div class="field no-label">
                         <div class="control">
@@ -53,10 +54,10 @@
                         </div>
                     </div>
                 </div>
-                    <?php
-                          break;
-                case 'price':
-                    ?>
+                        <?php
+                        break;
+                    case 'price':
+                        ?>
                 <div class="range price fields group group-2">
                     <div class="field no-label">
                         <div class="control">
@@ -89,20 +90,20 @@
                         </div>
                     </div>
                 </div>
-                    <?php
-                          break;
-                case 'select':
-                    ?>
-                    <?= /* @noEscape */ $block->getAttributeSelectElement($_attribute) ?>
-                    <?php
-                          break;
-                case 'yesno':
-                    ?>
-                    <?= /* @noEscape */ $block->getAttributeYesNoElement($_attribute) ?>
-                    <?php
-                          break;
-                case 'date':
-                    ?>
+                        <?php
+                        break;
+                    case 'select':
+                        ?>
+                        <?= /* @noEscape */ $block->getAttributeSelectElement($_attribute) ?>
+                        <?php
+                        break;
+                    case 'yesno':
+                        ?>
+                        <?= /* @noEscape */ $block->getAttributeYesNoElement($_attribute) ?>
+                        <?php
+                        break;
+                    case 'date':
+                        ?>
                 <div class="range dates fields group group-2">
                     <div class="field date no-label">
                         <div class="control">
@@ -115,10 +116,10 @@
                         </div>
                     </div>
                 </div>
-                    <?php
-                          break;
-                default:
-                    ?>
+                        <?php
+                        break;
+                    default:
+                        ?>
                 <input type="text"
                        name="<?= $block->escapeHtmlAttr($_code) ?>"
                        id="<?= $block->escapeHtmlAttr($_code) ?>"
