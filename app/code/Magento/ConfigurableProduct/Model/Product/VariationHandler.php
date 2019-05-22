@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
  * Variation Handler
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 100.0.3
+ * @since 100.1.2
  */
 class VariationHandler
 {
@@ -131,7 +131,7 @@ class VariationHandler
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
-     * @since 100.1.17
+     * @since 100.1.0
      */
     public function prepareAttributeSet(\Magento\Catalog\Model\Product $product)
     {
@@ -226,7 +226,7 @@ class VariationHandler
      * @param array $productsData
      * @param bool $skipDuplicateImage
      *
-     * @since 100.1.0
+     * @since 100.1.2
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
