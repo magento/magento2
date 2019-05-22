@@ -49,7 +49,6 @@ class MediaGalleryProcessor implements CollectionProcessorInterface
                     $collection->addAttributeToSelect($mediaAttribute);
                 }
             }
-            $collection->addMediaGalleryData();
         }
 
         return $collection;
