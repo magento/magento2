@@ -577,6 +577,7 @@ class EavSetup
             if (empty($data['attribute_group_code'])) {
                 if (empty($attributeGroupCode)) {
                     // in the following code md5 is not used for security purposes
+                    // phpcs:disable Magento2.Security.InsecureFunction
                     $attributeGroupCode = md5($name);
                 }
                 $data['attribute_group_code'] = $attributeGroupCode;
