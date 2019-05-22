@@ -7,20 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\InventoryExportStock\Model;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryExportStock\Model\ResourceModel\StockIndexDumpProcessor;
-use Magento\InventoryExportStockApi\Api\Data\ProductStockIndexDataInterface;
-use Magento\InventoryExportStockApi\Api\Data\ProductStockIndexDataInterfaceFactory;
 use Magento\InventoryExportStockApi\Api\ExportStockIndexDataInterface;
 use Magento\InventorySales\Model\ResourceModel\GetWebsiteIdByWebsiteCode;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
-use Magento\InventorySalesApi\Api\StockResolverInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
+use Magento\InventorySalesApi\Api\GetStockBySalesChannelInterface;
 
 /**
- * Class ExportStockIndexData provides stock index export
+ * Class ExportStockIndexData provides stock index export based on raw data contained in the stock index.
  */
 class ExportStockIndexData implements ExportStockIndexDataInterface
 {
+    /**
+     * @var SalesChannelInterfaceFactory
+     */
+    private $salesChannelInterfaceFactory;
+
     /**
      * @var StockIndexDumpProcessor
      */
@@ -32,48 +35,53 @@ class ExportStockIndexData implements ExportStockIndexDataInterface
     private $getWebsiteIdByWebsiteCode;
 
     /**
-     * @var StockResolverInterface
-     */
-    private $stockResolver;
-
-    /**
      * @var ProductStockIndexDataMapper
      */
     private $productStockIndexDataMapper;
 
     /**
-     * ExportStockIndexData constructor
-     *
+     * @var GetStockBySalesChannelInterface
+     */
+    private $getStockBySalesChannel;
+
+    /**
+     * @param SalesChannelInterfaceFactory $salesChannelInterfaceFactory
      * @param StockIndexDumpProcessor $stockIndexDumpProcessor
      * @param GetWebsiteIdByWebsiteCode $getWebsiteIdByWebsiteCode
-     * @param StockResolverInterface $stockResolver
      * @param ProductStockIndexDataMapper $productStockIndexDataMapper
+     * @param GetStockBySalesChannelInterface $getStockBySalesChannel
      */
     public function __construct(
+        SalesChannelInterfaceFactory $salesChannelInterfaceFactory,
         StockIndexDumpProcessor $stockIndexDumpProcessor,
         GetWebsiteIdByWebsiteCode $getWebsiteIdByWebsiteCode,
-        StockResolverInterface $stockResolver,
-        ProductStockIndexDataMapper $productStockIndexDataMapper
+        ProductStockIndexDataMapper $productStockIndexDataMapper,
+        GetStockBySalesChannelInterface $getStockBySalesChannel
     ) {
+        $this->salesChannelInterfaceFactory = $salesChannelInterfaceFactory;
         $this->stockIndexDumpProcessor = $stockIndexDumpProcessor;
         $this->getWebsiteIdByWebsiteCode = $getWebsiteIdByWebsiteCode;
-        $this->stockResolver = $stockResolver;
         $this->productStockIndexDataMapper = $productStockIndexDataMapper;
+        $this->getStockBySalesChannel = $getStockBySalesChannel;
     }
 
     /**
-     * Provides stock index export from inventory_stock_% table
-     *
-     * @param string $websiteCode
-     * @return ProductStockIndexDataInterface[]
-     * @throws LocalizedException
+     * @inheritDoc
      */
-    public function execute(string $websiteCode): array
+    public function execute(string $salesChannelCode): array
     {
-        $websiteId = $this->getWebsiteIdByWebsiteCode->execute($websiteCode);
-        $stockId = $this->stockResolver
-            ->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
-        $items = $this->stockIndexDumpProcessor->execute($websiteId, $stockId);
+        $salesChannel = $this->salesChannelInterfaceFactory->create(
+            [
+                'data' => [
+                    SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
+                    SalesChannelInterface::CODE => $salesChannelCode
+                ]
+            ]
+        );
+
+        $stock = $this->getStockBySalesChannel->execute($salesChannel);
+        $websiteId = $this->getWebsiteIdByWebsiteCode->execute($salesChannel->getCode());
+        $items = $this->stockIndexDumpProcessor->execute($websiteId, $stock->getStockId());
         $productsData = [];
         foreach ($items as $item) {
             $productsData[] = $this->productStockIndexDataMapper->execute($item);
