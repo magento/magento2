@@ -64,7 +64,8 @@ class CouponCodeValidation implements ObserverInterface
             //Only validating the code if it's a new code.
             /** @var Quote[] $found */
             $found = $this->cartRepository->getList(
-                $this->criteriaBuilder->addFilter(CartInterface::KEY_ENTITY_ID, $quote->getId())->create()
+                $this->criteriaBuilder->addFilter('main_table.' . CartInterface::KEY_ENTITY_ID, $quote->getId())
+                    ->create()
             )->getItems();
             if (!$found || ((string)array_shift($found)->getCouponCode()) !== (string)$code) {
                 try {
