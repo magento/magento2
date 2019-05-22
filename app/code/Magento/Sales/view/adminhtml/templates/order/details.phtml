@@ -44,7 +44,7 @@ $_order = $block->getOrder() ?>
             <td align="center" valign="top" style="padding:3px 9px"><?= (int) $_item->getQtyOrdered()*1 ?></td>
             <td align="right" valign="top" style="padding:3px 9px"><?= /* @noEscape */ $_order->formatPrice($_item->getRowTotal()) ?></td>
         </tr>
-<?php endforeach ?>
+<?php endforeach; ?>
     </tbody>
 
     <tfoot>
@@ -57,7 +57,7 @@ $_order = $block->getOrder() ?>
             <br /><?= $block->escapeHtml(__('Message:')) ?><br /> <?= $block->escapeHtml($_giftMessage->getMessage()) ?>
             </td>
         </tr>
-     <?php endif; ?>
+    <?php endif; ?>
         <tr>
             <td colspan="2" align="right" style="padding:3px 9px"><?= $block->escapeHtml(__('Subtotal')) ?></td>
             <td align="right" style="padding:3px 9px"><?= /* @noEscape */ $_order->formatPrice($_order->getSubtotal()) ?></td>
