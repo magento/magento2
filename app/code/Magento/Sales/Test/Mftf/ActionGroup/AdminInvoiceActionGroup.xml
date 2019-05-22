@@ -80,4 +80,11 @@
         <click selector="{{AdminInvoicesFiltersSection.applyFilters}}" stepKey="clickApplyFilters"/>
         <waitForPageLoad stepKey="waitForFiltersApply"/>
     </actionGroup>
+
+    <actionGroup name="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" extends="filterInvoiceGridByOrderId">
+        <arguments>
+            <argument name="orderId" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminInvoicesGridSection.clearFilters}}" dependentSelector="{{AdminInvoicesGridSection.clearFilters}}" visible="true" stepKey="clearFilters" after="goToInvoices"/>
+    </actionGroup>
 </actionGroups>
