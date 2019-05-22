@@ -201,6 +201,8 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
                 $tag->nodeValue = $this->escaper->escapeHtml($tag->nodeValue);
             }
             $data = $domDocument->saveHTML();
+            preg_match('/<body>(.+)<\/body><\/html>$/si', $data, $matches);
+            $data = !empty($matches) ? $matches[1] : '';
         }
         return $this->escaper->escapeHtml($data, $allowedTags);
     }
