@@ -11,7 +11,7 @@
     <h3><?= /* @escapeNotVerified */ $block->getTitle() ?></h3>
 <?php endif ?> -->
 <?php if (!empty($tabs)): ?>
-<div id="<?= /* @escapeNotVerified */ $block->getId() ?>">
+<div id="<?=  $block->escapeHtmlAttr($block->getId()) ?>">
 <ul  class="tabs-horiz">
 <?php foreach ($tabs as $_tab): ?>
     <?php $_tabClass = 'tab-item-link ' . $block->getTabClass($_tab) . ' ' . (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>

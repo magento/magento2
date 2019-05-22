@@ -20,12 +20,12 @@
     case 'column': ?>
       <?php break;
     case 'hidden': ?>
-    <input type="<?= /* @escapeNotVerified */ $element->getType() ?>" name="<?= /* @escapeNotVerified */ $element->getName() ?>" id="<?= $element->getHtmlId() ?>" value="<?= /* @escapeNotVerified */ $element->getValue() ?>">
+    <input type="<?= $block->escapeHtmlAttr($element->getType()) ?>" name="<?= $block->escapeHtmlAttr($element->getName()) ?>" id="<?= $element->getHtmlId() ?>" value="<?= /* @escapeNotVerified */ $element->getValue() ?>">
       <?php break;
     case 'select': ?>
     <span class="form_row">
         <?php if ($element->getLabel()): ?><label for="<?= $element->getHtmlId() ?>"><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label><?php endif; ?>
-        <select name="<?= /* @escapeNotVerified */ $element->getName() ?>" id="<?= $element->getHtmlId() ?>" class="select<?= /* @escapeNotVerified */ $element->getClass() ?>" title="<?= /* @escapeNotVerified */ $element->getTitle() ?>">
+        <select name="<?= $block->escapeHtmlAttr($element->getName()) ?>" id="<?= $element->getHtmlId() ?>" class="select<?= /* @escapeNotVerified */ $element->getClass() ?>" title="<?= /* @escapeNotVerified */ $element->getTitle() ?>">
         <?php foreach ($element->getValues() as $_value): ?>
             <option <?= /* @escapeNotVerified */ $_value->serialize() ?><?php if ($_value->getValue() == $element->getValue()): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ $_value->getLabel() ?></option>
         <?php endforeach; ?>

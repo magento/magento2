@@ -39,7 +39,7 @@ if ($isField) {
 
 <?php if ($isWrapped): ?>
     <div class="fieldset-wrapper <?= ($isCollapsable) ? 'admin__collapsible-block-wrapper ' : '' ?>"
-        id="<?= /* @escapeNotVerified */ $containerId ? $containerId : $id . '-wrapper' ?>"
+        id="<?=  $block->escapeHtmlAttr($containerId ? $containerId : $id . '-wrapper') ?>"
         data-role="<?= /* @escapeNotVerified */ $id ?>-wrapper">
         <div class="fieldset-wrapper-title admin__fieldset-wrapper-title">
             <strong <?php /* @escapeNotVerified */ echo($isCollapsable) ?
