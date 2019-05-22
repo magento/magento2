@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * @var $block \Magento\CatalogInventory\Block\Stockqty\Composite
  */
 ?>
-<?php if ($block->isMsgVisible()): ?>
+<?php if ($block->isMsgVisible()) : ?>
     <div class="availability only">
         <a href="#"
            data-mage-init='{"toggleAdvanced": {"selectorsToggleClass": "active", "baseToggleClass": "expanded", "toggleContainers": "#<?= /* @escapeNotVerified */ $block->getDetailsPlaceholderId() ?>"}}'
