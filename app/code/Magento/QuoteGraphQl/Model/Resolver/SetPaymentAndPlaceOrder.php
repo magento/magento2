@@ -14,20 +14,29 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Api\CartManagementInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
-use Magento\Quote\Api\Data\PaymentInterfaceFactory;
-use Magento\Quote\Api\PaymentMethodManagementInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
- * Mutation resolver for setting payment method for shopping cart
+ * @inheritdoc
  */
-class SetPaymentMethodOnCart implements ResolverInterface
+class SetPaymentAndPlaceOrder implements ResolverInterface
 {
+    /**
+     * @var CartManagementInterface
+     */
+    private $cartManagement;
+
     /**
      * @var GetCartForUser
      */
     private $getCartForUser;
+
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
 
     /**
      * @var \Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart
@@ -36,13 +45,19 @@ class SetPaymentMethodOnCart implements ResolverInterface
 
     /**
      * @param GetCartForUser $getCartForUser
+     * @param CartManagementInterface $cartManagement
+     * @param OrderRepositoryInterface $orderRepository
      * @param \Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart $setPaymentMethodOnCart
      */
     public function __construct(
         GetCartForUser $getCartForUser,
+        CartManagementInterface $cartManagement,
+        OrderRepositoryInterface $orderRepository,
         \Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart $setPaymentMethodOnCart
     ) {
         $this->getCartForUser = $getCartForUser;
+        $this->cartManagement = $cartManagement;
+        $this->orderRepository = $orderRepository;
         $this->setPaymentMethodOnCart = $setPaymentMethodOnCart;
     }
 
@@ -52,7 +67,7 @@ class SetPaymentMethodOnCart implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
-            throw new GraphQlInputException(__('Required parameter "cart_id" is missing.'));
+            throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
         $maskedCartId = $args['input']['cart_id'];
 
@@ -64,10 +79,26 @@ class SetPaymentMethodOnCart implements ResolverInterface
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
         $cart = $this->setPaymentMethodOnCart->execute($paymentData, $cart);
 
-        return [
-            'cart' => [
-                'model' => $cart,
-            ],
-        ];
+        if ($context->getUserId() === 0) {
+            if (!$cart->getCustomerEmail()) {
+                throw new GraphQlInputException(__("Guest email for cart is missing. Please enter"));
+            }
+            $cart->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
+        }
+
+        try {
+            $orderId = $this->cartManagement->placeOrder($cart->getId());
+            $order = $this->orderRepository->get($orderId);
+
+            return [
+                'order' => [
+                    'order_id' => $order->getIncrementId(),
+                ],
+            ];
+        } catch (NoSuchEntityException $e) {
+            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__('Unable to place order: %message', ['message' => $e->getMessage()]), $e);
+        }
     }
 }
