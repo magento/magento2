@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\InventoryExportStock\Model;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchResultsInterface;
 use Magento\InventoryExportStockApi\Api\Data\ExportStockSalableQtySearchResultInterface;
-use Magento\InventoryExportStockApi\Api\ExportStockSalableQtyBySalesChannelInterface;
+use Magento\InventoryExportStockApi\Api\Data\ExportStockSalableQtySearchResultInterfaceFactory;
 use Magento\InventoryExportStockApi\Api\ExportStockSalableQtyInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
+use Magento\InventorySalesApi\Api\GetStockBySalesChannelInterface;
 
 /**
  * Class ExportStockSalableQty provides product stock information by search criteria
@@ -25,27 +28,50 @@ class ExportStockSalableQty implements ExportStockSalableQtyInterface
     private $salesChannelInterfaceFactory;
 
     /**
-     * @var ExportStockSalableQtyBySalesChannelInterface
+     * @var ProductRepositoryInterface
      */
-    private $exportStockSalableQtyBySalesChannel;
+    private $productRepository;
+
+    /**
+     * @var ExportStockSalableQtySearchResultInterfaceFactory
+     */
+    private $exportStockSalableQtySearchResultFactory;
+
+    /**
+     * @var PreciseExportStockProcessor
+     */
+    private $preciseExportStockProcessor;
+
+    /**
+     * @var GetStockBySalesChannelInterface
+     */
+    private $getStockBySalesChannel;
 
     /**
      * @param SalesChannelInterfaceFactory $salesChannelInterfaceFactory
-     * @param ExportStockSalableQtyBySalesChannelInterface $exportStockSalableQtyBySalesChannel
+     * @param ProductRepositoryInterface $productRepository
+     * @param ExportStockSalableQtySearchResultInterfaceFactory $exportStockSalableQtySearchResultFactory
+     * @param PreciseExportStockProcessor $preciseExportStockProcessor
+     * @param GetStockBySalesChannelInterface $getStockBySalesChannel
      */
     public function __construct(
         SalesChannelInterfaceFactory $salesChannelInterfaceFactory,
-        ExportStockSalableQtyBySalesChannelInterface $exportStockSalableQtyBySalesChannel
+        ProductRepositoryInterface $productRepository,
+        ExportStockSalableQtySearchResultInterfaceFactory $exportStockSalableQtySearchResultFactory,
+        PreciseExportStockProcessor $preciseExportStockProcessor,
+        GetStockBySalesChannelInterface $getStockBySalesChannel
     ) {
-
+        $this->productRepository = $productRepository;
+        $this->exportStockSalableQtySearchResultFactory = $exportStockSalableQtySearchResultFactory;
+        $this->preciseExportStockProcessor = $preciseExportStockProcessor;
+        $this->getStockBySalesChannel = $getStockBySalesChannel;
         $this->salesChannelInterfaceFactory = $salesChannelInterfaceFactory;
-        $this->exportStockSalableQtyBySalesChannel = $exportStockSalableQtyBySalesChannel;
     }
 
     /**
      * @inheritDoc
      */
-    public function getList(
+    public function execute(
         string $salesChannelCode,
         SearchCriteriaInterface $searchCriteria
     ): ExportStockSalableQtySearchResultInterface {
@@ -57,7 +83,27 @@ class ExportStockSalableQty implements ExportStockSalableQtyInterface
                 ]
             ]
         );
+        $stock = $this->getStockBySalesChannel->execute($salesChannel);
+        $productSearchResult = $this->getProducts($searchCriteria);
+        $items = $this->preciseExportStockProcessor->execute($productSearchResult->getItems(), $stock->getStockId());
+        /** @var ExportStockSalableQtySearchResultInterface $searchResult */
+        $searchResult = $this->exportStockSalableQtySearchResultFactory->create();
+        $searchResult->setSearchCriteria($productSearchResult->getSearchCriteria());
+        $searchResult->setItems($items);
+        $searchResult->setTotalCount(count($items));
 
-        return $this->exportStockSalableQtyBySalesChannel->getList($salesChannel, $searchCriteria);
+        return $searchResult;
+    }
+
+    /**
+     * Provides product search result by search criteria
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     *
+     * @return SearchResultsInterface
+     */
+    private function getProducts(SearchCriteriaInterface $searchCriteria): SearchResultsInterface
+    {
+        return $this->productRepository->getList($searchCriteria);
     }
 }

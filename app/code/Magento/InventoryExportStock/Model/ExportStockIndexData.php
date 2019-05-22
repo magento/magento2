@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\InventoryExportStock\Model;
 
+use Magento\InventoryExportStock\Model\ResourceModel\StockIndexDumpProcessor;
 use Magento\InventoryExportStockApi\Api\ExportStockIndexDataInterface;
+use Magento\InventorySales\Model\ResourceModel\GetWebsiteIdByWebsiteCode;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
+use Magento\InventorySalesApi\Api\GetStockBySalesChannelInterface;
 
 /**
- * Class ExportStockIndexData provides stock index export
+ * Class ExportStockIndexData provides stock index export based on raw data contained in the stock index.
  */
 class ExportStockIndexData implements ExportStockIndexDataInterface
 {
@@ -22,21 +25,44 @@ class ExportStockIndexData implements ExportStockIndexDataInterface
     private $salesChannelInterfaceFactory;
 
     /**
-     * @var ExportStockIndexDataBySalesChannel
+     * @var StockIndexDumpProcessor
      */
-    private $exportStockIndexDataBySalesChannel;
+    private $stockIndexDumpProcessor;
+
+    /**
+     * @var GetWebsiteIdByWebsiteCode
+     */
+    private $getWebsiteIdByWebsiteCode;
+
+    /**
+     * @var ProductStockIndexDataMapper
+     */
+    private $productStockIndexDataMapper;
+
+    /**
+     * @var GetStockBySalesChannelInterface
+     */
+    private $getStockBySalesChannel;
 
     /**
      * @param SalesChannelInterfaceFactory $salesChannelInterfaceFactory
-     * @param ExportStockIndexDataBySalesChannel $exportStockIndexDataBySalesChannel
+     * @param StockIndexDumpProcessor $stockIndexDumpProcessor
+     * @param GetWebsiteIdByWebsiteCode $getWebsiteIdByWebsiteCode
+     * @param ProductStockIndexDataMapper $productStockIndexDataMapper
+     * @param GetStockBySalesChannelInterface $getStockBySalesChannel
      */
     public function __construct(
         SalesChannelInterfaceFactory $salesChannelInterfaceFactory,
-        ExportStockIndexDataBySalesChannel $exportStockIndexDataBySalesChannel
+        StockIndexDumpProcessor $stockIndexDumpProcessor,
+        GetWebsiteIdByWebsiteCode $getWebsiteIdByWebsiteCode,
+        ProductStockIndexDataMapper $productStockIndexDataMapper,
+        GetStockBySalesChannelInterface $getStockBySalesChannel
     ) {
-
         $this->salesChannelInterfaceFactory = $salesChannelInterfaceFactory;
-        $this->exportStockIndexDataBySalesChannel = $exportStockIndexDataBySalesChannel;
+        $this->stockIndexDumpProcessor = $stockIndexDumpProcessor;
+        $this->getWebsiteIdByWebsiteCode = $getWebsiteIdByWebsiteCode;
+        $this->productStockIndexDataMapper = $productStockIndexDataMapper;
+        $this->getStockBySalesChannel = $getStockBySalesChannel;
     }
 
     /**
@@ -53,6 +79,14 @@ class ExportStockIndexData implements ExportStockIndexDataInterface
             ]
         );
 
-        return $this->exportStockIndexDataBySalesChannel->execute($salesChannel);
+        $stock = $this->getStockBySalesChannel->execute($salesChannel);
+        $websiteId = $this->getWebsiteIdByWebsiteCode->execute($salesChannel->getCode());
+        $items = $this->stockIndexDumpProcessor->execute($websiteId, $stock->getStockId());
+        $productsData = [];
+        foreach ($items as $item) {
+            $productsData[] = $this->productStockIndexDataMapper->execute($item);
+        }
+
+        return $productsData;
     }
 }
