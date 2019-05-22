@@ -19,6 +19,9 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Sales\Api\InvoiceOrderInterface;
 
+/**
+ * Shipping information managment test.
+ */
 class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CartManagementInterface */
