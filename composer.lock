@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fb300fceb9376d854f7a62d9484ae291",
+    "content-hash": "c0c005ec7be9a4aa48da81e6c7434142",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -553,12 +553,17 @@
         },
         {
             "name": "magento/composer",
-            "version": "1.2.1",
+            "version": "1.2.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/composer.git",
+                "reference": "6b406bc65690c1b28be9255249507e1c6572d815"
+            },
             "dist": {
-                "type": "path",
-                "url": "/Volumes/Workspace/AdobeTeam/composer-1.2.0",
-                "reference": "ad9f2ebc170175ed1190cab32c0c6e93cc27ffd4",
-                "shasum": null
+                "type": "zip",
+                "url": "https://api.github.com/repos/magento/composer/zipball/6b406bc65690c1b28be9255249507e1c6572d815",
+                "reference": "6b406bc65690c1b28be9255249507e1c6572d815",
+                "shasum": ""
             },
             "require": {
                 "composer/composer": "1.4.1",
@@ -578,7 +583,12 @@
                 "OSL-3.0",
                 "AFL-3.0"
             ],
-            "description": "Magento composer library helps to instantiate Composer application and run composer commands."
+            "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
+            "support": {
+                "source": "https://github.com/magento/composer/tree/1.2",
+                "issues": "https://github.com/magento/composer/issues"
+            },
+            "time": "2019-05-21T16:03:27+00:00"
         },
         {
             "name": "magento/magento-composer-installer",
@@ -9185,12 +9195,20 @@
             "time": "2018-12-25T11:19:39+00:00"
         }
     ],
-    "aliases": [],
-    "minimum-stability": "stable",
+    "aliases": [
+        {
+            "alias": "1.2.1",
+            "alias_normalized": "1.2.1.0",
+            "version": "1.2.9999999.9999999-dev",
+            "package": "magento/composer"
+        }
+    ],
+    "minimum-stability": "dev",
     "stability-flags": {
+        "magento/composer": 20,
         "phpmd/phpmd": 0
     },
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "~7.0.13|~7.1.0|~7.2.0",
