@@ -56,6 +56,7 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      */
     public function testResolveGuest($paymentMethod)
     {
@@ -83,7 +84,7 @@ mutation {
     createPaypalExpressToken(input: {
         cart_id: "{$cartId}",
         code: "{$paymentMethod}",
-        express_button: true
+        express_button: false
     })
     {
         __typename
@@ -116,6 +117,11 @@ mutation {
           }
         }
       }
+      placeOrder(input: {cart_id: "{$cartId}"}) {
+        order {
+          order_id
+        }
+      }
 }
 QUERY;
 
@@ -138,6 +144,9 @@ QUERY;
             $paypalRequest['SOLUTIONTYPE'] = null;
         }
 
+        $paypalRequest['AMT'] = '30.00';
+        $paypalRequest['SHIPPINGAMT'] = '10.00';
+
         $this->nvpMock
             ->expects($this->at(0))
             ->method('call')
@@ -156,14 +165,53 @@ QUERY;
             ->with(Nvp::GET_EXPRESS_CHECKOUT_DETAILS, $paypalRequestDetails)
             ->willReturn($paypalRequestDetailsResponse);
 
+        $paypalRequestPlaceOrder = include __DIR__ . '/../../../_files/guest_paypal_place_order.php';
+
+        $this->nvpMock
+            ->expects($this->at(2))
+            ->method('call')
+            ->with(Nvp::DO_EXPRESS_CHECKOUT_PAYMENT, $paypalRequestPlaceOrder)
+            ->willReturn([
+                'RESULT' => '0',
+                'PNREF' => 'B7PPAC033FF2',
+                'RESPMSG' => 'Approved',
+                'AVSADDR' => 'Y',
+                'AVSZIP' => 'Y',
+                'TOKEN' => $token,
+                'PAYERID' => $payerId,
+                'PPREF' => '7RK43642T8939154L',
+                'CORRELATIONID' => 'f7b102bcad3db',
+                'PAYMENTTYPE' => 'instant',
+                'PENDINGREASON' => 'authorization',
+            ]);
+
         $response = $this->graphqlController->dispatch($this->request);
         $responseData = $this->json->unserialize($response->getContent());
+        
+        $this->assertArrayHasKey('data', $responseData);
+        $this->assertArrayHasKey('createPaypalExpressToken', $responseData['data']);
         $createTokenData = $responseData['data']['createPaypalExpressToken'];
 
         $this->assertArrayNotHasKey('errors', $responseData);
         $this->assertEquals($paypalResponse['TOKEN'], $createTokenData['token']);
         $this->assertEquals($paymentMethod, $createTokenData['method']);
         $this->assertArrayHasKey('paypal_urls', $createTokenData);
+
+        $this->assertTrue(
+            isset($responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code'])
+        );
+        $this->assertEquals(
+            $paymentMethod,
+            $responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']
+        );
+
+        $this->assertTrue(
+            isset($responseData['data']['placeOrder']['order']['order_id'])
+        );
+        $this->assertEquals(
+            'test_quote',
+            $responseData['data']['placeOrder']['order']['order_id']
+        );
     }
 
     /**
