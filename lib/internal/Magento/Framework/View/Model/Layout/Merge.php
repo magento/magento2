@@ -293,6 +293,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 
     /**
      * Add the first existing (declared in layout updates) page handle along with all parents to the update.
+     *
      * Return whether any page handles have been added or not.
      *
      * @param string[] $handlesToTry
@@ -325,6 +326,8 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     }
 
     /**
+     * Page layout type
+     *
      * @return string|null
      */
     public function getPageLayout()
@@ -617,7 +620,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     public function validateUpdate($handle, $updateXml)
     {
-        return;
+        return null;
     }
 
     /**
@@ -945,6 +948,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     public function getCacheId()
     {
         $layoutCacheKeys = $this->layoutCacheKey->getCacheKeys();
+        // phpcs:ignore Magento2.Security.InsecureFunction
         return $this->generateCacheId(md5(implode('|', array_merge($this->getHandles(), $layoutCacheKeys))));
     }
 }
