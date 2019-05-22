@@ -175,7 +175,8 @@ class Builder
                 \Magento\Downloadable\Api\Data\LinkInterface::class
             );
             if ($link->getSampleType() === \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE
-                && isset($sample['file'])) {
+                && isset($sample['file'])
+            ) {
                 $linkSampleFileName = $this->downloadableFile->moveFileFromTmp(
                     $this->getComponent()->getBaseSampleTmpPath(),
                     $this->getComponent()->getBaseSamplePath(),
