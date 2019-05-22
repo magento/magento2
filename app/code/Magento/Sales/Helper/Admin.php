@@ -180,36 +180,27 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     public function escapeHtmlWithLinks($data, $allowedTags = null)
     {
         if (!empty($data) && is_array($allowedTags) && in_array('a', $allowedTags)) {
-            $result = null;
-            $links = [];
-            while (true) {
-                $start = strpos($data, '<a', isset($end) ? $end : 0);
-                $end = strpos($data, '</a>');
-                if (!$start || !$end) {
-                    break;
-                }
-                $result = substr($data, $start, $end - $start + 4);
-                $domDocument = new \DOMDocument('1.0', 'UTF-8');
-                libxml_use_internal_errors(true);
-                @$domDocument->loadHTML($result);
+            $domDocument = $this->domDocumentFactory->create();
+            libxml_use_internal_errors(true);
+            @$domDocument->loadHTML($data);
 
-                foreach ($domDocument->getElementsByTagName('a') as $tag) {
-                    $attributeNames = [];
-                    foreach ($tag->attributes as $attribute) {
-                        if ($attribute->name != 'href') {
-                            $attributeNames[] = $attribute->name;
-                        }
+            foreach ($domDocument->getElementsByTagName('a') as $tag) {
+                $attributeNames = [];
+                foreach ($tag->attributes as $attribute) {
+                    if ($attribute->name != 'href') {
+                        $attributeNames[] = $attribute->name;
                     }
-                    foreach ($attributeNames as $name) {
-                        $tag->removeAttribute($name);
-                    }
-                    $hrefValue = $tag->getAttribute('href');
-                    $tag->setAttribute('href', $this->escaper->escapeUrl($hrefValue));
-
-                    $links[] = $domDocument->saveHTML();
                 }
+                foreach ($attributeNames as $name) {
+                    $tag->removeAttribute($name);
+                }
+                $hrefValue = $tag->getAttribute('href');
+                $hrefValue = $this->filterUrl($hrefValue);
+
+                $tag->setAttribute('href', htmlspecialchars_decode($this->escaper->escapeUrl($hrefValue)));
+                $tag->nodeValue = $this->escaper->escapeHtml($tag->nodeValue);
+                $data = $domDocument->saveHTML($tag);
             }
-            return $links;
         }
         return $this->escaper->escapeHtml($data, $allowedTags);
     }
