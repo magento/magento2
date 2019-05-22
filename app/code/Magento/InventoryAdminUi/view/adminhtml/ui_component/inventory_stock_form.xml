@@ -160,7 +160,7 @@
                         <visible>false</visible>
                     </settings>
                 </field>
-                <actionDelete name="action_delete">
+                <actionDelete name="actionDelete" template="Magento_InventoryCatalogAdminUi/stock/assign-sources/action-delete">
                     <argument name="data" xsi:type="array" />
                     <settings>
                         <label translate="true">Unassign</label>
