@@ -10,7 +10,8 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminVerifyCustomerAddressStateContainValuesOnceTest">
         <annotations>
-            <stories value="Verify customer address state"/>
+            <features value="Customer"/>
+            <stories value="Update Customer Address"/>
             <title value="State/Province dropdown contain values once"/>
             <description value="When editing a customer in the backend from the Magento Admin Panel the State/Province should only be listed once"/>
             <severity value="MAJOR"/>
@@ -25,8 +26,9 @@
         <after>
             <deleteData createDataKey="customer" stepKey="deleteFirstCustomer"/>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteSecondCustomer">
-                <argument name="customerEmail" value="Simple_Customer_Without_Address.email"/>
+                <argument name="customerEmail" value="Simple_US_Customer.email"/>
             </actionGroup>
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -54,7 +56,7 @@
 
         <!--Select new created customer, Click Edit mode-->
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPageWithoutAddresses">
-            <argument name="customer" value="Simple_Customer_Without_Address"/>
+            <argument name="customer" value="Simple_US_Customer"/>
         </actionGroup>
 
         <!--Select Addresses tab, Click on  create new addresses btn-->
