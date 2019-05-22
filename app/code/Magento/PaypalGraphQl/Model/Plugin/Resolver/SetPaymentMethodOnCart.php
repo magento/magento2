@@ -128,5 +128,4 @@ class SetPaymentMethodOnCart
     {
         return !empty($paymentCode) && in_array($paymentCode, $this->allowedPaymentMethodCodes);
     }
-
 }

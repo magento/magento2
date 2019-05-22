@@ -81,6 +81,12 @@ abstract class AbstractTest extends TestCase
         return $quote;
     }
 
+    /**
+     * Get mock of Nvp class
+     *
+     * @param string $nvpClass
+     * @return AbstractApi|MockObject
+     */
     private function getNvpMock(string $nvpClass)
     {
         if (empty($this->nvpMock)) {
@@ -105,7 +111,14 @@ abstract class AbstractTest extends TestCase
         return $this->nvpMock;
     }
 
-    protected function getCreateTokenMutation($cartId, $paymentMethod)
+    /**
+     * Get GraphQl query for creating Paypal token
+     *
+     * @param string $cartId
+     * @param string $paymentMethod
+     * @return string
+     */
+    protected function getCreateTokenMutation(string $cartId, string $paymentMethod): string
     {
         return <<<QUERY
 mutation {
