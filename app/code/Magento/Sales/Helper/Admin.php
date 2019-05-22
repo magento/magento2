@@ -198,7 +198,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
                 $hrefValue = $tag->getAttribute('href');
                 $hrefValue = $this->filterUrl($hrefValue);
 
-                $tag->setAttribute('href', $this->escaper->escapeUrl($hrefValue));
+                $tag->setAttribute('href', htmlspecialchars_decode($this->escaper->escapeUrl($hrefValue)));
                 $tag->nodeValue = $this->escaper->escapeHtml($tag->nodeValue);
                 $temporaryData .= $domDocument->saveHTML($tag);
             }
