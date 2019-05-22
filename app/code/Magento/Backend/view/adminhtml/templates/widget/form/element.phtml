@@ -20,12 +20,12 @@
     case 'column': ?>
       <?php break;
     case 'hidden': ?>
-    <input type="<?= $block->escapeHtmlAttr($element->getType()) ?>" name="<?= $block->escapeHtmlAttr($element->getName()) ?>" id="<?= $element->getHtmlId() ?>" value="<?= /* @escapeNotVerified */ $element->getValue() ?>">
+    <input type="<?= $block->escapeHtmlAttr($element->getType()) ?>" name="<?= $block->escapeHtmlAttr($element->getName()) ?>" id="<?= $element->getHtmlId() ?>" value="<?=  $block->escapeHtmlAttr($element->getValue()) ?>">
       <?php break;
     case 'select': ?>
     <span class="form_row">
         <?php if ($element->getLabel()): ?><label for="<?= $element->getHtmlId() ?>"><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label><?php endif; ?>
-        <select name="<?= $block->escapeHtmlAttr($element->getName()) ?>" id="<?= $element->getHtmlId() ?>" class="select<?= /* @escapeNotVerified */ $element->getClass() ?>" title="<?= /* @escapeNotVerified */ $element->getTitle() ?>">
+        <select name="<?= $block->escapeHtmlAttr($element->getName()) ?>" id="<?= $element->getHtmlId() ?>" class="select<?= /* @escapeNotVerified */ $element->getClass() ?>" title="<?=  $block->escapeHtmlAttr($element->getTitle()) ?>">
         <?php foreach ($element->getValues() as $_value): ?>
             <option <?= /* @escapeNotVerified */ $_value->serialize() ?><?php if ($_value->getValue() == $element->getValue()): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ $_value->getLabel() ?></option>
         <?php endforeach; ?>
@@ -37,20 +37,20 @@
     case 'password': ?>
     <span class="form_row">
         <?php if ($element->getLabel()): ?><label for="<?= $element->getHtmlId() ?>" <?= /* @escapeNotVerified */ $block->getUiId('label') ?>><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label><?php endif; ?>
-        <input type="<?= /* @escapeNotVerified */ $element->getType() ?>" name="<?= /* @escapeNotVerified */ $element->getName() ?>" id="<?= $element->getHtmlId() ?>" value="<?= /* @escapeNotVerified */ $element->getValue() ?>" class="input-text <?= /* @escapeNotVerified */ $element->getClass() ?>" title="<?= /* @escapeNotVerified */ $element->getTitle() ?>" <?= ($element->getOnClick() ? 'onClick="' . $element->getOnClick() . '"' : '') ?>/>
+        <input type="<?=  $block->escapeHtmlAttr($element->getType()) ?>" name="<?=  $block->escapeHtmlAttr($element->getName()) ?>" id="<?= $element->getHtmlId() ?>" value="<?=  $block->escapeHtmlAttr($element->getValue()) ?>" class="input-text <?= /* @escapeNotVerified */ $element->getClass() ?>" title="<?=  $block->escapeHtmlAttr($element->getTitle()) ?>" <?= ($element->getOnClick() ? 'onClick="' . $element->getOnClick() . '"' : '') ?>/>
     </span>
       <?php break;
     case 'radio': ?>
     <span class="form_row">
         <?php if ($element->getLabel()): ?><label for="<?= $element->getHtmlId() ?>"><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label><?php endif; ?>
-        <input type="<?= /* @escapeNotVerified */ $element->getType() ?>" name="<?= /* @escapeNotVerified */ $element->getName() ?>" id="<?= $element->getHtmlId() ?>" value="<?= /* @escapeNotVerified */ $element->getValue() ?>" class="input-text <?= /* @escapeNotVerified */ $element->getClass() ?>" title="<?= /* @escapeNotVerified */ $element->getTitle() ?>"/>
+        <input type="<?=  $block->escapeHtmlAttr($element->getType()) ?>" name="<?=  $block->escapeHtmlAttr($element->getName()) ?>" id="<?= $element->getHtmlId() ?>" value="<?=  $block->escapeHtmlAttr($element->getValue()) ?>" class="input-text <?= /* @escapeNotVerified */ $element->getClass() ?>" title="<?=  $block->escapeHtmlAttr($element->getTitle()) ?>"/>
     </span>
       <?php break;
     case 'radios': ?>
     <span class="form_row">
         <label for="<?= $element->getHtmlId() ?>"><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label>
     <?php foreach ($element->getRadios() as $_radio): ?>
-    <input type="radio" name="<?= /* @escapeNotVerified */ $_radio->getName() ?>" id="<?= $_radio->getHtmlId() ?>" value="<?= /* @escapeNotVerified */ $_radio->getValue() ?>" class="input-radio <?= /* @escapeNotVerified */ $_radio->getClass() ?>" title="<?= /* @escapeNotVerified */ $_radio->getTitle() ?>" <?= ($_radio->getValue() == $element->getChecked()) ? 'checked="true"' : '' ?> >&nbsp;<?= /* @escapeNotVerified */ $_radio->getLabel() ?>
+    <input type="radio" name="<?=  $block->escapeHtmlAttr($_radio->getName()) ?>" id="<?= $_radio->getHtmlId() ?>" value="<?=  $block->escapeHtmlAttr($_radio->getValue()) ?>" class="input-radio <?= /* @escapeNotVerified */ $_radio->getClass() ?>" title="<?=  $block->escapeHtmlAttr($_radio->getTitle()) ?>" <?= ($_radio->getValue() == $element->getChecked()) ? 'checked="true"' : '' ?> >&nbsp;<?= /* @escapeNotVerified */ $_radio->getLabel() ?>
     <?php endforeach; ?>
     </span>
       <?php break;
@@ -84,13 +84,13 @@
             });
         });
 </script>
-      <textarea name="<?= /* @escapeNotVerified */ $element->getName() ?>" title="<?= /* @escapeNotVerified */ $element->getTitle() ?>" id="<?= $element->getHtmlId() ?>" class="textarea <?= /* @escapeNotVerified */ $element->getClass() ?>" cols="80" rows="20"><?= /* @escapeNotVerified */ $element->getValue() ?></textarea>
+      <textarea name="<?=  $block->escapeHtmlAttr($element->getName()) ?>" title="<?=  $block->escapeHtmlAttr($element->getTitle()) ?>" id="<?= $element->getHtmlId() ?>" class="textarea <?= /* @escapeNotVerified */ $element->getClass() ?>" cols="80" rows="20"><?= /* @escapeNotVerified */ $element->getValue() ?></textarea>
     </span>
       <?php break;
         case 'textarea': ?>
             <span class="form_row">
                     <label for="<?= $element->getHtmlId() ?>"><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label>
-                    <textarea name="<?= /* @escapeNotVerified */ $element->getName() ?>" title="<?= /* @escapeNotVerified */ $element->getTitle() ?>" id="<?= $element->getHtmlId() ?>" class="textarea <?= /* @escapeNotVerified */ $element->getClass() ?>" cols="15" rows="2"><?= /* @escapeNotVerified */ $element->getValue() ?></textarea>
+                    <textarea name="<?=  $block->escapeHtmlAttr($element->getName()) ?>" title="<?=  $block->escapeHtmlAttr($element->getTitle()) ?>" id="<?= $element->getHtmlId() ?>" class="textarea <?= /* @escapeNotVerified */ $element->getClass() ?>" cols="15" rows="2"><?= /* @escapeNotVerified */ $element->getValue() ?></textarea>
             </span>
       <?php break;
     case 'editor': ?>

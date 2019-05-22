@@ -26,7 +26,7 @@
                 <?= /* @escapeNotVerified */ $block->getTabLabel($_tab) ?>
             </span>
         </a>
-        <div id="<?= /* @escapeNotVerified */ $block->getTabId($_tab) ?>_content" style="display:none"><?= /* @escapeNotVerified */ $block->getTabContent($_tab) ?></div>
+        <div id="<?=  $block->escapeHtmlAttr($block->getTabId($_tab)) ?>_content" style="display:none"><?= /* @escapeNotVerified */ $block->getTabContent($_tab) ?></div>
     </li>
 <?php endforeach; ?>
 </ul>

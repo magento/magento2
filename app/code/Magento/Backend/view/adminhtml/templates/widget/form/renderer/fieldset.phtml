@@ -40,7 +40,7 @@ if ($isField) {
 <?php if ($isWrapped): ?>
     <div class="fieldset-wrapper <?= ($isCollapsable) ? 'admin__collapsible-block-wrapper ' : '' ?>"
         id="<?=  $block->escapeHtmlAttr($containerId ? $containerId : $id . '-wrapper') ?>"
-        data-role="<?= /* @escapeNotVerified */ $id ?>-wrapper">
+        data-role="<?=  $block->escapeHtmlAttr($id) ?>-wrapper">
         <div class="fieldset-wrapper-title admin__fieldset-wrapper-title">
             <strong <?php /* @escapeNotVerified */ echo($isCollapsable) ?
                 'class="admin__collapsible-title" data-toggle="collapse" data-target="#' . $id . '-content"' :
@@ -50,14 +50,14 @@ if ($isField) {
             <?= /* @escapeNotVerified */ $titleActions ?>
         </div>
         <div class="fieldset-wrapper-content admin__fieldset-wrapper-content<?= ($isCollapsable) ? ' collapse' : '' ?>"
-            id="<?= /* @escapeNotVerified */ $id ?>-content"
-            data-role="<?= /* @escapeNotVerified */ $id ?>-content">
+            id="<?=  $block->escapeHtmlAttr($id) ?>-content"
+            data-role="<?=  $block->escapeHtmlAttr($id) ?>-content">
 <?php endif; ?>
 
     <?php if (!$element->getNoContainer()): ?>
-        <fieldset class="<?= /* @escapeNotVerified */ $cssClass ?>" id="<?= /* @escapeNotVerified */ $id ?>">
+        <fieldset class="<?=  $block->escapeHtmlAttr($cssClass) ?>" id="<?=  $block->escapeHtmlAttr($id) ?>">
         <?php if ($element->getLegend() && !$isWrapped): ?>
-            <legend class="<?= /* @escapeNotVerified */ $isField ? 'label admin__field-label' : 'admin__legend legend' ?>">
+            <legend class="<?= /* @noEscape */ $isField ? 'label admin__field-label' : 'admin__legend legend' ?>">
                 <span><?= /* @escapeNotVerified */ $element->getLegend() ?></span>
             </legend><br />
         <?php endif; ?>
