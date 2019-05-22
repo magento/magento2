@@ -14,7 +14,7 @@ $numColumns = sizeof($block->getColumns());
 <?php if ($block->getCollection()): ?>
 <div class="dashboard-item-content">
     <?php if ($block->getCollection()->getSize()>0): ?>
-        <table class="admin__table-primary dashboard-data" id="<?= /* @escapeNotVerified */ $block->getId() ?>_table">
+        <table class="admin__table-primary dashboard-data" id="<?= $block->escapeHtmlAttr($block->getId()) ?>_table">
             <?php
             /* This part is commented to remove all <col> tags from the code. */
             /* foreach ($block->getColumns() as $_column): ?>
@@ -34,9 +34,9 @@ $numColumns = sizeof($block->getColumns());
             <?php if (!$block->getIsCollapsed()): ?>
                 <tbody>
                 <?php foreach ($block->getCollection() as $_index => $_item): ?>
-                    <tr title="<?= /* @escapeNotVerified */ $block->getRowUrl($_item) ?>">
+                    <tr title="<?= $block->escapeHtmlAttr($block->getRowUrl($_item)) ?>">
                     <?php $i = 0; foreach ($block->getColumns() as $_column): ?>
-                        <td class="<?= /* @escapeNotVerified */ $_column->getCssProperty() ?> <?= ++$i == $numColumns ? 'last' : '' ?>"><?= (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?></td>
+                        <td class="<?= $block->escapeHtmlAttr($_column->getCssProperty()) ?> <?= ++$i == $numColumns ? 'last' : '' ?>"><?= (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?></td>
                     <?php endforeach; ?>
                     </tr>
                 <?php endforeach; ?>
@@ -44,7 +44,7 @@ $numColumns = sizeof($block->getColumns());
             <?php endif; ?>
         </table>
     <?php else: ?>
-        <div class="<?= /* @escapeNotVerified */ $block->getEmptyTextClass() ?>"><?= /* @escapeNotVerified */ $block->getEmptyText() ?></div>
+        <div class="<?= $block->escapeHtmlAttr($block->getEmptyTextClass()) ?>"><?= $block->escapeHtml($block->getEmptyText()) ?></div>
     <?php endif; ?>
 </div>
 <?php if ($block->canDisplayContainer()): ?>
@@ -65,23 +65,23 @@ require(deps, function(<?= ($block->getDependencyJsObject() ? 'registry' : '') ?
     <?php //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed ?>
 
     <?php if ($block->getDependencyJsObject()): ?>
-        registry.get('<?= /* @escapeNotVerified */ $block->getDependencyJsObject() ?>', function (<?= /* @escapeNotVerified */ $block->getDependencyJsObject() ?>) {
+        registry.get('<?= $block->escapeJs($block->getDependencyJsObject()) ?>', function (<?= $block->escapeJs($block->getDependencyJsObject()) ?>) {
     <?php endif; ?>
 
-    <?= /* @escapeNotVerified */ $block->getJsObjectName() ?> = new varienGrid('<?= /* @escapeNotVerified */ $block->getId() ?>', '<?= /* @escapeNotVerified */ $block->getGridUrl() ?>', '<?= /* @escapeNotVerified */ $block->getVarNamePage() ?>', '<?= /* @escapeNotVerified */ $block->getVarNameSort() ?>', '<?= /* @escapeNotVerified */ $block->getVarNameDir() ?>', '<?= /* @escapeNotVerified */ $block->getVarNameFilter() ?>');
-    <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.useAjax = '<?= /* @escapeNotVerified */ $block->getUseAjax() ?>';
+    <?= $block->escapeJs($block->getJsObjectName()) ?> = new varienGrid('<?= $block->escapeJs($block->getId()) ?>', '<?= $block->escapeJs($block->getGridUrl()) ?>', '<?= $block->escapeJs($block->getVarNamePage()) ?>', '<?= $block->escapeJs($block->getVarNameSort()) ?>', '<?= $block->escapeJs($block->getVarNameDir()) ?>', '<?= $block->escapeJs($block->getVarNameFilter()) ?>');
+    <?= $block->escapeJs($block->getJsObjectName()) ?>.useAjax = '<?= $block->escapeJs($block->getUseAjax()) ?>';
     <?php if ($block->getRowClickCallback()): ?>
-        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.rowClickCallback = <?= /* @escapeNotVerified */ $block->getRowClickCallback() ?>;
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.rowClickCallback = <?= /* @noEscape */ $block->getRowClickCallback() ?>;
     <?php endif; ?>
     <?php if ($block->getCheckboxCheckCallback()): ?>
-        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.checkboxCheckCallback = <?= /* @escapeNotVerified */ $block->getCheckboxCheckCallback() ?>;
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.checkboxCheckCallback = <?= /* @noEscape */ $block->getCheckboxCheckCallback() ?>;
     <?php endif; ?>
     <?php if ($block->getRowInitCallback()): ?>
-        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.initRowCallback = <?= /* @escapeNotVerified */ $block->getRowInitCallback() ?>;
-        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.rows.each(function(row){<?= /* @escapeNotVerified */ $block->getRowInitCallback() ?>(<?= /* @escapeNotVerified */ $block->getJsObjectName() ?>, row)});
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.initRowCallback = <?= /* @noEscape */ $block->getRowInitCallback() ?>;
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.rows.each(function(row){<?= /* @noEscape */ $block->getRowInitCallback() ?>(<?= $block->escapeJs($block->getJsObjectName()) ?>, row)});
     <?php endif; ?>
     <?php if ($block->getMassactionBlock()->isAvailable()): ?>
-    <?= /* @escapeNotVerified */ $block->getMassactionBlock()->getJavaScript() ?>
+    <?= /* @noEscape */ $block->getMassactionBlock()->getJavaScript() ?>
     <?php endif ?>
 
     <?php if ($block->getDependencyJsObject()): ?>

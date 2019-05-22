@@ -17,15 +17,15 @@
                 <?php if (in_array($value, ['custom'])) {
                     continue;
                 } ?>
-                <option value="<?= /* @escapeNotVerified */ $value ?>"
+                <option value="<?= /* @noEscape */ $value ?>"
                     <?php if ($block->getRequest()->getParam('period') == $value): ?> selected="selected"<?php endif; ?>
-                    ><?= /* @escapeNotVerified */ $label ?></option>
+                    ><?= $block->escapeHtml($label) ?></option>
             <?php endforeach; ?>
         </select>
     </div>
     <?php if ($block->getCount()): ?>
     <div class="dashboard-diagram-image">
-        <img src="<?= /* @escapeNotVerified */ $block->getChartUrl(false) ?>" class="dashboard-diagram-chart" alt="Chart" title="Chart" />
+        <img src="<?= $block->escapeUrl($block->getChartUrl(false)) ?>" class="dashboard-diagram-chart" alt="Chart" title="Chart" />
     </div>
     <?php else: ?>
     <div class="dashboard-diagram-nodata">
