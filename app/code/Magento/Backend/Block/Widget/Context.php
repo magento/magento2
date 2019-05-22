@@ -19,7 +19,7 @@ use Magento\Framework\Cache\LockGuardedCacheLoader;
  * the classes they were introduced for.
  *
  * @api
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD)
  * @since 100.0.2
  */
 class Context extends \Magento\Backend\Block\Template\Context

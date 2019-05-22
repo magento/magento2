@@ -14,7 +14,6 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteria
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
-use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Framework\Data\Collection\Db\SizeResolverInterfaceFactory;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -28,7 +27,6 @@ use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
-use Magento\Search\Model\EngineResolver;
 
 /**
  * Fulltext Collection
@@ -126,11 +124,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $totalRecordsResolverFactory;
 
     /**
-     * @var EngineResolverInterface
-     */
-    private $engineResolver;
-
-    /**
      * @var array
      */
     private $searchOrders;
@@ -177,7 +170,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param SearchCriteriaResolverFactory|null $searchCriteriaResolverFactory
      * @param SearchResultApplierFactory|null $searchResultApplierFactory
      * @param TotalRecordsResolverFactory|null $totalRecordsResolverFactory
-     * @param EngineResolverInterface|null $engineResolver
      * @param DefaultFilterStrategyApplyCheckerInterface|null $defaultFilterStrategyApplyChecker
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -217,7 +209,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         SearchCriteriaResolverFactory $searchCriteriaResolverFactory = null,
         SearchResultApplierFactory $searchResultApplierFactory = null,
         TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
-        EngineResolverInterface $engineResolver = null,
         DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null
     ) {
         $this->queryFactory = $catalogSearchData;
