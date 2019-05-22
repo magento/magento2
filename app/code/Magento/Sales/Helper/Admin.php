@@ -180,40 +180,36 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     public function escapeHtmlWithLinks($data, $allowedTags = null)
     {
         if (!empty($data) && is_array($allowedTags) && in_array('a', $allowedTags)) {
+            $result = null;
             $links = [];
-            $link = null;
-            $i = 1;
-            $domDocument = new \DOMDocument('1.0', 'UTF-8');
-            $data = str_replace('%', '%%', $data);
-            $regexp = "#(?J)<a"
-                ."(?:(?:\s+(?:(?:href\s*=\s*(['\"])(?<link>.*?)\\1\s*)|(?:\S+\s*=\s*(['\"])(.*?)\\3)\s*)*)|>)"
-                .">?(?:(?:(?<text>.*?)(?:<\/a\s*>?|(?=<\w))|(?<text>.*)))#si";
-            while (preg_match($regexp, $data, $matches)) {
-                $text = '';
-                if (!empty($matches['text'])) {
-                    $text = str_replace('%%', '%', $matches['text']);
+            while (true) {
+                $start = strpos($data, '<a', isset($end) ? $end : 0);
+                $end = strpos($data, '</a>');
+                if (!$start || !$end) {
+                    break;
                 }
-                $url = $this->filterUrl($matches['link'] ?? '');
-                //Recreate a minimalistic secure a tag
-                $link = sprintf(
-                    '<a href="%s">%s</a>',
-                    htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false),
-                    $this->escaper->escapeHtml($text)
-                );
+                $result = substr($data, $start, $end - $start + 4);
+                $domDocument = new \DOMDocument('1.0', 'UTF-8');
                 libxml_use_internal_errors(true);
-                $domDocument->loadHTML($link);
-                foreach ($domDocument->getElementsByTagName('a') as $tag) {
-                    if ($hrefValue = $tag->getAttribute('href')) {
-                        $tag->setAttribute('href', $this->escaper->escapeUrl($hrefValue));
-                    }
-                }
-                $links[] = $domDocument->saveHTML();
-                $data = str_replace($matches[0], '%' . $i . '$s', $data);
-                ++$i;
-            }
-            $data = $this->escaper->escapeHtml($data, $allowedTags);
+                @$domDocument->loadHTML($result);
 
-            return vsprintf($data, $links);
+                foreach ($domDocument->getElementsByTagName('a') as $tag) {
+                    $attributeNames = [];
+                    foreach ($tag->attributes as $attribute) {
+                        if ($attribute->name != 'href') {
+                            $attributeNames[] = $attribute->name;
+                        }
+                    }
+                    foreach ($attributeNames as $name) {
+                        $tag->removeAttribute($name);
+                    }
+                    $hrefValue = $tag->getAttribute('href');
+                    $tag->setAttribute('href', $this->escaper->escapeUrl($hrefValue));
+
+                    $links[] = $domDocument->saveHTML();
+                }
+            }
+            return $links;
         }
         return $this->escaper->escapeHtml($data, $allowedTags);
     }
