@@ -14,6 +14,7 @@
             <description value="Delete a customer group"/>
             <stories value="Delete Customer Group"/>
             <testCaseId value="MC-14590" />
+            <severity value="MAJOR"/>
             <group value="customers"/>
             <group value="mtf_migrated"/>
         </annotations>
