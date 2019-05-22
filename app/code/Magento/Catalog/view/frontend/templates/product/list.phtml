@@ -75,8 +75,8 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
                         <?= $block->getProductDetailsHtml($_product) ?>
 
                         <div class="product-item-inner">
-                            <div class="product actions product-item-actions"<?= /* @noEscape */ strpos($pos, $viewMode . '-actions') ? $position : '' ?>>
-                                <div class="actions-primary"<?= /* @noEscape */  strpos($pos, $viewMode . '-primary') ? $position : '' ?>>
+                            <div class="product actions product-item-actions"<?= strpos($pos, $viewMode . '-actions') ? $block->escapeHtmlAttr($position) : '' ?>>
+                                <div class="actions-primary"<?= strpos($pos, $viewMode . '-primary') ? $block->escapeHtmlAttr($position) : '' ?>>
                                     <?php if ($_product->isSaleable()) :?>
                                         <?php $postParams = $block->getAddToCartPostParams($_product); ?>
                                         <form data-role="tocart-form"
@@ -103,7 +103,7 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
-                                <div data-role="add-to-links" class="actions-secondary"<?= /* @noEscape */ strpos($pos, $viewMode . '-secondary') ? $position : '' ?>>
+                                <div data-role="add-to-links" class="actions-secondary"<?= strpos($pos, $viewMode . '-secondary') ? $block->escapeHtmlAttr($position) : '' ?>>
                                     <?php if ($addToBlock = $block->getChildBlock('addto')) :?>
                                         <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
                                     <?php endif; ?>
@@ -130,7 +130,7 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
         {
             "[data-role=tocart-form], .form.map.checkout": {
                 "catalogAddToCart": {
-                    "product_sku": "<?= /* @noEscape */ $_product->getSku() ?>"
+                    "product_sku": "<?= $block->escapeJs($_product->getSku()) ?>"
                 }
             }
         }

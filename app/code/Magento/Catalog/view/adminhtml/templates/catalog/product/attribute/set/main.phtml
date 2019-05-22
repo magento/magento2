@@ -279,8 +279,8 @@
 
                         addGroup : function() {
                             prompt({
-                                title: "<?= $block->escapeJs(__('Add New Group')) ?>",
-                                content: "<?= $block->escapeJs(__('Please enter a new group name.')) ?>",
+                                title: "<?= $block->escapeJs($block->escapeHtml(__('Add New Group'))) ?>",
+                                content: "<?= $block->escapeJs($block->escapeHtml(__('Please enter a new group name.'))) ?>",
                                 value: "",
                                 validation: true,
                                 validationRules: ['required-entry'],
