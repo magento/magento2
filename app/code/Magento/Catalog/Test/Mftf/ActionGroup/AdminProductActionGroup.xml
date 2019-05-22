@@ -483,7 +483,7 @@
         <click selector="{{AdminAddUpSellProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
     </actionGroup>
-    <actionGroup name="AdminProductAdvancedPricingNewCustomerGroupPrice">
+    <actionGroup name="adminProductAdvancedPricingNewCustomerGroupPrice">
         <arguments>
             <argument name="qty" type="string" defaultValue="2"/>
             <argument name="priceType" type="string" defaultValue="Discount"/>
