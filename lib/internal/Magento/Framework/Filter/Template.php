@@ -72,6 +72,7 @@ class Template implements \Zend_Filter_Interface
         'gettemplateprocessor',
         'vardirective',
         'delete',
+        'getdatausingmethod'
     ];
 
     /**
