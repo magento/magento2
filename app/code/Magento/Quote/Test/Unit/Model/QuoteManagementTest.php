@@ -197,21 +197,24 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ['getStore', 'getStoreId']
         );
 
-        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, [
-            'assignCustomer',
-            'collectTotals',
-            'getBillingAddress',
-            'getCheckoutMethod',
-            'getPayment',
-            'setCheckoutMethod',
-            'setCustomerEmail',
-            'setCustomerGroupId',
-            'setCustomerId',
-            'setCustomerIsGuest',
-            'setRemoteIp',
-            'setXForwardedFor',
-            'getId',
-        ]);
+        $this->quoteMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote::class,
+            [
+                'assignCustomer',
+                'collectTotals',
+                'getBillingAddress',
+                'getCheckoutMethod',
+                'getPayment',
+                'setCheckoutMethod',
+                'setCustomerEmail',
+                'setCustomerGroupId',
+                'setCustomerId',
+                'setCustomerIsGuest',
+                'setRemoteIp',
+                'setXForwardedFor',
+                'getId'
+            ]
+        );
 
         $this->quoteAddressFactory = $this->createPartialMock(
             \Magento\Quote\Model\Quote\AddressFactory::class,
