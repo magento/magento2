@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate
 ?>
 <?php
 /** @var \Magento\Tax\Block\Adminhtml\Items\Price\Renderer $block */
@@ -13,18 +12,18 @@
 $_item = $block->getItem();
 ?>
 
-<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
-    <?php if ($block->displayBothPrices()): ?>
-        <span class="label"><?= /* @escapeNotVerified */ __('Excl. Tax') ?>:</span>
+<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()) : ?>
+    <?php if ($block->displayBothPrices()) : ?>
+        <span class="label"><?= $block->escapeHtml(__('Excl. Tax')) ?>:</span>
     <?php endif; ?>
-    <?= /* @escapeNotVerified */ $block->formatPrice($_item->getCalculationPrice()) ?>
+    <?= /* @noEscape */ $block->formatPrice($_item->getCalculationPrice()) ?>
 <?php endif; ?>
 
 
-<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
-    <?php if ($block->displayBothPrices()): ?>
-        <br /><span class="label"><?= /* @escapeNotVerified */ __('Incl. Tax') ?>:</span>
+<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()) : ?>
+    <?php if ($block->displayBothPrices()) : ?>
+        <br /><span class="label"><?= $block->escapeHtml(__('Incl. Tax')) ?>:</span>
     <?php endif; ?>
-    <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getPriceInclTax($_item); ?>
-    <?= /* @escapeNotVerified */ $block->formatPrice($_incl) ?>
+    <?php $_incl = $this->helper(\Magento\Checkout\Helper\Data::class)->getPriceInclTax($_item); ?>
+    <?= /* @noEscape */ $block->formatPrice($_incl) ?>
 <?php endif; ?>
