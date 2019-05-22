@@ -42,7 +42,7 @@
                             <a href="<?= $block->escapeUrl($block->getViewUrl($_order)) ?>" class="action view">
                                 <span><?= $block->escapeHtml(__('View Order')) ?></span>
                             </a>
-                            <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($_order->getEntityId())) : ?>
+                            <?php if ($this->helper(\Magento\Sales\Helper\Reorder::class)->canReorder($_order->getEntityId())) : ?>
                                 <a href="#" data-post='<?= /* @noEscape */
                                 $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
                                     ->getPostData($block->getReorderUrl($_order))
@@ -59,6 +59,6 @@
     <?php if ($block->getPagerHtml()) : ?>
         <div class="order-products-toolbar toolbar bottom"><?= $block->getPagerHtml() ?></div>
     <?php endif ?>
-<?php else: ?>
+<?php else : ?>
     <div class="message info empty"><span><?= $block->escapeHtml(__('You have placed no orders.')) ?></span></div>
 <?php endif ?>

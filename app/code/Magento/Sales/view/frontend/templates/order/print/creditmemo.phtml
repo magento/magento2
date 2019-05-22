@@ -8,7 +8,7 @@
 <?php $_creditmemo = $block->getCreditmemo() ?>
 <?php if ($_creditmemo) : ?>
     <?php $_creditmemos = [$_creditmemo]; ?>
-<?php else: ?>
+<?php else : ?>
     <?php $_creditmemos = $_order->getCreditmemosCollection() ?>
 <?php endif; ?>
 <?php foreach ($_creditmemos as $_creditmemo) : ?>

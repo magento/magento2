@@ -34,7 +34,7 @@
                 </tr>
             </thead>
             <?php $_items = $_invoice->getAllItems(); ?>
-            <?php foreach ($_items as $_item): ?>
+            <?php foreach ($_items as $_item) : ?>
                 <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
                     <tbody>
                         <?= $block->getItemHtml($_item) ?>
