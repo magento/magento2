@@ -1795,7 +1795,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $position = 0;
                 foreach ($rowImages as $column => $columnImages) {
                     foreach ($columnImages as $columnImageKey => $columnImage) {
-                        $hash = md5_file($importDir . DIRECTORY_SEPARATOR . $columnImage);
+                        $filename = $importDir . DIRECTORY_SEPARATOR . $columnImage;
+                        $hash = '';
+                        if ($this->_mediaDirectory->isReadable($filename)) {
+                            $hash = md5_file($filename);
+                        }
 
                         if (!isset($existingImages[$rowSku])) {
                             $imageAlreadyExists = false;
