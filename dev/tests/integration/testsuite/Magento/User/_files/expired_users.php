@@ -53,5 +53,3 @@ $tableName = $resource->getTableName('admin_user');
 $sql = "UPDATE " . $tableName . " SET expires_at = '2010-01-01 00:00:00' WHERE user_id=" .
     $userIds[0] . ";";
 $result = $conn->query($sql);
-
-

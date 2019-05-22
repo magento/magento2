@@ -91,7 +91,8 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
             ['create']
         );
 
-        $this->currentSessionMock = $this->createPartialMock(\Magento\Security\Model\AdminSessionInfo::class, [
+        $this->currentSessionMock = $this->createPartialMock(
+            \Magento\Security\Model\AdminSessionInfo::class, [
                 'isActive',
                 'getStatus',
                 'load',
@@ -101,7 +102,8 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
                 'getUserId',
                 'getSessionId',
                 'getUpdatedAt'
-            ]);
+            ]
+        );
 
         $this->securityConfigMock = $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
             ->disableOriginalConstructor()

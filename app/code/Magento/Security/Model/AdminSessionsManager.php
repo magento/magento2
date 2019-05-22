@@ -127,8 +127,7 @@ class AdminSessionsManager
             }
         }
 
-        if ($this->authSession->getUser()->getExpiresAt())
-        {
+        if ($this->authSession->getUser()->getExpiresAt()) {
             $this->revokeExpiredAdminUser();
         }
 
@@ -155,8 +154,7 @@ class AdminSessionsManager
         }
 
         // todo: don't necessarily have a user here
-        if ($this->authSession->getUser()->getExpiresAt())
-        {
+        if ($this->authSession->getUser()->getExpiresAt()) {
             $this->revokeExpiredAdminUser();
         }
 

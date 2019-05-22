@@ -73,7 +73,5 @@ class DisableExpiredUsersTest extends \PHPUnit\Framework\TestCase
         static::assertEquals(1, $user->getIsActive());
         static::assertNotNull($user->getExpiresAt());
         static::assertNotNull($token->getId());
-
     }
-
 }

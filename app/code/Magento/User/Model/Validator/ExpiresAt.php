@@ -17,6 +17,7 @@ class ExpiresAt extends AbstractValidator
 
     /**
      * Ensure that the given date is later than the current date.
+     *
      * @param String $value
      * @return bool
      * @throws \Exception

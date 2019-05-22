@@ -144,6 +144,7 @@ class UserValidationRules
 
     /**
      * Adds validation rule for expiration date.
+     *
      * @param \Magento\Framework\Validator\DataObject $validator
      * @return \Magento\Framework\Validator\DataObject
      * @throws \Zend_Validate_Exception

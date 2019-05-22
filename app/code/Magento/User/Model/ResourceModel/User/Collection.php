@@ -16,6 +16,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Define resource model
+     *
      * @return void
      */
     protected function _construct()
@@ -44,7 +45,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Filter for expired, active users.
-     * @param null $now
+     *
+     * @param string $now
      * @return $this
      */
     public function addActiveExpiredUsersFilter($now = null)
