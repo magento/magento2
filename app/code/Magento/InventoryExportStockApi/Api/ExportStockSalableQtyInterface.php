@@ -16,11 +16,11 @@ interface ExportStockSalableQtyInterface
     /**
      * Provides stock export data
      *
-     * @param $salesChannelCode $salesChannelCode
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param $salesChannelCode $salesChannelCode
      * @return \Magento\InventoryExportStockApi\Api\Data\ExportStockSalableQtySearchResultInterface
      */
-    public function execute(
+    public function getList(
         string $salesChannelCode,
         \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
     ): \Magento\InventoryExportStockApi\Api\Data\ExportStockSalableQtySearchResultInterface;
