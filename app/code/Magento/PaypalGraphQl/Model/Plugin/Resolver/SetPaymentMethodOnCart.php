@@ -13,13 +13,16 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Paypal\Model\Express\Checkout\Factory as CheckoutFactory;
-use Magento\PaypalGraphQl\Model\PaypalConfigProvider;
 use Magento\PaypalGraphQl\Model\PaypalExpressAdditionalDataProvider;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\PaypalGraphQl\Model\Provider\Checkout as CheckoutProvider;
+use Magento\PaypalGraphQl\Model\Provider\Config as ConfigProvider;
 
 class SetPaymentMethodOnCart
 {
     private const PATH_CODE = 'input/payment_method/code';
+
+    private $allowedPaymentMethodCodes = [];
 
     /**
      * @var CheckoutFactory
@@ -37,26 +40,35 @@ class SetPaymentMethodOnCart
     private $arrayManager;
 
     /**
-     * @var PaypalConfigProvider
+     * @var CheckoutProvider
      */
-    private $paypalConfigProvider;
+    private $checkoutProvider;
+
+    /**
+     * @var ConfigProvider
+     */
+    private $configProvider;
 
     /**
      * @param CheckoutFactory $checkoutFactory
      * @param PaypalExpressAdditionalDataProvider $paypalExpressAdditionalDataProvider
      * @param ArrayManager $arrayManager
-     * @param PaypalConfigProvider $paypalConfigProvider
+     * @param CheckoutProvider $checkoutProvider
      */
     public function __construct(
         CheckoutFactory $checkoutFactory,
         PaypalExpressAdditionalDataProvider $paypalExpressAdditionalDataProvider,
         ArrayManager $arrayManager,
-        PaypalConfigProvider $paypalConfigProvider
+        CheckoutProvider $checkoutProvider,
+        ConfigProvider $configProvider,
+        array $allowedPaymentMethodCodes = []
     ) {
         $this->checkoutFactory = $checkoutFactory;
         $this->paypalExpressAdditionalDataProvider = $paypalExpressAdditionalDataProvider;
         $this->arrayManager = $arrayManager;
-        $this->paypalConfigProvider = $paypalConfigProvider;
+        $this->checkoutProvider = $checkoutProvider;
+        $this->configProvider = $configProvider;
+        $this->allowedPaymentMethodCodes = $allowedPaymentMethodCodes;
     }
 
     /**
@@ -71,6 +83,7 @@ class SetPaymentMethodOnCart
      * @param array|null $args
      * @return mixed
      * @throws GraphQlInputException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterResolve(
         ResolverInterface $subject,
@@ -81,30 +94,39 @@ class SetPaymentMethodOnCart
         array $value = null,
         array $args = null
     ) {
-        $code = $this->arrayManager->get(self::PATH_CODE, $args) ?? '';
-
-        $paypalAdditionalData = $this->paypalExpressAdditionalDataProvider->getData($args);
-        if (empty($paypalAdditionalData)
-            || empty($paypalAdditionalData[$code])
-            || empty($paypalAdditionalData[$code]['payer_id'])
-            || empty($paypalAdditionalData[$code]['token'])
-            || empty($code)
-        ) {
+        $paymentCode = $this->arrayManager->get(self::PATH_CODE, $args) ?? '';
+        if (!$this->isAllowedPaymentMethod($paymentCode)) {
             return $resolvedValue;
         }
 
-        // validate and get payment code method
-        $payerId = $paypalAdditionalData[$code]['payer_id'];
-        $token = $paypalAdditionalData[$code]['token'];
+        $paypalAdditionalData = $this->paypalExpressAdditionalDataProvider->getData($args);
+        $payerId = $paypalAdditionalData[$paymentCode]['payer_id'] ?? null;
+        $token = $paypalAdditionalData[$paymentCode]['token'] ?? null;
         $cart = $resolvedValue['cart']['model'];
-        $checkout = $this->paypalConfigProvider->getCheckout($code, $cart);
 
-        try {
-            $checkout->returnFromPaypal($token, $payerId);
-        } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()));
+        if ($payerId && $token) {
+            $config = $this->configProvider->getConfig($paymentCode);
+            $checkout = $this->checkoutProvider->getCheckout($config, $cart);
+
+            try {
+                $checkout->returnFromPaypal($token, $payerId);
+            } catch (LocalizedException $e) {
+                throw new GraphQlInputException(__($e->getMessage()));
+            }
         }
 
         return $resolvedValue;
     }
+
+    /**
+     * Check if payment method code is one that should be handled by this plugin
+     *
+     * @param string $paymentCode
+     * @return bool
+     */
+    private function isAllowedPaymentMethod(string $paymentCode): bool
+    {
+        return !empty($paymentCode) && in_array($paymentCode, $this->allowedPaymentMethodCodes);
+    }
+
 }

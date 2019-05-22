@@ -8,10 +8,7 @@ declare(strict_types=1);
 namespace Magento\PaypalGraphQl\Model\Resolver\Customer;
 
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Webapi\Request;
-use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\PaypalGraphQl\AbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -66,9 +63,10 @@ class PaypalExpressTokenTest extends AbstractTest
         $reservedQuoteId = 'test_quote';
         $cart = $this->getQuoteByReservedOrderId($reservedQuoteId);
         $cartId = $cart->getId();
+        $maskedCartId = $this->quoteIdToMaskedId->execute((int) $cartId);
         $paymentMethod = "paypal_express";
 
-        $query = $this->getCreateTokenMutation($cartId, $paymentMethod);
+        $query = $this->getCreateTokenMutation($maskedCartId, $paymentMethod);
 
         $postData = $this->json->serialize(['query' => $query]);
         $this->request->setPathInfo('/graphql');

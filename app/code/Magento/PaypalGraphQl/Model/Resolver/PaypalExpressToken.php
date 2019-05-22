@@ -8,19 +8,16 @@ declare(strict_types=1);
 namespace Magento\PaypalGraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\PaypalGraphQl\Model\PaypalConfigProvider;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\GuestCartRepositoryInterface;
-use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
-use Magento\Paypal\Model\Express\Checkout\Factory as CheckoutFactory;
+use Magento\Paypal\Model\ConfigFactory;
 use Magento\Framework\UrlInterface;
 use Magento\Checkout\Helper\Data as CheckoutHelper;
-use Magento\Quote\Api\Data\CartInterface;
+use Magento\PaypalGraphQl\Model\Provider\Checkout as CheckoutProvider;
+use Magento\PaypalGraphQl\Model\Provider\Config as ConfigProvider;
+use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 
 /**
  * Resolver for generating Paypal token
@@ -28,24 +25,19 @@ use Magento\Quote\Api\Data\CartInterface;
 class PaypalExpressToken implements ResolverInterface
 {
     /**
-     * @var CartRepositoryInterface
+     * @var GetCartForUser
      */
-    private $cartRepository;
+    private $getCartForUser;
 
     /**
-     * @var GuestCartRepositoryInterface
+     * @var ConfigProvider
      */
-    private $guestCartRepository;
+    private $configProvider;
 
     /**
-     * @var MaskedQuoteIdToQuoteIdInterface
+     * @var CheckoutProvider
      */
-    private $maskedQuoteIdToQuoteId;
-
-    /**
-     * @var CheckoutFactory
-     */
-    private $checkoutFactory;
+    private $checkoutProvider;
 
     /**
      * @var UrlInterface
@@ -53,39 +45,28 @@ class PaypalExpressToken implements ResolverInterface
     private $url;
 
     /**
-     * @var PaypalConfigProvider
-     */
-    private $paypalConfigProvider;
-
-    /**
      * @var CheckoutHelper
      */
     private $checkoutHelper;
 
     /**
-     * @param CartRepositoryInterface $cartRepository
-     * @param GuestCartRepositoryInterface $guestCartRepository
-     * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
-     * @param CheckoutFactory $checkoutFactory
+     * @param GetCartForUser $getCartForUser
+     * @param ConfigFactory $configFactory
      * @param UrlInterface $url
-     * @param PaypalConfigProvider $paypalConfigProvider
+     * @param PaypalCheckoutProvider $paypalCheckoutProvider
      * @param CheckoutHelper $checkoutHelper
      */
     public function __construct(
-        CartRepositoryInterface $cartRepository,
-        GuestCartRepositoryInterface $guestCartRepository,
-        MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
-        CheckoutFactory $checkoutFactory,
+        GetCartForUser $getCartForUser,
+        CheckoutProvider $checkoutProvider,
+        ConfigProvider $configProvider,
         UrlInterface $url,
-        PaypalConfigProvider $paypalConfigProvider,
         CheckoutHelper $checkoutHelper
     ) {
-        $this->cartRepository = $cartRepository;
-        $this->guestCartRepository = $guestCartRepository;
-        $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
-        $this->checkoutFactory = $checkoutFactory;
+        $this->getCartForUser = $getCartForUser;
+        $this->checkoutProvider = $checkoutProvider;
+        $this->configProvider = $configProvider;
         $this->url = $url;
-        $this->paypalConfigProvider = $paypalConfigProvider;
         $this->checkoutHelper = $checkoutHelper;
     }
 
@@ -100,16 +81,17 @@ class PaypalExpressToken implements ResolverInterface
         array $args = null
     ) {
         $cartId = $args['input']['cart_id'] ?? '';
-        $code = $args['input']['code'] ?? '';
+        $paymentCode = $args['input']['code'] ?? '';
         $usePaypalCredit = isset($args['input']['paypal_credit']) ? $args['input']['paypal_credit'] : false;
         $usedExpressButton = isset($args['input']['express_button']) ? $args['input']['express_button'] : false;
         $customerId = $context->getUserId();
-        $cart = $this->getCart($cartId, $customerId);
-        $config = $this->paypalConfigProvider->getConfig($code);
-        $checkout = $this->paypalConfigProvider->getCheckout($code, $cart);
+
+        $cart = $this->getCartForUser->execute($cartId, $customerId);
+        $config = $this->configProvider->getConfig($paymentCode);
+        $checkout = $this->checkoutProvider->getCheckout($config, $cart);
 
         if ($cart->getIsMultiShipping()) {
-            $cart->setIsMultiShipping(false);
+            $cart->setIsMultiShipping(0);
             $cart->removeAllAddresses();
         }
         $checkout->setIsBml($usePaypalCredit);
@@ -122,7 +104,7 @@ class PaypalExpressToken implements ResolverInterface
             );
         } else {
             if (!$this->checkoutHelper->isAllowedGuestCheckout($cart)) {
-                throw new GraphQlInputException(__("Guest checkout is not allowed"));
+                throw new GraphQlInputException(__("Guest checkout is disabled."));
             }
         }
 
@@ -143,40 +125,12 @@ class PaypalExpressToken implements ResolverInterface
         }
 
         return [
-            'method' => $code,
+            'method' => $paymentCode,
             'token' => $token,
             'paypal_urls' => [
                 'start' => $checkout->getRedirectUrl(),
                 'edit' => $config->getExpressCheckoutEditUrl($token)
             ]
         ];
-    }
-
-    /**
-     * Get the guest cart or the customer cart
-     *
-     * @param string $cartId
-     * @param int $customerId
-     * @return CartInterface
-     * @throws GraphQlInputException
-     */
-    private function getCart(string $cartId, int $customerId): CartInterface
-    {
-        // validate cartId code
-        if (empty($cartId)) {
-            throw new GraphQlInputException(__("TODO Missing cart id"));
-        }
-
-        try {
-            if ($customerId) {
-                $cart = $this->cartRepository->get($cartId);
-            } else {
-                $cart = $this->guestCartRepository->get($cartId);
-            }
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlInputException(__("TODO cart not found"));
-        }
-
-        return $cart;
     }
 }
