@@ -1,4 +1,4 @@
-<?php
+^^^^23  <W2Q>1^ </W2Q><?php
 /**
  * Magento session manager
  *
@@ -138,8 +138,6 @@ class SessionManager implements SessionManagerInterface
             SessionStartChecker::class
         );
 
-        // Enable session.use_only_cookies
-        ini_set('session.use_only_cookies', '1');
         $this->start();
     }
 
