@@ -45,7 +45,7 @@ $numColumns = sizeof($block->getColumns());
                     <select name="<?= $block->escapeHtml($block->getId()) ?>_export" id="<?= $block->escapeHtml($block->getId()) ?>_export"
                             class="admin__control-select">
                         <?php foreach ($block->getExportTypes() as $_type): ?>
-                            <option value="<?= /* @escapeNotVerified */ $_type->getUrl() ?>"><?= /* @escapeNotVerified */ $_type->getLabel() ?></option>
+                            <option value="<?= $block->escapeHtmlAttr($_type->getUrl()) ?>"><?= /* @escapeNotVerified */ $_type->getLabel() ?></option>
                         <?php endforeach; ?>
                     </select>
                     <?= $block->getExportButtonHtml() ?>
@@ -71,9 +71,9 @@ $numColumns = sizeof($block->getColumns());
 
             <?php if ($block->getPagerVisibility()): ?>
                 <div class="admin__data-grid-pager-wrap">
-                    <select name="<?= /* @escapeNotVerified */ $block->getVarNameLimit() ?>"
+                    <select name="<?= $block->escapeHtmlAttr($block->getVarNameLimit()) ?>"
                             id="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-limit"
-                            onchange="<?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.loadByElement(this)"
+                            onchange="<?= /* @noEscape */ $block->getJsObjectName() ?>.loadByElement(this)"
                             class="admin__control-select">
                         <option value="20"<?php if ($block->getCollection()->getPageSize() == 20): ?>
                             selected="selected"<?php endif; ?>>20
@@ -100,7 +100,7 @@ $numColumns = sizeof($block->getColumns());
                         <?php if ($_curPage > 1): ?>
                             <button class="action-previous"
                                     type="button"
-                                    onclick="<?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.setPage('<?= /* @escapeNotVerified */ ($_curPage - 1) ?>');return false;">
+                                    onclick="<?= /* @noEscape */ $block->getJsObjectName() ?>.setPage('<?= /* @escapeNotVerified */ ($_curPage - 1) ?>');return false;">
                                 <span><?= $block->escapeHtml(__('Previous page')) ?></span>
                             </button>
                         <?php else: ?>
@@ -108,10 +108,10 @@ $numColumns = sizeof($block->getColumns());
                         <?php endif; ?>
                         <input type="text"
                                id="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-current"
-                               name="<?= /* @escapeNotVerified */ $block->getVarNamePage() ?>"
-                               value="<?= /* @escapeNotVerified */ $_curPage ?>"
+                               name="<?= $block->escapeHtmlAttr($block->getVarNamePage()) ?>"
+                               value="<?= $block->escapeHtmlAttr($_curPage) ?>"
                                class="admin__control-text"
-                               onkeypress="<?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.inputPage(event, '<?= /* @escapeNotVerified */ $_lastPage ?>')" <?= /* @escapeNotVerified */ $block->getUiId('current-page') ?> />
+                               onkeypress="<?= /* @noEscape */ $block->getJsObjectName() ?>.inputPage(event, '<?= /* @escapeNotVerified */ $_lastPage ?>')" <?= /* @escapeNotVerified */ $block->getUiId('current-page') ?> />
                         <label class="admin__control-support-text" for="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-current">
                             <?= /* @noEscape */ __('of %1', '<span>' . $block->getCollection())->getLastPageNumber() . '</span>' ?>
                         </label>
@@ -119,7 +119,7 @@ $numColumns = sizeof($block->getColumns());
                             <button type="button"
                                     title="<?= $block->escapeHtml(__('Next page')) ?>"
                                     class="action-next"
-                                    onclick="<?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.setPage('<?= /* @escapeNotVerified */ ($_curPage + 1) ?>');return false;">
+                                    onclick="<?= /* @noEscape */ $block->getJsObjectName() ?>.setPage('<?= /* @escapeNotVerified */ ($_curPage + 1) ?>');return false;">
                                 <span><?= $block->escapeHtml(__('Next page')) ?></span>
                             </button>
                         <?php else: ?>
@@ -146,7 +146,7 @@ $numColumns = sizeof($block->getColumns());
                     <tr>
                         <?php foreach ($block->getColumns() as $_column): ?>
                             <?php if ($_column->getHeaderHtml() == '&nbsp;'):?>
-                                <th class="data-grid-th" data-column="<?= /* @escapeNotVerified */ $_column->getId() ?>"
+                                <th class="data-grid-th" data-column="<?= $block->escapeHtmlAttr($_column->getId()) ?>"
                                     <?= $_column->getHeaderHtmlProperty() ?>>&nbsp;</th>
                             <?php else: ?>
                                 <?= $_column->getHeaderHtml() ?>
@@ -158,7 +158,7 @@ $numColumns = sizeof($block->getColumns());
                     <tr class="data-grid-filters" data-role="filter-form">
                         <?php $i = 0;
                         foreach ($block->getColumns() as $_column): ?>
-                            <td data-column="<?= /* @escapeNotVerified */ $_column->getId() ?>" <?= $_column->getHeaderHtmlProperty() ?>>
+                            <td data-column="<?= $block->escapeHtmlAttr($_column->getId()) ?>" <?= $_column->getHeaderHtmlProperty() ?>>
                                 <?= $_column->getFilterHtml() ?>
                             </td>
                         <?php endforeach; ?>
@@ -170,7 +170,7 @@ $numColumns = sizeof($block->getColumns());
                 <tfoot>
                 <tr class="totals">
                     <?php foreach ($block->getColumns() as $_column): ?>
-                        <th class="<?= /* @escapeNotVerified */ $_column->getCssProperty() ?>">
+                        <th class="<?= $block->escapeHtmlAttr($_column->getCssProperty()) ?>">
                             <?= /* @escapeNotVerified */ ($_column->hasTotalsLabel()) ? $_column->getTotalsLabel() : $_column->getRowField($_column->getGrid()->getTotals()) ?>
                         </th>
                     <?php endforeach; ?>
@@ -181,21 +181,21 @@ $numColumns = sizeof($block->getColumns());
             <tbody>
             <?php if (($block->getCollection()->getSize() > 0) && (!$block->getIsCollapsed())): ?>
                 <?php foreach ($block->getCollection() as $_index => $_item): ?>
-                    <tr title="<?= /* @escapeNotVerified */ $block->getRowUrl($_item) ?>"<?php if ($_class = $block->getRowClass($_item)): ?>
-                        class="<?= /* @escapeNotVerified */ $_class ?>"<?php endif; ?> ><?php
+                    <tr title="<?= $block->escapeHtmlAttr($block->getRowUrl($_item)) ?>"<?php if ($_class = $block->getRowClass($_item)): ?>
+                        class="<?= $block->escapeHtmlAttr($_class) ?>"<?php endif; ?> ><?php
                         $i = 0;
                         foreach ($block->getColumns() as $_column):
                             if ($block->shouldRenderCell($_item, $_column)):
                                 $_rowspan = $block->getRowspan($_item, $_column);
                                 ?>
                             <td <?= ($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>
-                                class="<?= /* @escapeNotVerified */ $_column->getCssProperty() ?>
+                                class="<?= $block->escapeHtmlAttr($_column->getCssProperty()) ?>
                                         <?= /* @escapeNotVerified */ $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': '' ?>">
                                 <?= (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
                                 </td><?php
                                 if ($block->shouldRenderEmptyCell($_item, $_column)):
                                     ?>
-                                    <td colspan="<?= /* @escapeNotVerified */ $block->getEmptyCellColspan($_item) ?>"
+                                    <td colspan="<?= $block->escapeHtmlAttr($block->getEmptyCellColspan($_item)) ?>"
                                         class="last"><?= /* @escapeNotVerified */ $block->getEmptyCellLabel() ?></td><?php
                                 endif;
                             endif;
@@ -206,7 +206,7 @@ $numColumns = sizeof($block->getColumns());
                             <tr>
                                 <?php $i = 0;
                                 foreach ($block->getMultipleRowColumns($_i) as $_column): ?>
-                                    <td class="<?= /* @escapeNotVerified */ $_column->getCssProperty() ?>
+                                    <td class="<?= $block->escapeHtmlAttr($_column->getCssProperty()) ?>
                                         <?= /* @escapeNotVerified */ $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': '' ?>">
                                         <?= (($_html = $_column->getRowField($_i)) != '' ? $_html : '&nbsp;') ?>
                                     </td>
@@ -219,7 +219,7 @@ $numColumns = sizeof($block->getColumns());
                         <tr class="subtotals">
                             <?php $i = 0;
                             foreach ($block->getSubTotalColumns() as $_column): ?>
-                                <td class="<?= /* @escapeNotVerified */ $_column->getCssProperty() ?>
+                                <td class="<?= $block->escapeHtmlAttr($_column->getCssProperty()) ?>
                                            <?= /* @escapeNotVerified */ $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': '' ?>">
                                     <?php /* @escapeNotVerified */ echo($_column->hasSubtotalsLabel() ? $_column->getSubtotalsLabel() :
                                         $_column->getRowField($block->getSubTotalItem($_item))
@@ -232,8 +232,8 @@ $numColumns = sizeof($block->getColumns());
                 <?php endforeach; ?>
             <?php elseif ($block->getEmptyText()): ?>
                 <tr class="data-grid-tr-no-data">
-                    <td class="<?= /* @escapeNotVerified */ $block->getEmptyTextClass() ?>"
-                        colspan="<?= /* @escapeNotVerified */ $numColumns ?>"><?= /* @escapeNotVerified */ $block->getEmptyText() ?></td>
+                    <td class="<?= $block->escapeHtmlAttr($block->getEmptyTextClass()) ?>"
+                        colspan="<?= $block->escapeHtmlAttr($numColumns) ?>"><?= /* @escapeNotVerified */ $block->getEmptyText() ?></td>
                 </tr>
             <?php endif; ?>
             </tbody>

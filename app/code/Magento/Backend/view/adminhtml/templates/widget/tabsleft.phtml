@@ -16,7 +16,7 @@
         <ul>
         <?php foreach ($section['children'] as $menuId => $menuItem): ?>
             <li id="li-<?= /* @escapeNotVerified */ $id ?>-<?= /* @escapeNotVerified */ $sectionId ?>-<?= /* @escapeNotVerified */ $menuId ?>">
-                <a href="#" title="<?= /* @escapeNotVerified */ $menuItem['title'] ?>">
+                <a href="#" title="<?= $block->escapeHtmlAttr($menuItem['title']) ?>">
                     <span><?= /* @escapeNotVerified */ $menuItem['label'] ?></span>
                 </a>
             </li>

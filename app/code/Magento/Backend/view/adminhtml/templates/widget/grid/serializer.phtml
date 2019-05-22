@@ -35,7 +35,7 @@
     });
 </script>
 <?php else :?>
-<input type="hidden" name="<?= /* @escapeNotVerified */ $block->getInputElementName() ?>"  value="" id="<?= /* @escapeNotVerified */ $_id ?>" />
+<input type="hidden" name="<?= $block->escapeHtmlAttr($block->getInputElementName()) ?>"  value="" id="<?= $block->escapeHtmlAttr($_id) ?>" />
 <script>
     require([
         'mage/adminhtml/grid'

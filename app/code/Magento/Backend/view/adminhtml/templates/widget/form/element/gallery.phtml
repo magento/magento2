@@ -33,12 +33,12 @@
         <tr id="<?= $block->getElement()->getHtmlId() ?>_tr_<?= /* @escapeNotVerified */ $image->getValueId() ?>" class="gallery">
         <?php foreach ($block->getValues()->getAttributeBackend()->getImageTypes() as $type): ?>
             <td class="gallery" align="center" style="vertical-align:bottom;">
-            <a href="<?= /* @escapeNotVerified */ $image->setType($type)->getSourceUrl() ?>" target="_blank" onclick="imagePreview('<?= $block->getElement()->getHtmlId() ?>_image_<?= /* @escapeNotVerified */ $type ?>_<?= /* @escapeNotVerified */ $image->getValueId() ?>');return false;">
-            <img id="<?= $block->getElement()->getHtmlId() ?>_image_<?= /* @escapeNotVerified */ $type ?>_<?= /* @escapeNotVerified */ $image->getValueId() ?>" src="<?= /* @escapeNotVerified */ $image->setType($type)->getSourceUrl() ?>?<?= /* @escapeNotVerified */ time() ?>" alt="<?= /* @escapeNotVerified */ $image->getValue() ?>" title="<?= /* @escapeNotVerified */ $image->getValue() ?>" height="25" class="small-image-preview v-middle"/></a><br/>
-            <input type="file" name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_<?= /* @escapeNotVerified */ $type ?>[<?= /* @escapeNotVerified */ $image->getValueId() ?>]" size="1"></td>
+            <a href="<?= $block->escapeUrl($image->setType($type)->getSourceUrl()) ?>" target="_blank" onclick="imagePreview('<?= $block->getElement()->getHtmlId() ?>_image_<?= /* @escapeNotVerified */ $type ?>_<?= /* @escapeNotVerified */ $image->getValueId() ?>');return false;">
+            <img id="<?= $block->getElement()->getHtmlId() ?>_image_<?= /* @escapeNotVerified */ $type ?>_<?= /* @escapeNotVerified */ $image->getValueId() ?>" src="<?= $block->escapeUrl($image->setType($type)->getSourceUrl()) ?>?<?= /* @escapeNotVerified */ time() ?>" alt="<?= $block->escapeHtmlAttr($image->getValue()) ?>" title="<?= $block->escapeHtmlAttr($image->getValue()) ?>" height="25" class="small-image-preview v-middle"/></a><br/>
+            <input type="file" name="<?= $block->escapeHtmlAttr($block->getElement()->getName()) ?>_<?= /* @escapeNotVerified */ $type ?>[<?= /* @escapeNotVerified */ $image->getValueId() ?>]" size="1"></td>
         <?php endforeach; ?>
-        <td class="gallery" align="center" style="vertical-align:bottom;"><input type="input" name="<?= /* @escapeNotVerified */ $block->getElement()->getParentName() ?>[position][<?= /* @escapeNotVerified */ $image->getValueId() ?>]" value="<?= /* @escapeNotVerified */ $image->getPosition() ?>" id="<?= $block->getElement()->getHtmlId() ?>_position_<?= /* @escapeNotVerified */ $image->getValueId() ?>" size="3"/></td>
-        <td class="gallery" align="center" style="vertical-align:bottom;"><?= $block->getDeleteButtonHtml($image->getValueId()) ?><input type="hidden" name="<?= /* @escapeNotVerified */ $block->getElement()->getParentName() ?>[delete][<?= /* @escapeNotVerified */ $image->getValueId() ?>]" id="<?= $block->getElement()->getHtmlId() ?>_delete_<?= /* @escapeNotVerified */ $image->getValueId() ?>"/></td>
+        <td class="gallery" align="center" style="vertical-align:bottom;"><input type="input" name="<?= $block->escapeHtmlAttr($block->getElement()->getParentName()) ?>[position][<?= /* @escapeNotVerified */ $image->getValueId() ?>]" value="<?= $block->escapeHtmlAttr($image->getPosition()) ?>" id="<?= $block->getElement()->getHtmlId() ?>_position_<?= /* @escapeNotVerified */ $image->getValueId() ?>" size="3"/></td>
+        <td class="gallery" align="center" style="vertical-align:bottom;"><?= $block->getDeleteButtonHtml($image->getValueId()) ?><input type="hidden" name="<?= $block->escapeHtmlAttr($block->getElement()->getParentName()) ?>[delete][<?= /* @escapeNotVerified */ $image->getValueId() ?>]" id="<?= $block->getElement()->getHtmlId() ?>_delete_<?= /* @escapeNotVerified */ $image->getValueId() ?>"/></td>
         </tr>
     <?php endforeach; ?>
 <?php endif; ?>
@@ -65,7 +65,7 @@ window.addNewImage = function()
 
     id--;
     num_of_images++;
-    new_file_input = '<input type="file" name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_%j%[%id%]" size="1">';
+    new_file_input = '<input type="file" name="<?= $block->escapeHtmlAttr($block->getElement()->getName()) ?>_%j%[%id%]" size="1">';
 
     // Sort order input
     var new_row_input = document.createElement( 'input' );

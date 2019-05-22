@@ -59,9 +59,9 @@ $numColumns = !is_null($block->getColumns()) ? sizeof($block->getColumns()) : 0;
                     </div>
                 <?php if ($block->getPagerVisibility()): ?>
                     <div class="admin__data-grid-pager-wrap">
-                        <select name="<?= /* @escapeNotVerified */ $block->getVarNameLimit() ?>"
+                        <select name="<?= $block->escapeHtmlAttr($block->getVarNameLimit()) ?>"
                                 id="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-limit"
-                                onchange="<?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.loadByElement(this)" <?= /* @escapeNotVerified */ $block->getUiId('per-page') ?>
+                                onchange="<?= /* @noEscape */ $block->getJsObjectName() ?>.loadByElement(this)" <?= /* @escapeNotVerified */ $block->getUiId('per-page') ?>
                                 class="admin__control-select">
                             <option value="20"<?php if ($block->getCollection()->getPageSize() == 20): ?>
                                 selected="selected"<?php endif; ?>>20
@@ -88,7 +88,7 @@ $numColumns = !is_null($block->getColumns()) ? sizeof($block->getColumns()) : 0;
                             <?php if ($_curPage > 1): ?>
                                 <button class="action-previous"
                                         type="button"
-                                        onclick="<?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.setPage('<?= /* @escapeNotVerified */ ($_curPage - 1) ?>');return false;">
+                                        onclick="<?= /* @noEscape */ $block->getJsObjectName() ?>.setPage('<?= /* @escapeNotVerified */ ($_curPage - 1) ?>');return false;">
                                             <span><?= $block->escapeHtml(__('Previous page')) ?></span>
                                 </button>
                             <?php else: ?>
@@ -97,10 +97,10 @@ $numColumns = !is_null($block->getColumns()) ? sizeof($block->getColumns()) : 0;
 
                             <input type="text"
                                    id="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-current"
-                                   name="<?= /* @escapeNotVerified */ $block->getVarNamePage() ?>"
-                                   value="<?= /* @escapeNotVerified */ $_curPage ?>"
+                                   name="<?= $block->escapeHtmlAttr($block->getVarNamePage()) ?>"
+                                   value="<?= $block->escapeHtmlAttr($_curPage) ?>"
                                    class="admin__control-text"
-                                   onkeypress="<?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.inputPage(event, '<?= /* @escapeNotVerified */ $_lastPage ?>')" <?= /* @escapeNotVerified */ $block->getUiId('current-page') ?> />
+                                   onkeypress="<?= /* @noEscape */ $block->getJsObjectName() ?>.inputPage(event, '<?= /* @escapeNotVerified */ $_lastPage ?>')" <?= /* @escapeNotVerified */ $block->getUiId('current-page') ?> />
 
                             <label class="admin__control-support-text" for="<?= $block->escapeHtml($block->getHtmlId())
                             ?>_page-current">
@@ -109,7 +109,7 @@ $numColumns = !is_null($block->getColumns()) ? sizeof($block->getColumns()) : 0;
                             <?php if ($_curPage < $_lastPage): ?>
                                 <button type="button" title="<?= $block->escapeHtml(__('Next page')) ?>"
                                         class="action-next"
-                                        onclick="<?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.setPage('<?= /* @escapeNotVerified */ ($_curPage + 1) ?>');return false;">
+                                        onclick="<?= /* @noEscape */ $block->getJsObjectName() ?>.setPage('<?= /* @escapeNotVerified */ ($_curPage + 1) ?>');return false;">
                                     <span><?= $block->escapeHtml(__('Next page')) ?></span>
                                 </button>
                             <?php else: ?>
@@ -122,7 +122,7 @@ $numColumns = !is_null($block->getColumns()) ? sizeof($block->getColumns()) : 0;
         </div>
         <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
         <?php if ($block->getGridCssClass()): ?>
-            <table class="<?= /* @escapeNotVerified */ $block->getGridCssClass() ?> data-grid" id="<?= $block->escapeHtml($block->getId()) ?>_table">
+            <table class="<?= $block->escapeHtmlAttr($block->getGridCssClass()) ?> data-grid" id="<?= $block->escapeHtml($block->getId()) ?>_table">
                 <!-- Rendering column set -->
                 <?= $block->getChildHtml('grid.columnSet') ?>
             </table>

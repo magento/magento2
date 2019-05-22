@@ -19,7 +19,7 @@
                 class="required-entry local-validation admin__control-select">
                 <option class="admin__control-select-placeholder" value="" selected><?= $block->escapeHtml(__('Actions')) ?></option>
                 <?php foreach ($block->getItems() as $_item): ?>
-                    <option value="<?= /* @escapeNotVerified */ $_item->getId() ?>"<?= ($_item->getSelected() ? ' selected="selected"' : '') ?>><?= /* @escapeNotVerified */ $_item->getLabel() ?></option>
+                    <option value="<?= $block->escapeHtmlAttr($_item->getId()) ?>"<?= ($_item->getSelected() ? ' selected="selected"' : '') ?>><?= /* @escapeNotVerified */ $_item->getLabel() ?></option>
                 <?php endforeach; ?>
             </select>
             <span class="outer-span" id="<?= $block->getHtmlId() ?>-form-hiddens"></span>
