@@ -35,7 +35,6 @@ return [
     'Magento_Paypal',
     'Magento_ProductVideo',
     'Magento_Reports',
-    'Magento_Sales',
     'Magento_Search',
     'Magento_Shipping',
     'Magento_Store',
