@@ -117,7 +117,7 @@ class Builder
      */
     private function getSortBuilder()
     {
-        if (null === $this->sortBuilder){
+        if (null === $this->sortBuilder) {
             $this->sortBuilder = ObjectManager::getInstance()->get(Sort::class);
         }
         return $this->sortBuilder;

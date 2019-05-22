@@ -9,10 +9,6 @@ namespace Magento\Elasticsearch\SearchAdapter\Query;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\RequestInterface;
-use Magento\Elasticsearch\Model\Config;
-use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
-use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation as AggregationBuilder;
-use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as Elasticsearch5Builder;
 
 /**
@@ -27,30 +23,6 @@ class Builder extends Elasticsearch5Builder
      * @var Sort
      */
     private $sortBuilder;
-
-    /**
-     * @param Config $clientConfig
-     * @param SearchIndexNameResolver $searchIndexNameResolver
-     * @param AggregationBuilder $aggregationBuilder
-     * @param ScopeResolverInterface $scopeResolver
-     * @param Sort|null $sortBuilder
-     */
-    public function __construct(
-        Config $clientConfig,
-        SearchIndexNameResolver $searchIndexNameResolver,
-        AggregationBuilder $aggregationBuilder,
-        ScopeResolverInterface $scopeResolver,
-        Sort $sortBuilder = null
-    ) {
-        $this->sortBuilder = $sortBuilder ?: ObjectManager::getInstance()->get(Sort::class);
-        parent::__construct(
-            $clientConfig,
-            $searchIndexNameResolver,
-            $aggregationBuilder,
-            $scopeResolver,
-            $this->sortBuilder
-        );
-    }
 
     /**
      * Set initial settings for query.
@@ -70,10 +42,23 @@ class Builder extends Elasticsearch5Builder
                 'from' => $request->getFrom(),
                 'size' => $request->getSize(),
                 'fields' => ['_id', '_score'],
-                'sort' => $this->sortBuilder->getSort($request),
+                'sort' => $this->getSortBuilder()->getSort($request),
                 'query' => [],
             ],
         ];
         return $searchQuery;
+    }
+
+    /**
+     * Get sort builder instance.
+     *
+     * @return Sort
+     */
+    private function getSortBuilder()
+    {
+        if (null === $this->sortBuilder) {
+            $this->sortBuilder = ObjectManager::getInstance()->get(Sort::class);
+        }
+        return $this->sortBuilder;
     }
 }
