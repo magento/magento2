@@ -445,7 +445,8 @@ TEMPLATE;
             ['setTemplateProcessor'],
             ['getTemplateProcessor'],
             ['varDirective'],
-            ['delete']
+            ['delete'],
+            ['getDataUsingMethod']
         ];
     }
 }
