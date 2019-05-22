@@ -9,7 +9,7 @@
 ?>
 <?php $_element = $block->getElement() ?>
 <?php if ($_element->getFieldsetContainerId()): ?>
-    <div id="<?= /* @escapeNotVerified */ $_element->getFieldsetContainerId() ?>">789
+    <div id="<?= $block->escapeHtmlAttr($_element->getFieldsetContainerId()) ?>">789
 <?php endif; ?>
 
 <?php if (!$_element->getNoContainer()): ?>
