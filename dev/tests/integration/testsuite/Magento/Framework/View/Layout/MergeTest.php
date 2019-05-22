@@ -79,7 +79,8 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $files = [];
-        foreach (glob(__DIR__ . '/_mergeFiles/layout/*.xml') as $filename) {
+        $fileDriver = new \Magento\Framework\Filesystem\Driver\File();
+        foreach ($fileDriver->readDirectory(__DIR__ . '/_mergeFiles/layout/') as $filename) {
             $files[] = new \Magento\Framework\View\File($filename, 'Magento_Widget');
         }
         $fileSource = $this->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
@@ -439,6 +440,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
             ->method('isValid')
             ->willThrowException(new \Exception('Layout is invalid.'));
 
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $suffix = md5(implode('|', $this->_model->getHandles()));
         $cacheId = "LAYOUT_{$this->_theme->getArea()}_STORE{$this->scope->getId()}"
             . "_{$this->_theme->getId()}{$suffix}_page_layout_merged";
