@@ -206,7 +206,7 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
-     * Returns media gallery atribute instance
+     * Returns media gallery attribute instance
      *
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
      * @since 101.0.0
@@ -230,6 +230,7 @@ class CreateHandler implements ExtensionInterface
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @since 101.0.0
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function processDeletedImages($product, array &$images)
     {
@@ -400,6 +401,7 @@ class CreateHandler implements ExtensionInterface
             $destinationFile = $forTmp
                 ? $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getTmpMediaPath($file))
                 : $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getMediaPath($file));
+            // phpcs:disable Magento2.Functions.DiscouragedFunction
             $destFile = dirname($file) . '/' . FileUploader::getNewFileName($destinationFile);
         }
 
@@ -420,6 +422,7 @@ class CreateHandler implements ExtensionInterface
             $destinationFile = $this->getUniqueFileName($file);
 
             if (!$this->mediaDirectory->isFile($this->mediaConfig->getMediaPath($file))) {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception();
             }
 
@@ -437,6 +440,7 @@ class CreateHandler implements ExtensionInterface
             }
 
             return str_replace('\\', '/', $destinationFile);
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             $file = $this->mediaConfig->getMediaPath($file);
             throw new \Magento\Framework\Exception\LocalizedException(

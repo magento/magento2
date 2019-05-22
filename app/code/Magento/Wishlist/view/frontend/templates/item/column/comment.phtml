@@ -17,6 +17,6 @@ $item = $block->getItem();
         <span><?= $block->escapeHtml(__('Comment')) ?></span>
     </label>
     <div class="control">
-        <textarea id="product-item-comment-<?= $block->escapeHtmlAttr($item->getWishlistItemId()) ?>" placeholder="<?= /* @noEscape */ $this->helper('Magento\Wishlist\Helper\Data')->defaultCommentString() ?>" name="description[<?= $block->escapeHtmlAttr($item->getWishlistItemId()) ?>]" title="<?= $block->escapeHtmlAttr(__('Comment')) ?>" class="product-item-comment"><?= ($block->escapeHtml($item->getDescription())) ?></textarea>
+        <textarea id="product-item-comment-<?= $block->escapeHtmlAttr($item->getWishlistItemId()) ?>" placeholder="<?= /* @noEscape */ $this->helper('Magento\Wishlist\Helper\Data')->defaultCommentString() ?>" name="description[<?= $block->escapeHtmlAttr($item->getWishlistItemId()) ?>]" title="<?= $block->escapeHtmlAttr(__('Comment')) ?>" class="product-item-comment" <?= $item->getProduct()->isSaleable() ? '' : 'disabled="disabled"' ?>><?= ($block->escapeHtml($item->getDescription())) ?></textarea>
     </div>
 </div>

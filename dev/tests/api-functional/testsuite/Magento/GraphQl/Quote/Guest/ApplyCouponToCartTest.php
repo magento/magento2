@@ -38,7 +38,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $couponCode = '2?ds5!2d';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('applyCouponToCart', $response);
         self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
@@ -57,12 +57,12 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $couponCode = '2?ds5!2d';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey("applyCouponToCart", $response);
         self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
 
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -78,7 +78,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
 
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -95,7 +95,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId, $couponCode);
 
         self::expectExceptionMessage('The current user cannot perform operations on cart "' . $maskedQuoteId . '"');
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -111,7 +111,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
 
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -125,7 +125,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId, $couponCode);
 
         self::expectExceptionMessage('Could not find a cart with ID "' . $maskedQuoteId . '"');
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -144,7 +144,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
 
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -164,7 +164,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
 
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -190,7 +190,7 @@ mutation {
 QUERY;
 
         $this->expectExceptionMessage($message);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**

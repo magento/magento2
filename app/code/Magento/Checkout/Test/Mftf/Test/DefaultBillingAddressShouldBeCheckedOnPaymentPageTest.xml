@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DefaultBillingAddressShouldBeCheckedOnPaymentPageTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout via the Storefront"/>
+            <title value="The default billing address should be used on checkout"/>
+            <description value="Default billing address should be preselected on payments page on checkout if it exist"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-98892"/>
+            <useCaseId value="MAGETWO-70996"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--Go to Storefront as Customer-->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+                <argument name="Customer" value="$$createCustomer$$" />
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Logout from customer account-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+        </after>
+        <!-- Add simple product to cart and go to checkout-->
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <!-- Click "+ New Address" and Fill new address-->
+        <click selector="{{CheckoutShippingSection.newAddressButton}}" stepKey="addAddress"/>
+        <actionGroup ref="LoggedInCheckoutWithOneAddressFieldWithoutStateField" stepKey="changeAddress">
+            <argument name="Address" value="UK_Not_Default_Address"/>
+            <argument name="classPrefix" value="._show"/>
+        </actionGroup>
+        <!--Click "Save Addresses" -->
+        <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="saveAddress"/>
+        <waitForPageLoad stepKey="waitForAddressSaved"/>
+        <dontSeeElement selector="{{StorefrontCheckoutAddressPopupSection.newAddressModalPopup}}" stepKey="dontSeeModalPopup"/>
+        <!--Select Shipping Rate "Flat Rate" and click "Next" button-->
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask2"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+        <!--Verify that "My billing and shipping address are the same" is unchecked and billing address is preselected-->
+        <dontSeeCheckboxIsChecked selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="shippingAndBillingAddressIsSameUnchecked"/>
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="assertBillingAddress"/>
+    </test>
+</tests>

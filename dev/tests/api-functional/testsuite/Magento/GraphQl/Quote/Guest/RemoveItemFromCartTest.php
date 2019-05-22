@@ -47,7 +47,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
         $itemId = $this->getQuoteItemIdByReservedQuoteIdAndSku->execute('test_quote', 'simple_product');
 
         $query = $this->getQuery($maskedQuoteId, $itemId);
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         $this->assertArrayHasKey('removeItemFromCart', $response);
         $this->assertArrayHasKey('cart', $response['removeItemFromCart']);
@@ -61,7 +61,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     public function testRemoveItemFromNonExistentCart()
     {
         $query = $this->getQuery('non_existent_masked_id', 1);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -77,7 +77,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
         $this->expectExceptionMessage("Cart doesn't contain the {$notExistentItemId} item.");
 
         $query = $this->getQuery($maskedQuoteId, $notExistentItemId);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -96,14 +96,14 @@ mutation {
   ) {
     cart {
       items {
-        qty
+        quantity
       }
     }
   }
 }
 QUERY;
         $this->expectExceptionMessage($message);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -141,7 +141,7 @@ QUERY;
         $this->expectExceptionMessage("Cart doesn't contain the {$secondQuoteItemId} item.");
 
         $query = $this->getQuery($firstQuoteMaskedId, $secondQuoteItemId);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -159,7 +159,7 @@ QUERY;
         $this->expectExceptionMessage("The current user cannot perform operations on cart \"$customerQuoteMaskedId\"");
 
         $query = $this->getQuery($customerQuoteMaskedId, $customerQuoteItemId);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -179,7 +179,7 @@ mutation {
   ) {
     cart {
       items {
-        qty
+        quantity
       }
     }
   }

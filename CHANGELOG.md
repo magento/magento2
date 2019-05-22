@@ -4136,7 +4136,7 @@ Tests:
   * Moved Multishipping functionality to newly created module Multishipping
   * Extracted Product duplication behavior from Product model to Product\Copier model
   * Replaced event "catalog_model_product_duplicate" with composite Product\Copier model
-  * Replaced event "catalog_product_prepare_save" with controller product initialization helper that can be customozed via plugins
+  * Replaced event "catalog_product_prepare_save" with controller product initialization helper that can be customized via plugins
   * Consolidated Authorize.Net functionality in single module Authorizenet
   * Eliminated dependency of Sales module on Shipping and Usa modules
   * Eliminated dependency of Shipping module on Customer module
@@ -4335,7 +4335,7 @@ Tests:
   * Fixed order placing with virtual product using Express Checkout
   * Fixed the error during order placement with Recurring profile payment
   * Fixed wrong redirect after customer registration during multishipping checkout
-  * Fixed inability to crate shipping labels
+  * Fixed inability to create shipping labels
   * Fixed inability to switch language, if the default language is English
   * Fixed an issue with incorrect XML appearing in cache after some actions on the frontend
   * Fixed product export

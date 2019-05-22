@@ -72,13 +72,13 @@ mutation {
           code
           label
         }
-        address_type
+        __typename
       }
     }
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
         $cartResponse = $response['setShippingAddressesOnCart']['cart'];
@@ -130,7 +130,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -166,7 +166,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -205,7 +205,7 @@ QUERY;
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -243,7 +243,7 @@ mutation {
 }
 QUERY;
         $this->expectExceptionMessage($message);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -287,7 +287,7 @@ mutation {
 }
 QUERY;
         self::expectExceptionMessage('"Street Address" cannot contain more than 2 lines.');
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -364,7 +364,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -383,7 +383,7 @@ QUERY;
             ['response_field' => 'postcode', 'expected_value' => '887766'],
             ['response_field' => 'telephone', 'expected_value' => '88776655'],
             ['response_field' => 'country', 'expected_value' => ['code' => 'US', 'label' => 'US']],
-            ['response_field' => 'address_type', 'expected_value' => 'SHIPPING']
+            ['response_field' => '__typename', 'expected_value' => 'ShippingCartAddress']
         ];
 
         $this->assertResponseFields($shippingAddressResponse, $assertionMap);

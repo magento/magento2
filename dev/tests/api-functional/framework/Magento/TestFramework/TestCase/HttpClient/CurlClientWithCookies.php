@@ -23,8 +23,6 @@ class CurlClientWithCookies
     protected $jsonSerializer;
 
     /**
-     * CurlClient constructor.
-     *
      * @param CurlClient $curlClient
      * @param \Magento\TestFramework\Helper\JsonSerializer $jsonSerializer
      */
@@ -38,6 +36,8 @@ class CurlClientWithCookies
     }
 
     /**
+     * Compose the resource url
+     *
      * @param string $resourcePath Resource URL like /V1/Resource1/123
      * @return string resource URL
      * @throws \Exception
@@ -82,7 +82,7 @@ class CurlClientWithCookies
      *      ],
      *  ]
      *
-     * @param $headerBlock
+     * @param string $headerBlock
      * @return array
      */
     private function cookieParse($headerBlock)

@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -77,7 +76,7 @@ class PlaceOrderTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
 
         $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('placeOrder', $response);
         self::assertArrayHasKey('order_id', $response['placeOrder']['order']);
@@ -98,7 +97,7 @@ class PlaceOrderTest extends GraphQlAbstract
             'Unable to place order: A server error stopped your order from being placed. ' .
             'Please try to place your order again'
         );
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -116,7 +115,7 @@ class PlaceOrderTest extends GraphQlAbstract
         self::expectExceptionMessage(
             'Unable to place order: Some addresses can\'t be used due to the configurations for specific countries'
         );
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -135,7 +134,7 @@ class PlaceOrderTest extends GraphQlAbstract
         self::expectExceptionMessage(
             'Unable to place order: The shipping method is missing. Select the shipping method and try again'
         );
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -156,7 +155,7 @@ class PlaceOrderTest extends GraphQlAbstract
         self::expectExceptionMessageRegExp(
             '/Unable to place order: Please check the billing address information*/'
         );
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -176,7 +175,7 @@ class PlaceOrderTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId);
 
         self::expectExceptionMessage('Unable to place order: Enter a valid payment method and try again');
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -197,7 +196,7 @@ class PlaceOrderTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId);
 
         self::expectExceptionMessage('Unable to place order: Some of the products are out of stock');
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -220,7 +219,7 @@ class PlaceOrderTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId);
 
         self::expectExceptionMessageRegExp('/The current user cannot perform operations on cart*/');
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -243,7 +242,7 @@ class PlaceOrderTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId);
 
         self::expectExceptionMessageRegExp('/The current user cannot perform operations on cart*/');
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer3@search.example.com'));
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer3@search.example.com'));
     }
 
     /**

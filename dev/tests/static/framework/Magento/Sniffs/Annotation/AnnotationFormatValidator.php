@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+
 namespace Magento\Sniffs\Annotation;
 
 use PHP_CodeSniffer\Files\File;
@@ -247,6 +248,60 @@ class AnnotationFormatValidator
             }
             $tagGroups[$groupId][] = $tag;
         }
+    }
+
+    /**
+     * Validates tag aligning format
+     *
+     * @param File $phpcsFile
+     * @param int $commentStartPtr
+     */
+    public function validateTagAligningFormat(File $phpcsFile, int $commentStartPtr) : void
+    {
+        $tokens = $phpcsFile->getTokens();
+        $noAlignmentPositions = [];
+        $actualPositions = [];
+        $stackPtr = null;
+        foreach ($tokens[$commentStartPtr]['comment_tags'] as $tag) {
+            $content = $tokens[$tag]['content'];
+            if (preg_match('/^@/', $content) && ($tokens[$tag]['line'] === $tokens[$tag + 2]['line'])) {
+                $noAlignmentPositions[] = $tokens[$tag + 1]['column'] + 1;
+                $actualPositions[] = $tokens[$tag + 2]['column'];
+                $stackPtr = $stackPtr ?? $tag;
+            }
+        }
+
+        if (!$this->allTagsAligned($actualPositions)
+            && !$this->noneTagsAligned($actualPositions, $noAlignmentPositions)) {
+            $phpcsFile->addFixableError(
+                'Tags visual alignment must be consistent',
+                $stackPtr,
+                'MethodArguments'
+            );
+        }
+    }
+
+    /**
+     * Check whether all docblock params are aligned.
+     *
+     * @param array $actualPositions
+     * @return bool
+     */
+    private function allTagsAligned(array $actualPositions)
+    {
+        return count(array_unique($actualPositions)) === 1;
+    }
+
+    /**
+     * Check whether all docblock params are not aligned.
+     *
+     * @param array $actualPositions
+     * @param array $noAlignmentPositions
+     * @return bool
+     */
+    private function noneTagsAligned(array $actualPositions, array $noAlignmentPositions)
+    {
+        return $actualPositions === $noAlignmentPositions;
     }
 
     /**

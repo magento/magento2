@@ -11,6 +11,7 @@
     <test name="AdminCreateNewAttributeFromProductTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Product attributes"/>
             <title value="Check that New Attribute from Product is create"/>
             <description value="Check that New Attribute from Product is create"/>
             <severity value="MAJOR"/>
