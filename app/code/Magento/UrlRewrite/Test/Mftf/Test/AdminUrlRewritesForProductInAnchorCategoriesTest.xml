@@ -14,7 +14,7 @@
             <title value="Url-rewrites for product in anchor categories"/>
             <description value="For a product with category that has parent anchor categories, the rewrites is created when the category/product is saved."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-76098"/>
+            <testCaseId value="MC-16568"/>
             <group value="urlRewrite"/>
         </annotations>
 
@@ -83,10 +83,10 @@
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="Url-rewrites for product in anchor categories"/>
-            <title value="Url-rewrites for product in anchor categories"/>
+            <title value="Url-rewrites for product in anchor categories with configuration turned off"/>
             <description value="For a product with category that has parent anchor categories, the rewrites is created when the category/product is saved."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-94800"/>
+            <testCaseId value="MC-6844"/>
             <group value="urlRewrite"/>
         </annotations>
 
@@ -183,10 +183,10 @@
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="Url-rewrites for product in anchor categories for all store views"/>
-            <title value="Url-rewrites for product in anchor categories"/>
+            <title value="Url-rewrites for product in anchor categories for all store views"/>
             <description value="Verify that Saving category do not delete UrlRewrites for subcategories and all products in them."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-76301"/>
+            <testCaseId value="MC-16681"/>
             <group value="urlRewrite"/>
         </annotations>
         <before>
@@ -210,10 +210,10 @@
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="Url-rewrites for product in anchor categories for all store views"/>
-            <title value="Url-rewrites for product in anchor categories"/>
-            <description value="Verify that Saving category do not delete UrlRewrites for subcategories and all products in them."/>
+            <title value="Url-rewrites for product in anchor categories for all store views with configuration turned off"/>
+            <description value="Url-rewrites for product in anchor categories for all store views with configuration turned off"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-94802"/>
+            <testCaseId value="MC-6964"/>
             <group value="urlRewrite"/>
         </annotations>
         <before>
