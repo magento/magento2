@@ -16,7 +16,7 @@
         <fillField userInput="{{customerData.lastname}}" selector="{{AdminCustomerAccountInformationSection.lastName}}" stepKey="fillLastName"/>
         <fillField userInput="{{customerData.email}}" selector="{{AdminCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCustomer"/>
-        <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
-        <see userInput="You saved the customer." selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessageVisible"/>
+        <see userInput="You saved the customer." selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>

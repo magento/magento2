@@ -20,11 +20,11 @@
             <group value="customer"/>
         </annotations>
         <before>
-            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="customer"/>
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="firstCustomer"/>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
         </before>
         <after>
-            <deleteData createDataKey="customer" stepKey="deleteFirstCustomer"/>
+            <deleteData createDataKey="firstCustomer" stepKey="deleteFirstCustomer"/>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteSecondCustomer">
                 <argument name="customerEmail" value="Simple_US_Customer.email"/>
             </actionGroup>
@@ -37,7 +37,7 @@
 
         <!--Select created customer, Click Edit mode-->
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPageWithAddresses">
-            <argument name="customer" value="Simple_US_Customer_Multiple_Addresses"/>
+            <argument name="customer" value="$$firstCustomer$$"/>
         </actionGroup>
 
         <!--Select Addresses tab-->
