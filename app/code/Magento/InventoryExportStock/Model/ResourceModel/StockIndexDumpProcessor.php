@@ -180,6 +180,8 @@ class StockIndexDumpProcessor
             ->getTableName('cataloginventory_stock_item');
         $productEntityTable = $this->resourceConnection
             ->getTableName('catalog_product_entity');
+        $productWebsiteTable = $this->resourceConnection
+            ->getTableName('catalog_product_website');
         $select = $this->connection->select();
         $getQtyForNotManageStock = $this->getQtyForNotManageStock->execute();
         if ($getQtyForNotManageStock === null) {
@@ -203,7 +205,7 @@ class StockIndexDumpProcessor
             'legacy_stock_item.product_id = product_entity.entity_id',
             ['sku']
         )->join(
-            ['pr_web' => 'catalog_product_website'],
+            ['pr_web' => $productWebsiteTable],
             'legacy_stock_item.product_id = pr_web.product_id',
             ''
         )->where(
