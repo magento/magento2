@@ -1,4 +1,4 @@
-^^^^23  <W2Q>1^ </W2Q><?php
+<?php
 /**
  * Magento session manager
  *
@@ -137,7 +137,7 @@ class SessionManager implements SessionManagerInterface
         $this->sessionStartChecker = $sessionStartChecker ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
             SessionStartChecker::class
         );
-
+        
         $this->start();
     }
 
