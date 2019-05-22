@@ -147,7 +147,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
      * @param null|array $allowedTags
      * @return string
      */
-    /*public function escapeHtmlWithLinks($data, $allowedTags = null)
+    public function escapeHtmlWithLinks($data, $allowedTags = null)
     {
         if (!empty($data) && is_array($allowedTags) && in_array('a', $allowedTags)) {
             $links = [];
@@ -175,38 +175,8 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
             return vsprintf($data, $links);
         }
         return $this->escaper->escapeHtml($data, $allowedTags);
-    }*/
-
-    public function escapeHtmlWithLinks($data, $allowedTags = null)
-    {
-        if (!empty($data) && is_array($allowedTags) && in_array('a', $allowedTags)) {
-            $domDocument = $this->domDocumentFactory->create();
-            libxml_use_internal_errors(true);
-            @$domDocument->loadHTML($data, LIBXML_HTML_NODEFDTD);
-
-            foreach ($domDocument->getElementsByTagName('a') as $tag) {
-                $attributeNames = [];
-                foreach ($tag->attributes as $attribute) {
-                    if ($attribute->name != 'href') {
-                        $attributeNames[] = $attribute->name;
-                    }
-                }
-                foreach ($attributeNames as $name) {
-                    $tag->removeAttribute($name);
-                }
-                $hrefValue = $tag->getAttribute('href');
-                $hrefValue = $this->filterUrl($hrefValue);
-
-                $tag->setAttribute('href', $this->escaper->escapeUrl($hrefValue));
-                $tag->nodeValue = $this->escaper->escapeHtml($tag->nodeValue);
-            }
-            $data = $domDocument->saveHTML();
-            preg_match('/<body>(.+)<\/body><\/html>$/si', $data, $matches);
-            $data = !empty($matches) ? $matches[1] : '';
-        }
-        return $this->escaper->escapeHtml($data, $allowedTags);
     }
-
+ 
     /**
      * Filter the URL for allowed protocols.
      *
