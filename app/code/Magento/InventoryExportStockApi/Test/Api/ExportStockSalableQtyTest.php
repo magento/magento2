@@ -12,7 +12,6 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Rest\Request;
 
-
 class ExportStockSalableQtyTest extends WebapiAbstract
 {
     const API_PATH = '/V1/inventory/export-stock-salable-qty';
@@ -24,11 +23,16 @@ class ExportStockSalableQtyTest extends WebapiAbstract
     public function executeDataProvider(): array
     {
         return [
-            ['SKU-4', 'base', ['sku'=>'SKU-4','qty'=>0,'is_salable'=>true]]
+            ['SKU-4', 'website', 'base', ['sku' => 'SKU-4','qty' => 0, 'is_salable'=>true]]
         ];
     }
 
     /**
+     * @param string $sku
+     * @param string $type
+     * @param string $code
+     * @param array $expected
+     *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
@@ -38,7 +42,7 @@ class ExportStockSalableQtyTest extends WebapiAbstract
      * @dataProvider       executeDataProvider
      * @magentoDbIsolation disabled
      */
-    public function testExportStockSalableQty(string $sku, string $salesChannelCode, array $expectedResult): void
+    public function testExportStockSalableQty(string $sku, string $type, string $code, array $expected): void
     {
         $requestData = [
             'searchCriteria' => [
@@ -58,7 +62,7 @@ class ExportStockSalableQtyTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::API_PATH . '/' . $salesChannelCode. '?' . http_build_query($requestData),
+                'resourcePath' => sprintf("%s/%s/%s?%s", self::API_PATH, $type, $code, http_build_query($requestData)),
                 'httpMethod' => Request::HTTP_METHOD_GET
             ],
             'soap' => [
@@ -71,6 +75,6 @@ class ExportStockSalableQtyTest extends WebapiAbstract
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, $requestData);
 
-        self::assertEquals($expectedResult, current($res['items']));
+        self::assertEquals($expected, current($res['items']));
     }
 }

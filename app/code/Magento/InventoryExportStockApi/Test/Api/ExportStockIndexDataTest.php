@@ -23,11 +23,15 @@ class ExportStockIndexDataTest extends WebapiAbstract
     public function executeDataProvider(): array
     {
         return [
-            ['base', self::EXPORT_PRODUCT_COUNT]
+            ['website', 'base', self::EXPORT_PRODUCT_COUNT]
         ];
     }
 
     /**
+     * @param string $type
+     * @param string $code
+     * @param int $expectedResult
+     *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
@@ -37,11 +41,11 @@ class ExportStockIndexDataTest extends WebapiAbstract
      * @dataProvider       executeDataProvider
      * @magentoDbIsolation disabled
      */
-    public function testExportStockData(string $salesChannelCode, int $expectedResult): void
+    public function testExportStockData(string $type, string $code, int $expectedResult): void
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::API_PATH . '/' . $salesChannelCode,
+                'resourcePath' => self::API_PATH . '/' . $type . '/' . $code,
                 'httpMethod' => Request::HTTP_METHOD_GET
             ],
             'soap' => [
@@ -52,7 +56,7 @@ class ExportStockIndexDataTest extends WebapiAbstract
 
         $res = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
-            : $this->_webApiCall($serviceInfo, ['salesChannelCode' => $salesChannelCode]);
+            : $this->_webApiCall($serviceInfo, ['salesChannelCode' => $code]);
 
         self::assertEquals($expectedResult, count($res));
     }

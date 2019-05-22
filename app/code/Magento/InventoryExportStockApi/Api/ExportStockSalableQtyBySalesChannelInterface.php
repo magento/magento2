@@ -8,22 +8,20 @@ declare(strict_types=1);
 namespace Magento\InventoryExportStockApi\Api;
 
 /**
- * Interface for ExportStockSalableQty provides product's salable qty information by search criteria
+ * Export product's salable qty information by search criteria
  * @api
  */
-interface ExportStockSalableQtyInterface
+interface ExportStockSalableQtyBySalesChannelInterface
 {
     /**
      * Export product stock data filtered by search criteria.
      *
-     * @param string $salesChannelType
-     * @param string $salesChannelCode
+     * @param \Magento\InventorySalesApi\Api\Data\SalesChannelInterface $salesChannel
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\InventoryExportStockApi\Api\Data\ExportStockSalableQtySearchResultInterface
+     * @return Data\ExportStockSalableQtySearchResultInterface
      */
     public function execute(
-        string $salesChannelType,
-        string $salesChannelCode,
+        \Magento\InventorySalesApi\Api\Data\SalesChannelInterface $salesChannel,
         \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
     ): \Magento\InventoryExportStockApi\Api\Data\ExportStockSalableQtySearchResultInterface;
 }

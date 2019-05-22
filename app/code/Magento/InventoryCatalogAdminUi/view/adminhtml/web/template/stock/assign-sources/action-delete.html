@@ -5,9 +5,9 @@
  */
 -->
 <button class="action-delete"
-        attr="{'data-action': 'remove_row', title: $t($parent.deleteButtonLabel)}"
+        attr="{'data-action': 'remove_row', title: $t($parent.deleteButtonLabel), 'disabled': $data.disabled}"
         data-bind="
-            click: function(){ $parent.processingDeleteRecord($record().index, $record.recordId); },
+            click: $data.deleteRecord.bind($data, $record().index, $record().recordId),
             attr: {
                 title: $parent.deleteButtonLabel
             }
