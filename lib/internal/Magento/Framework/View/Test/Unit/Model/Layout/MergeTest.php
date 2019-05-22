@@ -11,6 +11,11 @@ use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
 
+/**
+ * Class MergeTest
+ *
+ * @package Magento\Framework\View\Test\Unit\Model\Layout
+ */
 class MergeTest extends \PHPUnit\Framework\TestCase
 {
     /**
