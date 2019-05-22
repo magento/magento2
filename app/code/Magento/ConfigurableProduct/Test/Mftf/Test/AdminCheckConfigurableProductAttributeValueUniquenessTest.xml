@@ -55,7 +55,7 @@
         <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="expandConfigurationsTab1"/>
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations1"/>
         <waitForPageLoad stepKey="waitForSelectAttributesPage1"/>
-        <actionGroup ref="AdminSelectAttributeForConfigurableProductFromPage" stepKey="selectCreatedAttribute1">
+        <actionGroup ref="adminSelectAttributeForConfigurableProductFromPage" stepKey="selectCreatedAttribute1">
             <argument name="attributeName" value="$$createProductAttribute.attribute_code$$"/>
         </actionGroup>
         <actionGroup ref="createAnOptionForAttribute" stepKey="createOption1ForSelectedAttribute">
@@ -82,7 +82,7 @@
         <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="expandConfigurationsTab2"/>
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations2"/>
         <waitForPageLoad stepKey="waitForSelectAttributesPage2"/>
-        <actionGroup ref="AdminSelectAttributeForConfigurableProductFromPage" stepKey="selectCreatedAttribute2">
+        <actionGroup ref="adminSelectAttributeForConfigurableProductFromPage" stepKey="selectCreatedAttribute2">
             <argument name="attributeName" value="$$createProductAttribute.attribute_code$$"/>
         </actionGroup>
         <actionGroup ref="createAnOptionForAttribute" stepKey="createAnOptionWithExistingName">
