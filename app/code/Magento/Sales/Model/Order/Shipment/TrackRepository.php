@@ -16,8 +16,9 @@ use Magento\Sales\Api\Data\ShipmentTrackInterfaceFactory;
 use Magento\Sales\Api\Data\ShipmentTrackSearchResultInterfaceFactory;
 use Magento\Sales\Api\ShipmentTrackRepositoryInterface;
 use Magento\Sales\Model\Spi\ShipmentTrackResourceInterface;
-use \Magento\Sales\Model\OrderRepository;
+use \Magento\Sales\Api\OrderRepositoryInterface;
 use \Magento\Framework\App\ObjectManager;
+use Psr\Log\LoggerInterface;
 
 /**
  * Repository of shipment tracking information
@@ -45,31 +46,39 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
     private $collectionProcessor;
 
     /**
-     * @var OrderRepository
+     * @var OrderRepositoryInterface
      */
     private $orderRepository;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * @param ShipmentTrackResourceInterface $trackResource
      * @param ShipmentTrackInterfaceFactory $trackFactory
      * @param ShipmentTrackSearchResultInterfaceFactory $searchResultFactory
      * @param CollectionProcessorInterface $collectionProcessor
-     * @param OrderRepository $orderRepository
+     * @param OrderRepositoryInterface|null $orderRepository
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         ShipmentTrackResourceInterface $trackResource,
         ShipmentTrackInterfaceFactory $trackFactory,
         ShipmentTrackSearchResultInterfaceFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor,
-        OrderRepository $orderRepository = null
+        OrderRepositoryInterface $orderRepository = null,
+        LoggerInterface $logger = null
     ) {
-
         $this->trackResource = $trackResource;
         $this->trackFactory = $trackFactory;
         $this->searchResultFactory = $searchResultFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->orderRepository = $orderRepository ?:
-            ObjectManager::getInstance()->get(OrderRepository::class);
+            ObjectManager::getInstance()->get(OrderRepositoryInterface::class);
+        $this->logger = $logger ?:
+            ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -118,7 +127,8 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
         }
 
         if (array_search($entity['parent_id'], $shipmentId) === false) {
-            throw new CouldNotSaveException(__('The shipment doesn\'t belong to the order.'));
+            $this->logger->error('The shipment doesn\'t belong to the order.');
+            throw new CouldNotSaveException(__('Could not save the shipment tracking.'));
         }
 
         try {
