@@ -271,7 +271,7 @@ class LockGuardedCacheLoaderTest extends TestCase
     }
 
     /** @test */
-    public function nonBlockingLoaderAllowsToSpecifyStaleContentLoader()
+    public function dataFormatterGetsInvokedOnNonSavedCacheFlow()
     {
         $this->lockManager->lock('lock1');
 
@@ -283,35 +283,11 @@ class LockGuardedCacheLoaderTest extends TestCase
             function () {
                 return ['uncached'];
             },
-            $this->returnPassedDataWithMergedValue(['cached']),
-            function () {
-                return ['stale_data'];
-            }
+            $this->returnPassedDataWithMergedValue(['saved']),
+            $this->returnPassedDataWithMergedValue(['formatted'])
         );
 
-        $this->assertEquals(['stale_data'], $result);
-    }
-
-    /** @test */
-    public function nonBlockingLoaderUsesUncachedDataWhenStaleCacheLoaderReturnsFalse()
-    {
-        $this->lockManager->lock('lock1');
-
-        $result = $this->lockGuard->nonBlockingLockedLoadData(
-            'lock1',
-            function () {
-                return false;
-            },
-            function () {
-                return ['uncached'];
-            },
-            $this->returnPassedDataWithMergedValue(['cached']),
-            function () {
-                return false;
-            }
-        );
-
-        $this->assertEquals(['uncached'], $result);
+        $this->assertEquals(['uncached', 'formatted'], $result);
     }
 
     private function addLoadSequence(callable $loadOperation): void

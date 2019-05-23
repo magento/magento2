@@ -86,13 +86,33 @@
         <arguments>
             <argument name="source" xsi:type="object">systemConfigSourceAggregatedProxy</argument>
             <argument name="postProcessor" xsi:type="object">systemConfigPostProcessorCompositeProxy</argument>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+            <argument name="cache" xsi:type="object">systemConfigStaleCacheReplica</argument>
             <argument name="preProcessor" xsi:type="object">Magento\Framework\App\Config\PreProcessorComposite</argument>
             <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Serialize</argument>
             <argument name="reader" xsi:type="object">Magento\Config\App\Config\Type\System\Reader\Proxy</argument>
             <argument name="lockQuery" xsi:type="object">systemConfigQueryLocker</argument>
         </arguments>
     </type>
+
+    <virtualType name="systemConfigStaleCacheType" type="Magento\Framework\Cache\Frontend\StaleCache">
+        <arguments>
+            <argument name="cacheType" xsi:type="const">Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER</argument>
+            <argument name="cacheTag" xsi:type="string">STALE_CACHE</argument>
+            <argument name="identifierFormat" xsi:type="string">stale_config_%s_stale</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="systemConfigStaleCacheReplica" type="Magento\Framework\Cache\Frontend\StaleCacheReplica">
+        <arguments>
+            <argument name="masterCache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+            <argument name="slaveCache" xsi:type="object">systemConfigStaleCacheType</argument>
+            <argument name="masterOnlyIdentifiers" xsi:type="array">
+                <item name="scopes" xsi:type="string">system_scopes</item>
+            </argument>
+            <argument name="lockId" xsi:type="const">Magento\Config\App\Config\Type\System::LOCK_NAME</argument>
+            <argument name="lockManager" xsi:type="object">Magento\Framework\Lock\Backend\Cache</argument>
+        </arguments>
+    </virtualType>
 
     <virtualType name="systemConfigQueryLocker" type="Magento\Framework\Cache\LockGuardedCacheLoader">
         <arguments>

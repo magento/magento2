@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Cache\Frontend;
 
-use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Cache\Type\FrontendPool;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Config\CacheInterface;
@@ -17,13 +16,11 @@ use Magento\Framework\Config\CacheInterface;
  */
 class StaleCache implements CacheInterface
 {
-    const TYPE_IDENTIFIER = Config::TYPE_IDENTIFIER;
-
     /** @var FrontendPool */
     private $cacheFrontendPool;
 
     /** @var FrontendInterface */
-    private $decoratedFrontend;
+    private $frontend;
 
     /** @var string */
     private $identifierFormat;
@@ -49,22 +46,10 @@ class StaleCache implements CacheInterface
         $this->cacheTag = $cacheTag;
     }
 
-    /**
-     * Find frontend to use for cache storage
-     *
-     * @return FrontendInterface
-     */
-    private function findFrontend()
-    {
-        if (!$this->decoratedFrontend) {
-            $this->decoratedFrontend = $this->cacheFrontendPool->get(self::TYPE_IDENTIFIER);
-        }
-
-        return $this->decoratedFrontend;
-    }
-
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
+        $tags[] = $this->cacheTag;
+
         return $this->findFrontend()->save(
             $data,
             $this->formatCacheIdentifier($identifier),
@@ -78,7 +63,7 @@ class StaleCache implements CacheInterface
      */
     public function test($identifier)
     {
-
+        return $this->findFrontend()->test($this->formatCacheIdentifier($identifier));
     }
 
     /**
@@ -102,7 +87,19 @@ class StaleCache implements CacheInterface
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {
-        // TODO: Implement clean() method.
+        if ($mode === \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG) {
+            $result = true;
+            foreach ($tags as $tag) {
+                $result = $this->findFrontend()
+                        ->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [$this->cacheTag, $tag]) && $result;
+            }
+
+            return $result;
+        }
+
+
+        $tags[] = $this->cacheTag;
+        return $this->findFrontend()->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, $tags);
     }
 
     /**
@@ -126,13 +123,23 @@ class StaleCache implements CacheInterface
     }
 
     /**
+     * Finds cache frontend by cache type in frontend pool.
+     */
+    private function findFrontend(): FrontendInterface
+    {
+        if (!$this->frontend) {
+            $this->frontend = $this->cacheFrontendPool->get($this->cacheType);
+        }
+
+        return $this->frontend;
+    }
+
+    /**
      * @param $identifier
      * @return string
      */
     private function formatCacheIdentifier($identifier): string
     {
-        $identifier = sprintf($this->identifierFormat, $identifier);
-
-        return $identifier;
+        return sprintf($this->identifierFormat, $identifier);
     }
 }

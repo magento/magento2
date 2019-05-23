@@ -176,6 +176,22 @@ class StaleCacheReplicaTest extends TestCase
 
 
     /** @test */
+    public function returnsTrueWhenCacheEntryIsAvailableInMaster()
+    {
+        $this->masterCache->save('data_in_master', 'master_data');
+
+        $this->assertTrue($this->cache->test('master_data'));
+    }
+    
+    /** @test */
+    public function returnsFalseWhenCacheEntryIsNotInMasterEvenIfItIsInSlave()
+    {
+        $this->slaveCache->save('data_in_slave', 'master_data');
+
+        $this->assertFalse($this->cache->test('master_data'));
+    }
+
+    /** @test */
     public function returnsBackendFromMasterCache()
     {
         $zendCache = Zend_Cache::factory('core', 'test');

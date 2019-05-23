@@ -112,7 +112,7 @@ class LockGuardedCacheLoader
         callable $dataLoader,
         callable $dataCollector,
         callable $dataSaver,
-        callable $staleDataLoader = null
+        callable $dataFormatter = null
     ) {
         $cachedData = $dataLoader();
 
@@ -122,24 +122,18 @@ class LockGuardedCacheLoader
 
         $isLocked = $this->locker->isLocked($lockName);
 
-        $staleDataLoader = $staleDataLoader ?? $dataCollector;
-
-        if ($isLocked) {
-            return $staleDataLoader() ?: $dataCollector();
-        }
-
-        $dataToCache = $dataCollector();
+        $cachedData = $dataCollector();
 
         if (!$isLocked
             && $this->locker->lock($lockName, 0)) {
             try {
-                $cachedData = $dataSaver($dataToCache);
+                $cachedData = $dataSaver($cachedData);
             } finally {
                 $this->locker->unlock($lockName);
             }
         }
 
-        return $cachedData;
+        return $dataFormatter ? $dataFormatter($cachedData) : $cachedData;
     }
 
     /**

@@ -57,7 +57,7 @@ class StaleCacheReplica implements FrontendInterface
      */
     public function test($identifier)
     {
-        // TODO: Implement test() method.
+        return $this->masterCache->test($identifier);
     }
 
     /**
