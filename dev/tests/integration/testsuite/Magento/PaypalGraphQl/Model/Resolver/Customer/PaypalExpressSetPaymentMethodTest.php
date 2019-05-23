@@ -5,18 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
+namespace Magento\PaypalGraphQl\Model\Resolver\Customer;
 
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\Webapi\Request;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\PaypalGraphQl\AbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
-use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\UrlInterface;
 
 /**
+ * Test ExpressSetPaymentMethodTest graphql endpoint for customer
+ *
  * @magentoAppArea graphql
  */
 class PaypalExpressSetPaymentMethodTest extends AbstractTest
@@ -31,7 +32,9 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
      */
     private $json;
 
-    /** @var QuoteIdToMaskedQuoteId */
+    /**
+     * @var QuoteIdToMaskedQuoteId
+     */
     private $quoteIdToMaskedId;
 
     protected function setUp()
@@ -41,10 +44,6 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
         $this->request = $this->objectManager->create(Http::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteId::class);
-
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->graphqlController = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
-        $this->request = $this->objectManager->create(Http::class);
     }
 
     /**
@@ -52,41 +51,47 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
      *
      * @return void
      * @dataProvider getPaypalCodesProvider
+     * @magentoConfigFixture default_store payment/paypal_express/active 1
+     * @magentoConfigFixture default_store payment/paypal_express/merchant_id test_merchant_id
+     * @magentoConfigFixture default_store payment/paypal_express/wpp/api_username test_username
+     * @magentoConfigFixture default_store payment/paypal_express/wpp/api_password test_password
+     * @magentoConfigFixture default_store payment/paypal_express/wpp/api_signature test_signature
+     * @magentoConfigFixture default_store payment/paypal_express/payment_action Authorization
      * @magentoConfigFixture default_store paypal/wpp/sandbox_flag 1
+     * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      */
-    public function testResolveGuest(string $paymentMethod): void
+    public function testResolve(string $paymentMethod): void
     {
-        $reservedQuoteId = 'test_quote';
+
         $payerId = 'SQFE93XKTSDRJ';
         $token = 'EC-TOKEN1234';
         $correlationId = 'c123456789';
 
-        $config = $this->objectManager->get(ConfigInterface::class);
-        $config->saveConfig('payment/' . $paymentMethod .'/active', '1');
-
-        if ($paymentMethod == 'payflow_express') {
-            $config = $this->objectManager->get(ConfigInterface::class);
-            $config->saveConfig('payment/payflow_link/active', '1');
-        }
-
-        $this->objectManager->get(ReinitableConfigInterface::class)->reinit();
-
+        $reservedQuoteId = 'test_quote';
         $cart = $this->getQuoteByReservedOrderId($reservedQuoteId);
+        $cartId = $cart->getId();
+        $maskedCartId = $this->quoteIdToMaskedId->execute((int) $cartId);
 
-        $cartId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
+        $url = $this->objectManager->get(UrlInterface::class);
+        $baseUrl = $url->getBaseUrl();
 
         $query = <<<QUERY
 mutation {
     createPaypalExpressToken(input: {
-        cart_id: "{$cartId}",
+        cart_id: "{$maskedCartId}",
         code: "{$paymentMethod}",
+        urls: {
+            return_url: "{$baseUrl}paypal/express/return/",
+            cancel_url: "{$baseUrl}paypal/express/cancel/"
+            success_url: "{$baseUrl}checkout/onepage/success/",
+            pending_url: "{$baseUrl}checkout/onepage/pending/"
+        }
         express_button: false
     })
     {
@@ -112,7 +117,7 @@ mutation {
             }
           }
         },
-        cart_id: "{$cartId}"})
+        cart_id: "{$maskedCartId}"})
       {
         cart {
           selected_payment_method {
@@ -120,7 +125,7 @@ mutation {
           }
         }
       }
-      placeOrder(input: {cart_id: "{$cartId}"}) {
+      placeOrder(input: {cart_id: "{$maskedCartId}"}) {
         order {
           order_id
         }
@@ -132,13 +137,21 @@ QUERY;
         $this->request->setPathInfo('/graphql');
         $this->request->setMethod('POST');
         $this->request->setContent($postData);
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']);
-        $this->request->setHeaders($headers);
 
-        $paypalRequest = include __DIR__ . '/../../../_files/guest_paypal_create_token_request.php';
+        /** @var \Magento\Integration\Model\Oauth\Token $tokenModel */
+        $tokenModel = $this->objectManager->create(\Magento\Integration\Model\Oauth\Token::class);
+        $customerToken = $tokenModel->createCustomerToken(1)->getToken();
+
+        $webApiRequest = $this->objectManager->get(Request::class);
+        $webApiRequest->getHeaders()
+            ->addHeaderLine('Content-Type', 'application/json')
+            ->addHeaderLine('Accept', 'application/json')
+            ->addHeaderLine('Authorization', 'Bearer ' . $customerToken);
+        $this->request->setHeaders($webApiRequest->getHeaders());
+
+        $paypalRequest = include __DIR__ . '/../../../_files/customer_paypal_create_token_request.php';
         $paypalResponse = [
-            'TOKEN' => $token,
+            'TOKEN' => $payerId,
             'CORRELATIONID' => $correlationId,
             'ACK' => 'Success'
         ];
@@ -170,6 +183,8 @@ QUERY;
 
         $paypalRequestPlaceOrder = include __DIR__ . '/../../../_files/guest_paypal_place_order.php';
 
+        $paypalRequestPlaceOrder['EMAIL'] = 'customer@example.com';
+
         $this->nvpMock
             ->expects($this->at(2))
             ->method('call')
@@ -190,7 +205,7 @@ QUERY;
 
         $response = $this->graphqlController->dispatch($this->request);
         $responseData = $this->json->unserialize($response->getContent());
-        
+
         $this->assertArrayHasKey('data', $responseData);
         $this->assertArrayHasKey('createPaypalExpressToken', $responseData['data']);
         $createTokenData = $responseData['data']['createPaypalExpressToken'];

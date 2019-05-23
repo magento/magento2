@@ -46,6 +46,9 @@ class PaypalExpressTokenTest extends AbstractTest
     }
 
     /**
+     * Test create paypal token for customer
+     *
+     * @return void
      * @magentoConfigFixture default_store payment/paypal_express/active 1
      * @magentoConfigFixture default_store payment/paypal_express/merchant_id test_merchant_id
      * @magentoConfigFixture default_store payment/paypal_express/wpp/api_username test_username
@@ -60,7 +63,7 @@ class PaypalExpressTokenTest extends AbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      */
-    public function testResolve()
+    public function testResolve(): void
     {
         $reservedQuoteId = 'test_quote';
         $cart = $this->getQuoteByReservedOrderId($reservedQuoteId);

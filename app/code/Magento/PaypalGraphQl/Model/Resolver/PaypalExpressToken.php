@@ -109,15 +109,15 @@ class PaypalExpressToken implements ResolverInterface
         }
 
         $checkout->prepareGiropayUrls(
-            $this->url->getUrl('checkout/onepage/success'),
-            $this->url->getUrl('paypal/express/cancel'),
-            $this->url->getUrl('checkout/onepage/success')
+            $args['input']['urls']['success_url'] ?? '',
+            $args['input']['urls']['cancel_url'] ?? '',
+            $args['input']['urls']['pending_url'] ?? ''
         );
 
         try {
             $token = $checkout->start(
-                $this->url->getUrl('paypal/express/return'),
-                $this->url->getUrl('paypal/express/cancel'),
+                $args['input']['urls']['return_url'] ?? '',
+                $args['input']['urls']['cancel_url'] ?? '',
                 $usedExpressButton
             );
         } catch (LocalizedException $e) {

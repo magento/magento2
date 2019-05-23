@@ -8,6 +8,7 @@ type Mutation {
 input PaypalExpressTokenInput {
     cart_id: String! @doc(description:"Cart id code")
     code: String! @doc(description:"Payment method code")
+    urls: PaypalExpressUrlsInput
     use_paypal_credit: Boolean @doc(description: "Use Paypal credit")
     express_button: Boolean @doc(description: "Indicate if quick checkout button was used")
 }
@@ -30,6 +31,13 @@ input PaypalExpressInput {
 input PayflowExpressInput {
     payer_id: String!
     token: String!
+}
+
+input PaypalExpressUrlsInput {
+    return_url: String!
+    cancel_url: String!
+    success_url: String!
+    pending_url: String!
 }
 
 type PaypalExpressUrlList {
