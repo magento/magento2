@@ -14,8 +14,7 @@
     </head>
     <body>
         <referenceBlock name="head.additional">
-            <block name="css_rel_preload_script" ifconfig="dev/css/use_css_critical_path"
-                   template="Magento_Theme::js/css_rel_preload.phtml"/>
+            <block name="css_rel_preload_script" ifconfig="dev/css/use_css_critical_path" template="Magento_Theme::js/css_rel_preload.phtml"/>
         </referenceBlock>
         <referenceContainer name="after.body.start">
             <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Theme::js/components.phtml" before="-"/>
