@@ -16,6 +16,11 @@ use Magento\Theme\Model\Theme\ThemeDependencyChecker;
 class UninstallDependencyCheck
 {
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @var ComposerInformation
      */
     private $composerInfo;
@@ -38,15 +43,20 @@ class UninstallDependencyCheck
      * @param ComposerInformation $composerInfo
      * @param DependencyChecker $dependencyChecker
      * @param ThemeDependencyCheckerFactory $themeDependencyCheckerFactory
+     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         ComposerInformation $composerInfo,
         DependencyChecker $dependencyChecker,
-        ThemeDependencyCheckerFactory $themeDependencyCheckerFactory
+        ThemeDependencyCheckerFactory $themeDependencyCheckerFactory,
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->composerInfo = $composerInfo;
         $this->packageDependencyChecker = $dependencyChecker;
         $this->themeDependencyChecker = $themeDependencyCheckerFactory->create();
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Escaper::class
+        );
     }
 
     /**
@@ -96,8 +106,8 @@ class UninstallDependencyCheck
             }
 
             return ['success' => true];
-        } catch (\RuntimeException $e) {
-            $message = str_replace(PHP_EOL, '<br/>', htmlspecialchars($e->getMessage()));
+        } catch (\Exception $e) {
+            $message = str_replace(PHP_EOL, '<br/>', $this->escaper->escapeHtml($e->getMessage()));
             return ['success' => false, 'error' => $message];
         }
     }

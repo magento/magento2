@@ -87,7 +87,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
         if (is_string($filter)) {
             $data = [];
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $filter = base64_decode($filter);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             parse_str(urldecode($filter), $data);
 
             if (!isset($data['report_from'])) {
@@ -113,6 +115,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             $this->_setFilterValues($data);
         } elseif ($filter && is_array($filter)) {
             $this->_setFilterValues($filter);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
         } elseif (0 !== sizeof($this->_defaultFilter)) {
             $this->_setFilterValues($this->_defaultFilter);
         }
@@ -328,7 +331,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         if (isset($this->_filters[$name])) {
             return $this->_filters[$name];
         } else {
-            return $this->getRequest()->getParam($name) ? htmlspecialchars($this->getRequest()->getParam($name)) : '';
+            return $this->getRequest()->getParam($name) ? $this->escapeHtml($this->getRequest()->getParam($name)) : '';
         }
     }
 

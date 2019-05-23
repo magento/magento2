@@ -6,10 +6,39 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate
+/**
+ * Tax Rate AjaxSave Controller
+ */
+class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate implements HttpPostActionInterface
 {
+    /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Tax\Model\Calculation\Rate\Converter $taxRateConverter
+     * @param \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository
+     * @param \Magento\Framework\Escaper|null $escaper
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Tax\Model\Calculation\Rate\Converter $taxRateConverter,
+        \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository,
+        \Magento\Framework\Escaper $escaper = null
+    ) {
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Escaper::class
+        );
+        parent::__construct($context, $coreRegistry, $taxRateConverter, $taxRateRepository);
+    }
+
     /**
      * Save Tax Rate via AJAX
      *
@@ -27,7 +56,7 @@ class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate
                 'success' => true,
                 'error_message' => '',
                 'tax_calculation_rate_id' => $taxRate->getId(),
-                'code' =>  htmlspecialchars($taxRate->getCode()),
+                'code' =>  $this->escaper->escapeHtml($taxRate->getCode()),
             ];
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $responseContent = [
