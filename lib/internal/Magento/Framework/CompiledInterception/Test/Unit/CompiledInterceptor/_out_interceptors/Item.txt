@@ -51,17 +51,17 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
         	case 'emptyscope':
         		$result = parent::getName();
         		
-        		return $this->____plugin_simple_plugin()->afterGetName($this, $result);
+        		return (($tmp = $this->____plugin_simple_plugin()->afterGetName($this, $result)) !== null) ? $tmp : $result;
         	case 'backend':
         		$this->____plugin_advanced_plugin()->beforeGetName($this);
         		
         		$result = $this->____plugin_advanced_plugin()->aroundGetName($this, function(){
         			$result = parent::getName();
         			
-        			return $this->____plugin_simple_plugin()->afterGetName($this, $result);
+        			return (($tmp = $this->____plugin_simple_plugin()->afterGetName($this, $result)) !== null) ? $tmp : $result;
         		});
         		
-        		return $this->____plugin_advanced_plugin()->afterGetName($this, $result);
+        		return (($tmp = $this->____plugin_advanced_plugin()->afterGetName($this, $result)) !== null) ? $tmp : $result;
         	default:
         		return parent::getName();
         }

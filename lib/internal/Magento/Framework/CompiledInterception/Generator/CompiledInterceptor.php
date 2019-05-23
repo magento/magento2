@@ -237,10 +237,10 @@ class CompiledInterceptor extends EntityAbstract
 
         if (isset($conf[DefinitionInterface::LISTENER_AFTER])) {
             foreach ($conf[DefinitionInterface::LISTENER_AFTER] as $plugin) {
-                if ($returnVoid) {
+                if (!$returnVoid) {
                     $chain[] = ["((\$tmp = \$this->" . $this->getGetterName($plugin) . "()->after$capName(\$this, \$result$extraParams)) !== null) ? \$tmp : \$result;"];
                 } else {
-                    $chain[] = ["\$this->" . $this->getGetterName($plugin) . "()->after$capName(\$this, \$result$extraParams);"];
+                    $chain[] = ["\$this->" . $this->getGetterName($plugin) . "()->after$capName(\$this, null$extraParams);"];
                 }
             }
         }

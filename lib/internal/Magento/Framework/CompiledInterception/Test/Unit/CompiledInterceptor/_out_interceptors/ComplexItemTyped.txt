@@ -50,7 +50,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
         	case 'backend':
         		parent::returnVoid();
         		
-        		(($tmp = $this->____plugin_complex_plugin()->afterReturnVoid($this, $result)) !== null) ? $tmp : $result;
+        		$this->____plugin_complex_plugin()->afterReturnVoid($this, null);
         	default:
         		parent::returnVoid();
         }
@@ -65,7 +65,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
         	case 'backend':
         		$result = parent::getNullableValue();
         		
-        		return $this->____plugin_complex_plugin()->afterGetNullableValue($this, $result);
+        		return (($tmp = $this->____plugin_complex_plugin()->afterGetNullableValue($this, $result)) !== null) ? $tmp : $result;
         	default:
         		return parent::getNullableValue();
         }
@@ -85,10 +85,10 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
         				return parent::getName();
         			});
         			
-        			return $this->____plugin_complex_plugin()->afterGetName($this, $result);
+        			return (($tmp = $this->____plugin_complex_plugin()->afterGetName($this, $result)) !== null) ? $tmp : $result;
         		});
         		
-        		return $this->____plugin_advanced_plugin()->afterGetName($this, $result);
+        		return (($tmp = $this->____plugin_advanced_plugin()->afterGetName($this, $result)) !== null) ? $tmp : $result;
         	default:
         		return parent::getName();
         }
