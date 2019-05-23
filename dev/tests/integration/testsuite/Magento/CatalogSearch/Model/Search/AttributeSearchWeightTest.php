@@ -24,6 +24,8 @@ use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Test for name over sku search weight of product attributes
+ *
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
@@ -155,7 +157,6 @@ class AttributeSearchWeightTest extends TestCase
             $products[1]->getData('name'),
             'Products order is not as expected.'
         );
-
     }
 
     public function skuOverNameAttributeSearchWeightDataProvider()
