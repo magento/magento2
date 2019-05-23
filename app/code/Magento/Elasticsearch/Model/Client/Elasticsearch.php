@@ -252,7 +252,18 @@ class Elasticsearch implements ClientInterface
                                 'match' => 'price_*',
                                 'match_mapping' => 'string',
                                 'mapping' => [
-                                    'type' => 'float'
+                                    'type' => 'float',
+                                    'store' => true
+                                ],
+                            ],
+                        ],
+                        [
+                            'position_mapping' => [
+                                'match' => 'position_*',
+                                'match_mapping' => 'string',
+                                'mapping' => [
+                                    'type' => 'integer',
+                                    'index' => 'no'
                                 ],
                             ],
                         ],
@@ -265,16 +276,7 @@ class Elasticsearch implements ClientInterface
                                     'index' => 'no'
                                 ],
                             ],
-                        ],
-                        [
-                            'position_mapping' => [
-                                'match' => 'position_*',
-                                'match_mapping' => 'string',
-                                'mapping' => [
-                                    'type' => 'int'
-                                ],
-                            ],
-                        ],
+                        ]
                     ],
                 ],
             ],

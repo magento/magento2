@@ -267,6 +267,16 @@ class Elasticsearch implements ClientInterface
                             ],
                         ],
                         [
+                            'position_mapping' => [
+                                'match' => 'position_*',
+                                'match_mapping_type' => 'string',
+                                'mapping' => [
+                                    'type' => 'integer',
+                                    'index' => false,
+                                ],
+                            ],
+                        ],
+                        [
                             'string_mapping' => [
                                 'match' => '*',
                                 'match_mapping_type' => 'string',
@@ -275,16 +285,7 @@ class Elasticsearch implements ClientInterface
                                     'index' => false,
                                 ]),
                             ],
-                        ],
-                        [
-                            'position_mapping' => [
-                                'match' => 'position_*',
-                                'match_mapping_type' => 'string',
-                                'mapping' => [
-                                    'type' => 'int',
-                                ],
-                            ],
-                        ],
+                        ]
                     ],
                 ],
             ],

@@ -361,6 +361,16 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                 ],
                             ],
                             [
+                                'position_mapping' => [
+                                    'match' => 'position_*',
+                                    'match_mapping_type' => 'string',
+                                    'mapping' => [
+                                        'type' => 'integer',
+                                        'index' => false
+                                    ],
+                                ],
+                            ],
+                            [
                                 'string_mapping' => [
                                     'match' => '*',
                                     'match_mapping_type' => 'string',
@@ -370,16 +380,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'copy_to' => '_search'
                                     ],
                                 ],
-                            ],
-                            [
-                                'position_mapping' => [
-                                    'match' => 'position_*',
-                                    'match_mapping_type' => 'string',
-                                    'mapping' => [
-                                        'type' => 'int',
-                                    ],
-                                ],
-                            ],
+                            ]
                         ],
                     ],
                 ],
@@ -428,6 +429,16 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                 ],
                             ],
                             [
+                                'position_mapping' => [
+                                    'match' => 'position_*',
+                                    'match_mapping_type' => 'string',
+                                    'mapping' => [
+                                        'type' => 'integer',
+                                        'index' => false
+                                    ],
+                                ],
+                            ],
+                            [
                                 'string_mapping' => [
                                     'match' => '*',
                                     'match_mapping_type' => 'string',
@@ -437,16 +448,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'copy_to' => '_search'
                                     ],
                                 ],
-                            ],
-                            [
-                                'position_mapping' => [
-                                    'match' => 'position_*',
-                                    'match_mapping_type' => 'string',
-                                    'mapping' => [
-                                        'type' => 'int',
-                                    ],
-                                ],
-                            ],
+                            ]
                         ],
                     ],
                 ],
