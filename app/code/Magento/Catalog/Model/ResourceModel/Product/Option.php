@@ -6,6 +6,8 @@
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\Store;
 
 /**
@@ -77,10 +79,10 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Save options store data
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _afterSave(AbstractModel $object)
     {
         $this->_saveValuePrices($object);
         $this->_saveValueTitles($object);
@@ -91,66 +93,21 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Save value prices
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function _saveValuePrices(\Magento\Framework\Model\AbstractModel $object)
+    protected function _saveValuePrices(AbstractModel $object)
     {
-        $priceTable = $this->getTable('catalog_product_option_price');
-        $connection = $this->getConnection();
-
         /*
          * Better to check param 'price' and 'price_type' for saving.
          * If there is not price skip saving price
          */
-
         if (in_array($object->getType(), $this->getPriceTypes())) {
             // save for store_id = 0
             if (!$object->getData('scope', 'price')) {
-                $statement = $connection->select()->from(
-                    $priceTable,
-                    'option_id'
-                )->where(
-                    'option_id = ?',
-                    $object->getId()
-                )->where(
-                    'store_id = ?',
-                    Store::DEFAULT_STORE_ID
-                );
-                $optionId = $connection->fetchOne($statement);
-
-                if (!$optionId) {
-                    $data = $this->_prepareDataForTable(
-                        new \Magento\Framework\DataObject(
-                            [
-                                'option_id' => $object->getId(),
-                                'store_id' => Store::DEFAULT_STORE_ID,
-                                'price' => $object->getPrice(),
-                                'price_type' => $object->getPriceType(),
-                            ]
-                        ),
-                        $priceTable
-                    );
-                    $connection->insert($priceTable, $data);
-                } elseif ((int)$object->getStoreId() === Store::DEFAULT_STORE_ID) {
-                    $data = $this->_prepareDataForTable(
-                        new \Magento\Framework\DataObject(
-                            ['price' => $object->getPrice(), 'price_type' => $object->getPriceType()]
-                        ),
-                        $priceTable
-                    );
-
-                    $connection->update(
-                        $priceTable,
-                        $data,
-                        [
-                            'option_id = ?' => $object->getId(),
-                            'store_id  = ?' => Store::DEFAULT_STORE_ID
-                        ]
-                    );
-                }
+                $this->savePriceByStore($object, Store::DEFAULT_STORE_ID);
             }
 
             $scope = (int)$this->_config->getValue(
@@ -178,49 +135,12 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                             $newPrice = $object->getPrice();
                         }
 
-                        $statement = $connection->select()->from(
-                            $priceTable
-                        )->where(
-                            'option_id = ?',
-                            $object->getId()
-                        )->where(
-                            'store_id  = ?',
-                            $storeId
-                        );
-
-                        if ($connection->fetchOne($statement)) {
-                            $data = $this->_prepareDataForTable(
-                                new \Magento\Framework\DataObject(
-                                    ['price' => $newPrice, 'price_type' => $object->getPriceType()]
-                                ),
-                                $priceTable
-                            );
-
-                            $connection->update(
-                                $priceTable,
-                                $data,
-                                ['option_id = ?' => $object->getId(), 'store_id  = ?' => $storeId]
-                            );
-                        } else {
-                            $data = $this->_prepareDataForTable(
-                                new \Magento\Framework\DataObject(
-                                    [
-                                        'option_id' => $object->getId(),
-                                        'store_id' => $storeId,
-                                        'price' => $newPrice,
-                                        'price_type' => $object->getPriceType(),
-                                    ]
-                                ),
-                                $priceTable
-                            );
-                            $connection->insert($priceTable, $data);
-                        }
+                        $this->savePriceByStore($object, (int)$storeId, $newPrice);
                     }
                 }
-            } elseif ($scope == Store::PRICE_SCOPE_WEBSITE && $object->getData('scope', 'price')
-            ) {
-                $connection->delete(
-                    $priceTable,
+            } elseif ($scope == Store::PRICE_SCOPE_WEBSITE && $object->getData('scope', 'price')) {
+                $this->getConnection()->delete(
+                    $this->getTable('catalog_product_option_price'),
                     ['option_id = ?' => $object->getId(), 'store_id  = ?' => $object->getStoreId()]
                 );
             }
@@ -230,13 +150,67 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Save option price by store
+     *
+     * @param AbstractModel $object
+     * @param int $storeId
+     * @param float|null $newPrice
+     */
+    private function savePriceByStore(AbstractModel $object, int $storeId, float $newPrice = null): void
+    {
+        $priceTable = $this->getTable('catalog_product_option_price');
+        $connection = $this->getConnection();
+        $price = $newPrice === null ? $object->getPrice() : $newPrice;
+
+        $statement = $connection->select()->from($priceTable, 'option_id')
+            ->where('option_id = ?', $object->getId())
+            ->where('store_id = ?', $storeId);
+        $optionId = $connection->fetchOne($statement);
+
+        if (!$optionId) {
+            $data = $this->_prepareDataForTable(
+                new DataObject([
+                    'option_id' => $object->getId(),
+                    'store_id' => $storeId,
+                    'price' => $price,
+                    'price_type' => $object->getPriceType(),
+                ]),
+                $priceTable
+            );
+            $connection->insert($priceTable, $data);
+        } else {
+            // skip to update the default price when the store price is saving
+            if ($storeId === Store::DEFAULT_STORE_ID && (int)$object->getStoreId() !== $storeId) {
+                return;
+            }
+
+            $data = $this->_prepareDataForTable(
+                new DataObject([
+                    'price' => $price,
+                    'price_type' => $object->getPriceType()
+                ]),
+                $priceTable
+            );
+
+            $connection->update(
+                $priceTable,
+                $data,
+                [
+                    'option_id = ?' => $object->getId(),
+                    'store_id  = ?' => $storeId
+                ]
+            );
+        }
+    }
+
+    /**
      * Save titles
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _saveValueTitles(\Magento\Framework\Model\AbstractModel $object)
+    protected function _saveValueTitles(AbstractModel $object)
     {
         $connection = $this->getConnection();
         $titleTableName = $this->getTable('catalog_product_option_title');
@@ -583,6 +557,8 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Get Metadata Pool
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
