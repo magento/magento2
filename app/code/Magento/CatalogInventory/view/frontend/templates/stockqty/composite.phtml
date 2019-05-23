@@ -13,9 +13,9 @@
         <a href="#"
            data-mage-init='{"toggleAdvanced": {"selectorsToggleClass": "active", "baseToggleClass": "expanded", "toggleContainers": "#<?= $block->escapeHtmlAttr($block->getDetailsPlaceholderId()) ?>"}}'
            id="<?= $block->escapeHtmlAttr($block->getPlaceholderId()) ?>"
-           title="<?= /* @noEscape */ __('Only %1 left', ($block->escapeHtmlAttr($block->getStockQtyLeft()))) ?>"
+           title="<?= $block->escapeHtmlAttr(__('Only %1 left', ($block->getStockQtyLeft()))) ?>"
            class="action show">
-            <?= /* @noEscape */ __('Only %1 left', "<strong>{$block->escapeHtml($block->getStockQtyLeft())}</strong>") ?>
+            <?= $block->escapeHtml(__('Only %1 left', "<strong>{$block->getStockQtyLeft()}</strong>")) ?>
         </a>
     </div>
     <div class="availability only detailed" id="<?= $block->escapeHtmlAttr($block->getDetailsPlaceholderId()) ?>">
@@ -33,8 +33,8 @@
                     <?php $childProductStockQty = $block->getProductStockQty($childProduct); ?>
                     <?php if ($childProductStockQty > 0) : ?>
                         <tr>
-                            <td data-th="<?= $block->escapeHtml(__('Product Name')) ?>" class="col item"><?= $block->escapeHtml($childProduct->getName()) ?></td>
-                            <td data-th="<?= $block->escapeHtml(__('Qty')) ?>" class="col qty"><?= $block->escapeHtml($childProductStockQty) ?></td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Product Name')) ?>" class="col item"><?= $block->escapeHtml($childProduct->getName()) ?></td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Qty')) ?>" class="col qty"><?= $block->escapeHtml($childProductStockQty) ?></td>
                         </tr>
                     <?php endif ?>
                 <?php endforeach ?>
