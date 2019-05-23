@@ -10,6 +10,7 @@
     <test name="DefaultConfigForUPSTypeTest">
         <annotations>
             <title value="Default Configuration for UPS Type"/>
+            <stories value="UPS"/>
             <description value="Default Configuration for UPS Type"/>
             <features value="Ups"/>
             <severity value="MAJOR"/>
