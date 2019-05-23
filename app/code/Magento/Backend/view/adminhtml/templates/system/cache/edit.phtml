@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -45,7 +42,7 @@
     continue;
 }?>
                     <tr>
-                        <td class="label"><label><?= /* @escapeNotVerified */ $_item['label'] ?></label></td>
+                        <td class="label"><label><?= $block->escapeHtml($_item['label']) ?></label></td>
                         <td class="value">
                             <?php foreach ($_item['buttons'] as $_button): ?>
                                 <?php $clickAction = "setCacheAction('catalog_action',this)"; ?>

@@ -28,17 +28,17 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
     <?php if ($element->getType() == 'hidden'): ?>
         <?= $element->getElementHtml() ?>
     <?php else: ?>
-    <div<?= /* @escapeNotVerified */ $fieldAttributes ?>>
+    <div<?= /* @noEscape */ $fieldAttributes ?>>
         <?php if ($elementBeforeLabel): ?>
             <?= $element->getElementHtml() ?>
             <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
-            <?= /* @escapeNotVerified */ $note ?>
+            <?= /* @noEscape */ $note ?>
         <?php else: ?>
             <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
             <div class="admin__field-control control">
-                <?= /* @escapeNotVerified */ ($addOn) ? '<div class="addon">' . $element->getElementHtml() . '</div>' : $element->getElementHtml() ?>
+                <?= /* @noEscape */ ($addOn) ? '<div class="addon">' . $element->getElementHtml() . '</div>' : $element->getElementHtml() ?>
                 <?= $block->getHintHtml() ?>
-                <?= /* @escapeNotVerified */ $note ?>
+                <?= /* @noEscape */ $note ?>
             </div>
         <?php endif; ?>
     </div>

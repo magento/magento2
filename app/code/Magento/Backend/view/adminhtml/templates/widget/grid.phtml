@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -50,8 +47,8 @@ $numColumns = !is_null($block->getColumns()) ? sizeof($block->getColumns()) : 0;
                 <?php endif; ?>
                     <?php $countRecords = $block->getCollection()->getSize(); ?>
                     <div class="admin__control-support-text">
-                        <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>-total-count" <?= /* @escapeNotVerified */ $block->getUiId('total-count') ?>>
-                            <?= /* @escapeNotVerified */ $countRecords ?>
+                        <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>-total-count" <?= /* @noEscape */ $block->getUiId('total-count') ?>>
+                            <?= /* @noEscape */ $countRecords ?>
                         </span>
                         <?= $block->escapeHtml(__('records found')) ?>
                         <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>_massaction-count"
@@ -61,7 +58,7 @@ $numColumns = !is_null($block->getColumns()) ? sizeof($block->getColumns()) : 0;
                     <div class="admin__data-grid-pager-wrap">
                         <select name="<?= $block->escapeHtmlAttr($block->getVarNameLimit()) ?>"
                                 id="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-limit"
-                                onchange="<?= /* @noEscape */ $block->getJsObjectName() ?>.loadByElement(this)" <?= /* @escapeNotVerified */ $block->getUiId('per-page') ?>
+                                onchange="<?= /* @noEscape */ $block->getJsObjectName() ?>.loadByElement(this)" <?= /* @noEscape */ $block->getUiId('per-page') ?>
                                 class="admin__control-select">
                             <option value="20"<?php if ($block->getCollection()->getPageSize() == 20): ?>
                                 selected="selected"<?php endif; ?>>20
@@ -88,7 +85,7 @@ $numColumns = !is_null($block->getColumns()) ? sizeof($block->getColumns()) : 0;
                             <?php if ($_curPage > 1): ?>
                                 <button class="action-previous"
                                         type="button"
-                                        onclick="<?= /* @noEscape */ $block->getJsObjectName() ?>.setPage('<?= /* @escapeNotVerified */ ($_curPage - 1) ?>');return false;">
+                                        onclick="<?= /* @noEscape */ $block->getJsObjectName() ?>.setPage('<?= /* @noEscape */ ($_curPage - 1) ?>');return false;">
                                             <span><?= $block->escapeHtml(__('Previous page')) ?></span>
                                 </button>
                             <?php else: ?>
@@ -100,7 +97,7 @@ $numColumns = !is_null($block->getColumns()) ? sizeof($block->getColumns()) : 0;
                                    name="<?= $block->escapeHtmlAttr($block->getVarNamePage()) ?>"
                                    value="<?= $block->escapeHtmlAttr($_curPage) ?>"
                                    class="admin__control-text"
-                                   onkeypress="<?= /* @noEscape */ $block->getJsObjectName() ?>.inputPage(event, '<?= /* @escapeNotVerified */ $_lastPage ?>')" <?= /* @escapeNotVerified */ $block->getUiId('current-page') ?> />
+                                   onkeypress="<?= /* @noEscape */ $block->getJsObjectName() ?>.inputPage(event, '<?= /* @noEscape */ $_lastPage ?>')" <?= /* @noEscape */ $block->getUiId('current-page') ?> />
 
                             <label class="admin__control-support-text" for="<?= $block->escapeHtml($block->getHtmlId())
                             ?>_page-current">
@@ -109,7 +106,7 @@ $numColumns = !is_null($block->getColumns()) ? sizeof($block->getColumns()) : 0;
                             <?php if ($_curPage < $_lastPage): ?>
                                 <button type="button" title="<?= $block->escapeHtml(__('Next page')) ?>"
                                         class="action-next"
-                                        onclick="<?= /* @noEscape */ $block->getJsObjectName() ?>.setPage('<?= /* @escapeNotVerified */ ($_curPage + 1) ?>');return false;">
+                                        onclick="<?= /* @noEscape */ $block->getJsObjectName() ?>.setPage('<?= /* @noEscape */ ($_curPage + 1) ?>');return false;">
                                     <span><?= $block->escapeHtml(__('Next page')) ?></span>
                                 </button>
                             <?php else: ?>
@@ -159,29 +156,29 @@ $numColumns = !is_null($block->getColumns()) ? sizeof($block->getColumns()) : 0;
         <?php //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed ?>
 
         <?php if ($block->getDependencyJsObject()): ?>
-            registry.get('<?= /* @escapeNotVerified */ $block->getDependencyJsObject() ?>', function (<?= /* @escapeNotVerified */ $block->getDependencyJsObject() ?>) {
+            registry.get('<?= $block->escapeJs($block->getDependencyJsObject()) ?>', function (<?= $block->escapeJs($block->getDependencyJsObject()) ?>) {
         <?php endif; ?>
 
-        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?> = new varienGrid('<?= $block->escapeHtml($block->getId()) ?>', '<?= /* @escapeNotVerified */ $block->getGridUrl() ?>', '<?= /* @escapeNotVerified */ $block->getVarNamePage() ?>', '<?= /* @escapeNotVerified */ $block->getVarNameSort() ?>', '<?= /* @escapeNotVerified */ $block->getVarNameDir() ?>', '<?= /* @escapeNotVerified */ $block->getVarNameFilter() ?>');
-        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.useAjax = <?= /* @escapeNotVerified */ $block->getUseAjax() ? 'true' : 'false' ?>;
+        <?= $block->escapeJs($block->getJsObjectName()) ?> = new varienGrid('<?= $block->escapeHtml($block->getId()) ?>', '<?= $block->escapeJs($block->getGridUrl()) ?>', '<?= $block->escapeJs($block->getVarNamePage()) ?>', '<?= $block->escapeJs($block->getVarNameSort()) ?>', '<?= $block->escapeJs($block->getVarNameDir()) ?>', '<?= $block->escapeJs($block->getVarNameFilter()) ?>');
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.useAjax = <?= /* @noEscape */ $block->getUseAjax() ? 'true' : 'false' ?>;
         <?php if ($block->getRowClickCallback()): ?>
-        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.rowClickCallback = <?= /* @escapeNotVerified */ $block->getRowClickCallback() ?>;
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.rowClickCallback = <?= /* @noEscape */ $block->getRowClickCallback() ?>;
         <?php endif; ?>
         <?php if ($block->getCheckboxCheckCallback()): ?>
-        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.checkboxCheckCallback = <?= /* @escapeNotVerified */ $block->getCheckboxCheckCallback() ?>;
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.checkboxCheckCallback = <?= /* @noEscape */ $block->getCheckboxCheckCallback() ?>;
         <?php endif; ?>
         <?php if ($block->getSortableUpdateCallback()): ?>
-        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.sortableUpdateCallback = <?= /* @escapeNotVerified */ $block->getSortableUpdateCallback() ?>;
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.sortableUpdateCallback = <?= /* @noEscape */ $block->getSortableUpdateCallback() ?>;
         <?php endif; ?>
-        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.bindSortable();
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.bindSortable();
         <?php if ($block->getRowInitCallback()): ?>
-        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.initRowCallback = <?= /* @escapeNotVerified */ $block->getRowInitCallback() ?>;
-        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.initGridRows();
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.initRowCallback = <?= /* @noEscape */ $block->getRowInitCallback() ?>;
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.initGridRows();
         <?php endif; ?>
         <?php if ($block->getChildBlock('grid.massaction') && $block->getChildBlock('grid.massaction')->isAvailable()): ?>
-        <?= /* @escapeNotVerified */ $block->getChildBlock('grid.massaction')->getJavaScript() ?>
+        <?= /* @noEscape */ $block->getChildBlock('grid.massaction')->getJavaScript() ?>
         <?php endif ?>
-        <?= /* @escapeNotVerified */ $block->getAdditionalJavaScript() ?>
+        <?= /* @noEscape */ $block->getAdditionalJavaScript() ?>
 
         <?php if ($block->getDependencyJsObject()): ?>
             });

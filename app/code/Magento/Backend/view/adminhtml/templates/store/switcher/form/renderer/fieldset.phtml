@@ -13,7 +13,7 @@
 <?php endif; ?>
 
 <?php if (!$_element->getNoContainer()): ?>
-    <fieldset class="admin__fieldset fieldset <?= /* @escapeNotVerified */ $_element->getClass() ?>" id="<?= $_element->getHtmlId() ?>">
+    <fieldset class="admin__fieldset fieldset <?= $block->escapeHtmlAttr($_element->getClass()) ?>" id="<?= $_element->getHtmlId() ?>">
 <?php endif; ?>
 
     <?php if ($_element->getLegend()): ?>
@@ -21,7 +21,7 @@
             <span><?= /* @escapeNotVerified */ $_element->getLegend() ?></span>
             <?= $block->getHintHtml() ?>
         </legend><br/>
-        <?= /* @escapeNotVerified */ $_element->getHeaderBar() ?>
+        <?= /* @noEscape */ $_element->getHeaderBar() ?>
     <?php else: ?>
         <?= $block->getHintHtml() ?>
     <?php endif; ?>
