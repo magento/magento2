@@ -253,6 +253,9 @@ class CompiledInterceptor extends EntityAbstract
                 $body[] = $line;
             }
         }
+        if ($returnVoid) {
+            $body[] = 'break;';
+        }
         
         return $body;
     }
