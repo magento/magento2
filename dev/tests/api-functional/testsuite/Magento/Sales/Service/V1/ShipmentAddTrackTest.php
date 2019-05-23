@@ -81,13 +81,15 @@ class ShipmentAddTrackTest extends WebapiAbstract
      * Shipment Tracking throw an error if order doesn't exist.
      *
      * @magentoApiDataFixture Magento/Sales/_files/shipment.php
+     * @magentoApiDataFixture Magento/Sales/_files/order_list.php
      */
     public function testShipmentTrackWithFailedOrderId()
     {
         /** @var \Magento\Sales\Model\Order $order */
         $orderCollection = $this->objectManager->get(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
         $order = $orderCollection->getLastItem();
-        $failedOrderId = $order->getId() + 999999;
+        // Order ID from Magento/Sales/_files/order_list.php
+        $failedOrderId = $order->getId();
         $shipmentCollection = $this->objectManager->get(Collection::class);
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
         $shipment = $shipmentCollection->getFirstItem();
@@ -102,7 +104,7 @@ class ShipmentAddTrackTest extends WebapiAbstract
             ShipmentTrackInterface::TITLE => 'Shipment title',
             ShipmentTrackInterface::CARRIER_CODE => Track::CUSTOM_CARRIER_CODE,
         ];
-        $expectedMessage = 'The entity that was requested doesn\'t exist. Verify the entity and try again.';
+        $expectedMessage = 'The shipment doesn\'t belong to the order.';
 
         try {
             $this->_webApiCall($this->getServiceInfo(), ['entity' => $trackData]);
