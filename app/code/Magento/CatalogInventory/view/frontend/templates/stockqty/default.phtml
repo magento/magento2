@@ -10,6 +10,6 @@
 ?>
 <?php if ($block->isMsgVisible()) : ?>
     <div class="availability only" title="<?= $block->escapeHtmlAttr(__('Only %1 left', ($block->getStockQtyLeft()))) ?>">
-        <?= $block->escapeHtml(__('Only %1 left', "<strong>{$block->getStockQtyLeft()}</strong>")) ?>
+        <?= /* @noEscape */ __('Only %1 left', "<strong>{$block->escapeHtml($block->getStockQtyLeft())}</strong>") ?>
     </div>
 <?php endif ?>
