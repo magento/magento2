@@ -490,14 +490,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isAllow()
     {
-        if ($this->_moduleManager->isOutputEnabled($this->_getModuleName()) && $this->scopeConfig->getValue(
+        $isOutputEnabled  = $this->_moduleManager->isOutputEnabled($this->_getModuleName());
+
+        $isWishlistActive = $this->scopeConfig->getValue(
             'wishlist/general/active',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )
-        ) {
-            return true;
-        }
-        return false;
+        );
+
+        return $isOutputEnabled && $isWishlistActive;
     }
 
     /**
