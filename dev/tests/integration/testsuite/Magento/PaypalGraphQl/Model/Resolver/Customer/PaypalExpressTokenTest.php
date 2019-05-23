@@ -48,13 +48,7 @@ class PaypalExpressTokenTest extends AbstractTest
     /**
      * Test create paypal token for customer
      *
-     * @return void
-     * @magentoConfigFixture default_store payment/paypal_express/active 1
-     * @magentoConfigFixture default_store payment/paypal_express/merchant_id test_merchant_id
-     * @magentoConfigFixture default_store payment/paypal_express/wpp/api_username test_username
-     * @magentoConfigFixture default_store payment/paypal_express/wpp/api_password test_password
-     * @magentoConfigFixture default_store payment/paypal_express/wpp/api_signature test_signature
-     * @magentoConfigFixture default_store payment/paypal_express/payment_action Authorization
+     * @dataProvider getPaypalCodesProvider
      * @magentoConfigFixture default_store paypal/wpp/sandbox_flag 1
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
@@ -63,13 +57,17 @@ class PaypalExpressTokenTest extends AbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      */
-    public function testResolve(): void
+    public function testResolve($paymentMethod): void
     {
+        $this->enablePaymentMethod($paymentMethod);
+        if ($paymentMethod === 'payflow_express') {
+            $this->enablePaymentMethod('payflow_link');
+        }
+
         $reservedQuoteId = 'test_quote';
         $cart = $this->getQuoteByReservedOrderId($reservedQuoteId);
         $cartId = $cart->getId();
         $maskedCartId = $this->quoteIdToMaskedId->execute((int) $cartId);
-        $paymentMethod = "paypal_express";
 
         $query = $this->getCreateTokenMutation($maskedCartId, $paymentMethod);
 
@@ -90,6 +88,10 @@ class PaypalExpressTokenTest extends AbstractTest
         $this->request->setHeaders($webApiRequest->getHeaders());
 
         $paypalRequest = include __DIR__ . '/../../../_files/customer_paypal_create_token_request.php';
+        if ($paymentMethod == 'payflow_express') {
+            $paypalRequest['SOLUTIONTYPE'] = null;
+        }
+
         $paypalResponse = [
             'TOKEN' => 'EC-TOKEN1234',
             'CORRELATIONID' => 'c123456789',
@@ -109,5 +111,18 @@ class PaypalExpressTokenTest extends AbstractTest
         $this->assertEquals($paypalResponse['TOKEN'], $createTokenData['token']);
         $this->assertEquals($paymentMethod, $createTokenData['method']);
         $this->assertArrayHasKey('paypal_urls', $createTokenData);
+    }
+
+    /**
+     * Paypal method codes provider
+     *
+     * @return array
+     */
+    public function getPaypalCodesProvider(): array
+    {
+        return [
+            ['paypal_express'],
+            ['payflow_express'],
+        ];
     }
 }

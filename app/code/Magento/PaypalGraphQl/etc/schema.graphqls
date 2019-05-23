@@ -13,7 +13,8 @@ input PaypalExpressTokenInput {
     express_button: Boolean @doc(description: "Indicate if quick checkout button was used")
 }
 
-type PaypalExpressToken implements PaymentTokenInterface {
+type PaypalExpressToken {
+    method: String
     token: String
     paypal_urls: PaypalExpressUrlList
 }

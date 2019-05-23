@@ -121,11 +121,6 @@ input ShippingMethodInput {
 
 input PlaceOrderInput {
     cart_id: String!
-    payment_details: PlaceOrderPaymentDetails
-}
-
-input PlaceOrderPaymentDetails {
-    code: String!
 }
 
 input SetPaymentMethodOnCartInput {
@@ -335,8 +330,4 @@ type CartItemSelectedOptionValuePrice {
 
 type Order {
     order_id: String
-}
-
-interface PaymentTokenInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PaymentTokenTypeResolver"){
-    method: String
 }

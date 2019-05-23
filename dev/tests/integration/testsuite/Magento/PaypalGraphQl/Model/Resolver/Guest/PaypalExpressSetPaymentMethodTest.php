@@ -13,8 +13,6 @@ use Magento\PaypalGraphQl\AbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
-use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\UrlInterface;
 
 /**
@@ -53,7 +51,6 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
      *
      * @return void
      * @dataProvider getPaypalCodesProvider
-     * @magentoConfigFixture default_store paypal/wpp/sandbox_flag 1
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -64,23 +61,17 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
      */
     public function testResolveGuest(string $paymentMethod): void
     {
+        $this->enablePaymentMethod($paymentMethod);
+        if($paymentMethod === 'payflow_express'){
+            $this->enablePaymentMethod('payflow_link');
+        }
+
         $reservedQuoteId = 'test_quote';
         $payerId = 'SQFE93XKTSDRJ';
         $token = 'EC-TOKEN1234';
         $correlationId = 'c123456789';
 
-        $config = $this->objectManager->get(ConfigInterface::class);
-        $config->saveConfig('payment/' . $paymentMethod .'/active', '1');
-
-        if ($paymentMethod == 'payflow_express') {
-            $config = $this->objectManager->get(ConfigInterface::class);
-            $config->saveConfig('payment/payflow_link/active', '1');
-        }
-
-        $this->objectManager->get(ReinitableConfigInterface::class)->reinit();
-
         $cart = $this->getQuoteByReservedOrderId($reservedQuoteId);
-
         $cartId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
 
         $url = $this->objectManager->get(UrlInterface::class);
@@ -200,11 +191,10 @@ QUERY;
 
         $response = $this->graphqlController->dispatch($this->request);
         $responseData = $this->json->unserialize($response->getContent());
-        
+
         $this->assertArrayHasKey('data', $responseData);
         $this->assertArrayHasKey('createPaypalExpressToken', $responseData['data']);
         $createTokenData = $responseData['data']['createPaypalExpressToken'];
-
         $this->assertArrayNotHasKey('errors', $responseData);
         $this->assertEquals($paypalResponse['TOKEN'], $createTokenData['token']);
         $this->assertEquals($paymentMethod, $createTokenData['method']);
