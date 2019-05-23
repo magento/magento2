@@ -13,20 +13,6 @@
         <script src="mage/polyfill.js"/>
     </head>
     <body>
-        <referenceBlock name="head.additional">
-            <!--CSS rel preload script https://github.com/filamentgroup/loadCSS/blob/v2.0.1/src/cssrelpreload.js-->
-            <block class="Magento\Framework\View\Element\Text" name="css_rel_preload_script">
-                <action method="setText">
-                    <argument translate="true" name="text" xsi:type="string">
-                        <![CDATA[
-                        <script>
-                        !function(t){"use strict";t.loadCSS||(t.loadCSS=function(){});var e=loadCSS.relpreload={};if(e.support=function(){var e;try{e=t.document.createElement("link").relList.supports("preload")}catch(t){e=!1}return function(){return e}}(),e.bindMediaToggle=function(t){var e=t.media||"all";function a(){t.media=e}t.addEventListener?t.addEventListener("load",a):t.attachEvent&&t.attachEvent("onload",a),setTimeout(function(){t.rel="stylesheet",t.media="only x"}),setTimeout(a,3e3)},e.poly=function(){if(!e.support())for(var a=t.document.getElementsByTagName("link"),n=0;n<a.length;n++){var o=a[n];"preload"!==o.rel||"style"!==o.getAttribute("as")||o.getAttribute("data-loadcss")||(o.setAttribute("data-loadcss",!0),e.bindMediaToggle(o))}},!e.support()){e.poly();var a=t.setInterval(e.poly,500);t.addEventListener?t.addEventListener("load",function(){e.poly(),t.clearInterval(a)}):t.attachEvent&&t.attachEvent("onload",function(){e.poly(),t.clearInterval(a)})}"undefined"!=typeof exports?exports.loadCSS=loadCSS:t.loadCSS=loadCSS}("undefined"!=typeof global?global:this);
-                        </script>
-                        ]]>
-                    </argument>
-                </action>
-            </block>
-        </referenceBlock>
         <referenceContainer name="after.body.start">
             <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Theme::js/components.phtml" before="-"/>
         </referenceContainer>
