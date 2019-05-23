@@ -11,6 +11,7 @@
     <test name="AddOutOfStockProductToCompareListTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Compare List"/>
             <title value="Add out of stock product to compare list"/>
             <description value="Add out of stock product to compare list"/>
             <severity value="MAJOR"/>
