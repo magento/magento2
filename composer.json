@@ -35,7 +35,7 @@
         "zendframework/zend-captcha": "^2.7.1",
         "zendframework/zend-session": "^2.7.3",
         "zendframework/zend-mail": "^2.9.0",
-        "magento/zendframework1": "~1.13.0",
+        "magento/zendframework1": "~1.14.0",
         "colinmollenhour/credis": "1.8.2",
         "colinmollenhour/php-redis-session-abstract": "~1.4.0",
         "colinmollenhour/cache-backend-redis": "1.10.6",
