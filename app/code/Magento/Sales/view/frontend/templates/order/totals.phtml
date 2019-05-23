@@ -14,14 +14,14 @@
         <?= $block->getChildHtml($_total->getBlockName(), false) ?>
     <?php else :?>
     <tr class="<?= $block->escapeHtmlAttr($_code) ?>">
-        <th <?= $block->escapeHtmlAttr($block->getLabelProperties()) ?> scope="row">
+        <th <?= /* @noEscape */ $block->getLabelProperties() ?> scope="row">
             <?php if ($_total->getStrong()) : ?>
                 <strong><?= $block->escapeHtml($_total->getLabel()) ?></strong>
             <?php else : ?>
                 <?= $block->escapeHtml($_total->getLabel()) ?>
             <?php endif ?>
         </th>
-        <td <?= $block->escapeHtmlAttr($block->getValueProperties()) ?> data-th="<?= $block->escapeHtmlAttr($_total->getLabel()) ?>">
+        <td <?= /* @noEscape */ $block->getValueProperties() ?> data-th="<?= $block->escapeHtmlAttr($_total->getLabel()) ?>">
             <?php if ($_total->getStrong()) : ?>
                 <strong><?= /* @noEscape */ $block->formatValue($_total) ?></strong>
             <?php else : ?>
