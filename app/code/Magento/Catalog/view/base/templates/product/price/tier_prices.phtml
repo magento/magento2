@@ -77,7 +77,7 @@ $product = $block->getSaleableItem();
                             $price['price_qty'],
                             $priceAmountBlock,
                             $index,
-                            $tierPriceModel->getSavePercent($price['price'])
+                            $block->formatPercent($price['percentage_value'] ?? $tierPriceModel->getSavePercent($price['price']))
                         )
                         : __('Buy %1 for %2 each', $price['price_qty'], $priceAmountBlock);
                 ?>
