@@ -10,7 +10,6 @@ namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\PaypalGraphQl\AbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -38,11 +37,6 @@ class PaypalExpressTokenTest extends AbstractTest
      */
     private $quoteIdToMaskedId;
 
-    /**
-     * @var CustomerTokenServiceInterface
-     */
-    private $customerTokenService;
-
     protected function setUp()
     {
         parent::setUp();
@@ -50,12 +44,13 @@ class PaypalExpressTokenTest extends AbstractTest
         $this->request = $this->objectManager->create(Http::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteId::class);
-        $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
     }
 
     /**
      * Test create paypal token for guest
      *
+     * @param string $paymentMethod
+     * @return void
      * @dataProvider getPaypalCodesProvider
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
@@ -63,6 +58,7 @@ class PaypalExpressTokenTest extends AbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      */
     public function testResolve($paymentMethod): void
     {
@@ -74,7 +70,6 @@ class PaypalExpressTokenTest extends AbstractTest
         $cart = $this->getQuoteByReservedOrderId($reservedQuoteId);
 
         $cartId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
-        $paymentMethod = "paypal_express";
         $query = $this->getCreateTokenMutation($cartId, $paymentMethod);
 
         $postData = $this->json->serialize(['query' => $query]);
@@ -114,6 +109,8 @@ class PaypalExpressTokenTest extends AbstractTest
     /**
      * Test create paypal token for guest
      *
+     * @param string $paymentMethod
+     * @return void
      * @dataProvider getPaypalCodesProvider
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
@@ -121,6 +118,7 @@ class PaypalExpressTokenTest extends AbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      */
     public function testResolveWithPaypalError($paymentMethod): void
     {

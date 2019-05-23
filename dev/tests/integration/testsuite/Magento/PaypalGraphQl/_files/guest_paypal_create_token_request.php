@@ -13,7 +13,7 @@ $baseUrl = $url->getBaseUrl();
 
 return [
         'PAYMENTACTION' => 'Authorization',
-        'AMT' => '20.00',
+        'AMT' => '30.00',
         'CURRENCYCODE' => 'USD',
         'RETURNURL' => $baseUrl . 'paypal/express/return/',
         'CANCELURL' => $baseUrl . 'paypal/express/cancel/',
@@ -22,7 +22,7 @@ return [
         'GIROPAYCANCELURL' => $baseUrl . 'paypal/express/cancel/',
         'GIROPAYSUCCESSURL' => $baseUrl . 'checkout/onepage/success/',
         'BANKTXNPENDINGURL' => $baseUrl . 'checkout/onepage/pending/',
-        'SHIPPINGAMT' => '0.00',
+        'SHIPPINGAMT' => '10.00',
         'ITEMAMT' => '20.00',
         'TAXAMT' => '0.00',
         'L_NUMBER0' => null,

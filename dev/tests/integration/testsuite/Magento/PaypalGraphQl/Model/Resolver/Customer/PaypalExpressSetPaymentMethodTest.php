@@ -49,6 +49,7 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
     /**
      * Test end to end test to process a paypal express order
      *
+     * @param string $paymentMethod
      * @return void
      * @dataProvider getPaypalCodesProvider
      * @magentoConfigFixture default_store paypal/wpp/sandbox_flag 1
@@ -59,6 +60,7 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testResolve(string $paymentMethod): void
     {
@@ -67,7 +69,7 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
             $this->enablePaymentMethod('payflow_link');
         }
 
-        $payerId = 'SQFE93XKTSDRJ';
+        $payerId = 'PAYER123456';
         $token = 'EC-TOKEN1234';
         $correlationId = 'c123456789';
         $reservedQuoteId = 'test_quote';
@@ -171,7 +173,7 @@ QUERY;
             'TOKEN' => $token,
         ];
 
-        $paypalRequestDetailsResponse = include __DIR__ . '/../../../_files/guest_paypal_set_payer_id.php';
+        $paypalRequestDetailsResponse = include __DIR__ . '/../../../_files/paypal_set_payer_id_repsonse.php';
 
         $this->nvpMock
             ->expects($this->at(1))
@@ -179,7 +181,7 @@ QUERY;
             ->with(Nvp::GET_EXPRESS_CHECKOUT_DETAILS, $paypalRequestDetails)
             ->willReturn($paypalRequestDetailsResponse);
 
-        $paypalRequestPlaceOrder = include __DIR__ . '/../../../_files/guest_paypal_place_order.php';
+        $paypalRequestPlaceOrder = include __DIR__ . '/../../../_files/paypal_place_order_request.php';
 
         $paypalRequestPlaceOrder['EMAIL'] = 'customer@example.com';
 
@@ -187,19 +189,21 @@ QUERY;
             ->expects($this->at(2))
             ->method('call')
             ->with(Nvp::DO_EXPRESS_CHECKOUT_PAYMENT, $paypalRequestPlaceOrder)
-            ->willReturn([
-                'RESULT' => '0',
-                'PNREF' => 'B7PPAC033FF2',
-                'RESPMSG' => 'Approved',
-                'AVSADDR' => 'Y',
-                'AVSZIP' => 'Y',
-                'TOKEN' => $token,
-                'PAYERID' => $payerId,
-                'PPREF' => '7RK43642T8939154L',
-                'CORRELATIONID' => $correlationId,
-                'PAYMENTTYPE' => 'instant',
-                'PENDINGREASON' => 'authorization',
-            ]);
+            ->willReturn(
+                [
+                    'RESULT' => '0',
+                    'PNREF' => 'B7PPAC033FF2',
+                    'RESPMSG' => 'Approved',
+                    'AVSADDR' => 'Y',
+                    'AVSZIP' => 'Y',
+                    'TOKEN' => $token,
+                    'PAYERID' => $payerId,
+                    'PPREF' => '7RK43642T8939154L',
+                    'CORRELATIONID' => $correlationId,
+                    'PAYMENTTYPE' => 'instant',
+                    'PENDINGREASON' => 'authorization',
+                ]
+            );
 
         $response = $this->graphqlController->dispatch($this->request);
         $responseData = $this->json->unserialize($response->getContent());

@@ -33,6 +33,8 @@ use Magento\Framework\UrlInterface;
 
 /**
  * Abstract class with common logic for Paypal GraphQl tests
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractTest extends TestCase
 {
@@ -126,7 +128,7 @@ abstract class AbstractTest extends TestCase
         $config->setScope(ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
 
         foreach ($paypalMethods as $method) {
-            $paymentMethodActive = 'payment/' . $methodCode . '/active';
+            $paymentMethodActive = 'payment/' . $method . '/active';
             $config->setDataByPath($paymentMethodActive, '0');
             $config->save();
         }

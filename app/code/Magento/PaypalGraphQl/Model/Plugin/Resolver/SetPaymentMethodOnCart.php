@@ -18,6 +18,9 @@ use Magento\Framework\Stdlib\ArrayManager;
 use Magento\PaypalGraphQl\Model\Provider\Checkout as CheckoutProvider;
 use Magento\PaypalGraphQl\Model\Provider\Config as ConfigProvider;
 
+/**
+ * Plugin to perform Paypal-specific logic when setting payment method on cart
+ */
 class SetPaymentMethodOnCart
 {
     private const PATH_CODE = 'input/payment_method/code';

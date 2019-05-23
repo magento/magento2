@@ -49,6 +49,7 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
     /**
      * Test end to end test to process a paypal express order
      *
+     * @param string $paymentMethod
      * @return void
      * @dataProvider getPaypalCodesProvider
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
@@ -58,16 +59,17 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testResolveGuest(string $paymentMethod): void
     {
         $this->enablePaymentMethod($paymentMethod);
-        if($paymentMethod === 'payflow_express'){
+        if ($paymentMethod === 'payflow_express') {
             $this->enablePaymentMethod('payflow_link');
         }
 
         $reservedQuoteId = 'test_quote';
-        $payerId = 'SQFE93XKTSDRJ';
+        $payerId = 'PAYER123456';
         $token = 'EC-TOKEN1234';
         $correlationId = 'c123456789';
 
@@ -161,7 +163,7 @@ QUERY;
             'TOKEN' => $token,
         ];
 
-        $paypalRequestDetailsResponse = include __DIR__ . '/../../../_files/guest_paypal_set_payer_id.php';
+        $paypalRequestDetailsResponse = include __DIR__ . '/../../../_files/paypal_set_payer_id_repsonse.php';
 
         $this->nvpMock
             ->expects($this->at(1))
@@ -169,7 +171,7 @@ QUERY;
             ->with(Nvp::GET_EXPRESS_CHECKOUT_DETAILS, $paypalRequestDetails)
             ->willReturn($paypalRequestDetailsResponse);
 
-        $paypalRequestPlaceOrder = include __DIR__ . '/../../../_files/guest_paypal_place_order.php';
+        $paypalRequestPlaceOrder = include __DIR__ . '/../../../_files/paypal_place_order_request.php';
 
         $this->nvpMock
             ->expects($this->at(2))

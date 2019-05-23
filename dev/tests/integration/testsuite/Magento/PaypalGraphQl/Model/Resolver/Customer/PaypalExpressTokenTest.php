@@ -48,6 +48,7 @@ class PaypalExpressTokenTest extends AbstractTest
     /**
      * Test create paypal token for customer
      *
+     * @param string $paymentMethod
      * @dataProvider getPaypalCodesProvider
      * @magentoConfigFixture default_store paypal/wpp/sandbox_flag 1
      * @magentoDataFixture Magento/Customer/_files/customer.php
@@ -56,6 +57,7 @@ class PaypalExpressTokenTest extends AbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      */
     public function testResolve($paymentMethod): void
     {
