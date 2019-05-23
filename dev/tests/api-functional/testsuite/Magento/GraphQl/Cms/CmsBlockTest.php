@@ -13,6 +13,9 @@ use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Widget\Model\Template\FilterEmulate;
 
+/**
+ * Get CMS Block test
+ */
 class CmsBlockTest extends GraphQlAbstract
 {
     /**
@@ -59,6 +62,39 @@ QUERY;
         self::assertArrayHasKey('cmsBlocks', $response);
         self::assertArrayHasKey('items', $response['cmsBlocks']);
 
+        self::assertEquals($cmsBlockData['identifier'], $response['cmsBlocks']['items'][0]['identifier']);
+        self::assertEquals($cmsBlockData['title'], $response['cmsBlocks']['items'][0]['title']);
+        self::assertEquals($renderedContent, $response['cmsBlocks']['items'][0]['content']);
+    }
+
+    /**
+     * Verify the fields of CMS Block selected by block_id
+     *
+     * @magentoApiDataFixture Magento/Cms/_files/blocks.php
+     */
+    public function testGetCmsBlockByBlockId()
+    {
+        $cmsBlock = $this->blockRepository->getById('enabled_block');
+        $cmsBlockData = $cmsBlock->getData();
+        $blockId = $cmsBlockData['block_id'];
+        $renderedContent = $this->filterEmulate->setUseSessionInUrl(false)->filter($cmsBlock->getContent());
+
+        $query =
+            <<<QUERY
+{
+  cmsBlocks(identifiers: "$blockId") {
+    items {
+      identifier
+      title
+      content
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+
+        self::assertArrayHasKey('cmsBlocks', $response);
+        self::assertArrayHasKey('items', $response['cmsBlocks']);
         self::assertEquals($cmsBlockData['identifier'], $response['cmsBlocks']['items'][0]['identifier']);
         self::assertEquals($cmsBlockData['title'], $response['cmsBlocks']['items'][0]['title']);
         self::assertEquals($renderedContent, $response['cmsBlocks']['items'][0]['content']);
