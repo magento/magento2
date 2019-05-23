@@ -14,6 +14,8 @@ use Magento\PaypalGraphQl\AbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 
 /**
  * Test ExpressSetPaymentMethodTest graphql endpoint for customer
@@ -51,12 +53,6 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
      *
      * @return void
      * @dataProvider getPaypalCodesProvider
-     * @magentoConfigFixture default_store payment/paypal_express/active 1
-     * @magentoConfigFixture default_store payment/paypal_express/merchant_id test_merchant_id
-     * @magentoConfigFixture default_store payment/paypal_express/wpp/api_username test_username
-     * @magentoConfigFixture default_store payment/paypal_express/wpp/api_password test_password
-     * @magentoConfigFixture default_store payment/paypal_express/wpp/api_signature test_signature
-     * @magentoConfigFixture default_store payment/paypal_express/payment_action Authorization
      * @magentoConfigFixture default_store paypal/wpp/sandbox_flag 1
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
@@ -72,8 +68,18 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
         $payerId = 'SQFE93XKTSDRJ';
         $token = 'EC-TOKEN1234';
         $correlationId = 'c123456789';
-
         $reservedQuoteId = 'test_quote';
+
+        $config = $this->objectManager->get(ConfigInterface::class);
+        $config->saveConfig('payment/' . $paymentMethod .'/active', '1');
+
+        if ($paymentMethod == 'payflow_express') {
+            $config = $this->objectManager->get(ConfigInterface::class);
+            $config->saveConfig('payment/payflow_link/active', '1');
+        }
+
+        $this->objectManager->get(ReinitableConfigInterface::class)->reinit();
+
         $cart = $this->getQuoteByReservedOrderId($reservedQuoteId);
         $cartId = $cart->getId();
         $maskedCartId = $this->quoteIdToMaskedId->execute((int) $cartId);
