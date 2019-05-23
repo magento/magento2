@@ -16,6 +16,7 @@
         "ext-gd": "*",
         "ext-hash": "*",
         "ext-iconv": "*",
+        "ext-intl": "*",
         "ext-openssl": "*",
         "ext-simplexml": "*",
         "ext-spl": "*",
