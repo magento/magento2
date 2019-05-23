@@ -270,7 +270,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getAddress()
     {
-        if ($this->getQuote()->getItemsQty() == $this->getQuote()->getVirtualItemsQty()) {
+        if ($this->getQuote()->isVirtual()) {
             $address = $this->getQuote()->getBillingAddress();
         } else {
             $address = $this->getQuote()->getShippingAddress();
