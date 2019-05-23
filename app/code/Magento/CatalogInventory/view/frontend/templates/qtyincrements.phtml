@@ -10,6 +10,6 @@
 ?>
 <?php if ($block->getProductQtyIncrements()) : ?>
     <div class="product pricing">
-        <?= /* @noEscape */ __('%1 is available to buy in increments of %2', $block->escapeHtml($block->getProductName()), $block->escapeHtml($block->getProductQtyIncrements())) ?>
+        <?= $block->escapeHtml(__('%1 is available to buy in increments of %2', $block->getProductName(), $block->getProductQtyIncrements())) ?>
     </div>
 <?php endif ?>
