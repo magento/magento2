@@ -54,4 +54,12 @@ class ComplexItem
     {
         $this->variadicAttribute = $variadicValue;
     }
+
+    /**
+     *
+     */
+    public function returnsSelf()
+    {
+        return $this;
+    }
 }

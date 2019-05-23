@@ -50,7 +50,6 @@ class FileCache implements CacheInterface, SerializerInterface
      *
      * @param string $identifier
      * @return string|bool
-     * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function load($identifier)
@@ -66,7 +65,6 @@ class FileCache implements CacheInterface, SerializerInterface
      * @param array $tags
      * @param int|bool|null $lifeTime
      * @return bool
-     * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
@@ -88,7 +86,6 @@ class FileCache implements CacheInterface, SerializerInterface
      *
      * @param string $identifier
      * @return bool
-     * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function remove($identifier)
@@ -102,7 +99,6 @@ class FileCache implements CacheInterface, SerializerInterface
      * @param string $mode
      * @param array $tags
      * @return bool
-     * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])

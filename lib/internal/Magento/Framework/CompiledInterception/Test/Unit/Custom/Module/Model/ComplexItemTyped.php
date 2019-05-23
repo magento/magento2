@@ -66,4 +66,20 @@ class ComplexItemTyped
     {
         $this->variadicValue = $variadicValue;
     }
+
+    /**
+     *
+     */
+    public function returnsSelf() : self
+    {
+        return $this;
+    }
+
+    /**
+     *
+     */
+    public function returnsType() : \Magento\Framework\Something
+    {
+        return null;
+    }
 }

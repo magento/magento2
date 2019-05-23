@@ -59,7 +59,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
     /**
      * {@inheritdoc}
      */
-    public function getNullableValue() : string
+    public function getNullableValue() : ?string
     {
         switch($this->____scope->getCurrentScope()){
         	case 'backend':
@@ -158,10 +158,40 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function returnsSelf() : \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItemTyped
+    {
+        switch($this->____scope->getCurrentScope()){
+        	case 'backend':
+        		$this->____plugin_complex_plugin()->beforeReturnsSelf($this);
+        		
+        		return parent::returnsSelf();
+        	default:
+        		return parent::returnsSelf();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function returnsType() : \Magento\Framework\Something
+    {
+        switch($this->____scope->getCurrentScope()){
+        	case 'backend':
+        		$this->____plugin_complex_plugin()->beforeReturnsType($this);
+        		
+        		return parent::returnsType();
+        	default:
+        		return parent::returnsType();
+        }
+    }
+
+    /**
      * plugin "complex_plugin"
      * @return \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Complex
      */
-    public function ____plugin_complex_plugin()
+    public function ____plugin_complex_plugin() : \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Complex
     {
         if ($this->____plugin_complex_plugin === null) {
         	$this->____plugin_complex_plugin = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Complex::class);
@@ -173,7 +203,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
      * plugin "advanced_plugin"
      * @return \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced
      */
-    public function ____plugin_advanced_plugin()
+    public function ____plugin_advanced_plugin() : \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced
     {
         if ($this->____plugin_advanced_plugin === null) {
         	$this->____plugin_advanced_plugin = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class);

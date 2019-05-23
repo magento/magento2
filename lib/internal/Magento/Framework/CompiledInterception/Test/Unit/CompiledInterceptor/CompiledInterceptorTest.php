@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\CompiledInterception\Test\Unit\CompiledInterceptor;
 
+use Magento\Framework\App\AreaList;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\CompiledInterception\Generator\CompiledInterceptor;
 
@@ -20,11 +21,21 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
     private $ioGenerator;
 
     /**
+     * @var AreaList|MockObject
+     */
+    private $areaList;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
         $this->ioGenerator = $this->getMockBuilder(Io::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+
+        $this->areaList = $this->getMockBuilder(AreaList::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -43,6 +54,7 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
         $interceptor = $this->getMockBuilder(CompiledInterceptor::class)
             ->setMethods(['_validateData'])
             ->setConstructorArgs([
+                $this->areaList,
                 $className,
                 $resultClassName,
                 $this->ioGenerator,

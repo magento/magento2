@@ -7,26 +7,37 @@
 namespace Magento\Framework\CompiledInterception\Generator;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Code\Generator\CodeGeneratorInterface;
+use Magento\Framework\Code\Generator\DefinedClasses;
+use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Code\Generator\EntityAbstract;
 use Magento\Framework\Config\ScopeInterface;
-use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Framework\Interception\DefinitionInterface;
+use Magento\Framework\App\AreaList;
 
-class CompiledInterceptor extends Interceptor
+class CompiledInterceptor extends EntityAbstract
 {
+    /**
+     * Entity type
+     */
+    const ENTITY_TYPE = 'interceptor';
 
     protected $plugins;
 
     protected $classMethods = [];
+
     protected $classProperties = [];
 
+    protected $areaList;
+
     public function __construct(
+        AreaList $areaList,
         $sourceClassName = null,
         $resultClassName = null,
-        \Magento\Framework\Code\Generator\Io $ioObject = null,
-        \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
-        \Magento\Framework\Code\Generator\DefinedClasses $definedClasses = null,
+        Io $ioObject = null,
+        CodeGeneratorInterface $classGenerator = null,
+        DefinedClasses $definedClasses = null,
         $plugins = null
     )
     {
@@ -36,14 +47,8 @@ class CompiledInterceptor extends Interceptor
             $classGenerator,
             $definedClasses);
 
-        if ($plugins !== null) {
-            $this->plugins = $plugins;
-        } else {
-            $this->plugins = [];
-            foreach (['primary', 'frontend', 'adminhtml', 'crontab', 'webapi_rest', 'webapi_soap'] as $scope) {
-                $this->plugins[$scope] = new CompiledPluginList(ObjectManager::getInstance(), $scope);
-            }
-        }
+        $this->areaList = $areaList;
+        $this->plugins = $plugins;
     }
 
     /**
@@ -54,6 +59,10 @@ class CompiledInterceptor extends Interceptor
         //NOOP
     }
 
+    /**
+     * @return bool|string
+     * @throws \ReflectionException
+     */
     protected function _generateCode()
     {
         $typeName = $this->getSourceClassName();
@@ -73,8 +82,19 @@ class CompiledInterceptor extends Interceptor
         ]);
         $this->overrideMethodsAndGeneratePluginGetters($reflection);
 
-        //return parent::_generateCode();
-        return EntityAbstract::_generateCode();
+        return parent::_generateCode();
+    }
+
+    /**
+     * Whether method is intercepted
+     *
+     * @param \ReflectionMethod $method
+     * @return bool
+     */
+    protected function isInterceptedMethod(\ReflectionMethod $method)
+    {
+        return !($method->isConstructor() || $method->isFinal() || $method->isStatic() || $method->isDestructor()) &&
+            !in_array($method->getName(), ['__sleep', '__wakeup', '__clone']);
     }
 
     protected function overrideMethodsAndGeneratePluginGetters(\ReflectionClass $reflection)
@@ -86,7 +106,7 @@ class CompiledInterceptor extends Interceptor
             if ($this->isInterceptedMethod($method)) {
                 $config = $this->_getPluginsConfig($method, $allPlugins);
                 if (!empty($config)) {
-                    $this->classMethods[] = $this->_getCompiledMethodInfo($method, $config);
+                    $this->classMethods[] = $this->getCompiledMethodInfo($method, $config);
                 }
             }
         }
@@ -300,14 +320,14 @@ class CompiledInterceptor extends Interceptor
             'name' => $this->getGetterName($plugin),
             'parameters' => [],
             'body' => implode("\n", $body),
-            //'returnType' => $class,
+            'returnType' => $plugin['class'],
             'docblock' => [
                 'shortDescription' => 'plugin "' . $plugin['code'] . '"' . "\n" . '@return \\' . $plugin['class']
             ],
         ];
     }
 
-    protected function _getCompiledMethodInfo(\ReflectionMethod $method, $config)
+    private function getCompiledMethodInfo(\ReflectionMethod $method, $config)
     {
         $parameters = $method->getParameters();
         $returnsVoid = ($method->hasReturnType() && $method->getReturnType()->getName() == 'void');
@@ -333,12 +353,18 @@ class CompiledInterceptor extends Interceptor
         }
 
         $body[] = "}";
-        
+        $returnType = $method->getReturnType();
+        $returnTypeValue = $returnType
+            ? ($returnType->allowsNull() ? '?' : '') .$returnType->getName()
+            : null;
+        if ($returnTypeValue === 'self') {
+            $returnTypeValue = $method->getDeclaringClass()->getName();
+        }
         return [
             'name' => ($method->returnsReference() ? '& ' : '') . $method->getName(),
             'parameters' =>array_map(array($this, '_getMethodParameterInfo'), $parameters),
             'body' => implode("\n", $body),
-            'returnType' => $method->getReturnType(),
+            'returnType' => $returnTypeValue,
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
         ];
     }
@@ -386,6 +412,12 @@ class CompiledInterceptor extends Interceptor
         $className = ltrim($this->getSourceClassName(), '\\');
 
         $ret = array();
+        if ($this->plugins === null) {
+            $this->plugins = [];
+            foreach ($this->areaList->getCodes() as $scope) {
+                $this->plugins[$scope] = new CompiledPluginList(ObjectManager::getInstance(), $scope);
+            }
+        }
         foreach ($this->plugins as $scope => $pluginsList) {
             $p = $this->_getPluginsChain($pluginsList, $className, $method->getName(), $allPlugins);
             if ($p) {
@@ -396,4 +428,13 @@ class CompiledInterceptor extends Interceptor
         return $ret;
     }
 
+    /**
+     * Get default constructor definition for generated class
+     *
+     * @return array
+     */
+    protected function _getDefaultConstructorDefinition()
+    {
+        // TODO: Implement _getDefaultConstructorDefinition() method.
+    }
 }

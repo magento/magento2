@@ -123,4 +123,19 @@ class Complex
 
     }
 
+    /**
+     *
+     */
+    public function beforeReturnsSelf()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function beforeReturnsType()
+    {
+
+    }
 }
