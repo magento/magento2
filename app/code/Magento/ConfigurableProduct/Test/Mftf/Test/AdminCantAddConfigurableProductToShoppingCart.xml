@@ -22,7 +22,7 @@
             <!--Create category-->
             <comment userInput="Create category" stepKey="commentCreateCategory"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
-            <!-- Create the configurable product based on the data in the /data folder -->
+            <!-- Create the configurable product based on the data in the data folder -->
             <comment userInput="Create the configurable product based on the data in the data folder" stepKey="createConfigurableProduct"/>
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
