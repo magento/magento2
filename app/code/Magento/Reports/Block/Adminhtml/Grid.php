@@ -16,6 +16,11 @@ namespace Magento\Reports\Block\Adminhtml;
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
     /**
+     * @var \Magento\Framework\Url\DecoderInterface
+     */
+    private $urlDecoder;
+
+    /**
      * Should Store Switcher block be visible
      *
      * @var bool
@@ -72,6 +77,24 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     protected $_filterValues;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Helper\Data $backendHelper
+     * @param array $data
+     * @param \Magento\Framework\Url\DecoderInterface|null $urlDecoder
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Helper\Data $backendHelper,
+        array $data = [],
+        \Magento\Framework\Url\DecoderInterface $urlDecoder = null
+    ) {
+        $this->urlDecoder = $urlDecoder ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Url\DecoderInterface::class
+        );
+        parent::__construct($context, $backendHelper, $data);
+    }
+
+    /**
      * Apply sorting and filtering to collection
      *
      * @return $this
@@ -87,9 +110,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
         if (is_string($filter)) {
             $data = [];
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $filter = base64_decode($filter);
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $filter = $this->urlDecoder->decode($filter);
             parse_str(urldecode($filter), $data);
 
             if (!isset($data['report_from'])) {
