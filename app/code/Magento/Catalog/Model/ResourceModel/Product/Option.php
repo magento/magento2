@@ -9,7 +9,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\Store;
-use Magento\Tests\NamingConvention\true\float;
 
 /**
  * Catalog product custom option resource model
