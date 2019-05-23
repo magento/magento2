@@ -64,21 +64,15 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
      */
     public function testResolve(string $paymentMethod): void
     {
+        $this->enablePaymentMethod($paymentMethod);
+        if ($paymentMethod === 'payflow_express') {
+            $this->enablePaymentMethod('payflow_link');
+        }
 
         $payerId = 'SQFE93XKTSDRJ';
         $token = 'EC-TOKEN1234';
         $correlationId = 'c123456789';
         $reservedQuoteId = 'test_quote';
-
-        $config = $this->objectManager->get(ConfigInterface::class);
-        $config->saveConfig('payment/' . $paymentMethod .'/active', '1');
-
-        if ($paymentMethod == 'payflow_express') {
-            $config = $this->objectManager->get(ConfigInterface::class);
-            $config->saveConfig('payment/payflow_link/active', '1');
-        }
-
-        $this->objectManager->get(ReinitableConfigInterface::class)->reinit();
 
         $cart = $this->getQuoteByReservedOrderId($reservedQuoteId);
         $cartId = $cart->getId();
