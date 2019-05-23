@@ -161,6 +161,23 @@ class SystemTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testClearingConfigurationCacheLockingItReturnsStaleCachedValue()
+    {
+        // First uncached call to configuration
+        $this->createSystemConfig()->get('stores/default/web/test/test_value_1');
+
+        $this->accessCacheFrontend()->clean();
+
+        $this->accessLock()->lock('SYSTEM_CONFIG');
+        // Second call after cache data is stored
+        $configValue = $this->createSystemConfig()->get('stores/default/web/test/test_value_1');
+        $this->accessLock()->unlock('SYSTEM_CONFIG');
+
+        $this->assertEquals(
+            'value1.db.store_default.test',
+            $configValue
+        );
+    }
 
     private function accessCacheFrontend(): FrontendInterface
     {
