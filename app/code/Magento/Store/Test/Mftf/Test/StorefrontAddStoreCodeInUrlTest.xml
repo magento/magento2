@@ -11,8 +11,10 @@
     <test name="StorefrontAddStoreCodeInUrlTest">
         <annotations>
             <features value="Backend"/>
+            <stories value="Update Store Group"/>
             <title value="Store code should be added to storefront URL if the corresponding configuration is enabled"/>
             <description value="Store code should be added to storefront URL if the corresponding configuration is enabled"/>
+            <severity value="CRITICAL"/>
             <testCaseId value="MC-15944" />
             <group value="store"/>
             <group value="mtf_migrated"/>
