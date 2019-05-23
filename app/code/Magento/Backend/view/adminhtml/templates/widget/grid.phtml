@@ -101,7 +101,7 @@ $numColumns = !is_null($block->getColumns()) ? sizeof($block->getColumns()) : 0;
 
                             <label class="admin__control-support-text" for="<?= $block->escapeHtml($block->getHtmlId())
                             ?>_page-current">
-                                <?= /* @noEscape */ __('of %1', '<span>' . $block->getCollection())->getLastPageNumber() . '</span>' ?>
+                                <?= /* @noEscape */ __('of %1', '<span>' . $block->getCollection()->getLastPageNumber() . '</span>') ?>
                             </label>
                             <?php if ($_curPage < $_lastPage): ?>
                                 <button type="button" title="<?= $block->escapeHtml(__('Next page')) ?>"

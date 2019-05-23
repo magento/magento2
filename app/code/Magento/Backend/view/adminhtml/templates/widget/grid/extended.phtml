@@ -110,7 +110,7 @@ $numColumns = sizeof($block->getColumns());
                                class="admin__control-text"
                                onkeypress="<?= /* @noEscape */ $block->getJsObjectName() ?>.inputPage(event, '<?= /* @noEscape */ $_lastPage ?>')" <?= /* @noEscape */ $block->getUiId('current-page') ?> />
                         <label class="admin__control-support-text" for="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-current">
-                            <?= /* @noEscape */ __('of %1', '<span>' . $block->getCollection())->getLastPageNumber() . '</span>' ?>
+                            <?= /* @noEscape */ __('of %1', '<span>' . $block->getCollection()->getLastPageNumber() . '</span>') ?>
                         </label>
                         <?php if ($_curPage < $_lastPage): ?>
                             <button type="button"
