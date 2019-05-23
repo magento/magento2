@@ -40,7 +40,8 @@ class System implements ConfigTypeInterface
      * System config type.
      */
     const CONFIG_TYPE = 'system';
-    const STALE_CACHE_PREFIX = 'stale';
+
+    const STALE_CACHE_KEY = 'stale_system';
 
     /**
      * @var string
@@ -277,7 +278,7 @@ class System implements ConfigTypeInterface
      */
     private function loadAllStaleDataFromCache()
     {
-        return $this->loadFromCacheAndDecode(self::STALE_CACHE_PREFIX . '_' . $this->configType);
+        return $this->loadFromCacheAndDecode(self::STALE_CACHE_KEY);
     }
 
     /**
@@ -409,7 +410,7 @@ class System implements ConfigTypeInterface
         $this->saveToCache($this->configType . '_default', $data['default']);
 
         $this->saveToCacheWithCacheTag(
-            self::STALE_CACHE_PREFIX . '_' .  $this->configType,
+            self::STALE_CACHE_KEY,
             $data,
             []
         );
