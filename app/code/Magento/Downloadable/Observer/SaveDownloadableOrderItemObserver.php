@@ -176,7 +176,6 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
                 }
             }
         }
-
         return $this;
     }
 
