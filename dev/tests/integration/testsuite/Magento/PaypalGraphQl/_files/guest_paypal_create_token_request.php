@@ -21,7 +21,7 @@ return [
         'SOLUTIONTYPE' => 'Mark',
         'GIROPAYCANCELURL' => $baseUrl . 'paypal/express/cancel/',
         'GIROPAYSUCCESSURL' => $baseUrl . 'checkout/onepage/success/',
-        'BANKTXNPENDINGURL' => $baseUrl . 'checkout/onepage/success/',
+        'BANKTXNPENDINGURL' => $baseUrl . 'checkout/onepage/pending/',
         'SHIPPINGAMT' => '0.00',
         'ITEMAMT' => '20.00',
         'TAXAMT' => '0.00',

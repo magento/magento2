@@ -15,6 +15,7 @@ use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\UrlInterface;
 
 /**
  * @magentoAppArea graphql
@@ -82,11 +83,20 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
 
         $cartId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
 
+        $url = $this->objectManager->get(UrlInterface::class);
+        $baseUrl = $url->getBaseUrl();
+
         $query = <<<QUERY
 mutation {
     createPaypalExpressToken(input: {
         cart_id: "{$cartId}",
         code: "{$paymentMethod}",
+        urls: {
+            return_url: "{$baseUrl}paypal/express/return/",
+            cancel_url: "{$baseUrl}paypal/express/cancel/"
+            success_url: "{$baseUrl}checkout/onepage/success/",
+            pending_url: "{$baseUrl}checkout/onepage/pending/"
+        }
         express_button: false
     })
     {
