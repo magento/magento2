@@ -41,12 +41,15 @@ class System implements ConfigTypeInterface
      */
     const CONFIG_TYPE = 'system';
 
-    const STALE_CACHE_KEY = 'stale_system';
+    /**
+     * Name of the lock to acquire during write
+     */
+    const LOCK_NAME = 'SYSTEM_CONFIG';
 
     /**
      * @var string
      */
-    private static $lockName = 'SYSTEM_CONFIG';
+    private static $lockName = self::LOCK_NAME;
 
     /**
      * @var array
@@ -223,11 +226,7 @@ class System implements ConfigTypeInterface
             self::$lockName,
             \Closure::fromCallable([$this, 'loadAllDataFromCache']),
             \Closure::fromCallable([$this, 'readData']),
-            function ($data) {
-                $this->cacheData($data);
-                return $data;
-            },
-            \Closure::fromCallable([$this, 'loadAllStaleDataFromCache'])
+            \Closure::fromCallable([$this, 'cacheData'])
         );
     }
 
@@ -249,13 +248,9 @@ class System implements ConfigTypeInterface
             function () {
                 return \Closure::fromCallable([$this, 'readData'])();
             },
+            \Closure::fromCallable([$this, 'cacheData']),
             function ($data) use ($scopeType) {
-                $this->cacheData($data);
                 return $data[$scopeType] ?? [];
-            },
-            function () use ($scopeType) {
-                $scopeData = $this->loadAllStaleDataFromCache()[$scopeType] ?? false;
-                return $scopeData;
             }
         );
     }
@@ -269,16 +264,6 @@ class System implements ConfigTypeInterface
     private function loadAllDataFromCache()
     {
         return $this->loadFromCacheAndDecode($this->configType);
-    }
-
-    /**
-     * Loads all cache data for configuration
-     *
-     * @return array|bool
-     */
-    private function loadAllStaleDataFromCache()
-    {
-        return $this->loadFromCacheAndDecode(self::STALE_CACHE_KEY);
     }
 
     /**
@@ -369,18 +354,9 @@ class System implements ConfigTypeInterface
             self::$lockName,
             $loadAction,
             \Closure::fromCallable([$this, 'readData']),
+            \Closure::fromCallable([$this, 'cacheData']),
             function ($data) use ($scopeType, $scopeId) {
-                $this->cacheData($data);
                 return $data[$scopeType][$scopeId] ?? [];
-            },
-            function () use ($scopeType, $scopeId) {
-                $staleData = $this->loadAllStaleDataFromCache();
-
-                if ($staleData) {
-                    return $staleData[$scopeType][$scopeId] ?? [];
-                }
-
-                return false;
             }
         );
     }
@@ -402,18 +378,12 @@ class System implements ConfigTypeInterface
      * Caches data per scope to avoid reading data for all scopes on every request
      *
      * @param array $data
-     * @return void
+     * @return array
      */
     private function cacheData(array $data)
     {
         $this->saveToCache($this->configType, $data);
         $this->saveToCache($this->configType . '_default', $data['default']);
-
-        $this->saveToCacheWithCacheTag(
-            self::STALE_CACHE_KEY,
-            $data,
-            []
-        );
 
         $scopes = [];
         foreach ([StoreScope::SCOPE_WEBSITES, StoreScope::SCOPE_STORES] as $curScopeType) {
@@ -424,6 +394,7 @@ class System implements ConfigTypeInterface
         }
 
         $this->saveToCache($this->configType . '_scopes', $scopes);
+        return $data;
     }
 
     /**
@@ -436,8 +407,11 @@ class System implements ConfigTypeInterface
      */
     private function saveToCache(string $cacheKey, array $data)
     {
-        $cacheTags = [self::CACHE_TAG];
-        $this->saveToCacheWithCacheTag($cacheKey, $data, $cacheTags);
+        $this->cache->save(
+            $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($data)),
+            $cacheKey,
+            [self::CACHE_TAG]
+        );
     }
 
     /**
@@ -500,17 +474,4 @@ class System implements ConfigTypeInterface
         );
     }
 
-    /**
-     * @param string $cacheKey
-     * @param array $data
-     * @param array $cacheTags
-     */
-    private function saveToCacheWithCacheTag(string $cacheKey, array $data, array $cacheTags)
-    {
-        $this->cache->save(
-            $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($data)),
-            $cacheKey,
-            $cacheTags
-        );
-    }
 }
