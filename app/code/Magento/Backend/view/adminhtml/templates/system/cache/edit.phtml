@@ -50,7 +50,7 @@
                                     <?php $clickAction = "if (confirm('" . addslashes($_button['warning']) . "')) {{$clickAction}}"; ?>
                                 <?php endif; ?>
                                 <button <?php if (!isset($_button['disabled']) || !$_button['disabled']):?>onclick="<?=  /* @noEscape */ $clickAction ?>"<?php endif; ?> id="<?= $block->escapeHtmlAttr($_button['name']) ?>" type="button" class="scalable <?php if (isset($_button['disabled']) && $_button['disabled']):?>disabled<?php endif; ?>" style=""><span><span><span><?= $block->escapeHtml($_button['action']) ?></span></span></span></button>
-                                <?php if (isset($_button['comment'])): ?> <br /> <small><?= /* @escapeNotVerified */ $_button['comment'] ?></small> <?php endif; ?>
+                                <?php if (isset($_button['comment'])): ?> <br /> <small><?= $block->escapeHtml($_button['comment']) ?></small> <?php endif; ?>
                             <?php endforeach; ?>
                         </td>
                         <td><small>&nbsp;</small></td>

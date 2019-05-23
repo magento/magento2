@@ -3,12 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <!-- <?php if ($block->getTitle()): ?>
-    <h3><?= /* @escapeNotVerified */ $block->getTitle() ?></h3>
+    <h3><?= $block->escapeHtml($block->getTitle()) ?></h3>
 <?php endif ?> -->
 <?php if (!empty($tabs)): ?>
 <div id="<?=  $block->escapeHtmlAttr($block->getId()) ?>">
@@ -23,10 +20,10 @@
                 <span class="changed" title="<?= $block->escapeHtml(__('The information in this tab has been changed.')) ?>"></span>
                 <span class="error" title="<?= $block->escapeHtml(__('This tab contains invalid data. Please resolve this before saving.')) ?>"></span>
                 <span class="loader" title="<?= $block->escapeHtml(__('Loading...')) ?>"></span>
-                <?= /* @escapeNotVerified */ $block->getTabLabel($_tab) ?>
+                <?= $block->escapeHtml($block->getTabLabel($_tab)) ?>
             </span>
         </a>
-        <div id="<?=  $block->escapeHtmlAttr($block->getTabId($_tab)) ?>_content" style="display:none"><?= /* @escapeNotVerified */ $block->getTabContent($_tab) ?></div>
+        <div id="<?=  $block->escapeHtmlAttr($block->getTabId($_tab)) ?>_content" style="display:none"><?= /* @noEscape */ $block->getTabContent($_tab) ?></div>
     </li>
 <?php endforeach; ?>
 </ul>
@@ -34,10 +31,10 @@
 <script>
 require(["jquery","mage/backend/tabs"], function($){
     $(function() {
-        $('#<?= /* @escapeNotVerified */ $block->getId() ?>').tabs({
-            active: '<?= /* @escapeNotVerified */ $block->getActiveTabId() ?>',
-            destination: '#<?= /* @escapeNotVerified */ $block->getDestElementId() ?>',
-            shadowTabs: <?= /* @escapeNotVerified */ $block->getAllShadowTabs() ?>
+        $('#<?= /* @noEscape */ $block->getId() ?>').tabs({
+            active: '<?= /* @noEscape */ $block->getActiveTabId() ?>',
+            destination: '#<?= /* @noEscape */ $block->getDestElementId() ?>',
+            shadowTabs: <?= /* @noEscape */ $block->getAllShadowTabs() ?>
         });
     });
 });

@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <tr>
 <td colspan="2">
@@ -30,15 +27,15 @@
 
 <?php $i = 0; if (!is_null($block->getValues())): ?>
     <?php foreach ($block->getValues() as $image): $i++; ?>
-        <tr id="<?= $block->getElement()->getHtmlId() ?>_tr_<?= /* @escapeNotVerified */ $image->getValueId() ?>" class="gallery">
+        <tr id="<?= $block->getElement()->getHtmlId() ?>_tr_<?= $block->escapeHtmlAttr($image->getValueId()) ?>" class="gallery">
         <?php foreach ($block->getValues()->getAttributeBackend()->getImageTypes() as $type): ?>
             <td class="gallery" align="center" style="vertical-align:bottom;">
-            <a href="<?= $block->escapeUrl($image->setType($type)->getSourceUrl()) ?>" target="_blank" onclick="imagePreview('<?= $block->getElement()->getHtmlId() ?>_image_<?= /* @escapeNotVerified */ $type ?>_<?= /* @escapeNotVerified */ $image->getValueId() ?>');return false;">
-            <img id="<?= $block->getElement()->getHtmlId() ?>_image_<?= /* @escapeNotVerified */ $type ?>_<?= /* @escapeNotVerified */ $image->getValueId() ?>" src="<?= $block->escapeUrl($image->setType($type)->getSourceUrl()) ?>?<?= /* @escapeNotVerified */ time() ?>" alt="<?= $block->escapeHtmlAttr($image->getValue()) ?>" title="<?= $block->escapeHtmlAttr($image->getValue()) ?>" height="25" class="small-image-preview v-middle"/></a><br/>
-            <input type="file" name="<?= $block->escapeHtmlAttr($block->getElement()->getName()) ?>_<?= /* @escapeNotVerified */ $type ?>[<?= /* @escapeNotVerified */ $image->getValueId() ?>]" size="1"></td>
+            <a href="<?= $block->escapeUrl($image->setType($type)->getSourceUrl()) ?>" target="_blank" onclick="imagePreview('<?= $block->getElement()->getHtmlId() ?>_image_<?= $block->escapeHtmlAttr($type) ?>_<?= $block->escapeHtmlAttr($image->getValueId()) ?>');return false;">
+            <img id="<?= $block->getElement()->getHtmlId() ?>_image_<?= $block->escapeHtmlAttr($type) ?>_<?= $block->escapeHtmlAttr($image->getValueId()) ?>" src="<?= $block->escapeUrl($image->setType($type)->getSourceUrl()) ?>?<?= /* @noEscape */ time() ?>" alt="<?= $block->escapeHtmlAttr($image->getValue()) ?>" title="<?= $block->escapeHtmlAttr($image->getValue()) ?>" height="25" class="small-image-preview v-middle"/></a><br/>
+            <input type="file" name="<?= $block->escapeHtmlAttr($block->getElement()->getName()) ?>_<?= $block->escapeHtmlAttr($type) ?>[<?= $block->escapeHtmlAttr($image->getValueId()) ?>]" size="1"></td>
         <?php endforeach; ?>
-        <td class="gallery" align="center" style="vertical-align:bottom;"><input type="input" name="<?= $block->escapeHtmlAttr($block->getElement()->getParentName()) ?>[position][<?= /* @escapeNotVerified */ $image->getValueId() ?>]" value="<?= $block->escapeHtmlAttr($image->getPosition()) ?>" id="<?= $block->getElement()->getHtmlId() ?>_position_<?= /* @escapeNotVerified */ $image->getValueId() ?>" size="3"/></td>
-        <td class="gallery" align="center" style="vertical-align:bottom;"><?= $block->getDeleteButtonHtml($image->getValueId()) ?><input type="hidden" name="<?= $block->escapeHtmlAttr($block->getElement()->getParentName()) ?>[delete][<?= /* @escapeNotVerified */ $image->getValueId() ?>]" id="<?= $block->getElement()->getHtmlId() ?>_delete_<?= /* @escapeNotVerified */ $image->getValueId() ?>"/></td>
+        <td class="gallery" align="center" style="vertical-align:bottom;"><input type="input" name="<?= $block->escapeHtmlAttr($block->getElement()->getParentName()) ?>[position][<?= $block->escapeHtmlAttr($image->getValueId()) ?>]" value="<?= $block->escapeHtmlAttr($image->getPosition()) ?>" id="<?= $block->getElement()->getHtmlId() ?>_position_<?= $block->escapeHtmlAttr($image->getValueId()) ?>" size="3"/></td>
+        <td class="gallery" align="center" style="vertical-align:bottom;"><?= $block->getDeleteButtonHtml($image->getValueId()) ?><input type="hidden" name="<?= $block->escapeHtmlAttr($block->getElement()->getParentName()) ?>[delete][<?= $block->escapeHtmlAttr($image->getValueId()) ?>]" id="<?= $block->getElement()->getHtmlId() ?>_delete_<?= $block->escapeHtmlAttr($image->getValueId()) ?>"/></td>
         </tr>
     <?php endforeach; ?>
 <?php endif; ?>
@@ -56,7 +53,7 @@ require([
     'prototype'
 ], function () {
 id = 0;
-num_of_images = <?= /* @escapeNotVerified */ $i ?>;
+num_of_images = <?= /* @noEscape */ $i ?>;
 
 window.addNewImage = function()
 {
@@ -70,12 +67,12 @@ window.addNewImage = function()
     // Sort order input
     var new_row_input = document.createElement( 'input' );
     new_row_input.type = 'text';
-    new_row_input.name = '<?= /* @escapeNotVerified */ $block->getElement()->getParentName() ?>[position]['+id+']';
+    new_row_input.name = '<?= $block->escapeJs($block->getElement()->getParentName()) ?>[position]['+id+']';
     new_row_input.size = '3';
     new_row_input.value = '0';
 
     // Delete button
-    new_row_button = <?= /* @escapeNotVerified */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getDeleteButtonHtml("this")) ?>;
+    new_row_button = <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getDeleteButtonHtml("this")) ?>;
 
     table = document.getElementById( "gallery" );
 
@@ -114,8 +111,8 @@ window.deleteImage = function(image)
         document.getElementById("gallery_thead").style.visibility="hidden";
     }
     if (image>0) {
-        document.getElementById('<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_delete_'+image).value=image;
-        document.getElementById('<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_tr_'+image).style.display='none';
+        document.getElementById('<?= $block->escapeJs($block->getElement()->getName()) ?>_delete_'+image).value=image;
+        document.getElementById('<?= $block->escapeJs($block->getElement()->getName()) ?>_tr_'+image).style.display='none';
     } else {
         image.parentNode.parentNode.parentNode.removeChild( image.parentNode.parentNode );
     }
