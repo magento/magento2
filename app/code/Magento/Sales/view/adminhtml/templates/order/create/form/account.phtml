@@ -7,7 +7,7 @@
 /** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Form\Account */
 ?>
 
-<div class="admin__page-section-title <?= $block->escapeHtmlAttr($block->getHeaderCssClass()) ?>">
+<div class="admin__page-section-title <?= /* @noEscape */ $block->getHeaderCssClass() ?>">
     <span class="title"><?= $block->escapeHtml($block->getHeaderText()) ?></span>
     <div class="actions"></div>
 </div>
