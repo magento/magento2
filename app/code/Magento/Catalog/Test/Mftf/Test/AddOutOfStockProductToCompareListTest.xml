@@ -11,9 +11,9 @@
     <test name="AddOutOfStockProductToCompareListTest">
         <annotations>
             <features value="Catalog"/>
-            <stories value="Product Comparison for products Out of Stock"/>
-            <title value="Add Product that is Out of Stock product to Product Comparison"/>
-            <description value="Customer should be able to add Product that is Out Of Stock to the Product Comparison"/>
+            <stories value="Compare List"/>
+            <title value="Add out of stock product to compare list"/>
+            <description value="Add out of stock product to compare list"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-98644"/>
             <useCaseId value="MAGETWO-98522"/>

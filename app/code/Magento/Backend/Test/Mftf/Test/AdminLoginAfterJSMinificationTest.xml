@@ -11,10 +11,10 @@
     <test name="AdminLoginAfterJSMinificationTest">
         <annotations>
             <features value="Backend"/>
-            <stories value="Admin Panel JS minification"/>
+            <stories value="Login"/>
             <title value="Admin panel should be accessible with JS minification enabled"/>
             <description value="Admin panel should be accessible with JS minification enabled"/>
-            <testCaseId value="MC-14104"/>
+            <testCaseId value="MC-14104" />
             <severity value="MAJOR"/>
             <group value="backend"/>
             <group value="mtf_migrated"/>
