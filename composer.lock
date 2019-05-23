@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "597fe6a47b695221292482fead498d83",
+    "content-hash": "33e7703ac47e1c27235b830825e14800",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -6699,16 +6699,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.3.14",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "b4002b3fe53884895921b44cf519d42918e3c7c6"
+                "reference": "ef534dbcb3aeea68f9254dfd018165c546ad2edb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/b4002b3fe53884895921b44cf519d42918e3c7c6",
-                "reference": "b4002b3fe53884895921b44cf519d42918e3c7c6",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/ef534dbcb3aeea68f9254dfd018165c546ad2edb",
+                "reference": "ef534dbcb3aeea68f9254dfd018165c546ad2edb",
                 "shasum": ""
             },
             "require": {
@@ -6721,12 +6721,12 @@
                 "fzaninotto/faker": "^1.6",
                 "monolog/monolog": "^1.0",
                 "mustache/mustache": "~2.5",
-                "php": "7.0.2|7.0.4|~7.0.6|~7.1.0|~7.2.0",
+                "php": "7.0.2||7.0.4||~7.0.6||~7.1.0||~7.2.0||~7.3.0",
                 "symfony/process": "^2.8 || ^3.1 || ^4.0",
                 "vlucas/phpdotenv": "^2.4"
             },
             "require-dev": {
-                "brainmaestro/composer-git-hooks": "^2.3",
+                "brainmaestro/composer-git-hooks": "^2.3.1",
                 "codacy/coverage": "^1.4",
                 "codeception/aspect-mock": "^3.0",
                 "doctrine/cache": "<1.7.0",
@@ -6768,19 +6768,19 @@
                 "magento",
                 "testing"
             ],
-            "time": "2019-02-19T16:03:22+00:00"
+            "time": "2019-04-29T20:56:26+00:00"
         },
         {
             "name": "mikey179/vfsStream",
             "version": "v1.6.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/mikey179/vfsStream.git",
+                "url": "https://github.com/bovigo/vfsStream.git",
                 "reference": "d5fec95f541d4d71c4823bb5e30cf9b9e5b96145"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikey179/vfsStream/zipball/d5fec95f541d4d71c4823bb5e30cf9b9e5b96145",
+                "url": "https://api.github.com/repos/bovigo/vfsStream/zipball/d5fec95f541d4d71c4823bb5e30cf9b9e5b96145",
                 "reference": "d5fec95f541d4d71c4823bb5e30cf9b9e5b96145",
                 "shasum": ""
             },

@@ -10,12 +10,12 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCantAddConfigurableProductToShoppingCart">
         <annotations>
-            <title value="Configurable product can't be added to shopping cart via admin"/>
-            <description value="Configurable product can't be added to shopping cart via admin"/>
+            <title value="Disabled variation of configurable product can't be added to shopping cart via admin"/>
+            <description value="Disabled variation of configurable product can't be added to shopping cart via admin"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MAGETWO-99240"/>
             <useCaseId value="MAGETWO-72172"/>
-            <group value="sales"/>
+            <group value="ConfigurableProduct"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
@@ -23,12 +23,12 @@
             <comment userInput="Create category" stepKey="commentCreateCategory"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <!-- Create the configurable product based on the data in the /data folder -->
-            <comment userInput="Create the configurable product based on the data in the /data folder" stepKey="createConfigurableProduct"/>
+            <comment userInput="Create the configurable product based on the data in the data folder" stepKey="createConfigurableProduct"/>
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <!-- Make the configurable product have two options, that are children of the default attribute set -->
-            <comment userInput="Make the configurable product have two options, that are children of the default attribute set" stepKey="configurableProductHaveTwoOptions"/>
+            <!-- Create the configurable product with two options based on the default attribute set -->
+            <comment userInput="Create the configurable product with two options based on the default attribute set" stepKey="configurableProductWithTwoOptions"/>
             <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
             <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
