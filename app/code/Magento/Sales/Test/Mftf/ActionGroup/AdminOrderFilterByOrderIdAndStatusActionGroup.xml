@@ -9,10 +9,6 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOrderFilterByOrderIdAndStatusActionGroup">
-        <annotations>
-            <description>Admin filter order by OrderID and order status in Orders Grid</description>
-            <page>AdminOrdersPage</page>
-        </annotations>
         <arguments>
             <argument name="orderId" type="string"/>
             <argument name="orderStatus" type="string"/>

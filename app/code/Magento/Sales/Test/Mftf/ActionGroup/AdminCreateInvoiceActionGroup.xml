@@ -9,10 +9,6 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateInvoiceActionGroup">
-        <annotations>
-            <description>Admin create invoice on order page by click on button Invoice</description>
-            <page>AdminOrderDetailsPage</page>
-        </annotations>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
         <waitForPageLoad stepKey="waitForInvoicePage"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice"/>
@@ -20,18 +16,10 @@
         <see userInput="The invoice has been created." stepKey="seeMessage"/>
     </actionGroup>
     <actionGroup name="AdminCreateInvoiceAndShipmentActionGroup" extends="AdminCreateInvoiceActionGroup">
-        <annotations>
-            <description>Admin create invoice and shipment</description>
-            <page>AdminOrderDetailsPage</page>
-        </annotations>
         <checkOption selector="{{AdminInvoicePaymentShippingSection.CreateShipment}}" stepKey="checkCreateShipment" after="waitForInvoicePage"/>
         <see userInput="You created the invoice and shipment." stepKey="seeMessage"/>
     </actionGroup>
     <actionGroup name="AdminCreateInvoiceAndCreditMemoActionGroup" extends="AdminCreateInvoiceActionGroup">
-        <annotations>
-            <description>Admin create invoice and credit memo</description>
-            <page>AdminOrderDetailsPage</page>
-        </annotations>
         <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="pushButtonCreditMemo" after="seeMessage"/>
         <waitForPageLoad stepKey="waitForLoadingCreditMemoPage" after="pushButtonCreditMemo"/>
         <scrollTo selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="scrollToBottom" after="waitForLoadingCreditMemoPage"/>
