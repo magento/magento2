@@ -113,9 +113,12 @@ class CreateOptions extends Action implements HttpPostActionInterface
     {
         $originalOptions = $attribute->getSource()->getAllOptions(false);
         $allOptions = array_merge($originalOptions, $newOptions);
-        $optionValues = array_map(function ($option) {
-            return $option['label'];
-        }, $allOptions);
+        $optionValues = array_map(
+            function ($option) {
+                return $option['label'];
+            },
+            $allOptions
+        );
 
         $uniqueValues = array_unique($optionValues);
         $duplicates = array_diff_assoc($optionValues, $uniqueValues);
