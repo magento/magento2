@@ -11,20 +11,8 @@ define([
     return Select.extend({
         defaults: {
             links: {
-                linkedValue: false,
-                value: null
+                linkedValue: false
             }
-        },
-
-        /**
-         * Invokes initialize method of parent class,
-         * contains initialization logic
-         */
-        initialize: function () {
-            this._super()
-                .setDifferedFromDefault();
-
-            return this;
         },
 
         /** @inheritdoc */
