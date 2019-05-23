@@ -15,7 +15,7 @@ $taxAmount = $block->getTotal()->getValue();
     global $taxIter;
     $taxIter++;
     ?>
-    <?php $class = "{$block->getTotal()->getCode()} " . ($this->helper(\Magento\Tax\Helper\Data::class)->displayFullSummary() ? 'summary-total' : ''); ?>
+    <?php $class = $block->escapeHtmlAttr("{$block->getTotal()->getCode()} " . ($this->helper(\Magento\Tax\Helper\Data::class)->displayFullSummary() ? 'summary-total' : '')); ?>
     <tr<?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayFullSummary()) : ?>
         onclick="expandDetails(this, '.summary-details-<?= $block->escapeJs($taxIter) ?>')"
     <?php endif; ?>

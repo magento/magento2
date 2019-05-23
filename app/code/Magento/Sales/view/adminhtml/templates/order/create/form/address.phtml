@@ -46,7 +46,7 @@ else :
 endif; ?>
 
 <fieldset class="admin__fieldset">
-    <legend class="admin__legend <?= /* @noEscape */ $block->getHeaderCssClass() ?>">
+    <legend class="admin__legend <?= $block->escapeHtmlAttr($block->getHeaderCssClass()) ?>">
         <span><?= $block->escapeHtml($block->getHeaderText()) ?></span>
     </legend><br>
 
