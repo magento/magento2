@@ -38,7 +38,6 @@ class OptionTest extends \PHPUnit\Framework\TestCase
      */
     private $storeManager;
 
-
     /**
      * @inheritdoc
      */

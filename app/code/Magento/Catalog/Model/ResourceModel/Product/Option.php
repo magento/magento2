@@ -9,6 +9,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\Store;
+use Magento\Tests\NamingConvention\true\float;
 
 /**
  * Catalog product custom option resource model
@@ -95,8 +96,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param AbstractModel $object
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _saveValuePrices(AbstractModel $object)
     {
@@ -116,27 +115,13 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             );
 
             if ($object->getStoreId() != '0' && $scope == Store::PRICE_SCOPE_WEBSITE) {
-                $baseCurrency = $this->_config->getValue(
-                    \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                    'default'
-                );
-
                 $storeIds = $this->_storeManager->getStore($object->getStoreId())->getWebsite()->getStoreIds();
-                if (is_array($storeIds)) {
-                    foreach ($storeIds as $storeId) {
-                        if ($object->getPriceType() == 'fixed') {
-                            $storeCurrency = $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
-                            $rate = $this->_currencyFactory->create()->load($baseCurrency)->getRate($storeCurrency);
-                            if (!$rate) {
-                                $rate = 1;
-                            }
-                            $newPrice = $object->getPrice() * $rate;
-                        } else {
-                            $newPrice = $object->getPrice();
-                        }
-
-                        $this->savePriceByStore($object, (int)$storeId, $newPrice);
-                    }
+                if (empty($storeIds)) {
+                    return $this;
+                }
+                foreach ($storeIds as $storeId) {
+                    $newPrice = $this->calculateStorePrice($object, $storeId);
+                    $this->savePriceByStore($object, (int)$storeId, $newPrice);
                 }
             } elseif ($scope == Store::PRICE_SCOPE_WEBSITE && $object->getData('scope', 'price')) {
                 $this->getConnection()->delete(
@@ -169,12 +154,14 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         if (!$optionId) {
             $data = $this->_prepareDataForTable(
-                new DataObject([
-                    'option_id' => $object->getId(),
-                    'store_id' => $storeId,
-                    'price' => $price,
-                    'price_type' => $object->getPriceType(),
-                ]),
+                new DataObject(
+                    [
+                        'option_id' => $object->getId(),
+                        'store_id' => $storeId,
+                        'price' => $price,
+                        'price_type' => $object->getPriceType(),
+                    ]
+                ),
                 $priceTable
             );
             $connection->insert($priceTable, $data);
@@ -185,10 +172,12 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
 
             $data = $this->_prepareDataForTable(
-                new DataObject([
-                    'price' => $price,
-                    'price_type' => $object->getPriceType()
-                ]),
+                new DataObject(
+                    [
+                        'price' => $price,
+                        'price_type' => $object->getPriceType()
+                    ]
+                ),
                 $priceTable
             );
 
@@ -201,6 +190,29 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ]
             );
         }
+    }
+
+    /**
+     * Calculate price by store
+     *
+     * @param AbstractModel $object
+     * @param int $storeId
+     * @return float
+     */
+    private function calculateStorePrice(AbstractModel $object, int $storeId): float
+    {
+        $price = $object->getPrice();
+        if ($object->getPriceType() == 'fixed') {
+            $baseCurrency = $this->_config->getValue(
+                \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
+                'default'
+            );
+            $storeCurrency = $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
+            $rate = $this->_currencyFactory->create()->load($baseCurrency)->getRate($storeCurrency);
+            $price = $object->getPrice() * ($rate ?: 1);
+        }
+
+        return (float)$price;
     }
 
     /**
