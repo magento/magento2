@@ -46,6 +46,19 @@
         <data key="website_id">0</data>
         <requiredEntity type="address">US_Address_TX</requiredEntity>
     </entity>
+    <entity name="UsCustomerAssignedToNewCustomerGroup" type="customer">
+        <var key="group_id" entityKey="id" entityType="customerGroup" />
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">US_Address_TX</requiredEntity>
+    </entity>
     <entity name="Simple_US_Customer_Incorrect_Name" type="customer">
         <data key="group_id">1</data>
         <data key="default_billing">true</data>

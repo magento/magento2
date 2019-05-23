@@ -13,7 +13,7 @@
             <block class="Magento\Integration\Block\Adminhtml\Integration\Grid" name="integration.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">integrationGrid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Integration\Model\ResourceModel\Integration\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\Integration\Model\ResourceModel\Integration\Collection</argument>
                     <argument name="use_ajax" xsi:type="string">1</argument>
                     <argument name="default_sort" xsi:type="string">integration_id</argument>
                     <argument name="default_dir" xsi:type="string">asc</argument>

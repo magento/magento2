@@ -147,6 +147,16 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     private $addressesToSync = [];
 
     /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
+     */
+    private $remoteAddress;
+
+    /**
      * @param EventManager $eventManager
      * @param QuoteValidator $quoteValidator
      * @param OrderFactory $orderFactory
@@ -169,6 +179,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param QuoteFactory $quoteFactory
      * @param \Magento\Quote\Model\QuoteIdMaskFactory|null $quoteIdMaskFactory
      * @param \Magento\Customer\Api\AddressRepositoryInterface|null $addressRepository
+     * @param \Magento\Framework\App\RequestInterface|null $request
+     * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -193,7 +205,9 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         \Magento\Customer\Api\AccountManagementInterface $accountManagement,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory = null,
-        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository = null
+        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository = null,
+        \Magento\Framework\App\RequestInterface $request = null,
+        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress = null
     ) {
         $this->eventManager = $eventManager;
         $this->quoteValidator = $quoteValidator;
@@ -219,6 +233,10 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             ->get(\Magento\Quote\Model\QuoteIdMaskFactory::class);
         $this->addressRepository = $addressRepository ?: ObjectManager::getInstance()
             ->get(\Magento\Customer\Api\AddressRepositoryInterface::class);
+        $this->request = $request ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\App\RequestInterface::class);
+        $this->remoteAddress = $remoteAddress ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class);
     }
 
     /**
@@ -281,6 +299,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             throw new StateException(
                 __("The customer can't be assigned to the cart because the customer already has an active cart.")
             );
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
         }
 
@@ -366,6 +385,14 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             }
             $quote->setCustomerIsGuest(true);
             $quote->setCustomerGroupId(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID);
+        }
+
+        $remoteAddress = $this->remoteAddress->getRemoteAddress();
+        if ($remoteAddress !== false) {
+            $quote->setRemoteIp($remoteAddress);
+            $quote->setXForwardedFor(
+                $this->request->getServer('HTTP_X_FORWARDED_FOR')
+            );
         }
 
         $this->eventManager->dispatch('checkout_submit_before', ['quote' => $quote]);
@@ -627,12 +654,14 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                     'exception' => $e,
                 ]
             );
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $consecutiveException) {
             $message = sprintf(
                 "An exception occurred on 'sales_model_service_quote_submit_failure' event: %s",
                 $consecutiveException->getMessage()
             );
 
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception($message, 0, $e);
         }
     }

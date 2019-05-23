@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
@@ -11,6 +13,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Catalog\Model\Category as CategoryModel;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Stdlib\ArrayManager;
@@ -202,6 +205,7 @@ class Categories extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @throws LocalizedException
      * @since 101.0.0
      */
     protected function customizeCategoriesField(array $meta)
@@ -306,20 +310,64 @@ class Categories extends AbstractModifier
      *
      * @param string|null $filter
      * @return array
+     * @throws LocalizedException
      * @since 101.0.0
      */
     protected function getCategoriesTree($filter = null)
     {
-        $categoryTree = $this->getCacheManager()->load(self::CATEGORY_TREE_ID . '_' . $filter);
-        if ($categoryTree) {
-            return $this->serializer->unserialize($categoryTree);
+        $storeId = (int) $this->locator->getStore()->getId();
+
+        $cachedCategoriesTree = $this->getCacheManager()
+            ->load($this->getCategoriesTreeCacheId($storeId, (string) $filter));
+        if (!empty($cachedCategoriesTree)) {
+            return $this->serializer->unserialize($cachedCategoriesTree);
         }
 
-        $storeId = $this->locator->getStore()->getId();
+        $categoriesTree = $this->retrieveCategoriesTree(
+            $storeId,
+            $this->retrieveShownCategoriesIds($storeId, (string) $filter)
+        );
+
+        $this->getCacheManager()->save(
+            $this->serializer->serialize($categoriesTree),
+            $this->getCategoriesTreeCacheId($storeId, (string) $filter),
+            [
+                \Magento\Catalog\Model\Category::CACHE_TAG,
+                \Magento\Framework\App\Cache\Type\Block::CACHE_TAG
+            ]
+        );
+
+        return $categoriesTree;
+    }
+
+    /**
+     * Get cache id for categories tree.
+     *
+     * @param int $storeId
+     * @param string $filter
+     * @return string
+     */
+    private function getCategoriesTreeCacheId(int $storeId, string $filter = '') : string
+    {
+        return self::CATEGORY_TREE_ID
+            . '_' . (string) $storeId
+            . '_' . $filter;
+    }
+
+    /**
+     * Retrieve filtered list of categories id.
+     *
+     * @param int $storeId
+     * @param string $filter
+     * @return array
+     * @throws LocalizedException
+     */
+    private function retrieveShownCategoriesIds(int $storeId, string $filter = '') : array
+    {
         /* @var $matchingNamesCollection \Magento\Catalog\Model\ResourceModel\Category\Collection */
         $matchingNamesCollection = $this->categoryCollectionFactory->create();
 
-        if ($filter !== null) {
+        if (!empty($filter)) {
             $matchingNamesCollection->addAttributeToFilter(
                 'name',
                 ['like' => $this->dbHelper->addLikeEscape($filter, ['position' => 'any'])]
@@ -339,6 +387,19 @@ class Categories extends AbstractModifier
             }
         }
 
+        return $shownCategoriesIds;
+    }
+
+    /**
+     * Retrieve tree of categories with attributes.
+     *
+     * @param int $storeId
+     * @param array $shownCategoriesIds
+     * @return array|null
+     * @throws LocalizedException
+     */
+    private function retrieveCategoriesTree(int $storeId, array $shownCategoriesIds) : ?array
+    {
         /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
         $collection = $this->categoryCollectionFactory->create();
 
@@ -364,15 +425,6 @@ class Categories extends AbstractModifier
             $categoryById[$category->getId()]['label'] = $category->getName();
             $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
         }
-
-        $this->getCacheManager()->save(
-            $this->serializer->serialize($categoryById[CategoryModel::TREE_ROOT_ID]['optgroup']),
-            self::CATEGORY_TREE_ID . '_' . $filter,
-            [
-                \Magento\Catalog\Model\Category::CACHE_TAG,
-                \Magento\Framework\App\Cache\Type\Block::CACHE_TAG
-            ]
-        );
 
         return $categoryById[CategoryModel::TREE_ROOT_ID]['optgroup'];
     }

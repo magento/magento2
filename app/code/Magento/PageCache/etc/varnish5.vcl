@@ -93,8 +93,8 @@ sub vcl_recv {
     }
 
     # Remove all marketing get parameters to minimize the cache objects
-    if (req.url ~ "(\?|&)(gclid|cx|ie|cof|siteurl|zanpid|origin|mc_[a-z]+|utm_[a-z]+)=") {
-        set req.url = regsuball(req.url, "(gclid|cx|ie|cof|siteurl|zanpid|origin|mc_[a-z]+|utm_[a-z]+)=[-_A-z0-9+()%.]+&?", "");
+    if (req.url ~ "(\?|&)(gclid|cx|ie|cof|siteurl|zanpid|origin|fbclid|mc_[a-z]+|utm_[a-z]+|_bta_[a-z]+)=") {
+        set req.url = regsuball(req.url, "(gclid|cx|ie|cof|siteurl|zanpid|origin|fbclid|mc_[a-z]+|utm_[a-z]+|_bta_[a-z]+)=[-_A-z0-9+()%.]+&?", "");
         set req.url = regsub(req.url, "[?|&]+$", "");
     }
 
@@ -129,6 +129,19 @@ sub vcl_hash {
         hash_data(req.http./* {{ ssl_offloaded_header }} */);
     }
     /* {{ design_exceptions_code }} */
+
+    if (req.url ~ "/graphql") {
+        call process_graphql_headers;
+    }
+}
+
+sub process_graphql_headers {
+    if (req.http.Store) {
+        hash_data(req.http.Store);
+    }
+    if (req.http.Content-Currency) {
+        hash_data(req.http.Content-Currency);
+    }
 }
 
 sub vcl_backend_response {
