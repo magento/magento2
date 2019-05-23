@@ -131,9 +131,11 @@ class Sidebar extends Block
         $this->_rootElement->find($this->braintreePaypalCheckoutButton)
             ->click();
         $browser = $this->browser;
-        $this->browser->waitUntil(function () use ($browser, $windowsCount) {
-            return count($browser->getWindowHandles()) === ($windowsCount + 1) ? true: null;
-        });
+        $this->browser->waitUntil(
+            function () use ($browser, $windowsCount) {
+                return count($browser->getWindowHandles()) === ($windowsCount + 1) ? true: null;
+            }
+        );
     }
 
     /**
