@@ -111,7 +111,6 @@ class PaypalExpressTokenTest extends AbstractTest
         $createTokenData = $responseData['data']['createPaypalExpressToken'];
         $this->assertArrayNotHasKey('errors', $responseData);
         $this->assertEquals($paypalResponse['TOKEN'], $createTokenData['token']);
-        $this->assertEquals($paymentMethod, $createTokenData['method']);
         $this->assertArrayHasKey('paypal_urls', $createTokenData);
     }
 

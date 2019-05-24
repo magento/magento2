@@ -196,7 +196,6 @@ mutation {
             start
             edit
         }
-        method
     }
 }
 QUERY;

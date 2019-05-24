@@ -101,7 +101,6 @@ mutation {
             start
             edit
         }
-        method
     }
     setPaymentMethodOnCart(input: {
         payment_method: {
@@ -214,7 +213,6 @@ QUERY;
 
         $this->assertArrayNotHasKey('errors', $responseData);
         $this->assertEquals($paypalResponse['TOKEN'], $createTokenData['token']);
-        $this->assertEquals($paymentMethod, $createTokenData['method']);
         $this->assertArrayHasKey('paypal_urls', $createTokenData);
 
         $this->assertTrue(

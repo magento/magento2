@@ -102,7 +102,6 @@ class PaypalExpressTokenTest extends AbstractTest
 
         $this->assertArrayNotHasKey('errors', $responseData);
         $this->assertEquals($paypalResponse['TOKEN'], $createTokenData['token']);
-        $this->assertEquals($paymentMethod, $createTokenData['method']);
         $this->assertArrayHasKey('paypal_urls', $createTokenData);
     }
 
@@ -157,6 +156,61 @@ class PaypalExpressTokenTest extends AbstractTest
         $responseData = $this->json->unserialize($response->getContent());
         $this->assertArrayHasKey('createPaypalExpressToken', $responseData['data']);
         $this->assertEmpty($responseData['data']['createPaypalExpressToken']);
+        $this->assertArrayHasKey('errors', $responseData);
+        $actualError = $responseData['errors'][0];
+        $this->assertEquals($expectedExceptionMessage, $actualError['message']);
+        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
+    }
+
+    /**
+     * Test redirect Urls are validated
+     *
+     * @return void
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     */
+    public function testResolveWithInvalidRedirectUrl(): void
+    {
+        $paymentMethod = 'paypal_express';
+        $this->enablePaymentMethod($paymentMethod);
+        $reservedQuoteId = 'test_quote';
+        $cart = $this->getQuoteByReservedOrderId($reservedQuoteId);
+
+        $cartId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
+        $query = <<<QUERY
+mutation {
+    createPaypalExpressToken(input: {
+        cart_id: "{$cartId}",
+        code: "{$paymentMethod}",
+        urls: {
+            return_url: "http://mangeto.test/paypal/express/return/",
+            cancel_url: "http://mangeto.test/paypal/express/cancel/"
+            success_url: "not/a/url",
+            pending_url: "http://mangeto.test/checkout/onepage/pending/"
+        }
+    })
+    {
+        __typename
+        token
+        paypal_urls{
+            start
+            edit
+        }
+    }
+}
+QUERY;
+
+        $postData = $this->json->serialize(['query' => $query]);
+        $this->request->setPathInfo('/graphql');
+        $this->request->setMethod('POST');
+        $this->request->setContent($postData);
+        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
+            ->addHeaders(['Content-Type' => 'application/json']);
+        $this->request->setHeaders($headers);
+
+        $expectedExceptionMessage = "Invalid URL 'not/a/url'.";
+
+        $response = $this->graphqlController->dispatch($this->request);
+        $responseData = $this->json->unserialize($response->getContent());
         $this->assertArrayHasKey('errors', $responseData);
         $actualError = $responseData['errors'][0];
         $this->assertEquals($expectedExceptionMessage, $actualError['message']);

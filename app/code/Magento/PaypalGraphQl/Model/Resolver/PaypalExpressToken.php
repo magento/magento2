@@ -12,8 +12,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Paypal\Model\ConfigFactory;
-use Magento\Framework\UrlInterface;
+use Magento\Framework\Url\Validator as UrlValidator;
 use Magento\Checkout\Helper\Data as CheckoutHelper;
 use Magento\PaypalGraphQl\Model\Provider\Checkout as CheckoutProvider;
 use Magento\PaypalGraphQl\Model\Provider\Config as ConfigProvider;
@@ -40,9 +39,9 @@ class PaypalExpressToken implements ResolverInterface
     private $checkoutProvider;
 
     /**
-     * @var UrlInterface
+     * @var UrlValidator
      */
-    private $url;
+    private $urlValidator;
 
     /**
      * @var CheckoutHelper
@@ -51,22 +50,22 @@ class PaypalExpressToken implements ResolverInterface
 
     /**
      * @param GetCartForUser $getCartForUser
-     * @param ConfigFactory $configFactory
-     * @param UrlInterface $url
-     * @param PaypalCheckoutProvider $paypalCheckoutProvider
+     * @param CheckoutProvider $checkoutProvider
+     * @param ConfigProvider $configProvider
+     * @param UrlValidator $urlValidator
      * @param CheckoutHelper $checkoutHelper
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         CheckoutProvider $checkoutProvider,
         ConfigProvider $configProvider,
-        UrlInterface $url,
+        UrlValidator $urlValidator,
         CheckoutHelper $checkoutHelper
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->checkoutProvider = $checkoutProvider;
         $this->configProvider = $configProvider;
-        $this->url = $url;
+        $this->urlValidator = $urlValidator;
         $this->checkoutHelper = $checkoutHelper;
     }
 
@@ -108,6 +107,9 @@ class PaypalExpressToken implements ResolverInterface
             }
         }
 
+        if (!empty($args['input']['urls'])) {
+            $this->validateUrls($args['input']['urls']);
+        }
         $checkout->prepareGiropayUrls(
             $args['input']['urls']['success_url'] ?? '',
             $args['input']['urls']['cancel_url'] ?? '',
@@ -125,12 +127,29 @@ class PaypalExpressToken implements ResolverInterface
         }
 
         return [
-            'method' => $paymentCode,
             'token' => $token,
             'paypal_urls' => [
                 'start' => $checkout->getRedirectUrl(),
                 'edit' => $config->getExpressCheckoutEditUrl($token)
             ]
         ];
+    }
+
+    /**
+     * Validate redirect Urls
+     *
+     * @param array $urls
+     * @return boolean
+     * @throws GraphQlInputException
+     */
+    private function validateUrls(array $urls): bool
+    {
+        foreach ($urls as $url) {
+            if (!$this->urlValidator->isValid($url)) {
+                $errorMessage = $this->urlValidator->getMessages()['invalidUrl'] ?? "Invalid Url.";
+                throw new GraphQlInputException(__($errorMessage));
+            }
+        }
+        return true;
     }
 }
