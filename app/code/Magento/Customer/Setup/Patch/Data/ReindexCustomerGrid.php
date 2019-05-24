@@ -11,8 +11,7 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 
 /**
- * Class ReindexCustomerGrid
- * @package Magento\Customer\Setup\Patch
+ * Reindex customer grid during setup process.
  */
 class ReindexCustomerGrid implements DataPatchInterface
 {
@@ -22,7 +21,6 @@ class ReindexCustomerGrid implements DataPatchInterface
     private $indexerRegistry;
 
     /**
-     * AddCustomerUpdatedAtAttribute constructor.
      * @param IndexerRegistry $indexerRegistry
      */
     public function __construct(
@@ -32,7 +30,7 @@ class ReindexCustomerGrid implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -41,7 +39,7 @@ class ReindexCustomerGrid implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -49,7 +47,7 @@ class ReindexCustomerGrid implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
