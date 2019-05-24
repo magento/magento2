@@ -79,8 +79,7 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
-            <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
-             <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
+            <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
