@@ -16,7 +16,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Newsletter\Model\Subscriber;
 
 /**
- * Newsletter toggle subscription resolver, used for GraphQL request processing.
+ * @inheritdoc
  */
 class ToggleSubscription implements ResolverInterface
 {
@@ -35,22 +35,7 @@ class ToggleSubscription implements ResolverInterface
     }
 
     /**
-     * Resolver to actually execute the GraphQL Command
-     *
-     * @param Field            $field
-     * @param ContextInterface $context
-     * @param ResolveInfo      $info
-     * @param array|null       $value
-     * @param array|null       $args
-     *
-     * @return array
-     *
-     * @throws GraphQlNoSuchEntityException
-     *
-     * phpcs:disable SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
-     * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceBeforeLastUsed
-     * phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
