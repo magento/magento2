@@ -42,14 +42,14 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
             'prototype'
         ], function (mageTemplate) {
         // create row creator
-        window.arrayRow<?= $block->escapeHtml($_htmlId) ?> = {
+        window.arrayRow<?= $block->escapeJs($_htmlId) ?> = {
 
             // define row prototypeJS template
             template: mageTemplate(
                     '<tr id="<%- _id %>">'
                     <?php foreach ($block->getColumns() as $columnName => $column) : ?>
                         + '<td>'
-                        + '<?= $block->escapeHtml($block->renderCellTemplate($columnName)) ?>'
+                        + '<?= $block->escapeJs($block->renderCellTemplate($columnName)) ?>'
                         + '<\/td>'
                     <?php endforeach; ?>
 
@@ -60,7 +60,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                     <?php endif; ?>
 
                     + '<td class="col-actions"><button '
-                    + 'onclick="arrayRow<?= $block->escapeHtml($_htmlId) ?>.del(\'<%- _id %>\')" '
+                    + 'onclick="arrayRow<?= $block->escapeJs($_htmlId) ?>.del(\'<%- _id %>\')" '
                     + 'class="action-delete" type="button">'
                     + '<span><?= $block->escapeHtml(__('Delete')) ?><\/span><\/button><\/td>'
                     + '<\/tr>'
@@ -77,7 +77,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                     var d = new Date();
                     templateValues = {
                         <?php foreach ($block->getColumns() as $columnName => $column) : ?>
-                            <?= $block->escapeHtml($columnName) ?>: '',
+                            <?= $block->escapeJs($columnName) ?>: '',
                                 'option_extra_attrs': {},
                         <?php endforeach; ?>
                         _id: '_' + d.getTime() + '_' + d.getMilliseconds()
@@ -88,7 +88,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
             if (insertAfterId) {
                 Element.insert($(insertAfterId), {after: this.template(templateValues)});
             } else {
-                Element.insert($('addRow<?= $block->escapeHtml($_htmlId) ?>'), {bottom: this.template(templateValues)});
+                Element.insert($('addRow<?= $block->escapeJs($_htmlId) ?>'), {bottom: this.template(templateValues)});
             }
 
             // Fill controls with data
@@ -113,23 +113,23 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
         }
 
         // bind add action to "Add" button in last row
-        Event.observe('addToEndBtn<?= $block->escapeHtml($_htmlId) ?>',
+        Event.observe('addToEndBtn<?= $block->escapeJs($_htmlId) ?>',
             'click',
-            arrayRow<?= $block->escapeHtml($_htmlId) ?>.add.bind(
-                arrayRow<?= $block->escapeHtml($_htmlId) ?>, false, false
+            arrayRow<?= $block->escapeJs($_htmlId) ?>.add.bind(
+                arrayRow<?= $block->escapeJs($_htmlId) ?>, false, false
             )
         );
 
         // add existing rows
         <?php
         foreach ($block->getArrayRows() as $_rowId => $_row) {
-            echo $block->escapeHtml("arrayRow{$_htmlId}.add(" . $_row->toJson() . ");\n");
+            echo "arrayRow{$block->escapeJs($_htmlId)}.add(" . $_row->toJson() . ");\n";
         }
         ?>
 
         // Toggle the grid availability, if element is disabled (depending on scope)
         <?php if ($block->getElement()->getDisabled()) : ?>
-        toggleValueElements({checked: true}, $('grid<?= $block->escapeHtml($_htmlId) ?>').parentNode);
+        toggleValueElements({checked: true}, $('grid<?= $block->escapeJs($_htmlId) ?>').parentNode);
         <?php endif; ?>
         });
     </script>
