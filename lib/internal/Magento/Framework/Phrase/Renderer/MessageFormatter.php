@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Framework\Phrase\Renderer;
 
 use Magento\Framework\Phrase\RendererInterface;
@@ -26,7 +28,7 @@ class MessageFormatter implements RendererInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function render(array $source, array $arguments)
     {

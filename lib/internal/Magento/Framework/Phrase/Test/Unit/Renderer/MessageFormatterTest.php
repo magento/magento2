@@ -4,24 +4,30 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 
 use Magento\Framework\Phrase\Renderer\MessageFormatter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests that messages sent through the MessageFormatter phrase renderer result in what would be expected when sent
  * through PHP's native MessageFormatter, and that the locale is pulled from the Translate dependency
  */
-class MessageFormatterTest extends \PHPUnit\Framework\TestCase
+class MessageFormatterTest extends TestCase
 {
     /** @var ObjectManager */
     private $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
     }
 
     /**
