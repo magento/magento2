@@ -69,6 +69,6 @@ class OptionTest extends \PHPUnit\Framework\TestCase
 
         $product = $this->productRepository->get('simple', false, $secondStoreId, true);
         $option = $product->getOptions()[0];
-        $this->assertEquals($secondWebsitePrice, $option->getPrice(), 'Price value by store_id=1 is wrong');
+        $this->assertEquals($secondWebsitePrice, $option->getPrice(), 'Price value by not default store is wrong');
     }
 }
