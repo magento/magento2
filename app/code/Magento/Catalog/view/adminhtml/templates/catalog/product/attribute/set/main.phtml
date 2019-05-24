@@ -57,8 +57,8 @@
                 ], function(jQuery, prompt, alert){
 
                 //<![CDATA[
-                var allowDragAndDrop = <?= ($block->getIsReadOnly() ? 'false' : 'true') ?>;
-                var canEditGroups = <?=  ($block->getIsReadOnly() ? 'false' : 'true') ?>;
+                var allowDragAndDrop = <?= /* @noEscape */ ($block->getIsReadOnly() ? 'false' : 'true') ?>;
+                var canEditGroups = <?=  /* @noEscape */ ($block->getIsReadOnly() ? 'false' : 'true') ?>;
 
                 var TreePanels = function() {
                     // shorthand

@@ -20,12 +20,11 @@ $element = $block->getElement();
 
 <?php $_showWebsite = $block->isShowWebsiteColumn(); ?>
 <?php $_showWebsite = $block->isMultiWebsites(); ?>
-<div class="field" id="attribute-<?= /* @noEscape */ $_htmlId ?>-container" data-attribute-code="<?= /* @noEscape */ $_htmlId ?>"
-     data-apply-to="<?= $block->escapeHtml(
-         $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode(
-             $element->hasEntityAttribute() ? $element->getEntityAttribute()->getApplyTo() : []
-         )
-     )?>">
+<div class="field" id="attribute-<?= /* @noEscape */ $_htmlId ?>-container" data-attribute-code="<?= /* @noEscape */ $_htmlId ?>" data-apply-to="<?= $block->escapeHtml(
+    $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode(
+        $element->hasEntityAttribute() ? $element->getEntityAttribute()->getApplyTo() : []
+    )
+)?>">
     <label class="label"><span><?= $block->escapeHtml($block->getElement()->getLabel()) ?></span></label>
     <div class="control">
         <table class="admin__control-table tiers_table" id="tiers_table">
@@ -151,7 +150,7 @@ var tierPriceControl = {
     }
 };
 <?php foreach ($block->getValues() as $_item) :?>
-tierPriceControl.addItem('<?= $block->escapeJs($_item['website_id']) ?>', '<?= $block->escapeJs($_item['cust_group']) ?>', '<?= $_item['price_qty']*1 ?>', '<?= $block->escapeJs($_item['price']) ?>', <?= (int)!empty($_item['readonly']) ?>);
+tierPriceControl.addItem('<?= $block->escapeJs($_item['website_id']) ?>', '<?= $block->escapeJs($_item['cust_group']) ?>', '<?= /* @noEscape */ $_item['price_qty']*1 ?>', '<?= $block->escapeJs($_item['price']) ?>', <?= /* @noEscape */ (int)!empty($_item['readonly']) ?>);
 <?php endforeach; ?>
 <?php if ($_readonly) :?>
 $('<?= $block->escapeJs($_htmlId) ?>_container').up('table').select('button')

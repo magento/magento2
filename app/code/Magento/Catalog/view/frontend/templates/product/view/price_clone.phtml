@@ -4,7 +4,11 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var \Magento\Catalog\Block\Product\AbstractProduct $block */ ?>
+<?php
+// phpcs:disable PSR2.Files.ClosingTag
+
+/** @var \Magento\Catalog\Block\Product\AbstractProduct $block */
+?>
 <?php $_product = $block->getProduct() ?>
 <?= $block->getProductPriceHtml(
     $_product,

@@ -84,7 +84,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
     {
         $imageId = $this->getRequest()->getParam('image');
         $image = null;
-        if ($imageId) {
+        if (is_int($imageId)) {
             $image = $this->getGalleryCollection()->getItemById($imageId);
         }
 

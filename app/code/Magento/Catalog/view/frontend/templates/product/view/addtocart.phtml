@@ -19,7 +19,7 @@
                        name="qty"
                        id="qty"
                        min="0"
-                       value="<?= $block->getProductDefaultQty() * 1 ?>"
+                       value="<?= /* @noEscape */ $block->getProductDefaultQty() * 1 ?>"
                        title="<?= $block->escapeHtmlAttr(__('Qty')) ?>"
                        class="input-text qty"
                        data-validate="<?= $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"

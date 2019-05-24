@@ -9,7 +9,6 @@ return [
     'Magento_Backend',
     'Magento_Backup',
     'Magento_Bundle',
-    'Magento_Catalog',
     'Magento_CatalogInventory',
     'Magento_CatalogRule',
     'Magento_CatalogSearch',

@@ -16,7 +16,7 @@
             <?php $suffix = $block->getNameInLayout(); ?>
             <?php $iterator = 1; ?>
             <ol class="product-items" id="widget-new-products-<?= $block->escapeHtmlAttr($suffix) ?>">
-                <?php foreach ($_products->getItems() as $_product): ?>
+                <?php foreach ($_products->getItems() as $_product) :?>
                     <?= /* @noEscape */ ($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
                     <div class="product-item-info">
                         <a class="product-item-photo" href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
@@ -30,17 +30,17 @@
                                     <?= /* @noEscape */ $this->helper(Magento\Catalog\Helper\Output::class)->productAttribute($_product, $_product->getName(), 'name') ?>
                                 </a>
                             </strong>
-                            <?= $block->getProductPriceHtml($_product, '-widget-new-' . $suffix) ?>
+                            <?= /* @noEscape */ $block->getProductPriceHtml($_product, '-widget-new-' . $suffix) ?>
                             <div class="product-item-actions">
                                 <div class="actions-primary">
-                                    <?php if ($_product->isSaleable()): ?>
+                                    <?php if ($_product->isSaleable()) :?>
                                         <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)) :?>
                                             <button type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
                                                     class="action tocart primary"
                                                     data-mage-init='{"redirectUrl":{"url":"<?= $block->escapeUrl($block->getAddToCartUrl($_product)) ?>"}}'>
                                                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                             </button>
-                                        <?php else: ?>
+                                        <?php else :?>
                                             <?php
                                                 $postDataHelper = $this->helper(Magento\Framework\Data\Helper\PostHelper::class);
                                                 $postData = $postDataHelper->getPostData($block->escapeUrl($block->getAddToCartUrl($_product)), ['product' => $_product->getEntityId()]);
@@ -51,12 +51,12 @@
                                                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                             </button>
                                         <?php endif; ?>
-                                    <?php else: ?>
-                                        <?php if ($_product->getIsSalable()): ?>
+                                    <?php else :?>
+                                        <?php if ($_product->getIsSalable()) :?>
                                             <div class="stock available" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
                                                 <span><?= $block->escapeHtml(__('In stock')) ?></span>
                                             </div>
-                                        <?php else: ?>
+                                        <?php else :?>
                                             <div class="stock unavailable" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
                                                 <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
                                             </div>

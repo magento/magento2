@@ -49,7 +49,7 @@ $fieldAttributes = $fieldId . ' class="' . $block->escapeHtmlAttr($fieldClass) .
         <?php else :?>
             <?= $element->getLabelHtml('', $block->getScopeLabel()) ?>
             <div class="admin__field-control control">
-                <?= ($addOn) ? '<div class="addon">' . $block->getElementHtml() . '</div>' : $block->getElementHtml() ?>
+                <?= /* @noEscape */ ($addOn) ? '<div class="addon">' . $block->getElementHtml() . '</div>' : $block->getElementHtml() ?>
                 <?= /* @noEscape */ $note ?>
             </div>
         <?php endif; ?>

@@ -8,16 +8,14 @@
 <?php $_option = $block->getOption(); ?>
 <?php $_optionId = $_option->getId(); ?>
 <div class="admin__field field<?= $_option->getIsRequire() ? ' required _required' : '' ?>">
-  <label class="label admin__field-label">
-      <span>
-          <?= $block->escapeHtml($_option->getTitle()) ?>
-          <?= /* @noEscape */ $block->getFormattedPrice() ?>
-      </span>
-  </label>
+    <label class="label admin__field-label">
+        <span>
+            <?= $block->escapeHtml($_option->getTitle()) ?>
+            <?= /* @noEscape */ $block->getFormattedPrice() ?>
+        </span>
+    </label>
   <div class="admin__field-control control">
-
-        <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
-            || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE) :?>
+        <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME  || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE) :?>
 
             <?= $block->getDateHtml() ?>
 

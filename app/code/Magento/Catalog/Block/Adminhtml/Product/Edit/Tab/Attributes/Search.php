@@ -100,7 +100,9 @@ class Search extends \Magento\Backend\Block\Widget
             ['like' => $escapedLabelPart]
         );
 
-        $collection->setExcludeSetFilter($templateId ?: $this->getRequest()->getParam('template_id'))->setPageSize(20);
+        $paramTemplateId = $this->getRequest()->getParam('template_id');
+        $paramTemplateId = is_int($paramTemplateId) ? $paramTemplateId : null;
+        $collection->setExcludeSetFilter($templateId ?: $paramTemplateId)->setPageSize(20);
 
         $result = [];
         foreach ($collection->getItems() as $attribute) {

@@ -8,7 +8,7 @@
 ?>
 <div class="fieldset-wrapper admin__collapsible-block-wrapper" data-tab="<?= /* @noEscape */ $block->getTabId() ?>"
      id="<?= /* @noEscape */ $block->getTabId() ?>-wrapper" data-mage-init='{"collapsible":{
-                    "active": <?= $block->isTabOpened() ? 'true' : 'false' ?>,
+                    "active": <?= /* @noEscape */ $block->isTabOpened() ? 'true' : 'false' ?>,
                     "openedState": "_show",
                     "closedState": "_hide",
                     "animate": 200,

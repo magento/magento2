@@ -15,9 +15,9 @@ require(['jquery', "prototype", "extjs/ext-tree-checkbox"], function(jQuery){
 
 var tree<?= $block->escapeJs($block->getId()) ?>;
 
-var useMassaction = <?= $block->getUseMassaction() ? 1 : 0 ?>;
+var useMassaction = <?= /* @noEscape */ $block->getUseMassaction() ? 1 : 0 ?>;
 
-var isAnchorOnly = <?= $block->getIsAnchorOnly() ? 1 : 0 ?>;
+var isAnchorOnly = <?= /* @noEscape */ $block->getIsAnchorOnly() ? 1 : 0 ?>;
 
 Ext.tree.TreePanel.Enhanced = function(el, config)
 {
@@ -55,7 +55,7 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
 
 jQuery(function()
 {
-    var emptyNodeAdded = <?= ($block->getWithEmptyNode() ? 'false' : 'true') ?>;
+    var emptyNodeAdded = <?= /* @noEscape */ ($block->getWithEmptyNode() ? 'false' : 'true') ?>;
 
     var categoryLoader = new Ext.tree.TreeLoader({
        dataUrl: '<?= $block->escapeJs($block->escapeUrl($block->getLoadTreeUrl())) ?>'

@@ -41,7 +41,7 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
             <div class="products-<?= /* @noEscape */ $mode ?> <?= /* @noEscape */ $mode ?>">
                 <ol class="product-items <?= /* @noEscape */ $type ?>">
                     <?php $iterator = 1; ?>
-                    <?php foreach ($items as $_item): ?>
+                    <?php foreach ($items as $_item) :?>
                         <?= /* @noEscape */ ($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
                         <div class="product-item-info">
                             <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>"

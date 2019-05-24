@@ -58,13 +58,13 @@
                         <input type="hidden"
                                id="original_inventory_qty"
                                name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[stock_data][original_inventory_qty]"
-                               value="<?= $block->getFieldValue('qty') * 1 ?>">
+                               value="<?= /* @noEscape */ $block->getFieldValue('qty') * 1 ?>">
                     <?php endif;?>
                     <input type="text"
                            class="input-text validate-number"
                            id="inventory_qty"
                            name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[stock_data][qty]"
-                           value="<?= $block->getFieldValue('qty') * 1 ?>" <?= /* @noEscape */ $_readonly ?>>
+                           value="<?= /* @noEscape */ $block->getFieldValue('qty') * 1 ?>" <?= /* @noEscape */ $_readonly ?>>
                 </div>
                 <?php if (!$block->isSingleStoreMode()) :?>
                     <div class="field-service"><?= $block->escapeHtml(__('[GLOBAL]')) ?></div>
@@ -80,7 +80,7 @@
                            class="input-text validate-number"
                            id="inventory_min_qty"
                            name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[stock_data][min_qty]"
-                           value="<?= $block->getFieldValue('min_qty') * 1 ?>" <?= /* @noEscape */ $_readonly ?>>
+                           value="<?= /* @noEscape */ $block->getFieldValue('min_qty') * 1 ?>" <?= /* @noEscape */ $_readonly ?>>
 
                     <div class="control-inner-wrap">
                         <?php $_checked = ($block->getFieldValue('use_config_min_qty') || $block->isNew()) ? 'checked="checked"' : '' ?>
@@ -112,7 +112,7 @@
                 <div class="control">
                     <input type="text" class="input-text validate-number" id="inventory_min_sale_qty"
                            name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[stock_data][min_sale_qty]"
-                           value="<?= $block->getFieldValue('min_sale_qty') * 1 ?>" <?= /* @noEscape */ $_readonly ?>>
+                           value="<?= /* @noEscape */ $block->getFieldValue('min_sale_qty') * 1 ?>" <?= /* @noEscape */ $_readonly ?>>
                     <div class="control-inner-wrap">
                         <?php $_checked = ($block->getFieldValue('use_config_min_sale_qty') || $block->isNew()) ? 'checked="checked"' : '' ?>
                         <input type="checkbox"
@@ -145,7 +145,7 @@
                            class="input-text validate-number"
                            id="inventory_max_sale_qty"
                            name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[stock_data][max_sale_qty]"
-                           value="<?= $block->getFieldValue('max_sale_qty') * 1 ?>" <?= /* @noEscape */ $_readonly ?>>
+                           value="<?= /* @noEscape */ $block->getFieldValue('max_sale_qty') * 1 ?>" <?= /* @noEscape */ $_readonly ?>>
                     <?php $_checked = ($block->getFieldValue('use_config_max_sale_qty') || $block->isNew()) ? 'checked="checked"' : '' ?>
                     <div class="control-inner-wrap">
                         <input type="checkbox"
@@ -250,7 +250,7 @@
                            class="input-text validate-number"
                            id="inventory_notify_stock_qty"
                            name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[stock_data][notify_stock_qty]"
-                           value="<?= $block->getFieldValue('notify_stock_qty') * 1 ?>" <?= /* @noEscape */ $_readonly ?>>
+                           value="<?= /* @noEscape */ $block->getFieldValue('notify_stock_qty') * 1 ?>" <?= /* @noEscape */ $_readonly ?>>
 
                     <div class="control-inner-wrap">
                         <?php $_checked = ($block->getFieldValue('use_config_notify_stock_qty') || $block->isNew()) ? 'checked="checked"' : '' ?>
@@ -321,7 +321,7 @@
                        class="input-text validate-digits"
                        id="inventory_qty_increments"
                        name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[stock_data][qty_increments]"
-                       value="<?= $block->getFieldValue('qty_increments') * 1 ?>" <?= /* @noEscape */ $_readonly ?>>
+                       value="<?= /* @noEscape */ $block->getFieldValue('qty_increments') * 1 ?>" <?= /* @noEscape */ $_readonly ?>>
                 <div class="control-inner-wrap">
                     <?php $_checked = ($block->getFieldValue('use_config_qty_increments') || $block->isNew()) ? 'checked="checked"' : '' ?>
                     <input type="checkbox"

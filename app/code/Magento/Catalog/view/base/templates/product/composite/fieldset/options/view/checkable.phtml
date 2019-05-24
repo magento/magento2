@@ -55,7 +55,7 @@ if ($option) : ?>
 
         <div class="field choice admin__field admin__field-option <?= /* @noEscape */ $option->getIsRequire() ? 'required': '' ?>">
             <input type="<?= $block->escapeHtmlAttr($optionType) ?>"
-                   class="<?= $optionType === Option::OPTION_TYPE_RADIO
+                   class="<?= /* @noEscape */ $optionType === Option::OPTION_TYPE_RADIO
                        ? 'radio admin__control-radio'
                        : 'checkbox admin__control-checkbox' ?> <?= $option->getIsRequire()
                        ? 'required': '' ?>
