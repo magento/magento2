@@ -42,7 +42,7 @@ class CompiledPluginList extends PluginList
             new \Magento\Framework\ObjectManager\Definition\Runtime(),
             ['first' => 'global'],
             'compiled_plugins_' . $scope,
-            new FileCache($cachePath)
+            new NoSerialize()
         );
     }
 

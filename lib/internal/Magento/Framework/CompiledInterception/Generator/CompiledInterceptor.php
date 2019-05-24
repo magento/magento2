@@ -193,75 +193,110 @@ class CompiledInterceptor extends EntityAbstract
     }
 
     /**
+     * @param $plugins
+     * @param $methodName
+     * @param $extraParams
+     * @param $parametersList
+     * @return array
+     */
+    private function compileBeforePlugins($plugins, $methodName, $extraParams, $parametersList)
+    {
+        $lines = [];
+        foreach ($plugins as $plugin) {
+            $call = "\$this->" . $this->getGetterName($plugin) . "()->$methodName(\$this$extraParams);";
+
+            if (!empty($parametersList)) {
+                $lines[] = "\$beforeResult = " . $call;
+                $lines[] = "if (\$beforeResult !== null) list({$parametersList}) = (array)\$beforeResult;";
+            } else {
+                $lines[] = $call;
+            }
+            $lines[] = "";
+        }
+        return $lines;
+    }
+
+    /**
+     * @param $methodName
+     * @param $plugin
+     * @param $capitalizedName
+     * @param $extraParams
+     * @param $parameters
+     * @param $returnVoid
+     * @return array
+     */
+    private function compileAroundPlugin($methodName, $plugin, $capitalizedName, $extraParams, $parameters, $returnVoid)
+    {
+        $lines = [];
+        $lines[] = "\$this->" . $this->getGetterName($plugin) . "()->around$capitalizedName(\$this, function({$this->_getParameterListForNextCallback($parameters)}){";
+        $this->addCodeSubBlock($lines, $this->getMethodSourceFromConfig($methodName, $plugin['next'] ?: [], $parameters, $returnVoid));
+        $lines[] = "}$extraParams);";
+        return $lines;
+    }
+
+    /**
+     * @param $plugins
+     * @param $methodName
+     * @param $extraParams
+     * @param $returnVoid
+     * @return array
+     */
+    private function compileAfterPlugins($plugins, $methodName, $extraParams, $returnVoid)
+    {
+        $lines = [];
+        foreach ($plugins as $plugin) {
+            if (!$returnVoid) {
+                $lines[] = ["((\$tmp = \$this->" . $this->getGetterName($plugin) . "()->$methodName(\$this, \$result$extraParams)) !== null) ? \$tmp : \$result;"];
+            } else {
+                $lines[] = ["\$this->" . $this->getGetterName($plugin) . "()->$methodName(\$this, null$extraParams);"];
+            }
+        }
+        return $lines;
+    }
+
+    /**
      * @param \ReflectionMethod $method
      * @param $conf
      * @param $parameters
      * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _getMethodSourceFromConfig(\ReflectionMethod $method, $conf, $parameters, $returnVoid)
+    private function getMethodSourceFromConfig($methodName, $conf, $parameters, $returnVoid)
     {
-        $body = [];
         $first = true;
-        $capName = ucfirst($method->getName());
-        $extraParams = empty($parameters) ? '' : (', ' . $this->_getParameterList($parameters));
+        $capitalizedName = ucfirst($methodName);
+        $parametersList = $this->_getParameterList($parameters);
+        $extraParams = empty($parameters) ? '' : (', ' . $parametersList);
 
         if (isset($conf[DefinitionInterface::LISTENER_BEFORE])) {
-            foreach ($conf[DefinitionInterface::LISTENER_BEFORE] as $plugin) {
-                if ($first) $first = false; else $body[] = "";
-
-                $call = "\$this->" . $this->getGetterName($plugin) . "()->before$capName(\$this$extraParams);";
-
-                if (!empty($parameters)) {
-                    $body[] = "\$beforeResult = " . $call;
-                    $body[] = "if (\$beforeResult !== null) list({$this->_getParameterList($parameters)}) = (array)\$beforeResult;";
-                } else {
-                    $body[] = $call;
-                }
-            }
-        }
-
-
-        $chain = [];
-        $main = [];
-        if (isset($conf[DefinitionInterface::LISTENER_AROUND])) {
-            $plugin = $conf[DefinitionInterface::LISTENER_AROUND];
-            $main[] = "\$this->" . $this->getGetterName($plugin) . "()->around$capName(\$this, function({$this->_getParameterListForNextCallback($parameters)}){";
-            $this->addCodeSubBlock($main, $this->_getMethodSourceFromConfig($method, $plugin['next'] ?: [], $parameters, $returnVoid));
-            $main[] = "}$extraParams);";
+            $body = $this->compileBeforePlugins($conf[DefinitionInterface::LISTENER_BEFORE], 'before' . $capitalizedName, $extraParams, $parametersList);
         } else {
-            $main[] = "parent::{$method->getName()}({$this->_getParameterList($parameters)});";
+            $body = [];
         }
-        $chain[] = $main;
+
+        $resultChain = [];
+        if (isset($conf[DefinitionInterface::LISTENER_AROUND])) {
+            $resultChain[] = $this->compileAroundPlugin($methodName, $conf[DefinitionInterface::LISTENER_AROUND],  $capitalizedName, $extraParams, $parameters, $returnVoid);
+        } else {
+            $resultChain[] = ["parent::{$methodName}({$this->_getParameterList($parameters)});"];
+        }
 
         if (isset($conf[DefinitionInterface::LISTENER_AFTER])) {
-            foreach ($conf[DefinitionInterface::LISTENER_AFTER] as $plugin) {
-                if (!$returnVoid) {
-                    $chain[] = ["((\$tmp = \$this->" . $this->getGetterName($plugin) . "()->after$capName(\$this, \$result$extraParams)) !== null) ? \$tmp : \$result;"];
-                } else {
-                    $chain[] = ["\$this->" . $this->getGetterName($plugin) . "()->after$capName(\$this, null$extraParams);"];
-                }
-            }
+            $resultChain = array_merge($resultChain, $this->compileAfterPlugins($conf[DefinitionInterface::LISTENER_AFTER], 'after' . $capitalizedName, $extraParams, $returnVoid));
         }
-        foreach ($chain as $lp => $piece) {
+        foreach ($resultChain as $lp => $piece) {
             if ($first) $first = false; else $body[] = "";
             if (!$returnVoid) {
-                $piece[0] = (($lp + 1 == count($chain)) ? "return " : "\$result = ") . $piece[0];
+                $piece[0] = (($lp + 1 == count($resultChain)) ? "return " : "\$result = ") . $piece[0];
             }
             foreach ($piece as $line) {
                 $body[] = $line;
             }
         }
-        if ($returnVoid) {
-            $body[] = 'return;';
-        }
-        
         return $body;
     }
 
     /**
-     * @param \ReflectionParameter[]  $parameters
+     * @param array $parameters
      * @return string
      */
     protected function _getParameterListForNextCallback(array $parameters)
@@ -351,8 +386,10 @@ class CompiledInterceptor extends EntityAbstract
 
         foreach ($cases as $case) {
             $body = array_merge($body, $case['cases']);
-            $this->addCodeSubBlock($body, $this->_getMethodSourceFromConfig($method, $case['conf'], $parameters, $returnsVoid), 2);
-            //$body[] = "\t\tbreak;";
+            $this->addCodeSubBlock($body, $this->getMethodSourceFromConfig($method->getName(), $case['conf'], $parameters, $returnsVoid), 2);
+            if ($returnsVoid) {
+                $body[] = "\t\tbreak;";
+            }
         }
 
         $body[] = "}";
@@ -384,37 +421,37 @@ class CompiledInterceptor extends EntityAbstract
                 'clean_name' => preg_replace("/[^A-Za-z0-9_]/", '_', $code . $suffix)
             ];
         }
-        $ret = $allPlugins[$code][$className];
-        $ret['next'] = $next;
-        return $ret;
+        $result = $allPlugins[$code][$className];
+        $result['next'] = $next;
+        return $result;
 
     }
 
     protected function _getPluginsChain(CompiledPluginList $plugins, $className, $method, &$allPlugins, $next = '__self')
     {
-        $ret = $plugins->getNext($className, $method, $next);
-        if(!empty($ret[DefinitionInterface::LISTENER_BEFORE])) {
-            foreach ($ret[DefinitionInterface::LISTENER_BEFORE] as $k => $code) {
-                $ret[DefinitionInterface::LISTENER_BEFORE][$k] = $this->_getPluginInfo($plugins, $code, $className, $allPlugins);
+        $result = $plugins->getNext($className, $method, $next);
+        if(!empty($result[DefinitionInterface::LISTENER_BEFORE])) {
+            foreach ($result[DefinitionInterface::LISTENER_BEFORE] as $k => $code) {
+                $result[DefinitionInterface::LISTENER_BEFORE][$k] = $this->_getPluginInfo($plugins, $code, $className, $allPlugins);
             }
         }
-        if(!empty($ret[DefinitionInterface::LISTENER_AFTER])) {
-            foreach ($ret[DefinitionInterface::LISTENER_AFTER] as $k => $code) {
-                $ret[DefinitionInterface::LISTENER_AFTER][$k] = $this->_getPluginInfo($plugins, $code, $className, $allPlugins);
+        if(!empty($result[DefinitionInterface::LISTENER_AFTER])) {
+            foreach ($result[DefinitionInterface::LISTENER_AFTER] as $k => $code) {
+                $result[DefinitionInterface::LISTENER_AFTER][$k] = $this->_getPluginInfo($plugins, $code, $className, $allPlugins);
             }
         }
-        if (isset($ret[DefinitionInterface::LISTENER_AROUND])) {
-            $ret[DefinitionInterface::LISTENER_AROUND] = $this->_getPluginInfo($plugins, $ret[DefinitionInterface::LISTENER_AROUND], $className, $allPlugins,
-                $this->_getPluginsChain($plugins, $className, $method, $allPlugins, $ret[DefinitionInterface::LISTENER_AROUND]));
+        if (isset($result[DefinitionInterface::LISTENER_AROUND])) {
+            $result[DefinitionInterface::LISTENER_AROUND] = $this->_getPluginInfo($plugins, $result[DefinitionInterface::LISTENER_AROUND], $className, $allPlugins,
+                $this->_getPluginsChain($plugins, $className, $method, $allPlugins, $result[DefinitionInterface::LISTENER_AROUND]));
         }
-        return $ret;
+        return $result;
     }
 
     protected function _getPluginsConfig(\ReflectionMethod $method, &$allPlugins)
     {
         $className = ltrim($this->getSourceClassName(), '\\');
 
-        $ret = array();
+        $result = array();
         if ($this->plugins === null) {
             $this->plugins = [];
             foreach ($this->areaList->getCodes() as $scope) {
@@ -422,13 +459,13 @@ class CompiledInterceptor extends EntityAbstract
             }
         }
         foreach ($this->plugins as $scope => $pluginsList) {
-            $p = $this->_getPluginsChain($pluginsList, $className, $method->getName(), $allPlugins);
-            if ($p) {
-                $ret[$scope] = $p;
+            $pluginChain = $this->_getPluginsChain($pluginsList, $className, $method->getName(), $allPlugins);
+            if ($pluginChain) {
+                $result[$scope] = $pluginChain;
             }
 
         }
-        return $ret;
+        return $result;
     }
 
     /**
@@ -438,6 +475,6 @@ class CompiledInterceptor extends EntityAbstract
      */
     protected function _getDefaultConstructorDefinition()
     {
-        // TODO: Implement _getDefaultConstructorDefinition() method.
+
     }
 }

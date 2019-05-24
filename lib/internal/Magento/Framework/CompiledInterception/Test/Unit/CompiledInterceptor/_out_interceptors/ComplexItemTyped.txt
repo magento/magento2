@@ -51,10 +51,10 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
         		parent::returnVoid();
         		
         		$this->____plugin_complex_plugin()->afterReturnVoid($this, null);
-        		return;
+        		break;
         	default:
         		parent::returnVoid();
-        		return;
+        		break;
         }
     }
 
