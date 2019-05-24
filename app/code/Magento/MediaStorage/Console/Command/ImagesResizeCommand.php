@@ -10,10 +10,10 @@ namespace Magento\MediaStorage\Console\Command;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\MediaStorage\Service\ImageResize;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Helper\ProgressBarFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Magento\Framework\ObjectManagerInterface;
 
 class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
 {
@@ -28,24 +28,24 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     private $appState;
 
     /**
-     * @var ObjectManagerInterface
+     * @var ProgressBarFactory
      */
-    private $objectManager;
+    private $progressBarFactory;
 
     /**
      * @param State $appState
      * @param ImageResize $resize
-     * @param ObjectManagerInterface $objectManager
+     * @param ProgressBarFactory $progressBarFactory
      */
     public function __construct(
         State $appState,
         ImageResize $resize,
-        ObjectManagerInterface $objectManager
+        ProgressBarFactory $progressBarFactory
     ) {
         parent::__construct();
         $this->resize = $resize;
         $this->appState = $appState;
-        $this->objectManager = $objectManager;
+        $this->progressBarFactory = $progressBarFactory;
     }
 
     /**
@@ -67,7 +67,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
             $generator = $this->resize->resizeFromThemes();
 
             /** @var ProgressBar $progress */
-            $progress = $this->objectManager->create(ProgressBar::class, [
+            $progress = $this->progressBarFactory->create([
                 'output' => $output,
                 'max' => $generator->current()
             ]);
@@ -79,9 +79,10 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
                 $progress->setOverwrite(false);
             }
 
-            for (; $generator->valid(); $generator->next()) {
+            while ($generator->valid()) {
                 $progress->setMessage($generator->key());
                 $progress->advance();
+                $generator->next();
             }
         } catch (\Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
