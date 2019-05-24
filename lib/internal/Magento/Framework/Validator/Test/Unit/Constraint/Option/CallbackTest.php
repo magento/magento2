@@ -54,7 +54,6 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
         );
 
         return [
-            [$functionName, 'Value from function'],
             [$closure, 'Value from closure'],
             [[$this, 'getTestValue'], self::TEST_VALUE],
             [[__CLASS__, 'getTestValueStatically'], self::TEST_VALUE],
