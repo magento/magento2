@@ -213,6 +213,34 @@ class AccountManagementTest extends WebapiAbstract
         }
     }
 
+    public function testCreateCustomerWithoutOptionalFields()
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST, ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'CreateAccount',
+            ],
+        ];
+
+        $customerDataArray = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->customerHelper->createSampleCustomerDataObject(),
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
+        unset($customerDataArray['store_id']);
+        unset($customerDataArray['website_id']);
+        $requestData = ['customer' => $customerDataArray, 'password' => CustomerHelper::PASSWORD];
+        try {
+            $customerData = $this->_webApiCall($serviceInfo, $requestData, null, 'all');
+            $this->assertNotNull($customerData['id']);
+        } catch (\Exception $e) {
+            $this->fail('Customer should be created without optional fields.');
+        }
+    }
+
     /**
      * Test customer activation when it is required
      *

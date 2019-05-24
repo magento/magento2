@@ -11,6 +11,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Magento\TestFramework\TestCase\SetupTestCase;
 use Magento\Framework\Console\Cli;
 use Magento\TestFramework\Deploy\CliCommand;
+use Magento\TestFramework\Deploy\TestModuleManager;
 
 /**
  * The purpose of this test is to verify the declaration:generate:whitelist command.
@@ -43,6 +44,11 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
     private $cliCommand;
 
     /**
+     * @var TestModuleManager
+     */
+    private $moduleManager;
+
+    /**
      * {@inheritdoc}
      */
     public function setUp()
@@ -56,20 +62,43 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
         );
         $this->cliCommand = $this->objectManager->get(CliCommand::class);
         $this->tester = new CommandTester($this->command);
+        $this->moduleManager = $this->objectManager->get(TestModuleManager::class);
     }
 
     /**
-     * Execute generate command for whitelist on module Magento_TestSetupDeclarationModule1.
-     *
-     * @param array $expectedWhitelistContent
+     * Execute generate command for whitelist.
      *
      * @moduleName Magento_TestSetupDeclarationModule1
-     * @dataProvider contentsDataProvider
+     * @moduleName Magento_TestSetupDeclarationModule8
+     * @throws \Exception
      */
-    public function testExecute(array $expectedWhitelistContent)
+    public function testExecute()
     {
-        $moduleName = 'Magento_TestSetupDeclarationModule1';
-        $this->cliCommand->install([$moduleName]);
+        $modules = [
+            'Magento_TestSetupDeclarationModule1',
+            'Magento_TestSetupDeclarationModule8',
+        ];
+
+        $this->cliCommand->install($modules);
+        foreach ($modules as $moduleName) {
+            $this->moduleManager->updateRevision(
+                $moduleName,
+                'whitelist_upgrade',
+                'db_schema.xml',
+                'etc'
+            );
+        }
+
+        foreach ($modules as $moduleName) {
+            $this->checkWhitelistFile($moduleName);
+        }
+    }
+
+    /**
+     * @param string $moduleName
+     */
+    private function checkWhitelistFile(string $moduleName)
+    {
         $modulePath = $this->componentRegistrar->getPath('module', $moduleName);
         $whiteListFileName = $modulePath
             . DIRECTORY_SEPARATOR
@@ -79,124 +108,25 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
 
         //run bin/magento declaration:generate:whitelist Magento_TestSetupDeclarationModule1 command.
         $this->tester->execute(['--module-name' => $moduleName], ['interactive' => false]);
-
         $this->assertSame(Cli::RETURN_SUCCESS, $this->tester->getStatusCode());
 
         $this->assertFileExists($whiteListFileName);
         $this->assertContains('', $this->tester->getDisplay());
 
-        $whitelistContent = json_decode(file_get_contents($whiteListFileName), true);
-        $this->assertEquals($expectedWhitelistContent, $whitelistContent);
-    }
-
-    /**
-     * Data provider for whitelist contents.
-     *
-     * @return array
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function contentsDataProvider(): array
-    {
-        return [
-            [
-                'content' => [
-                    'reference_table' =>
-                        [
-                            'column' =>
-                                [
-                                    'tinyint_ref' => true,
-                                    'tinyint_without_padding' => true,
-                                    'bigint_without_padding' => true,
-                                    'integer_without_padding' => true,
-                                    'smallint_with_big_padding' => true,
-                                    'smallint_without_default' => true,
-                                    'int_without_unsigned' => true,
-                                    'int_unsigned' => true,
-                                    'bigint_default_nullable' => true,
-                                    'bigint_not_default_not_nullable' => true,
-                                    'smallint_without_padding' => true,
-                                ],
-                            'constraint' =>
-                                [
-                                    'tinyint_primary' => true,
-                                ],
-                        ],
-                    'auto_increment_test' =>
-                        [
-                            'column' =>
-                                [
-                                    'int_auto_increment_with_nullable' => true,
-                                    'int_disabled_auto_increment' => true,
-                                ],
-                            'constraint' =>
-                                [
-                                    'AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE' => true,
-                                ],
-                        ],
-                    'test_table' =>
-                        [
-                            'column' =>
-                                [
-                                    'smallint' => true,
-                                    'tinyint' => true,
-                                    'bigint' => true,
-                                    'float' => true,
-                                    'double' => true,
-                                    'decimal' => true,
-                                    'date' => true,
-                                    'timestamp' => true,
-                                    'datetime' => true,
-                                    'longtext' => true,
-                                    'mediumtext' => true,
-                                    'varchar' => true,
-                                    'mediumblob' => true,
-                                    'blob' => true,
-                                    'boolean' => true,
-                                    'varbinary_rename' => true,
-                                ],
-                            'index' =>
-                                [
-                                    'TEST_TABLE_TINYINT_BIGINT' => true,
-                                ],
-                            'constraint' =>
-                                [
-                                    'TEST_TABLE_SMALLINT_BIGINT' => true,
-                                    'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF' => true,
-                                ],
-                        ],
-                    'store' =>
-                        [
-                            'column' =>
-                                [
-                                    'store_owner_id' => true,
-                                    'store_owner' => true,
-                                ],
-                            'constraint' =>
-                                [
-                                    'STORE_STORE_OWNER_ID_STORE_OWNER_OWNER_ID' => true,
-                                ],
-                        ],
-                    'store_owner' =>
-                        [
-                            'column' =>
-                                [
-                                    'owner_id' => true,
-                                    'label' => true,
-                                ],
-                            'constraint' =>
-                                [
-                                    '' => true,
-                                ],
-                        ],
-                    'some_table' =>
-                        [
-                            'column' =>
-                                [
-                                    'some_column' => true,
-                                ],
-                        ],
-                ],
-            ],
-        ];
+        $whitelistFileContent = file_get_contents($whiteListFileName);
+        $expectedWhitelistContent = file_get_contents(
+            dirname(__DIR__, 2)
+            . DIRECTORY_SEPARATOR
+            . implode(
+                DIRECTORY_SEPARATOR,
+                [
+                    '_files',
+                    'WhitelistGenerate',
+                    str_replace('Magento_', '', $moduleName),
+                    'db_schema_whitelist.json'
+                ]
+            )
+        );
+        $this->assertEquals($expectedWhitelistContent, $whitelistFileContent);
     }
 }

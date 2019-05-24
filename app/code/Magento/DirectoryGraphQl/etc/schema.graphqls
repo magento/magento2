@@ -1,0 +1,39 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+    currency: Currency @resolver(class: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Currency") @doc(description: "The currency query returns information about store currency.") @cache(cacheable: false)
+    countries: [Country] @resolver(class: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Countries") @doc(description: "The countries query provides information for all countries.") @cache(cacheable: false)
+    country (id: String): Country @resolver(class: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Country") @doc(description: "The countries query provides information for a single country.") @cache(cacheable: false)
+}
+
+type Currency {
+    base_currency_code: String
+    base_currency_symbol: String
+    default_display_currecy_code: String @deprecated(reason: "Symbol was missed. Use `default_display_currency_code`.")
+    default_display_currency_code: String
+    default_display_currecy_symbol: String @deprecated(reason: "Symbol was missed. Use `default_display_currency_symbol`.")
+    default_display_currency_symbol: String
+    available_currency_codes: [String]
+    exchange_rates: [ExchangeRate]
+}
+
+type ExchangeRate {
+    currency_to: String
+    rate: Float
+}
+
+type Country {
+    id: String
+    two_letter_abbreviation: String
+    three_letter_abbreviation: String
+    full_name_locale: String
+    full_name_english: String
+    available_regions: [Region]
+}
+
+type Region {
+    id: Int
+    code: String
+    name: String
+}

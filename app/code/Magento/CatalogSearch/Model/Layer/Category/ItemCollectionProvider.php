@@ -10,8 +10,7 @@ use Magento\Catalog\Model\Layer\ItemCollectionProviderInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * Catalog search category layer collection provider.
  */
 class ItemCollectionProvider implements ItemCollectionProviderInterface
 {
@@ -29,8 +28,7 @@ class ItemCollectionProvider implements ItemCollectionProviderInterface
     }
 
     /**
-     * @param \Magento\Catalog\Model\Category $category
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
+     * @inheritdoc
      */
     public function getCollection(\Magento\Catalog\Model\Category $category)
     {

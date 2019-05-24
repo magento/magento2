@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Model\Indexer;
 
+use Magento\Customer\Model\ResourceModel\Customer\Indexer\CollectionFactory;
 use Magento\Customer\Model\ResourceModel\Customer\Indexer\Collection;
 use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 use Traversable;
@@ -25,11 +26,11 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
     private $batchSize;
 
     /**
-     * @param \Magento\Customer\Model\ResourceModel\Customer\Indexer\CollectionFactory $collection
+     * @param CollectionFactory $collectionFactory
      * @param int $batchSize
      */
     public function __construct(
-        \Magento\Customer\Model\ResourceModel\Customer\Indexer\CollectionFactory $collectionFactory,
+        CollectionFactory $collectionFactory,
         $batchSize = 10000
     ) {
         $this->customerCollection = $collectionFactory->create();
@@ -37,7 +38,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMainTable()
     {
@@ -45,7 +46,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIdFieldName()
     {
@@ -53,7 +54,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addFieldToSelect($fieldName, $alias = null)
     {
@@ -62,7 +63,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSelect()
     {
@@ -70,7 +71,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addFieldToFilter($attribute, $condition = null)
     {
@@ -79,7 +80,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
     }
 
     /**
-     * @return int
+     * @inheritdoc
      */
     public function count()
     {
@@ -104,5 +105,29 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
             }
             $pageNumber++;
         } while ($pageNumber <= $lastPage);
+    }
+
+    /**
+     * Joins Attribute
+     *
+     * @param string $alias alias for the joined attribute
+     * @param string|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
+     * @param string $bind attribute of the main entity to link with joined $filter
+     * @param string|null $filter primary key for the joined entity (entity_id default)
+     * @param string $joinType inner|left
+     * @param int|null $storeId
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @see Collection::joinAttribute()
+     */
+    public function joinAttribute(
+        string $alias,
+        $attribute,
+        string $bind,
+        ?string $filter = null,
+        string $joinType = 'inner',
+        ?int $storeId = null
+    ): void {
+        $this->customerCollection->joinAttribute($alias, $attribute, $bind, $filter, $joinType, $storeId);
     }
 }

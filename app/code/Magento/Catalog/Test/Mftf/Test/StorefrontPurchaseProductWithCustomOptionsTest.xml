@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPurchaseProductWithCustomOptionsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Purchase a product with Custom Options of different types"/>
+            <title value="Admin should be able to sell products with custom options of different types"/>
+            <description value="Admin should be able to sell products with custom options of different types"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16462"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--Create Simple Product with Custom Options-->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">17</field>
+            </createData>
+            <updateData createDataKey="createProduct" entity="productWithOptions" stepKey="updateProductWithOption"/>
+            <!-- Logout customer before in case of it logged in from previous test -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Delete product and category -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderListingFilters"/>
+            <actionGroup ref="logout" stepKey="logoutAdmin"/>
+            <!-- Logout customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
+        </after>
+
+        <!-- Login Customer Storefront -->
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomerOnStorefront">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Checking the correctness of displayed prices for user parameters -->
+
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPage"/>
+
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsPrice(ProductOptionField.title, ProductOptionField.price)}}" stepKey="checkFieldProductOption"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsPrice(ProductOptionArea.title, '1.7')}}" stepKey="checkAreaProductOption"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsDropDown(ProductOptionDropDown.title, ProductOptionValueDropdown1.price)}}" stepKey="checkDropDownProductOption"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsRadioButtons(ProductOptionRadiobutton.title, ProductOptionValueRadioButtons1.price)}}" stepKey="checkButtonsProductOption"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsCheckbox(ProductOptionCheckbox.title, '20.91')}}" stepKey="checkCheckboxProductOptiozn"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsMultiselect(ProductOptionMultiSelect.title, ProductOptionValueMultiSelect1.price)}}" stepKey="checkMultiSelectProductOption"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsData(ProductOptionDate.title, ProductOptionDate.price)}}" stepKey="checkDataProductOption"/>
+
+        <!--Generate year-->
+        <generateDate date="Now" format="Y" stepKey="year"/>
+        <generateDate date="Now" format="y" stepKey="shortYear"/>
+
+        <!-- Adding items to the checkout -->
+
+        <fillField userInput="OptionField" selector="{{StorefrontProductInfoMainSection.productOptionFieldInput(ProductOptionField.title)}}" stepKey="fillProductOptionInputField"/>
+        <fillField userInput="OptionArea" selector="{{StorefrontProductInfoMainSection.productOptionAreaInput(ProductOptionArea.title)}}" stepKey="fillProductOptionInputArea"/>
+        <attachFile userInput="{{productWithOptions.file}}" selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" stepKey="fillUploadFile"/>
+        <selectOption userInput="{{ProductOptionValueDropdown1.price}}" selector="{{StorefrontProductInfoMainSection.productOptionSelect(ProductOptionDropDown.title)}}" stepKey="seeProductOptionDropDown"/>
+        <checkOption selector="{{StorefrontProductInfoMainSection.productOptionRadioButtonsCheckbox(ProductOptionRadiobutton.title, ProductOptionValueRadioButtons1.price)}}" stepKey="seeProductOptionRadioButtons"/>
+        <checkOption selector="{{StorefrontProductInfoMainSection.productOptionRadioButtonsCheckbox(ProductOptionCheckbox.title, '20.91')}}" stepKey="seeProductOptionCheckbox"/>
+        <selectOption userInput="{{ProductOptionValueMultiSelect1.price}}" selector="{{StorefrontProductInfoMainSection.productOptionSelect(ProductOptionMultiSelect.title)}}" stepKey="selectProductOptionMultiSelect"/>
+        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.productOptionDataMonth(ProductOptionDate.title)}}" stepKey="selectProductOptionDate"/>
+        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.productOptionDataDay(ProductOptionDate.title)}}" stepKey="selectProductOptionDate1"/>
+        <selectOption userInput="$year" selector="{{StorefrontProductInfoMainSection.productOptionDataYear(ProductOptionDate.title)}}" stepKey="selectProductOptionDate2"/>
+        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.productOptionDateAndTimeMonth(ProductOptionDateTime.title)}}" stepKey="selectProductOptionDateAndTimeMonth"/>
+        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.productOptionDateAndTimeDay(ProductOptionDateTime.title)}}" stepKey="selectProductOptionDateAndTimeDay"/>
+        <selectOption userInput="$year" selector="{{StorefrontProductInfoMainSection.productOptionDateAndTimeYear(ProductOptionDateTime.title)}}" stepKey="selectProductOptionDateAndTimeYear"/>
+        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.productOptionDateAndTimeHour(ProductOptionDateTime.title)}}" stepKey="selectProductOptionDateAndTimeHour"/>
+        <selectOption userInput="00" selector="{{StorefrontProductInfoMainSection.productOptionDateAndTimeMinute(ProductOptionDateTime.title)}}" stepKey="selectProductOptionDateAndTimeMinute"/>
+        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.productOptionTimeHour(ProductOptionTime.title)}}" stepKey="selectProductOptionTimeHour"/>
+        <selectOption userInput="00" selector="{{StorefrontProductInfoMainSection.productOptionTimeMinute(ProductOptionTime.title)}}" stepKey="selectProductOptionTimeMinute"/>
+
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="finalProductPrice"/>
+
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Checking the correctness of displayed custom options for user parameters on checkout -->
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
+
+        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true" stepKey="exposeMiniCart"/>
+
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
+        <waitForElement selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" time="30" stepKey="waitForCartItemsAreaActive"/>
+
+        <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="$$createProduct.name$$" stepKey="seeProductInCart"/>
+
+        <conditionalClick selector="{{CheckoutPaymentSection.ProductOptionsByProductItemName($$createProduct.name$$)}}" dependentSelector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" visible="false" stepKey="exposeProductOptions"/>
+
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionField.title}}" stepKey="seeProductOptionFieldInput1"/>
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionArea.title}}" stepKey="seeProductOptionAreaInput1"/>
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{productWithOptions.file}}" stepKey="seeProductOptionFileInput1"/>
+        <seeElement selector="{{CheckoutPaymentSection.ProductOptionLinkActiveByProductItemName($$createProduct.name$$, productWithOptions.file)}}" stepKey="seeProductOptionFileInputLink1"/>
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionValueDropdown1.title}}" stepKey="seeProductOptionValueDropdown1Input1"/>
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeProductOptionValueRadioButtons1Input1"/>
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionValueCheckbox.title}}" stepKey="seeProductOptionValueCheckboxInput1" />
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionValueMultiSelect1.title}}" stepKey="seeproductAttributeOptionsMultiselect1Input1" />
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="Jan 1, $year" stepKey="seeProductOptionDateAndTimeInput" />
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="1/1/$shortYear, 1:00 AM" stepKey="seeProductOptionDataInput" />
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="1:00 AM" stepKey="seeProductOptionTimeInput" />
+        <!--Select shipping method-->
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterClickNext"/>
+        <!--Select payment method-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <!-- Place Order -->
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+
+        <!-- Login to Admin and open Order -->
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+        <actionGroup ref="filterOrderGridById" stepKey="filterByOrderId">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad stepKey="waitForOrderPageOpened"/>
+
+        <!-- Checking the correctness of displayed custom options for user parameters on Order -->
+
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionField.title}}" stepKey="seeAdminOrderProductOptionField" />
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionArea.title}}" stepKey="seeAdminOrderProductOptionArea"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{productWithOptions.file}}" stepKey="seeAdminOrderProductOptionFile"/>
+        <seeElement selector="{{AdminOrderItemsOrderedSection.productNameOptionsLink(productWithOptions.file)}}" stepKey="seeAdminOrderProductOptionFileLink"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueDropdown1.title}}" stepKey="seeAdminOrderProductOptionValueDropdown1"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeAdminOrderProductOptionValueRadioButton1"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueCheckbox.title}}" stepKey="seeAdminOrderProductOptionValueCheckbox" />
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueMultiSelect1.title}}" stepKey="seeAdminOrderproductAttributeOptionsMultiselect1" />
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Jan 1, $year" stepKey="seeAdminOrderProductOptionDateAndTime" />
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="1/1/$shortYear, 1:00 AM" stepKey="seeAdminOrderProductOptionData" />
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="1:00 AM" stepKey="seeAdminOrderProductOptionTime" />
+
+        <!-- Reorder and Checking the correctness of displayed custom options for user parameters on Order and correctness of displayed price Subtotal-->
+
+        <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
+        <actionGroup ref="AdminCheckoutSelectCheckMoneyOrderBillingMethodActionGroup" stepKey="selectBillingMethod"/>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="trySubmitOrder"/>
+
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionField.title}}" stepKey="seeAdminOrderProductOptionField1" />
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionArea.title}}" stepKey="seeAdminOrderProductOptionArea1"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{productWithOptions.file}}" stepKey="seeAdminOrderProductOptionFile1"/>
+        <seeElement selector="{{AdminOrderItemsOrderedSection.productNameOptionsLink(productWithOptions.file)}}" stepKey="seeAdminOrderProductOptionFileLink1"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueDropdown1.title}}" stepKey="seeAdminOrderProductOptionValueDropdown11"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeAdminOrderProductOptionValueRadioButton11"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueCheckbox.title}}" stepKey="seeAdminOrderProductOptionValueCheckbox1" />
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueMultiSelect1.title}}" stepKey="seeAdminOrderproductAttributeOptionsMultiselect11" />
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Jan 1, $year" stepKey="seeAdminOrderProductOptionDateAndTime1" />
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="1/1/$shortYear, 1:00 AM" stepKey="seeAdminOrderProductOptionData1" />
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="1:00 AM" stepKey="seeAdminOrderProductOptionTime1" />
+
+        <see selector="{{AdminOrderTotalSection.subTotal}}" userInput="{$finalProductPrice}" stepKey="seeOrderSubTotal"/>
+
+        <!-- Go to Customer Order Page and Checking the correctness of displayed custom options for user parameters on Order -->
+
+        <amOnPage url="{{StorefrontCustomerOrderViewPage.url({$grabOrderNumber})}}" stepKey="amOnOrderPage"/>
+
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionField.title, ProductOptionField.title)}}" userInput="{{ProductOptionField.title}}" stepKey="seeStorefontOrderProductOptionField1" />
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionArea.title, ProductOptionArea.title)}}" userInput="{{ProductOptionArea.title}}" stepKey="seeStorefontOrderProductOptionArea1"/>
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptionsFile($$createProduct.name$$, ProductOptionFile.title, productWithOptions.file)}}" userInput="{{productWithOptions.file}}" stepKey="seeStorefontOrderProductOptionFile1"/>
+        <seeElement selector="{{StorefrontCustomerOrderSection.productCustomOptionsLink($createProduct.name$, ProductOptionFile.title, productWithOptions.file)}}" stepKey="seeStorefontOrderProductOptionFileLink1"/>
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionDropDown.title, ProductOptionValueDropdown1.title)}}" userInput="{{ProductOptionValueDropdown1.title}}" stepKey="seeStorefontOrderProductOptionValueDropdown11"/>
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionRadiobutton.title, ProductOptionValueRadioButtons1.title)}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeStorefontOrderProductOptionValueRadioButtons11"/>
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionCheckbox.title, ProductOptionValueCheckbox.title)}}" userInput="{{ProductOptionValueCheckbox.title}}" stepKey="seeStorefontOrderProductOptionValueCheckbox1" />
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionMultiSelect.title, ProductOptionValueMultiSelect1.title)}}" userInput="{{ProductOptionValueMultiSelect1.title}}" stepKey="seeStorefontOrderproductAttributeOptionsMultiselect11" />
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionDate.title, 'Jan 1, $year')}}" userInput="Jan 1, $year" stepKey="seeStorefontOrderProductOptionDateAndTime1" />
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionDateTime.title, '1/1/$shortYear, 1:00 AM')}}" userInput="1/1/$shortYear, 1:00 AM" stepKey="seeStorefontOrderProductOptionData1" />
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionTime.title, '1:00 AM')}}" userInput="1:00 AM" stepKey="seeStorefontOrderProductOptionTime1" />
+    </test>
+</tests>

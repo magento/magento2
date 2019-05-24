@@ -212,7 +212,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testIsVatValidationEnabled($store, $result)
     {
         $this->scopeConfig->expects($this->once())
-            ->method('getValue')
+            ->method('isSetFlag')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VAT_VALIDATION_ENABLED,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -242,7 +242,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testHasValidateOnEachTransaction($store, $result)
     {
         $this->scopeConfig->expects($this->once())
-            ->method('getValue')
+            ->method('isSetFlag')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VIV_ON_EACH_TRANSACTION,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -297,7 +297,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testIsDisableAutoGroupAssignDefaultValue()
     {
         $this->scopeConfig->expects($this->once())
-            ->method('getValue')
+            ->method('isSetFlag')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -309,7 +309,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testIsVatAttributeVisible()
     {
         $this->scopeConfig->expects($this->once())
-            ->method('getValue')
+            ->method('isSetFlag')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VAT_FRONTEND_VISIBILITY,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -408,6 +408,19 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      * @return array
      */
     public function isAttributeVisibleDataProvider()
+    {
+        return [
+            ['fax', true],
+            ['invalid_code', false]
+        ];
+    }
+
+    /**
+     * Data provider for test  testIsAttributeRequire
+     *
+     * @return array
+     */
+    public function isAttributeRequiredDataProvider()
     {
         return [
             ['fax', true],

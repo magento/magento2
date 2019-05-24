@@ -19,9 +19,10 @@
                 <order_status>processing</order_status>
                 <payment_action>authorize</payment_action>
                 <test>1</test>
-                <title>Credit Card Direct Post (Authorize.net)</title>
+                <title>Credit Card Direct Post (Authorize.Net)</title>
                 <trans_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <trans_md5 backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <signature_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <allowspecific>0</allowspecific>
                 <currency>USD</currency>
                 <create_order_before>1</create_order_before>
@@ -32,6 +33,8 @@
                 <cgi_url>https://secure.authorize.net/gateway/transact.dll</cgi_url>
                 <cgi_url_td_test_mode>https://apitest.authorize.net/xml/v1/request.api</cgi_url_td_test_mode>
                 <cgi_url_td>https://api2.authorize.net/xml/v1/request.api</cgi_url_td>
+                <paymentInfoKeys>x_card_type,x_account_number,x_avs_code,x_auth_code,x_response_reason_text,x_cvv2_resp_code</paymentInfoKeys>
+                <group>authorizenet</group>
             </authorizenet_directpost>
         </payment>
     </default>

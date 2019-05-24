@@ -178,8 +178,9 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
-     * Need use as _prepareLayout - but problem in declaring collection from
-     * another block (was problem with search result)
+     * Need use as _prepareLayout - but problem in declaring collection from another block.
+     * (was problem with search result)
+     *
      * @return $this
      */
     protected function _beforeToHtml()
@@ -188,7 +189,9 @@ class ListProduct extends AbstractProduct implements IdentityInterface
 
         $this->addToolbarBlock($collection);
 
-        $collection->load();
+        if (!$collection->isLoaded()) {
+            $collection->load();
+        }
 
         return parent::_beforeToHtml();
     }
@@ -262,6 +265,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
+     * Set collection.
+     *
      * @param AbstractCollection $collection
      * @return $this
      */
@@ -272,7 +277,9 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
-     * @param array|string|integer| Element $code
+     * Add attribute.
+     *
+     * @param array|string|integer|Element $code
      * @return $this
      */
     public function addAttribute($code)
@@ -282,6 +289,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
+     * Get price block template.
+     *
      * @return mixed
      */
     public function getPriceBlockTemplate()
@@ -371,6 +380,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
+     * Get product price.
+     *
      * @param Product $product
      * @return string
      */
@@ -396,8 +407,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
-     * Specifies that price rendering should be done for the list of products
-     * i.e. rendering happens in the scope of product list, but not single product
+     * Specifies that price rendering should be done for the list of products.
+     * (rendering happens in the scope of product list, but not single product)
      *
      * @return Render
      */

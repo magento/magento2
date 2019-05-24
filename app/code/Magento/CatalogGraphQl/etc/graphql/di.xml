@@ -6,6 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Catalog\Model\Product\Option\Type\Date" type="Magento\CatalogGraphQl\Model\Product\Option\DateType" />
     <type name="Magento\CatalogGraphQl\Model\ProductInterfaceTypeResolverComposite">
         <arguments>
             <argument name="productTypeNameResolvers" xsi:type="array">
@@ -37,11 +38,15 @@
                 </item>
                 <item name="customizable_options" xsi:type="array">
                     <item name="field" xsi:type="string">CustomizableFieldOption</item>
+                    <item name="date" xsi:type="string">CustomizableDateOption</item>
                     <item name="date_time" xsi:type="string">CustomizableDateOption</item>
+                    <item name="time" xsi:type="string">CustomizableDateOption</item>
                     <item name="file" xsi:type="string">CustomizableFileOption</item>
                     <item name="area" xsi:type="string">CustomizableAreaOption</item>
                     <item name="drop_down" xsi:type="string">CustomizableDropDownOption</item>
+                    <item name="multiple" xsi:type="string">CustomizableMultipleOption</item>
                     <item name="radio" xsi:type="string">CustomizableRadioOption</item>
+                    <item name="checkbox" xsi:type="string">CustomizableCheckboxOption</item>
                 </item>
             </argument>
         </arguments>
@@ -73,4 +78,21 @@
             </argument>
         </arguments>
     </virtualType>
+    <preference for="Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match"
+                type="Magento\CatalogGraphQl\Model\Search\Adapter\Mysql\Query\Builder\Match" />
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="product_url_suffix" xsi:type="string">catalog/seo/product_url_suffix</item>
+                <item name="category_url_suffix" xsi:type="string">catalog/seo/category_url_suffix</item>
+                <item name="title_separator" xsi:type="string">catalog/seo/title_separator</item>
+                <item name="list_mode" xsi:type="string">catalog/frontend/list_mode</item>
+                <item name="grid_per_page_values" xsi:type="string">catalog/frontend/grid_per_page_values</item>
+                <item name="list_per_page_values" xsi:type="string">catalog/frontend/list_per_page_values</item>
+                <item name="grid_per_page" xsi:type="string">catalog/frontend/grid_per_page</item>
+                <item name="list_per_page" xsi:type="string">catalog/frontend/list_per_page</item>
+                <item name="catalog_default_sort_by" xsi:type="string">catalog/frontend/default_sort_by</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

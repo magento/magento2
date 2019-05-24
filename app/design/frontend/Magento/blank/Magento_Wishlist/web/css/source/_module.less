@@ -8,6 +8,24 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
+    .toolbar {
+        &.wishlist-toolbar {
+            .limiter {
+                float: right;
+            }
+            .main .pages {
+                display: inline-block;
+                position: relative;
+                z-index: 0;
+            }
+            .toolbar-amount,
+            .limiter {
+                display: inline-block;
+                z-index: 1;
+            }
+        }
+    }
+
     .form.wishlist.items {
         .actions-toolbar {
             &:extend(.abs-reset-left-margin all);
@@ -177,10 +195,10 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .products-grid.wishlist {
         margin-bottom: @indent__l;
-        margin-right: -@indent__s;
+        margin-right: 0;
         .product {
             &-item {
-                padding: @indent__base @indent__s @indent__base @indent__base;
+                padding: @indent__base 0 @indent__base 0;
                 position: relative;
 
                 &-photo {
@@ -194,6 +212,7 @@
 
                 &-actions {
                     display: block;
+                    float: left;
 
                     .action {
                         margin-right: 15px;

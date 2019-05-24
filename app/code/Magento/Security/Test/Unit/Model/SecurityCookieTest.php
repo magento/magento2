@@ -87,7 +87,7 @@ class SecurityCookieTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($cookie);
 
-        $this->assertEquals(intval($cookie), $this->model->getLogoutReasonCookie());
+        $this->assertEquals((int)$cookie, $this->model->getLogoutReasonCookie());
     }
 
     /**
@@ -114,7 +114,7 @@ class SecurityCookieTest extends \PHPUnit\Framework\TestCase
             ->method('setPublicCookie')
             ->with(
                 SecurityCookie::LOGOUT_REASON_CODE_COOKIE_NAME,
-                intval($status),
+                (int)$status,
                 $this->cookieMetadataMock
             )
             ->willReturnSelf();

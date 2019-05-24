@@ -207,6 +207,7 @@
             <rule type="paypalExpressLockConfigurationConditional" event=":load">
                 <argument name="payflow_link_ca">payflow_link_ca</argument>
             </rule>
+            <rule type="removeCreditOptionConditional" event=":load"/>
         </relation>
     </payment>
 </rules>

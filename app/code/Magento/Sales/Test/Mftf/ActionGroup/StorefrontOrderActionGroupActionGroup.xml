@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Fill order information fields and click continue-->
+    <actionGroup name="StorefrontSearchGuestOrderActionGroup">
+        <arguments>
+            <argument name="orderId" type="string"/>
+            <argument name="orderLastName" type="string"/>
+            <argument name="orderEmail" type="string"/>
+        </arguments>
+        <amOnPage url="{{StorefrontOrdersAndReturnsPage.url}}" stepKey="navigateToOrderAndReturnPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <fillField selector="{{StorefrontOrderAndReturnInformationSection.orderId}}" userInput="{{orderId}}" stepKey="fillOrderId"/>
+        <fillField selector="{{StorefrontOrderAndReturnInformationSection.bilingLastName}}" userInput="{{orderLastName}}" stepKey="fillBillingLastName"/>
+        <fillField selector="{{StorefrontOrderAndReturnInformationSection.email}}" userInput="{{orderEmail}}" stepKey="fillEmail"/>
+        <click selector="{{StorefrontOrderAndReturnInformationSection.continueButton}}" stepKey="clickContinue"/>
+        <waitForPageLoad stepKey="waitForOrderInformationPageLoad"/>
+        <seeInCurrentUrl url="{{StorefrontOrderInformationPage.url}}" stepKey="seeOrderInformationUrl"/>
+    </actionGroup>
+</actionGroups>

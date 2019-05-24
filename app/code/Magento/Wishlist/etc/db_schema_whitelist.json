@@ -35,8 +35,7 @@
             "PRIMARY": true,
             "WISHLIST_ITEM_WISHLIST_ID_WISHLIST_WISHLIST_ID": true,
             "WISHLIST_ITEM_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID": true,
-            "WISHLIST_ITEM_STORE_ID_STORE_STORE_ID": true,
-            "WISHLIST_ITEM_PRODUCT_ID_SEQUENCE_PRODUCT_SEQUENCE_VALUE": true
+            "WISHLIST_ITEM_STORE_ID_STORE_STORE_ID": true
         }
     },
     "wishlist_item_option": {
@@ -49,7 +48,8 @@
         },
         "constraint": {
             "PRIMARY": true,
-            "FK_A014B30B04B72DD0EAB3EECD779728D6": true
+            "FK_A014B30B04B72DD0EAB3EECD779728D6": true,
+            "WISHLIST_ITEM_OPTION_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID": true
         }
     }
 }

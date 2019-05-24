@@ -8,14 +8,16 @@ namespace Magento\CatalogSearch\Model\Advanced\Request;
 use Magento\Framework\Search\Request\Builder as RequestBuilder;
 
 /**
+ * Catalog search advanced request builder.
+ *
  * @api
  * @since 100.0.2
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
  */
 class Builder extends RequestBuilder
 {
     /**
+     * Bind value to query.
+     *
      * @param string $attributeCode
      * @param array|string $attributeValue
      * @return void

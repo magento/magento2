@@ -144,9 +144,11 @@ class Mcrypt implements EncryptionAdapterInterface
      */
     public function encrypt(string $data): string
     {
-        throw new \Exception(
-            (string)new \Magento\Framework\Phrase('Mcrypt cannot be used for encryption. Use Sodium instead')
-        );
+        if (strlen($data) == 0) {
+            return $data;
+        }
+        // @codingStandardsIgnoreLine
+        return @mcrypt_generic($this->getHandle(), $data);
     }
 
     /**

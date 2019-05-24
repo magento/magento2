@@ -9,7 +9,7 @@
     <update handle="customer_account"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Review\Block\Customer\ListCustomer" name="review_customer_list" template="Magento_Review::customer/list.phtml" cacheable="false"/>
+            <block class="Magento\Review\Block\Customer\ListCustomer" name="review_customer_list" template="Magento_Review::customer/list.phtml" cacheable="false" ifconfig="catalog/review/active"/>
         </referenceContainer>
     </body>
 </page>

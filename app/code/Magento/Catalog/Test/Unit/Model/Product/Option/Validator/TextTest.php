@@ -19,6 +19,11 @@ class TextTest extends \PHPUnit\Framework\TestCase
     protected $valueMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $localeFormatMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -26,6 +31,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
         $configMock = $this->createMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
         $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $priceConfigMock = new \Magento\Catalog\Model\Config\Source\Product\Options\Price($storeManagerMock);
+        $this->localeFormatMock = $this->createMock(\Magento\Framework\Locale\FormatInterface::class);
         $config = [
             [
                 'label' => 'group label 1',
@@ -53,7 +59,8 @@ class TextTest extends \PHPUnit\Framework\TestCase
         $this->valueMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Option::class, $methods);
         $this->validator = new \Magento\Catalog\Model\Product\Option\Validator\Text(
             $configMock,
-            $priceConfigMock
+            $priceConfigMock,
+            $this->localeFormatMock
         );
     }
 
@@ -69,6 +76,10 @@ class TextTest extends \PHPUnit\Framework\TestCase
         $this->valueMock->method('getPrice')
             ->willReturn(10);
         $this->valueMock->expects($this->once())->method('getMaxCharacters')->will($this->returnValue(10));
+        $this->localeFormatMock->expects($this->exactly(2))
+            ->method('getNumber')
+            ->with($this->equalTo(10))
+            ->will($this->returnValue(10));
         $this->assertTrue($this->validator->isValid($this->valueMock));
         $this->assertEmpty($this->validator->getMessages());
     }
@@ -85,6 +96,15 @@ class TextTest extends \PHPUnit\Framework\TestCase
         $this->valueMock->method('getPrice')
             ->willReturn(10);
         $this->valueMock->expects($this->once())->method('getMaxCharacters')->will($this->returnValue(-10));
+        $this->localeFormatMock->expects($this->at(0))
+            ->method('getNumber')
+            ->with($this->equalTo(10))
+            ->will($this->returnValue(10));
+        $this->localeFormatMock
+            ->expects($this->at(1))
+            ->method('getNumber')
+            ->with($this->equalTo(-10))
+            ->will($this->returnValue(-10));
         $messages = [
             'option values' => 'Invalid option value',
         ];

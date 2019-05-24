@@ -115,6 +115,7 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
         } else {
             $miniShoppingCart->getCartItem($newProduct)->clickEditItem();
             $this->catalogProductView->getViewBlock()->addToCart($newProduct);
+            $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
         }
         // Prepare data for asserts:
         $cart['data']['items'] = ['products' => [$newProduct]];

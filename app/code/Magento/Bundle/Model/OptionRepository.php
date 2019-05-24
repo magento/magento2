@@ -90,7 +90,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($sku, $optionId)
     {
@@ -106,23 +106,24 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
 
         $productLinks = $this->linkManagement->getChildren($product->getSku(), $optionId);
 
-        /** @var \Magento\Bundle\Api\Data\OptionInterface $option */
+        /** @var \Magento\Bundle\Api\Data\OptionInterface $optionDataObject */
         $optionDataObject = $this->optionFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $optionDataObject,
             $option->getData(),
             \Magento\Bundle\Api\Data\OptionInterface::class
         );
-        $optionDataObject->setOptionId($option->getId())
-            ->setTitle($option->getTitle() === null ? $option->getDefaultTitle() : $option->getTitle())
-            ->setSku($product->getSku())
-            ->setProductLinks($productLinks);
+
+        $optionDataObject->setOptionId($option->getId());
+        $optionDataObject->setTitle($option->getTitle() === null ? $option->getDefaultTitle() : $option->getTitle());
+        $optionDataObject->setSku($product->getSku());
+        $optionDataObject->setProductLinks($productLinks);
 
         return $optionDataObject;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList($sku)
     {
@@ -131,6 +132,8 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     }
 
     /**
+     * Return list of product options
+     *
      * @param ProductInterface $product
      * @return \Magento\Bundle\Api\Data\OptionInterface[]
      */
@@ -140,7 +143,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(\Magento\Bundle\Api\Data\OptionInterface $option)
     {
@@ -156,20 +159,19 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($sku, $optionId)
     {
-        $product = $this->getProduct($sku);
-        $optionCollection = $this->type->getOptionsCollection($product);
-        $optionCollection->setIdFilter($optionId);
-        $hasBeenDeleted = $this->delete($optionCollection->getFirstItem());
+        /** @var \Magento\Bundle\Api\Data\OptionInterface $option */
+        $option = $this->get($sku, $optionId);
+        $hasBeenDeleted = $this->delete($option);
 
         return $hasBeenDeleted;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -189,6 +191,9 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param \Magento\Bundle\Api\Data\OptionInterface $option
      * @return $this
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     protected function updateOptionSelection(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -228,9 +233,12 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     }
 
     /**
+     * Retrieve product by SKU
+     *
      * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductInterface
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     private function getProduct($sku)
     {

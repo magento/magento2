@@ -10,6 +10,9 @@
         <tab id="catalog" translate="label" sortOrder="200">
             <label>Catalog</label>
         </tab>
+        <tab id="advanced" translate="label" sortOrder="999999">
+            <label>Advanced</label>
+        </tab>
         <section id="catalog" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
             <class>separator-top</class>
             <label>Catalog</label>
@@ -56,7 +59,7 @@
                 <field id="grid_per_page_values" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Products per Page on Grid Allowed Values</label>
                     <comment>Comma-separated.</comment>
-                    <validate>validate-per-page-value-list</validate>
+                    <validate>validate-per-page-value-list required-entry</validate>
                 </field>
                 <field id="grid_per_page" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Products per Page on Grid Default Value</label>
@@ -66,7 +69,7 @@
                 <field id="list_per_page_values" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Products per Page on List Allowed Values</label>
                     <comment>Comma-separated.</comment>
-                    <validate>validate-per-page-value-list</validate>
+                    <validate>validate-per-page-value-list required-entry</validate>
                 </field>
                 <field id="list_per_page" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Products per Page on List Default Value</label>
@@ -83,13 +86,19 @@
                     <backend_model>Magento\Catalog\Model\Indexer\Product\Flat\System\Config\Mode</backend_model>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="default_sort_by" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="default_sort_by" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Product Listing Sort by</label>
+                    <comment>Applies to category pages</comment>
                     <source_model>Magento\Catalog\Model\Config\Source\ListSort</source_model>
                 </field>
                 <field id="list_allow_all" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allow All Products per Page</label>
                     <comment>Whether to show "All" option in the "Show X Per Page" dropdown</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="remember_pagination" translate="label comment" type="select" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Remember Category Pagination</label>
+                    <comment>Changing may affect SEO and cache storage consumption.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
@@ -105,14 +114,14 @@
             </group>
             <group id="seo" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Search Engine Optimization</label>
-                <field id="title_separator" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="title_separator" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Page Title Separator</label>
                 </field>
-                <field id="category_canonical_tag" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="category_canonical_tag" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Use Canonical Link Meta Tag For Categories</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="product_canonical_tag" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="product_canonical_tag" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Use Canonical Link Meta Tag For Products</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
@@ -190,6 +199,20 @@
                 <field id="default_category_layout" translate="label" type="select" sortOrder="20" showInDefault="1">
                     <label>Default Category Layout</label>
                     <source_model>Magento\Catalog\Model\Config\Source\LayoutList</source_model>
+                </field>
+            </group>
+        </section>
+        <section id="system" translate="label" type="text" sortOrder="900" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>System</label>
+            <tab>advanced</tab>
+            <resource>Magento_Config::config_system</resource>
+            <group id="upload_configuration" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Images Upload Configuration</label>
+                <field id="jpeg_quality" translate="label comment" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Quality</label>
+                    <validate>validate-digits validate-digits-range digits-range-1-100 required-entry</validate>
+                    <comment>Jpeg quality for resized images 1-100%.</comment>
                 </field>
             </group>
         </section>

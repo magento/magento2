@@ -876,7 +876,7 @@ class Multishipping extends \Magento\Framework\DataObject
      */
     public function save()
     {
-        $this->getQuote()->collectTotals();
+        $this->getQuote()->setTotalsCollectedFlag(false)->collectTotals();
         $this->quoteRepository->save($this->getQuote());
         return $this;
     }
@@ -899,13 +899,23 @@ class Multishipping extends \Magento\Framework\DataObject
      */
     public function validateMinimumAmount()
     {
-        return !($this->_scopeConfig->isSetFlag(
+        $minimumOrderActive = $this->_scopeConfig->isSetFlag(
             'sales/minimum_order/active',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) && $this->_scopeConfig->isSetFlag(
+        );
+
+        $minimumOrderMultiFlag = $this->_scopeConfig->isSetFlag(
             'sales/minimum_order/multi_address',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) && !$this->getQuote()->validateMinimumAmount());
+        );
+
+        if ($minimumOrderMultiFlag) {
+            $result = !($minimumOrderActive && !$this->getQuote()->validateMinimumAmount());
+        } else {
+            $result = !($minimumOrderActive && !$this->validateMinimumAmountForAddressItems());
+        }
+
+        return $result;
     }
 
     /**
@@ -1124,6 +1134,44 @@ class Multishipping extends \Magento\Framework\DataObject
     }
 
     /**
+     * Validate minimum amount for "Checkout with Multiple Addresses" when
+     * "Validate Each Address Separately in Multi-address Checkout" is No.
+     *
+     * @return bool
+     */
+    private function validateMinimumAmountForAddressItems()
+    {
+        $result = true;
+        $storeId = $this->getQuote()->getStoreId();
+
+        $minAmount = $this->_scopeConfig->getValue(
+            'sales/minimum_order/amount',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        $taxInclude = $this->_scopeConfig->getValue(
+            'sales/minimum_order/tax_including',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+
+        $this->getQuote()->collectTotals();
+        $addresses = $this->getQuote()->getAllAddresses();
+
+        $baseTotal = 0;
+        foreach ($addresses as $address) {
+            $taxes = $taxInclude ? $address->getBaseTaxAmount() : 0;
+            $baseTotal += $address->getBaseSubtotalWithDiscount() + $taxes;
+        }
+
+        if ($baseTotal < $minAmount) {
+            $result = false;
+        }
+
+        return $result;
+    }
+
+    /**
      * Remove successfully placed items from quote.
      *
      * @param \Magento\Quote\Model\Quote\Address[] $shippingAddresses
@@ -1134,7 +1182,7 @@ class Multishipping extends \Magento\Framework\DataObject
     {
         foreach ($shippingAddresses as $address) {
             foreach ($address->getAllItems() as $addressItem) {
-                if (in_array($addressItem->getId(), $placedAddressItems)) {
+                if (in_array($addressItem->getQuoteItemId(), $placedAddressItems)) {
                     if ($addressItem->getProduct()->getIsVirtual()) {
                         $addressItem->isDeleted(true);
                     } else {
@@ -1184,7 +1232,7 @@ class Multishipping extends \Magento\Framework\DataObject
         $item = array_pop($items);
         foreach ($addresses as $address) {
             foreach ($address->getAllItems() as $addressItem) {
-                if ($addressItem->getId() == $item->getQuoteItemId()) {
+                if ($addressItem->getQuoteItemId() == $item->getQuoteItemId()) {
                     return (int)$address->getId();
                 }
             }

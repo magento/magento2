@@ -25,6 +25,7 @@ define([
             }
         },
         scrollHeight: 0,
+        shoppingCartUrl: window.checkout.shoppingCartUrl,
 
         /**
          * Create sidebar.
@@ -227,6 +228,10 @@ define([
 
             if (!_.isUndefined(productData)) {
                 $(document).trigger('ajax:updateCartItemQty');
+
+                if (window.location.href === this.shoppingCartUrl) {
+                    window.location.reload(false);
+                }
             }
             this._hideItemButton(elem);
         },
