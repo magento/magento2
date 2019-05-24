@@ -13,6 +13,7 @@ use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch6\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\Search\Request\Builder;
 use Magento\Framework\Search\Request\Config as RequestConfig;
 use Magento\Framework\Search\Response\QueryResponse;
@@ -58,6 +59,12 @@ class AttributeSearchWeightTest extends TestCase
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
     }
 
+    /**
+     * @param string $attributeName
+     * @param int $searchWeight
+     * @throws NoSuchEntityException
+     * @throws StateException
+     */
     private function setAttributeSearchWeight(string $attributeName, int $searchWeight)
     {
         /** @var AttributeRepositoryInterface $attributeRepository */
@@ -119,20 +126,20 @@ class AttributeSearchWeightTest extends TestCase
      * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix composite_product_search
      * @magentoDataFixture Magento/CatalogSearch/_files/products_for_sku_search_weight_score.php
-     * @param $searchQuery
-     * @param $skuSearchWeight
-     * @param $nameSearchWeight
-     * @param $firstMatchProductName
-     * @param $secondMatchProductName
+     * @param string $searchQuery
+     * @param int $skuSearchWeight
+     * @param int $nameSearchWeight
+     * @param string $firstMatchProductName
+     * @param string $secondMatchProductName
      * @throws NoSuchEntityException
      * @throws \Throwable
      */
     public function testSkuOverNameAttributeSearchWeight(
-        $searchQuery,
-        $skuSearchWeight,
-        $nameSearchWeight,
-        $firstMatchProductName,
-        $secondMatchProductName
+        string $searchQuery,
+        int $skuSearchWeight,
+        int $nameSearchWeight,
+        string $firstMatchProductName,
+        string $secondMatchProductName
     ) {
         $this->setAttributeSearchWeight('sku', $skuSearchWeight);
         $this->setAttributeSearchWeight('name', $nameSearchWeight);
@@ -159,7 +166,7 @@ class AttributeSearchWeightTest extends TestCase
         );
     }
 
-    public function skuOverNameAttributeSearchWeightDataProvider()
+    public function skuOverNameAttributeSearchWeightDataProvider(): array
     {
         return [
             ['1-2-3-4', 10, 5, 'test', '1-2-3-4'],
