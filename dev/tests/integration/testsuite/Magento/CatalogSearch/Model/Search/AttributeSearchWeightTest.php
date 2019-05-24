@@ -29,6 +29,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test for name over sku search weight of product attributes
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
