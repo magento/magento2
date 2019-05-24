@@ -428,6 +428,15 @@
         </arguments>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{categoryName}}]" stepKey="searchAndSelectCategory"/>
     </actionGroup>
+    <!--Remove category from product in ProductFrom Page-->
+    <actionGroup name="removeCategoryFromProduct">
+        <arguments>
+            <argument name="categoryName" type="string" defaultValue="{{_defaultCategory.name}}"/>
+        </arguments>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
+        <click selector="{{AdminProductFormSection.unselectCategories(categoryName)}}" stepKey="unselectCategories"/>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategory"/>
+    </actionGroup>
 
     <actionGroup name="expandAdminProductSection">
         <arguments>
