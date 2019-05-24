@@ -15,7 +15,7 @@
             <title value="Conflict resolution for PayPal in United Kingdom"/>
             <description value="A popup should show when enabling different paypal solutions when one is already enabled for merchant country United Kingdom"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-13146"/>
+            <testCaseId value="MC-16679"/>
             <group value="paypal"/>
         </annotations>
         <before>
@@ -120,7 +120,7 @@
             <title value="Conflict resolution for PayPal in France"/>
             <description value="A popup should show when enabling different paypal solutions when one is already enabled for merchant country France"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-13146"/>
+            <testCaseId value="MC-16675"/>
             <group value="paypal"/>
         </annotations>
         <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="France" stepKey="setMerchantCountry"/>
@@ -160,7 +160,7 @@
             <title value="Conflict resolution for PayPal in Hong Kong"/>
             <description value="A popup should show when enabling different paypal solutions when one is already enabled for merchant country Hong Kong"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-13146"/>
+            <testCaseId value="MC-16676"/>
             <group value="paypal"/>
         </annotations>
         <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="Hong Kong SAR China" stepKey="setMerchantCountry"/>
@@ -200,7 +200,7 @@
             <title value="Conflict resolution for PayPal in Italy"/>
             <description value="A popup should show when enabling different paypal solutions when one is already enabled for merchant country Italy"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-13146"/>
+            <testCaseId value="MC-16677"/>
             <group value="paypal"/>
         </annotations>
         <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="Italy" stepKey="setMerchantCountry"/>
@@ -240,7 +240,7 @@
             <title value="Conflict resolution for PayPal in Spain"/>
             <description value="A popup should show when enabling different paypal solutions when one is already enabled for merchant country Spain"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-13146"/>
+            <testCaseId value="MC-16678"/>
             <group value="paypal"/>
         </annotations>
         <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="Spain" stepKey="setMerchantCountry"/>
