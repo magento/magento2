@@ -58,6 +58,8 @@ class SetPaymentMethodOnCart
      * @param PaypalExpressAdditionalDataProvider $paypalExpressAdditionalDataProvider
      * @param ArrayManager $arrayManager
      * @param CheckoutProvider $checkoutProvider
+     * @param ConfigProvider $configProvider
+     * @param array $allowedPaymentMethodCodes
      */
     public function __construct(
         CheckoutFactory $checkoutFactory,

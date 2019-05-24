@@ -30,7 +30,9 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
      */
     private $json;
 
-    /** @var QuoteIdToMaskedQuoteId */
+    /**
+     * @var QuoteIdToMaskedQuoteId
+     */
     private $quoteIdToMaskedId;
 
     protected function setUp()
@@ -176,19 +178,21 @@ QUERY;
             ->expects($this->at(2))
             ->method('call')
             ->with(Nvp::DO_EXPRESS_CHECKOUT_PAYMENT, $paypalRequestPlaceOrder)
-            ->willReturn([
-                'RESULT' => '0',
-                'PNREF' => 'B7PPAC033FF2',
-                'RESPMSG' => 'Approved',
-                'AVSADDR' => 'Y',
-                'AVSZIP' => 'Y',
-                'TOKEN' => $token,
-                'PAYERID' => $payerId,
-                'PPREF' => '7RK43642T8939154L',
-                'CORRELATIONID' => $correlationId,
-                'PAYMENTTYPE' => 'instant',
-                'PENDINGREASON' => 'authorization',
-            ]);
+            ->willReturn(
+                [
+                    'RESULT' => '0',
+                    'PNREF' => 'B7PPAC033FF2',
+                    'RESPMSG' => 'Approved',
+                    'AVSADDR' => 'Y',
+                    'AVSZIP' => 'Y',
+                    'TOKEN' => $token,
+                    'PAYERID' => $payerId,
+                    'PPREF' => '7RK43642T8939154L',
+                    'CORRELATIONID' => $correlationId,
+                    'PAYMENTTYPE' => 'instant',
+                    'PENDINGREASON' => 'authorization',
+                ]
+            );
 
         $response = $this->graphqlController->dispatch($this->request);
         $responseData = $this->json->unserialize($response->getContent());
