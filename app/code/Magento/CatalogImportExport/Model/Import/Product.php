@@ -1000,10 +1000,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function deleteProductsForReplacement()
     {
-        $this->setParameters(array_merge(
-            $this->getParameters(),
-            ['behavior' => Import::BEHAVIOR_DELETE]
-        ));
+        $this->setParameters(
+            array_merge(
+                $this->getParameters(),
+                ['behavior' => Import::BEHAVIOR_DELETE]
+            )
+        );
         $this->_deleteProducts();
 
         return $this;
@@ -1092,10 +1094,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->deleteProductsForReplacement();
         $this->_oldSku = $this->skuProcessor->reloadOldSkus()->getOldSkus();
         $this->_validatedRows = null;
-        $this->setParameters(array_merge(
-            $this->getParameters(),
-            ['behavior' => Import::BEHAVIOR_APPEND]
-        ));
+        $this->setParameters(
+            array_merge(
+                $this->getParameters(),
+                ['behavior' => Import::BEHAVIOR_APPEND]
+            )
+        );
         $this->_saveProductsData();
 
         return $this;
@@ -2626,9 +2630,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return explode($delimiter, $values);
         }
         if (preg_match_all('~"((?:[^"]|"")*)"~', $values, $matches)) {
-            return $values = array_map(function ($value) {
-                return str_replace('""', '"', $value);
-            }, $matches[1]);
+            return $values = array_map(
+                function ($value) {
+                    return str_replace('""', '"', $value);
+                },
+                $matches[1]
+            );
         }
         return [$values];
     }
@@ -3053,20 +3060,27 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $productId = $this->skuProcessor->getNewSku($sku)[$this->getProductEntityLinkField()];
             $productIds[] = $productId;
             $productLinkKeys = $this->fetchProductLinks($resource, $productId);
-            $linkNameToId = array_filter($this->_linkNameToId, function ($linkName) use ($rowData) {
-                return isset($rowData[$linkName . 'sku']);
-            }, ARRAY_FILTER_USE_KEY);
+            $linkNameToId = array_filter(
+                $this->_linkNameToId,
+                function ($linkName) use ($rowData) {
+                    return isset($rowData[$linkName . 'sku']);
+                },
+                ARRAY_FILTER_USE_KEY
+            );
             foreach ($linkNameToId as $linkName => $linkId) {
                 $linkSkus = explode($this->getMultipleValueSeparator(), $rowData[$linkName . 'sku']);
                 $linkPositions = !empty($rowData[$linkName . 'position'])
                     ? explode($this->getMultipleValueSeparator(), $rowData[$linkName . 'position'])
                     : [];
 
-                $linkSkus = array_filter($linkSkus, function ($linkedSku) use ($sku) {
-                    $linkedSku = trim($linkedSku);
-                    return ($this->skuProcessor->getNewSku($linkedSku) !== null || $this->isSkuExist($linkedSku))
-                        && strcasecmp($linkedSku, $sku) !== 0;
-                });
+                $linkSkus = array_filter(
+                    $linkSkus,
+                    function ($linkedSku) use ($sku) {
+                        $linkedSku = trim($linkedSku);
+                        return ($this->skuProcessor->getNewSku($linkedSku) !== null || $this->isSkuExist($linkedSku))
+                            && strcasecmp($linkedSku, $sku) !== 0;
+                    }
+                );
                 foreach ($linkSkus as $linkedKey => $linkedSku) {
                     $linkedId = $this->getProductLinkedId($linkedSku);
                     if ($linkedId == null) {
