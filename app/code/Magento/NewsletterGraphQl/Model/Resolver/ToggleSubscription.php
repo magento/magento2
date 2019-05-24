@@ -1,13 +1,11 @@
 <?php
 /**
- * @author Francois Loermans <floermans@emico.nl>
- * @copyright (c) Emico B.V. 2019
- *
- * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 declare(strict_types = 1);
 
-namespace Emico\NewsletterGraphQl\Model\Resolver;
+namespace Magento\NewsletterGraphQl\Model\Resolver;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;

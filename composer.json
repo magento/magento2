@@ -190,6 +190,7 @@
         "magento/module-mysql-mq": "*",
         "magento/module-new-relic-reporting": "*",
         "magento/module-newsletter": "*",
+        "magento/module-newsletter-graph-ql": "*",
         "magento/module-offline-payments": "*",
         "magento/module-offline-shipping": "*",
         "magento/module-page-cache": "*",
