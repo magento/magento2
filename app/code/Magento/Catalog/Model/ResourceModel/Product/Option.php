@@ -113,7 +113,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
 
-            if ((int)$object->getStoreId() != Store::DEFAULT_STORE_ID && $scope === Store::PRICE_SCOPE_WEBSITE) {
+            if ((int)$object->getStoreId() !== Store::DEFAULT_STORE_ID && $scope === Store::PRICE_SCOPE_WEBSITE) {
                 $storeIds = $this->_storeManager->getStore($object->getStoreId())->getWebsite()->getStoreIds();
                 if (empty($storeIds)) {
                     return $this;
