@@ -401,3 +401,15 @@ type SortFields @doc(description: "SortFields contains a default value for sort 
     default: String @doc(description: "Default value of sort fields")
     options: [SortField] @doc(description: "Available sort fields")
 }
+
+type StoreConfig @doc(description: "The type contains information about a store config") {
+    product_url_suffix : String @doc(description: "Product URL Suffix")
+    category_url_suffix : String @doc(description: "Category URL Suffix")
+    title_separator : String @doc(description: "Page Title Separator")
+    list_mode : String @doc(description: "List Mode")
+    grid_per_page_values : String @doc(description: "Products per Page on Grid Allowed Values")
+    list_per_page_values : String @doc(description: "Products per Page on List Allowed Values")
+    grid_per_page : Int @doc(description: "Products per Page on Grid Default Value")
+    list_per_page : Int @doc(description: "Products per Page on List Default Value")
+    catalog_default_sort_by : String @doc(description: "Default Sort By")
+}
