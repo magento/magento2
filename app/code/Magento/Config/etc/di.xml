@@ -110,7 +110,7 @@
                 <item name="scopes" xsi:type="string">system_scopes</item>
             </argument>
             <argument name="lockId" xsi:type="const">Magento\Config\App\Config\Type\System::LOCK_NAME</argument>
-            <argument name="lockManager" xsi:type="object">Magento\Framework\Lock\Backend\Cache</argument>
+            <argument name="lockManager" xsi:type="object">Magento\Framework\Lock\Proxy</argument>
         </arguments>
     </virtualType>
 
