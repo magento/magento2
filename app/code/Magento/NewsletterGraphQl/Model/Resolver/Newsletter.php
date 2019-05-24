@@ -1,9 +1,7 @@
 <?php
 /**
- * @author Francois Loermans <floermans@emico.nl>
- * @copyright (c) Emico B.V. 2019
- *
- * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 declare(strict_types = 1);
 
@@ -37,16 +35,7 @@ class Newsletter implements ResolverInterface
     }
 
     /**
-     * @param Field            $field
-     * @param ContextInterface $context
-     * @param ResolveInfo      $info
-     * @param array|null       $value
-     * @param array|null       $args
-     * @return array|\Magento\Framework\GraphQl\Query\Resolver\Value|mixed
-     * @throws GraphQlNoSuchEntityException
-     * phpcs:disable SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
-     * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceBeforeLastUsed
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
     public function resolve(
         Field $field,

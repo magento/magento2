@@ -7,7 +7,7 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\NewsletterGraphQl\Model\Resolver;
+namespace Emico\NewsletterGraphQl\Model\Resolver;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -37,16 +37,7 @@ class ToggleSubscription implements ResolverInterface
     }
 
     /**
-     * @param Field            $field
-     * @param ContextInterface $context
-     * @param ResolveInfo      $info
-     * @param array|null       $value
-     * @param array|null       $args
-     * @return array
-     * @throws GraphQlNoSuchEntityException
-     * phpcs:disable SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
-     * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceBeforeLastUsed
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
