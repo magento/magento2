@@ -358,13 +358,15 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     {
         $quote = $this->quoteRepository->getActive($cartId);
         if ($paymentMethod) {
-            $paymentMethod->setChecks([
-                \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_CHECKOUT,
-                \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY,
-                \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY,
-                \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
-                \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL,
-            ]);
+            $paymentMethod->setChecks(
+                [
+                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_CHECKOUT,
+                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY,
+                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY,
+                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
+                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL
+                ]
+            );
             $quote->getPayment()->setQuote($quote);
 
             $data = $paymentMethod->getData();
