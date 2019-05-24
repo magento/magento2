@@ -6,62 +6,100 @@
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\File;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Downloadable\Controller\Adminhtml\Downloadable\File;
+use Magento\Backend\App\Action\Context;
+use Magento\Downloadable\Model\Link;
+use Magento\Downloadable\Model\Sample;
+use Magento\Downloadable\Helper\File as FileHelper;
+use Magento\MediaStorage\Model\File\UploaderFactory;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\State;
 
-class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\File
+/**
+ * Upload controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Upload extends File
 {
     /**
-     * @var \Magento\Downloadable\Model\Link
+     * @var Link
      */
-    protected $_link;
+    protected $link;
 
     /**
-     * @var \Magento\Downloadable\Model\Sample
+     * @var Sample
      */
-    protected $_sample;
+    protected $sample;
 
     /**
      * Downloadable file helper.
      *
-     * @var \Magento\Downloadable\Helper\File
+     * @var FileHelper
      */
-    protected $_fileHelper;
+    protected $fileHelper;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\UploaderFactory
+     * @var UploaderFactory
      */
     private $uploaderFactory;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @var Database
      */
     private $storageDatabase;
 
     /**
+     * @var State
+     */
+    private $state;
+
+    /**
+     * Construct Upload controller
      *
-     * Copyright © Magento, Inc. All rights reserved.
-     * See COPYING.txt for license details.
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Downloadable\Model\Link $link
-     * @param \Magento\Downloadable\Model\Sample $sample
-     * @param \Magento\Downloadable\Helper\File $fileHelper
-     * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
-     * @param \Magento\MediaStorage\Helper\File\Storage\Database $storageDatabase
+     * @param Context $context
+     * @param Link $link
+     * @param Sample $sample
+     * @param FileHelper $fileHelper
+     * @param UploaderFactory $uploaderFactory
+     * @param Database $storageDatabase
+     * @param State $state
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Downloadable\Model\Link $link,
-        \Magento\Downloadable\Model\Sample $sample,
-        \Magento\Downloadable\Helper\File $fileHelper,
-        \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
-        \Magento\MediaStorage\Helper\File\Storage\Database $storageDatabase
+        Context $context,
+        Link $link,
+        Sample $sample,
+        FileHelper $fileHelper,
+        UploaderFactory $uploaderFactory,
+        Database $storageDatabase,
+        State $state = null
     ) {
         parent::__construct($context);
-        $this->_link = $link;
-        $this->_sample = $sample;
-        $this->_fileHelper = $fileHelper;
+        $this->link = $link;
+        $this->sample = $sample;
+        $this->fileHelper = $fileHelper;
         $this->uploaderFactory = $uploaderFactory;
         $this->storageDatabase = $storageDatabase;
+        $this->state = $state ? $state : ObjectManager::getInstance()->get(State::class);
+    }
+
+    /**
+     * Dispatch request
+     *
+     * @param RequestInterface $request
+     * @return \Magento\Framework\App\ResponseInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function dispatch(RequestInterface $request)
+    {
+        if ($this->state->getAreaCode() !== 'adminhtml') {
+            return $this->_redirect($this->_redirect->getRefererUrl());
+        }
+
+        return parent::dispatch($request);
     }
 
     /**
@@ -74,17 +112,17 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
         $type = $this->getRequest()->getParam('type');
         $tmpPath = '';
         if ($type == 'samples') {
-            $tmpPath = $this->_sample->getBaseTmpPath();
+            $tmpPath = $this->sample->getBaseTmpPath();
         } elseif ($type == 'links') {
-            $tmpPath = $this->_link->getBaseTmpPath();
+            $tmpPath = $this->link->getBaseTmpPath();
         } elseif ($type == 'link_samples') {
-            $tmpPath = $this->_link->getBaseSampleTmpPath();
+            $tmpPath = $this->link->getBaseSampleTmpPath();
         }
 
         try {
             $uploader = $this->uploaderFactory->create(['fileId' => $type]);
 
-            $result = $this->_fileHelper->uploadFromTmp($tmpPath, $uploader);
+            $result = $this->fileHelper->uploadFromTmp($tmpPath, $uploader);
 
             if (!$result) {
                 throw new \Exception('File can not be moved from temporary folder to the destination folder.');
