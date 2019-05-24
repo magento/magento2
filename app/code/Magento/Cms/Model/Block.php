@@ -41,6 +41,8 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
     protected $_eventPrefix = 'cms_block';
 
     /**
+     * Construct.
+     *
      * @return void
      */
     protected function _construct()
