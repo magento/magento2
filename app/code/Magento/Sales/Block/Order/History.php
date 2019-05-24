@@ -149,10 +149,13 @@ class History extends \Magento\Framework\View\Element\Template
     /**
      * @param object $order
      * @return string
+     * @deprecated Action does not exist
      */
     public function getTrackUrl($order)
     {
-        return $this->getUrl('sales/order/track', ['order_id' => $order->getId()]);
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        trigger_error('Method is deprecated', E_USER_DEPRECATED);
+        return '';
     }
 
     /**

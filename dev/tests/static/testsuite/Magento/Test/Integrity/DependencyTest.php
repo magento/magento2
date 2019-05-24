@@ -17,6 +17,7 @@ use Magento\TestFramework\Dependency\LayoutRule;
 use Magento\TestFramework\Dependency\PhpRule;
 use Magento\TestFramework\Dependency\ReportsConfigRule;
 use Magento\TestFramework\Dependency\AnalyticsConfigRule;
+use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 
 /**
@@ -67,17 +68,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     protected static $_listConfigXml = [];
 
     /**
-     * List of routes.xml files by modules
-     *
-     * Format: array(
-     *  '{Module_Name}' => '{Filename}'
-     * )
-     *
-     * @var array
-     */
-    protected static $_listRoutesXml = [];
-
-    /**
      * List of analytics.xml
      *
      * Format: array(
@@ -87,17 +77,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * @var array
      */
     protected static $_listAnalyticsXml = [];
-
-    /**
-     * List of routers
-     *
-     * Format: array(
-     *  '{Router}' => '{Module_Name}'
-     * )
-     *
-     * @var array
-     */
-    protected static $_mapRouters = [];
 
     /**
      * List of layout blocks
@@ -168,7 +147,14 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     private static $whiteList = [];
 
     /**
+     * @var RouteMapper
+     */
+    private static $routeMapper = null;
+
+    /**
      * Sets up data
+     *
+     * @throws \Exception
      */
     public static function setUpBeforeClass()
     {
@@ -181,13 +167,12 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             );
         }
 
+        self::$routeMapper = new RouteMapper();
         self::$_namespaces = implode('|', Files::init()->getNamespaces());
 
         self::_prepareListConfigXml();
-        self::_prepareListRoutesXml();
         self::_prepareListAnalyticsXml();
 
-        self::_prepareMapRouters();
         self::_prepareMapLayoutBlocks();
         self::_prepareMapLayoutHandles();
 
@@ -232,20 +217,23 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Create rules objects
+     *
+     * @throws \Exception
      */
     protected static function _initRules()
     {
-        $replaceFilePattern = str_replace('\\', '/', realpath(__DIR__)) . '/_files/dependency_test/tables_*.php';
+        $replaceFilePattern = str_replace('\\', '/', realpath(__DIR__))
+            . '/_files/dependency_test/tables_*.php';
         $dbRuleTables = [];
         foreach (glob($replaceFilePattern) as $fileName) {
             //phpcs:ignore Generic.PHP.NoSilencedErrors
             $dbRuleTables = array_merge($dbRuleTables, @include $fileName);
         }
         self::$_rulesInstances = [
-            new PhpRule(self::$_mapRouters, self::$_mapLayoutBlocks),
+            new PhpRule(self::$routeMapper->getRoutes(), self::$_mapLayoutBlocks),
             new DbRule($dbRuleTables),
             new LayoutRule(
-                self::$_mapRouters,
+                self::$routeMapper->getRoutes(),
                 self::$_mapLayoutBlocks,
                 self::$_mapLayoutHandles
             ),
@@ -298,6 +286,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @inheritdoc
+     * @throws \Exception
      */
     public function testUndeclared()
     {
@@ -440,13 +429,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     {
         $schemaDependencyProvider = new DeclarativeSchemaDependencyProvider();
 
-        /** TODO: Remove this temporary solution after MC-5806 is closed */
-        $filePattern = __DIR__ . '/_files/dependency_test/undetected_dependencies_*.php';
-        $undetectedDependencies = [];
-        foreach (glob($filePattern) as $fileName) {
-            $undetectedDependencies = array_merge($undetectedDependencies, require $fileName);
-        }
-
         foreach (array_keys(self::$mapDependencies) as $module) {
             $declared = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
             $found = array_merge(
@@ -454,10 +436,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 $this->_getDependencies($module, self::TYPE_SOFT, self::MAP_TYPE_FOUND),
                 $schemaDependencyProvider->getDeclaredExistingModuleDependencies($module)
             );
-            /** TODO: Remove this temporary solution after MC-5806 is closed */
-            if (!empty($undetectedDependencies[$module])) {
-                $found = array_merge($found, $undetectedDependencies[$module]);
-            }
 
             $found['Magento\Framework'] = 'Magento\Framework';
             $this->_setDependencies($module, self::TYPE_HARD, self::MAP_TYPE_REDUNDANT, array_diff($declared, $found));
@@ -557,6 +535,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Prepare list of config.xml files (by modules).
+     *
+     * @throws \Exception
      */
     protected static function _prepareListConfigXml()
     {
@@ -570,21 +550,9 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Prepare list of routes.xml files (by modules)
-     */
-    protected static function _prepareListRoutesXml()
-    {
-        $files = Files::init()->getConfigFiles('*/routes.xml', [], false);
-        foreach ($files as $file) {
-            if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
-                $module = $matches['namespace'] . '\\' . $matches['module'];
-                self::$_listRoutesXml[$module][] = $file;
-            }
-        }
-    }
-
-    /**
      * Prepare list of analytics.xml files
+     *
+     * @throws \Exception
      */
     protected static function _prepareListAnalyticsXml()
     {
@@ -598,56 +566,9 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Prepare map of routers
-     */
-    protected static function _prepareMapRouters()
-    {
-        $pattern = '/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)\/Controller\/' .
-            '(?<path>[\/\w]*).php/';
-
-        $files = Files::init()->getPhpFiles(Files::INCLUDE_APP_CODE | Files::INCLUDE_NON_CLASSES);
-        foreach ($files as $file) {
-            if (preg_match($pattern, $file, $matches)) {
-                $module = $matches['namespace'] . '\\' . $matches['module'];
-                if (!empty(self::$_listRoutesXml[$module])) {
-                    foreach (self::$_listRoutesXml[$module] as $configFile) {
-                        self::updateRoutersMap($module, $configFile);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Update routers map for the module basing on the routing config file
-     *
-     * @param string $module
-     * @param string $configFile
-     *
-     * @return void
-     */
-    private static function updateRoutersMap($module, $configFile)
-    {
-        // Read module's routes.xml file
-        $config = simplexml_load_file($configFile);
-        $nodes  = $config->xpath("/config/router/*");
-        foreach ($nodes as $node) {
-            $id = (string)$node['id'];
-            if ($id != 'adminhtml' && '' == (string)$node['frontName']) {
-                // Exclude overridden routers
-                continue;
-            }
-            if (!isset(self::$_mapRouters[$id])) {
-                self::$_mapRouters[$id] = [];
-            }
-            if (!in_array($module, self::$_mapRouters[$id])) {
-                self::$_mapRouters[$id][] = $module;
-            }
-        }
-    }
-
-    /**
      * Prepare map of layout blocks
+     *
+     * @throws \Exception
      */
     protected static function _prepareMapLayoutBlocks()
     {
@@ -676,6 +597,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Prepare map of layout handles
+     *
+     * @throws \Exception
      */
     protected static function _prepareMapLayoutHandles()
     {

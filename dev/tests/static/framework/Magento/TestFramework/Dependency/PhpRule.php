@@ -8,7 +8,12 @@
 namespace Magento\TestFramework\Dependency;
 
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\UrlInterface;
+use Magento\TestFramework\Dependency\Route\RouteMapper;
 
+/**
+ * Rule to check the dependencies between modules based on references, getUrl and layout blocks
+ */
 class PhpRule implements RuleInterface
 {
     /**
@@ -34,7 +39,7 @@ class PhpRule implements RuleInterface
      *
      * @var array
      */
-    protected $_mapRouters = [];
+    private $_mapRouters = [];
 
     /**
      * List of layout blocks
@@ -59,11 +64,15 @@ class PhpRule implements RuleInterface
     ];
 
     /**
-     * Constructor
-     *
+     * @var RouteMapper
+     */
+    private $routeMapper;
+
+    /**
      * @param array $mapRouters
      * @param array $mapLayoutBlocks
      * @param array $pluginMap
+     * @throws \Exception
      */
     public function __construct(array $mapRouters, array $mapLayoutBlocks, array $pluginMap = [])
     {
@@ -71,6 +80,7 @@ class PhpRule implements RuleInterface
         $this->_mapLayoutBlocks = $mapLayoutBlocks;
         $this->_namespaces = implode('|', \Magento\Framework\App\Utility\Files::init()->getNamespaces());
         $this->pluginMap = $pluginMap ?: null;
+        $this->routeMapper = new RouteMapper();
     }
 
     /**
@@ -81,6 +91,7 @@ class PhpRule implements RuleInterface
      * @param string $file
      * @param string $contents
      * @return array
+     * @throws \Exception
      */
     public function getDependencyInfo($currentModule, $fileType, $file, &$contents)
     {
@@ -95,7 +106,7 @@ class PhpRule implements RuleInterface
         );
         $dependenciesInfo = $this->considerCaseDependencies(
             $dependenciesInfo,
-            $this->_caseGetUrl($currentModule, $contents)
+            $this->_caseGetUrl($currentModule, $contents, $file)
         );
         $dependenciesInfo = $this->considerCaseDependencies(
             $dependenciesInfo,
@@ -111,6 +122,7 @@ class PhpRule implements RuleInterface
      * @param string $file
      * @param string $contents
      * @return array
+     * @throws \Exception
      */
     private function caseClassesAndIdentifiers($currentModule, $file, &$contents)
     {
@@ -184,12 +196,14 @@ class PhpRule implements RuleInterface
      * Generate an array of plugin info
      *
      * @return array
+     * @throws \Exception
      */
     private function loadPluginMap()
     {
         if (!$this->pluginMap) {
             foreach ($this->loadDiFiles() as $filepath) {
                 $dom = new \DOMDocument();
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $dom->loadXML(file_get_contents($filepath));
                 $typeNodes = $dom->getElementsByTagName('type');
                 /** @var \DOMElement $type */
@@ -214,6 +228,7 @@ class PhpRule implements RuleInterface
      * @param string $dependent
      * @param string $dependency
      * @return bool
+     * @throws \Exception
      */
     private function isPluginDependency($dependent, $dependency)
     {
@@ -239,10 +254,12 @@ class PhpRule implements RuleInterface
      * @param $currentModule
      * @param $contents
      * @return array
+     * @throws \Exception
      */
     protected function _caseGetUrl($currentModule, &$contents)
     {
-        $pattern = '/[\->:]+(?<source>getUrl\([\'"](?<router>[\w\/*]+)[\'"])/';
+        $pattern = '#(\->|:)(?<source>getUrl\(([\'"])(?<route_id>[a-z0-9\-_]{3,})/'
+            .'(?<controller_name>[a-z0-9\-_]+)(/(?<action_name>[a-z0-9\-_]+))?\3)#i';
 
         $dependencies = [];
         if (!preg_match_all($pattern, $contents, $matches, PREG_SET_ORDER)) {
@@ -250,18 +267,17 @@ class PhpRule implements RuleInterface
         }
 
         foreach ($matches as $item) {
-            $router = str_replace('/', '\\', $item['router']);
-            if (isset($this->_mapRouters[$router])) {
-                $modules = $this->_mapRouters[$router];
-                if (!in_array($currentModule, $modules)) {
-                    foreach ($modules as $module) {
-                        $dependencies[] = [
-                            'module' => $module,
-                            'type' => RuleInterface::TYPE_HARD,
-                            'source' => $item['source'],
-                        ];
-                    }
-                }
+            $modules = $this->routeMapper->getDependencyByRoutePath(
+                $item['route_id'],
+                $item['controller_name'],
+                $item['action_name'] ?? UrlInterface::DEFAULT_ACTION_NAME
+            );
+            if (!in_array($currentModule, $modules)) {
+                $dependencies[] = [
+                    'module' => implode(" || ", $modules),
+                    'type' => RuleInterface::TYPE_HARD,
+                    'source' => $item['source'],
+                ];
             }
         }
         return $dependencies;

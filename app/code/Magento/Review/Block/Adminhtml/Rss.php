@@ -45,10 +45,9 @@ class Rss extends \Magento\Backend\Block\AbstractBlock implements DataProviderIn
      */
     public function getRssData()
     {
-        $newUrl = $this->getUrl('rss/catalog/review', ['_secure' => true, '_nosecret' => true]);
         $title = __('Pending product review(s)');
 
-        $data = ['title' => $title, 'description' => $title, 'link' => $newUrl, 'charset' => 'UTF-8'];
+        $data = ['title' => $title, 'description' => $title, 'link' => '', 'charset' => 'UTF-8'];
 
         foreach ($this->rssModel->getProductCollection() as $item) {
             if ($item->getStoreId()) {
