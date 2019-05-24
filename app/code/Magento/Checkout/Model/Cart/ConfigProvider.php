@@ -21,6 +21,11 @@ class ConfigProvider implements \Magento\Framework\View\Element\Block\ArgumentIn
      * @var \Magento\Framework\Serialize\SerializerInterface
      */
     private $serializer;
+
+    /**
+     * @var array
+     */
+    private $providedConfig = null;
     
     /**
      * Config constructor.
@@ -43,7 +48,11 @@ class ConfigProvider implements \Magento\Framework\View\Element\Block\ArgumentIn
      */
     public function getCheckoutConfig()
     {
-        return $this->configProvider->getConfig();
+        if (null === $this->providedConfig) {
+            $this->providedConfig = $this->configProvider->getConfig();
+        }
+
+        return $this->providedConfig;
     }
     
     /**
