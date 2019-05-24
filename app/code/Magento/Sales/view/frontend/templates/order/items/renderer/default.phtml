@@ -25,7 +25,7 @@ $_item = $block->getItem();
                     </dd>
                 <?php else : ?>
                     <dd>
-                        <?= /* @noEscape */ nl2br($block->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value']))) ?>
+                        <?= /* @noEscape */ nl2br($block->escapeHtml($_option['print_value'] ?? $_option['value'])) ?>
                     </dd>
                 <?php endif; ?>
             <?php endforeach; ?>
@@ -46,25 +46,25 @@ $_item = $block->getItem();
         <?php if ($block->getItem()->getQtyOrdered() > 0) : ?>
             <li class="item">
                 <span class="title"><?= $block->escapeHtml(__('Ordered')) ?></span>
-                <span class="content"><?= (int) $block->getItem()->getQtyOrdered()*1 ?></span>
+                <span class="content"><?= (int) $block->getItem()->getQtyOrdered() ?></span>
             </li>
         <?php endif; ?>
         <?php if ($block->getItem()->getQtyShipped() > 0) : ?>
             <li class="item">
                 <span class="title"><?= $block->escapeHtml(__('Shipped')) ?></span>
-                <span class="content"><?= (int) $block->getItem()->getQtyShipped()*1 ?></span>
+                <span class="content"><?= (int) $block->getItem()->getQtyShipped() ?></span>
             </li>
         <?php endif; ?>
         <?php if ($block->getItem()->getQtyCanceled() > 0) : ?>
             <li class="item">
                 <span class="title"><?= $block->escapeHtml(__('Canceled')) ?></span>
-                <span class="content"><?= (int) $block->getItem()->getQtyCanceled()*1 ?></span>
+                <span class="content"><?= (int) $block->getItem()->getQtyCanceled() ?></span>
             </li>
         <?php endif; ?>
         <?php if ($block->getItem()->getQtyRefunded() > 0) : ?>
             <li class="item">
                 <span class="title"><?= $block->escapeHtml(__('Refunded')) ?></span>
-                <span class="content"><?= (int) $block->getItem()->getQtyRefunded()*1 ?></span>
+                <span class="content"><?= (int) $block->getItem()->getQtyRefunded() ?></span>
             </li>
         <?php endif; ?>
         </ul>

@@ -6,7 +6,9 @@
 
 ?>
 <?php $_shipment = $block->getShipment() ?>
-<?php $_order = $block->getOrder() ?>
+<?php
+/* @var \Magento\Sales\Model\Order $_order */
+$_order = $block->getOrder() ?>
 <?php if ($_shipment && $_order) : ?>
     <?php $trackCollection = $_order->getTracksCollection($_shipment->getId()) ?>
     <?php if ($trackCollection) : ?>

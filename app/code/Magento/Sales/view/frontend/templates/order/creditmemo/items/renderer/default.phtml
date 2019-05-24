@@ -29,9 +29,7 @@
                     </dd>
                 <?php else : ?>
                     <dd>
-                        <?= $block->escapeHtml(
-                            (isset($_option['print_value']) ? $_option['print_value'] : $_option['value'])
-                        ) ?>
+                        <?= $block->escapeHtml($_option['print_value'] ?? $_option['value']) ?>
                     </dd>
                 <?php endif; ?>
             <?php endforeach; ?>
@@ -59,7 +57,7 @@
     <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
         <?= $block->getItemPriceHtml() ?>
     </td>
-    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>"><?= (int) $_item->getQty() * 1 ?></td>
+    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>"><?= (int) $_item->getQty() ?></td>
     <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
         <?= $block->getItemRowTotalHtml() ?>
     </td>
