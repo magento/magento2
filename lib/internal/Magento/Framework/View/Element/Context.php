@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\View\Element;
 
+use Magento\Framework\Cache\LockGuardedCacheLoader;
+
 /**
  * Constructor modification point for Magento\Framework\View\Element\AbstractBlock.
  *
@@ -16,8 +18,7 @@ namespace Magento\Framework\View\Element;
  * As Magento moves from inheritance-based APIs all such classes will be deprecated together with
  * the classes they were introduced for.
  *
- * @SuppressWarnings(PHPMD.TooManyFields)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD)
  *
  * @api
  */
@@ -137,11 +138,15 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $inlineTranslation;
 
     /**
+     * @var LockGuardedCacheLoader
+     */
+    private $lockQuery;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Framework\TranslateInterface $translator
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Session\SessionManagerInterface $session
@@ -155,6 +160,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @param LockGuardedCacheLoader $lockQuery
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -175,7 +181,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
+        LockGuardedCacheLoader $lockQuery
     ) {
         $this->_request = $request;
         $this->_layout = $layout;
@@ -194,6 +201,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         $this->_filterManager = $filterManager;
         $this->_localeDate = $localeDate;
         $this->inlineTranslation = $inlineTranslation;
+        $this->lockQuery = $lockQuery;
     }
 
     /**
@@ -357,10 +365,22 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
+     * Get locale date.
+     *
      * @return \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     public function getLocaleDate()
     {
         return $this->_localeDate;
+    }
+
+    /**
+     * Lock guarded cache loader.
+     *
+     * @return LockGuardedCacheLoader
+     */
+    public function getLockGuardedCacheLoader()
+    {
+        return $this->lockQuery;
     }
 }

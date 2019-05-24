@@ -16,11 +16,4 @@ interface ResponseInterface extends \IteratorAggregate, \Countable
      * @return \Magento\Framework\Api\Search\AggregationInterface
      */
     public function getAggregations();
-
-    /**
-     * Return total count of items.
-     *
-     * @return int
-     */
-    public function getTotal(): int;
 }
