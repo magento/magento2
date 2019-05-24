@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dfd412036f4554b7090b45204bc830f2",
+    "content-hash": "5c05752aca22723453de6d1ffae9f9a6",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -88,16 +88,16 @@
         },
         {
             "name": "colinmollenhour/cache-backend-redis",
-            "version": "1.10.6",
+            "version": "1.10.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis.git",
-                "reference": "cc941a5f4cc017e11d3eab9061811ba9583ed6bf"
+                "reference": "0ea3e4bf924242f8d03155761bf540c90a2db2d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/cc941a5f4cc017e11d3eab9061811ba9583ed6bf",
-                "reference": "cc941a5f4cc017e11d3eab9061811ba9583ed6bf",
+                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/0ea3e4bf924242f8d03155761bf540c90a2db2d7",
+                "reference": "0ea3e4bf924242f8d03155761bf540c90a2db2d7",
                 "shasum": ""
             },
             "require": {
@@ -120,7 +120,7 @@
             ],
             "description": "Zend_Cache backend using Redis with full support for tags.",
             "homepage": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis",
-            "time": "2018-09-24T16:02:07+00:00"
+            "time": "2019-02-18T18:59:51+00:00"
         },
         {
             "name": "colinmollenhour/credis",
@@ -164,21 +164,21 @@
         },
         {
             "name": "colinmollenhour/php-redis-session-abstract",
-            "version": "v1.4.1",
+            "version": "v1.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/php-redis-session-abstract.git",
-                "reference": "4949ca28b86037abb44984c77bab9d0a4e075643"
+                "reference": "9f69f5c1be512d5ff168e731e7fa29ab2905d847"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/php-redis-session-abstract/zipball/4949ca28b86037abb44984c77bab9d0a4e075643",
-                "reference": "4949ca28b86037abb44984c77bab9d0a4e075643",
+                "url": "https://api.github.com/repos/colinmollenhour/php-redis-session-abstract/zipball/9f69f5c1be512d5ff168e731e7fa29ab2905d847",
+                "reference": "9f69f5c1be512d5ff168e731e7fa29ab2905d847",
                 "shasum": ""
             },
             "require": {
                 "colinmollenhour/credis": "~1.6",
-                "php": "^5.5 || ^7.0"
+                "php": "~5.5.0|~5.6.0|~7.0.0|~7.1.0|~7.2.0"
             },
             "type": "library",
             "autoload": {
@@ -197,7 +197,7 @@
             ],
             "description": "A Redis-based session handler with optimistic locking",
             "homepage": "https://github.com/colinmollenhour/php-redis-session-abstract",
-            "time": "2019-03-18T14:43:14+00:00"
+            "time": "2018-01-08T14:53:13+00:00"
         },
         {
             "name": "composer/ca-bundle",
