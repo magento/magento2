@@ -49,7 +49,7 @@ class SelectedShippingMethod implements ResolverInterface
         $carrierTitle = null;
         $methodTitle = null;
 
-        if (count($rates) > 0) {
+        if (count($rates) > 0 && !empty($address->getShippingMethod())) {
             list($carrierCode, $methodCode) = explode('_', $address->getShippingMethod(), 2);
 
             /** @var Rate $rate */
