@@ -12,7 +12,9 @@
  */
 ?>
 <div class="price-box msrp">
-    <?php if ($this->helper('Magento\Msrp\Helper\Data')->canApplyMsrp($block->getProduct())): ?>
+    <?php //phpcs:disable ?>
+    <?php if ($this->helper(\Magento\Msrp\Helper\Data::class)->canApplyMsrp($block->getProduct())) : ?>
+    <?php //phpcs:enable ?>
         <a href="<?= $block->escapeUrl($block->getProduct()->getProductUrl()) ?>">
             <?= $block->escapeHtml(__('Click for price')) ?>
         </a>
