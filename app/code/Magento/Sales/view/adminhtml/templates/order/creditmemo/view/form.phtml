@@ -62,7 +62,7 @@
 </section>
 <?php $_items = $block->getCreditmemo()->getAllItems() ?>
 
-<?php if (!empty($_items)) : ?>
+<?php if (count($_items)) : ?>
 <div id="creditmemo_items_container">
     <?= $block->getChildHtml('creditmemo_items') ?>
 </div>

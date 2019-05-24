@@ -13,7 +13,7 @@
         <span class="title"><?= $block->escapeHtml(__('Items to Refund')) ?></span>
     </div>
 
-    <?php if (!empty($_items)) : ?>
+    <?php if (count($_items)) : ?>
     <div class="admin__table-wrapper">
         <table class="data-table admin__table-primary order-creditmemo-tables">
             <thead>

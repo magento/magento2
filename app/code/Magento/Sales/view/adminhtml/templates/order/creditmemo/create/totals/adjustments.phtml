@@ -21,7 +21,7 @@
         <td>
             <input type="text"
                    name="creditmemo[adjustment_positive]"
-                   value="<?= /* @noEscape */ $_source->getBaseAdjustmentPositive()*1 ?>"
+                   value="<?= /* @noEscape */ $_source->getBaseAdjustmentPositive() ?>"
                    class="input-text admin__control-text not-negative-amount"
                    id="adjustment_positive" />
         </td>
@@ -31,7 +31,7 @@
         <td>
             <input type="text"
                    name="creditmemo[adjustment_negative]"
-                   value="<?= /* @noEscape */ $_source->getBaseAdjustmentNegative()*1 ?>"
+                   value="<?= /* @noEscape */ $_source->getBaseAdjustmentNegative() ?>"
                    class="input-text admin__control-text not-negative-amount"
                    id="adjustment_negative"/>
             <script>
