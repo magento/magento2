@@ -80,11 +80,13 @@ class SwitchRequest extends \Magento\Framework\App\Action\Action implements Http
         $encodedUrl = (string)$this->_request->getParam(ActionInterface::PARAM_NAME_URL_ENCODED);
         $targetUrl = $this->urlDecoder->decode($encodedUrl);
 
-        $data = new HashData([
-            "customer_id" => $customerId,
-            "time_stamp" => $timeStamp,
-            "___from_store" => $fromStoreCode
-        ]);
+        $data = new HashData(
+            [
+                "customer_id" => $customerId,
+                "time_stamp" => $timeStamp,
+                "___from_store" => $fromStoreCode
+            ]
+        );
 
         if ($targetUrl && $this->hashGenerator->validateHash($signature, $data)) {
             try {
