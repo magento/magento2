@@ -11,9 +11,11 @@
     <test name="StorefrontLockCustomerOnLoginPageTest">
         <annotations>
             <features value="Customer"/>
+            <stories value="Customer Login"/>
             <title value="Lock customer on Storefront with after many attempts to log in with incorrect credentials"/>
             <description value="Lock customer on Storefront with after many attempts to log in with incorrect credentials"/>
             <testCaseId value="MC-14388" />
+            <severity value="CRITICAL"/>
             <group value="customer"/>
             <group value="security"/>
             <group value="mtf_migrated"/>

@@ -223,11 +223,14 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
         $this->reindexRuleGroupWebsite = $this->createMock(
             \Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite::class
         );
-        $this->setProperties($this->indexBuilder, [
-            'metadataPool' => $this->metadataPool,
-            'reindexRuleProductPrice' => $this->reindexRuleProductPrice,
-            'reindexRuleGroupWebsite' => $this->reindexRuleGroupWebsite
-        ]);
+        $this->setProperties(
+            $this->indexBuilder,
+            [
+                'metadataPool' => $this->metadataPool,
+                'reindexRuleProductPrice' => $this->reindexRuleProductPrice,
+                'reindexRuleGroupWebsite' => $this->reindexRuleGroupWebsite,
+            ]
+        );
     }
 
     /**
