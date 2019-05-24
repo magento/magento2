@@ -10,16 +10,15 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 use Magento\Backend\App\Action;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Backend\Model\View\Result\ForwardFactory;
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Adminhtml sales orders creation process controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
-abstract class Create extends \Magento\Backend\App\Action implements HttpGetActionInterface, HttpPostActionInterface
+abstract class Create extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Escaper
