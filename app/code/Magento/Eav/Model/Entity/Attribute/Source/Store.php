@@ -38,7 +38,7 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
      *
      * @return array
      */
-    public function getAllOptions()
+    public function getAllOptions($withEmpty = true, $defaultValues = false)
     {
         if ($this->_options === null) {
             $this->_options = $this->_storeCollectionFactory->create()->load()->toOptionArray();
