@@ -134,11 +134,15 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($params['customer_id'], $this->customerId);
         $this->assertEquals($params['___from_store'], $fromStoreCode);
 
-        $this->assertTrue($this->hashGenerator->validateHash($signature, new HashData([
-            "customer_id" => $this->customerId,
-            "time_stamp" => $params['time_stamp'],
-            "___from_store" => $fromStoreCode
-        ])));
+        $data =  new HashData(
+            [
+                "customer_id" => $this->customerId,
+                "time_stamp" => $params['time_stamp'],
+                "___from_store" => $fromStoreCode
+            ]
+        );
+
+        $this->assertTrue($this->hashGenerator->validateHash($signature, $data));
     }
 
     /**
@@ -151,11 +155,13 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
         $timeStamp = 0;
         $customerId = 8;
         $fromStoreCode = 'store1';
-        $data = new HashData([
-            "customer_id" => $customerId,
-            "time_stamp" => $timeStamp,
-            "___from_store" => $fromStoreCode
-        ]);
+        $data = new HashData(
+            [
+                "customer_id" => $customerId,
+                "time_stamp" => $timeStamp,
+                "___from_store" => $fromStoreCode
+            ]
+        );
         $redirectUrl = "http://domain.com/";
         $fromStore = $this->createPartialMock(Store::class, ['getCode']);
         $toStore = $this->createPartialMock(Store::class, ['getCode']);
