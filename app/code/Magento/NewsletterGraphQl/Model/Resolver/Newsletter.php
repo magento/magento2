@@ -49,6 +49,7 @@ class Newsletter implements ResolverInterface
      *
      * phpcs:disable SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
      * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceBeforeLastUsed
+     * phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function resolve(
