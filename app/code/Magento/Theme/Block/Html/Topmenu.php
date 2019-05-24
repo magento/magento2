@@ -205,7 +205,7 @@ class Topmenu extends Template implements IdentityInterface
         \Magento\Framework\Data\Tree\Node $menuTree,
         $childrenWrapClass,
         $limit,
-        array $colBrakes = []
+        $colBrakes = []
     ) {
         $html = '';
 
