@@ -79,6 +79,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
      * Get current image
      *
      * @return Image|null
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getCurrentImage()
     {

@@ -6,10 +6,14 @@
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable Generic.WhiteSpace.ScopeIndent.Incorrect
+// phpcs:disable Squiz.WhiteSpace.ControlStructureSpacing
 
 /* @var $block \Magento\Catalog\Block\Product\AbstractProduct */
 ?>
-<?php switch ($type = $block->getType()) {
+
+<?php
+
+switch ($type = $block->getType()) {
 
     case 'related-rule':
         if ($exist = $block->hasItems()) {

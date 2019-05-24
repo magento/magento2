@@ -87,6 +87,7 @@ class Search extends \Magento\Backend\Block\Widget
      * @param string $labelPart
      * @param int $templateId
      * @return array
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getSuggestedAttributes($labelPart, $templateId = null)
     {

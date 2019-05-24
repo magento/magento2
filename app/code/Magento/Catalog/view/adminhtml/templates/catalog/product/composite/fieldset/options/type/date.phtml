@@ -4,7 +4,11 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /* @var $block \Magento\Catalog\Block\Product\View\Options\Type\Date */ ?>
+<?php
+// phpcs:disable Squiz.WhiteSpace.ControlStructureSpacing
+
+/* @var $block \Magento\Catalog\Block\Product\View\Options\Type\Date */
+?>
 <?php $_option = $block->getOption(); ?>
 <?php $_optionId = $_option->getId(); ?>
 <div class="admin__field field<?= $_option->getIsRequire() ? ' required _required' : '' ?>">
@@ -15,7 +19,9 @@
         </span>
     </label>
   <div class="admin__field-control control">
-        <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME  || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE) :?>
+
+        <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
+            || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE) :?>
 
             <?= $block->getDateHtml() ?>
 
