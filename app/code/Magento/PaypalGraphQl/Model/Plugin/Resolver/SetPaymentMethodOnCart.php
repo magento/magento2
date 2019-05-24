@@ -9,6 +9,7 @@ namespace Magento\PaypalGraphQl\Model\Plugin\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -78,9 +79,9 @@ class SetPaymentMethodOnCart
      * Update Paypal payment information on cart
      *
      * @param ResolverInterface $subject
-     * @param $resolvedValue
+     * @param array $resolvedValue
      * @param Field $field
-     * @param $context
+     * @param ContextInterface $context
      * @param ResolveInfo $info
      * @param array|null $value
      * @param array|null $args
