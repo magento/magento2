@@ -23,13 +23,12 @@ input PaymentMethodAdditionalDataInput {
     payflow_express: PayflowExpressInput @doc(description:"Required input for PayPal Payflow Express Checkout payments")
 }
 
-input PaypalExpressInput @doc(description:"Required input for PayPal Express Checkout payments
-") {
+input PaypalExpressInput @doc(description:"Required input for PayPal Express Checkout payments") {
     payer_id: String! @doc(description:"The unique ID of the PayPal user")
     token: String! @doc(description:"The token returned by the createPaypalExpressToken mutation")
 }
 
-input PayflowExpressInput @doc(description:"") {
+input PayflowExpressInput @doc(description:"Required input for PayPal Payflow Express Checkout payments") {
     payer_id: String! @doc(description:"The unique ID of the PayPal user")
     token: String! @doc(description:"The token returned by the createPaypalExpressToken mutation")
 }
@@ -41,8 +40,7 @@ input PaypalExpressUrlsInput @doc(description:"A set of URLs that PayPal uses to
     pending_url: String! @doc(description:"The URL to redirect for a pending transactions. Not applicable to most PayPal solutions")
 }
 
-type PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer to authorize payment and adjust checkout details
-") {
+type PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer to authorize payment and adjust checkout details") {
     start: String @doc(description:"The URL to the PayPal login page")
     edit: String @doc(description:"The PayPal URL that allows the buyer to edit their checkout details")
 }
