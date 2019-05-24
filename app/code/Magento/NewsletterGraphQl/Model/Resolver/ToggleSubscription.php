@@ -35,8 +35,23 @@ class ToggleSubscription implements ResolverInterface
     }
 
     /**
-     * @inheritdoc
+     * Resolver to actually execute the GraphQL Command
+     *
+     * @param Field            $field
+     * @param ContextInterface $context
+     * @param ResolveInfo      $info
+     * @param array|null       $value
+     * @param array|null       $args
+     *
+     * @return array
+     *
+     * @throws GraphQlNoSuchEntityException
+     *
+     * phpcs:disable SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
+     * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceBeforeLastUsed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+
     public function resolve(
         Field $field,
         $context,
