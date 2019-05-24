@@ -28,7 +28,7 @@ require([
     "prototype"
 ], function(VarienRulesForm){
 
-window.<?= $block->escapeJs($_jsObjectName) ?> = new VarienRulesForm('<?= /* @noEscape */ $_jsObjectName ?>', '<?= /* @noEscape */ $block->getNewChildUrl() ?>');
+window.<?= /* @noEscape */ $_jsObjectName ?> = new VarienRulesForm('<?= /* @noEscape */ $_jsObjectName ?>', '<?= /* @noEscape */ $block->getNewChildUrl() ?>');
 <?php if ($_element->getReadonly()) : ?>
     <?= /* @noEscape */ $_element->getHtmlId() ?>.setReadonly(true);
 <?php endif; ?>
