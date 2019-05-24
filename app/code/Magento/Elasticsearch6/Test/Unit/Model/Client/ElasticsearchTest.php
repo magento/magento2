@@ -8,6 +8,9 @@ namespace Magento\Elasticsearch6\Test\Unit\Model\Client;
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Class ElasticsearchTest
+ */
 class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 {
     /**

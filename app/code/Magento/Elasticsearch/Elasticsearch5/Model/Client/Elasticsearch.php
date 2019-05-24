@@ -91,7 +91,7 @@ class Elasticsearch implements ClientInterface
     }
 
     /**
-     * Validate connection params
+     * Validate connection params.
      *
      * @return bool
      */
@@ -109,7 +109,9 @@ class Elasticsearch implements ClientInterface
     private function buildConfig($options = [])
     {
         $host = preg_replace('/http[s]?:\/\//i', '', $options['hostname']);
+        // @codingStandardsIgnoreStart
         $protocol = parse_url($options['hostname'], PHP_URL_SCHEME);
+        // @codingStandardsIgnoreEnd
         if (!$protocol) {
             $protocol = 'http';
         }
