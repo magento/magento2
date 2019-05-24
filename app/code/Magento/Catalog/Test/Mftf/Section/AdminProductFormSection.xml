@@ -208,5 +208,6 @@
         <element name="dropDownAttribute" type="select" selector="//select[@name='product[{{arg}}]']" parameterized="true" timeout="30"/>
         <element name="attributeSection" type="block" selector="//div[@data-index='attributes']/div[contains(@class, 'admin__collapsible-content _show')]" timeout="30"/>
         <element name="customAttribute" type="text" selector="product[{{attributecode}}]" timeout="30" parameterized="true"/>
+        <element name="customAttributeLabel" type="text" selector=" div[data-index={{attributecode}}] > div > label > span" timeout="30" parameterized="true"/>
     </section>
 </sections>
