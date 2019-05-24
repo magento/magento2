@@ -37,7 +37,6 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
      */
     public function getConfigDataProvider()
     {
-        $functionName = create_function('', 'return "Value from function";');
         $closure = function () {
             return 'Value from closure';
         };
