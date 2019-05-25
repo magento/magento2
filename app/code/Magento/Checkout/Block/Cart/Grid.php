@@ -162,7 +162,7 @@ class Grid extends \Magento\Checkout\Block\Cart
      *
      * @return string
      */
-    public function getValidationUrl()
+    public function getValidationUrl(): string
     {
         return $this->getUrl('checkout/cart/updateItemQty', ['_secure' => $this->getRequest()->isSecure()]);
     }
