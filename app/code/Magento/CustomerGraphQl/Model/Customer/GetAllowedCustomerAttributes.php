@@ -8,11 +8,14 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Customer;
 
 use Magento\Customer\Api\CustomerMetadataManagementInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**
  * Get allowed address attributes
@@ -25,18 +28,37 @@ class GetAllowedCustomerAttributes
     private $attributeRepository;
 
     /**
+     * @var CustomerInterfaceFactory\
+     */
+    private $customerDataFactory;
+
+    /**
+     * @var DataObjectProcessor
+     */
+    private $dataObjectProcessor;
+
+    /**
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
 
     /**
+     * GetAllowedCustomerAttributes constructor.
+     *
      * @param AttributeRepository $attributeRepository
+     * @param CustomerInterfaceFactory $customerDataFactory
+     * @param DataObjectProcessor $dataObjectProcessor
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         AttributeRepository $attributeRepository,
+        CustomerInterfaceFactory $customerDataFactory,
+        DataObjectProcessor $dataObjectProcessor,
         SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->attributeRepository = $attributeRepository;
+        $this->customerDataFactory = $customerDataFactory;
+        $this->dataObjectProcessor = $dataObjectProcessor;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
@@ -49,6 +71,13 @@ class GetAllowedCustomerAttributes
      */
     public function execute($attributeKeys): array
     {
+        /** @var CustomerInterface $customerDataDummy */
+        $customerDataDummy = $this->customerDataFactory->create();
+        $requiredDataAttributes = $this->dataObjectProcessor->buildOutputDataArray(
+            $customerDataDummy,
+            CustomerInterface::class
+        );
+        $attributeKeys = array_merge($attributeKeys, array_keys($requiredDataAttributes));
         $this->searchCriteriaBuilder->addFilter('attribute_code', $attributeKeys, 'in');
         $searchCriteria = $this->searchCriteriaBuilder->create();
         try {
