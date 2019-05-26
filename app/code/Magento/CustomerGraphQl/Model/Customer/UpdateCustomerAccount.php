@@ -82,6 +82,8 @@ class UpdateCustomerAccount
     }
 
     /**
+     * Update customer account
+     *
      * @param CustomerInterface $customer
      * @param array $data
      * @throws GraphQlAlreadyExistsException

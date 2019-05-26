@@ -292,6 +292,4 @@ QUERY;
         $this->registry->register('isSecureArea', false);
         parent::tearDown();
     }
-
-
 }

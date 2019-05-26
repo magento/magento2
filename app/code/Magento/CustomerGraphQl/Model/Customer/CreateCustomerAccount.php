@@ -51,12 +51,14 @@ class CreateCustomerAccount
     private $validateCustomerData;
 
     /**
+     * CreateCustomerAccount constructor.
+     *
      * @param DataObjectHelper $dataObjectHelper
      * @param CustomerInterfaceFactory $customerFactory
      * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $accountManagement
      * @param ChangeSubscriptionStatus $changeSubscriptionStatus
-     * @param GetAllowedCustomerAttributes $getAllowedCustomerAttributes
+     * @param ValidateCustomerData $validateCustomerData
      */
     public function __construct(
         DataObjectHelper $dataObjectHelper,

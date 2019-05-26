@@ -9,9 +9,14 @@ namespace Magento\CustomerGraphQl\Model\Customer;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
+/**
+ * Class ValidateCustomerData
+ */
 class ValidateCustomerData
 {
     /**
+     * Get allowed/required customer attributes
+     *
      * @var GetAllowedCustomerAttributes
      */
     private $getAllowedCustomerAttributes;
@@ -27,6 +32,8 @@ class ValidateCustomerData
     }
 
     /**
+     * Validate customer data
+     *
      * @param array $customerData
      * @return void
      * @throws GraphQlInputException
