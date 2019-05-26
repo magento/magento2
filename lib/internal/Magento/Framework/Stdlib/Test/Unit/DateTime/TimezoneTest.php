@@ -253,4 +253,15 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfig->method('getValue')->with('', '', null)->willReturn($configuredTimezone);
     }
+
+    public function testCheckIfScopeDateSetsTimeZone()
+    {
+        $scopeDate = new \DateTime('now', new \DateTimeZone('America/Vancouver'));
+        $this->scopeConfig->method('getValue')->willReturn('America/Vancouver');
+
+        $this->assertEquals(
+            $scopeDate->getTimezone(),
+            $this->getTimezone()->scopeDate(0, $scopeDate->getTimestamp())->getTimezone()
+        );
+    }
 }
