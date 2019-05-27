@@ -1052,6 +1052,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         return $object;
     }
 
+    /**
+     * Test submit for customer
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testSubmitForCustomer()
     {
         $orderData = [];
