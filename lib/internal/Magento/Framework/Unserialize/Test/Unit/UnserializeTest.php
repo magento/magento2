@@ -8,6 +8,9 @@ namespace Magento\Framework\Unserialize\Test\Unit;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Unserialize\Unserialize;
 
+/**
+ * Test class for Magento/Framework/Unserialize/Unserialize.
+ */
 class UnserializeTest extends \PHPUnit\Framework\TestCase
 {
     /**

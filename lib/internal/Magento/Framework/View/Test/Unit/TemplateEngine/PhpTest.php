@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\View\Test\Unit\TemplateEngine;
 
+/**
+ * Class PhpTest.
+ */
 class PhpTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_PROP_VALUE = 'TEST_PROP_VALUE';
