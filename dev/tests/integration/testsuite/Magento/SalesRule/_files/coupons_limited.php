@@ -6,6 +6,7 @@
 
 use Magento\SalesRule\Model\Coupon;
 
+// phpcs:ignore Magento2.Security.IncludeFile
 require 'rules.php';
 
 $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

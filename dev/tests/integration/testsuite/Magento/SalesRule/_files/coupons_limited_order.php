@@ -7,8 +7,10 @@
 use Magento\Sales\Model\Order;
 use Magento\TestFramework\Helper\Bootstrap;
 
+// phpcs:disable Magento2.Security.IncludeFile
 require 'coupons_limited.php';
 require __DIR__ . '/../../../Magento/Sales/_files/order.php';
+// phpcs:enable
 
 $collection = Bootstrap::getObjectManager()->create(
     \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class

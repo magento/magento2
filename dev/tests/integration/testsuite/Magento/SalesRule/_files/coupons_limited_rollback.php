@@ -18,4 +18,5 @@ foreach ($couponCodes as $couponCode) {
     $coupon->delete();
 }
 
+// phpcs:ignore Magento2.Security.IncludeFile
 require 'rules_rollback.php';
