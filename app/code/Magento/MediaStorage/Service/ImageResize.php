@@ -202,10 +202,12 @@ class ImageResize
         $viewImages = [];
         /** @var \Magento\Theme\Model\Theme $theme */
         foreach ($themes as $theme) {
-            $config = $this->viewConfig->getViewConfig([
-                'area' => Area::AREA_FRONTEND,
-                'themeModel' => $theme,
-            ]);
+            $config = $this->viewConfig->getViewConfig(
+                [
+                    'area' => Area::AREA_FRONTEND,
+                    'themeModel' => $theme,
+                ]
+            );
             $images = $config->getMediaEntities('Magento_Catalog', ImageHelper::MEDIA_TYPE_CONFIG_NODE);
             foreach ($images as $imageId => $imageData) {
                 $uniqIndex = $this->getUniqueImageIndex($imageData);

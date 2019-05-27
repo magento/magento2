@@ -16,6 +16,11 @@ use Symfony\Component\Console\Helper\ProgressBarFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Resizes product images according to theme view definitions.
+ *
+ * @package Magento\MediaStorage\Console\Command
+ */
 class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
 {
     /**
@@ -53,7 +58,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -62,7 +67,9 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -71,10 +78,12 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
             $generator = $this->resize->resizeFromThemes();
 
             /** @var ProgressBar $progress */
-            $progress = $this->progressBarFactory->create([
-                'output' => $output,
-                'max' => $generator->current()
-            ]);
+            $progress = $this->progressBarFactory->create(
+                [
+                    'output' => $output,
+                    'max' => $generator->current()
+                ]
+            );
             $progress->setFormat(
                 "%current%/%max% [%bar%] %percent:3s%% %elapsed% %memory:6s% \t| <info>%message%</info>"
             );

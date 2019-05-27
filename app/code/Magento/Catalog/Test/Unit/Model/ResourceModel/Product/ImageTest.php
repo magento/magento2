@@ -16,6 +16,10 @@ use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Framework\DB\Query\BatchIteratorInterface;
 
+/**
+ * Class ImageTest
+ * @package Magento\Catalog\Test\Unit\Model\ResourceModel\Product
+ */
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
