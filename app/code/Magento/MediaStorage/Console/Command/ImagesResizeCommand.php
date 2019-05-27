@@ -10,6 +10,7 @@ namespace Magento\MediaStorage\Console\Command;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\MediaStorage\Service\ImageResize;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\ProgressBarFactory;
@@ -41,13 +42,14 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     /**
      * @param State $appState
      * @param ImageResize $resize
+     * @param ObjectManagerInterface $objectManager
      * @param ProgressBarFactory $progressBarFactory
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         State $appState,
         ImageResize $resize,
-        $objectManager = null,
+        ObjectManagerInterface $objectManager,
         ProgressBarFactory $progressBarFactory = null
     ) {
         parent::__construct();
