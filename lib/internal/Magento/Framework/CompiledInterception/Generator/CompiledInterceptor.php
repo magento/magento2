@@ -369,7 +369,6 @@ class CompiledInterceptor extends EntityAbstract
      */
     private function getMethodSourceFromConfig($methodName, $conf, $parameters, $returnVoid)
     {
-        $first = true;
         $capitalizedName = ucfirst($methodName);
         $parametersList = $this->getParameterList($parameters);
         $extraParams = empty($parameters) ? '' : (', ' . $parametersList);
@@ -407,20 +406,34 @@ class CompiledInterceptor extends EntityAbstract
                 $returnVoid
             ));
         }
+        return array_merge($body, $this->getResultChainLines($resultChain, $returnVoid));
+    }
+
+    /**
+     * Implode result chain into list of assignments
+     *
+     * @param array $resultChain
+     * @param bool $returnVoid
+     * @return array
+     */
+    private function getResultChainLines($resultChain, $returnVoid)
+    {
+        $lines = [];
+        $first = true;
         foreach ($resultChain as $lp => $piece) {
             if ($first) {
                 $first = false;
             } else {
-                $body[] = "";
+                $lines[] = "";
             }
             if (!$returnVoid) {
                 $piece[0] = (($lp + 1 == count($resultChain)) ? "return " : "\$result = ") . $piece[0];
             }
             foreach ($piece as $line) {
-                $body[] = $line;
+                $lines[] = $line;
             }
         }
-        return $body;
+        return $lines;
     }
 
     /**
@@ -532,19 +545,7 @@ class CompiledInterceptor extends EntityAbstract
             'switch ($this->____scope->getCurrentScope()) {'
         ];
 
-        $cases = [];
-        //group cases by config
-        foreach ($config as $scope => $conf) {
-            $key = md5(serialize($conf));
-            if (!isset($cases[$key])) {
-                $cases[$key] = ['cases'=>[], 'conf'=>$conf];
-            }
-            $cases[$key]['cases'][] = "\tcase '$scope':";
-        }
-        //call parent method for scopes with no plugins (or when no scope is set)
-        $cases[] = ['cases'=>["\tdefault:"], 'conf'=>[]];
-
-        foreach ($cases as $case) {
+        foreach ($this->getScopeCasesFromConfig($config) as $case) {
             $body = array_merge($body, $case['cases']);
             $this->addCodeSubBlock(
                 $body,
@@ -571,6 +572,28 @@ class CompiledInterceptor extends EntityAbstract
             'returnType' => $returnTypeValue,
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
         ];
+    }
+
+    /**
+     * Get scope cases from config
+     *
+     * @param array $config
+     * @return array
+     */
+    private function getScopeCasesFromConfig($config)
+    {
+        $cases = [];
+        //group cases by config
+        foreach ($config as $scope => $conf) {
+            $key = md5(serialize($conf));
+            if (!isset($cases[$key])) {
+                $cases[$key] = ['cases'=>[], 'conf'=>$conf];
+            }
+            $cases[$key]['cases'][] = "\tcase '$scope':";
+        }
+        //call parent method for scopes with no plugins (or when no scope is set)
+        $cases[] = ['cases'=>["\tdefault:"], 'conf'=>[]];
+        return $cases;
     }
 
     /**
