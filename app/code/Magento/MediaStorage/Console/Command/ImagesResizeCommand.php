@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaStorage\Console\Command;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\MediaStorage\Service\ImageResize;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -36,16 +37,19 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
      * @param State $appState
      * @param ImageResize $resize
      * @param ProgressBarFactory $progressBarFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         State $appState,
         ImageResize $resize,
-        ProgressBarFactory $progressBarFactory
+        $objectManager = null,
+        ProgressBarFactory $progressBarFactory = null
     ) {
         parent::__construct();
         $this->resize = $resize;
         $this->appState = $appState;
-        $this->progressBarFactory = $progressBarFactory;
+        $this->progressBarFactory = $progressBarFactory
+            ?: ObjectManager::getInstance()->get(ProgressBarFactory::class);
     }
 
     /**
@@ -92,5 +96,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
 
         $output->write(PHP_EOL);
         $output->writeln("<info>Product images resized successfully</info>");
+
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }
