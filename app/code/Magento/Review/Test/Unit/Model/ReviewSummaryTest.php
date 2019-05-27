@@ -10,6 +10,9 @@ namespace Magento\Review\Test\Unit\Model;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 
+/**
+ * Test for Magento\Review\Model\ReviewSummary class.
+ */
 class ReviewSummaryTest extends \PHPUnit\Framework\TestCase
 {
     /**

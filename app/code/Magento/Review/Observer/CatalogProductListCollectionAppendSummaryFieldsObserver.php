@@ -12,6 +12,9 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Review\Model\ResourceModel\Review\SummaryFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Append review summary to product list collection.
+ */
 class CatalogProductListCollectionAppendSummaryFieldsObserver implements ObserverInterface
 {
     /**
@@ -53,6 +56,7 @@ class CatalogProductListCollectionAppendSummaryFieldsObserver implements Observe
             $this->storeManager->getStore()->getId(),
             \Magento\Review\Model\Review::ENTITY_PRODUCT_CODE
         );
+
         return $this;
     }
 }

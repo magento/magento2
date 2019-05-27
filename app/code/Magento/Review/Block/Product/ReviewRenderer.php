@@ -44,8 +44,8 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
-     * @param ReviewSummaryFactory $reviewSummaryFactory
      * @param array $data
+     * @param ReviewSummaryFactory $reviewSummaryFactory
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -54,7 +54,8 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
         ReviewSummaryFactory $reviewSummaryFactory = null
     ) {
         $this->_reviewFactory = $reviewFactory;
-        $this->reviewSummaryFactory = $reviewSummaryFactory ?? ObjectManager::getInstance()->get(ReviewSummaryFactory::class);
+        $this->reviewSummaryFactory = $reviewSummaryFactory ??
+            ObjectManager::getInstance()->get(ReviewSummaryFactory::class);
         parent::__construct($context, $data);
     }
 
@@ -94,7 +95,7 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
             );
         }
 
-        if (!$product->getRatingSummary() && !$displayIfNoReviews) {
+        if (null === $product->getRatingSummary() && !$displayIfNoReviews) {
             return '';
         }
         // pick template among available

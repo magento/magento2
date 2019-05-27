@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Review\Block\Customer;
 
 use Magento\Catalog\Model\Product;
@@ -202,7 +203,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     protected function _toHtml()
     {
