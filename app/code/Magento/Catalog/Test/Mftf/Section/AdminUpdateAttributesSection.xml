@@ -11,32 +11,32 @@
     <section name="AdminUpdateAttributesSection">
         <element name="saveButton" type="button" selector="button[title='Save']" timeout="30"/>
 
-        <element name="toggleCountryOfManufacture" type="checkbox" selector="#toggle_country_of_manufacture"/>
-        <element name="toggleCustomDesign" type="checkbox" selector="#toggle_custom_design"/>
-        <element name="toggleCustomDesignFrom" type="checkbox" selector="#toggle_custom_design_from"/>
-        <element name="toggleCustomDesignTo" type="checkbox" selector="#toggle_custom_design_to"/>
-        <element name="toggleCustomLayout" type="checkbox" selector="#toggle_custom_layout"/>
-        <element name="toggleCustomLayoutUpdate" type="checkbox" selector="#toggle_custom_layout_update"/>
-        <element name="toggleDescription" type="checkbox" selector="#toggle_description"/>
-        <element name="toggleMetaDescription" type="checkbox" selector="#toggle_meta_description"/>
-        <element name="toggleMetaKeyword" type="checkbox" selector="#toggle_meta_keyword"/>
-        <element name="toggleMetaTitle" type="checkbox" selector="#toggle_meta_title"/>
-        <element name="toggleName" type="checkbox" selector="#toggle_name"/>
-        <element name="toggleNewsFromDate" type="checkbox" selector="#toggle_news_from_date"/>
-        <element name="toggleNewsToDate" type="checkbox" selector="#toggle_news_to_date"/>
-        <element name="toggleOptionsContainer" type="checkbox" selector="#toggle_options_container"/>
-        <element name="togglePageLayout" type="checkbox" selector="#toggle_page_layout"/>
-        <element name="togglePrice" type="checkbox" selector="#toggle_price"/>
-        <element name="toggleShortDescription" type="checkbox" selector="#toggle_short_description"/>
-        <element name="toggleSpecialFromDate" type="checkbox" selector="#toggle_special_from_date"/>
-        <element name="toggleSpecialPrice" type="checkbox" selector="#toggle_special_price"/>
-        <element name="toggleSpecialToDate" type="checkbox" selector="#toggle_special_to_date"/>
-        <element name="toggleTaxClass" type="checkbox" selector="#toggle_tax_class_id"/>
-        <element name="toggleVisibility" type="checkbox" selector="#toggle_visibility"/>
-        <element name="toggleWeight" type="checkbox" selector="#toggle_weight"/>
-        <element name="toggleColor" type="checkbox" selector="#toggle_color"/>
+        <element name="toggleCountryOfManufacture" type="checkbox" selector="#toggle_attributes_country_of_manufacture"/>
+        <element name="toggleCustomDesign" type="checkbox" selector="#toggle_attributes_custom_design"/>
+        <element name="toggleCustomDesignFrom" type="checkbox" selector="#toggle_attributes_custom_design_from"/>
+        <element name="toggleCustomDesignTo" type="checkbox" selector="#toggle_attributes_custom_design_to"/>
+        <element name="toggleCustomLayout" type="checkbox" selector="#toggle_attributes_custom_layout"/>
+        <element name="toggleCustomLayoutUpdate" type="checkbox" selector="#toggle_attributes_custom_layout_update"/>
+        <element name="toggleDescription" type="checkbox" selector="#toggle_attributes_description"/>
+        <element name="toggleMetaDescription" type="checkbox" selector="#toggle_attributes_meta_description"/>
+        <element name="toggleMetaKeyword" type="checkbox" selector="#toggle_attributes_meta_keyword"/>
+        <element name="toggleMetaTitle" type="checkbox" selector="#toggle_attributes_meta_title"/>
+        <element name="toggleName" type="checkbox" selector="#toggle_attributes_name"/>
+        <element name="toggleNewsFromDate" type="checkbox" selector="#toggle_attributes_news_from_date"/>
+        <element name="toggleNewsToDate" type="checkbox" selector="#toggle_attributes_news_to_date"/>
+        <element name="toggleOptionsContainer" type="checkbox" selector="#toggle_attributes_options_container"/>
+        <element name="togglePageLayout" type="checkbox" selector="#toggle_attributes_page_layout"/>
+        <element name="togglePrice" type="checkbox" selector="#toggle_attributes_price"/>
+        <element name="toggleShortDescription" type="checkbox" selector="#toggle_attributes_short_description"/>
+        <element name="toggleSpecialFromDate" type="checkbox" selector="#toggle_attributes_special_from_date"/>
+        <element name="toggleSpecialPrice" type="checkbox" selector="#toggle_attributes_special_price"/>
+        <element name="toggleSpecialToDate" type="checkbox" selector="#toggle_attributes_special_to_date"/>
+        <element name="toggleTaxClass" type="checkbox" selector="#toggle_attributes_tax_class_id"/>
+        <element name="toggleVisibility" type="checkbox" selector="#toggle_attributes_visibility"/>
+        <element name="toggleWeight" type="checkbox" selector="#toggle_attributes_weight"/>
+        <element name="toggleColor" type="checkbox" selector="#toggle_attributes_color"/>
 
-        <element name="description" type="input" selector="#description"/>
+        <element name="description" type="textarea" selector="#attributes_description"/>
     </section>
     <section name="AdminUpdateAttributesWebsiteSection">
         <element name="website" type="button" selector="#attributes_update_tabs_websites"/>

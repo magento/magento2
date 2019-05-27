@@ -12,14 +12,14 @@
         <element name="AttributeName" type="text" selector=".field-name .input-text"/>
         <element name="AttributeNameDisabled" type="text" selector=".field-name .input-text[disabled]"/>
         <element name="ChangeAttributeNameToggle" type="checkbox" selector=".field-name .attribute-change-checkbox .checkbox"/>
-        <element name="AttributeContainer" type="select" selector=".field-container .select-select"/>
-        <element name="AttributeContainerDisabled" type="select" selector=".field-container .select-select[disabled]"/>
+        <element name="AttributeContainer" type="select" selector=".field-container select.select"/>
+        <element name="AttributeContainerDisabled" type="select" selector=".field-container select.select[disabled]"/>
         <element name="ChangeAttributeContainerToggle" type="checkbox" selector=".field-container .attribute-change-checkbox .checkbox"/>
         <element name="NameError" type="text" selector=".field-name .mage-error"/>
         <element name="AttributePrice" type="text" selector=".field-price .input-text"/>
         <element name="ChangeAttributePriceToggle" type="checkbox" selector=".field-price .attribute-change-checkbox .checkbox"/>
         <element name="PriceError" type="text" selector=".field-price .mage-error"/>
-        <element name="AttributeDescription" type="text" selector=".field-description .input-text"/>
+        <element name="AttributeDescription" type="text" selector=".field-description .textarea"/>
         <element name="ChangeAttributeDescriptionToggle" type="checkbox" selector=".field-description .attribute-change-checkbox .checkbox"/>
         <element name="Save" type="button" selector="button.save.primary" timeout="30"/>
         <element name="ProductDataMayBeLostModal" type="button" selector="//aside[contains(@class,'_show')]//header[contains(.,'Product data may be lost')]"/>
