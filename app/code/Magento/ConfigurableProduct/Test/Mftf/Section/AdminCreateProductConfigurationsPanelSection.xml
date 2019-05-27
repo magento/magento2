@@ -26,6 +26,10 @@
         <element name="saveAttribute" type="button" selector="li[data-attribute-option-title=''] .action-save" timeout="30"/>
         <element name="attributeCheckboxByIndex" type="input" selector="li.attribute-option:nth-of-type({{var1}}) input" parameterized="true"/>
 
+        <element name="applySingleSetOfImages" type="radio" selector=".admin__field-label[for='apply-single-set-radio']" timeout="30"/>
+        <element name="imageFileUpload" type="input" selector=".steps-wizard-section input[type='file'][name='image']"/>
+        <element name="imageUploadButton" type="button" selector=".steps-wizard-section div.gallery"/>
+
         <element name="applyUniquePricesByAttributeToEachSku" type="radio" selector=".admin__field-label[for='apply-unique-prices-radio']"/>
         <element name="applySinglePriceToAllSkus" type="radio" selector=".admin__field-label[for='apply-single-price-radio']"/>
         <element name="singlePrice" type="input" selector="#apply-single-price-input"/>

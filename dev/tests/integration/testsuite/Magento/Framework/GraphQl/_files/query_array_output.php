@@ -31,8 +31,13 @@ return [
                                 ],
                                 'required' => false,
                                 'isList' => false,
-                                'resolver' => 'Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata',
-                                'description' => 'Returns the attribute type, given an attribute code and entity type'
+                                'resolver' => Magento\EavGraphQl\Model\Resolver\CustomAttributeMetadata::class,
+                                'description' => 'Returns the attribute type, given an attribute code and entity type',
+                                'cache' => [
+                                    'cacheTag' => 'cat_test',
+                                    'cacheIdentity' =>
+                                        Magento\EavGraphQl\Model\Resolver\CustomAttributeMetadata::class
+                                ]
                         ],
                         'products' => [
                         'name' => 'products',
@@ -95,7 +100,7 @@ return [
                             ],
                             'required' => false,
                             'isList' => false,
-                            'resolver' => 'Magento\\CatalogGraphQl\\Model\\Resolver\\Products',
+                            'resolver' => Magento\CatalogGraphQl\Model\Resolver\Products::class,
                             'description' => 'comment for products fields'
                         ]
                 ]
@@ -274,7 +279,7 @@ return [
 
                         ]
                 ],
-                'typeResolver' => 'Magento\\CatalogGraphQl\\Model\\ProductLinkTypeResolverComposite',
+                'typeResolver' => Magento\CatalogGraphQl\Model\ProductLinkTypeResolverComposite::class,
                 'description' => 'description for ProductLinksInterface'
         ]
 ];

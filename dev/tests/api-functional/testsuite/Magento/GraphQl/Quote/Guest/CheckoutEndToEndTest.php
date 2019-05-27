@@ -77,10 +77,9 @@ class CheckoutEndToEndTest extends GraphQlAbstract
         $this->addProductToCart($cartId, $qty, $sku);
 
         $this->setBillingAddress($cartId);
-        $shippingAddress = $this->setShippingAddress($cartId);
+        $shippingMethod = $this->setShippingAddress($cartId);
 
-        $shippingMethod = current($shippingAddress['available_shipping_methods']);
-        $paymentMethod = $this->setShippingMethod($cartId, $shippingAddress['address_id'], $shippingMethod);
+        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
         $this->setPaymentMethod($cartId, $paymentMethod);
 
         $this->placeOrder($cartId);
@@ -267,7 +266,6 @@ mutation {
   ) {
     cart {
       shipping_addresses {
-        address_id
         available_shipping_methods {
           carrier_code
           method_code
@@ -285,8 +283,6 @@ QUERY;
         self::assertCount(1, $response['setShippingAddressesOnCart']['cart']['shipping_addresses']);
 
         $shippingAddress = current($response['setShippingAddressesOnCart']['cart']['shipping_addresses']);
-        self::assertArrayHasKey('address_id', $shippingAddress);
-        self::assertNotEmpty($shippingAddress['address_id']);
         self::assertArrayHasKey('available_shipping_methods', $shippingAddress);
         self::assertCount(1, $shippingAddress['available_shipping_methods']);
 
@@ -300,16 +296,15 @@ QUERY;
         self::assertArrayHasKey('amount', $availableShippingMethod);
         self::assertNotEmpty($availableShippingMethod['amount']);
 
-        return $shippingAddress;
+        return $availableShippingMethod;
     }
 
     /**
      * @param string $cartId
-     * @param int $addressId
      * @param array $method
      * @return array
      */
-    private function setShippingMethod(string $cartId, int $addressId, array $method): array
+    private function setShippingMethod(string $cartId, array $method): array
     {
         $query = <<<QUERY
 mutation {
@@ -317,7 +312,6 @@ mutation {
     cart_id: "{$cartId}", 
     shipping_methods: [
       {
-         cart_address_id: {$addressId}
          carrier_code: "{$method['carrier_code']}"
          method_code: "{$method['method_code']}"
       }

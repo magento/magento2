@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Ups;
 
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
-use Magento\GraphQl\Quote\GetQuoteShippingAddressIdByReservedQuoteId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -69,11 +68,6 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     private $getMaskedQuoteIdByReservedOrderId;
 
     /**
-     * @var GetQuoteShippingAddressIdByReservedQuoteId
-     */
-    private $getQuoteShippingAddressIdByReservedQuoteId;
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -81,9 +75,6 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
         $objectManager = Bootstrap::getObjectManager();
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->getQuoteShippingAddressIdByReservedQuoteId = $objectManager->get(
-            GetQuoteShippingAddressIdByReservedQuoteId::class
-        );
     }
 
     /**
@@ -102,9 +93,8 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     {
         $quoteReservedId = 'test_quote';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
-        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
 
-        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
+        $query = $this->getQuery($maskedQuoteId, self::CARRIER_CODE, $methodCode);
         $response = $this->sendRequestWithToken($query);
 
         self::assertArrayHasKey('setShippingMethodsOnCart', $response);
@@ -158,9 +148,8 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     {
         $quoteReservedId = 'test_quote';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
-        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
 
-        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
+        $query = $this->getQuery($maskedQuoteId, self::CARRIER_CODE, $methodCode);
         $response = $this->sendRequestWithToken($query);
 
         self::assertArrayHasKey('setShippingMethodsOnCart', $response);
@@ -201,7 +190,6 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * Generates query for setting the specified shipping method on cart
      *
-     * @param int $shippingAddressId
      * @param string $maskedQuoteId
      * @param string $carrierCode
      * @param string $methodCode
@@ -209,7 +197,6 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
      */
     private function getQuery(
         string $maskedQuoteId,
-        int $shippingAddressId,
         string $carrierCode,
         string $methodCode
     ): string {
@@ -219,7 +206,6 @@ mutation {
     cart_id: "$maskedQuoteId"
     shipping_methods: [
       {
-        cart_address_id: $shippingAddressId
         carrier_code: "$carrierCode"
         method_code: "$methodCode"
       }

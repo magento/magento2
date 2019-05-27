@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderFormPaymentSection">
-        <element name="header" type="text" selector="#shipping-methods span.title"/>
+        <element name="header" type="text" selector="#order-methods span.title"/>
         <element name="getShippingMethods" type="text" selector="#order-shipping_method a.action-default" timeout="30"/>
         <element name="flatRateOption" type="radio" selector="#s_method_flatrate_flatrate" timeout="30"/>
         <element name="shippingError" type="text" selector="#order[has_shipping]-error"/>

@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
-    cart(cart_id: String!): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Returns information about shopping cart")
+    cart(cart_id: String!): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Returns information about shopping cart") @cache(cacheable: false)
 }
 
 type Mutation {
@@ -115,7 +115,6 @@ input SetShippingMethodsOnCartInput {
 }
 
 input ShippingMethodInput {
-    cart_address_id: Int!
     carrier_code: String!
     method_code: String!
 }
@@ -131,7 +130,11 @@ input SetPaymentMethodOnCartInput {
 
 input PaymentMethodInput {
     code: String! @doc(description:"Payment method code")
+    additional_data: PaymentMethodAdditionalDataInput @doc(description:"Additional payment data")
     purchase_order_number: String @doc(description:"Purchase order number")
+}
+
+input PaymentMethodAdditionalDataInput {
 }
 
 input SetGuestEmailOnCartInput {
@@ -188,7 +191,6 @@ type Cart {
 }
 
 type CartAddress {
-    address_id: Int
     firstname: String
     lastname: String
     company: String
@@ -231,13 +233,14 @@ type SelectedShippingMethod {
 type AvailableShippingMethod {
     carrier_code: String!
     carrier_title: String!
-    method_code: String!
-    method_title: String!
+    method_code: String @doc(description: "Could be null if method is not available")
+    method_title: String @doc(description: "Could be null if method is not available")
     error_message: String
     amount: Float!
-    base_amount: Float!
+    base_amount: Float @doc(description: "Could be null if method is not available")
     price_excl_tax: Float!
     price_incl_tax: Float!
+    available: Boolean!
 }
 
 type AvailablePaymentMethod {
@@ -247,7 +250,11 @@ type AvailablePaymentMethod {
 
 type SelectedPaymentMethod {
     code: String @doc(description: "The payment method code")
+    additional_data: SelectedPaymentMethodAdditionalData @doc(description: "Additional payment data")
     purchase_order_number: String @doc(description: "The purchase order number.")
+}
+
+type SelectedPaymentMethodAdditionalData {
 }
 
 enum AdressTypeEnum {

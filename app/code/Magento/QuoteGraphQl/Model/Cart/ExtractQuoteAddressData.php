@@ -50,7 +50,6 @@ class ExtractQuoteAddressData
         }
 
         $addressData = array_merge($addressData, [
-            'address_id' => $address->getId(),
             'address_type' => $addressType,
             'country' => [
                 'code' => $address->getCountryId(),

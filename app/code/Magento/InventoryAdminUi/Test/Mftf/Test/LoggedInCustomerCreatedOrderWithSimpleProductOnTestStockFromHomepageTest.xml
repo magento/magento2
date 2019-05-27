@@ -111,5 +111,9 @@
         <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$createSource.source[name]$$)}}" userInput="100" stepKey="checkProductSourceQtyAfterPlaceOrder"/>
         <see selector="{{AdminProductGridSection.productSalableQty('1',$$createStock.stock[name]$$)}}" userInput="95" stepKey="checkSalableQtyAfterPlaceOrder"/>
 
+        <!--Admin area Reorder-->
+        <comment userInput="Admin - Reorder" stepKey="ReorderFromAdmin"/>
+
+
     </test>
 </tests>

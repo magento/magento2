@@ -10,8 +10,6 @@ namespace Magento\InventoryLowQuantityNotification\Test\Integration\Model;
 use Magento\InventoryLowQuantityNotificationAdminUi\Block\Adminhtml\Rss\NotifyStock;
 use Magento\InventoryLowQuantityNotificationApi\Api\GetSourceItemConfigurationInterface;
 use Magento\InventoryLowQuantityNotificationApi\Api\SourceItemConfigurationsSaveInterface;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -24,16 +22,6 @@ class RssFeedTest extends TestCase
      * @var NotifyStock
      */
     private $dataProvider;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var string
-     */
-    private $storeCodeBefore;
 
     /**
      * @var SourceItemConfigurationsSaveInterface
@@ -53,13 +41,10 @@ class RssFeedTest extends TestCase
         parent::setUp();
 
         $this->dataProvider = Bootstrap::getObjectManager()->create(NotifyStock::class);
-        $this->storeManager = Bootstrap::getObjectManager()->create(StoreManagerInterface::class);
         $this->sourceItemConfigurationsSave = Bootstrap::getObjectManager()
             ->create(SourceItemConfigurationsSaveInterface::class);
         $this->getSourceItemConfiguration = Bootstrap::getObjectManager()
             ->create(GetSourceItemConfigurationInterface::class);
-        $this->storeCodeBefore = $this->storeManager->getStore()->getCode();
-        $this->storeManager->setCurrentStore(Store::ADMIN_CODE);
     }
 
     // @codingStandardsIgnoreStart
@@ -153,17 +138,5 @@ class RssFeedTest extends TestCase
             ['SKU-3', 'eu-2', 5, 2],
             ['SKU-3', 'eu-2', null, 3],
         ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-
-        if (null !== $this->storeCodeBefore) {
-            $this->storeManager->setCurrentStore($this->storeCodeBefore);
-        }
     }
 }

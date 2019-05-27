@@ -13,9 +13,13 @@
         <element name="firstName" type="input" selector="input[name=firstname]"/>
         <element name="lastName" type="input" selector="input[name=lastname]"/>
         <element name="street" type="input" selector="input[name='street[0]']"/>
+        <element name="street2" type="input" selector="input[name='street[1]']"/>
         <element name="city" type="input" selector="input[name=city]"/>
         <element name="region" type="select" selector="select[name=region_id]"/>
+        <element name="regionInput" type="input" selector="input[name=region]"/>
         <element name="postcode" type="input" selector="input[name=postcode]"/>
+        <element name="country" type="select" selector="select[name=country_id]"/>
+        <element name="company" type="input" selector="input[name=company]"/>
         <element name="telephone" type="input" selector="input[name=telephone]"/>
         <element name="next" type="button" selector="button.button.action.continue.primary" timeout="30"/>
         <element name="firstShippingMethod" type="radio" selector=".row:nth-of-type(1) .col-method .radio"/>
