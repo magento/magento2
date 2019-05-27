@@ -574,7 +574,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             );
         }
         $this->removeProductFromLocalCacheBySku($product->getSku());
-        unset($this->instancesById[$product->getId()]);
+        $this->removeProductFromLocalCacheById($product->getId());
 
         return $this->get($product->getSku(), false, $product->getStoreId());
     }
@@ -588,7 +588,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $productId = $product->getId();
         try {
             $this->removeProductFromLocalCacheBySku($product->getSku());
-            unset($this->instancesById[$product->getId()]);
+            $this->removeProductFromLocalCacheById($product->getId());
             $this->resourceModel->delete($product);
         } catch (ValidatorException $e) {
             throw new CouldNotSaveException(__($e->getMessage()), $e);
@@ -599,7 +599,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             );
         }
         $this->removeProductFromLocalCacheBySku($sku);
-        unset($this->instancesById[$productId]);
+        $this->removeProductFromLocalCacheById($productId);
 
         return true;
     }
@@ -770,10 +770,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Removes product in the local cache by id.
      *
-     * @param string $id
+     * @param string|null $id
      * @return void
      */
-    private function removeProductFromLocalCacheById(string $id): void
+    private function removeProductFromLocalCacheById(?string $id): void
     {
         unset($this->instancesById[$id]);
     }
@@ -815,7 +815,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         try {
             $this->removeProductFromLocalCacheBySku($product->getSku());
-            unset($this->instancesById[$product->getId()]);
+            $this->removeProductFromLocalCacheById($product->getId());
             $this->resourceModel->save($product);
         } catch (ConnectionException $exception) {
             throw new TemporaryCouldNotSaveException(
