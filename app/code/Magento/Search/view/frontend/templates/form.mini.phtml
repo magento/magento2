@@ -42,8 +42,10 @@ $helper = $this->helper(\Magento\Search\Helper\Data::class);
             </div>
             <div class="actions">
                 <button type="submit"
-                        title="<?= $block->escapeHtml(__('Search')) ?>"
-                        class="action search">
+                    title="<?= $block->escapeHtml(__('Search')) ?>"
+                    class="action search"
+                    aria-label="Search"
+                >
                     <span><?= /* @escapeNotVerified */ __('Search') ?></span>
                 </button>
             </div>

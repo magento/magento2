@@ -15,6 +15,5 @@
         <element name="delete" type="button" selector="//*[contains(@class,'admin__data-grid-header-row row row-gutter')]//*[text()='Delete']"/>
         <element name="ok" type="button" selector="//button[@data-role='action']//span[text()='OK']"/>
         <element name="deletedSuccessMessage" type="button" selector="//*[@class='message message-success success']"/>
-
     </section>
 </sections>

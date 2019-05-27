@@ -560,7 +560,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     /**
      * Retrieve order instance
      *
-     * @return \Magento\Sales\Model\Order
+     * @return \Magento\Sales\Model\Order\Payment
      */
     public function getOrder()
     {

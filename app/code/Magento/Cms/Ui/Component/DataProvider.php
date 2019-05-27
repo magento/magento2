@@ -13,6 +13,9 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
 
+/**
+ * DataProvider for cms ui.
+ */
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
     /**
@@ -67,6 +70,8 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     }
 
     /**
+     * Get authorization info.
+     *
      * @deprecated 101.0.7
      * @return AuthorizationInterface|mixed
      */
@@ -95,7 +100,8 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
                             'config' => [
                                 'editorConfig' => [
                                     'enabled' => false
-                                ]
+                                ],
+                                'componentType' => \Magento\Ui\Component\Container::NAME
                             ]
                         ]
                     ]

@@ -9,7 +9,7 @@
     <section name="quote">
         <group name="totals">
             <item name="subtotal" instance="Magento\Quote\Model\Quote\Address\Total\Subtotal" sort_order="100"/>
-            <item name="shipping" instance="Magento\Quote\Model\Quote\Address\Total\Shipping" sort_order="250"/>
+            <item name="shipping" instance="Magento\Quote\Model\Quote\Address\Total\Shipping" sort_order="350"/>
             <item name="grand_total" instance="Magento\Quote\Model\Quote\Address\Total\Grand" sort_order="550"/>
         </group>
     </section>

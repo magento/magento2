@@ -47,20 +47,6 @@ class Escaper
     private $escapeAsUrlAttributes = ['href'];
 
     /**
-     * @param \Magento\Framework\ZendEscaper|null $escaper
-     * @param \Psr\Log\LoggerInterface|null $logger
-     */
-    public function __construct(
-        \Magento\Framework\ZendEscaper $escaper = null,
-        \Psr\Log\LoggerInterface $logger = null
-    ) {
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\ZendEscaper::class);
-        $this->logger = $logger ?? \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Psr\Log\LoggerInterface::class);
-    }
-
-    /**
      * Escape string for HTML context.
      *
      * AllowedTags will not be escaped, except the following: script, img, embed,
@@ -99,7 +85,7 @@ class Escaper
                     );
                 } catch (\Exception $e) {
                     restore_error_handler();
-                    $this->logger->critical($e);
+                    $this->getLogger()->critical($e);
                 }
                 restore_error_handler();
 
@@ -229,7 +215,7 @@ class Escaper
     public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
         if ($escapeSingleQuote) {
-            return $this->escaper->escapeHtmlAttr((string) $string);
+            return $this->getEscaper()->escapeHtmlAttr((string) $string);
         }
         return htmlspecialchars((string)$string, ENT_COMPAT, 'UTF-8', false);
     }
@@ -254,7 +240,7 @@ class Escaper
      */
     public function encodeUrlParam($string)
     {
-        return $this->escaper->escapeUrl($string);
+        return $this->getEscaper()->escapeUrl($string);
     }
 
     /**
@@ -293,7 +279,7 @@ class Escaper
      */
     public function escapeCss($string)
     {
-        return $this->escaper->escapeCss($string);
+        return $this->getEscaper()->escapeCss($string);
     }
 
     /**
@@ -369,6 +355,36 @@ class Escaper
     }
 
     /**
+     * Get escaper
+     *
+     * @return \Magento\Framework\ZendEscaper
+     * @deprecated 100.2.0
+     */
+    private function getEscaper()
+    {
+        if ($this->escaper == null) {
+            $this->escaper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\ZendEscaper::class);
+        }
+        return $this->escaper;
+    }
+
+    /**
+     * Get logger
+     *
+     * @return \Psr\Log\LoggerInterface
+     * @deprecated 100.2.0
+     */
+    private function getLogger()
+    {
+        if ($this->logger == null) {
+            $this->logger = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Psr\Log\LoggerInterface::class);
+        }
+        return $this->logger;
+    }
+
+    /**
      * Filter prohibited tags.
      *
      * @param string[] $allowedTags
@@ -382,7 +398,7 @@ class Escaper
         );
 
         if (!empty($notAllowedTags)) {
-            $this->logger->critical(
+            $this->getLogger()->critical(
                 'The following tag(s) are not allowed: ' . implode(', ', $notAllowedTags)
             );
             $allowedTags = array_diff($allowedTags, $this->notAllowedTags);

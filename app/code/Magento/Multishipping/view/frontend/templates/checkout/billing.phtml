@@ -55,6 +55,10 @@
                 <div class="box-content">
                     <address>
                         <?= /* @noEscape */ $block->getCheckoutData()->getAddressHtml($block->getAddress()); ?>
+                        <input type="hidden"
+                               id="multishipping_billing_country_id"
+                               value="<?= /* @noEscape */ $block->getAddress()->getCountryId(); ?>"
+                               name="multishipping_billing_country_id"/>
                     </address>
                 </div>
             </div>
@@ -80,35 +84,44 @@
                                     $block->setMethodFormTemplate($code, $methodsForms[$code]);
                                 }
                                 ?>
-                            <dt class="item-title">
-                                <?php if ($methodsCount > 1) : ?>
-                                    <input type="radio"
-                                           id="p_method_<?= $block->escapeHtml($code); ?>"
-                                           value="<?= $block->escapeHtml($code); ?>"
-                                           name="payment[method]"
-                                           title="<?= $block->escapeHtml($_method->getTitle()) ?>"
-                                        <?php if ($checked) : ?>
-                                           checked="checked"
+                                <div data-bind="scope: 'payment_method_<?= $block->escapeHtml($code);?>'">
+                                    <dt class="item-title">
+                                        <?php if ($methodsCount > 1) : ?>
+                                            <input type="radio"
+                                                   id="p_method_<?= $block->escapeHtml($code); ?>"
+                                                   value="<?= $block->escapeHtml($code); ?>"
+                                                   name="payment[method]"
+                                                   title="<?= $block->escapeHtml($_method->getTitle()) ?>"
+                                                   data-bind="
+                                                       value: getCode(),
+                                                       checked: isChecked,
+                                                       click: selectPaymentMethod,
+                                                       visible: isRadioButtonVisible()"
+                                                <?php if ($checked) : ?>
+                                                    checked="checked"
+                                                <?php endif; ?>
+                                                   class="radio"/>
+                                        <?php else : ?>
+                                            <input type="radio"
+                                                   id="p_method_<?= $block->escapeHtml($code); ?>"
+                                                   value="<?= $block->escapeHtml($code); ?>"
+                                                   name="payment[method]"
+                                                   data-bind="
+                                                       value: getCode(),
+                                                       afterRender: selectPaymentMethod"
+                                                   checked="checked"
+                                                   class="radio solo method" />
                                         <?php endif; ?>
-                                           class="radio"/>
-                                <?php else : ?>
-                                    <input type="radio"
-                                           id="p_method_<?= $block->escapeHtml($code); ?>"
-                                           value="<?= $block->escapeHtml($code); ?>"
-                                           name="payment[method]"
-                                           checked="checked"
-                                           class="radio solo method" />
-                                <?php endif; ?>
-                                    <label for="p_method_<?= $block->escapeHtml($code); ?>">
-                                        <?= $block->escapeHtml($_method->getTitle()) ?>
-                                    </label>
-                            </dt>
-                                <?php if ($html = $block->getChildHtml('payment.method.' . $code)) : ?>
-                                    <dd class="item-content <?= $checked ? '' : 'no-display'; ?>"
-                                        data-bind="scope: 'payment_method_<?= $block->escapeHtml($code);?>'">
-                                        <?= /* @noEscape */ $html; ?>
-                                    </dd>
-                                <?php endif; ?>
+                                        <label for="p_method_<?= $block->escapeHtml($code); ?>">
+                                            <?= $block->escapeHtml($_method->getTitle()) ?>
+                                        </label>
+                                    </dt>
+                                    <?php if ($html = $block->getChildHtml('payment.method.' . $code)) : ?>
+                                        <dd class="item-content <?= $checked ? '' : 'no-display'; ?>">
+                                            <?= /* @noEscape */ $html; ?>
+                                        </dd>
+                                    <?php endif; ?>
+                                </div>
                             <?php endforeach; ?>
                         </dl>
                         <?= $block->getChildHtml('payment_methods_after') ?>

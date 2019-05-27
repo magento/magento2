@@ -7,14 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddressForUser;
-use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
+use Magento\CustomerGraphQl\Model\Customer\Address\DeleteCustomerAddress as DeleteCustomerAddressModel;
+use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddress;
+use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 
 /**
  * Customers address delete, used for GraphQL request processing.
@@ -22,33 +21,33 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 class DeleteCustomerAddress implements ResolverInterface
 {
     /**
-     * @var CheckCustomerAccount
+     * @var GetCustomer
      */
-    private $checkCustomerAccount;
+    private $getCustomer;
 
     /**
-     * @var AddressRepositoryInterface
+     * @var GetCustomerAddress
      */
-    private $addressRepository;
+    private $getCustomerAddress;
 
     /**
-     * @var GetCustomerAddressForUser
+     * @var DeleteCustomerAddressModel
      */
-    private $getCustomerAddressForUser;
+    private $deleteCustomerAddress;
 
     /**
-     * @param CheckCustomerAccount $checkCustomerAccount
-     * @param AddressRepositoryInterface $addressRepository
-     * @param GetCustomerAddressForUser $getCustomerAddressForUser
+     * @param GetCustomer $getCustomer
+     * @param GetCustomerAddress $getCustomerAddress
+     * @param DeleteCustomerAddressModel $deleteCustomerAddress
      */
     public function __construct(
-        CheckCustomerAccount $checkCustomerAccount,
-        AddressRepositoryInterface $addressRepository,
-        GetCustomerAddressForUser $getCustomerAddressForUser
+        GetCustomer $getCustomer,
+        GetCustomerAddress $getCustomerAddress,
+        DeleteCustomerAddressModel $deleteCustomerAddress
     ) {
-        $this->checkCustomerAccount = $checkCustomerAccount;
-        $this->addressRepository = $addressRepository;
-        $this->getCustomerAddressForUser = $getCustomerAddressForUser;
+        $this->getCustomer = $getCustomer;
+        $this->getCustomerAddress = $getCustomerAddress;
+        $this->deleteCustomerAddress = $deleteCustomerAddress;
     }
 
     /**
@@ -61,36 +60,14 @@ class DeleteCustomerAddress implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $currentUserId = $context->getUserId();
-        $currentUserType = $context->getUserType();
-
-        $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
-
-        return $this->deleteCustomerAddress((int)$currentUserId, (int)$args['id']);
-    }
-
-    /**
-     * Delete customer address
-     *
-     * @param int $customerId
-     * @param int $addressId
-     * @return bool
-     * @throws GraphQlAuthorizationException
-     * @throws GraphQlNoSuchEntityException
-     */
-    private function deleteCustomerAddress($customerId, $addressId)
-    {
-        $address = $this->getCustomerAddressForUser->execute($addressId, $customerId);
-        if ($address->isDefaultBilling()) {
-            throw new GraphQlAuthorizationException(
-                __('Customer Address %1 is set as default billing address and can not be deleted', [$addressId])
-            );
+        if (!isset($args['id']) || empty($args['id'])) {
+            throw new GraphQlInputException(__('Address "id" value should be specified'));
         }
-        if ($address->isDefaultShipping()) {
-            throw new GraphQlAuthorizationException(
-                __('Customer Address %1 is set as default shipping address and can not be deleted', [$addressId])
-            );
-        }
-        return $this->addressRepository->delete($address);
+
+        $customer = $this->getCustomer->execute($context);
+        $address = $this->getCustomerAddress->execute((int)$args['id'], (int)$customer->getId());
+
+        $this->deleteCustomerAddress->execute($address);
+        return true;
     }
 }

@@ -13,7 +13,7 @@ use Magento\Framework\Module\DbVersionInfo;
 /**
  * Old Validator for database
  *
- * Used in order to support backward compatability of modules that are installed
+ * Used in order to support backward compatibility of modules that are installed
  * in old way (with Install/Upgrade Schema/Data scripts)
  */
 class OldDbValidator implements UpToDateValidatorInterface
