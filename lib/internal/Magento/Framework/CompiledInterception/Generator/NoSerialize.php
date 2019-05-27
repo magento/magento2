@@ -7,6 +7,9 @@ namespace Magento\Framework\CompiledInterception\Generator;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Class NoSerialize
+ */
 class NoSerialize implements SerializerInterface
 {
     /**

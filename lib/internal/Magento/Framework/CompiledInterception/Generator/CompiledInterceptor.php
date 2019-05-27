@@ -17,8 +17,7 @@ use Magento\Framework\Interception\DefinitionInterface;
 use Magento\Framework\App\AreaList;
 
 /**
- * compiled interceptors generator
- * please see ../README.md for details
+ * Compiled interceptors generator, please see ../README.md for details
  */
 class CompiledInterceptor extends EntityAbstract
 {
@@ -43,8 +42,8 @@ class CompiledInterceptor extends EntityAbstract
     /**
      * CompiledInterceptor constructor.
      * @param AreaList $areaList
-     * @param null $sourceClassName
-     * @param null $resultClassName
+     * @param null|string $sourceClassName
+     * @param null|string $resultClassName
      * @param Io|null $ioObject
      * @param CodeGeneratorInterface|null $classGenerator
      * @param DefinedClasses|null $definedClasses
@@ -516,8 +515,13 @@ class CompiledInterceptor extends EntityAbstract
             }
         }
         if (isset($result[DefinitionInterface::LISTENER_AROUND])) {
-            $result[DefinitionInterface::LISTENER_AROUND] = $this->getPluginInfo($plugins, $result[DefinitionInterface::LISTENER_AROUND], $className, $allPlugins,
-                $this->getPluginsChain($plugins, $className, $method, $allPlugins, $result[DefinitionInterface::LISTENER_AROUND]));
+            $result[DefinitionInterface::LISTENER_AROUND] = $this->getPluginInfo(
+                $plugins,
+                $result[DefinitionInterface::LISTENER_AROUND],
+                $className,
+                $allPlugins,
+                $this->getPluginsChain($plugins, $className, $method, $allPlugins, $result[DefinitionInterface::LISTENER_AROUND])
+            );
         }
         return $result;
     }

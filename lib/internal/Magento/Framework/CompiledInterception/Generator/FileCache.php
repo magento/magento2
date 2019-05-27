@@ -8,6 +8,9 @@ namespace Magento\Framework\CompiledInterception\Generator;
 
 use Magento\Framework\Config\CacheInterface;
 
+/**
+ * Class FileCache
+ */
 class FileCache implements CacheInterface
 {
 

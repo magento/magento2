@@ -7,7 +7,10 @@ namespace Magento\Framework\CompiledInterception\Test\Unit\CompiledPluginList;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\CompiledInterception\Generator\CompiledPluginList;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item;
+use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item\Enhanced;
+use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced;
+use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple;
 use Psr\Log\NullLogger;
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
@@ -46,7 +49,7 @@ class CompiledPluginListTest extends \PHPUnit\Framework\TestCase
         $omConfigMock->expects($this->any())->method('getOriginalInstanceType')->will($this->returnArgument(0));
         $ret = [];
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        foreach($readerMap as $readerLine) {
+        foreach ($readerMap as $readerLine) {
             $ret[$readerLine[0]] = $objectManagerHelper->getObject(
                 CompiledPluginList::class,
                 [
@@ -64,18 +67,18 @@ class CompiledPluginListTest extends \PHPUnit\Framework\TestCase
     public function testGetPlugin()
     {
 
-        $this->objects['backend']->getNext(\Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item::class, 'getName');
+        $this->objects['backend']->getNext(Item::class, 'getName');
         $this->assertEquals(
-            \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple::class,
+            Simple::class,
             $this->objects['backend']->getPluginType(
-                \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item::class,
+                Item::class,
                 'simple_plugin'
             )
         );
         $this->assertEquals(
-            \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class,
+            Advanced::class,
             $this->objects['backend']->getPluginType(
-                \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item::class,
+                Item::class,
                 'advanced_plugin'
             )
         );
@@ -101,39 +104,39 @@ class CompiledPluginListTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                [4 => ['simple_plugin']], \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item::class,
+                [4 => ['simple_plugin']], Item::class,
                 'getName',
                 'global',
             ],
             [
                 // advanced plugin has lower sort order
                 [2 => 'advanced_plugin', 4 => ['advanced_plugin'], 1 => ['advanced_plugin']],
-                \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item::class,
+                Item::class,
                 'getName',
                 'backend'
             ],
             [
                 // advanced plugin has lower sort order
                 [4 => ['simple_plugin']],
-                \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item::class,
+                Item::class,
                 'getName',
                 'backend',
                 'advanced_plugin'
             ],
             // simple plugin is disabled in configuration for
             // \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item in frontend
-            [null, \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item::class, 'getName', 'frontend'],
+            [null, Item::class, 'getName', 'frontend'],
             // test plugin inheritance
             [
                 [4 => ['simple_plugin']],
-                \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item\Enhanced::class,
+                Enhanced::class,
                 'getName',
                 'global'
             ],
             [
                 // simple plugin is disabled in configuration for parent
                 [2 => 'advanced_plugin', 4 => ['advanced_plugin'], 1 => ['advanced_plugin']],
-                \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item\Enhanced::class,
+                Enhanced::class,
                 'getName',
                 'frontend'
             ]
@@ -158,5 +161,4 @@ class CompiledPluginListTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertNull($this->objects['frontend']->getNext('typeWithoutInstance', 'someMethod'));
     }
-
 }

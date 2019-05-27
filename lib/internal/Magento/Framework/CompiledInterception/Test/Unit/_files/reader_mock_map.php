@@ -4,25 +4,33 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItem;
+use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItemTyped;
+use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item;
+use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item\Enhanced;
+use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced;
+use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Complex;
+use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple;
+
 return [
     [
         'global',
         [
-            \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item::class => [
+            Item::class => [
                 'plugins' => [
                     'simple_plugin' => [
                         'sortOrder' => 10,
                         'instance' =>
-                            \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple::class,
+                            Simple::class,
                     ],
                 ],
             ],
-            \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItem::class => [
+            ComplexItem::class => [
                 'plugins' => [
                     'advanced_plugin' => [
                         'sortOrder' => 5,
                         'instance' =>
-                            \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class,
+                            Advanced::class,
                     ],
                 ],
             ],
@@ -31,40 +39,40 @@ return [
     [
         'backend',
         [
-            \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item::class => [
+            Item::class => [
                 'plugins' => [
                     'advanced_plugin' => [
                         'sortOrder' => 5,
                         'instance' =>
-                            \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class,
+                            Advanced::class,
                     ],
                 ],
             ],
-            \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItem::class => [
+            ComplexItem::class => [
                 'plugins' => [
                     'complex_plugin' => [
                         'sortOrder' => 15,
                         'instance' =>
-                            \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Complex::class,
+                            Complex::class,
                     ],
                     'advanced_plugin' => [
                         'sortOrder' => 5,
                         'instance' =>
-                            \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class,
+                            Advanced::class,
                     ],
                 ],
             ],
-            \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItemTyped::class => [
+            ComplexItemTyped::class => [
                 'plugins' => [
                     'complex_plugin' => [
                         'sortOrder' => 25,
                         'instance' =>
-                            \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Complex::class,
+                            Complex::class,
                     ],
                     'advanced_plugin' => [
                         'sortOrder' => 5,
                         'instance' =>
-                            \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class,
+                            Advanced::class,
                     ],
                 ],
             ],
@@ -72,14 +80,14 @@ return [
     ],
     [
         'frontend',
-        [\Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item::class => [
+        [Item::class => [
                 'plugins' => ['simple_plugin' => ['disabled' => true]],
-            ], \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item\Enhanced::class => [
+            ], Enhanced::class => [
                 'plugins' => [
                     'advanced_plugin' => [
                         'sortOrder' => 5,
                         'instance' =>
-                            \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class,
+                            Advanced::class,
                     ],
                 ],
             ],
