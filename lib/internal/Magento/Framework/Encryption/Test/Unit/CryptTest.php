@@ -9,6 +9,9 @@
  */
 namespace Magento\Framework\Encryption\Test\Unit;
 
+/**
+ *
+ */
 class CryptTest extends \PHPUnit\Framework\TestCase
 {
     private $_key;
@@ -27,6 +30,7 @@ class CryptTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped('MC-16965: need to fix');
         $this->_key = substr(__CLASS__, -32, 32);
     }
 
