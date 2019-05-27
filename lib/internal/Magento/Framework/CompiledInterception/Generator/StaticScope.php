@@ -46,6 +46,6 @@ class StaticScope implements ScopeInterface
      */
     public function setCurrentScope($scope)
     {
-        throw new \Exception('readonly');
+        throw new \RuntimeException('readonly');
     }
 }

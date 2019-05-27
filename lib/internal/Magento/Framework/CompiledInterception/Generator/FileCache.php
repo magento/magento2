@@ -49,7 +49,7 @@ class FileCache implements CacheInterface
      */
     public function test($identifier)
     {
-        // TODO: Implement test() method.
+        return file_exists($this->getCachePath($identifier));
     }
 
     /**
@@ -85,6 +85,7 @@ class FileCache implements CacheInterface
                 $path,
                 '<?php return ' . var_export($data, true) . '?>'
             );
+            return true;
         }
     }
 
@@ -97,7 +98,7 @@ class FileCache implements CacheInterface
      */
     public function remove($identifier)
     {
-        // TODO: Implement remove() method.
+        return false;
     }
 
     /**
@@ -110,7 +111,7 @@ class FileCache implements CacheInterface
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {
-        // TODO: Implement clean() method.
+        return false;
     }
 
     /**
@@ -120,7 +121,7 @@ class FileCache implements CacheInterface
      */
     public function getBackend()
     {
-        // TODO: Implement getBackend() method.
+        return null;
     }
 
     /**
@@ -130,6 +131,6 @@ class FileCache implements CacheInterface
      */
     public function getLowLevelFrontend()
     {
-        // TODO: Implement getLowLevelFrontend() method.
+        return null;
     }
 }

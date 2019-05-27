@@ -78,7 +78,7 @@ class CompiledInterceptor extends EntityAbstract
      */
     public function setInterceptedMethods($interceptedMethods)
     {
-        //NOOP
+        return;
     }
 
     /**
@@ -399,12 +399,15 @@ class CompiledInterceptor extends EntityAbstract
         }
 
         if (isset($conf[DefinitionInterface::LISTENER_AFTER])) {
-            $resultChain = array_merge($resultChain, $this->compileAfterPlugins(
-                $conf[DefinitionInterface::LISTENER_AFTER],
-                'after' . $capitalizedName,
-                $extraParams,
-                $returnVoid
-            ));
+            $resultChain = array_merge(
+                $resultChain,
+                $this->compileAfterPlugins(
+                    $conf[DefinitionInterface::LISTENER_AFTER],
+                    'after' . $capitalizedName,
+                    $extraParams,
+                    $returnVoid
+                )
+            );
         }
         return array_merge($body, $this->getResultChainLines($resultChain, $returnVoid));
     }
