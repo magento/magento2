@@ -16,6 +16,10 @@ use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Interception\DefinitionInterface;
 use Magento\Framework\App\AreaList;
 
+/**
+ * compiled interceptors generator
+ * please see ../README.md for details
+ */
 class CompiledInterceptor extends EntityAbstract
 {
     /**
@@ -23,15 +27,18 @@ class CompiledInterceptor extends EntityAbstract
      */
     const ENTITY_TYPE = 'interceptor';
 
-    protected $plugins;
+    private $plugins;
 
-    protected $classMethods = null;
+    private $classMethods;
 
-    protected $classProperties = null;
+    private $classProperties;
 
-    protected $baseReflection = null;
+    /**
+     * @var \ReflectionClass
+     */
+    private $baseReflection;
 
-    protected $areaList;
+    private $areaList;
 
     /**
      * CompiledInterceptor constructor.
@@ -51,8 +58,7 @@ class CompiledInterceptor extends EntityAbstract
         CodeGeneratorInterface $classGenerator = null,
         DefinedClasses $definedClasses = null,
         $plugins = null
-    )
-    {
+    ){
         parent::__construct($sourceClassName,
             $resultClassName ,
             $ioObject,
@@ -123,10 +129,13 @@ class CompiledInterceptor extends EntityAbstract
             $this->classMethods = [];
             $this->classProperties = [];
 
-            $this->injectPropertiesSettersToConstructor($this->getSourceClassReflection()->getConstructor(), [
-                ScopeInterface::class => '____scope',
-                ObjectManagerInterface::class => '____om',
-            ]);
+            $this->injectPropertiesSettersToConstructor(
+                $this->getSourceClassReflection()->getConstructor(),
+                [
+                    ScopeInterface::class => '____scope',
+                    ObjectManagerInterface::class => '____om',
+                ]
+            );
             $this->overrideMethodsAndGeneratePluginGetters($this->getSourceClassReflection());
         }
     }
@@ -137,7 +146,10 @@ class CompiledInterceptor extends EntityAbstract
      */
     private function getSourceClassReflection()
     {
-        return new \ReflectionClass($this->getSourceClassName());
+        if ($this->baseReflection === null) {
+            $this->baseReflection = new \ReflectionClass($this->getSourceClassName());
+        }
+        return $this->baseReflection;
     }
 
     /**
@@ -413,6 +425,7 @@ class CompiledInterceptor extends EntityAbstract
 
         return [
             'name' => $this->getGetterName($plugin),
+            'visibility' => 'private',
             'parameters' => [],
             'body' => implode("\n", $body),
             'returnType' => $plugin['class'],
@@ -433,7 +446,7 @@ class CompiledInterceptor extends EntityAbstract
         $returnsVoid = ($method->hasReturnType() && $method->getReturnType()->getName() == 'void');
 
         $body = [
-            'switch($this->____scope->getCurrentScope()){'
+            'switch ($this->____scope->getCurrentScope()) {'
         ];
 
         $cases = [];
@@ -457,7 +470,7 @@ class CompiledInterceptor extends EntityAbstract
         $body[] = "}";
         $returnType = $method->getReturnType();
         $returnTypeValue = $returnType
-            ? ($returnType->allowsNull() ? '?' : '') .$returnType->getName()
+            ? ($returnType->allowsNull() ? '?' : '') . $returnType->getName()
             : null;
         if ($returnTypeValue === 'self') {
             $returnTypeValue = $method->getDeclaringClass()->getName();

@@ -46,7 +46,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
      */
     public function returnVoid() : void
     {
-        switch($this->____scope->getCurrentScope()){
+        switch ($this->____scope->getCurrentScope()) {
         	case 'backend':
         		parent::returnVoid();
         		
@@ -63,7 +63,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
      */
     public function getNullableValue() : ?string
     {
-        switch($this->____scope->getCurrentScope()){
+        switch ($this->____scope->getCurrentScope()) {
         	case 'backend':
         		$result = parent::getNullableValue();
         		
@@ -78,7 +78,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
      */
     public function getName() : string
     {
-        switch($this->____scope->getCurrentScope()){
+        switch ($this->____scope->getCurrentScope()) {
         	case 'backend':
         		$this->____plugin_advanced_plugin()->beforeGetName($this);
         		
@@ -101,7 +101,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
      */
     public function setValue(string $value)
     {
-        switch($this->____scope->getCurrentScope()){
+        switch ($this->____scope->getCurrentScope()) {
         	case 'backend':
         		$beforeResult = $this->____plugin_complex_plugin()->beforeSetValue($this, $value);
         		if ($beforeResult !== null) list($value) = (array)$beforeResult;
@@ -119,7 +119,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
      */
     public function firstVariadicParameter(string ... $variadicValue)
     {
-        switch($this->____scope->getCurrentScope()){
+        switch ($this->____scope->getCurrentScope()) {
         	case 'backend':
         		return $this->____plugin_complex_plugin()->aroundFirstVariadicParameter($this, function($variadicValue){
         			return parent::firstVariadicParameter($variadicValue);
@@ -134,7 +134,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
      */
     public function secondVariadicParameter(string $value, string ... $variadicValue)
     {
-        switch($this->____scope->getCurrentScope()){
+        switch ($this->____scope->getCurrentScope()) {
         	case 'backend':
         		return $this->____plugin_complex_plugin()->aroundSecondVariadicParameter($this, function($value, $variadicValue){
         			return parent::secondVariadicParameter($value, $variadicValue);
@@ -149,7 +149,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
      */
     public function byRefVariadic(string &... $variadicValue)
     {
-        switch($this->____scope->getCurrentScope()){
+        switch ($this->____scope->getCurrentScope()) {
         	case 'backend':
         		return $this->____plugin_complex_plugin()->aroundByRefVariadic($this, function(&$variadicValue){
         			return parent::byRefVariadic($variadicValue);
@@ -164,7 +164,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
      */
     public function returnsSelf() : \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItemTyped
     {
-        switch($this->____scope->getCurrentScope()){
+        switch ($this->____scope->getCurrentScope()) {
         	case 'backend':
         		$this->____plugin_complex_plugin()->beforeReturnsSelf($this);
         		
@@ -179,7 +179,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
      */
     public function returnsType() : \Magento\Framework\Something
     {
-        switch($this->____scope->getCurrentScope()){
+        switch ($this->____scope->getCurrentScope()) {
         	case 'backend':
         		$this->____plugin_complex_plugin()->beforeReturnsType($this);
         		
@@ -193,7 +193,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
      * plugin "complex_plugin"
      * @return \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Complex
      */
-    public function ____plugin_complex_plugin() : \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Complex
+    private function ____plugin_complex_plugin() : \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Complex
     {
         if ($this->____plugin_complex_plugin === null) {
         	$this->____plugin_complex_plugin = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Complex::class);
@@ -205,7 +205,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
      * plugin "advanced_plugin"
      * @return \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced
      */
-    public function ____plugin_advanced_plugin() : \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced
+    private function ____plugin_advanced_plugin() : \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced
     {
         if ($this->____plugin_advanced_plugin === null) {
         	$this->____plugin_advanced_plugin = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class);

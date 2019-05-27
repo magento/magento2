@@ -9,6 +9,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Interception\PluginList\PluginList;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\Config\Reader\Dom;
+use Magento\Framework\ObjectManager\Relations\Runtime as ObjectManagerRelationsRuntime;
+use Magento\Framework\Interception\Definition\Runtime as InterceptionDefinitionRuntime;
+use Magento\Framework\ObjectManager\Definition\Runtime as ObjectManagerDefinitionRuntime;
 
 class CompiledPluginList extends PluginList
 {
@@ -35,11 +38,11 @@ class CompiledPluginList extends PluginList
             $reader,
             new StaticScope($scope),
             new FileCache($cachePath),
-            new \Magento\Framework\ObjectManager\Relations\Runtime(),
+            new ObjectManagerRelationsRuntime(),
             $omConfig,
-            new \Magento\Framework\Interception\Definition\Runtime(),
+            new InterceptionDefinitionRuntime(),
             $objectManager,
-            new \Magento\Framework\ObjectManager\Definition\Runtime(),
+            new ObjectManagerDefinitionRuntime(),
             ['first' => 'global'],
             'compiled_plugins_' . $scope,
             new NoSerialize()

@@ -46,7 +46,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
      */
     public function getName()
     {
-        switch($this->____scope->getCurrentScope()){
+        switch ($this->____scope->getCurrentScope()) {
         	case 'global':
         	case 'emptyscope':
         		$result = parent::getName();
@@ -71,7 +71,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
      * plugin "simple_plugin"
      * @return \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple
      */
-    public function ____plugin_simple_plugin() : \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple
+    private function ____plugin_simple_plugin() : \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple
     {
         if ($this->____plugin_simple_plugin === null) {
         	$this->____plugin_simple_plugin = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple::class);
@@ -83,7 +83,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Unit\Cust
      * plugin "advanced_plugin"
      * @return \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced
      */
-    public function ____plugin_advanced_plugin() : \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced
+    private function ____plugin_advanced_plugin() : \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced
     {
         if ($this->____plugin_advanced_plugin === null) {
         	$this->____plugin_advanced_plugin = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class);

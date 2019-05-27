@@ -12,7 +12,7 @@ class ComplexItemTyped
     private $value;
     private $variadicValue;
 
-    public function returnVoid() : void
+    public function returnVoid(): void
     {
         // Nothing to do here
     }
@@ -20,7 +20,7 @@ class ComplexItemTyped
     /**
      * @return null|string
      */
-    public function getNullableValue() : ?string
+    public function getNullableValue(): ?string
     {
         return null;
     }
@@ -28,7 +28,7 @@ class ComplexItemTyped
     /**
      * @return string
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->value;
     }
@@ -70,7 +70,7 @@ class ComplexItemTyped
     /**
      *
      */
-    public function returnsSelf() : self
+    public function returnsSelf(): self
     {
         return $this;
     }
@@ -78,7 +78,7 @@ class ComplexItemTyped
     /**
      *
      */
-    public function returnsType() : \Magento\Framework\Something
+    public function returnsType(): \Magento\Framework\Something
     {
         return null;
     }
