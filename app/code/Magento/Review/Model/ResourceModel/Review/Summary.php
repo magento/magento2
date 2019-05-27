@@ -79,15 +79,15 @@ class Summary extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Append review summary fields to product collection
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
-     * @param $storeId
-     * @param $entityCode
+     * @param string $storeId
+     * @param string $entityCode
      * @return Summary
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function appendSummaryFieldsToCollection(
         \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection,
-        $storeId,
-        $entityCode
+        string $storeId,
+        string $entityCode
     ) {
         if (!$productCollection->isLoaded()) {
             $summaryEntitySubSelect = $this->getConnection()->select();
@@ -99,7 +99,10 @@ class Summary extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'entity_code = ?',
                     $entityCode
                 );
-            $joinCond = new \Zend_Db_Expr("e.entity_id = review_summary.entity_pk_value AND review_summary.store_id = {$storeId} AND review_summary.entity_type = ({$summaryEntitySubSelect})");
+            $joinCond = new \Zend_Db_Expr(
+                "e.entity_id = review_summary.entity_pk_value AND review_summary.store_id = {$storeId}"
+                . " AND review_summary.entity_type = ({$summaryEntitySubSelect})"
+            );
             $productCollection->getSelect()
                 ->joinLeft(
                     ['review_summary' => $this->getMainTable()],

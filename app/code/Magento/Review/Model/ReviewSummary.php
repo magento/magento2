@@ -10,6 +10,9 @@ namespace Magento\Review\Model;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory as SummaryCollectionFactory;
 
+/**
+ * ReviewSummary model.
+ */
 class ReviewSummary
 {
     /**
@@ -17,6 +20,9 @@ class ReviewSummary
      */
     private $summaryCollectionFactory;
 
+    /**
+     * @param SummaryCollectionFactory $sumColFactory
+     */
     public function __construct(
         SummaryCollectionFactory $sumColFactory
     ) {
@@ -27,18 +33,20 @@ class ReviewSummary
      * Append review summary data to product
      *
      * @param AbstractModel $object
-     * @param $storeId
+     * @param int $storeId
      * @param int $entityType
      */
-    public function appendSummaryDataToObject(AbstractModel $object, $storeId, $entityType = 1): void
+    public function appendSummaryDataToObject(AbstractModel $object, int $storeId, int $entityType = 1): void
     {
         $summary = $this->summaryCollectionFactory->create()
             ->addEntityFilter($object->getId(), $entityType)
             ->addStoreFilter($storeId)
             ->getFirstItem();
-        $object->addData([
-            'reviews_count' => $summary->getData('reviews_count'),
-            'rating_summary' => $summary->getData('rating_summary')
-        ]);
+        $object->addData(
+            [
+                'reviews_count' => $summary->getData('reviews_count'),
+                'rating_summary' => $summary->getData('rating_summary')
+            ]
+        );
     }
 }
