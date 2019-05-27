@@ -8,6 +8,9 @@ namespace Magento\Cms\Helper\Wysiwyg;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\ObjectManager;
 
+/**
+ * Image test.
+ */
 class ImagesTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -82,22 +85,22 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     public function providerGetImageHtmlDeclaration()
     {
         return [
-            [true, 'wysiwyg/hello.png', true, '<img src="http://example.com/pub/media/wysiwyg/hello.png" alt="" />'],
+            [true, 'hello.png', true, '<img src="http://example.com/pub/media/wysiwyg/hello.png" alt="" />'],
             [
                 false,
-                'wysiwyg/hello.png',
+                'hello.png',
                 false,
                 function ($actualResult) {
                     $expectedResult = (
                         '/backend/cms/wysiwyg/directive/___directive/' .
                         'e3ttZWRpYSB1cmw9Ind5c2l3eWcvaGVsbG8ucG5nIn19/'
                     );
-
+                     // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $this->assertContains($expectedResult, parse_url($actualResult, PHP_URL_PATH));
                 }
             ],
-            [true, 'wysiwyg/hello.png', false, 'http://example.com/pub/media/wysiwyg/hello.png'],
-            [false, 'wysiwyg/hello.png', true, '<img src="{{media url=&quot;wysiwyg/hello.png&quot;}}" alt="" />'],
+            [true, 'hello.png', false, 'http://example.com/pub/media/wysiwyg/hello.png'],
+            [false, 'hello.png', true, '<img src="{{media url=&quot;wysiwyg/hello.png&quot;}}" alt="" />'],
         ];
     }
 
@@ -114,23 +117,34 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
 
         $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 
-        $contextMock = $this->objectManager->create(\Magento\Framework\App\Helper\Context::class, [
+        $contextMock = $this->objectManager->create(
+            \Magento\Framework\App\Helper\Context::class,
+            [
             'eventManager' => $eventManagerMock,
-        ]);
+            ]
+        );
 
-        $helper = $this->objectManager->create(\Magento\Cms\Helper\Wysiwyg\Images::class, [
+        $helper = $this->objectManager->create(
+            \Magento\Cms\Helper\Wysiwyg\Images::class,
+            [
             'context' => $contextMock
-        ]);
+            ]
+        );
 
         $checkResult = new \stdClass();
         $checkResult->isAllowed = false;
 
         $eventManagerMock->expects($this->any())
             ->method('dispatch')
-            ->with('cms_wysiwyg_images_static_urls_allowed', ['result' => $checkResult, 'store_id' => $storeId])
-            ->willReturnCallback(function ($_, $arr) use ($isStaticUrlsAllowed) {
-                $arr['result']->isAllowed = $isStaticUrlsAllowed;
-            });
+            ->with(
+                'cms_wysiwyg_images_static_urls_allowed',
+                ['result' => $checkResult, 'store_id' => $storeId]
+            )
+            ->willReturnCallback(
+                function ($_, $arr) use ($isStaticUrlsAllowed) {
+                    $arr['result']->isAllowed = $isStaticUrlsAllowed;
+                }
+            );
 
         $helper->setStoreId($storeId);
 

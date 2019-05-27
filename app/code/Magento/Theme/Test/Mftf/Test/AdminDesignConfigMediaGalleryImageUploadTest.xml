@@ -68,11 +68,5 @@
         <actionGroup ref="DeleteImageFromStorageActionGroup" stepKey="deleteImageFromStorage">
             <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
-        <actionGroup ref="NavigateToFaviconMediaFolderActionGroup" stepKey="navigateToFolder3">
-            <argument name="StoreFolder" value="{{AdminDesignConfigSection.storeLink}}"/>
-        </actionGroup>
-        <actionGroup ref="DeleteImageFromStorageActionGroup" stepKey="deleteImageFromStorage2">
-            <argument name="Image" value="ImageUpload3"/>
-        </actionGroup>
     </test>
 </tests>

@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Wysiwyg Images Helper.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Images extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -224,8 +225,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Return path of the current selected directory or root directory for startup
-     * Try to create target directory if it doesn't exist
+     * Return path of the current selected directory or root directory for startup.
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -246,7 +246,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
                 if (!$this->_directory->isExist($currentDir)) {
                     $this->_directory->create($currentDir);
                 }
-            } catch (\Magento\Framework\Exception\FileSystemException $e) {
+            } catch (\FileSystemException $e) {
                 $message = __('The directory %1 is not writable by server.', $currentPath);
                 throw new \Magento\Framework\Exception\LocalizedException($message);
             }
@@ -294,6 +294,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     public function idDecode($string)
     {
         $string = strtr($string, ':_-', '+/=');
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         return base64_decode($string);
     }
 
@@ -315,7 +316,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Set user-traversable image directory subpath relative to media directory and relative to nested storage root
      *
-     * @var string $subpath
+     * @param string $subpath
      * @return void
      */
     public function setImageDirectorySubpath($subpath)

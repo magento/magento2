@@ -105,6 +105,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs(['path' => $this->path])
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->directoryWriteMock->expects($this->any())
             ->method('getAbsolutePath')
             ->willReturnMap(
@@ -167,9 +168,9 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
      * @param string $path
      * @return string
      */
-    protected function getAbsolutePath($path)
+    protected function getAbsolutePath()
     {
-        return $this->path . $path;
+        return $this->path;
     }
 
     public function testSetStoreId()
@@ -317,9 +318,11 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->eventManagerMock->expects($this->any())
             ->method('dispatch')
             ->with('cms_wysiwyg_images_static_urls_allowed', ['result' => $checkResult, 'store_id' => $storeId])
-            ->willReturnCallback(function ($str, $arr) use ($allowedValue) {
-                $arr['result']->isAllowed = $allowedValue;
-            });
+            ->willReturnCallback(
+                function ($str, $arr) use ($allowedValue) {
+                    $arr['result']->isAllowed = $allowedValue;
+                }
+            );
     }
 
     /**
@@ -327,10 +330,11 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
      */
     public function providerIsUsingStaticUrlsAllowed()
     {
-        return [
+        return
+            [
             [true],
             [false],
-        ];
+            ];
     }
 
     /**
@@ -380,7 +384,6 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     public function testGetCurrentPathThrowException()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('The directory PATH is not writable by server.');
 
         $this->directoryWriteMock->expects($this->once())
             ->method('isExist')

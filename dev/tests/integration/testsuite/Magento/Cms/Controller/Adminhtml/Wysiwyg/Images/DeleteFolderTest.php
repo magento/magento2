@@ -95,9 +95,10 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
             $linkedDirectory->getRelativePath($linkedDirectoryPath . DIRECTORY_SEPARATOR . $directoryName)
         );
         $this->model->getRequest()->setParams(
-            ['node' => $this->imagesHelper->idEncode('wysiwyg' . DIRECTORY_SEPARATOR . $directoryName)]
+            ['node' => $this->imagesHelper->idEncode('' . DIRECTORY_SEPARATOR . $directoryName)]
         );
         $this->model->execute();
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $this->assertFalse(is_dir($linkedDirectoryPath . DIRECTORY_SEPARATOR . $directoryName));
     }
 
@@ -109,7 +110,11 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithWrongDirectoryName()
     {
-        $directoryName = '/../../etc/';
+        $linkedDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::PUB);
+        $linkedDirectory->create(
+            $this->fullDirectoryPath
+        );
+        $directoryName = '/../../../etc/';
         $this->model->getRequest()->setParams(['node' => $this->imagesHelper->idEncode($directoryName)]);
         $this->model->execute();
 
@@ -117,6 +122,7 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * phpcs:disable Magento2.Functions.StaticFunction
      * @inheritdoc
      */
     public static function tearDownAfterClass()
