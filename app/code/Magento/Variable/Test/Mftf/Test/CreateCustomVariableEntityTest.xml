@@ -30,7 +30,7 @@
         <actionGroup ref="AdminClickMainButtonActionGroup" stepKey="clickSaveCustomVariable">
             <argument name="button" value="{{AdminMainActionsSection.save}}"/>
         </actionGroup>
-        <actionGroup ref="AssertMessageActionGroup" stepKey="seeSuccessMessage">
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
             <argument name="message" value="You saved the custom variable."/>
         </actionGroup>
         <actionGroup ref="AdminFilterGridActionGroup" stepKey="filterVariablesGridByNewVariableCode" >
