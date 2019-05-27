@@ -525,10 +525,8 @@ class Customer extends AbstractCustomer
                         if (!isset($attributesToSave[$tableName])) {
                             $attributesToSave[$tableName] = [];
                         }
-                        $attributesToSave[$tableName] = array_diff_key(
-                                $attributesToSave[$tableName],
-                                $customerAttributes
-                            ) + $customerAttributes;
+                        $attributes = array_diff_key($attributesToSave[$tableName], $customerAttributes);
+                        $attributesToSave[$tableName] =  $attributes + $customerAttributes;
                     }
                 }
             }
@@ -584,13 +582,9 @@ class Customer extends AbstractCustomer
                 $this->addRowError(self::ERROR_INVALID_STORE, $rowNumber);
             }
             // check password
-            if (isset(
-                    $rowData['password']
-                ) && strlen(
-                    $rowData['password']
-                ) && $this->string->strlen(
-                    $rowData['password']
-                ) < self::MIN_PASSWORD_LENGTH
+            if (isset($rowData['password'])
+                && strlen($rowData['password'])
+                && $this->string->strlen($rowData['password']) < self::MIN_PASSWORD_LENGTH
             ) {
                 $this->addRowError(self::ERROR_PASSWORD_LENGTH, $rowNumber);
             }
