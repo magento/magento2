@@ -69,7 +69,6 @@ class CleanConfigurationTmpImages
         \Magento\Catalog\Model\Product $configurableProduct
     ) {
 
-        // Clean tmp
         $configurations = $this->getConfigurations();
         foreach ($configurations as $variationId => $simpleProductData) {
             if (!isset($simpleProductData['media_gallery']['images'])) {
@@ -87,7 +86,6 @@ class CleanConfigurationTmpImages
                 }
             }
         }
-
 
         return $configurableProduct;
     }
