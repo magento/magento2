@@ -81,12 +81,6 @@ class ImageResize
     private $mediaDirectory;
 
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @param State $appState
      * @param MediaConfig $imageConfig
      * @param ProductImage $productImage
      * @param ImageFactory $imageFactory
@@ -96,11 +90,11 @@ class ImageResize
      * @param ThemeCustomizationConfig $themeCustomizationConfig
      * @param Collection $themeCollection
      * @param Filesystem $filesystem
+     * @throws \Magento\Framework\Exception\FileSystemException
      * @internal param ProductImage $gallery
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        State $appState,
         MediaConfig $imageConfig,
         ProductImage $productImage,
         ImageFactory $imageFactory,
@@ -111,7 +105,6 @@ class ImageResize
         Collection $themeCollection,
         Filesystem $filesystem
     ) {
-        $this->appState = $appState;
         $this->imageConfig = $imageConfig;
         $this->productImage = $productImage;
         $this->imageFactory = $imageFactory;
@@ -121,7 +114,6 @@ class ImageResize
         $this->themeCustomizationConfig = $themeCustomizationConfig;
         $this->themeCollection = $themeCollection;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->filesystem = $filesystem;
     }
 
     /**
@@ -144,31 +136,50 @@ class ImageResize
     }
 
     /**
-     * Create resized images of different sizes from themes.
+     * Count how many images will require resizing
      *
-     * @param array|null $themes
-     * @return \Generator
+     * @return int
      * @throws NotFoundException
      */
-    public function resizeFromThemes(array $themes = null): \Generator
+    public function getCountForResize()
     {
         $count = $this->productImage->getCountAllProductImages();
         if (!$count) {
             throw new NotFoundException(__('Cannot resize images - product images not found'));
         }
 
+        return $count;
+    }
+
+    /**
+     * Create resized images of different sizes from themes.
+     *
+     * @param array|null $themes
+     * @return \Generator|\Exception|boolean Generator values will be true (on success) or an Exception object if
+     * an exception was raised during processing of the image.
+     * The generator key is always the filename that was processed.
+     */
+    public function resizeFromThemes(array $themes = null): \Generator
+    {
         $productImages = $this->productImage->getAllProductImages();
         $viewImages = $this->getViewImages($themes ?? $this->getThemesInUse());
 
         foreach ($productImages as $image) {
+            $result = true;
             $originalImageName = $image['filepath'];
             $originalImagePath = $this->mediaDirectory->getAbsolutePath(
                 $this->imageConfig->getMediaPath($originalImageName)
             );
-            foreach ($viewImages as $viewImage) {
-                $this->resize($viewImage, $originalImagePath, $originalImageName);
+
+            try {
+                foreach ($viewImages as $viewImage) {
+                    $this->resize($viewImage, $originalImagePath, $originalImageName);
+                }
+            } catch (\Exception $e) {
+                $result = $e;
             }
-            yield $originalImageName => $count;
+
+            yield $originalImageName => $result;
         }
     }
 

@@ -64,12 +64,11 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     {
         try {
             $this->appState->setAreaCode(Area::AREA_GLOBAL);
-            $generator = $this->resize->resizeFromThemes();
 
             /** @var ProgressBar $progress */
             $progress = $this->objectManager->create(ProgressBar::class, [
                 'output' => $output,
-                'max' => $generator->current()
+                'max' => $this->resize->getCountForResize()
             ]);
             $progress->setFormat(
                 "%current%/%max% [%bar%] %percent:3s%% %elapsed% %memory:6s% \t| <info>%message%</info>"
@@ -79,9 +78,15 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
                 $progress->setOverwrite(false);
             }
 
+            $generator = $this->resize->resizeFromThemes();
             for (; $generator->valid(); $generator->next()) {
                 $progress->setMessage($generator->key());
                 $progress->advance();
+
+                if ($generator->current() instanceof \Exception) {
+                    $output->writeln(''); // blank line for aligning error messages
+                    $output->writeln("<error>{$generator->current()->getMessage()}</error>");
+                }
             }
         } catch (\Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
