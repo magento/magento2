@@ -6,6 +6,7 @@
 namespace Magento\Framework\CompiledInterception\Generator;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\Interception\PluginList\PluginList;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\Config\Reader\Dom;
@@ -13,21 +14,24 @@ use Magento\Framework\ObjectManager\Relations\Runtime as ObjectManagerRelationsR
 use Magento\Framework\Interception\Definition\Runtime as InterceptionDefinitionRuntime;
 use Magento\Framework\ObjectManager\Definition\Runtime as ObjectManagerDefinitionRuntime;
 
+/**
+ * Class CompiledPluginList
+ */
 class CompiledPluginList extends PluginList
 {
     /**
      * CompiledPluginList constructor.
-     * @param $objectManager ObjectManager
-     * @param $scope
-     * @param null $reader
-     * @param null $omConfig
-     * @param null $cachePath
+     * @param ObjectManager $objectManager
+     * @param string $scope
+     * @param null|ReaderInterface $reader
+     * @param null|ConfigInterface $omConfig
+     * @param null|string $cachePath
      */
     public function __construct(
         $objectManager,
         $scope,
-        $reader = null,
-        $omConfig = null,
+        ReaderInterface $reader = null,
+        ConfigInterface $omConfig = null,
         $cachePath = null
     ) {
         if (!$reader || !$omConfig) {
@@ -63,13 +67,14 @@ class CompiledPluginList extends PluginList
     }
 
     /**
-     * @param $type
-     * @param $code
+     * Get class of a plugin
+     *
+     * @param string $type
+     * @param string $code
      * @return mixed
      */
     public function getPluginType($type, $code)
     {
         return $this->_inherited[$type][$code]['instance'];
     }
-
 }

@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\CompiledInterception\Generator;
 
-
 use Magento\Framework\Config\CacheInterface;
 
 /**
@@ -18,21 +17,27 @@ class FileCache implements CacheInterface
 
     /**
      * FileCache constructor.
-     * @param null $cachePath
+     * @param null|string $cachePath
      */
     public function __construct($cachePath = null)
     {
-        $this->cachePath = ($cachePath === null ? BP . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'cache' : $cachePath);
+        if ($cachePath === null) {
+            $this->cachePath = BP . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'cache';
+        } else {
+            $this->cachePath = $cachePath;
+        }
     }
 
-
     /**
-     * @param $identifier
+     * Get cache path
+     *
+     * @param string $identifier
      * @return string
      */
     private function getCachePath($identifier)
     {
-        return $this->cachePath . DIRECTORY_SEPARATOR . str_replace('|', '_', $identifier . '.php');
+        $identifier = str_replace('|', '_', $identifier);
+        return $this->cachePath . DIRECTORY_SEPARATOR . $identifier . '.php';
     }
 
     /**
@@ -127,5 +132,4 @@ class FileCache implements CacheInterface
     {
         // TODO: Implement getLowLevelFrontend() method.
     }
-
 }

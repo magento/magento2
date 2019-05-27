@@ -19,7 +19,8 @@ class StaticScope implements ScopeInterface
 
     /**
      * StaticScope constructor.
-     * @param $scope
+     *
+     * @param string $scope
      */
     public function __construct($scope)
     {
@@ -37,6 +38,7 @@ class StaticScope implements ScopeInterface
     }
 
     /**
+     * Unused interface method
      *
      * @param string $scope
      * @throws \Exception
@@ -46,5 +48,4 @@ class StaticScope implements ScopeInterface
     {
         throw new \Exception('readonly');
     }
-
 }
