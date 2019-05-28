@@ -9,7 +9,7 @@
         <?= $block->escapeHtml(__('Export to:')) ?>
     </label>
     <select name="<?= $block->escapeHtmlAttr($block->getId()) ?>_export" id="<?= $block->escapeHtmlAttr($block->getId()) ?>_export" class="admin__control-select">
-        <?php foreach ($block->getExportTypes() as $_type): ?>
+        <?php foreach ($block->getExportTypes() as $_type) : ?>
             <option value="<?= $block->escapeHtmlAttr($_type->getUrl()) ?>"><?= $block->escapeHtml($_type->getLabel()) ?></option>
         <?php endforeach; ?>
     </select>
