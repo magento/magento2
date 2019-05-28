@@ -31,6 +31,7 @@ class PaypalExpressAdditionalDataProvider implements AdditionalDataProviderInter
     ) {
         $this->arrayManager = $arrayManager;
     }
+
     /**
      * Returns additional data
      *
