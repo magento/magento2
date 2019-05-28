@@ -8,12 +8,14 @@ namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Directory\Model\AllowedCountriesFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
+/**
+ * Migrate store allowed countries to website.
+ */
 class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, PatchVersionInterface
 {
     /**
@@ -27,7 +29,7 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
     private $storeManager;
 
     /**
-     * @var AllowedCountriesFactory
+     * @var AllowedCountries
      */
     private $allowedCountries;
 
@@ -48,10 +50,11 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
+
         $this->moduleDataSetup->getConnection()->beginTransaction();
 
         try {
@@ -149,7 +152,7 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -159,7 +162,7 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -167,7 +170,7 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

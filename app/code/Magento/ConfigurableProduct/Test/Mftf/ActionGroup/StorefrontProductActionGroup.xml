@@ -34,6 +34,19 @@
         <seeElement selector="{{StorefrontProductInfoMainSection.attributeOptionByAttributeID(attributeCode, optionName)}}" stepKey="verifyOptionExists"/>
     </actionGroup>
 
+    <!-- Adds Single Option Configurable Product to cart-->
+    <actionGroup name="SelectSingleAttributeAndAddToCart">
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="attributeCode" type="string"/>
+            <argument name="optionName" type="string"/>
+        </arguments>
+        <selectOption selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID(attributeCode)}}" userInput="{{optionName}}" stepKey="selectAttribute"/>
+        <click stepKey="addProduct" selector="{{StorefrontProductActionSection.addToCart}}"/>
+        <waitForElementVisible selector="{{StorefrontQuickSearchResultsSection.messageSection}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontQuickSearchResultsSection.messageSection}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddedToCartMessage"/>
+    </actionGroup>
+
     <!-- Verify configurable product options in storefront product view -->
     <actionGroup name="storefrontCheckConfigurableProductOptions">
         <arguments>
@@ -64,6 +77,18 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <selectOption userInput="{{label}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption1"/>
         <seeElement selector="{{StorefrontProductMediaSection.imageFile(image.filename)}}" stepKey="seeFirstImage"/>
+    </actionGroup>
+
+    <!-- Assert option image and price in storefront product page -->
+    <actionGroup name="AssertOptionImageAndPriceInStorefrontProductActionGroup">
+        <arguments>
+            <argument name="label" type="string"/>
+            <argument name="image" type="string"/>
+            <argument name="price" type="string"/>
+        </arguments>
+        <selectOption userInput="{{label}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile(image)}}" stepKey="seeImage"/>
+        <see userInput="{{price}}" selector="{{StorefrontProductInfoMainSection.price}}" stepKey="seeProductPrice"/>
     </actionGroup>
 
     <!-- Assert configurable product with special price in storefront product page -->
