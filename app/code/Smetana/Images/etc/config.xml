@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <smetana_section>
+            <smetana_group>
+                <image_width>640</image_width>
+                <image_height>480</image_height>
+            </smetana_group>
+        </smetana_section>
+    </default>
+</config>

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="smetana_tab" translate="label" sortOrder="10">
+            <label>Smetana</label>
+        </tab>
+        <section id="smetana_section" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Images for Products</label>
+            <tab>smetana_tab</tab>
+            <resource>Smetana_Images::images_config</resource>
+            <group id="smetana_group" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Image Configuration</label>
+                <attribute type="expanded">1</attribute>
+                <field id="smetana_upload_image" translate="label" type="image" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Select Image</label>
+                    <backend_model>Smetana\Images\Model\Config\Image</backend_model>
+                    <base_url type="media" scope_info="1">products_image</base_url>
+                </field>
+                <field id="image_width" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Image Width</label>
+                    <validate>required-entry validate-zero-or-greater validate-length minimum-length-3 maximum-length-4</validate>
+                </field>
+                <field id="image_height" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Image Height</label>
+                    <validate>required-entry validate-zero-or-greater validate-length minimum-length-3 maximum-length-4</validate>
+                    <comment>With these dimensions, the image will be display at Frontend product page.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
