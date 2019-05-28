@@ -7,13 +7,15 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminLoginAfterJSMinificationTest">
         <annotations>
             <features value="Backend"/>
+            <stories value="Admin Panel JS minification"/>
             <title value="Admin panel should be accessible with JS minification enabled"/>
             <description value="Admin panel should be accessible with JS minification enabled"/>
-            <testCaseId value="MC-14104" />
+            <testCaseId value="MC-14104"/>
+            <severity value="MAJOR"/>
             <group value="backend"/>
             <group value="mtf_migrated"/>
         </annotations>
