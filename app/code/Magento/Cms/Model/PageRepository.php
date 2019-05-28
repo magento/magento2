@@ -85,8 +85,6 @@ class PageRepository implements PageRepositoryInterface
      * @param DataObjectHelper $dataObjectHelper
      * @param DataObjectProcessor $dataObjectProcessor
      * @param StoreManagerInterface $storeManager
-     * @param UserContextInterface|null $userContext
-     * @param AuthorizationInterface|null $authorization
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -98,9 +96,7 @@ class PageRepository implements PageRepositoryInterface
         Data\PageSearchResultsInterfaceFactory $searchResultsFactory,
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor,
-        StoreManagerInterface $storeManager,
-        UserContextInterface $userContext = null,
-        AuthorizationInterface $authorization = null
+        StoreManagerInterface $storeManager
     ) {
         $this->resource = $resource;
         $this->pageFactory = $pageFactory;
@@ -110,8 +106,34 @@ class PageRepository implements PageRepositoryInterface
         $this->dataPageFactory = $dataPageFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->storeManager = $storeManager;
-        $this->userContext = $userContext ?: ObjectManager::getInstance()->get(UserContextInterface::class);
-        $this->authorization = $authorization ?: ObjectManager::getInstance()->get(AuthorizationInterface::class);
+    }
+
+    /**
+     * Get user context.
+     *
+     * @return UserContextInterface
+     */
+    private function getUserContext()
+    {
+        if (!$this->userContext) {
+            $this->userContext = ObjectManager::getInstance()->get(UserContextInterface::class);
+        }
+
+        return $this->userContext;
+    }
+
+    /**
+     * Get authorization service.
+     *
+     * @return AuthorizationInterface
+     */
+    private function getAuthorization()
+    {
+        if (!$this->authorization) {
+            $this->authorization = ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        }
+
+        return $this->authorization;
     }
 
     /**
@@ -129,10 +151,10 @@ class PageRepository implements PageRepositoryInterface
         }
         try {
             //Validate changing of design.
-            $userType = $this->userContext->getUserType();
+            $userType = $this->getUserContext()->getUserType();
             if (($userType === UserContextInterface::USER_TYPE_ADMIN
                     || $userType === UserContextInterface::USER_TYPE_INTEGRATION)
-                && !$this->authorization->isAllowed('Magento_Cms::save_design')
+                && !$this->getAuthorization()->isAllowed('Magento_Cms::save_design')
             ) {
                 if (!$page->getId()) {
                     $page->setLayoutUpdateXml(null);
