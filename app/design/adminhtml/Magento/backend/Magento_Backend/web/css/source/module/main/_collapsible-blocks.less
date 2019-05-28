@@ -84,6 +84,12 @@
             content: '';
         }
     }
+
+    &.active {
+        &:before {
+            transform: rotate(180deg);
+        }
+    }
 }
 
 .__collapsible-sub-title-pattern() {
