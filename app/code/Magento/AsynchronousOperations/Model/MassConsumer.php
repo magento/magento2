@@ -23,6 +23,7 @@ use Magento\Framework\MessageQueue\QueueInterface;
 use Magento\Framework\MessageQueue\LockInterface;
 use Magento\Framework\MessageQueue\MessageController;
 use Magento\Framework\MessageQueue\ConsumerInterface;
+use Magento\AsynchronousOperations\Model\MassConsumerEnvelopeCallbackFactory;
 
 /**
  * Class Consumer used to process OperationInterface messages.
@@ -66,9 +67,9 @@ class MassConsumer implements ConsumerInterface
      */
     private $registry;
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var MassConsumerEnvelopeCallbackFactory
      */
-    private $storeManager;
+    private $massConsumerEnvelopeCallback;
 
     /**
      * Initialize dependencies.
@@ -80,7 +81,7 @@ class MassConsumer implements ConsumerInterface
      * @param OperationProcessorFactory $operationProcessorFactory
      * @param LoggerInterface $logger
      * @param Registry $registry
-     * @param StoreManagerInterface $storeManager
+     * @param MassConsumerEnvelopeCallbackFactory $massConsumerEnvelopeCallback
      */
     public function __construct(
         CallbackInvokerInterface $invoker,
@@ -90,7 +91,7 @@ class MassConsumer implements ConsumerInterface
         OperationProcessorFactory $operationProcessorFactory,
         LoggerInterface $logger,
         Registry $registry = null,
-        StoreManagerInterface $storeManager = null
+        MassConsumerEnvelopeCallbackFactory $massConsumerEnvelopeCallback = null
     ) {
         $this->invoker = $invoker;
         $this->resource = $resource;
@@ -102,8 +103,8 @@ class MassConsumer implements ConsumerInterface
         $this->logger = $logger;
         $this->registry = $registry ?? \Magento\Framework\App\ObjectManager::getInstance()
             ->get(Registry::class);
-        $this->storeManager = $storeManager ?? \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(StoreManagerInterface::class);
+        $this->massConsumerEnvelopeCallback = $massConsumerEnvelopeCallback ?? \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(MassConsumerEnvelopeCallbackFactory::class);
     }
 
     /**
@@ -132,54 +133,17 @@ class MassConsumer implements ConsumerInterface
      */
     private function getTransactionCallback(QueueInterface $queue)
     {
-        return function (EnvelopeInterface $message) use ($queue) {
-            /** @var LockInterface $lock */
-            $lock = null;
-            try {
-                $amqpProperties = $message->getProperties();
-                if (isset($amqpProperties['application_headers'])) {
-                    $headers = $amqpProperties['application_headers'];
-                    if ($headers instanceof AMQPTable) {
-                        $headers = $headers->getNativeData();
-                    }
-                    if (isset($headers['store_id'])) {
-                        $storeId = $headers['store_id'];
-                        $currentStoreId = $this->storeManager->getStore()->getId();
-
-                        if (isset($storeId) && $storeId !== $currentStoreId) {
-                            $this->storeManager->setCurrentStore($storeId);
-                        }
-                    }
-                }
-
-                $topicName = $message->getProperties()['topic_name'];
-                $lock = $this->messageController->lock($message, $this->configuration->getConsumerName());
-
-                $allowedTopics = $this->configuration->getTopicNames();
-                if (in_array($topicName, $allowedTopics)) {
-                    $this->operationProcessor->process($message->getBody());
-                } else {
-                    $queue->reject($message);
-                    return;
-                }
-                $queue->acknowledge($message);
-            } catch (MessageLockException $exception) {
-                $queue->acknowledge($message);
-            } catch (ConnectionLostException $e) {
-                if ($lock) {
-                    $this->resource->getConnection()
-                        ->delete($this->resource->getTableName('queue_lock'), ['id = ?' => $lock->getId()]);
-                }
-            } catch (NotFoundException $e) {
-                $queue->acknowledge($message);
-                $this->logger->warning($e->getMessage());
-            } catch (\Exception $e) {
-                $queue->reject($message, false, $e->getMessage());
-                if ($lock) {
-                    $this->resource->getConnection()
-                        ->delete($this->resource->getTableName('queue_lock'), ['id = ?' => $lock->getId()]);
-                }
-            }
+        $callbackInstance =  $this->massConsumerEnvelopeCallback->create([
+            'resource' => $this->resource,
+            'messageController'=>$this->messageController,
+            'configuration'=>$this->configuration,
+            'operationProcessor'=>$this->operationProcessor,
+            'logger'=>$this->logger,
+            'registry'=>$this->registry,
+            'queue'=>$queue,
+        ]);
+        return function (EnvelopeInterface $message) use ($callbackInstance) {
+            $callbackInstance->execute($message);
         };
     }
 }

@@ -72,7 +72,4 @@
             <argument name="instanceName" xsi:type="string">\Magento\Framework\Amqp\Bulk\Exchange</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Framework\MessageQueue\EnvelopeFactory">
-        <plugin name="amqpStoreIdFieldForMessageQueueEnvelopeFactory" type="Magento\Amqp\Plugin\Framework\MessageQueue\EnvelopeFactoryPlugin" />
-    </type>
 </config>
