@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Customer\Api\Data\AddressInterface;
@@ -134,6 +135,11 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
     private $formKeyValidator;
 
     /**
+     * @var CustomerRepository
+     */
+    private $customerRepository;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig
@@ -153,6 +159,7 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
      * @param DataObjectHelper $dataObjectHelper
      * @param AccountRedirect $accountRedirect
      * @param Validator $formKeyValidator
+     * @param CustomerRepository $customerRepository
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -175,6 +182,7 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
         CustomerExtractor $customerExtractor,
         DataObjectHelper $dataObjectHelper,
         AccountRedirect $accountRedirect,
+        CustomerRepository $customerRepository,
         Validator $formKeyValidator = null
     ) {
         $this->session = $customerSession;
@@ -195,6 +203,7 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
         $this->dataObjectHelper = $dataObjectHelper;
         $this->accountRedirect = $accountRedirect;
         $this->formKeyValidator = $formKeyValidator ?: ObjectManager::getInstance()->get(Validator::class);
+        $this->customerRepository = $customerRepository;
         parent::__construct($context);
     }
 
@@ -348,7 +357,11 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
                 ->createAccount($customer, $password, $redirectUrl);
 
             if ($this->getRequest()->getParam('is_subscribed', false)) {
-                $this->subscriberFactory->create()->subscribeCustomerById($customer->getId());
+                $subscriber = $this->subscriberFactory->create()->subscribeCustomerById($customer->getId());
+                $extensionAttributes = $customer->getExtensionAttributes();
+                $extensionAttributes->setIsSubscribed($subscriber->isSubscribed($customer));
+                $customer->setExtensionAttributes($extensionAttributes);
+                $this->customerRepository->save($customer);
             }
 
             $this->_eventManager->dispatch(
