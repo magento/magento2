@@ -14,7 +14,7 @@
         <element name="shippingMethodForm" type="text" selector="#co-shipping-method-form"/>
         <element name="shippingMethod" type="text" selector="//*[@id='cart-totals']//tr[@class='totals shipping excl']//th//span[@class='value']"/>
         <element name="shipping" type="text" selector="//*[@id='cart-totals']//tr[@class='totals shipping excl']//td//span[@class='price']"/>
-        <element name="total" type="text" selector="//*[@id='cart-totals']//tr[@class='grand totals']//td//span[@class='price']"/>
+        <element name="total" type="text" selector="//*[@id='cart-totals']//tr[@class='grand totals']//td//span[@class='price']" timeout="10"/>
         <element name="proceedToCheckout" type="button" selector=".action.primary.checkout span" timeout="30"/>
         <element name="discountAmount" type="text" selector="td[data-th='Discount']"/>
         <element name="shippingHeading" type="button" selector="#block-shipping-heading"/>

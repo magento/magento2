@@ -7,8 +7,5 @@
  *
  * @var \Magento\Backend\Block\Template $block
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
-<div><p><?= /* @escapeNotVerified */ __("Please setup or sign in into your 3rd party account to complete setup of this integration.") ?></p></div>
+<div><p><?= $block->escapeHtml(__("Please setup or sign in into your 3rd party account to complete setup of this integration.")) ?></p></div>
