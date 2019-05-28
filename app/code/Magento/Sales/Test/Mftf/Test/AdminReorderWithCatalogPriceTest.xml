@@ -45,6 +45,7 @@
                 <argument name="ruleName" value="{{CatalogRuleToPercent.name}}" />
             </actionGroup>
             <!--Clear all filters in grid-->
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="resetCatalogRuleGridFilters"/>
             <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
             <actionGroup ref="logout" stepKey="logout"/>
