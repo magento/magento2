@@ -41347,7 +41347,7 @@ vars.put("product_sku", product.get("sku"));
         <collectionProp name="Arguments.arguments">
           <elementProp name="" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">{"query":"mutation {  \n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cartItems: [\n        {\n          data: {\n            quantity: 2\n            sku: \"${product_sku}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        quantity\n        product {\n          sku\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.value">{"query":"mutation {  \n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cart_items: [\n        {\n          data: {\n            quantity: 2\n            sku: \"${product_sku}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        quantity\n        product {\n          sku\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -41567,7 +41567,7 @@ vars.put("product_sku", product.get("sku"));
         <collectionProp name="Arguments.arguments">
           <elementProp name="" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">{"query":"mutation {\n  addConfigurableProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cartItems: [\n        {\n          variant_sku: \"${product_option}\"\n          data: {\n            quantity: 2\n            sku: \"${product_option}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        id\n        quantity\n        product {\n          name\n          sku\n        }\n        ... on ConfigurableCartItem {\n          configurable_options {\n            option_label\n          }\n        }\n    }\n  }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  addConfigurableProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cart_items: [\n        {\n          variant_sku: \"${product_option}\"\n          data: {\n            quantity: 2\n            sku: \"${product_option}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        id\n        quantity\n        product {\n          name\n          sku\n        }\n        ... on ConfigurableCartItem {\n          configurable_options {\n            option_label\n          }\n        }\n    }\n  }\n  }\n}","variables":null,"operationName":null}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -41739,7 +41739,7 @@ vars.put("product_sku", product.get("sku"));
         <collectionProp name="Arguments.arguments">
           <elementProp name="" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">{"query":"mutation {  \n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cartItems: [\n        {\n          data: {\n            quantity: 2\n            sku: \"${product_sku}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        quantity\n        product {\n          sku\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.value">{"query":"mutation {  \n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cart_items: [\n        {\n          data: {\n            quantity: 2\n            sku: \"${product_sku}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        quantity\n        product {\n          sku\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -42045,7 +42045,7 @@ vars.put("product_sku", product.get("sku"));
         <collectionProp name="Arguments.arguments">
           <elementProp name="" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">{"query":"mutation {\n  addConfigurableProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cartItems: [\n        {\n          variant_sku: \"${product_option}\"\n          data: {\n            quantity: 2\n            sku: \"${product_option}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        id\n        quantity\n        product {\n          name\n          sku\n        }\n        ... on ConfigurableCartItem {\n          configurable_options {\n            option_label\n          }\n        }\n    }\n  }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  addConfigurableProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cart_items: [\n        {\n          variant_sku: \"${product_option}\"\n          data: {\n            quantity: 2\n            sku: \"${product_option}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        id\n        quantity\n        product {\n          name\n          sku\n        }\n        ... on ConfigurableCartItem {\n          configurable_options {\n            option_label\n          }\n        }\n    }\n  }\n  }\n}","variables":null,"operationName":null}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -42303,7 +42303,7 @@ vars.put("product_sku", product.get("sku"));
         <collectionProp name="Arguments.arguments">
           <elementProp name="" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">{"query":"mutation {  \n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cartItems: [\n        {\n          data: {\n            quantity: 2\n            sku: \"${product_sku}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        quantity\n        product {\n          sku\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.value">{"query":"mutation {  \n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cart_items: [\n        {\n          data: {\n            quantity: 2\n            sku: \"${product_sku}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        quantity\n        product {\n          sku\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -42609,7 +42609,7 @@ vars.put("product_sku", product.get("sku"));
         <collectionProp name="Arguments.arguments">
           <elementProp name="" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">{"query":"mutation {\n  addConfigurableProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cartItems: [\n        {\n          variant_sku: \"${product_option}\"\n          data: {\n            quantity: 2\n            sku: \"${product_option}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        id\n        quantity\n        product {\n          name\n          sku\n        }\n        ... on ConfigurableCartItem {\n          configurable_options {\n            option_label\n          }\n        }\n    }\n  }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  addConfigurableProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cart_items: [\n        {\n          variant_sku: \"${product_option}\"\n          data: {\n            quantity: 2\n            sku: \"${product_option}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        id\n        quantity\n        product {\n          name\n          sku\n        }\n        ... on ConfigurableCartItem {\n          configurable_options {\n            option_label\n          }\n        }\n    }\n  }\n  }\n}","variables":null,"operationName":null}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -42867,7 +42867,7 @@ vars.put("product_sku", product.get("sku"));
         <collectionProp name="Arguments.arguments">
           <elementProp name="" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">{"query":"mutation {  \n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cartItems: [\n        {\n          data: {\n            quantity: 2\n            sku: \"${product_sku}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        quantity\n        product {\n          sku\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.value">{"query":"mutation {  \n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cart_items: [\n        {\n          data: {\n            quantity: 2\n            sku: \"${product_sku}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        quantity\n        product {\n          sku\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -43094,7 +43094,7 @@ vars.put("product_sku", product.get("sku"));
         <collectionProp name="Arguments.arguments">
           <elementProp name="" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">{"query":"mutation {  \n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cartItems: [\n        {\n          data: {\n            quantity: 2\n            sku: \"${product_sku}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        quantity\n        product {\n          sku\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.value">{"query":"mutation {  \n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cart_items: [\n        {\n          data: {\n            quantity: 2\n            sku: \"${product_sku}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        quantity\n        product {\n          sku\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -43959,7 +43959,7 @@ vars.put("product_sku", product.get("sku"));
         <collectionProp name="Arguments.arguments">
           <elementProp name="" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">{"query":"mutation {\n  addConfigurableProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cartItems: [\n        {\n          variant_sku: \"${product_option}\"\n          data: {\n            quantity: 2\n            sku: \"${product_option}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        id\n        quantity\n        product {\n          name\n          sku\n        }\n        ... on ConfigurableCartItem {\n          configurable_options {\n            option_label\n          }\n        }\n    }\n  }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  addConfigurableProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cart_items: [\n        {\n          variant_sku: \"${product_option}\"\n          data: {\n            quantity: 2\n            sku: \"${product_option}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        id\n        quantity\n        product {\n          name\n          sku\n        }\n        ... on ConfigurableCartItem {\n          configurable_options {\n            option_label\n          }\n        }\n    }\n  }\n  }\n}","variables":null,"operationName":null}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -44019,7 +44019,7 @@ vars.put("product_sku", product.get("sku"));
         <collectionProp name="Arguments.arguments">
           <elementProp name="" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">{"query":"mutation {  \n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cartItems: [\n        {\n          data: {\n            quantity: 2\n            sku: \"${product_sku}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        quantity\n        product {\n          sku\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.value">{"query":"mutation {  \n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cart_items: [\n        {\n          data: {\n            quantity: 2\n            sku: \"${product_sku}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        quantity\n        product {\n          sku\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>

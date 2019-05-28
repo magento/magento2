@@ -38,9 +38,9 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected $eventManager;
 
     /**
-     * @var QuoteValidator
+     * @var SubmitQuoteValidator
      */
-    protected $quoteValidator;
+    private $submitQuoteValidator;
 
     /**
      * @var OrderFactory
@@ -159,7 +159,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
     /**
      * @param EventManager $eventManager
-     * @param QuoteValidator $quoteValidator
+     * @param SubmitQuoteValidator $submitQuoteValidator
      * @param OrderFactory $orderFactory
      * @param OrderManagement $orderManagement
      * @param CustomerManagement $customerManagement
@@ -186,7 +186,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      */
     public function __construct(
         EventManager $eventManager,
-        QuoteValidator $quoteValidator,
+        SubmitQuoteValidator $submitQuoteValidator,
         OrderFactory $orderFactory,
         OrderManagement $orderManagement,
         CustomerManagement $customerManagement,
@@ -211,7 +211,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress = null
     ) {
         $this->eventManager = $eventManager;
-        $this->quoteValidator = $quoteValidator;
+        $this->submitQuoteValidator = $submitQuoteValidator;
         $this->orderFactory = $orderFactory;
         $this->orderManagement = $orderManagement;
         $this->customerManagement = $customerManagement;
@@ -361,13 +361,15 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     {
         $quote = $this->quoteRepository->getActive($cartId);
         if ($paymentMethod) {
-            $paymentMethod->setChecks([
-                \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_CHECKOUT,
-                \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY,
-                \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY,
-                \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
-                \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL,
-            ]);
+            $paymentMethod->setChecks(
+                [
+                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_CHECKOUT,
+                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY,
+                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY,
+                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
+                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL
+                ]
+            );
             $quote->getPayment()->setQuote($quote);
 
             $data = $paymentMethod->getData();
@@ -487,7 +489,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected function submitQuote(QuoteEntity $quote, $orderData = [])
     {
         $order = $this->orderFactory->create();
-        $this->quoteValidator->validateBeforeSubmit($quote);
+        $this->submitQuoteValidator->validateQuote($quote);
         if (!$quote->getCustomerIsGuest()) {
             if ($quote->getCustomerId()) {
                 $this->_prepareCustomerQuote($quote);
@@ -542,6 +544,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $order->setCustomerFirstname($quote->getCustomerFirstname());
         $order->setCustomerMiddlename($quote->getCustomerMiddlename());
         $order->setCustomerLastname($quote->getCustomerLastname());
+        $this->submitQuoteValidator->validateOrder($order);
 
         $this->eventManager->dispatch(
             'sales_model_service_quote_submit_before',

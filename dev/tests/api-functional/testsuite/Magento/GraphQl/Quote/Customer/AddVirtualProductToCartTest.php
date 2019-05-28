@@ -139,7 +139,7 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
 mutation {
   addVirtualProductsToCart(input: {
     cart_id: "{$maskedQuoteId}", 
-    cartItems: [
+    cart_items: [
       {
         data: {
           quantity: {$quantity}

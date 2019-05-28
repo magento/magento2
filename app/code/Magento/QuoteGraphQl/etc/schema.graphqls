@@ -27,7 +27,7 @@ input createEmptyCartInput {
 
 input AddSimpleProductsToCartInput {
     cart_id: String!
-    cartItems: [SimpleProductCartItemInput!]!
+    cart_items: [SimpleProductCartItemInput!]!
 }
 
 input SimpleProductCartItemInput {
@@ -37,7 +37,7 @@ input SimpleProductCartItemInput {
 
 input AddVirtualProductsToCartInput {
     cart_id: String!
-    cartItems: [VirtualProductCartItemInput!]!
+    cart_items: [VirtualProductCartItemInput!]!
 }
 
 input VirtualProductCartItemInput {
@@ -52,7 +52,7 @@ input CartItemInput {
 
 input CustomizableOptionInput {
     id: Int!
-    value: String!
+    value_string: String!
 }
 
 input ApplyCouponToCartInput {
@@ -130,11 +130,7 @@ input SetPaymentMethodOnCartInput {
 
 input PaymentMethodInput {
     code: String! @doc(description:"Payment method code")
-    additional_data: PaymentMethodAdditionalDataInput @doc(description:"Additional payment data")
     purchase_order_number: String @doc(description:"Purchase order number")
-}
-
-input PaymentMethodAdditionalDataInput {
 }
 
 input SetGuestEmailOnCartInput {
@@ -243,10 +239,10 @@ type AvailableShippingMethod {
     method_code: String @doc(description: "Could be null if method is not available")
     method_title: String @doc(description: "Could be null if method is not available")
     error_message: String
-    amount: Float!
-    base_amount: Float @doc(description: "Could be null if method is not available")
-    price_excl_tax: Float!
-    price_incl_tax: Float!
+    amount: Money!
+    base_amount: Money @doc(description: "Could be null if method is not available")
+    price_excl_tax: Money!
+    price_incl_tax: Money!
     available: Boolean!
 }
 
@@ -258,11 +254,7 @@ type AvailablePaymentMethod {
 type SelectedPaymentMethod {
     code: String! @doc(description: "The payment method code")
     title: String! @doc(description: "The payment method title.")
-    additional_data: SelectedPaymentMethodAdditionalData @doc(description: "Additional payment data")
     purchase_order_number: String @doc(description: "The purchase order number.")
-}
-
-type SelectedPaymentMethodAdditionalData {
 }
 
 type AppliedCoupon {
@@ -314,8 +306,7 @@ interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\
 type SelectedCustomizableOption {
     id: Int!
     label: String!
-    type: String!
-    is_required: Int!
+    is_required: Boolean!
     values: [SelectedCustomizableOptionValue!]!
     sort_order: Int!
 }
@@ -323,9 +314,8 @@ type SelectedCustomizableOption {
 type SelectedCustomizableOptionValue {
     id: Int!
     label: String!
-    value: String!
+    value: String
     price: CartItemSelectedOptionValuePrice!
-    sort_order: Int!
 }
 
 type CartItemSelectedOptionValuePrice {
