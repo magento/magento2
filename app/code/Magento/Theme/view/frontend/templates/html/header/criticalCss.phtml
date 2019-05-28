@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Theme\Block\Html\Header\CriticalCss $block
+ */
+?>
+<?php $criticalCssData = $block->getCriticalCssData(); ?>
+
+<style type="text/css" data-type="criticalCss">
+    <?= $criticalCssData; ?>
+</style>
