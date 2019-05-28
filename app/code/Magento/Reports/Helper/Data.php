@@ -4,15 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Reports data helper
- */
 namespace Magento\Reports\Helper;
 
 use Magento\Framework\Data\Collection;
-use Magento\Framework\Stdlib\DateTime;
 
 /**
+ * Reports data helper.
+ *
  * @api
  * @since 100.0.2
  */
@@ -63,22 +61,27 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $dateStart = new \DateTime($from);
         $dateEnd = new \DateTime($to);
-        while ($dateStart->diff($dateEnd)->invert == 0) {
-            switch ($period) {
-                case self::REPORT_PERIOD_TYPE_DAY:
-                    $intervals[] = $dateStart->format('Y-m-d');
-                    $dateStart->add(new \DateInterval('P1D'));
-                    break;
-                case self::REPORT_PERIOD_TYPE_MONTH:
-                    $intervals[] = $dateStart->format('Y-m');
-                    $dateStart->add(new \DateInterval('P1M'));
-                    break;
-                case self::REPORT_PERIOD_TYPE_YEAR:
-                    $intervals[] = $dateStart->format('Y');
-                    $dateStart->add(new \DateInterval('P1Y'));
-                    break;
-            }
+        $dateFormat = 'Y-m-d';
+        $dateInterval = new \DateInterval('P1D');
+        switch ($period) {
+            case self::REPORT_PERIOD_TYPE_MONTH:
+                $dateFormat = 'Y-m';
+                $dateInterval = new \DateInterval('P1M');
+                break;
+            case self::REPORT_PERIOD_TYPE_YEAR:
+                $dateFormat = 'Y';
+                $dateInterval = new \DateInterval('P1Y');
+                break;
         }
+        while ($dateStart->diff($dateEnd)->invert == 0) {
+            $intervals[] = $dateStart->format($dateFormat);
+            $dateStart->add($dateInterval);
+        }
+
+        if (!in_array($dateEnd->format($dateFormat), $intervals)) {
+            $intervals[] = $dateEnd->format($dateFormat);
+        }
+
         return $intervals;
     }
 
