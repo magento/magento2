@@ -23,7 +23,7 @@
             <createData entity="ApiCategory" stepKey="createCategory"/>
 
             <!-- Create downloadable Product -->
-            <createData entity="DownloadableProductWithTwoLink1000" stepKey="downloadableProduct">
+            <createData entity="DownloadableProductWithTwoLink100" stepKey="downloadableProduct">
                 <requiredEntity createDataKey="createCategory"/>
                 <field key="price">280</field>
             </createData>
@@ -182,7 +182,7 @@
             </actionGroup>
             <actionGroup ref="AdminAddToOrderBundleProductActionGroup" stepKey="addBundleProduct">
                 <argument name="option" value="{$grabBundleOption}"/>
-                <argument name="selectedProduct" value="$$simpleProduct1$$"/>
+                <argument name="selectedProductName" value="$$simpleProduct1.name$$"/>
                 <argument name="quantity" value="2"/>
             </actionGroup>
 
@@ -196,7 +196,7 @@
 
             <!-- add Coupon -->
             <actionGroup ref="AdminAddToOrderCouponCodeActionGroup" stepKey="addCoupon">
-                <argument name="coupon" value="$$createCouponForCartPriceRule$$"/>
+                <argument name="couponCode" value="$$createCouponForCartPriceRule.code$$"/>
             </actionGroup>
 
             <actionGroup ref="fillOrderCustomerInformation" stepKey="fillOrder">

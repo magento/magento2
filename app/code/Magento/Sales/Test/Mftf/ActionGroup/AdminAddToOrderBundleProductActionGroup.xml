@@ -9,20 +9,16 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAddToOrderBundleProductActionGroup">
-        <annotations>
-            <description>Configuration added Bundle Product during creation order by Admin: select bundle option and product with quantity</description>
-            <page>AdminOrderCreatePage</page>
-        </annotations>
         <arguments>
             <argument name="option" type="string"/>
-            <argument name="selectedProduct" type="entity"/>
+            <argument name="selectedProductName" type="string"/>
             <argument name="quantity" type="string"/>
         </arguments>
         <scrollTo selector="{{AdminOrderFormConfigureProductSection.bundleItems}}" stepKey="scroll"/>
         <click selector="{{AdminOrderFormConfigureProductSection.bundleItems}}" stepKey="focusOnSideDialog"/>
         <waitForAjaxLoad stepKey="waitForAjax"/>
         <click selector="{{AdminOrderFormConfigureProductSection.bundleSelect(option)}}" stepKey="clickSelector"/>
-        <selectOption selector="{{AdminOrderFormConfigureProductSection.bundleSelect(option)}}" userInput="{{selectedProduct.name}}" stepKey="selectionOption"/>
+        <selectOption selector="{{AdminOrderFormConfigureProductSection.bundleSelect(option)}}" userInput="{{selectedProductName}}" stepKey="selectionOption"/>
         <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
         <fillField userInput="{{quantity}}" selector="{{AdminOrderFormConfigureProductSection.quantity}}" stepKey="fillQty"/>
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkConfigurablePopover"/>

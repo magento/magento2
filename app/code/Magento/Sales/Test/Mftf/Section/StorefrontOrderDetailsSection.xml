@@ -15,6 +15,6 @@
         <element name="grandTotalPrice" type="text" selector="tr.grand_total span.price"/>
         <element name="paymentMethod" type="text" selector=".box-order-billing-method dt.title"/>
         <element name="shippingMethod" type="text" selector=".box-order-shipping-method div.box-content"/>
-        <element name="productNameCell" type="text" selector="//*[@class='product name product-item-name']"/>
+        <element name="productNameCell" type="text" selector="//*[contains(@class, 'product-item-name')]"/>
      </section>
 </sections>

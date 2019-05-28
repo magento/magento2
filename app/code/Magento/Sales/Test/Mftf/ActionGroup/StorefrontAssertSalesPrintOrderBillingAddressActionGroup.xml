@@ -9,10 +9,6 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertSalesPrintOrderBillingAddress">
-        <annotations>
-            <description>Assert billing address data on printed order</description>
-            <page>StorefrontPrintOrderPage</page>
-        </annotations>
         <arguments>
             <argument name="address" type="entity"/>
         </arguments>

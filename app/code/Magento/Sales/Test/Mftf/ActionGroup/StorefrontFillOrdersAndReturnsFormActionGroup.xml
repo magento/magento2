@@ -9,13 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontFillOrdersAndReturnsFormActionGroup">
-        <annotations>
-            <description>Fill order information in form "Orders and Returns"</description>
-            <page>StorefrontGuestOrderSearchPage</page>
-        </annotations>
         <arguments>
             <argument name="orderNumber" type="string"/>
-            <argument name="customer" type="entity" defaultValue="$$createCustomer$$"/>
+            <argument name="customer" type="entity"/>
         </arguments>
         <fillField selector="{{StorefrontGuestOrderSearchSection.orderId}}" userInput="{{orderNumber}}" stepKey="inputOrderId"/>
         <fillField selector="{{StorefrontGuestOrderSearchSection.billingLastName}}" userInput="{{customer.lastname}}" stepKey="inputBillingLastName"/>

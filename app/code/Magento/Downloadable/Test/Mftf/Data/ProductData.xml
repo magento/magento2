@@ -74,7 +74,7 @@
         <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
         <requiredEntity type="downloadable_link">apiDownloadableLink</requiredEntity>
     </entity>
-    <entity name="DownloadableProductWithTwoLink1000" type="product">
+    <entity name="DownloadableProductWithTwoLink100" type="product">
         <data key="sku" unique="suffix">downloadableproduct</data>
         <data key="type_id">downloadable</data>
         <data key="attribute_set_id">4</data>
