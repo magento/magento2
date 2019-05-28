@@ -12,6 +12,7 @@
 
         <annotations>
             <features value="ConfigurableProduct"/>
+            <stories value="Cancel order"/>
             <title value="Product qunatity return after order cancel"/>
             <description value="Check Product qunatity return after order cancel"/>
             <severity value="CRITICAL"/>
