@@ -711,13 +711,11 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     {
         $validator = $this->_getValidatorBeforeSave();
         if ($validator && !$validator->isValid($this)) {
-            $errors = $validator->getMessages();
             $exception = new \Magento\Framework\Validator\Exception(
-                new Phrase(implode(PHP_EOL, $errors))
+                null,
+                null,
+                $validator->getMessages()
             );
-            foreach ($errors as $errorMessage) {
-                $exception->addMessage(new \Magento\Framework\Message\Error($errorMessage));
-            }
             throw $exception;
         }
         return $this;
