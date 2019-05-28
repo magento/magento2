@@ -181,7 +181,7 @@ class Config
     /**
      * State label getter
      *
-     * @param   string $state
+     * @param string $state
      * @return \Magento\Framework\Phrase|string
      */
     public function getStateLabel($state)
