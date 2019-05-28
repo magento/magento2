@@ -12,7 +12,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 use PhpAmqpLib\Wire\AMQPTable;
-use Magento\Framework\Amqp\Queue;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\AsynchronousOperations\Model\MassConsumerEnvelopeCallback as SubjectMassConsumerEnvelopeCallback;
 use Psr\Log\LoggerInterface;
@@ -24,22 +23,22 @@ use Psr\Log\LoggerInterface;
 class MassConsumerEnvelopeCallback
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
     /**
-     * @var \Magento\Framework\MessageQueue\EnvelopeFactory
+     * @var EnvelopeFactory
      */
     private $envelopeFactory;
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @param \Magento\Framework\MessageQueue\EnvelopeFactory $envelopeFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param EnvelopeFactory $envelopeFactory
+     * @param StoreManagerInterface $storeManager
+     * @param LoggerInterface $logger
      */
     public function __construct(
         EnvelopeFactory $envelopeFactory,
