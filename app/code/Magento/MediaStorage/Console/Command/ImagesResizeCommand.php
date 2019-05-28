@@ -15,6 +15,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Image resize console command
+ */
 class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
 {
     /**
@@ -49,7 +52,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -58,7 +61,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -66,10 +69,13 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
             $this->appState->setAreaCode(Area::AREA_GLOBAL);
 
             /** @var ProgressBar $progress */
-            $progress = $this->objectManager->create(ProgressBar::class, [
-                'output' => $output,
-                'max' => $this->resize->getCountForResize()
-            ]);
+            $progress = $this->objectManager->create(
+                ProgressBar::class,
+                [
+                    'output' => $output,
+                    'max' => $this->resize->getCountForResize()
+                ]
+            );
             $progress->setFormat(
                 "%current%/%max% [%bar%] %percent:3s%% %elapsed% %memory:6s% \t| <info>%message%</info>"
             );

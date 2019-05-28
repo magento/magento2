@@ -31,11 +31,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class ImageResize
 {
     /**
-     * @var State
-     */
-    private $appState;
-
-    /**
      * @var MediaConfig
      */
     private $imageConfig;
@@ -95,6 +90,7 @@ class ImageResize
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
+        State $appState,
         MediaConfig $imageConfig,
         ProductImage $productImage,
         ImageFactory $imageFactory,
@@ -213,10 +209,12 @@ class ImageResize
         $viewImages = [];
         /** @var \Magento\Theme\Model\Theme $theme */
         foreach ($themes as $theme) {
-            $config = $this->viewConfig->getViewConfig([
-                'area' => Area::AREA_FRONTEND,
-                'themeModel' => $theme,
-            ]);
+            $config = $this->viewConfig->getViewConfig(
+                [
+                    'area' => Area::AREA_FRONTEND,
+                    'themeModel' => $theme,
+                ]
+            );
             $images = $config->getMediaEntities('Magento_Catalog', ImageHelper::MEDIA_TYPE_CONFIG_NODE);
             foreach ($images as $imageId => $imageData) {
                 $uniqIndex = $this->getUniqueImageIndex($imageData);
