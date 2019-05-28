@@ -38,29 +38,9 @@ class MassConsumer implements ConsumerInterface
     private $invoker;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
-     */
-    private $resource;
-
-    /**
      * @var \Magento\Framework\MessageQueue\ConsumerConfigurationInterface
      */
     private $configuration;
-
-    /**
-     * @var \Magento\Framework\MessageQueue\MessageController
-     */
-    private $messageController;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var OperationProcessor
-     */
-    private $operationProcessor;
 
     /**
      * @var Registry
@@ -75,32 +55,18 @@ class MassConsumer implements ConsumerInterface
      * Initialize dependencies.
      *
      * @param CallbackInvokerInterface $invoker
-     * @param ResourceConnection $resource
-     * @param MessageController $messageController
      * @param ConsumerConfigurationInterface $configuration
-     * @param OperationProcessorFactory $operationProcessorFactory
-     * @param LoggerInterface $logger
      * @param MassConsumerEnvelopeCallbackFactory $massConsumerEnvelopeCallback
      * @param Registry $registry
      */
     public function __construct(
         CallbackInvokerInterface $invoker,
-        ResourceConnection $resource,
-        MessageController $messageController,
         ConsumerConfigurationInterface $configuration,
-        OperationProcessorFactory $operationProcessorFactory,
-        LoggerInterface $logger,
         MassConsumerEnvelopeCallbackFactory $massConsumerEnvelopeCallback,
         Registry $registry = null
     ) {
         $this->invoker = $invoker;
-        $this->resource = $resource;
-        $this->messageController = $messageController;
         $this->configuration = $configuration;
-        $this->operationProcessor = $operationProcessorFactory->create([
-            'configuration' => $configuration
-        ]);
-        $this->logger = $logger;
         $this->massConsumerEnvelopeCallback = $massConsumerEnvelopeCallback;
         $this->registry = $registry ?? \Magento\Framework\App\ObjectManager::getInstance()
             ->get(Registry::class);
@@ -133,12 +99,7 @@ class MassConsumer implements ConsumerInterface
     private function getTransactionCallback(QueueInterface $queue)
     {
         $callbackInstance =  $this->massConsumerEnvelopeCallback->create([
-            'resource' => $this->resource,
-            'messageController' => $this->messageController,
             'configuration' => $this->configuration,
-            'operationProcessor' => $this->operationProcessor,
-            'logger' => $this->logger,
-            'registry' => $this->registry,
             'queue' => $queue,
         ]);
         return function (EnvelopeInterface $message) use ($callbackInstance) {
