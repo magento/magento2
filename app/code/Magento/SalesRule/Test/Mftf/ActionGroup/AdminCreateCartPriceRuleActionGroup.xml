@@ -25,7 +25,6 @@
     </actionGroup>
 
     <actionGroup name="AdminCreateCartPriceRuleAndStayOnEditActionGroup" extends="AdminCreateCartPriceRuleActionGroup" >
-        <click selector="{{AdminCartPriceRulesFormSection.discardSubsequentRules}}" stepKey="setYesDiscardSubsequentRule" after="clickToExpandActions"/>
         <click selector="{{AdminCartPriceRulesFormSection.saveAndContinue}}" stepKey="clickSaveButton"/>
     </actionGroup>
 
