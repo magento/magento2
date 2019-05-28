@@ -228,6 +228,7 @@ class ImageResize
     {
         ksort($imageData);
         unset($imageData['type']);
+        // phpcs:disable Magento2.Security.InsecureFunction
         return md5(json_encode($imageData));
     }
 
