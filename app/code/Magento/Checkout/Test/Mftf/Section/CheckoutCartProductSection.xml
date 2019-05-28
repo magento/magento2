@@ -47,7 +47,7 @@
         <element name="checkoutCartSubtotal" type="text" selector="//td[@class='col subtotal']//span[@class='price']"/>
         <element name="emptyCart" selector=".cart-empty" type="text"/>
         <!-- Required attention section -->
-        <element name="removeProductBySku" type="button" selector="//*[contains(text(), '{{sku}}')]/ancestor::tbody//button" parameterized="true" timeout="30"/>
-        <element name="failedItemBySku" type="block" selector="//*[@class='cart item' and .//tr[contains(@class,'info') and .//div[contains(.,'{{sku}}')]]]" parameterized="true" timeout="30"/>
+        <element name="removeProductBySku" type="button" selector="//div[contains(., '{{sku}}')]/ancestor::tbody//button" parameterized="true" timeout="30"/>
+        <element name="failedItemBySku" type="block" selector="//div[contains(.,'{{sku}}')]/ancestor::tbody" parameterized="true" timeout="30"/>
     </section>
 </sections>
