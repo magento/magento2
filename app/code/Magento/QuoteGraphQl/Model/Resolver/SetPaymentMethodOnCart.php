@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -20,6 +19,7 @@ use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\Quote\Api\Data\PaymentInterfaceFactory;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Mutation resolver for setting payment method for shopping cart
@@ -61,9 +61,8 @@ class SetPaymentMethodOnCart implements ResolverInterface
         $this->getCartForUser = $getCartForUser;
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentFactory = $paymentFactory;
-        $this->additionalDataProviderPool = $additionalDataProviderPool ?? ObjectManager::getInstance()->create(
-            AdditionalDataProviderPool::class
-        );
+        $this->additionalDataProviderPool = $additionalDataProviderPool
+            ?: ObjectManager::getInstance()->get(AdditionalDataProviderPool::class);
     }
 
     /**
@@ -87,12 +86,11 @@ class SetPaymentMethodOnCart implements ResolverInterface
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
         $payment = $this->paymentFactory->create(
             [
-                'data' => [
-                    PaymentInterface::KEY_METHOD => $paymentMethodCode,
-                    PaymentInterface::KEY_PO_NUMBER => $poNumber,
-                    PaymentInterface::KEY_ADDITIONAL_DATA => $additionalData,
-                ]
-            ]
+            'data' => [
+                PaymentInterface::KEY_METHOD => $paymentMethodCode,
+                PaymentInterface::KEY_PO_NUMBER => $poNumber,
+                PaymentInterface::KEY_ADDITIONAL_DATA => $additionalData,
+            ]]
         );
 
         try {
