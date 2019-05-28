@@ -131,6 +131,8 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
     }
 
     /**
+     * Add messages but skip duplicates
+     *
      * @param array $stack
      * @param array $newMessages
      * @return array
