@@ -93,7 +93,8 @@ class MassPublisher implements PublisherInterface
                     'properties' => [
                         'delivery_mode' => 2,
                         'message_id' => $this->messageIdGenerator->generate($topicName),
-                    ]
+                    ],
+                    'publisher_flag'=>true
                 ]
             );
         }

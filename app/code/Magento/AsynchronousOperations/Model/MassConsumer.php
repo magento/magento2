@@ -10,6 +10,8 @@ namespace Magento\AsynchronousOperations\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Registry;
+use Magento\Store\Model\StoreManagerInterface;
+use PhpAmqpLib\Wire\AMQPTable;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\MessageQueue\MessageLockException;
 use Magento\Framework\MessageQueue\ConnectionLostException;
@@ -63,6 +65,10 @@ class MassConsumer implements ConsumerInterface
      * @var Registry
      */
     private $registry;
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * Initialize dependencies.
@@ -74,6 +80,7 @@ class MassConsumer implements ConsumerInterface
      * @param OperationProcessorFactory $operationProcessorFactory
      * @param LoggerInterface $logger
      * @param Registry $registry
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         CallbackInvokerInterface $invoker,
@@ -82,7 +89,8 @@ class MassConsumer implements ConsumerInterface
         ConsumerConfigurationInterface $configuration,
         OperationProcessorFactory $operationProcessorFactory,
         LoggerInterface $logger,
-        Registry $registry = null
+        Registry $registry = null,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->invoker = $invoker;
         $this->resource = $resource;
@@ -94,6 +102,8 @@ class MassConsumer implements ConsumerInterface
         $this->logger = $logger;
         $this->registry = $registry ?? \Magento\Framework\App\ObjectManager::getInstance()
             ->get(Registry::class);
+        $this->storeManager = $storeManager ?? \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(StoreManagerInterface::class);
     }
 
     /**
@@ -126,6 +136,22 @@ class MassConsumer implements ConsumerInterface
             /** @var LockInterface $lock */
             $lock = null;
             try {
+                $amqpProperties = $message->getProperties();
+                if (isset($amqpProperties['application_headers'])) {
+                    $headers = $amqpProperties['application_headers'];
+                    if ($headers instanceof AMQPTable) {
+                        $headers = $headers->getNativeData();
+                    }
+                    if (isset($headers['store_id'])) {
+                        $storeId = $headers['store_id'];
+                        $currentStoreId = $this->storeManager->getStore()->getId();
+
+                        if (isset($storeId) && $storeId !== $currentStoreId) {
+                            $this->storeManager->setCurrentStore($storeId);
+                        }
+                    }
+                }
+
                 $topicName = $message->getProperties()['topic_name'];
                 $lock = $this->messageController->lock($message, $this->configuration->getConsumerName());
 
