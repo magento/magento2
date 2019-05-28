@@ -19,7 +19,6 @@ class Add extends \Magento\Catalog\Controller\Product\Compare implements HttpPos
      * Add item to compare list.
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @throws NoSuchEntityException
      */
     public function execute()
     {
