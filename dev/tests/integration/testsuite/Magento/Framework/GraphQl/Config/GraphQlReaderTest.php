@@ -35,6 +35,9 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
     /** @var  SerializerInterface */
     private $jsonSerializer;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -183,6 +186,7 @@ QUERY;
         $headers = $this->objectManager->create(\Zend\Http\Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);
         $request->setHeaders($headers);
+
         $response = $this->graphQlController->dispatch($request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
         $expectedOutput = require __DIR__ . '/../_files/schema_response_sdl_description.php';

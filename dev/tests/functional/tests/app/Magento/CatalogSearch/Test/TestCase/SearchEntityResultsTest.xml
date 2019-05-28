@@ -8,53 +8,64 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogSearch\Test\TestCase\SearchEntityResultsTest" summary="Use Quick Search to Find Product" ticketId="MAGETWO-25095">
         <variation name="SearchEntityResultsTestVariation1" summary="Use Quick Search to Find the Product" ticketId="MAGETWO-12420">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, mftf_migrated:yes</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::default::sku</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult" />
         </variation>
         <variation name="SearchEntityResultsTestVariation2" summary="Search simple product and add to cart" ticketId="MAGETWO-43235">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::default::simple</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductAddedToCartFromSearchResults" />
         </variation>
         <variation name="SearchEntityResultsTestVariation3" summary="Search virtual product and add to cart" ticketId="MAGETWO-43235">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductVirtual::default::virtual</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductAddedToCartFromSearchResults" />
         </variation>
         <variation name="SearchEntityResultsTestVariation4" summary="Search configurable product and add to cart" ticketId="MAGETWO-43235">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">configurableProduct::default::configurable</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductAddedToCartFromSearchResults" />
         </variation>
         <variation name="SearchEntityResultsTestVariation5" summary="Search downloadable product and add to cart" ticketId="MAGETWO-43235">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">downloadableProduct::default::downloadable</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductAddedToCartFromSearchResults" />
         </variation>
         <variation name="SearchEntityResultsTestVariation6" summary="Search grouped product and add to cart" ticketId="MAGETWO-43235">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">groupedProduct::withSimpleProducts_without_qty::grouped</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductAddedToCartFromSearchResults" />
         </variation>
         <variation name="SearchEntityResultsTestVariation7" summary="Search bundle dynamic product and add to cart" ticketId="MAGETWO-43235">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">bundleProduct::bundle_dynamic_product::bundle</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductAddedToCartFromSearchResults" />
         </variation>
         <variation name="SearchEntityResultsTestVariation8" summary="Search fixed product">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">bundleProduct::bundle_fixed_product::bundle</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResult" />
         </variation>
         <variation name="SearchEntityResultsTestVariation9">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::default::name</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult" />
         </variation>
         <variation name="SearchEntityResultsTestVariation10">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::product_with_special_symbols_in_name::name</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult" />
         </variation>
         <variation name="SearchEntityResultsTestVariation11">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogSearch/data/query_text/search_query" xsi:type="string">TryToFindMeAndI&#39;llFindYOU</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::default</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchNoResultMessage" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchNoResult" />
         </variation>
         <variation name="SearchEntityResultsTestVariation12" summary="Search for simple product name using 2 symbols query length" ticketId="MAGETWO-36542">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::default::name</data>
             <data name="queryLength" xsi:type="string">2</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult" />
@@ -66,6 +77,7 @@
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult" />
         </variation>
         <variation name="SearchEntityResultsTestVariation14" summary="Search for simple product name using 128 symbols query length" ticketId="MAGETWO-36542">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::product_with_long_name::name</data>
             <data name="queryLength" xsi:type="string">128</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult" />
@@ -80,6 +92,7 @@
         <variation name="SearchEntityResultsTestVariation16"
                    summary="Search for two simple products for text in attributes with same search weight and check their sort order"
                    ticketId="MAGETWO-64501">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogSearch/data/query_text/search_query" xsi:type="string">alaska</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="array">
                 <item name="product_2" xsi:type="string">catalogProductSimple::search_weight_term_twice_weight_1</item>
@@ -90,6 +103,7 @@
         <variation name="SearchEntityResultsTestVariation17"
                    summary="Search for two simple products for text in attributes with different search weight and check their sort order"
                    ticketId="MAGETWO-64502">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogSearch/data/query_text/search_query" xsi:type="string">alaska</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="array">
                 <item name="product_1" xsi:type="string">catalogProductSimple::search_weight_term_once_weight_5</item>
@@ -98,6 +112,7 @@
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResultOrder" />
         </variation>
         <variation name="SearchEntityResultsTestVariation18" summary="Search Configurable Product with Enabled and Disabled Children." ticketId="MAGETWO-69181">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">configurableProduct::one_simple_product_not_visible_individually::name</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResult" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertConfigurableWithDisabledOptionCatalogSearchNoResult" />

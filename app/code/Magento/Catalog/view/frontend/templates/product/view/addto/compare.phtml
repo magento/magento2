@@ -9,6 +9,10 @@
 /** @var $block \Magento\Catalog\Block\Product\View\Addto\Compare */
 ?>
 
+<?php $viewModel = $block->getData('addToCompareViewModel'); ?>
+<?php if ($viewModel->isAvailableForCompare($block->getProduct())): ?>
 <a href="#" data-post='<?= /* @escapeNotVerified */ $block->getPostDataParams() ?>'
         data-role="add-to-links"
         class="action tocompare"><span><?= /* @escapeNotVerified */ __('Add to Compare') ?></span></a>
+<?php endif; ?>
+
