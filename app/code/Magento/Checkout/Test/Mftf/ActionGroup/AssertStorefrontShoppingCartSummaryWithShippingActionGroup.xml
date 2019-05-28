@@ -11,9 +11,7 @@
         <arguments>
             <argument name="shipping" type="string"/>
         </arguments>
-        <waitForLoadingMaskToDisappear stepKey="waitForMaskToDisappear" after="assertSubtotal"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.shipping}}" time="60" stepKey="waitForElementToBeVisible" after="waitForMaskToDisappear"/>
-        <wait time="5" stepKey="waitForShippingDetailsToLoad" after="waitForElementToBeVisible"/>
-        <see userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" stepKey="assertShipping" after="waitForShippingDetailsToLoad" />
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.shipping}}" stepKey="waitForElementToBeVisible" after="waitForPageToLoad"/>
+        <see userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" stepKey="assertShipping" after="waitForElementToBeVisible"/>
     </actionGroup>
 </actionGroups>
