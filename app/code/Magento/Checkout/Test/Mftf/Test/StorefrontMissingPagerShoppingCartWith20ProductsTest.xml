@@ -24,14 +24,14 @@
             <!--Create and add to cart 20 products-->
             <actionGroup ref="CreateAndAddToCart20ProductsActionGroup" stepKey="CartItems" />
         </before>
+        <after>
+            <!--Delete the test products-->
+            <actionGroup ref="Delete20ProductsActionGroup" stepKey="Delete20CreatedProducts" />
+        </after>
         <!-- Go to the shopping cart and check if the pager is missing-->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
         <actionGroup ref="AssertPagerTextIsNotVisibleActionGroup" stepKey="VerifyMissingPagerText" >
             <argument name="text" value="Items 1 to 20"/>
         </actionGroup>
-        <after>
-            <!--Delete the test products-->
-            <actionGroup ref="Delete20ProductsActionGroup" stepKey="Delete20CreatedProducts" />
-        </after>
     </test>
 </tests>

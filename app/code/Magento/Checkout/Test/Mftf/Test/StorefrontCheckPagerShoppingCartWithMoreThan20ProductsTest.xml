@@ -31,6 +31,13 @@
                 <argument name="product" value="$$simpleProduct21CartItems$$"/>
             </actionGroup>
         </before>
+        <after>
+            <!--Set back the default number of items on cart which is 20-->
+            <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 20" />
+
+            <actionGroup ref="Delete20ProductsActionGroup" stepKey="Delete20CreatedProducts" />
+            <deleteData createDataKey="simpleProduct21CartItems" stepKey="deleteCartItem21"/>
+        </after>
         <!-- Go to the shopping cart and check if the pager is visible-->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart2"/>
         <actionGroup ref="AssertPagerTextIsVisibleActionGroup" stepKey="VerifyPagerText">
@@ -42,12 +49,5 @@
         <actionGroup ref="AssertPagerTextIsNotVisibleActionGroup" stepKey="VerifyMissingPagerText2" >
             <argument name="text" value="Items 1 to 20"/>
         </actionGroup>
-        <after>
-            <!--Set back the default number of items on cart which is 20-->
-            <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 20" />
-
-            <actionGroup ref="Delete20ProductsActionGroup" stepKey="Delete20CreatedProducts" />
-            <deleteData createDataKey="simpleProduct21CartItems" stepKey="deleteCartItem21"/>
-        </after>
     </test>
 </tests>

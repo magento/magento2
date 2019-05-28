@@ -31,10 +31,6 @@
                 <argument name="product" value="$$createSimpleProduct2$$"/>
             </actionGroup>
         </before>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart2"/>
-        <actionGroup ref="AssertPagerTextIsVisibleActionGroup" stepKey="VerifyPagerTextWithChangedConfiguration">
-            <argument name="text" value="Items 1 to 1 of 2 total"/>
-        </actionGroup>
         <after>
             <!--Set back the default number of items on cart which is 20-->
             <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 20" />
@@ -42,5 +38,9 @@
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteProduct2"/>
         </after>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart2"/>
+        <actionGroup ref="AssertPagerTextIsVisibleActionGroup" stepKey="VerifyPagerTextWithChangedConfiguration">
+            <argument name="text" value="Items 1 to 1 of 2 total"/>
+        </actionGroup>
     </test>
 </tests>
