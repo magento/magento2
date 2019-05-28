@@ -47,6 +47,7 @@
             <!--Clear all filters in grid-->
             <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Login as admin -->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
