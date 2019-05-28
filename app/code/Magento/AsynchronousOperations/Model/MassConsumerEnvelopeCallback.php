@@ -57,18 +57,12 @@ class MassConsumerEnvelopeCallback
     private $operationProcessor;
 
     /**
-     * @var Registry
-     */
-    private $registry;
-
-    /**
      * @param ResourceConnection $resource
      * @param MessageController $messageController
      * @param ConsumerConfigurationInterface $configuration
      * @param OperationProcessorFactory $operationProcessorFactory
      * @param LoggerInterface $logger
      * @param QueueInterface $queue
-     * @param Registry|null $registry
      */
     public function __construct(
         ResourceConnection $resource,
@@ -76,8 +70,7 @@ class MassConsumerEnvelopeCallback
         ConsumerConfigurationInterface $configuration,
         OperationProcessorFactory $operationProcessorFactory,
         LoggerInterface $logger,
-        QueueInterface $queue,
-        Registry $registry = null
+        QueueInterface $queue
     ) {
         $this->resource = $resource;
         $this->messageController = $messageController;
@@ -86,8 +79,6 @@ class MassConsumerEnvelopeCallback
             'configuration' => $configuration
         ]);
         $this->logger = $logger;
-        $this->registry = $registry ?? \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(Registry::class);
         $this->queue = $queue;
     }
 

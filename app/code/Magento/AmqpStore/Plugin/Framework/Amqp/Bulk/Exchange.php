@@ -13,7 +13,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
 use PhpAmqpLib\Wire\AMQPTable;
-use Magento\Framework\Amqp\Bulk\Exchange;
+use Magento\Framework\Amqp\Bulk\Exchange as SubjectExchange;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Psr\Log\LoggerInterface;
 
@@ -21,7 +21,7 @@ use Psr\Log\LoggerInterface;
  * Plugin to set 'store_id' to the new custom header 'store_id' in amqp
  * 'application_headers'.
  */
-class ExchangePlugin
+class Exchange
 {
     /**
      * @var StoreManagerInterface
@@ -51,13 +51,13 @@ class ExchangePlugin
     }
 
     /**
-     * @param Exchange $subject
+     * @param SubjectExchange $subject
      * @param $topic
      * @param EnvelopeInterface[] $envelopes
      * @return array|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeEnqueue(Exchange $subject, $topic, array $envelopes)
+    public function beforeEnqueue(SubjectExchange $subject, $topic, array $envelopes)
     {
         try {
             $storeId = $this->storeManager->getStore()->getId();

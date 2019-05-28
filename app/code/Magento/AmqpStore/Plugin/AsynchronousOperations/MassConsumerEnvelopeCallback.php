@@ -14,14 +14,14 @@ use Magento\Framework\MessageQueue\EnvelopeFactory;
 use PhpAmqpLib\Wire\AMQPTable;
 use Magento\Framework\Amqp\Queue;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
-use Magento\AsynchronousOperations\Model\MassConsumerEnvelopeCallback;
+use Magento\AsynchronousOperations\Model\MassConsumerEnvelopeCallback as SubjectMassConsumerEnvelopeCallback;
 use Psr\Log\LoggerInterface;
 
 /**
  * Plugin to get 'store_id' from the new custom header 'store_id' in amqp
  * 'application_headers' properties and setCurrentStore by value 'store_id'.
  */
-class MassConsumerEnvelopeCallbackPlugin
+class MassConsumerEnvelopeCallback
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -52,12 +52,12 @@ class MassConsumerEnvelopeCallbackPlugin
     }
 
     /**
-     * @param MassConsumerEnvelopeCallback $subject
+     * @param SubjectMassConsumerEnvelopeCallback $subject
      * @param EnvelopeInterface $message
      * @return array|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeExecute(MassConsumerEnvelopeCallback $subject, EnvelopeInterface $message)
+    public function beforeExecute(SubjectMassConsumerEnvelopeCallback $subject, EnvelopeInterface $message)
     {
         $amqpProperties = $message->getProperties();
         if (isset($amqpProperties['application_headers'])) {
@@ -76,7 +76,7 @@ class MassConsumerEnvelopeCallbackPlugin
                     return null;
                 }
                 if (isset($storeId) && $storeId !== $currentStoreId) {
-                        $this->storeManager->setCurrentStore($storeId);
+                    $this->storeManager->setCurrentStore($storeId);
                 }
             }
         }

@@ -80,8 +80,8 @@ class MassConsumer implements ConsumerInterface
      * @param ConsumerConfigurationInterface $configuration
      * @param OperationProcessorFactory $operationProcessorFactory
      * @param LoggerInterface $logger
-     * @param Registry $registry
      * @param MassConsumerEnvelopeCallbackFactory $massConsumerEnvelopeCallback
+     * @param Registry $registry
      */
     public function __construct(
         CallbackInvokerInterface $invoker,
@@ -90,8 +90,8 @@ class MassConsumer implements ConsumerInterface
         ConsumerConfigurationInterface $configuration,
         OperationProcessorFactory $operationProcessorFactory,
         LoggerInterface $logger,
-        Registry $registry = null,
-        MassConsumerEnvelopeCallbackFactory $massConsumerEnvelopeCallback = null
+        MassConsumerEnvelopeCallbackFactory $massConsumerEnvelopeCallback,
+        Registry $registry = null
     ) {
         $this->invoker = $invoker;
         $this->resource = $resource;
@@ -101,10 +101,9 @@ class MassConsumer implements ConsumerInterface
             'configuration' => $configuration
         ]);
         $this->logger = $logger;
+        $this->massConsumerEnvelopeCallback = $massConsumerEnvelopeCallback;
         $this->registry = $registry ?? \Magento\Framework\App\ObjectManager::getInstance()
             ->get(Registry::class);
-        $this->massConsumerEnvelopeCallback = $massConsumerEnvelopeCallback ?? \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(MassConsumerEnvelopeCallbackFactory::class);
     }
 
     /**
@@ -135,12 +134,12 @@ class MassConsumer implements ConsumerInterface
     {
         $callbackInstance =  $this->massConsumerEnvelopeCallback->create([
             'resource' => $this->resource,
-            'messageController'=>$this->messageController,
-            'configuration'=>$this->configuration,
-            'operationProcessor'=>$this->operationProcessor,
-            'logger'=>$this->logger,
-            'registry'=>$this->registry,
-            'queue'=>$queue,
+            'messageController' => $this->messageController,
+            'configuration' => $this->configuration,
+            'operationProcessor' => $this->operationProcessor,
+            'logger' => $this->logger,
+            'registry' => $this->registry,
+            'queue' => $queue,
         ]);
         return function (EnvelopeInterface $message) use ($callbackInstance) {
             $callbackInstance->execute($message);
