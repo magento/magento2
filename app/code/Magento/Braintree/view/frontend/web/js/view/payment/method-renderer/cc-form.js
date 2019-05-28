@@ -207,8 +207,6 @@ define(
             placeOrder: function (key) {
                 var self = this;
 
-                self.isPlaceOrderActionAllowed(false);
-
                 if (key) {
                     return self._super();
                 }
@@ -216,7 +214,6 @@ define(
                 validatorManager.validate(self, function () {
                     return self.placeOrder('parent');
                 }, function (err) {
-                    self.isPlaceOrderActionAllowed(true);
 
                     if (err) {
                         self.showError(err);
