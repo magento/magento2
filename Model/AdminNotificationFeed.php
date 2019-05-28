@@ -77,7 +77,7 @@ class AdminNotificationFeed extends \Magento\AdminNotification\Model\Feed
     public function getFeedUrl()
     {
         if (is_null($this->_feedUrl)) {
-            $this->_feedUrl = 'http://mage'.'fan'
+            $this->_feedUrl = 'https://mage'.'fan'
             .'.c'.'om/community/notifications'.'/'.'feed/';
         }
 
