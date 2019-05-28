@@ -16,6 +16,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\UrlInterface;
 
 /**
+ * Test ExpressSetPaymentMethodTest graphql endpoint for guest
+ *
  * @magentoAppArea graphql
  */
 class PaypalExpressSetPaymentMethodTest extends AbstractTest
