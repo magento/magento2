@@ -54,14 +54,16 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $designConfigData = [];
 
         $this->template = $this->getMockBuilder(\Magento\Email\Model\Template::class)
-            ->setMethods([
-                'setDesignConfig',
-                'getDesignConfig',
-                '__wakeup',
-                'getProcessedTemplate',
-                'getAppState',
-                'revertDesign'
-            ])
+            ->setMethods(
+                [
+                    'setDesignConfig',
+                    'getDesignConfig',
+                    '__wakeup',
+                    'getProcessedTemplate',
+                    'getAppState',
+                    'revertDesign'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -82,9 +84,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
             ->willReturn(self::MALICIOUS_TEXT);
 
         $this->template->method('getDesignConfig')
-            ->willReturn(new \Magento\Framework\DataObject(
-                $designConfigData
-            ));
+            ->willReturn(new \Magento\Framework\DataObject($designConfigData));
 
         $emailFactory = $this->createPartialMock(\Magento\Email\Model\TemplateFactory::class, ['create']);
         $emailFactory->expects($this->any())
@@ -106,9 +106,11 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $this->storeManager->expects($this->any())->method('getDefaultStoreView')->willReturn(null);
         $this->storeManager->expects($this->any())->method('getStores')->willReturn([$store]);
         $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
-            ->setConstructorArgs([
-                $scopeConfig
-            ])
+            ->setConstructorArgs(
+                [
+                    $scopeConfig
+                ]
+            )
             ->setMethods(['emulateAreaCode'])
             ->disableOriginalConstructor()
             ->getMock();
