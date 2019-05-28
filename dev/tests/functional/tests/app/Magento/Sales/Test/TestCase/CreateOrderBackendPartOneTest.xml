@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\CreateOrderBackendPartOneTest" summary="Create Order from Admin within Offline Payment Methods" ticketId="MAGETWO-28696">
         <variation name="CreateOrderBackendTestVariation1" ticketId="MAGETWO-17063">
-            <data name="issue" xsi:type="string">https://github.com/magento-engcom/msi/issues/1624</data>
             <data name="description" xsi:type="string">Create order with simple product for registered US customer using Fixed shipping method and Cash on Delivery payment method</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::with_one_custom_option</data>
             <data name="customer/dataset" xsi:type="string">default</data>
@@ -70,7 +69,6 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderByDateInOrdersGrid" />
         </variation>
         <variation name="CreateOrderBackendTestVariation4">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create order with virtual product for registered UK customer using Bank Transfer payment method</data>
             <data name="products/0" xsi:type="string">catalogProductVirtual::default</data>
             <data name="customer/dataset" xsi:type="string">default</data>

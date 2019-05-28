@@ -12,5 +12,6 @@
         <element name="username" type="input" selector="#username"/>
         <element name="password" type="input" selector="#login"/>
         <element name="signIn" type="button" selector=".actions .action-primary" timeout="30"/>
+        <element name="forgotPasswordLink" type="button" selector=".action-forgotpassword" timeout="10"/>
     </section>
 </sections>

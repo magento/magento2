@@ -9,6 +9,8 @@
 namespace Magento\Config\Model\Config\Backend;
 
 /**
+ * Backend model for encrypted values.
+ *
  * @api
  * @since 100.0.2
  */
@@ -48,9 +50,14 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
      * Magic method called during class serialization
      *
      * @return string[]
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $properties = parent::__sleep();
         return array_diff($properties, ['_encryptor']);
     }
@@ -59,9 +66,14 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
      * Magic method called during class un-serialization
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         parent::__wakeup();
         $this->_encryptor = \Magento\Framework\App\ObjectManager::getInstance()->get(
             \Magento\Framework\Encryption\EncryptorInterface::class
