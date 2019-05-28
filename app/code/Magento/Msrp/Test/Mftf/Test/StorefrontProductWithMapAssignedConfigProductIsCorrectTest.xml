@@ -11,6 +11,7 @@
     <test name="StorefrontProductWithMapAssignedConfigProductIsCorrectTest">
         <annotations>
             <features value="Msrp"/>
+            <stories value="Minimum advertised price"/>
             <title value="Check that simple products with MAP assigned to configurable product displayed correctly"/>
             <description value="Check that simple products with MAP assigned to configurable product displayed correctly"/>
             <severity value="CRITICAL"/>
