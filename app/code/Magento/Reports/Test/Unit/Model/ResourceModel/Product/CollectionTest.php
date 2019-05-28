@@ -138,6 +138,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($this->selectMock);
 
+        $productLimitationFactoryMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->collection = new ProductCollection(
             $entityFactoryMock,
             $loggerMock,
@@ -162,7 +166,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $this->eventTypeFactoryMock,
             $productTypeMock,
             $quoteResourceMock,
-            $this->connectionMock
+            $this->connectionMock,
+            $productLimitationFactoryMock
         );
     }
 
