@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Magento\AsynchronousOperations\Model;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Registry;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\MessageQueue\MessageLockException;
 use Magento\Framework\MessageQueue\ConnectionLostException;

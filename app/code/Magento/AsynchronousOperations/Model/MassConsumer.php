@@ -8,22 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Model;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Registry;
-use Magento\Store\Model\StoreManagerInterface;
-use PhpAmqpLib\Wire\AMQPTable;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\MessageQueue\MessageLockException;
-use Magento\Framework\MessageQueue\ConnectionLostException;
-use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\MessageQueue\CallbackInvokerInterface;
 use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
-use Magento\Framework\MessageQueue\LockInterface;
-use Magento\Framework\MessageQueue\MessageController;
 use Magento\Framework\MessageQueue\ConsumerInterface;
-use Magento\AsynchronousOperations\Model\MassConsumerEnvelopeCallbackFactory;
 
 /**
  * Class Consumer used to process OperationInterface messages.
