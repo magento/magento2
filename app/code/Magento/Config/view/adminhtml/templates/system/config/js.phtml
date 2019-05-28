@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <script>
 require([
@@ -71,7 +68,7 @@ originModel.prototype = {
     {
         this.reload = false;
         this.loader = new varienLoader(true);
-        this.regionsUrl = "<?= /* @escapeNotVerified */ $block->getUrl('directory/json/countryRegion') ?>";
+        this.regionsUrl = "<?= $block->escapeUrl($block->getUrl('directory/json/countryRegion')) ?>";
 
         this.bindCountryRegionRelation();
     },

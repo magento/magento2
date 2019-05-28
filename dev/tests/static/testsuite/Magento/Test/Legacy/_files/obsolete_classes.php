@@ -4,6 +4,8 @@
  *
  * Format: array(<class_name>[, <replacement>])
  *
+ * @codingStandardsIgnoreFile
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -1818,7 +1820,7 @@ return [
     ],
     ['Magento\Adminhtml\Block\Report\Shopcart\Product', 'Magento\Reports\Block\Adminhtml\Shopcart\Product'],
     ['Magento\Adminhtml\Block\Report\Wishlist\Grid', 'Magento\Reports\Block\Adminhtml\Wishlist\Grid'],
-    ['Magento\Adminhtml\Block\Report\Wishlist', 'Magento\Reports\Block\Adminhtml\Wishlist'],
+    ['Magento\Adminhtml\Block\Report\Wishlist'],
     ['Magento\Backend\Helper\Addresses'],
     ['Magento\Backend\Controller\Adminhtml\System\Variable', 'Magento\Variable\Controller\Adminhtml\System\Variable'],
     [
@@ -3226,6 +3228,8 @@ return [
     ['Magento\Tax\Model\ResourceModel\Sales\Order\Tax\Item', 'Magento\Sales\Model\ResourceModel\Order\Tax\Item'],
     ['Magento\Tax\Model\Sales\Order\Tax\Item', 'Magento\Sales\Model\Order\Tax\Item'],
     ['Magento\Reports\Block\Adminhtml\Product\Grid'],
+    ['Magento\Reports\Block\Adminhtml\Product\Widget\Viewed\Item'],
+    ['Magento\Reports\Block\Adminhtml\Wishlist'],
     ['Magento\Reports\Model\Totals'],
     ['Magento\Log\Model\Shell'],
     ['Magento\Log\App\Shell'],
