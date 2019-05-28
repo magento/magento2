@@ -76,6 +76,7 @@ class ImageResize
     private $mediaDirectory;
 
     /**
+     * @param State $appState
      * @param MediaConfig $imageConfig
      * @param ProductImage $productImage
      * @param ImageFactory $imageFactory
@@ -88,6 +89,7 @@ class ImageResize
      * @throws \Magento\Framework\Exception\FileSystemException
      * @internal param ProductImage $gallery
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         State $appState,
@@ -235,6 +237,7 @@ class ImageResize
     {
         ksort($imageData);
         unset($imageData['type']);
+        // phpcs:ignore Magento2.Security.InsecureFunction.DiscouragedWithAlternative -- irrelevant for security
         return md5(json_encode($imageData));
     }
 

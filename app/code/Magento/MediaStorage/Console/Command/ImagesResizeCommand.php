@@ -85,13 +85,14 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
             }
 
             $generator = $this->resize->resizeFromThemes();
-            for (; $generator->valid(); $generator->next()) {
-                $progress->setMessage($generator->key());
+
+            foreach ($generator as $filename => $result) {
+                $progress->setMessage($filename);
                 $progress->advance();
 
-                if ($generator->current() instanceof \Exception) {
+                if ($result instanceof \Exception) {
                     $output->writeln(''); // blank line for aligning error messages
-                    $output->writeln("<error>{$generator->current()->getMessage()}</error>");
+                    $output->writeln("<error>{$result->getMessage()}</error>");
                 }
             }
         } catch (\Exception $e) {
