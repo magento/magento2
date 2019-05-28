@@ -9,7 +9,7 @@
  * @see \Magento\Backend\Block\Page\Notices
  */
 ?>
-<?php if ($block->displayNoscriptNotice()): ?>
+<?php if ($block->displayNoscriptNotice()) : ?>
     <noscript>
         <div class="messages">
             <div class="message message-warning message-noscript">
@@ -19,7 +19,7 @@
         </div>
     </noscript>
 <?php endif; ?>
-<?php if ($block->displayDemoNotice()): ?>
+<?php if ($block->displayDemoNotice()) : ?>
     <div class="messages">
         <div class="message message-warning message-demo-mode">
             <?= $block->escapeHtml(__('This is only a demo store. You can browse and place orders, but nothing will be processed.')) ?>

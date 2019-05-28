@@ -14,9 +14,9 @@ require([
 
 window.changeDiagramsPeriod = function(periodObj) {
     periodParam = periodObj.value ? 'period/' + periodObj.value + '/' : '';
-<?php foreach ($block->getChildBlock('diagrams')->getTabsIds() as $tabId): ?>
+    <?php foreach ($block->getChildBlock('diagrams')->getTabsIds() as $tabId) : ?>
     ajaxBlockParam = 'block/tab_<?= $block->escapeJs($tabId) ?>/';
-    ajaxBlockUrl = '<?= $block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => '', 'period' => '']) ?>' + ajaxBlockParam + periodParam;
+    ajaxBlockUrl = '<?= $block->escapeJs($block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => '', 'period' => ''])) ?>' + ajaxBlockParam + periodParam;
     new Ajax.Request(ajaxBlockUrl, {
         parameters: {isAjax: 'true', form_key: FORM_KEY},
         onSuccess: function(transport) {
@@ -41,8 +41,8 @@ window.changeDiagramsPeriod = function(periodObj) {
             }
         }
     });
-<?php endforeach; ?>
-    ajaxBlockUrl = '<?= $block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => 'totals', 'period' => '']) ?>' + periodParam;
+    <?php endforeach; ?>
+    ajaxBlockUrl = '<?= $block->escapeJs($block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => 'totals', 'period' => ''])) ?>' + periodParam;
     new Ajax.Request(ajaxBlockUrl, {
         parameters: {isAjax: 'true', form_key: FORM_KEY},
         onSuccess: function(transport) {

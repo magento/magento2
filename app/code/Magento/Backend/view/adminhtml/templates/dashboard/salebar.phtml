@@ -4,8 +4,8 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php if (sizeof($block->getTotals()) > 0): ?>
-    <?php foreach ($block->getTotals() as $_total): ?>
+<?php if (count($block->getTotals()) > 0) : ?>
+    <?php foreach ($block->getTotals() as $_total) : ?>
     <div class="dashboard-item dashboard-item-primary">
         <div class="dashboard-item-title"><?= $block->escapeHtml($_total['label']) ?></div>
         <div class="dashboard-item-content">

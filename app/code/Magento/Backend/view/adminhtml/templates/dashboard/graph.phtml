@@ -10,8 +10,11 @@
                class="label"><?= $block->escapeHtml(__('Select Range:')) ?></label>
         <select name="period" id="order_<?= $block->getHtmlId() ?>_period"
                 onchange="changeDiagramsPeriod(this);" class="admin__control-select">
-            <?php foreach ($this->helper('Magento\Backend\Helper\Dashboard\Data')->getDatePeriods() as $value => $label): ?>
-                <?php if (in_array($value, ['custom'])) {
+            <?php //phpcs:disable ?>
+            <?php foreach ($this->helper(\Magento\Backend\Helper\Dashboard\Data::class)->getDatePeriods() as $value => $label) : ?>
+                <?php
+                //phpcs:enable
+                if (in_array($value, ['custom'])) {
                     continue;
                 } ?>
                 <option value="<?= /* @noEscape */ $value ?>"
@@ -20,11 +23,11 @@
             <?php endforeach; ?>
         </select>
     </div>
-    <?php if ($block->getCount()): ?>
+    <?php if ($block->getCount()) : ?>
     <div class="dashboard-diagram-image">
         <img src="<?= $block->escapeUrl($block->getChartUrl(false)) ?>" class="dashboard-diagram-chart" alt="Chart" title="Chart" />
     </div>
-    <?php else: ?>
+    <?php else : ?>
     <div class="dashboard-diagram-nodata">
         <span><?= $block->escapeHtml(__('No Data Found')) ?></span>
     </div>

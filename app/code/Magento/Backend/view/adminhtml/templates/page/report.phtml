@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php if ($block->getBugreportUrl()): ?>
+<?php if ($block->getBugreportUrl()) : ?>
     <a class="link-report" href="<?= $block->escapeUrl($block->getBugreportUrl()) ?>" id="footer_bug_tracking" target="_blank">
         <?= $block->escapeHtml(__('Report an Issue')) ?>
     </a>

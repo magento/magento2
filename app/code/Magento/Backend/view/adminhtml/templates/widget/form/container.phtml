@@ -5,12 +5,12 @@
  */
 
 /** @var $block \Magento\Backend\Block\Widget\Form\Container */
- ?>
+?>
 <?= /* @noEscape */ $block->getFormInitScripts() ?>
-<?php if ($block->getButtonsHtml('header')): ?>
+<?php if ($block->getButtonsHtml('header')) : ?>
     <div class="page-form-actions" <?= /* @noEscape */ $block->getUiId('content-header') ?>><?= $block->getButtonsHtml('header') ?></div>
 <?php endif; ?>
-<?php if ($block->getButtonsHtml('toolbar')): ?>
+<?php if ($block->getButtonsHtml('toolbar')) : ?>
     <div class="page-main-actions">
         <div class="page-actions">
             <div class="page-actions-buttons">
@@ -20,7 +20,7 @@
     </div>
 <?php endif; ?>
 <?= $block->getFormHtml() ?>
-<?php if ($block->hasFooterButtons()): ?>
+<?php if ($block->hasFooterButtons()) : ?>
     <div class="content-footer">
         <p class="form-buttons"><?= $block->getButtonsHtml('footer') ?></p>
     </div>
