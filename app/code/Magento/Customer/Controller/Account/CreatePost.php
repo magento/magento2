@@ -39,6 +39,8 @@ use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Customer\Controller\AbstractAccount;
 
 /**
+ * Post create customer action
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -158,8 +160,8 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
      * @param CustomerExtractor $customerExtractor
      * @param DataObjectHelper $dataObjectHelper
      * @param AccountRedirect $accountRedirect
-     * @param Validator $formKeyValidator
      * @param CustomerRepository $customerRepository
+     * @param Validator $formKeyValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -337,22 +339,16 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
             return $this->resultRedirectFactory->create()
                 ->setUrl($this->_redirect->error($url));
         }
-
         $this->session->regenerateId();
-
         try {
             $address = $this->extractAddress();
             $addresses = $address === null ? [] : [$address];
-
             $customer = $this->customerExtractor->extract('customer_account_create', $this->_request);
             $customer->setAddresses($addresses);
-
             $password = $this->getRequest()->getParam('password');
             $confirmation = $this->getRequest()->getParam('password_confirmation');
             $redirectUrl = $this->session->getBeforeAuthUrl();
-
             $this->checkPasswordConfirmation($password, $confirmation);
-
             $customer = $this->accountManagement
                 ->createAccount($customer, $password, $redirectUrl);
 
@@ -362,12 +358,10 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
                 $customer->setExtensionAttributes($extensionAttributes);
                 $this->customerRepository->save($customer);
             }
-
             $this->_eventManager->dispatch(
                 'customer_register_success',
                 ['account_controller' => $this, 'customer' => $customer]
             );
-
             $confirmationStatus = $this->accountManagement->getConfirmationStatus($customer->getId());
             if ($confirmationStatus === AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED) {
                 $email = $this->customerUrl->getEmailConfirmationUrl($customer->getEmail());
