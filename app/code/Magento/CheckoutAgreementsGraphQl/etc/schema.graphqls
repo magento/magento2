@@ -1,0 +1,21 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+    checkoutAgreements: [CheckoutAgreement] @resolver(class: "Magento\\CheckoutAgreementsGraphQl\\Model\\Resolver\\CheckoutAgreements") @doc(description: "The Checkout Agreements information")
+}
+
+type CheckoutAgreement @doc(description: "Defines all Checkout Agreement information") {
+    agreement_id: Int! @doc(description: "Checkout Agreement identifier")
+    name: String! @doc(description: "Checkout Agreement name")
+    content: String! @doc(description: "Checkout Agreement content")
+    content_height: String @doc(description: "Checkout Agreement content height")
+    checkbox_text: String! @doc(description: "Checkout Agreement checkbox text")
+    is_html: Boolean! @doc(description: "Is Checkout Agreement content in HTML format")
+    mode: CheckoutAgreementMode!
+}
+
+enum CheckoutAgreementMode {
+    AUTO
+    MANUAL
+}

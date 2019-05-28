@@ -8,9 +8,11 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="clickViewAndEditCartFromMiniCart">
+        <scrollTo selector="{{StorefrontMinicartSection.showCart}}" stepKey="scrollToMiniCart"/>
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
         <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="viewAndEditCart"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
         <seeInCurrentUrl url="checkout/cart" stepKey="seeInCurrentUrl"/>
     </actionGroup>
     <actionGroup name="assertOneProductNameInMiniCart">

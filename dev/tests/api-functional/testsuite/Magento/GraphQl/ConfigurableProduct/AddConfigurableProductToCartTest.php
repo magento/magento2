@@ -37,14 +37,14 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
     public function testAddConfigurableProductToCart()
     {
         $variantSku = 'simple_41';
-        $qty = 2;
+        $quantity = 2;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
-        $query = $this->getQuery($maskedQuoteId, $variantSku, $qty);
+        $query = $this->getQuery($maskedQuoteId, $variantSku, $quantity);
         $response = $this->graphQlMutation($query);
 
         $cartItems = $response['addConfigurableProductsToCart']['cart']['items'];
-        self::assertEquals($qty, $cartItems[0]['qty']);
+        self::assertEquals($quantity, $cartItems[0]['quantity']);
         self::assertEquals($variantSku, $cartItems[0]['product']['sku']);
     }
 
@@ -57,10 +57,10 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
     public function testAddProductIfQuantityIsNotAvailable()
     {
         $variantSku = 'simple_41';
-        $qty = 200;
+        $quantity = 200;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
-        $query = $this->getQuery($maskedQuoteId, $variantSku, $qty);
+        $query = $this->getQuery($maskedQuoteId, $variantSku, $quantity);
         $this->graphQlMutation($query);
     }
 
@@ -73,31 +73,31 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
     public function testAddOutOfStockProduct()
     {
         $variantSku = 'simple_1010';
-        $qty = 1;
+        $quantity = 1;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
-        $query = $this->getQuery($maskedQuoteId, $variantSku, $qty);
+        $query = $this->getQuery($maskedQuoteId, $variantSku, $quantity);
         $this->graphQlMutation($query);
     }
 
     /**
      * @param string $maskedQuoteId
      * @param string $variantSku
-     * @param int $qty
+     * @param int $quantity
      * @return string
      */
-    private function getQuery(string $maskedQuoteId, string $variantSku, int $qty): string
+    private function getQuery(string $maskedQuoteId, string $variantSku, int $quantity): string
     {
         return <<<QUERY
 mutation {
   addConfigurableProductsToCart(
     input: {
       cart_id: "{$maskedQuoteId}"
-      cartItems: [
+      cart_items: [
         {
           variant_sku: "{$variantSku}"
           data: {
-            qty: {$qty}
+            quantity: {$quantity}
             sku: "{$variantSku}"
           }
         }
@@ -107,7 +107,7 @@ mutation {
     cart {
       items {
         id
-        qty
+        quantity
         product {
           name
           sku
