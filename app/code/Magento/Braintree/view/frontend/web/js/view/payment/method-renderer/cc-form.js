@@ -90,11 +90,11 @@ define(
                         });
                     })
                     .then(function (hostedFieldsInstance) {
-                            self.hostedFieldsInstance = hostedFieldsInstance;
-                            self.isPlaceOrderActionAllowed(true);
-                            self.initFormValidationEvents(hostedFieldsInstance);
+                        self.hostedFieldsInstance = hostedFieldsInstance;
+                        self.isPlaceOrderActionAllowed(true);
+                        self.initFormValidationEvents(hostedFieldsInstance);
 
-                            return self.hostedFieldsInstance;
+                        return self.hostedFieldsInstance;
                     })
                     .catch(function () {
                         self.showError($t('Payment ' + self.getTitle() + ' can\'t be initialized'));
