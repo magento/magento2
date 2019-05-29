@@ -34,7 +34,7 @@ class UpsUrlTest extends TestCase
      * @dataProvider validDataProvider
      * @param string $data The valid data
      */
-    public function testBeforeSave($data=null)
+    public function testBeforeSave($data = null)
     {
         $this->config->setValue($data);
         $this->config->beforeSave();
