@@ -7,13 +7,14 @@
 
 define([
     'jquery',
-    'Magento_Braintree/js/view/payment/method-renderer/hosted-fields',
+    'Magento_Braintree/js/view/payment/method-renderer/cc-form',
     'Magento_Braintree/js/validator',
     'Magento_Ui/js/model/messageList',
     'mage/translate',
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Checkout/js/action/set-payment-information',
-    'Magento_Checkout/js/model/payment/additional-validators'
+    'Magento_Checkout/js/model/payment/additional-validators',
+    'Magento_Braintree/js/view/payment/validator-handler'
 ], function (
     $,
     Component,
@@ -22,7 +23,8 @@ define([
     $t,
     fullScreenLoader,
     setPaymentInformationAction,
-    additionalValidators
+    additionalValidators,
+    validatorManager
 ) {
     'use strict';
 
@@ -32,32 +34,12 @@ define([
         },
 
         /**
-         * Get list of available CC types
-         *
-         * @returns {Object}
-         */
-        getCcAvailableTypes: function () {
-            var availableTypes = validator.getAvailableCardTypes(),
-                billingCountryId;
-
-            billingCountryId = $('#multishipping_billing_country_id').val();
-
-            if (billingCountryId && validator.getCountrySpecificCardTypes(billingCountryId)) {
-                return validator.collectTypes(
-                    availableTypes, validator.getCountrySpecificCardTypes(billingCountryId)
-                );
-            }
-
-            return availableTypes;
-        },
-
-        /**
          * @override
          */
         placeOrder: function () {
             var self = this;
 
-            this.validatorManager.validate(self, function () {
+            validatorManager.validate(self, function () {
                 return self.setPaymentInformation();
             });
         },
@@ -67,9 +49,7 @@ define([
          */
         setPaymentInformation: function () {
             if (additionalValidators.validate()) {
-
                 fullScreenLoader.startLoader();
-
                 $.when(
                     setPaymentInformationAction(
                         this.messageContainer,
