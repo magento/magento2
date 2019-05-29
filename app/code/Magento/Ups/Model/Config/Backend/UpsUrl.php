@@ -21,6 +21,7 @@ class UpsUrl extends Value
      */
     public function beforeSave()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $host = parse_url((string)$this->getValue(), \PHP_URL_HOST);
 
         if (!empty($host) && !preg_match('/(?:.+\.|^)ups\.com$/i', $host)) {
