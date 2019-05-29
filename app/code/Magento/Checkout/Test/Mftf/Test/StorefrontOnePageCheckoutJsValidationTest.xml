@@ -21,17 +21,16 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="addToCartFromStorefrontProductPage">
-                <argument name="product" value="$$createProduct$$"/>
-            </actionGroup>
-            <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart"/>
-            <waitForPageLoad stepKey="waitForCheckoutPage"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
 
-        <dontSeeElement selector="div .field-error" stepKey="dontSeeValidationErrors"/>
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="guestGoToCheckout"/>
+        <actionGroup ref="StorefrontAssertNoValidationErrorForCheckoutAddressFieldsActionGroup" stepKey="seeNoValidationErrors"/>
     </test>
 </tests>
