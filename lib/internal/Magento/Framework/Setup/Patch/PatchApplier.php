@@ -164,7 +164,17 @@ class PatchApplier
                     $this->moduleDataSetup->getConnection()->commit();
                 } catch (\Exception $e) {
                     $this->moduleDataSetup->getConnection()->rollBack();
-                    throw new Exception(new Phrase($e->getMessage()));
+                    throw new Exception(
+                        new Phrase(
+                            'Unable to apply data patch %1 for module %2. Original exception message: %3',
+                            [
+                                get_class($dataPatch),
+                                $moduleName,
+                                $e->getMessage()
+                            ]
+                        ),
+                        $e
+                    );
                 } finally {
                     unset($dataPatch);
                 }
