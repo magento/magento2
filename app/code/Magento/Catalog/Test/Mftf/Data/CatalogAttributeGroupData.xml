@@ -14,7 +14,4 @@
     <entity name="emptyGroup">
         <data key="name">Empty Group</data>
     </entity>
-    <entity name="newGroup">
-        <data key="name">New Group</data>
-    </entity>
 </entities>
