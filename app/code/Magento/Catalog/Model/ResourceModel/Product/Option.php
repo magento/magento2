@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -202,12 +203,14 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $price = $object->getPrice();
         if ($object->getPriceType() == 'fixed') {
-            $baseCurrency = $this->_config->getValue(
+            $website  = $this->_storeManager->getStore($storeId)->getWebsite();
+            $websiteBaseCurrency = $this->_config->getValue(
                 \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                'default'
+                ScopeInterface::SCOPE_WEBSITE,
+                $website
             );
             $storeCurrency = $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
-            $rate = $this->_currencyFactory->create()->load($baseCurrency)->getRate($storeCurrency);
+            $rate = $this->_currencyFactory->create()->load($websiteBaseCurrency)->getRate($storeCurrency);
             $price = $object->getPrice() * ($rate ?: 1);
         }
 
