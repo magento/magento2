@@ -145,12 +145,14 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage Page not found.
      */
     public function testExecuteWithNonPostRequest()
     {
         $this->requestMock->expects($this->once())->method('isPost')->willReturn(false);
+
+        $this->resultPageFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultPageMock);
 
         $this->viewController->execute();
     }
