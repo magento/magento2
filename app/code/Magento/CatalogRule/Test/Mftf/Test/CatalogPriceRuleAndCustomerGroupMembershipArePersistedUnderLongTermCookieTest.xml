@@ -17,9 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-69455"/>
             <group value="persistent"/>
-            <skip>
-                <issueId value="MC-5777"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>
