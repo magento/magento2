@@ -169,7 +169,7 @@ switch ($type = $block->getType()) {
         <?php if ($type == 'related' && $canItemsAddToCart): ?>
         <div class="block-actions">
             <?= /* @escapeNotVerified */ __('Check items to add to the cart or') ?>
-            <button type="button" class="action select" role="select-all"><span><?= /* @escapeNotVerified */ __('select all') ?></span></button>
+            <button type="button" class="action select" role="button"><span><?= /* @escapeNotVerified */ __('select all') ?></span></button>
         </div>
         <?php endif; ?>
         <div class="products wrapper grid products-grid products-<?= /* @escapeNotVerified */ $type ?>">

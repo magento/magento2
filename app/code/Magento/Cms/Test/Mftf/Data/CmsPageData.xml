@@ -50,6 +50,7 @@
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
         <data key="file">magento-again.jpg</data>
+        <data key="fileName">magento-again</data>
         <data key="value">magento-again.jpg</data>
         <data key="content">Image content. Yeah.</data>
         <data key="height">1000</data>
@@ -71,6 +72,7 @@
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
         <data key="value">magento3.jpg</data>
+        <data key="file">magento3.jpg</data>
         <data key="fileName">magento3</data>
         <data key="extension">jpg</data>
         <data key="content">Image content. Yeah.</data>

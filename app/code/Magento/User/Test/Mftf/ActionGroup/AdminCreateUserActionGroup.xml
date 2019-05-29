@@ -39,7 +39,7 @@
             <argument name="role"/>
             <argument name="user" defaultValue="newAdmin"/>
         </arguments>
-        <amOnPage url="{{AdminEditUserPage.url}}" stepKey="navigateToNewUser"/>
+        <amOnPage url="{{AdminNewUserPage.url}}" stepKey="navigateToNewUser"/>
         <waitForPageLoad stepKey="waitForUsersPage" />
         <fillField selector="{{AdminCreateUserSection.usernameTextField}}" userInput="{{user.username}}" stepKey="enterUserName" />
         <fillField selector="{{AdminCreateUserSection.firstNameTextField}}" userInput="{{user.firstName}}" stepKey="enterFirstName" />

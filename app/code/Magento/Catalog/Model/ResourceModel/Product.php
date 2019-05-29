@@ -9,6 +9,8 @@ use Magento\Catalog\Model\ResourceModel\Product\Website\Link as ProductWebsiteLi
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
+use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Product entity resource model
@@ -44,7 +46,7 @@ class Product extends AbstractResource
     /**
      * Category collection factory
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     * @var Category\CollectionFactory
      */
     protected $_categoryCollectionFactory;
 
@@ -64,7 +66,7 @@ class Product extends AbstractResource
     protected $typeFactory;
 
     /**
-     * @var \Magento\Framework\EntityManager\EntityManager
+     * @var EntityManager
      * @since 101.0.0
      */
     protected $entityManager;
@@ -81,7 +83,7 @@ class Product extends AbstractResource
     protected $availableCategoryIdsCache = [];
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CategoryLink
+     * @var Product\CategoryLink
      */
     private $productCategoryLink;
 
@@ -110,7 +112,7 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Factory $modelFactory,
-        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        Category\CollectionFactory $categoryCollectionFactory,
         Category $catalogCategory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
@@ -236,7 +238,7 @@ class Product extends AbstractResource
     /**
      * Retrieve product category identifiers
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param  \Magento\Catalog\Model\Product $product
      * @return array
      */
     public function getCategoryIds($product)
@@ -248,7 +250,7 @@ class Product extends AbstractResource
     /**
      * Get product identifier by sku
      *
-     * @param string $sku
+     * @param  string $sku
      * @return int|false
      */
     public function getIdBySku($sku)
@@ -348,11 +350,11 @@ class Product extends AbstractResource
      * Get collection of product categories
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
+     * @return Category\Collection
      */
     public function getCategoryCollection($product)
     {
-        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
+        /** @var Category\Collection $collection */
         $collection = $this->_categoryCollectionFactory->create();
         $collection->joinField(
             'product_id',
@@ -428,18 +430,26 @@ class Product extends AbstractResource
     /**
      * Check availability display product in category
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Catalog\Model\Product|int $product
      * @param int $categoryId
      * @return string
      */
     public function canBeShowInCategory($product, $categoryId)
     {
+        if ($product instanceof \Magento\Catalog\Model\Product) {
+            $productId = $product->getEntityId();
+            $storeId = $product->getStoreId();
+        } else {
+            $productId = $product;
+            $storeId = $this->_storeManager->getStore()->getId();
+        }
+
         $select = $this->getConnection()->select()->from(
-            $this->tableMaintainer->getMainTable($product->getStoreId()),
+            $this->tableMaintainer->getMainTable($storeId),
             'product_id'
         )->where(
             'product_id = ?',
-            (int)$product->getEntityId()
+            (int)$productId
         )->where(
             'category_id = ?',
             (int)$categoryId
@@ -614,7 +624,7 @@ class Product extends AbstractResource
     /**
      * Reset firstly loaded attributes
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @param integer $entityId
      * @param array|null $attributes
      * @return $this
@@ -667,12 +677,12 @@ class Product extends AbstractResource
     /**
      * Save entity's attributes into the object's resource
      *
-     * @param  \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      * @throws \Exception
      * @since 101.0.0
      */
-    public function save(\Magento\Framework\Model\AbstractModel $object)
+    public function save(AbstractModel $object)
     {
         $this->getEntityManager()->save($object);
         return $this;
@@ -681,13 +691,13 @@ class Product extends AbstractResource
     /**
      * Retrieve entity manager object
      *
-     * @return \Magento\Framework\EntityManager\EntityManager
+     * @return EntityManager
      */
     private function getEntityManager()
     {
         if (null === $this->entityManager) {
-            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\EntityManager::class);
+            $this->entityManager = ObjectManager::getInstance()
+                ->get(EntityManager::class);
         }
         return $this->entityManager;
     }
@@ -707,13 +717,13 @@ class Product extends AbstractResource
      * Retrieve CategoryLink object
      *
      * @deprecated 101.1.0
-     * @return \Magento\Catalog\Model\ResourceModel\Product\CategoryLink
+     * @return Product\CategoryLink
      */
     private function getProductCategoryLink()
     {
         if (null === $this->productCategoryLink) {
-            $this->productCategoryLink = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Model\ResourceModel\Product\CategoryLink::class);
+            $this->productCategoryLink = ObjectManager::getInstance()
+                ->get(Product\CategoryLink::class);
         }
         return $this->productCategoryLink;
     }

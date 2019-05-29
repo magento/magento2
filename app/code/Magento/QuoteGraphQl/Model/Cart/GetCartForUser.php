@@ -13,6 +13,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Get cart
@@ -30,15 +31,23 @@ class GetCartForUser
     private $cartRepository;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param CartRepositoryInterface $cartRepository
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
-        CartRepositoryInterface $cartRepository
+        CartRepositoryInterface $cartRepository,
+        StoreManagerInterface $storeManager
     ) {
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->cartRepository = $cartRepository;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -72,6 +81,15 @@ class GetCartForUser
         if (false === (bool)$cart->getIsActive()) {
             throw new GraphQlNoSuchEntityException(
                 __('Current user does not have an active cart.')
+            );
+        }
+
+        if ((int)$cart->getStoreId() !== (int)$this->storeManager->getStore()->getId()) {
+            throw new GraphQlNoSuchEntityException(
+                __(
+                    'Wrong store code specified for cart "%masked_cart_id"',
+                    ['masked_cart_id' => $cartHash]
+                )
             );
         }
 

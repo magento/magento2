@@ -57,7 +57,7 @@
         <arguments>
             <argument name="Address"/>
         </arguments>
-        
+
         <amOnPage url="customer/address/new/" stepKey="goToAddressPage"/>
         <waitForPageLoad stepKey="waitForAddressPage"/>
         <fillField stepKey="fillFirstName" selector="{{StorefrontCustomerAddressSection.firstName}}" userInput="{{Address.firstname}}"/>

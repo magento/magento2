@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Admin creates new Store group -->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStoreGroupFormActionGroup">
+        <arguments>
+            <argument name="website" type="string"/>
+            <argument name="storeGroupName" type="string"/>
+            <argument name="storeGroupCode" type="string"/>
+            <argument name="rootCategory" type="string"/>
+        </arguments>
+        <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickEditExistingStoreRow"/>
+        <waitForPageLoad stepKey="waitTillAdminSystemStoreGroupPage"/>
+        <seeInField selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" userInput="{{website}}" stepKey="seeAssertWebsite"/>
+        <seeInField selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" userInput="{{storeGroupName}}" stepKey="seeAssertStoreGroupName"/>
+        <seeInField selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" userInput="{{storeGroupCode}}" stepKey="seeAssertStoreGroupCode"/>
+        <seeInField selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="{{rootCategory}}" stepKey="seeAssertRootCategory"/>
+    </actionGroup>
+</actionGroups>

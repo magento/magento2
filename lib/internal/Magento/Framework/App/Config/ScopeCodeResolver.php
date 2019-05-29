@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\App\Config;
 
+use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverPool;
 
 /**
@@ -34,7 +35,7 @@ class ScopeCodeResolver
      * Resolve scope code
      *
      * @param string $scopeType
-     * @param string $scopeCode
+     * @param string|null $scopeCode
      * @return string
      */
     public function resolve($scopeType, $scopeCode)
@@ -42,20 +43,24 @@ class ScopeCodeResolver
         if (isset($this->resolvedScopeCodes[$scopeType][$scopeCode])) {
             return $this->resolvedScopeCodes[$scopeType][$scopeCode];
         }
-        if (($scopeCode === null || is_numeric($scopeCode))
-            && $scopeType !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT
-        ) {
+
+        if ($scopeType !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
             $scopeResolver = $this->scopeResolverPool->get($scopeType);
             $resolverScopeCode = $scopeResolver->getScope($scopeCode);
         } else {
             $resolverScopeCode = $scopeCode;
         }
 
-        if ($resolverScopeCode instanceof \Magento\Framework\App\ScopeInterface) {
+        if ($resolverScopeCode instanceof ScopeInterface) {
             $resolverScopeCode = $resolverScopeCode->getCode();
         }
 
+        if ($scopeCode === null) {
+            $scopeCode = $resolverScopeCode;
+        }
+
         $this->resolvedScopeCodes[$scopeType][$scopeCode] = $resolverScopeCode;
+
         return $resolverScopeCode;
     }
 
