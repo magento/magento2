@@ -23,11 +23,18 @@ class CloseTransactionHandler implements HandlerInterface
     private $subjectReader;
 
     /**
-     * @param SubjectReader $subjectReader
+     * @var bool
      */
-    public function __construct(SubjectReader $subjectReader)
+    private $closeTransaction;
+
+    /**
+     * @param SubjectReader $subjectReader
+     * @param bool $closeTransaction
+     */
+    public function __construct(SubjectReader $subjectReader, bool $closeTransaction = true)
     {
         $this->subjectReader = $subjectReader;
+        $this->closeTransaction = $closeTransaction;
     }
 
     /**
@@ -39,7 +46,7 @@ class CloseTransactionHandler implements HandlerInterface
         $payment = $paymentDO->getPayment();
 
         if ($payment instanceof Payment) {
-            $payment->setIsTransactionClosed(true);
+            $payment->setIsTransactionClosed($this->closeTransaction);
             $payment->setShouldCloseParentTransaction(true);
         }
     }
