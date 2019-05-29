@@ -28,19 +28,19 @@ class Upload extends File
     /**
      * @var Link
      */
-    protected $link;
+    protected $_link; // phpcs:ignore
 
     /**
      * @var Sample
      */
-    protected $sample;
+    protected $_sample; // phpcs:ignore
 
     /**
      * Downloadable file helper.
      *
      * @var FileHelper
      */
-    protected $fileHelper;
+    protected $_fileHelper; // phpcs:ignore
 
     /**
      * @var UploaderFactory
@@ -78,9 +78,9 @@ class Upload extends File
         State $state = null
     ) {
         parent::__construct($context);
-        $this->link = $link;
-        $this->sample = $sample;
-        $this->fileHelper = $fileHelper;
+        $this->_link = $link;
+        $this->_sample = $sample;
+        $this->_fileHelper = $fileHelper;
         $this->uploaderFactory = $uploaderFactory;
         $this->storageDatabase = $storageDatabase;
         $this->state = $state ? $state : ObjectManager::getInstance()->get(State::class);
@@ -112,17 +112,17 @@ class Upload extends File
         $type = $this->getRequest()->getParam('type');
         $tmpPath = '';
         if ($type == 'samples') {
-            $tmpPath = $this->sample->getBaseTmpPath();
+            $tmpPath = $this->_sample->getBaseTmpPath();
         } elseif ($type == 'links') {
-            $tmpPath = $this->link->getBaseTmpPath();
+            $tmpPath = $this->_link->getBaseTmpPath();
         } elseif ($type == 'link_samples') {
-            $tmpPath = $this->link->getBaseSampleTmpPath();
+            $tmpPath = $this->_link->getBaseSampleTmpPath();
         }
 
         try {
             $uploader = $this->uploaderFactory->create(['fileId' => $type]);
 
-            $result = $this->fileHelper->uploadFromTmp($tmpPath, $uploader);
+            $result = $this->_fileHelper->uploadFromTmp($tmpPath, $uploader);
 
             if (!$result) {
                 throw new \Exception('File can not be moved from temporary folder to the destination folder.');
