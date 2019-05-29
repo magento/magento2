@@ -12,10 +12,8 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Asset\Repository;
 
 /**
- * Block will add inline critical css
+ * This block will add inline critical css
  * in case dev/css/use_css_critical_path is enabled
- *
- * @package Magento\Theme\Block\Html\Header
  */
 class CriticalCss extends Template
 {
@@ -25,16 +23,24 @@ class CriticalCss extends Template
     private $assetRepo;
 
     /**
+     * @var $filePath
+     */
+    private $filePath;
+
+    /**
      * @param Template\Context $context
      * @param Repository $assetRepo
+     * @param string $filePath
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
         Repository $assetRepo,
+        string $filePath = '',
         array $data = []
     ) {
         $this->assetRepo = $assetRepo;
+        $this->filePath = $filePath;
         parent::__construct($context, $data);
     }
 
@@ -45,7 +51,7 @@ class CriticalCss extends Template
      */
     public function getCriticalCssData()
     {
-        $asset = $this->assetRepo->createAsset('css/critical.css', ['_secure' => 'false']);
+        $asset = $this->assetRepo->createAsset($this->filePath, ['_secure' => 'false']);
         $content = $asset->getContent();
 
         return $content;

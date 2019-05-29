@@ -30,4 +30,9 @@
         <plugin name="result-js-footer" type="Magento\Theme\Controller\Result\JsFooterPlugin"/>
         <plugin name="asyncCssLoad" type="Magento\Theme\Controller\Result\AsyncCssPlugin"/>
     </type>
+    <type name="Magento\Theme\Block\Html\Header\CriticalCss">
+        <arguments>
+            <item name="filePath" xsi:type="string">css/critical.css</item>
+        </arguments>
+    </type>
 </config>
