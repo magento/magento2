@@ -30,7 +30,6 @@ return [
     'Magento_Msrp',
     'Magento_PageCache',
     'Magento_Paypal',
-    'Magento_ProductVideo',
     'Magento_Reports',
     'Magento_Sales',
     'Magento_Search',
