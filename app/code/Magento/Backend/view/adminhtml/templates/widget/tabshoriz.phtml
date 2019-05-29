@@ -4,16 +4,16 @@
  * See COPYING.txt for license details.
  */
 ?>
-<!-- <?php if ($block->getTitle()): ?>
+<!-- <?php if ($block->getTitle()) : ?>
     <h3><?= $block->escapeHtml($block->getTitle()) ?></h3>
 <?php endif ?> -->
-<?php if (!empty($tabs)): ?>
+<?php if (!empty($tabs)) : ?>
 <div id="<?=  $block->escapeHtmlAttr($block->getId()) ?>">
 <ul  class="tabs-horiz">
-<?php foreach ($tabs as $_tab): ?>
-    <?php $_tabClass = 'tab-item-link ' . $block->getTabClass($_tab) . ' ' . (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
-    <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $block->getTabUrl($_tab) != '#') ? 'link' : '' ?>
-    <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' : $block->getTabUrl($_tab) ?>
+    <?php foreach ($tabs as $_tab) : ?>
+        <?php $_tabClass = 'tab-item-link ' . $block->getTabClass($_tab) . ' ' . (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
+        <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $block->getTabUrl($_tab) != '#') ? 'link' : '' ?>
+        <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' : $block->getTabUrl($_tab) ?>
     <li>
         <a href="<?= $block->escapeHtmlAttr($_tabHref) ?>" id="<?= $block->escapeHtmlAttr($block->getTabId($_tab)) ?>" title="<?= $block->escapeHtmlAttr($block->getTabTitle($_tab)) ?>" class="<?= $block->escapeHtmlAttr($_tabClass) ?>" data-tab-type="<?= $block->escapeHtmlAttr($_tabType) ?>">
             <span>
@@ -25,7 +25,7 @@
         </a>
         <div id="<?=  $block->escapeHtmlAttr($block->getTabId($_tab)) ?>_content" style="display:none"><?= /* @noEscape */ $block->getTabContent($_tab) ?></div>
     </li>
-<?php endforeach; ?>
+    <?php endforeach; ?>
 </ul>
 </div>
 <script>

@@ -5,6 +5,9 @@
  */
 namespace Magento\User\Controller\Adminhtml\Locks;
 
+/**
+ * Testing locked users list.
+ */
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**

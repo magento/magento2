@@ -25,13 +25,13 @@
             <span class="outer-span" id="<?= $block->getHtmlId() ?>-form-additional"></span>
             <?= $block->getApplyButtonHtml() ?>
         </div>
-    <?php if ($block->getHideFormElement() !== true):?>
+    <?php if ($block->getHideFormElement() !== true) :?>
     </form>
     <?php endif ?>
     <div class="no-display">
-    <?php foreach ($block->getItems() as $_item): ?>
+    <?php foreach ($block->getItems() as $_item) : ?>
         <div id="<?= $block->getHtmlId() ?>-item-<?= /* @noEscape */ $_item->getId() ?>-block">
-            <?php if ('' != $_item->getBlockName()):?>
+            <?php if ('' != $_item->getBlockName()) :?>
                 <?= $block->getChildHtml($_item->getBlockName()) ?>
             <?php endif;?>
         </div>
@@ -46,7 +46,7 @@
             data-menu="grid-mass-select">
             <optgroup label="<?= $block->escapeHtml(__('Mass Actions')) ?>">
                 <option disabled selected></option>
-                <?php if ($block->getUseSelectAll()):?>
+                <?php if ($block->getUseSelectAll()) :?>
                     <option value="selectAll">
                         <?= $block->escapeHtml(__('Select All')) ?>
                     </option>
@@ -75,7 +75,7 @@
             var massAction = $('option:selected', this).val();
             this.blur();
             switch (massAction) {
-                <?php if ($block->getUseSelectAll()):?>
+                <?php if ($block->getUseSelectAll()) : ?>
                 case 'selectAll':
                     return <?= $block->escapeJs($block->getJsObjectName()) ?>.selectAll();
                     break;
@@ -92,7 +92,7 @@
             }
         });
     });
-    <?php if (!$block->getParentBlock()->canDisplayContainer()): ?>
+    <?php if (!$block->getParentBlock()->canDisplayContainer()) : ?>
         <?= $block->escapeJs($block->getJsObjectName()) ?>.setGridIds('<?= /* @noEscape */ $block->getGridIdsJson() ?>');
     <?php endif; ?>
 </script>
