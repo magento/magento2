@@ -57,10 +57,10 @@ class ShipmentSender extends Sender
      * @param ShipmentIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @param Renderer $addressRenderer
      * @param PaymentHelper $paymentHelper
      * @param ShipmentResource $shipmentResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
-     * @param Renderer $addressRenderer
      * @param ManagerInterface $eventManager
      */
     public function __construct(
@@ -96,10 +96,11 @@ class ShipmentSender extends Sender
      * @param Shipment $shipment
      * @param bool $forceSyncMode
      * @return bool
+     * @throws \Exception
      */
     public function send(Shipment $shipment, $forceSyncMode = false)
     {
-        $shipment->setSendEmail(true);
+        $shipment->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $shipment->getOrder();
@@ -146,6 +147,7 @@ class ShipmentSender extends Sender
      *
      * @param Order $order
      * @return string
+     * @throws \Exception
      */
     protected function getPaymentHtml(Order $order)
     {

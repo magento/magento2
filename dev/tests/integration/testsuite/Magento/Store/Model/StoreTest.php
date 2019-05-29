@@ -8,7 +8,6 @@ namespace Magento\Store\Model;
 
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\App\Bootstrap;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
@@ -16,6 +15,7 @@ use Zend\Stdlib\Parameters;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Security.Superglobal
  */
 class StoreTest extends \PHPUnit\Framework\TestCase
 {
@@ -201,7 +201,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetBaseUrlForCustomEntryPoint($type, $useCustomEntryPoint, $useStoreCode, $expected)
     {
-         /* config operations require store to be loaded */
+        /* config operations require store to be loaded */
         $this->model->load('default');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
@@ -213,6 +213,10 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         // emulate custom entry point
         $_SERVER['SCRIPT_FILENAME'] = 'custom_entry.php';
+        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\App\RequestInterface::class);
+        $request->setServer(new Parameters($_SERVER));
+
         if ($useCustomEntryPoint) {
             $property = new \ReflectionProperty($this->model, '_isCustomEntryPoint');
             $property->setAccessible(true);
@@ -298,11 +302,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $url = $product->getUrlInStore();
 
         $this->assertEquals(
-            $secondStore->getBaseUrl().'catalog/product/view/id/1/s/simple-product/',
+            $secondStore->getBaseUrl() . 'catalog/product/view/id/1/s/simple-product/',
             $url
         );
         $this->assertEquals(
-            $secondStore->getBaseUrl().'?___from_store=default',
+            $secondStore->getBaseUrl() . '?___from_store=default',
             $secondStore->getCurrentUrl()
         );
         $this->assertEquals(
@@ -332,25 +336,25 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $product->setStoreId($secondStore->getId());
         $url = $product->getUrlInStore();
 
-         /** @var \Magento\Catalog\Model\CategoryRepository $categoryRepository */
+        /** @var \Magento\Catalog\Model\CategoryRepository $categoryRepository */
         $categoryRepository = $objectManager->get(\Magento\Catalog\Model\CategoryRepository::class);
         $category = $categoryRepository->get(333, $secondStore->getStoreId());
 
         $this->assertEquals(
-            $secondStore->getBaseUrl().'catalog/category/view/s/category-1/id/333/',
+            $secondStore->getBaseUrl() . 'catalog/category/view/s/category-1/id/333/',
             $category->getUrl()
         );
         $this->assertEquals(
-            $secondStore->getBaseUrl().
+            $secondStore->getBaseUrl() .
             'catalog/product/view/id/333/s/simple-product-three/?___store=fixture_second_store',
             $url
         );
         $this->assertEquals(
-            $secondStore->getBaseUrl().'?___store=fixture_second_store&___from_store=default',
+            $secondStore->getBaseUrl() . '?___store=fixture_second_store&___from_store=default',
             $secondStore->getCurrentUrl()
         );
         $this->assertEquals(
-            $secondStore->getBaseUrl().'?___store=fixture_second_store',
+            $secondStore->getBaseUrl() . '?___store=fixture_second_store',
             $secondStore->getCurrentUrl(false)
         );
     }
@@ -405,7 +409,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public static function saveValidationDataProvider()
+    public function saveValidationDataProvider()
     {
         return [
             'empty store name' => [['name' => '']],
