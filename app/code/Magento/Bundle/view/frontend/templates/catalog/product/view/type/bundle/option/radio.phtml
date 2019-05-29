@@ -21,6 +21,7 @@
         <div class="nested options-list">
             <?php if ($block->showSingle()): ?>
                 <?= /* @escapeNotVerified */ $block->getSelectionTitlePrice($_selections[0]) ?>
+                <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selections[0]) ?>
                 <input type="hidden"
                     class="bundle-option-<?= (int)$_option->getId() ?>  product bundle option"
                     name="bundle_option[<?= (int)$_option->getId() ?>]"
@@ -57,6 +58,8 @@
                         <label class="label"
                                for="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-<?= /* @escapeNotVerified */ $_selection->getSelectionId() ?>">
                             <span><?= /* @escapeNotVerified */ $block->getSelectionTitlePrice($_selection) ?></span>
+                            <br/>
+                            <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selection) ?>
                         </label>
                     </div>
                 <?php endforeach; ?>

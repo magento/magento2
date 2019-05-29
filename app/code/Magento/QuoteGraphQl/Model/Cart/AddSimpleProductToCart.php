@@ -13,21 +13,13 @@ use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Quote\Model\Quote;
 
 /**
  * Add simple product to cart
- *
- * TODO: should be replaced for different types resolver
  */
 class AddSimpleProductToCart
 {
-    /**
-     * @var ArrayManager
-     */
-    private $arrayManager;
-
     /**
      * @var DataObjectFactory
      */
@@ -39,16 +31,13 @@ class AddSimpleProductToCart
     private $productRepository;
 
     /**
-     * @param ArrayManager $arrayManager
      * @param DataObjectFactory $dataObjectFactory
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
-        ArrayManager $arrayManager,
         DataObjectFactory $dataObjectFactory,
         ProductRepositoryInterface $productRepository
     ) {
-        $this->arrayManager = $arrayManager;
         $this->dataObjectFactory = $dataObjectFactory;
         $this->productRepository = $productRepository;
     }
@@ -66,7 +55,7 @@ class AddSimpleProductToCart
     public function execute(Quote $cart, array $cartItemData): void
     {
         $sku = $this->extractSku($cartItemData);
-        $qty = $this->extractQty($cartItemData);
+        $quantity = $this->extractQuantity($cartItemData);
         $customizableOptions = $this->extractCustomizableOptions($cartItemData);
 
         try {
@@ -76,7 +65,7 @@ class AddSimpleProductToCart
         }
 
         try {
-            $result = $cart->addProduct($product, $this->createBuyRequest($qty, $customizableOptions));
+            $result = $cart->addProduct($product, $this->createBuyRequest($quantity, $customizableOptions));
         } catch (\Exception $e) {
             throw new GraphQlInputException(
                 __(
@@ -100,27 +89,32 @@ class AddSimpleProductToCart
      */
     private function extractSku(array $cartItemData): string
     {
-        $sku = $this->arrayManager->get('data/sku', $cartItemData);
-        if (!isset($sku)) {
-            throw new GraphQlInputException(__('Missing key "sku" in cart item data'));
+        if (!isset($cartItemData['data']['sku']) || empty($cartItemData['data']['sku'])) {
+            throw new GraphQlInputException(__('Missed "sku" in cart item data'));
         }
-        return (string)$sku;
+        return (string)$cartItemData['data']['sku'];
     }
 
     /**
-     * Extract Qty from cart item data
+     * Extract quantity from cart item data
      *
      * @param array $cartItemData
      * @return float
      * @throws GraphQlInputException
      */
-    private function extractQty(array $cartItemData): float
+    private function extractQuantity(array $cartItemData): float
     {
-        $qty = $this->arrayManager->get('data/qty', $cartItemData);
-        if (!isset($qty)) {
-            throw new GraphQlInputException(__('Missing key "qty" in cart item data'));
+        if (!isset($cartItemData['data']['quantity'])) {
+            throw new GraphQlInputException(__('Missed "qty" in cart item data'));
         }
-        return (float)$qty;
+        $quantity = (float)$cartItemData['data']['quantity'];
+
+        if ($quantity <= 0) {
+            throw new GraphQlInputException(
+                __('Please enter a number greater than 0 in this field.')
+            );
+        }
+        return $quantity;
     }
 
     /**
@@ -131,11 +125,17 @@ class AddSimpleProductToCart
      */
     private function extractCustomizableOptions(array $cartItemData): array
     {
-        $customizableOptions = $this->arrayManager->get('customizable_options', $cartItemData, []);
+        if (!isset($cartItemData['customizable_options']) || empty($cartItemData['customizable_options'])) {
+            return [];
+        }
 
         $customizableOptionsData = [];
-        foreach ($customizableOptions as $customizableOption) {
-            $customizableOptionsData[$customizableOption['id']] = $customizableOption['value'];
+        foreach ($cartItemData['customizable_options'] as $customizableOption) {
+            if (isset($customizableOption['value_string'])) {
+                $customizableOptionsData[$customizableOption['id']] = $this->convertCustomOptionValue(
+                    $customizableOption['value_string']
+                );
+            }
         }
         return $customizableOptionsData;
     }
@@ -143,17 +143,33 @@ class AddSimpleProductToCart
     /**
      * Format GraphQl input data to a shape that buy request has
      *
-     * @param float $qty
+     * @param float $quantity
      * @param array $customOptions
      * @return DataObject
      */
-    private function createBuyRequest(float $qty, array $customOptions): DataObject
+    private function createBuyRequest(float $quantity, array $customOptions): DataObject
     {
         return $this->dataObjectFactory->create([
             'data' => [
-                'qty' => $qty,
+                'qty' => $quantity,
                 'options' => $customOptions,
             ],
         ]);
+    }
+
+    /**
+     * Convert custom options vakue
+     *
+     * @param string $value
+     * @return string|array
+     */
+    private function convertCustomOptionValue(string $value)
+    {
+        $value = trim($value);
+        if (substr($value, 0, 1) === "[" &&
+            substr($value, strlen($value) - 1, 1) === "]") {
+            return explode(',', substr($value, 1, -1));
+        }
+        return $value;
     }
 }

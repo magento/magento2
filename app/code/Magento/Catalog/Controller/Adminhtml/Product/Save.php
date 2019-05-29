@@ -159,6 +159,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
                 if ($redirectBack === 'duplicate') {
                     $product->unsetData('quantity_and_stock_status');
                     $newProduct = $this->productCopier->copy($product);
+                    $this->checkUniqueAttributes($product);
                     $this->messageManager->addSuccessMessage(__('You duplicated the product.'));
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -342,5 +343,26 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
         }
 
         return $data;
+    }
+
+    /**
+     * Check unique attributes and add error to message manager
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     */
+    private function checkUniqueAttributes(\Magento\Catalog\Model\Product $product)
+    {
+        $uniqueLabels = [];
+        foreach ($product->getAttributes() as $attribute) {
+            if ($attribute->getIsUnique() && $attribute->getIsUserDefined()
+                && $product->getData($attribute->getAttributeCode()) !== null
+            ) {
+                $uniqueLabels[] = $attribute->getDefaultFrontendLabel();
+            }
+        }
+        if ($uniqueLabels) {
+            $uniqueLabels = implode('", "', $uniqueLabels);
+            $this->messageManager->addErrorMessage(__('The value of attribute(s) "%1" must be unique', $uniqueLabels));
+        }
     }
 }

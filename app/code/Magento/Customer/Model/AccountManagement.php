@@ -19,6 +19,7 @@ use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Customer\CredentialsValidator;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
+use Magento\Directory\Model\AllowedCountries;
 use Magento\Eav\Model\Validator\Attribute\Backend;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -340,6 +341,11 @@ class AccountManagement implements AccountManagementInterface
     private $addressRegistry;
 
     /**
+     * @var AllowedCountries
+     */
+    private $allowedCountriesReader;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -371,8 +377,10 @@ class AccountManagement implements AccountManagementInterface
      * @param CollectionFactory|null $visitorCollectionFactory
      * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @param AddressRegistry|null $addressRegistry
+     * @param AllowedCountries|null $allowedCountriesReader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __construct(
         CustomerFactory $customerFactory,
@@ -405,7 +413,8 @@ class AccountManagement implements AccountManagementInterface
         SaveHandlerInterface $saveHandler = null,
         CollectionFactory $visitorCollectionFactory = null,
         SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        AddressRegistry $addressRegistry = null
+        AddressRegistry $addressRegistry = null,
+        AllowedCountries $allowedCountriesReader = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -445,6 +454,8 @@ class AccountManagement implements AccountManagementInterface
             ?: ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
         $this->addressRegistry = $addressRegistry
             ?: ObjectManager::getInstance()->get(AddressRegistry::class);
+        $this->allowedCountriesReader = $allowedCountriesReader
+            ?: ObjectManager::getInstance()->get(AllowedCountries::class);
     }
 
     /**
@@ -554,6 +565,7 @@ class AccountManagement implements AccountManagementInterface
         }
         try {
             $this->getAuthentication()->authenticate($customerId, $password);
+            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (InvalidEmailOrPasswordException $e) {
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
@@ -624,7 +636,6 @@ class AccountManagement implements AccountManagementInterface
      * @param string $rpToken
      * @throws ExpiredException
      * @throws NoSuchEntityException
-     *
      * @return CustomerInterface
      * @throws LocalizedException
      */
@@ -703,7 +714,12 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setRpTokenCreatedAt(null);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
         $this->destroyCustomerSessions($customer->getId());
-        $this->sessionManager->destroy();
+        if ($this->sessionManager->isSessionExists()) {
+            //delete old session and move data to the new session
+            //use this instead of $this->sessionManager->regenerateId because last one doesn't delete old session
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            session_regenerate_id(true);
+        }
         $this->customerRepository->save($customer);
 
         return true;
@@ -890,11 +906,15 @@ class AccountManagement implements AccountManagementInterface
             throw new InputMismatchException(
                 __('A customer with the same email address already exists in an associated website.')
             );
+            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (LocalizedException $e) {
             throw $e;
         }
         try {
             foreach ($customerAddresses as $address) {
+                if (!$this->isAddressAllowedForWebsite($address, $customer->getStoreId())) {
+                    continue;
+                }
                 if ($address->getId()) {
                     $newAddress = clone $address;
                     $newAddress->setId(null);
@@ -906,6 +926,7 @@ class AccountManagement implements AccountManagementInterface
                 }
             }
             $this->customerRegistry->remove($customer->getId());
+            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (InputException $e) {
             $this->customerRepository->delete($customer);
             throw $e;
@@ -1008,6 +1029,7 @@ class AccountManagement implements AccountManagementInterface
     {
         try {
             $this->getAuthentication()->authenticate($customer->getId(), $currentPassword);
+            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (InvalidEmailOrPasswordException $e) {
             throw new InvalidEmailOrPasswordException(
                 __("The password doesn't match this account. Verify the password and try again.")
@@ -1067,6 +1089,7 @@ class AccountManagement implements AccountManagementInterface
         $result = $this->getEavValidator()->isValid($customerModel);
         if ($result === false && is_array($this->getEavValidator()->getMessages())) {
             return $validationResults->setIsValid(false)->setMessages(
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 call_user_func_array(
                     'array_merge',
                     $this->getEavValidator()->getMessages()
@@ -1564,6 +1587,7 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * Destroy all active customer sessions by customer id (current session will not be destroyed).
+     *
      * Customer sessions which should be deleted are collecting from the "customer_visitor" table considering
      * configured session lifetime.
      *
@@ -1600,5 +1624,19 @@ class AccountManagement implements AccountManagementInterface
     private function setIgnoreValidationFlag($customer)
     {
         $customer->setData('ignore_validation_flag', true);
+    }
+
+    /**
+     * Check is address allowed for store
+     *
+     * @param AddressInterface $address
+     * @param int|null $storeId
+     * @return bool
+     */
+    private function isAddressAllowedForWebsite(AddressInterface $address, $storeId): bool
+    {
+        $allowedCountries = $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $storeId);
+
+        return in_array($address->getCountryId(), $allowedCountries);
     }
 }
