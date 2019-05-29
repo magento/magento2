@@ -316,7 +316,7 @@ class Price implements DimensionalIndexerInterface
         $specialFromExpr = "{$specialFrom} IS NULL OR {$specialFromDate} <= {$currentDate}";
         $specialToExpr = "{$specialTo} IS NULL OR {$specialToDate} >= {$currentDate}";
         $specialExpr = "{$specialPrice} IS NOT NULL AND {$specialPrice} > 0 AND {$specialPrice} < 100"
-            . " AND {$specialFromExpr} AND {$specialToExpr}";
+            . " AND ({$specialFromExpr}) AND ({$specialToExpr})";
         $tierExpr = new \Zend_Db_Expr('tp.min_price');
 
         if ($priceType == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED) {
