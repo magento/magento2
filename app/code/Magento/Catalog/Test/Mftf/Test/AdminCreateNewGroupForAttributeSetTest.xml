@@ -18,16 +18,17 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-        <!-- Create a custom attribute set and custom product attribute -->
-        <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
-        <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <!-- Create a custom attribute set and custom product attribute -->
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+
+            <!-- Login to Admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <!-- Login to Admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
         
         <!-- Navigate to Stores > Attributes > Attribute Set -->
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetPage"/>
@@ -50,17 +51,17 @@
         <see userInput="This is a required field." selector="{{AdminProductAttributeSetEditSection.errorLabel}}" stepKey="seeErrorMessage"/>
 
         <!-- Fill 'name' for new group and click 'Ok': Name = Custom group -->
-        <fillField userInput="Custom group" selector="{{AdminProductAttributeSetEditSection.newGroupName}}" stepKey="fillCustomGroupName"/>
+        <fillField userInput="{{customGroup.name}}" selector="{{AdminProductAttributeSetEditSection.newGroupName}}" stepKey="fillCustomGroupName"/>
         <click selector="{{AdminProductAttributeSetEditSection.buttonOk}}" stepKey="clickButtonOk"/>
 
         <!-- Group is created and displayed in 'Groups' block -->
-        <seeElement selector="{{AdminProductAttributeSetEditSection.attributeGroup('Custom group')}}" stepKey="assertCustomGroup"/>
+        <seeElement selector="{{AdminProductAttributeSetEditSection.attributeGroup(customGroup.name)}}" stepKey="assertCustomGroup"/>
 
         <!-- Move custom Product Attribute to new 'Custom group' Group -->
         <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
-        <click selector="{{AdminProductAttributeSetEditSection.attributeGroupExtender('Custom group')}}" stepKey="click"/>
+        <click selector="{{AdminProductAttributeSetEditSection.attributeGroupExtender(customGroup.name)}}" stepKey="click"/>
         <waitForPageLoad stepKey="waitForPageLoadAfterClick"/>
-        <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.unassignedAttribute($$createConfigProductAttribute.attribute_code$$)}}" selector2="{{AdminProductAttributeSetEditSection.attributeGroupExtender('Custom group')}}" stepKey="moveAttribute"/>
+        <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.unassignedAttribute($$createConfigProductAttribute.attribute_code$$)}}" selector2="{{AdminProductAttributeSetEditSection.attributeGroupExtender(customGroup.name)}}" stepKey="moveAttribute"/>
         <waitForPageLoad stepKey="waitForDragAndDrop"/>
 
         <!-- Attribute is displayed in the new group -->
@@ -77,13 +78,13 @@
         <click selector="{{AdminProductAttributeSetEditSection.AddNewGroup}}" stepKey="clickAddEmptyGroup"/>
         <waitForAjaxLoad stepKey="waitForLoad"/>
 
-        <fillField userInput="Empty group" selector="{{AdminProductAttributeSetEditSection.newGroupName}}" stepKey="fillGroupName"/>
+        <fillField userInput="{{emptyGroup.name}}" selector="{{AdminProductAttributeSetEditSection.newGroupName}}" stepKey="fillGroupName"/>
         <click selector="{{AdminProductAttributeSetEditSection.buttonOk}}" stepKey="clickOnOk"/>
         <waitForPageLoad stepKey="waitForNewGroup"/>
 
         <!-- Empty group is created. No attributes are assigned to it. -->
-        <seeElement selector="{{AdminProductAttributeSetEditSection.attributeGroup('Empty group')}}" stepKey="assertEmptyGroup"/>
-        <dontSeeElement selector="{{AdminProductAttributeSetEditSection.attributesInGroup('Empty group')}}" stepKey="seeNoAttributes"/>
+        <seeElement selector="{{AdminProductAttributeSetEditSection.attributeGroup(emptyGroup.name)}}" stepKey="assertEmptyGroup"/>
+        <dontSeeElement selector="{{AdminProductAttributeSetEditSection.attributesInGroup(emptyGroup.name)}}" stepKey="seeNoAttributes"/>
       
         <!-- Navigate to Catalog > Products -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductPage"/>
@@ -98,13 +99,13 @@
         </actionGroup>
 
         <!-- New Section 'Custom group' is present in form. The section contains the attribute from preconditions  -->
-        <seeElement selector="{{AdminProductAttributeSection.attributeGroupByName('Custom group')}}" stepKey="seeSectionCustomGroup"/>
-        <click selector="{{AdminProductAttributeSection.attributeGroupByName('Custom group')}}" stepKey="openCustomGroupSection"/>
+        <seeElement selector="{{AdminProductAttributeSection.attributeGroupByName(customGroup.name)}}" stepKey="seeSectionCustomGroup"/>
+        <click selector="{{AdminProductAttributeSection.attributeGroupByName(customGroup.name)}}" stepKey="openCustomGroupSection"/>
         <waitForAjaxLoad stepKey="waitForOpenSection"/>
-        <scrollTo selector="//footer" stepKey="scrollToFooter"/>
-        <seeElement selector="{{AdminProductAttributeSection.attributeByGroupAndName('Custom group')}}" stepKey="seeAttributePresent"/>
+        <scrollTo selector="{{AdminProductFormSection.footerBlock}}" stepKey="scrollToFooter"/>
+        <seeElement selector="{{AdminProductAttributeSection.attributeByGroupAndName(customGroup.name)}}" stepKey="seeAttributePresent"/>
 
         <!-- Empty section is absent in Product Form -->
-        <dontSeeElement selector="{{AdminProductAttributeSection.attributeGroupByName('Empty group')}}" stepKey="dontSeeEmptyGroup"/>
+        <dontSeeElement selector="{{AdminProductAttributeSection.attributeGroupByName(emptyGroup.name)}}" stepKey="dontSeeEmptyGroup"/>
     </test>
 </tests>
