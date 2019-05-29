@@ -55,10 +55,14 @@ class CriticalCss extends Template
     public function getCriticalCssData()
     {
         try {
+            if ($this->filePath === '') {
+                throw new LocalizedException(__("Empty path for critical css"));
+            }
+
             $asset = $this->assetRepo->createAsset($this->filePath, ['_secure' => 'false']);
             $content = $asset->getContent();
         } catch (LocalizedException | NotFoundException $e) {
-            throw new LocalizedException(__("Cannot get critical css file data ", $e->getMessage()));
+            throw new LocalizedException(__("Cannot get critical css file data: ", $e->getMessage()));
         };
 
         return $content;
