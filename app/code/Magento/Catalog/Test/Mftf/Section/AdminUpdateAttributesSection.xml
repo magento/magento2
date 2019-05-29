@@ -14,4 +14,7 @@
         <element name="website" type="button" selector="#attributes_update_tabs_websites"/>
         <element name="addProductToWebsite" type="checkbox" selector="#add-products-to-website-content .website-checkbox"/>
     </section>
+    <section name="AdminUpdateAttributesAttributesSection">
+        <element name="formByStoreId" type="block" selector="//form[contains(@action,'store/{{store_id}}')]" parameterized="true"/>
+    </section>
 </sections>
