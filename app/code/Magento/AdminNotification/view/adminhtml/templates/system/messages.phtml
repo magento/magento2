@@ -31,11 +31,11 @@
             <?php endif; ?>
 
             <?php if ($block->getMajorCount()) : ?>
-               <div class="message message-warning warning">
-                   <a class="message-link" href="#" title="<?= $block->escapeHtml(__('Major System Messages')) ?>">
-                       <?= $block->escapeHtml($block->getMajorCount()) ?>
-                   </a>
-               </div>
+                <div class="message message-warning warning">
+                    <a class="message-link" href="#" title="<?= $block->escapeHtml(__('Major System Messages')) ?>">
+                        <?= $block->escapeHtml($block->getMajorCount()) ?>
+                    </a>
+                </div>
             <?php endif; ?>
         </div>
         <div id="message-system-all" title="<?= $block->escapeHtml(__('System messages')) ?>" data-mage-init='<?= $block->escapeHtml($block->getSystemMessageDialogJson()) ?>'></div>

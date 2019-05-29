@@ -42,7 +42,7 @@ if ($exist = $block->getRecentlyComparedProducts()) {
             <div class="products-<?= $block->escapeHtml($mode) ?> <?= $block->escapeHtml($mode) ?>">
                 <ol class="product-items <?= $block->escapeHtml($type) ?>">
                     <?php foreach ($items as $_item) : ?>
-                        <?= ($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
+                        <?= ($iterator++ == 1) ? $block->escapeHtml('<li class="product-item">') : $block->escapeHtml('</li><li class="product-item">') ?>
                             <div class="product-item-info">
                                 <a href="<?= $block->escapeHtml($block->getProductUrl($_item)) ?>" class="product-item-photo">
                                     <?= $block->getImage($_item, $image)->toHtml() ?>
@@ -130,7 +130,7 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                                     <?php endif; ?>
                                 </div>
                             </div>
-                        <?= ($iterator == count($items)+1) ? '</li>' : '' ?>
+                        <?= ($iterator == count($items)+1) ? $block->escapeHtml('</li>') : '' ?>
                     <?php endforeach ?>
                 </ol>
             </div>
