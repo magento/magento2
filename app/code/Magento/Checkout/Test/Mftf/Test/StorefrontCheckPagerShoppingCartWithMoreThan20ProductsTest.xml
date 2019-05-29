@@ -40,7 +40,7 @@
         </after>
         <!-- Go to the shopping cart and check if the pager is visible-->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart2"/>
-        <actionGroup ref="AssertPagerTextIsVisibleActionGroup" stepKey="VerifyPagerText">
+        <actionGroup ref="AssertTextIsVisibleOnPageActionGroup" stepKey="VerifyPagerText">
             <argument name="text" value="Items 1 to 20 of 21 total"/>
         </actionGroup>
 

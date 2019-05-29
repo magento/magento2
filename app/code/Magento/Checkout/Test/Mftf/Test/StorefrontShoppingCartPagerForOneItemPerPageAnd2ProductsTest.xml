@@ -39,7 +39,7 @@
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteProduct2"/>
         </after>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart2"/>
-        <actionGroup ref="AssertPagerTextIsVisibleActionGroup" stepKey="VerifyPagerTextWithChangedConfiguration">
+        <actionGroup ref="AssertTextIsVisibleOnPageActionGroup" stepKey="VerifyPagerTextWithChangedConfiguration">
             <argument name="text" value="Items 1 to 1 of 2 total"/>
         </actionGroup>
     </test>

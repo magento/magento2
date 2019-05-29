@@ -7,11 +7,11 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertPagerTextIsVisibleActionGroup">
+    <actionGroup name="AssertTextIsVisibleOnPageActionGroup">
         <arguments>
             <argument name="text" type="string"/>
         </arguments>
-        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
-        <see userInput="{{text}}" stepKey="VerifyPagerText"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see userInput="{{text}}" stepKey="VerifyPageText"/>
     </actionGroup>
 </actionGroups>
