@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
@@ -22,6 +23,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 
 /**
  * Product collection
@@ -303,6 +305,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $urlFinder;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
+    /**
      * Collection constructor
      *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -330,6 +337,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param TableMaintainer|null $tableMaintainer
      * @param PriceTableResolver|null $priceTableResolver
      * @param DimensionFactory|null $dimensionFactory
+     * @param CategoryRepositoryInterface|null $categoryRepository
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -358,7 +366,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         MetadataPool $metadataPool = null,
         TableMaintainer $tableMaintainer = null,
         PriceTableResolver $priceTableResolver = null,
-        DimensionFactory $dimensionFactory = null
+        DimensionFactory $dimensionFactory = null,
+        CategoryRepositoryInterface $categoryRepository = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -392,6 +401,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(PriceTableResolver::class);
         $this->dimensionFactory = $dimensionFactory
             ?: ObjectManager::getInstance()->get(DimensionFactory::class);
+        $this->categoryRepository = $categoryRepository ?: ObjectManager::getInstance()
+            ->get(CategoryRepositoryInterface::class);
     }
 
     /**
@@ -1673,7 +1684,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     public function setVisibility($visibility)
     {
         $this->_productLimitationFilters['visibility'] = $visibility;
-        $this->_applyProductLimitations();
+        if ($this->getStoreId() == Store::DEFAULT_STORE_ID) {
+            $this->addAttributeToFilter('visibility', $visibility);
+        } else {
+            $this->_applyProductLimitations();
+        }
 
         return $this;
     }
@@ -2053,12 +2068,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _applyZeroStoreProductLimitations()
     {
         $filters = $this->_productLimitationFilters;
+        $categories = [];
+        $categories = $this->getChildrenCategories((int)$filters['category_id'], $categories);
 
         $conditions = [
             'cat_pro.product_id=e.entity_id',
             $this->getConnection()->quoteInto(
-                'cat_pro.category_id=?',
-                $filters['category_id']
+                'cat_pro.category_id IN (?)',
+                $categories
             ),
         ];
         $joinCond = join(' AND ', $conditions);
@@ -2077,6 +2094,29 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_joinFields['position'] = ['table' => 'cat_pro', 'field' => 'position'];
 
         return $this;
+    }
+
+    /**
+     * Get children categories.
+     *
+     * @param int $categoryId
+     * @param array $categories
+     * @return array
+     */
+    private function getChildrenCategories(int $categoryId, array $categories): array
+    {
+        $category = $this->categoryRepository->get($categoryId);
+        $categories[] = $category->getId();
+        if ($category->getIsAnchor()) {
+            $categoryChildren = $category->getChildren();
+            $categoryChildrenIds = explode(',', $categoryChildren);
+            foreach ($categoryChildrenIds as $categoryChildrenId) {
+                if ($categoryChildrenId) {
+                    $categories = $this->getChildrenCategories((int)$categoryChildrenId, $categories);
+                }
+            }
+        }
+        return $categories;
     }
 
     /**
