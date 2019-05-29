@@ -93,6 +93,7 @@ define(
                             self.hostedFieldsInstance = hostedFieldsInstance;
                             self.isPlaceOrderActionAllowed(true);
                             self.initFormValidationEvents(hostedFieldsInstance);
+
                         return self.hostedFieldsInstance;
                     })
                     .catch(function () {
