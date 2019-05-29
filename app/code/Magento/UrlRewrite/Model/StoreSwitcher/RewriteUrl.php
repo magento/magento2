@@ -63,10 +63,12 @@ class RewriteUrl implements StoreSwitcherInterface
         }
 
         $oldStoreId = $fromStore->getId();
-        $oldRewrite = $this->urlFinder->findOneByData([
-            UrlRewrite::REQUEST_PATH => $urlPath,
-            UrlRewrite::STORE_ID => $oldStoreId,
-        ]);
+        $oldRewrite = $this->urlFinder->findOneByData(
+            [
+                UrlRewrite::REQUEST_PATH => $urlPath,
+                UrlRewrite::STORE_ID => $oldStoreId,
+            ]
+        );
         if ($oldRewrite) {
             $targetUrl = $targetStore->getBaseUrl();
             // look for url rewrite match on the target store
@@ -75,13 +77,13 @@ class RewriteUrl implements StoreSwitcherInterface
                 $targetUrl .= $currentRewrite->getRequestPath();
             }
         } else {
-            $existingRewrite = $this->urlFinder->findOneByData([
-                UrlRewrite::REQUEST_PATH => $urlPath
-            ]);
-            $currentRewrite = $this->urlFinder->findOneByData([
-                UrlRewrite::REQUEST_PATH => $urlPath,
-                UrlRewrite::STORE_ID => $targetStore->getId(),
-            ]);
+            $existingRewrite = $this->urlFinder->findOneByData([UrlRewrite::REQUEST_PATH => $urlPath]);
+            $currentRewrite = $this->urlFinder->findOneByData(
+                [
+                    UrlRewrite::REQUEST_PATH => $urlPath,
+                    UrlRewrite::STORE_ID => $targetStore->getId(),
+                ]
+            );
 
             if ($existingRewrite && !$currentRewrite) {
                 /** @var \Magento\Framework\App\Response\Http $response */
@@ -100,15 +102,19 @@ class RewriteUrl implements StoreSwitcherInterface
      */
     private function findCurrentRewrite(UrlRewrite $oldRewrite, StoreInterface $targetStore)
     {
-        $currentRewrite = $this->urlFinder->findOneByData([
-            UrlRewrite::TARGET_PATH => $oldRewrite->getTargetPath(),
-            UrlRewrite::STORE_ID => $targetStore->getId(),
-        ]);
-        if (!$currentRewrite) {
-            $currentRewrite = $this->urlFinder->findOneByData([
-                UrlRewrite::REQUEST_PATH => $oldRewrite->getTargetPath(),
+        $currentRewrite = $this->urlFinder->findOneByData(
+            [
+                UrlRewrite::TARGET_PATH => $oldRewrite->getTargetPath(),
                 UrlRewrite::STORE_ID => $targetStore->getId(),
-            ]);
+            ]
+        );
+        if (!$currentRewrite) {
+            $currentRewrite = $this->urlFinder->findOneByData(
+                [
+                    UrlRewrite::REQUEST_PATH => $oldRewrite->getTargetPath(),
+                    UrlRewrite::STORE_ID => $targetStore->getId(),
+                ]
+            );
         }
         return $currentRewrite;
     }
