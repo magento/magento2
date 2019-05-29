@@ -59,7 +59,7 @@ $numColumns = count($block->getColumns());
                                 <?= /* @noEscape */ ($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>
                                 class="<?= $block->escapeHtmlAttr($_column->getCssProperty()) ?> <?= /* @noEscape */ $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': '' ?> <?= ++$i == $numColumns ? 'last' : '' ?>"
                             >
-                                <?= (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                                <?= /* @noEscape */ (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
                             </td><?php
                             if ($block->shouldRenderEmptyCell($_item, $_column)) :?>
                                 <td colspan="<?= $block->escapeHtmlAttr($block->getEmptyCellColspan($_item)) ?>" class="last">
@@ -71,12 +71,12 @@ $numColumns = count($block->getColumns());
 ?></tr>
                     <?php $_isFirstRow = true; ?>
                     <?php foreach ($block->getMultipleRows($_item) as $_i) : ?>
-                        <?php if ($_isFirstRow) : ?>
-                            <?php
+                        <?php
+                        if ($_isFirstRow) {
                             $_isFirstRow = false;
                             continue;
-                            ?>
-                        <?php endif; ?>
+                        }
+                        ?>
                     <tr data-role="row">
                         <?php $i = 0; foreach ($block->getMultipleRowColumns($_i) as $_column) :
                             ?><td data-column="<?= $block->escapeHtmlAttr($_column->getId()) ?>"

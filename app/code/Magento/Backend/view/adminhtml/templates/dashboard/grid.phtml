@@ -52,7 +52,7 @@ var deps = [];
 deps.push('uiRegistry');
         <?php endif; ?>
 
-        <?php if (strpos($block->getRowClickCallback(), 'order.') !== false): ?>
+        <?php if (strpos($block->getRowClickCallback(), 'order.') !== false) : ?>
 deps.push('Magento_Sales/order/create/form');
         <?php endif; ?>
 
@@ -73,12 +73,12 @@ require(deps, function(<?= ($block->getDependencyJsObject() ? 'registry' : '') ?
         <?php if ($block->getCheckboxCheckCallback()) : ?>
             <?= $block->escapeJs($block->getJsObjectName()) ?>.checkboxCheckCallback = <?= /* @noEscape */ $block->getCheckboxCheckCallback() ?>;
         <?php endif; ?>
-        <?php if ($block->getRowInitCallback()): ?>
+        <?php if ($block->getRowInitCallback()) : ?>
             <?= $block->escapeJs($block->getJsObjectName()) ?>.initRowCallback = <?= /* @noEscape */ $block->getRowInitCallback() ?>;
             <?= $block->escapeJs($block->getJsObjectName()) ?>.rows.each(function(row){<?= /* @noEscape */ $block->getRowInitCallback() ?>(<?= $block->escapeJs($block->getJsObjectName()) ?>, row)});
         <?php endif; ?>
-        <?php if ($block->getMassactionBlock()->isAvailable()): ?>
-        <?= /* @noEscape */ $block->getMassactionBlock()->getJavaScript() ?>
+        <?php if ($block->getMassactionBlock()->isAvailable()) : ?>
+            <?= /* @noEscape */ $block->getMassactionBlock()->getJavaScript() ?>
         <?php endif ?>
 
         <?php if ($block->getDependencyJsObject()) : ?>

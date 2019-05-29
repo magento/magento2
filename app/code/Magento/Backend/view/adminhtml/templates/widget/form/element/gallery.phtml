@@ -72,7 +72,9 @@ window.addNewImage = function()
     new_row_input.value = '0';
 
     // Delete button
-    new_row_button = <?= /* phpcs:disable*/ /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getDeleteButtonHtml("this")) /* phpcs:enable */ ?>;
+    <?php //phpcs:disable ?>
+    new_row_button = <?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getDeleteButtonHtml("this")) ?>;
+    <?php // phpcs:enable ?>
 
     table = document.getElementById( "gallery" );
 

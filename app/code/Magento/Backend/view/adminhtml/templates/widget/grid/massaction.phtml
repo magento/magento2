@@ -7,7 +7,7 @@
 <?= /* @noEscape */ $block->getSomething() ?>
 <div id="<?= $block->getHtmlId() ?>" class="admin__grid-massaction">
 
-    <?php if ($block->getHideFormElement() !== true):?>
+    <?php if ($block->getHideFormElement() !== true) : ?>
     <form action="" id="<?= $block->getHtmlId() ?>-form" method="post">
     <?php endif ?>
         <div class="admin__grid-massaction-form">
@@ -17,7 +17,7 @@
                 class="required-entry local-validation admin__control-select"
                 <?= /* @noEscape */ $block->getUiId('select') ?>>
                 <option class="admin__control-select-placeholder" value="" selected><?= $block->escapeHtml(__('Actions')) ?></option>
-                <?php foreach ($block->getItems() as $_item):?>
+                <?php foreach ($block->getItems() as $_item) : ?>
                     <option value="<?= $block->escapeHtmlAttr($_item->getId()) ?>"<?= ($_item->getSelected() ? ' selected="selected"' : '') ?>><?= $block->escapeHtml($_item->getLabel()) ?></option>
                 <?php endforeach; ?>
             </select>

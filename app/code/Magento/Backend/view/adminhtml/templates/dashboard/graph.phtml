@@ -18,7 +18,7 @@
                     continue;
                 } ?>
                 <option value="<?= /* @noEscape */ $value ?>"
-                    <?php if ($block->getRequest()->getParam('period') == $value): ?> selected="selected"<?php endif; ?>
+                    <?php if ($block->getRequest()->getParam('period') == $value) : ?> selected="selected"<?php endif; ?>
                     ><?= $block->escapeHtml($label) ?></option>
             <?php endforeach; ?>
         </select>

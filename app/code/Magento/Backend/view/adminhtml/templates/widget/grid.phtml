@@ -23,7 +23,7 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
     <?php if ($block->canDisplayContainer()) : ?>
 <div id="<?= $block->escapeHtml($block->getId()) ?>" data-grid-id="<?= $block->escapeHtml($block->getId()) ?>">
     <?php else : ?>
-<?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+    <?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
     <?php endif; ?>
 
         <div class="admin__data-grid-header admin__data-grid-toolbar">
@@ -187,7 +187,7 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
 </script>
 <?php endif; ?>
 
-    <?php if ($block->getChildBlock('grid.js')): ?>
+    <?php if ($block->getChildBlock('grid.js')) : ?>
         <?= $block->getChildHtml('grid.js') ?>
     <?php endif; ?>
 

@@ -34,7 +34,7 @@
         </button>
         <ul class="dropdown-menu" data-role="stores-list">
             <?php if ($block->hasDefaultOption()) : ?>
-                <li class="store-switcher-all <?php if (!($block->getDefaultSelectionName() != $block->getCurrentSelectionName())) : ?>disabled<?php endif; ?> <?php if ( ! $block->hasScopeSelected()) : ?>current<?php endif; ?>">
+                <li class="store-switcher-all <?php if (!($block->getDefaultSelectionName() != $block->getCurrentSelectionName())) : ?>disabled<?php endif; ?> <?php if (!$block->hasScopeSelected()) : ?>current<?php endif; ?>">
                     <?php if ($block->getDefaultSelectionName() != $block->getCurrentSelectionName()) : ?>
                         ?>
                         <a data-role="store-view-id" data-value="" href="#">
@@ -74,7 +74,7 @@
                                 <?php endif; ?>
                             </li>
                         <?php endif; ?>
-                        <li class="store-switcher-store-view <?php if ( ! ($block->isStoreSwitchEnabled() && ! $block->isStoreSelected($store))) : ?>disabled<?php endif; ?> <?php if ($block->isStoreSelected($store)) :?>current<?php endif; ?>">
+                        <li class="store-switcher-store-view <?php if (!($block->isStoreSwitchEnabled() && !$block->isStoreSelected($store))) : ?>disabled<?php endif; ?> <?php if ($block->isStoreSelected($store)) :?>current<?php endif; ?>">
                             <?php if ($block->isStoreSwitchEnabled() && ! $block->isStoreSelected($store)) : ?>
                                 <a data-role="store-view-id" data-value="<?= $block->escapeHtml($store->getId()) ?>" href="#">
                                     <?= $block->escapeHtml($store->getName()) ?>

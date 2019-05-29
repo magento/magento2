@@ -239,7 +239,7 @@ $numColumns = count($block->getColumns());
 <script>
     var deps = [];
 
-        <?php if ($block->getDependencyJsObject()): ?>
+        <?php if ($block->getDependencyJsObject()) : ?>
     deps.push('uiRegistry');
         <?php endif; ?>
 
@@ -262,21 +262,22 @@ $numColumns = count($block->getColumns());
         <?php if ($block->getDependencyJsObject()) : ?>
         registry.get('<?= $block->escapeJs($block->getDependencyJsObject()) ?>', function (<?= $block->escapeJs($block->getDependencyJsObject()) ?>) {
         <?php endif; ?>
-
-    <?= $block->escapeJs($block->getJsObjectName()) ?> = new varienGrid(<?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getId()) ?>, '<?= $block->escapeJs($block->getGridUrl()) ?>', '<?= $block->escapeJs($block->getVarNamePage()) ?>', '<?= $block->escapeJs($block->getVarNameSort()) ?>', '<?= $block->escapeJs($block->getVarNameDir()) ?>', '<?= $block->escapeJs($block->getVarNameFilter()) ?>');
-    <?= $block->escapeJs($block->getJsObjectName()) ?>.useAjax = '<?= $block->escapeJs($block->getUseAjax()) ?>';
+    <?php // phpcs:disable ?>
+    <?= $block->escapeJs($block->getJsObjectName()) ?> = new varienGrid(<?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getId()) ?>, '<?= $block->escapeJs($block->getGridUrl()) ?>', '<?= $block->escapeJs($block->getVarNamePage()) ?>', '<?= $block->escapeJs($block->getVarNameSort()) ?>', '<?= $block->escapeJs($block->getVarNameDir()) ?>', '<?= $block->escapeJs($block->getVarNameFilter()) ?>');
+    <?php //phpcs:enable ?>
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.useAjax = '<?= $block->escapeJs($block->getUseAjax()) ?>';
         <?php if ($block->getRowClickCallback()) : ?>
-        <?= $block->escapeJs($block->getJsObjectName()) ?>.rowClickCallback = <?= /* @noEscape */ $block->getRowClickCallback() ?>;
+            <?= $block->escapeJs($block->getJsObjectName()) ?>.rowClickCallback = <?= /* @noEscape */ $block->getRowClickCallback() ?>;
         <?php endif; ?>
         <?php if ($block->getCheckboxCheckCallback()) : ?>
-        <?= $block->escapeJs($block->getJsObjectName()) ?>.checkboxCheckCallback = <?= /* @noEscape */ $block->getCheckboxCheckCallback() ?>;
+            <?= $block->escapeJs($block->getJsObjectName()) ?>.checkboxCheckCallback = <?= /* @noEscape */ $block->getCheckboxCheckCallback() ?>;
         <?php endif; ?>
         <?php if ($block->getRowInitCallback()) : ?>
-        <?= $block->escapeJs($block->getJsObjectName()) ?>.initRowCallback = <?= /* @noEscape */ $block->getRowInitCallback() ?>;
-        <?= $block->escapeJs($block->getJsObjectName()) ?>.initGridRows();
+            <?= $block->escapeJs($block->getJsObjectName()) ?>.initRowCallback = <?= /* @noEscape */ $block->getRowInitCallback() ?>;
+            <?= $block->escapeJs($block->getJsObjectName()) ?>.initGridRows();
         <?php endif; ?>
         <?php if ($block->getMassactionBlock() && $block->getMassactionBlock()->isAvailable()) : ?>
-        <?= /* @noEscape */ $block->getMassactionBlock()->getJavaScript() ?>
+            <?= /* @noEscape */ $block->getMassactionBlock()->getJavaScript() ?>
         <?php endif ?>
         <?= /* @noEscape */ $block->getAdditionalJavaScript() ?>
 
