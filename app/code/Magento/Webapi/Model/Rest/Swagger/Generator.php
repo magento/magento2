@@ -139,7 +139,7 @@ class Generator extends AbstractSchemaGenerator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function generateSchema($requestedServiceMetadata, $requestScheme, $requestHost, $endpointUrl)
     {
@@ -199,7 +199,7 @@ class Generator extends AbstractSchemaGenerator
     }
 
     /**
-     * @return string[]
+     * @return array
      */
     protected function getConsumableDatatypes()
     {
@@ -210,7 +210,7 @@ class Generator extends AbstractSchemaGenerator
     }
 
     /**
-     * @return string[]
+     * @return array
      */
     protected function getProducibleDatatypes()
     {
@@ -631,7 +631,7 @@ class Generator extends AbstractSchemaGenerator
     /**
      * Get the CamelCased type name in 'hyphen-separated-lowercase-words' format
      *
-     * e.g. test-module5-v1-entity-all-soap-and-rest
+     * E.g. test-module5-v1-entity-all-soap-and-rest
      *
      * @param string $typeName
      * @return string
