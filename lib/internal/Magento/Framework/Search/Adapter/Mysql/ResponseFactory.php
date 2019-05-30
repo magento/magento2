@@ -64,6 +64,7 @@ class ResponseFactory
 	}
 	$total = 0;
 	if(array_key_exists('total',$rawResponse)){
+		/** @var integer $total **/ 
 		$total = $rawResponse['total'];	
 	}
 	/** @var \Magento\Framework\Search\Response\Aggregation $aggregations */
