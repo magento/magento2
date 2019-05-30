@@ -12,8 +12,6 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Payment\Gateway\Command\CommandPoolInterface;
-use Magento\Sales\Model\Order;
 use Magento\Framework\Webapi\Request;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\HTTP\ZendClient;
@@ -92,6 +90,7 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/login someusername
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_key somepassword
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_signature_key abc
+     * @magentoDataFixture Magento/Sales/_files/default_rollback.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product_authorizenet.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
@@ -149,15 +148,6 @@ QUERY;
         $this->request->setHeaders($webApiRequest->getHeaders());
 
         $graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
-
-        /** @var CommandPoolInterface $commandPool */
-        $commandPool = $this->objectManager->get('AuthorizenetAcceptjsCommandPool');
-        $commandPool->get('authorize');
-        /** @var Order $order */
-        $fullOrder = include __DIR__ . '/../../../_files/place_order_customer_authorizenet.php';
-
-        $payment = $fullOrder->getPayment();
-        $this->paymentFactory->create($payment);
 
         $expectedRequest = include __DIR__ . '/../../../_files/request_authorize_customer.php';
         $authorizeResponse = include __DIR__ . '/../../../_files/response_authorize.php';

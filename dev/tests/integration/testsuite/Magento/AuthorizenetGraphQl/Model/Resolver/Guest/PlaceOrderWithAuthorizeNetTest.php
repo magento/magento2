@@ -11,8 +11,6 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
-use Magento\Payment\Gateway\Command\CommandPoolInterface;
-use Magento\Sales\Model\Order;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
@@ -86,6 +84,7 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/login someusername
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_key somepassword
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_signature_key abc
+     * @magentoDataFixture Magento/Sales/_files/default_rollback.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product_authorizenet.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
@@ -137,15 +136,6 @@ QUERY;
             ->addHeaders(['Content-Type' => 'application/json']);
         $this->request->setHeaders($headers);
 
-        /** @var CommandPoolInterface $commandPool */
-        $commandPool = $this->objectManager->get('AuthorizenetAcceptjsCommandPool');
-        $command = $commandPool->get('authorize');
-        /** @var Order $order */
-        $fullOrder = include __DIR__ . '/../../../_files/place_order_guest_authorizenet.php';
-
-        $payment = $fullOrder->getPayment();
-        $paymentDO = $this->paymentFactory->create($payment);
-
         $expectedRequest = include __DIR__ . '/../../../_files/request_authorize.php';
         $authorizeResponse = include __DIR__ . '/../../../_files/response_authorize.php';
 
@@ -153,11 +143,6 @@ QUERY;
             ->with(json_encode($expectedRequest), 'application/json');
 
         $this->responseMock->method('getBody')->willReturn(json_encode($authorizeResponse));
-
-        $command->execute([
-            'payment' => $paymentDO,
-            'amount' => 100.00
-        ]);
 
         $response = $this->graphql->dispatch($this->request);
         $responseData = $this->jsonSerializer->unserialize($response->getContent());
