@@ -39,19 +39,35 @@ class Exception extends InputException
         $code = 0
     ) {
         if (!empty($messages)) {
-            $message = '';
-            foreach ($messages as $propertyMessages) {
-                foreach ($propertyMessages as $propertyMessage) {
-                    if ($message) {
-                        $message .= PHP_EOL;
+            $exceptionMessage = '';
+            foreach ($messages as $propertyMessage) {
+                if (is_array($propertyMessage)) {
+                    foreach ($propertyMessage as $property) {
+                        $exceptionMessage = $this->processPropertyMessage($property, $exceptionMessage);
                     }
-                    $message .= $propertyMessage;
-                    $this->addMessage(new Error($propertyMessage));
+                }
+                if ($propertyMessage instanceof Phrase) {
+                    $exceptionMessage = $this->processPropertyMessage($propertyMessage, $exceptionMessage);
                 }
             }
-            $phrase = new Phrase($message);
+            $phrase = new Phrase($exceptionMessage);
         }
         parent::__construct($phrase, $cause, $code);
+    }
+
+    /**
+     * @param Phrase $propertyMessage
+     * @param string $exceptionMessage
+     * @return string
+     */
+    private function processPropertyMessage(Phrase $propertyMessage, string $exceptionMessage)
+    {
+        if ($exceptionMessage != '') {
+            $exceptionMessage .= PHP_EOL;
+        }
+        $exceptionMessage .= $propertyMessage;
+        $this->addMessage(new Error($propertyMessage));
+        return $exceptionMessage;
     }
 
     /**
