@@ -61,15 +61,24 @@ class ResponseFactory
         foreach ($rawResponse['documents'] as $rawDocument) {
             /** @var \Magento\Framework\Api\Search\Document[] $documents */
             $documents[] = $this->documentFactory->create($rawDocument);
-        }
-        /** @var \Magento\Framework\Search\Response\Aggregation $aggregations */
+	}
+
+	$total = 0;
+	if(array_key_exists('total',$rawResponse))
+	{
+
+		$total = $rawResponse['total'];	
+
+	}
+
+	/** @var \Magento\Framework\Search\Response\Aggregation $aggregations */
         $aggregations = $this->aggregationFactory->create($rawResponse['aggregations']);
         return $this->objectManager->create(
             \Magento\Framework\Search\Response\QueryResponse::class,
             [
                 'documents' => $documents,
                 'aggregations' => $aggregations,
-                'total' => $rawResponse['total']
+                'total' => $total
             ]
         );
     }
