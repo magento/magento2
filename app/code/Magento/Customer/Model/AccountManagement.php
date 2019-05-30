@@ -652,15 +652,17 @@ class AccountManagement implements AccountManagementInterface
      */
     private function handleUnknownTemplate($template)
     {
-        throw new InputException(__(
-            'Invalid value of "%value" provided for the %fieldName field. Possible values: %template1 or %template2.',
-            [
-                'value' => $template,
-                'fieldName' => 'template',
-                'template1' => AccountManagement::EMAIL_REMINDER,
-                'template2' => AccountManagement::EMAIL_RESET
-            ]
-        ));
+        throw new InputException(
+            __(
+                'Invalid value of "%value" provided for the %fieldName field. Possible values: %template1 or %template2.',
+                [
+                    'value' => $template,
+                    'fieldName' => 'template',
+                    'template1' => AccountManagement::EMAIL_REMINDER,
+                    'template2' => AccountManagement::EMAIL_RESET
+                ]
+            )
+        );
     }
 
     /**
@@ -1314,13 +1316,20 @@ class AccountManagement implements AccountManagementInterface
         }
 
         $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
-            ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
+            ->setTemplateOptions(
+                [
+                    'area' => Area::AREA_FRONTEND,
+                    'store' => $storeId
+                ]
+            )
             ->setTemplateVars($templateParams)
-            ->setFrom($this->scopeConfig->getValue(
-                $sender,
-                ScopeInterface::SCOPE_STORE,
-                $storeId
-            ))
+            ->setFrom(
+                $this->scopeConfig->getValue(
+                    $sender,
+                    ScopeInterface::SCOPE_STORE,
+                    $storeId
+                )
+            )
             ->addTo($email, $this->customerViewHelper->getCustomerName($customer))
             ->getTransport();
 
