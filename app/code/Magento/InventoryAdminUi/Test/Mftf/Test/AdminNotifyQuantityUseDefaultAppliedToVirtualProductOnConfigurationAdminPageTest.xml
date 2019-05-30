@@ -13,7 +13,7 @@
             <stories value="Use 'Notify for Quantity Below' system value with custom source on Virtual product"/>
             <title value="Use 'Notify for Quantity Below' system value with custom source on Virtual product"/>
             <description value="Verify, that Virtual product with custom source can use 'Notify for Quantity Below' system value for specified source."/>
-            <testCaseId value="MSI-1617"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457015/scenarios/1570144"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

@@ -4,8 +4,8 @@
         <annotations>
             <stories value="Logged In Customer created Order with Simple product from Homepage with Free Shipping method"/>
             <title value="Logged In Customer created Order with Simple product from Homepage with Free Shipping method"/>
-            <description value="/scenarios/1408757"/>
-            <testCaseId value="MSI-2057"/>
+            <description value=""/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419534/scenarios/1408757"/>
             <severity value="BLOCKER"/>
             <group value="msi"/>
             <group value="multi_mode"/>

@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Add Downloadable Product"/>
             <title value="Downloadable Product  assigned to Test Stock created by Admin user"/>
-            <description value="Downloadable Product  assigned to Test Stock created by Admin user"/>
-            <testCaseId value="MSI-1750"/>
+            <description value="Downloadable Product  assigned to Test Stock created by Admin user."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457024/scenarios/1466426"/>
             <severity value="MAJOR"/>
             <group value="msi"/>
             <group value="multi_mode"/>

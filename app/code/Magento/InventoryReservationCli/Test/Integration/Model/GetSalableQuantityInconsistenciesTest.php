@@ -11,6 +11,17 @@ use Magento\InventoryReservationCli\Model\GetSalableQuantityInconsistencies;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * @see https://app.hiptest.com/projects/69435/test-plan/folders/909285/scenarios/3026032
+ * @see https://app.hiptest.com/projects/69435/test-plan/folders/888618/scenarios/3027875
+ * @see https://app.hiptest.com/projects/69435/test-plan/folders/888618/scenarios/3027429
+ * @see https://app.hiptest.com/projects/69435/test-plan/folders/888618/scenarios/3027919
+ * @see https://app.hiptest.com/projects/69435/test-plan/folders/909285/scenarios/3027919
+ * @see https://app.hiptest.com/projects/69435/test-plan/folders/909285/scenarios/3031256
+ * @see https://app.hiptest.com/projects/69435/test-plan/folders/909285/scenarios/3031505
+ * @see https://app.hiptest.com/projects/69435/test-plan/folders/888618/scenarios/3031591
+ * @see https://app.hiptest.com/projects/69435/test-plan/folders/888618/scenarios/3031728
+ */
 class GetSalableQuantityInconsistenciesTest extends TestCase
 {
     /**

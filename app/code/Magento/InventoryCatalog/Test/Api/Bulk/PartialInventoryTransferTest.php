@@ -17,6 +17,9 @@ use Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferItemInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * @see https://app.hiptest.com/projects/69435/test-plan/folders/909116/scenarios/3042077
+ */
 class PartialInventoryTransferTest extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/inventory/bulk-partial-source-transfer';

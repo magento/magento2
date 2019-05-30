@@ -96,6 +96,7 @@ class SourcesTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/908874/scenarios/1408728
      *
      * @magentoDbIsolation disabled
      */
@@ -128,6 +129,7 @@ class SourcesTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/908874/scenarios/1408729
      *
      * @magentoDbIsolation disabled
      */
@@ -157,6 +159,7 @@ class SourcesTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/908874/scenarios/1465149
      *
      * @magentoDbIsolation disabled
      */

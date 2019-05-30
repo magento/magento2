@@ -16,6 +16,7 @@ class PlaceOrderOnDefaultStockTest extends PlaceOrderTest
      * @magentoDataFixture ../../../../app/code/Magento/InventoryGroupedProduct/Test/_files/default_stock_grouped_products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/419537/scenarios/1620162
      */
     public function testPlaceOrderWithInStockProduct()
     {

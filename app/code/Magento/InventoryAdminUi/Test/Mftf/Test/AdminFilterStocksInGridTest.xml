@@ -13,7 +13,7 @@
             <stories value="Filtering in a Grid"/>
             <title value="Filter Stocks on the Manage Stocks grid"/>
             <description value="You should be able to Filter the Stocks from the Manage Stocks grid."/>
-            <testCaseId value="MSI-626"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/910527/scenarios/1408750"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

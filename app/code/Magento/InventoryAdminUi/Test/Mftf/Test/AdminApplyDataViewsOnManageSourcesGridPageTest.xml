@@ -13,7 +13,7 @@
             <stories value="Save and Load Admin Grid Views"/>
             <title value="Save and Load Admin Source Grid Views"/>
             <description value="You should be able to Save and Load a Grid View for the Sources Grid."/>
-            <testCaseId value="MSI-915"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/910317/scenarios/1408753"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

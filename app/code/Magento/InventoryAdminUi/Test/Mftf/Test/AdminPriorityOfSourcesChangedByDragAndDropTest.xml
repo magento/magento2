@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Configuration-Stocks"/>
             <title value="Priority of Sources assigned to the Stock changed by drag-n-drop action in the grid by Admin user"/>
-            <description value="You should be able to change Source priority on Stock edit page"/>
-            <testCaseId value="MSI-952"/>
+            <description value="You should be able to change Source priority on Stock edit page."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/910527/scenarios/1499607"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

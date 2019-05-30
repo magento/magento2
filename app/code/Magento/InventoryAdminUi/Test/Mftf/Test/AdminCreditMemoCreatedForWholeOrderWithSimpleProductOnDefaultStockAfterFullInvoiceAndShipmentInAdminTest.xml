@@ -12,8 +12,8 @@
         <annotations>
             <stories value="MSI Credit Memo"/>
             <title value="Credit memo created for whole order with Simple product on Default stock after full invoice and shipment in Admin"/>
-            <description value="Credit memo created for whole order with Simple product on Default stock after full invoice and shipment in Admin"/>
-            <testCaseId value="MSI-1949"/>
+            <description value="Credit memo created for whole order with Simple product on Default stock after full invoice and shipment in Admin."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735125/scenarios/1474868"/>
             <severity value="BLOCKER"/>
             <group value="msi"/>
             <group value="multi_mode"/>

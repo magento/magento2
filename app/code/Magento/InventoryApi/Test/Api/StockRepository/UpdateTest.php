@@ -23,6 +23,8 @@ class UpdateTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock.php
+     *
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/529092/scenarios/1820381
      */
     public function testUpdate()
     {

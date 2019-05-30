@@ -13,7 +13,7 @@
             <stories value="CatalogInventory stock option"/>
             <title value="Admin user apply 'Only X left Threshold' for Simple product on Default source"/>
             <description value="In default source you should be able to create order with simple order and enabled config 'Only X left Threshold'."/>
-            <testCaseId value="MSI-1527"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/908790/scenarios/2075108"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
