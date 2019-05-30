@@ -20,7 +20,7 @@ class Renderer implements RendererInterface
     /**
      * @var array
      */
-    protected $assetTypeOrder = ['css', 'ico', 'js'];
+    protected $assetTypeOrder = ['css', 'ico', 'js', 'font'];
 
     /**
      * @var Config
@@ -321,6 +321,10 @@ class Renderer implements RendererInterface
             case 'css':
                 $attributes = ' rel="stylesheet" type="text/css" ' . ($attributes ?: ' media="all"');
                 break;
+
+            case 'font':
+                $attributes = 'rel="preload" as="font" crossorigin="anonymous"';
+                break;
         }
         return $attributes;
     }
@@ -340,6 +344,7 @@ class Renderer implements RendererInterface
                 break;
 
             case 'css':
+            case 'font':
             default:
                 $groupTemplate = '<link ' . $attributes . ' href="%s" />' . "\n";
                 break;
