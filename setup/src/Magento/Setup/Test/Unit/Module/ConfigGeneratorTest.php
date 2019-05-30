@@ -17,6 +17,9 @@ use Magento\Setup\Model\CryptKeyGenerator;
 use PHPUnit\Framework\TestCase;
 use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 
+/**
+ * Test for Magento\Setup\Model\ConfigGenerator class.
+ */
 class ConfigGeneratorTest extends TestCase
 {
     /**
@@ -71,6 +74,7 @@ class ConfigGeneratorTest extends TestCase
     {
         $returnValue = $this->configGeneratorObject->createCryptConfig([]);
         $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $this->assertEquals(['crypt' => ['key' => md5('key')]], $returnValue->getData());
     }
 

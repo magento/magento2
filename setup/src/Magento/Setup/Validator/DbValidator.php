@@ -100,14 +100,16 @@ class DbValidator
         $driverOptions = []
     ) {
         // establish connection to information_schema view to retrieve information about user and table privileges
-        $connection = $this->connectionFactory->create([
-            ConfigOptionsListConstants::KEY_NAME => 'information_schema',
-            ConfigOptionsListConstants::KEY_HOST => $dbHost,
-            ConfigOptionsListConstants::KEY_USER => $dbUser,
-            ConfigOptionsListConstants::KEY_PASSWORD => $dbPass,
-            ConfigOptionsListConstants::KEY_ACTIVE => true,
-            ConfigOptionsListConstants::KEY_DRIVER_OPTIONS => $driverOptions,
-        ]);
+        $connection = $this->connectionFactory->create(
+            [
+                ConfigOptionsListConstants::KEY_NAME => 'information_schema',
+                ConfigOptionsListConstants::KEY_HOST => $dbHost,
+                ConfigOptionsListConstants::KEY_USER => $dbUser,
+                ConfigOptionsListConstants::KEY_PASSWORD => $dbPass,
+                ConfigOptionsListConstants::KEY_ACTIVE => true,
+                ConfigOptionsListConstants::KEY_DRIVER_OPTIONS => $driverOptions,
+            ]
+        );
 
         if (!$connection) {
             throw new \Magento\Setup\Exception('Database connection failure.');
@@ -182,6 +184,7 @@ class DbValidator
         ];
 
         // check global privileges
+        // phpcs:ignore Magento2.SQL.RawQuery
         $userPrivilegesQuery = "SELECT PRIVILEGE_TYPE FROM USER_PRIVILEGES "
             . "WHERE REPLACE(GRANTEE, '\'', '') = current_user()";
         $grantInfo = $connection->query($userPrivilegesQuery)->fetchAll(\PDO::FETCH_NUM);
@@ -190,6 +193,7 @@ class DbValidator
         }
 
         // check database privileges
+        // phpcs:ignore Magento2.SQL.RawQuery
         $schemaPrivilegesQuery = "SELECT PRIVILEGE_TYPE FROM SCHEMA_PRIVILEGES " .
             "WHERE '$dbName' LIKE TABLE_SCHEMA AND REPLACE(GRANTEE, '\'', '') = current_user()";
         $grantInfo = $connection->query($schemaPrivilegesQuery)->fetchAll(\PDO::FETCH_NUM);

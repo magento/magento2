@@ -13,6 +13,9 @@ use Magento\Framework\Config\Data\ConfigDataFactory;
 use Magento\Setup\Model\ConfigGenerator;
 use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 
+/**
+ * Test for Magento\Setup\Model\ConfigGenerator class.
+ */
 class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**

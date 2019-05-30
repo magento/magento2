@@ -66,14 +66,16 @@ class AdminCredentialsValidator
     {
         $driverOptions = $this->driverOptions->getDriverOptions($data);
 
-        $dbConnection = $this->connectionFactory->create([
-            ConfigOption::KEY_NAME => $data[ConfigOption::INPUT_KEY_DB_NAME],
-            ConfigOption::KEY_HOST => $data[ConfigOption::INPUT_KEY_DB_HOST],
-            ConfigOption::KEY_USER => $data[ConfigOption::INPUT_KEY_DB_USER],
-            ConfigOption::KEY_PASSWORD => $data[ConfigOption::INPUT_KEY_DB_PASSWORD],
-            ConfigOption::KEY_PREFIX => $data[ConfigOption::INPUT_KEY_DB_PREFIX],
-            ConfigOption::KEY_DRIVER_OPTIONS => $driverOptions
-        ]);
+        $dbConnection = $this->connectionFactory->create(
+            [
+                ConfigOption::KEY_NAME => $data[ConfigOption::INPUT_KEY_DB_NAME],
+                ConfigOption::KEY_HOST => $data[ConfigOption::INPUT_KEY_DB_HOST],
+                ConfigOption::KEY_USER => $data[ConfigOption::INPUT_KEY_DB_USER],
+                ConfigOption::KEY_PASSWORD => $data[ConfigOption::INPUT_KEY_DB_PASSWORD],
+                ConfigOption::KEY_PREFIX => $data[ConfigOption::INPUT_KEY_DB_PREFIX],
+                ConfigOption::KEY_DRIVER_OPTIONS => $driverOptions
+            ]
+        );
 
         $adminAccount = $this->adminAccountFactory->create(
             $dbConnection,
