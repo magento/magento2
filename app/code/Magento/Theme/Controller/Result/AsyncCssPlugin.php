@@ -45,10 +45,12 @@ class AsyncCssPlugin
             self::XML_PATH_USE_CSS_CRITICAL_PATH,
             ScopeInterface::SCOPE_STORE
         )) {
+            $cssMatches = [];
             // add link rel preload to style sheets
             $content = preg_replace_callback(
                 '@<link\b.*?rel=("|\')stylesheet\1.*?/>@',
-                function ($matches) {
+                function ($matches) use (&$cssMatches) {
+                    $cssMatches[] = $matches[0];
                     preg_match('@href=("|\')(.*?)\1@', $matches[0], $hrefAttribute);
                     $href = $hrefAttribute[2];
                     if (preg_match('@media=("|\')(.*?)\1@', $matches[0], $mediaAttribute)) {
@@ -56,14 +58,9 @@ class AsyncCssPlugin
                     }
                     $media = $media ?? 'all';
                     $loadCssAsync = sprintf(
-                        '<link rel="preload" as="style" media="%s" 
-                         onload="
-                            this.onload=null;
-                            this.rel=\'stylesheet\';
-                            document.dispatchEvent(new Event(\'criticalCssLoaded\'));"' .
-                        'href="%s"><noscript><link rel="stylesheet" href="%s"></noscript>',
+                        '<link rel="preload" as="style" media="%s" ' .
+                        'href="%s">',
                         $media,
-                        $href,
                         $href
                     );
 
@@ -72,7 +69,10 @@ class AsyncCssPlugin
                 $content
             );
 
-            $subject->setContent($content);
+            if (!empty($cssMatches)) {
+                $content = str_replace('</body', implode("\n", $cssMatches) . "\n</body", $content);
+                $subject->setContent($content);
+            }
         }
     }
 }
