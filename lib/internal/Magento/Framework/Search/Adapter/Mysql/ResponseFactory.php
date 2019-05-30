@@ -62,15 +62,10 @@ class ResponseFactory
             /** @var \Magento\Framework\Api\Search\Document[] $documents */
             $documents[] = $this->documentFactory->create($rawDocument);
 	}
-
 	$total = 0;
-	if(array_key_exists('total',$rawResponse))
-	{
-
+	if(array_key_exists('total',$rawResponse)){
 		$total = $rawResponse['total'];	
-
 	}
-
 	/** @var \Magento\Framework\Search\Response\Aggregation $aggregations */
         $aggregations = $this->aggregationFactory->create($rawResponse['aggregations']);
         return $this->objectManager->create(
