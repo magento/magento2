@@ -3,10 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Element\UiComponent\Argument\Interpreter;
 
+use Magento\Framework\Code\Reader\ClassReader;
+use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
 /**
  * Class ConfigurableObject
@@ -16,8 +22,9 @@ class ConfigurableObject implements InterpreterInterface
     /**
      * @var array
      */
-    private $classBlacklist = [
-        \Zend\Code\Reflection\FileReflection::class
+    private $classWhitelist = [
+        DataProviderInterface::class,
+        OptionSourceInterface::class
     ];
 
     /**
@@ -29,17 +36,33 @@ class ConfigurableObject implements InterpreterInterface
      * @var InterpreterInterface
      */
     protected $argumentInterpreter;
+    /**
+     * @var ClassReader|null
+     */
+    private $classReader;
+    /**
+     * @var ConfigInterface
+     */
+    private $objectManagerConfig;
 
     /**
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
      * @param InterpreterInterface $argumentInterpreter
+     * @param ClassReader|null $classReader
+     * @param ConfigInterface $objectManagerConfig
      */
-    public function __construct(ObjectManagerInterface $objectManager, InterpreterInterface $argumentInterpreter)
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        InterpreterInterface $argumentInterpreter,
+        ClassReader $classReader = null,
+        ConfigInterface $objectManagerConfig = null
+    ) {
         $this->objectManager = $objectManager;
         $this->argumentInterpreter = $argumentInterpreter;
+        $this->classReader = $classReader ?? $objectManager->get(ClassReader::class);
+        $this->objectManagerConfig = $objectManagerConfig ?? $objectManager->get(ConfigInterface::class);
     }
 
     /**
@@ -61,14 +84,18 @@ class ConfigurableObject implements InterpreterInterface
                 throw new \InvalidArgumentException('Node "argument" with name "class" is required for this type.');
             }
 
-            if (in_array(
-                ltrim(strtolower($arguments['class']), '\\'),
-                array_map('strtolower', $this->classBlacklist)
-            )) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Class argument is invalid: %s',
-                    $arguments['class']
-                ));
+            $type = $this->objectManagerConfig->getInstanceType(
+                $this->objectManagerConfig->getPreference($arguments['class'])
+            );
+
+            $classParents = $this->getParents($type);
+
+            $whitelistIntersection = array_intersect($classParents, $this->classWhitelist);
+
+            if (empty($whitelistIntersection)) {
+                throw new \InvalidArgumentException(
+                    sprintf('Class argument is invalid: %s', $arguments['class'])
+                );
             }
 
             $className = $arguments['class'];
@@ -76,5 +103,24 @@ class ConfigurableObject implements InterpreterInterface
         }
 
         return $this->objectManager->create($className, $arguments);
+    }
+
+    /**
+     * Retrieves all the parent classes and interfaces for a class including the ones implemented by the class itself
+     *
+     * @param string $type
+     * @return string[]
+     */
+    private function getParents(string $type)
+    {
+        $classParents = $this->classReader->getParents($type);
+        foreach ($classParents as $parent) {
+            if (empty($parent)) {
+                continue;
+            }
+            $classParents = array_merge($classParents, $this->getParents($parent));
+        }
+
+        return $classParents;
     }
 }
