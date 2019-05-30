@@ -63,10 +63,7 @@ class Exchange
     {
         try {
             $storeId = $this->storeManager->getStore()->getId();
-            $code = $this->storeManager->getStore()->getCode();
-            $t=1;
         } catch (NoSuchEntityException $e) {
-            $r=1;
             $this->logger->error(
                 sprintf("Can't get current storeId and inject to amqp message. Error %s.", $e->getMessage())
             );
