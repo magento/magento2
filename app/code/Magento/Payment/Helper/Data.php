@@ -150,7 +150,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $res[] = $methodInstance;
         }
 
-        @uasort(
+        uasort(
             $res,
             function (MethodInterface $a, MethodInterface $b) {
                 return (int)$a->getConfigData('sort_order') <=> (int)$b->getConfigData('sort_order');
@@ -261,14 +261,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $groupRelations = [];
 
         foreach ($this->getPaymentMethods() as $code => $data) {
-            if (!empty($data['active'])) {
-                $storedTitle = $this->getMethodInstance($code)->getConfigData('title', $store);
-                if (isset($storedTitle)) {
-                    $methods[$code] = $storedTitle;
-                } elseif (isset($data['title'])) {
-                    $methods[$code] = $data['title'];
-                }
+            $storedTitle = $this->getMethodInstance($code)->getConfigData('title', $store);
+            if (isset($storedTitle)) {
+                $methods[$code] = $storedTitle;
+            } elseif (isset($data['title'])) {
+                $methods[$code] = $data['title'];
             }
+
             if ($asLabelValue && $withGroups && isset($data['group'])) {
                 $groupRelations[$code] = $data['group'];
             }
