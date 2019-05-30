@@ -21,6 +21,7 @@
         <element name="enableProductAttributeLabel" type="text" selector="//span[text()='Enable Product']/parent::label"/>
         <element name="enableProductAttributeLabelWrapper" type="text" selector="//span[text()='Enable Product']/parent::label/parent::div"/>
         <element name="productStatus" type="checkbox" selector="input[name='product[status]']"/>
+        <element name="productStatusValue" type="checkbox" selector="input[name='product[status]'][value='{{value}}']" timeout="30" parameterized="true"/>
         <element name="productStatusDisabled" type="checkbox" selector="input[name='product[status]'][disabled]"/>
         <element name="enableProductLabel" type="checkbox" selector="input[name='product[status]']+label"/>
         <element name="productStatusUseDefault" type="checkbox" selector="input[name='use_default[status]']"/>
