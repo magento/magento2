@@ -77,49 +77,49 @@
                 <ol class="items">
                     <?php foreach ($block->getItems() as $_index => $_item): ?>
                         <?php $_product = $_item->getProduct() ?>
-                    <li class="item">
-                         <div class="product">
-                             <div class="number">
-                                 <?= $block->escapeHtml(__('<span>Item %1</span> of %2', $_index+1, $block->countItems()), ['span']) ?>
-                             </div>
-                             <div class="img photo container">
-                                 <?= $block->getImage($_product, 'gift_messages_checkout_thumbnail')->toHtml() ?>
-                             </div>
-                             <strong class="product name"><?= $block->escapeHtml($_product->getName()) ?></strong>
-                         </div>
-                         <div class="options">
-                             <div class="options-items-container" id="options-items-container-<?= (int) $block->getEntity()->getId() ?>-<?= (int) $_item->getId() ?>"></div>
-                             <?php if ($block->isItemMessagesAvailable($_item)): ?>
-                             <button class="action action-gift"
-                                     data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-item-container-<?= (int) $_item->getId() ?>"}}'>
-                                 <span><?= $block->escapeHtml(__('Gift Message')) ?></span>
-                             </button>
-                             <div id="gift-messages-for-item-container-<?= (int) $_item->getId() ?>" class="block message hidden">
-                                 <fieldset class="fieldset">
-                                     <p><?= $block->escapeHtml(__('Leave a box blank if you don\'t want to add a gift message for that item.')) ?></p>
-                                     <div class="field from">
-                                         <label for="gift-message-<?= (int) $_item->getId() ?>-from" class="label"><span><?= $block->escapeHtml(__('From')) ?></span></label>
-                                         <div class="control">
-                                             <input type="text" name="giftmessage[quote_item][<?= (int) $_item->getId() ?>][from]" id="gift-message-<?= (int) $_item->getId() ?>-from" title="<?= $block->escapeHtmlAttr(__('From')) ?>" value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getSender(), $block->getDefaultFrom()) ?>" class="input-text">
-                                         </div>
-                                     </div>
-                                     <div class="field to">
-                                        <label for="gift-message-<?= (int) $_item->getId() ?>-to" class="label"><span><?= $block->escapeHtmlAttr(__('To')) ?></span></label>
-                                        <div class="control">
-                                            <input type="text" name="giftmessage[quote_item][<?= (int) $_item->getId() ?>][to]" id="gift-message-<?= (int) $_item->getId() ?>-to" title="<?= $block->escapeHtmlAttr(__('To')) ?>" value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getRecipient(), $block->getDefaultTo()) ?>" class="input-text">
-                                        </div>
-                                     </div>
-                                     <div class="field text">
-                                         <label for="gift-message-<?= (int) $_item->getId() ?>-message" class="label"><span><?= $block->escapeHtml(__('Message')) ?></span></label>
-                                         <div class="control">
-                                            <textarea id="gift-message-<?= (int) $_item->getId() ?>-message" class="input-text giftmessage-area" name="giftmessage[quote_item][<?= (int) $_item->getId() ?>][message]" title="<?= $block->escapeHtmlAttr(__('Message')) ?>" rows="5" cols="40"><?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getMessage()) ?></textarea>
-                                         </div>
-                                     </div>
-                                </fieldset>
-                             </div>
-                            <?php endif; ?>
-                         </div>
-                    </li>
+                        <li class="item">
+                            <div class="product">
+                                <div class="number">
+                                    <?= $block->escapeHtml(__('<span>Item %1</span> of %2', $_index+1, $block->countItems()), ['span']) ?>
+                                </div>
+                                <div class="img photo container">
+                                    <?= $block->getImage($_product, 'gift_messages_checkout_thumbnail')->toHtml() ?>
+                                </div>
+                                <strong class="product name"><?= $block->escapeHtml($_product->getName()) ?></strong>
+                            </div>
+                            <div class="options">
+                                <div class="options-items-container" id="options-items-container-<?= (int) $block->getEntity()->getId() ?>-<?= (int) $_item->getId() ?>"></div>
+                                <?php if ($block->isItemMessagesAvailable($_item)): ?>
+                                    <button class="action action-gift"
+                                            data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-item-container-<?= (int) $_item->getId() ?>"}}'>
+                                        <span><?= $block->escapeHtml(__('Gift Message')) ?></span>
+                                    </button>
+                                    <div id="gift-messages-for-item-container-<?= (int) $_item->getId() ?>" class="block message hidden">
+                                        <fieldset class="fieldset">
+                                            <p><?= $block->escapeHtml(__('Leave a box blank if you don\'t want to add a gift message for that item.')) ?></p>
+                                            <div class="field from">
+                                                <label for="gift-message-<?= (int) $_item->getId() ?>-from" class="label"><span><?= $block->escapeHtml(__('From')) ?></span></label>
+                                                <div class="control">
+                                                    <input type="text" name="giftmessage[quote_item][<?= (int) $_item->getId() ?>][from]" id="gift-message-<?= (int) $_item->getId() ?>-from" title="<?= $block->escapeHtmlAttr(__('From')) ?>" value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getSender(), $block->getDefaultFrom()) ?>" class="input-text">
+                                                </div>
+                                            </div>
+                                            <div class="field to">
+                                                <label for="gift-message-<?= (int) $_item->getId() ?>-to" class="label"><span><?= $block->escapeHtmlAttr(__('To')) ?></span></label>
+                                                <div class="control">
+                                                    <input type="text" name="giftmessage[quote_item][<?= (int) $_item->getId() ?>][to]" id="gift-message-<?= (int) $_item->getId() ?>-to" title="<?= $block->escapeHtmlAttr(__('To')) ?>" value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getRecipient(), $block->getDefaultTo()) ?>" class="input-text">
+                                                </div>
+                                            </div>
+                                            <div class="field text">
+                                                <label for="gift-message-<?= (int) $_item->getId() ?>-message" class="label"><span><?= $block->escapeHtml(__('Message')) ?></span></label>
+                                                <div class="control">
+                                                    <textarea id="gift-message-<?= (int) $_item->getId() ?>-message" class="input-text giftmessage-area" name="giftmessage[quote_item][<?= (int) $_item->getId() ?>][message]" title="<?= $block->escapeHtmlAttr(__('Message')) ?>" rows="5" cols="40"><?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getMessage()) ?></textarea>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </li>
                     <?php endforeach; ?>
                 </ol>
             </dd>
@@ -204,53 +204,53 @@ case 'multishipping_address': ?>
 
             <dd id="allow-gift-options-for-items-container-<?= (int) $block->getEntity()->getId() ?>" class="order-options individual">
                 <ol class="items">
-                <?php foreach ($block->getItems() as $_index => $_item): ?>
-                     <?php $_product = $_item->getProduct() ?>
-                    <li class="item">
-                        <div class="product">
-                            <div class="number"><?= $block->escapeHtml(__('<span>Item %1</span> of %2', $_index+1, $block->countItems()), ['span']) ?></div>
-                            <div class="img photo container">
-                             <?= $block->getImage($_product, 'gift_messages_checkout_thumbnail')->toHtml() ?>
-                            </div>
-                            <strong class="product-name"><?= $block->escapeHtml($_product->getName()) ?></strong>
-                        </div>
-                        <div class="options">
-                            <div class="options-items-container" id="options-items-container-<?= (int) $block->getEntity()->getId() ?>-<?= (int) $_item->getId() ?>"></div>
-                            <input type="hidden" name="giftoptions[quote_address_item][<?= (int) $_item->getId() ?>][address]" value="<?= (int) $block->getEntity()->getId() ?>" />
-                            <?php if ($block->isItemMessagesAvailable($_item)): ?>
-                                <?php $_giftMessage = true; ?>
-                                <button class="action action-gift"
-                                     data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-item-container-<?= (int) $_item->getId() ?>"}}'>
-                                    <span><?= $block->escapeHtml(__('Gift Message')) ?></span>
-                                </button>
-                                <div id="gift-messages-for-item-container-<?= (int) $_item->getId() ?>" class="block message hidden">
-                                    <fieldset class="fieldset">
-                                        <p><?= $block->escapeHtml(__('You can leave this box blank if you don\'t want to add a gift message for the item.')) ?></p>
-                                        <input type="hidden" name="giftmessage[quote_address_item][<?= (int) $_item->getId() ?>][address]" value="<?= (int) $block->getEntity()->getId() ?>" />
-                                        <div class="field from">
-                                            <label for="gift-message-<?= (int) $_item->getId() ?>-from" class="label"><span><?= $block->escapeHtml(__('From')) ?></span></label>
-                                            <div class="control">
-                                                <input type="text" name="giftmessage[quote_address_item][<?= (int) $_item->getId() ?>][from]" id="gift-message-<?= (int) $_item->getId() ?>-from" title="<?= $block->escapeHtmlAttr(__('From')) ?>"  value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getSender(), $block->getDefaultFrom()) ?>" class="input-text">
-                                            </div>
-                                        </div>
-                                        <div class="field to">
-                                            <label for="gift-message-<?= (int) $_item->getId() ?>-to" class="label"><span><?= $block->escapeHtml(__('To')) ?></span></label>
-                                            <div class="control">
-                                                <input type="text" name="giftmessage[quote_address_item][<?= (int) $_item->getId() ?>][to]" id="gift-message-<?= (int) $_item->getId() ?>-to" title="<?= $block->escapeHtmlAttr(__('To')) ?>" value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getRecipient(), $block->getDefaultTo()) ?>" class="input-text">
-                                            </div>
-                                        </div>
-                                        <div class="field text">
-                                            <label for="gift-message-<?= (int) $_item->getId() ?>-message" class="label"><span><?= $block->escapeHtml(__('Message')) ?></span></label>
-                                            <div class="control">
-                                                <textarea id="gift-message-<?= (int) $_item->getId() ?>-message" class="input-text giftmessage-area" name="giftmessage[quote_address_item][<?= (int) $_item->getId() ?>][message]" title="<?= $block->escapeHtmlAttr(__('Message')) ?>" rows="5" cols="10"><?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getMessage()) ?></textarea>
-                                            </div>
-                                        </div>
-                                 </fieldset>
+                    <?php foreach ($block->getItems() as $_index => $_item): ?>
+                        <?php $_product = $_item->getProduct() ?>
+                        <li class="item">
+                            <div class="product">
+                                <div class="number"><?= $block->escapeHtml(__('<span>Item %1</span> of %2', $_index+1, $block->countItems()), ['span']) ?></div>
+                                <div class="img photo container">
+                                    <?= $block->getImage($_product, 'gift_messages_checkout_thumbnail')->toHtml() ?>
                                 </div>
-                            <?php endif; ?>
-                        </div>
-                    </li>
-                <?php endforeach; ?>
+                                <strong class="product-name"><?= $block->escapeHtml($_product->getName()) ?></strong>
+                            </div>
+                            <div class="options">
+                                <div class="options-items-container" id="options-items-container-<?= (int) $block->getEntity()->getId() ?>-<?= (int) $_item->getId() ?>"></div>
+                                <input type="hidden" name="giftoptions[quote_address_item][<?= (int) $_item->getId() ?>][address]" value="<?= (int) $block->getEntity()->getId() ?>" />
+                                <?php if ($block->isItemMessagesAvailable($_item)): ?>
+                                    <?php $_giftMessage = true; ?>
+                                    <button class="action action-gift"
+                                            data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-item-container-<?= (int) $_item->getId() ?>"}}'>
+                                        <span><?= $block->escapeHtml(__('Gift Message')) ?></span>
+                                    </button>
+                                    <div id="gift-messages-for-item-container-<?= (int) $_item->getId() ?>" class="block message hidden">
+                                        <fieldset class="fieldset">
+                                            <p><?= $block->escapeHtml(__('You can leave this box blank if you don\'t want to add a gift message for the item.')) ?></p>
+                                            <input type="hidden" name="giftmessage[quote_address_item][<?= (int) $_item->getId() ?>][address]" value="<?= (int) $block->getEntity()->getId() ?>" />
+                                            <div class="field from">
+                                                <label for="gift-message-<?= (int) $_item->getId() ?>-from" class="label"><span><?= $block->escapeHtml(__('From')) ?></span></label>
+                                                <div class="control">
+                                                    <input type="text" name="giftmessage[quote_address_item][<?= (int) $_item->getId() ?>][from]" id="gift-message-<?= (int) $_item->getId() ?>-from" title="<?= $block->escapeHtmlAttr(__('From')) ?>"  value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getSender(), $block->getDefaultFrom()) ?>" class="input-text">
+                                                </div>
+                                            </div>
+                                            <div class="field to">
+                                                <label for="gift-message-<?= (int) $_item->getId() ?>-to" class="label"><span><?= $block->escapeHtml(__('To')) ?></span></label>
+                                                <div class="control">
+                                                    <input type="text" name="giftmessage[quote_address_item][<?= (int) $_item->getId() ?>][to]" id="gift-message-<?= (int) $_item->getId() ?>-to" title="<?= $block->escapeHtmlAttr(__('To')) ?>" value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getRecipient(), $block->getDefaultTo()) ?>" class="input-text">
+                                                </div>
+                                            </div>
+                                            <div class="field text">
+                                                <label for="gift-message-<?= (int) $_item->getId() ?>-message" class="label"><span><?= $block->escapeHtml(__('Message')) ?></span></label>
+                                                <div class="control">
+                                                    <textarea id="gift-message-<?= (int) $_item->getId() ?>-message" class="input-text giftmessage-area" name="giftmessage[quote_address_item][<?= (int) $_item->getId() ?>][message]" title="<?= $block->escapeHtmlAttr(__('Message')) ?>" rows="5" cols="10"><?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getMessage()) ?></textarea>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
                 </ol>
             </dd>
             <?php endif; ?>
