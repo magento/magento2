@@ -95,9 +95,9 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
      */
     public function testDispatchToPlaceAnOrderWithAuthorizenet(): void
     {
-      $paymentMethod = 'authorizenet_acceptjs';
-      $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-      $query
+        $paymentMethod = 'authorizenet_acceptjs';
+        $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query
             = <<<QUERY
  mutation {
   setPaymentMethodOnCart(input: {
@@ -135,8 +135,9 @@ QUERY;
         $headers = $this->objectManager->create(\Zend\Http\Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);
         $this->request->setHeaders($headers);
-
+        // phpcs:ignore Magento2.Security.IncludeFile
         $expectedRequest = include __DIR__ . '/../../../_files/request_authorize.php';
+        // phpcs:ignore Magento2.Security.IncludeFile
         $authorizeResponse = include __DIR__ . '/../../../_files/response_authorize.php';
 
         $this->clientMock->method('setRawData')
@@ -147,7 +148,7 @@ QUERY;
         $response = $this->graphql->dispatch($this->request);
         $responseData = $this->jsonSerializer->unserialize($response->getContent());
 
-       $this->assertArrayNotHasKey('errors', $responseData, 'Response has errors');
+        $this->assertArrayNotHasKey('errors', $responseData, 'Response has errors');
         $this->assertTrue(
             isset($responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code'])
         );

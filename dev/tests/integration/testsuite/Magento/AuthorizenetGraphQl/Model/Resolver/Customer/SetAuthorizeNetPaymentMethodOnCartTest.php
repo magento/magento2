@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
  * @magentoDbIsolation disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SetAuthorizenetPaymentMethodOnCartTest extends TestCase
+class SetAuthorizeNetPaymentMethodOnCartTest extends TestCase
 {
     const CONTENT_TYPE = 'application/json';
 

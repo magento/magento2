@@ -143,7 +143,9 @@ QUERY;
         $this->request->setHeaders($webApiRequest->getHeaders());
         $graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
 
+        // phpcs:ignore Magento2.Security.IncludeFile
         $expectedRequest = include __DIR__ . '/../../../_files/request_authorize_customer.php';
+        // phpcs:ignore Magento2.Security.IncludeFile
         $authorizeResponse = include __DIR__ . '/../../../_files/response_authorize.php';
 
         $this->clientMock->method('setRawData')
