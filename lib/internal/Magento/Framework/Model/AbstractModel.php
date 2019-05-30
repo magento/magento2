@@ -10,6 +10,7 @@ use Magento\Framework\Phrase;
 /**
  * Abstract model class
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -200,7 +201,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      */
     protected function _construct()
     {
-        return;
     }
 
     /**
@@ -721,6 +721,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     {
         $validator = $this->_getValidatorBeforeSave();
         if ($validator && !$validator->isValid($this)) {
+            $errors = $validator->getMessages();
             $exception = new \Magento\Framework\Validator\Exception(
                 null,
                 null,

@@ -56,6 +56,8 @@ class Exception extends InputException
     }
 
     /**
+     * Adding message to the stack and updating main exception message
+     *
      * @param Phrase $propertyMessage
      * @param string $exceptionMessage
      * @return string
