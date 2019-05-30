@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Controller\Result;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -42,7 +44,7 @@ class AsyncCssPlugin
         if (strpos($content, '</body') !== false && $this->scopeConfig->isSetFlag(
             self::XML_PATH_USE_CSS_CRITICAL_PATH,
             ScopeInterface::SCOPE_STORE
-            )) {
+        )) {
             // add link rel preload to style sheets
             $content = preg_replace_callback(
                 '@<link\b.*?rel=("|\')stylesheet\1.*?/>@',
@@ -54,7 +56,11 @@ class AsyncCssPlugin
                     }
                     $media = $media ?? 'all';
                     $loadCssAsync = sprintf(
-                        '<link rel="preload" as="style" media="%s" onload="this.onload=null;this.rel=\'stylesheet\'"' .
+                        '<link rel="preload" as="style" media="%s" 
+                         onload="
+                            this.onload=null;
+                            this.rel=\'stylesheet\';
+                            document.dispatchEvent(new Event(\'criticalCssLoaded\'));"' .
                         'href="%s"><noscript><link rel="stylesheet" href="%s"></noscript>',
                         $media,
                         $href,
