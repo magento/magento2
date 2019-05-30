@@ -29,15 +29,15 @@
                     <?php foreach ($block->getStoreCollection($_group) as $_store) : ?>
                         <?php if ($showWebsite == false) : ?>
                             <?php $showWebsite = true; ?>
-                                <option website="true" value="<?= $block->escapeHtml($_website->getId()) ?>"<?php if ($block->getRequest()->getParam('website') == $_website->getId()) : ?> selected<?php endif; ?>>
+                                <option website="true" value="<?= $block->escapeHtmlAttr($_website->getId()) ?>"<?php if ($block->getRequest()->getParam('website') == $_website->getId()) : ?> selected<?php endif; ?>>
                                     <?= $block->escapeHtml($_website->getName()) ?>
                                 </option>
                         <?php endif; ?>
                         <?php if ($showGroup == false) : ?>
                             <?php $showGroup = true; ?>
-                            <option group="true" value="<?= $block->escapeHtml($_group->getId()) ?>"<?php if ($block->getRequest()->getParam('group') == $_group->getId()) : ?> selected<?php endif; ?>>&nbsp;&nbsp;&nbsp;<?= $block->escapeHtml($_group->getName()) ?></option>
+                            <option group="true" value="<?= $block->escapeHtmlAttr($_group->getId()) ?>"<?php if ($block->getRequest()->getParam('group') == $_group->getId()) : ?> selected<?php endif; ?>>&nbsp;&nbsp;&nbsp;<?= $block->escapeHtml($_group->getName()) ?></option>
                         <?php endif; ?>
-                        <option value="<?= $block->escapeHtml($_store->getId()) ?>"<?php if ($block->getStoreId() == $_store->getId()) : ?> selected<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?= $block->escapeHtml($_store->getName()) ?></option>
+                        <option value="<?= $block->escapeHtmlAttr($_store->getId()) ?>"<?php if ($block->getStoreId() == $_store->getId()) : ?> selected<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?= $block->escapeHtml($_store->getName()) ?></option>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
             <?php endforeach; ?>
@@ -60,7 +60,7 @@ require(['prototype'], function(){
         if(obj.switchParams){
             storeParam+= obj.switchParams;
         }
-        setLocation('<?= $block->escapeHtml($block->getSwitchUrl()) ?>'+storeParam);
+        setLocation('<?= $block->escapeUrl($block->getSwitchUrl()) ?>'+storeParam);
     }
 
 });

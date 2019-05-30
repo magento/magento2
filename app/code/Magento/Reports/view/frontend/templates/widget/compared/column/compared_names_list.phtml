@@ -19,7 +19,7 @@
         <strong><?= $block->escapeHtml(__('Recently Compared')) ?></span></strong>
     </div>
     <div class="block-content">
-        <ol id="widget-compared-<?= $block->escapeHtml($block->getNameInLayout()) ?>" class="product-items product-items-names">
+        <ol id="widget-compared-<?= $block->escapeHtmlAttr($suffix) ?>" class="product-items product-items-names">
         <?php $i = 0; foreach ($_products as $_product) : ?>
             <li class="product-item">
                 <strong class="product-item-name">

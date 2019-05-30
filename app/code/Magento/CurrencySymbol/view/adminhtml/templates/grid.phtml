@@ -11,29 +11,28 @@
 ?>
 
 <form id="currency-symbols-form" action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>" method="post">
-    <input name="form_key" type="hidden" value="<?= $block->escapeHtml($block->getFormKey()) ?>" />
+    <input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" />
     <fieldset class="admin__fieldset">
         <?php foreach ($block->getCurrencySymbolsData() as $code => $data) : ?>
         <div class="admin__field _required">
-            <label class="admin__field-label" for="custom_currency_symbol<?= $block->escapeHtml($code) ?>">
+            <label class="admin__field-label" for="custom_currency_symbol<?= $block->escapeHtmlAttr($code) ?>">
                 <span><?= $block->escapeHtml($code) ?> (<?= $block->escapeHtml($data['displayName']) ?>)</span>
             </label>
             <div class="admin__field-control">
-                <input id="custom_currency_symbol<?= $block->escapeHtml($code) ?>"
+                <input id="custom_currency_symbol<?= $block->escapeHtmlAttr($code) ?>"
                        class="required-entry admin__control-text <?= $data['inherited'] ? 'disabled' : '' ?>"
                        type="text"
                        value="<?= $block->escapeHtmlAttr($data['displaySymbol']) ?>"
-                       name="custom_currency_symbol[<?= $block->escapeHtml($code) ?>]">
+                       name="custom_currency_symbol[<?= $block->escapeHtmlAttr($code) ?>]">
                 <div class="admin__field admin__field-option">
-                    <input id="custom_currency_symbol_inherit<?= $block->escapeHtml($code) ?>"
+                    <input id="custom_currency_symbol_inherit<?= $block->escapeHtmlAttr($code) ?>"
                            class="admin__control-checkbox" type="checkbox"
-                           onclick="toggleUseDefault(<?= '\'' . $block->escapeHtml($code) . '\',\'' .
-                                $block->escapeJs($data['parentSymbol']) . '\'' ?>)"
+                           onclick="toggleUseDefault(<?= '\'' . $block->escapeJs($code) . '\',\'' . $block->escapeJs($data['parentSymbol']) . '\'' ?>)"
                             <?= $data['inherited'] ? ' checked="checked"' : '' ?>
                            value="1"
-                           name="inherit_custom_currency_symbol[<?= $block->escapeHtml($code) ?>]">
+                           name="inherit_custom_currency_symbol[<?= $block->escapeHtmlAttr($code) ?>]">
                     <label class="admin__field-label"
-                           for="custom_currency_symbol_inherit<?= $block->escapeHtml($code) ?>">
+                           for="custom_currency_symbol_inherit<?= $block->escapeHtmlAttr($code) ?>">
                         <span>
                             <?= $block->escapeHtml($block->getInheritText()) ?>
                         </span>

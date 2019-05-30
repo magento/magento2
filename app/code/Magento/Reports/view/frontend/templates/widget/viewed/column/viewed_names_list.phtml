@@ -23,7 +23,7 @@
     </div>
     <div class="block-content">
         <?php $suffix = $block->getNameInLayout(); ?>
-        <ol id="widget-viewed-<?= $block->escapeHtml($suffix) ?>" class="product-items product-items-names">
+        <ol id="widget-viewed-<?= $block->escapeHtmlAttr($suffix) ?>" class="product-items product-items-names">
         <?php foreach ($_products as $_product) : ?>
             <li class="product-item">
                 <strong class="product-item-name">

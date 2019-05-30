@@ -8,10 +8,10 @@
 ?>
 
 <div style="display:none" id="system_messages_list" data-role="system_messages_list"
-     title="<?= $block->escapeHtml($block->getPopupTitle()) ?>">
+     title="<?= $block->escapeHtmlAttr($block->getPopupTitle()) ?>">
     <ul class="message-system-list messages">
         <?php foreach ($block->getUnreadMessages() as $message) : ?>
-            <li class="message message-warning <?= $block->escapeHtml($block->getItemClass($message)) ?>">
+            <li class="message message-warning <?= $block->escapeHtmlAttr($block->getItemClass($message)) ?>">
                 <?= $block->escapeHtml($message->getText()) ?>
             </li>
         <?php endforeach;?>
