@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Controller\Adminhtml\Export;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
@@ -85,7 +87,10 @@ class Export extends ExportController implements HttpPostActionInterface
 
                 $this->messagePublisher->publish('import_export.export', $dataObject);
                 $this->messageManager->addSuccessMessage(
-                    __('Message is added to queue, wait to get your file soon')
+                    __(
+                        'Message is added to queue, wait to get your file soon.'
+                        . ' Make sure your cron job is running to export the file'
+                    )
                 );
             } catch (\Exception $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
