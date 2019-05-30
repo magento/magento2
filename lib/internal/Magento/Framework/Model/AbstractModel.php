@@ -10,7 +10,6 @@ use Magento\Framework\Phrase;
 /**
  * Abstract model class
  *
- * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -201,6 +200,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      */
     protected function _construct()
     {
+        return;
     }
 
     /**
