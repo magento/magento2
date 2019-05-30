@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\TemplateEngine;
 
 /**
- * Class PhpTest.
+ * Test template engine that enables PHP templates to be used for rendering.
  */
 class PhpTest extends \PHPUnit\Framework\TestCase
 {
