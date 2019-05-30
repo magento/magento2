@@ -13,6 +13,7 @@ use Magento\Framework\Webapi\Request;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests SetPaymentMethod mutation for customer via authorizeNet payment
@@ -21,7 +22,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDbIsolation disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SetAuthorizenetPaymentMethodOnCustomerCartTest extends \Magento\TestFramework\Indexer\TestCase
+class SetAuthorizenetPaymentMethodOnCartTest extends TestCase
 {
     const CONTENT_TYPE = 'application/json';
 
@@ -43,19 +44,6 @@ class SetAuthorizenetPaymentMethodOnCustomerCartTest extends \Magento\TestFramew
 
     /** @var Http */
     private $request;
-
-    public static function setUpBeforeClass()
-    {
-        $db = Bootstrap::getInstance()->getBootstrap()
-            ->getApplication()
-            ->getDbInstance();
-        if (!$db->isDbDumpExists()) {
-            throw new \LogicException('DB dump does not exist.');
-        }
-        $db->restoreFromDbDump();
-
-        parent::setUpBeforeClass();
-    }
 
     protected function setUp() : void
     {

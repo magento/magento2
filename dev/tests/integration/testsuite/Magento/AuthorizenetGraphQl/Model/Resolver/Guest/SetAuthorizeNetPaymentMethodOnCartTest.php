@@ -12,6 +12,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests SetPaymentMethod mutation for guest via authorizeNet payment
@@ -20,7 +21,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDbIsolation disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SetAuthorizeNetPaymentMethodOnGuestCartTest extends \Magento\TestFramework\Indexer\TestCase
+class SetAuthorizeNetPaymentMethodOnCartTest extends TestCase
 {
     const CONTENT_TYPE = 'application/json';
 
@@ -38,19 +39,6 @@ class SetAuthorizeNetPaymentMethodOnGuestCartTest extends \Magento\TestFramework
 
     /** @var Http */
     private $request;
-
-    public static function setUpBeforeClass()
-    {
-        $db = Bootstrap::getInstance()->getBootstrap()
-            ->getApplication()
-            ->getDbInstance();
-        if (!$db->isDbDumpExists()) {
-            throw new \LogicException('DB dump does not exist.');
-        }
-        $db->restoreFromDbDump();
-
-        parent::setUpBeforeClass();
-    }
 
     protected function setUp() : void
     {
