@@ -43,7 +43,7 @@ https://magefan.com/contact
 The code is licensed under [Open Software License ("OSL") v. 3.0](http://opensource.org/licenses/osl-3.0.php).
 
 ## Other Magento 2 Extensions by Magefan
-* [Magento 2 Blog Extension](https://magefan.com/magento2-blog-extension)
+  * [Magento 2 Blog Extension](https://magefan.com/magento2-blog-extension)
   * [Magento 2 Blog Plus Extension](https://magefan.com/magento2-blog-extension/pricing)
   * [Magento 2 Blog Extra Extension](https://magefan.com/magento2-blog-extension/pricing)
   * [Magento 2 Login As Customer Extension](https://magefan.com/login-as-customer-magento-2-extension)
