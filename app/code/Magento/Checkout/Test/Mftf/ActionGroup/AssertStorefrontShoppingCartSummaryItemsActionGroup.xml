@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontShoppingCartSummaryItemsActionGroup">
+        <arguments>
+            <argument name="subtotal" type="string"/>
+            <argument name="total" type="string"/>
+        </arguments>
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
+        <waitForPageLoad stepKey="waitForCartPage"/>
+        <see userInput="{{subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <see userInput="{{total}}" selector="{{CheckoutCartSummarySection.total}}" stepKey="assertTotal"/>
+        <seeElement  selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="seeProceedToCheckoutButton"/>
+    </actionGroup>
+</actionGroups>
