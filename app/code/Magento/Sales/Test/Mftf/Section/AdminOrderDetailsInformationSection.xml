@@ -20,5 +20,6 @@
         <element name="shippingAddress" type="text" selector=".order-shipping-address"/>
         <element name="itemsOrdered" type="text" selector=".edit-order-table"/>
         <element name="attributeLabel" type="text" selector="//label[contains(.,'{{attributeLabel}}')]" parameterized="true"/>
+        <element name="paymentInformation" type="text" selector="//div[@class='order-payment-method-title']"/>
     </section>
 </sections>
