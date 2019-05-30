@@ -51,6 +51,27 @@ class GetSelectedPaymentMethodTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     */
+    public function testGetSelectedPaymentMethodBeforeSet()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+
+        $this->assertArrayHasKey('cart', $response);
+        $this->assertArrayHasKey('selected_payment_method', $response['cart']);
+        $this->assertArrayHasKey('code', $response['cart']['selected_payment_method']);
+        $this->assertEquals('', $response['cart']['selected_payment_method']['code']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
      */
     public function testGetSelectedPaymentMethodFromNonExistentCart()
