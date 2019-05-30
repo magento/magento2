@@ -113,7 +113,6 @@
             <argument name="lockManager" xsi:type="object">Magento\Framework\Lock\Proxy</argument>
         </arguments>
     </virtualType>
-
     <virtualType name="systemConfigQueryLocker" type="Magento\Framework\Cache\LockGuardedCacheLoader">
         <arguments>
             <argument name="locker" xsi:type="object">Magento\Framework\Lock\Proxy</argument>
