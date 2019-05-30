@@ -5,10 +5,6 @@
  */
 
 declare(strict_types=1);
-use Magento\TestFramework\ObjectManager;
-
-/** @var \Magento\Sales\Model\Order $order */
-$order = ObjectManager::getInstance()->get(\Magento\Payment\Gateway\Data\Order\OrderAdapter::class);
 
 return [
     'createTransactionRequest' => [
