@@ -53,13 +53,34 @@
         <arguments>
             <argument name="rowIndex" type="string"/>
         </arguments>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitFormReload"/>
+        <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
         <click stepKey="clickSelectBtn" selector="{{AdminExportAttributeSection.selectByIndex(rowIndex)}}"/>
         <click stepKey="clickOnDelete" selector="{{AdminExportAttributeSection.delete(rowIndex)}}" after="clickSelectBtn"/>
         <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmDelete"/>
-        <waitForPageLoad stepKey="waitForExportDataDeleted" />
+        <waitForElementVisible selector="{{AdminDataGridTableSection.dataGridEmpty}}" stepKey="waitDataGridEmptyMessageAppears"/>
+        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
+    </actionGroup>
+
+    <actionGroup name="deleteAllExportedFiles">
+        <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
+        <executeInSelenium
+            function="
+                function ($webdriver) use ($I) {
+                    $buttons = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::xpath('//tr[@data-repeat-index=\'0\']//button'));
+                    while(!empty($buttons)) {
+                        $buttons[0]->click();
+                        $I->waitForElementVisible('//tr[@data-repeat-index=\'0\']//a[text()=\'Delete\']', 10);
+                        $deleteButton = $webdriver->findElement(\Facebook\WebDriver\WebDriverBy::xpath('//tr[@data-repeat-index=\'0\']//a[text()=\'Delete\']'));
+                        $deleteButton->click();
+                        $I->waitForElementVisible('.modal-popup.confirm button.action-accept', 10);
+                        $I->click('.modal-popup.confirm button.action-accept');
+                        $I->waitForPageLoad(60);
+                        $buttons = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::xpath('//tr[@data-repeat-index=\'0\']//button'));
+                    }
+                }"
+            stepKey="deleteAllExportedFilesOneByOne"/>
+        <waitForElementVisible selector="{{AdminDataGridTableSection.dataGridEmpty}}" stepKey="waitDataGridEmptyMessageAppears"/>
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
     </actionGroup>
 </actionGroups>
