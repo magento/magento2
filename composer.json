@@ -197,6 +197,7 @@
         "magento/module-payment": "*",
         "magento/module-paypal": "*",
         "magento/module-paypal-captcha": "*",
+        "magento/module-paypal-graph-ql": "*",
         "magento/module-persistent": "*",
         "magento/module-product-alert": "*",
         "magento/module-product-video": "*",
