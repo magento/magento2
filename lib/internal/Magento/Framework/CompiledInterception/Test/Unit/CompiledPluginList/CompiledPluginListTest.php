@@ -13,11 +13,6 @@ use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlu
 use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple;
 use Psr\Log\NullLogger;
 
-require_once __DIR__ . '/../Custom/Module/Model/Item.php';
-require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';
-require_once __DIR__ . '/../Custom/Module/Model/ItemPlugin/Simple.php';
-require_once __DIR__ . '/../Custom/Module/Model/ItemPlugin/Advanced.php';
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

@@ -57,7 +57,7 @@ class FileCache implements CacheInterface
      *
      * @param string $identifier
      * @return string|bool
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD)
      */
     public function load($identifier)
     {

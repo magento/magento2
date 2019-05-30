@@ -1,0 +1,191 @@
+namespace Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\SecondItem;
+
+use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\ObjectManagerInterface;
+
+/**
+ * Interceptor class for @see \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\SecondItem
+ */
+class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\SecondItem
+{
+    /**
+     * @var ScopeInterface
+     */
+    private $____scope = null;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $____om = null;
+
+    /**
+     * @var \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced
+     */
+    private $____plugin_advanced_plugin1 = null;
+
+    /**
+     * @var \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Simple
+     */
+    private $____plugin_simple_plugin1 = null;
+
+    /**
+     * @var \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced
+     */
+    private $____plugin_advanced_plugin2 = null;
+
+    /**
+     * @var \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced
+     */
+    private $____plugin_advanced_plugin3 = null;
+
+    /**
+     * @var \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Simple
+     */
+    private $____plugin_simple_plugin2 = null;
+
+    /**
+     * @var \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Simple
+     */
+    private $____plugin_simple_plugin3 = null;
+
+    /**
+     * @var \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced
+     */
+    private $____plugin_advanced_plugin4 = null;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(\Magento\Framework\ObjectManagerInterface $____om, \Magento\Framework\Config\ScopeInterface $____scope)
+    {
+        $this->____om = $____om;
+        $this->____scope = $____scope;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        switch ($this->____scope->getCurrentScope()) {
+        	case 'frontend':
+        		$this->____plugin_advanced_plugin1()->beforeGetName($this);
+        		
+        		$result = $this->____plugin_advanced_plugin1()->aroundGetName($this, function(){
+        			$this->____plugin_advanced_plugin2()->beforeGetName($this);
+        			
+        			$result = $this->____plugin_advanced_plugin2()->aroundGetName($this, function(){
+        				$this->____plugin_advanced_plugin3()->beforeGetName($this);
+        				
+        				$result = $this->____plugin_advanced_plugin3()->aroundGetName($this, function(){
+        					$this->____plugin_advanced_plugin4()->beforeGetName($this);
+        					
+        					$result = $this->____plugin_advanced_plugin4()->aroundGetName($this, function(){
+        						return parent::getName();
+        					});
+        					
+        					return (($tmp = $this->____plugin_advanced_plugin4()->afterGetName($this, $result)) !== null) ? $tmp : $result;
+        				});
+        				
+        				$result = (($tmp = $this->____plugin_simple_plugin2()->afterGetName($this, $result)) !== null) ? $tmp : $result;
+        				
+        				$result = (($tmp = $this->____plugin_simple_plugin3()->afterGetName($this, $result)) !== null) ? $tmp : $result;
+        				
+        				return (($tmp = $this->____plugin_advanced_plugin3()->afterGetName($this, $result)) !== null) ? $tmp : $result;
+        			});
+        			
+        			return (($tmp = $this->____plugin_advanced_plugin2()->afterGetName($this, $result)) !== null) ? $tmp : $result;
+        		});
+        		
+        		$result = (($tmp = $this->____plugin_simple_plugin1()->afterGetName($this, $result)) !== null) ? $tmp : $result;
+        		
+        		return (($tmp = $this->____plugin_advanced_plugin1()->afterGetName($this, $result)) !== null) ? $tmp : $result;
+        	default:
+        		return parent::getName();
+        }
+    }
+
+    /**
+     * plugin "advanced_plugin1"
+     * @return \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced
+     */
+    private function ____plugin_advanced_plugin1() : \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced
+    {
+        if ($this->____plugin_advanced_plugin1 === null) {
+        	$this->____plugin_advanced_plugin1 = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced::class);
+        }
+        return $this->____plugin_advanced_plugin1;
+    }
+
+    /**
+     * plugin "simple_plugin1"
+     * @return \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Simple
+     */
+    private function ____plugin_simple_plugin1() : \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Simple
+    {
+        if ($this->____plugin_simple_plugin1 === null) {
+        	$this->____plugin_simple_plugin1 = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Simple::class);
+        }
+        return $this->____plugin_simple_plugin1;
+    }
+
+    /**
+     * plugin "advanced_plugin2"
+     * @return \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced
+     */
+    private function ____plugin_advanced_plugin2() : \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced
+    {
+        if ($this->____plugin_advanced_plugin2 === null) {
+        	$this->____plugin_advanced_plugin2 = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced::class);
+        }
+        return $this->____plugin_advanced_plugin2;
+    }
+
+    /**
+     * plugin "advanced_plugin3"
+     * @return \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced
+     */
+    private function ____plugin_advanced_plugin3() : \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced
+    {
+        if ($this->____plugin_advanced_plugin3 === null) {
+        	$this->____plugin_advanced_plugin3 = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced::class);
+        }
+        return $this->____plugin_advanced_plugin3;
+    }
+
+    /**
+     * plugin "simple_plugin2"
+     * @return \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Simple
+     */
+    private function ____plugin_simple_plugin2() : \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Simple
+    {
+        if ($this->____plugin_simple_plugin2 === null) {
+        	$this->____plugin_simple_plugin2 = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Simple::class);
+        }
+        return $this->____plugin_simple_plugin2;
+    }
+
+    /**
+     * plugin "simple_plugin3"
+     * @return \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Simple
+     */
+    private function ____plugin_simple_plugin3() : \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Simple
+    {
+        if ($this->____plugin_simple_plugin3 === null) {
+        	$this->____plugin_simple_plugin3 = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Simple::class);
+        }
+        return $this->____plugin_simple_plugin3;
+    }
+
+    /**
+     * plugin "advanced_plugin4"
+     * @return \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced
+     */
+    private function ____plugin_advanced_plugin4() : \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced
+    {
+        if ($this->____plugin_advanced_plugin4 === null) {
+        	$this->____plugin_advanced_plugin4 = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced::class);
+        }
+        return $this->____plugin_advanced_plugin4;
+    }
+}

@@ -9,12 +9,14 @@ namespace Magento\Framework\CompiledInterception\Test\Integration\CompiledInterc
 use Magento\Framework\App\AreaList;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\CompiledInterception\Generator\CompiledInterceptor;
-
-use Magento\Framework\CompiledInterception\Test\Unit\CompiledPluginList\CompiledPluginListTest;
-use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItem;
-use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItemTyped;
-use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use Magento\Framework\CompiledInterception\Generator\CompiledPluginList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\SecondItem;
+use Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ComplexItem;
+use Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ComplexItemTyped;
+use Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\NullLogger;
 
 /**
  * Class CompiledInterceptorTest
@@ -46,6 +48,40 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return array
+     */
+    public function createScopeReaders()
+    {
+        $readerMap = include __DIR__ . '/../_files/reader_mock_map.php';
+        $readerMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class);
+        $readerMock->expects($this->any())->method('read')->will($this->returnValueMap($readerMap));
+
+        $omMock = $this->createMock(ObjectManager::class);
+        $omMock->method('get')->with(\Psr\Log\LoggerInterface::class)->willReturn(new NullLogger());
+
+        $omConfigMock =  $this->getMockForAbstractClass(
+            \Magento\Framework\Interception\ObjectManager\ConfigInterface::class
+        );
+
+        $omConfigMock->expects($this->any())->method('getOriginalInstanceType')->will($this->returnArgument(0));
+        $ret = [];
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        foreach ($readerMap as $readerLine) {
+            $ret[$readerLine[0]] = $objectManagerHelper->getObject(
+                CompiledPluginList::class,
+                [
+                    'objectManager' => $omMock,
+                    'scope' => $readerLine[0],
+                    'reader' => $readerMock,
+                    'omConfig' => $omConfigMock,
+                    'cachePath' => false
+                ]
+            );
+        }
+        return $ret;
+    }
+
+    /**
      * Checks a test case when interceptor generates code for the specified class.
      *
      * @param string $className
@@ -66,7 +102,7 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
                     $this->ioGenerator,
                     null,
                     null,
-                    (new CompiledPluginListTest())->createScopeReaders()
+                    $this->createScopeReaders()
                 ]
             )
             ->getMock();
@@ -81,6 +117,12 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
 
         $generated = $interceptor->generate();
         $this->assertEquals($fileName . '.php', $generated, 'Generated interceptor is invalid.');
+
+        /*
+        eval( $code );
+        $className  = "\\$resultClassName";
+        $interceptor = new $className();
+        */
     }
 
     /**
@@ -105,6 +147,11 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
                 ComplexItemTyped::class,
                 ComplexItemTyped::class . '\Interceptor',
                 'ComplexItemTyped'
+            ],
+            [
+                SecondItem::class,
+                SecondItem::class . '\Interceptor',
+                'SecondItem'
             ],
         ];
     }

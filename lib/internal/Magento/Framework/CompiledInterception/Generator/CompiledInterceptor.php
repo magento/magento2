@@ -78,7 +78,7 @@ class CompiledInterceptor extends EntityAbstract
      */
     public function setInterceptedMethods($interceptedMethods)
     {
-        return;
+        //NOOP
     }
 
     /**
@@ -106,12 +106,17 @@ class CompiledInterceptor extends EntityAbstract
     }
 
     /**
-     * Unused, required by interface
+     * Get default constructor definition for generated class
      *
-     * @return array|void
+     * @return array
+     * @throws \ReflectionException
      */
     protected function _getDefaultConstructorDefinition()
     {
+        return $this->injectPropertiesSettersToConstructor(
+            $this->getSourceClassReflection()->getConstructor(),
+            static::propertiesToInjectToConstructor()
+        );
     }
 
     /**
@@ -142,15 +147,32 @@ class CompiledInterceptor extends EntityAbstract
             $this->classMethods = [];
             $this->classProperties = [];
 
-            $this->injectPropertiesSettersToConstructor(
-                $this->getSourceClassReflection()->getConstructor(),
-                [
-                    ScopeInterface::class => '____scope',
-                    ObjectManagerInterface::class => '____om',
-                ]
-            );
+            foreach (static::propertiesToInjectToConstructor() as $type => $name) {
+                $this->_classGenerator->addUse($type);
+                $this->classProperties[] = [
+                    'name' => $name,
+                    'visibility' => 'private',
+                    'docblock' => [
+                        'tags' => [['name' => 'var', 'description' => substr(strrchr($type, "\\"), 1)]],
+                    ]
+                ];
+            }
+            $this->classMethods[] = $this->_getDefaultConstructorDefinition();
             $this->overrideMethodsAndGeneratePluginGetters($this->getSourceClassReflection());
         }
+    }
+
+    /**
+     * Get properties to be injected from DI
+     *
+     * @return array
+     */
+    public static function propertiesToInjectToConstructor()
+    {
+        return [
+            ScopeInterface::class => '____scope',
+            ObjectManagerInterface::class => '____om',
+        ];
     }
 
     /**
@@ -206,10 +228,11 @@ class CompiledInterceptor extends EntityAbstract
     }
 
     /**
-     * Generate class constructor adding required properties
+     * Generate class constructor adding required properties when types are not present in parent constructor
      *
      * @param \ReflectionMethod|null $parentConstructor
      * @param array $properties
+     * @return array
      */
     private function injectPropertiesSettersToConstructor(\ReflectionMethod $parentConstructor = null, $properties = [])
     {
@@ -218,20 +241,11 @@ class CompiledInterceptor extends EntityAbstract
             $body = [];
         } else {
             $parameters = $parentConstructor->getParameters();
+            $parentCallParams = [];
             foreach ($parameters as $parameter) {
                 $parentCallParams[] = '$' . $parameter->getName();
             }
-            $body = ["parent::__construct(" . implode(', ', $parentCallParams) .");"];
-        }
-        foreach ($properties as $type => $name) {
-            $this->_classGenerator->addUse($type);
-            $this->classProperties[] = [
-                'name' => $name,
-                'visibility' => 'private',
-                'docblock' => [
-                    'tags' => [['name' => 'var', 'description' => substr(strrchr($type, "\\"), 1)]],
-                ]
-            ];
+            $body = ["parent::__construct(" . implode(', ', $parentCallParams) . ");"];
         }
         $extraParams = $properties;
         $extraSetters = array_combine($properties, $properties);
@@ -245,24 +259,24 @@ class CompiledInterceptor extends EntityAbstract
             }
         }
         $parameters = array_map([$this, '_getMethodParameterInfo'], $parameters);
-        /* foreach ($extraParams as $type => $name) {
+        foreach ($extraParams as $type => $name) {
             array_unshift($parameters, [
                 'name' => $name,
                 'type' => $type
             ]);
-        } */
+        }
         foreach ($extraSetters as $name => $paramName) {
             array_unshift($body, "\$this->$name = \$$paramName;");
         }
-        foreach ($extraParams as $type => $name) {
+        /*foreach ($extraParams as $type => $name) {
             array_unshift($body, "//TODO fix di in production mode");
             array_unshift(
                 $body,
                 "\$$name = \\Magento\\Framework\\App\\ObjectManager::getInstance()->get(\\$type::class);"
             );
-        }
+        }*/
 
-        $this->classMethods[] = [
+        return [
             'name' => '__construct',
             'parameters' => $parameters,
             'body' => implode("\n", $body),
@@ -588,11 +602,13 @@ class CompiledInterceptor extends EntityAbstract
         $cases = [];
         //group cases by config
         foreach ($config as $scope => $conf) {
-            $key = md5(serialize($conf));
-            if (!isset($cases[$key])) {
-                $cases[$key] = ['cases'=>[], 'conf'=>$conf];
+            foreach ($cases as &$case) {
+                if ($case['conf'] == $conf) {
+                    $case['cases'][] = "\tcase '$scope':";
+                    continue 2;
+                }
             }
-            $cases[$key]['cases'][] = "\tcase '$scope':";
+            $cases[] = ['cases'=>["\tcase '$scope':"], 'conf'=>$conf];
         }
         //call parent method for scopes with no plugins (or when no scope is set)
         $cases[] = ['cases'=>["\tdefault:"], 'conf'=>[]];

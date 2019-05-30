@@ -4,12 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItem;
-use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ComplexItemTyped;
 use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item;
 use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item\Enhanced;
 use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced;
-use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Complex;
 use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple;
 
 return [
@@ -20,17 +17,7 @@ return [
                 'plugins' => [
                     'simple_plugin' => [
                         'sortOrder' => 10,
-                        'instance' =>
-                            Simple::class,
-                    ],
-                ],
-            ],
-            ComplexItem::class => [
-                'plugins' => [
-                    'advanced_plugin' => [
-                        'sortOrder' => 5,
-                        'instance' =>
-                            Advanced::class,
+                        'instance' => Simple::class,
                     ],
                 ],
             ],
@@ -43,36 +30,7 @@ return [
                 'plugins' => [
                     'advanced_plugin' => [
                         'sortOrder' => 5,
-                        'instance' =>
-                            Advanced::class,
-                    ],
-                ],
-            ],
-            ComplexItem::class => [
-                'plugins' => [
-                    'complex_plugin' => [
-                        'sortOrder' => 15,
-                        'instance' =>
-                            Complex::class,
-                    ],
-                    'advanced_plugin' => [
-                        'sortOrder' => 5,
-                        'instance' =>
-                            Advanced::class,
-                    ],
-                ],
-            ],
-            ComplexItemTyped::class => [
-                'plugins' => [
-                    'complex_plugin' => [
-                        'sortOrder' => 25,
-                        'instance' =>
-                            Complex::class,
-                    ],
-                    'advanced_plugin' => [
-                        'sortOrder' => 5,
-                        'instance' =>
-                            Advanced::class,
+                        'instance' => Advanced::class,
                     ],
                 ],
             ],
@@ -80,14 +38,15 @@ return [
     ],
     [
         'frontend',
-        [Item::class => [
+        [
+            Item::class => [
                 'plugins' => ['simple_plugin' => ['disabled' => true]],
-            ], Enhanced::class => [
+            ],
+            Enhanced::class => [
                 'plugins' => [
                     'advanced_plugin' => [
                         'sortOrder' => 5,
-                        'instance' =>
-                            Advanced::class,
+                        'instance' => Advanced::class,
                     ],
                 ],
             ],

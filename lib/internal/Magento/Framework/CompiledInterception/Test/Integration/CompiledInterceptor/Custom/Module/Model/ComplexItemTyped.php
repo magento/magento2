@@ -5,7 +5,7 @@
  */
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model;
+namespace Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model;
 
 class ComplexItemTyped
 {
