@@ -55,17 +55,22 @@ class Exchange
      * @param $topic
      * @param EnvelopeInterface[] $envelopes
      * @return array|null
+     * @throws NoSuchEntityException
+     * @throws AMQPInvalidArgumentException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeEnqueue(SubjectExchange $subject, $topic, array $envelopes)
     {
         try {
             $storeId = $this->storeManager->getStore()->getId();
+            $code = $this->storeManager->getStore()->getCode();
+            $t=1;
         } catch (NoSuchEntityException $e) {
+            $r=1;
             $this->logger->error(
                 sprintf("Can't get current storeId and inject to amqp message. Error %s.", $e->getMessage())
             );
-            return null;
+            throw new NoSuchEntityException(__($e->getMessage()));
         }
 
         $updatedEnvelopes = [];
@@ -83,7 +88,7 @@ class Exchange
                         $this->logger->error(
                             sprintf("Can't set storeId to amqp message. Error %s.", $ea->getMessage())
                         );
-                        return null;
+                        throw new AMQPInvalidArgumentException($ea->getMessage());
                     }
                     $properties['application_headers'] = $headers;
                 }

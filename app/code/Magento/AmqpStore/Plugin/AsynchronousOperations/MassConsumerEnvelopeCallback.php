@@ -51,12 +51,17 @@ class MassConsumerEnvelopeCallback
     }
 
     /**
+     * Check if amqpProperties['application_headers'] have 'store_id' and use it to setCurrentStore
+     * Restore currentStore of consumer process after execution.
+     *
      * @param SubjectMassConsumerEnvelopeCallback $subject
+     * @param callable $proceed
      * @param EnvelopeInterface $message
      * @return array|null
+     * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeExecute(SubjectMassConsumerEnvelopeCallback $subject, EnvelopeInterface $message)
+    public function aroundExecute(SubjectMassConsumerEnvelopeCallback $subject, callable $proceed, EnvelopeInterface $message)
     {
         $amqpProperties = $message->getProperties();
         if (isset($amqpProperties['application_headers'])) {
@@ -72,13 +77,17 @@ class MassConsumerEnvelopeCallback
                     $this->logger->error(
                         sprintf("Can't set currentStoreId during processing queue. Error %s.", $e->getMessage())
                     );
-                    return null;
+                    throw new NoSuchEntityException(__($e->getMessage()));
                 }
                 if (isset($storeId) && $storeId !== $currentStoreId) {
                     $this->storeManager->setCurrentStore($storeId);
                 }
             }
         }
-        return [$message];
+        $result = $proceed($message);
+        if (isset($storeId, $currentStoreId) && $storeId !== $currentStoreId) {
+            $this->storeManager->setCurrentStore($currentStoreId);//restore previous current store
+        }
+        return $result;
     }
 }
