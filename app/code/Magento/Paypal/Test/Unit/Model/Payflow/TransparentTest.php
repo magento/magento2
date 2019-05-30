@@ -28,6 +28,9 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TransparentTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -97,15 +100,15 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
      */
-    public function testValidAuthorizeRequest(DataObject $validAuthorizeRequest): void
+    public function testValidAuthorizeRequest(DataObject $validAuthorizeRequest)
     {
         $this->scopeConfig->method('getValue')
             ->willReturnMap([
-                ['payment/payflowpro/user', ScopeInterface::SCOPE_STORE, NULL, 'user'],
-                ['payment/payflowpro/vendor', ScopeInterface::SCOPE_STORE, NULL, 'vendor'],
-                ['payment/payflowpro/partner', ScopeInterface::SCOPE_STORE, NULL, 'partner'],
-                ['payment/payflowpro/pwd', ScopeInterface::SCOPE_STORE, NULL, 'pwd'],
-                ['payment/payflowpro/verbosity', ScopeInterface::SCOPE_STORE, NULL, 'verbosity'],
+                ['payment/payflowpro/user', ScopeInterface::SCOPE_STORE, null, 'user'],
+                ['payment/payflowpro/vendor', ScopeInterface::SCOPE_STORE, null, 'vendor'],
+                ['payment/payflowpro/partner', ScopeInterface::SCOPE_STORE, null, 'partner'],
+                ['payment/payflowpro/pwd', ScopeInterface::SCOPE_STORE, null, 'pwd'],
+                ['payment/payflowpro/verbosity', ScopeInterface::SCOPE_STORE, null, 'verbosity'],
             ]);
         $this->paymentConfig->method('getBuildNotationCode')->willReturn('BUTTONSOURCE');
         $this->payment->method('getAdditionalInformation')

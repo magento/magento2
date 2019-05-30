@@ -162,7 +162,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             [
                 [
                     'base_discount_tax_compensation_amount' => 0,
-                    'base_shipping_discount_tax_compensation_amount' => 0,
+                    'base_shipping_discount_tax_compensation_amnt' => 0,
                     'base_subtotal' => 0,
                     'base_tax_amount' => 0,
                     'base_shipping_amount' => 0,
