@@ -156,6 +156,9 @@ QUERY;
         /** @var Order $order */
         $fullOrder = include __DIR__ . '/../../../_files/place_order_customer_authorizenet.php';
 
+        $payment = $fullOrder->getPayment();
+        $this->paymentFactory->create($payment);
+
         $expectedRequest = include __DIR__ . '/../../../_files/request_authorize_customer.php';
         $authorizeResponse = include __DIR__ . '/../../../_files/response_authorize.php';
 
