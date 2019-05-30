@@ -58,9 +58,7 @@
         <actionGroup ref="AssertStoreFrontShippingMethodUnavailableActionGroup" stepKey="dontSeeFlatRateShippingMethod">
             <argument name="shippingMethodName" value="Flat Rate"/>
         </actionGroup>
-        <actionGroup ref="AssertStoreFrontShippingMethodUnavailableActionGroup" stepKey="dontFreeShippingMethod">
-            <argument name="shippingMethodName" value="Free Shipping"/>
-        </actionGroup>
+        <actionGroup ref="AssertStoreFrontShippingMethodUnavailableActionGroup" stepKey="dontFreeShippingMethod"/>
 
         <!-- Assert no quotes message -->
         <actionGroup ref="AssertStoreFrontNoQuotesMessageActionGroup" stepKey="assertNoQuotesMessage"/>
@@ -77,9 +75,7 @@
         <actionGroup ref="AssertStoreFrontShippingMethodUnavailableActionGroup" stepKey="dontSeeFlatRateShippingMtd">
             <argument name="shippingMethodName" value="Flat Rate"/>
         </actionGroup>
-        <actionGroup ref="AssertStoreFrontShippingMethodUnavailableActionGroup" stepKey="dontFreeShippingMtd">
-            <argument name="shippingMethodName" value="Free Shipping"/>
-        </actionGroup>
+        <actionGroup ref="AssertStoreFrontShippingMethodUnavailableActionGroup" stepKey="dontFreeShippingMtd"/>
 
         <!-- Assert no quotes message for US > California -->
         <actionGroup ref="AssertStoreFrontNoQuotesMessageActionGroup" stepKey="assertNoQuotesMsg"/>
@@ -91,9 +87,7 @@
         <selectOption selector="{{CheckoutShippingSection.country}}" userInput="Afghanistan" stepKey="selectSpecificCountry"/>
 
         <!-- Assert shipping methods are available -->
-        <actionGroup ref="AssertStoreFrontShippingMethodAvailableActionGroup" stepKey="seeFlatRateShippingMethod">
-            <argument name="shippingMethodName" value="Flat Rate"/>
-        </actionGroup>
+        <actionGroup ref="AssertStoreFrontShippingMethodAvailableActionGroup" stepKey="seeFlatRateShippingMethod"/>
         <actionGroup ref="AssertStoreFrontShippingMethodAvailableActionGroup" stepKey="seeFreeShippingMethod">
             <argument name="shippingMethodName" value="Free Shipping"/>
         </actionGroup>
