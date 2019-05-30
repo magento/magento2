@@ -24,7 +24,5 @@ $product = $productRepository->get('simple_product');
 
 $quote = $quoteFactory->create();
 $quoteResource->load($quote, 'test_quote', 'reserved_order_id');
-//$quoteResource->load($quote, '100000001', 'reserved_order_id');
-//$quote->addProduct($product, 2);
 $quote->addProduct($product, 4);
 $cartRepository->save($quote);

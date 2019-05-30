@@ -50,13 +50,10 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
     /** @var Http */
     private $request;
 
-    /**
-     * @var ZendClient|MockObject|InvocationMocker */
+    /** @var ZendClient|MockObject|InvocationMocker */
     private $clientMock;
 
-    /**
-     * @var Zend_Http_Response
-     */
+    /** @var Zend_Http_Response */
     protected $responseMock;
 
     /** @var  PaymentFactory */

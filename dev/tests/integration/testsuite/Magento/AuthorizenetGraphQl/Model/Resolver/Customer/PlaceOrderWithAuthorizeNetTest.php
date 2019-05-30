@@ -52,16 +52,13 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
     /** @var Http */
     private $request;
 
-    /**
-     * @var ZendClient|MockObject|InvocationMocker */
+    /** @var ZendClient|MockObject|InvocationMocker */
     private $clientMock;
 
     /** @var  CustomerTokenServiceInterface */
     private $customerTokenService;
 
-    /**
-     * @var Zend_Http_Response
-     */
+    /** @var Zend_Http_Response */
     protected $responseMock;
 
     /** @var  PaymentFactory */
@@ -158,9 +155,6 @@ QUERY;
         $commandPool->get('authorize');
         /** @var Order $order */
         $fullOrder = include __DIR__ . '/../../../_files/place_order_customer_authorizenet.php';
-
-        $payment = $fullOrder->getPayment();
-        $paymentDO = $this->paymentFactory->create($payment);
 
         $expectedRequest = include __DIR__ . '/../../../_files/request_authorize_customer.php';
         $authorizeResponse = include __DIR__ . '/../../../_files/response_authorize.php';

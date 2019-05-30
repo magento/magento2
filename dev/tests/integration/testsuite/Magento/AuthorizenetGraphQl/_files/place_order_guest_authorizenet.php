@@ -94,7 +94,6 @@ $orderItem1->setProductId($product->getId())
     ->setProductType($product->getTypeId());
 
 $orderAmount = 100;
-//$orderAmount = 30;
 $customerEmail = $billingAddress->getEmail();
 
 /** @var Order $order */
@@ -102,10 +101,8 @@ $order = $objectManager->create(Order::class);
 $order->setState(Order::STATE_PROCESSING)
     ->setIncrementId('test_quote')
     ->setStatus(Order::STATE_PROCESSING)
-   // ->setCustomerId($customer->getId())
    ->setCustomerId(null)
     ->setCustomerIsGuest(true)
-    //->setRemoteIp('127.0.0.1')
     ->setCreatedAt(date('Y-m-d 00:00:55'))
     ->setOrderCurrencyCode('USD')
     ->setBaseCurrencyCode('USD')
