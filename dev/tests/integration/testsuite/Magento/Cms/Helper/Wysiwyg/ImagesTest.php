@@ -7,6 +7,9 @@ namespace Magento\Cms\Helper\Wysiwyg;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class ImagesTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetStorageRoot()
@@ -23,6 +26,12 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->assertStringStartsWith($mediaPath, $helper->getStorageRoot());
     }
 
+    /**
+     * @magentoConfigFixture default_store admin/url/use_custom 1
+     * @magentoConfigFixture default_store admin/url/custom http://backend/
+     * @magentoConfigFixture admin_store web/secure/base_url http://backend/
+     * @magentoConfigFixture admin_store web/unsecure/base_url http://backend/
+     */
     public function testGetCurrentUrl()
     {
         $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
