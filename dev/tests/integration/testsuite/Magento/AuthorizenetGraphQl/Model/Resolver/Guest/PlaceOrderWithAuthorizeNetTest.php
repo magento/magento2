@@ -85,7 +85,7 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_key somepassword
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_signature_key abc
      * @magentoDataFixture Magento/Sales/_files/default_rollback.php
-     * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product_authorizenet.php
+     * @magentoDataFixture Magento/AuthorizenetGraphQl/_files/simple_product_authorizenet.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
      * @magentoDataFixture Magento/AuthorizenetGraphQl/_files/set_new_shipping_address_authorizenet.php
@@ -169,7 +169,6 @@ QUERY;
     protected function tearDown()
     {
         $this->objectManager->removeSharedInstance(ZendClientFactory::class);
-        include __DIR__ . '/../../../../../Magento/Customer/_files/not_logged_in_customer_rollback.php';
         parent::tearDown();
     }
 }

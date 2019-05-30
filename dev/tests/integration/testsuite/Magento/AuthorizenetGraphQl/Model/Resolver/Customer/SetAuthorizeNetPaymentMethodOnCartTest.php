@@ -38,10 +38,6 @@ class SetAuthorizenetPaymentMethodOnCartTest extends TestCase
     /** @var  CustomerTokenServiceInterface */
     private $customerTokenService;
 
-    /**
-     * @var \Magento\Framework\App\Cache */
-    private $appCache;
-
     /** @var Http */
     private $request;
 

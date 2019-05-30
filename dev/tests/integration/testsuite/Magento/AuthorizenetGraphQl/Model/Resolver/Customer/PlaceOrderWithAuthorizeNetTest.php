@@ -41,9 +41,6 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
     /** @var  GetMaskedQuoteIdByReservedOrderId */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    /** @var GraphQl */
-    private $graphql;
-
     /** @var SerializerInterface */
     private $jsonSerializer;
 
@@ -65,7 +62,6 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
     protected function setUp() : void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
         $this->request = $this->objectManager->get(Http::class);
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -92,7 +88,7 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_signature_key abc
      * @magentoDataFixture Magento/Sales/_files/default_rollback.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product_authorizenet.php
+     * @magentoDataFixture Magento/AuthorizenetGraphQl/_files/simple_product_authorizenet.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoDataFixture Magento/AuthorizenetGraphQl/_files/set_new_shipping_address_authorizenet.php
      * @magentoDataFixture Magento/AuthorizenetGraphQl/_files/set_new_billing_address_authorizenet.php
@@ -140,13 +136,11 @@ QUERY;
         $this->request->setContent($this->jsonSerializer->serialize($postData));
         $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
         $bearerCustomerToken = 'Bearer ' . $customerToken;
-        $contentType ='application/json';
         $webApiRequest = $this->objectManager->get(Request::class);
-        $webApiRequest->getHeaders()->addHeaderLine('Content-Type', $contentType)
-            ->addHeaderLine('Accept', $contentType)
+        $webApiRequest->getHeaders()->addHeaderLine('Content-Type', 'application/json')
+            ->addHeaderLine('Accept', 'application/json')
             ->addHeaderLine('Authorization', $bearerCustomerToken);
         $this->request->setHeaders($webApiRequest->getHeaders());
-
         $graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
 
         $expectedRequest = include __DIR__ . '/../../../_files/request_authorize_customer.php';
@@ -160,7 +154,7 @@ QUERY;
         $response = $graphql->dispatch($this->request);
         $responseData = $this->jsonSerializer->unserialize($response->getContent());
 
-       $this->assertArrayNotHasKey('errors', $responseData, 'Response has errors');
+        $this->assertArrayNotHasKey('errors', $responseData, 'Response has errors');
         $this->assertTrue(
             isset($responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code'])
         );
@@ -182,7 +176,6 @@ QUERY;
     protected function tearDown()
     {
         $this->objectManager->removeSharedInstance(ZendClientFactory::class);
-        include __DIR__ . '/../../../../../Magento/Customer/_files/customer_rollback.php';
         parent::tearDown();
     }
 }
