@@ -324,10 +324,12 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Checks if image has alpha transparency
      *
      * @param resource $imageResource
-     * @param int $fileType one of the constants IMAGETYPE_*
+     * @param int $fileType
      * @param bool &$isAlpha
      * @param bool &$isTrueColor
+     *
      * @return boolean
+     *
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     private function _getTransparency($imageResource, $fileType, &$isAlpha = false, &$isTrueColor = false)
