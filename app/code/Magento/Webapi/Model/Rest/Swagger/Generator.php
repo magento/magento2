@@ -199,6 +199,8 @@ class Generator extends AbstractSchemaGenerator
     }
 
     /**
+     * List out consumes data type
+     * 
      * @return array
      */
     protected function getConsumableDatatypes()
@@ -210,6 +212,8 @@ class Generator extends AbstractSchemaGenerator
     }
 
     /**
+     * List out produces data type
+     * 
      * @return array
      */
     protected function getProducibleDatatypes()
