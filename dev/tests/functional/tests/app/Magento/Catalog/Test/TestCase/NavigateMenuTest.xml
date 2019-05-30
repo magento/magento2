@@ -8,21 +8,25 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Backend\Test\TestCase\NavigateMenuTest">
         <variation name="NavigateMenuTest9">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="menuItem" xsi:type="string">Catalog > Products</data>
             <data name="pageTitle" xsi:type="string">Products</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
         <variation name="NavigateMenuTest10">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="menuItem" xsi:type="string">Catalog > Categories</data>
             <data name="pageTitle" xsi:type="string">Default Category (ID: 2)</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
         <variation name="NavigateMenuTest11">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="menuItem" xsi:type="string">Stores > Product</data>
             <data name="pageTitle" xsi:type="string">Product Attributes</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
         <variation name="NavigateMenuTest12">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="menuItem" xsi:type="string">Stores > Attribute Set</data>
             <data name="pageTitle" xsi:type="string">Attribute Sets</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>

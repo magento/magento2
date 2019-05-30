@@ -36,7 +36,7 @@ QUERY;
         $customerToken = $customerTokenService->createCustomerAccessToken($userName, $password);
 
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $response = $this->graphQlMutation($query, [], '', $headerMap);
         $this->assertTrue($response['revokeCustomerToken']['result']);
     }
 
@@ -53,6 +53,6 @@ QUERY;
                 }
             }
 QUERY;
-        $this->graphQlQuery($query, [], '');
+        $this->graphQlMutation($query, [], '');
     }
 }
