@@ -44,7 +44,7 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
         <ol class="product-items" id="widget-viewed-<?= $block->escapeHtmlAttr($suffix) ?>">
             <?php $iterator = 1; ?>
             <?php foreach ($items as $_product) : ?>
-                <?= ($iterator++ == 1) ? $block->escapeHtml('<li class="product-item">') : $block->escapeHtml('</li><li class="product-item">') ?>
+                <?= /* @noEscape */ ($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
                     <div class="product-item-info">
                         <a class="product-item-photo" href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
                            title="<?= $block->escapeHtmlAttr($block->stripTags($_product->getName(), null, true)) ?>">
@@ -95,7 +95,7 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
                             </div>
                         </div>
                     </div>
-                <?= ($iterator == count($items)+1) ? $block->escapeHtml('</li>') : '' ?>
+                <?= /* @noEscape */ ($iterator == count($items)+1) ? '</li>' : '' ?>
             <?php endforeach; ?>
         </ol>
     </div>

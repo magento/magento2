@@ -21,7 +21,7 @@
             title="<?= $block->escapeHtmlAttr(__('Notifications')) ?>"
             data-toggle="dropdown">
             <span class="notifications-counter">
-                <?= ($notificationCount > $notificationCounterMax) ? (int)$notificationCounterMax . '+' : (int)$notificationCount ?>
+                <?= /* @noEscape */ ($notificationCount > $notificationCounterMax) ? (int)$notificationCounterMax . '+' : (int)$notificationCount ?>
             </span>
         </a>
         <ul
