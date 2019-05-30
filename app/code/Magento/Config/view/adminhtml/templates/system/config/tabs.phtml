@@ -8,7 +8,7 @@
 ?>
 
 <?php if ($block->getTabs()) : ?>
-    <div id="<?= $block->escapeHtml($block->getId()) ?>" class="config-nav">
+    <div id="<?= $block->escapeHtmlAttr($block->getId()) ?>" class="config-nav">
         <?php
         /** @var $_tab \Magento\Config\Model\Config\Structure\Element\Tab */
         foreach ($block->getTabs() as $_tab) :
@@ -21,9 +21,9 @@
 
             <div class="config-nav-block admin__page-nav _collapsed
                 <?php if ($_tab->getClass()) : ?>
-                    <?= $block->escapeHtml($_tab->getClass()) ?>
+                    <?= $block->escapeHtmlAttr($_tab->getClass()) ?>
                 <?php endif ?>"
-                 data-mage-init='{"collapsible":{"active": "<?= $block->escapeHtml($activeCollapsible) ?>",
+                 data-mage-init='{"collapsible":{"active": "<?= $block->escapeHtmlAttr($activeCollapsible) ?>",
                      "openedState": "_show",
                      "closedState": "_hide",
                      "collapsible": true,

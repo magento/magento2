@@ -68,7 +68,7 @@ originModel.prototype = {
     {
         this.reload = false;
         this.loader = new varienLoader(true);
-        this.regionsUrl = "<?= $block->escapeUrl($block->getUrl('directory/json/countryRegion')) ?>";
+        this.regionsUrl = "<?= $block->escapeJs($block->escapeUrl($block->getUrl('directory/json/countryRegion'))) ?>";
 
         this.bindCountryRegionRelation();
     },

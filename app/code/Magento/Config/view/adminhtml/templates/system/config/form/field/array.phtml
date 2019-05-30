@@ -10,30 +10,30 @@ $_htmlId = $block->getHtmlId() ? $block->getHtmlId() : '_' . uniqid();
 $_colspan = $block->isAddAfter() ? 2 : 1;
 ?>
 
-<div class="design_theme_ua_regexp" id="grid<?= $block->escapeHtml($_htmlId) ?>">
+<div class="design_theme_ua_regexp" id="grid<?= $block->escapeHtmlAttr($_htmlId) ?>">
     <div class="admin__control-table-wrapper">
-        <table class="admin__control-table" id="<?= $block->escapeHtml($block->getElement()->getId()) ?>">
+        <table class="admin__control-table" id="<?= $block->escapeHtmlAttr($block->getElement()->getId()) ?>">
             <thead>
             <tr>
                 <?php foreach ($block->getColumns() as $columnName => $column) : ?>
                     <th><?= $block->escapeHtml($column['label']) ?></th>
                 <?php endforeach; ?>
-                <th class="col-actions" colspan="<?= $block->escapeHtml($_colspan) ?>"><?= $block->escapeHtml(__('Action')) ?></th>
+                <th class="col-actions" colspan="<?= (int)$_colspan ?>"><?= $block->escapeHtml(__('Action')) ?></th>
             </tr>
             </thead>
             <tfoot>
             <tr>
                 <td colspan="<?= count($block->getColumns())+$_colspan ?>" class="col-actions-add">
-                    <button id="addToEndBtn<?= $block->escapeHtml($_htmlId) ?>" class="action-add" title="<?= $block->escapeHtml(__('Add')) ?>" type="button">
+                    <button id="addToEndBtn<?= $block->escapeHtmlAttr($_htmlId) ?>" class="action-add" title="<?= $block->escapeHtmlAttr(__('Add')) ?>" type="button">
                         <span><?= $block->escapeHtml($block->getAddButtonLabel()) ?></span>
                     </button>
                 </td>
             </tr>
             </tfoot>
-            <tbody id="addRow<?= $block->escapeHtml($_htmlId) ?>"></tbody>
+            <tbody id="addRow<?= $block->escapeHtmlAttr($_htmlId) ?>"></tbody>
         </table>
     </div>
-    <input type="hidden" name="<?= $block->escapeHtml($block->getElement()->getName()) ?>[__empty]" value="" />
+    <input type="hidden" name="<?= $block->escapeHtmlAttr($block->getElement()->getName()) ?>[__empty]" value="" />
 
     <script>
         require([
@@ -54,14 +54,14 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
 
                     <?php if ($block->isAddAfter()) : ?>
                         + '<td><button class="action-add" type="button" id="addAfterBtn<%- _id %>"><span>'
-                        + '<?= $block->escapeHtml(__('Add after')) ?>'
+                        + '<?= $block->escapeJs($block->escapeHtml(__('Add after'))) ?>'
                         + '<\/span><\/button><\/td>'
                     <?php endif; ?>
 
                     + '<td class="col-actions"><button '
                     + 'onclick="arrayRow<?= $block->escapeJs($_htmlId) ?>.del(\'<%- _id %>\')" '
                     + 'class="action-delete" type="button">'
-                    + '<span><?= $block->escapeHtml(__('Delete')) ?><\/span><\/button><\/td>'
+                    + '<span><?= $block->escapeJs($block->escapeHtml(__('Delete'))) ?><\/span><\/button><\/td>'
                     + '<\/tr>'
             ),
 
@@ -122,7 +122,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
         // add existing rows
         <?php
         foreach ($block->getArrayRows() as $_rowId => $_row) {
-            echo /** noEscape */ "arrayRow{$block->escapeJs($_htmlId)}.add(" . /** noEscape */$_row->toJson() . $block->escapeHtml(");\n");
+            echo /** @noEscape */ "arrayRow{$block->escapeJs($_htmlId)}.add(" . /** @noEscape */ $_row->toJson() . ");\n";
         }
         ?>
 

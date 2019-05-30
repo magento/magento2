@@ -30,11 +30,11 @@ if ($exist = $block->getRecentlyComparedProducts()) {
     </div>
     <div class="block-content">
         <?php $suffix = $block->getNameInLayout(); ?>
-        <ol id="widget-compared-<?= $block->escapeHtml($suffix) ?>" class="product-items product-items-images">
+        <ol id="widget-compared-<?= $block->escapeHtmlAttr($suffix) ?>" class="product-items product-items-images">
         <?php $i = 0; foreach ($items as $_product) : ?>
             <li class="product-item">
                 <a class="product-item-photo" href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
-                    title="<?= $block->escapeHtml($block->stripTags($_product->getName(), null, true)) ?>">
+                    title="<?= $block->escapeHtmlAttr($block->stripTags($_product->getName(), null, true)) ?>">
                     <?= $block->getImage($_product, $image)->toHtml() ?>
                 </a>
             </li>

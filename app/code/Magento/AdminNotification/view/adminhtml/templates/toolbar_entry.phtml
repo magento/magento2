@@ -12,16 +12,16 @@
 <div
     data-mage-init='{"toolbarEntry": {}}'
     class="notifications-wrapper admin__action-dropdown-wrap"
-    data-notification-count="<?= $block->escapeHtml($notificationCount) ?>">
+    data-notification-count="<?= (int)$notificationCount ?>">
     <?php if ($notificationCount > 0) : ?>
         <a
             href="<?= $block->escapeUrl($block->getUrl('adminhtml/notification/index')) ?>"
             class="notifications-action admin__action-dropdown"
             data-mage-init='{"dropdown":{}}'
-            title="<?= $block->escapeHtml(__('Notifications')) ?>"
+            title="<?= $block->escapeHtmlAttr(__('Notifications')) ?>"
             data-toggle="dropdown">
             <span class="notifications-counter">
-                <?= ($notificationCount > $notificationCounterMax) ? $block->escapeHtml($notificationCounterMax) . '+' : $block->escapeHtml($notificationCount) ?>
+                <?= ($notificationCount > $notificationCounterMax) ? (int)$notificationCounterMax . '+' : (int)$notificationCount ?>
             </span>
         </a>
         <ul
@@ -30,7 +30,7 @@
             <?php foreach ($block->getLatestUnreadNotifications() as $notification) : ?>
                 <?php /** @var $notification \Magento\AdminNotification\Model\Inbox */ ?>
                 <li class="notifications-entry<?php if ($notification->getSeverity() == 1) : ?> notifications-critical<?php endif; ?>"
-                    data-notification-id="<?= $block->escapeHtml($notification->getId()) ?>"
+                    data-notification-id="<?= $block->escapeHtmlAttr($notification->getId()) ?>"
                     data-notification-severity="<?php if ($notification->getSeverity() == 1) : ?>1<?php endif; ?>">
                     <?php
                         $notificationDescription = $notification->getDescription();
@@ -59,7 +59,7 @@
                     <button
                         type="button"
                         class="notifications-close"
-                        title="<?= $block->escapeHtml(__('Close')) ?>"
+                        title="<?= $block->escapeHtmlAttr(__('Close')) ?>"
                         ></button>
                 </li>
             <?php endforeach; ?>
@@ -67,7 +67,7 @@
                 <a
                     href="<?= $block->escapeUrl($block->getUrl('adminhtml/notification/index')) ?>"
                     class="action-tertiary action-more">
-                    <?= $block->escapeHtml(__('See All (')) ?><span class="notifications-counter"><?= $block->escapeHtml($notificationCount) ?></span><?= $block->escapeHtml(__(' unread)')) ?>
+                    <?= $block->escapeHtml(__('See All (')) ?><span class="notifications-counter"><?= (int)$notificationCount ?></span><?= $block->escapeHtml(__(' unread)')) ?>
                 </a>
             </li>
         </ul>
@@ -75,7 +75,7 @@
         <a
             class="notifications-action admin__action-dropdown"
             href="<?= $block->escapeUrl($block->getUrl('adminhtml/notification/index')) ?>"
-            title="<?= $block->escapeHtml(__('Notifications')) ?>">
+            title="<?= $block->escapeHtmlAttr(__('Notifications')) ?>">
         </a>
     <?php endif; ?>
 </div>

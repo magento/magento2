@@ -14,11 +14,11 @@
             <?php if ($_option['is_close']) : ?>
                 </optgroup>
             <?php else : ?>
-                <optgroup label="<?= $block->escapeHtml($_option['label']) ?>" style="<?= $block->escapeHtml($_option['style']) ?>">
+                <optgroup label="<?= $block->escapeHtmlAttr($_option['label']) ?>" style="<?= $block->escapeHtml($_option['style']) ?>">
             <?php endif; ?>
             <?php continue ?>
         <?php endif; ?>
-            <option value="<?= $block->escapeHtml($_value) ?>" url="<?= $block->escapeUrl($_option['url']) ?>" <?= $_option['selected'] ? 'selected="selected"' : '' ?> style="<?= $block->escapeHtml($_option['style']) ?>">
+            <option value="<?= $block->escapeHtmlAttr($_value) ?>" url="<?= $block->escapeUrl($_option['url']) ?>" <?= $_option['selected'] ? 'selected="selected"' : '' ?> style="<?= $block->escapeHtmlAttr($_option['style']) ?>">
                 <?= $block->escapeHtml($_option['label']) ?>
             </option>
         <?php endforeach ?>
