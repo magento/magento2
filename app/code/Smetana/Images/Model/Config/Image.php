@@ -47,10 +47,11 @@ class Image extends \Magento\Config\Model\Config\Backend\Image
             foreach ($files as $file) {
                 @unlink($this->_getUploadDir() . '/' . $file);
             }
+            if(mime_content_type($this->getFileData()['tmp_name']) != 'image/jpeg') {
+                throw new \Magento\Framework\Exception\LocalizedException(__('%1', 'The file has the wrong extension'));
+            }
         }
-        if(mime_content_type($this->getFileData()['tmp_name']) != 'image/jpeg') {
-            throw new \Magento\Framework\Exception\LocalizedException(__('%1', 'The file has the wrong extension'));
-        }
+
         return parent::beforeSave();
     }
 }

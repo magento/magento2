@@ -1,16 +1,16 @@
 <?php
-namespace Smetana\Images\Helper;
+/*namespace Smetana\Images\Helper;
 
-use Magento\Framework\Filesystem;
+use \Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    public $mediaDirectory;
+    public $scopeConfig;
 
     public function __construct(
-        Filesystem $filesystem
+        ScopeConfigInterface $scopeConfig
     ) {
-        $this->mediaDirectory = $filesystem->getDirectoryWrite('media');
+        $this->scopeConfig = $scopeConfig;
     }
 
     public function getConfig($config_path)
@@ -20,4 +20,4 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
-}
+}*/

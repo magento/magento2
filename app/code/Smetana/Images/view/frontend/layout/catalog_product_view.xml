@@ -1,6 +1,6 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceContainer name="alert.urls">
+        <referenceContainer name="product.info.addtocart">
             <block class="Smetana\Images\Block\Image" name="some.block.name" template="Smetana_Images::image.phtml" />
         </referenceContainer>
     </body>
