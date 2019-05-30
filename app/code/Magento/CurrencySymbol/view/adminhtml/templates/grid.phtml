@@ -27,7 +27,7 @@
                 <div class="admin__field admin__field-option">
                     <input id="custom_currency_symbol_inherit<?= $block->escapeHtmlAttr($code) ?>"
                            class="admin__control-checkbox" type="checkbox"
-                           onclick="toggleUseDefault(<?= '\'' . $block->escapeHtmlAttr($code) . '\',\'' . $block->escapeJs($data['parentSymbol']) . '\'' ?>)"
+                           onclick="toggleUseDefault(<?= '\'' . $block->escapeJs($code) . '\',\'' . $block->escapeJs($data['parentSymbol']) . '\'' ?>)"
                             <?= $data['inherited'] ? ' checked="checked"' : '' ?>
                            value="1"
                            name="inherit_custom_currency_symbol[<?= $block->escapeHtmlAttr($code) ?>]">
