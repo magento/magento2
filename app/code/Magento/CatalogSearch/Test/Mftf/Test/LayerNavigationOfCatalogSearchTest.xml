@@ -19,8 +19,7 @@
         </annotations>
         <before>
             <magentoCLI command="config:set catalog/layered_navigation/price_range_calculation auto" stepKey="setAutoPriceRange"/>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <createData stepKey="createPriceAttribute" entity="productAttributePrice"/>
+            <createData stepKey="createPriceAttribute" entity="productAttributeTypeOfPrice"/>
             <createData stepKey="assignPriceAttributeGroup" entity="AddToDefaultSet">
                 <requiredEntity createDataKey="createPriceAttribute"/>
             </createData>
@@ -31,6 +30,7 @@
             <createData entity="SimpleProduct" stepKey="simpleProduct2">
                 <requiredEntity createDataKey="subCategory"/>
             </createData>
+            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="subCategory"/>

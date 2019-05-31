@@ -278,7 +278,7 @@
         <data key="used_for_sort_by">false</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
-    <entity name="productAttributePrice" type="ProductAttribute">
+    <entity name="productAttributeTypeOfPrice" type="ProductAttribute">
         <data key="attribute_code" unique="suffix">attribute</data>
         <data key="frontend_input">price</data>
         <data key="scope">global</data>
