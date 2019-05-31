@@ -9,7 +9,7 @@ namespace Magento\QuoteGraphQl\Model\Cart\Payment;
 
 /**
  * Pool model for AdditionalDataProvider
- **/
+ */
 class AdditionalDataProviderPool
 {
     /**
