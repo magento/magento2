@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Magento\WebapiAsync\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Exception\NotFoundException;
 use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
@@ -21,6 +20,9 @@ use Magento\Framework\Registry;
 use Magento\Framework\Webapi\Exception;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface as Product;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\Store;
+use Magento\Framework\Webapi\Rest\Request;
 
 /**
  * Check async request for multistore product creation service, scheduling bulk
@@ -76,7 +78,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
     private $productRepository;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -92,7 +94,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
         $this->registry = $this->objectManager->get(Registry::class);
 
         $params = array_merge_recursive(
-            \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams(),
+            Bootstrap::getInstance()->getAppInitParams(),
             ['MAGE_DIRS' => ['cache' => ['path' => TESTS_TEMP_DIR . '/cache']]]
         );
 
@@ -126,8 +128,8 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
         $product = $this->getProductData();
         $this->_markTestAsRestOnly();
 
-        /** @var $store \Magento\Store\Model\Group */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
+        /** @var Store $store */
+        $store = $this->objectManager->create(Store::class);
         $store->load(self::STORE_CODE_FROM_FIXTURE);
         $this->assertEquals(
             self::STORE_NAME_FROM_FIXTURE,
@@ -136,9 +138,9 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
         );
 
         try {
-            /** @var \Magento\Catalog\Model\Product $productModel */
-            $productModel = Bootstrap::getObjectManager()->create(
-                \Magento\Catalog\Model\Product::class,
+            /** @var Product $productModel */
+            $productModel = $this->objectManager->create(
+                Product::class,
                 ['data' => $product['product']]
             );
             $this->productRepository->save($productModel);
@@ -186,7 +188,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
             $serviceInfo = [
                 'rest' => [
                     'resourcePath' => self::REST_RESOURCE_PATH . '/' . $sku,
-                    'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET
+                    'httpMethod' => Request::HTTP_METHOD_GET
                 ]
             ];
             $storeResponse = $this->_webApiCall($serviceInfo, $requestData, null, $checkingStore);
@@ -318,7 +320,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::ASYNC_RESOURCE_PATH . '/' . $sku,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'httpMethod' => Request::HTTP_METHOD_PUT,
             ],
         ];
 
@@ -343,15 +345,14 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
     public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();
-        /** @var \Magento\Framework\Registry $registry */
-        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get(\Magento\Framework\Registry::class);
+        /** @var Registry $registry */
+        $registry = Bootstrap::getObjectManager()->get(Registry::class);
 
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', true);
 
-        /** @var $store \Magento\Store\Model\Store */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
+        /** @var Store $store*/
+        $store = Bootstrap::getObjectManager()->create(Store::class);
         $store->load('fixturestore');
         if ($store->getId()) {
             $store->delete();
