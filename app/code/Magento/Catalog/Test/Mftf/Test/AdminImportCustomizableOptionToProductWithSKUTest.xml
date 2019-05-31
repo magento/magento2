@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-15740"/>
             <useCaseId value="MAGETWO-73157"/>
+            <skip>
+                <issueId value="MC-16313"/>
+            </skip>
             <group value="catalog"/>
         </annotations>
         <before>
@@ -28,6 +31,8 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <updateData createDataKey="createFirstProduct" entity="ProductWithFieldOptions" stepKey="updateProductCustomOptions" />
+            <magentoCLI stepKey="reindex" command="indexer:reindex"/>
+            <magentoCLI stepKey="flushCache" command="cache:flush"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>

@@ -4,18 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
  * Shopping cart additional info
  * @var $block \Magento\Framework\View\Element\Template
  */
+
+// phpcs:disable PSR2.Files.ClosingTag
 ?>
 <?php
 $name = $block->getNameInLayout();
 foreach ($block->getChildNames($name) as $childName) {
+    // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
     echo $block->getChildBlock($childName)->setItem($block->getItem())->toHtml();
 }
 ?>

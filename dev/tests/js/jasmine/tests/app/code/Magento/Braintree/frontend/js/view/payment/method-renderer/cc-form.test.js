@@ -85,21 +85,5 @@ define([
             expect(braintreeCcForm.getCode()).toEqual(expectedCode);
             expect(braintreeCcForm.messageContainer).toEqual(expectedMessageContainer);
         });
-
-        it('Check if form validation fails when "Place Order" button should be active.', function () {
-            var errorMessage = 'Something went wrong.',
-
-                /**
-                 * Anonymous wrapper
-                 */
-                func = function () {
-                    braintreeCcForm.clientConfig.onError({
-                        'message': errorMessage
-                    });
-                };
-
-            expect(func).toThrow(errorMessage);
-            expect(braintreeCcForm.isPlaceOrderActionAllowed()).toBeTruthy();
-        });
     });
 });

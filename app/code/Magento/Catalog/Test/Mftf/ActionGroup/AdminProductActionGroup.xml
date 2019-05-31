@@ -248,15 +248,14 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
 
-    <actionGroup name="AdminAssignProductToCategory">
+    <actionGroup name="AdminAssignProductToCategory" extends="AdminProductAssignCategory">
         <arguments>
             <argument name="productId" type="string"/>
-            <argument name="categoryName" type="string"/>
         </arguments>
-        <amOnPage url="{{AdminProductEditPage.url(productId)}}" stepKey="amOnPage"/>
-        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{categoryName}}]" stepKey="selectCategory"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." stepKey="seeSaveProductMessage"/>
+        <amOnPage url="{{AdminProductEditPage.url(productId)}}" before="searchAndSelectCategory" stepKey="amOnPage"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" after="searchAndSelectCategory" stepKey="clickOnSaveButton"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" after="clickOnSaveButton" stepKey="waitForSaveProductMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." after="waitForSaveProductMessage" stepKey="seeSaveProductMessage"/>
     </actionGroup>
 
     <actionGroup name="AdminChangeProductAttributeSet">
@@ -268,5 +267,20 @@
         <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{attributeSet.attribute_set_name}}" stepKey="searchForAttributeSet"/>
         <waitForElementVisible selector="{{AdminProductFormSection.attributeSetFilterResultByName(attributeSet.attribute_set_name)}}" stepKey="waitForNewAttributeSetIsShown"/>
         <click selector="{{AdminProductFormSection.attributeSetFilterResultByName(attributeSet.attribute_set_name)}}" stepKey="selectAttributeSet"/>
+    </actionGroup>
+
+    <actionGroup name="AdminProductAssignCategory">
+        <arguments>
+            <argument name="categoryName" type="string"/>
+        </arguments>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{categoryName}}]" stepKey="searchAndSelectCategory"/>
+    </actionGroup>
+
+    <!--Navigate to created product page directly via ID-->
+    <actionGroup name="goToProductPageViaID">
+        <arguments>
+            <argument name="productId" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductEditPage.url(productId)}}" stepKey="goToProduct"/>
     </actionGroup>
 </actionGroups>
