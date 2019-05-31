@@ -69,9 +69,11 @@ define([
                 media: '(max-width: 768px)',
                 entry: function () {
                     this.isExpandable = true;
+                    this.element.attr('aria-expanded', false);
                 }.bind(this),
                 exit: function () {
                     this.isExpandable = true;
+                    this.element.attr('aria-expanded', false);
                 }.bind(this)
             });
 
