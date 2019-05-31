@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright © 2015 Ihor Vansach (ihor@magefan.com). All rights reserved.
- * See LICENSE.txt for license details (http://opensource.org/licenses/osl-3.0.php).
+ * lease visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
  *
  * Glory to Ukraine! Glory to the heroes!
  */
@@ -19,19 +19,31 @@ class Info extends \Magento\Config\Block\System\Config\Form\Field
      * @var \Magento\Framework\Module\ModuleListInterface
      */
     protected $moduleList;
+    /**
+     * @var \Magento\Framework\App\ProductMetadataInterface
+     */
+    protected $metadata;
 
     /**
+     * Info constructor.
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
+     * @param null|\Magento\Framework\App\ProductMetadataInterface
      */
     public function __construct(
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Backend\Block\Template\Context $context,
-        array $data = []
+        array $data = [],
+        $metadata = null
     ) {
         parent::__construct($context, $data);
         $this->moduleList       = $moduleList;
+
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->metadata = $metadata ?: $objectManager->get(
+            \Magento\Framework\App\ProductMetadataInterface::class
+        );
     }
 
     /**
@@ -45,6 +57,17 @@ class Info extends \Magento\Config\Block\System\Config\Form\Field
         $html = '<div style="padding:10px;background-color:#f8f8f8;border:1px solid #ddd;margin-bottom:7px;">
             Login As Customer Extension v' . $m['setup_version'] . ' was developed by <a href="http://magefan.com/" target="_blank">MageFan</a>.
         </div>';
+        $html .= '<style>#row_mfloginascustomer_general_key{display:none}</style>';
+        if ($this->metadata->getEdition() != 'Community') {
+            $html .= '<script>
+        require([
+            "jquery",
+            "domReady!"
+        ], function($){
+             $("#row_mfloginascustomer_general_key").show();
+        });
+        </script>';
+        }
 
         return $html;
     }

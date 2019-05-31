@@ -1,0 +1,36 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ *
+ * Glory to Ukraine! Glory to the heroes!
+ */
+?>
+<?php
+/**
+ * Login As Customer available for to get notification
+ *
+ * @var $block \Magefan\LoginAsCustomer\Block\Adminhtml\System\Config\Form\CheckEnableInfo
+ */
+?>
+<?php if (!$block->isEnabled()) { ?>
+    <div class="messages">
+        <div class="message message-error">
+            <div data-ui-id="messages-message-error">
+               <?php $html = __('Magefan Login As Customer is disabled, to enable the extension please navigate to <a href="%1" target="_blank">Stores > Configuration > Magefan Extensions > Login As Customer</a>.', $block->getUrl('adminhtml/system_config/edit', ['section' => 'mfloginascustomer']));
+               ?>
+                <?= $html ?>
+            </div>
+        </div>
+    </div>
+<?php } elseif ($block->isKeyMissing()) { ?>
+    <div class="messages">
+        <div class="message message-error">
+            <div data-ui-id="messages-message-error">
+                <?php $html = __('Magefan Login As Customer <strong>Product Key</strong> is missing. Login As Customer Extension will be automatically disabled soon. Please specify the product key in <a href="%1" target="_blank">Stores > Configuration > Magefan Extensions > Login As Customer</a>.', $block->getUrl('adminhtml/system_config/edit', ['section' => 'mfloginascustomer']));
+                ?>
+                <?= $html ?>
+            </div>
+        </div>
+    </div>
+<?php } ?>
