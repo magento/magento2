@@ -67,7 +67,7 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
         $this->baseDirectory->expects($this->any())
             ->method('getAbsolutePath')
             ->with(null)
-            ->willReturn('/a/b/c');
+            ->willReturn('/a/b/c/');
 
         $this->model = new FileInfo(
             $this->filesystem,
@@ -85,12 +85,12 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory->expects($this->at(0))
             ->method('getAbsolutePath')
             ->with(null)
-            ->willReturn('/a/b/c/pub/media');
+            ->willReturn('/a/b/c/pub/media/');
 
         $this->mediaDirectory->expects($this->at(1))
             ->method('getAbsolutePath')
             ->with(null)
-            ->willReturn('/a/b/c/pub/media');
+            ->willReturn('/a/b/c/pub/media/');
 
         $this->mediaDirectory->expects($this->at(2))
             ->method('getAbsolutePath')
@@ -116,7 +116,7 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory->expects($this->any())
             ->method('getAbsolutePath')
             ->with(null)
-            ->willReturn('/a/b/c/pub/media');
+            ->willReturn('/a/b/c/pub/media/');
 
         $this->mediaDirectory->expects($this->once())
             ->method('stat')
@@ -130,22 +130,55 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $result['size']);
     }
 
-    public function testIsExist()
+    /**
+     * @param $fileName
+     * @param $fileMediaPath
+     * @dataProvider isExistProvider
+     */
+    public function testIsExist($fileName, $fileMediaPath)
     {
-        $mediaPath = '/catalog/category';
-
-        $fileName = '/filename.ext1';
-
         $this->mediaDirectory->expects($this->any())
             ->method('getAbsolutePath')
-            ->with(null)
-            ->willReturn('/a/b/c/pub/media');
+            ->willReturn('/a/b/c/pub/media/');
 
         $this->mediaDirectory->expects($this->once())
             ->method('isExist')
-            ->with($mediaPath . $fileName)
+            ->with($fileMediaPath)
             ->willReturn(true);
 
         $this->assertTrue($this->model->isExist($fileName));
+    }
+
+    public function isExistProvider()
+    {
+        return [
+            ['/filename.ext1', '/catalog/category/filename.ext1'],
+            ['/pub/media/filename.ext1', 'filename.ext1'],
+            ['/media/filename.ext1', 'filename.ext1']
+        ];
+    }
+
+    /**
+     * @param $fileName
+     * @param $expected
+     * @dataProvider isBeginsWithMediaDirectoryPathProvider
+     */
+    public function testIsBeginsWithMediaDirectoryPath($fileName, $expected)
+    {
+        $this->mediaDirectory->expects($this->any())
+            ->method('getAbsolutePath')
+            ->willReturn('/a/b/c/pub/media/');
+
+        $this->assertEquals($expected, $this->model->isBeginsWithMediaDirectoryPath($fileName));
+    }
+
+    public function isBeginsWithMediaDirectoryPathProvider()
+    {
+        return [
+            ['/pub/media/test/filename.ext1', true],
+            ['/media/test/filename.ext1', true],
+            ['/test/filename.ext1', false],
+            ['test2/filename.ext1', false]
+        ];
     }
 }
