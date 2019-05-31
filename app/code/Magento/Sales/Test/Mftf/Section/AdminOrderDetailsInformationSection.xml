@@ -19,5 +19,6 @@
         <element name="billingAddress" type="text" selector=".order-billing-address"/>
         <element name="shippingAddress" type="text" selector=".order-shipping-address"/>
         <element name="itemsOrdered" type="text" selector=".edit-order-table"/>
+        <element name="paymentInformation" type="text" selector="//div[@class='order-payment-method-title']"/>
     </section>
 </sections>
