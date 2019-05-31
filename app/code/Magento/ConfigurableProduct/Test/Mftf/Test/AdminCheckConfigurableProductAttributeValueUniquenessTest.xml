@@ -11,9 +11,8 @@
     <test name="AdminCheckConfigurableProductAttributeValueUniquenessTest">
         <annotations>
             <features value="ConfigurableProduct"/>
-            <stories value="Edit a configurable product in admin"/>
-            <title value="Check attribute value uniqueness in configurable products"/>
-            <description value="Check attribute value uniqueness in configurable products"/>
+            <title value="Attribute value validation (check for uniqueness) in configurable products"/>
+            <description value="Attribute value validation (check for uniqueness) in configurable products"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-99519"/>
             <useCaseId value="MAGETWO-99443"/>
