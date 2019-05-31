@@ -128,22 +128,19 @@ class CssUrls implements ProcessorInterface
                 ];
             } else {
                 $filePathInBase = $package->getArea() .
-                    '/' .
-                    Package::BASE_THEME .
-                    '/' .
-                    $package->getLocale() .
-                    '/' .
-                    $lookupFileId;
+                    '/' . Package::BASE_THEME .
+                    '/' . $package->getLocale() .
+                    '/' . $lookupFileId;
                 if ($this->staticDir->isReadable($this->minification->addMinifiedSign($filePathInBase))) {
                     $urlMap[$url][] = [
                         'filePath' => $this->minification->addMinifiedSign($packagePath . '/' . $cssFilePath),
-                        'replace' => '../../../../' // base path is always of four chunks size
-                            . str_repeat('../', count(explode('/', $cssFileBasePath)))
-                            . $this->minification->addMinifiedSign($filePathInBase)
+                        'replace' => str_repeat('../', count(explode('/', $cssFileBasePath)) + 4)
+                            . $this->minification->addMinifiedSign($filePathInBase),
                     ];
                 }
             }
         }
+
         return $urlMap;
     }
 
