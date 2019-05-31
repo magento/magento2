@@ -73,7 +73,7 @@ class Queue implements QueueInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function dequeue()
     {
@@ -92,7 +92,7 @@ class Queue implements QueueInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function acknowledge(EnvelopeInterface $envelope)
     {
@@ -103,25 +103,26 @@ class Queue implements QueueInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function subscribe($callback)
     {
         while (true) {
             while ($envelope = $this->dequeue()) {
                 try {
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     call_user_func($callback, $envelope);
-                    $this->acknowledge($envelope);
                 } catch (\Exception $e) {
                     $this->reject($envelope);
                 }
             }
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             sleep($this->interval);
         }
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function reject(EnvelopeInterface $envelope, $requeue = true, $rejectionMessage = null)
     {
@@ -139,7 +140,7 @@ class Queue implements QueueInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function push(EnvelopeInterface $envelope)
     {

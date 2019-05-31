@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SetCustomerGroupForSelectedCustomersViaGrid">
+        <arguments>
+            <argument name="groupName" type="string"/>
+        </arguments>
+        <click selector="{{CustomersPageSection.actions}}" stepKey="clickActions"/>
+        <click selector="{{CustomersPageSection.actionItem('Assign a Customer Group')}}" stepKey="clickAssignAction"/>
+        <executeJS function="document.getElementsByClassName('action-menu _active')[0].scrollBy(0, 10000)" stepKey="scrollToGroup"/>
+        <click selector="{{CustomersPageSection.assignGroup(groupName)}}" stepKey="selectGroup"/>
+        <waitForPageLoad stepKey="waitAfterSelectingGroup"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptModal"/>
+    </actionGroup>
+</actionGroups>

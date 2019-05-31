@@ -81,16 +81,12 @@
         <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="LoggedInCheckoutFillNewBillingAddressActionGroup1">
             <argument name="Address" value="US_Address_NY"/>
         </actionGroup>
-        <click selector="{{CheckoutPaymentSection.addressAction('Save Address')}}" stepKey="SaveAddress"/>
+        <click selector="{{CheckoutPaymentSection.addressAction('Ship here')}}" stepKey="SaveAddress"/>
         <waitForPageLoad stepKey="waitForPageLoad9"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext1"/>
         <waitForPageLoad stepKey="waitForPageLoad10"/>
         <click selector="{{BraintreeConfigurationPaymentSection.paymentMethod}}" stepKey="SelectBraintreePaymentMethod1"/>
         <waitForPageLoad stepKey="waitForPageLoad11"/>
-        <click selector="{{CheckoutPaymentSection.shippingAndBillingAddressSame}}" stepKey="UncheckCheckBox"/>
-
-        <click selector="{{CheckoutShippingSection.updateAddress}}" stepKey="clickToUpdate"/>
-        <waitForPageLoad stepKey="waitForPageLoad12"/>
         <!--Place order-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="PlaceOrder1"/>
         <waitForPageLoad stepKey="waitForPageLoad13"/>

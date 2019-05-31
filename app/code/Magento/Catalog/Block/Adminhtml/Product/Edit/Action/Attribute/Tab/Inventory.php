@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
-use Magento\Customer\Api\Data\GroupInterface;
-
 /**
  * Products mass update inventory tab
  *
@@ -32,28 +30,19 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     protected $disabledFields = [];
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\CatalogInventory\Model\Source\Backorders $backorders
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param array $data
-     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\CatalogInventory\Model\Source\Backorders $backorders,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
-        array $data = [],
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null
+        array $data = []
     ) {
         $this->_backorders = $backorders;
         $this->stockConfiguration = $stockConfiguration;
-        $this->serializer = $serializer ?? \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         parent::__construct($context, $data);
     }
 
@@ -85,9 +74,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
      */
     public function getStoreId()
     {
-        $storeId = (int)$this->getRequest()->getParam('store');
-
-        return $storeId;
+        return (int)$this->getRequest()->getParam('store');
     }
 
     /**
@@ -99,22 +86,6 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     public function getDefaultConfigValue($field)
     {
         return $this->stockConfiguration->getDefaultConfigValue($field);
-    }
-
-    /**
-     * Returns min_sale_qty configuration for the ALL Customer Group
-     *
-     * @return float
-     */
-    public function getDefaultMinSaleQty()
-    {
-        $default = $this->stockConfiguration->getDefaultConfigValue('min_sale_qty');
-        if (!is_numeric($default)) {
-            $default = $this->serializer->unserialize($default);
-            $default = $default[GroupInterface::CUST_GROUP_ALL] ?? 1;
-        }
-
-        return (float) $default;
     }
 
     /**

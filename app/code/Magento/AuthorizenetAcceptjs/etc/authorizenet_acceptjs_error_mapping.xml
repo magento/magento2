@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/error_mapping.xsd">
+    <message_list>
+        <message code="E00003" translate="true">Invalid request to gateway.</message>
+        <message code="E00007" translate="true">Invalid gateway credentials.</message>
+        <message code="E00027" translate="true">Transaction has been declined. Please try again later.</message>
+        <message code="ETHV" translate="true">The authenticity of the gateway response could not be verified.</message>
+    </message_list>
+</mapping>
