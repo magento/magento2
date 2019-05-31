@@ -54,6 +54,6 @@ class StoreCategories
         $rootCategory = $this->categoryRepository->get($rootCategoryId);
         $categoriesIds = $rootCategory->getAllChildren(true);
 
-        return $categoriesIds;
+        return (array) $categoriesIds;
     }
 }
