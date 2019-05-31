@@ -44,7 +44,7 @@ class Generator extends AbstractSchemaGenerator
     /**
      * Wrapper node for XML requests
      */
-    const XML_SCHEMA_PARAMWRAPPER = 'request';
+    private const XML_SCHEMA_PARAMWRAPPER = 'request';
 
     /**
      * Swagger factory instance.
@@ -203,7 +203,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @return array
      */
-    protected function getConsumableDatatypes()
+    private function getConsumableDatatypes()
     {
         return [
             'application/json',
@@ -216,7 +216,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @return array
      */
-    protected function getProducibleDatatypes()
+    private function getProducibleDatatypes()
     {
         return [
             'application/json',
