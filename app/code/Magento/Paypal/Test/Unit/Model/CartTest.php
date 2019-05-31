@@ -7,6 +7,9 @@ namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Paypal\Model\Cart;
 
+/**
+ * @see \Magento\Paypal\Model\Cart
+ */
 class CartTest extends \PHPUnit\Framework\TestCase
 {
     /**

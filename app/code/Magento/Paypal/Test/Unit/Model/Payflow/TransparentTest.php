@@ -103,18 +103,22 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
     public function testValidAuthorizeRequest(DataObject $validAuthorizeRequest)
     {
         $this->scopeConfig->method('getValue')
-            ->willReturnMap([
-                ['payment/payflowpro/user', ScopeInterface::SCOPE_STORE, null, 'user'],
-                ['payment/payflowpro/vendor', ScopeInterface::SCOPE_STORE, null, 'vendor'],
-                ['payment/payflowpro/partner', ScopeInterface::SCOPE_STORE, null, 'partner'],
-                ['payment/payflowpro/pwd', ScopeInterface::SCOPE_STORE, null, 'pwd'],
-                ['payment/payflowpro/verbosity', ScopeInterface::SCOPE_STORE, null, 'verbosity'],
-            ]);
+            ->willReturnMap(
+                [
+                    ['payment/payflowpro/user', ScopeInterface::SCOPE_STORE, null, 'user'],
+                    ['payment/payflowpro/vendor', ScopeInterface::SCOPE_STORE, null, 'vendor'],
+                    ['payment/payflowpro/partner', ScopeInterface::SCOPE_STORE, null, 'partner'],
+                    ['payment/payflowpro/pwd', ScopeInterface::SCOPE_STORE, null, 'pwd'],
+                    ['payment/payflowpro/verbosity', ScopeInterface::SCOPE_STORE, null, 'verbosity'],
+                ]
+            );
         $this->paymentConfig->method('getBuildNotationCode')->willReturn('BUTTONSOURCE');
         $this->payment->method('getAdditionalInformation')
-            ->willReturnMap([
-                [Payflowpro::PNREF, 'XXXXXXXXXXXX'],
-            ]);
+            ->willReturnMap(
+                [
+                    [Payflowpro::PNREF, 'XXXXXXXXXXXX'],
+                ]
+            );
         $this->order->method('getIncrementId')->willReturn('000000001');
         $this->order->method('getBaseCurrencyCode')->willReturn('USD');
         $this->payPalCart->method('getSubtotal')->willReturn(5.00);
@@ -136,26 +140,28 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                new DataObject([
-                    'user' => 'user',
-                    'vendor' => 'vendor',
-                    'partner' => 'partner',
-                    'pwd' => 'pwd',
-                    'verbosity' => 'verbosity',
-                    'BUTTONSOURCE' => 'BUTTONSOURCE',
-                    'tender' => 'C',
-                    'custref' => '000000001',
-                    'invnum' => '000000001',
-                    'comment_1' => '000000001',
-                    'trxtype' => 'A',
-                    'origid' => 'XXXXXXXXXXXX',
-                    'amt' => '10.00',
-                    'currency' => 'USD',
-                    'itemamt' => '5.00',
-                    'taxamt' => '5.00',
-                    'freightamt' => '5.00',
-                    'discount' => '5.00',
-                ]),
+                new DataObject(
+                    [
+                        'user' => 'user',
+                        'vendor' => 'vendor',
+                        'partner' => 'partner',
+                        'pwd' => 'pwd',
+                        'verbosity' => 'verbosity',
+                        'BUTTONSOURCE' => 'BUTTONSOURCE',
+                        'tender' => 'C',
+                        'custref' => '000000001',
+                        'invnum' => '000000001',
+                        'comment1' => '000000001',
+                        'trxtype' => 'A',
+                        'origid' => 'XXXXXXXXXXXX',
+                        'amt' => '10.00',
+                        'currency' => 'USD',
+                        'itemamt' => '5.00',
+                        'taxamt' => '5.00',
+                        'freightamt' => '5.00',
+                        'discount' => '5.00',
+                    ]
+                ),
             ]
         ];
     }

@@ -9,6 +9,7 @@ namespace Magento\Paypal\Model;
 
 /**
  * PayPal-specific model for shopping cart items and totals
+ *
  * The main idea is to accommodate all possible totals into PayPal-compatible 4 totals and line items
  */
 class Cart extends \Magento\Payment\Model\Cart
