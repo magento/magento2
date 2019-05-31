@@ -5,11 +5,15 @@
  */
 use Magento\Framework\Autoload\AutoloaderRegistry;
 
-// phpcs:ignore Magento2.Security.IncludeFile
+/**
+ * phpcs:disable PSR1.Files.SideEffects
+ * phpcs:disable Squiz.Functions.GlobalFunction
+ * phpcs:disable Magento2.Security.IncludeFile
+ */
 require_once __DIR__ . '/../../../../app/bootstrap.php';
-// phpcs:ignore Magento2.Security.IncludeFile
 require_once __DIR__ . '/autoload.php';
 
+// phpcs:ignore Magento2.Functions.DiscouragedFunction
 $testsBaseDir = dirname(__DIR__);
 $fixtureBaseDir = $testsBaseDir. '/testsuite';
 
@@ -28,7 +32,6 @@ try {
     $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
 
     $testFrameworkDir = __DIR__;
-    // phpcs:ignore Magento2.Security.IncludeFile
     require_once 'deployTestModules.php';
 
     if ($settings->get('TESTS_EXTRA_VERBOSE_LOG')) {
@@ -47,10 +50,12 @@ try {
     }
 
     $installConfigFile = $settings->getAsConfigFile('TESTS_INSTALL_CONFIG_FILE');
+    // phpcs:ignore Magento2.Functions.DiscouragedFunction
     if (!file_exists($installConfigFile)) {
         $installConfigFile .= '.dist';
     }
     $globalConfigFile = $settings->getAsConfigFile('TESTS_GLOBAL_CONFIG_FILE');
+    // phpcs:ignore Magento2.Functions.DiscouragedFunction
     if (!file_exists($globalConfigFile)) {
         $globalConfigFile .= '.dist';
     }

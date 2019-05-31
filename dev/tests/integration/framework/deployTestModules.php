@@ -5,6 +5,8 @@
  */
 
 /**
+ * phpcs:disable PSR1.Files.SideEffects
+ * phpcs:disable Squiz.Functions.GlobalFunction
  * @var string $testFrameworkDir - Must be defined in parent script.
  * @var \Magento\TestFramework\Bootstrap\Settings $settings - Must be defined in parent script.
  */
@@ -21,10 +23,14 @@ foreach ($iterator as $file) {
         $source = $file->getPathname();
         $relativePath = substr($source, strlen($pathToCommittedTestModules));
         $destination = $pathToInstalledMagentoInstanceModules . $relativePath;
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $targetDir = dirname($destination);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         if (!is_dir($targetDir)) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             mkdir($targetDir, 0755, true);
         }
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         copy($source, $destination);
     }
 }
@@ -32,6 +38,7 @@ unset($iterator, $file);
 
 // Register the modules under '_files/'
 $pathPattern = $pathToInstalledMagentoInstanceModules . '/TestModule*/registration.php';
+// phpcs:ignore Magento2.Functions.DiscouragedFunction
 $files = glob($pathPattern, GLOB_NOSORT);
 if ($files === false) {
     throw new \RuntimeException('glob() returned error while searching in \'' . $pathPattern . '\'');
@@ -43,6 +50,7 @@ foreach ($files as $file) {
 
 if ((int)$settings->get('TESTS_PARALLEL_RUN') !== 1) {
     // Only delete modules if we are not using parallel executions
+    // phpcs:ignore Magento2.Functions.DiscouragedFunction
     register_shutdown_function(
         'deleteTestModules',
         $pathToCommittedTestModules,
