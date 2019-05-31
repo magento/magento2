@@ -5,7 +5,8 @@
  */
 
 /**
- * @var $testFrameworkDir string - Must be defined in parent script.
+ * @var string $testFrameworkDir - Must be defined in parent script.
+ * @var \Magento\TestFramework\Bootstrap\Settings $settings - Must be defined in parent script.
  */
 
 /** Copy test modules to app/code/Magento to make them visible for Magento instance */
@@ -36,5 +37,35 @@ if ($files === false) {
     throw new \RuntimeException('glob() returned error while searching in \'' . $pathPattern . '\'');
 }
 foreach ($files as $file) {
+    // phpcs:ignore Magento2.Security.IncludeFile
     include $file;
+}
+
+if ((int)$settings->get('TESTS_PARALLEL_RUN') !== 1) {
+    // Only delete modules if we are not using parallel executions
+    register_shutdown_function(
+        'deleteTestModules',
+        $pathToCommittedTestModules,
+        $pathToInstalledMagentoInstanceModules
+    );
+}
+
+/**
+ * Delete all test module directories which have been created before
+ *
+ * @param string $pathToCommittedTestModules
+ * @param string $pathToInstalledMagentoInstanceModules
+ */
+function deleteTestModules($pathToCommittedTestModules, $pathToInstalledMagentoInstanceModules)
+{
+    $filesystem = new \Symfony\Component\Filesystem\Filesystem();
+    $iterator = new DirectoryIterator($pathToCommittedTestModules);
+    /** @var SplFileInfo $file */
+    foreach ($iterator as $file) {
+        if ($file->isDir() && !in_array($file->getFilename(), ['.', '..'])) {
+            $targetDirPath = $pathToInstalledMagentoInstanceModules . '/' . $file->getFilename();
+            $filesystem->remove($targetDirPath);
+        }
+    }
+    unset($iterator, $file);
 }
