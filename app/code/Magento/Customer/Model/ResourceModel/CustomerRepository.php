@@ -215,7 +215,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         $storeId = $customerModel->getStoreId();
         if ($storeId === null) {
             $customerModel->setStoreId(
-                $prevCustomerData->getStoreId() ?? $this->storeManager->getStore()->getId()
+                $prevCustomerData ? $prevCustomerData->getStoreId() : $this->storeManager->getStore()->getId()
             );
         }
 
