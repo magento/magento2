@@ -73,15 +73,12 @@
         </actionGroup>
         <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowOfCreatedSimpleProduct"/>
         <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
-        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$rootCategory.name$$,$$category.name$$]" stepKey="selectCategory"/>
-
-
-<!--        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>-->
-<!--        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$rootCategory.name$$" stepKey="fillSearchForInitialCategory"/>-->
-<!--        <click selector="{{AdminProductFormSection.selectCategory($$rootCategory.name$$)}}" stepKey="unselectInitialCategory"/>-->
-<!--        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$category.name$$" stepKey="fillSearchCategory"/>-->
-<!--        <click selector="{{AdminProductFormSection.selectCategory($$category.name$$)}}" stepKey="clickOnCategory"/>-->
-<!--        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>-->
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$rootCategory.name$$" stepKey="fillSearchForInitialCategory"/>
+        <click selector="{{AdminProductFormSection.selectCategory($$rootCategory.name$$)}}" stepKey="unselectInitialCategory"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$category.name$$" stepKey="fillSearchCategory"/>
+        <click selector="{{AdminProductFormSection.selectCategory($$category.name$$)}}" stepKey="clickOnCategory"/>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForSimpleProductSaved"/>
