@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\View\Element\UiComponent\Argument\Interpreter;
 
-use Magento\Framework\Code\Reader\ClassReader;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Data\Argument\InterpreterInterface;
@@ -33,11 +32,6 @@ class ConfigurableObject implements InterpreterInterface
     protected $argumentInterpreter;
 
     /**
-     * @var ClassReader
-     */
-    private $classReader;
-
-    /**
      * @var ConfigInterface
      */
     private $objectManagerConfig;
@@ -48,20 +42,17 @@ class ConfigurableObject implements InterpreterInterface
      * @param ObjectManagerInterface $objectManager
      * @param InterpreterInterface $argumentInterpreter
      * @param array $classWhitelist
-     * @param ClassReader|null $classReader
      * @param ConfigInterface|null $objectManagerConfig
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         InterpreterInterface $argumentInterpreter,
         array $classWhitelist = [],
-        ClassReader $classReader = null,
         ConfigInterface $objectManagerConfig = null
     ) {
         $this->objectManager = $objectManager;
         $this->argumentInterpreter = $argumentInterpreter;
         $this->classWhitelist = $classWhitelist;
-        $this->classReader = $classReader ?? $objectManager->get(ClassReader::class);
         $this->objectManagerConfig = $objectManagerConfig ?? $objectManager->get(ConfigInterface::class);
     }
 
