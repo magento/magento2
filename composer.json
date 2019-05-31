@@ -22,6 +22,7 @@
         "zendframework/zend-text": "^2.6.0",
         "zendframework/zend-i18n": "^2.7.3",
         "zendframework/zend-eventmanager": "^2.6.3",
+        "zendframework/zend-feed": "^2.9.0",
         "zendframework/zend-view": "^2.8.1",
         "zendframework/zend-servicemanager": "^2.7.8",
         "zendframework/zend-json": "^2.6.1",
