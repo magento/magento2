@@ -47,6 +47,11 @@
                 <argument name="customStore" value="thirdStoreView"/>
             </actionGroup>
 
+            <!-- Delete category -->
+            <actionGroup ref="DeleteCategory" stepKey="deleteCategory">
+                <argument name="categoryEntity" value="Gear"/>
+            </actionGroup>
+
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
