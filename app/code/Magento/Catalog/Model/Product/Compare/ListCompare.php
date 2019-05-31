@@ -103,7 +103,7 @@ class ListCompare extends \Magento\Framework\DataObject
         if (!$item->getId()) {
             $item->addProductData($product);
             $productId = $item->getProductId();
-            if ($this->_catalogFactory->create()->load($productId)->getId()) {
+            if ($productId && $this->_catalogFactory->create()->load($productId)->getId()) {
                 $item->save();
             }
         }
