@@ -52,6 +52,13 @@ class ListCompare extends \Magento\Framework\DataObject
     protected $_compareItemFactory;
 
     /**
+     * Catalog factory
+     *
+     * @var \Magento\Catalog\Model\ProductFactory
+     */
+    protected $_catalogFactory;
+
+    /**
      * Constructor
      *
      * @param \Magento\Catalog\Model\Product\Compare\ItemFactory $compareItemFactory
@@ -59,6 +66,7 @@ class ListCompare extends \Magento\Framework\DataObject
      * @param \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Visitor $customerVisitor
+     * @param \Magento\Catalog\Model\ProductFactory $catalogFactory
      * @param array $data
      */
     public function __construct(
@@ -67,6 +75,7 @@ class ListCompare extends \Magento\Framework\DataObject
         \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Visitor $customerVisitor,
+		\Magento\Catalog\Model\ProductFactory $catalogFactory,
         array $data = []
     ) {
         $this->_compareItemFactory = $compareItemFactory;
@@ -74,6 +83,7 @@ class ListCompare extends \Magento\Framework\DataObject
         $this->_catalogProductCompareItem = $catalogProductCompareItem;
         $this->_customerSession = $customerSession;
         $this->_customerVisitor = $customerVisitor;
+		$this->_catalogFactory = $catalogFactory;
         parent::__construct($data);
     }
 
@@ -92,7 +102,10 @@ class ListCompare extends \Magento\Framework\DataObject
 
         if (!$item->getId()) {
             $item->addProductData($product);
-            $item->save();
+            $productId = $item->getProductId();
+            if ($this->_catalogFactory->create()->load($productId)->getId()) {
+                $item->save();
+            }
         }
 
         return $this;
