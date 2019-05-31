@@ -106,7 +106,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param LockGuardedCacheLoader $lockQuery
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\View\TemplateEnginePool $enginePool
@@ -127,6 +126,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param ImageBuilder $imageBuilder
      * @param ReviewRendererInterface $reviewRenderer
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param LockGuardedCacheLoader|null $lockQuery
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -148,7 +148,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        LockGuardedCacheLoader $lockQuery,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\View\TemplateEnginePool $enginePool,
@@ -168,7 +167,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
         ReviewRendererInterface $reviewRenderer,
-        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        LockGuardedCacheLoader $lockQuery = null
     ) {
         $this->imageHelper = $imageHelper;
         $this->imageBuilder = $imageBuilder;
@@ -200,7 +200,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
             $filterManager,
             $localeDate,
             $inlineTranslation,
-            $lockQuery,
             $filesystem,
             $viewFileSystem,
             $enginePool,
@@ -208,7 +207,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
             $storeManager,
             $pageConfig,
             $resolver,
-            $validator
+            $validator,
+            $lockQuery
         );
     }
 
