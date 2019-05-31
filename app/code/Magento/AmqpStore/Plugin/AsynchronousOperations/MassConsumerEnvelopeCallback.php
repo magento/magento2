@@ -26,10 +26,12 @@ class MassConsumerEnvelopeCallback
      * @var StoreManagerInterface
      */
     private $storeManager;
+
     /**
      * @var EnvelopeFactory
      */
     private $envelopeFactory;
+
     /**
      * @var LoggerInterface
      */
@@ -52,13 +54,13 @@ class MassConsumerEnvelopeCallback
 
     /**
      * Check if amqpProperties['application_headers'] have 'store_id' and use it to setCurrentStore
-     * Restore currentStore of consumer process after execution.
+     * Restore original store value in consumer process after execution.
+     * Reject queue messages because of wrong store_id.
      *
      * @param SubjectMassConsumerEnvelopeCallback $subject
      * @param callable $proceed
      * @param EnvelopeInterface $message
-     * @return array|null
-     * @throws NoSuchEntityException
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(SubjectMassConsumerEnvelopeCallback $subject, callable $proceed, EnvelopeInterface $message)
@@ -75,19 +77,22 @@ class MassConsumerEnvelopeCallback
                     $currentStoreId = $this->storeManager->getStore()->getId();
                 } catch (NoSuchEntityException $e) {
                     $this->logger->error(
-                        sprintf("Can't set currentStoreId during processing queue. Error %s.", $e->getMessage())
+                        sprintf(
+                            "Can't set currentStoreId during processing queue. Message rejected. Error %s.",
+                            $e->getMessage()
+                        )
                     );
-                    throw new NoSuchEntityException(__($e->getMessage()));
+                    $subject->getQueue()->reject($message, false, $e->getMessage());
+                    return;
                 }
                 if (isset($storeId) && $storeId !== $currentStoreId) {
                     $this->storeManager->setCurrentStore($storeId);
                 }
             }
         }
-        $result = $proceed($message);
+        $proceed($message);
         if (isset($storeId, $currentStoreId) && $storeId !== $currentStoreId) {
-            $this->storeManager->setCurrentStore($currentStoreId);//restore previous current store
+            $this->storeManager->setCurrentStore($currentStoreId);//restore original store value
         }
-        return $result;
     }
 }

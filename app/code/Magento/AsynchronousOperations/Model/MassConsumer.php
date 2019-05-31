@@ -36,6 +36,7 @@ class MassConsumer implements ConsumerInterface
      * @var Registry
      */
     private $registry;
+
     /**
      * @var MassConsumerEnvelopeCallbackFactory
      */

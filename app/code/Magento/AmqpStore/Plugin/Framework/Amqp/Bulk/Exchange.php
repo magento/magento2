@@ -27,10 +27,12 @@ class Exchange
      * @var StoreManagerInterface
      */
     private $storeManager;
+
     /**
      * @var EnvelopeFactory
      */
     private $envelopeFactory;
+
     /**
      * @var LoggerInterface
      */
@@ -51,11 +53,14 @@ class Exchange
     }
 
     /**
+     * Set current store_id in amqpProperties['application_headers']
+     * so consumer may check store_id and execute operation in correct store scope.
+     * Prevent publishing inconsistent messages because of store_id not defined or wrong.
+     *
      * @param SubjectExchange $subject
      * @param $topic
      * @param EnvelopeInterface[] $envelopes
-     * @return array|null
-     * @throws NoSuchEntityException
+     * @return array
      * @throws AMQPInvalidArgumentException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -67,7 +72,7 @@ class Exchange
             $this->logger->error(
                 sprintf("Can't get current storeId and inject to amqp message. Error %s.", $e->getMessage())
             );
-            throw new NoSuchEntityException(__($e->getMessage()));
+            throw new \Exception($e->getMessage());
         }
 
         $updatedEnvelopes = [];

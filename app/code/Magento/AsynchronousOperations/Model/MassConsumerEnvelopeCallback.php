@@ -20,7 +20,7 @@ use Magento\Framework\MessageQueue\LockInterface;
 use Magento\Framework\MessageQueue\MessageController;
 
 /**
- * Class used by \Magento\AsynchronousOperations\Model\MassConsumer as public callback function.
+ * Class used as public callback function by async consumer.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassConsumerEnvelopeCallback
@@ -85,6 +85,7 @@ class MassConsumerEnvelopeCallback
      * Get transaction callback. This handles the case of async.
      *
      * @param EnvelopeInterface $message
+     * @return void
      */
     public function execute(EnvelopeInterface $message)
     {
@@ -120,5 +121,14 @@ class MassConsumerEnvelopeCallback
                     ->delete($this->resource->getTableName('queue_lock'), ['id = ?' => $lock->getId()]);
             }
         }
+    }
+
+    /**
+     * Get message queue.
+     * @return QueueInterface
+     */
+    public function getQueue()
+    {
+        return $this->queue;
     }
 }
