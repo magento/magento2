@@ -137,7 +137,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         } elseif ($filter && is_array($filter)) {
             $this->_setFilterValues($filter);
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        } elseif (0 !== sizeof($this->_defaultFilter)) {
+        } elseif (0 !== count($this->_defaultFilter)) {
             $this->_setFilterValues($this->_defaultFilter);
         }
 
