@@ -58,10 +58,11 @@ class Exchange
      * Prevent publishing inconsistent messages because of store_id not defined or wrong.
      *
      * @param SubjectExchange $subject
-     * @param $topic
+     * @param string $topic
      * @param EnvelopeInterface[] $envelopes
      * @return array
      * @throws AMQPInvalidArgumentException
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeEnqueue(SubjectExchange $subject, $topic, array $envelopes)
