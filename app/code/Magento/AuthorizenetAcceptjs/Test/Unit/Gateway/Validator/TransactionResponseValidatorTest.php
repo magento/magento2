@@ -15,13 +15,18 @@ use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Tests for the transaction response validator
+ */
 class TransactionResponseValidatorTest extends TestCase
 {
     private const RESPONSE_CODE_APPROVED = 1;
     private const RESPONSE_CODE_HELD = 4;
+    private const RESPONSE_CODE_DENIED = 2;
     private const RESPONSE_REASON_CODE_APPROVED = 1;
     private const RESPONSE_REASON_CODE_PENDING_REVIEW_AUTHORIZED = 252;
     private const RESPONSE_REASON_CODE_PENDING_REVIEW = 253;
+    private const ERROR_CODE_AVS_MISMATCH = 27;
 
     /**
      * @var ResultInterfaceFactory|MockObject
@@ -86,16 +91,6 @@ class TransactionResponseValidatorTest extends TestCase
     public function scenarioProvider()
     {
         return [
-            // This validator only cares about successful edge cases so test for default behavior
-            [
-                [
-                    'responseCode' => 'foo',
-                ],
-                true,
-                [],
-                []
-            ],
-
             // Test for acceptable reason codes
             [
                 [
@@ -207,6 +202,29 @@ class TransactionResponseValidatorTest extends TestCase
                 false,
                 ['foo'],
                 ['bar']
+            ],
+            [
+                [
+                    'responseCode' => self::RESPONSE_CODE_DENIED,
+                    'errors' => [
+                        [
+                            'errorCode' => self::ERROR_CODE_AVS_MISMATCH,
+                            'errorText' => 'bar'
+                        ]
+                    ]
+                ],
+                false,
+                [self::ERROR_CODE_AVS_MISMATCH],
+                ['bar']
+            ],
+            // This validator only cares about successful edge cases so test for default behavior
+            [
+                [
+                    'responseCode' => 'foo',
+                ],
+                false,
+                [],
+                []
             ],
         ];
     }
