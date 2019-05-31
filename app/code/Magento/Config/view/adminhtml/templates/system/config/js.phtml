@@ -176,7 +176,8 @@ originModel.prototype = {
         }
     },
     clearRegionField: function(disabled) {
-        var text = document.createElement('text');
+        var text = document.createElement('input');
+        text.setAttribute('type', 'text');
         text.setAttribute('name', this.regionElement.name);
         text.setAttribute('title', this.regionElement.title);
         text.setAttribute('id', this.regionElement.id);
