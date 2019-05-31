@@ -4,13 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend */
 $elementHtml = $block->getParentElementHtml();
 
-$attributeCode = $block->getAttribute()
-    ->getAttributeCode();
+$attributeCode = $block->getAttribute()->getAttributeCode();
 
 $switchAttributeCode = "{$attributeCode}_type";
 $switchAttributeValue = $block->getProduct()
@@ -21,7 +18,7 @@ $isElementReadonly = $block->getElement()
 ?>
 
 <?php if (!($attributeCode === 'price' && $block->getCanReadPrice() === false)) { ?>
-    <div class="<?= /* @escapeNotVerified */  $attributeCode ?> "><?= /* @escapeNotVerified */  $elementHtml ?></div>
+    <div class="<?= $block->escapeHtmlAttr($attributeCode) ?> "><?= /* @noEscape */ $elementHtml ?></div>
 <?php } ?>
 
 <?= $block->getExtendedElement($switchAttributeCode)->toHtml() ?>
@@ -29,9 +26,9 @@ $isElementReadonly = $block->getElement()
 <?php if (!$isElementReadonly && $block->getDisableChild()) { ?>
     <script>
         require(['prototype'], function () {
-            function <?= /* @escapeNotVerified */ $switchAttributeCode ?>_change() {
-                var $attribute = $('<?= /* @escapeNotVerified */ $attributeCode ?>');
-                if ($('<?= /* @escapeNotVerified */ $switchAttributeCode ?>').value == '<?= /* @escapeNotVerified */ $block::DYNAMIC ?>') {
+            function <?= $block->escapeJs($switchAttributeCode) ?>_change() {
+                var $attribute = $('<?= /* @noEscape */ $attributeCode ?>');
+                if ($('<?= $block->escapeJs($switchAttributeCode) ?>').value == '<?= $block->escapeJs($block::DYNAMIC) ?>') {
                     if ($attribute) {
                         $attribute.disabled = true;
                         $attribute.value = '';
@@ -44,8 +41,8 @@ $isElementReadonly = $block->getElement()
                     if ($attribute) {
                         <?php if ($attributeCode === 'price' && !$block->getCanEditPrice() && $block->getCanReadPrice()
                                 && $block->getProduct()->isObjectNew()) { ?>
-                            <?php $defaultProductPrice = $block->getDefaultProductPrice() ?: "''"; ?>
-                            $attribute.value = <?= /* @escapeNotVerified */ $defaultProductPrice ?>;
+                                        <?php $defaultProductPrice = $block->escapeJs($block->getDefaultProductPrice() ?: "''") ?>
+                            $attribute.value = <?= $block->escapeJs($defaultProductPrice) ?>;
                         <?php } else { ?>
                             $attribute.disabled = false;
                             $attribute.addClassName('required-entry');
@@ -59,10 +56,10 @@ $isElementReadonly = $block->getElement()
 
             <?php if (!($attributeCode === 'price' && !$block->getCanEditPrice()
                     && !$block->getProduct()->isObjectNew())) { ?>
-                $('<?= /* @escapeNotVerified */ $switchAttributeCode ?>').observe('change', <?= /* @escapeNotVerified */ $switchAttributeCode ?>_change);
+                $('<?= $block->escapeJs($switchAttributeCode) ?>').observe('change', <?= $block->escapeJs($switchAttributeCode) ?>_change);
             <?php } ?>
             Event.observe(window, 'load', function(){
-                <?= /* @escapeNotVerified */ $switchAttributeCode ?>_change();
+                <?= $block->escapeJs($switchAttributeCode) ?>_change();
             });
         });
     </script>
