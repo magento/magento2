@@ -75,7 +75,7 @@ class ListCompare extends \Magento\Framework\DataObject
         \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Visitor $customerVisitor,
-		\Magento\Catalog\Model\ProductFactory $catalogFactory,
+        \Magento\Catalog\Model\ProductFactory $catalogFactory,
         array $data = []
     ) {
         $this->_compareItemFactory = $compareItemFactory;
@@ -83,7 +83,7 @@ class ListCompare extends \Magento\Framework\DataObject
         $this->_catalogProductCompareItem = $catalogProductCompareItem;
         $this->_customerSession = $customerSession;
         $this->_customerVisitor = $customerVisitor;
-		$this->_catalogFactory = $catalogFactory;
+        $this->_catalogFactory = $catalogFactory;
         parent::__construct($data);
     }
 
