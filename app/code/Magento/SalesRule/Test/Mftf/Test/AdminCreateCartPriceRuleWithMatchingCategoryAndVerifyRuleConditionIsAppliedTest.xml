@@ -17,7 +17,7 @@
             <group value="SalesRule"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-17140"/>
+                <issueId value="MC-16684"/>
             </skip>
         </annotations>
 
