@@ -13,9 +13,9 @@ $userIds = [];
 
 /** @var $model \Magento\User\Model\User */
 $model = $objectManager->create(\Magento\User\Model\User::class);
-$model->setFirstname("John")
-    ->setLastname("Doe")
-    ->setUsername('adminUser3')
+$model->setFirstName("John")
+    ->setLastName("Doe")
+    ->setUserName('adminUser3')
     ->setPassword(\Magento\TestFramework\Bootstrap::ADMIN_PASSWORD)
     ->setEmail('adminUser3@example.com')
     ->setRoleType('G')
@@ -31,9 +31,9 @@ $userIds[] = $model->getDataByKey('user_id');
 $futureDate = new \DateTime();
 $futureDate->modify('+10 days');
 $model = $objectManager->create(\Magento\User\Model\User::class);
-$model->setFirstname("John")
-    ->setLastname("Doe")
-    ->setUsername('adminUser4')
+$model->setFirstName("John")
+    ->setLastName("Doe")
+    ->setUserName('adminUser4')
     ->setPassword(\Magento\TestFramework\Bootstrap::ADMIN_PASSWORD)
     ->setEmail('adminUser4@example.com')
     ->setExpiresAt($futureDate->format('Y-m-d H:i:s'))

@@ -51,8 +51,7 @@ class DisableExpiredUsers
         $users = $this->userCollectionFactory->create()
             ->addActiveExpiredUsersFilter();
 
-        if ($users->getSize() > 0)
-        {
+        if ($users->getSize() > 0) {
             /** @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection $currentSessions */
             $currentSessions = $this->adminSessionCollectionFactory->create()
                 ->addFieldToFilter('user_id', ['in' => $users->getAllIds()])
