@@ -324,6 +324,8 @@ class AdminSessionsManager
     }
 
     /**
+     * Create admin session info collection.
+     *
      * @return \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection
      * @since 100.1.0
      */
@@ -334,8 +336,7 @@ class AdminSessionsManager
 
     /**
      * Calculates diff between now and last session updated_at
-     * and decides whether new prolong must be triggered or not
-     *
+     * and decides whether new prolong must be triggered or not.
      * This is done to limit amount of session prolongs and updates to database
      * within some period of time - X
      * X - is calculated in getIntervalBetweenConsecutiveProlongs()

@@ -92,7 +92,8 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->currentSessionMock = $this->createPartialMock(
-            \Magento\Security\Model\AdminSessionInfo::class, [
+            \Magento\Security\Model\AdminSessionInfo::class,
+            [
                 'isActive',
                 'getStatus',
                 'load',

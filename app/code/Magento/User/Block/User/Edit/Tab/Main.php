@@ -181,22 +181,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
                 'time_format' => 'hh:mm:ss',
                 'class' => 'validate-date',
             ]
-        )
-//            ->setAfterElementHtml("<script type=\"text/javascript\">
-//                //<![CDATA[
-//                  require([
-//                  'jquery',
-//                  'mage/calendar'
-//                    ], function($){
-//                           $('#expires_at').calendar({
-//                           hideIfNoPrevNext: true,
-//                           minDate: new Date(),
-//                           showOn: 'button',
-//                           dateFormat: 'yyyy-MM-dd'
-//                        });    });
-//                //]]>
-//                </script>")
-        ;
+        );
 
         $baseFieldset->addField('user_roles', 'hidden', ['name' => 'user_roles', 'id' => '_user_roles']);
 

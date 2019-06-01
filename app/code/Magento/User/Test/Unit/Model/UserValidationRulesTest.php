@@ -7,6 +7,11 @@ namespace Magento\User\Test\Unit\Model;
 
 use Magento\User\Model\UserValidationRules;
 
+/**
+ * Class UserValidationRulesTest
+ *
+ * @package Magento\User\Test\Unit\Model
+ */
 class UserValidationRulesTest extends \PHPUnit\Framework\TestCase
 {
     /**

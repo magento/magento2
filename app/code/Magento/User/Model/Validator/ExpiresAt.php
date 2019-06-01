@@ -10,6 +10,7 @@ use Magento\Framework\Validator\AbstractValidator;
 
 /**
  * Class ExpiresAt
+ *
  * @package Magento\User\Model\Validator
  */
 class ExpiresAt extends AbstractValidator
