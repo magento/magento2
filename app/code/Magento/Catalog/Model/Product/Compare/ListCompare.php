@@ -54,9 +54,9 @@ class ListCompare extends \Magento\Framework\DataObject
     /**
      * Catalog factory
      *
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
-    protected $_catalogFactory;
+    private $productRepository;
 
     /**
      * Constructor
@@ -66,8 +66,8 @@ class ListCompare extends \Magento\Framework\DataObject
      * @param \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Visitor $customerVisitor
-     * @param \Magento\Catalog\Model\ProductFactory $catalogFactory
      * @param array $data
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Compare\ItemFactory $compareItemFactory,
@@ -75,16 +75,15 @@ class ListCompare extends \Magento\Framework\DataObject
         \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Visitor $customerVisitor,
-        \Magento\Catalog\Model\ProductFactory $catalogFactory = null,
-        array $data = []
+        array $data = [],
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
     ) {
         $this->_compareItemFactory = $compareItemFactory;
         $this->_itemCollectionFactory = $itemCollectionFactory;
         $this->_catalogProductCompareItem = $catalogProductCompareItem;
         $this->_customerSession = $customerSession;
         $this->_customerVisitor = $customerVisitor;
-        $this->_catalogFactory = $catalogFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Model\ProductFactory::class);
+        $this->productRepository = $productRepository;
         parent::__construct($data);
     }
 
@@ -103,10 +102,7 @@ class ListCompare extends \Magento\Framework\DataObject
 
         if (!$item->getId()) {
             $item->addProductData($product);
-            $productId = $item->getProductId();
-            if ($productId && $this->_catalogFactory->create()->load($productId)->getId()) {
-                $item->save();
-            }
+            $item->save();
         }
 
         return $this;
@@ -122,7 +118,9 @@ class ListCompare extends \Magento\Framework\DataObject
     {
         if (is_array($productIds)) {
             foreach ($productIds as $productId) {
-                $this->addProduct($productId);
+                if ($this->productRepository->getById($productId)->getId()) {
+                    $this->addProduct($productId);
+                }
             }
         }
         return $this;
