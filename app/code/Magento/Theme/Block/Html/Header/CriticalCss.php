@@ -15,7 +15,7 @@ use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Asset\File\NotFoundException;
 
 /**
- * This ViewModel will add inline critical css in case dev/css/use_css_critical_path is enabled
+ * This ViewModel will add inline critical css in case dev/css/use_css_critical_path is enabled.
  */
 class CriticalCss implements ArgumentInterface
 {
@@ -30,10 +30,8 @@ class CriticalCss implements ArgumentInterface
     private $filePath;
 
     /**
-     * @param Template\Context $context
      * @param Repository $assetRepo
      * @param string $filePath
-     * @param array $data
      */
     public function __construct(
         Repository $assetRepo,
@@ -54,8 +52,11 @@ class CriticalCss implements ArgumentInterface
         try {
             $asset = $this->assetRepo->createAsset($this->filePath, ['_secure' => 'false']);
             $content = $asset->getContent();
-        } catch (LocalizedException | NotFoundException $e) {
-            throw new LocalizedException(__("Cannot get critical css file data: ", $e->getMessage()));
+        } catch (NotFoundException $e) {
+            throw new LocalizedException(__(
+                'Cannot get critical css file data: "%1"',
+                $e->getMessage()
+            ));
         };
 
         return $content;

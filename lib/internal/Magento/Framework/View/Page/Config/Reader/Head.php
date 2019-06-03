@@ -35,8 +35,6 @@ class Head implements Layout\ReaderInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return string[]
      */
     public function getSupportedNodes()
     {
@@ -66,10 +64,6 @@ class Head implements Layout\ReaderInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @param Layout\Reader\Context $readerContext
-     * @param Layout\Element $headElement
-     * @return $this
      */
     public function interpret(
         Layout\Reader\Context $readerContext,

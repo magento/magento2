@@ -10,6 +10,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * A repository service for view assets
@@ -201,9 +202,10 @@ class Repository
     /**
      * Create a file asset that's subject of fallback system
      *
-     * @param string $fileId
+     * @param $fileId
      * @param array $params
      * @return File
+     * @throws LocalizedException
      */
     public function createAsset($fileId, array $params = [])
     {
