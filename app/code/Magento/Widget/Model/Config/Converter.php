@@ -240,7 +240,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 ];
 
                 continue;
-            } else if (!isset($depends[$dependencyName]['values'])) {
+            } elseif (!isset($depends[$dependencyName]['values'])) {
                 $depends[$dependencyName]['values'] = [$depends[$dependencyName]['value']];
                 unset($depends[$dependencyName]['value']);
             }

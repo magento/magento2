@@ -1790,7 +1790,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 ->setWebsiteId($store->getWebsiteId())
                 ->setCreatedAt(null);
             $customer = $this->_validateCustomerData($customer);
-        } else if (!$customer->getId()) {
+        } elseif (!$customer->getId()) {
             /** Create new customer */
             $customerBillingAddressDataObject = $this->getBillingAddress()->exportCustomerAddress();
             $customer->setSuffix($customerBillingAddressDataObject->getSuffix())

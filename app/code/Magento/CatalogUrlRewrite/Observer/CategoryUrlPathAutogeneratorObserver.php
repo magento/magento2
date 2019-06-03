@@ -72,7 +72,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
         if ($category->getUrlKey() !== false && !$useDefaultAttribute) {
             $resultUrlKey = $this->categoryUrlPathGenerator->getUrlKey($category);
             $this->updateUrlKey($category, $resultUrlKey);
-        } else if ($useDefaultAttribute) {
+        } elseif ($useDefaultAttribute) {
             $resultUrlKey = $category->formatUrlKey($category->getOrigData('name'));
             $this->updateUrlKey($category, $resultUrlKey);
             $category->setUrlKey(null)->setUrlPath(null);
