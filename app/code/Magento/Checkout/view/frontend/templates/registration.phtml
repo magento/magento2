@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+/** @var $block \Magento\Checkout\Block\Registration */
 ?>
 <div id="registration" data-bind="scope:'registration'">
     <br />
@@ -17,8 +17,9 @@
                         "registration": {
                             "component": "Magento_Checkout/js/view/registration",
                             "config": {
-                                "registrationUrl": "<?= /* @escapeNotVerified */ $block->getCreateAccountUrl() ?>",
-                                "email": "<?= /* @escapeNotVerified */ $block->getEmailAddress() ?>"
+                                "registrationUrl":
+                                    "<?= $block->escapeJs($block->escapeUrl($block->getCreateAccountUrl())) ?>",
+                                "email": "<?= $block->escapeJs($block->getEmailAddress()) ?>"
                             },
                             "children": {
                                 "errors": {
