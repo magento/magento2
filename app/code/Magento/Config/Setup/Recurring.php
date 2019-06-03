@@ -5,24 +5,22 @@
  */
 namespace Magento\Config\Setup;
 
-use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
- * Upgrade the Config module DB scheme
+ * Class Recurring
  */
-class UpgradeSchema implements UpgradeSchemaInterface
+class Recurring implements InstallSchemaInterface
 {
     /**
      * @inheritdoc
      */
-    public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-        if (version_compare($context->getVersion(), '2.2.10', '<')) {
-            $this->addUpdatedAtField($setup);
-        }
+        $this->addUpdatedAtField($setup);
         $setup->endSetup();
     }
 
