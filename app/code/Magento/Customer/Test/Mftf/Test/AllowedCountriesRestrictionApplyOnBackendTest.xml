@@ -17,6 +17,7 @@
             <testCaseId value="MC-6441"/>
             <useCaseId value="MAGETWO-91523"/>
             <group value="customer"/>
+            <group value="banana"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -114,6 +115,6 @@
         <waitForPageLoad stepKey="waitForCustomersGrid"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomersGrid"/>
         <executeJS function="var len = document.querySelectorAll('{{AdminCustomerFiltersSection.countryOptions}}').length; return len-1;" stepKey="countriesAmount2"/>
-        <assertEquals expected="($countriesAmount)" expectedType="int" actual="($countriesAmount2)" stepKey="assertCountryAmounts"/>
+        <assertEquals expected="($countriesAmount)" actual="($countriesAmount2)" stepKey="assertCountryAmounts"/>
     </test>
 </tests>
