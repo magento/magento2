@@ -104,7 +104,7 @@ class ShipmentAddTrackTest extends WebapiAbstract
             ShipmentTrackInterface::TITLE => 'Shipment title',
             ShipmentTrackInterface::CARRIER_CODE => Track::CUSTOM_CARRIER_CODE,
         ];
-        $expectedMessage = 'The shipment doesn\'t belong to the order.';
+        $expectedMessage = 'Could not save the shipment tracking.';
 
         try {
             $this->_webApiCall($this->getServiceInfo(), ['entity' => $trackData]);
