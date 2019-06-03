@@ -32,14 +32,39 @@
         <data key="label">No</data>
         <data key="value">0</data>
     </entity>
-    <entity name="EnablePaymentCashOnDeliveryData">
+    <entity name="EnableZeroSubtotalCheckoutConfigData">
+        <!--Default Data-->
+        <data key="path">payment/free/active</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableZeroSubtotalCheckoutConfigData">
+        <data key="path">payment/free/active</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableCashOnDeliveryConfigData">
         <data key="path">payment/cashondelivery/active</data>
         <data key="scope_id">0</data>
         <data key="label">Yes</data>
         <data key="value">1</data>
     </entity>
-    <entity name="DisablePaymentCashOnDeliveryData">
+    <entity name="DisableCashOnDeliveryConfigData">
         <data key="path">payment/cashondelivery/active</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnablePurchaseOrderConfigData">
+        <data key="path">payment/purchaseorder/active</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisablePurchaseOrderConfigData">
+        <data key="path">payment/purchaseorder/active</data>
         <data key="scope_id">0</data>
         <data key="label">No</data>
         <data key="value">0</data>
