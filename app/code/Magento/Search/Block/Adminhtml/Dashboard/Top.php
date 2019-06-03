@@ -53,6 +53,8 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
+     * Construct.
+     *
      * @return void
      */
     protected function _construct()
@@ -62,7 +64,7 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareCollection()
     {
@@ -86,7 +88,7 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareColumns()
     {
@@ -119,7 +121,7 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRowUrl($row)
     {

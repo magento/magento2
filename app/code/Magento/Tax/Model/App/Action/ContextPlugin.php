@@ -70,6 +70,8 @@ class ContextPlugin
     }
 
     /**
+     * Before dispatch.
+     *
      * @param \Magento\Framework\App\ActionInterface $subject
      * @param \Magento\Framework\App\RequestInterface $request
      * @return mixed
