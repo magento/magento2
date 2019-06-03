@@ -23,7 +23,7 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
     /**
      * Catalog data
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $_moduleManager = null;
 
@@ -43,7 +43,7 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Framework\View\LayoutInterface $layout
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Backend\Helper\Data $backendData
      * @param array $data
      */
@@ -53,7 +53,7 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
         \Magento\Framework\Escaper $escaper,
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Framework\View\LayoutInterface $layout,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Backend\Helper\Data $backendData,
         array $data = []
     ) {
