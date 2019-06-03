@@ -12,7 +12,6 @@
         "ext-spl": "*",
         "ext-dom": "*",
         "ext-simplexml": "*",
-        "ext-mcrypt": "*",
         "ext-hash": "*",
         "ext-curl": "*",
         "ext-iconv": "*",
