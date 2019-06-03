@@ -88,20 +88,20 @@ class ConfigurableObject implements InterpreterInterface
 
             $className = $arguments['class'];
             unset($arguments['class']);
-        }
 
-        $type = $this->objectManagerConfig->getInstanceType(
-            $this->objectManagerConfig->getPreference($className)
-        );
-
-        $classParents = $this->getParents($type);
-
-        $whitelistIntersection = array_intersect($classParents, $this->classWhitelist);
-
-        if (empty($whitelistIntersection)) {
-            throw new \InvalidArgumentException(
-                sprintf('Class argument is invalid: %s', $className)
+            $type = $this->objectManagerConfig->getInstanceType(
+                $this->objectManagerConfig->getPreference($className)
             );
+
+            $classParents = $this->getParents($type);
+
+            $whitelistIntersection = array_intersect($classParents, $this->classWhitelist);
+
+            if (empty($whitelistIntersection)) {
+                throw new \InvalidArgumentException(
+                    sprintf('Class argument is invalid: %s', $className)
+                );
+            }
         }
 
         return $this->objectManager->create($className, $arguments);

@@ -159,21 +159,13 @@ class ConfigurableObjectTest extends TestCase
     public function validDataProvider()
     {
         return [
-            // Test most basic syntax
+            // Test most basic syntax with no arguments
             [
                 [
-                    'value' => 'MyFooClass',
+                    'value' => 'MyObject',
                 ],
-                'MyFooClass',
-                [
-                    ['MyFooClass', ['Something', 'skipme']],
-                    ['Something', ['dontcare', 'SomethingElse']],
-                    ['SomethingElse', [\Foo\Bar\ClassA::class, 'unrelated']],
-                    ['skipme', []],
-                    ['dontcare', []],
-                    ['unrelated', []],
-                    [\Foo\Bar\ClassA::class, []]
-                ],
+                'MyObject',
+                [],
                 []
             ],
             // Test alternative data syntax
