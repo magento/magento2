@@ -19,11 +19,11 @@
                 </field>
                 <field id="image_width" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Image Width</label>
-                    <validate>required-entry validate-zero-or-greater validate-length minimum-length-3 maximum-length-4</validate>
+                    <validate>required-entry validate-zero-or-greater validate-length minimum-length-3 maximum-length-3</validate>
                 </field>
                 <field id="image_height" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Image Height</label>
-                    <validate>required-entry validate-zero-or-greater validate-length minimum-length-3 maximum-length-4</validate>
+                    <validate>required-entry validate-zero-or-greater validate-length minimum-length-3 maximum-length-3</validate>
                     <comment>With these dimensions, the image will be display at Frontend product page.</comment>
                 </field>
             </group>

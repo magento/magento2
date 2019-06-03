@@ -6,51 +6,33 @@ use \Magento\Framework\App\Config\ScopeConfigInterface;
 class Image extends \Magento\Framework\View\Element\Template
 {
     public $scopeConfig;
+    public $helper;
 
     public function __construct(
         ScopeConfigInterface $scopeConfig,
+        \Smetana\Images\Helper\Data $helper,
         \Magento\Framework\View\Element\Template\Context $context
     ) {
+        $this->helper = $helper;
         $this->scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
 
-    public function getConfig()
+    public function getConfig($option)
     {
         return $this->scopeConfig->getValue(
-            'smetana_section/smetana_group/smetana_upload_image',
+            "smetana_section/smetana_group/$option",
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
-}
 
-/// OLD OLD
-/// use Smetana\Images\Helper\Data;
-//use Magento\Framework\Filesystem;
-//
-//class Image extends \Magento\Framework\View\Element\Template
-//{
-//    public $helper;
-//    public $mediaDirectory;
-//
-//    public function __construct(
-//        Data $helper,
-//        Filesystem $filesystem,
-//        \Magento\Framework\View\Element\Template\Context $context
-//    ) {
-//        $this->helper = $helper;
-//        $this->mediaDirectory = $filesystem->getDirectoryWrite('media');
-//        parent::__construct($context);
-//    }
-//
-//    public function getImage()
-//    {
-////        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-////        $helper = $objectManager->create('Smetana\Images\Helper\Data');
-//
-//
-//        $name = $this->helper->getConfig('smetana_section/smetana_group/smetana_upload_image');
-//        return $name;
-//        $path = $this->mediaDirectory->getAbsolutePath('products_image') . '/' . $name;
-//        return $path;
-//    }
+    public function getImage()
+    {
+        $path = $this->helper->resize(
+            $this->getConfig('smetana_upload_image'),
+            $this->getConfig('image_width'),
+            $this->getConfig('image_height')
+        );
+        return $path == false ? '' : substr($path, strpos($path, 'pub'));
+    }
+}
