@@ -11,6 +11,8 @@ namespace Magento\Framework\Data\Form;
  * Class FormKey
  *
  * @api
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class FormKey
 {

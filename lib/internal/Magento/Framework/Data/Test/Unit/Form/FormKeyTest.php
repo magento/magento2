@@ -10,6 +10,9 @@ use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Session\SessionManager;
 
+/**
+ * Class FormKeyTest
+ */
 class FormKeyTest extends \PHPUnit\Framework\TestCase
 {
     /**

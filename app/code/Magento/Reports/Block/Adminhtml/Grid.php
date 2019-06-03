@@ -109,9 +109,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         }
 
         if (is_string($filter)) {
-            $data = [];
             $filter = $this->urlDecoder->decode($filter);
-            parse_str(urldecode($filter), $data);
+
+            /** @var $request \Magento\Framework\HTTP\PhpEnvironment\Request */
+            $request = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\HTTP\PhpEnvironment\Request::class);
+            $data = $request->setRequestUri(urldecode($filter))->getQuery()->toArray();
 
             if (!isset($data['report_from'])) {
                 // getting all reports from 2001 year
@@ -136,7 +138,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             $this->_setFilterValues($data);
         } elseif ($filter && is_array($filter)) {
             $this->_setFilterValues($filter);
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
         } elseif (0 !== count($this->_defaultFilter)) {
             $this->_setFilterValues($this->_defaultFilter);
         }
