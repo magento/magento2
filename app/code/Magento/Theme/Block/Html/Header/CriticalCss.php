@@ -45,14 +45,13 @@ class CriticalCss implements ArgumentInterface
      * Returns critical css data as string.
      *
      * @return bool|string
-     * @throws LocalizedException
      */
     public function getCriticalCssData()
     {
         try {
             $asset = $this->assetRepo->createAsset($this->filePath, ['_secure' => 'false']);
             $content = $asset->getContent();
-        } catch (NotFoundException $e) {
+        } catch (LocalizedException | NotFoundException $e) {
             $content = '';
         };
 
