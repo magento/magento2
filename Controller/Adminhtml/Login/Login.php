@@ -73,18 +73,30 @@ class Login extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        if (!$this->config->isEnabled($this->storeManager->getStore()->getId())) {
+        $customerId = (int) $this->getRequest()->getParam('customer_id');
+        if (!$customerId) {
+            $customerId = (int) $this->getRequest()->getParam('entity_id');
+        }
 
-            $this->messageManager->addErrorMessage(__('Magefan Login As Customer is disabled.'));
+        if (!$this->config->isEnabled()) {
+            $msg = __('Magefan Blog is disabled, to enable the extension please navigate to Stores > Configuration > Magefan Extensions > Login As Customer "%1"', $this->getUrl('adminhtml/system_config/edit', ['section' => 'mfloginascustomer']));
+            $this->messageManager->addErrorMessage($msg);
             $this->_redirect('customer/index/index');
             return;
         } elseif (!$this->config->isKeyMissing() && $this->metadata->getEdition() != 'Community') {
-
-            $this->messageManager->addErrorMessage(__('Magefan Login As Customer Product Key is missing.'));
+            $msg = __('Magefan Blog Product Key is missing. Blog Extension will be automatically disabled soon. Please specify the product key in Stores > Configuration > Magefan Extensions > Login As Customer "%1"', $this->getUrl('adminhtml/system_config/edit', ['section' => 'mfloginascustomer']));
+            $this->messageManager->addErrorMessage($msg);
             $this->_redirect('customer/index/index');
             return;
         }
-        $customerId = (int) $this->getRequest()->getParam('customer_id');
+
+        $customerStoreId = $this->getRequest()->getParam('store_id');
+
+        if (!isset($customerStoreId) && $this->config->getStoreViewLogin()) {
+            $this->messageManager->addNoticeMessage(__('Select Store View.'));
+            $this->_redirect('loginascustomer/login/manual', ['entity_id' => $customerId ]);
+            return;
+        }
 
         $login = $this->loginModel->setCustomerId($customerId);
 
@@ -105,7 +117,7 @@ class Login extends \Magento\Backend\App\Action
         if (null === $customerStoreId) {
             $store = $this->storeManager->getDefaultStoreView();
         }
-        
+
         $redirectUrl = $this->url->setScope($store)
             ->getUrl('loginascustomer/login/index', ['secret' => $login->getSecret(), '_nosid' => true]);
 

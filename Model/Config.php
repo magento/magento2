@@ -22,6 +22,7 @@ class Config
      */
     const XML_PATH_EXTENSION_ENABLED     = 'mfloginascustomer/general/enabled';
     const XML_PATH_KEY                   = 'mfloginascustomer/general/key';
+    const STORE_VIEW_TO_LOGIN_IN         = 'mfloginascustomer/general/store_view_login';
 
     /**
      * @var ScopeConfigInterface
@@ -73,6 +74,17 @@ class Config
     {
         return $this->getConfig(
             self::XML_PATH_KEY,
+            $storeId
+        );
+    }
+    /**
+     * @param null $storeId
+     * @return mixed
+     */
+    public function getStoreViewLogin($storeId = null)
+    {
+        return $this->getConfig(
+            self::STORE_VIEW_TO_LOGIN_IN,
             $storeId
         );
     }

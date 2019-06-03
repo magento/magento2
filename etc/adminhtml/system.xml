@@ -44,7 +44,7 @@
                 </field>
                 <field id="store_view_login" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Store View To Login In</label>
-                    <source_model>Magefan\Blog\Model\Config\Source\DisplayMode</source_model> <!--ЗМІНИТИ -->
+                    <source_model>Magefan\LoginAsCustomer\Model\Config\Source\StoreViewLogin</source_model>
                 </field>
             </group>
         </section>
