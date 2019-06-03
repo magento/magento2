@@ -15,7 +15,7 @@
         </arguments>
         <click selector="{{AdminOrderFormItemsOrderedSection.configureButtonBySku}}" stepKey="clickConfigure"/>
         <waitForPageLoad stepKey="waitForConfigurePageLoad"/>
-        <selectOption selector="{{AdminOrderFormConfigureProductSection.attributeSelect}}" userInput="{{optionName}}" stepKey="selectOption"/>
+        <selectOption selector="{{AdminOrderFormConfigureProductSection.selectOption}}" userInput="{{optionName}}" stepKey="selectOption"/>
         <fillField selector="{{AdminOrderFormConfigureProductSection.quantity}}" userInput="{{productQty}}" stepKey="fillProductQty"/>
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOk"/>
     </actionGroup>
