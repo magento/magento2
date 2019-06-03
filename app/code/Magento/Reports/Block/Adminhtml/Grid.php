@@ -109,6 +109,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         }
 
         if (is_string($filter)) {
+            // this is a replacement for base64_decode()
             $filter = $this->urlDecoder->decode($filter);
 
             /** @var $request \Magento\Framework\HTTP\PhpEnvironment\Request */
