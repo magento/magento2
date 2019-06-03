@@ -19,7 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Controller for notifying about stock.
  */
-class Stock extends AddController implements HttpPostActionInterface
+class Stock extends AddController
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
