@@ -90,14 +90,14 @@
                                     <a href="#"
                                        class="icon icon-configure"
                                        title="<?= $block->escapeHtml(__('Configure and Add to Order')) ?>"
-                                       onclick="order.sidebarConfigureProduct('<?= 'sidebar_wishlist' ?>', <?= (int) $block->getProductId($_item) ?>, <?= (int) $block->getItemId($_item) ?>); return false;">
+                                       onclick="order.sidebarConfigureProduct('sidebar_wishlist', <?= (int) $block->getProductId($_item) ?>, <?= (int) $block->getItemId($_item) ?>); return false;">
                                         <span><?= $block->escapeHtml(__('Configure and Add to Order')) ?></span>
                                     </a>
                                 <?php elseif ($block->isConfigurationRequired($_item->getTypeId())) : ?>
                                     <a href="#"
                                        class="icon icon-configure"
                                        title="<?= $block->escapeHtml(__('Configure and Add to Order')) ?>"
-                                       onclick="order.sidebarConfigureProduct('<?= 'sidebar' ?>', <?= (int) $block->getProductId($_item) ?>); return false;">
+                                       onclick="order.sidebarConfigureProduct('sidebar', <?= (int) $block->getProductId($_item) ?>); return false;">
                                         <span><?= $block->escapeHtml(__('Configure and Add to Order')) ?></span>
                                     </a>
                                 <?php else : ?>

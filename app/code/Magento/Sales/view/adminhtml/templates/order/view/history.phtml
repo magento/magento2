@@ -15,7 +15,7 @@
                 <div class="admin__field-control">
                     <select name="history[status]" id="history_status" class="admin__control-select">
                         <?php foreach ($block->getStatuses() as $_code => $_label) : ?>
-                            <option value="<?= $block->escapeHtml($_code) ?>"<?php if ($_code == $block->getOrder()->getStatus()) : ?> selected="selected"<?php endif; ?>><?= $block->escapeHtml($_label) ?></option>
+                            <option value="<?= $block->escapeHtmlAttr($_code) ?>"<?php if ($_code == $block->getOrder()->getStatus()) : ?> selected="selected"<?php endif; ?>><?= $block->escapeHtml($_label) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

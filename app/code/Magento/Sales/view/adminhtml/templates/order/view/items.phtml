@@ -17,7 +17,7 @@ $_order = $block->getOrder() ?>
                 $lastItemNumber = count($columns) ?>
                 <?php foreach ($columns as $columnName => $columnTitle) : ?>
                     <?php $i++; ?>
-                    <th class="col-<?= /* @noEscape */ $columnName ?><?= /* @noEscape */ ($i === $lastItemNumber ? ' last' : '') ?>"><span><?= $block->escapeHtml($columnTitle) ?></span></th>
+                    <th class="col-<?= $block->escapeHtmlAttr($columnName) ?><?= /* @noEscape */ ($i === $lastItemNumber ? ' last' : '') ?>"><span><?= $block->escapeHtml($columnTitle) ?></span></th>
                 <?php endforeach; ?>
             </tr>
         </thead>

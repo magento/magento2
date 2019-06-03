@@ -11,7 +11,7 @@
         <td>
             <input type="text"
                    name="creditmemo[shipping_amount]"
-                   value="<?= /* @noEscape */ $block->getShippingAmount() ?>"
+                   value="<?= $block->escapeHtmlAttr($block->getShippingAmount()) ?>"
                    class="input-text admin__control-text not-negative-amount"
                    id="shipping_amount" />
         </td>
@@ -21,7 +21,7 @@
         <td>
             <input type="text"
                    name="creditmemo[adjustment_positive]"
-                   value="<?= /* @noEscape */ $_source->getBaseAdjustmentPositive() ?>"
+                   value="<?= $block->escapeHtmlAttr($_source->getBaseAdjustmentPositive()) ?>"
                    class="input-text admin__control-text not-negative-amount"
                    id="adjustment_positive" />
         </td>
@@ -31,7 +31,7 @@
         <td>
             <input type="text"
                    name="creditmemo[adjustment_negative]"
-                   value="<?= /* @noEscape */ $_source->getBaseAdjustmentNegative() ?>"
+                   value="<?= $block->escapeHtmlAttr($_source->getBaseAdjustmentNegative()) ?>"
                    class="input-text admin__control-text not-negative-amount"
                    id="adjustment_negative"/>
             <script>
@@ -39,7 +39,7 @@
 
                 //<![CDATA[
                 Validation.addAllThese([
-                    ['not-negative-amount', '<?= $block->escapeHtml(__('Please enter a positive number in this field.')) ?>', function(v) {
+                    ['not-negative-amount', '<?= $block->escapeJs(__('Please enter a positive number in this field.')) ?>', function(v) {
                         if(v.length)
                             return /^\s*\d+([,.]\d+)*\s*%?\s*$/.test(v);
                         else

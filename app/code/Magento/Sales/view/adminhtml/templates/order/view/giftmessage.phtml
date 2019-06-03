@@ -8,7 +8,7 @@
 ?>
 <?php if ($block->canDisplayGiftmessage()) : ?>
     <?php $_required = $block->getMessage()->getMessage() != '' ?>
-    <div id="<?= $block->getHtmlId() ?>" class="admin__page-section-content giftmessage-whole-order-container">
+    <div id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>" class="admin__page-section-content giftmessage-whole-order-container">
         <form class="entry-edit form-inline" id="<?= $block->escapeHtmlAttr($block->getFieldId('form')) ?>" action="<?= $block->escapeUrl($block->getSaveUrl()) ?>">
             <fieldset class="admin__fieldset">
                 <legend class="admin__legend"><span><?= $block->escapeHtml(__('Gift Message for the Entire Order')) ?></span></legend>

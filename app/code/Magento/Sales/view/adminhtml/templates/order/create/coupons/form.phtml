@@ -5,10 +5,7 @@
  */
 ?>
 <?php
-/**
- * \Magento\Sales\Block\Adminhtml\Order\Create\Coupons
- *
- */
+/* @var \Magento\Sales\Block\Adminhtml\Order\Create\Coupons $block */
 ?>
 <div class="admin__field field-apply-coupon-code">
     <label class="admin__field-label"><span><?= $block->escapeHtml(__('Apply Coupon Code')) ?></span></label>
@@ -18,7 +15,7 @@
         <?php if ($block->getCouponCode()) : ?>
         <p class="added-coupon-code">
             <span><?= $block->escapeHtml($block->getCouponCode()) ?></span>
-            <a href="#" onclick="order.applyCoupon(''); return false;" title="<?= $block->escapeHtml(__('Remove Coupon Code')) ?>"
+            <a href="#" onclick="order.applyCoupon(''); return false;" title="<?= $block->escapeHtmlAttr(__('Remove Coupon Code')) ?>"
                class="action-remove"><span><?= $block->escapeHtml(__('Remove')) ?></span></a>
         </p>
         <?php endif; ?>

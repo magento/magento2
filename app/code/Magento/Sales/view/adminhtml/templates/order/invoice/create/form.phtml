@@ -91,7 +91,7 @@ require(['prototype'], function(){
     }
 
     /*forced creating of shipment*/
-    var forcedShipmentCreate = <?= /* @noEscape */ $block->getForcedShipmentCreate() ?>;
+    var forcedShipmentCreate = <?= (int) $block->getForcedShipmentCreate() ?>;
     var shipmentElement = $('invoice_do_shipment');
     if (forcedShipmentCreate && shipmentElement) {
         shipmentElement.checked = true;
