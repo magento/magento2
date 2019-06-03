@@ -94,6 +94,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * Indicate that block can display container
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function canDisplayContainer()
     {
@@ -196,7 +197,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
     /**
      * Retrieve save url
      *
-     * @return array
+     * @return string
      */
     public function getSaveUrl()
     {
@@ -259,9 +260,11 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
     }
 
     /**
+     * Retrieve rendered column html content
+     *
      * @param \Magento\Framework\DataObject|Item $item
      * @param string $column
-     * @param null $field
+     * @param string $field
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @since 100.1.0
@@ -301,6 +304,8 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
     }
 
     /**
+     * Get columns data.
+     *
      * @return array
      * @since 100.1.0
      */

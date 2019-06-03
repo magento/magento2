@@ -35,7 +35,9 @@
             click="editAddress">
         <span translate="'Edit'"></span>
     </button>
+    <!-- ko if: (!isSelected()) -->
     <button type="button" click="selectAddress" class="action action-select-shipping-item">
         <span translate="'Ship Here'"></span>
     </button>
+    <!-- /ko -->
 </div>

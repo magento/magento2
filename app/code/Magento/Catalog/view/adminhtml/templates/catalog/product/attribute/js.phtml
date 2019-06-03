@@ -45,11 +45,11 @@ function checkOptionsPanelVisibility(){
 
         if($('frontend_input') && ($('frontend_input').value=='select' || $('frontend_input').value=='multiselect')){
             panel.show();
-            panel.addClass(activePanelClass);
+            jQuery(panel).addClass(activePanelClass);
         }
         else {
             panel.hide();
-            panel.removeClass(activePanelClass);
+            jQuery(panel).removeClass(activePanelClass);
         }
     }
 }
@@ -334,7 +334,7 @@ if ($('is_required')) {
 
 jQuery(function($) {
     bindAttributeInputType();
-    // @todo: refactor collapsable component
+    // @todo: refactor collapsible component
     $('.attribute-popup .collapse, [data-role="advanced_fieldset-content"]')
         .collapsable()
         .collapse('hide');

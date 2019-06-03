@@ -17,6 +17,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
 /**
+ * TransportBuilder
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -175,13 +177,31 @@ class TransportBuilder
     /**
      * Set mail from address
      *
+     * @deprecated This function sets the from address but does not provide
+     * a way of setting the correct from addresses based on the scope.
+     * @see setFromByScope()
+     *
      * @param string|array $from
      * @return $this
+     * @throws \Magento\Framework\Exception\MailException
      */
     public function setFrom($from)
     {
-        $result = $this->_senderResolver->resolve($from);
-        $this->message->setFrom($result['email'], $result['name']);
+        return $this->setFromByScope($from, null);
+    }
+
+    /**
+     * Set mail from address by scopeId
+     *
+     * @param string|array $from
+     * @param string|int $scopeId
+     * @return $this
+     * @throws \Magento\Framework\Exception\MailException
+     */
+    public function setFromByScope($from, $scopeId = null)
+    {
+        $result = $this->_senderResolver->resolve($from, $scopeId);
+        $this->message->setFromAddress($result['email'], $result['name']);
         return $this;
     }
 
@@ -237,6 +257,7 @@ class TransportBuilder
      * Get mail transport
      *
      * @return \Magento\Framework\Mail\TransportInterface
+     * @throws LocalizedException
      */
     public function getTransport()
     {

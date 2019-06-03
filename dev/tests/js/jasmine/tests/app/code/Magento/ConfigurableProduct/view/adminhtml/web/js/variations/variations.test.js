@@ -46,8 +46,8 @@ define([
 
             variation.serializeData();
 
-            expect(variation.source.data['configurable-matrix']).toBeUndefined();
-            expect(variation.source.data['associated_product_ids']).toBeUndefined();
+            expect(variation.source.data['configurable-matrix']).toEqual(matrix);
+            expect(variation.source.data['associated_product_ids']).toEqual(ids);
             expect(variation.source.data['configurable-matrix-serialized']).toEqual(resultMatrix);
             expect(variation.source.data['associated_product_ids_serialized']).toEqual(resultIds);
         });
@@ -112,10 +112,69 @@ define([
             variation.source.data['associated_product_ids_serialized'] = JSON.stringify(['some old data']);
             variation.serializeData();
 
-            expect(variation.source.data['configurable-matrix']).toBeUndefined();
-            expect(variation.source.data['associated_product_ids']).toBeUndefined();
+            expect(variation.source.data['configurable-matrix']).toEqual(matrix);
+            expect(variation.source.data['associated_product_ids']).toEqual(ids);
             expect(variation.source.data['configurable-matrix-serialized']).toEqual(resultMatrix);
             expect(variation.source.data['associated_product_ids_serialized']).toEqual(resultIds);
+        });
+
+        it('checks that "unserializeData" unserializes data', function () {
+            var matrixString = '[{"name":"Small Product","attributes":"Size: small","price":5.5},' +
+                '{"name":"Medium Product","attributes":"Size: medium","price":10.99},' +
+                '{"name":"Large Product","attributes":"Size: large","price":25}]',
+            idString = '[100, 101, 102]',
+            resultMatrix = JSON.parse(matrixString),
+            resultIds = JSON.parse(idString);
+
+            variation.source.data['configurable-matrix-serialized'] = matrixString;
+            variation.source.data['associated_product_ids_serialized'] = idString;
+
+            variation.unserializeData();
+
+            expect(variation.source.data['configurable-matrix-serialized']).toBeUndefined();
+            expect(variation.source.data['associated_product_ids_serialized']).toBeUndefined();
+            expect(variation.source.data['configurable-matrix']).toEqual(resultMatrix);
+            expect(variation.source.data['associated_product_ids']).toEqual(resultIds);
+        });
+
+        it('checks that "serializeData" and "unserializeData" give proper result', function () {
+            var matrix = [
+                    {
+                        name: 'Small Product',
+                        attributes: 'Size: small',
+                        price: 5.50
+                    },
+                    {
+                        name: 'Medium Product',
+                        attributes: 'Size: medium',
+                        price: 10.99
+                    },
+                    {
+                        name: 'Large Product',
+                        attributes: 'Size: large',
+                        price: 25
+                    }
+                ],
+                ids = [1, 2, 3],
+                resultMatrix = JSON.stringify(matrix),
+                resultIds = JSON.stringify(ids);
+
+            variation.source.data['configurable-matrix'] = matrix;
+            variation.source.data['associated_product_ids'] = ids;
+
+            variation.serializeData();
+
+            expect(variation.source.data['configurable-matrix']).toEqual(matrix);
+            expect(variation.source.data['associated_product_ids']).toEqual(ids);
+            expect(variation.source.data['configurable-matrix-serialized']).toEqual(resultMatrix);
+            expect(variation.source.data['associated_product_ids_serialized']).toEqual(resultIds);
+
+            variation.unserializeData();
+
+            expect(variation.source.data['configurable-matrix']).toEqual(matrix);
+            expect(variation.source.data['associated_product_ids']).toEqual(ids);
+            expect(variation.source.data['configurable-matrix-serialized']).toBeUndefined();
+            expect(variation.source.data['associated_product_ids_serialized']).toBeUndefined();
         });
     });
 });

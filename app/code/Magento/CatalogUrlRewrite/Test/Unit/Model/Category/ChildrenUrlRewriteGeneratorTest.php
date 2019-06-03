@@ -31,6 +31,9 @@ class ChildrenUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $serializerMock;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    private $categoryRepository;
+
     protected function setUp()
     {
         $this->serializerMock = $this->getMockBuilder(Json::class)
@@ -47,6 +50,9 @@ class ChildrenUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->categoryUrlRewriteGenerator = $this->getMockBuilder(
             \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator::class
         )->disableOriginalConstructor()->getMock();
+        $this->categoryRepository = $this->getMockBuilder(
+            \Magento\Catalog\Model\CategoryRepository::class
+        )->disableOriginalConstructor()->getMock();
         $mergeDataProviderFactory = $this->createPartialMock(
             \Magento\UrlRewrite\Model\MergeDataProviderFactory::class,
             ['create']
@@ -59,14 +65,15 @@ class ChildrenUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
             [
                 'childrenCategoriesProvider' => $this->childrenCategoriesProvider,
                 'categoryUrlRewriteGeneratorFactory' => $this->categoryUrlRewriteGeneratorFactory,
-                'mergeDataProviderFactory' => $mergeDataProviderFactory
+                'mergeDataProviderFactory' => $mergeDataProviderFactory,
+                'categoryRepository' => $this->categoryRepository
             ]
         );
     }
 
     public function testNoChildrenCategories()
     {
-        $this->childrenCategoriesProvider->expects($this->once())->method('getChildren')->with($this->category, true)
+        $this->childrenCategoriesProvider->expects($this->once())->method('getChildrenIds')->with($this->category, true)
             ->will($this->returnValue([]));
 
         $this->assertEquals([], $this->childrenUrlRewriteGenerator->generate('store_id', $this->category));
@@ -76,14 +83,16 @@ class ChildrenUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $storeId = 'store_id';
         $saveRewritesHistory = 'flag';
+        $childId = 2;
 
         $childCategory = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()->getMock();
-        $childCategory->expects($this->once())->method('setStoreId')->with($storeId);
         $childCategory->expects($this->once())->method('setData')
             ->with('save_rewrites_history', $saveRewritesHistory);
-        $this->childrenCategoriesProvider->expects($this->once())->method('getChildren')->with($this->category, true)
-            ->will($this->returnValue([$childCategory]));
+        $this->childrenCategoriesProvider->expects($this->once())->method('getChildrenIds')->with($this->category, true)
+            ->will($this->returnValue([$childId]));
+        $this->categoryRepository->expects($this->once())->method('get')
+            ->with($childId, $storeId)->willReturn($childCategory);
         $this->category->expects($this->any())->method('getData')->with('save_rewrites_history')
             ->will($this->returnValue($saveRewritesHistory));
         $this->categoryUrlRewriteGeneratorFactory->expects($this->once())->method('create')

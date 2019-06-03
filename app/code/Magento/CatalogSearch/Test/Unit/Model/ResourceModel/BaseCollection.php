@@ -9,6 +9,9 @@ namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
  * Base class for Collection tests.
  *
  * Contains helper methods to get commonly used mocks used for collection tests.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  **/
 class BaseCollection extends \PHPUnit\Framework\TestCase
 {

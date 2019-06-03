@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminEditCustomerAddressesSection">
+        <element name="addresses" type="button" selector="//span[text()='Addresses']" timeout="30"/>
+        <element name="addNewAddress" type="button" selector="//span[text()='Add New Address']"/>
+        <element name="defaultBillingAddress" type="text" selector="input[name='default_billing']"/>
+        <element name="defaultShippingAddress" type="text" selector="input[name='default_shipping']"/>
+        <element name="defaultBillingAddressButton" type="text" selector="//input[@name='default_billing']/following-sibling::label"/>
+        <element name="defaultShippingAddressButton" type="text" selector="//input[@name='default_shipping']/following-sibling::label"/>
+        <element name="prefixName" type="text" selector="input[name='prefix']"/>
+        <element name="firstName" type="text" selector="input[name='firstname']" />
+        <element name="middleName" type="text" selector="input[name='middlename']" />
+        <element name="lastName" type="text" selector="input[name='lastname']" />
+        <element name="suffixName" type="text" selector="input[name='suffix']" />
+        <element name="company" type="text" selector="input[name='company']" />
+        <element name="streetAddress" type="text" selector="input[name='street[0]']" />
+        <element name="city" type="text" selector="//*[@class='modal-component']//input[@name='city']" />
+        <element name="country" type="select" selector="//*[@class='modal-component']//select[@name='country_id']" />
+        <element name="state" type="select" selector="//*[@class='modal-component']//select[@name='region_id']" />
+        <element name="dropDownAttribute" type="select" selector="//select[@name='{{var1}}']" parameterized="true"/>
+        <element name="zipCode" type="text" selector="//*[@class='modal-component']//input[@name='postcode']" />
+        <element name="phone" type="text" selector="//*[@class='modal-component']//input[@name='telephone']" />
+        <element name="vat" type="text" selector="input[name='vat_id']" />
+        <element name="save" type="button" selector="//button[@title='Save']" />
+    </section>
+
+</sections>

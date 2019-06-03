@@ -47,7 +47,7 @@ Sending,Sending
 Paused,Paused
 View,View
 Unknown,Unknown
-Order,Order
+"Order #","Order #"
 Purchased,Purchased
 "Bill-to Name","Bill-to Name"
 "Ship-to Name","Ship-to Name"
@@ -506,10 +506,10 @@ Strong,Strong
 "Rebuild Customer grid index","Rebuild Customer grid index"
 Group,Group
 "Add New Customer","Add New Customer"
-"Are you sure to delete selected customers?","Are you sure to delete selected customers?"
+"Are you sure you want to delete the selected customers?","Are you sure you want to delete the selected customers?"
 "Delete items","Delete items"
 "Subscribe to Newsletter","Subscribe to Newsletter"
-"Are you sure to unsubscribe selected customers from newsletter?","Are you sure to unsubscribe selected customers from newsletter?"
+"Are you sure you want to unsubscribe the selected customers from the newsletter?","Are you sure you want to unsubscribe the selected customers from the newsletter?"
 "Unsubscribe from Newsletter","Unsubscribe from Newsletter"
 "Assign a Customer Group","Assign a Customer Group"
 Phone,Phone

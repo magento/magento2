@@ -5,6 +5,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Declaration\Schema\Config;
 
 /**
@@ -23,7 +25,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param  \DOMDocument $source
      * @return array
      */
-    public function convert($source)
+    public function convert($source): array
     {
         $output = $this->recursiveConvert($this->getTablesNode($source));
         return $output;
@@ -37,7 +39,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param  \DOMDocument $element
      * @return \DOMNodeList
      */
-    private function getTablesNode(\DOMDocument $element)
+    private function getTablesNode(\DOMDocument $element): \DOMNodeList
     {
         return $element->getElementsByTagName('table');
     }
@@ -48,21 +50,21 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \Traversable $source
      * @return array
      */
-    private function recursiveConvert(\Traversable $source)
+    private function recursiveConvert(\Traversable $source): array
     {
         $output = [];
         foreach ($source as $element) {
             if ($element instanceof \DOMElement) {
-                $key = $element->getAttribute('name');
+                $key = $this->getIdAttributeValue($element);
 
                 if ($element->hasChildNodes()) {
                     $output[$element->tagName][$key] =
                         array_replace(
                             $this->recursiveConvert($element->childNodes),
-                            $this->interpretateAttributes($element)
+                            $this->interpretAttributes($element)
                         );
-                } else if ($this->hasAttributesExceptName($element)) {
-                    $output[$element->tagName][$key] = $this->interpretateAttributes($element);
+                } elseif ($this->hasAttributesExceptIdAttribute($element)) {
+                    $output[$element->tagName][$key] = $this->interpretAttributes($element);
                 } else {
                     $output[$element->tagName][$key] = $key;
                 }
@@ -73,25 +75,48 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * Check whether we have any attributes except name XSI:TYPE is in another namespace.
-     * Note: name is mandatory attribute.
+     * Provide the value of the ID attribute for each element.
+     *
+     * @param \DOMElement $element
+     * @return string
+     */
+    private function getIdAttributeValue(\DOMElement $element): string
+    {
+        $idAttributeValue = '';
+        switch ($element->tagName) {
+            case ('table'):
+            case ('column'):
+                $idAttributeValue = $element->getAttribute('name');
+                break;
+            case ('index'):
+            case ('constraint'):
+                $idAttributeValue = $element->getAttribute('referenceId');
+                break;
+        }
+
+        return $idAttributeValue;
+    }
+
+    /**
+     * Check whether we have any attributes except ID attribute.
      *
      * @param  \DOMElement $element
      * @return bool
      */
-    private function hasAttributesExceptName(\DOMElement $element)
+    private function hasAttributesExceptIdAttribute(\DOMElement $element)
     {
         return $element->hasAttribute('xsi:type') || $element->attributes->length >= 2;
     }
 
     /**
      * Mix attributes that comes from XML schema with default ones.
+     *
      * So if you will not have some attribute in schema - it will be taken from default one.
      *
      * @param  \DOMElement $domElement
-     * @return mixed
+     * @return array
      */
-    private function interpretateAttributes(\DOMElement $domElement)
+    private function interpretAttributes(\DOMElement $domElement): array
     {
         $attributes = $this->getAttributes($domElement);
         $xsiType = $domElement->getAttribute('xsi:type');
@@ -109,7 +134,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param  \DOMElement $element
      * @return array
      */
-    private function getAttributes(\DOMElement $element)
+    private function getAttributes(\DOMElement $element): array
     {
         $attributes = [];
         $attributeNodes = $element->attributes;

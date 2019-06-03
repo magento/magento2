@@ -8,10 +8,12 @@ namespace Magento\UrlRewrite\Model\Exception;
 use Magento\Framework\Phrase;
 
 /**
+ * Exception for already created url.
+ *
  * @api
  * @since 100.2.0
  */
-class UrlAlreadyExistsException extends \Magento\Framework\Exception\LocalizedException
+class UrlAlreadyExistsException extends \Magento\Framework\Exception\AlreadyExistsException
 {
     /**
      * @var array
@@ -34,6 +36,8 @@ class UrlAlreadyExistsException extends \Magento\Framework\Exception\LocalizedEx
     }
 
     /**
+     * Get URLs
+     *
      * @return array
      * @since 100.2.0
      */

@@ -18,6 +18,20 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
+    
+    .search {
+        .fieldset {
+            .control {
+                .addon {
+                    input {
+                        flex-basis: auto;
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+    
     .block-search {
         margin-bottom: 0;
 
@@ -199,7 +213,7 @@
 //  Mobile
 //  _____________________________________________
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .block-search {
         margin-top: @indent__s;
     }

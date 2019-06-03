@@ -420,6 +420,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
             $request->setTrxtype(self::TRXTYPE_SALE);
             $request->setOrigid($payment->getAdditionalInformation(self::PNREF));
             $payment->unsAdditionalInformation(self::PNREF);
+            $request->setData('currency', $payment->getOrder()->getBaseCurrencyCode());
         } elseif ($payment->getParentTransactionId()) {
             $request = $this->buildBasicRequest();
             $request->setOrigid($payment->getParentTransactionId());
@@ -472,6 +473,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
 
     /**
      * Check void availability
+     *
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -584,7 +586,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function postRequest(DataObject $request, ConfigInterface $config)
     {
@@ -719,6 +721,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     }
 
     /**
+     * Set billing address
+     *
      * @param DataObject $request
      * @param DataObject $billing
      *
@@ -745,6 +749,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     }
 
     /**
+     * Set shipping address
+     *
      * @param DataObject $request
      * @param DataObject $shipping
      *
@@ -815,6 +821,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     }
 
     /**
+     * Set transaction status
+     *
      * @param DataObject $payment
      * @param DataObject $response
      *
@@ -848,6 +856,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     }
 
     /**
+     * Fill customer contacts
+     *
      * @param DataObject $order
      * @param DataObject $request
      * @return DataObject
@@ -869,6 +879,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
 
     /**
      * Add order details to payment request
+     *
      * @param DataObject $request
      * @param Order $order
      * @return void
@@ -883,7 +894,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $orderIncrementId = $order->getIncrementId();
         $request->setCustref($orderIncrementId)
             ->setInvnum($orderIncrementId)
-            ->setComment1($orderIncrementId);
+            ->setData('comment1', $orderIncrementId);
     }
 
     /**
@@ -917,6 +928,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     }
 
     /**
+     * Make a transaction Inquiry Request
+     *
      * @param InfoInterface $payment
      * @param string $transactionId
      * @return DataObject

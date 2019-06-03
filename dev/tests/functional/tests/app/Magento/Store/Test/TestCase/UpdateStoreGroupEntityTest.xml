@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Store\Test\TestCase\UpdateStoreGroupEntityTest" summary="Update Store Group" ticketId="MAGETWO-27568">
         <variation name="UpdateStoreGroupEntityTestVariation1">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
             <data name="storeGroupOrigin/dataset" xsi:type="string">custom</data>
             <data name="storeGroup/data/website_id/dataset" xsi:type="string">main_website</data>
             <data name="storeGroup/data/name" xsi:type="string">store_name_updated_%isolation%</data>
@@ -20,7 +20,7 @@
             <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupOnStoreViewForm" />
         </variation>
         <variation name="UpdateStoreGroupEntityTestVariation2">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
             <data name="storeGroupOrigin/dataset" xsi:type="string">custom</data>
             <data name="storeGroup/data/website_id/dataset" xsi:type="string">custom_website</data>
             <data name="storeGroup/data/name" xsi:type="string">store_name_updated_%isolation%</data>

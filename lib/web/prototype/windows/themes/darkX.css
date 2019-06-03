@@ -99,23 +99,3 @@
 	font-size: 14px;
 	background:#5E5148;
 }
-
-
-/* FOR IE */
-* html .darkX_minimize {
-	background-color: transparent;
-	background-image: none;
-	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../themes/darkX/button-minimize-focused.png", sizingMethod="crop");
-}
-
-* html .darkX_maximize {
-	background-color: transparent;
-	background-image: none;
-	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../themes/darkX/button-maximize-focused.png", sizingMethod="scale");
-}
-
-* html .darkX_close {
-	background-color: transparent;
-	background-image: none;
-	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../themes/darkX/button-close-focused.png", sizingMethod="crop");
-}

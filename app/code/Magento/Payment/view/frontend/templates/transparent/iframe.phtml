@@ -40,9 +40,7 @@ $params = $block->getParams();
                     $(parent).trigger('clearTimeout');
                     fullScreenLoader.stopLoader();
                     globalMessageList.addErrorMessage({
-                        message: $t(
-                            'A server error stopped your order from being placed. Please try to place your order again.'
-                        )
+                        message: $t(<?= /* @noEscape */ json_encode($params['error_msg'])?>)
                     });
                 }
             );

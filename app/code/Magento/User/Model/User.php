@@ -212,9 +212,14 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Removing dependencies and leaving only entity's properties.
      *
      * @return string[]
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $properties = parent::__sleep();
         return array_diff(
             $properties,
@@ -240,9 +245,14 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Restoring required objects after serialization.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->serializer = $objectManager->get(Json::class);
@@ -276,7 +286,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         }
 
         if ($this->getIsActive() !== null) {
-            $data['is_active'] = intval($this->getIsActive());
+            $data['is_active'] = (int)$this->getIsActive();
         }
 
         $this->addData($data);
@@ -406,6 +416,10 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function getRole()
     {
+        if ($this->getData('extracted_role')) {
+            $this->_role = $this->getData('extracted_role');
+            $this->unsetData('extracted_role');
+        }
         if (null === $this->_role) {
             $this->_role = $this->_roleFactory->create();
             $roles = $this->getRoles();

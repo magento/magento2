@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckTaxAddingValidVATIdTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="MAGETWO-91639: Tax is added despite customer group changes"/>
+            <title value="Check tax adding when it's changed to 'Valid VAT ID - Intra-Union'"/>
+            <description value="Tax should be applied"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-95028"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <!--Log In-->
+            <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
+            <!--Create category-->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!--Create product-->
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+
+        <!--Add new tax rates. Go to tax rule page -->
+        <actionGroup ref="addNewTaxRuleActionGroup" stepKey="addFirstTaxRuleActionGroup"/>
+        <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="{{TaxRule.name}}"/>
+
+        <!-- Add NY and CA tax rules -->
+        <actionGroup ref="addNewTaxRateNoZip" stepKey="addSimpleTaxUK">
+            <argument name="taxCode" value="SimpleTaxUK"/>
+        </actionGroup>
+        <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+        <waitForPageLoad stepKey="waitForNewTaxRuleCreated"/>
+
+        <!-- Go to tax rule page to create second Tax Rule-->
+        <actionGroup ref="addNewTaxRuleActionGroup" stepKey="addSecondTaxRuleActionGroup"/>
+        <fillField stepKey="fillSecondRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="{{TaxRuleZeroRate.name}}"/>
+        <actionGroup ref="addNewTaxRateNoZip" stepKey="addSimpleTaxUKZeroRate">
+            <argument name="taxCode" value="SimpleTaxUKZeroRate"/>
+        </actionGroup>
+        <actionGroup ref="addCustomerTaxClass" stepKey="addCustomerTaxClass">
+            <argument name="customerTaxClassName" value="UK_zero"/>
+        </actionGroup>
+        <click stepKey="disableDefaultProdTaxClass" selector="{{AdminTaxRulesSection.defaultCustomerTaxClass}}"/>
+        <wait stepKey="waitForDisableDefaultProdTaxClass" time="2"/>
+        <click stepKey="clickSaveBtn" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+        <waitForPageLoad stepKey="waitForSecondTaxRuleCreated"/>
+
+        <!--Create a Customer Group (CUSTOMERS > Customer Groups)-->
+        <actionGroup ref="AdminCreateCustomerGroupActionGroup" stepKey="createCustomerGroup">
+            <argument name="groupName" value="test_UK"/>
+            <argument name="taxClass" value="UK_zero"/>
+        </actionGroup>
+
+        <!--Set Customer Create New Account Options Config-->
+        <createData entity="SetCustomerCreateNewAccountOptionsConfig" stepKey="setCustomerCreateNewAccountOptionsConfig"/>
+        <actionGroup ref="SetGroupForValidVATIdIntraUnionActionGroup" stepKey="setGroupForValidVATIdIntraUnionActionGroup" after="setCustomerCreateNewAccountOptionsConfig">
+            <argument name="value" value="test_UK"/>
+        </actionGroup>
+
+        <!--Register customer on storefront-->
+        <actionGroup ref="SignUpNewCustomerStorefrontActionGroup" stepKey="createAnAccount">
+            <argument name="Customer" value="CustomerEntityOne"/>
+        </actionGroup>
+
+        <!--Go to My account > Address book-->
+        <actionGroup ref="EnterCustomerAddressInfoFillState" stepKey="enterAddressInfo">
+            <argument name="Address" value="UK_Simple_Address"/>
+        </actionGroup>
+
+        <!-- Go to product visible -->
+        <amOnPage url="$$createProduct.name$$.html" stepKey="navigateToProductPageOnDefaultStore"/>
+        <see userInput="$$createProduct.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertFirstProductNameTitle"/>
+
+        <!--Add a product to the cart-->
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
+        <waitForPageLoad stepKey="waitForAddProductToCart"/>
+        <!--Proceed to checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup"/>
+        <!-- Click next button to open payment section -->
+        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
+        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+
+        <!-- Check order summary in checkout -->
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <!--Verify that Tax 50% is applied -->
+        <see userInput="$123.00" selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="assertSubtotal"/>
+        <see userInput="$5.00" selector="{{CheckoutPaymentSection.orderSummaryShippingTotal}}" stepKey="assertShipping"/>
+        <see userInput="Flat Rate - Fixed" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertShippingMethod"/>
+        <see userInput="$61.50" selector="{{CheckoutPaymentSection.tax}}" stepKey="assertTax"/>
+        <see userInput="$189.50" selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="assertTotal"/>
+
+        <after>
+            <!-- Go to the tax rule page and delete the row we created-->
+            <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
+            <waitForPageLoad stepKey="waitForRulesPage"/>
+
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+                <argument name="name" value="{{TaxRule.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteSecondRule">
+                <argument name="name" value="{{TaxRuleZeroRate.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+
+            <!-- Go to the tax rate page -->
+            <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRatesPage"/>
+            <waitForPageLoad stepKey="waitForRatesPage"/>
+
+            <!-- Delete the two tax rates that were created -->
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
+                <argument name="name" value="{{SimpleTaxUK.state}}-{{SimpleTaxUK.rate}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteCARate">
+                <argument name="name" value="{{SimpleTaxUKZeroRate.state}}-{{SimpleTaxUKZeroRate.rate}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+
+            <!--Delete created customer group-->
+            <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
+                <argument name="customerGroupName" value="test_UK"/>
+            </actionGroup>
+
+            <createData entity="SetCustomerCreateNewAccountOptionsDefaultConfig" stepKey="setCustomerCreateNewAccountOptionsDefaultConfig"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategoryFirst"/>
+
+            <actionGroup ref="deleteProductTaxClass" stepKey="deleteFirstProductTaxClass">
+                <argument name="taxClassName" value="UK_zero"/>
+            </actionGroup>
+
+           <!--Log Out-->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

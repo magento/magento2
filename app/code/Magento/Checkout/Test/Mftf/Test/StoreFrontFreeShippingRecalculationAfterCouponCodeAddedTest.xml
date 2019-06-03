@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontFreeShippingRecalculationAfterCouponCodeAddedTest">
+        <annotations>
+            <title value="Checkout Free Shipping Recalculation after Coupon Code Added"/>
+            <stories value="Checkout Free Shipping Recalculation after Coupon Code Added"/>
+            <description value="User should be able to do checkout free shipping recalculation after adding coupon code"/>
+            <features value="Checkout"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96537"/>
+            <useCaseId value="MAGETWO-96431"/>
+            <group value="Checkout"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="Simple_US_Customer" stepKey="createSimpleUsCustomer">
+                <field key="group_id">1</field>
+            </createData>
+            <createData entity="_defaultCategory" stepKey="defaultCategory"/>
+            <createData entity="_defaultProduct" stepKey="simpleProduct">
+                <field key="price">90</field>
+                <requiredEntity createDataKey="defaultCategory"/>
+            </createData>
+            <!--It is default for FlatRate-->
+            <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
+            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
+            <createData entity="MinimumOrderAmount90" stepKey="minimumOrderAmount90"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache1"/>
+            <actionGroup ref="AdminCreateCartPriceRuleWithCouponCode" stepKey="createCartPriceRule">
+                <argument name="ruleName" value="CatPriceRule"/>
+                <argument name="couponCode" value="CatPriceRule.coupon_code"/>
+            </actionGroup>
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStoreFront">
+                <argument name="Customer" value="$$createSimpleUsCustomer$$"/>
+            </actionGroup>
+            <amOnPage url="$$simpleProduct.name$$.html" stepKey="navigateToProductPage"/>
+            <waitForPageLoad stepKey="waitForProductPage"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>
+            <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
+            <createData entity="DefaultMinimumOrderAmount" stepKey="defaultMinimumOrderAmount"/>
+            <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache2"/>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="{{CatPriceRule.name}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartRule">
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="couponCode" value="{{CatPriceRule.coupon_code}}"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart1"/>
+        <waitForPageLoad stepKey="waitForpageLoad1"/>
+        <dontSee selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Free')}}" stepKey="dontSeeFreeShipping"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage"/>
+        <waitForPageLoad stepKey="waitForShoppingCartPage"/>
+        <conditionalClick selector="{{DiscountSection.DiscountTab}}" dependentSelector="{{DiscountSection.CouponInput}}" visible="false" stepKey="clickIfDiscountTabClosed1"/>
+        <waitForPageLoad stepKey="waitForCouponTabOpen1"/>
+        <click selector="{{DiscountSection.CancelCoupon}}" stepKey="cancelCoupon"/>
+        <waitForPageLoad stepKey="waitForCancel"/>
+        <see userInput='You canceled the coupon code.' stepKey="seeCancellationMessage"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
+        <waitForPageLoad stepKey="waitForShippingMethods"/>
+        <click stepKey="chooseFreeShipping" selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Free')}}"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext1"/>
+        <waitForPageLoad stepKey="waitForReviewAndPayments1"/>
+        <conditionalClick selector="{{DiscountSection.DiscountTab}}" dependentSelector="{{DiscountSection.CouponInput}}" visible="false" stepKey="clickIfDiscountTabClosed2"/>
+        <waitForPageLoad stepKey="waitForCouponTabOpen2"/>
+        <fillField selector="{{DiscountSection.DiscountInput}}" userInput="{{CatPriceRule.coupon_code}}" stepKey="fillCouponCode"/>
+        <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="applyCode"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see userInput="Your coupon was successfully applied." stepKey="seeSuccessMessage"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder1"/>
+        <waitForPageLoad stepKey="waitForError"/>
+        <see stepKey="seeShippingMethodError" userInput="The shipping method is missing. Select the shipping method and try again."/>
+        <amOnPage stepKey="navigateToShippingPage" url="{{CheckoutShippingPage.url}}"/>
+        <waitForPageLoad stepKey="waitForShippingPageLoad"/>
+        <click stepKey="chooseFlatRateShipping" selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Flat Rate')}}"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext2"/>
+        <waitForPageLoad stepKey="waitForReviewAndPayments2"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder2"/>
+        <waitForPageLoad stepKey="waitForSuccessfullyPlacedOrder"/>
+        <see stepKey="seeSuccessMessageForPlacedOrder" userInput="Thank you for your purchase!"/>
+    </test>
+</tests>

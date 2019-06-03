@@ -9,6 +9,9 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Quote\Address\FreeShippingInterface;
 
+/**
+ * Collect totals for shipping.
+ */
 class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**
@@ -111,7 +114,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     {
         $amount = $total->getShippingAmount();
         $shippingDescription = $total->getShippingDescription();
-        $title = ($amount != 0 && $shippingDescription)
+        $title = ($shippingDescription)
             ? __('Shipping & Handling (%1)', $shippingDescription)
             : __('Shipping & Handling');
 
@@ -227,7 +230,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param bool $addressFreeShipping
      * @param float $itemWeight
      * @param float $itemQty
-     * @param $freeShipping
+     * @param bool $freeShipping
      * @return float
      */
     private function getItemRowWeight(

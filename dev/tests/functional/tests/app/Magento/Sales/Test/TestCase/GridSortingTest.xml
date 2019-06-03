@@ -9,7 +9,6 @@
     <testCase name="Magento\Ui\Test\TestCase\GridSortingTest" summary="Grid UI Component Sorting" ticketId="MAGETWO-41328">
         <variation name="SalesOrderGridSorting">
             <data name="tag" xsi:type="string">severity:S2</data>
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Verify sales order grid storting</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="string">-</item>

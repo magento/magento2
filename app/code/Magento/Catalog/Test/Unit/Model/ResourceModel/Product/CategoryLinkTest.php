@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
@@ -129,9 +130,20 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
                 );
         }
 
+        $expectedResult = [];
+
+        foreach ($affectedIds as $type => $ids) {
+            $expectedResult = array_merge($expectedResult, $ids);
+            // Verify if the correct insert, update and/or delete actions are performed:
+            $this->setupExpectationsForConnection($type, $ids);
+        }
+
         $actualResult = $this->model->saveCategoryLinks($product, $newCategoryLinks);
+
         sort($actualResult);
-        $this->assertEquals($affectedIds, $actualResult);
+        sort($expectedResult);
+
+        $this->assertEquals($expectedResult, $actualResult);
     }
 
     /**
@@ -151,7 +163,11 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
                     ['category_id' => 3, 'position' => 10],
                     ['category_id' => 4, 'position' => 20],
                 ],
-                [], // Nothing to update - data not changed
+                [
+                    'update' => [],
+                    'insert' => [],
+                    'delete' => [],
+                ],
             ],
             [
                 [
@@ -162,7 +178,11 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
                     ['category_id' => 3, 'position' => 10],
                     ['category_id' => 4, 'position' => 20],
                 ],
-                [3, 4, 5], // 4 - updated position, 5 - added, 3 - deleted
+                [
+                    'update' => [4],
+                    'insert' => [5],
+                    'delete' => [3],
+                ],
             ],
             [
                 [
@@ -173,7 +193,11 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
                     ['category_id' => 3, 'position' => 10],
                     ['category_id' => 4, 'position' => 20],
                 ],
-                [3, 4], // 3 - updated position, 4 - deleted
+                [
+                    'update' => [3],
+                    'insert' => [],
+                    'delete' => [4],
+                ],
             ],
             [
                 [],
@@ -181,8 +205,80 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
                     ['category_id' => 3, 'position' => 10],
                     ['category_id' => 4, 'position' => 20],
                 ],
-                [3, 4], // 3, 4 - deleted
+                [
+                    'update' => [],
+                    'insert' => [],
+                    'delete' => [3, 4],
+                ],
             ],
+            [
+                [
+                    ['category_id' => 3, 'position' => 10],
+                    ['category_id' => 4, 'position' => 20],
+                ],
+                [
+                    ['category_id' => 3, 'position' => 20], // swapped positions
+                    ['category_id' => 4, 'position' => 10], // swapped positions
+                ],
+                [
+                    'update' => [3, 4],
+                    'insert' => [],
+                    'delete' => [],
+                ],
+            ]
         ];
+    }
+
+    /**
+     * @param $type
+     * @param $ids
+     */
+    private function setupExpectationsForConnection($type, $ids): void
+    {
+        switch ($type) {
+            case 'insert':
+                $this->connectionMock
+                    ->expects($this->exactly(empty($ids) ? 0 : 1))
+                    ->method('insertArray')
+                    ->with(
+                        $this->anything(),
+                        $this->anything(),
+                        $this->callback(function ($data) use ($ids) {
+                            $foundIds = [];
+                            foreach ($data as $row) {
+                                $foundIds[] = $row['category_id'];
+                            }
+                            return $ids === $foundIds;
+                        })
+                    );
+                break;
+            case 'update':
+                $this->connectionMock
+                    ->expects($this->exactly(empty($ids) ? 0 : 1))
+                    ->method('insertOnDuplicate')
+                    ->with(
+                        $this->anything(),
+                        $this->callback(function ($data) use ($ids) {
+                            $foundIds = [];
+                            foreach ($data as $row) {
+                                $foundIds[] = $row['category_id'];
+                            }
+                            return $ids === $foundIds;
+                        })
+                    );
+                break;
+            case 'delete':
+                $this->connectionMock
+                    ->expects($this->exactly(empty($ids) ? 0 : 1))
+                    ->method('delete')
+                    // Verify that the correct category ID's are touched:
+                    ->with(
+                        $this->anything(),
+                        $this->callback(function ($data) use ($ids) {
+                            return array_values($data)[1] === $ids;
+                        })
+                    );
+                break;
+        }
     }
 }

@@ -4,15 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Form text element
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * Form text element
+ */
 class Text extends AbstractElement
 {
     /**
@@ -65,6 +63,7 @@ class Text extends AbstractElement
             'placeholder',
             'data-form-part',
             'data-role',
+            'data-validation-params',
             'data-action'
         ];
     }

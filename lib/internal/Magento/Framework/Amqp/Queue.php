@@ -37,7 +37,7 @@ class Queue implements QueueInterface
     private $envelopeFactory;
 
     /**
-     * @var LoggerInterface $logger
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -63,7 +63,7 @@ class Queue implements QueueInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.0.0
      */
     public function dequeue()
@@ -98,7 +98,7 @@ class Queue implements QueueInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.0.0
      */
     public function acknowledge(EnvelopeInterface $envelope)
@@ -119,7 +119,7 @@ class Queue implements QueueInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.0.0
      */
     public function subscribe($callback)
@@ -153,7 +153,7 @@ class Queue implements QueueInterface
     }
 
     /**
-     * (@inheritdoc)
+     * @inheritdoc
      * @since 100.0.0
      */
     public function reject(EnvelopeInterface $envelope, $requeue = true, $rejectionMessage = null)
@@ -172,7 +172,7 @@ class Queue implements QueueInterface
     }
 
     /**
-     * (@inheritdoc)
+     * @inheritdoc
      * @since 100.0.0
      */
     public function push(EnvelopeInterface $envelope)

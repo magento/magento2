@@ -12,7 +12,7 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Phrase;
 
 /**
- * Class GraphQlAuthenticationException
+ * Exception for GraphQL to be thrown when authentication fails
  */
 class GraphQlAuthenticationException extends AuthenticationException implements ClientAware
 {

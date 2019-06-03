@@ -17,6 +17,7 @@
                 <url path="sales/order_create/start"/>
                 <class>primary</class>
                 <label translate="true">Create New Order</label>
+                <aclResource>Magento_Sales::create</aclResource>
             </button>
         </buttons>
         <spinner>sales_order_columns</spinner>

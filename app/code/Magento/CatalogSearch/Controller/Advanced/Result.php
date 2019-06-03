@@ -13,11 +13,15 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\UrlFactory;
 
 /**
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * Advanced search result.
  */
 class Result extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
+    /**
+     * No results default handle.
+     */
+    const DEFAULT_NO_RESULT_HANDLE = 'catalogsearch_advanced_result_noresults';
+
     /**
      * Url factory
      *
@@ -50,13 +54,16 @@ class Result extends \Magento\Framework\App\Action\Action implements HttpGetActi
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @inheritdoc
      */
     public function execute()
     {
         try {
             $this->_catalogSearchAdvanced->addFilters($this->getRequest()->getQueryValue());
-            $this->_view->loadLayout();
+            $this->_view->getPage()->initLayout();
+            $handles = $this->_view->getLayout()->getUpdate()->getHandles();
+            $handles[] = static::DEFAULT_NO_RESULT_HANDLE;
+            $this->_view->loadLayout($handles);
             $this->_view->renderLayout();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());

@@ -15,4 +15,8 @@
         <section name="cart"/>
         <section name="checkout-data"/>
     </action>
+    <action name="paypal/express/onAuthorization">
+        <section name="cart"/>
+        <section name="checkout-data"/>
+    </action>
 </config>

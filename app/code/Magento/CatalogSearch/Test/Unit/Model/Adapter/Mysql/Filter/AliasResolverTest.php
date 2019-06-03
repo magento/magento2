@@ -9,6 +9,10 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Mysql\Filter;
 use Magento\CatalogSearch\Model\Search\RequestGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class AliasResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**

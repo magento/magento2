@@ -54,7 +54,7 @@
                 <collapsible>true</collapsible>
                 <label translate="true">HTML Head</label>
             </settings>
-            <field name="head_shortcut_icon" formElement="fileUploader">
+            <field name="head_shortcut_icon" formElement="imageUploader">
                 <settings>
                     <notice translate="true">Not all browsers support all these formats!</notice>
                     <label translate="true">Favicon Icon</label>
@@ -151,7 +151,7 @@
                 <collapsible>true</collapsible>
                 <label translate="true">Header</label>
             </settings>
-            <field name="header_logo_src" formElement="fileUploader">
+            <field name="header_logo_src" formElement="imageUploader">
                 <settings>
                     <label translate="true">Logo Image</label>
                     <componentType>imageUploader</componentType>

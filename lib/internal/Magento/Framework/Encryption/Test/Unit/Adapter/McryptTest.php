@@ -161,15 +161,6 @@ class McryptTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     */
-    public function testEncrypt()
-    {
-        $crypt = new \Magento\Framework\Encryption\Adapter\Mcrypt($this->key);
-        $crypt->encrypt('Hello World!!');
-    }
-
-    /**
      * @dataProvider getCipherModeCombinations
      */
     public function testInitVectorNone(string $cipher, string $mode)

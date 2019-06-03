@@ -24,6 +24,7 @@ class CatalogProductCompareClearObserver implements ObserverInterface
 
     /**
      * @param \Magento\Reports\Model\Product\Index\ComparedFactory $productCompFactory
+     * @param \Magento\Reports\Model\ReportStatus $reportStatus
      */
     public function __construct(
         \Magento\Reports\Model\Product\Index\ComparedFactory $productCompFactory,
@@ -39,7 +40,7 @@ class CatalogProductCompareClearObserver implements ObserverInterface
      * Reset count of compared products cache
      *
      * @param \Magento\Framework\Event\Observer $observer
-     * @return $this
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
