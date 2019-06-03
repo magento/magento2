@@ -202,7 +202,7 @@ class Repository
     /**
      * Create a file asset that's subject of fallback system
      *
-     * @param $fileId
+     * @param string $fileId
      * @param array $params
      * @return File
      * @throws LocalizedException
