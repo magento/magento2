@@ -6,6 +6,7 @@
 
 namespace Magento\Checkout\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
@@ -64,13 +65,21 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
         \Magento\Quote\Api\CartManagementInterface $cartManagement,
         \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory,
-        \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
+        \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $cartRepository = null,
+        \Magento\Checkout\Helper\Data $checkoutHelper = null,
+        \Psr\Log\LoggerInterface $logger = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->cartManagement = $cartManagement;
         $this->paymentDetailsFactory = $paymentDetailsFactory;
         $this->cartTotalsRepository = $cartTotalsRepository;
+        $this->cartRepository = $cartRepository ?:
+            ObjectManager::getInstance()->get(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->checkoutHelper = $checkoutHelper ?:
+            ObjectManager::getInstance()->get(\Magento\Checkout\Helper\Data::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
     }
 
     /**
@@ -85,12 +94,15 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         try {
             $orderId = $this->cartManagement->placeOrder($cartId);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            /** @var \Magento\Quote\Model\Quote $quote */
+            $quote = $this->cartRepository->getActive($cartId);
+            $this->checkoutHelper->sendPaymentFailedEmail($quote, __($e->getMessage()));
             throw new CouldNotSaveException(
                 __($e->getMessage()),
                 $e
             );
         } catch (\Exception $e) {
-            $this->getLogger()->critical($e);
+            $this->logger->critical($e);
             throw new CouldNotSaveException(
                 __('A server error stopped your order from being placed. Please try to place your order again.'),
                 $e
@@ -137,20 +149,6 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         $paymentDetails->setPaymentMethods($this->paymentMethodManagement->getList($cartId));
         $paymentDetails->setTotals($this->cartTotalsRepository->get($cartId));
         return $paymentDetails;
-    }
-
-    /**
-     * Get logger instance
-     *
-     * @return \Psr\Log\LoggerInterface
-     * @deprecated 100.2.0
-     */
-    private function getLogger()
-    {
-        if (!$this->logger) {
-            $this->logger = \Magento\Framework\App\ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
-        }
-        return $this->logger;
     }
 
     /**

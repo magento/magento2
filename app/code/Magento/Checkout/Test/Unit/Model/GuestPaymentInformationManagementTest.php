@@ -58,6 +58,11 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
      */
     private $resourceConnectionMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $checkoutHelperMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -186,6 +191,14 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $billingAddressMock = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
         $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
         $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
+        $quoteIdMaskMock = $this->getMockBuilder(\Magento\Quote\Model\QuoteIdMask::class)
+            ->setMethods(['getQuoteId', 'load'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($quoteIdMaskMock);
+        $quoteIdMaskMock->expects($this->once())->method('load')->with($cartId, 'masked_id')->willReturnSelf();
+        $quoteIdMaskMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
+        $this->checkoutHelperMock->expects($this->any())->method('sendPaymentFailedEmail')->willReturnSelf();
 
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
 
