@@ -53,10 +53,7 @@ class CriticalCss implements ArgumentInterface
             $asset = $this->assetRepo->createAsset($this->filePath, ['_secure' => 'false']);
             $content = $asset->getContent();
         } catch (NotFoundException $e) {
-            throw new LocalizedException(__(
-                'Cannot get critical css file data: "%1"',
-                $e->getMessage()
-            ));
+            $content = '';
         };
 
         return $content;
