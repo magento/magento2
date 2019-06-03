@@ -1,0 +1,46 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Mutation {
+    createPaypalExpressToken(input: PaypalExpressTokenInput): PaypalExpressToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PaypalExpressToken") @doc(description:"Initiates a PayPal checkout transaction and receives a token.")
+}
+
+input PaypalExpressTokenInput @doc(description:"Defines the attributes required to receive a payment token from PayPal") {
+    cart_id: String! @doc(description:"The unique ID that identifies the customer's cart")
+    code: String! @doc(description:"Payment method code")
+    urls: PaypalExpressUrlsInput! @doc(description:"A set of URLs that PayPal uses to respond to a token request")
+    use_paypal_credit: Boolean @doc(description: "Indicates whether the buyer clicked the Paypal credit button. The default value is false")
+    express_button: Boolean @doc(description: "Indicates whether the buyer selected the quick checkout button. The default value is false")
+}
+
+type PaypalExpressToken @doc(description: "Contains the token returned by PayPal and a set of URLs that allow the buyer to authorize payment and adjust checkout details") {
+    token: String @doc(description:"The token returned by PayPal")
+    paypal_urls: PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer to authorize payment and adjust checkout details")
+}
+
+input PaymentMethodAdditionalDataInput {
+    paypal_express: PaypalExpressInput @doc(description:"Required input for PayPal Express Checkout payments")
+    payflow_express: PayflowExpressInput @doc(description:"Required input for PayPal Payflow Express Checkout payments")
+}
+
+input PaypalExpressInput @doc(description:"Required input for PayPal Express Checkout payments") {
+    payer_id: String! @doc(description:"The unique ID of the PayPal user")
+    token: String! @doc(description:"The token returned by the createPaypalExpressToken mutation")
+}
+
+input PayflowExpressInput @doc(description:"Required input for PayPal Payflow Express Checkout payments") {
+    payer_id: String! @doc(description:"The unique ID of the PayPal user")
+    token: String! @doc(description:"The token returned by the createPaypalExpressToken mutation")
+}
+
+input PaypalExpressUrlsInput @doc(description:"A set of URLs that PayPal uses to respond to a token request") {
+    return_url: String! @doc(description:"The URL of the final review page on your website where the buyer confirms the order and payment")
+    cancel_url: String! @doc(description:"The URL of the original page on your website where the buyer initially chose PayPal as a payment type")
+    success_url: String @doc(description:"The URL to redirect upon success. Not applicable to most PayPal solutions")
+    pending_url: String @doc(description:"The URL to redirect for a pending transactions. Not applicable to most PayPal solutions")
+}
+
+type PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer to authorize payment and adjust checkout details") {
+    start: String @doc(description:"The URL to the PayPal login page")
+    edit: String @doc(description:"The PayPal URL that allows the buyer to edit their checkout details")
+}
