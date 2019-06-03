@@ -28,8 +28,12 @@ class Image extends \Magento\Framework\View\Element\Template
 
     public function getImage()
     {
+        $image = $this->getConfig('smetana_upload_image');
+        if ($image === null) {
+            return false;
+        }
         $path = $this->helper->resize(
-            $this->getConfig('smetana_upload_image'),
+            $image,
             $this->getConfig('image_width'),
             $this->getConfig('image_height')
         );
