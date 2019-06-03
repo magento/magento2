@@ -14,6 +14,7 @@
             <title value="Layer Navigation of Catalog Search Should Equalize Price Range As Default Configuration"/>
             <description value="Make sure filter of custom attribute with type of price displays on storefront Catalog page and price range should respect the configuration in Admin site"/>
             <testCaseId value="MC-16979"/>
+            <issueId value="MC-16650"/>
             <severity value="MAJOR"/>
             <group value="CatalogSearch"/>
         </annotations>
@@ -44,7 +45,7 @@
         <actionGroup ref="navigateToCreatedProductEditPage" stepKey="navigateToCreatedProductEditPage1">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
-        <grabTextFrom selector="{{AdminProductAttributeSection.customAttributeLabel($$createPriceAttribute.attribute_code$$)}}" stepKey="grabAttributeLabel"/>
+        <grabTextFrom selector="{{AdminProductFormSection.attributeLabelByText($$createPriceAttribute.attribute[frontend_labels][0][label]$$)}}" stepKey="grabAttributeLabel"/>
         <fillField selector="{{AdminProductAttributeSection.customAttribute($$createPriceAttribute.attribute_code$$)}}" userInput="30" stepKey="fillCustomPrice1"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton1"/>
         <waitForPageLoad stepKey="waitForSimpleProductSaved1"/>
@@ -61,8 +62,7 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$subCategory.name$$)}}" stepKey="goToCategoryStorefront"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <see userInput="{$grabAttributeLabel}" selector="{{StorefrontCategoryFilterSection.CustomPriceAttribute}}" stepKey="seePriceLayerNavigation"/>
-        <click selector="{{StorefrontCategoryFilterSection.CustomPriceAttribute}}" stepKey="expandPriceFilter"/>
-        <seeElement selector="{{StorefrontCategoryFilterSection.CustomPriceAttributeContent}}" stepKey="seeFilterContent"/>
+        <click selector="{{StorefrontCategoryFilterSection.CustomPriceAttribute($grabAttributeLabel)}}" stepKey="expandPriceFilter"/>
     </test>
 </tests>
 
