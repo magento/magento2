@@ -1,45 +1,54 @@
 <?php
 namespace Smetana\Images\Model\Config;
 
+/**
+ * Image Operations
+ */
 class Image extends \Magento\Config\Model\Config\Backend\Image
 {
     /**
      * The tail part of directory path for uploading
      *
+     * @var string
      */
     const UPLOAD_DIR = 'products_image';
 
     /**
-     * Return path to directory for upload file
+     * Returning path to directory for upload file
      *
      * @return string
      * @throw \Magento\Framework\Exception\LocalizedException
      */
-    protected function _getUploadDir()
+    protected function _getUploadDir(): string
     {
         return $this->_mediaDirectory->getAbsolutePath($this->_appendScopeInfo(self::UPLOAD_DIR));
     }
 
     /**
-     * Makes a decision about whether to add info about the scope.
+     * Making a decision about whether to add info about the scope
      *
      * @return boolean
      */
-    protected function _addWhetherScopeInfo()
+    protected function _addWhetherScopeInfo(): bool
     {
         return true;
     }
 
     /**
-     * Getter for allowed extensions of uploaded files.
+     * Getting for allowed extensions of uploaded files
      *
-     * @return string[]
+     * @return array
      */
-    protected function _getAllowedExtensions()
+    protected function _getAllowedExtensions(): array
     {
         return ['jpg', 'jpeg'];
     }
 
+    /**
+     * Changing process of saving image
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function beforeSave()
     {
         if (!empty($this->getFileData())) {

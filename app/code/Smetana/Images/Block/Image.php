@@ -46,10 +46,11 @@ class Image extends \Magento\Framework\View\Element\Template
      */
     public function getConfig(string $option): string
     {
-        return $this->scopeConfig->getValue(
+        $value = $this->scopeConfig->getValue(
             "smetana_section/smetana_group/$option",
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
+        return $value === null ? '' : $value;
     }
 
     /**
@@ -60,13 +61,13 @@ class Image extends \Magento\Framework\View\Element\Template
     public function getImage()
     {
         $image = $this->getConfig('smetana_upload_image');
-        if ($image === null) {
+        if ($image === null || $image == '') {
             return false;
         }
         $path = $this->helper->resize(
             $image,
-            $this->getConfig('image_width'),
-            $this->getConfig('image_height')
+            (int) $this->getConfig('image_width'),
+            (int) $this->getConfig('image_height')
         );
         return $path == false ? '' : substr($path, strpos($path, 'pub'));
     }

@@ -4,11 +4,30 @@ namespace Smetana\Images\Helper;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 
+/**
+ * Images helper
+ */
 class Data extends AbstractHelper
 {
+    /**
+     * Filesystem
+     *
+     * @var \Magento\Framework\Filesystem
+     */
     protected $_filesystem;
+
+    /**
+     * Adapter Factory
+     *
+     * @var \Magento\Framework\Image\AdapterFactory
+     */
     protected $_imageFactory;
 
+    /**
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Image\AdapterFactory $imageFactory
+     * @param \Magento\Framework\App\Helper\Context $context
+     */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Image\AdapterFactory $imageFactory,
@@ -19,7 +38,16 @@ class Data extends AbstractHelper
         $this->_imageFactory = $imageFactory;
     }
 
-    public function resize($image, $width = null, $height = null)
+    /**
+     * Resizing Smetana Image
+     *
+     * @param string $image
+     * @param int $width
+     * @param int $height
+     *
+     * @return string or boolean
+     */
+    public function resize(string $image, int $width = null, int $height = null)
     {
         $mediaDirectory = $this->_filesystem->getDirectoryRead('media');
         $origPath = $mediaDirectory->getAbsolutePath('products_image/' . $image);
