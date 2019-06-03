@@ -22,6 +22,7 @@ class Renderer implements RendererInterface
      */
     protected $assetTypeOrder = [
         'css',
+        'ico',
         'js',
         'eot',
         'svg',
