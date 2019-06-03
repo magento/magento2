@@ -113,7 +113,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             $filter = $this->urlDecoder->decode($filter);
 
             /** @var $request \Magento\Framework\HTTP\PhpEnvironment\Request */
-            $request = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\HTTP\PhpEnvironment\Request::class);
+            $request = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\HTTP\PhpEnvironment\Request::class);
             $data = $request->setRequestUri(urldecode($filter))->getQuery()->toArray();
 
             if (!isset($data['report_from'])) {
