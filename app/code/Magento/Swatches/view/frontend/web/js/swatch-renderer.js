@@ -1254,7 +1254,7 @@ define([
                         dataMergeStrategy: this.options.gallerySwitchStrategy
                     });
                 }
-
+                gallery.first();
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
