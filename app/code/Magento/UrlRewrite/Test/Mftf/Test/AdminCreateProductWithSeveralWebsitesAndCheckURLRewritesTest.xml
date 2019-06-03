@@ -17,7 +17,7 @@
             <group value="urlRewrite"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-17140"/>
+                <issueId value="MC-17181"/>
             </skip>
         </annotations>
 
