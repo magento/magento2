@@ -115,15 +115,15 @@ class CreateOptions extends Action implements HttpPostActionInterface
         $allOptions = array_merge($originalOptions, $newOptions);
         $optionValues = array_map(
             function ($option) {
-                return $option['label'];
+                return $option['label'] ?? null;
             },
             $allOptions
         );
 
-        $uniqueValues = array_unique($optionValues);
+        $uniqueValues = array_unique(array_filter($optionValues));
         $duplicates = array_diff_assoc($optionValues, $uniqueValues);
         if ($duplicates) {
-            throw new LocalizedException(__('Attributes must have unique option values'));
+            throw new LocalizedException(__('The value of attribute ""%1"" must be unique', $attribute->getName()));
         }
     }
 

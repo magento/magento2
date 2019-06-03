@@ -148,22 +148,22 @@ define([
         saveAttribute: function () {
             var errorMessage = $.mage.__('Select options for all attributes or remove unused attributes.');
 
-            this.attributes.each(function (attribute) {
+            if (!this.attributes().length) {
+                throw new Error(errorMessage);
+            }
+
+            _.each(this.attributes(), function (attribute) {
                 attribute.chosen = [];
 
                 if (!attribute.chosenOptions.getLength()) {
                     throw new Error(errorMessage);
                 }
-                attribute.chosenOptions.each(function (id) {
+                _.each(attribute.chosenOptions(), function (id) {
                     attribute.chosen.push(attribute.options.findWhere({
                         id: id
                     }));
                 });
             });
-
-            if (!this.attributes().length) {
-                throw new Error(errorMessage);
-            }
         },
 
         /**
@@ -188,10 +188,10 @@ define([
                 allOptions = [],
                 attributesWithDuplicateOptions = [];
 
-            this.attributes.each(function (attribute) {
+            _.each(this.attributes(), function (attribute) {
                 allOptions[attribute.id] = [];
 
-                attribute.options.each(function (element) {
+                _.each(attribute.options(), function (element) {
                     var option = attribute.options.findWhere({
                         id: element.id
                     });
@@ -200,16 +200,22 @@ define([
                         newOptions.push(option);
                     }
 
-                    if (typeof allOptions[attribute.id][option.label] !== 'undefined') {
-                        attributesWithDuplicateOptions.push(attribute);
-                    }
+                    if (!_.isUndefined(option.label)) {
+                        if (!_.isUndefined(allOptions[attribute.id][option.label])) {
+                            attributesWithDuplicateOptions.push(attribute);
+                        }
 
-                    allOptions[attribute.id][option.label] = option.label;
+                        allOptions[attribute.id][option.label] = option.label;
+                    }
                 });
             });
 
             if (attributesWithDuplicateOptions.length) {
-                throw new Error($.mage.__('Attributes must have unique option values'));
+                _.each(attributesWithDuplicateOptions, function (attribute) {
+                    throw new Error($.mage.__(
+                        'The value of attribute ""%1"" must be unique').replace("\"%1\"", attribute.label)
+                    );
+                });
             }
 
             if (!newOptions.length) {
@@ -231,7 +237,7 @@ define([
                     return;
                 }
 
-                this.attributes.each(function (attribute) {
+                _.each(this.attributes(), function (attribute) {
                     _.each(savedOptions, function (newOptionId, oldOptionId) {
                         var option = attribute.options.findWhere({
                             id: oldOptionId
