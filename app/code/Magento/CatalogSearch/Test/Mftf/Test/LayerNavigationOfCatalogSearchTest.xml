@@ -61,8 +61,7 @@
         <comment userInput="Navigate to category on Storefront" stepKey="comment3"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$subCategory.name$$)}}" stepKey="goToCategoryStorefront"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <see userInput="{$grabAttributeLabel}" selector="{{StorefrontCategoryFilterSection.CustomPriceAttribute}}" stepKey="seePriceLayerNavigation"/>
-        <click selector="{{StorefrontCategoryFilterSection.CustomPriceAttribute($grabAttributeLabel)}}" stepKey="expandPriceFilter"/>
+        <see userInput="{$grabAttributeLabel}" selector="{{StorefrontCategoryFilterSection.CustomPriceAttribute}}" stepKey="seePriceLayerNavigationOnStorefront"/>
     </test>
 </tests>
 
