@@ -31,7 +31,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
         $result = new DataObject();
         try {
             $agreementsValidator = $this->_objectManager->get(
-                \Magento\CheckoutAgreements\Model\AgreementsValidator::class
+                \Magento\Checkout\Api\AgreementsValidatorInterface::class
             );
             if (!$agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {
                 $result->setData('success', false);

@@ -85,7 +85,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return void
+     * @inheritDoc
      */
     protected function _construct()
     {
@@ -99,7 +99,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get store
+     *
      * @return Store
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _getStore()
     {
@@ -108,7 +111,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return $this
+     * @inheritDoc
      */
     protected function _prepareCollection()
     {
@@ -136,7 +139,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             );
         }
         if ($store->getId()) {
-            //$collection->setStoreId($store->getId());
             $collection->addStoreFilter($store);
             $collection->joinAttribute(
                 'name',
@@ -187,8 +189,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @param \Magento\Backend\Block\Widget\Grid\Column $column
-     * @return $this
+     * @inheritDoc
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -208,8 +209,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return $this
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws \Exception
      */
     protected function _prepareColumns()
     {
@@ -364,16 +366,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             ]
         );
 
-        $block = $this->getLayout()->getBlock('grid.bottom.links');
-        if ($block) {
-            $this->setChild('grid.bottom.links', $block);
-        }
-
         return parent::_prepareColumns();
     }
 
     /**
-     * @return $this
+     * @inheritDoc
      */
     protected function _prepareMassaction()
     {
@@ -425,7 +422,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getGridUrl()
     {
@@ -433,8 +430,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $row
-     * @return string
+     * @inheritDoc
      */
     public function getRowUrl($row)
     {

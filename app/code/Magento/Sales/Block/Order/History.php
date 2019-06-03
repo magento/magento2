@@ -67,7 +67,7 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return void
+     * @inheritDoc
      */
     protected function _construct()
     {
@@ -76,8 +76,9 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return CollectionFactoryInterface
+     * Provide order collection factory
      *
+     * @return CollectionFactoryInterface
      * @deprecated 100.1.1
      */
     private function getOrderCollectionFactory()
@@ -89,6 +90,8 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get customer orders
+     *
      * @return bool|\Magento\Sales\Model\ResourceModel\Order\Collection
      */
     public function getOrders()
@@ -111,7 +114,7 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return $this
+     * @inheritDoc
      */
     protected function _prepareLayout()
     {
@@ -130,6 +133,8 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get Pager child block output
+     *
      * @return string
      */
     public function getPagerHtml()
@@ -138,6 +143,8 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get order view URL
+     *
      * @param object $order
      * @return string
      */
@@ -147,9 +154,12 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get order track URL
+     *
      * @param object $order
      * @return string
      * @deprecated Action does not exist
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getTrackUrl($order)
     {
@@ -159,6 +169,8 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get reorder URL
+     *
      * @param object $order
      * @return string
      */
@@ -168,6 +180,8 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get customer account URL
+     *
      * @return string
      */
     public function getBackUrl()

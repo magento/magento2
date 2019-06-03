@@ -9,8 +9,7 @@ namespace Magento\TestFramework\Dependency\Route;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Utility\Files;
-use Magento\Framework\Exception\NotFoundException;
-use Magento\Framework\UrlInterface;
+use Magento\TestFramework\Exception\NoSuchActionException;
 
 /**
  * Route mapper based on routes.xml declarations
@@ -155,12 +154,13 @@ class RouteMapper
      * @param string $controllerName
      * @param string $actionName
      * @return array
+     * @throws NoSuchActionException
      * @throws \Exception
      */
     public function getDependencyByRoutePath(
         string $routeId,
         string $controllerName,
-        string $actionName = UrlInterface::DEFAULT_ACTION_NAME
+        string $actionName
     ): array {
         $routeId = strtolower($routeId);
         $controllerName = strtolower($controllerName);
@@ -181,7 +181,9 @@ class RouteMapper
         }
 
         if (empty($dependencies)) {
-            throw new NotFoundException(__('Invalid URL path: %1', implode('/', [$routeId, $controllerName, $actionName])));
+            throw new NoSuchActionException(implode('/', [$routeId, $controllerName, $actionName]));
+        } else {
+            $dependencies = array_unique($dependencies);
         }
         return $dependencies;
     }
@@ -224,7 +226,7 @@ class RouteMapper
      *
      * @return void
      */
-    private function processConfigFile($module, $configFile)
+    private function processConfigFile(string $module, string $configFile)
     {
         // Read module's routes.xml file
         $config = simplexml_load_file($configFile);
@@ -295,12 +297,12 @@ class RouteMapper
     /**
      * Provide a list of available module actions by router_id
      *
-     * @param $module
-     * @param $routerId
+     * @param string $module
+     * @param string $routerId
      * @param array $files
      * @return array
      */
-    private function getModuleActionsMapping($module, $routerId, array $files): array
+    private function getModuleActionsMapping(string $module, string $routerId, array $files): array
     {
         $subdirectoryPattern = str_replace('\\', DIRECTORY_SEPARATOR, $module);
         $subdirectoryPattern .= DIRECTORY_SEPARATOR . 'Controller/';

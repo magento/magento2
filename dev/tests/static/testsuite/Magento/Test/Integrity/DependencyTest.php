@@ -10,6 +10,7 @@ namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Test\Integrity\Dependency\DeclarativeSchemaDependencyProvider;
 use Magento\TestFramework\Dependency\DbRule;
 use Magento\TestFramework\Dependency\DiRule;
@@ -147,6 +148,13 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     private static $whiteList = [];
 
     /**
+     * Routes whitelist
+     *
+     * @var array|null
+     */
+    private static $routesWhitelist = null;
+
+    /**
      * @var RouteMapper
      */
     private static $routeMapper = null;
@@ -230,7 +238,12 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $dbRuleTables = array_merge($dbRuleTables, @include $fileName);
         }
         self::$_rulesInstances = [
-            new PhpRule(self::$routeMapper->getRoutes(), self::$_mapLayoutBlocks),
+            new PhpRule(
+                self::$routeMapper->getRoutes(),
+                self::$_mapLayoutBlocks,
+                [],
+                ['routes' => self::getRoutesWhitelist()]
+            ),
             new DbRule($dbRuleTables),
             new LayoutRule(
                 self::$routeMapper->getRoutes(),
@@ -241,6 +254,25 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             new ReportsConfigRule($dbRuleTables),
             new AnalyticsConfigRule(),
         ];
+    }
+
+    /**
+     * Initialize routes whitelist
+     *
+     * @return array
+     */
+    private static function getRoutesWhitelist(): array
+    {
+        if (is_null(self::$routesWhitelist)) {
+            $routesWhitelistFilePattern = realpath(__DIR__) . '/_files/dependency_test/whitelist/routes_*.php';
+            $routesWhitelist = [];
+            foreach (glob($routesWhitelistFilePattern) as $fileName) {
+                $routesWhitelist = array_merge($routesWhitelist, include $fileName);
+            }
+            self::$routesWhitelist = $routesWhitelist;
+        }
+
+        return self::$routesWhitelist;
     }
 
     /**
@@ -256,7 +288,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         switch ($fileType) {
             case 'php':
                 //Removing php comments
-                $contents = preg_replace('~/\*.*?\*/~s', '', $contents);
+                $contents = preg_replace('~/\*.*?\*/~m', '', $contents);
+                $contents = preg_replace('~^\s*/\*.*?\*/~sm', '', $contents);
                 $contents = preg_replace('~^\s*//.*$~m', '', $contents);
                 break;
             case 'layout':
@@ -351,6 +384,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * @param string $file
      * @param string $contents
      * @return string[]
+     * @throws LocalizedException
      */
     protected function getDependenciesFromFiles($module, $fileType, $file, $contents)
     {
@@ -361,6 +395,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $newDependencies = $rule->getDependencyInfo($module, $fileType, $file, $contents);
             $dependencies = array_merge($dependencies, $newDependencies);
         }
+
         foreach ($dependencies as $key => $dependency) {
             foreach (self::$whiteList as $namespace) {
                 if (strpos($dependency['source'], $namespace) !== false) {
@@ -400,21 +435,64 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      */
     private function collectDependency($dependency, $currentModule, &$undeclared)
     {
-        $module = $dependency['module'];
-        $nsModule = str_replace('_', '\\', $module);
         $type = isset($dependency['type']) ? $dependency['type'] : self::TYPE_HARD;
 
         $soft = $this->_getDependencies($currentModule, self::TYPE_SOFT, self::MAP_TYPE_DECLARED);
         $hard = $this->_getDependencies($currentModule, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
 
         $declared = $type == self::TYPE_SOFT ? array_merge($soft, $hard) : $hard;
-        if (!in_array($module, $declared) && !in_array($nsModule, $declared) && !$this->_isFake($nsModule)) {
-            $undeclared[$type][] = $module;
-        } elseif ((in_array($module, $declared) || in_array($nsModule, $declared)) && $this->_isFake($nsModule)) {
-            $this->_setDependencies($currentModule, $type, self::MAP_TYPE_REDUNDANT, $module);
+
+        $module = $dependency['module'];
+        if (is_array($module)) {
+            $this->collectConditionalDependencies($module, $type, $currentModule, $declared, $undeclared);
+        } else {
+            $nsModule = str_replace('_', '\\', $module);
+
+            if (!in_array($nsModule, $declared) && !$this->_isFake($nsModule)) {
+                $undeclared[$type][] = $module;
+            } elseif (in_array($nsModule, $declared) && $this->_isFake($nsModule)) {
+                $this->_setDependencies($currentModule, $type, self::MAP_TYPE_REDUNDANT, $module);
+            }
+
+            $this->addDependency($currentModule, $type, self::MAP_TYPE_FOUND, $nsModule);
+        }
+    }
+
+    /**
+     * Collect non-strict dependencies when the module depends on one of modules
+     *
+     * @param array $conditionalDependencies
+     * @param string $type
+     * @param string $currentModule
+     * @param array $declared
+     * @param array $undeclared
+     */
+    private function collectConditionalDependencies(
+        array $conditionalDependencies,
+        string $type,
+        string $currentModule,
+        array $declared,
+        array &$undeclared
+    ) {
+        array_walk(
+            $conditionalDependencies,
+            function (&$moduleName) {
+                $moduleName = str_replace('_', '\\', $moduleName);
+            }
+        );
+        $declaredDependencies =  array_intersect($conditionalDependencies, $declared);
+
+        foreach ($declaredDependencies as $moduleName) {
+            if ($this->_isFake($moduleName)) {
+                $this->_setDependencies($currentModule, $type, self::MAP_TYPE_REDUNDANT, $moduleName);
+            }
+
+            $this->addDependency($currentModule, $type, self::MAP_TYPE_FOUND, $moduleName);
         }
 
-        $this->addDependency($currentModule, $type, self::MAP_TYPE_FOUND, $nsModule);
+        if (empty($declaredDependencies)) {
+            $undeclared[$type][] = implode(" || ", $conditionalDependencies);
+        }
     }
 
     /**
@@ -718,10 +796,14 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         string $type,
         array $packageModuleMap
     ): void {
-        $packageNames = array_filter($packageNames, function ($packageName) use ($packageModuleMap) {
-            return isset($packageModuleMap[$packageName]) ||
-                0 === strpos($packageName, 'magento/') && 'magento/magento-composer-installer' != $packageName;
-        });
+        $packageNames = array_filter(
+            $packageNames,
+            function ($packageName) use ($packageModuleMap) {
+                return isset($packageModuleMap[$packageName]) ||
+                    0 === strpos($packageName, 'magento/')
+                    && 'magento/magento-composer-installer' != $packageName;
+            }
+        );
 
         foreach ($packageNames as $packageName) {
             self::addDependency(
