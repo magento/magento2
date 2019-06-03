@@ -3,11 +3,30 @@ namespace Smetana\Images\Block;
 
 use \Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * Returning complete image
+ */
 class Image extends \Magento\Framework\View\Element\Template
 {
+    /**
+     * Scope Config Interface
+     *
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     public $scopeConfig;
+
+    /**
+     * Image Helper
+     *
+     * @var \Smetana\Images\Helper\Data
+     */
     public $helper;
 
+    /**
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Smetana\Images\Helper\Data $helper
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         \Smetana\Images\Helper\Data $helper,
@@ -18,7 +37,14 @@ class Image extends \Magento\Framework\View\Element\Template
         parent::__construct($context);
     }
 
-    public function getConfig($option)
+    /**
+     * Getting config value
+     *
+     * @param string $option
+     *
+     * @return string
+     */
+    public function getConfig(string $option): string
     {
         return $this->scopeConfig->getValue(
             "smetana_section/smetana_group/$option",
@@ -26,6 +52,11 @@ class Image extends \Magento\Framework\View\Element\Template
         );
     }
 
+    /**
+     * Getting image path
+     *
+     * @return string or boolean
+     */
     public function getImage()
     {
         $image = $this->getConfig('smetana_upload_image');
