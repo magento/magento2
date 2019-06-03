@@ -5,11 +5,11 @@
  */
 
 /**
- * @var \Magento\Theme\Block\Html\Header\CriticalCss $block
+ * @var \Magento\Theme\Block\Html\Header\CriticalCss $criticalCssViewModel
  */
 ?>
-<?php $criticalCssData = $block->getCriticalCssData(); ?>
+<?php $criticalCssViewModel = $block->getData('criticalCssViewModel'); ?>
 
 <style type="text/css" data-type="criticalCss">
-    <?= $criticalCssData; ?>
+    <?= /* @noEscape */ $criticalCssViewModel->getCriticalCssData() ?>
 </style>

@@ -14,6 +14,7 @@
         <font src="fonts/opensans/regular/opensans-400.woff2"/>
         <font src="fonts/opensans/semibold/opensans-600.woff2"/>
         <font src="fonts/opensans/bold/opensans-700.woff2"/>
+        <font src="fonts/Luma-Icons.woff2"/>
         <meta name="format-detection" content="telephone=no"/>
     </head>
 </page>

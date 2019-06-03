@@ -420,10 +420,10 @@ class Renderer implements RendererInterface
     /**
      * Check if file type can be font
      *
-     * @param $type
+     * @param string $type
      * @return bool
      */
-    private function canTypeBeFont($type)
+    private function canTypeBeFont(string $type): bool
     {
         return in_array($type, self::FONTS_TYPE);
     }

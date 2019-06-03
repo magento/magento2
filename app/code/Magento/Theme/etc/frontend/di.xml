@@ -32,7 +32,7 @@
     </type>
     <type name="Magento\Theme\Block\Html\Header\CriticalCss">
         <arguments>
-            <item name="filePath" xsi:type="string">css/critical.css</item>
+            <argument name="filePath" xsi:type="string">css/critical.css</argument>
         </arguments>
     </type>
 </config>
