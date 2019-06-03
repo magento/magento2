@@ -5,8 +5,9 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend\TierPrice;
 
-use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\FormatInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Customer\Api\GroupManagementInterface;
@@ -39,18 +40,25 @@ class UpdateHandler extends AbstractHandler
     private $tierPriceResource;
 
     /**
+     * @var FormatInterface
+     */
+    private $localeFormat;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice $tierPriceResource
+     * @param FormatInterface|null $localeFormat
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         ProductAttributeRepositoryInterface $attributeRepository,
         GroupManagementInterface $groupManagement,
         MetadataPool $metadataPool,
-        Tierprice $tierPriceResource
+        Tierprice $tierPriceResource,
+        FormatInterface $localeFormat = null
     ) {
         parent::__construct($groupManagement);
 
@@ -58,6 +66,7 @@ class UpdateHandler extends AbstractHandler
         $this->attributeRepository = $attributeRepository;
         $this->metadataPoll = $metadataPool;
         $this->tierPriceResource = $tierPriceResource;
+        $this->localeFormat = $localeFormat ?: ObjectManager::getInstance()->get(FormatInterface::class);
     }
 
     /**
@@ -116,8 +125,9 @@ class UpdateHandler extends AbstractHandler
     {
         $isChanged = false;
         foreach ($valuesToUpdate as $key => $value) {
-            if ((!empty($value['value']) && (float)$oldValues[$key]['price'] !== (float)$value['value'])
-                || $this->getPercentage($oldValues[$key]) !== $this->getPercentage($value)
+            if ((!empty($value['value'])
+                    && (float)$oldValues[$key]['price'] !== $this->localeFormat->getNumber($value['value'])
+                ) || $this->getPercentage($oldValues[$key]) !== $this->getPercentage($value)
             ) {
                 $price = new \Magento\Framework\DataObject(
                     [

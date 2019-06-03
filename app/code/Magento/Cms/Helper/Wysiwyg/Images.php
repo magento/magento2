@@ -239,11 +239,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     {
         if (!$this->_currentUrl) {
             $path = $this->getCurrentPath();
-            $mediaUrl = $this->_storeManager->getStore(
-                $this->_storeId
-            )->getBaseUrl(
-                \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-            );
+            $mediaUrl = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
             $this->_currentUrl = $mediaUrl . $this->_directory->getRelativePath($path) . '/';
         }
         return $this->_currentUrl;

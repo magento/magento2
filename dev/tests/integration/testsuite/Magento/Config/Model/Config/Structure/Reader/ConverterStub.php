@@ -3,14 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Paypal\Model\Config\Structure\Reader;
+declare(strict_types=1);
+
+namespace Magento\Config\Model\Config\Structure\Reader;
+
+use Magento\Config\Model\Config\Structure\Converter;
 
 /**
- * Class ConverterStub
+ * Class ConverterStub used for ReaderTest.
  */
-class ConverterStub extends \Magento\Config\Model\Config\Structure\Converter
+class ConverterStub extends Converter
 {
     /**
+     * Convert dom document wrapper.
+     *
      * @param \DOMDocument $document
      * @return array|null
      */
@@ -20,7 +26,7 @@ class ConverterStub extends \Magento\Config\Model\Config\Structure\Converter
     }
 
     /**
-     * Convert dom document
+     * Convert dom document.
      *
      * @param \DOMNode $source
      * @return array

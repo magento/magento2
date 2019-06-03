@@ -70,7 +70,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
-     * @magentoDbIsolationEnabled
+     * @magentoDbIsolation enabled
      */
     public function testExport()
     {
@@ -95,7 +95,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data_special_chars.php
-     * @magentoDbIsolationEnabled
+     * @magentoDbIsolation enabled
      */
     public function testExportSpecialChars()
     {
@@ -110,7 +110,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
-     * @magentoDbIsolationEnabled
+     * @magentoDbIsolation enabled
      */
     public function testExportWithProductLinks()
     {

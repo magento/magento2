@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  *
  */
-namespace Magento\Widget\Model\Config;
+namespace Magento\Config\Model\Config\Structure\Reader;
 
 /**
  * @magentoAppArea adminhtml

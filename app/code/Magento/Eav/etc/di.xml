@@ -53,6 +53,7 @@
         </arguments>
     </type>
     <type name="Magento\Eav\Model\Entity\Attribute">
+        <plugin name="eav_code_validator" type="Magento\Eav\Plugin\Model\Entity\Attribute" />
         <arguments>
             <argument name="reservedAttributeList" xsi:type="object">Magento\Catalog\Model\Product\ReservedAttributeList\Proxy</argument>
         </arguments>
