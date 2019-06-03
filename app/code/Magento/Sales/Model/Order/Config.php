@@ -177,7 +177,7 @@ class Config
     /**
      * State label getter
      *
-     * @param   string $state
+     * @param string $state
      * @return \Magento\Framework\Phrase|string
      */
     public function getStateLabel($state)
@@ -209,7 +209,7 @@ class Config
     {
         $states = [];
         foreach ($this->_getCollection() as $item) {
-            if ($item->getState()) {
+            if ($item->getState() && $item->getIsDefault()) {
                 $states[$item->getState()] = __($item->getData('label'));
             }
         }
