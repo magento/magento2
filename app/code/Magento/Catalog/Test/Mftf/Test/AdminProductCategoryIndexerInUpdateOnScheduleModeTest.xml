@@ -90,7 +90,7 @@
         <dontSee userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProductA1"/>
 
         <!-- 4. Run cron to reindex -->
-        <wait time="30" stepKey="waitForChanges"/>
+        <wait time="60" stepKey="waitForChanges"/>
         <magentoCLI command="cron:run" stepKey="runCron"/>
 
         <!-- 5. Open category A on Storefront again -->
@@ -117,7 +117,7 @@
         <see userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeNameProductA1"/>
 
         <!-- 8. Run cron reindex (Ensure that at least one minute passed since last cron run) -->
-        <wait time="30" stepKey="waitOneMinute"/>
+        <wait time="60" stepKey="waitOneMinute"/>
         <magentoCLI command="cron:run" stepKey="runCron1"/>
 
         <!-- 9. Open category A on Storefront again -->
@@ -170,7 +170,7 @@
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductC2InCategoryC2"/>
 
         <!-- 14. Run cron to reindex  (Ensure that at least one minute passed since last cron run) -->
-        <wait time="30" stepKey="waitMinute"/>
+        <wait time="60" stepKey="waitMinute"/>
         <magentoCLI command="cron:run" stepKey="runCron2"/>
 
         <!--  15. Open category B on Storefront  -->
@@ -227,7 +227,7 @@
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryCPageProductC2"/>
 
         <!-- 17.14. Run cron to reindex  (Ensure that at least one minute passed since last cron run) -->
-        <wait time="30" stepKey="waitForOneMinute"/>
+        <wait time="60" stepKey="waitForOneMinute"/>
         <magentoCLI command="cron:run" stepKey="runCron3"/>
 
         <!--  17.15. Open category B on Storefront  -->
@@ -286,7 +286,7 @@
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeOnCategoryCProductC2"/>
 
         <!-- 18.14. Run cron to reindex  (Ensure that at least one minute passed since last cron run) -->
-        <wait time="30" stepKey="waitExtraMinute"/>
+        <wait time="60" stepKey="waitExtraMinute"/>
         <magentoCLI command="cron:run" stepKey="runCron4"/>
 
         <!--  18.15. Open category B on Storefront  -->
