@@ -183,7 +183,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      *
      * @param   array $values
      * @return  $this
-     * @throws LocalizedException
+     * @throws  LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
