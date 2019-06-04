@@ -34,7 +34,7 @@ class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->websiteFactoryMock =
-            $this->getMockBuilder('Magento\Store\Model\WebsiteFactory')
+            $this->getMockBuilder(\Magento\Store\Model\WebsiteFactory::class)
                 ->disableOriginalConstructor()
                 ->setMethods(['create'])
                 ->getMock();
