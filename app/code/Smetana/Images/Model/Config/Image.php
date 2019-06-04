@@ -1,6 +1,8 @@
 <?php
 namespace Smetana\Images\Model\Config;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Image Operations
  */
@@ -52,10 +54,12 @@ class Image extends \Magento\Config\Model\Config\Backend\Image
     public function beforeSave()
     {
         if (!empty($this->getFileData())) {
-            $files = @scandir($this->_getUploadDir());
+            $operations = ObjectManager::getInstance()->create(\Magento\Framework\Filesystem\Driver\File::CLASS);
+
+            $files = $operations->readDirectory($this->_getUploadDir());
             if ($files) {
                 foreach ($files as $file) {
-                    @unlink($this->_getUploadDir() . '/' . $file);
+                    $operations->deleteFile($file);
                 }
                 if (mime_content_type($this->getFileData()['tmp_name']) != 'image/jpeg') {
                     throw new \Magento\Framework\Exception\LocalizedException(__('%1', 'The file has the wrong extension'));
