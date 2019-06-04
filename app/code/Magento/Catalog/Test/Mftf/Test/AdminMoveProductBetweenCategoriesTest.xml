@@ -72,6 +72,19 @@
             <see selector="{{AdminIndexManagementSection.successMessage}}"  userInput="You saved the configuration." stepKey="seeMessage"/>
         </before>
         <after>
+            <!-- Switch "Category Product" and "Product Category" indexers to "Update by Save" mode -->
+            <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="onIndexManagement"/>
+            <waitForPageLoad stepKey="waitForManagementPage"/>
+
+            <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchCategoryProduct">
+                <argument name="indexerValue" value="catalog_category_product"/>
+                <argument name="action" value="Update on Save"/>
+            </actionGroup>
+            <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchProductCategory">
+                <argument name="indexerValue" value="catalog_product_category"/>
+                <argument name="action" value="Update on Save"/>
+            </actionGroup>
+
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSecondCategory" stepKey="deleteSecondCategory"/>
             <deleteData createDataKey="createAnchoredCategory1" stepKey="deleteAnchoredCategory1"/>
