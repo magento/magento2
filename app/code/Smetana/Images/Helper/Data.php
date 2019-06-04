@@ -24,18 +24,28 @@ class Data extends AbstractHelper
     protected $_imageFactory;
 
     /**
+     * File Operations Class
+     *
+     * @var \Magento\Framework\Filesystem\Driver\File
+     */
+    public $file;
+
+    /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
+     * @param \Magento\Framework\Filesystem\Driver\File $file
      * @param \Magento\Framework\App\Helper\Context $context
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Image\AdapterFactory $imageFactory,
+        \Magento\Framework\Filesystem\Driver\File $file,
         Context $context
     ) {
         parent::__construct($context);
         $this->_filesystem = $filesystem;
         $this->_imageFactory = $imageFactory;
+        $this->file = $file;
     }
 
     /**
@@ -51,26 +61,27 @@ class Data extends AbstractHelper
     {
         $mediaDirectory = $this->_filesystem->getDirectoryRead('media');
         $origPath = $mediaDirectory->getAbsolutePath('products_image/' . $image);
-
-        if (!file_exists($origPath)) {
+        if (!$this->file->isFile($origPath)) {
             return false;
         }
 
-        $resizePath = $mediaDirectory->getAbsolutePath('products_image/resize/' . $width . $height . '_' . explode('/', $image)[1]);
-        if (!file_exists($resizePath)) {
-            $files = @scandir($mediaDirectory->getAbsolutePath('products_image/resize/'));
+        $resizePath = $mediaDirectory
+            ->getAbsolutePath('products_image/resize/' . $width . $height . '_' . explode('/', $image)[1]);
+        if (!$this->file->isFile($mediaDirectory->getAbsolutePath() . $resizePath)) {
+            $files = $this->file->readDirectory($mediaDirectory->getAbsolutePath('products_image/resize/'));
             if ($files) {
                 foreach ($files as $file) {
-                    @unlink($mediaDirectory->getAbsolutePath('products_image/resize/') . $file);
+                    $this->file->deleteFile($file);
                 }
             }
             $imageResize = $this->_imageFactory->create();
             $imageResize->open($origPath);
             $imageResize->constrainOnly(true);
             $imageResize->keepTransparency(true);
-            $imageResize->resize($width,$height);
+            $imageResize->resize($width, $height);
             $imageResize->save($resizePath);
         }
+
         return $resizePath;
     }
 }

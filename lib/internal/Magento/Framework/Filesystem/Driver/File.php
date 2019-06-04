@@ -119,7 +119,7 @@ class File implements DriverInterface
      * Tells whether the filename is a regular directory
      *
      * @param string $path
-     * @return bool
+     * @return bool.
      * @throws FileSystemException
      */
     public function isDirectory($path)

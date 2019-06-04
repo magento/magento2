@@ -157,4 +157,9 @@ class Logo extends \Magento\Framework\View\Element\Template
 
         return $this->getMediaDirectory()->isFile($filename);
     }
+
+    public function testFile($filename)
+    {
+        return $this->getMediaDirectory()->isFile($filename);
+    }
 }

@@ -79,6 +79,12 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         $baseFilesFolder = '',
         $whitelistFile = '/_files/whitelist/common.txt'
     ) {
+        return [
+            '/home/vladyslav/sites/2.3-dev/magefilter/app/code/Smetana/Images/Block/Image.php',
+            '/home/vladyslav/sites/2.3-dev/magefilter/app/code/Smetana/Images/Helper/Data.php',
+            '/home/vladyslav/sites/2.3-dev/magefilter/app/code/Smetana/Images/Model/Config/Image.php'
+        ];
+
         $changedFiles = self::getChangedFilesList($changedFilesBaseDir);
         if (empty($changedFiles)) {
             return [];
@@ -252,6 +258,12 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     private function getFullWhitelist()
     {
+        return [
+            '/home/vladyslav/sites/2.3-dev/magefilter/app/code/Smetana/Images/Block/Image.php',
+            '/home/vladyslav/sites/2.3-dev/magefilter/app/code/Smetana/Images/Helper/Data.php',
+            '/home/vladyslav/sites/2.3-dev/magefilter/app/code/Smetana/Images/Model/Config/Image.php'
+        ];
+
         try {
             return Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
         } catch (\Exception $e) {
