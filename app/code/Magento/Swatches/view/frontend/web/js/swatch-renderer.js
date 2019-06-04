@@ -697,7 +697,7 @@ define([
          */
         _sortImages: function (images) {
             return _.sortBy(images, function (image) {
-                return image.position;
+                return parseInt(image.position, 10);
             });
         },
 
@@ -1254,7 +1254,7 @@ define([
                         dataMergeStrategy: this.options.gallerySwitchStrategy
                     });
                 }
-
+                gallery.first();
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }

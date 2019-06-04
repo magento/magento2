@@ -28,7 +28,7 @@ class GetCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -46,11 +46,11 @@ class GetCartTest extends GraphQlAbstract
         self::assertCount(2, $response['cart']['items']);
 
         self::assertNotEmpty($response['cart']['items'][0]['id']);
-        self::assertEquals(2, $response['cart']['items'][0]['qty']);
-        self::assertEquals('simple', $response['cart']['items'][0]['product']['sku']);
+        self::assertEquals(2, $response['cart']['items'][0]['quantity']);
+        self::assertEquals('simple_product', $response['cart']['items'][0]['product']['sku']);
 
         self::assertNotEmpty($response['cart']['items'][1]['id']);
-        self::assertEquals(2, $response['cart']['items'][1]['qty']);
+        self::assertEquals(2, $response['cart']['items'][1]['quantity']);
         self::assertEquals('virtual-product', $response['cart']['items'][1]['product']['sku']);
     }
 
@@ -98,6 +98,54 @@ class GetCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_guest_not_default_store.php
+     */
+    public function testGetCartWithNotDefaultStore()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1_not_default_store_guest');
+        $query = $this->getQuery($maskedQuoteId);
+
+        $headerMap = ['Store' => 'fixture_second_store'];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+
+        self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('items', $response['cart']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Wrong store code specified for cart
+     */
+    public function testGetCartWithWrongStore()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $query = $this->getQuery($maskedQuoteId);
+
+        $headerMap = ['Store' => 'fixture_second_store'];
+        $this->graphQlQuery($query, [], '', $headerMap);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_guest_not_default_store.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Requested store is not found
+     */
+    public function testGetCartWithNotExistingStore()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1_not_default_store_guest');
+
+        $headerMap['Store'] = 'not_existing_store';
+        $query = $this->getQuery($maskedQuoteId);
+
+        $this->graphQlQuery($query, [], '', $headerMap);
+    }
+
+    /**
      * @param string $maskedQuoteId
      * @return string
      */
@@ -108,7 +156,7 @@ class GetCartTest extends GraphQlAbstract
   cart(cart_id: "{$maskedQuoteId}") {
     items {
       id
-      qty
+      quantity
       product {
         sku
       }

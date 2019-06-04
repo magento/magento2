@@ -16,6 +16,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CartItemRepositoryInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Item;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 
 /**
@@ -98,7 +99,7 @@ class UpdateCartItems implements ResolverInterface
             if (!isset($item['quantity'])) {
                 throw new GraphQlInputException(__('Required parameter "quantity" for "cart_items" is missing.'));
             }
-            $qty = (float)$item['quantity'];
+            $quantity = (float)$item['quantity'];
 
             $cartItem = $cart->getItemById($itemId);
             if ($cartItem === false) {
@@ -107,11 +108,38 @@ class UpdateCartItems implements ResolverInterface
                 );
             }
 
-            if ($qty <= 0.0) {
+            if ($quantity <= 0.0) {
                 $this->cartItemRepository->deleteById((int)$cart->getId(), $itemId);
             } else {
-                $cartItem->setQty($qty);
+                $cartItem->setQty($quantity);
+                $this->validateCartItem($cartItem);
                 $this->cartItemRepository->save($cartItem);
+            }
+        }
+    }
+
+    /**
+     * Validate cart item
+     *
+     * @param Item $cartItem
+     * @return void
+     * @throws GraphQlInputException
+     */
+    private function validateCartItem(Item $cartItem): void
+    {
+        if ($cartItem->getHasError()) {
+            $errors = [];
+            foreach ($cartItem->getMessage(false) as $message) {
+                $errors[] = $message;
+            }
+
+            if (!empty($errors)) {
+                throw new GraphQlInputException(
+                    __(
+                        'Could not update the product with SKU %sku: %message',
+                        ['sku' => $cartItem->getSku(), 'message' => __(implode("\n", $errors))]
+                    )
+                );
             }
         }
     }

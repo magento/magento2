@@ -13,6 +13,7 @@
         <arguments>
             <argument name="catalogRule" defaultValue="_defaultCatalogRule"/>
         </arguments>
+
         <!-- Go to the admin Catalog rule grid and add a new one -->
         <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
@@ -27,15 +28,14 @@
         <click stepKey="clickToCalender" selector="{{AdminNewCatalogPriceRule.toDateButton}}"/>
         <click stepKey="clickToToday" selector="{{AdminNewCatalogPriceRule.todayDate}}"/>
         <click stepKey="openActionDropdown" selector="{{AdminNewCatalogPriceRule.actionsTab}}"/>
-        <selectOption stepKey="discountType" selector="{{AdminNewCatalogPriceRuleActions.apply}}" userInput="{{catalogRule.simple_action}}"/>
         <fillField stepKey="fillDiscountValue" selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="{{catalogRule.discount_amount}}"/>
+        <selectOption stepKey="discountType" selector="{{AdminNewCatalogPriceRuleActions.apply}}" userInput="{{catalogRule.simple_action}}"/>
         <selectOption stepKey="discardSubsequentRules" selector="{{AdminNewCatalogPriceRuleActions.disregardRules}}" userInput="Yes"/>
 
         <!-- Scroll to top and either save or save and apply after the action group -->
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <waitForPageLoad stepKey="waitForApplied"/>
     </actionGroup>
-
 
     <actionGroup name="createCatalogPriceRule">
         <arguments>
@@ -51,6 +51,26 @@
 
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <waitForPageLoad stepKey="waitForApplied"/>
+    </actionGroup>
+
+    <actionGroup name="CreateCatalogPriceRuleViaTheUi">
+        <arguments>
+            <argument name="catalogRule" defaultValue="_defaultCatalogRule"/>
+            <argument name="customerGroup" defaultValue="General" type="string"/>
+            <argument name="disregardRules" defaultValue="Yes" type="string"/>
+        </arguments>
+
+        <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}" stepKey="fillName1"/>
+        <fillField selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}" stepKey="fillDescription1"/>
+        <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" userInput="{{catalogRule.website_ids[0]}}"  stepKey="selectWebSite1"/>
+        <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="{{customerGroup}}" stepKey="selectCustomerGroup1"/>
+        <scrollTo selector="{{AdminNewCatalogPriceRule.actionsTab}}" stepKey="scrollToActionTab1"/>
+        <click selector="{{AdminNewCatalogPriceRule.actionsTab}}" stepKey="openActionDropdown1"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleActions.apply}}" userInput="{{catalogRule.simple_action}}" stepKey="discountType1"/>
+        <fillField selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="{{catalogRule.discount_amount}}" stepKey="fillDiscountValue1"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleActions.disregardRules}}" userInput="{{disregardRules}}" stepKey="discardSubsequentRules1"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <scrollToTopOfPage stepKey="scrollToTop1"/>
     </actionGroup>
 
     <actionGroup name="CreateCatalogPriceRuleConditionWithAttribute">
@@ -115,5 +135,26 @@
 
     <actionGroup name="selectNotLoggedInCustomerGroupActionGroup">
         <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
+    </actionGroup>
+
+    <!-- Open rule for Edit -->
+    <actionGroup name="OpenCatalogPriceRule">
+        <arguments>
+            <argument name="ruleName" type="string" defaultValue="CustomCatalogRule.name"/>
+        </arguments>
+        <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToAdminCatalogPriceRuleGridPage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <fillField selector="{{AdminCatalogPriceRuleGridSection.filterByRuleName}}" userInput="{{ruleName}}" stepKey="filterByRuleName"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch"/>
+        <click selector="{{AdminGridTableSection.row('1')}}" stepKey="clickEdit"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <actionGroup name="RemoveCatalogPriceRule" extends="OpenCatalogPriceRule">
+        <click selector="{{AdminMainActionsSection.delete}}" after="waitForPageLoad" stepKey="clickToDelete"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" after="clickToDelete" stepKey="waitForElementVisible"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" after="waitForElementVisible" stepKey="clickToConfirm"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" after="clickToConfirm" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the rule." after="waitForSuccessMessage" stepKey="verifyRuleIsDeleted"/>
     </actionGroup>
 </actionGroups>

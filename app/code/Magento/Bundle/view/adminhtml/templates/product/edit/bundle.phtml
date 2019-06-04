@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle */
 ?>
 <script>
@@ -19,14 +17,20 @@ if(typeof Bundle=='undefined') {
 <div id="bundle_product_container" class="entry-edit form-inline">
     <fieldset class="fieldset">
         <div class="field field-ship-bundle-items">
-            <label for="shipment_type" class="label"><?= /* @escapeNotVerified */ __('Ship Bundle Items') ?></label>
+            <label for="shipment_type" class="label"><?= $block->escapeHtml(__('Ship Bundle Items')) ?></label>
             <div class="control">
-                <select <?php if ($block->isReadonly()): ?>disabled="disabled" <?php endif;?>
+                <select <?php if ($block->isReadonly()) : ?>disabled="disabled" <?php endif;?>
                         id="shipment_type"
-                        name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[shipment_type]"
+                        name="<?= $block->escapeHtmlAttr($block->getFieldSuffix()) ?>[shipment_type]"
                         class="select">
-                    <option value="1"><?= /* @escapeNotVerified */ __('Separately') ?></option>
-                    <option value="0"<?php if ($block->getProduct()->getShipmentType() == 0): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ __('Together') ?></option>
+                    <option value="1"><?= $block->escapeHtml(__('Separately')) ?></option>
+                    <option value="0"
+                        <?php if ($block->getProduct()->getShipmentType() == 0) : ?>
+                            selected="selected"
+                        <?php endif; ?>
+                    >
+                        <?= $block->escapeHtml(__('Together')) ?>
+                    </option>
                 </select>
             </div>
         </div>
@@ -48,7 +52,7 @@ require(["prototype", "mage/adminhtml/form"], function(){
     // re-bind form elements onchange
     varienWindowOnload(true);
 
-    <?php if ($block->isReadonly()):?>
+    <?php if ($block->isReadonly()) :?>
     $('product_bundle_container').select('input', 'select', 'textarea', 'button').each(function(input){
         input.disabled = true;
         if (input.tagName.toLowerCase() == 'button') {

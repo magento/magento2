@@ -1,6 +1,6 @@
 type Query {
     customAttributeMetadata(attributes: [AttributeInput!]!): CustomAttributeMetadata @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata")
-    @doc(description: "Returns the attribute type, given an attribute code and entity type")
+    @doc(description: "Returns the attribute type, given an attribute code and entity type") @cache(cacheTag: "cat_test", cacheIdentity: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata")
 }
 
 type CustomAttributeMetadata {

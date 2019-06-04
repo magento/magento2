@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminMenuStoresTaxesTaxRules">
+        <data key="pageTitle">Tax Rules</data>
+        <data key="title">Tax Rules</data>
+        <data key="dataUiId">magento-tax-sales-tax-rules</data>
+    </entity>
+    <entity name="AdminMenuStoresTaxZonesAndRates">
+        <data key="pageTitle">Tax Zones and Rates</data>
+        <data key="title">Tax Zones and Rates</data>
+        <data key="dataUiId">magento-tax-sales-tax-rates</data>
+    </entity>
+    <entity name="AdminMenuSystemDataTransferImportAndExportTaxRates">
+        <data key="pageTitle">Import and Export Tax Rates</data>
+        <data key="title">Import/Export Tax Rates</data>
+        <data key="dataUiId">magento-taximportexport-system-convert-tax</data>
+    </entity>
+</entities>

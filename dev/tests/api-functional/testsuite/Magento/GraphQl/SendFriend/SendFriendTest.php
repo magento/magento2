@@ -7,11 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\SendFriend;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\SendFriend\Model\SendFriend;
 use Magento\SendFriend\Model\SendFriendFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Tests for send email to friend
+ */
 class SendFriendTest extends GraphQlAbstract
 {
 
@@ -19,54 +23,34 @@ class SendFriendTest extends GraphQlAbstract
      * @var SendFriendFactory
      */
     private $sendFriendFactory;
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
 
     protected function setUp()
     {
         $this->sendFriendFactory = Bootstrap::getObjectManager()->get(SendFriendFactory::class);
+        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      */
     public function testSendFriend()
     {
-        $query =
-            <<<QUERY
-mutation {
-    sendEmailToFriend(
-        input: {
-          product_id: 1
-          sender: {
-            name: "Name"
-            email: "e@mail.com"
-            message: "Lorem Ipsum"
-        }          
-          recipients: [
-              {
+        $productId = (int)$this->productRepository->get('simple_product')->getId();
+        $recipients = '{
                   name: "Recipient Name 1"
                   email:"recipient1@mail.com"
                },
               {
                   name: "Recipient Name 2"
                   email:"recipient2@mail.com"
-              }
-          ]
-        } 
-    ) {
-        sender {
-            name
-            email
-            message
-        }
-        recipients {
-            name
-            email
-        }
-    }
-}
-QUERY;
+              }';
+        $query = $this->getQuery($productId, $recipients);
 
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
         self::assertEquals('Name', $response['sendEmailToFriend']['sender']['name']);
         self::assertEquals('e@mail.com', $response['sendEmailToFriend']['sender']['email']);
         self::assertEquals('Lorem Ipsum', $response['sendEmailToFriend']['sender']['message']);
@@ -78,69 +62,34 @@ QUERY;
 
     public function testSendWithoutExistProduct()
     {
-        $query =
-            <<<QUERY
-mutation {
-    sendEmailToFriend(
-        input: {
-          product_id: 2018
-          sender: {
-            name: "Name"
-            email: "e@mail.com"
-            message: "Lorem Ipsum"
-        }          
-          recipients: [
-              {
+        $productId = 2018;
+        $recipients = '{
                   name: "Recipient Name 1"
                   email:"recipient1@mail.com"
                },
               {
                   name: "Recipient Name 2"
                   email:"recipient2@mail.com"
-              }
-          ]
-        } 
-    ) {
-        sender {
-            name
-            email
-            message
-        }
-        recipients {
-            name
-            email
-        }
-    }
-}
-QUERY;
+              }';
+        $query = $this->getQuery($productId, $recipients);
+
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
             'The product that was requested doesn\'t exist. Verify the product and try again.'
         );
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      */
     public function testMaxSendEmailToFriend()
     {
         /** @var SendFriend $sendFriend */
         $sendFriend = $this->sendFriendFactory->create();
 
-        $query =
-            <<<QUERY
-mutation {
-    sendEmailToFriend(
-        input: {
-          product_id: 1
-          sender: {
-            name: "Name"
-            email: "e@mail.com"
-            message: "Lorem Ipsum"
-        }
-          recipients: [
-                {
+        $productId = (int)$this->productRepository->get('simple_product')->getId();
+        $recipients = '{
                   name: "Recipient Name 1"
                   email:"recipient1@mail.com"
                },
@@ -163,25 +112,13 @@ mutation {
                {
                   name: "Recipient Name 1"
                   email:"recipient1@mail.com"
-               }
-          ]
-        }
-    ) {
-        sender {
-            name
-            email
-            message
-        }
-        recipients {
-            name
-            email
-        }
-    }
-}
-QUERY;
+               }';
+
+        $query = $this->getQuery($productId, $recipients);
+
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage("No more than {$sendFriend->getMaxRecipients()} emails can be sent at a time.");
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -214,11 +151,11 @@ mutation {
 QUERY;
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage($errorMessage);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * TODO: use magentoApiConfigFixture (to be merged https://github.com/magento/graphql-ce/pull/351)
      * @magentoApiDataFixture Magento/SendFriend/Fixtures/sendfriend_configuration.php
      */
@@ -228,50 +165,69 @@ QUERY;
         /** @var SendFriend $sendFriend */
         $sendFriend = $this->sendFriendFactory->create();
 
-        $query =
-            <<<QUERY
-mutation {
-    sendEmailToFriend(
-        input: {
-          product_id: 1
-          sender: {
-            name: "Name"
-            email: "e@mail.com"
-            message: "Lorem Ipsum"
-        }
-          recipients: [
-                {
+        $productId = (int)$this->productRepository->get('simple_product')->getId();
+        $recipients = '{
                   name: "Recipient Name 1"
                   email:"recipient1@mail.com"
                },
-               {
+              {
                   name: "Recipient Name 2"
                   email:"recipient2@mail.com"
-               }
+              }';
+        $query = $this->getQuery($productId, $recipients);
 
-          ]
-        }
-    ) {
-        sender {
-            name
-            email
-            message
-        }
-        recipients {
-            name
-            email
-        }
-    }
-}
-QUERY;
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
             "You can't send messages more than {$sendFriend->getMaxSendsToFriend()} times an hour."
         );
 
-        for ($i = 0; $i <= $sendFriend->getMaxSendsToFriend() + 1; $i++) {
-            $this->graphQlQuery($query);
+        $maxSendToFriends = $sendFriend->getMaxSendsToFriend();
+        for ($i = 0; $i <= $maxSendToFriends + 1; $i++) {
+            $this->graphQlMutation($query);
         }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     */
+    public function testSendProductWithoutSenderEmail()
+    {
+        $productId = (int)$this->productRepository->get('simple_product')->getId();
+        $recipients = '{
+                  name: "Recipient Name 1"
+                  email:""
+               }';
+        $query = $this->getQuery($productId, $recipients);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: Please provide Email for all of recipients.');
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product_without_visibility.php
+     */
+    public function testSendProductWithoutVisibility()
+    {
+        $productId = (int)$this->productRepository->get('simple_product_without_visibility')->getId();
+        $recipients = '{
+                  name: "Recipient Name 1"
+                  email:"recipient1@mail.com"
+               },
+              {
+                  name: "Recipient Name 2"
+                  email:"recipient2@mail.com"
+              }';
+        $query = $this->getQuery($productId, $recipients);
+
+        $response = $this->graphQlMutation($query);
+        self::assertEquals('Name', $response['sendEmailToFriend']['sender']['name']);
+        self::assertEquals('e@mail.com', $response['sendEmailToFriend']['sender']['email']);
+        self::assertEquals('Lorem Ipsum', $response['sendEmailToFriend']['sender']['message']);
+        self::assertEquals('Recipient Name 1', $response['sendEmailToFriend']['recipients'][0]['name']);
+        self::assertEquals('recipient1@mail.com', $response['sendEmailToFriend']['recipients'][0]['email']);
+        self::assertEquals('Recipient Name 2', $response['sendEmailToFriend']['recipients'][1]['name']);
+        self::assertEquals('recipient2@mail.com', $response['sendEmailToFriend']['recipients'][1]['email']);
     }
 
     /**
@@ -353,5 +309,39 @@ QUERY;
           ]', 'Please provide Message.'
             ]
         ];
+    }
+
+    /**
+     * @param int $productId
+     * @param string $recipients
+     * @return string
+     */
+    private function getQuery(int $productId, string $recipients): string
+    {
+        return <<<QUERY
+mutation {
+    sendEmailToFriend(
+        input: {
+          product_id: {$productId}
+          sender: {
+            name: "Name"
+            email: "e@mail.com"
+            message: "Lorem Ipsum"
+        }          
+          recipients: [{$recipients}]
+        } 
+    ) {
+        sender {
+            name
+            email
+            message
+        }
+        recipients {
+            name
+            email
+        }
+    }
+}
+QUERY;
     }
 }
