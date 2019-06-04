@@ -49,6 +49,80 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
         $this->_model->setAttributeModel($attribute);
     }
 
+    /**
+     * Test the product collection returns the correct number of items after the filter is applied.
+     *
+     * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_special_price_filterable.php
+     * @magentoDataFixture Magento/Catalog/_files/multiple_visible_products.php
+     * @magentoDbIsolation disabled
+     */
+    public function testApplyProductCollection()
+    {
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $category = $objectManager->create(\Magento\Catalog\Model\Category::class);
+        $category->load(2);
+        $this->_model->getLayer()->setCurrentCategory($category);
+
+        /** @var $attribute \Magento\Catalog\Model\Entity\Attribute */
+        $attribute = $objectManager->create(\Magento\Catalog\Model\Entity\Attribute::class);
+        $attribute->loadByCode('catalog_product', 'special_price');
+        $this->_model->setAttributeModel($attribute);
+
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var $request \Magento\TestFramework\Request */
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
+        $request->setParam('special_price', '10-20');
+        $result = $this->_model->apply($request);
+        $collection = $this->_model->getLayer()->getProductCollection();
+        $size = $collection->getSize();
+        $this->assertEquals(
+            1,
+            $size
+        );
+    }
+
+    /**
+     * Test the filter label is correct
+     */
+    public function testApplyFilterLabel()
+    {
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var $request \Magento\TestFramework\Request */
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
+        $request->setParam('weight', '10-20');
+        $this->_model->apply($request);
+
+        $filters = $this->_model->getLayer()->getState()->getFilters();
+        $this->assertArrayHasKey(0, $filters);
+        $this->assertEquals(
+            '<span class="price">$10.00</span> - <span class="price">$19.99</span>',
+            (string)$filters[0]->getLabel()
+        );
+    }
+
+    /**
+     * Test the filter label is correct when there is empty To value
+     */
+    public function testApplyFilterLabelWithEmptyToValue()
+    {
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var $request \Magento\TestFramework\Request */
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
+        $request->setParam('weight', '10-');
+        $this->_model->apply($request);
+
+        $filters = $this->_model->getLayer()->getState()->getFilters();
+        $this->assertArrayHasKey(0, $filters);
+        $this->assertEquals(
+            '<span class="price">$10.00</span> and above',
+            (string)$filters[0]->getLabel()
+        );
+    }
+
     public function testApplyNothing()
     {
         $this->assertEmpty($this->_model->getData('range'));
