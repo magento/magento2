@@ -70,7 +70,7 @@ Disallow: /*SID=
                 <move_inline_to_bottom>0</move_inline_to_bottom>
             </js>
             <css>
-                <use_css_critical_path>1</use_css_critical_path>
+                <use_css_critical_path>0</use_css_critical_path>
             </css>
         </dev>
     </default>
