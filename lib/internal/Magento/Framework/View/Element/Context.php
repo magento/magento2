@@ -6,6 +6,7 @@
 namespace Magento\Framework\View\Element;
 
 use Magento\Framework\Cache\LockGuardedCacheLoader;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Constructor modification point for Magento\Framework\View\Element\AbstractBlock.
@@ -182,7 +183,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        LockGuardedCacheLoader $lockQuery
+        LockGuardedCacheLoader $lockQuery = null
     ) {
         $this->_request = $request;
         $this->_layout = $layout;
@@ -201,7 +202,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         $this->_filterManager = $filterManager;
         $this->_localeDate = $localeDate;
         $this->inlineTranslation = $inlineTranslation;
-        $this->lockQuery = $lockQuery;
+        $this->lockQuery = $lockQuery ?: ObjectManager::getInstance()->get(LockGuardedCacheLoader::class);
     }
 
     /**

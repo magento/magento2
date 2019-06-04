@@ -57,7 +57,6 @@ class Context extends \Magento\Backend\Block\Template\Context
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param LockGuardedCacheLoader $lockQuery
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\View\TemplateEnginePool $enginePool
@@ -73,6 +72,7 @@ class Context extends \Magento\Backend\Block\Template\Context
      * @param \Magento\Framework\Code\NameBuilder $nameBuilder
      * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
      * @param Button\ToolbarInterface $toolbar
+     * @param LockGuardedCacheLoader|null $lockQuery
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -94,7 +94,6 @@ class Context extends \Magento\Backend\Block\Template\Context
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        LockGuardedCacheLoader $lockQuery,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\View\TemplateEnginePool $enginePool,
@@ -109,7 +108,8 @@ class Context extends \Magento\Backend\Block\Template\Context
         \Magento\Framework\Data\Form\FormKey $formKey,
         \Magento\Framework\Code\NameBuilder $nameBuilder,
         Button\ButtonList $buttonList,
-        Button\ToolbarInterface $toolbar
+        Button\ToolbarInterface $toolbar,
+        LockGuardedCacheLoader $lockQuery = null
     ) {
         parent::__construct(
             $request,
@@ -129,7 +129,6 @@ class Context extends \Magento\Backend\Block\Template\Context
             $filterManager,
             $localeDate,
             $inlineTranslation,
-            $lockQuery,
             $filesystem,
             $viewFileSystem,
             $enginePool,
@@ -142,7 +141,8 @@ class Context extends \Magento\Backend\Block\Template\Context
             $backendSession,
             $mathRandom,
             $formKey,
-            $nameBuilder
+            $nameBuilder,
+            $lockQuery
         );
 
         $this->buttonList = $buttonList;

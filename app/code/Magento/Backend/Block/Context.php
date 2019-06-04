@@ -47,8 +47,8 @@ class Context extends \Magento\Framework\View\Element\Context
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param LockGuardedCacheLoader $lockQuery
      * @param \Magento\Framework\AuthorizationInterface $authorization
+     * @param LockGuardedCacheLoader|null $lockQuery
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -70,8 +70,8 @@ class Context extends \Magento\Framework\View\Element\Context
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        LockGuardedCacheLoader $lockQuery,
-        \Magento\Framework\AuthorizationInterface $authorization
+        \Magento\Framework\AuthorizationInterface $authorization,
+        LockGuardedCacheLoader $lockQuery = null
     ) {
         $this->_authorization = $authorization;
         parent::__construct(
