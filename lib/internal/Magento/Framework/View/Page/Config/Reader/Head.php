@@ -63,6 +63,8 @@ class Head implements Layout\ReaderInterface
     }
 
     /**
+     * Read children elements structure and fill scheduled structure
+     *
      * @param Layout\Reader\Context $readerContext
      * @param Layout\Element $headElement
      * @return $this|Layout\ReaderInterface
