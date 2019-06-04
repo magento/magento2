@@ -52,7 +52,7 @@ class CriticalCss implements ArgumentInterface
             $content = $asset->getContent();
         } catch (LocalizedException | NotFoundException $e) {
             $content = '';
-        };
+        }
 
         return $content;
     }
