@@ -21,6 +21,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     private $urlDecoder;
 
     /**
+     * @var \Zend\Stdlib\Parameters
+     */
+    private $parameters;
+
+    /**
      * Should Store Switcher block be visible
      *
      * @var bool
@@ -81,16 +86,21 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param array $data
      * @param \Magento\Framework\Url\DecoderInterface|null $urlDecoder
+     * @param \Zend\Stdlib\Parameters $parameters
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         array $data = [],
-        \Magento\Framework\Url\DecoderInterface $urlDecoder = null
+        \Magento\Framework\Url\DecoderInterface $urlDecoder = null,
+        \Zend\Stdlib\Parameters $parameters = null
     ) {
         $this->urlDecoder = $urlDecoder ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
             \Magento\Framework\Url\DecoderInterface::class
         );
+
+        $this->parameters = $parameters ?? new \Zend\Stdlib\Parameters();
+
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -112,10 +122,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             // this is a replacement for base64_decode()
             $filter = $this->urlDecoder->decode($filter);
 
-            /** @var $request \Magento\Framework\HTTP\PhpEnvironment\Request */
-            $request = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\HTTP\PhpEnvironment\Request::class);
-            $data = $request->setRequestUri(urldecode($filter))->getQuery()->toArray();
+            // this is a replacement for parse_str()
+            $this->parameters->fromString(urldecode($filter));
+            $data = $this->parameters->toArray();
 
             if (!isset($data['report_from'])) {
                 // getting all reports from 2001 year
