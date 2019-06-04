@@ -90,8 +90,7 @@ class Template implements \Zend_Filter_Interface
      */
     private $restrictedMethodsByInstanceType = [
         \Magento\Framework\DB\Adapter\AdapterInterface::class => [
-            'rawquery',
-            'rawfetchrow'
+            '*'
         ]
     ];
 
@@ -417,7 +416,9 @@ class Template implements \Zend_Filter_Interface
             }
         } else {
             foreach ($this->restrictedMethodsByInstanceType as $instanceType => $restrictedMethods) {
-                if ($object instanceof $instanceType && in_array(mb_strtolower($method), $restrictedMethods)) {
+                if ($object instanceof $instanceType &&
+                    ($restrictedMethods === '*' || in_array(mb_strtolower($method), $restrictedMethods))
+                ) {
                     throw new \InvalidArgumentException("Method $method cannot be called from template.");
                 }
             }
