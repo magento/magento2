@@ -277,12 +277,19 @@ class View extends DataObject implements ViewInterface
                 ? View\StateInterface::STATUS_SUSPENDED
                 : View\StateInterface::STATUS_IDLE;
             $this->getState()->setVersionId($currentVersionId)->setStatus($statusToRestore)->save();
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->getState()->loadByView($this->getId());
             $statusToRestore = $this->getState()->getStatus() === View\StateInterface::STATUS_SUSPENDED
                 ? View\StateInterface::STATUS_SUSPENDED
                 : View\StateInterface::STATUS_IDLE;
             $this->getState()->setStatus($statusToRestore)->save();
+            if (!$exception instanceof \Exception) {
+                $exception = new \RuntimeException(
+                    'Error when updating an mview',
+                    0,
+                    $exception
+                );
+            }
             throw $exception;
         }
     }
