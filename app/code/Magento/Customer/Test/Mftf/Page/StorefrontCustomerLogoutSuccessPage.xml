@@ -5,11 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="AdminNewWidgetPage" url="admin/widget_instance/new/" area="admin" module="Magento_Widget">
-        <section name="AdminNewWidgetSelectProductPopupSection"/>
-        <section name="AdminCatalogProductWidgetSection"/>
-    </page>
+    <page name="StorefrontCustomerLogoutSuccessPage" url="customer/account/logoutSuccess/" area="storefront" module="Magento_Customer"/>
 </pages>

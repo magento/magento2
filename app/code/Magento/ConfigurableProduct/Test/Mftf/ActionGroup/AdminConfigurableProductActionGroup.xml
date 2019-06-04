@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--
 
     Create a configurable product with three options for color: red, white, and blue
@@ -74,5 +74,29 @@
         <click selector="{{AdminChooseAffectedAttributeSetSection.confirm}}" stepKey="clickOnConfirmInPopup"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
         <seeInTitle userInput="{{product.name}}" stepKey="seeProductNameInTitle"/>
+    </actionGroup>
+
+    <!--Click in Next Step and see Title-->
+    <actionGroup name="AdminConfigurableWizardMoveToNextStepActionGroup">
+        <arguments>
+            <argument name="title" type="string"/>
+        </arguments>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.next}}" stepKey="clickNextButton"/>
+        <waitForPageLoad stepKey="waitForNextStepLoaded"/>
+        <see userInput="{{title}}" selector="{{AdminProductFormConfigurationsSection.stepsWizardTitle}}" stepKey="seeStepTitle"/>
+    </actionGroup>
+
+    <!-- Add unique image to configurable product option-->
+    <actionGroup name="AddUniqueImageToConfigurableProductOptionActionGroup">
+        <arguments>
+            <argument name="image" defaultValue="ProductImage"/>
+            <argument name="frontend_label" type="string"/>
+            <argument name="label" type="string"/>
+        </arguments>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.applyUniqueImagesToEachSkus}}" stepKey="clickOnApplyUniqueImagesToEachSku"/>
+        <selectOption userInput="{{frontend_label}}" selector="{{AdminCreateProductConfigurationsPanelSection.selectImagesButton}}" stepKey="selectOption"/>
+        <attachFile selector="{{AdminCreateProductConfigurationsPanelSection.uploadImagesButton(label)}}" userInput="{{image.file}}" stepKey="uploadFile"/>
+        <waitForElementNotVisible selector="{{AdminProductImagesSection.uploadProgressBar}}" stepKey="waitForUpload"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanelSection.imageFile(image.fileName)}}" stepKey="waitForThumbnail"/>
     </actionGroup>
 </actionGroups>
