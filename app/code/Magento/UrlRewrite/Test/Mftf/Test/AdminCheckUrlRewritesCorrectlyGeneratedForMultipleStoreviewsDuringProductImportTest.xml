@@ -14,7 +14,7 @@
             <title value="Url Rewrites Correctly Generated for Multiple Storeviews During Product Import"/>
             <description value="Check Url Rewrites Correctly Generated for Multiple Storeviews During Product Import."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-68980"/>
+            <testCaseId value="MC-12656"/>
             <group value="urlRewrite"/>
         </annotations>
         <before>
@@ -118,10 +118,10 @@
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="Url Rewrites for Multiple Storeviews"/>
-            <title value="Url Rewrites Correctly Generated for Multiple Storeviews During Product Import"/>
+            <title value="Url Rewrites Correctly Generated for Multiple Storeviews During Product Import With Configuration Turned Off"/>
             <description value="Check Url Rewrites Correctly Generated for Multiple Storeviews During Product Import."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-94801"/>
+            <testCaseId value="MC-6802"/>
             <group value="urlRewrite"/>
         </annotations>
         <before>
