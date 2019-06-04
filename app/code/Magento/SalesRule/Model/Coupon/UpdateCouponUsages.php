@@ -63,7 +63,7 @@ class UpdateCouponUsages
      * @param bool $increment
      * @return Order
      */
-    public function execute(Order $subject, bool $increment)
+    public function execute(Order $subject, bool $increment): Order
     {
         if (!$subject || !$subject->getAppliedRuleIds()) {
             return $subject;
@@ -115,7 +115,7 @@ class UpdateCouponUsages
      * @param int $ruleId
      * @param int $customerId
      */
-    private function updateCustomerRuleUsages(bool $increment, int $ruleId, int $customerId)
+    private function updateCustomerRuleUsages(bool $increment, int $ruleId, int $customerId): void
     {
         /** @var \Magento\SalesRule\Model\Rule\Customer $ruleCustomer */
         $ruleCustomer = $this->ruleCustomerFactory->create();
@@ -137,7 +137,7 @@ class UpdateCouponUsages
      * @param bool $increment
      * @param int $customerId
      */
-    private function updateCouponUsages(Order $subject, bool $increment, int $customerId)
+    private function updateCouponUsages(Order $subject, bool $increment, int $customerId): void
     {
         $this->coupon->load($subject->getCouponCode(), 'code');
         if ($this->coupon->getId()) {

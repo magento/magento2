@@ -30,7 +30,7 @@ class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param bool $increment
      * @return void
      */
-    public function updateCustomerCouponTimesUsed($customerId, $couponId, $increment = true)
+    public function updateCustomerCouponTimesUsed($customerId, $couponId, $increment = true): void
     {
         $connection = $this->getConnection();
         $select = $connection->select();
