@@ -34,6 +34,8 @@ HTML;
 }
 
 $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
+$_SERVER['MAGENTO_BACKEND_URL'] = $bootstrap->getMagentoBackendUrl();
+$_SERVER['NODE_ENV'] = $bootstrap->getMode();
 /** @var \Magento\Framework\App\Http $app */
 $app = $bootstrap->createApplication(\Magento\Framework\App\Http::class);
 $bootstrap->run($app);

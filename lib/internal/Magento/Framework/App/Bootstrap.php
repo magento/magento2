@@ -242,6 +242,15 @@ class Bootstrap
     }
 
     /**
+     * @return string
+     */
+    public function getMagentoBackendUrl(): string
+    {
+        $protocol = isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'on' ? 'https' : 'http';
+        return "{$protocol}://{$_SERVER['HTTP_HOST']}";
+    }
+
+    /**
      * Runs an application
      *
      * @param \Magento\Framework\AppInterface $application
@@ -383,7 +392,7 @@ class Bootstrap
         $handler = new ErrorHandler();
         set_error_handler([$handler, 'handler']);
     }
-    
+
     /**
      * Getter for error code
      *
@@ -395,11 +404,11 @@ class Bootstrap
     }
 
     /**
-     * Checks whether developer mode is set in the initialization parameters
+     * Returns the mode from the initialization parameters
      *
-     * @return bool
+     * @return mixed|string
      */
-    public function isDeveloperMode()
+    public function getMode()
     {
         $mode = 'default';
         if (isset($this->server[State::PARAM_MODE])) {
@@ -411,8 +420,17 @@ class Bootstrap
                 $mode = $configMode;
             }
         }
+        return $mode;
+    }
 
-        return $mode == State::MODE_DEVELOPER;
+    /**
+     * Checks whether developer mode is set in the initialization parameters
+     *
+     * @return bool
+     */
+    public function isDeveloperMode()
+    {
+        return $this->getMode() == State::MODE_DEVELOPER;
     }
 
     /**
@@ -425,7 +443,6 @@ class Bootstrap
      */
     protected function terminate(\Exception $e)
     {
-
         if ($this->isDeveloperMode()) {
             echo $e;
         } else {

@@ -25,8 +25,8 @@ HTML;
 }
 
 $params = $_SERVER;
-$params[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] = array_replace_recursive(
-    $params[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] ?? [],
+$_SERVER[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] = array_replace_recursive(
+    $_SERVER[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] ?? [],
     [
         DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
         DirectoryList::MEDIA => [DirectoryList::URL_PATH => 'media'],
@@ -34,7 +34,9 @@ $params[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] = array_replace_recursive(
         DirectoryList::UPLOAD => [DirectoryList::URL_PATH => 'media/upload'],
     ]
 );
-$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
+$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
+$_SERVER['MAGENTO_BACKEND_URL'] = $bootstrap->getMagentoBackendUrl();
+$_SERVER['NODE_ENV'] = $bootstrap->getMode();
 /** @var \Magento\Framework\App\Http $app */
 $app = $bootstrap->createApplication(\Magento\Framework\App\Http::class);
 $bootstrap->run($app);
