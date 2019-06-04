@@ -67,7 +67,7 @@ class Data extends AbstractHelper
 
         $resizePath = $mediaDirectory
             ->getAbsolutePath('products_image/resize/' . $width . $height . '_' . explode('/', $image)[1]);
-        if (!$this->file->isFile($mediaDirectory->getAbsolutePath() . $resizePath)) {
+        if (!$this->file->isFile($resizePath)) {
             $files = $this->file->readDirectory($mediaDirectory->getAbsolutePath('products_image/resize/'));
             if ($files) {
                 foreach ($files as $file) {
