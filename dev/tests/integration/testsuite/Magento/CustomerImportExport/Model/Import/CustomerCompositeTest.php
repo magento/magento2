@@ -8,6 +8,9 @@ namespace Magento\CustomerImportExport\Model\Import;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
+/**
+ * Test for CustomerComposite import class
+ */
 class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
@@ -129,10 +132,10 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      * @param string $sourceFile
      * @param array $dataBefore
      * @param array $dataAfter
-     * @param array $errors
      * @param int $updatedItemsCount
      * @param int $createdItemsCount
      * @param int $deletedItemsCount
+     * @param array $errors
      *
      * @magentoDataFixture Magento/Customer/_files/import_export/customers_for_address_import.php
      * @magentoAppIsolation enabled
@@ -144,10 +147,10 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
         $sourceFile,
         array $dataBefore,
         array $dataAfter,
-        array $errors = [],
         $updatedItemsCount,
         $createdItemsCount,
-        $deletedItemsCount
+        $deletedItemsCount,
+        array $errors = []
     ) {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
@@ -206,10 +209,10 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
                 '$sourceFile' => $filesDirectory . self::DELETE_FILE_NAME,
                 '$dataBefore' => $this->_beforeImport,
                 '$dataAfter' => [],
-                '$errors' => [],
                 '$updatedItemsCount' => 0,
                 '$createdItemsCount' => 0,
                 '$deletedItemsCount' => 1,
+                '$errors' => [],
             ],
         ];
 
@@ -218,10 +221,10 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
             '$sourceFile' => $filesDirectory . self::UPDATE_FILE_NAME,
             '$dataBefore' => $this->_beforeImport,
             '$dataAfter' => $this->_afterImport,
-            '$errors' => [],
             '$updatedItemsCount' => 1,
             '$createdItemsCount' => 3,
             '$deletedItemsCount' => 0,
+            '$errors' => [],
         ];
 
         return $sourceData;
