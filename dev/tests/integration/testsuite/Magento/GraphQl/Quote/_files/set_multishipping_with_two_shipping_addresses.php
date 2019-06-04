@@ -18,7 +18,9 @@ $quoteResource = Bootstrap::getObjectManager()->get(QuoteResource::class);
 $quote = $quoteFactory->create();
 $quoteResource->load($quote, 'test_quote', 'reserved_order_id');
 
+// phpcs:disable
 require __DIR__ . '/../../../Multishipping/Fixtures/shipping_address_list.php';
+// phpcs:enable
 
 /** @var CartRepositoryInterface $quoteRepository */
 $quoteRepository = $objectManager->get(CartRepositoryInterface::class);
