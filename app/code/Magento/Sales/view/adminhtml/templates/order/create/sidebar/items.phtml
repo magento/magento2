@@ -5,11 +5,11 @@
  */
 ?>
 <?php /* @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar */ ?>
-<div class="create-order-sidebar-block" id="sidebar_data_<?= (int) $block->getDataId() ?>">
+<div class="create-order-sidebar-block" id="sidebar_data_<?= $block->escapeHtmlAttr($block->getDataId()) ?>">
     <div class="head sidebar-title-block">
         <a href="#" class="action-refresh"
            title="<?= $block->escapeHtml(__('Refresh')) ?>"
-           onclick="order.loadArea('sidebar_<?= (int) $block->getDataId() ?>', 'sidebar_data_<?= (int) $block->getDataId() ?>');return false;">
+           onclick="order.loadArea('sidebar_<?= $block->escapeJs($block->getDataId()) ?>', 'sidebar_data_<?= $block->escapeJs($block->getDataId()) ?>');return false;">
             <span><?= $block->escapeHtml(__('Refresh')) ?></span>
         </a>
         <h5 class="create-order-sidebar-label">
@@ -75,7 +75,7 @@
                                            type="checkbox"
                                            class="admin__control-checkbox"
                                            name="sidebar[remove][<?= (int) $block->getItemId($_item) ?>]"
-                                           value="<?= (int) $block->getDataId() ?>"
+                                           value="<?= $block->escapeHtmlAttr($block->getDataId()) ?>"
                                            title="<?= $block->escapeHtml(__('Remove')) ?>" />
                                     <label class="admin__field-label"
                                            for="sidebar-remove-<?= $block->escapeHtmlAttr($block->getSidebarStorageAction()) ?>-<?= (int) $block->getItemId($_item) ?>">
