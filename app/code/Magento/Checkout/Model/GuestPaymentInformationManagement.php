@@ -77,22 +77,22 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement,
         \Magento\Quote\Api\GuestCartManagementInterface $cartManagement,
         \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement,
-        \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
+        \Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface $MaskedQuoteIdToQuoteIdInterface,
         CartRepositoryInterface $cartRepository,
+        ResourceConnection $connectionPool = null,
         \Magento\Checkout\Helper\Data $checkoutHelper = null,
-        \Psr\Log\LoggerInterface $logger = null,
-        ResourceConnection $connectionPool = null
+        \Psr\Log\LoggerInterface $logger = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->cartManagement = $cartManagement;
         $this->paymentInformationManagement = $paymentInformationManagement;
-        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+        $this->MaskedQuoteIdToQuoteIdInterface = $MaskedQuoteIdToQuoteIdInterface;
         $this->cartRepository = $cartRepository;
+        $this->connectionPool = $connectionPool ?: ObjectManager::getInstance()->get(ResourceConnection::class);
         $this->checkoutHelper = $checkoutHelper ?:
             ObjectManager::getInstance()->get(\Magento\Checkout\Helper\Data::class);
         $this->logger = $logger ?: ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
-        $this->connectionPool = $connectionPool ?: ObjectManager::getInstance()->get(ResourceConnection::class);
     }
 
     /**
@@ -114,7 +114,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
             try {
                 $orderId = $this->cartManagement->placeOrder($cartId);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+                $quoteIdMask = $this->MaskedQuoteIdToQuoteIdInterface->create()->load($cartId, 'masked_id');
                 $quote = $this->cartRepository->getActive($quoteIdMask->getQuoteId());
                 $this->checkoutHelper->sendPaymentFailedEmail($quote, __($e->getMessage()));
                 throw new CouldNotSaveException(
