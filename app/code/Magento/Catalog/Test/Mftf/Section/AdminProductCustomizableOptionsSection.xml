@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductCustomizableOptionsSection">
         <element name="checkIfCustomizableOptionsTabOpen" type="text" selector="//span[text()='Customizable Options']/parent::strong/parent::*[@data-state-collapsible='closed']"/>
         <element name="customizableOptions" type="text" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Customizable Options']" timeout="30"/>
@@ -26,8 +26,13 @@
         <element name="lastOptionTypeParent" type="block" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__action-multiselect-text')]" />
         <!-- var 1 represents the option type that you want to select, i.e "radio buttons" -->
         <element name="optionType" type="block" selector="//*[@data-index='custom_options']//label[text()='{{var1}}'][ancestor::*[contains(@class, '_active')]]" parameterized="true" />
-        <element name="optionPrice" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@name='product[options][0][price]']"/>
-        <element name="optionPriceType" type="select" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@name='product[options][0][price_type]']"/>
-        <element name="optionFileExtensions" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@name='product[options][0][file_extension]']"/>
+        <element name="optionPrice" type="input" selector="[data-index='custom_options'] [data-index='options'] tbody tr:nth-last-of-type(1) input[name*='price']"/>
+        <element name="optionPriceType" type="select" selector="[data-index='custom_options'] [data-index='options'] tbody tr:nth-last-of-type(1) select[name*='price_type']"/>
+        <element name="optionFileExtensions" type="input" selector="[data-index='custom_options'] [data-index='options'] tbody tr:nth-last-of-type(1) input[name*='file_extension']"/>
+        <element name="optionSku" type="input" selector="[data-index='custom_options'] [data-index='options'] tbody tr:nth-last-of-type(1) input[name*='sku']"/>
+        <element name="optionTitleInputByIndex" type="input" selector="input[name='product[options][{{index}}][title]']" parameterized="true"/>
+        <element name="importOptions" type="button" selector="[data-index='custom_options'] [data-index='button_import']" timeout="30"/>
+        <element name="optionPriceByIndex" type="input" selector="input[name='product[options][{{index}}][price]']" parameterized="true"/>
+        <element name="optionSkuByIndex" type="input" selector="input[name='product[options][{{index}}][sku]']" parameterized="true"/>
     </section>
 </sections>

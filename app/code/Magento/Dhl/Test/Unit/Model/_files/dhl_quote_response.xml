@@ -351,14 +351,6 @@
                 <BookingCutoffOffset>PT1H</BookingCutoffOffset>
             </QtdShp>
             <QtdShp>
-                <OriginServiceArea>
-                    <FacilityCode>NUQ</FacilityCode>
-                    <ServiceAreaCode>NUQ</ServiceAreaCode>
-                </OriginServiceArea>
-                <DestinationServiceArea>
-                    <FacilityCode>BER</FacilityCode>
-                    <ServiceAreaCode>BER</ServiceAreaCode>
-                </DestinationServiceArea>
                 <GlobalProductCode>P</GlobalProductCode>
                 <LocalProductCode>P</LocalProductCode>
                 <ProductShortName>EXPRESS WORLDWIDE</ProductShortName>
@@ -376,10 +368,9 @@
                 <TotalTransitDays>2</TotalTransitDays>
                 <PickupPostalLocAddDays>0</PickupPostalLocAddDays>
                 <DeliveryPostalLocAddDays>0</DeliveryPostalLocAddDays>
-                <DeliveryDate>
-                    <DlvyDateTime>2014-01-13 11:59:00</DlvyDateTime>
-                    <DeliveryDateTimeOffset>+00:00</DeliveryDateTimeOffset>
-                </DeliveryDate>
+                <PickupNonDHLCourierCode />
+                <DeliveryNonDHLCourierCode />
+                <DeliveryDate>2014-01-13</DeliveryDate>
                 <DeliveryTime>PT23H59M</DeliveryTime>
                 <DimensionalWeight>2.205</DimensionalWeight>
                 <WeightUnit>LB</WeightUnit>
@@ -436,9 +427,6 @@
                     <TotalTaxAmount>0.000</TotalTaxAmount>
                     <WeightChargeTax>0.000</WeightChargeTax>
                 </QtdSInAdCur>
-                <PickupWindowEarliestTime>09:00:00</PickupWindowEarliestTime>
-                <PickupWindowLatestTime>17:00:00</PickupWindowLatestTime>
-                <BookingCutoffOffset>PT1H</BookingCutoffOffset>
             </QtdShp>
         </BkgDetails>
         <Srvs>

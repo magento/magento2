@@ -48,7 +48,12 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         $this->model = new SaveHandler($this->optionRepository);
     }
 
-    public function testExecute()
+    /**
+     * @dataProvider testExecuteDataProvider
+     * @param bool $dataHasChangedFor
+     * @return void
+     */
+    public function testExecute(bool $dataHasChangedFor)
     {
         $this->optionMock->expects($this->any())->method('getOptionId')->willReturn(5);
         $this->entity->expects($this->once())->method('getOptions')->willReturn([$this->optionMock]);
@@ -63,10 +68,27 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('getProductOptions')
             ->with($this->entity)
             ->willReturn([$this->optionMock, $secondOptionMock]);
-
+        $this->entity->expects($this->once())
+            ->method('dataHasChangedFor')
+            ->with('sku')
+            ->willReturn($dataHasChangedFor);
+        $this->entity->expects($this->once())
+            ->method('getSku')
+            ->willReturn('product_sku');
         $this->optionRepository->expects($this->once())->method('delete');
         $this->optionRepository->expects($this->once())->method('save')->with($this->optionMock);
 
         $this->assertEquals($this->entity, $this->model->execute($this->entity));
+    }
+
+    /**
+     * @return array
+     */
+    public function testExecuteDataProvider(): array
+    {
+        return [
+            [true],
+            [false],
+        ];
     }
 }
