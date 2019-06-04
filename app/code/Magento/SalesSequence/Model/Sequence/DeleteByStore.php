@@ -10,24 +10,29 @@ namespace Magento\SalesSequence\Model\Sequence;
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\SalesSequence\Model\MetaFactory;
 use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
-use Magento\SalesSequence\Model\ResourceModel\Profile as ResourceProfile;
+use Magento\SalesSequence\Model\ResourceModel\Meta\Ids as ResourceMetadataIds;
+use Magento\SalesSequence\Model\ResourceModel\Profile\Ids as ResourceProfileIds;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Class DeleteByStore
- * @api
  */
 class DeleteByStore
 {
     /**
-     * @var resourceMetadata
+     * @var ResourceMetadata
      */
     private $resourceMetadata;
 
     /**
-     * @var ResourceProfile
+     * @var ResourceMetadataIds
      */
-    private $resourceProfile;
+    private $resourceMetadataIds;
+
+    /**
+     * @var ResourceProfileIds
+     */
+    private $resourceProfileIds;
 
     /**
      * @var MetaFactory
@@ -41,18 +46,21 @@ class DeleteByStore
 
     /**
      * @param ResourceMetadata $resourceMetadata
-     * @param ResourceProfile $resourceProfile
+     * @param ResourceMetadataIds $resourceMetadataIds
+     * @param ResourceProfileIds $resourceProfileIds
      * @param MetaFactory $metaFactory
      * @param AppResource $appResource
      */
     public function __construct(
         ResourceMetadata $resourceMetadata,
-        ResourceProfile $resourceProfile,
+        ResourceMetadataIds $resourceMetadataIds,
+        ResourceProfileIds $resourceProfileIds,
         MetaFactory $metaFactory,
         AppResource $appResource
     ) {
         $this->resourceMetadata = $resourceMetadata;
-        $this->resourceProfile = $resourceProfile;
+        $this->resourceMetadataIds = $resourceMetadataIds;
+        $this->resourceProfileIds = $resourceProfileIds;
         $this->metaFactory = $metaFactory;
         $this->appResource = $appResource;
     }
@@ -66,8 +74,8 @@ class DeleteByStore
      */
     public function execute(StoreInterface $store): void
     {
-        $metadataIds = $this->resourceMetadata->getIdsByStore($store->getId());
-        $profileIds = $this->resourceProfile->getProfileIdsByMetadataIds($metadataIds);
+        $metadataIds = $this->resourceMetadataIds->getByStoreId($store->getId());
+        $profileIds = $this->resourceProfileIds->getByMetadataIds($metadataIds);
 
         $this->appResource->getConnection()->delete(
             $this->appResource->getTableName('sales_sequence_profile'),

@@ -11,7 +11,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesSequence\Model\Meta;
 use Magento\SalesSequence\Model\MetaFactory;
 use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMeta;
-use Magento\SalesSequence\Model\ResourceModel\Profile as ResourceProfile;
+use Magento\SalesSequence\Model\ResourceModel\Meta\Ids as ResourceMetaIds;
+use Magento\SalesSequence\Model\ResourceModel\Profile\Ids as ResourceProfileIds;
 use Magento\SalesSequence\Model\Sequence\DeleteByStore;
 use Magento\Store\Api\Data\StoreInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -33,9 +34,14 @@ class DeleteByStoreTest extends TestCase
     private $resourceSequenceMeta;
 
     /**
-     * @var ResourceProfile | MockObject
+     * @var ResourceMetaIds | MockObject
      */
-    private $resourceSequenceProfile;
+    private $resourceSequenceMetaIds;
+
+    /**
+     * @var ResourceProfileIds | MockObject
+     */
+    private $resourceSequenceProfileIds;
 
     /**
      * @var Meta | MockObject
@@ -75,11 +81,15 @@ class DeleteByStoreTest extends TestCase
         );
         $this->resourceSequenceMeta = $this->createPartialMock(
             ResourceMeta::class,
-            ['getIdsByStore', 'load', 'delete']
+            ['load', 'delete']
         );
-        $this->resourceSequenceProfile = $this->createPartialMock(
-            ResourceProfile::class,
-            ['getProfileIdsByMetadataIds']
+        $this->resourceSequenceMetaIds = $this->createPartialMock(
+            ResourceMetaIds::class,
+            ['getByStoreId']
+        );
+        $this->resourceSequenceProfileIds = $this->createPartialMock(
+            ResourceProfileIds::class,
+            ['getByMetadataIds']
         );
         $this->meta = $this->createPartialMock(
             Meta::class,
@@ -102,8 +112,9 @@ class DeleteByStoreTest extends TestCase
         $this->deleteByStore = $helper->getObject(
             DeleteByStore::class,
             [
+                'resourceMetadataIds' => $this->resourceSequenceMetaIds,
                 'resourceMetadata' => $this->resourceSequenceMeta,
-                'resourceProfile' => $this->resourceSequenceProfile,
+                'resourceProfileIds' => $this->resourceSequenceProfileIds,
                 'metaFactory' => $this->metaFactory,
                 'appResource' => $this->resourceMock,
             ]
@@ -119,12 +130,12 @@ class DeleteByStoreTest extends TestCase
         $this->store->expects($this->once())
             ->method('getId')
             ->willReturn($storeId);
-        $this->resourceSequenceMeta->expects($this->once())
-            ->method('getIdsByStore')
+        $this->resourceSequenceMetaIds->expects($this->once())
+            ->method('getByStoreId')
             ->with($storeId)
             ->willReturn($metadataIds);
-        $this->resourceSequenceProfile->expects($this->once())
-            ->method('getProfileIdsByMetadataIds')
+        $this->resourceSequenceProfileIds->expects($this->once())
+            ->method('getByMetadataIds')
             ->with($metadataIds)
             ->willReturn($profileIds);
         $this->resourceMock->expects($this->once())
