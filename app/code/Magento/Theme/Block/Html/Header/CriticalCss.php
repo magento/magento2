@@ -10,7 +10,6 @@ namespace Magento\Theme\Block\Html\Header;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
-use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Asset\File\NotFoundException;
 
