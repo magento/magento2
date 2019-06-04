@@ -1132,6 +1132,37 @@ QUERY;
     }
 
     /**
+     * Verify that invalid page numbers return an error
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage currentPage value must be greater than 0
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testInvalidPageNumbers()
+    {
+        $query = <<<QUERY
+{
+  products (
+    filter: {
+      sku: {
+        like:"simple%"
+      }
+    }
+    pageSize: 4
+    currentPage: 0
+  ) {
+    items {
+      sku
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlQuery($query);
+    }
+
+    /**
      * Asserts the different fields of items returned after search query is executed
      *
      * @param Product[] $filteredProducts
