@@ -23,15 +23,15 @@
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
 
             <!-- Enable free shipping method -->
-            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
+            <magentoCLI command="config:set {{EnableFreeShippingConfigData.path}} {{EnableFreeShippingConfigData.value}}" stepKey="enableFreeShipping"/>
 
             <!-- Disable flat rate method -->
-            <createData entity="DisableFlatRateShippingMethodConfig" stepKey="disableFlatRate"/>
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
         </before>
         <after>
             <!-- Roll back configuration -->
-            <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
-            <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
 
             <!-- Delete simple product -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
