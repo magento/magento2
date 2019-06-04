@@ -114,9 +114,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
             try {
                 $orderId = $this->cartManagement->placeOrder($cartId);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                /** @var $quoteIdMask QuoteIdMask */
                 $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-                /** @var \Magento\Quote\Model\Quote $quote */
                 $quote = $this->cartRepository->getActive($quoteIdMask->getQuoteId());
                 $this->checkoutHelper->sendPaymentFailedEmail($quote, __($e->getMessage()));
                 throw new CouldNotSaveException(
