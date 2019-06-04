@@ -346,7 +346,7 @@ namespace Magento\Framework\Session {
             $this->assertTrue(self::$isSessionSetSaveHandlerInvoked);
         }
 
-        private function initializeModel(): void
+        private function initializeModel()
         {
             $this->model = $this->objectManager->create(
                 \Magento\Framework\Session\SessionManager::class,
