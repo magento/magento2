@@ -11,7 +11,8 @@
             <argument name="attributeLabel" type="string"/>
             <argument name="attributeValue" type="string"/>
         </arguments>
-        <scrollTo selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="scrollToMoreInformation"/>
+        <waitForElementVisible selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="waitForMoreInformationVisible"/>
+        <click selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="clickMoreInformationTab"/>
         <see selector="{{StorefrontProductMoreInformationSection.attributeLabel}}" userInput="{{attributeLabel}}" stepKey="seeAttributeLabel"/>
         <see selector="{{StorefrontProductMoreInformationSection.attributeValue}}" userInput="{{attributeValue}}" stepKey="seeAttributeText"/>
     </actionGroup>
