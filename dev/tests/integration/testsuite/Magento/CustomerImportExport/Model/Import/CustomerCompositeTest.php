@@ -130,14 +130,25 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      * @param array $dataBefore
      * @param array $dataAfter
      * @param array $errors
+     * @param int $updatedItemsCount
+     * @param int $createdItemsCount
+     * @param int $deletedItemsCount
      *
      * @magentoDataFixture Magento/Customer/_files/import_export/customers_for_address_import.php
      * @magentoAppIsolation enabled
      *
      * @dataProvider importDataDataProvider
      */
-    public function testImportData($behavior, $sourceFile, array $dataBefore, array $dataAfter, array $errors = [])
-    {
+    public function testImportData(
+        $behavior,
+        $sourceFile,
+        array $dataBefore,
+        array $dataAfter,
+        array $errors = [],
+        $updatedItemsCount,
+        $createdItemsCount,
+        $deletedItemsCount
+    ) {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
         // set entity adapter parameters
@@ -173,6 +184,9 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
 
         // import data
         $this->_entityAdapter->importData();
+        $this->assertSame($updatedItemsCount, $this->_entityAdapter->getUpdatedItemsCount());
+        $this->assertSame($createdItemsCount, $this->_entityAdapter->getCreatedItemsCount());
+        $this->assertSame($deletedItemsCount, $this->_entityAdapter->getDeletedItemsCount());
 
         // assert data after import
         $this->_assertCustomerData($dataAfter);
@@ -192,6 +206,10 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
                 '$sourceFile' => $filesDirectory . self::DELETE_FILE_NAME,
                 '$dataBefore' => $this->_beforeImport,
                 '$dataAfter' => [],
+                '$errors' => [],
+                '$updatedItemsCount' => 0,
+                '$createdItemsCount' => 0,
+                '$deletedItemsCount' => 1,
             ],
         ];
 
@@ -201,6 +219,9 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
             '$dataBefore' => $this->_beforeImport,
             '$dataAfter' => $this->_afterImport,
             '$errors' => [],
+            '$updatedItemsCount' => 1,
+            '$createdItemsCount' => 3,
+            '$deletedItemsCount' => 0,
         ];
 
         return $sourceData;
