@@ -10,7 +10,6 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="formkey"/>
     <update handle="loginascustomer_login_grid_block"/>
-    <update handle="loginascustomer_update_info"/>
     <body>
         <referenceContainer name="content">
             <block class="Magefan\LoginAsCustomer\Block\Adminhtml\Login" name="loginascustomer.container"/>

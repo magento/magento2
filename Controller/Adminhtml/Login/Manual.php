@@ -19,9 +19,8 @@ class Manual extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magefan_LoginAsCustomer::login_log');
+        $this->_setActiveMenu('Magefan_LoginAsCustomer::login_button');
         $title = __('Store View To Login In ');
         $this->_view->getPage()->getConfig()->getTitle()->prepend($title);
         $this->_addBreadcrumb($title, $title);
@@ -35,6 +34,6 @@ class Manual extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magefan_LoginAsCustomer::login_log');
+        return $this->_authorization->isAllowed('Magefan_LoginAsCustomer::login_button');
     }
 }

@@ -10,6 +10,7 @@ namespace Magefan\LoginAsCustomer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\ProductMetadataInterface;
 
 /**
  * Class Config
@@ -28,15 +29,22 @@ class Config
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
+    /**
+     * @var \Magento\Framework\App\ProductMetadataInterface
+     */
+    protected $metadata;
 
     /**
      * Config constructor.
      * @param ScopeConfigInterface $scopeConfig
+     * @param ProductMetadataInterface $metadata
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        ProductMetadataInterface $metadata
     ) {
         $this->scopeConfig = $scopeConfig;
+        $this->metadata = $metadata;
     }
 
     /**
@@ -45,7 +53,7 @@ class Config
      * @param null $storeId
      * @return mixed
      */
-    public function getConfig($path, $storeId = null)
+    final public function getConfig($path, $storeId = null)
     {
         return $this->scopeConfig->getValue(
             $path,
@@ -55,37 +63,33 @@ class Config
     }
 
     /**
-     * @param null $storeId
      * @return mixed
      */
-    public function isEnabled($storeId = null)
+    final public function isEnabled()
     {
         return $this->getConfig(
-            self::XML_PATH_EXTENSION_ENABLED,
-            $storeId
+            self::XML_PATH_EXTENSION_ENABLED
         );
     }
 
     /**
-     * @param null $storeId
      * @return mixed
      */
-    public function isKeyMissing($storeId = null)
+    final public function isKeyMissing()
     {
-        return $this->getConfig(
-            self::XML_PATH_KEY,
-            $storeId
+        return !$this->getConfig(
+            self::XML_PATH_KEY
+            && $this->metadata->getEdition() != 'C' . strrev('ytinummo')
         );
     }
+
     /**
-     * @param null $storeId
      * @return mixed
      */
-    public function getStoreViewLogin($storeId = null)
+    public function getStoreViewLogin()
     {
         return $this->getConfig(
-            self::STORE_VIEW_TO_LOGIN_IN,
-            $storeId
+            self::STORE_VIEW_TO_LOGIN_IN
         );
     }
 }

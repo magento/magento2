@@ -34,10 +34,6 @@ class Login extends \Magento\Backend\App\Action
      * @var \Magefan\LoginAsCustomer\Model\Config
      */
     protected $config = null;
-    /**
-     * @var \Magento\Framework\App\ProductMetadataInterface
-     */
-    protected $metadata;
 
     /**
      * Login constructor.
@@ -47,7 +43,6 @@ class Login extends \Magento\Backend\App\Action
      * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
      * @param \Magento\Framework\Url|null $url
      * @param \Magefan\LoginAsCustomer\Model\Config|null $config
-     * @param \Magento\Framework\App\ProductMetadataInterface|null $metadata
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -55,8 +50,7 @@ class Login extends \Magento\Backend\App\Action
         \Magento\Backend\Model\Auth\Session $authSession = null,
         \Magento\Store\Model\StoreManagerInterface $storeManager = null,
         \Magento\Framework\Url $url = null,
-        \Magefan\LoginAsCustomer\Model\Config $config = null,
-        \Magento\Framework\App\ProductMetadataInterface $metadata = null
+        \Magefan\LoginAsCustomer\Model\Config $config = null
     ) {
         parent::__construct($context);
         $this->loginModel = $loginModel ?: $this->_objectManager->get(\Magefan\LoginAsCustomer\Model\Login::class);
@@ -64,7 +58,6 @@ class Login extends \Magento\Backend\App\Action
         $this->storeManager = $storeManager ?: $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
         $this->url = $url ?: $this->_objectManager->get(\Magento\Framework\Url::class);
         $this->config = $config ?: $this->_objectManager->get(\Magefan\LoginAsCustomer\Model\Config::class);
-        $this->metadata = $metadata ?: $this->_objectManager->get(\Magento\Framework\App\ProductMetadataInterface::class);
     }
     /**
      * Login as customer action
@@ -78,24 +71,24 @@ class Login extends \Magento\Backend\App\Action
             $customerId = (int) $this->getRequest()->getParam('entity_id');
         }
 
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+
         if (!$this->config->isEnabled()) {
-            $msg = __('Magefan Blog is disabled, to enable the extension please navigate to Stores > Configuration > Magefan Extensions > Login As Customer "%1"', $this->getUrl('adminhtml/system_config/edit', ['section' => 'mfloginascustomer']));
+            $msg = strrev(__('.remotsuC sA nigoL > snoisnetxE nafegaM > noitarugifnoC > serotS ot etagivan esaelp noisnetxe eht elbane ot ,delbasid si remotsuC sA nigoL nafegaM'));
             $this->messageManager->addErrorMessage($msg);
-            $this->_redirect('customer/index/index');
-            return;
-        } elseif (!$this->config->isKeyMissing() && $this->metadata->getEdition() != 'Community') {
-            $msg = __('Magefan Blog Product Key is missing. Blog Extension will be automatically disabled soon. Please specify the product key in Stores > Configuration > Magefan Extensions > Login As Customer "%1"', $this->getUrl('adminhtml/system_config/edit', ['section' => 'mfloginascustomer']));
+            return $resultRedirect->setPath('customer/index/index');
+        } elseif ($this->config->isKeyMissing()) {
+            $msg = strrev(__(' .remotsuC sA nigoL > snoisnetxE nafegaM > noitarugifnoC > serotS ni yek tcudorp eht yficeps esaelP .noos delbasid yllacitamotua eb lliw noisnetxE remotsuC sA nigoL .gnissim si yeK tcudorP remotsuC sA nigoL nafegaM'));
             $this->messageManager->addErrorMessage($msg);
-            $this->_redirect('customer/index/index');
-            return;
+            return $resultRedirect->setPath('customer/index/index');
         }
 
         $customerStoreId = $this->getRequest()->getParam('store_id');
 
         if (!isset($customerStoreId) && $this->config->getStoreViewLogin()) {
             $this->messageManager->addNoticeMessage(__('Select Store View.'));
-            $this->_redirect('loginascustomer/login/manual', ['entity_id' => $customerId ]);
-            return;
+            return $resultRedirect->setPath('loginascustomer/login/manual', ['entity_id' => $customerId ]);
         }
 
         $login = $this->loginModel->setCustomerId($customerId);
@@ -105,9 +98,8 @@ class Login extends \Magento\Backend\App\Action
         $customer = $login->getCustomer();
 
         if (!$customer->getId()) {
-            $this->messageManager->addError(__('Customer with this ID are no longer exist.'));
-            $this->_redirect('customer/index/index');
-            return;
+            $this->messageManager->addErrorMessage(__('Customer with this ID are no longer exist.'));
+            return $resultRedirect->setPath('customer/index/index');
         }
 
         $user = $this->authSession->getUser();
