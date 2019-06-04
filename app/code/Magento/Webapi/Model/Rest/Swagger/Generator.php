@@ -877,7 +877,7 @@ class Generator extends AbstractSchemaGenerator
         $bodySchema['type'] = 'object';
 
         /*
-         * Make shure we have a proper XML wrapper for request parameters for the XML fromat.
+         * Make sure we have a proper XML wrapper for request parameters for the XML format.
          */
         if (!isset($bodySchema['xml']) || !is_array($bodySchema['xml'])) {
             $bodySchema['xml'] = [];
