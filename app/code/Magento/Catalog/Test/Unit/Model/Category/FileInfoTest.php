@@ -11,28 +11,35 @@ use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FileInfoTest extends \PHPUnit\Framework\TestCase
+class FileInfoTest extends TestCase
 {
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     private $filesystem;
 
     /**
-     * @var Mime|\PHPUnit_Framework_MockObject_MockObject
+     * @var Mime|MockObject
      */
     private $mime;
 
     /**
-     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|MockObject
      */
     private $mediaDirectory;
 
     /**
-     * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadInterface|MockObject
      */
     private $baseDirectory;
+
+    /**
+     * @var ReadInterface|MockObject
+     */
+    private $pubDirectory;
 
     /**
      * @var FileInfo
@@ -44,30 +51,41 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
             ->getMockForAbstractClass();
 
-        $this->baseDirectory = $this->getMockBuilder(ReadInterface::class)
+        $this->baseDirectory = $baseDirectory = $this->getMockBuilder(ReadInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->pubDirectory = $pubDirectory = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
 
         $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filesystem->expects($this->any())
-            ->method('getDirectoryWrite')
+
+        $this->filesystem->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectory);
 
-        $this->filesystem->expects($this->any())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::ROOT)
-            ->willReturn($this->baseDirectory);
+        $this->filesystem->method('getDirectoryRead')
+            ->willReturnCallback(function ($arg) use ($baseDirectory, $pubDirectory) {
+                if ($arg === DirectoryList::PUB) {
+                    return $pubDirectory;
+                }
+                return $baseDirectory;
+            });
 
         $this->mime = $this->getMockBuilder(Mime::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->baseDirectory->expects($this->any())
-            ->method('getAbsolutePath')
-            ->with(null)
+        $this->baseDirectory->method('getAbsolutePath')
             ->willReturn('/a/b/c/');
+
+        $this->baseDirectory->method('getRelativePath')
+            ->with('/a/b/c/pub/')
+            ->willReturn('pub/');
+
+        $this->pubDirectory->method('getAbsolutePath')
+            ->willReturn('/a/b/c/pub/');
 
         $this->model = new FileInfo(
             $this->filesystem,
@@ -113,13 +131,11 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
 
         $expected = ['size' => 1];
 
-        $this->mediaDirectory->expects($this->any())
-            ->method('getAbsolutePath')
+        $this->mediaDirectory->method('getAbsolutePath')
             ->with(null)
             ->willReturn('/a/b/c/pub/media/');
 
-        $this->mediaDirectory->expects($this->once())
-            ->method('stat')
+        $this->mediaDirectory->method('stat')
             ->with($mediaPath . $fileName)
             ->willReturn($expected);
 
@@ -137,12 +153,10 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsExist($fileName, $fileMediaPath)
     {
-        $this->mediaDirectory->expects($this->any())
-            ->method('getAbsolutePath')
+        $this->mediaDirectory->method('getAbsolutePath')
             ->willReturn('/a/b/c/pub/media/');
 
-        $this->mediaDirectory->expects($this->once())
-            ->method('isExist')
+        $this->mediaDirectory->method('isExist')
             ->with($fileMediaPath)
             ->willReturn(true);
 
@@ -165,8 +179,7 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsBeginsWithMediaDirectoryPath($fileName, $expected)
     {
-        $this->mediaDirectory->expects($this->any())
-            ->method('getAbsolutePath')
+        $this->mediaDirectory->method('getAbsolutePath')
             ->willReturn('/a/b/c/pub/media/');
 
         $this->assertEquals($expected, $this->model->isBeginsWithMediaDirectoryPath($fileName));

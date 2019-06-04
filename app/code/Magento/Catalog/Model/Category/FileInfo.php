@@ -44,6 +44,11 @@ class FileInfo
     private $baseDirectory;
 
     /**
+     * @var ReadInterface
+     */
+    private $pubDirectory;
+
+    /**
      * @param Filesystem $filesystem
      * @param Mime $mime
      */
@@ -80,6 +85,20 @@ class FileInfo
         }
 
         return $this->baseDirectory;
+    }
+
+    /**
+     * Get Pub Directory read instance
+     *
+     * @return ReadInterface
+     */
+    private function getPubDirectory()
+    {
+        if (!isset($this->pubDirectory)) {
+            $this->pubDirectory = $this->filesystem->getDirectoryRead(DirectoryList::PUB);
+        }
+
+        return $this->pubDirectory;
     }
 
     /**
@@ -174,11 +193,13 @@ class FileInfo
      */
     private function getMediaDirectoryPathRelativeToBaseDirectoryPath(string $filePath = '')
     {
-        $baseDirectoryPath = $this->getBaseDirectory()->getAbsolutePath();
+        $baseDirectory = $this->getBaseDirectory();
+        $baseDirectoryPath = $baseDirectory->getAbsolutePath();
         $mediaDirectoryPath = $this->getMediaDirectory()->getAbsolutePath();
+        $pubDirectoryPath = $this->getPubDirectory()->getAbsolutePath();
 
         $mediaDirectoryRelativeSubpath = substr($mediaDirectoryPath, strlen($baseDirectoryPath));
-        $pubDirectory = 'pub' . DIRECTORY_SEPARATOR;
+        $pubDirectory = $baseDirectory->getRelativePath($pubDirectoryPath);
 
         if (strpos($mediaDirectoryRelativeSubpath, $pubDirectory) === 0 && strpos($filePath, $pubDirectory) !== 0) {
             $mediaDirectoryRelativeSubpath = substr($mediaDirectoryRelativeSubpath, strlen($pubDirectory));
