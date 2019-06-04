@@ -110,9 +110,13 @@
         <actionGroup ref="fillMainProductForm" stepKey="fillProductForm"/>
         <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
 
+        <!--Run full reindex and clear caches -->
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
         <!-- Assert product attribute on Storefront -->
         <actionGroup ref="OpenStorefrontProductPageByProductNameActionGroup" stepKey="openProductPage"/>
-        <actionGroup ref="StorefrontAssertProductAttributeOnProductPageActionGroup" stepKey="assertProductAttribute">
+        <actionGroup ref="checkAttributeInMoreInformationTab" stepKey="checkAttributeInMoreInformationTab">
             <argument name="attributeLabel" value="{{productTextEditorAttribute.attribute_code}}"/>
             <argument name="attributeValue" value="This content from product page"/>
         </actionGroup>
