@@ -85,6 +85,6 @@ class CleanExpiredQuotes
      */
     public function setExpireQuotesAdditionalFilterFields(array $fields)
     {
-        $this->expireQuotesFilterFields = $fields;
+        $this->expireQuotesFilterFields = array_merge($this->expireQuotesFilterFields, $fields);
     }
 }
