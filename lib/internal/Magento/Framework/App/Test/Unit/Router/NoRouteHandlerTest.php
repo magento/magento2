@@ -76,7 +76,7 @@ class NoRouteHandlerTest extends \Magento\Framework\TestFramework\Unit\BaseTestC
         // Set expectations
         $this->requestMock->expects($this->once())
             ->method('setModuleName')
-            ->with('core')
+            ->with('cms')
             ->willReturnSelf();
         $this->requestMock->expects($this->once())
             ->method('setControllerName')
