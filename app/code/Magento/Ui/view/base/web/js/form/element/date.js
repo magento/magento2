@@ -130,14 +130,13 @@ define([
                 if (this.options.showsTime) {
                     shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
                 } else {
-                    dateFormat = this.shiftedValue() ? this.outputDateFormat : this.inputDateFormat;
+                    if (this.storedDateFormat) {
+                        dateFormat = this.storedDateFormat;
+                    } else {
+                        dateFormat = this.shiftedValue() ? this.outputDateFormat : this.inputDateFormat;
+                        this.storedDateFormat = dateFormat;
+                    }
                     shiftedValue = moment(value, dateFormat);
-                }
-
-                if (this.storedDateFormat) {
-                    shiftedValue = moment(value, this.storedDateFormat);
-                } else {
-                    this.storedDateFormat = dateFormat;
                 }
 
                 shiftedValue = shiftedValue.format(this.pickerDateTimeFormat);
