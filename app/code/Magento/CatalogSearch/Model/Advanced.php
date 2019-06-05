@@ -345,7 +345,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Add data about search criteria to object state
      *
-     * @todo: Move this code to block
+     * @todo:   Move this code to block
      *
      * @param   EntityAttribute $attribute
      * @param   mixed $value
