@@ -19,6 +19,5 @@
         <section name="AdminCategoryModalSection"/>
         <section name="AdminCategoryMessagesSection"/>
         <section name="AdminCategoryContentSection"/>
-        <section name="AdminCategoryAddProductsModalSection"/>
     </page>
 </pages>
