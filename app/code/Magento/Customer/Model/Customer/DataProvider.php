@@ -369,8 +369,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $meta[$code]['arguments']['data']['config']['visible'] = $this->canShowAttribute($attribute);
 
             $this->overrideFileUploaderMetadata($entityType, $attribute, $meta[$code]['arguments']['data']['config']);
+            $meta[$code]['arguments']['data']['config']['__disableTmpl'] = true;
         }
-
         $this->processWebsiteMeta($meta);
         return $meta;
     }
