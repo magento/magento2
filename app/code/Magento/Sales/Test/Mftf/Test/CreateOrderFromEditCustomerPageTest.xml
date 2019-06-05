@@ -191,14 +191,16 @@
         <click selector="{{AdminEditCustomerOrdersSection.orderIdInGrid('$orderId')}}" stepKey="selectOnOrderID"/>
 
         <!-- Assert ordered product in customer order section-->
-        <waitForPageLoad stepKey="waitForOrderInformationTolLoad"/>
-        <see selector="{{AdminOrderItemsOrderedSection.productNameColumn}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProductInGrid"/>
-        <see selector="{{AdminOrderItemsOrderedSection.productNameColumn}}" userInput="$$simpleProduct.name$$" stepKey="seeFirstProductInGrid"/>
-        <see selector="{{AdminOrderItemsOrderedSection.productNameColumn}}" userInput="$$simpleProduct1.name$$" stepKey="seeSecondProductInGrid"/>
-        <see selector="{{AdminOrderItemsOrderedSection.statusColumn}}" userInput="Ordered" stepKey="seeProductStatus"/>
-        <see selector="{{AdminOrderItemsOrderedSection.subtotalColumn}}" userInput="$30.00" stepKey="seeConfigurableProductSubtotal"/>
-        <see selector="{{AdminOrderItemsOrderedSection.subtotalColumn}}" userInput="$10.00" stepKey="seeFirstProductSubtotal"/>
-        <see selector="{{AdminOrderItemsOrderedSection.subtotalColumn}}" userInput="$20.00" stepKey="seeSecondProductSubtotal"/>
-        <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$60.00" stepKey="seeOrderGrandTotal"/>
+        <waitForPageLoad stepKey="waitForOrderInformationToLoad"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameColumn}}" userInput="$createConfigProduct.name$" stepKey="seeConfigurableProductInGrid"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameColumn}}" userInput="$simpleProduct.name$" stepKey="seeFirstProductInGrid"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameColumn}}" userInput="$simpleProduct1.name$" stepKey="seeSecondProductInGrid"/>
+        <see selector="{{AdminOrderItemsOrderedSection.statusColumn}}" userInput="{{OrderStatus.ordered}}" stepKey="seeProductStatus"/>
+        <see selector="{{AdminOrderItemsOrderedSection.subtotalColumn}}" userInput="$createConfigChildProduct1.price$" stepKey="seeConfigurableProductSubtotal"/>
+        <see selector="{{AdminOrderItemsOrderedSection.subtotalColumn}}" userInput="$simpleProduct.price$" stepKey="seeFirstProductSubtotal"/>
+        <see selector="{{AdminOrderItemsOrderedSection.subtotalColumn}}" userInput="$simpleProduct1.price$" stepKey="seeSecondProductSubtotal"/>
+        <see selector="{{AdminOrderTotalSection.subTotal}}"  userInput="{{AdminOrderMultipleProducts.subtotal}}" stepKey="checkSubtotal" />
+        <see selector="{{AdminOrderTotalSection.shippingAndHandling}}" userInput="{{AdminOrderMultipleProducts.shipping}}" stepKey="checkShippingAndHandling" />
+        <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="{{AdminOrderMultipleProducts.grandTotal}}" stepKey="checkGrandTotal" />
     </test>
 </tests>
