@@ -89,10 +89,12 @@ class MassConsumer implements ConsumerInterface
      */
     private function getTransactionCallback(QueueInterface $queue)
     {
-        $callbackInstance =  $this->massConsumerEnvelopeCallback->create([
-            'configuration' => $this->configuration,
-            'queue' => $queue,
-        ]);
+        $callbackInstance =  $this->massConsumerEnvelopeCallback->create(
+            [
+                'configuration' => $this->configuration,
+                'queue' => $queue,
+            ]
+        );
         return function (EnvelopeInterface $message) use ($callbackInstance) {
             $callbackInstance->execute($message);
         };

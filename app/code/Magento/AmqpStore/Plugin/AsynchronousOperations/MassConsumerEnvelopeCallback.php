@@ -63,8 +63,11 @@ class MassConsumerEnvelopeCallback
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(SubjectMassConsumerEnvelopeCallback $subject, callable $proceed, EnvelopeInterface $message)
-    {
+    public function aroundExecute(
+        SubjectMassConsumerEnvelopeCallback $subject,
+        callable $proceed,
+        EnvelopeInterface $message
+    ) {
         $amqpProperties = $message->getProperties();
         if (isset($amqpProperties['application_headers'])) {
             $headers = $amqpProperties['application_headers'];

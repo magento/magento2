@@ -74,9 +74,11 @@ class MassConsumerEnvelopeCallback
         $this->resource = $resource;
         $this->messageController = $messageController;
         $this->configuration = $configuration;
-        $this->operationProcessor = $operationProcessorFactory->create([
-            'configuration' => $configuration
-        ]);
+        $this->operationProcessor = $operationProcessorFactory->create(
+            [
+                'configuration' => $configuration
+            ]
+        );
         $this->logger = $logger;
         $this->queue = $queue;
     }
@@ -125,6 +127,7 @@ class MassConsumerEnvelopeCallback
 
     /**
      * Get message queue.
+     *
      * @return QueueInterface
      */
     public function getQueue()

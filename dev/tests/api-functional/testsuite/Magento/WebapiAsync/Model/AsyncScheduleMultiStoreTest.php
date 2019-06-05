@@ -99,11 +99,14 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
         );
 
         /** @var PublisherConsumerController publisherConsumerController */
-        $this->publisherConsumerController = $this->objectManager->create(PublisherConsumerController::class, [
-            'consumers' => $this->consumers,
-            'logFilePath' => $this->logFilePath,
-            'appInitParams' => $params,
-        ]);
+        $this->publisherConsumerController = $this->objectManager->create(
+            PublisherConsumerController::class,
+            [
+                'consumers' => $this->consumers,
+                'logFilePath' => $this->logFilePath,
+                'appInitParams' => $params,
+            ]
+        );
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
 
         try {
@@ -240,6 +243,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
             foreach ($this->skus as $sku) {
                 $this->productRepository->deleteById($sku);
             }
+        // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             throw $e;
             //nothing to delete
@@ -252,6 +256,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
             ->getSize();
 
         if ($size > 0) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new Exception(new Phrase("Collection size after clearing the products: %size", ['size' => $size]));
         }
         $this->skus = [];
@@ -271,11 +276,13 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
 
         return [
             'product' =>
-                $productBuilder([
-                    ProductInterface::TYPE_ID => 'simple',
-                    ProductInterface::SKU => 'multistore-sku-test-1',
-                    ProductInterface::NAME => 'Test Name ',
-                ]),
+                $productBuilder(
+                    [
+                        ProductInterface::TYPE_ID => 'simple',
+                        ProductInterface::SKU => 'multistore-sku-test-1',
+                        ProductInterface::NAME => 'Test Name ',
+                    ]
+                ),
         ];
     }
 
@@ -341,10 +348,12 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
 
     /**
      * Remove test store
+     * //phpcs:disable
      */
     public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();
+        //phpcs:enable
         /** @var Registry $registry */
         $registry = Bootstrap::getObjectManager()->get(Registry::class);
 
