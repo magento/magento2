@@ -77,7 +77,7 @@ class Router implements \Magento\Framework\App\RouterInterface
     public function match(RequestInterface $request)
     {
         $rewrite = $this->getRewrite(
-            $this->getNormalizedRequestPath($request),
+            $this->getNormalizedPathInfo($request),
             $this->storeManager->getStore()->getId()
         );
 
@@ -160,7 +160,7 @@ class Router implements \Magento\Framework\App\RouterInterface
      * @param RequestInterface|HttpRequest $request
      * @return string
      */
-    private function getNormalizedRequestPath(RequestInterface $request): string
+    private function getNormalizedPathInfo(RequestInterface $request): string
     {
         $path = $request->getPathInfo();
         /**
