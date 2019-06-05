@@ -415,6 +415,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Exception
      */
     public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false)
     {
@@ -425,15 +426,13 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $imagePath
         );
 
-        $merged = false;
-
         if ($this->getWatermarkWidth() &&
             $this->getWatermarkHeight() &&
             $this->getWatermarkPosition() != self::POSITION_STRETCH
         ) {
             $newWatermark = imagecreatetruecolor($this->getWatermarkWidth(), $this->getWatermarkHeight());
             imagealphablending($newWatermark, false);
-            $col = imagecolorallocate($newWatermark, 255, 255, 255);
+            $col = imagecolorallocatealpha($newWatermark, 255, 255, 255, 127);
             imagecolortransparent($newWatermark, $col);
             imagefilledrectangle($newWatermark, 0, 0, $this->getWatermarkWidth(), $this->getWatermarkHeight(), $col);
             imagesavealpha($newWatermark, true);
@@ -457,7 +456,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         } elseif ($this->getWatermarkPosition() == self::POSITION_STRETCH) {
             $newWatermark = imagecreatetruecolor($this->_imageSrcWidth, $this->_imageSrcHeight);
             imagealphablending($newWatermark, false);
-            $col = imagecolorallocate($newWatermark, 255, 255, 255);
+            $col = imagecolorallocatealpha($newWatermark, 255, 255, 255, 127);
             imagecolortransparent($newWatermark, $col);
             imagefilledrectangle($newWatermark, 0, 0, $this->_imageSrcWidth, $this->_imageSrcHeight, $col);
             imagesavealpha($newWatermark, true);
@@ -542,7 +541,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             );
         }
 
-        if ($tile === false && $merged === false) {
+        if ($tile === false) {
             $this->copyImageWithAlphaPercentage(
                 $this->_imageHandler,
                 $watermark,
@@ -836,6 +835,8 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
                 $alphaPercentage
             );
         }
+
+        imagealphablending($destinationImage, true);
 
         if ($alphaPercentage >= 100) {
             return imagecopy(

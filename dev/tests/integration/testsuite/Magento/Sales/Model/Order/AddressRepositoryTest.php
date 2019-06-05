@@ -3,19 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Sales\Api\Data\OrderAddressInterface;
+use Magento\Sales\Api\OrderAddressRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class AddressRepositoryTest
- * @package Magento\Sales\Model\Order]
- * @magentoDbIsolation enabled
  */
-class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
+class AddressRepositoryTest extends TestCase
 {
     /** @var AddressRepository */
     protected $repository;
@@ -29,22 +33,25 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     /** @var SearchCriteriaBuilder */
     private $searchCriteriaBuilder;
 
+    /** @var ObjectManagerInterface */
+    private $objectManager;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->repository = $objectManager->create(AddressRepository::class);
-        $this->searchCriteriaBuilder = $objectManager->create(
-            \Magento\Framework\Api\SearchCriteriaBuilder::class
-        );
-        $this->filterBuilder = $objectManager->get(
-            \Magento\Framework\Api\FilterBuilder::class
-        );
-        $this->sortOrderBuilder = $objectManager->get(
-            \Magento\Framework\Api\SortOrderBuilder::class
-        );
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->repository = $this->objectManager->get(AddressRepository::class);
+        $this->searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
+        $this->filterBuilder = $this->objectManager->get(FilterBuilder::class);
+        $this->sortOrderBuilder = $this->objectManager->get(SortOrderBuilder::class);
     }
 
     /**
+     * Test for get list with multiple filters and sorting
+     *
+     * @return void
      * @magentoDataFixture Magento/Sales/_files/address_list.php
      */
     public function testGetListWithMultipleFiltersAndSorting()
@@ -77,5 +84,24 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(2, $items);
         $this->assertEquals('ZX0789', array_shift($items)->getPostcode());
         $this->assertEquals('47676', array_shift($items)->getPostcode());
+    }
+
+    /**
+     * Test for formatting custom sales address multi-attribute
+     *
+     * @return void
+     * @magentoDataFixture Magento/Sales/_files/order_address_with_multi_attribute.php
+     */
+    public function testFormatSalesAddressCustomMultiAttribute()
+    {
+        $address = $this->objectManager->get(OrderAddressInterface::class)
+            ->load('multiattribute@example.com', 'email');
+        $address->setData('address_multiselect_attribute', ['dog', 'cat']);
+        $address->setData('address_multiline_attribute', ['dog', 'cat']);
+
+        $this->objectManager->get(OrderAddressRepositoryInterface::class)
+            ->save($address);
+        $this->assertEquals('dog,cat', $address->getData('address_multiselect_attribute'));
+        $this->assertEquals('dog'.PHP_EOL.'cat', $address->getData('address_multiline_attribute'));
     }
 }
