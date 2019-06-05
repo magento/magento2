@@ -192,6 +192,7 @@
     </section>
     <section name="ProductDescriptionWysiwygSection">
         <element name="EditArea" type="text" selector="#editorproduct_form_description .mce-edit-area"/>
+        <element name="attributeEditArea" type="textarea" selector="#product_form_{{attributeCode}}" parameterized="true" timeout="30"/>
     </section>
     <section name="ProductShortDescriptionWysiwygSection">
         <element name="EditArea" type="text" selector="#editorproduct_form_short_description .mce-edit-area"/>

@@ -16,7 +16,7 @@
             <description value="Create text editor product attribute with TinyMCE4 enabled"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-6338"/>
-            <group value="Catalog"/>
+            <group value="catalog"/>
         </annotations>
         <before>
             <!-- Enable WYSIWYG editor -->
@@ -93,26 +93,22 @@
         <seeElement selector="{{AdminProductFormSection.attributeLabelByText(productTextEditorAttribute.attribute_code)}}" stepKey="seeAttributeLabelInProductForm"/>
 
         <!-- TinyMCE 4 is displayed in WYSIWYG content area -->
-        <seeElement selector="{{TinyMCESection.TinyMCE4}}" stepKey="seeTinyMCE4" />
+        <seeElement selector="{{TinyMCESection.TinyMCE4}}" stepKey="seeTinyMCE4"/>
 
         <!-- Verify toolbar menu -->
         <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyToolbarMenu"/>
-
-        <!-- Add content into attribute -->
-        <executeJS function="tinyMCE.get('product_form_{{productTextEditorAttribute.attribute_code}}').setContent('This content from product page');" stepKey="executeJSFillContent"/>
 
         <!-- Click Show/Hide button and see Insert Image button -->
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <click selector="{{ProductAttributeWYSIWYGSection.showHideBtn(productTextEditorAttribute.attribute_code)}}" stepKey="clickShowHideBtn"/>
         <waitForElementVisible selector="{{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImageBtn"/>
 
+        <!-- Add content into attribute -->
+        <fillField selector="{{ProductDescriptionWysiwygSection.attributeEditArea(productTextEditorAttribute.attribute_code)}}" userInput="This content from product page" stepKey="setContent"/>
+
         <!-- Fill and save product form -->
         <actionGroup ref="fillMainProductForm" stepKey="fillProductForm"/>
         <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
-
-        <!--Run full reindex and clear caches -->
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
         <!-- Assert product attribute on Storefront -->
         <actionGroup ref="OpenStorefrontProductPageByProductNameActionGroup" stepKey="openProductPage"/>
