@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Quote\Customer;
+namespace Magento\AuthorizenetGraphQl\Model\Resolver\Customer;
 
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -13,6 +13,7 @@ use Magento\Framework\Webapi\Request;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests SetPaymentMethod mutation for customer via authorizeNet payment
@@ -21,7 +22,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDbIsolation disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SetAuthorizenetPaymentMethodOnCustomerCartTest extends \PHPUnit\Framework\TestCase
+class SetAuthorizeNetPaymentMethodOnCartTest extends TestCase
 {
     const CONTENT_TYPE = 'application/json';
 
