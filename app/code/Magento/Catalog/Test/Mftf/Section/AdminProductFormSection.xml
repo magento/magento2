@@ -32,7 +32,7 @@
         <element name="productTaxClassDisabled" type="select" selector="select[name='product[tax_class_id]'][disabled=true]"/>
         <element name="productTaxClassUseDefault" type="checkbox" selector="input[name='use_default[tax_class_id]']"/>
         <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']" timeout="30"/>
-        <element name="currentCategory" type="text" selector=".admin__action-multiselect-crumb span[data-bind='text: label']"/>
+        <element name="currentCategory" type="text" selector=".admin__action-multiselect-crumb > span"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
         <element name="unselectCategories" type="button" selector="//span[@class='admin__action-multiselect-crumb']/span[contains(.,'{{category}}')]/../button[@data-action='remove-selected-item']" parameterized="true" timeout="30"/>
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>

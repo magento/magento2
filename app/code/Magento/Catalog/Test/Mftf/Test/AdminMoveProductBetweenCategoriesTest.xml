@@ -17,8 +17,12 @@
             <testCaseId value="MC-11296"/>
             <group value="catalog"/>
         </annotations>
+
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
+            <createData entity="_defaultCategory" stepKey="createAnchoredCategory1"/>
+            <createData entity="_defaultCategory" stepKey="createSecondCategory"/>
 
             <!-- Switch "Category Product" and "Product Category" indexers to "Update by Schedule" mode -->
             <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="onIndexManagement"/>
@@ -30,47 +34,8 @@
             <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchProductCategory">
                 <argument name="indexerValue" value="catalog_product_category"/>
             </actionGroup>
-
-            <!-- Create the anchored category <Cat1_anchored> -->
-            <createData entity="_defaultCategory" stepKey="createAnchoredCategory1"/>
-            <actionGroup ref="AdminAnchorCategoryActionGroup" stepKey="anchorCategory">
-                <argument name="categoryName" value="$$createAnchoredCategory1.name$$"/>
-            </actionGroup>
-
-            <!-- Create subcategory <Sub1> of the anchored category -->
-            <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
-            <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="addSubCategoryName"/>
-            <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory1"/>
-            <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
-            <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
-
-            <!-- Assign <product1> to the <Sub1> -->
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
-
-            <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="goToProduct"/>
-            <waitForPageLoad stepKey="waitForProductPage"/>
-            <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="activateDropDown"/>
-            <fillField userInput="{{SimpleSubCategory.name}}" selector="{{AdminProductFormSection.searchCategory}}" stepKey="fillSearchField"/>
-            <waitForPageLoad stepKey="waitForSearchSubCategory"/>
-            <click selector="{{AdminProductFormSection.selectCategory(SimpleSubCategory.name)}}" stepKey="selectSubCategory"/>
-            <click selector="{{AdminProductFormSection.done}}" stepKey="clickButtonDone"/>
-            <waitForPageLoad stepKey="waitForCategoryApply"/>
-            <click selector="{{AdminProductFormSection.save}}" stepKey="clickButtonSave"/>
-            <waitForPageLoad stepKey="waitForSave"/>
-
-            <!-- Create another non-anchored category <Cat2> -->
-            <createData entity="_defaultCategory" stepKey="createSecondCategory"/>
-
-            <!-- Enable `Use Categories Path for Product URLs` on Stores -> Configuration -> Catalog -> Catalog -> Search Engine Optimization -->
-            <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="onConfigPage"/>
-            <waitForPageLoad stepKey="waitForLoading"/>
-            <conditionalClick selector="{{AdminCatalogSearchEngineConfigurationSection.searchEngineOptimization}}" dependentSelector="{{AdminCatalogSearchEngineConfigurationSection.openedEngineOptimization}}" visible="false" stepKey="clickEngineOptimization"/>
-            <uncheckOption selector="{{AdminCatalogSearchEngineConfigurationSection.systemValueUseCategoriesPath}}" stepKey="uncheckDefault"/>
-            <selectOption userInput="Yes" selector="{{AdminCatalogSearchEngineConfigurationSection.selectUseCategoriesPatForProductUrls}}" stepKey="selectYes"/>
-            <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
-            <waitForPageLoad stepKey="waitForSaving"/>
-            <see selector="{{AdminIndexManagementSection.successMessage}}"  userInput="You saved the configuration." stepKey="seeMessage"/>
         </before>
+
         <after>
             <!-- Switch "Category Product" and "Product Category" indexers to "Update by Save" mode -->
             <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="onIndexManagement"/>
@@ -90,6 +55,39 @@
             <deleteData createDataKey="createAnchoredCategory1" stepKey="deleteAnchoredCategory1"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+        <!-- Create the anchored category <Cat1_anchored> -->
+        <actionGroup ref="AdminAnchorCategoryActionGroup" stepKey="anchorCategory">
+            <argument name="categoryName" value="$$createAnchoredCategory1.name$$"/>
+        </actionGroup>
+
+        <!-- Create subcategory <Sub1> of the anchored category -->
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="addSubCategoryName"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory1"/>
+        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSaveSuccessMessage"/>
+
+        <!-- Assign <product1> to the <Sub1> -->
+        <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="goToProduct"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="activateDropDownCategory"/>
+        <fillField userInput="{{SimpleSubCategory.name}}" selector="{{AdminProductFormSection.searchCategory}}" stepKey="fillSearch"/>
+        <waitForPageLoad stepKey="waitForSubCategory"/>
+        <click selector="{{AdminProductFormSection.selectCategory(SimpleSubCategory.name)}}" stepKey="selectSub1Category"/>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickDone"/>
+        <waitForPageLoad stepKey="waitForApplyCategory"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSave"/>
+        <waitForPageLoad stepKey="waitForSavingChanges"/>
+
+        <!-- Enable `Use Categories Path for Product URLs` on Stores -> Configuration -> Catalog -> Catalog -> Search Engine Optimization -->
+        <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="onConfigPage"/>
+        <waitForPageLoad stepKey="waitForLoading"/>
+        <conditionalClick selector="{{AdminCatalogSearchEngineConfigurationSection.searchEngineOptimization}}" dependentSelector="{{AdminCatalogSearchEngineConfigurationSection.openedEngineOptimization}}" visible="false" stepKey="clickEngineOptimization"/>
+        <uncheckOption selector="{{AdminCatalogSearchEngineConfigurationSection.systemValueUseCategoriesPath}}" stepKey="uncheckDefault"/>
+        <selectOption userInput="Yes" selector="{{AdminCatalogSearchEngineConfigurationSection.selectUseCategoriesPatForProductUrls}}" stepKey="selectYes"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForSaving"/>
+        <see selector="{{AdminIndexManagementSection.successMessage}}"  userInput="You saved the configuration." stepKey="seeMessage"/>
 
         <!-- Navigate to the Catalog > Products -->
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="onCatalogProductPage"/>
@@ -107,9 +105,9 @@
         <click selector="{{AdminProductFormSection.unselectCategories(SimpleSubCategory.name)}}" stepKey="removeCategory"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="openDropDown"/>
         <checkOption selector="{{AdminProductFormSection.selectCategory($$createSecondCategory.name$$)}}" stepKey="selectCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickDone"/>
-        <waitForPageLoad stepKey="waitForApplyCategory"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSave"/>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="pressButtonDone"/>
+        <waitForPageLoad stepKey="waitForApplyCategory2"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="pushButtonSave"/>
         <waitForPageLoad stepKey="waitForSavingProduct"/>
 
         <!--Product is saved -->
@@ -183,7 +181,7 @@
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickButtonDone"/>
         <waitForPageLoad stepKey="waitForCategoryApply"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickButtonSave"/>
-        <waitForPageLoad stepKey="waitForSaving"/>
+        <waitForPageLoad stepKey="waitForSaveChanges"/>
 
         <!-- Product is saved successfully -->
         <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSaveMessage"/>
