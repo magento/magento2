@@ -7,11 +7,8 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertPagerTextIsNotVisibleActionGroup">
-        <arguments>
-            <argument name="text" type="string"/>
-        </arguments>
-        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
-        <dontSee userInput="{{text}}" selector="{{StorefrontCartToolbarSection.toolbarNumber}}" stepKey="VerifyMissingPagerText"/>
+    <actionGroup name="StorefrontOpenCartPageActionGroup">
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="openCartPage" />
+        <waitForPageLoad stepKey="waitForPageLoaded" />
     </actionGroup>
 </actionGroups>
