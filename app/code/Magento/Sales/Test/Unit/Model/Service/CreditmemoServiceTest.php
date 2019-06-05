@@ -351,9 +351,14 @@ class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
         $order->method('getBaseTotalPaid')
             ->willReturn($baseTotalPaid);
         $baseAvailableRefund = $baseTotalPaid - $baseTotalRefunded;
-        $order->method('formatBasePriceTxt')
+        $baseCurrency = $this->createMock(\Magento\Directory\Model\Currency::class);
+        $baseCurrency->expects($this->once())
+            ->method('formatTxt')
             ->with($baseAvailableRefund)
             ->willReturn($baseAvailableRefund);
+        $order->expects($this->once())
+            ->method('getBaseCurrency')
+            ->willReturn($baseCurrency);
         $this->creditmemoService->refund($creditMemo, true);
     }
 
@@ -411,9 +416,14 @@ class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
         $order->method('getTotalPaid')
             ->willReturn($totalPaid);
         $baseAvailableRefund = $baseTotalPaid - $baseTotalRefunded;
-        $order->method('formatBasePriceTxt')
+        $baseCurrency = $this->createMock(\Magento\Directory\Model\Currency::class);
+        $baseCurrency->expects($this->once())
+            ->method('formatTxt')
             ->with($baseAvailableRefund)
             ->willReturn(sprintf('$%.2f', $baseAvailableRefund));
+        $order->expects($this->once())
+            ->method('getBaseCurrency')
+            ->willReturn($baseCurrency);
         $this->creditmemoService->refund($creditMemo, true);
     }
 }

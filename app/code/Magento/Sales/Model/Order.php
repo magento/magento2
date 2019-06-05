@@ -1503,7 +1503,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Get item by quote item id
      *
      * @param mixed $quoteItemId
-     * @return \Magento\Framework\DataObject|null
+     * @return  \Magento\Framework\DataObject|null
      */
     public function getItemByQuoteItemId($quoteItemId)
     {
@@ -1782,17 +1782,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function formatBasePricePrecision($price, $precision)
     {
         return $this->getBaseCurrency()->formatPrecision($price, $precision);
-    }
-
-    /**
-     * Retrieve text formatted base price value
-     *
-     * @param float $price
-     * @return string
-     */
-    public function formatBasePriceTxt($price)
-    {
-        return $this->getBaseCurrency()->formatTxt($price);
     }
 
     /**
