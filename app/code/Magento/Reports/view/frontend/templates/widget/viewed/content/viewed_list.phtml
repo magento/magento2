@@ -59,14 +59,14 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
                                             <?= $block->escapeHtml($_item->getName()) ?>
                                         </a>
                                     </strong>
-                                    <?= $block->escapeHtml($block->getProductPriceHtml(
+                                    <?= /* @noEscape */ $block->getProductPriceHtml(
                                         $_item,
                                         \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                                         \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
                                         [
                                             'price_id_suffix' => '-' . $type
                                         ]
-                                    )) ?>
+                                    ) ?>
                                     <?php if ($rating) : ?>
                                         <?= $block->getReviewsSummaryHtml($_item, $rating) ?>
                                     <?php endif; ?>
@@ -87,7 +87,7 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
                                                                 $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_item), ['product' => $_item->getEntityId()]);
                                                             ?>
                                                             <button class="action tocart primary"
-                                                                    data-post='<?= $block->escapeHtmlAttr($postData) ?>'
+                                                                    data-post='<?= /* @noEscape */ $postData ?>'
                                                                     type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
                                                                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                             </button>
@@ -107,7 +107,7 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
                                                     <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow() && $showWishlist) : ?>
                                                         <a href="#"
                                                            class="action towishlist" data-action="add-to-wishlist"
-                                                           data-post='<?= $block->escapeHtmlAttr($block->getAddToWishlistParams($_item)) ?>'
+                                                           data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_item) ?>'
                                                            title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>">
                                                             <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
                                                         </a>
@@ -115,7 +115,7 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
                                                     <?php if ($block->getAddToCompareUrl() && $showCompare) : ?>
                                                         <?php  $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');?>
                                                         <a href="#" class="action tocompare"
-                                                           data-post='<?= $block->escapeHtmlAttr($compareHelper->getPostDataParams($_item)) ?>'
+                                                           data-post='<?= /* @noEscape */ $compareHelper->getPostDataParams($_item) ?>'
                                                            title="<?= $block->escapeHtmlAttr(__('Add to Compare')) ?>">
                                                             <span><?= $block->escapeHtml(__('Add to Compare')) ?></span>
                                                         </a>

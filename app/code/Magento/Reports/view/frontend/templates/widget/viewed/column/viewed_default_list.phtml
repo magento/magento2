@@ -58,14 +58,14 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
                                     <?= $block->escapeHtml($this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name')) ?>
                                 </a>
                             </strong>
-                            <?= $block->escapeHtml($block->getProductPriceHtml(
+                            <?= /* @noEscape */ $block->getProductPriceHtml(
                                 $_product,
                                 \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                                 \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
                                 [
                                     'price_id_suffix' => '-widget-viewed-' . $suffix
                                 ]
-                            )) ?>
+                            ) ?>
                             <div class="product-item-actions">
                                 <?php if ($_product->isSaleable()) : ?>
                                 <div class="actions-primary">
@@ -80,7 +80,7 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
                                             $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
                                             $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_product), ['product' => $_product->getEntityId()]);
                                         ?>
-                                        <button type="button" class="action tocart primary" data-post='<?= $block->escapeHtmlAttr($postData) ?>'>
+                                        <button type="button" class="action tocart primary" data-post='<?= /* @noEscape */ $postData ?>'>
                                             <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                         </button>
                                     <?php endif; ?>
