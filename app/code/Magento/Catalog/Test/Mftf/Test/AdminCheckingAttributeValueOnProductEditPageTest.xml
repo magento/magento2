@@ -52,10 +52,11 @@
 
         <!--Go to Product edit page-->
         <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToProductEditPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <scrollToTopOfPage stepKey="scrollToShowAttribute"/>
         <!--Click on attribute dropdown-->
         <click selector="{{AdminProductFormSection.customAttributeDropdownField($$createDropdownProductAttribute.attribute[attribute_code]$$)}}" stepKey="clickOnAttributeDropdown"/>
         <!--Check attribute dropdown options-->
+        <waitForElementVisible selector="{{AdminProductFormSection.customAttributeDropdownField($$createDropdownProductAttribute.attribute[attribute_code]$$)}}" stepKey="waitDropdownAppears"/>
         <see selector="{{AdminProductFormSection.customAttributeDropdownField($$createDropdownProductAttribute.attribute[attribute_code]$$)}}" userInput="admin_option_1" stepKey="seeFirstAdminOption"/>
         <see selector="{{AdminProductFormSection.customAttributeDropdownField($$createDropdownProductAttribute.attribute[attribute_code]$$)}}" userInput="admin_option_2" stepKey="seeSecondAdminOption"/>
         <dontSee selector="{{AdminProductFormSection.customAttributeDropdownField($$createDropdownProductAttribute.attribute[attribute_code]$$)}}" userInput="option1" stepKey="dontSeeFirstStoreOption"/>

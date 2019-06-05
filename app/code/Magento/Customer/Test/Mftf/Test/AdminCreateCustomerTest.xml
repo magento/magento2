@@ -23,6 +23,8 @@
             <magentoCLI command="indexer:reindex customer_grid" stepKey="reindexCustomerGrid"/>
         </before>
         <after>
+            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearCustomerGridFilter"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -35,6 +37,7 @@
         <click selector="{{AdminNewCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
         <waitForElementNotVisible selector="div [data-role='spinner']" time="10" stepKey="waitForSpinner1"/>
         <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
+        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearCustomerGridFilter"/>
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="openFilter"/>
         <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerFiltersSection.emailInput}}" stepKey="filterEmail"/>
         <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>
