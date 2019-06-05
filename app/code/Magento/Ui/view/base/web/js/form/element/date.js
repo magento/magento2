@@ -76,16 +76,7 @@ define([
              *
              * @type {String}
              */
-            shiftedValue: '',
-
-            /**
-             * Stored Date format initially received from server
-             * for offline date formatting
-             *
-             * @private
-             * @type {String}
-             */
-            storedDateFormat: ''
+            shiftedValue: ''
         },
 
         /**
@@ -130,18 +121,16 @@ define([
                 if (this.options.showsTime) {
                     shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
                 } else {
-                    if (this.storedDateFormat) {
-                        dateFormat = this.storedDateFormat;
-                    } else {
-                        dateFormat = this.shiftedValue() ? this.outputDateFormat : this.inputDateFormat;
-                        this.storedDateFormat = dateFormat;
-                    }
+                    dateFormat = this.shiftedValue() ? this.outputDateFormat : this.inputDateFormat;
                     shiftedValue = moment(value, dateFormat);
                 }
 
+                if (!shiftedValue.isValid()) {
+                    shiftedValue = moment(value, this.inputDateFormat);
+                }
                 shiftedValue = shiftedValue.format(this.pickerDateTimeFormat);
             } else {
-                shiftedValue = '';
+                shiftedValue = this.shiftedValue();
             }
 
             if (shiftedValue !== this.shiftedValue()) {
