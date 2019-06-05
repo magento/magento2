@@ -546,6 +546,8 @@ class Config extends \Magento\Framework\DataObject
         }
 
         $section = array_shift($pathParts);
+        $this->setData('section', $section);
+
         $data = [
             'fields' => [
                 array_pop($pathParts) => ['value' => $value],
@@ -558,8 +560,8 @@ class Config extends \Magento\Framework\DataObject
                 ],
             ];
         }
-        $data['section'] = $section;
-        $this->addData($data);
+        $groups = array_replace_recursive((array) $this->getData('groups'), $data['groups']);
+        $this->setData('groups', $groups);
     }
 
     /**
