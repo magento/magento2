@@ -90,11 +90,40 @@ define([
          * @param {Object} option
          */
         saveOption: function (option) {
-            if (!_.isEmpty(option.label)) {
+            if (this.isValidOption(option)) {
                 this.options.remove(option);
                 this.options.push(option);
                 this.chosenOptions.push(option.id);
             }
+        },
+
+        /**
+         * @param {Object} option
+         * @return boolean
+         */
+        isValidOption: function (option) {
+            var duplicatedOptions = [],
+                errorOption,
+                allOptions = [];
+
+            if (_.isEmpty(option.label)) {
+                return false;
+            }
+
+            _.each(this.options(), function (option) {
+                if (!_.isUndefined(allOptions[option.label])) {
+                    duplicatedOptions.push(option);
+                }
+
+                allOptions[option.label] = option.label;
+            });
+
+            if (duplicatedOptions.length) {
+                errorOption = $("[data-role=\"" + option.id + "\"");
+                errorOption.addClass("_error");
+                return false;
+            }
+            return true;
         },
 
         /**
@@ -128,6 +157,7 @@ define([
             }));
             attribute.opened = ko.observable(this.initialOpened(index));
             attribute.collapsible = ko.observable(true);
+            attribute.isValidOption = this.isValidOption;
 
             return attribute;
         },
@@ -184,13 +214,9 @@ define([
          * @return {Boolean}
          */
         saveOptions: function () {
-            var newOptions = [],
-                allOptions = [],
-                attributesWithDuplicateOptions = [];
+            var newOptions = [];
 
             _.each(this.attributes(), function (attribute) {
-                allOptions[attribute.id] = [];
-
                 _.each(attribute.options(), function (element) {
                     var option = attribute.options.findWhere({
                         id: element.id
@@ -199,24 +225,8 @@ define([
                     if (option['is_new'] === true) {
                         newOptions.push(option);
                     }
-
-                    if (!_.isUndefined(option.label)) {
-                        if (!_.isUndefined(allOptions[attribute.id][option.label])) {
-                            attributesWithDuplicateOptions.push(attribute);
-                        }
-
-                        allOptions[attribute.id][option.label] = option.label;
-                    }
                 });
             });
-
-            if (attributesWithDuplicateOptions.length) {
-                _.each(attributesWithDuplicateOptions, function (attribute) {
-                    throw new Error($.mage.__(
-                        'The value of attribute ""%1"" must be unique').replace("\"%1\"", attribute.label)
-                    );
-                });
-            }
 
             if (!newOptions.length) {
                 return false;
