@@ -10,8 +10,7 @@
     <div class="grid-loader"></div>
 </div>
 
-<div class="form-inline" id="<?= /* @escapeNotVerified */ $block->getNameInLayout() ?>" style="display:none">
+<div class="form-inline" id="<?= $block->escapeHtmlAttr($block->getNameInLayout()) ?>" style="display:none">
     <?= $block->getFormHtml() ?>
     <?= $block->getChildHtml('form_after') ?>
 </div>
-
