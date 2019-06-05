@@ -154,6 +154,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                             'default' => 'default_value',
                                             'size' => 'multiline_count',
                                             'componentType' => Field::NAME,
+                                            '__disableTmpl' => true
                                         ],
                                     ],
                                 ],
@@ -177,6 +178,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                                 'true' => 1,
                                                 'false' => 0,
                                             ],
+                                            '__disableTmpl' => true
                                         ],
                                     ],
                                 ],
@@ -200,6 +202,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                             'default' => 'default_value',
                                             'size' => 'multiline_count',
                                             'componentType' => Field::NAME,
+                                            '__disableTmpl' => true
                                         ],
                                     ],
                                 ],
@@ -223,6 +226,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                                 'true' => 1,
                                                 'false' => 0,
                                             ],
+                                            '__disableTmpl' => true
                                         ],
                                     ],
                                 ],
@@ -245,7 +249,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                             'filterBy' => [
                                                 'target' => '${ $.provider }:data.customer.website_id',
                                                 'field' => 'website_ids'
-                                            ]
+                                            ],
+                                            '__disableTmpl' => true
                                         ],
                                     ],
                                 ],
