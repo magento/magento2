@@ -8,6 +8,9 @@
 
 namespace Magento\Framework\App\Test\Unit\Router;
 
+/**
+ * Test for default no route handler
+ */
 class NoRouteHandlerTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
 {
     /**

@@ -10,6 +10,9 @@ namespace Magento\Framework\App\Router;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Default no route handler for frontend
+ */
 class NoRouteHandler implements NoRouteHandlerInterface
 {
     /**
