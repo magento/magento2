@@ -36,27 +36,27 @@
             <actionGroup ref="AdminAnchorCategoryActionGroup" stepKey="anchorCategory">
                 <argument name="categoryName" value="$$createAnchoredCategory1.name$$"/>
             </actionGroup>
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
 
             <!-- Create subcategory <Sub1> of the anchored category -->
             <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
             <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="addSubCategoryName"/>
-
-            <!-- Assign <product1> to the <Sub1> -->
-            <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
-            <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
-            <click selector="{{AdminCategoryProductsSection.addProducts}}" stepKey="clickButtonAddProducts"/>
-            <waitForPageLoad stepKey="waitForPanelAddProducts"/>
-            <conditionalClick selector="{{AdminCategoryAddProductsModalSection.clearAll}}" dependentSelector="{{AdminCategoryAddProductsModalSection.clearAll}}" visible="true" stepKey="clearFilters"/>
-            <fillField selector="{{AdminCategoryAddProductsModalSection.searchKeyword}}" userInput="$$simpleProduct.name$$" stepKey="fillSearch"/>
-            <click selector="{{AdminCategoryAddProductsModalSection.searchFullText}}" stepKey="clickSearch"/>
-            <click selector="{{AdminCategoryAddProductsModalSection.gridActionToggle}}" stepKey="clickActionToggle"/>
-            <click selector="{{AdminCategoryAddProductsModalSection.gridSelectAll}}" stepKey="clickSelectAll"/>
-            <click selector="{{AdminCategoryAddProductsModalSection.saveClose}}" stepKey="saveAndClose"/>
-            <waitForLoadingMaskToDisappear stepKey="waitForSavingSearch"/>
             <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory1"/>
             <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
             <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
+
+            <!-- Assign <product1> to the <Sub1> -->
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
+
+            <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="goToProduct"/>
+            <waitForPageLoad stepKey="waitForProductPage"/>
+            <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="activateDropDown"/>
+            <fillField userInput="{{SimpleSubCategory.name}}" selector="{{AdminProductFormSection.searchCategory}}" stepKey="fillSearchField"/>
+            <waitForPageLoad stepKey="waitForSearchSubCategory"/>
+            <click selector="{{AdminProductFormSection.selectCategory(SimpleSubCategory.name)}}" stepKey="selectSubCategory"/>
+            <click selector="{{AdminProductFormSection.done}}" stepKey="clickButtonDone"/>
+            <waitForPageLoad stepKey="waitForCategoryApply"/>
+            <click selector="{{AdminProductFormSection.save}}" stepKey="clickButtonSave"/>
+            <waitForPageLoad stepKey="waitForSave"/>
 
             <!-- Create another non-anchored category <Cat2> -->
             <createData entity="_defaultCategory" stepKey="createSecondCategory"/>
