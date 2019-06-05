@@ -35,12 +35,23 @@ return [
     ],
     'eval' => [
         'replacement' => '',
-        'exclude' => []
+        'exclude' => [
+            [
+                'type' => 'module',
+                'name' => 'Magento_Catalog',
+                'path' => 'view/adminhtml/templates/catalog/wysiwyg/js.phtml'
+            ]
+        ]
     ],
     'md5' => [
         'replacement' => '',
         'exclude' => [
             ['type' => 'library', 'name' => 'magento/framework', 'path' => 'App/Utility/Files.php'],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Catalog',
+                'path' => 'view/adminhtml/templates/catalog/product/edit/serializer.phtml'
+            ]
         ],
     ],
     'srand' => [
