@@ -12,7 +12,7 @@
         <arguments>
             <argument name="status" type="string" defaultValue="1"/>
         </arguments>
-        <conditionalClick selector="{{AdminShippingMethodFlatRateSection.carriersFratRateTab}}" dependentSelector="{{AdminShippingMethodFlatRateSection.carriersFlatRateActive}}" visible="false" stepKey="expandTab"/>
+        <conditionalClick selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTab}}" dependentSelector="{{AdminShippingMethodFlatRateSection.carriersFlatRateActive}}" visible="false" stepKey="expandTab"/>
         <selectOption selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateActive}}" userInput="{{status}}" stepKey="changeFlatRateMethodStatus"/>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfigs"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>

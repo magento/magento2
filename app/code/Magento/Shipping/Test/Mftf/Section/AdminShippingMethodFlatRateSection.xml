@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminShippingMethodFlatRateSection">
-        <element name="carriersFratRateTab" type="button" selector="#carriers_flatrate-head"/>
+        <element name="carriersFlatRateTab" type="button" selector="#carriers_flatrate-head"/>
         <element name="carriersFlatRateActive" type="select" selector="#carriers_flatrate_active"/>
     </section>
 </sections>
