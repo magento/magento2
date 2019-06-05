@@ -4,9 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax\Serializer */
 ?>
 
+// phpcs:disable Magento2.Security.InsecureFunction.DiscouragedWithAlternative
 <?php $_id = 'id_' . md5(microtime()) ?>
-<input type="hidden" name="<?= /* @escapeNotVerified */ $block->getInputElementName() ?>"  value="" id="<?= /* @escapeNotVerified */ $_id ?>" />
+<input type="hidden"
+       name="<?= $block->escapeHtmlAttr($block->getInputElementName()) ?>"
+       value=""
+       id="<?= /* @noEscape */ $_id ?>" />
