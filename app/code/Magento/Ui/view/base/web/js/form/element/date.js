@@ -106,16 +106,7 @@ define([
              *
              * @type {String}
              */
-            shiftedValue: '',
-
-            /**
-             * Stored Date format initially received from server
-             * for offline date formatting
-             *
-             * @private
-             * @type {String}
-             */
-            storedDateFormat: ''
+            shiftedValue: ''
         },
 
         /**
@@ -175,19 +166,11 @@ define([
                     shiftedValue = moment(value, dateFormat);
                 }
 
-                if (this.storedDateFormat) {
-                    shiftedValue = moment(value, this.storedDateFormat);
-                } else {
-                    this.storedDateFormat = dateFormat;
-                }
-
                 shiftedValue = shiftedValue.format(this.pickerDateTimeFormat);
-            } else {
-                shiftedValue = '';
-            }
 
-            if (shiftedValue !== this.shiftedValue()) {
-                this.shiftedValue(shiftedValue);
+                if (shiftedValue !== this.shiftedValue()) {
+                    this.shiftedValue(shiftedValue);
+                }
             }
         },
 
