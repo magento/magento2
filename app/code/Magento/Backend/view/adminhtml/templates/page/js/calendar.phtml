@@ -25,16 +25,16 @@ require([
             dayNamesMin: <?= /* @noEscape */ $days['abbreviated'] ?>,
             monthNames: <?= /* @noEscape */ $months['wide'] ?>,
             monthNamesShort: <?= /* @noEscape */ $months['abbreviated'] ?>,
-            infoTitle: "<?= $block->escapeHtml(__('About the calendar')) ?>",
+            infoTitle: "<?= $block->escapeJs(__('About the calendar')) ?>",
             firstDay: <?= /* @noEscape */ $firstDay ?>,
-            closeText: "<?= $block->escapeHtml(__('Close')) ?>",
-            currentText: "<?= $block->escapeHtml(__('Go Today')) ?>",
-            prevText: "<?= $block->escapeHtml(__('Previous')) ?>",
-            nextText: "<?= $block->escapeHtml(__('Next')) ?>",
-            weekHeader: "<?= $block->escapeHtml(__('WK')) ?>",
-            timeText: "<?= $block->escapeHtml(__('Time')) ?>",
-            hourText: "<?= $block->escapeHtml(__('Hour')) ?>",
-            minuteText: "<?= $block->escapeHtml(__('Minute')) ?>",
+            closeText: "<?= $block->escapeJs(__('Close')) ?>",
+            currentText: "<?= $block->escapeJs(__('Go Today')) ?>",
+            prevText: "<?= $block->escapeJs(__('Previous')) ?>",
+            nextText: "<?= $block->escapeJs(__('Next')) ?>",
+            weekHeader: "<?= $block->escapeJs(__('WK')) ?>",
+            timeText: "<?= $block->escapeJs(__('Time')) ?>",
+            hourText: "<?= $block->escapeJs(__('Hour')) ?>",
+            minuteText: "<?= $block->escapeJs(__('Minute')) ?>",
             dateFormat: $.datepicker.RFC_2822,
             showOn: "button",
             showAnim: "",
@@ -51,7 +51,7 @@ require([
             showMinute: false,
             serverTimezoneSeconds: <?= (int) $block->getStoreTimestamp() ?>,
             serverTimezoneOffset: <?= (int) $block->getTimezoneOffsetSeconds() ?>,
-            yearRange: '<?= /* @noEscape */ $block->getYearRange() ?>'
+            yearRange: '<?= $block->escapeJs($block->getYearRange()) ?>'
         }
     });
 

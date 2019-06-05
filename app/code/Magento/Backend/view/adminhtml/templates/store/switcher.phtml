@@ -143,7 +143,7 @@ require([
             <?php if ($block->getUseConfirm()) : ?>
 
             confirm({
-                content:  "<?= $block->escapeHtml(__('Please confirm scope switching. All data that hasn\'t been saved will be lost.')) ?>",
+                content:  "<?= $block->escapeJs(__('Please confirm scope switching. All data that hasn\'t been saved will be lost.')) ?>",
                 actions: {
                     confirm: function() {
                         reload();
