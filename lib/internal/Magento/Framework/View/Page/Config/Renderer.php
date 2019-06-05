@@ -425,7 +425,7 @@ class Renderer implements RendererInterface
      */
     private function canTypeBeFont(string $type): bool
     {
-        return in_array($type, self::FONTS_TYPE);
+        return in_array($type, self::FONTS_TYPE, true);
     }
 
     /**

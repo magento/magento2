@@ -87,7 +87,7 @@ class MergeService
     {
         $isCss = $contentType == 'css';
         $isJs = $contentType == 'js';
-        if (!in_array($contentType, self::SUPPORTED_MERGE_TYPE)) {
+        if (!in_array($contentType, self::SUPPORTED_MERGE_TYPE, true)) {
             throw new \InvalidArgumentException("Merge for content type '{$contentType}' is not supported.");
         }
 
