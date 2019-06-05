@@ -53,14 +53,14 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                                     <?= $block->escapeHtml($this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name')) ?>
                                 </a>
                             </strong>
-                            <?= $block->escapeHtml($block->getProductPriceHtml(
+                            <?= /* @noEscape */ $block->getProductPriceHtml(
                                 $_product,
                                 \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                                 \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
                                 [
                                     'price_id_suffix' => '-widget-compared-' . $suffix
                                 ]
-                            )) ?>
+                            ) ?>
                             <div class="product-item-actions">
                             <?php if ($_product->isSaleable()) : ?>
                                 <div class="actions-primary">
@@ -76,7 +76,7 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                                     $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_product), ['product' => $_product->getEntityId()])
                                     ?>
                                     <button class="action tocart primary"
-                                            data-post='<?= $block->escapeHtmlAttr($postData) ?>'
+                                            data-post='<?= /* @noEscape */ $postData ?>'
                                             type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
                                         <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                     </button>

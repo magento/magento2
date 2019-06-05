@@ -27,7 +27,7 @@
             <?php if ($block->getCriticalCount()) : ?>
                 <div class="message message-warning error">
                     <a class="message-link" href="#" title="<?= $block->escapeHtml(__('Critical System Messages')) ?>">
-                        <?= $block->escapeHtml($block->getCriticalCount()) ?>
+                        <?= (int) $block->getCriticalCount() ?>
                     </a>
                 </div>
             <?php endif; ?>
@@ -35,7 +35,7 @@
             <?php if ($block->getMajorCount()) : ?>
                <div class="message message-warning warning">
                    <a class="message-link" href="#" title="<?= $block->escapeHtml(__('Major System Messages')) ?>">
-                       <?= $block->escapeHtml($block->getMajorCount()) ?>
+                       <?= (int) $block->getMajorCount() ?>
                    </a>
                </div>
             <?php endif; ?>

@@ -53,14 +53,14 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                                             <?= $block->escapeHtml($_item->getName()) ?>
                                         </a>
                                     </strong>
-                                    <?= $block->escapeHtml($block->getProductPriceHtml(
+                                    <?= /* @noEscape */ $block->getProductPriceHtml(
                                         $_item,
                                         \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                                         \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
                                         [
                                             'price_id_suffix' => '-' . $type
                                         ]
-                                    )) ?>
+                                    ) ?>
                                     <?php if ($rating) : ?>
                                         <?= $block->getReviewsSummaryHtml($_item, $rating) ?>
                                     <?php endif; ?>
@@ -81,7 +81,7 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                                                                 $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
                                                             ?>
                                                             <button class="action tocart primary"
-                                                                    data-post='<?= $block->escapeHtmlAttr(postData) ?>'
+                                                                    data-post='<?= /* @noEscape */ $postData ?>'
                                                                     type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
                                                                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                             </button>
@@ -100,7 +100,7 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                                                 <div class="actions-secondary" data-role="add-to-links">
                                                     <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow() && $showWishlist) : ?>
                                                         <a href="#"
-                                                           data-post='<?= $block->escapeHtmlAttr($block->getAddToWishlistParams($_item)) ?>'
+                                                           data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_item) ?>'
                                                            data-action="add-to-wishlist"
                                                            class="action towishlist"
                                                            title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>">
@@ -110,7 +110,7 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                                                     <?php if ($block->getAddToCompareUrl() && $showCompare) : ?>
                                                         <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare'); ?>
                                                         <a href="#" class="action tocompare"
-                                                           data-post='<?= $block->escapeHtmlAttr($compareHelper->getPostDataParams($_item)) ?>'
+                                                           data-post='<?= /* @noEscape */ $compareHelper->getPostDataParams($_item) ?>'
                                                            title="<?= $block->escapeHtmlAttr(__('Add to Compare')) ?>">
                                                             <span><?= $block->escapeHtml(__('Add to Compare')) ?></span>
                                                         </a>
