@@ -99,7 +99,6 @@ class Context extends \Magento\Framework\View\Element\Context
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param LockGuardedCacheLoader $lockQuery
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\View\TemplateEnginePool $enginePool
@@ -108,6 +107,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param \Magento\Framework\View\Element\Template\File\Resolver $resolver
      * @param \Magento\Framework\View\Element\Template\File\Validator $validator
+     * @param LockGuardedCacheLoader|null $lockQuery
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -129,7 +129,6 @@ class Context extends \Magento\Framework\View\Element\Context
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        LockGuardedCacheLoader $lockQuery,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\View\TemplateEnginePool $enginePool,
@@ -137,7 +136,8 @@ class Context extends \Magento\Framework\View\Element\Context
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\Page\Config $pageConfig,
         \Magento\Framework\View\Element\Template\File\Resolver $resolver,
-        \Magento\Framework\View\Element\Template\File\Validator $validator
+        \Magento\Framework\View\Element\Template\File\Validator $validator,
+        LockGuardedCacheLoader $lockQuery = null
     ) {
         parent::__construct(
             $request,
