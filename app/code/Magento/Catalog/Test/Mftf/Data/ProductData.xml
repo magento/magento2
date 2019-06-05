@@ -153,6 +153,18 @@
         <data key="status">1</data>
         <data key="quantity">0</data>
     </entity>
+    <entity name="SimpleProductInStockQuantityZero" type="product">
+        <data key="sku" unique="suffix">testSku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">SimpleProductInStockQuantityZero</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">SimpleProductInStockQuantityZero</data>
+        <data key="status">1</data>
+        <data key="quantity">0</data>
+        <requiredEntity type="product_extension_attribute">EavStock0</requiredEntity>
+    </entity>
     <!-- Simple Product Disabled -->
     <entity name="SimpleProductOffline" type="product2">
         <data key="sku" unique="suffix">testSku</data>
@@ -227,6 +239,9 @@
         <data key="quantity">100</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleProductWithShortSKU" type="product2" extends="ApiSimpleOne">
+        <data key="sku" unique="suffix">pr</data>
     </entity>
     <entity name="ApiSimpleOneHidden" type="product2">
         <data key="sku" unique="suffix">api-simple-product</data>
