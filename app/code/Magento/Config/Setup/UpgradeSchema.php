@@ -5,22 +5,24 @@
  */
 namespace Magento\Config\Setup;
 
-use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
 
 /**
- * Class Recurring
+ * Upgrade the AsynchronousOperations module DB scheme
  */
-class Recurring implements InstallSchemaInterface
+class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-        $this->addUpdatedAtField($setup);
+        if (version_compare($context->getVersion(), '2.1.0', '<')) {
+            $this->addUpdatedAtField($setup);
+        }
         $setup->endSetup();
     }
 
