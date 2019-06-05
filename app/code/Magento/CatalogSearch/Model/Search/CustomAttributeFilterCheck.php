@@ -44,7 +44,7 @@ class CustomAttributeFilterCheck
 
         return $attribute
             && $filter->getType() === FilterInterface::TYPE_TERM
-            && in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true);
+            && in_array($attribute->getFrontendInput(), ['select', 'multiselect', 'boolean'], true);
     }
 
     /**

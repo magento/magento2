@@ -977,12 +977,9 @@
 
 // While first time init
 .gallery-placeholder {
-    .loading-mask {
-        padding: 0 0 50%;
-        position: static;
-    }
-    .loader img {
-        position: absolute;
+    &__image {
+        display: block;
+        margin: auto;
     }
 }
 
@@ -1003,6 +1000,7 @@
         display: block;
     }
 }
+
 .fotorama__product-video--loaded {
     .fotorama__img, .fotorama__img--full {
         display: none !important;

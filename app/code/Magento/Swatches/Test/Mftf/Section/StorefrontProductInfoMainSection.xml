@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductInfoMainSection">
-        <element name="swatchOptionByLabel" type="button" selector="div.swatch-option[option-label={{opt}}]" parameterized="true"/>
+        <element name="swatchOptionByLabel" type="button" selector="div.swatch-option[option-label='{{opt}}']" parameterized="true"/>
         <element name="nthSwatchOption" type="button" selector="div.swatch-option:nth-of-type({{var}})" parameterized="true"/>
         <element name="selectedSwatchValue" type="text" selector="//div[contains(@class, 'swatch-attribute') and contains(., '{{attr}}')]//span[contains(@class, 'swatch-attribute-selected-option')]" parameterized="true"/>
         <element name="swatchAttributeOptions" type="text" selector="div.swatch-attribute-options"/>
