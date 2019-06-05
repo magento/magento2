@@ -144,7 +144,7 @@ class AttributeMetadataResolver
             $attribute,
             $meta['arguments']['data']['config']
         );
-
+        $meta['arguments']['data']['config']['__disableTmpl'] = true;
         return $meta;
     }
 
