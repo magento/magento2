@@ -108,7 +108,6 @@
             </actionGroup>
         </before>
         <after>
-            <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 20" />
             <deleteData createDataKey="simpleProduct1" stepKey="deleteCartItem1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteCartItem2"/>
             <deleteData createDataKey="simpleProduct3" stepKey="deleteCartItem3"/>
