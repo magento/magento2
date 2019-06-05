@@ -12,6 +12,9 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 use Magento\Sales\Setup\SalesSetupFactory;
 
+/**
+ * Update credit memo grid currency code.
+ */
 class UpdateCreditmemoGridCurrencyCode implements DataPatchInterface, PatchVersionInterface
 {
     /**
@@ -45,7 +48,7 @@ class UpdateCreditmemoGridCurrencyCode implements DataPatchInterface, PatchVersi
         $connection = $salesSetup->getConnection();
         $creditMemoGridTable = $salesSetup->getTable('sales_creditmemo_grid');
         $orderTable = $salesSetup->getTable('sales_order');
-
+        // phpcs:disable Magento2.SQL.RawQuery
         $sql = "UPDATE {$creditMemoGridTable} AS scg 
         JOIN {$orderTable} AS so ON so.entity_id = scg.order_id 
         SET scg.order_currency_code = so.order_currency_code, 
