@@ -13,7 +13,7 @@
             <title value="Visibility of duplicate product on the Storefront"/>
             <description value="Check visibility of duplicate product on the Storefront"/>
             <severity value="AVERAGE"/>
-            <testCaseId value="MAGETWO-99396"/>
+            <testCaseId value="MC-17226"/>
             <useCaseId value="MAGETWO-64923"/>
             <group value="ConfigurableProduct"/>
         </annotations>

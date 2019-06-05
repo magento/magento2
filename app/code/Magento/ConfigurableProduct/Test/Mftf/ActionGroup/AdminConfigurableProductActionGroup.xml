@@ -122,18 +122,6 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
     </actionGroup>
-    <actionGroup name="AdminCreateAttributeForConfigurableProduct">
-        <arguments>
-            <argument name="attributeName" type="string"/>
-        </arguments>
-        <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickOnNewAttribute"/>
-        <waitForPageLoad stepKey="waitForIFrame"/>
-        <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
-        <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{attributeName}}" stepKey="fillDefaultLabel"/>
-        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="clickOnNewAttributePanel"/>
-        <waitForPageLoad stepKey="waitForSaveAttribute"/>
-        <switchToIFrame stepKey="switchOutOfIFrame"/>
-    </actionGroup>
     <actionGroup name="createOptionsForAttribute">
         <arguments>
             <argument name="attributeName" type="string" defaultValue="{{productAttributeColor.default_label}}"/>
