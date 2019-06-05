@@ -112,7 +112,8 @@
 
         <!-- Assert product attribute on Storefront -->
         <actionGroup ref="OpenStorefrontProductPageByProductNameActionGroup" stepKey="openProductPage"/>
-        <actionGroup ref="checkAttributeInMoreInformationTab" stepKey="checkAttributeInMoreInformationTab">
+        <scrollTo stepKey="scrollToMoreInformation" selector="{{StorefrontProductMoreInformationSection.moreInformationSpecs}}" />
+        <actionGroup ref="AssertStorefrontCustomProductAttributeActionGroup" stepKey="checkAttributeInMoreInformationTab">
             <argument name="attributeLabel" value="{{productTextEditorAttribute.attribute_code}}"/>
             <argument name="attributeValue" value="This content from product page"/>
         </actionGroup>
