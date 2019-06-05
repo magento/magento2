@@ -50,7 +50,9 @@ class SenderBuilder
         $this->templateContainer = $templateContainer;
         $this->identityContainer = $identityContainer;
         $this->transportBuilder = $transportBuilder;
-        $this->transportBuilderFactory = $transportBuilderFactory ? $transportBuilderFactory : \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Mail\Template\TransportBuilderFactory::class);
+        $this->transportBuilderFactory = $transportBuilderFactory
+          ? $transportBuilderFactory
+          : \Magento\Framework\App\ObjectManager::getInstance()->get(TransportBuilderFactory::class);
     }
 
     /**
@@ -72,7 +74,7 @@ class SenderBuilder
     public function send()
     {
         $this->resetTransportBuilder();
-
+        
         $this->configureEmailTemplate();
 
         $this->transportBuilder->addTo(
@@ -104,7 +106,7 @@ class SenderBuilder
         if (!empty($copyTo) && $this->identityContainer->getCopyMethod() == 'copy') {
             foreach ($copyTo as $email) {
                 $this->resetTransportBuilder();
-                
+
                 $this->configureEmailTemplate();
 
                 $this->transportBuilder->addTo($email);
