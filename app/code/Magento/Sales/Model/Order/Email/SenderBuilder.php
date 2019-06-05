@@ -27,28 +27,42 @@ class SenderBuilder
     protected $identityContainer;
 
     /**
-     * @var TransportBuilderFactory
+     * @var TransportBuilder
      */
-    protected $transportBuilderFactory;
+    protected $transportBuilder;
 
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @param Template $templateContainer
      * @param IdentityInterface $identityContainer
-     * @param TransportBuilderFactory $transportBuilderFactory
+     * @param TransportBuilder $transportBuilder
      * @param TransportBuilderByStore $transportBuilderByStore
+     * @param TransportBuilderFactory $transportBuilderFactory
      */
     public function __construct(
         Template $templateContainer,
         IdentityInterface $identityContainer,
-        TransportBuilderFactory $transportBuilderFactory,
-        TransportBuilderByStore $transportBuilderByStore = null
+        TransportBuilder $transportBuilder,
+        TransportBuilderByStore $transportBuilderByStore = null,
+        TransportBuilderFactory $transportBuilderFactory = null
     ) {
         $this->templateContainer = $templateContainer;
         $this->identityContainer = $identityContainer;
-        $this->transportBuilderFactory = $transportBuilderFactory;
+        $this->transportBuilder = $transportBuilder;
+        $this->transportBuilderFactory = $transportBuilderFactory ? $transportBuilderFactory : \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Mail\Template\TransportBuilderFactory::class);
     }
+
+    /**
+     * Create a new transport builder to stop data persisting between customers
+     *
+     * @return void
+     */
+    protected function resetTransportBuilder()
+    {
+        $this->transportBuilder = $this->transportBuilderFactory->create();
+    }
+
 
     /**
      * Prepare and send email message
@@ -57,11 +71,11 @@ class SenderBuilder
      */
     public function send()
     {
-        $transportBuilder = $this->transportBuilderFactory->create();
+        $this->resetTransportBuilder();
 
-        $this->configureEmailTemplate($transportBuilder);
+        $this->configureEmailTemplate();
 
-        $transportBuilder->addTo(
+        $this->transportBuilder->addTo(
             $this->identityContainer->getCustomerEmail(),
             $this->identityContainer->getCustomerName()
         );
@@ -70,11 +84,11 @@ class SenderBuilder
 
         if (!empty($copyTo) && $this->identityContainer->getCopyMethod() == 'bcc') {
             foreach ($copyTo as $email) {
-                $transportBuilder->addBcc($email);
+                $this->transportBuilder->addBcc($email);
             }
         }
 
-        $transport = $transportBuilder->getTransport();
+        $transport = $this->transportBuilder->getTransport();
         $transport->sendMessage();
     }
 
@@ -89,13 +103,13 @@ class SenderBuilder
 
         if (!empty($copyTo) && $this->identityContainer->getCopyMethod() == 'copy') {
             foreach ($copyTo as $email) {
-                $transportBuilder = $this->transportBuilderFactory->create();
+                $this->resetTransportBuilder();
+                
+                $this->configureEmailTemplate();
 
-                $this->configureEmailTemplate($transportBuilder);
+                $this->transportBuilder->addTo($email);
 
-                $transportBuilder->addTo($email);
-
-                $transport = $transportBuilder->getTransport();
+                $transport = $this->transportBuilder->getTransport();
                 $transport->sendMessage();
             }
         }
@@ -104,15 +118,14 @@ class SenderBuilder
     /**
      * Configure email template
      *
-     * @param TransportBuilder $transportBuilder
      * @return void
      */
-    protected function configureEmailTemplate($transportBuilder)
+    protected function configureEmailTemplate()
     {
-        $transportBuilder->setTemplateIdentifier($this->templateContainer->getTemplateId());
-        $transportBuilder->setTemplateOptions($this->templateContainer->getTemplateOptions());
-        $transportBuilder->setTemplateVars($this->templateContainer->getTemplateVars());
-        $transportBuilder->setFromByScope(
+        $this->transportBuilder->setTemplateIdentifier($this->templateContainer->getTemplateId());
+        $this->transportBuilder->setTemplateOptions($this->templateContainer->getTemplateOptions());
+        $this->transportBuilder->setTemplateVars($this->templateContainer->getTemplateVars());
+        $this->transportBuilder->setFromByScope(
             $this->identityContainer->getEmailIdentity(),
             $this->identityContainer->getStore()->getId()
         );
