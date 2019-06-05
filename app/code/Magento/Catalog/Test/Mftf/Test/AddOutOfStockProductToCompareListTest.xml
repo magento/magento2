@@ -11,8 +11,9 @@
     <test name="AddOutOfStockProductToCompareListTest">
         <annotations>
             <features value="Catalog"/>
-            <title value="Add out of stock product to compare list"/>
-            <description value="Add out of stock product to compare list"/>
+            <stories value="Product Comparison for products Out of Stock"/>
+            <title value="Add Product that is Out of Stock product to Product Comparison"/>
+            <description value="Customer should be able to add Product that is Out Of Stock to the Product Comparison"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-98644"/>
             <useCaseId value="MAGETWO-98522"/>
@@ -58,7 +59,7 @@
         <waitForPageLoad stepKey="waitForProdAddToCmpList"/>
         <!--Assert success message-->
         <comment userInput="Assert success message" stepKey="assertSuccessMsg"/>
-        <grabTextFrom  selector="{{AdminProductMessagesSection.successMessage}}"  stepKey="grabTextFromSuccessMessage"/>
+        <grabTextFrom selector="{{AdminProductMessagesSection.successMessage}}" stepKey="grabTextFromSuccessMessage"/>
         <assertEquals expected='You added product $$product.name$$ to the comparison list.' expectedType="string" actual="($grabTextFromSuccessMessage)" stepKey="assertSuccessMessage"/>
         <!--See product in the comparison list-->
         <comment userInput="See product in the comparison list" stepKey="seeProductInComparisonList"/>
@@ -66,7 +67,7 @@
         <waitForPageLoad stepKey="waitForStorefrontProductComparePageLoad"/>
         <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName($product.name$)}}" stepKey="seeProductInCompareList"/>
         <!--Go to Category page and delete product from comparison list-->
-        <comment userInput="Go to Category page and delete prduct from comparison list" stepKey="deletProdFromCmpList"/>
+        <comment userInput="Go to Category page and delete product from comparison list" stepKey="deleteProdFromCmpList"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <click selector="{{StorefrontComparisonSidebarSection.ClearAll}}" stepKey="clickClearAll"/>
@@ -80,7 +81,7 @@
         <waitForPageLoad stepKey="waitProdAddingToCmpList"/>
         <!--Assert success message-->
         <comment userInput="Assert success message" stepKey="assertSuccessMsg2"/>
-        <grabTextFrom  selector="{{AdminProductMessagesSection.successMessage}}"  stepKey="grabTextFromSuccessMessage2"/>
+        <grabTextFrom selector="{{AdminProductMessagesSection.successMessage}}" stepKey="grabTextFromSuccessMessage2"/>
         <assertEquals expected='You added product $$product.name$$ to the comparison list.' expectedType="string" actual="($grabTextFromSuccessMessage)" stepKey="assertSuccessMessage2"/>
         <!--Check that product displays on add to compare widget-->
         <comment userInput="Check that product displays on add to compare widget" stepKey="checkProdNameOnWidget"/>
