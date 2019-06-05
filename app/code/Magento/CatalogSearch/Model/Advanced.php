@@ -183,7 +183,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      *
      * @param   array $values
      * @return  $this
-     * @throws LocalizedException
+     * @throws  LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -198,6 +198,10 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                 continue;
             }
             $value = $values[$attribute->getAttributeCode()];
+            if (is_string($value)) {
+                $value = trim($value);
+            }
+            $value = (is_string($value) ? trim($value) : $value);
             $preparedSearchValue = $this->getPreparedSearchCriteria($attribute, $value);
             if (false === $preparedSearchValue) {
                 continue;
@@ -341,7 +345,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Add data about search criteria to object state
      *
-     * @todo: Move this code to block
+     * @todo:   Move this code to block
      *
      * @param   EntityAttribute $attribute
      * @param   mixed $value
