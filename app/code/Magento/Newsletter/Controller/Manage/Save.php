@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Newsletter\Controller\Manage;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
-use Magento\Customer\Model\Customer;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Newsletter\Model\Subscriber;
@@ -68,7 +68,7 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
      *
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function execute(): \Magento\Framework\App\ResponseInterface
+    public function execute()
     {
         if (!$this->formKeyValidator->validate($this->getRequest())) {
             return $this->_redirect('customer/account/');
@@ -117,10 +117,10 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
     /**
      * Set ignore_validation_flag to skip unnecessary address and customer validation
      *
-     * @param Customer $customer
+     * @param CustomerInterface $customer
      * @return void
      */
-    private function setIgnoreValidationFlag(Customer $customer): void
+    private function setIgnoreValidationFlag(CustomerInterface $customer): void
     {
         $customer->setData('ignore_validation_flag', true);
     }

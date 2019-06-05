@@ -41,7 +41,7 @@ class Problem extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return void
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _construct()

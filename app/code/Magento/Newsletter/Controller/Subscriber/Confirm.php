@@ -20,7 +20,7 @@ class Confirm extends \Magento\Newsletter\Controller\Subscriber implements HttpG
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function execute(): \Magento\Framework\Controller\Result\Redirect
+    public function execute()
     {
         $id = (int)$this->getRequest()->getParam('id');
         $code = (string)$this->getRequest()->getParam('code');
