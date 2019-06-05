@@ -44,6 +44,7 @@
         <data key="password">pwdTest123!</data>
         <data key="store_id">0</data>
         <data key="website_id">0</data>
+        <data key="group">General</data>
         <requiredEntity type="address">US_Address_TX</requiredEntity>
     </entity>
     <entity name="SimpleUsCustomerWithNewCustomerGroup" type="customer">
