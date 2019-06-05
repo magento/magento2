@@ -7,8 +7,14 @@ namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initialize
 
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
+use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
+use Magento\Quote\Model\Quote\Item;
 
+/**
+ * Class StockItem initializes stock item and populates it with data
+ */
 class StockItem
 {
     /**
@@ -27,25 +33,33 @@ class StockItem
     protected $stockState;
 
     /**
+     * @var StockStateProviderInterface
+     */
+    private $stockStateProvider;
+
+    /**
      * @param ConfigInterface $typeConfig
      * @param QuoteItemQtyList $quoteItemQtyList
      * @param StockStateInterface $stockState
+     * @param StockStateProviderInterface $stockStateProvider
      */
     public function __construct(
         ConfigInterface $typeConfig,
         QuoteItemQtyList $quoteItemQtyList,
-        StockStateInterface $stockState
+        StockStateInterface $stockState,
+        StockStateProviderInterface $stockStateProvider
     ) {
         $this->quoteItemQtyList = $quoteItemQtyList;
         $this->typeConfig = $typeConfig;
         $this->stockState = $stockState;
+        $this->stockStateProvider = $stockStateProvider;
     }
 
     /**
      * Initialize stock item
      *
-     * @param \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem
-     * @param \Magento\Quote\Model\Quote\Item $quoteItem
+     * @param StockItemInterface $stockItem
+     * @param Item $quoteItem
      * @param int $qty
      *
      * @return \Magento\Framework\DataObject
@@ -54,11 +68,14 @@ class StockItem
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function initialize(
-        \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem,
-        \Magento\Quote\Model\Quote\Item $quoteItem,
+        StockItemInterface $stockItem,
+        Item $quoteItem,
         $qty
     ) {
         $product = $quoteItem->getProduct();
+        $quoteItemId = $quoteItem->getId();
+        $quoteId = $quoteItem->getQuoteId();
+        $productId = $product->getId();
         /**
          * When we work with subitem
          */
@@ -68,14 +85,14 @@ class StockItem
              * we are using 0 because original qty was processed
              */
             $qtyForCheck = $this->quoteItemQtyList
-                ->getQty($product->getId(), $quoteItem->getId(), $quoteItem->getQuoteId(), 0);
+                ->getQty($productId, $quoteItemId, $quoteId, 0);
         } else {
             $increaseQty = $quoteItem->getQtyToAdd() ? $quoteItem->getQtyToAdd() : $qty;
             $rowQty = $qty;
             $qtyForCheck = $this->quoteItemQtyList->getQty(
-                $product->getId(),
-                $quoteItem->getId(),
-                $quoteItem->getQuoteId(),
+                $productId,
+                $quoteItemId,
+                $quoteId,
                 $increaseQty
             );
         }
@@ -90,13 +107,19 @@ class StockItem
 
         $stockItem->setProductName($product->getName());
 
+        /** @var \Magento\Framework\DataObject $result */
         $result = $this->stockState->checkQuoteItemQty(
-            $product->getId(),
+            $productId,
             $rowQty,
             $qtyForCheck,
             $qty,
             $product->getStore()->getWebsiteId()
         );
+
+        /* We need to ensure that any possible plugin will not erase the data */
+        $backOrdersQty = $this->stockStateProvider->checkQuoteItemQty($stockItem, $rowQty, $qtyForCheck, $qty)
+            ->getItemBackorders();
+        $result->setItemBackorders($backOrdersQty);
 
         if ($stockItem->hasIsChildItem()) {
             $stockItem->unsIsChildItem();
