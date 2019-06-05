@@ -7,23 +7,20 @@
  */
 namespace Magento\Framework\App\Router;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\RequestInterface;
-
 /**
  * Default no route handler for frontend
  */
-class NoRouteHandler implements NoRouteHandlerInterface
+class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInterface
 {
     /**
-     * @var ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
     /**
-     * @param ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
-    public function __construct(ScopeConfigInterface $config)
+    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $config)
     {
         $this->_config = $config;
     }
@@ -31,10 +28,11 @@ class NoRouteHandler implements NoRouteHandlerInterface
     /**
      * Check and process no route request
      *
-     * @param RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function process(RequestInterface $request)
+    public function process(\Magento\Framework\App\RequestInterface $request)
     {
         $noRoutePath = $this->_config->getValue('web/default/no_route', 'default');
 
@@ -44,9 +42,9 @@ class NoRouteHandler implements NoRouteHandlerInterface
             $noRoute = [];
         }
 
-        $moduleName = $noRoute[0] ?? 'cms';
-        $actionPath = $noRoute[1] ?? 'index';
-        $actionName = $noRoute[2] ?? 'index';
+        $moduleName = isset($noRoute[0]) ? $noRoute[0] : 'cms';
+        $actionPath = isset($noRoute[1]) ? $noRoute[1] : 'index';
+        $actionName = isset($noRoute[2]) ? $noRoute[2] : 'index';
 
         $request->setModuleName($moduleName)->setControllerName($actionPath)->setActionName($actionName);
 
