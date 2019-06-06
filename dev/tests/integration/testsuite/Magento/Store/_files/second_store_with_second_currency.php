@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-require_once 'second_store.php';
+require_once __DIR__ . '/second_store.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $store = $objectManager->create(\Magento\Store\Model\Store::class);
