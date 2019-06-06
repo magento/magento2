@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-16161"/>
             <group value="mtf_migrated"/>
+            <group value="banana"/>
         </annotations>
 
         <before>
@@ -120,6 +121,7 @@
         <selectOption selector="{{AdminOrderFormItemsOrderedSection.moveProduct($$simpleProduct.name$$)}}" userInput="Move to Wish List" stepKey="moveProductToWishList"/>
         <selectOption selector="{{AdminOrderFormItemsOrderedSection.moveProduct($$createConfigProduct.name$$)}}" userInput="Move to Wish List" stepKey="moveConfigurableProductToWishList"/>
         <click selector="{{OrdersGridSection.update}}" stepKey="clickOnUpdateItemsAndQuantity"/>
+        <waitForPageLoad stepKey="waitForAdminCreateOrderWishListSectionPageLoad"/>
 
         <!-- Assert products in Wish List  section -->
         <see selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$simpleProduct.name$$" stepKey="seeSimpleProductInWishList"/>
