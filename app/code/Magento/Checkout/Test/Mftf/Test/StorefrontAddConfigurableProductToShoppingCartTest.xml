@@ -19,6 +19,7 @@
 
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateDefaultPrice.path}} {{EnableFlatRateDefaultPrice.value}}" stepKey="enableFlatRateDefaultPrice"/>
             <!-- Create Default Category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
 
