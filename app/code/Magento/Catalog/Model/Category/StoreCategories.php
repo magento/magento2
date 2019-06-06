@@ -45,7 +45,7 @@ class StoreCategories
      * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getCategoryIds(int $storeGroupId = null): array
+    public function getCategoryIds(?int $storeGroupId = null): array
     {
         $rootCategoryId = $storeGroupId
             ? $this->groupRepository->get($storeGroupId)->getRootCategoryId()
