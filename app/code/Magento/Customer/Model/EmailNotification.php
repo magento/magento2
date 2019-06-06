@@ -17,7 +17,7 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Class for notification customer.
+ * Customer email notification
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -64,8 +64,6 @@ class EmailNotification implements EmailNotificationInterface
         self::NEW_ACCOUNT_EMAIL_CONFIRMED => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE,
         self::NEW_ACCOUNT_EMAIL_CONFIRMATION => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
     ];
-
-    const CUSTOMER_CONFIRM_URL = 'customer/account/confirm/';
 
     /**#@-*/
 
@@ -366,7 +364,6 @@ class EmailNotification implements EmailNotificationInterface
      * @param string $backUrl
      * @param string $storeId
      * @param string $sendemailStoreId
-     * @param array $extensions
      * @return void
      * @throws LocalizedException
      */
@@ -375,8 +372,7 @@ class EmailNotification implements EmailNotificationInterface
         $type = self::NEW_ACCOUNT_EMAIL_REGISTERED,
         $backUrl = '',
         $storeId = 0,
-        $sendemailStoreId = null,
-        $extensions = []
+        $sendemailStoreId = null
     ) {
         $types = self::TEMPLATE_TYPES;
 
@@ -394,26 +390,11 @@ class EmailNotification implements EmailNotificationInterface
 
         $customerEmailData = $this->getFullCustomerObject($customer);
 
-        $templateVars = [
-            'customer' => $customerEmailData,
-            'back_url' => $backUrl,
-            'store' => $store
-        ];
-        if ($type == self::NEW_ACCOUNT_EMAIL_CONFIRMATION) {
-            if (empty($extensions)) {
-                $templateVars['url'] = self::CUSTOMER_CONFIRM_URL;
-                $templateVars['extensions'] = $extensions;
-            } else {
-                $templateVars['url'] = $extensions['url'];
-                $templateVars['extensions'] = $extensions['extension_info'];
-            }
-        }
-
         $this->sendEmailTemplate(
             $customer,
             $types[$type],
             self::XML_PATH_REGISTER_EMAIL_IDENTITY,
-            $templateVars,
+            ['customer' => $customerEmailData, 'back_url' => $backUrl, 'store' => $store],
             $storeId
         );
     }

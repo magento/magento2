@@ -154,7 +154,7 @@
 
         <fillField stepKey="fillCategoryName" selector="{{AdminProductCategoryCreationSection.nameInput}}" userInput="{{categoryName}}"/>
 
-        <!-- Search and select a parent catagory for the product -->
+        <!-- Search and select a parent category for the product -->
         <click stepKey="clickParentCategory" selector="{{AdminProductCategoryCreationSection.parentCategory}}"/>
         <waitForPageLoad stepKey="waitForDropDownVisible"/>
         <fillField stepKey="searchForParent" userInput="{{parentCategoryName}}" selector="{{AdminProductCategoryCreationSection.parentSearch}}"/>
@@ -231,6 +231,23 @@
         <waitForPageLoad stepKey="waitForStoreViewChangeLoad"/>
     </actionGroup>
 
+    <actionGroup name="switchCategoryToAllStoreView">
+        <arguments>
+            <argument name="CatName"/>
+        </arguments>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(CatName)}}" stepKey="navigateToCreatedCategory" />
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSpinner1"/>
+        <scrollToTopOfPage stepKey="scrollToToggle"/>
+        <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewDropdownToggle}}" stepKey="openStoreViewDropDown"/>
+        <click selector="{{AdminCategoryMainActionsSection.allStoreViews}}" stepKey="clickStoreViewByName"/>
+        <see selector="{{AdminCategoryMainActionsSection.storeSwitcher}}" userInput="All Store Views" stepKey="seeAllStoreView"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSpinner2"/>
+        <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}" stepKey="selectStoreViewAccept"/>
+        <waitForPageLoad stepKey="waitForStoreViewChangeLoad"/>
+    </actionGroup>
+
     <actionGroup name="navigateToCreatedCategory">
         <arguments>
             <argument name="Category"/>
@@ -262,5 +279,41 @@
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{value}}" stepKey="enterURLKey"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessage"/>
+    </actionGroup>
+    <actionGroup name="OpenCategoryFromCategoryTree">
+        <arguments>
+            <argument name="category" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
+        <waitForPageLoad stepKey="waitForCategoryToLoad"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(category)}}" stepKey="selectCategory"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <waitForElementVisible selector="{{AdminCategoryContentSection.categoryPageTitle}}" stepKey="waitForCategoryTitle"/>
+    </actionGroup>
+    <actionGroup name="AdminAssignProductToCategory">
+        <arguments>
+            <argument name="productId" type="string"/>
+            <argument name="categoryName" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductEditPage.url(productId)}}" stepKey="amOnPage"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{categoryName}}]" stepKey="selectCategory"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." stepKey="seeSaveProductMessage"/>
+    </actionGroup>
+    <actionGroup name="FillCategoryNameAndUrlKeyAndSave">
+        <arguments>
+            <argument name="categoryName" type="string"/>
+            <argument name="categoryUrlKey" type="string"/>
+        </arguments>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{categoryName}}" stepKey="enterCategoryName"/>
+        <scrollTo selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="scrollToSearchEngineOptimization"/>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="openSEO"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{categoryUrlKey}}" stepKey="enterURLKey"/>
+        <scrollToTopOfPage stepKey="scrollToTheTopOfPage"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
     </actionGroup>
 </actionGroups>

@@ -15,23 +15,13 @@ namespace Magento\Directory\Model\Config\Source;
 class WeightUnit implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * @var string
-     */
-    const CODE_LBS = 'lbs';
-
-    /**
-     * @var string
-     */
-    const CODE_KGS = 'kgs';
-
-    /**
      * @inheritdoc
      */
     public function toOptionArray()
     {
         return [
-            ['value' => self::CODE_LBS, 'label' => __('lbs')],
-            ['value' => self::CODE_KGS, 'label' => __('kgs')]
+            ['value' => 'lbs', 'label' => __('lbs')],
+            ['value' => 'kgs', 'label' => __('kgs')]
         ];
     }
 }

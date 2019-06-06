@@ -3,24 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
-<?php if ($block->canDisplayGiftmessage()): ?>
-<div id="gift-message-form-data-<?= /* @escapeNotVerified */ $block->getItem()->getId() ?>" class="no-display">
-    <form id="<?= /* @escapeNotVerified */ $block->getFieldId('form') ?>" action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>">
-        <input type="hidden" id="<?= /* @escapeNotVerified */ $block->getFieldId('type') ?>" name="<?= /* @escapeNotVerified */ $block->getFieldName('type') ?>" value="order_item" />
-        <input type="hidden" id="<?= /* @escapeNotVerified */ $block->getFieldId('sender') ?>" name="<?= /* @escapeNotVerified */ $block->getFieldName('sender') ?>" value="<?= /* @escapeNotVerified */ $block->getSender() ?>" />
-        <input type="hidden" id="<?= /* @escapeNotVerified */ $block->getFieldId('recipient') ?>" name="<?= /* @escapeNotVerified */ $block->getFieldName('recipient') ?>"  value="<?= /* @escapeNotVerified */ $block->getRecipient() ?>" />
-        <input type="hidden" id="<?= /* @escapeNotVerified */ $block->getFieldId('message') ?>" name="<?= /* @escapeNotVerified */ $block->getFieldName('message') ?>"  value="<?= /* @escapeNotVerified */ $block->getMessageText() ?>" />
+<?php if ($block->canDisplayGiftmessage()) : ?>
+<div id="gift-message-form-data-<?= (int) $block->getItem()->getId() ?>" class="no-display">
+    <form id="<?= $block->escapeHtmlAttr($block->getFieldId('form')) ?>"
+          action="<?= $block->escapeUrl($block->getSaveUrl()) ?>">
+        <input type="hidden"
+               id="<?= $block->escapeHtmlAttr($block->getFieldId('type')) ?>"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName('type')) ?>"
+               value="order_item" />
+        <input type="hidden"
+               id="<?= $block->escapeHtmlAttr($block->getFieldId('sender')) ?>"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName('sender')) ?>"
+               value="<?= $block->escapeHtmlAttr($block->getSender()) ?>" />
+        <input type="hidden"
+               id="<?= $block->escapeHtmlAttr($block->getFieldId('recipient')) ?>"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName('recipient')) ?>"
+               value="<?= $block->escapeHtmlAttr($block->getRecipient()) ?>" />
+        <input type="hidden"
+               id="<?= $block->escapeHtmlAttr($block->getFieldId('message')) ?>"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName('message')) ?>"
+               value="<?= $block->escapeHtmlAttr($block->getMessageText()) ?>" />
     </form>
 
-    <?php if ($block->getMessageText()): ?>
+    <?php if ($block->getMessageText()) : ?>
     <div class="gift-options-tooltip-content">
-        <div><strong><?= /* @escapeNotVerified */ __('Gift Message') ?></strong>: </div>
-        <div><?= /* @escapeNotVerified */ $block->getMessageText() ?></div>
+        <div><strong><?= $block->escapeHtml(__('Gift Message')) ?></strong>: </div>
+        <div><?= /* @noEscape */ $block->getMessageText() ?></div>
     </div>
     <?php endif; ?>
 </div>

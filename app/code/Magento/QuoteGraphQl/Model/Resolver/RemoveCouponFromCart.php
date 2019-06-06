@@ -50,7 +50,7 @@ class RemoveCouponFromCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (!isset($args['input']['cart_id'])) {
+        if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
         $maskedCartId = $args['input']['cart_id'];
@@ -61,15 +61,20 @@ class RemoveCouponFromCart implements ResolverInterface
 
         try {
             $this->couponManagement->remove($cartId);
-        } catch (NoSuchEntityException $exception) {
-            throw new GraphQlNoSuchEntityException(__($exception->getMessage()));
-        } catch (CouldNotDeleteException $exception) {
-            throw new LocalizedException(__($exception->getMessage()));
+        } catch (NoSuchEntityException $e) {
+            $message = $e->getMessage();
+            if (preg_match('/The "\d+" Cart doesn\'t contain products/', $message)) {
+                $message = 'Cart does not contain products';
+            }
+            throw new GraphQlNoSuchEntityException(__($message), $e);
+        } catch (CouldNotDeleteException $e) {
+            throw new LocalizedException(__($e->getMessage()), $e);
         }
 
-        $data['cart']['applied_coupon'] = [
-            'code' => '',
+        return [
+            'cart' => [
+                'model' => $cart,
+            ],
         ];
-        return $data;
     }
 }

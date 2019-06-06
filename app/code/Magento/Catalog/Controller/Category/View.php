@@ -6,14 +6,28 @@
  */
 namespace Magento\Catalog\Controller\Category;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Design;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\View\Result\PageFactory;
+use Magento\Catalog\Model\Session;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * View a category on storefront. Needs to be accessible by POST because of the store switching.
@@ -25,41 +39,41 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * Catalog session
      *
-     * @var \Magento\Catalog\Model\Session
+     * @var Session
      */
     protected $_catalogSession;
 
     /**
      * Catalog design
      *
-     * @var \Magento\Catalog\Model\Design
+     * @var Design
      */
     protected $_catalogDesign;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     * @var CategoryUrlPathGenerator
      */
     protected $categoryUrlPathGenerator;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     protected $resultPageFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\ForwardFactory
+     * @var ForwardFactory
      */
     protected $resultForwardFactory;
 
@@ -83,28 +97,28 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
     /**
      * Constructor
      *
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Catalog\Model\Design $catalogDesign
-     * @param \Magento\Catalog\Model\Session $catalogSession
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
+     * @param Context $context
+     * @param Design $catalogDesign
+     * @param Session $catalogSession
+     * @param Registry $coreRegistry
+     * @param StoreManagerInterface $storeManager
+     * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
+     * @param PageFactory $resultPageFactory
+     * @param ForwardFactory $resultForwardFactory
      * @param Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
      * @param ToolbarMemorizer|null $toolbarMemorizer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Catalog\Model\Design $catalogDesign,
-        \Magento\Catalog\Model\Session $catalogSession,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
+        Context $context,
+        Design $catalogDesign,
+        Session $catalogSession,
+        Registry $coreRegistry,
+        StoreManagerInterface $storeManager,
+        CategoryUrlPathGenerator $categoryUrlPathGenerator,
         PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
+        ForwardFactory $resultForwardFactory,
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         ToolbarMemorizer $toolbarMemorizer = null
@@ -125,7 +139,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
     /**
      * Initialize requested category object
      *
-     * @return \Magento\Catalog\Model\Category|bool
+     * @return Category|bool
      */
     protected function _initCategory()
     {
@@ -150,8 +164,8 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 'catalog_controller_category_init_after',
                 ['category' => $category, 'controller_action' => $this]
             );
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+        } catch (LocalizedException $e) {
+            $this->_objectManager->get(LoggerInterface::class)->critical($e);
             return false;
         }
 
@@ -161,13 +175,12 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
     /**
      * Category view action
      *
-     * @return \Magento\Framework\Controller\ResultInterface
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @return ResultInterface
+     * @throws NoSuchEntityException
      */
     public function execute()
     {
-        if ($this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED)) {
+        if ($this->_request->getParam(ActionInterface::PARAM_NAME_URL_ENCODED)) {
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl());
         }
         $category = $this->_initCategory();
@@ -188,29 +201,18 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 $page->getConfig()->setPageLayout($settings->getPageLayout());
             }
 
-            $hasChildren = $category->hasChildren();
-            if ($category->getIsAnchor()) {
-                $type = $hasChildren ? 'layered' : 'layered_without_children';
-            } else {
-                $type = $hasChildren ? 'default' : 'default_without_children';
-            }
+            $pageType = $this->getPageType($category);
 
-            if (!$hasChildren) {
+            if (!$category->hasChildren()) {
                 // Two levels removed from parent.  Need to add default page type.
-                $parentType = strtok($type, '_');
-                $page->addPageLayoutHandles(['type' => $parentType], null, false);
+                $parentPageType = strtok($pageType, '_');
+                $page->addPageLayoutHandles(['type' => $parentPageType], null, false);
             }
-            $page->addPageLayoutHandles(['type' => $type], null, false);
+            $page->addPageLayoutHandles(['type' => $pageType], null, false);
             $page->addPageLayoutHandles(['id' => $category->getId()]);
 
             // apply custom layout update once layout is loaded
-            $layoutUpdates = $settings->getLayoutUpdates();
-            if ($layoutUpdates && is_array($layoutUpdates)) {
-                foreach ($layoutUpdates as $layoutUpdate) {
-                    $page->addUpdate($layoutUpdate);
-                    $page->addPageLayoutHandles(['layout_update' => sha1($layoutUpdate)], null, false);
-                }
-            }
+            $this->applyLayoutUpdates($page, $settings);
 
             $page->getConfig()->addBodyClass('page-products')
                 ->addBodyClass('categorypath-' . $this->categoryUrlPathGenerator->getUrlPath($category))
@@ -219,6 +221,42 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
             return $page;
         } elseif (!$this->getResponse()->isRedirect()) {
             return $this->resultForwardFactory->create()->forward('noroute');
+        }
+    }
+
+    /**
+     * Get page type based on category
+     *
+     * @param Category $category
+     * @return string
+     */
+    private function getPageType(Category $category) : string
+    {
+        $hasChildren = $category->hasChildren();
+        if ($category->getIsAnchor()) {
+            return  $hasChildren ? 'layered' : 'layered_without_children';
+        }
+
+        return $hasChildren ? 'default' : 'default_without_children';
+    }
+
+    /**
+     * Apply custom layout updates
+     *
+     * @param Page $page
+     * @param DataObject $settings
+     * @return void
+     */
+    private function applyLayoutUpdates(
+        Page $page,
+        DataObject $settings
+    ) {
+        $layoutUpdates = $settings->getLayoutUpdates();
+        if ($layoutUpdates && is_array($layoutUpdates)) {
+            foreach ($layoutUpdates as $layoutUpdate) {
+                $page->addUpdate($layoutUpdate);
+                $page->addPageLayoutHandles(['layout_update' => sha1($layoutUpdate)], null, false);
+            }
         }
     }
 }

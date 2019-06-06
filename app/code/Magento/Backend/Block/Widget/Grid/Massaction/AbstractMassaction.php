@@ -282,25 +282,23 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         if (!$this->getUseSelectAll()) {
             return '';
         }
-        /** @var \Magento\Framework\Data\Collection $allIdsCollection */
-        $allIdsCollection = clone $this->getParentBlock()->getCollection();
 
-        if ($this->getMassactionIdField()) {
-            $massActionIdField = $this->getMassactionIdField();
+        /** @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection $collection */
+        $collection = clone $this->getParentBlock()->getCollection();
+
+        if ($collection instanceof AbstractDb) {
+            $idsSelect = clone $collection->getSelect();
+            $idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
+            $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+            $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+            $idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+            $idsSelect->columns($this->getMassactionIdField(), 'main_table');
+            $idList = $collection->getConnection()->fetchCol($idsSelect);
         } else {
-            $massActionIdField = $this->getParentBlock()->getMassactionIdField();
+            $idList = $collection->setPageSize(0)->getColumnValues($this->getMassactionIdField());
         }
 
-        if ($allIdsCollection instanceof AbstractDb) {
-            $allIdsCollection->getSelect()->limit();
-            $allIdsCollection->clear();
-        }
-
-        $gridIds = $allIdsCollection->setPageSize(0)->getColumnValues($massActionIdField);
-        if (!empty($gridIds)) {
-            return join(",", $gridIds);
-        }
-        return '';
+        return implode(',', $idList);
     }
 
     /**

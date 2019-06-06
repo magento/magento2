@@ -389,6 +389,9 @@ class AdvancedPricing extends AbstractModifier
                 'componentType' => Container::NAME,
                 'component' => 'Magento_Ui/js/form/components/button',
                 'template' => 'ui/form/components/button/container',
+                'imports' => [
+                    'childError' => $this->scopeName . '.advanced_pricing_modal.advanced-pricing:error',
+                ],
                 'actions' => [
                     [
                         'targetName' => $this->scopeName . '.advanced_pricing_modal',

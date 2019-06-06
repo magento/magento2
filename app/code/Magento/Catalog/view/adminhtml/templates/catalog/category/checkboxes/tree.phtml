@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * @var $block \Magento\Catalog\Block\Adminhtml\Category\Tree
  */
@@ -20,7 +19,7 @@
             "categoryCheckboxTree": {
                 "dataUrl":       "<?= $block->escapeUrl($block->getLoadTreeUrl()) ?>",
                 "divId":         "<?= /* @noEscape */ $divId ?>",
-                "rootVisible":   <?= /* @noEscape */ $block->getRoot()->getIsVisible() ? 'true' : 'false' ?>,
+                "rootVisible":   false,
                 "useAjax":       <?= $block->escapeHtml($block->getUseAjax()) ?>,
                 "currentNodeId": <?= (int)$block->getCategoryId() ?>,
                 "jsFormObject":  "<?= /* @noEscape */ $block->getJsFormObject() ?>",
@@ -28,7 +27,7 @@
                 "checked":       "<?= $block->escapeHtml($block->getRoot()->getChecked()) ?>",
                 "allowdDrop":    <?= /* @noEscape */ $block->getRoot()->getIsVisible() ? 'true' : 'false' ?>,
                 "rootId":        <?= (int)$block->getRoot()->getId() ?>,
-                "expanded":      <?= (int)$block->getIsWasExpanded() ?>,
+                "expanded":      true,
                 "categoryId":    <?= (int)$block->getCategoryId() ?>,
                 "treeJson":      <?= /* @noEscape */ $block->getTreeJson() ?>
             }

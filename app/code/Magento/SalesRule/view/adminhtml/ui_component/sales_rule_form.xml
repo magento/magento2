@@ -128,7 +128,7 @@
                 </validation>
                 <dataType>number</dataType>
                 <tooltip>
-                    <link>http://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
+                    <link>https://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
                     <description>What is this?</description>
                 </tooltip>
                 <label translate="true">Websites</label>
@@ -452,7 +452,7 @@
                 <dataScope>discount_step</dataScope>
             </settings>
         </field>
-        <field name="apply_to_shipping" component="Magento_Ui/js/form/element/single-checkbox-toggle-notice" formElement="checkbox">
+        <field name="apply_to_shipping" component="Magento_SalesRule/js/form/element/apply_to_shipping" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">sales_rule</item>
