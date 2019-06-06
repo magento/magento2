@@ -14,7 +14,7 @@
             <stories value="OnePageCheckout with Promo Code"/>
             <title value="Storefront apply promo code during checkout test"/>
             <description value="Apply promo code during checkout for physical product"/>
-            <severity value="CRITICAl"/>
+            <severity value="CRITICAL"/>
             <testCaseId value="MC-13212"/>
             <group value="checkout"/>
         </annotations>
