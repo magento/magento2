@@ -16,6 +16,7 @@ use Psr\Log\LoggerInterface as Logger;
 /**
  * Base items collection class
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -217,7 +218,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     {
         if ($this->_totalRecords === null) {
             $sql = $this->getSelectCountSql();
-            $this->_totalRecords = $this->getConnection()->fetchOne($sql, $this->_bindParams);
+            $this->_totalRecords = $this->_totalRecords ?? $this->getConnection()->fetchOne($sql, $this->_bindParams);
         }
         return (int)$this->_totalRecords;
     }
@@ -367,10 +368,12 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Hook for operations before rendering filters
      *
      * @return void
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function _renderFiltersBefore()
     {
     }
+    // phpcs:enable
 
     /**
      * Add field filter to collection
@@ -730,6 +733,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     public function printLogQuery($printQuery = false, $logQuery = false, $sql = null)
     {
         if ($printQuery || $this->getFlag('print_query')) {
+            // phpcs:ignore Magento2.Security.LanguageConstruct
             echo $sql === null ? $this->getSelect()->__toString() : $sql;
         }
 
@@ -822,11 +826,13 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Init select
      *
      * @return void
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function _initSelect()
     {
         // no implementation, should be overridden in children classes
     }
+    // phpcs:enable
 
     /**
      * Join extension attribute.
