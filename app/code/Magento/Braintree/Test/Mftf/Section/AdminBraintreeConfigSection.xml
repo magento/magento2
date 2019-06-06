@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminBraintreeConfigSection">
+        <element name="recommendedSolutionsTab" type="block" selector="//*[contains(@class, 'section-config')]//a[normalize-space(text())='Recommended Solutions:']"/>
+        <element name="braintreeConfigureButton" type="button" selector=".braintree-section .action-configure" timeout="10"/>
+        <element name="title" type="input" selector="input[name='groups[braintree_section][groups][braintree][groups][braintree_required][fields][title][value]']"/>
+        <element name="environment" type="select" selector="select[name='groups[braintree_section][groups][braintree][groups][braintree_required][fields][environment][value]']"/>
+        <element name="paymentAction" type="select" selector="select[name='groups[braintree_section][groups][braintree][groups][braintree_required][fields][payment_action][value]']"/>
+        <element name="merchantId" type="input" selector="input[name='groups[braintree_section][groups][braintree][groups][braintree_required][fields][merchant_id][value]']"/>
+        <element name="publicKey" type="input" selector="input[name='groups[braintree_section][groups][braintree][groups][braintree_required][fields][public_key][value]']"/>
+        <element name="privateKey" type="input" selector="input[name='groups[braintree_section][groups][braintree][groups][braintree_required][fields][private_key][value]']"/>
+        <element name="active" type="select" selector="select[name='groups[braintree_section][groups][braintree][fields][active][value]']"/>
+        <element name="braintreePaypalActive" type="select" selector="select[name='groups[braintree_section][groups][braintree][fields][active_braintree_paypal][value]']"/>
+        <element name="advancedSettingsTab" type="block" selector="//*[contains(@class, 'braintree-section')]//a[normalize-space(text())='Advanced Braintree Settings']" timeout="10"/>
+        <element name="merchantAccountId" type="input" selector="input[name='groups[braintree_section][groups][braintree][groups][braintree_advanced][fields][merchant_account_id][value]']"/>
+        <element name="useCcv" type="select" selector="select[name='groups[braintree_section][groups][braintree][groups][braintree_advanced][fields][useccv][value]']"/>
+    </section>
+</sections>

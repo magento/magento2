@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Switch back to createData after MQE-1427 will be deployed -->
+    <actionGroup name="AdminFillBasicBraintreeConfigActionGroup">
+        <arguments>
+            <argument name="braintreeConfig" defaultValue="BraintreeConfigData"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="openPaymentConfigPage"/>
+        <waitForPageLoad time="30" stepKey="waitPaymentConfigPageOpened"/>
+        <scrollTo selector="{{AdminBraintreeConfigSection.recommendedSolutionsTab}}" stepKey="scrollToRecommendedSolutions"/>
+        <conditionalClick selector="{{AdminBraintreeConfigSection.recommendedSolutionsTab}}" dependentSelector="{{AdminBraintreeConfigSection.braintreeConfigureButton}}" visible="false" stepKey="expandRecommendedSolutions"/>
+        <waitForElementVisible selector="{{AdminBraintreeConfigSection.braintreeConfigureButton}}" stepKey="waitForConfigureButton"/>
+        <click selector="{{AdminBraintreeConfigSection.braintreeConfigureButton}}" stepKey="clickConfigureButton"/>
+        <waitForElementVisible selector="{{AdminBraintreeConfigSection.title}}" stepKey="waitForTitleElement"/>
+        <fillField userInput="{{braintreeConfig.title}}" selector="{{AdminBraintreeConfigSection.title}}" stepKey="fillTitle"/>
+        <selectOption userInput="{{braintreeConfig.environment}}" selector="{{AdminBraintreeConfigSection.environment}}" stepKey="fillEnvironment"/>
+        <selectOption userInput="{{braintreeConfig.payment_action}}" selector="{{AdminBraintreeConfigSection.paymentAction}}" stepKey="fillPaymentAction"/>
+        <fillField userInput="{{_CREDS.braintree_disabled_fraud_merchant_id}}" selector="{{AdminBraintreeConfigSection.merchantId}}" stepKey="fillMerchantId"/>
+        <fillField userInput="{{_CREDS.braintree_disabled_fraud_public_key}}" selector="{{AdminBraintreeConfigSection.publicKey}}" stepKey="fillPublicKey"/>
+        <fillField userInput="{{_CREDS.braintree_disabled_fraud_private_key}}" selector="{{AdminBraintreeConfigSection.privateKey}}" stepKey="fillPrivateKey"/>
+        <selectOption userInput="{{braintreeConfig.active}}" selector="{{AdminBraintreeConfigSection.active}}" stepKey="fillActive"/>
+        <conditionalClick selector="{{AdminBraintreeConfigSection.advancedSettingsTab}}" dependentSelector="{{AdminBraintreeConfigSection.merchantAccountId}}" visible="false" stepKey="openAdvancedSettingsTab"/>
+        <waitForElementVisible selector="{{AdminBraintreeConfigSection.merchantAccountId}}" stepKey="waitForMerchantAccountIdElement"/>
+        <fillField userInput="{{_CREDS.braintree_disabled_fraud_merchant_account_id}}" selector="{{AdminBraintreeConfigSection.merchantAccountId}}" stepKey="fillMerchantAccountId"/>
+        <selectOption userInput="{{braintreeConfig.useccv}}" selector="{{AdminBraintreeConfigSection.useCcv}}" stepKey="fillCvvVerification"/>
+        <scrollToTopOfPage stepKey="scrollPageTop"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveButton"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="assertConfigSaved"/>
+    </actionGroup>
+
+    <actionGroup name="AdminFillBraintreeWithPaypalConfigActionGroup" extends="AdminFillBasicBraintreeConfigActionGroup">
+        <selectOption userInput="{{braintreeConfig.active_braintree_paypal}}" selector="{{AdminBraintreeConfigSection.braintreePaypalActive}}" after="fillActive" stepKey="fillBraintreePaypalActive"/>
+    </actionGroup>
+
+    <actionGroup name="DisableBraintreeActionGroup">
+        <magentoCLI command="config:set {{BraintreeDisableConfigData.path}} {{BraintreeDisableConfigData.value}}" stepKey="disableBraintreePayment"/>
+    </actionGroup>
+
+    <actionGroup name="DisableBraintreeWithPaypalActionGroup" extends="DisableBraintreeActionGroup">
+        <magentoCLI command="config:set {{BraintreeDisablePaypalConfigData.path}} {{BraintreeDisablePaypalConfigData.value}}" stepKey="disableBraintreePaypal"/>
+    </actionGroup>
+</actionGroups>
