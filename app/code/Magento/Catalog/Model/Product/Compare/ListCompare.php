@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model\Product\Compare;
 
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Product Compare List Model
@@ -82,16 +83,16 @@ class ListCompare extends \Magento\Framework\DataObject
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Visitor $customerVisitor,
         array $data = [],
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository = null,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder = null
     ) {
         $this->_compareItemFactory = $compareItemFactory;
         $this->_itemCollectionFactory = $itemCollectionFactory;
         $this->_catalogProductCompareItem = $catalogProductCompareItem;
         $this->_customerSession = $customerSession;
         $this->_customerVisitor = $customerVisitor;
-        $this->productRepository = $productRepository;
-		$this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->productRepository = $productRepository ?: ObjectManager::getInstance()->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()->get(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         parent::__construct($data);
     }
 
