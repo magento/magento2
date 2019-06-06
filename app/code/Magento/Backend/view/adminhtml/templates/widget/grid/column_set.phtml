@@ -94,7 +94,7 @@ $numColumns = count($block->getColumns());
                             <td data-column="<?= $block->escapeHtmlAttr($_column->getId()) ?>"
                                 class="<?= $block->escapeHtmlAttr($_column->getCssProperty()) ?> <?= /* @noEscape */ $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': '' ?> <?= ++$i == $numColumns ? 'last' : '' ?>"
                             >
-                                <?= /* @noEscape */ $_column->hasSubtotalsLabel() ? $_column->getSubtotalsLabel() : $_column->getRowField($block->getSubTotals($_item)) ?>
+                                <?= /* @noEscape */ $_column->hasSubtotalsLabel() ? $block->escapeHtml($_column->getSubtotalsLabel()) : $_column->getRowField($block->getSubTotals($_item)) ?>
                             </td>
                         <?php endforeach; ?>
                     </tr>
@@ -138,7 +138,7 @@ $numColumns = count($block->getColumns());
                 <th data-column="<?= $block->escapeHtmlAttr($_column->getId()) ?>"
                     class="<?= $block->escapeHtmlAttr($_column->getCssProperty()) ?>"
                 >
-                    <?= /* @noEscape */ ($_column->hasTotalsLabel()) ? $_column->getTotalsLabel() : $_column->getRowField($block->getTotals()) ?>
+                    <?= /* @noEscape */ ($_column->hasTotalsLabel()) ? $block->escapeHtml($_column->getTotalsLabel()) : $_column->getRowField($block->getTotals()) ?>
                 </th>
             <?php endforeach; ?>
         </tr>

@@ -114,7 +114,7 @@ $numColumns = count($block->getColumns());
                         </label>
                         <?php if ($_curPage < $_lastPage) : ?>
                             <button type="button"
-                                    title="<?= $block->escapeHtml(__('Next page')) ?>"
+                                    title="<?= $block->escapeHtmlAttr(__('Next page')) ?>"
                                     class="action-next"
                                     onclick="<?= /* @noEscape */ $block->getJsObjectName() ?>.setPage('<?= /* @noEscape */ ($_curPage + 1) ?>');return false;">
                                 <span><?= $block->escapeHtml(__('Next page')) ?></span>
@@ -168,7 +168,7 @@ $numColumns = count($block->getColumns());
                 <tr class="totals">
                     <?php foreach ($block->getColumns() as $_column) : ?>
                         <th class="<?= $block->escapeHtmlAttr($_column->getCssProperty()) ?>">
-                            <?= /* @noEscape */ ($_column->hasTotalsLabel()) ? $_column->getTotalsLabel() : $_column->getRowField($_column->getGrid()->getTotals()) ?>
+                            <?= /* @noEscape */ ($_column->hasTotalsLabel()) ? $block->escapeHtml($_column->getTotalsLabel()) : $_column->getRowField($_column->getGrid()->getTotals()) ?>
                         </th>
                     <?php endforeach; ?>
                 </tr>
@@ -218,7 +218,7 @@ $numColumns = count($block->getColumns());
                             foreach ($block->getSubTotalColumns() as $_column) : ?>
                                 <td class="<?= $block->escapeHtmlAttr($_column->getCssProperty()) ?>
                                            <?= /* @noEscape */ $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': '' ?>">
-                                    <?= /* @noEscape */ $_column->hasSubtotalsLabel() ? $_column->getSubtotalsLabel() : $_column->getRowField($block->getSubTotalItem($_item)) ?>
+                                    <?= /* @noEscape */ $_column->hasSubtotalsLabel() ? $block->escapeHtml($_column->getSubtotalsLabel()) : $_column->getRowField($block->getSubTotalItem($_item)) ?>
                                 </td>
                             <?php endforeach; ?>
                         </tr>

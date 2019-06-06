@@ -44,7 +44,7 @@
             class="action-select-multiselect _disabled"
             disabled="disabled"
             data-menu="grid-mass-select">
-            <optgroup label="<?= $block->escapeHtml(__('Mass Actions')) ?>">
+            <optgroup label="<?= $block->escapeHtmlAttr(__('Mass Actions')) ?>">
                 <option disabled selected></option>
                 <?php if ($block->getUseSelectAll()) :?>
                     <option value="selectAll">
@@ -93,7 +93,7 @@
         });
     });
     <?php if (!$block->getParentBlock()->canDisplayContainer()) : ?>
-        <?= $block->escapeJs($block->getJsObjectName()) ?>.setGridIds('<?= /* @noEscape */ $block->getGridIdsJson() ?>');
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.setGridIds('<?= $block->escapeJs($block->getGridIdsJson()) ?>');
     <?php endif; ?>
 </script>
 </div>
