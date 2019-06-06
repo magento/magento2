@@ -103,4 +103,14 @@
         <conditionalClick selector="{{AdminProductGridTableHeaderSection.id('ascend')}}" dependentSelector="{{AdminProductGridTableHeaderSection.id('descend')}}" visible="false" stepKey="sortById"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
+
+    <actionGroup name="DeleteProductsIfTheyExist">
+        <conditionalClick selector="{{AdminProductGridSection.multicheckDropdown}}" dependentSelector="{{AdminDataGridTableSection.firstRow}}" visible="true" stepKey="openMulticheckDropdown"/>
+        <conditionalClick selector="{{AdminProductGridSection.multicheckOption('Select All')}}" dependentSelector="{{AdminDataGridTableSection.firstRow}}" visible="true" stepKey="selectAllProductInFilteredGrid"/>
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModalPopUp"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmProductDelete"/>
+    </actionGroup>
+
 </actionGroups>
