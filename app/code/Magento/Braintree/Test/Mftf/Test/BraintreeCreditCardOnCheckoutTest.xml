@@ -49,6 +49,7 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <!--Proceed to checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup"/>
 
@@ -74,6 +75,7 @@
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart1"/>
         <waitForPageLoad stepKey="waitForPageLoad7"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage2"/>
         <!--Proceed to checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup1"/>
         <click selector="{{CheckoutPaymentSection.addressAction('New Address')}}" stepKey="clickOnNewAddress"/>
