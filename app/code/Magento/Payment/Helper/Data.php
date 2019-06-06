@@ -149,7 +149,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             }
             $res[] = $methodInstance;
         }
-
+        // phpcs:ignore Generic.PHP.NoSilencedErrors
         @uasort(
             $res,
             function (MethodInterface $a, MethodInterface $b) {
