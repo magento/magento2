@@ -172,10 +172,10 @@ class SaveInventoryDataObserver implements ObserverInterface
     /**
      * Process stock data for parent products
      *
-     * @param $product
+     * @param Product $product
      * @return void
      */
-    private function processParents($product)
+    private function processParents(Product $product)
     {
         foreach ($this->parentItemProcessorPool as $processor) {
             $processor->process($product);
