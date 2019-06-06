@@ -31,6 +31,9 @@ QUERY;
         self::assertFalse($response['isEmailAvailable']['is_email_available']);
     }
 
+    /**
+     * Verify email availability
+     */
     public function testEmailAvailable()
     {
         $query =
