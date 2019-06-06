@@ -17,6 +17,9 @@
             <severity value="BLOCKER"/>
             <group value="msi"/>
             <group value="multi_mode"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
 
         <before>
