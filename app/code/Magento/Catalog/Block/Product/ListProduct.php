@@ -373,7 +373,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         return [
             'action' => $url,
             'data' => [
-                'product' => $product->getEntityId(),
+                'product' => (int) $product->getEntityId(),
                 ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlHelper->getEncodedUrl($url),
             ]
         ];
