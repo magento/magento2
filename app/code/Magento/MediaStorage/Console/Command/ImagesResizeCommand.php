@@ -15,6 +15,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class for catalog image resizing via CLI
+ */
 class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
 {
     /**
@@ -49,7 +52,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -58,19 +61,23 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
+            $errors = [];
             $this->appState->setAreaCode(Area::AREA_GLOBAL);
             $generator = $this->resize->resizeFromThemes();
 
             /** @var ProgressBar $progress */
-            $progress = $this->objectManager->create(ProgressBar::class, [
-                'output' => $output,
-                'max' => $generator->current()
-            ]);
+            $progress = $this->objectManager->create(
+                ProgressBar::class,
+                [
+                    'output' => $output,
+                    'max' => $generator->current()
+                ]
+            );
             $progress->setFormat(
                 "%current%/%max% [%bar%] %percent:3s%% %elapsed% %memory:6s% \t| <info>%message%</info>"
             );
@@ -79,8 +86,17 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
                 $progress->setOverwrite(false);
             }
 
+            // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
             for (; $generator->valid(); $generator->next()) {
-                $progress->setMessage($generator->key());
+                $resizeInfo = $generator->key();
+                $error = $resizeInfo['error'];
+                $filename = $resizeInfo['filename'];
+
+                if ($error !== '') {
+                    $errors[$filename] = $error;
+                }
+
+                $progress->setMessage($filename);
                 $progress->advance();
             }
         } catch (\Exception $e) {
@@ -90,6 +106,13 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
         }
 
         $output->write(PHP_EOL);
-        $output->writeln("<info>Product images resized successfully</info>");
+        if (count($errors)) {
+            $output->writeln("<info>Product images resized with errors:</info>");
+            foreach ($errors as $error) {
+                $output->writeln("<error>{$error}</error>");
+            }
+        } else {
+            $output->writeln("<info>Product images resized successfully</info>");
+        }
     }
 }

@@ -161,14 +161,21 @@ class ImageResize
         $viewImages = $this->getViewImages($themes ?? $this->getThemesInUse());
 
         foreach ($productImages as $image) {
+            $error = '';
             $originalImageName = $image['filepath'];
             $originalImagePath = $this->mediaDirectory->getAbsolutePath(
                 $this->imageConfig->getMediaPath($originalImageName)
             );
-            foreach ($viewImages as $viewImage) {
-                $this->resize($viewImage, $originalImagePath, $originalImageName);
+
+            if ($this->mediaDirectory->isFile($originalImagePath)) {
+                foreach ($viewImages as $viewImage) {
+                    $this->resize($viewImage, $originalImagePath, $originalImageName);
+                }
+            } else {
+                $error = __('Cannot resize image "%1" - original image not found', $originalImagePath);
             }
-            yield $originalImageName => $count;
+
+            yield ['filename' => $originalImageName, 'error' => $error] => $count;
         }
     }
 
@@ -202,10 +209,12 @@ class ImageResize
         $viewImages = [];
         /** @var \Magento\Theme\Model\Theme $theme */
         foreach ($themes as $theme) {
-            $config = $this->viewConfig->getViewConfig([
-                'area' => Area::AREA_FRONTEND,
-                'themeModel' => $theme,
-            ]);
+            $config = $this->viewConfig->getViewConfig(
+                [
+                    'area' => Area::AREA_FRONTEND,
+                    'themeModel' => $theme,
+                ]
+            );
             $images = $config->getMediaEntities('Magento_Catalog', ImageHelper::MEDIA_TYPE_CONFIG_NODE);
             foreach ($images as $imageId => $imageData) {
                 $uniqIndex = $this->getUniqueImageIndex($imageData);
@@ -226,7 +235,7 @@ class ImageResize
     {
         ksort($imageData);
         unset($imageData['type']);
-        return md5(json_encode($imageData));
+        return hash('sha256', json_encode($imageData));
     }
 
     /**
