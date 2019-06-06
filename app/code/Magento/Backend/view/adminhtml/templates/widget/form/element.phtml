@@ -71,12 +71,12 @@ $type = $element->getType();
             });
         });
 </script>
-      <textarea name="<?= $block->escapeHtmlAttr($element->getName()) ?>" title="<?=  $block->escapeHtmlAttr($element->getTitle()) ?>" id="<?= $element->getHtmlId() ?>" class="textarea <?= $block->escapeHtmlAttr($element->getClass()) ?>" cols="80" rows="20"><?= /* @noEscape */ $element->getValue() ?></textarea>
+      <textarea name="<?= $block->escapeHtmlAttr($element->getName()) ?>" title="<?=  $block->escapeHtmlAttr($element->getTitle()) ?>" id="<?= $element->getHtmlId() ?>" class="textarea <?= $block->escapeHtmlAttr($element->getClass()) ?>" cols="80" rows="20"><?= $block->escapeHtml($element->getValue()) ?></textarea>
     </span>
 <?php elseif ($type === 'textarea') : ?>
             <span class="form_row">
                     <label for="<?= $element->getHtmlId() ?>"><?= $block->escapeHtml($element->getLabel()) ?>:</label>
-                    <textarea name="<?= $block->escapeHtmlAttr($element->getName()) ?>" title="<?=  $block->escapeHtmlAttr($element->getTitle()) ?>" id="<?= $element->getHtmlId() ?>" class="textarea <?= $block->escapeHtmlAttr($element->getClass()) ?>" cols="15" rows="2"><?= /* @noEscape */$element->getValue() ?></textarea>
+                    <textarea name="<?= $block->escapeHtmlAttr($element->getName()) ?>" title="<?=  $block->escapeHtmlAttr($element->getTitle()) ?>" id="<?= $element->getHtmlId() ?>" class="textarea <?= $block->escapeHtmlAttr($element->getClass()) ?>" cols="15" rows="2"><?= $block->escapeHtml($element->getValue()) ?></textarea>
             </span>
 <?php endif; ?>
 <?php if ($element->getScript()) : ?>
