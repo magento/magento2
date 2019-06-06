@@ -20,4 +20,3 @@
         <element name="moveProduct" type="select" selector="//td[contains(.,'{{productName}}')]/../..//td//select" parameterized="true"/>
     </section>
 </sections>
-

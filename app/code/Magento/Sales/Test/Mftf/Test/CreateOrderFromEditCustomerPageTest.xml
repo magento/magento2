@@ -135,6 +135,7 @@
         <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect($$createConfigProductAttribute.default_frontend_label$$)}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="selectConfigurableOption"/>
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkButton"/>
         <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickOnUpdateButton"/>
+        <waitForPageLoad stepKey="waitForAdminOrderItemsOrderedSectionPageLoad1"/>
 
         <!-- Assert Products in Order item section -->
         <see selector="{{AdminOrderItemsOrderedSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeSimpleProductInOrderItemGrid"/>
@@ -144,6 +145,7 @@
         <selectOption selector="{{AdminOrderFormItemsOrderedSection.moveProduct($$simpleProduct.name$$)}}" userInput="Move to Shopping Cart" stepKey="moveFirstSimpleProductToShoppingCart"/>
         <selectOption selector="{{AdminOrderFormItemsOrderedSection.moveProduct($$simpleProduct1.name$$)}}" userInput="Move to Shopping Cart" stepKey="moveSecondSimpleProductToShoppingCart"/>
         <click selector="{{OrdersGridSection.update}}" stepKey="clickOnUpdateItems"/>
+        <waitForPageLoad stepKey="waitForAdminCreateOrderShoppingCartSectionPageLoad"/>
 
         <!-- Assert products in Shopping cart section -->
         <see selector="{{AdminCreateOrderShoppingCartSection.shoppingCartBlock}}" userInput="$$simpleProduct.name$$" stepKey="seeProductInShoppingCart"/>
@@ -154,6 +156,7 @@
         <click selector="{{AdminCreateOrderShoppingCartSection.addToOrderCheckBox($$simpleProduct.name$$)}}" stepKey="selectFirstProduct"/>
         <click selector="{{AdminCreateOrderShoppingCartSection.addToOrderCheckBox($$simpleProduct1.name$$)}}" stepKey="selectSecondProduct"/>
         <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickOnUpdateButton1"/>
+        <waitForPageLoad stepKey="waitForAdminCreateOrderShoppingCartSectionPageLoad1"/>
 
         <!-- After move, assert products are not present in Shopping cart section -->
         <dontSee selector="{{AdminCreateOrderShoppingCartSection.shoppingCartBlock}}" userInput="$$simpleProduct.name$$" stepKey="donSeeProductInShoppingCart"/>
@@ -177,6 +180,7 @@
 
         <!-- Submit order -->
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+        <waitForPageLoad stepKey="waitForAdminOrderFormLoad"/>
 
         <!-- Verify order information -->
         <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
