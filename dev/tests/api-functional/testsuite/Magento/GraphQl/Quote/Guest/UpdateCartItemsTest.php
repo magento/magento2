@@ -60,7 +60,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $qty = 2;
 
         $query = $this->getQuery($maskedQuoteId, $itemId, $qty);
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         $this->assertArrayHasKey('updateCartItems', $response);
         $this->assertArrayHasKey('cart', $response['updateCartItems']);
@@ -84,7 +84,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $qty = 0;
 
         $query = $this->getQuery($maskedQuoteId, $itemId, $qty);
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         $this->assertArrayHasKey('updateCartItems', $response);
         $this->assertArrayHasKey('cart', $response['updateCartItems']);
@@ -100,7 +100,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
     public function testUpdateItemInNonExistentCart()
     {
         $query = $this->getQuery('non_existent_masked_id', 1, 2);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -116,7 +116,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $this->expectExceptionMessage("Could not find cart item with id: {$notExistentItemId}.");
 
         $query = $this->getQuery($maskedQuoteId, $notExistentItemId, 2);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -142,7 +142,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $this->expectExceptionMessage("Could not find cart item with id: {$secondQuoteItemId}.");
 
         $query = $this->getQuery($firstQuoteMaskedId, $secondQuoteItemId, 2);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -158,7 +158,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $this->expectExceptionMessage("The current user cannot perform operations on cart \"$customerQuoteMaskedId\"");
 
         $query = $this->getQuery($customerQuoteMaskedId, $customerQuoteItemId, 2);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -186,7 +186,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -217,7 +217,7 @@ mutation {
 }
 QUERY;
         $this->expectExceptionMessage($message);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**

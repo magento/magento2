@@ -13,7 +13,7 @@
             <stories value="Add Configurable Product"/>
             <title value="Create a Configurable Product with a drop down attribute assigned to a New Source"/>
             <description value="You should be able to create a Configurable Product that is assigned to a New Source with a drop down attribute."/>
-            <testCaseId value="MSI-1304"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457025/scenarios/1820815"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

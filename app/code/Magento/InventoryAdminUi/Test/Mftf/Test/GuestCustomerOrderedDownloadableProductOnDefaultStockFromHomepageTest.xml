@@ -13,13 +13,14 @@
             <stories value="Add Order"/>
             <title value="Create an Order with a Downloadable Product assigned to the Default Stock via the Storefront as Guest"/>
             <description value="You should be able to create an Order with a Downloadable Product from the Storefront as Guest."/>
-            <testCaseId value="MSI-1299"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419539/scenarios/1437474"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
 
         <before>
+            <magentoCLI stepKey="enableGuestCheckoutForDownloadable" command="config:set catalog/downloadable/disable_guest_checkout 0" />
             <createData entity="FullSource1" stepKey="createSource"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -44,129 +45,46 @@
                           stepKey="selectWebsiteAsSalesChannel"/>
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
 
-            <!-- Create Configurable Product -->
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToAdminProductGrid"/>
-            <waitForPageLoad time="30" stepKey="waitForProductGridLoad"/>
-            <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
-            <click selector="{{AdminProductGridActionSection.addTypeProduct('configurable')}}"
-                   stepKey="addConfigurableProduct"/>
-            <waitForPageLoad time="30" stepKey="waitForConfigurableProductNewPageLoad"/>
-
-            <fillField userInput="{{ConfigurableMsiProduct.name}}" selector="{{AdminProductFormSection.productName}}"
-                       stepKey="fillProductName"/>
-            <fillField userInput="{{ConfigurableMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}"
-                       stepKey="fillProductPrice"/>
-            <fillField userInput="{{ConfigurableMsiProduct.sku}}" selector="{{AdminProductFormSection.productSku}}"
-                       stepKey="fillProductSku"/>
-            <fillField userInput="{{ConfigurableMsiProduct.quantity}}"
-                       selector="{{AdminConfigurableProductFormSection.productQuantity}}"
-                       stepKey="fillProductQuantity"/>
-            <fillField userInput="{{ConfigurableMsiProduct.weight}}"
-                       selector="{{AdminConfigurableProductFormSection.productWeight}}" stepKey="fillProductWeight"/>
-
-            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
-                                        parameterArray="[$$createCategory.name$$]" stepKey="searchAndSelectCategory"/>
-            <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}"
-                   stepKey="clickOnTheCreateConfigurationsButton"/>
-            <waitForElementVisible selector="{{AdminConfigurableProductSelectAttributesSlideOut.grid}}" time="30"
-                                   stepKey="waitForGridPresents"/>
-
-            <click selector="{{AdminGridRow.checkboxByValue('color')}}" stepKey="selectColorAttribute"/>
-            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToSecondStep"/>
-
-            <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="addNewColorWhite"/>
-            <fillField userInput="{{colorProductAttribute1.name}}"
-                       selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="setNameWhite"/>
-            <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="saveWhiteColor"/>
-
-            <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="addNewColorRed"/>
-            <fillField userInput="{{colorProductAttribute2.name}}"
-                       selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="setNameRed"/>
-            <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="saveRedColor"/>
-
-            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToThirdStep"/>
-
-            <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}"
-                   stepKey="clickOnApplySingleQuantityToEachSku"/>
-
-            <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}"
-                   stepKey="openSelectSourcesModalWindow"/>
-            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}"
-                              dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true"
-                              stepKey="clearSourcesFilter"/>
-            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultByNameForAssignment">
-                <argument name="keyword" value="_defaultSource.name"/>
-            </actionGroup>
-            <click selector="{{AdminGridRow.checkboxByValue(_defaultSource.name)}}"
-                   stepKey="selectDefaultSource"/>
-            <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="doneAssignSources"/>
-            <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSource('0')}}"
-                       userInput="100" stepKey="fillQuantityForCustomSource"/>
-
-            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToFourthStep"/>
-            <click selector="{{AdminCreateProductConfigurationsPanel.next}}"
-                   stepKey="doneGeneratingConfigurableVariations"/>
-
-            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableProduct"/>
-            <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}"
-                              dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true"
-                              stepKey="confirmDefaultAttributeSetForConfigurableProduct"/>
-            <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkProductSavedMessage"/>
-
-            <seeNumberOfElements selector="{{AdminProductFormConfigurationsSection.currentVariationsRows}}"
-                                 userInput="2" stepKey="checkConfigurableMatrix"/>
-            <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}"
-                 userInput="{{colorProductAttribute1.name}}" stepKey="checkWhiteAttributeVariationName"/>
-            <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}"
-                 userInput="{{colorProductAttribute2.name}}" stepKey="checkRedAttributeVariationName"/>
-            <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}"
-                 userInput="{{colorProductAttribute1.name}}" stepKey="checkWhiteAttributeVariationSku"/>
-            <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}"
-                 userInput="{{colorProductAttribute2.name}}" stepKey="checkRedAttributeVariationSku"/>
-            <see selector="{{AdminConfigurableProductFormSection.currentVariationsQuantityCells}}" userInput="100"
-                 stepKey="checkQtyIsCorrectForCustomSource"/>
-
-            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose"/>
+            <createData entity="MsiDownloadableProduct" stepKey="downloadableProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="downloadableLink1" stepKey="addDownloadableLink">
+                <field key="is_shareable">1</field>
+                <requiredEntity createDataKey="downloadableProduct"/>
+            </createData>
+            <amOnPage url="{{AdminProductEditPage.url($$downloadableProduct.id$$)}}" stepKey="openProductEditPage" />
+            <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="In Stock" stepKey="selectStockStatus" />
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillDefaultSourceQtyField"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseProduct"/>
         </before>
         <after>
+            <magentoCLI stepKey="disableGuestCheckoutForDownloadable" command="config:set catalog/downloadable/disable_guest_checkout 1" />
             <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource">
                 <argument name="sourceCode" value="$$createSource.source[source_code]$$"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="downloadableProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 
-        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="assertProductInStorefront">
-            <argument name="product" value="ConfigurableMsiProduct"/>
-        </actionGroup>
-
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategory"/>
-        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoad"/>
-        <click selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(ConfigurableMsiProduct.name)}}"
-               stepKey="openProductPage"/>
-        <waitForAjaxLoad stepKey="waitForImageLoader"/>
-        <selectOption selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}"
-                      userInput="{{colorProductAttribute1.name}}" stepKey="selectWhiteVariation"/>
-        <seeOptionIsSelected selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}"
-                             userInput="{{colorProductAttribute1.name}}" stepKey="checkWhiteVariationIsSelected"/>
-        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="5" stepKey="fillQuantity"/>
+        <amOnPage url="{{StorefrontProductPage.url($$downloadableProduct.custom_attributes[url_key]$$)}}" stepKey="openProductPage"/>
+        <waitForPageLoad stepKey="waitForImageLoader"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
-        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30"
-                               stepKey="waitForProductAdded"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAdded"/>
 
         <!-- Place Order -->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
 
         <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{MsiCustomer1.email}}" stepKey="enterEmail"/>
-        <fillField selector="#shipping-new-address-form input[name=firstname]" userInput="{{MsiCustomer1.firstname}}" stepKey="enterFirstName"/>
-        <fillField selector="#shipping-new-address-form input[name=lastname]" userInput="{{MsiCustomer1.lastname}}" stepKey="enterLastName"/>
-        <fillField selector="#shipping-new-address-form input[name='street[0]']" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="enterStreet"/>
-        <fillField selector="#shipping-new-address-form input[name=city]" userInput="{{CustomerAddressSimple.city}}" stepKey="enterCity"/>
-        <selectOption selector="#shipping-new-address-form select[name=region_id]" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
-        <fillField selector="#shipping-new-address-form input[name=postcode]" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
-        <fillField selector="#shipping-new-address-form input[name=telephone]" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
+        <fillField selector="{{CheckoutPaymentSection.guestFirstName}}" userInput="{{MsiCustomer1.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutPaymentSection.guestLastName}}" userInput="{{MsiCustomer1.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutPaymentSection.guestStreet}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutPaymentSection.guestCity}}" userInput="{{CustomerAddressSimple.city}}" stepKey="enterCity"/>
+        <selectOption selector="{{CheckoutPaymentSection.guestRegion}}" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutPaymentSection.guestPostcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector="{{CheckoutPaymentSection.guestTelephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
 
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <click selector="{{CheckoutPaymentSection.update}}" stepKey="clickUpdate"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
 
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
@@ -188,15 +106,13 @@
 
         <actionGroup ref="AdminGoToProductGridFilterResultsByInput" stepKey="goToProductGridFilterResultsByInput">
             <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="filter_value" value="ConfigurableMsiProduct.sku"/>
+            <argument name="filter_value" value="$$downloadableProduct.product[sku]$$"/>
         </actionGroup>
 
-        <see selector="{{AdminGridRow.rowOne}}" userInput="{{colorProductAttribute1.name}}"
-             stepKey="seeProductNameInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="$100.00" stepKey="seeProductPriceInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{_defaultSource.name}}: 100"
              stepKey="seeProductQuantityInGrid"/>
-        <see selector="{{AdminGridRow.rowOne}}" userInput="{{_defaultStock.name}}: 95"
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{_defaultStock.name}}: 99"
              stepKey="seeProductSalableQuantityInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="Enabled" stepKey="seeProductStatusInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="Main Website" stepKey="seeProductWebsiteInGrid"/>

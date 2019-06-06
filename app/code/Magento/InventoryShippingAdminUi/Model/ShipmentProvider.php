@@ -36,7 +36,9 @@ class ShipmentProvider implements ShipmentProviderInterface
 
         $shipmentItems = [];
         foreach ($items as $item) {
+            $orderItemId = $item['orderItemId'];
             if (empty($item['sources'])) {
+                $shipmentItems['items'][$orderItemId] = $item['qtyToShip'];
                 continue;
             }
             $orderItemId = $item['orderItemId'];

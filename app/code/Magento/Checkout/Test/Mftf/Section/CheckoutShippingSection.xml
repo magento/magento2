@@ -15,7 +15,7 @@
         <element name="editAddressButton" type="button" selector=".action-edit-address" timeout="30"/>
         <element name="addressDropdown" type="select" selector="[name=billing_address_id]"/>
         <element name="newAddressButton" type="button" selector=".action-show-popup" timeout="30"/>
-        <element name="email" type="input" selector="#customer-email"/>
+        <element name="email" type="input" selector="#checkout-customer-email"/>
         <element name="firstName" type="input" selector="input[name=firstname]"/>
         <element name="lastName" type="input" selector="input[name=lastname]"/>
         <element name="company" type="input" selector="input[name=company]"/>

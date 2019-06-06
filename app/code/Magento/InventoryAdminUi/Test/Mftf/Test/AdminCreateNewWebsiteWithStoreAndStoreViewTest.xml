@@ -13,7 +13,7 @@
             <stories value="Add Website with Store and Store View"/>
             <title value="Add a New Website with a Store and Store View"/>
             <description value="You should be able to add a New Website then assign a Store and Store View to it."/>
-            <testCaseId value="MSI-796"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/409121/scenarios/1408725"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

@@ -53,6 +53,7 @@
 
         <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-filters-current._show" visible="true" stepKey="clearTheFiltersIfPresent"/>
         <waitForPageLoad stepKey="waitForPageLoad" time="5"/>
+        <scrollToTopOfPage  stepKey="scrollToGridFilterControls"/>
         <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters1"/>
         <fillField userInput="{{filter_value}}" selector="{{filter_selector}}" stepKey="fillCodeField2"/>
         <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters1"/>

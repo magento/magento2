@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\InventoryExportStockApi\Api\Data\ExportStockSalableQtySearchResultInterface" type="Magento\InventoryExportStock\Model\ExportStockSalableQtySearchResult"/>
+    <preference for="Magento\InventoryExportStockApi\Api\ExportStockSalableQtyInterface" type="Magento\InventoryExportStock\Model\ExportStockSalableQty"/>
+    <preference for="Magento\InventoryExportStockApi\Api\ExportStockSalableQtyBySalesChannelInterface" type="Magento\InventoryExportStock\Model\ExportStockSalableQtyBySalesChannel"/>
+    <preference for="Magento\InventoryExportStockApi\Api\ExportStockIndexDataInterface" type="Magento\InventoryExportStock\Model\ExportStockIndexData"/>
+    <preference for="Magento\InventoryExportStockApi\Api\ExportStockIndexDataBySalesChannelInterface" type="Magento\InventoryExportStock\Model\ExportStockIndexDataBySalesChannel"/>
+    <preference for="Magento\InventoryExportStockApi\Api\Data\ProductStockIndexDataInterface" type="Magento\InventoryExportStock\Model\ProductStockIndexData"/>
+    <type name="Magento\InventoryExportStock\Model\GetQtyForNotManageStock">
+        <arguments>
+            <argument name="qtyForNotManageStock" xsi:type="null"/>
+        </arguments>
+    </type>
+</config>

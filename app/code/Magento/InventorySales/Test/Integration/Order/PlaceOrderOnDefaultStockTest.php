@@ -26,6 +26,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @see https://app.hiptest.com/projects/69435/test-plan/folders/419534/scenarios/2587535
  */
 class PlaceOrderOnDefaultStockTest extends TestCase
 {

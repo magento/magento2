@@ -10,7 +10,7 @@
     <test name="AdminUpdateCategoryUrlRewriteAndAddTemporaryRedirectTest">
         <annotations>
             <stories value="Update URL rewrite"/>
-            <title value="Update Category URL Rewrites, no redirect type"/>
+            <title value="Update Category URL Rewrites, Temporary redirect type"/>
             <description value="Login as Admin and update category UrlRewrite and add Temporary redirect type"/>
             <testCaseId value="MC-5356"/>
             <severity value="CRITICAL"/>

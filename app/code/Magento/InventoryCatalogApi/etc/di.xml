@@ -13,4 +13,6 @@
                 type="Magento\InventoryCatalogApi\Model\BulkSourceUnassignValidatorChain" />
     <preference for="Magento\InventoryCatalogApi\Model\BulkInventoryTransferValidatorInterface"
                 type="Magento\InventoryCatalogApi\Model\BulkInventoryTransferValidatorChain" />
+    <preference for="Magento\InventoryCatalogApi\Model\PartialInventoryTransferValidatorInterface"
+                type="Magento\InventoryCatalogApi\Model\PartialInventoryTransferValidatorChain"/>
 </config>

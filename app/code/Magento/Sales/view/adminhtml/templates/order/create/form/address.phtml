@@ -89,11 +89,8 @@ endif; ?>
         <?= $block->getForm()->toHtml() ?>
 
         <div class="admin__field admin__field-option order-save-in-address-book">
-            <input name="<?= $block->getForm()->getHtmlNamePrefix() ?>[save_in_address_book]" type="checkbox"
-                   id="<?= $block->getForm()->getHtmlIdPrefix() ?>save_in_address_book"
-                   value="1"
-                   <?php if (!$block->getDontSaveInAddressBook() && $block->getAddress()->getSaveInAddressBook()): ?> checked="checked"<?php endif; ?>
-                   class="admin__control-checkbox"/>
+            <input name="<?= $block->getForm()->getHtmlNamePrefix() ?>[save_in_address_book]" type="checkbox" id="<?= $block->getForm()->getHtmlIdPrefix() ?>save_in_address_book" value="1"
+                   <?php if (!$block->getDontSaveInAddressBook()): ?> checked="checked"<?php endif; ?> class="admin__control-checkbox"/>
             <label for="<?= $block->getForm()->getHtmlIdPrefix() ?>save_in_address_book"
                    class="admin__field-label"><?= /* @escapeNotVerified */ __('Save in address book') ?></label>
         </div>

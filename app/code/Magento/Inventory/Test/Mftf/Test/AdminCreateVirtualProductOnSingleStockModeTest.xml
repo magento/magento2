@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Add Virtual Product"/>
             <title value="Virtual Product created on Single stock mode by Admin user"/>
-            <description value="Virtual Product created on Single stock mode by Admin user"/>
-            <testCaseId value="MSI-1500"/>
+            <description value="Virtual Product created on Single stock mode by Admin user."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/911781/scenarios/1698232"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>

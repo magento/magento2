@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Cache Validation"/>
             <title value="Cache validation when Downloadable product on Single stock mode totally sold"/>
-            <description value="Cache validation when Downloadable product on Single stock mode totally sold"/>
-            <testCaseId value="MSI-1753"/>
+            <description value="Cache validation when Downloadable product on Single stock mode totally sold."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/912246/scenarios/2199978"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>

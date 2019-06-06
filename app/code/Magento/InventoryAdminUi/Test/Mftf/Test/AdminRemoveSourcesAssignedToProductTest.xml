@@ -13,7 +13,7 @@
             <stories value="Delete Sources from Products"/>
             <title value="Delete Sources From Products"/>
             <description value="You should be able to delete a Source assigned to a Product from the Product page."/>
-            <testCaseId value="MSI-937"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/409126/scenarios/1408762"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -58,29 +58,22 @@
         <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="default" stepKey="seeSourceIdInGrid1"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="Default Source" stepKey="seeSourceNameInGrid1"/>
 
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.source[source_code]$$" stepKey="seeSourceIdInGrid2"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.source[name]$$" stepKey="seeSourceNameInGrid2"/>
 
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource2.source[source_code]$$" stepKey="seeSourceIdInGrid3"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource2.source[name]$$" stepKey="seeSourceNameInGrid3"/>
 
         <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="clickOnSaveAndContinue1"/>
 
         <click selector="{{AdminProductSourcesGrid.rowDelete('1')}}" stepKey="clickOnDelete1"/>
-        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.source[source_code]$$" stepKey="dontSeeSourceIdInGrid1"/>
         <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.source[name]$$" stepKey="dontSeeSourceNameInGrid1"/>
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource2.source[source_code]$$" stepKey="seeSourceIdInGrid5"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource2.source[name]$$" stepKey="seeSourceNameInGrid5"/>
 
         <click selector="{{AdminProductSourcesGrid.rowDelete('1')}}" stepKey="clickOnDelete2"/>
-        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource2.source[source_code]$$" stepKey="dontSeeSourceIdInGrid2"/>
         <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource2.source[name]$$" stepKey="dontSeeSourceNameInGrid2"/>
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="default" stepKey="seeSourceIdInGrid6"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="Default Source" stepKey="seeSourceNameInGrid6"/>
 
         <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="clickOnSaveAndContinue2"/>
 
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="default" stepKey="seeSourceIdInGrid7"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="Default Source" stepKey="seeSourceNameInGrid7"/>
         <seeNumberOfElements selector=".data-row" userInput="1" stepKey="seeOneSourceRow1"/>
     </test>

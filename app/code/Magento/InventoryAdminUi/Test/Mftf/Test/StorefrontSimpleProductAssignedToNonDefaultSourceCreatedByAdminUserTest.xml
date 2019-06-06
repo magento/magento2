@@ -13,7 +13,7 @@
             <stories value="Assign Products to Sources"/>
             <title value="Simple Product assigned to non-default Source"/>
             <description value="Simple Product assigned to non-default Source created by Admin user visible on frontend."/>
-            <testCaseId value="MSI-954"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457014/scenarios/1454254"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -55,7 +55,6 @@
         </actionGroup>
         <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$createCustomSource.source[source_code]$$)}}" stepKey="clickOnCheckboxOnProductPage"/>
         <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDoneOnProductPage"/>
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createCustomSource.source[source_code]$$" stepKey="seeSourceIdInGridOnProductPage"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createCustomSource.source[name]$$" stepKey="seeSourceNameInGridOnProductPage"/>
 
         <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillSourceQtyFieldOnProductPage"/>

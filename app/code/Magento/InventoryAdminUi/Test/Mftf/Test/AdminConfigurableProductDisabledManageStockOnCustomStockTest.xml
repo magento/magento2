@@ -13,7 +13,7 @@
             <stories value="Check 'Manage Stock' system configuration value affection on configurable product on custom source."/>
             <title value="Check 'Manage Stock' system configuration value affection on configurable product on custom source."/>
             <description value="Verify, that configurable product with children on custom source and 'Out of Stock' status is visible on storefront in case 'Manage Stock' system configuration value is set to 'No'."/>
-            <testCaseId value="MSI-968"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457025/scenarios/1551168"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -45,6 +45,7 @@
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveCustomStock"/>
         </before>
         <after>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="reenableManageStock"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
         </after>

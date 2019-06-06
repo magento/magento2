@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Admin user apply 'Only X left Threshold' for Virtual product on Test source"/>
             <title value="Admin user apply 'Only X left Threshold' for Virtual product on Test source"/>
-            <description value="Admin user apply 'Only X left Threshold' for Virtual product on Test source"/>
-            <testCaseId value="MSI-1485"/>
+            <description value="Admin user apply 'Only X left Threshold' for Virtual product on Test source."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457015/scenarios/2075952"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

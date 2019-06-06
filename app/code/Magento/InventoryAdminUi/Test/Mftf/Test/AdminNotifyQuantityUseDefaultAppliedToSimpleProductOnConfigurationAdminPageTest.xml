@@ -13,7 +13,7 @@
             <stories value="Use 'Notify for Quantity Below' system value with custom source on simple product"/>
             <title value="Use 'Notify for Quantity Below' system value with custom source on simple product"/>
             <description value="Verify, that simple product with custom source can use 'Notify for Quantity Below' system value for specified source."/>
-            <testCaseId value="MSI-955"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457014/scenarios/1569806"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -100,7 +100,6 @@
         <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$customSource.source[source_code]$$)}}" stepKey="assignCustomSourceToProduct"/>
         <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="doneWithCustomSourceAssignment"/>
 
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$customSource.source[source_code]$$" stepKey="checkCustomSourceCode"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$customSource.source[name]$$" stepKey="checkCustomSourceName"/>
 
         <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillSourceQty"/>

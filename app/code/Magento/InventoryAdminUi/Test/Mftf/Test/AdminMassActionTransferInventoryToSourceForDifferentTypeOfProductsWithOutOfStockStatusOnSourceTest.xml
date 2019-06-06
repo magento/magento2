@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Transfer inventory to source"/>
             <title value="Admin user apply mass action 'Transfer Inventory To Source' on Products grid to different types of products with stock status 'Out of stock' on source"/>
-            <description value="You should be able to transfer inventory to source via mass action on products grid"/>
-            <testCaseId value="MSI-1520"/>
+            <description value="You should be able to transfer inventory to source via mass action on products grid."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/611878/scenarios/2092476"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

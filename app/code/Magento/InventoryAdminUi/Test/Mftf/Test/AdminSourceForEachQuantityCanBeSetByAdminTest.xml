@@ -13,7 +13,7 @@
             <stories value="Update Source"/>
             <title value="Set the For Each Quantity for a Source"/>
             <description value="You should be able to set the For Each Quantity for a Source via the Admin."/>
-            <testCaseId value="MSI-781"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/409126/scenarios/1408761"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -43,7 +43,6 @@
 
         <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillDefaultQuantityField1"/>
 
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="{{_defaultSource.source_code}}" stepKey="seeSourceIdInGrid1"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="{{_defaultSource.name}}" stepKey="seeSourceNameInGrid1"/>
         <seeInField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="seeSourceNameInGrid2"/>
 
@@ -54,7 +53,6 @@
 
         <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="fillDefaultQuantityField2"/>
 
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.source[source_code]$$" stepKey="seeSourceIdInGrid2"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.source[name]$$" stepKey="seeSourceNameInGrid3"/>
         <seeInField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="seeSourceNameInGrid4"/>
 
@@ -65,7 +63,6 @@
 
         <fillField selector="{{AdminProductSourcesGrid.rowQty('2')}}" userInput="100" stepKey="fillDefaultQuantityField5"/>
 
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource2.source[source_code]$$" stepKey="seeSourceIdInGrid3"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource2.source[name]$$" stepKey="seeSourceNameInGrid6"/>
         <seeInField selector="{{AdminProductSourcesGrid.rowQty('2')}}" userInput="100" stepKey="seeSourceNameInGrid7"/>
 

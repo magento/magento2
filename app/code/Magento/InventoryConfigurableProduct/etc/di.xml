@@ -14,4 +14,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface">
+        <plugin name="get_configurable_option_sku_from_order"
+                type="Magento\InventoryConfigurableProduct\Plugin\Sales\GetSkuFromOrderItem"/>
+    </type>
 </config>

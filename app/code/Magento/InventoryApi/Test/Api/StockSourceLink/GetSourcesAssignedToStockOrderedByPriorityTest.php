@@ -26,6 +26,8 @@ class GetSourcesAssignedToStockOrderedByPriorityTest extends WebapiAbstract
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     *
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/529092/scenarios/1820422
      */
     public function testGetAssignedSourcesForStock()
     {

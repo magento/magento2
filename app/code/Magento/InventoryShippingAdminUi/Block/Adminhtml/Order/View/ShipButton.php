@@ -9,7 +9,9 @@ namespace Magento\InventoryShippingAdminUi\Block\Adminhtml\Order\View;
 
 use Magento\Backend\Block\Widget\Container;
 use Magento\Backend\Block\Widget\Context;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Registry;
+use Magento\InventoryShippingAdminUi\Model\IsOrderSourceManageable;
 use Magento\InventoryShippingAdminUi\Model\IsWebsiteInMultiSourceMode;
 
 /**
@@ -30,20 +32,29 @@ class ShipButton extends Container
     private $isWebsiteInMultiSourceMode;
 
     /**
+     * @var IsOrderSourceManageable
+     */
+    private $isOrderSourceManageable;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode
      * @param array $data
+     * @param IsOrderSourceManageable $isOrderSourceManageable
      */
     public function __construct(
         Context $context,
         Registry $registry,
         IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode,
-        array $data = []
+        array $data = [],
+        IsOrderSourceManageable $isOrderSourceManageable = null
     ) {
         parent::__construct($context, $data);
         $this->registry = $registry;
         $this->isWebsiteInMultiSourceMode = $isWebsiteInMultiSourceMode;
+        $this->isOrderSourceManageable = $isOrderSourceManageable ??
+            ObjectManager::getInstance()->get(IsOrderSourceManageable::class);
     }
 
     /**
@@ -55,7 +66,7 @@ class ShipButton extends Container
 
         $order = $this->registry->registry('current_order');
         $websiteId = (int)$order->getStore()->getWebsiteId();
-        if ($this->isWebsiteInMultiSourceMode->execute($websiteId)) {
+        if ($this->isWebsiteInMultiSourceMode->execute($websiteId) && $this->isOrderSourceManageable->execute($order)) {
             $this->buttonList->update(
                 'order_ship',
                 'onclick',
@@ -69,6 +80,7 @@ class ShipButton extends Container
      * Source Selection URL getter
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getSourceSelectionUrl()
     {

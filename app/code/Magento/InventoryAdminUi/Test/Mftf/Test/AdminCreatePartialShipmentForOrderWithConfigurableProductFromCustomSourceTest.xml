@@ -13,7 +13,7 @@
             <stories value="Sales-Shipments"/>
             <title value="Admin user created partial shipment for order with Configurable product from Test source and Main Website."/>
             <description value="You should be able to create partial shipment for order from Custom Source."/>
-            <testCaseId value="MSI-1140"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735290/scenarios/1583130"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

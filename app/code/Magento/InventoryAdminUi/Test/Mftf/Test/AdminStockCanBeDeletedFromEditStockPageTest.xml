@@ -13,7 +13,7 @@
             <stories value="Delete Stock"/>
             <title value="Delete Stock From Edit Stock Page"/>
             <description value="You should be able to Delete a Stock from the Edit Stock page."/>
-            <testCaseId value="MSI-949"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/409123/scenarios/1413387"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

@@ -13,7 +13,7 @@
             <stories value="Create order with downloadable product on default stock from admin area."/>
             <title value="Create order with downloadable product on default stock from admin area"/>
             <description value="Check, admin user able to create order with downloadable product on default stock from admin area."/>
-            <testCaseId value="MSI-1301"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419539/scenarios/1444367"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

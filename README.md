@@ -6,7 +6,7 @@
 Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting-edge, feature-rich eCommerce solution that gets results.
 
 ## Magento System Requirements
-[Magento System Requirements](https://devdocs.magento.com/guides/v2.3/install-gde/system-requirements2.html).
+[Magento System Requirements](https://devdocs.magento.com/guides/v2.3/install-gde/system-requirements.html).
 
 ## Install Magento
 
@@ -45,7 +45,7 @@ Please review the [Code Contributions guide](https://devdocs.magento.com/guides/
 
 ## Reporting Security Issues
 
-To report security vulnerabilities in Magento software or web sites, please create a Bugcrowd researcher account [there](https://bugcrowd.com/magento) to submit and follow-up your issue. Learn more about reporting security issues [here](https://magento.com/security/reporting-magento-security-issue).
+To report security vulnerabilities or learn more about reporting security issues in Magento software or web sites visit the [Magento Bug Bounty Program](https://hackerone.com/magento) on hackerone. Please create a hackerone account [there](https://hackerone.com/magento) to submit and follow-up your issue.
 
 Stay up-to-date on the latest security news and patches for Magento by signing up for [Security Alert Notifications](https://magento.com/security/sign-up).
 

@@ -27,6 +27,8 @@ class StockSourceLinksSaveTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     *
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/530616/scenarios/1824134
      */
     public function testExecute()
     {
