@@ -9,11 +9,14 @@ use Magento\Catalog\Model\Category\FileInfo;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test for Magento\Catalog\Model\Category\FileInfo class.
+ */
 class FileInfoTest extends TestCase
 {
     /**
@@ -66,12 +69,14 @@ class FileInfoTest extends TestCase
             ->willReturn($this->mediaDirectory);
 
         $this->filesystem->method('getDirectoryRead')
-            ->willReturnCallback(function ($arg) use ($baseDirectory, $pubDirectory) {
-                if ($arg === DirectoryList::PUB) {
-                    return $pubDirectory;
+            ->willReturnCallback(
+                function ($arg) use ($baseDirectory, $pubDirectory) {
+                    if ($arg === DirectoryList::PUB) {
+                        return $pubDirectory;
+                    }
+                    return $baseDirectory;
                 }
-                return $baseDirectory;
-            });
+            );
 
         $this->mime = $this->getMockBuilder(Mime::class)
             ->disableOriginalConstructor()
