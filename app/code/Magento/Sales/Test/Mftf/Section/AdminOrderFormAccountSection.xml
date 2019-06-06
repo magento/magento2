@@ -16,5 +16,6 @@
         <element name="defaultGeneral" type="text" selector="//*[contains(text(),'General')]" timeout="15"/>
         <element name="defaultGeneral" type="text" selector="//*[contains(text(),'General')]" time="15"/>
         <element name="emailErrorMessage" type="text" selector="#email-error"/>
+        <element name="defaultGeneral" type="text" selector="//*[contains(text(),'General')]" timeout="15"/>
     </section>
 </sections>
