@@ -79,6 +79,7 @@
 
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickOnAddToCart1"/>
         <waitForPageLoad stepKey="waitForPageLoad9"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
 
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnTheShoppingCart1"/>
         <waitForPageLoad stepKey="waitForPageLoad10"/>
