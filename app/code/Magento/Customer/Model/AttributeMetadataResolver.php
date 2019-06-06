@@ -113,7 +113,12 @@ class AttributeMetadataResolver
         // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
         foreach (self::$metaProperties as $metaName => $origName) {
             $value = $attribute->getDataUsingMethod($origName);
-            $meta['arguments']['data']['config'][$metaName] = ($metaName === 'label') ? __($value) : $value;
+            if ($metaName === 'label') {
+                $meta['arguments']['data']['config'][$metaName] = __($value);
+                $meta['arguments']['data']['config']['__disableTmpl'] = [$metaName => true];
+            } else {
+                $meta['arguments']['data']['config'][$metaName] = $value;
+            }
             if ('frontend_input' === $origName) {
                 $meta['arguments']['data']['config']['formElement'] = self::$formElement[$value] ?? $value;
             }
@@ -144,7 +149,6 @@ class AttributeMetadataResolver
             $attribute,
             $meta['arguments']['data']['config']
         );
-        $meta['arguments']['data']['config']['__disableTmpl'] = true;
         return $meta;
     }
 
