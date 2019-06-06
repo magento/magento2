@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 ?>
 <script>
 require([
@@ -28,7 +26,7 @@ var catalogWysiwygEditor = {
                 url: editorUrl,
                 data: {
                     element_id: elementId + '_editor',
-                    store_id: '<?= /* @escapeNotVerified */ $block->getStoreId() ?>'
+                    store_id: '<?= $block->escapeJs($block->getStoreId()) ?>'
                 },
                 showLoader: true,
                 dataType: 'html',
@@ -46,7 +44,7 @@ var catalogWysiwygEditor = {
             this.modal.modal('option', 'firedElementId', elementId);
         } else {
             this.modal = jQuery(data).modal({
-                title: '<?= /* @escapeNotVerified */ __('WYSIWYG Editor') ?>',
+                title: '<?= $block->escapeJs($block->escapeHtml(__('WYSIWYG Editor'))) ?>',
                 modalClass: 'magento',
                 type: 'slide',
                 firedElementId: elementId,
