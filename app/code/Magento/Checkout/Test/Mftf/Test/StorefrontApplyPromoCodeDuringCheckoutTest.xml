@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontApplyPromoCodeDuringCheckoutTest">
+        <annotations>
+            <features value="OnePageCheckout"/>
+            <stories value="OnePageCheckout with Promo Code"/>
+            <title value="Storefront apply promo code during checkout test"/>
+            <description value="Apply promo code during checkout for physical product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-8316"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Create simple product -->
+            <createData entity="SimpleProduct3" stepKey="createProduct">
+                <field key="price">10.00</field>
+            </createData>
+
+            <!-- Create cart price rule -->
+            <createData entity="ActiveSalesRuleForNotLoggedIn" stepKey="createCartPriceRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete simple product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+
+            <!-- Delete sales rule -->
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+
+            <!-- Admin log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Add simple product to cart -->
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!-- Navigate to checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+
+        <!-- Fill shipping address -->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
+
+        <!-- Apply discount to order  -->
+        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyCoupon">
+            <argument name="discountCode" value="$$createCouponForCartPriceRule.code$$"/>
+        </actionGroup>
+
+        <!-- Select payment solution -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="clickCheckMoneyOrderPayment"/>
+
+        <!-- Place Order -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <!-- Login as admin -->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+        <!-- Check total in created order -->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad stepKey="waitForAdminOrderPageLoad"/>
+        <scrollTo selector="{{AdminOrderTotalSection.grandTotal}}" stepKey="scrollToOrderTotalSection"/>
+        <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$$createProduct.price$$" stepKey="checkTotal"/>
+    </test>
+</tests>
