@@ -52,11 +52,16 @@ class ListCompare extends \Magento\Framework\DataObject
     protected $_compareItemFactory;
 
     /**
-     * Catalog factory
+     * Product Repository
      *
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     private $productRepository;
+    
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
 
     /**
      * Constructor
@@ -68,6 +73,7 @@ class ListCompare extends \Magento\Framework\DataObject
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param array $data
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Compare\ItemFactory $compareItemFactory,
@@ -76,7 +82,8 @@ class ListCompare extends \Magento\Framework\DataObject
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Visitor $customerVisitor,
         array $data = [],
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+		\Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->_compareItemFactory = $compareItemFactory;
         $this->_itemCollectionFactory = $itemCollectionFactory;
@@ -84,6 +91,7 @@ class ListCompare extends \Magento\Framework\DataObject
         $this->_customerSession = $customerSession;
         $this->_customerVisitor = $customerVisitor;
         $this->productRepository = $productRepository;
+		$this->searchCriteriaBuilder = $searchCriteriaBuilder;
         parent::__construct($data);
     }
 
@@ -117,10 +125,12 @@ class ListCompare extends \Magento\Framework\DataObject
     public function addProducts($productIds)
     {
         if (is_array($productIds)) {
-            foreach ($productIds as $productId) {
-                if ($this->productRepository->getById($productId)->getId()) {
-                    $this->addProduct($productId);
-                }
+            $searchCriteria = $this->searchCriteriaBuilder
+                ->addFilter('entity_id', $productIds, 'in')
+                ->create();
+            $products = $this->productRepository->getList($searchCriteria)->getItems();
+            foreach ($products as $product) {
+                $this->addProduct($product->getId());
             }
         }
         return $this;
