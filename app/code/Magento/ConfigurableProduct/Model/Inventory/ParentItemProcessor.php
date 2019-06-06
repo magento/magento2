@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 
 /**
  * Process parent stock item
@@ -54,8 +55,10 @@ class ParentItemProcessor
      * Process pare
      *
      * @param Product $product
+     * @return void
      */
-    public function process(Product $product) {
+    public function process(Product $product)
+    {
         $parentIds = $this->configurableType->getParentIdsByChild($product->getId());
         foreach ($parentIds as $productId) {
             $this->processStockForParent((int)$productId);
@@ -66,6 +69,7 @@ class ParentItemProcessor
      * Change stock item for parent product depending on children stock items
      *
      * @param int $productId
+     * @return void
      */
     private function processStockForParent(int $productId)
     {
@@ -92,12 +96,25 @@ class ParentItemProcessor
             }
         }
 
-        if ($parentStockItem->getIsInStock() !== $childrenIsInStock) {
-            if ($childrenIsInStock === false || $parentStockItem->getStockStatusChangedAuto()) {
-                $parentStockItem->setIsInStock($childrenIsInStock);
-                $parentStockItem->setStockStatusChangedAuto(1);
-                $this->stockItemRepository->save($parentStockItem);
-            }
+        if ($this->isNeedToUpdateParent($parentStockItem, $childrenIsInStock)) {
+            $parentStockItem->setIsInStock($childrenIsInStock);
+            $parentStockItem->setStockStatusChangedAuto(1);
+            $this->stockItemRepository->save($parentStockItem);
         }
+    }
+
+    /**
+     * Check is parent item should be updated
+     *
+     * @param StockItemInterface $parentStockItem
+     * @param bool $childrenIsInStock
+     * @return bool
+     */
+    private function isNeedToUpdateParent(
+        StockItemInterface $parentStockItem,
+        bool $childrenIsInStock
+    ): bool {
+        return $parentStockItem->getIsInStock() !== $childrenIsInStock &&
+            ($childrenIsInStock === false || $parentStockItem->getStockStatusChangedAuto());
     }
 }
