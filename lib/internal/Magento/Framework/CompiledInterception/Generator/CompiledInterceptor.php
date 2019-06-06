@@ -712,6 +712,7 @@ class CompiledInterceptor extends EntityAbstract
             foreach ($this->areaList->getCodes() as $scope) {
                 $this->plugins[$scope] = new CompiledPluginList(ObjectManager::getInstance(), $scope);
             }
+            $this->plugins['primary'] = new CompiledPluginList(ObjectManager::getInstance(), 'primary');
         }
         foreach ($this->plugins as $scope => $pluginsList) {
             $pluginChain = $this->getPluginsChain($pluginsList, $className, $method->getName(), $allPlugins);
