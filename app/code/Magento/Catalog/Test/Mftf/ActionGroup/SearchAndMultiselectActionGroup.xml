@@ -9,10 +9,14 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="searchAndMultiSelectActionGroup">
+        <annotations>
+            <description>Search for and select multiple items in the Magento dropdown UI component.</description>
+        </annotations>
         <arguments>
-            <argument name="dropDownSelector" />
+            <argument name="dropDownSelector"/>
             <argument name="options" type="string"/>
         </arguments>
+
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForElementVisible selector="{{dropDownSelector}} .action-select.admin__action-multiselect" stepKey="waitForDropdown"/>
         <click selector="{{dropDownSelector}} .action-select.admin__action-multiselect" stepKey="clickDropdown"/>

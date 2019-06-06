@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontSelectBundleProductDropDownOptionActionGroup">
+        <annotations>
+            <description>Selects the provided Product Name on a Storefront Bundled Product page.</description>
+        </annotations>
         <arguments>
             <argument name="productName" type="string"/>
         </arguments>
+
         <click selector="{{StorefrontBundleProductActionSection.dropdownSelectOption}}" stepKey="clickOnSelectOption"/>
         <click selector="{{StorefrontBundleProductActionSection.dropdownProductSelection(productName)}}"  stepKey="selectProduct"/>
     </actionGroup>

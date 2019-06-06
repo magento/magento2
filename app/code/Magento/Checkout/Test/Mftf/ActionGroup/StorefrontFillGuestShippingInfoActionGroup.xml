@@ -10,9 +10,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Fill data in checkout shipping section -->
     <actionGroup name="StorefrontFillGuestShippingInfoActionGroup">
+        <annotations>
+            <description>Fills in the provided Customer details on the Storefront Checkout page under the 'Shipping Address' section.</description>
+        </annotations>
         <arguments>
             <argument name="customerData" defaultValue="Simple_UK_Customer_For_Shipment"/>
         </arguments>
+        
         <fillField selector="{{CheckoutShippingGuestInfoSection.email}}" userInput="{{customerData.email}}" stepKey="fillEmailAddressField"/>
         <fillField selector="{{CheckoutShippingGuestInfoSection.firstName}}" userInput="{{customerData.firstName}}" stepKey="fillFirstNameField"/>
         <fillField selector="{{CheckoutShippingGuestInfoSection.lastName}}" userInput="{{customerData.lastName}}" stepKey="fillLastNameField"/>

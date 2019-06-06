@@ -8,8 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-
     <actionGroup name="AddVisualSwatchToProductActionGroup">
+        <annotations>
+            <description>Adds the provided Visual Swatch Attribute and Options (2) to a Product on the Admin Product creation/edit page. Clicks on Save. Validates that the Success Message is present.</description>
+        </annotations>
         <arguments>
             <argument name="attribute" defaultValue="visualSwatchAttribute"/>
             <argument name="option1" defaultValue="visualSwatchOption1"/>
@@ -63,6 +65,9 @@
     </actionGroup>
 
     <actionGroup name="AddVisualSwatchToProductWithStorefrontConfigActionGroup" extends="AddVisualSwatchToProductActionGroup">
+        <annotations>
+            <description>EXTENDS: AddVisualSwatchToProductActionGroup. Add the provided Visual Swatch Attribute and Options (2) to a Product with Storefront Configurations.</description>
+        </annotations>
         <arguments>
             <argument name="attribute" defaultValue="visualSwatchAttribute"/>
             <argument name="option1" defaultValue="visualSwatchOption1"/>

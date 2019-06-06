@@ -9,11 +9,15 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminImportProductsActionGroup">
+        <annotations>
+            <description>Goes to the Admin Import page. Imports the provided File. Validates that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="behavior" type="string"/>
             <argument name="importFile" type="string"/>
             <argument name="importMessage" type="string"/>
         </arguments>
+
         <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="goToImportIndexPage"/>
         <waitForPageLoad stepKey="AdminImportMainSectionLoad"/>
         <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
@@ -26,5 +30,5 @@
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="Import successfully done" stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="AdminMessagesSection"/>
         <see selector="{{AdminMessagesSection.notice}}" userInput="{{importMessage}}" stepKey="seeImportMessage"/>
-        </actionGroup>
-    </actionGroups>
+    </actionGroup>
+</actionGroups>

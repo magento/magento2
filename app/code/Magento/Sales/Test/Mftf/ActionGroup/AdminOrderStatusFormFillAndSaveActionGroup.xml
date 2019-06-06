@@ -10,9 +10,12 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Fill Order status form and click save -->
     <actionGroup name="AdminOrderStatusFormFillAndSave">
+        <annotations>
+            <description>Fills in the provided Status and Label on the Admin Order Status section.</description>
+        </annotations>
         <arguments>
-            <argument name="status" type="string" />
-            <argument name="label" type="string" />
+            <argument name="status" type="string"/>
+            <argument name="label" type="string"/>
         </arguments>
 
         <fillField stepKey="fillStatusCode" selector="{{AdminOrderStatusFormSection.statusCodeField}}" userInput="{{status}}"/>

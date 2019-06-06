@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="ApplyCouponOnPaymentPageActionGroup">
+        <annotations>
+            <description>Adds the provided Coupon Code on the Storefront Shopping Cart page. Validates that the Discount Verification Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="couponCode" type="string"/>
         </arguments>
+
         <click selector="{{ProductCardSection.addCoupon}}" stepKey="clickToAddDiscount"/>
         <fillField selector="{{ProductCardSection.addCode}}" userInput="{{couponCode}}" stepKey="TypeDiscountCode"/>
         <click selector="{{ProductCardSection.applyDiscount}}" stepKey="clickToApplyDiscount"/>

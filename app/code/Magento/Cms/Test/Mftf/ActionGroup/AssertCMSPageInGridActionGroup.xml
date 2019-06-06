@@ -5,14 +5,18 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertCMSPageInGridActionGroup">
+        <annotations>
+            <description>Validates that the provided CMS Page is present in the Admin Pages grid.</description>
+        </annotations>
         <arguments>
-            <argument name="cmsPage" type="entity" />
+            <argument name="cmsPage" type="entity"/>
         </arguments>
 
-        <seeElement stepKey="seeElementByCmsPageIdentifier" selector="{{AdminDataGridTableSection.rowTemplateStrict(cmsPage.identifier)}}" />
-        <see userInput="{{cmsPage.title}}" stepKey="seeCmsPageTitle" selector="{{AdminDataGridTableSection.rowTemplateStrict(cmsPage.identifier)}}" />
+        <seeElement stepKey="seeElementByCmsPageIdentifier" selector="{{AdminDataGridTableSection.rowTemplateStrict(cmsPage.identifier)}}"/>
+        <see userInput="{{cmsPage.title}}" stepKey="seeCmsPageTitle" selector="{{AdminDataGridTableSection.rowTemplateStrict(cmsPage.identifier)}}"/>
     </actionGroup>
 </actionGroups>

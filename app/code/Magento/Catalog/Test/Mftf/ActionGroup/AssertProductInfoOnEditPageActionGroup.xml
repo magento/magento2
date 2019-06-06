@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertProductInfoOnEditPageActionGroup" extends="OpenEditProductOnBackendActionGroup">
+        <annotations>
+            <description>Validate that the provided Product details are correct on the Product creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="product" type="entity"/>
         </arguments>
+
         <waitForPageLoad stepKey="waitForProductToLoad"/>
         <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="seeProductName"/>
         <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="seeProductSku"/>

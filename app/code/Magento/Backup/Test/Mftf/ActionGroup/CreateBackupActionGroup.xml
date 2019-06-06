@@ -8,11 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-
     <actionGroup name="createSystemBackup">
+        <annotations>
+            <description>Creates a System Backup using provided Backup Entity.</description>
+        </annotations>
         <arguments>
             <argument name="backup" defaultValue="SystemBackup"/>
         </arguments>
+
         <click selector="{{AdminMainActionsSection.systemBackup}}" stepKey="clickCreateBackupButton"/>
         <waitForElementVisible selector="{{AdminCreateBackupFormSection.backupNameField}}" stepKey="waitForForm"/>
         <fillField selector="{{AdminCreateBackupFormSection.backupNameField}}" userInput="{{backup.name}}" stepKey="fillBackupName"/>
@@ -24,9 +27,13 @@
     </actionGroup>
 
     <actionGroup name="createMediaBackup">
+        <annotations>
+            <description>Creates a Media Backup using provided Backup Entity.</description>
+        </annotations>
         <arguments>
             <argument name="backup" defaultValue="MediaBackup"/>
         </arguments>
+
         <click selector="{{AdminMainActionsSection.mediaBackup}}" stepKey="clickCreateBackupButton"/>
         <waitForElementVisible selector="{{AdminCreateBackupFormSection.backupNameField}}" stepKey="waitForForm"/>
         <fillField selector="{{AdminCreateBackupFormSection.backupNameField}}" userInput="{{backup.name}}" stepKey="fillBackupName"/>
@@ -38,9 +45,13 @@
     </actionGroup>
 
     <actionGroup name="createDatabaseBackup">
+        <annotations>
+            <description>Creates a Database Backup using provided Backup Entity.</description>
+        </annotations>
         <arguments>
             <argument name="backup" defaultValue="DatabaseBackup"/>
         </arguments>
+
         <click selector="{{AdminMainActionsSection.databaseBackup}}" stepKey="clickCreateBackupButton"/>
         <waitForElementVisible selector="{{AdminCreateBackupFormSection.backupNameField}}" stepKey="waitForForm"/>
         <fillField selector="{{AdminCreateBackupFormSection.backupNameField}}" userInput="{{backup.name}}" stepKey="fillBackupName"/>
@@ -50,5 +61,4 @@
         <see selector="{{AdminGridTableSection.backupNameColumn}}" userInput="{{backup.name}}" stepKey="seeBackupInGrid"/>
         <see selector="{{AdminGridTableSection.backupTypeByName(backup.name)}}" userInput="{{backup.type}}" stepKey="seeBackupType"/>
     </actionGroup>
-
 </actionGroups>

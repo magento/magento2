@@ -9,10 +9,14 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontAssertUpdatedProductPriceInStorefrontProductPageActionGroup">
+        <annotations>
+            <description>Validates that the provided Product Name and Price are present on a Storefront Product page.</description>
+        </annotations>
         <arguments>
             <argument name="productName" type="string"/>
             <argument name="expectedPrice" type="string"/>
         </arguments>
+
         <seeInTitle userInput="{{productName}}" stepKey="assertProductNameTitle"/>
         <see userInput="{{productName}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
         <see userInput="{{expectedPrice}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>

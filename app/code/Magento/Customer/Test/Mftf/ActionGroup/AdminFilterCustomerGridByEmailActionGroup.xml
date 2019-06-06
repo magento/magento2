@@ -10,9 +10,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Filter customer grid by the email -->
     <actionGroup name="AdminFilterCustomerGridByEmail">
+        <annotations>
+            <description>Filters the Admin Customers grid by the provided Email Address.</description>
+        </annotations>
         <arguments>
             <argument name="email" type="string"/>
         </arguments>
+
         <conditionalClick selector="{{AdminCustomerFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerFiltersSection.clearAll}}" visible="true" stepKey="clickClearFilters"/>
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="openFilters"/>
         <fillField selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="{{email}}" stepKey="fillEmail"/>

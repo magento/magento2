@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminLoginWithCaptchaActionGroup" extends="LoginAsAdmin">
+        <annotations>
+            <description>EXTENDS: LoginAsAdmin. Fills in the Captcha field on the Backend Admin Login page.</description>
+        </annotations>
         <arguments>
-            <argument name="captcha" type="string" />
+            <argument name="captcha" type="string"/>
         </arguments>
-        <fillField stepKey="fillCaptchaField" after="fillPassword" userInput="{{captcha}}" selector="{{AdminLoginFormSection.captchaField}}" />
+
+        <fillField stepKey="fillCaptchaField" after="fillPassword" userInput="{{captcha}}" selector="{{AdminLoginFormSection.captchaField}}"/>
     </actionGroup>
 </actionGroups>

@@ -5,14 +5,19 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertMiniShoppingCartSubTotalActionGroup">
+        <annotations>
+            <description>Validates that the provided Subtotal (Price and Store Currency) is present and correct.</description>
+        </annotations>
         <arguments>
-            <argument name="dataQuote" type="entity" />
+            <argument name="dataQuote" type="entity"/>
         </arguments>
+
         <waitForPageLoad stepKey="waitForPageLoad" time="120"/>
-        <grabTextFrom selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="grabMiniCartTotal" />
+        <grabTextFrom selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="grabMiniCartTotal"/>
         <assertContains stepKey="assertMiniCartTotal">
             <actualResult type="variable">$grabMiniCartTotal</actualResult>
             <expectedResult type="string">{{dataQuote.subtotal}}</expectedResult>

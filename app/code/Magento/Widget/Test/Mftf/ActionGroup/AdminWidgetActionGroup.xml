@@ -5,13 +5,18 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateWidgetWithBlockActionGroup">
-    <arguments>
-        <argument name="widget"/>
-        <argument name="block" type="string"/>
-    </arguments>
+        <annotations>
+            <description>Goes to the Admin Widgets creation page. Creates the provided Widget which includes the provided Block. Clicks on Save. Validates that the Success Message is preset and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="widget"/>
+            <argument name="block" type="string"/>
+        </arguments>
+
         <amOnPage url="{{AdminNewWidgetPage.url}}" stepKey="createWidgetPage"/>
         <selectOption selector="{{AdminNewWidgetSection.widgetType}}" userInput="{{widget.type}}" stepKey="selectWidgetType"/>
         <selectOption selector="{{AdminNewWidgetSection.widgetDesignTheme}}" userInput="{{widget.designTheme}}" stepKey="selectWidgetDesignTheme"/>
@@ -21,7 +26,7 @@
         <selectOption selector="{{AdminNewWidgetSection.widgetStoreIds}}" userInput="{{widget.store_id}}" stepKey="selectWidgetStoreView"/>
         <click selector="{{AdminNewWidgetSection.addLayoutUpdate}}" stepKey="clickAddLayoutUpdate"/>
         <waitForPageLoad stepKey="waitForLoad1"/>
-        <scrollTo selector="{{AdminNewWidgetSection.selectDisplayOn}}" stepKey="scrollToElement" />
+        <scrollTo selector="{{AdminNewWidgetSection.selectDisplayOn}}" stepKey="scrollToElement"/>
         <selectOption selector="{{AdminNewWidgetSection.selectDisplayOn}}" userInput="{{widget.display}}" stepKey="selectWidgetDisplayOn"/>
         <waitForElement selector="{{AdminNewWidgetSection.selectContainer}}" time="30" stepKey="waitForContainer"/>
         <selectOption selector="{{AdminNewWidgetSection.selectContainer}}" userInput="{{widget.container}}" stepKey="selectWidgetContainer"/>

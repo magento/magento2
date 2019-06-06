@@ -8,12 +8,16 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-
     <!--Create New Template -->
     <actionGroup name="CreateNewTemplate">
+        <annotations>
+            <description>Clicks on Add New Template. Fills the Template details. Clicks on Save. PLEASE NOTE: The values are Hardcoded.</description>
+        </annotations>
+        
         <!--Click "Add New Template" button-->
         <click stepKey="clickAddNewTemplateButton" selector="{{EmailTemplatesSection.addNewTemplateButton}}"/>
         <waitForPageLoad stepKey="waitForNewEmailTemplatesPageLoaded"/>
+        
         <!--Select value for "Template" drop-down menu in "Load default template" tab-->
         <selectOption selector="{{EmailTemplatesSection.templateDropDown}}" stepKey="selectValueFromTemplateDropDown" userInput="Registry Update"/>
 
@@ -27,6 +31,10 @@
 
     <!--Delete created Template-->
     <actionGroup name="DeleteCreatedTemplate">
+        <annotations>
+            <description>Clicks on Delete Template. Accepts the Popup. Validates that the Email Template is NOT present in the Email Templates Grid.</description>
+        </annotations>
+        
         <switchToPreviousTab stepKey="switchToPreviousTab"/>
         <seeInCurrentUrl stepKey="seeCreatedTemplateUrl" url="email_template/edit/id"/>
         <click stepKey="clickDeleteTemplateButton" selector="{{EmailTemplatesSection.deleteTemplateButton}}"/>
@@ -35,5 +43,4 @@
         <click stepKey="clickResetFilterButton" selector="{{EmailTemplatesSection.resetFilterButton}}"/>
         <waitForElementNotVisible selector="{{MarketingEmailTemplateSection.clearSearchTemplate(EmailTemplate.templateName)}}" stepKey="waitForSearchFieldCleared"/>
     </actionGroup>
-
 </actionGroups>

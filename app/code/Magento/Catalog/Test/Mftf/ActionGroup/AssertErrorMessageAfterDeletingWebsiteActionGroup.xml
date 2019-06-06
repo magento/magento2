@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertErrorMessageAfterDeletingWebsiteActionGroup">
+        <annotations>
+            <description>Goes to the Admin Products grid page. Clicks on Ok. Validates that the provided Error Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="errorMessage" type="string"/>
         </arguments>
+
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
         <waitForPageLoad stepKey="waitForProductCatalogPageLoad"/>
         <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkButtonFromAdminCategoryModalSection"/>

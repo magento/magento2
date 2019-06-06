@@ -10,12 +10,16 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Add Bundle Product to Cart from the category page with specified quantity to cart -->
     <actionGroup name="StorefrontAddCategoryBundleProductToCartActionGroup">
+        <annotations>
+            <description>Adds a Bundled Product to the Cart from the Category page.</description>
+        </annotations>
         <arguments>
             <argument name="product"/>
             <argument name="quantity" defaultValue="1" type="string"/>
         </arguments>
-        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
-        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="clickAddToCart" />
+
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="clickAddToCart"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
@@ -27,9 +31,13 @@
 
     <!-- Add Bundle Product to Cart from the category page -->
     <actionGroup name="StorefrontAddBundleProductFromCategoryToCartActionGroup">
+        <annotations>
+            <description>Adds a Bundled Product to the Cart from the Product page. PLEASE NOTE: The Quantity selection is not available in the Action Group.</description>
+        </annotations>
         <arguments>
             <argument name="productName" type="string"/>
         </arguments>
+
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductTitleByName(productName)}}" stepKey="moveMouseOverProduct"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(productName)}}" stepKey="openProductPage"/>
         <waitForPageLoad time="30" stepKey="waitForBundleProductPageLoad"/>
@@ -41,9 +49,13 @@
 
     <!-- Add Bundle Product to Cart from product Page-->
     <actionGroup name="StorefrontAddBundleProductFromProductToCartActionGroup">
+        <annotations>
+            <description>Adds a Bundled Product to the Cart from the Product page. PLEASE NOTE: The Quantity selection is not available in the Action Group.</description>
+        </annotations>
         <arguments>
             <argument name="productName" type="string"/>
         </arguments>
+
         <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomizeAndAddToCart"/>
         <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="clickAddBundleProductToCart"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.productCount}}" stepKey="waitProductCount"/>
@@ -52,10 +64,14 @@
 
     <!-- Add Bundled Product to Cart with selected multiselect option-->
     <actionGroup name="StorefrontAddBundleProductFromProductToCartWithMultiOption" extends="StorefrontAddBundleProductFromProductToCartActionGroup">
+        <annotations>
+            <description>Selects a Bundled Product option on the Bundled Product page. PLEASE NOTE: The Quantity selection is not available in the Action Group.</description>
+        </annotations>
         <arguments>
             <argument name="optionName" type="string"/>
             <argument name="value" type="string"/>
         </arguments>
+
         <selectOption selector="{{StorefrontBundledSection.multiselectOptionFourProducts(optionName)}}" userInput="{{value}}" stepKey="selectValue" before="clickAddBundleProductToCart"/>
     </actionGroup>
 </actionGroups>

@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="NavigateToAllCustomerPage">
+        <annotations>
+            <description>Goes to the Admin Customers grid page.</description>
+        </annotations>
+
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>

@@ -6,12 +6,17 @@
  */
 -->
 
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CheckItemInLayeredNavigationActionGroup">
+        <annotations>
+            <description>Expands the Product Filters on a Storefront Category page if it is not expanded.</description>
+        </annotations>
         <arguments>
             <argument name="itemType"/>
             <argument name="itemName"/>
         </arguments>
+
         <conditionalClick selector="{{StorefrontCategorySidebarSection.filterOptionsTitle('itemType')}}" dependentSelector="{{StorefrontCategorySidebarSection.filterOptions}}" visible="false" stepKey="expandFilterOptions"/>
     </actionGroup>
 </actionGroups>

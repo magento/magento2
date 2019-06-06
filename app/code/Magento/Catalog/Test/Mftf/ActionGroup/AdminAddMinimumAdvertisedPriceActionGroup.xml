@@ -5,11 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAddMinimumAdvertisedPriceActionGroup">
+        <annotations>
+            <description>Clicks 'Advanced Pricing' on the Admin Product creation/edit page. Fills in the provided MSRP details. Clicks on Done.</description>
+        </annotations>
         <arguments>
             <argument name="msrpData" type="entity"/>
         </arguments>
+
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
         <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.msrp}}" stepKey="waitSpecialPrice"/>

@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontAddProductToCartWithQtyActionGroup">
+        <annotations>
+            <description>Fills in the provided Product Quantity. Clicks on Add To Cart. Validates that the Success Message is present.</description>
+        </annotations>
         <arguments>
             <argument name="productQty" type="string"/>
         </arguments>
+        
         <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{productQty}}" stepKey="fillProduct1Quantity"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickOnAddToCartButton"/>

@@ -10,9 +10,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Assert Shipping Method by Name Is Checked on Checkout -->
     <actionGroup name="StorefrontAssertCheckoutShippingMethodSelectedActionGroup">
+        <annotations>
+            <description>Validates that the provided Shipping Method is checked on the Storefront Checkout page.</description>
+        </annotations>
         <arguments>
             <argument name="shippingMethod"/>
         </arguments>
+
         <seeCheckboxIsChecked selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('shippingMethod')}}" stepKey="assertShippingMethodByNameIsChecked"/>
     </actionGroup>
 </actionGroups>
