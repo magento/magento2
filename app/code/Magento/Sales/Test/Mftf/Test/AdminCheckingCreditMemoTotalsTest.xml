@@ -19,7 +19,7 @@
             <group value="sales"/>
             <group value="tax"/>
             <skip>
-                <issueId value="DEVOPS-3311"/>
+                <issueId value="MAGETWO-99951"/>
             </skip>
         </annotations>
         <before>
