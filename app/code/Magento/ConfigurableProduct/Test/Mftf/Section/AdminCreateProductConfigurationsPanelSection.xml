@@ -7,9 +7,10 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCreateProductConfigurationsPanelSection">
         <element name="next" type="button" selector=".steps-wizard-navigation .action-next-step" timeout="30"/>
+        <element name="generateConfigure" type="button" selector="//div[@class='nav-bar-outer-actions']//*[contains(text(),'Generate Products')]"/>
         <element name="createNewAttribute" type="button" selector=".select-attributes-actions button[title='Create New Attribute']" timeout="30"/>
         <element name="filters" type="button" selector="button[data-action='grid-filter-expand']"/>
         <element name="attributeCode" type="input" selector=".admin__control-text[name='attribute_code']"/>
@@ -25,5 +26,12 @@
         <element name="attribute" type="input" selector="#apply-single-price-input-{{var1}}" parameterized="true"/>
         <element name="applySingleQuantityToEachSkus" type="radio" selector=".admin__field-label[for='apply-single-inventory-radio']" timeout="30"/>
         <element name="quantity" type="input" selector="#apply-single-inventory-input"/>
+        <element name="optionPrice" type="input" selector="//*[text()='{{optionName}}']/../..//input[contains(@id, 'apply-single-price-input')]" parameterized="true"/>
+
+        <!--Image Section-->
+        <element name="applyUniqueImagesToEachSkus" type="radio" selector="label[for='apply-unique-images-radio']" timeout="30"/>
+        <element name="selectImagesButton" type="select" selector="#apply-images-attributes" timeout="30"/>
+        <element name="uploadImagesButton" type="file" selector="//span[text()='{{optionName}}']/../../div[@data-role='gallery']//input[@type='file']" timeout="30" parameterized="true"/>
+        <element name="imageFile" type="text" selector="div[data-role='gallery'] img[src*='{{url}}']" parameterized="true"/>
     </section>
 </sections>
