@@ -70,11 +70,10 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
      * Retrieve all options
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    // @codingStandardsIgnoreStart
     public function getAllOptions($withEmpty = true, $defaultValues = false)
     {
-        // @codingStandardsIgnoreEnd
         if (!$this->options) {
             $allowedCountries = [];
             $websiteIds = [];
