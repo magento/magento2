@@ -317,7 +317,9 @@ class ConfigurableProductsFixture extends Fixture
     {
         $attributeSetClosure = function ($index) use ($defaultAttributeSets) {
             $attributeSetAmount = count(array_keys($defaultAttributeSets));
+            // @codingStandardsIgnoreStart
             mt_srand($index);
+            // @codingStandardsIgnoreEnd
 
             return $attributeSetAmount > ($index - 1) % (int)$this->fixtureModel->getValue('categories', 30)
                 ? array_keys($defaultAttributeSets)[mt_rand(0, $attributeSetAmount - 1)]
@@ -851,7 +853,9 @@ class ConfigurableProductsFixture extends Fixture
                         $configurableProductsCount / ($simpleProductsCount + $configurableProductsCount)
                     )
                 );
+            // @codingStandardsIgnoreStart
             mt_srand($index);
+            // @codingStandardsIgnoreEnd
             return $this->dataGenerator->generate(
                 $minAmountOfWordsDescription,
                 $maxAmountOfWordsDescription,
