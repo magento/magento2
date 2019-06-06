@@ -517,6 +517,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         /* Check if we edit guest order */
         $session->setCustomerId($order->getCustomerId() ?: false);
         $session->setStoreId($order->getStoreId());
+        if ($session->getData('reordered')) {
+            $this->getQuote()->setCustomerGroupId($order->getCustomerGroupId());
+        }
 
         /* Initialize catalog rule data with new session values */
         $this->initRuleData();
@@ -773,7 +776,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function getCustomerGroupId()
     {
         $groupId = $this->getQuote()->getCustomerGroupId();
-        if (!$groupId) {
+        if (!isset($groupId)) {
             $groupId = $this->getSession()->getCustomerGroupId();
         }
 
