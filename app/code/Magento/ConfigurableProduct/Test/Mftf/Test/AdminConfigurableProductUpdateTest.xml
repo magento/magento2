@@ -17,6 +17,9 @@
             <testCaseId value="MC-88"/>
             <group value="ConfigurableProduct"/>
             <severity value="AVERAGE"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
 
         <before>
