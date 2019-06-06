@@ -5,14 +5,21 @@
  */
 namespace Magento\Framework\Code;
 
+use Exception;
+use InvalidArgumentException;
+use LogicException;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\EntityAbstract;
 use Magento\Framework\Code\Generator\Io;
+use Magento\Framework\Dto\Code\Generator as DtoGenerator;
+use Magento\Framework\Dto\DtoConfig;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Filesystem\Driver\File;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 /**
  * Class code generator.
@@ -97,8 +104,8 @@ class Generator
      *
      * @param string $className
      * @return string | void
-     * @throws \RuntimeException
-     * @throws \InvalidArgumentException
+     * @throws RuntimeException
+     * @throws InvalidArgumentException
      */
     public function generateClass($className)
     {
@@ -121,9 +128,58 @@ class Generator
             return $skipReason;
         }
 
+        if ($this->isDto($className)) {
+            $this->dtoGenerator($className);
+        }
+
+        return $this->suffixBasedGenerator($resultEntityType, $sourceClassName, $className);
+    }
+
+    /**
+     * @param string $className
+     * @return string
+     */
+    private function dtoGenerator(string $className): string
+    {
+        /** @var DtoGenerator $generator */
+        $generator = ObjectManager::getInstance()->get(DtoGenerator::class);
+
+        if (!($file = $generator->generate($className))) {
+            /** @var $logger LoggerInterface */
+            $errors = $generator->getErrors();
+            $errors[] = 'Class ' . $className . ' generation error: The requested class did not generate properly, '
+                . 'because the \'generated\' directory permission is read-only. '
+                . 'If --- after running the \'bin/magento setup:di:compile\' CLI command when the \'generated\' '
+                . 'directory permission is set to write --- the requested class did not generate properly, then '
+                . 'you must add the generated class object to the signature of the related construct method, only.';
+            $message = implode(PHP_EOL, $errors);
+            $this->getLogger()->critical($message);
+            throw new RuntimeException($message);
+        }
+
+        if (!$this->definedClasses->isClassLoadableFromMemory($className)) {
+            $this->_ioObject->includeFile($file);
+        }
+
+        return self::GENERATION_SUCCESS;
+    }
+
+    /**
+     * @param string|null $resultEntityType
+     * @param string|null $sourceClassName
+     * @param string|null $className
+     * @return string
+     */
+    private function suffixBasedGenerator(
+        ?string $resultEntityType,
+        ?string $sourceClassName,
+        ?string $className
+    ): string {
         $generatorClass = $this->_generatedEntities[$resultEntityType];
+
         /** @var EntityAbstract $generator */
         $generator = $this->createGeneratorInstance($generatorClass, $sourceClassName, $className);
+
         if ($generator !== null) {
             $this->tryToLoadSourceClass($className, $generator);
             if (!($file = $generator->generate())) {
@@ -136,7 +192,7 @@ class Generator
                     . 'you must add the generated class object to the signature of the related construct method, only.';
                 $message = implode(PHP_EOL, $errors);
                 $this->getLogger()->critical($message);
-                throw new \RuntimeException($message);
+                throw new RuntimeException($message);
             }
             if (!$this->definedClasses->isClassLoadableFromMemory($className)) {
                 $this->_ioObject->includeFile($file);
@@ -194,7 +250,7 @@ class Generator
     public function getObjectManager()
     {
         if (!($this->objectManager instanceof ObjectManagerInterface)) {
-            throw new \LogicException(
+            throw new LogicException(
                 "Object manager was expected to be set using setObjectManger() "
                 . "before getObjectManager() invocation."
             );
@@ -208,7 +264,7 @@ class Generator
      * @param string $className
      * @param EntityAbstract $generator
      * @return void
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function tryToLoadSourceClass($className, $generator)
     {
@@ -219,9 +275,24 @@ class Generator
                     'Source class "%1" for "%2" generation does not exist.',
                     [$sourceClassName, $className]
                 );
-                throw new \RuntimeException($phrase->__toString());
+                throw new RuntimeException($phrase->__toString());
             }
         }
+    }
+
+    /**
+     * @param string $className
+     * @return bool
+     */
+    private function isDto(string $className): bool
+    {
+        try {
+            $dtoConfig = ObjectManager::getInstance()->get(DtoConfig::class);
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return $dtoConfig->isDto($className);
     }
 
     /**
@@ -234,7 +305,9 @@ class Generator
      */
     protected function shouldSkipGeneration($resultEntityType, $sourceClassName, $resultClass)
     {
-        if (!$resultEntityType || !$sourceClassName) {
+        $isDto = $this->isDto($resultClass);
+
+        if (!$isDto && (!$resultEntityType || !$sourceClassName)) {
             return self::GENERATION_ERROR;
         }
 
@@ -264,8 +337,8 @@ class Generator
             return self::GENERATION_SKIP;
         }
 
-        if (!isset($this->_generatedEntities[$resultEntityType])) {
-            throw new \InvalidArgumentException('Unknown generation entity.');
+        if (!$isDto && !isset($this->_generatedEntities[$resultEntityType])) {
+            throw new InvalidArgumentException('Unknown generation entity.');
         }
 
         return false;

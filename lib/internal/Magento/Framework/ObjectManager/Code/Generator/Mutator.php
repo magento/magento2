@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\ObjectManager\Code\Generator;
 
-use Magento\Framework\Api\DtoProcessor;
+use Magento\Framework\Dto\DtoProcessor;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Code\Generator\EntityAbstract;
 use ReflectionClass;

@@ -6,12 +6,18 @@
 
 declare(strict_types=1);
 
-namespace Magento\Framework\Api;
+namespace Magento\Framework\Dto;
 
 use Exception;
 use LogicException;
+use Magento\Framework\Api\AbstractSimpleObject;
+use Magento\Framework\Api\CustomAttributesDataInterface;
+use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ExtensionAttribute\InjectorProcessor;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessor;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Api\ObjectFactory;
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\ObjectManager\ConfigInterface;

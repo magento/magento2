@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Reflection;
 
-use Magento\Framework\Api\DtoProcessor;
+use Magento\Framework\Dto\DtoProcessor;
 use Magento\Framework\App\ObjectManager;
 
 /**

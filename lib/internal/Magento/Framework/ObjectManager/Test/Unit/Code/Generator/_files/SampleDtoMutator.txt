@@ -10,7 +10,7 @@ class SampleDtoMutator
     /**
      * Dto Processor
      *
-     * @var \Magento\Framework\Api\DtoProcessor
+     * @var \Magento\Framework\Dto\DtoProcessor
      */
     private $dtoProcessor = null;
 
@@ -26,9 +26,9 @@ class SampleDtoMutator
     /**
      * Mutator constructor
      *
-     * @param Magento\Framework\Api\DtoProcessor $dtoProcessor
+     * @param Magento\Framework\Dto\DtoProcessor $dtoProcessor
      */
-    public function __construct(\Magento\Framework\Api\DtoProcessor $dtoProcessor)
+    public function __construct(\Magento\Framework\Dto\DtoProcessor $dtoProcessor)
     {
         $this->dtoProcessor = $dtoProcessor;
     }

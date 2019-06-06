@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="dto"
+                            type="dtoType"
+                            maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation>Main schema element. DTOs</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="dtoType">
+        <xs:sequence>
+            <xs:element name="property" type="dtoObjectPropertyType" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="class" type="xs:string" use="required"/>
+        <xs:attribute name="interface" type="xs:string" use="required"/>
+        <xs:attribute name="mutable" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="dtoObjectPropertyType">
+        <xs:annotation>
+            <xs:documentation>Property declaration</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+        <xs:attribute name="optional" type="xs:boolean"/>
+        <xs:attribute name="nullable" type="xs:boolean"/>
+    </xs:complexType>
+</xs:schema>

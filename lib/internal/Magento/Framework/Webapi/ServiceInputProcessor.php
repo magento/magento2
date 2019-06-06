@@ -12,7 +12,7 @@ namespace Magento\Framework\Webapi;
 use InvalidArgumentException;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Api\DtoProcessor;
+use Magento\Framework\Dto\DtoProcessor;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;

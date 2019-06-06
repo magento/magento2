@@ -10,6 +10,7 @@ namespace Magento\Framework\Api;
 use LogicException;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Dto\DtoProcessor;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
@@ -91,8 +92,6 @@ class DataObjectHelper
      * @param array $data
      * @param string $interfaceName
      * @return $this
-     * @deprecated
-     * @see \Magento\Framework\Api\DtoProcessor::createFromArray
      */
     public function populateWithArray($dataObject, array $data, $interfaceName)
     {
@@ -101,18 +100,6 @@ class DataObjectHelper
         }
         $this->_setDataValues($dataObject, $data, $interfaceName);
         return $this;
-    }
-
-    /**
-     * Proxy for dto processor - create from array
-     *
-     * @param array $data
-     * @param string $interfaceName
-     * @return mixed
-     */
-    public function createFromArray(array $data, string $interfaceName)
-    {
-        return $this->dtoProcessor->createFromArray($data, $interfaceName);
     }
 
     /**
