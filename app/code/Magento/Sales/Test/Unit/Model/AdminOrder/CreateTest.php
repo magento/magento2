@@ -95,6 +95,9 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      */
     private $orderMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->formFactory = $this->createPartialMock(FormFactory::class, ['create']);
@@ -371,7 +374,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             [
                 'setSameAsBilling',
                 'setCustomerAddressId',
-                'getSameAsBilling'
+                'getSameAsBilling',
             ]
         );
         $address->method('getSameAsBilling')
