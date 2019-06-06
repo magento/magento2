@@ -417,7 +417,7 @@ class Template implements \Zend_Filter_Interface
         } else {
             foreach ($this->restrictedMethodsByInstanceType as $instanceType => $restrictedMethods) {
                 if ($object instanceof $instanceType &&
-                    ($restrictedMethods === '*' || in_array(mb_strtolower($method), $restrictedMethods))
+                    (in_array('*', $restrictedMethods) || in_array(mb_strtolower($method), $restrictedMethods))
                 ) {
                     throw new \InvalidArgumentException("Method $method cannot be called from template.");
                 }
