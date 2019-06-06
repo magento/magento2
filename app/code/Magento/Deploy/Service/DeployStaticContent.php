@@ -9,6 +9,7 @@ use Magento\Deploy\Strategy\DeployStrategyFactory;
 use Magento\Deploy\Process\QueueFactory;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Framework\App\View\Deployment\Version\StorageInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -16,6 +17,7 @@ use Psr\Log\LoggerInterface;
  * Main service for static content deployment
  *
  * Aggregates services to deploy static files, static files bundles, translations and minified templates
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeployStaticContent
 {
@@ -71,6 +73,7 @@ class DeployStaticContent
      * Run deploy procedure
      *
      * @param array $options
+     * @throws LocalizedException
      * @return void
      */
     public function deploy(array $options)
@@ -85,24 +88,26 @@ class DeployStaticContent
             return;
         }
 
-        $queue = $this->queueFactory->create(
-            [
-                'logger' => $this->logger,
-                'options' => $options,
-                'maxProcesses' => $this->getProcessesAmount($options),
-                'deployPackageService' => $this->objectManager->create(
-                    \Magento\Deploy\Service\DeployPackage::class,
-                    [
-                        'logger' => $this->logger
-                    ]
-                )
-            ]
-        );
+        $queueOptions = [
+            'logger' => $this->logger,
+            'options' => $options,
+            'maxProcesses' => $this->getProcessesAmount($options),
+            'deployPackageService' => $this->objectManager->create(
+                \Magento\Deploy\Service\DeployPackage::class,
+                [
+                    'logger' => $this->logger
+                ]
+            )
+        ];
+
+        if (isset($options[Options::MAX_EXECUTION_TIME])) {
+            $queueOptions['maxExecTime'] = (int)$options[Options::MAX_EXECUTION_TIME];
+        }
 
         $deployStrategy = $this->deployStrategyFactory->create(
             $options[Options::STRATEGY],
             [
-                'queue' => $queue
+                'queue' => $this->queueFactory->create($queueOptions)
             ]
         );
 
@@ -133,6 +138,8 @@ class DeployStaticContent
     }
 
     /**
+     * Returns amount of parallel processes, returns zero if option wasn't set.
+     *
      * @param array $options
      * @return int
      */
@@ -142,6 +149,8 @@ class DeployStaticContent
     }
 
     /**
+     * Checks if need to refresh only version.
+     *
      * @param array $options
      * @return bool
      */

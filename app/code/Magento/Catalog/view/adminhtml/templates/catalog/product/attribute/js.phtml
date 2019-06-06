@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 ?>
 <script>
 require([
@@ -45,11 +44,11 @@ function checkOptionsPanelVisibility(){
 
         if($('frontend_input') && ($('frontend_input').value=='select' || $('frontend_input').value=='multiselect')){
             panel.show();
-            panel.addClass(activePanelClass);
+            jQuery(panel).addClass(activePanelClass);
         }
         else {
             panel.hide();
-            panel.removeClass(activePanelClass);
+            jQuery(panel).removeClass(activePanelClass);
         }
     }
 }
@@ -197,22 +196,22 @@ function switchDefaultValueField()
             setRowVisibility('frontend_class', false);
         break;
 
-        <?php foreach ($this->helper('Magento\Catalog\Helper\Data')->getAttributeHiddenFields() as $type => $fields): ?>
-            case '<?= /* @escapeNotVerified */ $type ?>':
+        <?php foreach ($this->helper(Magento\Catalog\Helper\Data::class)->getAttributeHiddenFields() as $type => $fields) :?>
+            case '<?= $block->escapeJs($type) ?>':
                 var isFrontTabHidden = false;
-                <?php foreach ($fields as $one): ?>
-                    <?php if ($one == '_front_fieldset'): ?>
+                <?php foreach ($fields as $one) :?>
+                    <?php if ($one == '_front_fieldset') :?>
                         getFrontTab().hide();
                         isFrontTabHidden = true;
-                    <?php elseif ($one == '_default_value'): ?>
+                    <?php elseif ($one == '_default_value') :?>
                         defaultValueTextVisibility =
                         defaultValueTextareaVisibility =
                         defaultValueDateVisibility =
                         defaultValueYesnoVisibility = false;
-                    <?php elseif ($one == '_scope'): ?>
+                    <?php elseif ($one == '_scope') :?>
                         scopeVisibility = false;
-                    <?php else: ?>
-                        setRowVisibility('<?= /* @escapeNotVerified */ $one ?>', false);
+                    <?php else :?>
+                        setRowVisibility('<?= $block->escapeJs($one) ?>', false);
                     <?php endif; ?>
                 <?php endforeach; ?>
 

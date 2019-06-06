@@ -182,6 +182,10 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Minification is not applied in developer mode.</comment>
                 </field>
+                <field id="move_inline_to_bottom" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Move JS code to the bottom of the page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
             <group id="css" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>CSS Settings</label>
@@ -323,11 +327,11 @@
                     <label>Port (25)</label>
                     <comment>For Windows server only.</comment>
                 </field>
-                <field id="set_return_path" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="set_return_path" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Set Return-Path</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesnocustom</source_model>
                 </field>
-                <field id="return_path_email" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="return_path_email" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Return-Path Email</label>
                     <validate>validate-email</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Email\Address</backend_model>

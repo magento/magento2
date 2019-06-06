@@ -5,14 +5,29 @@
  */
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder;
 
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface as TypeResolver;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
+use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerInterface;
+use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool;
 use Magento\Framework\Search\Request\Query\Match as MatchRequestQuery;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class MatchTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var AttributeProvider|MockObject
+     */
+    private $attributeProvider;
+
+    /**
+     * @var TypeResolver|MockObject
+     */
+    private $fieldTypeResolver;
+
     /**
      * @var MatchQueryBuilder
      */
@@ -23,46 +38,63 @@ class MatchTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
+        $this->attributeProvider = $this->createMock(AttributeProvider::class);
+        $this->fieldTypeResolver = $this->createMock(TypeResolver::class);
+
+        $valueTransformerPoolMock = $this->createMock(ValueTransformerPool::class);
+        $valueTransformerMock = $this->createMock(ValueTransformerInterface::class);
+        $valueTransformerPoolMock->method('get')
+            ->willReturn($valueTransformerMock);
+        $valueTransformerMock->method('transform')
+            ->willReturnArgument(0);
+
         $this->matchQueryBuilder = (new ObjectManager($this))->getObject(
             MatchQueryBuilder::class,
             [
                 'fieldMapper' => $this->getFieldMapper(),
                 'preprocessorContainer' => [],
+                'attributeProvider' => $this->attributeProvider,
+                'fieldTypeResolver' => $this->fieldTypeResolver,
+                'valueTransformerPool' => $valueTransformerPoolMock,
             ]
         );
     }
 
     /**
      * Tests that method constructs a correct select query.
+     *
      * @see MatchQueryBuilder::build
-     *
-     * @dataProvider queryValuesInvariantsProvider
-     *
-     * @param string $rawQueryValue
-     * @param string $errorMessage
      */
-    public function testBuild($rawQueryValue, $errorMessage)
+    public function testBuild()
     {
-        $this->assertSelectQuery(
-            $this->matchQueryBuilder->build([], $this->getMatchRequestQuery($rawQueryValue), 'not'),
-            $errorMessage
-        );
-    }
+        $attributeAdapter = $this->createMock(AttributeAdapter::class);
+        $this->attributeProvider->expects($this->once())
+            ->method('getByAttributeCode')
+            ->with('some_field')
+            ->willReturn($attributeAdapter);
+        $this->fieldTypeResolver->expects($this->once())
+            ->method('getFieldType')
+            ->with($attributeAdapter)
+            ->willReturn('text');
 
-    /**
-     * @link https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html Fulltext-boolean search docs.
-     *
-     * @return array
-     */
-    public function queryValuesInvariantsProvider()
-    {
-        return [
-            ['query_value', 'Select query field must match simple raw query value.'],
-            ['query_value+', 'Specifying a trailing plus sign causes InnoDB to report a syntax error.'],
-            ['query_value-', 'Specifying a trailing minus sign causes InnoDB to report a syntax error.'],
-            ['query_@value', 'The @ symbol is reserved for use by the @distance proximity search operator.'],
-            ['query_value+@', 'The @ symbol is reserved for use by the @distance proximity search operator.'],
+        $rawQueryValue = 'query_value';
+        $selectQuery = $this->matchQueryBuilder->build([], $this->getMatchRequestQuery($rawQueryValue), 'not');
+
+        $expectedSelectQuery = [
+            'bool' => [
+                'must_not' => [
+                    [
+                        'match' => [
+                            'some_field' => [
+                                'query' => $rawQueryValue,
+                                'boost' => 43,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
+        $this->assertEquals($expectedSelectQuery, $selectQuery);
     }
 
     /**
@@ -76,6 +108,16 @@ class MatchTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuildMatchQuery($rawQueryValue, $queryValue, $match)
     {
+        $attributeAdapter = $this->createMock(AttributeAdapter::class);
+        $this->attributeProvider->expects($this->once())
+            ->method('getByAttributeCode')
+            ->with('some_field')
+            ->willReturn($attributeAdapter);
+        $this->fieldTypeResolver->expects($this->once())
+            ->method('getFieldType')
+            ->with($attributeAdapter)
+            ->willReturn('text');
+
         $query = $this->matchQueryBuilder->build([], $this->getMatchRequestQuery($rawQueryValue), 'should');
 
         $expectedSelectQuery = [
@@ -109,30 +151,6 @@ class MatchTest extends \PHPUnit\Framework\TestCase
             ['query_value', 'query_value', 'match'],
             ['"query value"', 'query value', 'match_phrase'],
         ];
-    }
-
-    /**
-     * @param array $selectQuery
-     * @param string $errorMessage
-     */
-    private function assertSelectQuery($selectQuery, $errorMessage)
-    {
-        $expectedSelectQuery = [
-            'bool' => [
-                'must_not' => [
-                    [
-                        'match' => [
-                            'some_field' => [
-                                'query' => 'query_value',
-                                'boost' => 43,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-
-        $this->assertEquals($expectedSelectQuery, $selectQuery, $errorMessage);
     }
 
     /**

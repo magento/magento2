@@ -34,6 +34,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             \Magento\Config\Block\System\Config\Form\Field\Image::class,
             [
                 'urlBuilder' => $this->urlBuilderMock,
+                '_escaper' => $objectManager->getObject(\Magento\Framework\Escaper::class)
             ]
         );
 

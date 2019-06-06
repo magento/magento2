@@ -11,8 +11,8 @@
     <!-- Fill Order status form and click save -->
     <actionGroup name="AdminOrderStatusFormFillAndSave">
         <arguments>
-            <argument name="status" type="string" defaultValue=""/>
-            <argument name="label" type="string" defaultValue=""/>
+            <argument name="status" type="string" />
+            <argument name="label" type="string" />
         </arguments>
 
         <fillField stepKey="fillStatusCode" selector="{{AdminOrderStatusFormSection.statusCodeField}}" userInput="{{status}}"/>

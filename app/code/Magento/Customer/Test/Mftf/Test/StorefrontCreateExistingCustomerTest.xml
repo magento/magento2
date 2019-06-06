@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCreateExistingCustomerTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Customer Registration"/>
+            <title value="Attempt to register customer on storefront with existing email"/>
+            <description value="Attempt to register customer on storefront with existing email"/>
+            <testCaseId value="MC-10907"/>
+            <severity value="MAJOR"/>
+            <group value="customers"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeErrorMessage">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="There is already an account with this email address."/>
+        </actionGroup>
+    </test>
+</tests>
