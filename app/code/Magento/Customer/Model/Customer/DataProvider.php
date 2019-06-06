@@ -345,7 +345,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 $value = $attribute->getDataUsingMethod($origName);
                 if ($metaName === 'label') {
                     $meta[$code]['arguments']['data']['config'][$metaName] = __($value);
-                    $meta[$code]['arguments']['data']['config']['__disableTmpl'] = ['label' => true];
+                    $meta[$code]['arguments']['data']['config']['__disableTmpl'] = [$metaName => true];
                 } else {
                     $meta[$code]['arguments']['data']['config'][$metaName] = $value;
                 }
