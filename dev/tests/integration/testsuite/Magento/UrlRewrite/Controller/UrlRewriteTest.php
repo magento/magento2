@@ -8,6 +8,9 @@ namespace Magento\UrlRewrite\Controller;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\Framework\App\Response\Http as HttpResponse;
 
+/**
+ * Class to test Match corresponding URL Rewrite
+ */
 class UrlRewriteTest extends AbstractController
 {
     /**
