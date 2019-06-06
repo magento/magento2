@@ -83,7 +83,7 @@ class ListCompare extends \Magento\Framework\DataObject
         \Magento\Customer\Model\Visitor $customerVisitor,
         array $data = [],
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-		\Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->_compareItemFactory = $compareItemFactory;
         $this->_itemCollectionFactory = $itemCollectionFactory;
