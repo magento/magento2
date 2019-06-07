@@ -167,6 +167,8 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
             'uenc',
             'form_key',
             'send',
+            'super_attribute',
+            'qty'
         ];
     }
 }
