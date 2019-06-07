@@ -113,7 +113,7 @@ class ConfigurableObject implements InterpreterInterface
      * @param string $type
      * @return string[]
      */
-    private function getParents(string $type)
+    private function getParents(string $type): array
     {
         $classParents = $this->classReader->getParents($type);
         foreach ($classParents as $parent) {
