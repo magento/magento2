@@ -8,7 +8,7 @@
 <script>
 require(['jquery', "mage/mage"], function(jQuery){
 
-    jQuery('#<?= /* @escapeNotVerified */ $block->getFormId() ?>').mage('form').mage('validation');
+    jQuery('#<?= $block->escapeJs($block->getFormId()) ?>').mage('form').mage('validation');
 
 });
 </script>
