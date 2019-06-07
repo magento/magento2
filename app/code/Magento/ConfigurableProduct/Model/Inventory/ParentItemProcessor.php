@@ -73,20 +73,22 @@ class ParentItemProcessor
      */
     private function processStockForParent(int $productId)
     {
-        $childrenIds = $this->configurableType->getChildrenIds($productId);
-        $allIds = $childrenIds;
-        $allIds[] = $productId;
-
         $criteria = $this->criteriaInterfaceFactory->create();
-        $criteria->setProductsFilter($allIds);
         $criteria->setScopeFilter($this->stockConfiguration->getDefaultScopeId());
+
+        $criteria->setProductsFilter($productId);
         $stockItemCollection = $this->stockItemRepository->getList($criteria);
         $allItems = $stockItemCollection->getItems();
-        if (empty($allItems[$productId])) {
+        if (empty($allItems)) {
             return;
         }
-        $parentStockItem = $allItems[$productId];
-        unset($allItems[$productId]);
+        $parentStockItem = array_shift($allItems);
+
+        $childrenIds = $this->configurableType->getChildrenIds($productId);
+        $criteria->setProductsFilter($childrenIds);
+        $stockItemCollection = $this->stockItemRepository->getList($criteria);
+        $allItems = $stockItemCollection->getItems();
+
         $childrenIsInStock = false;
 
         foreach ($allItems as $childItem) {
