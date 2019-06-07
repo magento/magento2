@@ -10,8 +10,6 @@ namespace Magento\SalesSequence\Model\Sequence;
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\SalesSequence\Model\MetaFactory;
 use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
-use Magento\SalesSequence\Model\ResourceModel\Meta\Ids as ResourceMetadataIds;
-use Magento\SalesSequence\Model\ResourceModel\Profile\Ids as ResourceProfileIds;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
@@ -25,16 +23,6 @@ class DeleteByStore
     private $resourceMetadata;
 
     /**
-     * @var ResourceMetadataIds
-     */
-    private $resourceMetadataIds;
-
-    /**
-     * @var ResourceProfileIds
-     */
-    private $resourceProfileIds;
-
-    /**
      * @var MetaFactory
      */
     private $metaFactory;
@@ -46,21 +34,15 @@ class DeleteByStore
 
     /**
      * @param ResourceMetadata $resourceMetadata
-     * @param ResourceMetadataIds $resourceMetadataIds
-     * @param ResourceProfileIds $resourceProfileIds
      * @param MetaFactory $metaFactory
      * @param AppResource $appResource
      */
     public function __construct(
         ResourceMetadata $resourceMetadata,
-        ResourceMetadataIds $resourceMetadataIds,
-        ResourceProfileIds $resourceProfileIds,
         MetaFactory $metaFactory,
         AppResource $appResource
     ) {
         $this->resourceMetadata = $resourceMetadata;
-        $this->resourceMetadataIds = $resourceMetadataIds;
-        $this->resourceProfileIds = $resourceProfileIds;
         $this->metaFactory = $metaFactory;
         $this->appResource = $appResource;
     }
@@ -70,12 +52,12 @@ class DeleteByStore
      *
      * @param StoreInterface $store
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
      */
     public function execute(StoreInterface $store): void
     {
-        $metadataIds = $this->resourceMetadataIds->getByStoreId($store->getId());
-        $profileIds = $this->resourceProfileIds->getByMetadataIds($metadataIds);
+        $metadataIds = $this->getMetadataIdsByStoreId($store->getId());
+        $profileIds = $this->getProfileIdsByMetadataIds($metadataIds);
 
         $this->appResource->getConnection()->delete(
             $this->appResource->getTableName('sales_sequence_profile'),
@@ -94,5 +76,43 @@ class DeleteByStore
             );
             $this->resourceMetadata->delete($metadata);
         }
+    }
+
+    /**
+     * Retrieves Metadata Ids by store id
+     *
+     * @param int $storeId
+     * @return int[]
+     */
+    private function getMetadataIdsByStoreId($storeId)
+    {
+        $connection = $this->appResource->getConnection();
+        $bind = ['store_id' => $storeId];
+        $select = $connection->select()->from(
+            $this->appResource->getTableName('sales_sequence_meta'),
+            ['meta_id']
+        )->where(
+            'store_id = :store_id'
+        );
+
+        return $connection->fetchCol($select, $bind);
+    }
+
+    /**
+     * Retrieves Profile Ids by metadata ids
+     *
+     * @param int[] $metadataIds
+     * @return int[]
+     */
+    private function getProfileIdsByMetadataIds(array $metadataIds)
+    {
+        $connection = $this->appResource->getConnection();
+        $select = $connection->select()
+            ->from(
+                $this->appResource->getTableName('sales_sequence_profile'),
+                ['profile_id']
+            )->where('meta_id IN (?)', $metadataIds);
+
+        return $connection->fetchCol($select);
     }
 }
