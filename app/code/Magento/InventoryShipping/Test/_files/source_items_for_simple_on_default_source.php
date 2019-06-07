@@ -1,0 +1,35 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
+use Magento\InventoryApi\Api\SourceItemsSaveInterface;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+
+/** @var DataObjectHelper $dataObjectHelper */
+$dataObjectHelper = Bootstrap::getObjectManager()->get(DataObjectHelper::class);
+/** @var SourceItemInterfaceFactory $sourceItemFactory */
+$sourceItemFactory = Bootstrap::getObjectManager()->get(SourceItemInterfaceFactory::class);
+/** @var  SourceItemsSaveInterface $sourceItemsSave */
+$sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::class);
+/** @var DefaultSourceProviderInterface $defaultSourceProvider */
+$defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
+
+$sourceItems = [];
+/** @var SourceItemInterface $source */
+$sourceItem = $sourceItemFactory->create();
+$sourceItemData = [
+    SourceItemInterface::SOURCE_CODE => $defaultSourceProvider->getCode(),
+    SourceItemInterface::SKU => 'simple',
+    SourceItemInterface::QUANTITY => 33,
+    SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
+];
+$dataObjectHelper->populateWithArray($sourceItem, $sourceItemData, SourceItemInterface::class);
+$sourceItems[] = $sourceItem;
+$sourceItemsSave->execute($sourceItems);

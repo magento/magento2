@@ -7,29 +7,43 @@ declare(strict_types=1);
 
 namespace Magento\InventoryGraphQl\Test\Api;
 
-use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Verify product status on different stocks.
+ */
 class ProductStockStatusTest extends GraphQlAbstract
 {
     /**
-     * @var StockRegistryInterface
+     * @var ObjectManagerInterface
      */
-    private $stockRegistry;
+    private $objectManager;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
-        $this->stockRegistry = Bootstrap::getObjectManager()->create(StockRegistryInterface::class);
+        $this->objectManager = Bootstrap::getObjectManager();
     }
 
     /**
+     * Verify product status on additional stock.
+     *
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryGraphQl/Test/_files/several_source_items.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      */
-    public function testQueryProductStockStatusInStockWithSources()
+    public function testProductStockStatusInStockWithSources():void
     {
+        $this->assignWebsiteToStock(10, 'base');
         $productSku = 'SKU-1';
         $query = <<<QUERY
         {
@@ -49,4 +63,25 @@ QUERY;
         $this->assertEquals('IN_STOCK', $response['products']['items'][0]['stock_status']);
     }
 
+    /**
+     * Assign website to stock as sales chanel.
+     *
+     * @param int $stockId
+     * @param string $websiteCode
+     * @return void
+     */
+    private function assignWebsiteToStock(int $stockId, string $websiteCode): void
+    {
+        $stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
+        $salesChannelFactory = Bootstrap::getObjectManager()->get(SalesChannelInterfaceFactory::class);
+        $stock = $stockRepository->get($stockId);
+        $extensionAttributes = $stock->getExtensionAttributes();
+        $salesChannels = $extensionAttributes->getSalesChannels();
+        $salesChannel = $salesChannelFactory->create();
+        $salesChannel->setCode($websiteCode);
+        $salesChannel->setType(SalesChannelInterface::TYPE_WEBSITE);
+        $salesChannels[] = $salesChannel;
+        $extensionAttributes->setSalesChannels($salesChannels);
+        $stockRepository->save($stock);
+    }
 }
