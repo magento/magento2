@@ -26,8 +26,6 @@ class CompiledInterceptor extends EntityAbstract
      */
     const ENTITY_TYPE = 'interceptor';
 
-    private $plugins;
-
     private $classMethods;
 
     private $classProperties;
@@ -37,26 +35,27 @@ class CompiledInterceptor extends EntityAbstract
      */
     private $baseReflection;
 
-    private $areaList;
+    /**
+     * @var AreasPluginList
+     */
+    private $areasPlugins;
 
     /**
      * CompiledInterceptor constructor.
-     * @param AreaList $areaList
+     * @param AreasPluginList $areasPlugins
      * @param null|string $sourceClassName
      * @param null|string $resultClassName
      * @param Io|null $ioObject
      * @param CodeGeneratorInterface|null $classGenerator
      * @param DefinedClasses|null $definedClasses
-     * @param null|array $plugins
      */
     public function __construct(
-        AreaList $areaList,
+        AreasPluginList $areasPlugins,
         $sourceClassName = null,
         $resultClassName = null,
         Io $ioObject = null,
         CodeGeneratorInterface $classGenerator = null,
-        DefinedClasses $definedClasses = null,
-        $plugins = null
+        DefinedClasses $definedClasses = null
     ) {
         parent::__construct(
             $sourceClassName,
@@ -65,9 +64,7 @@ class CompiledInterceptor extends EntityAbstract
             $classGenerator,
             $definedClasses
         );
-
-        $this->areaList = $areaList;
-        $this->plugins = $plugins;
+        $this->areasPlugins = $areasPlugins;
     }
 
     /**
@@ -268,14 +265,6 @@ class CompiledInterceptor extends EntityAbstract
         foreach ($extraSetters as $name => $paramName) {
             array_unshift($body, "\$this->$name = \$$paramName;");
         }
-        /*foreach ($extraParams as $type => $name) {
-            array_unshift($body, "//TODO fix di in production mode");
-            array_unshift(
-                $body,
-                "\$$name = \\Magento\\Framework\\App\\ObjectManager::getInstance()->get(\\$type::class);"
-            );
-        }*/
-
         return [
             'name' => '__construct',
             'parameters' => $parameters,
@@ -707,14 +696,7 @@ class CompiledInterceptor extends EntityAbstract
         $className = ltrim($this->getSourceClassName(), '\\');
 
         $result = [];
-        if ($this->plugins === null) {
-            $this->plugins = [];
-            foreach ($this->areaList->getCodes() as $scope) {
-                $this->plugins[$scope] = new CompiledPluginList(ObjectManager::getInstance(), $scope);
-            }
-            $this->plugins['primary'] = new CompiledPluginList(ObjectManager::getInstance(), 'primary');
-        }
-        foreach ($this->plugins as $scope => $pluginsList) {
+        foreach ($this->areasPlugins->getPluginsConfigForAllAreas() as $scope => $pluginsList) {
             $pluginChain = $this->getPluginsChain($pluginsList, $className, $method->getName(), $allPlugins);
             if ($pluginChain) {
                 $result[$scope] = $pluginChain;

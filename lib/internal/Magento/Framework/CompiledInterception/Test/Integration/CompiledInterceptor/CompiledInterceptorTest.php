@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor;
 
+use Magento\Framework\CompiledInterception\Generator\AreasPluginList;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\CompiledInterception\Generator\CompiledInterceptor;
@@ -91,18 +92,28 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerate($className, $resultClassName, $fileName)
     {
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        /** @var AreasPluginList $areaPlugins */
+        $areaPlugins = $objectManagerHelper->getObject(
+            AreasPluginList::class,
+            [
+                'areaList' => $this->areaList,
+                'plugins' => $this->createScopeReaders()
+            ]
+        );
+
+
         /** @var CompiledInterceptor|MockObject $interceptor */
         $interceptor = $this->getMockBuilder(CompiledInterceptor::class)
             ->setMethods(['_validateData'])
             ->setConstructorArgs(
                 [
-                    $this->areaList,
+                    $areaPlugins,
                     $className,
                     $resultClassName,
                     $this->ioGenerator,
                     null,
-                    null,
-                    $this->createScopeReaders()
+                    null
                 ]
             )
             ->getMock();
