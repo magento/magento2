@@ -17,9 +17,9 @@
     <li>
         <a href="<?= $block->escapeHtmlAttr($_tabHref) ?>" id="<?= $block->escapeHtmlAttr($block->getTabId($_tab)) ?>" title="<?= $block->escapeHtmlAttr($block->getTabTitle($_tab)) ?>" class="<?= $block->escapeHtmlAttr($_tabClass) ?>" data-tab-type="<?= $block->escapeHtmlAttr($_tabType) ?>">
             <span>
-                <span class="changed" title="<?= $block->escapeHtml(__('The information in this tab has been changed.')) ?>"></span>
-                <span class="error" title="<?= $block->escapeHtml(__('This tab contains invalid data. Please resolve this before saving.')) ?>"></span>
-                <span class="loader" title="<?= $block->escapeHtml(__('Loading...')) ?>"></span>
+                <span class="changed" title="<?= $block->escapeHtmlAttr(__('The information in this tab has been changed.')) ?>"></span>
+                <span class="error" title="<?= $block->escapeHtmlAttr(__('This tab contains invalid data. Please resolve this before saving.')) ?>"></span>
+                <span class="loader" title="<?= $block->escapeHtmlAttr(__('Loading...')) ?>"></span>
                 <?= $block->escapeHtml($block->getTabLabel($_tab)) ?>
             </span>
         </a>

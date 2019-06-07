@@ -104,7 +104,7 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
                                 <?= /* @noEscape */ __('of %1', '<span>' . $block->getCollection()->getLastPageNumber() . '</span>') ?>
                             </label>
                             <?php if ($_curPage < $_lastPage) : ?>
-                                <button type="button" title="<?= $block->escapeHtml(__('Next page')) ?>"
+                                <button type="button" title="<?= $block->escapeHtmlAttr(__('Next page')) ?>"
                                         class="action-next"
                                         onclick="<?= /* @noEscape */ $block->getJsObjectName() ?>.setPage('<?= /* @noEscape */ ($_curPage + 1) ?>');return false;">
                                     <span><?= $block->escapeHtml(__('Next page')) ?></span>
