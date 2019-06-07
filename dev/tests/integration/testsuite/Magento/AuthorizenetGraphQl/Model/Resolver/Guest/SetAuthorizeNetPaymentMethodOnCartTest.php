@@ -5,13 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Quote\Guest;
+namespace Magento\AuthorizenetGraphQl\Model\Resolver\Guest;
 
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests SetPaymentMethod mutation for guest via authorizeNet payment
@@ -20,7 +21,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDbIsolation disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SetAuthorizeNetPaymentMethodOnGuestCartTest extends \PHPUnit\Framework\TestCase
+class SetAuthorizeNetPaymentMethodOnCartTest extends TestCase
 {
     const CONTENT_TYPE = 'application/json';
 
