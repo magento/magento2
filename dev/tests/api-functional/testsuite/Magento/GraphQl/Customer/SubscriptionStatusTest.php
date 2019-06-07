@@ -52,7 +52,7 @@ query {
     }
 }
 QUERY;
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap($currentEmail, $currentPassword));
         $this->assertFalse($response['customer']['is_subscribed']);
     }
 
@@ -75,7 +75,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
-    public function testChangeSubscriptionStatusTest()
+    public function testSubscribeCustomer()
     {
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
@@ -97,7 +97,7 @@ QUERY;
             $query,
             [],
             '',
-            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+            $this->getHeaderMap($currentEmail, $currentPassword)
         );
         $this->assertTrue($response['updateCustomer']['customer']['is_subscribed']);
     }
@@ -145,7 +145,7 @@ mutation {
     }
 }
 QUERY;
-        $response = $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap($currentEmail, $currentPassword));
         $this->assertFalse($response['updateCustomer']['customer']['is_subscribed']);
     }
 
@@ -156,7 +156,7 @@ QUERY;
      * @return array
      * @throws AuthenticationException
      */
-    private function getCustomerAuthHeaders(string $email, string $password): array
+    private function getHeaderMap(string $email, string $password): array
     {
         $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
         return ['Authorization' => 'Bearer ' . $customerToken];
