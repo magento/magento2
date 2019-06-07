@@ -47,11 +47,10 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
      *
-     * @dataProvider dataProviderCustomerInfo
+     * @dataProvider dataProviderInvalidCustomerInfo
      * @param string $email
      * @param string $password
      * @param string $message
-     * @throws \Exception
      */
     public function testGenerateCustomerTokenNegativeCases(string $email, string $password, string $message)
     {
@@ -104,7 +103,7 @@ MUTATION;
     /**
      * @return array
      */
-    public function dataProviderCustomerInfo()
+    public function dataProviderInvalidCustomerInfo(): array
     {
         return [
             'invalid_email' => [
