@@ -33,6 +33,24 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const CHECK_IP = 1;
 
     const CHECK_COOKIE = 0;
+    
+    const XML_PATH_SENDER_EMAIL = 'trans_email/ident_support/email';
+
+ /**
+    * Get Sender Email
+    *
+    * @param int $store
+    * @return string
+    */
+
+    public function getSenderEmail($store = null)
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_SENDER_EMAIL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
 
     /**
      * Check is enabled Module
