@@ -480,11 +480,11 @@ class EavTest extends AbstractModifierTest
             ['value' => ['test1', 'test2'], 'label' => 'Array label'],
         ];
         $attributeOptionsExpected = [
-            ['value' => '1', 'label' => 'Int label'],
-            ['value' => '1.5', 'label' => 'Float label'],
-            ['value' => '1', 'label' => 'Boolean label'],
-            ['value' => 'string', 'label' => 'String label'],
-            ['value' => ['test1', 'test2'], 'label' => 'Array label'],
+            ['value' => '1', 'label' => 'Int label', '__disableTmpl' => true],
+            ['value' => '1.5', 'label' => 'Float label', '__disableTmpl' => true],
+            ['value' => '1', 'label' => 'Boolean label', '__disableTmpl' => true],
+            ['value' => 'string', 'label' => 'String label', '__disableTmpl' => true],
+            ['value' => ['test1', 'test2'], 'label' => 'Array label', '__disableTmpl' => true],
         ];
 
         $this->productMock->method('getId')->willReturn($productId);
@@ -563,6 +563,7 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
             ],
             'default_null_prod_not_new_locked_and_required' => [
@@ -582,6 +583,7 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
                 'locked' => true,
             ],
@@ -602,6 +604,7 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
             ],
             'default_null_prod_new_and_not_required' => [
@@ -621,6 +624,7 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
             ],
             'default_null_prod_new_locked_and_not_required' => [
@@ -640,6 +644,7 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
                 'locked' => true,
             ],
@@ -660,6 +665,7 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
             ]
         ];

@@ -6,13 +6,17 @@
  */
 namespace Magento\Catalog\Controller\Product\Compare;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Add item to compare list action.
+ */
 class Add extends \Magento\Catalog\Controller\Product\Compare implements HttpPostActionInterface
 {
     /**
-     * Add item to compare list
+     * Add item to compare list.
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
@@ -27,12 +31,13 @@ class Add extends \Magento\Catalog\Controller\Product\Compare implements HttpPos
         if ($productId && ($this->_customerVisitor->getId() || $this->_customerSession->isLoggedIn())) {
             $storeId = $this->_storeManager->getStore()->getId();
             try {
+                /** @var \Magento\Catalog\Model\Product $product */
                 $product = $this->productRepository->getById($productId, false, $storeId);
             } catch (NoSuchEntityException $e) {
                 $product = null;
             }
 
-            if ($product) {
+            if ($product && (int)$product->getStatus() !== Status::STATUS_DISABLED) {
                 $this->_catalogProductCompareList->addProduct($product);
                 $productName = $this->_objectManager->get(
                     \Magento\Framework\Escaper::class
@@ -41,7 +46,7 @@ class Add extends \Magento\Catalog\Controller\Product\Compare implements HttpPos
                     'addCompareSuccessMessage',
                     [
                         'product_name' => $productName,
-                        'compare_list_url' => $this->_url->getUrl('catalog/product_compare')
+                        'compare_list_url' => $this->_url->getUrl('catalog/product_compare'),
                     ]
                 );
 
@@ -50,6 +55,7 @@ class Add extends \Magento\Catalog\Controller\Product\Compare implements HttpPos
 
             $this->_objectManager->get(\Magento\Catalog\Helper\Product\Compare::class)->calculate();
         }
+
         return $resultRedirect->setRefererOrBaseUrl();
     }
 }

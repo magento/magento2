@@ -8,6 +8,9 @@ namespace Magento\Framework\Filter\Test\Unit;
 
 use Magento\Store\Model\Store;
 
+/**
+ * Template Filter test.
+ */
 class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -420,8 +423,8 @@ TEMPLATE;
      */
     public function testDisallowedMethods($method)
     {
-        $this->templateFilter->setVariables(['store' => $this->store]);
-        $this->templateFilter->filter('{{var store.'.$method.'()}}');
+        $this->templateFilter->setVariables(['store' => $this->store, 'filter' => $this->templateFilter]);
+        $this->templateFilter->filter('{{var store.'.$method.'()}} {{var filter.' .$method .'()}}');
     }
 
     /**
@@ -437,6 +440,13 @@ TEMPLATE;
             ['save'],
             ['getCollection'],
             ['getResource'],
+            ['getConfig'],
+            ['setVariables'],
+            ['setTemplateProcessor'],
+            ['getTemplateProcessor'],
+            ['varDirective'],
+            ['delete'],
+            ['getDataUsingMethod']
         ];
     }
 }

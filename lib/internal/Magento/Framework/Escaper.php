@@ -67,14 +67,14 @@ class Escaper
             foreach ($data as $item) {
                 $result[] = $this->escapeHtml($item, $allowedTags);
             }
-        } elseif (strlen($data)) {
+        } elseif (!empty($data)) {
             if (is_array($allowedTags) && !empty($allowedTags)) {
                 $allowedTags = $this->filterProhibitedTags($allowedTags);
                 $wrapperElementId = uniqid();
                 $domDocument = new \DOMDocument('1.0', 'UTF-8');
                 set_error_handler(
                     function ($errorNumber, $errorString) {
-                        throw new \Exception($errorString, $errorNumber);
+                        throw new \InvalidArgumentException($errorString, $errorNumber);
                     }
                 );
                 $data = $this->prepareUnescapedCharacters($data);
@@ -89,6 +89,7 @@ class Escaper
                 }
                 restore_error_handler();
 
+                $this->removeComments($domDocument);
                 $this->removeNotAllowedTags($domDocument, $allowedTags);
                 $this->removeNotAllowedAttributes($domDocument);
                 $this->escapeText($domDocument);
@@ -135,7 +136,7 @@ class Escaper
             . '\']'
         );
         foreach ($nodes as $node) {
-            if ($node->nodeName != '#text' && $node->nodeName != '#comment') {
+            if ($node->nodeName != '#text') {
                 $node->parentNode->replaceChild($domDocument->createTextNode($node->textContent), $node);
             }
         }
@@ -155,6 +156,21 @@ class Escaper
         );
         foreach ($nodes as $node) {
             $node->parentNode->removeAttribute($node->nodeName);
+        }
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param \DOMDocument $domDocument
+     * @return void
+     */
+    private function removeComments(\DOMDocument $domDocument)
+    {
+        $xpath = new \DOMXPath($domDocument);
+        $nodes = $xpath->query('//comment()');
+        foreach ($nodes as $node) {
+            $node->parentNode->removeChild($node);
         }
     }
 
@@ -328,7 +344,8 @@ class Escaper
      */
     private function escapeScriptIdentifiers(string $data): string
     {
-        $filteredData = preg_replace(self::$xssFiltrationPattern, ':', $data) ?: '';
+        $filteredData = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $data) ?: '';
+        $filteredData = preg_replace(self::$xssFiltrationPattern, ':', $filteredData) ?: '';
         if (preg_match(self::$xssFiltrationPattern, $filteredData)) {
             $filteredData = $this->escapeScriptIdentifiers($filteredData);
         }

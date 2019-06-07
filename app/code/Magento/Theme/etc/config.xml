@@ -68,7 +68,7 @@ Disallow: /*SID=
             </static>
             <dev>
                 <js>
-                    <move_inline_to_bottom>0</move_inline_to_bottom>
+                    <move_script_to_bottom>0</move_script_to_bottom>
                 </js>
             </dev>
         </dev>

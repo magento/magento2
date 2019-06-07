@@ -6,10 +6,16 @@
 namespace Magento\Downloadable\Model\Sample;
 
 use Magento\Downloadable\Api\Data\SampleInterface;
+use Magento\Downloadable\Helper\File;
 use Magento\Downloadable\Model\File\ContentValidator as FileContentValidator;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Url\Validator as UrlValidator;
 
+/**
+ * Class to validate Sample Content.
+ */
 class ContentValidator
 {
     /**
@@ -23,19 +29,27 @@ class ContentValidator
     protected $fileContentValidator;
 
     /**
+     * @var File
+     */
+    private $fileHelper;
+
+    /**
      * @param FileContentValidator $fileContentValidator
      * @param UrlValidator $urlValidator
+     * @param File|null $fileHelper
      */
     public function __construct(
         FileContentValidator $fileContentValidator,
-        UrlValidator $urlValidator
+        UrlValidator $urlValidator,
+        File $fileHelper = null
     ) {
         $this->fileContentValidator = $fileContentValidator;
         $this->urlValidator = $urlValidator;
+        $this->fileHelper = $fileHelper ?? ObjectManager::getInstance()->get(File::class);
     }
 
     /**
-     * Check if sample content is valid
+     * Check if sample content is valid.
      *
      * @param SampleInterface $sample
      * @param bool $validateSampleContent
@@ -51,29 +65,44 @@ class ContentValidator
         if ($validateSampleContent) {
             $this->validateSampleResource($sample);
         }
+
         return true;
     }
 
     /**
-     * Validate sample resource (file or URL)
+     * Validate sample resource (file or URL).
      *
      * @param SampleInterface $sample
-     * @throws InputException
      * @return void
+     * @throws InputException
      */
     protected function validateSampleResource(SampleInterface $sample)
     {
-        $sampleFile = $sample->getSampleFileContent();
-        if ($sample->getSampleType() == 'file'
-            && (!$sampleFile || !$this->fileContentValidator->isValid($sampleFile))
-        ) {
-            throw new InputException(__('Provided file content must be valid base64 encoded data.'));
+        if ($sample->getSampleType() === 'url') {
+            if (!$this->urlValidator->isValid($sample->getSampleUrl())) {
+                throw new InputException(__('Sample URL must have valid format.'));
+            }
+        } elseif ($sample->getSampleFileContent()) {
+            if (!$this->fileContentValidator->isValid($sample->getSampleFileContent())) {
+                throw new InputException(__('Provided file content must be valid base64 encoded data.'));
+            }
+        } elseif (!$this->isFileValid($sample->getBasePath() . $sample->getSampleFile())) {
+            throw new InputException(__('Sample file not found. Please try again.'));
         }
+    }
 
-        if ($sample->getSampleType() == 'url'
-            && !$this->urlValidator->isValid($sample->getSampleUrl())
-        ) {
-            throw new InputException(__('Sample URL must have valid format.'));
+    /**
+     * Check that Samples file is valid.
+     *
+     * @param string $file
+     * @return bool
+     */
+    private function isFileValid(string $file): bool
+    {
+        try {
+            return $this->fileHelper->ensureFileInFilesystem($file);
+        } catch (ValidatorException $e) {
+            return false;
         }
     }
 }

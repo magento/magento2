@@ -73,10 +73,14 @@ class ColumnFactory
             'filter' => ($attribute->getIsFilterableInGrid() || array_key_exists($columnName, $filterModifiers))
                 ? $this->getFilterType($attribute->getFrontendInput())
                 : null,
+            '__disableTmpl' => ['label' => true],
         ], $config);
 
         if ($attribute->usesSource()) {
             $config['options'] = $attribute->getSource()->getAllOptions();
+            foreach ($config['options'] as &$optionData) {
+                $optionData['__disableTmpl'] = true;
+            }
         }
         
         $config['component'] = $this->getJsComponent($config['dataType']);

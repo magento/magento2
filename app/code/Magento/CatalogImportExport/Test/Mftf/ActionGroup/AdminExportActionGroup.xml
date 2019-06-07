@@ -53,6 +53,8 @@
         <arguments>
             <argument name="rowIndex" type="string"/>
         </arguments>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad time="30" stepKey="waitFormReload"/>
         <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
         <click stepKey="clickSelectBtn" selector="{{AdminExportAttributeSection.selectByIndex(rowIndex)}}"/>
         <click stepKey="clickOnDelete" selector="{{AdminExportAttributeSection.delete(rowIndex)}}" after="clickSelectBtn"/>

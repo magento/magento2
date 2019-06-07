@@ -328,6 +328,7 @@ class Storage extends \Magento\Framework\DataObject
             $item->setName($item->getBasename());
             $item->setShortName($this->_cmsWysiwygImages->getShortFilename($item->getBasename()));
             $item->setUrl($this->_cmsWysiwygImages->getCurrentUrl() . $item->getBasename());
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $item->setSize(filesize($item->getFilename()));
             $item->setMimeType(\mime_content_type($item->getFilename()));
 
@@ -338,6 +339,7 @@ class Storage extends \Magento\Framework\DataObject
                     $thumbUrl = $this->_backendUrl->getUrl('cms/*/thumbnail', ['file' => $item->getId()]);
                 }
 
+                // phpcs:ignore Generic.PHP.NoSilencedErrors
                 $size = @getimagesize($item->getFilename());
 
                 if (is_array($size)) {
@@ -413,6 +415,7 @@ class Storage extends \Magento\Framework\DataObject
                 'id' => $this->_cmsWysiwygImages->convertPathToId($newPath),
             ];
             return $result;
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We cannot create a new directory.'));
         }
@@ -421,7 +424,7 @@ class Storage extends \Magento\Framework\DataObject
     /**
      * Recursively delete directory from storage
      *
-     * @param string $path Target dir
+     * @param string $path Absolute path to target directory
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -430,12 +433,20 @@ class Storage extends \Magento\Framework\DataObject
         if ($this->_coreFileStorageDb->checkDbUsage()) {
             $this->_directoryDatabaseFactory->create()->deleteDirectory($path);
         }
+        if (!$this->isPathAllowed($path, $this->getConditionsForExcludeDirs())) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We cannot delete directory %1.', $this->_getRelativePathToRoot($path))
+            );
+        }
         try {
             $this->_deleteByPath($path);
             $path = $this->getThumbnailRoot() . $this->_getRelativePathToRoot($path);
             $this->_deleteByPath($path);
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot delete directory %1.', $path));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We cannot delete directory %1.', $this->_getRelativePathToRoot($path))
+            );
         }
     }
 
@@ -482,13 +493,18 @@ class Storage extends \Magento\Framework\DataObject
     /**
      * Upload and resize new file
      *
-     * @param string $targetPath Target directory
+     * @param string $targetPath Absolute path to target directory
      * @param string $type Type of storage, e.g. image, media etc.
      * @return array File info Array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function uploadFile($targetPath, $type = null)
     {
+        if (!$this->isPathAllowed($targetPath, $this->getConditionsForExcludeDirs())) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We can\'t upload the file to current folder right now. Please try another folder.')
+            );
+        }
         /** @var \Magento\MediaStorage\Model\File\Uploader $uploader */
         $uploader = $this->_uploaderFactory->create(['fileId' => 'image']);
         $allowed = $this->getAllowedExtensions($type);
@@ -589,6 +605,7 @@ class Storage extends \Magento\Framework\DataObject
         $image->open($source);
         $image->keepAspectRatio($keepRatio);
         $image->resize($this->_resizeParameters['width'], $this->_resizeParameters['height']);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $dest = $targetDir . '/' . pathinfo($source, PATHINFO_BASENAME);
         $image->save($dest);
         if ($this->_directory->isFile($this->_directory->getRelativePath($dest))) {
@@ -624,6 +641,7 @@ class Storage extends \Magento\Framework\DataObject
         $thumbnailDir = $this->getThumbnailRoot();
 
         if ($filePath && strpos($filePath, $mediaRootDir) === 0) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $thumbnailDir .= dirname(substr($filePath, strlen($mediaRootDir)));
         }
 
@@ -674,6 +692,7 @@ class Storage extends \Magento\Framework\DataObject
         if (!$this->hasData('_image_extensions')) {
             $this->setData('_image_extensions', $this->getAllowedExtensions('image'));
         }
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         return in_array($ext, $this->_getData('_image_extensions'));
     }
@@ -783,5 +802,30 @@ class Storage extends \Magento\Framework\DataObject
         }
 
         return $allowed;
+    }
+
+    /**
+     * Check if path is not in excluded dirs.
+     *
+     * @param string $path Absolute path
+     * @param array $conditions Exclude conditions
+     * @return bool
+     */
+    private function isPathAllowed($path, array $conditions): bool
+    {
+        $isAllowed = true;
+        $regExp = $conditions['reg_exp'] ? '~' . implode('|', array_keys($conditions['reg_exp'])) . '~i' : null;
+        $storageRoot = $this->_cmsWysiwygImages->getStorageRoot();
+        $storageRootLength = strlen($storageRoot);
+
+        $mediaSubPathname = substr($path, $storageRootLength);
+        $rootChildParts = explode('/', '/' . ltrim($mediaSubPathname, '/'));
+
+        if (array_key_exists($rootChildParts[1], $conditions['plain'])
+            || ($regExp && preg_match($regExp, $path))) {
+            $isAllowed = false;
+        }
+
+        return $isAllowed;
     }
 }

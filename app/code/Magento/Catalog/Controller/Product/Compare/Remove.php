@@ -9,10 +9,13 @@ namespace Magento\Catalog\Controller\Product\Compare;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Remove item from compare list action.
+ */
 class Remove extends \Magento\Catalog\Controller\Product\Compare implements HttpPostActionInterface
 {
     /**
-     * Remove item from compare list
+     * Remove item from compare list.
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
@@ -22,12 +25,13 @@ class Remove extends \Magento\Catalog\Controller\Product\Compare implements Http
         if ($productId) {
             $storeId = $this->_storeManager->getStore()->getId();
             try {
+                /** @var \Magento\Catalog\Model\Product $product */
                 $product = $this->productRepository->getById($productId, false, $storeId);
             } catch (NoSuchEntityException $e) {
                 $product = null;
             }
 
-            if ($product) {
+            if ($product && $product->isSalable()) {
                 /** @var $item \Magento\Catalog\Model\Product\Compare\Item */
                 $item = $this->_compareItemFactory->create();
                 if ($this->_customerSession->isLoggedIn()) {
@@ -59,6 +63,7 @@ class Remove extends \Magento\Catalog\Controller\Product\Compare implements Http
 
         if (!$this->getRequest()->getParam('isAjax', false)) {
             $resultRedirect = $this->resultRedirectFactory->create();
+
             return $resultRedirect->setRefererOrBaseUrl();
         }
     }

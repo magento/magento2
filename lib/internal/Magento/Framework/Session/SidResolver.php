@@ -11,6 +11,7 @@ use Magento\Framework\App\State;
 
 /**
  * Class SidResolver
+ * @deprecated 2.3.3 SIDs in URLs are no longer used
  */
 class SidResolver implements SidResolverInterface
 {
