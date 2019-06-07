@@ -57,6 +57,7 @@
 
         <!-- Click on the magnifying glass to start searching -->
         <click selector="{{AdminGlobalSearchSection.globalSearch}}" stepKey="clickSearchBtn"/>
+        <waitForElementVisible selector="{{AdminGlobalSearchSection.globalSearchActive}}" stepKey="waitForSearchInputVisible"/>
 
         <!-- The search input is expanded and active -->
         <seeElement selector="{{AdminGlobalSearchSection.globalSearchActive}}" stepKey="seeActiveSearch"/>
