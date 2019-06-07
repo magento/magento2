@@ -24,17 +24,7 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
         $email = 'customer@example.com';
         $password = 'password';
 
-        $mutation
-            = <<<MUTATION
-mutation {
-	generateCustomerToken(
-        email: "{$email}"
-        password: "{$password}"
-    ) {
-        token
-    }
-}
-MUTATION;
+        $mutation = $this->getQuery($email, $password);
 
         $response = $this->graphQlMutation($mutation);
         $this->assertArrayHasKey('generateCustomerToken', $response);
@@ -52,19 +42,9 @@ MUTATION;
      * @param string $password
      * @param string $message
      */
-    public function testGenerateCustomerTokenNegativeCases(string $email, string $password, string $message)
+    public function testGenerateCustomerTokenInvalidData(string $email, string $password, string $message)
     {
-        $mutation
-            = <<<MUTATION
-mutation {
-	generateCustomerToken(
-        email: "{$email}"
-        password: "{$password}"
-    ) {
-        token
-    }
-}
-MUTATION;
+        $mutation = $this->getQuery($email, $password);
         $this->expectExceptionMessage($message);
         $this->graphQlMutation($mutation);
     }
@@ -79,17 +59,7 @@ MUTATION;
         $email = 'customer@example.com';
         $password = 'password';
 
-        $mutation
-            = <<<MUTATION
-mutation {
-	generateCustomerToken(
-        email: "{$email}"
-        password: "{$password}"
-    ) {
-        token
-    }
-}
-MUTATION;
+        $mutation = $this->getQuery($email, $password);
 
         $response1 = $this->graphQlMutation($mutation);
         $token1 = $response1['generateCustomerToken']['token'];
@@ -130,5 +100,23 @@ MUTATION;
 
             ]
         ];
+    }
+
+    /**
+     * @param string $email
+     * @param string $password
+     * @return string
+     */
+    private function getQuery(string $email, string $password) : string {
+        return <<<MUTATION
+mutation {
+	generateCustomerToken(
+        email: "{$email}"
+        password: "{$password}"
+    ) {
+        token
+    }
+}
+MUTATION;
     }
 }
