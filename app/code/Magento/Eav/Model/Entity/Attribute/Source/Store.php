@@ -35,8 +35,8 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 
     /**
      * Retrieve Full Option values array
-     *
-     * @return array
+     * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAllOptions($withEmpty = true, $defaultValues = false)
     {
