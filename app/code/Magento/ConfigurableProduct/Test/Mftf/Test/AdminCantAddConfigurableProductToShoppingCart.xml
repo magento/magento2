@@ -120,8 +120,8 @@
         <click selector="{{AdminOrderFormConfigureProductSection.configure($$createConfigProduct.id$$)}}" stepKey="clickOnConfigure"/>
         <!--Click on attribute drop-down and check no option 1 is available-->
         <comment userInput="Click on attribute drop-down and check no option 1 is available" stepKey="commentNoOptionIsAvailable"/>
-        <waitForElement selector="{{AdminOrderFormConfigureProductSection.attributeSelect}}" stepKey="waitForShippingSectionLoaded"/>
-        <click selector="{{AdminOrderFormConfigureProductSection.attributeSelect}}" stepKey="clickToSelectOption"/>
+        <waitForElement selector="{{AdminOrderFormConfigureProductSection.selectOption}}" stepKey="waitForShippingSectionLoaded"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.selectOption}}" stepKey="clickToSelectOption"/>
         <dontSee userInput="$$createConfigProductAttributeOption1.option[store_labels][1][label]$$" stepKey="dontSeeOption1"/>
     </test>
 </tests>
