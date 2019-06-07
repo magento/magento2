@@ -553,6 +553,9 @@ QUERY;
      */
     public function testSetBillingAddressWithoutRequiredParameters(string $input, string $message)
     {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $input = str_replace('cart_id_value', $maskedQuoteId, $input);
+        
         $query = <<<QUERY
 mutation {
   setBillingAddressOnCart(
