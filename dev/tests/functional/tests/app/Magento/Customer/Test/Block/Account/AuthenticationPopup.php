@@ -72,7 +72,7 @@ class AuthenticationPopup extends Form
         sleep(10);
         $this->fill($customer);
         $this->_rootElement->find($this->login)->click();
-        $this->waitForElementNotVisible($this->loadingMask);
         sleep(10);
+        $this->waitForElementNotVisible($this->loadingMask);
     }
 }
