@@ -312,7 +312,6 @@ class ConfigurableProductsFixture extends Fixture
      * @param array $defaultAttributeSets
      * @param int $configurableProductsCount
      * @return array
-     * @SuppressWarnings
      */
     private function getDefaultAttributeSetsConfig(array $defaultAttributeSets, $configurableProductsCount)
     {
@@ -822,7 +821,6 @@ class ConfigurableProductsFixture extends Fixture
      * @param int $minAmountOfWordsDescription
      * @param string $descriptionPrefix
      * @return \Closure
-     * @SuppressWarnings
      */
     private function getDescriptionClosure(
         $searchTerms,

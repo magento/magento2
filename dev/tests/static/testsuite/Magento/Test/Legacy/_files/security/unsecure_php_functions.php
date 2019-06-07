@@ -49,6 +49,8 @@ return [
     ],
     'mt_srand' => [
         'replacement' => '',
-        'exclude' => []
+        'exclude' => [
+            ['type' => 'setup', 'name' => 'magento/setup', 'path' => 'Fixtures/ConfigurableProductsFixture.php'],
+        ]
     ],
 ];
