@@ -202,7 +202,7 @@
     * [#21299](https://github.com/magento/magento2/issues/21299) -- HEAD request returns 404 (fixed in [magento/magento2#21378](https://github.com/magento/magento2/pull/21378))
     * [#21907](https://github.com/magento/magento2/issues/21907) -- Place order button disabled after failed email address validation check with braintree credit card (fixed in [magento/magento2#21936](https://github.com/magento/magento2/pull/21936))
     * [#6715](https://github.com/magento/magento2/issues/6715) -- Few weaknesses in the code (fixed in [magento/magento2#21968](https://github.com/magento/magento2/pull/21968))
-    * [#21960](https://github.com/magento/magento2/issues/21960) -- Layered Navigation: Equalize product count not working as expected (fixed in [magento/magento2#21968](https://github.com/magento/magento2/pull/21968))
+    * [#21960](https://github.com/magento/magento2/issues/21960) -- Layered Navigation: “Equalize product count” not working as expected (fixed in [magento/magento2#21968](https://github.com/magento/magento2/pull/21968))
     * [#22152](https://github.com/magento/magento2/issues/22152) -- Click on search icon it does not working (fixed in [magento/magento2#22154](https://github.com/magento/magento2/pull/22154))
     * [#22199](https://github.com/magento/magento2/issues/22199) -- A bug with health_check.php (fixed in [magento/magento2#22200](https://github.com/magento/magento2/pull/22200))
     * [#15090](https://github.com/magento/magento2/issues/15090) -- app:config:import fails with "Please specify the admin custom URL." (fixed in [magento/magento2#22281](https://github.com/magento/magento2/pull/22281))
@@ -276,7 +276,7 @@
     * [magento/magento2#21096](https://github.com/magento/magento2/pull/21096) -- Updated sprintf usage;  Simplified isset usage (by @df2k2)
     * [magento/magento2#21100](https://github.com/magento/magento2/pull/21100) -- [Sales] Improves the UX by scrolling down the customer to the Recent Orders (by @eduard13)
     * [magento/magento2#21129](https://github.com/magento/magento2/pull/21129) -- Remove unused reference on wishlist ConvertSerializedData controller (by @sasangagamlath)
-    * [magento/magento2#20165](https://github.com/magento/magento2/pull/20165) -- issue fixed #20163 On iPhone5 device newsletter subscription input bo (by @cedarvinda)
+    * [magento/magento2#20165](https://github.com/magento/magento2/pull/20165) -- issue fixed #20163 On iPhone5 device newsletter subscription input bo... (by @cedarvinda)
     * [magento/magento2#20466](https://github.com/magento/magento2/pull/20466) -- view-order-price-subtotal-alignment-not-proper-mobile (by @priti2jcommerce)
     * [magento/magento2#20682](https://github.com/magento/magento2/pull/20682) -- Full Tax Summary display wrong numbers (by @niravkrish)
     * [magento/magento2#20847](https://github.com/magento/magento2/pull/20847) -- Fixed validation strategy label in import form (by @elevinskii)
@@ -286,7 +286,7 @@
     * [magento/magento2#20902](https://github.com/magento/magento2/pull/20902) -- Fixed  #17564 Magento 2 inline edit date issues in admin grid with Ui Component (by @satyaprakashpatel)
     * [magento/magento2#20953](https://github.com/magento/magento2/pull/20953) -- #18698 Fixed order email sending via order async email sending when order was created with disabled email sending (by @serhiyzhovnir)
     * [magento/magento2#20963](https://github.com/magento/magento2/pull/20963) -- bundle-product-table-data-grouped-alignment :: Bundle product table d… (by @parag2jcommerce)
-    * [magento/magento2#21009](https://github.com/magento/magento2/pull/21009) -- issue fixed #20919 Email label and email field not aligned from left  (by @cedarvinda)
+    * [magento/magento2#21009](https://github.com/magento/magento2/pull/21009) -- issue fixed #20919 Email label and email field not aligned from left ... (by @cedarvinda)
     * [magento/magento2#21038](https://github.com/magento/magento2/pull/21038) -- quantity-not-center-align-on-review-order (by @nainesh2jcommerce)
     * [magento/magento2#21071](https://github.com/magento/magento2/pull/21071) -- Fixed Luma theme my account Order status tabs 21070 (by @abrarpathan19)
     * [magento/magento2#21102](https://github.com/magento/magento2/pull/21102) -- [Catalog] Fixing compare block product removing action from sidebar (by @eduard13)
@@ -311,7 +311,7 @@
     * [magento/magento2#20839](https://github.com/magento/magento2/pull/20839) -- Checkout shipping tooltip 20838 (by @abrarpathan19)
     * [magento/magento2#21197](https://github.com/magento/magento2/pull/21197) -- [Ui] Fixing the changing state of dropdown's icon (by @eduard13)
     * [magento/magento2#21227](https://github.com/magento/magento2/pull/21227) -- remove-duplicated-media (by @priti2jcommerce)
-    * [magento/magento2#19505](https://github.com/magento/magento2/pull/19505) -- ISSUE-5021 fixed guest checkout with custom shipping carrier with unde (by @vovsky)
+    * [magento/magento2#19505](https://github.com/magento/magento2/pull/19505) -- ISSUE-5021 fixed guest checkout with custom shipping carrier with unde... (by @vovsky)
     * [magento/magento2#21046](https://github.com/magento/magento2/pull/21046) -- Remove unwanted condition check (by @dominicfernando)
     * [magento/magento2#21121](https://github.com/magento/magento2/pull/21121) -- Applied PHP-CS-Fixer: concat_space, no_multiline_whitespace_around_double_arrow, ordered_imports (by @yogeshsuhagiya)
     * [magento/magento2#21178](https://github.com/magento/magento2/pull/21178) -- Fix issue 21177 - Cart page cross-sell product add-to-cart button issue resolved (by @speedy008)
@@ -345,7 +345,7 @@
     * [magento/magento2#21360](https://github.com/magento/magento2/pull/21360) -- Solve #21359 Search with long string display horizontal scroll in front end (by @mageprince)
     * [magento/magento2#21368](https://github.com/magento/magento2/pull/21368) -- Css property name issue (by @amol2jcommerce)
     * [magento/magento2#20044](https://github.com/magento/magento2/pull/20044) --  Sitemap filename can't exceed 32 characters #13937  (by @irajneeshgupta)
-    * [magento/magento2#20339](https://github.com/magento/magento2/pull/20339) -- issue fixed #20337 Option Title breaking in two line because applying (by @cedarvinda)
+    * [magento/magento2#20339](https://github.com/magento/magento2/pull/20339) -- issue fixed #20337 Option Title breaking in two line because applying... (by @cedarvinda)
     * [magento/magento2#20578](https://github.com/magento/magento2/pull/20578) -- Added original exception as the cause to the new exception on product delete error (by @woutersamaey)
     * [magento/magento2#20858](https://github.com/magento/magento2/pull/20858) -- Update details.phtml (by @mageho)
     * [magento/magento2#21105](https://github.com/magento/magento2/pull/21105) -- Fixed pagination issue in admin review grid (by @dominicfernando)
@@ -356,7 +356,7 @@
     * [magento/magento2#21401](https://github.com/magento/magento2/pull/21401) -- Show error message when customer click on Add to cart button without selecting atleast one product from recently orderred list (by @mageprince)
     * [magento/magento2#21405](https://github.com/magento/magento2/pull/21405) -- Removed unused else block and corrected return types (by @yogeshsuhagiya)
     * [magento/magento2#21429](https://github.com/magento/magento2/pull/21429) -- Correct spelling (by @ravi-chandra3197)
-    * [magento/magento2#21426](https://github.com/magento/magento2/pull/21426) -- fixes-for-product-page-product-in-website-multi-store-view-not-displa (by @priti2jcommerce)
+    * [magento/magento2#21426](https://github.com/magento/magento2/pull/21426) -- fixes-for-product-page-product-in-website-multi-store-view-not-displa... (by @priti2jcommerce)
     * [magento/magento2#21431](https://github.com/magento/magento2/pull/21431) -- Fix grammar (by @DanielRuf)
     * [magento/magento2#21151](https://github.com/magento/magento2/pull/21151) -- Database Rollback not working M2.3.0 (by @Stepa4man)
     * [magento/magento2#21458](https://github.com/magento/magento2/pull/21458) -- Elasticsearch6 implementation. (by @romainruaud)
@@ -437,7 +437,7 @@
     * [magento/magento2#21399](https://github.com/magento/magento2/pull/21399) -- Fixed : Additional addresses DataTable Pagination count displaying wrong (by @Dharmeshvaja91)
     * [magento/magento2#21693](https://github.com/magento/magento2/pull/21693) -- Fix #21692 #21752 - logic in constructor of address validator and Locale Resolver check (by @Bartlomiejsz)
     * [magento/magento2#21815](https://github.com/magento/magento2/pull/21815) -- Fill data_hash from BULK response with correct data (by @silyadev)
-    * [magento/magento2#21820](https://github.com/magento/magento2/pull/21820) -- #20825 Missing required argument $productAvailabilityChecks of Magent (by @kisroman)
+    * [magento/magento2#21820](https://github.com/magento/magento2/pull/21820) -- #20825 Missing required argument $productAvailabilityChecks of Magent... (by @kisroman)
     * [magento/magento2#21843](https://github.com/magento/magento2/pull/21843) -- Fix typo (by @nasanabri)
     * [magento/magento2#21851](https://github.com/magento/magento2/pull/21851) -- [Frontend] Fixing the accessibility standards violation (by @eduard13)
     * [magento/magento2#21884](https://github.com/magento/magento2/pull/21884) -- Correct spelling (by @ravi-chandra3197)
@@ -458,7 +458,7 @@
     * [magento/magento2#21921](https://github.com/magento/magento2/pull/21921) -- Correct spelling (by @ravi-chandra3197)
     * [magento/magento2#18067](https://github.com/magento/magento2/pull/18067) -- Fixes variables in configuration fields not being replaced with actual value… (by @hostep)
     * [magento/magento2#19265](https://github.com/magento/magento2/pull/19265) -- add missing fields to quote_address (by @ErikPel)
-    * [magento/magento2#20526](https://github.com/magento/magento2/pull/20526) -- [EAV] Improving the EAV attribute code validation, by not allowing to use n (by @eduard13)
+    * [magento/magento2#20526](https://github.com/magento/magento2/pull/20526) -- [EAV] Improving the EAV attribute code validation, by not allowing to use n... (by @eduard13)
     * [magento/magento2#20898](https://github.com/magento/magento2/pull/20898) -- Fixed #13319 , Incorrect method return value in \Magento\Shipping\Model\Carrier\AbstractCarrier::getTotalNumOfBoxes() (by @cedmudit)
     * [magento/magento2#21053](https://github.com/magento/magento2/pull/21053) -- Allow redis compression options to be specified during `setup:install` process (by @cmacdonald-au)
     * [magento/magento2#21065](https://github.com/magento/magento2/pull/21065) -- Refactored Retrieval Of Entity ID To Make AbstractDataProvider Usable (by @sprankhub)
