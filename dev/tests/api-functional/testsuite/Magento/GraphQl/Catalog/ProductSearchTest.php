@@ -1143,7 +1143,6 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      * @expectedException \Exception
      * @expectedExceptionMessage currentPage value must be greater than 0
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testInvalidPageNumbers()
     {
@@ -1174,7 +1173,6 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      * @expectedException \Exception
      * @expectedExceptionMessage pageSize value must be greater than 0
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testInvalidPageSize()
     {
