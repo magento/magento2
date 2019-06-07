@@ -180,8 +180,8 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
 
         $message = nl2br(htmlspecialchars($this->getSender()->getMessage()));
         $sender = [
-            'name' => $this->_escaper->escapeHtml($this->getSender()->getName()),
-            'email' => $this->_escaper->escapeHtml($this->getSender()->getEmail()),
+            'name' => $this->_escaper->escapeHtml($this->getSender()->getEmail()),
+            'email' => $this->_sendfriendData->getSenderEmail(),
         ];
 
         foreach ($this->getRecipients()->getEmails() as $k => $email) {
