@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminFixedTaxValSavedForSpecificWebsiteTest">
+        <annotations>
+            <features value="Tax"/>
+            <title value="Cannot Save FPT (Fixed Product Tax) On Catalog Product For Specific Website"/>
+            <description value="Cannot Save FPT (Fixed Product Tax) On Catalog Product For Specific Website"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-17182"/>
+            <useCaseId value=" MC-17014"/>
+            <group value="tax"/>
+        </annotations>
+        <before>
+            <!-- Create product attribute and add it to default attribute set />-->
+            <comment userInput="Create product attribute and add it to default attribute set" stepKey="createAttrAndAddToDefaultAttrSet"/>
+            <createData entity="productFPTAttribute" stepKey="createProductFPTAttribute"/>
+            <createData entity="AddToDefaultSet" stepKey="addToDefaultAttributeSet">
+                <requiredEntity createDataKey="createProductFPTAttribute"/>
+            </createData>
+            <!-- Create product, category and log in -->
+            <comment userInput="Create product, category and log in" stepKey="createDataAndLogIn"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!-- Create website, store and store view -->
+            <comment userInput="Create website, store and store view" stepKey="createWebsite"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
+                <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
+                <argument name="websiteCode" value="{{NewWebSiteData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStore">
+                <argument name="website" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeGroupName" value="{{NewStoreData.name}}"/>
+                <argument name="storeGroupCode" value="{{NewStoreData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+                <argument name="StoreGroup" value="NewStoreData"/>
+                <argument name="customStore" value="storeViewData"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete created data and log out -->
+            <comment userInput="Delete created data and log out" stepKey="deleteDataAndLogOut"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteCustomWebsite">
+                <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+        <!-- Go to product edit page and assign it to created website -->
+        <comment userInput="Go to product edit page and assign it to created website" stepKey="assignProductToCreatedWebsite"/>
+        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="navigateToProductPage"/>
+        <actionGroup ref="attachOneWebsiteToProductActionGroup" stepKey="updateSimpleProductAddingWebsiteCreated">
+            <argument name="website" value="{{NewWebSiteData.name}}"/>
+        </actionGroup>
+        <!-- Add Fixed Product Tax attribute -->
+        <comment userInput="Add Fixed Product Tax attribute" stepKey="addFixedProdTaxAttr"/>
+        <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFixedProductTaxAttr">
+            <argument name="FPTAttributeCode" value="$$createProductFPTAttribute.attribute_code$$"/>
+            <argument name="stateForFPT" value="California"/>
+            <argument name="valueForFPT" value="10"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <!-- Check if created tax attribute is saved -->
+        <comment userInput="Check if created tax attribute is saved" stepKey="checkThatTaxAttributeIsSaved"/>
+        <seeElement selector="{{AdminProductAddFPTValueSection.setTaxValueForFPT($$createProductFPTAttribute.attribute_code$$)}}" stepKey="checkIfTaxAttributeSaved"/>
+    </test>
+</tests>
