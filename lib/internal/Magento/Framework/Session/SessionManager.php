@@ -614,12 +614,16 @@ class SessionManager implements SessionManagerInterface
     private function initIniOptions()
     {
         foreach ($this->sessionConfig->getOptions() as $option => $value) {
-            $result = ini_set($option, $value);
-            if ($result === false) {
-                $error = error_get_last();
-                throw new \InvalidArgumentException(
-                    sprintf('Failed to set ini option "%s" to value "%s". %s', $option, $value, $error['message'])
-                );
+            if ($option === 'session.save_handler') {
+                continue;
+            } else {
+                $result = ini_set($option, $value);
+                if ($result === false) {
+                    $error = error_get_last();
+                    throw new \InvalidArgumentException(
+                        sprintf('Failed to set ini option "%s" to value "%s". %s', $option, $value, $error['message'])
+                    );
+                }
             }
         }
     }
