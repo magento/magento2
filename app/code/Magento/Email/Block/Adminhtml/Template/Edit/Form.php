@@ -9,6 +9,9 @@
  */
 namespace Magento\Email\Block\Adminhtml\Template\Edit;
 
+/**
+ * Adminhtml email template edit form block
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -191,7 +194,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         }
         $template = $this->getEmailTemplate();
         if ($template->getId() && ($templateVariables = $template->getVariablesOptionArray(true))) {
-            $variables = array_merge_recursive($variables, $templateVariables);
+            $variables = array_merge_recursive($variables, [$templateVariables]);
         }
         return $variables;
     }
