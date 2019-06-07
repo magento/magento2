@@ -9,4 +9,7 @@
     <page name="AdminConfigPage" url="admin/system_config/" area="admin" module="Magento_Config">
         <section name="AdminConfigSection"/>
     </page>
+    <page name="AdminConfigGeneralPage" url="admin/system_config/edit/section/general/" area="admin" module="Magento_Config">
+        <section name="CountryOptionsSection"/>
+    </page>
 </pages>
