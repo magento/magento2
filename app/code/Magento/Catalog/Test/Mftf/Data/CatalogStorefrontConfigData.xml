@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="RememberPaginationCatalogStorefrontConfig" type="catalog_storefront_config">
+        <requiredEntity type="grid_per_page_values">GridPerPageValues</requiredEntity>
+        <requiredEntity type="remember_pagination">RememberCategoryPagination</requiredEntity>
+    </entity>
+
+    <entity name="GridPerPageValues" type="grid_per_page_values">
+        <data key="value">9,12,20,24</data>
+    </entity>
+
+    <entity name="RememberCategoryPagination" type="remember_pagination">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="DefaultCatalogStorefrontConfiguration" type="default_catalog_storefront_config">
+        <requiredEntity type="catalogStorefrontFlagZero">DefaultCatalogStorefrontFlagZero</requiredEntity>
+        <data key="list_allow_all">DefaultListAllowAll</data>
+        <data key="flat_catalog_product">DefaultFlatCatalogProduct</data>
+    </entity>
+
+    <entity name="DefaultCatalogStorefrontFlagZero" type="catalogStorefrontFlagZero">
+        <data key="value">0</data>
+    </entity>
+
+    <entity name="DefaultListAllowAll" type="list_allow_all">
+        <data key="value">0</data>
+    </entity>
+
+    <entity name="DefaultFlatCatalogProduct" type="flat_catalog_product">
+        <data key="value">0</data>
+    </entity>
+
+    <entity name="UseFlatCatalogCategoryAndProduct" type="catalog_storefront_config">
+        <requiredEntity type="flat_catalog_product">UseFlatCatalogProduct</requiredEntity>
+        <requiredEntity type="flat_catalog_category">UseFlatCatalogCategory</requiredEntity>
+    </entity>
+
+    <entity name="UseFlatCatalogProduct" type="flat_catalog_product">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="UseFlatCatalogCategory" type="flat_catalog_category">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="DefaultFlatCatalogCategoryAndProduct" type="catalog_storefront_config">
+        <requiredEntity type="flat_catalog_product">DefaultFlatCatalogProduct</requiredEntity>
+        <requiredEntity type="flat_catalog_category">DefaultFlatCatalogCategory</requiredEntity>
+    </entity>
+
+    <entity name="DefaultFlatCatalogCategory" type="flat_catalog_category">
+        <data key="value">0</data>
+    </entity>
+</entities>

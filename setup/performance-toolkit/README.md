@@ -29,7 +29,7 @@ Splitting generation and indexation processes doesn't reduce total processing ti
     php bin/magento setup:performance:generate-fixtures -s setup/performance-toolkit/profiles/ce/small.xml
     php bin/magento indexer:reindex
 
-For more information about the available profiles and generating fixtures generation, read [Generate data for performance testing](http://devdocs.magento.com/guides/v2.2/config-guide/cli/config-cli-subcommands-perf-data.html).
+For more information about the available profiles and generating fixtures generation, read [Generate data for performance testing](https://devdocs.magento.com/guides/v2.2/config-guide/cli/config-cli-subcommands-perf-data.html).
 
 For run Admin Pool in multithreading mode, please be sure, that:
   - "Admin Account Sharing" is enabled
@@ -54,49 +54,139 @@ There are two JMeter scenarios located in `setup/performance-toolkit` folder: `b
 
 The following parameters can be passed to the `benchmark.jmx` scenario:
 
+Main parameters:
+
 | Parameter Name                                | Default Value       | Description                                                                              |
 | --------------------------------------------- | ------------------- | ---------------------------------------------------------------------------------------- |
 | host                                          |  localhost          | URL component 'host' of application being tested (URL or IP).                            |
 | base_path                                     |       /             | Base path for tested site.                                                               |
+| files_folder                                  | ./files/            | Path to various files that are used in scenario (`setup/performance-toolkit/files`).     |
+| request_protocol                              | http                | Hypertext Transfer Protocol (http or https).                                             |
+| graphql_port_number                           |                     | Port number for GraphQL.                                                                 |
+| admin_password                                | 123123q             | Admin backend password.                                                                  |
 | admin_path                                    | admin               | Admin backend path.                                                                      |
 | admin_user                                    | admin               | Admin backend user.                                                                      |
-| admin_password                                | 123123q             | Admin backend password.                                                                  |
-| customer_password                             | 123123q             | Storefront customer password.                                                            |
-| customers_page_size                           | 50                  | Page size for customers grid in Magento Admin.                                           |
-| files_folder                                  | ./files/            | Path to various files that are used in scenario (`setup/performance-toolkit/files`).     |
+| cache_hits_percentage                         | 100                 | Cache hits percentage.                                                                   |
+| seedForRandom                                 | 1                   | System option for setting random number method                                           |
 | loops                                         | 1                   | Number of loops to run.                                                                  |
-| frontendPoolUsers                             | 1                   | Total number of Frontend threads.                                                        |
-| adminPoolUsers                                | 1                   | Total number of Admin threads.                                                           |
-| browseCatalogByGuestPercentage                | 30                  | Percentage of threads in Frontend Pool that emulate catalog browsing activities.         |
-| browseCatalogByCustomerPercentage             | 0                   | Percentage of threads in Frontend Pool that emulate catalog browsing activities.         |
-| siteSearchPercentage                          | 30                  | Percentage of threads in Frontend Pool that emulate catalog search activities.           |
-| searchQuickPercentage                         | 60                  | Percentage of threads in Frontend Pool that emulate catalog search activities.           |
-| searchQuickFilterPercentage                   | 30                  | Percentage of threads in Frontend Pool that emulate catalog search activities.           |
-| searchAdvancedPercentage                      | 10                  | Percentage of threads in Frontend Pool that emulate catalog search activities.           |
-| checkoutByGuestPercentage                     | 4                   | Percentage of threads in Frontend Pool that emulate checkout by guest.                   |
-| checkoutByCustomerPercentage                  | 4                   | Percentage of threads in Frontend Pool that emulate checkout by customer.                |
-| addToCartByGuestPercentage                    | 28                  | Percentage of threads in Frontend Pool that emulate abandoned cart activities.           |
-| addToWishlistPercentage                       | 2                   | Percentage of threads in Frontend Pool that emulate adding products to Wishlist.         |
-| compareProductsPercentage                     | 2                   | Percentage of threads in Frontend Pool that emulate products comparison.                 |
-| productCompareDelay                           | 0                   | Delay (s) between iterations of product comparison.                                      |
-| promotionRulesPercentage                      | 10                  | Percentage of threads in Admin Pool that emulate creation of promotion rules.            |
-| adminPromotionsManagementDelay                | 0                   | Delay (s) between creation of promotion rules.                                           |
-| adminCategoryManagementPercentage             | 10                   | Percentage of threads in Merchandising Pool that emulate category management activities. |
-| adminProductEditingPercentage                 | 35                  | Percentage of threads in Merchandising Pool that emulate product editing.                |
-| adminProductCreationPercentage                | 25                  | Percentage of threads in Merchandising Pool that emulate creation of products.           |
-| adminPromotionRulesPercentage                 | 15                  | Percentage of threads in Admin Pool that emulate admin rules creating activities.        |
-| adminCategoryManagementDelay                  | 0                   | Delay (s) between iterations of category management activities.                          |
-| apiProcessOrders                              | 5                   | Number of orders for process in Admin API - Process Orders.                              |
-| adminEditOrderPercentage                      | 15                  | Percentage of threads in Admin Pool that emulate order edit.                             |
-| csrPoolUsers                                  | 0                   | Users of Customer Support Request (CSR) Pool.                                            |
-| othersPoolUsers                               | 0                   | Users of Others Pool.                                                                    |
-| browseCustomerGridPercentage                  | 10                  | Percentage of threads in CSR Pool that emulate customers browsing activities.            |
-| adminCreateOrderPercentage                    | 70                  | Percentage of threads in CSR Pool that emulate creation of orders.                       |
-| adminReturnsManagementPercentage              | 20                  | Percentage of threads in CSR Pool that emulate creation/processing of returns.           |
-| adminCreateProcessReturnsDelay                | 0                   | Delay (s) between creation of returns.                                                   |
-| wishlistDelay                                 | 0                   | Delay (s) between adding products to Wishlist.                                           |
-| categories_count                              | 100                 | Total number of categories that are be used in scenario.                                 |
-| simple_products_count                         | 30                  | Total number of simple products that are be used in scenario.                            |
+| frontendPoolUsers                             | 0                   | Total number of Frontend threads.                                                        |
+| adminPoolUsers                                | 0                   | Total number of Admin threads.                                                           |
+| csrPoolUsers                                  | 0                   | Total number of CSR threads.                                                             |
+| apiPoolUsers                                  | 0                   | Total number of API threads.                                                             |
+| oneThreadScenariosPoolUsers                   | 0                   | Total number of One Thread Scenarios threads.                                            |
+| graphQLPoolUsers                              | 0                   | Total number of GraphQL threads.                                                         |
+| combinedBenchmarkPoolUsers                    | 0                   | Total number of Combined Benchmark threads.                                              |
+
+Parameters for Frontend pool:
+
+| Parameter Name                                | Default Value       | Description                                                                               |
+| --------------------------------------------- | ------------------- | ----------------------------------------------------------------------------------------- |
+| browseCatalogByCustomerPercentage             |  0                  | Percentage of threads in Frontend Pool that emulate customer catalog browsing activities. |
+| browseCatalogByGuestPercentage                |  0                  | Percentage of threads in Frontend Pool that emulate guest catalog browsing activities.    |
+| siteSearchPercentage                          |  0                  | Percentage of threads in Frontend Pool that emulate catalog search activities.            |
+| addToCartByGuestPercentage                    |  0                  | Percentage of threads in Frontend Pool that emulate abandoned cart activities by guest.   |
+| addToWishlistPercentage                       |  0                  | Percentage of threads in Frontend Pool that emulate adding products to Wishlist.          |
+| compareProductsPercentage                     |  0                  | Percentage of threads in Frontend Pool that emulate products comparison.                  |
+| checkoutByGuestPercentage                     |  0                  | Percentage of threads in Frontend Pool that emulate checkout by guest.                    |
+| checkoutByCustomerPercentage                  |  0                  | Percentage of threads in Frontend Pool that emulate checkout by customer.                 |
+| reviewByCustomerPercentage                    |  0                  | Percentage of threads in Frontend Pool that emulate reviewing products.                   |
+| addToCartByCustomerPercentage                 |  0                  | Percentage of threads in Frontend Pool that emulate abandoned cart activities by customer.|
+| accountManagementPercentage                   |  0                  | Percentage of threads in Frontend Pool that emulate account management.                   |
+
+Parameters for Admin pool:
+
+| Parameter Name                                | Default Value       | Description                                                                               |
+| --------------------------------------------- | ------------------- | ----------------------------------------------------------------------------------------- |
+| adminCMSManagementPercentage                  |  0                  | Percentage of threads in Admin Pool that emulate CMS management activities.               |
+| browseProductGridPercentage                   |  0                  | Percentage of threads in Admin Pool that emulate products grid browsing activities.       |
+| browseOrderGridPercentage                     |  0                  | Percentage of threads in Admin Pool that emulate orders grid browsing activities.         |
+| adminProductCreationPercentage                |  0                  | Percentage of threads in Admin Pool that emulate product creation activities.             |
+| adminProductEditingPercentage                 |  0                  | Percentage of threads in Admin Pool that emulate product editing activities.              |
+
+Parameters for CSR pool:
+
+| Parameter Name                                | Default Value       | Description                                                                               |
+| --------------------------------------------- | ------------------- | ----------------------------------------------------------------------------------------- |
+| adminReturnsManagementPercentage              |  0                  | Percentage of threads in CSR Pool that emulate admin returns management activities.       |
+| browseCustomerGridPercentage                  |  0                  | Percentage of threads in CSR Pool that emulate customers grid browsing activities.        |
+| adminCreateOrderPercentage                    |  0                  | Percentage of threads in CSR Pool that emulate creating orders activities.                |
+
+Parameters for API pool:
+
+| Parameter Name                                | Default Value       | Description                                                                               |
+| --------------------------------------------- | ------------------- | ----------------------------------------------------------------------------------------- |
+| apiBasePercentage                             |  0                  | Percentage of threads in API Pool that emulate API requests activities.                   |
+
+Parameters for One Thread Scenarios pool:
+
+| Parameter Name                                | Default Value       | Description                                                                   |
+| --------------------------------------------- | ------------------- | ----------------------------------------------------------------------------- |
+| productGridMassActionPercentage               |  0                  | Percentage of threads that emulate product mass action activities.            |
+| importProductsPercentage                      |  0                  | Percentage of threads that emulate products import activities.                |
+| importCustomersPercentage                     |  0                  | Percentage of threads that emulate customers import activities.               |
+| exportProductsPercentage                      |  0                  | Percentage of threads that emulate products export activities.                |
+| exportCustomersPercentage                     |  0                  | Percentage of threads that emulate customers export activities.               |
+| apiSinglePercentage                           |  0                  | Percentage of threads that emulate API nonparallel requests activities.       |
+| adminCategoryManagementPercentage             |  0                  | Percentage of threads that emulate category management activities.            |
+| adminPromotionRulesPercentage                 |  0                  | Percentage of threads that emulate promotion rules activities.                |
+| adminCustomerManagementPercentage             |  0                  | Percentage of threads that emulate customer management activities.            |
+| adminEditOrderPercentage                      |  0                  | Percentage of threads that emulate edit order activities.                     |
+| catalogGraphQLPercentage                      |  0                  | Percentage of threads that emulate nonparallel catalogGraphQL activities.     |
+
+Parameters for GraphQL pool:
+
+| Parameter Name                                                    | Default Value       | Description                                                                               |
+| ----------------------------------------------------------------- | ------------------- | ----------------------------------------------------------------------------------------- |
+| graphqlGetListOfProductsByCategoryIdPercentage                    |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlGetSimpleProductDetailsByProductUrlKeyPercentage           |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlGetSimpleProductDetailsByNamePercentage                    |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlGetConfigurableProductDetailsByProductUrlKeyPercentage     |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlGetConfigurableProductDetailsByNamePercentage              |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlGetProductSearchByTextAndCategoryIdPercentage              |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlGetCategoryListByCategoryIdPercentage                      |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlUrlInfoByUrlKeyPercentage                                  |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlGetCmsPageByIdPercentage                                   |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlGetNavigationMenuByCategoryIdPercentage                    |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlCreateEmptyCartPercentage                                  |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlGetEmptyCartPercentage                                     |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlSetShippingAddressOnCartPercentage                         |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlSetBillingAddressOnCartPercentage                          |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlAddSimpleProductToCartPercentage                           |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlAddConfigurableProductToCartPercentage                     |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlUpdateSimpleProductQtyInCartPercentage                     |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlUpdateConfigurableProductQtyInCartPercentage               |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlRemoveSimpleProductFromCartPercentage                      |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlRemoveConfigurableProductFromCartPercentage                |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlApplyCouponToCartPercentage                                |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlRemoveCouponFromCartPercentage                             |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlCatalogBrowsingByGuestPercentage                           |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+| graphqlCheckoutByGuestPercentage                                  |  0                  | Percentage of threads in GraphQL Pool that emulate GraphQL requests activities.           |
+
+Parameters for Combined Benchmark pool:
+
+| Parameter Name                                                    | Default Value       | Description                                                                                          |
+| ----------------------------------------------------------------- | ------------------- | ---------------------------------------------------------------------------------------------------- |
+| cBrowseCatalogByGuestPercentage                                   |  29                 | Percentage of threads in Combined Benchmark Pool that emulate customer catalog browsing activities.  |
+| cSiteSearchPercentage                                             |  29                 | Percentage of threads in Combined Benchmark Pool that emulate catalog search activities.             |
+| cAddToCartByGuestPercentage                                       |  26                 | Percentage of threads in Combined Benchmark Pool that emulate abandoned cart activities.             |
+| cAddToWishlistPercentage                                          |  1.5                | Percentage of threads in Combined Benchmark Pool that emulate adding products to Wishlist.           |
+| cCompareProductsPercentage                                        |  1.5                | Percentage of threads in Combined Benchmark Pool that emulate products comparison.                   |
+| cCheckoutByGuestPercentage                                        |  3.5                | Percentage of threads in Combined Benchmark Pool that emulate checkout by guest.                     |
+| cCheckoutByCustomerPercentage                                     |  3.5                | Percentage of threads in Combined Benchmark Pool that emulate checkout by customer.                  |
+| cAccountManagementPercentage                                      |  1                  | Percentage of threads in Combined Benchmark Pool that emulate account management.                    |
+| cAdminCMSManagementPercentage                                     |  0.35               | Percentage of threads in Combined Benchmark Pool that emulate CMS management activities.             |
+| cAdminBrowseProductGridPercentage                                 |  0.2                | Percentage of threads in Combined Benchmark Pool that emulate products grid browsing activities.     |
+| cAdminBrowseOrderGridPercentage                                   |  0.2                | Percentage of threads in Combined Benchmark Pool that emulate orders grid browsing activities.       |
+| cAdminProductCreationPercentage                                   |  0.5                | Percentage of threads in Combined Benchmark Pool that emulate product creation activities.           |
+| cAdminProductEditingPercentage                                    |  0.65               | Percentage of threads in Combined Benchmark Pool that emulate product editing activities.            |
+| cAdminReturnsManagementPercentage                                 |  0.75               | Percentage of threads in Combined Benchmark Pool that emulate admin returns management activities.   |
+| cAdminBrowseCustomerGridPercentage                                |  0.1                | Percentage of threads in Combined Benchmark Pool that emulate customers grid browsing activities.    |
+| cAdminCreateOrderPercentage                                       |  0.5                | Percentage of threads in Combined Benchmark Pool that emulate creating orders activities.            |
+| cAdminCategoryManagementPercentage                                |  0.15               | Percentage of threads in Combined Benchmark Pool that emulate admin category management activities.  |
+| cAdminPromotionRulesPercentage                                    |  0.2                | Percentage of threads in Combined Benchmark Pool that emulate admin promotion rules activities.      |
+| cAdminCustomerManagementPercentage                                |  0.4                | Percentage of threads in Combined Benchmark Pool that emulate admin customers management activities. |
+| cAdminEditOrderPercentage                                         |  1                  | Percentage of threads in Combined Benchmark Pool that emulate admin edit order activities.           |
+
 
 Parameters must be passed to the command line with the `J` prefix:
 
@@ -113,10 +203,17 @@ There are some options that you should pass to JMeter in the console mode:
 
 To get more details about available JMeter options, read [Non-GUI Mode](http://jmeter.apache.org/usermanual/get-started.html#non_gui).
 
-For example, you can run the B2C scenario via console with 90 threads for the Frontend Pool and 10 threads for the Admin Pool:
+For example, you can run the B2C scenario via console with:
+90 threads for the Frontend Pool where:
+- 80% - guest catalog browsing activities.
+- 20% - checkout by customer.
+ 
+10 threads for the Admin Pool where:
+- 10% - admin products grid browsing activities. 
+- 90% - admin product creation activities.
 
     cd {JMeter path}/bin/
-    jmeter -n -t {path to performance toolkit}/benchmark.jmx -j ./jmeter.log -l ./jmeter-results.jtl -Jhost=magento2.dev -Jbase_path=/ -Jadmin_path=admin -JfrontendPoolUsers=90 -JadminPoolUsers=10
+    jmeter -n -t {path to performance toolkit}/benchmark.jmx -j ./jmeter.log -l ./jmeter-results.jtl -Jhost=magento2.dev -Jbase_path=/ -Jadmin_path=admin -JfrontendPoolUsers=90 -JadminPoolUsers=10 -JbrowseCatalogByGuestPercentage=80 -JcheckoutByCustomerPercentage=20 -JbrowseProductGridPercentage=10 -JadminProductCreationPercentage=90
 
 As a result, you will get `jmeter.log` and `jmeter-results.jtl`. The`jmeter.log` contains information about the test run and can be helpful in determining the cause of an error.  The JTL file is a text file containing the results of a test run. It can be opened in the GUI mode to perform analysis of the results (see the *Output* section below).
 
@@ -190,42 +287,21 @@ For more details, read [Summary Report](http://jmeter.apache.org/usermanual/comp
 
 ### Scenarios
 
-`benchmark.jmx` scenario has the following pools and default percentage breakdown for each scenario:
+`benchmark.jmx` scenario has the following pools:
 
 **Frontend Pool** (frontendPoolUsers)
 
-| Scenario Name             | % of Pool |
-| ------------------------- | --------- |
-| Catalog Browsing By Guest |     30    |
-| Site Search               |     30    |
-| Add To Cart By Guest      |     28    |
-| Add to Wishlist           |     2     |
-| Compare Products          |     2     |
-| Checkout By Guest         |     4     |
-| Checkout By Customer      |     4     |
-
-Site Search thread group contains 3 variations:
-- Quick Search (60%)
-- Quick Search With Filtration (30%)
-- Advanced Search (10%)
-
 **Admin Pool** (adminPoolUsers)
-
-| Scenario Name               |% of Pool  |
-| ----------------------------| --------- |
-| Admin Promotion Rules       | 15        |
-| Admin Edit Order            | 15        |
-| Admin Category Management   | 10        |
-| Admin Edit Product          | 35        |
-| Admin Create Product        | 25        |
 
 **CSR Pool** (csrPoolUsers)
 
-| Scenario Name              | % of Pool |
-| -------------------------- | --------- |
-| Browse Customer Grid       | 10        |
-| Admin Create Order         | 70        |
-| Admin Returns Management   | 20        |
+**API Pool** (apiPoolUsers)
+
+**One Thread Scenarios Pool** (oneThreadScenariosPoolUsers)
+
+**GraphQL Pool** (graphQLPoolUsers)
+
+**Combined Benchmark Pool** (combinedBenchmarkPoolUsers)
 
 **Legacy Threads**
 

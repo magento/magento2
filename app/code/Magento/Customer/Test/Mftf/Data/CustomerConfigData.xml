@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="CustomerAccountSharingDefault" type="customer_account_sharing_config">
+        <requiredEntity type="account_share_scope_value">CustomerAccountSharingPerWebsite</requiredEntity>
+    </entity>
+    <entity name="CustomerAccountSharingPerWebsite" type="account_share_scope_value">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="CustomerAccountSharingGlobal" type="customer_account_sharing_config">
+        <requiredEntity type="account_share_scope_value">GlobalCustomerAccountSharing</requiredEntity>
+    </entity>
+    <entity name="GlobalCustomerAccountSharing" type="account_share_scope_value">
+        <data key="value">0</data>
+    </entity>
+
+    <entity name="CustomerAccountSharingSystemValue" type="customer_account_sharing_config_inherit">
+        <requiredEntity type="account_share_scope_inherit">CustomerAccountSharingInherit</requiredEntity>
+    </entity>
+    <entity name="CustomerAccountSharingInherit" type="account_share_scope_inherit">
+        <data key="inherit">true</data>
+    </entity>
+    <entity name="StorefrontCustomerLockoutFailuresDefaultConfigData">
+        <!-- Magento default value -->
+        <data key="path">customer/password/lockout_failures</data>
+        <data key="scope_id">0</data>
+        <data key="label">10</data>
+        <data key="value">10</data>
+    </entity>
+    <entity name="StorefrontCustomerLockoutFailures5ConfigData">
+        <data key="path">customer/password/lockout_failures</data>
+        <data key="scope_id">0</data>
+        <data key="label">5</data>
+        <data key="value">5</data>
+    </entity>
+</entities>

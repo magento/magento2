@@ -16,6 +16,16 @@ use Magento\Catalog\Model\ResourceModel\Category;
 class LevelCalculator
 {
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * @var Category
+     */
+    private $resourceCategory;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param Category $resourceCategory
      */
@@ -39,6 +49,7 @@ class LevelCalculator
         $select = $connection->select()
             ->from($this->resourceConnection->getTableName('catalog_category_entity'), 'level')
             ->where($this->resourceCategory->getLinkField() . " = ?", $rootCategoryId);
+
         return (int) $connection->fetchOne($select);
     }
 }

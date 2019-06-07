@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 ?>
 <script>
 require([
@@ -40,13 +39,16 @@ function getFrontTab() {
 
 function checkOptionsPanelVisibility(){
     if($('manage-options-panel')){
-        var panel = $('manage-options-panel').up('.fieldset');
+        var panel = $('manage-options-panel').up('.fieldset'),
+            activePanelClass = 'selected-type-options';
 
         if($('frontend_input') && ($('frontend_input').value=='select' || $('frontend_input').value=='multiselect')){
             panel.show();
+            jQuery(panel).addClass(activePanelClass);
         }
         else {
             panel.hide();
+            jQuery(panel).removeClass(activePanelClass);
         }
     }
 }
@@ -55,7 +57,7 @@ function bindAttributeInputType()
 {
     checkOptionsPanelVisibility();
     switchDefaultValueField();
-    if($('frontend_input') && ($('frontend_input').value=='select' || $('frontend_input').value=='multiselect' || $('frontend_input').value=='price')){
+    if($('frontend_input') && ($('frontend_input').value=='boolean' || $('frontend_input').value=='select' || $('frontend_input').value=='multiselect' || $('frontend_input').value=='price')){
         if($('is_filterable') && !$('is_filterable').getAttribute('readonly')){
             $('is_filterable').disabled = false;
         }
@@ -194,22 +196,22 @@ function switchDefaultValueField()
             setRowVisibility('frontend_class', false);
         break;
 
-        <?php foreach ($this->helper('Magento\Catalog\Helper\Data')->getAttributeHiddenFields() as $type => $fields): ?>
-            case '<?= /* @escapeNotVerified */ $type ?>':
+        <?php foreach ($this->helper(Magento\Catalog\Helper\Data::class)->getAttributeHiddenFields() as $type => $fields) :?>
+            case '<?= $block->escapeJs($type) ?>':
                 var isFrontTabHidden = false;
-                <?php foreach ($fields as $one): ?>
-                    <?php if ($one == '_front_fieldset'): ?>
+                <?php foreach ($fields as $one) :?>
+                    <?php if ($one == '_front_fieldset') :?>
                         getFrontTab().hide();
                         isFrontTabHidden = true;
-                    <?php elseif ($one == '_default_value'): ?>
+                    <?php elseif ($one == '_default_value') :?>
                         defaultValueTextVisibility =
                         defaultValueTextareaVisibility =
                         defaultValueDateVisibility =
                         defaultValueYesnoVisibility = false;
-                    <?php elseif ($one == '_scope'): ?>
+                    <?php elseif ($one == '_scope') :?>
                         scopeVisibility = false;
-                    <?php else: ?>
-                        setRowVisibility('<?= /* @escapeNotVerified */ $one ?>', false);
+                    <?php else :?>
+                        setRowVisibility('<?= $block->escapeJs($one) ?>', false);
                     <?php endif; ?>
                 <?php endforeach; ?>
 
@@ -331,7 +333,7 @@ if ($('is_required')) {
 
 jQuery(function($) {
     bindAttributeInputType();
-    // @todo: refactor collapsable component
+    // @todo: refactor collapsible component
     $('.attribute-popup .collapse, [data-role="advanced_fieldset-content"]')
         .collapsable()
         .collapse('hide');

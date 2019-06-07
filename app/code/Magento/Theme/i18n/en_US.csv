@@ -96,6 +96,7 @@ Phrase,Phrase
 testMessage,testMessage
 Edit,Edit
 "We found no files.","We found no files."
+"thumbnail","thumbnail"
 "Browse Files","Browse Files"
 Scope:,Scope:
 Remove,Remove
@@ -188,3 +189,4 @@ Settings,Settings
 ID,ID
 View,View
 Action,Action
+"Display Report Bugs Link","Display Report Bugs Link"

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminExportSimpleProductWithCustomAttributeTest">
+        <annotations>
+            <features value="CatalogImportExport"/>
+            <stories value="Export products"/>
+            <title value="Export Simple Product with custom attribute"/>
+            <description value="Admin should be able to export Simple Product with custom attribute"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14007"/>
+            <group value="catalog_import_export"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create simple product with custom attribute set -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+            <createData entity="SimpleProductWithCustomAttributeSet" stepKey="createSimpleProductWithCustomAttributeSet">
+                <requiredEntity createDataKey="createCategory"/>
+                <requiredEntity createDataKey="createAttributeSet"/>
+            </createData>
+
+            <!-- Run cron twice -->
+            <magentoCLI command="cron:run" stepKey="runCron1"/>
+            <magentoCLI command="cron:run" stepKey="runCron2"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="deleteAllExportedFiles" stepKey="clearExportedFilesList"/>
+        </before>
+        <after>
+            <!-- Delete product creations -->
+            <deleteData createDataKey="createSimpleProductWithCustomAttributeSet" stepKey="deleteSimpleProductWithCustomAttributeSet"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete exported file -->
+            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile">
+                <argument name="rowIndex" value="0"/>
+            </actionGroup>
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Go to export page -->
+        <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
+        <waitForPageLoad stepKey="waitForExportIndexPageLoad"/>
+
+        <!-- Export created below products -->
+        <actionGroup ref="exportAllProducts" stepKey="exportCreatedProducts"/>
+
+        <!-- Run cron -->
+        <magentoCLI command="cron:run" stepKey="runCron3"/>
+        <magentoCLI command="cron:run" stepKey="runCron4"/>
+
+        <!-- Download product -->
+        <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
+    </test>
+</tests>

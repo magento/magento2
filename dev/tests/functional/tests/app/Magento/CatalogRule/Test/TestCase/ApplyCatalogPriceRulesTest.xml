@@ -106,6 +106,8 @@
             <data name="productPrice/0/special" xsi:type="string">5</data>
             <data name="productPrice/0/sub_total" xsi:type="string">5</data>
             <data name="productPrice/0/regular" xsi:type="string">10</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedCatalogPage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedShoppingCart" />
@@ -114,6 +116,7 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
         </variation>
         <variation name="ApplyCatalogRuleForSimpleProductWithCustomOptions" summary="Apply Catalog Rule for Simple Product With Custom Options" ticketId="MAGETWO-23038">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::with_default_custom_option</data>
             <data name="products/1" xsi:type="string">catalogProductSimple::with_percent_and_fixed_custom_option</data>
             <data name="products/2" xsi:type="string">catalogProductSimple::with_custom_options_and_price_56_78</data>
@@ -147,6 +150,7 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleOnOnepageCheckout" />
         </variation>
         <variation name="ApplyCatalogRuleForSimpleProductAndConfigurableProduct" summary="Apply Catalog Rule For Simple Product And Configurable Product" ticketId="MAGETWO-20616">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="products/0" xsi:type="string">configurableProduct::product_with_price_10</data>
             <data name="products/1" xsi:type="string">catalogProductSimple::simple_10_dollar</data>
             <data name="catalogRules/0/data/customer_group_ids/option_0" xsi:type="string">NOT LOGGED IN</data>
@@ -175,6 +179,7 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
         </variation>
         <variation name="ApplyCatalogRuleForSimpleProductAndFixedMethod" summary="Apply Catalog Rule For Simple Product And Fixed Shipping Method" ticketId="MAGETWO-23039">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::with_fixed_custom_option_price_100</data>
             <data name="customer/dataset" xsi:type="string">customer_US</data>
             <data name="catalogRules/0/data/name" xsi:type="string">CatalogPriceRule %isolation%</data>

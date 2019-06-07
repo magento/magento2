@@ -9,6 +9,9 @@
  */
 namespace Magento\Catalog\Block\Product\ProductList;
 
+/**
+ * Crosssell block for product
+ */
 class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**
@@ -25,7 +28,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     protected function _prepareData()
     {
-        $product = $this->_coreRegistry->registry('product');
+        $product = $this->getProduct();
         /* @var $product \Magento\Catalog\Model\Product */
 
         $this->_itemCollection = $product->getCrossSellProductCollection()->addAttributeToSelect(
@@ -43,6 +46,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
 
     /**
      * Before rendering html process
+     *
      * Prepare items collection
      *
      * @return \Magento\Catalog\Block\Product\ProductList\Crosssell

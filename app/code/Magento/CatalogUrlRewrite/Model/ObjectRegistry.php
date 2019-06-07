@@ -5,6 +5,9 @@
  */
 namespace Magento\CatalogUrlRewrite\Model;
 
+/**
+ * Class ObjectRegistry
+ */
 class ObjectRegistry
 {
     /**
@@ -26,15 +29,19 @@ class ObjectRegistry
     }
 
     /**
+     * Get Entity
+     *
      * @param int $entityId
      * @return \Magento\Framework\DataObject|null
      */
     public function get($entityId)
     {
-        return isset($this->entitiesMap[$entityId]) ? $this->entitiesMap[$entityId] : null;
+        return $this->entitiesMap[$entityId] ?? null;
     }
 
     /**
+     * List Entities
+     *
      * @return \Magento\Framework\DataObject[]
      */
     public function getList()

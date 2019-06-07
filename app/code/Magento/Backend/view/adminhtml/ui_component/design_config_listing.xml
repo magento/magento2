@@ -6,6 +6,7 @@
  */
 -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <listingToolbar name="listing_top" />
     <columns name="design_config_columns">
         <column name="theme_theme_id" component="Magento_Ui/js/grid/columns/select" sortOrder="40">
             <settings>

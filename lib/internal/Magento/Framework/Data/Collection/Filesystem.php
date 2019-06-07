@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Data\Collection;
 
 use Magento\Framework\Data\Collection;
@@ -27,63 +29,63 @@ use Magento\Framework\Data\Collection;
 class Filesystem extends \Magento\Framework\Data\Collection
 {
     /**
-     * Target directory
+     * Target directory.
      *
      * @var string
      */
     protected $_targetDirs = [];
 
     /**
-     * Whether to collect files
+     * Whether to collect files.
      *
      * @var bool
      */
     protected $_collectFiles = true;
 
     /**
-     * Whether to collect directories before files
+     * Whether to collect directories before files.
      *
      * @var bool
      */
     protected $_dirsFirst = true;
 
     /**
-     * Whether to collect recursively
+     * Whether to collect recursively.
      *
      * @var bool
      */
     protected $_collectRecursively = true;
 
     /**
-     * Whether to collect dirs
+     * Whether to collect dirs.
      *
      * @var bool
      */
     protected $_collectDirs = false;
 
     /**
-     * \Directory names regex pre-filter
+     * \Directory names regex pre-filter.
      *
      * @var string
      */
     protected $_allowedDirsMask = '/^[a-z0-9\.\-\_]+$/i';
 
     /**
-     * Filenames regex pre-filter
+     * Filenames regex pre-filter.
      *
      * @var string
      */
     protected $_allowedFilesMask = '/^[a-z0-9\.\-\_]+\.[a-z0-9]+$/i';
 
     /**
-     * Disallowed filenames regex pre-filter match for better versatility
+     * Disallowed filenames regex pre-filter match for better versatility.
      *
      * @var string
      */
     protected $_disallowedFilesMask = '';
 
     /**
-     * Filter rendering helper variable
+     * Filter rendering helper variable.
      *
      * @var int
      * @see Collection::$_filter
@@ -92,7 +94,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     private $_filterIncrement = 0;
 
     /**
-     * Filter rendering helper variable
+     * Filter rendering helper variable.
      *
      * @var array
      * @see Collection::$_filter
@@ -101,7 +103,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     private $_filterBrackets = [];
 
     /**
-     * Filter rendering helper variable
+     * Filter rendering helper variable.
      *
      * @var string
      * @see Collection::$_filter
@@ -110,22 +112,21 @@ class Filesystem extends \Magento\Framework\Data\Collection
     private $_filterEvalRendered = '';
 
     /**
-     * Collecting items helper variable
+     * Collecting items helper variable.
      *
      * @var array
      */
     protected $_collectedDirs = [];
 
     /**
-     * Collecting items helper variable
+     * Collecting items helper variable.
      *
      * @var array
      */
     protected $_collectedFiles = [];
 
     /**
-     * Allowed dirs mask setter
-     * Set empty to not filter
+     * Allowed dirs mask setter. Set empty to not filter.
      *
      * @param string $regex
      * @return $this
@@ -137,8 +138,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Allowed files mask setter
-     * Set empty to not filter
+     * Allowed files mask setter. Set empty to not filter.
      *
      * @param string $regex
      * @return $this
@@ -150,8 +150,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Disallowed files mask setter
-     * Set empty value to not use this filter
+     * Disallowed files mask setter. Set empty value to not use this filter.
      *
      * @param string $regex
      * @return $this
@@ -163,7 +162,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Set whether to collect dirs
+     * Set whether to collect dirs.
      *
      * @param bool $value
      * @return $this
@@ -175,7 +174,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Set whether to collect files
+     * Set whether to collect files.
      *
      * @param bool $value
      * @return $this
@@ -187,7 +186,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Set whether to collect recursively
+     * Set whether to collect recursively.
      *
      * @param bool $value
      * @return $this
@@ -199,7 +198,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Target directory setter. Adds directory to be scanned
+     * Target directory setter. Adds directory to be scanned.
      *
      * @param string $value
      * @return $this
@@ -209,6 +208,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     {
         $value = (string)$value;
         if (!is_dir($value)) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Unable to set target directory.');
         }
         $this->_targetDirs[$value] = $value;
@@ -216,8 +216,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Set whether to collect directories before files
-     * Works *before* sorting.
+     * Set whether to collect directories before files. Works *before* sorting.
      *
      * @param bool $value
      * @return $this
@@ -229,7 +228,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Get files from specified directory recursively (if needed)
+     * Get files from specified directory recursively (if needed).
      *
      * @param string|array $dir
      * @return void
@@ -281,7 +280,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Lauch data collecting
+     * Launch data collecting.
      *
      * @param bool $printQuery
      * @param bool $logQuery
@@ -295,6 +294,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
             return $this;
         }
         if (empty($this->_targetDirs)) {
+            // phpcs:disable Magento2.Exceptions.DirectThrow
             throw new \Exception('Please specify at least one target directory.');
         }
 
@@ -364,25 +364,22 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Callback for sorting items
-     * Currently supports only sorting by one column
+     * Callback for sorting items. Currently supports only sorting by one column.
      *
      * @param array $a
      * @param array $b
-     * @return int|void
+     * @return int
      */
     protected function _usort($a, $b)
     {
         foreach ($this->_orders as $key => $direction) {
             $result = $a[$key] > $b[$key] ? 1 : ($a[$key] < $b[$key] ? -1 : 0);
             return self::SORT_ORDER_ASC === strtoupper($direction) ? $result : -$result;
-            break;
         }
     }
 
     /**
-     * Set select order
-     * Currently supports only sorting by one column
+     * Set select order. Currently supports only sorting by one column.
      *
      * @param   string $field
      * @param   string $direction
@@ -395,7 +392,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Generate item row basing on the filename
+     * Generate item row basing on the filename.
      *
      * @param string $filename
      * @return array
@@ -433,13 +430,11 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * The filters renderer and caller
-     * Applies to each row, renders once.
+     * The filters renderer and caller. Applies to each row, renders once.
      *
      * @param array $row
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.EvalExpression)
      */
     protected function _filterRow($row)
     {
@@ -469,14 +464,14 @@ class Filesystem extends \Magento\Framework\Data\Collection
         }
         $result = false;
         if ($this->_filterEvalRendered) {
+            // phpcs:ignore Squiz.PHP.Eval
             eval('$result = ' . $this->_filterEvalRendered . ';');
         }
         return $result;
     }
 
     /**
-     * Invokes specified callback
-     * Skips, if there is no filtered key in the row
+     * Invokes specified callback. Skips, if there is no filtered key in the row.
      *
      * @param callback $callback
      * @param array $callbackParams
@@ -493,7 +488,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Fancy field filter
+     * Fancy field filter.
      *
      * @param string $field
      * @param mixed $cond
@@ -626,7 +621,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Prepare a bracket into filters
+     * Prepare a bracket into filters.
      *
      * @param string $bracket
      * @param bool $isAnd
@@ -643,7 +638,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Render condition sign before element, if required
+     * Render condition sign before element, if required.
      *
      * @param int $increment
      * @param bool $isAnd
@@ -666,7 +661,8 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Does nothing. Intentionally disabled parent method
+     * Does nothing. Intentionally disabled parent method.
+     *
      * @param string $field
      * @param string $value
      * @param string $type
@@ -679,7 +675,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Get all ids of collected items
+     * Get all ids of collected items.
      *
      * @return array
      */
@@ -689,7 +685,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Callback method for 'like' fancy filter
+     * Callback method for 'like' fancy filter.
      *
      * @param string $field
      * @param mixed $filterValue
@@ -700,6 +696,9 @@ class Filesystem extends \Magento\Framework\Data\Collection
      */
     public function filterCallbackLike($field, $filterValue, $row)
     {
+        // Forced to do this in order to keep backward compatibility for @api class.
+        // Strict typing must be added to this method next major release.
+        $filterValue = (string)$filterValue;
         $filterValue = trim(stripslashes($filterValue), '\'');
         $filterValue = trim($filterValue, '%');
         $filterValueRegex = '(.*?)' . preg_quote($filterValue, '/') . '(.*?)';
@@ -708,7 +707,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Callback method for 'eq' fancy filter
+     * Callback method for 'eq' fancy filter.
      *
      * @param string $field
      * @param mixed $filterValue
@@ -723,7 +722,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Callback method for 'in' fancy filter
+     * Callback method for 'in' fancy filter.
      *
      * @param string $field
      * @param mixed $filterValue
@@ -738,7 +737,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Callback method for 'isnull' fancy filter
+     * Callback method for 'isnull' fancy filter.
      *
      * @param string $field
      * @param mixed $filterValue
@@ -754,7 +753,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Callback method for 'moreq' fancy filter
+     * Callback method for 'moreq' fancy filter.
      *
      * @param string $field
      * @param mixed $filterValue
@@ -769,7 +768,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Callback method for 'lteq' fancy filter
+     * Callback method for 'lteq' fancy filter.
      *
      * @param string $field
      * @param mixed $filterValue

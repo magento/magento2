@@ -9,6 +9,7 @@
 #    listen 80;
 #    server_name mage.dev;
 #    set $MAGE_ROOT /var/www/magento2;
+#    set $MAGE_DEBUG_SHOW_ARGS 1;
 #    include /vagrant/magento2/nginx.conf.sample;
 # }
 #
@@ -32,6 +33,12 @@ autoindex off;
 charset UTF-8;
 error_page 404 403 = /errors/404.php;
 #add_header "X-UA-Compatible" "IE=Edge";
+
+
+# Deny access to sensitive files
+location /.user.ini {
+    deny all;
+}
 
 # PHP entry point for setup application
 location ~* ^/setup($|/) {
@@ -99,7 +106,7 @@ location /static/ {
 
     # Remove signature of the static files that is used to overcome the browser cache
     location ~ ^/static/version {
-        rewrite ^/static/(version[^/]+/)?(.*)$ /static/$2 last;
+        rewrite ^/static/(version\d*/)?(.*)$ /static/$2 last;
     }
 
     location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2|json)$ {
@@ -108,7 +115,7 @@ location /static/ {
         expires +1y;
 
         if (!-f $request_filename) {
-            rewrite ^/static/?(.*)$ /static.php?resource=$1 last;
+            rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
         }
     }
     location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
@@ -117,11 +124,11 @@ location /static/ {
         expires    off;
 
         if (!-f $request_filename) {
-           rewrite ^/static/?(.*)$ /static.php?resource=$1 last;
+           rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
         }
     }
     if (!-f $request_filename) {
-        rewrite ^/static/?(.*)$ /static.php?resource=$1 last;
+        rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
     }
     add_header X-Frame-Options "SAMEORIGIN";
 }
@@ -159,9 +166,14 @@ location /media/downloadable/ {
 location /media/import/ {
     deny all;
 }
+location /errors/ {
+    location ~* \.xml$ {
+        deny all;
+    }
+}
 
 # PHP entry point for main application
-location ~ (index|get|static|report|404|503|health_check)\.php$ {
+location ~ ^/(index|get|static|errors/report|errors/404|errors/503|health_check)\.php$ {
     try_files $uri =404;
     fastcgi_pass   fastcgi_backend;
     fastcgi_buffers 1024 4k;
@@ -198,6 +210,6 @@ gzip_types
 gzip_vary on;
 
 # Banned locations (only reached if the earlier PHP entry point regexes don't match)
-location ~* (\.php$|\.htaccess$|\.git) {
+location ~* (\.php$|\.phtml$|\.htaccess$|\.git) {
     deny all;
 }

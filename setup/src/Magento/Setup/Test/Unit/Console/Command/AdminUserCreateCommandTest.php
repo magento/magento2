@@ -11,8 +11,12 @@ use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\User\Model\UserValidationRules;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -125,11 +129,34 @@ class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetOptionsList()
+    /**
+     * @param int $mode
+     * @param string $description
+     * @dataProvider getOptionListDataProvider
+     */
+    public function testGetOptionsList($mode, $description)
     {
         /* @var $argsList \Symfony\Component\Console\Input\InputArgument[] */
-        $argsList = $this->command->getOptionsList();
+        $argsList = $this->command->getOptionsList($mode);
         $this->assertEquals(AdminAccount::KEY_EMAIL, $argsList[2]->getName());
+        $this->assertEquals($description, $argsList[2]->getDescription());
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptionListDataProvider()
+    {
+        return [
+            [
+                'mode' => InputOption::VALUE_REQUIRED,
+                'description' => '(Required) Admin email',
+            ],
+            [
+                'mode' => InputOption::VALUE_OPTIONAL,
+                'description' => 'Admin email',
+            ],
+        ];
     }
 
     /**

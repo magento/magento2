@@ -12,7 +12,8 @@ define([
 
     var counter = 1,
         watchers,
-        globalObserver;
+        globalObserver,
+        disabledNodes = [];
 
     watchers = {
         selectors: {},
@@ -140,7 +141,7 @@ define([
     }
 
     /**
-     * Calls handlers assocoiated with an added node.
+     * Calls handlers associated with an added node.
      * Adds listeners for the node removal.
      *
      * @param {HTMLElement} node - Added node.
@@ -162,7 +163,7 @@ define([
     }
 
     /**
-     * Calls handlers assocoiated with a removed node.
+     * Calls handlers associated with a removed node.
      *
      * @param {HTMLElement} node - Removed node.
      */
@@ -238,11 +239,58 @@ define([
         };
     }
 
-    globalObserver = new MutationObserver(function (mutations) {
-        var changes = formChangesLists(mutations);
+    /**
+     * Verify if the DOM node is a child of a defined disabled node, if so we shouldn't observe provided mutation.
+     *
+     * @param {Object} mutation - a single mutation
+     * @returns {Boolean}
+     */
+    function shouldObserveMutation(mutation) {
+        var isDisabled;
 
-        changes.removed.forEach(processRemoved);
-        changes.added.forEach(processAdded);
+        if (disabledNodes.length > 0) {
+            // Iterate through the disabled nodes and determine if this mutation is occurring inside one of them
+            isDisabled = _.find(disabledNodes, function (node) {
+                return node === mutation.target || $.contains(node, mutation.target);
+            });
+
+            // If we find a matching node we should not observe the mutation
+            return !isDisabled;
+        }
+
+        return true;
+    }
+
+    /**
+     * Should we observe these mutations? Check the first and last mutation to determine if this is a disabled mutation,
+     * we check both the first and last in case one has been removed from the DOM during the process of the mutation.
+     *
+     * @param {Array} mutations - An array of mutation records.
+     * @returns {Boolean}
+     */
+    function shouldObserveMutations(mutations) {
+        var firstMutation,
+            lastMutation;
+
+        if (mutations.length > 0) {
+            firstMutation = mutations[0];
+            lastMutation = mutations[mutations.length - 1];
+
+            return shouldObserveMutation(firstMutation) && shouldObserveMutation(lastMutation);
+        }
+
+        return true;
+    }
+
+    globalObserver = new MutationObserver(function (mutations) {
+        var changes;
+
+        if (shouldObserveMutations(mutations)) {
+            changes = formChangesLists(mutations);
+
+            changes.removed.forEach(processRemoved);
+            changes.added.forEach(processAdded);
+        }
     });
 
     globalObserver.observe(document.body, {
@@ -251,6 +299,16 @@ define([
     });
 
     return {
+        /**
+         * Disable a node from being observed by the mutations, you may want to disable specific aspects of the
+         * application which are heavy on DOM changes. The observer running on some actions could cause significant
+         * delays and degrade the performance of that specific part of the application exponentially.
+         *
+         * @param {HTMLElement} node - a HTML node within the document
+         */
+        disableNode: function (node) {
+            disabledNodes.push(node);
+        },
 
         /**
          * Adds listener for the appearance of nodes that matches provided

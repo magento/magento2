@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CheckDefaultValueOfPayPalCustomizeButtonTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Button Configuration"/>
+            <title value="Check Default Value Of PayPal Customize Button"/>
+            <description value="Default value of PayPal Customize Button should be NO"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-10904"/>
+            <skip>
+                <issueId value="DEVOPS-3311"/>
+            </skip>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <actionGroup ref="ConfigPayPalExpressCheckout" stepKey="ConfigPayPalExpressCheckout"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="OpenPayPalButtonCheckoutPage" stepKey="openPayPalButtonCheckoutPage"/>
+        <seeElement selector="{{ButtonCustomization.customizeDrpDown}}" stepKey="seeCustomizeDropDown"/>
+        <seeOptionIsSelected selector="{{ButtonCustomization.customizeDrpDown}}" userInput="No" stepKey="seeNoIsDefaultValue"/>
+        <selectOption selector="{{ButtonCustomization.customizeDrpDown}}" userInput="Yes" stepKey="enableButtonCustomization"/>
+        <!--Verify default value-->
+        <comment userInput="Verify default value" stepKey="commentVerifyDefaultValue1"/>
+        <seeElement selector="{{ButtonCustomization.label}}" stepKey="seeLabel"/>
+        <seeElement selector="{{ButtonCustomization.layout}}" stepKey="seeLayout"/>
+        <seeElement selector="{{ButtonCustomization.size}}" stepKey="seeSize1"/>
+        <seeElement selector="{{ButtonCustomization.shape}}" stepKey="seeShape1"/>
+        <seeElement selector="{{ButtonCustomization.color}}" stepKey="seeColor"/>
+    </test>
+    <test name="CheckCreditButtonConfiguration">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Button Configuration"/>
+            <title value="Check Credit Button Configuration"/>
+            <description value="Admin is able to customize Credit button"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-10900"/>
+            <skip>
+                <issueId value="DEVOPS-3311"/>
+            </skip>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="_defaultProduct" stepKey="createPreReqProduct">
+                <requiredEntity createDataKey="createPreReqCategory"/>
+            </createData>
+            <!-- Create Customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <!--Config PayPal Express Checkout-->
+            <comment userInput="config PayPal Express Checkout" stepKey="commemtConfigPayPalExpressCheckout"/>
+            <actionGroup ref="ConfigPayPalExpressCheckout" stepKey="ConfigPayPalExpressCheckout"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteCategory" createDataKey="createPreReqCategory"/>
+            <deleteData stepKey="deleteProduct" createDataKey="createPreReqProduct"/>
+            <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <!--Navigate to button configuration setting-->
+        <comment userInput="Navigate to button configuration setting in Admin site" stepKey="commentNavigateToButtonConfigurationInAdmin"/>
+        <actionGroup ref="OpenPayPalButtonCheckoutPage" stepKey="openPayPalButtonCheckoutPage"/>
+        <waitForElement selector="{{ButtonCustomization.customizeDrpDown}}" stepKey="seeCustomizeDropDown"/>
+        <selectOption selector="{{ButtonCustomization.customizeDrpDown}}" userInput="Yes" stepKey="enableButtonCustomization"/>
+        <!--Verify Credit Button value-->
+        <comment userInput="Verify Credit Button value" stepKey="commentVerifyDefaultValue2"/>
+        <selectOption selector="{{ButtonCustomization.label}}" userInput="{{PayPalLabel.credit}}" stepKey="selectCreditAsLabel"/>
+        <seeElement selector="{{ButtonCustomization.size}}" stepKey="seeSize2"/>
+        <seeElement selector="{{ButtonCustomization.shape}}" stepKey="seeShape2"/>
+        <dontSeeElement selector="{{ButtonCustomization.layout}}" stepKey="dontSeeLayout"/>
+        <dontSeeElement selector="{{ButtonCustomization.color}}" stepKey="dontSeeColor"/>
+        <!--Customize Credit Button-->
+        <selectOption selector="{{ButtonCustomization.size}}" userInput="{{PayPalSize.medium}}" stepKey="selectSize"/>
+        <selectOption selector="{{ButtonCustomization.shape}}" userInput="{{PayPalShape.pill}}" stepKey="selectShape"/>
+        <!--Save configuration-->
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForConfigSave"/>
+        <openNewTab stepKey="openNewTab"/>
+        <amOnPage url="/" stepKey="openStorefront"/>
+        <!--Login to storefront as previously created customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="addProductToCheckoutPage" stepKey="addProductToCheckoutPage">
+            <argument name="Category" value="$$createPreReqCategory$$"/>
+        </actionGroup>
+        <!--set ID for iframe of PayPal group button-->
+        <executeJS function="jQuery('.zoid-component-frame.zoid-visible').attr('id', 'myIframe')" stepKey="clickOrderLink"/>
+        <!--switch to iframe of PayPal group button-->
+        <comment userInput="switch to iframe of PayPal group button" stepKey="commentSwitchToIframe"/>
+        <switchToIFrame userInput="myIframe" stepKey="clickPrintOrderLink"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.PayPalBtn}}" stepKey="waitForPayPalBtn"/>
+        <seeElement selector="{{PayPalButtonOnStorefront.label(PayPalLabel.credit)}}{{PayPalButtonOnStorefront.size(PayPalSize.medium)}}" stepKey="seeButtonInMediumSize"/>
+        <seeElement selector="{{PayPalButtonOnStorefront.label(PayPalLabel.credit)}}{{PayPalButtonOnStorefront.shape(PayPalShape.pill)}}" stepKey="seeButtonInPillShape"/>
+    </test>
+    <test name="PayPalSmartButtonInCheckoutPage">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Generic checkout skeleton flow"/>
+            <title value="Mainflow of PayPal Smart Button"/>
+            <description value="Users are able to place order using PayPal Smart Button"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13690"/>
+            <skip>
+                <issueId value="DEVOPS-3311"/>
+            </skip>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="_defaultProduct" stepKey="createPreReqProduct">
+            <requiredEntity createDataKey="createPreReqCategory"/>
+            </createData>
+            <!-- Create Customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <!--Config PayPal Express Checkout-->
+            <comment userInput="config PayPal Express Checkout" stepKey="commemtConfigPayPalExpressCheckout"/>
+            <actionGroup ref="ConfigPayPalExpressCheckout" stepKey="ConfigPayPalExpressCheckout"/>
+            <magentoCLI command="config:set payment/paypal_express/in_context 1" stepKey="disableInContextPayPal"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteCategory" createDataKey="createPreReqCategory"/>
+            <deleteData stepKey="deleteProduct" createDataKey="createPreReqProduct"/>
+            <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
+            <magentoCLI command="config:set payment/paypal_express/in_context 0" stepKey="enableInContextPayPal"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+        <magentoCLI command="config:set payment/paypal_express/payment_action Authorization" stepKey="inputPaymentAction"/>
+        <magentoCLI command="config:set payment/paypal_express/solution_type Sole" stepKey="enablePayPalGuestCheckout"/>
+        <magentoCLI command="config:set payment/paypal_express/line_items_enabled 1" stepKey="enableTransferCartLine"/>
+        <magentoCLI command="config:set payment/paypal_express/skip_order_review_step 1" stepKey="enableSkipOrderReview"/>
+        <!--Login to storefront as previously created customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!--Place an order using PayPal method-->
+        <comment userInput="Place an order using PayPal method" stepKey="commentPayPalPlaceOrder"/>
+        <actionGroup ref="CreatePayPalOrderWithSelectedPaymentMethodActionGroup" stepKey="createPayPalOrder">
+            <argument name="Category" value="$$createPreReqCategory$$"/>
+        </actionGroup>
+        <!--Open Cart on PayPal-->
+        <comment userInput="Open Cart on PayPal" stepKey="commentOpenCart"/>
+        <click selector="{{PayPalPaymentSection.cartIcon}}" stepKey="openCart"/>
+        <seeElement selector="{{PayPalPaymentSection.itemName($$createPreReqProduct.name$$)}}" stepKey="seeProductname"/>
+        <click selector="{{PayPalPaymentSection.PayPalSubmitBtn}}" stepKey="clickPayPalSubmitBtn"/>
+        <switchToPreviousTab stepKey="switchToPreviousTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!--I see order successful Page instead of Order Review Page-->
+        <comment userInput="I see order successful Page instead of Order Review Page" stepKey="commentVerifyOrderReviewPage"/>
+        <waitForElement selector="{{CheckoutSuccessMainSection.successTitle}}" stepKey="waitForLoadSuccessPageTitle"/>
+        <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="seeOrderLink"/>
+    </test>
+</tests>

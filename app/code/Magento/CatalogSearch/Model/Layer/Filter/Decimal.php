@@ -9,9 +9,6 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 
 /**
  * Layer decimal filter
- *
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
  */
 class Decimal extends AbstractFilter
 {
@@ -114,12 +111,9 @@ class Decimal extends AbstractFilter
                 $from = '';
             }
             if ($to == '*') {
-                $to = '';
+                $to = null;
             }
-            $label = $this->renderRangeLabel(
-                empty($from) ? 0 : $from,
-                empty($to) ? 0 : $to
-            );
+            $label = $this->renderRangeLabel(empty($from) ? 0 : $from, $to);
             $value = $from . '-' . $to;
 
             $data[] = [
@@ -144,7 +138,7 @@ class Decimal extends AbstractFilter
     protected function renderRangeLabel($fromPrice, $toPrice)
     {
         $formattedFromPrice = $this->priceCurrency->format($fromPrice);
-        if ($toPrice === '') {
+        if ($toPrice === null) {
             return __('%1 and above', $formattedFromPrice);
         } else {
             if ($fromPrice != $toPrice) {

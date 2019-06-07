@@ -35,13 +35,14 @@ define([
     var checkoutConfig = window.checkoutConfig,
         validators = [],
         observedElements = [],
-        postcodeElement = null,
+        postcodeElements = [],
         postcodeElementName = 'postcode';
 
     validators.push(defaultValidator);
 
     return {
         validateAddressTimeout: 0,
+        validateZipCodeTimeout: 0,
         validateDelay: 2000,
 
         /**
@@ -101,7 +102,7 @@ define([
 
             if (element.index === postcodeElementName) {
                 this.bindHandler(element, delay);
-                postcodeElement = element;
+                postcodeElements.push(element);
             }
         },
 
@@ -133,10 +134,20 @@ define([
                 });
             } else {
                 element.on('value', function () {
+                    clearTimeout(self.validateZipCodeTimeout);
+                    self.validateZipCodeTimeout = setTimeout(function () {
+                        if (element.index === postcodeElementName) {
+                            self.postcodeValidation(element);
+                        } else {
+                            $.each(postcodeElements, function (index, elem) {
+                                self.postcodeValidation(elem);
+                            });
+                        }
+                    }, delay);
+
                     if (!formPopUpState.isVisible()) {
                         clearTimeout(self.validateAddressTimeout);
                         self.validateAddressTimeout = setTimeout(function () {
-                            self.postcodeValidation();
                             self.validateFields();
                         }, delay);
                     }
@@ -148,8 +159,8 @@ define([
         /**
          * @return {*}
          */
-        postcodeValidation: function () {
-            var countryId = $('select[name="country_id"]').val(),
+        postcodeValidation: function (postcodeElement) {
+            var countryId = $('select[name="country_id"]:visible').val(),
                 validationResult,
                 warnMessage;
 
@@ -178,8 +189,8 @@ define([
          */
         validateFields: function () {
             var addressFlat = addressConverter.formDataProviderToFlatData(
-                    this.collectObservedData(),
-                    'shippingAddress'
+                this.collectObservedData(),
+                'shippingAddress'
                 ),
                 address;
 

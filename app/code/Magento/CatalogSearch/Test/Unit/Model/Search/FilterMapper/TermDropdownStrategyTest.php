@@ -18,6 +18,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class TermDropdownStrategyTest.
  * Unit test for \Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class TermDropdownStrategyTest extends \PHPUnit\Framework\TestCase
 {

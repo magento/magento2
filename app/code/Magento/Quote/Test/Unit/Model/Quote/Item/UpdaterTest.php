@@ -67,7 +67,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
                 'addOption',
                 'setCustomPrice',
                 'setOriginalCustomPrice',
-                'unsetData',
+                'setData',
                 'hasData',
                 'setIsQtyDecimal'
             ]);
@@ -92,7 +92,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @ExceptedExceptionMessage The qty value is required to update quote item.
+     * @expectedExceptionMessage The qty value is required to update quote item.
      */
     public function testUpdateNoQty()
     {
@@ -301,7 +301,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
                 'setProduct',
                 'getData',
                 'unsetData',
-                'hasData'
+                'hasData',
             ]);
         $buyRequestMock->expects($this->never())->method('setCustomPrice');
         $buyRequestMock->expects($this->once())->method('getData')->will($this->returnValue([]));
@@ -353,7 +353,11 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($buyRequestMock));
 
         $this->itemMock->expects($this->exactly(2))
-            ->method('unsetData');
+            ->method('setData')
+            ->withConsecutive(
+                ['custom_price', null],
+                ['original_custom_price', null]
+            );
 
         $this->itemMock->expects($this->once())
             ->method('hasData')

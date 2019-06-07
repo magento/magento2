@@ -56,7 +56,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                     },
                     loadProductData : function() {
                         jQuery.ajax({
-                            type: "POST",
+                            type: "GET",
                             url: review.productInfoUrl,
                             data: {
                                 form_key: FORM_KEY

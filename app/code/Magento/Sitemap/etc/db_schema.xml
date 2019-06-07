@@ -16,12 +16,12 @@
         <column xsi:type="timestamp" name="sitemap_time" on_update="false" nullable="true" comment="Sitemap Time"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Store id"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="sitemap_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SITEMAP_STORE_ID_STORE_STORE_ID" table="sitemap" column="store_id"
+        <constraint xsi:type="foreign" referenceId="SITEMAP_STORE_ID_STORE_STORE_ID" table="sitemap" column="store_id"
                     referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
-        <index name="SITEMAP_STORE_ID" indexType="btree">
+        <index referenceId="SITEMAP_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>

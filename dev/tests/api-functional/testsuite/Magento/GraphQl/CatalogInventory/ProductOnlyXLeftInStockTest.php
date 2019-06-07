@@ -16,7 +16,6 @@ class ProductOnlyXLeftInStockTest extends GraphQlAbstract
      */
     public function testQueryProductOnlyXLeftInStockDisabled()
     {
-        $this->cleanCache();
         $productSku = 'simple';
 
         $query = <<<QUERY

@@ -27,6 +27,9 @@
     <event name="catalog_product_save_after">
         <observer name="process_url_rewrite_saving" instance="Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver"/>
     </event>
+    <event name="catalog_product_attribute_update_before">
+        <observer name="process_url_rewrite_on_change_product_visibility" instance="Magento\CatalogUrlRewrite\Observer\ProcessUrlRewriteOnChangeProductVisibilityObserver"/>
+    </event>
     <event name="catalog_category_save_before">
         <observer name="category_url_path_autogeneration" instance="Magento\CatalogUrlRewrite\Observer\CategoryUrlPathAutogeneratorObserver"/>
     </event>

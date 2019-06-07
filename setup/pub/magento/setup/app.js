@@ -56,6 +56,9 @@ app.config(['$httpProvider', '$stateProvider', function ($httpProvider, $statePr
             return $delegate;
         });
     })
+    .config(['$locationProvider', function($locationProvider) {
+        $locationProvider.hashPrefix('');
+    }])
     .run(function ($rootScope, $state) {
         $rootScope.$state = $state;
     });

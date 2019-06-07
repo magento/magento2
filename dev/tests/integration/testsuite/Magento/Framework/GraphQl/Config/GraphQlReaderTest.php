@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\GraphQl\Config;
 
 use Magento\Framework\App\Cache;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\GraphQl\Config;
 use Magento\Framework\GraphQl\Schema\SchemaGenerator;
 use Magento\Framework\ObjectManagerInterface;
@@ -34,6 +35,9 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
     /** @var  SerializerInterface */
     private $jsonSerializer;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -175,12 +179,14 @@ QUERY;
             'operationName' => 'IntrospectionQuery'
         ];
         /** @var Http $request */
-        $request = $this->objectManager->get(\Magento\Framework\App\Request\Http::class);
+        $request = $this->objectManager->get(Http::class);
         $request->setPathInfo('/graphql');
+        $request->setMethod('POST');
         $request->setContent(json_encode($postData));
         $headers = $this->objectManager->create(\Zend\Http\Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);
         $request->setHeaders($headers);
+
         $response = $this->graphQlController->dispatch($request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
         $expectedOutput = require __DIR__ . '/../_files/schema_response_sdl_description.php';
@@ -191,6 +197,16 @@ QUERY;
         $mergedSchemaResponseFields = array_merge($schemaResponseFieldsFirstHalf, $schemaResponseFieldsSecondHalf);
 
         foreach ($expectedOutput as $searchTerm) {
+            $sortFields = ['inputFields', 'fields'];
+            foreach ($sortFields as $sortField) {
+                isset($searchTerm[$sortField]) && is_array($searchTerm[$sortField])
+                    ? usort($searchTerm[$sortField], function ($a, $b) {
+                        $cmpField = 'name';
+                        return isset($a[$cmpField]) && isset($b[$cmpField])
+                            ? strcmp($a[$cmpField], $b[$cmpField]) : 0;
+                    }) : null;
+            }
+
             $this->assertTrue(
                 (in_array($searchTerm, $mergedSchemaResponseFields)),
                 'Missing type in the response'

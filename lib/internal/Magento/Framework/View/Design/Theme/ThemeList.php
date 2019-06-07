@@ -40,7 +40,7 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
     protected $_itemObjectClass = ThemeInterface::class;
 
     /**
-     * @var \Magento\Framework\Config\ThemeFactory $themeConfigFactory
+     * @var \Magento\Framework\Config\ThemeFactory
      */
     protected $themeConfigFactory;
 

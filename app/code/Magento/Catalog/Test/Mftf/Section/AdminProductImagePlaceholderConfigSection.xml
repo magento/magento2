@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductImagePlaceholderConfigSection">
+        <element name="sectionHeader" type="text" selector="#catalog_placeholder-head"/>
+        <!--Base image placeholder-->
+        <element name="baseImageInput" type="file" selector="#catalog_placeholder_image_placeholder" timeout="10"/>
+        <element name="baseImageDelete" type="checkbox" selector="#catalog_placeholder_image_placeholder_delete"/>
+        <element name="baseImage" type="text" selector="#catalog_placeholder_image_placeholder_image"/>
+        <element name="baseImageBySrc" type="text" selector="#catalog_placeholder_image_placeholder_image[src*='{{var}}']" parameterized="true"/>
+
+        <!--Small image placeholder-->
+        <element name="smallImageInput" type="file" selector="#catalog_placeholder_small_image_placeholder" timeout="10"/>
+        <element name="smallImageDelete" type="checkbox" selector="#catalog_placeholder_small_image_placeholder_delete"/>
+        <element name="smallImage" type="text" selector="#catalog_placeholder_small_image_placeholder_image"/>
+        <element name="smallImageBySrc" type="text" selector="#catalog_placeholder_small_image_placeholder_image[src*='{{var}}']" parameterized="true"/>
+
+        <!--Swatch image placeholder-->
+        <element name="swatchImageInput" type="file" selector="#catalog_placeholder_swatch_image_placeholder" timeout="10"/>
+        <element name="swatchImageDelete" type="checkbox" selector="#catalog_placeholder_swatch_image_placeholder_delete"/>
+        <element name="swatchImage" type="text" selector="#catalog_placeholder_swatch_image_placeholder_image"/>
+        <element name="swatchImageBySrc" type="text" selector="#catalog_placeholder_swatch_image_placeholder_image[src*='{{var}}']" parameterized="true"/>
+
+        <!--Thumbnail image placeholder-->
+        <element name="thumbnailImageInput" type="file" selector="#catalog_placeholder_thumbnail_placeholder" timeout="10"/>
+        <element name="thumbnailImageDelete" type="checkbox" selector="#catalog_placeholder_thumbnail_placeholder_delete"/>
+        <element name="thumbnailImage" type="text" selector="#catalog_placeholder_thumbnail_placeholder_image"/>
+        <element name="thumbnailImageBySrc" type="text" selector="#catalog_placeholder_thumbnail_placeholder_image[src*='{{var}}']" parameterized="true"/>
+    </section>
+</sections>

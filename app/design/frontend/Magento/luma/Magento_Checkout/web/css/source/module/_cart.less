@@ -97,6 +97,7 @@
                 .field {
                     .radio {
                         float: left;
+                        margin-top: 4px;
                     }
 
                     .radio {
@@ -145,12 +146,6 @@
         }
 
         &:extend(.abs-adjustment-incl-excl-tax all);
-
-        .action {
-            &.multicheckout {
-                color: @color-blue2;
-            }
-        }
     }
 
     //  Totals block
@@ -215,7 +210,7 @@
                         height: 36px;
                         margin-top: -7px;
                         text-align: center;
-                        width: 45px;
+                        width: 60px;
                     }
                 }
 
@@ -497,6 +492,17 @@
             }
         }
     }
+
+    .cart.table-wrapper,
+    .order-items.table-wrapper {
+        .col.price,
+        .col.qty,
+        .col.subtotal,
+        .col.msrp {
+            text-align: left;
+        }
+    }
+
 }
 
 //
@@ -520,6 +526,18 @@
 //
 //  Desktop
 //  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+    .cart-container {
+        .block.crosssell {
+            .products-grid {
+                .product-item-actions {
+                    margin: 0 0 @indent__s;
+                }
+            }
+        }
+    }
+}
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .checkout-cart-index {
@@ -627,11 +645,8 @@
                 }
 
                 &-item-details {
-                    padding-bottom: 35px;
-                }
-
-                &-item-details {
                     display: table-cell;
+                    padding-bottom: 35px;
                     vertical-align: top;
                     white-space: normal;
                     width: 99%;
@@ -696,6 +711,9 @@
                     margin-left: @indent__s;
                     position: static;
                 }
+            }
+            &.discount {
+                width: auto;
             }
         }
     }

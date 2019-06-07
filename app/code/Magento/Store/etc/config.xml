@@ -130,6 +130,8 @@
                     <html>html</html>
                     <phtml>phtml</phtml>
                     <shtml>shtml</shtml>
+                    <phpt>phpt</phpt>
+                    <pht>pht</pht>
                 </protected_extensions>
                 <public_files_valid_paths>
                     <protected>
