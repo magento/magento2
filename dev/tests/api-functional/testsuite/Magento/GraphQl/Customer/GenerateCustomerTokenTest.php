@@ -42,41 +42,19 @@ MUTATION;
     }
 
     /**
-     * Verify customer with invalid email
+     * Test customer with invalid data.
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage GraphQL response contains errors: The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.
-     */
-    public function testGenerateCustomerTokenWithInvalidEmail()
-    {
-        $email = 'customer@example';
-        $password = 'password';
-
-        $mutation
-            = <<<MUTATION
-mutation {
-	generateCustomerToken(
-        email: "{$email}"
-        password: "{$password}"
-    ) {
-        token
-    }
-}
-MUTATION;
-        $this->graphQlMutation($mutation);
-    }
-
-    /**
-     * Verify customer with empty email
      *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @dataProvider dataProviderCustomerInfo
+     * @param string $email
+     * @param string $password
+     * @param string $message
+     * @throws \Exception
      */
-    public function testGenerateCustomerTokenWithEmptyEmail()
+    public function testGenerateCustomerTokenNegativeCases(string $email, string $password, string $message)
     {
-        $email = '';
-        $password = 'password';
-
         $mutation
             = <<<MUTATION
 mutation {
@@ -88,68 +66,12 @@ mutation {
     }
 }
 MUTATION;
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: Specify the "email" value.');
+        $this->expectExceptionMessage($message);
         $this->graphQlMutation($mutation);
     }
 
     /**
-     * Verify customer with invalid credentials
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage GraphQL response contains errors: The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.
-     */
-    public function testGenerateCustomerTokenWithIncorrectPassword()
-    {
-        $email = 'customer@example.com';
-        $password = 'bad-password';
-
-        $mutation
-            = <<<MUTATION
-mutation {
-	generateCustomerToken(
-        email: "{$email}"
-        password: "{$password}"
-    ) {
-        token
-    }
-}
-MUTATION;
-
-        $this->graphQlMutation($mutation);
-    }
-
-    /**
-     * Verify customer with empty password
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     */
-    public function testGenerateCustomerTokenWithInvalidPassword()
-    {
-        $email = 'customer@example.com';
-        $password = '';
-
-        $mutation
-            = <<<MUTATION
-mutation {
-	generateCustomerToken(
-        email: "{$email}"
-        password: "{$password}"
-    ) {
-        token
-    }
-}
-MUTATION;
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: Specify the "password" value.');
-        $this->graphQlMutation($mutation);
-    }
-
-    /**
-     * Verify customer with empty password
+     * Test customer token regeneration.
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
@@ -177,5 +99,37 @@ MUTATION;
         $token2 = $response2['generateCustomerToken']['token'];
 
         $this->assertNotEquals($token1, $token2, 'Tokens should not be identical!');
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderCustomerInfo()
+    {
+        return [
+            'invalid_email' => [
+                'invalid_email@example.com',
+                'password',
+                'The account sign-in was incorrect or your account is disabled temporarily. ' .
+                'Please wait and try again later.'
+            ],
+            'empty_email' => [
+                '',
+                'password',
+                'Specify the "email" value.'
+            ],
+            'invalid_password' => [
+                'customer@example.com',
+                'invalid_password',
+                'The account sign-in was incorrect or your account is disabled temporarily. ' .
+                'Please wait and try again later.'
+            ],
+            'empty_password' => [
+                'customer@example.com',
+                '',
+                'Specify the "password" value.'
+
+            ]
+        ];
     }
 }
