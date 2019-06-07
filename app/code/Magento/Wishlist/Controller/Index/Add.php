@@ -89,7 +89,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
             $session->unsBeforeWishlistRequest();
         }
 
-        $requestParams = array_intersect_key($requestParams, array_flip($this->getParamWhitelist()));
+        unset($requestParams['login']);
         $productId = isset($requestParams['product']) ? (int)$requestParams['product'] : null;
         if (!$productId) {
             $resultRedirect->setPath('*/');
@@ -152,23 +152,5 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
 
         $resultRedirect->setPath('*', ['wishlist_id' => $wishlist->getId()]);
         return $resultRedirect;
-    }
-
-    /**
-     * Whitelist for allowed param data
-     *
-     * @return string[]
-     */
-    private function getParamWhitelist()
-    {
-        return [
-            'referer',
-            'product',
-            'uenc',
-            'form_key',
-            'send',
-            'super_attribute',
-            'qty'
-        ];
     }
 }
