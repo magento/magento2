@@ -76,6 +76,15 @@ class Template implements \Zend_Filter_Interface
     ];
 
     /**
+     * @var array[]
+     */
+    private $restrictedMethodsByInstanceType = [
+        \Magento\Framework\DB\Adapter\AdapterInterface::class => [
+            '*'
+        ]
+    ];
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param array $variables
      */
@@ -335,6 +344,14 @@ class Template implements \Zend_Filter_Interface
         if ($object === $this) {
             if (in_array(mb_strtolower($method), $this->restrictedMethods)) {
                 throw new \InvalidArgumentException("Method $method cannot be called from template.");
+            }
+        } else {
+            foreach ($this->restrictedMethodsByInstanceType as $instanceType => $restrictedMethods) {
+                if ($object instanceof $instanceType &&
+                    (in_array('*', $restrictedMethods) || in_array(mb_strtolower($method), $restrictedMethods))
+                ) {
+                    throw new \InvalidArgumentException("Method $method cannot be called from template.");
+                }
             }
         }
     }
