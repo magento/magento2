@@ -9,6 +9,9 @@ namespace Magento\GraphQl\Customer;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test email availability functionality
+ */
 class IsEmailAvailableTest extends GraphQlAbstract
 {
     /**
