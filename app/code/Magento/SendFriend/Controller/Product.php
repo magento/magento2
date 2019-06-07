@@ -61,6 +61,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
 
     /**
      * Check if module is enabled
+     *
      * If allow only for customer - redirect to login page
      *
      * @param RequestInterface $request
