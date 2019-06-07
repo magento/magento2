@@ -160,7 +160,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * @var \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory
      */
-    protected $_condProdCombineF;
+    protected $_condProdCombineFactory;
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Collection
@@ -202,7 +202,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\Coupon\CodegeneratorFactory $codegenFactory,
         \Magento\SalesRule\Model\Rule\Condition\CombineFactory $condCombineFactory,
-        \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF,
+        \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineFactory,
         \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $couponCollection,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -215,7 +215,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         $this->_couponFactory = $couponFactory;
         $this->_codegenFactory = $codegenFactory;
         $this->_condCombineFactory = $condCombineFactory;
-        $this->_condProdCombineF = $condProdCombineF;
+        $this->_condProdCombineFactory = $condProdCombineFactory;
         $this->_couponCollection = $couponCollection;
         $this->_storeManager = $storeManager;
         parent::__construct(
@@ -342,7 +342,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      */
     public function getActionsInstance()
     {
-        return $this->_condProdCombineF->create();
+        return $this->_condProdCombineFactory->create();
     }
 
     /**
