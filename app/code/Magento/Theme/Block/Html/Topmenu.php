@@ -78,6 +78,7 @@ class Topmenu extends Template implements IdentityInterface
      * @param string $childrenWrapClass
      * @param int $limit
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getHtml($outermostClass = '', $childrenWrapClass = '', $limit = 0)
     {
