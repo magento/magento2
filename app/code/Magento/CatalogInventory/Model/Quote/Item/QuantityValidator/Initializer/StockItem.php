@@ -10,6 +10,7 @@ use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote\Item;
 
 /**
@@ -41,18 +42,19 @@ class StockItem
      * @param ConfigInterface $typeConfig
      * @param QuoteItemQtyList $quoteItemQtyList
      * @param StockStateInterface $stockState
-     * @param StockStateProviderInterface $stockStateProvider
+     * @param StockStateProviderInterface|null $stockStateProvider
      */
     public function __construct(
         ConfigInterface $typeConfig,
         QuoteItemQtyList $quoteItemQtyList,
         StockStateInterface $stockState,
-        StockStateProviderInterface $stockStateProvider
+        StockStateProviderInterface $stockStateProvider = null
     ) {
         $this->quoteItemQtyList = $quoteItemQtyList;
         $this->typeConfig = $typeConfig;
         $this->stockState = $stockState;
-        $this->stockStateProvider = $stockStateProvider;
+        $this->stockStateProvider = $stockStateProvider ?: ObjectManager::getInstance()
+            ->get(StockStateProviderInterface::class);
     }
 
     /**
