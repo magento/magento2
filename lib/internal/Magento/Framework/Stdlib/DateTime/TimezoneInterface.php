@@ -117,8 +117,8 @@ interface TimezoneInterface
      * Checks if current date of the given scope (in the scope timezone) is within the range
      *
      * @param int|string|\Magento\Framework\App\ScopeInterface $scope
-     * @param string|null $dateFrom
-     * @param string|null $dateTo
+     * @param string|\DateTimeInterface|null $dateFrom
+     * @param string|\DateTimeInterface|null $dateTo
      * @return bool
      */
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null);

@@ -241,8 +241,18 @@ class Timezone implements TimezoneInterface
         }
 
         $scopeTimeStamp = $this->scopeTimeStamp($scope);
+
+        if ($dateFrom instanceof \DateTimeInterface) {
+            $dateFrom = $dateFrom->format('Y-m-d H:i:s');
+        }
+
+        if ($dateTo instanceof \DateTimeInterface) {
+            $dateTo = $dateTo->format('Y-m-d H:i:s');
+        }
+
         $fromTimeStamp = strtotime($dateFrom);
         $toTimeStamp = strtotime($dateTo);
+
         if ($dateTo) {
             // fix date YYYY-MM-DD 00:00:00 to YYYY-MM-DD 23:59:59
             $toTimeStamp += 86400;
