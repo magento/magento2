@@ -28,4 +28,17 @@
     <entity name="CustomerAccountSharingInherit" type="account_share_scope_inherit">
         <data key="inherit">true</data>
     </entity>
+    <entity name="StorefrontCustomerLockoutFailuresDefaultConfigData">
+        <!-- Magento default value -->
+        <data key="path">customer/password/lockout_failures</data>
+        <data key="scope_id">0</data>
+        <data key="label">10</data>
+        <data key="value">10</data>
+    </entity>
+    <entity name="StorefrontCustomerLockoutFailures5ConfigData">
+        <data key="path">customer/password/lockout_failures</data>
+        <data key="scope_id">0</data>
+        <data key="label">5</data>
+        <data key="value">5</data>
+    </entity>
 </entities>

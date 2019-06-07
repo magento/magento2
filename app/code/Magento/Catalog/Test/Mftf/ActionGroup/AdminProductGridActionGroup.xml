@@ -256,7 +256,7 @@
 
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Change status')}}" stepKey="clickChangeStatusAction"/>
-        <click selector="{{AdminProductGridSection.changeStatus('status')}}" stepKey="clickChangeStatusDisabled" parameterized="true"/>
+        <click selector="{{AdminProductGridSection.changeStatus('status')}}" stepKey="clickChangeStatusDisabled"/>
         <waitForPageLoad stepKey="waitForStatusToBeChanged"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) have been updated." stepKey="seeSuccessMessage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForMaskToDisappear"/>
