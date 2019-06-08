@@ -7,18 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\SendFriendGraphQl\Model\Resolver;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\SendFriend\Model\SendFriend;
 use Magento\SendFriend\Model\SendFriendFactory;
+use Magento\SendFriend\Helper\Data as SendFriendHelper;
 
 /**
  * @inheritdoc
@@ -46,21 +50,29 @@ class SendEmailToFriend implements ResolverInterface
     private $eventManager;
 
     /**
+     * @var SendFriendHelper
+     */
+    private $sendFriendHelper;
+
+    /**
      * @param SendFriendFactory $sendFriendFactory
      * @param ProductRepositoryInterface $productRepository
      * @param DataObjectFactory $dataObjectFactory
      * @param ManagerInterface $eventManager
+     * @param SendFriendHelper|null $sendFriendHelper
      */
     public function __construct(
         SendFriendFactory $sendFriendFactory,
         ProductRepositoryInterface $productRepository,
         DataObjectFactory $dataObjectFactory,
-        ManagerInterface $eventManager
+        ManagerInterface $eventManager,
+        SendFriendHelper $sendFriendHelper = null
     ) {
         $this->sendFriendFactory = $sendFriendFactory;
         $this->productRepository = $productRepository;
         $this->dataObjectFactory = $dataObjectFactory;
         $this->eventManager = $eventManager;
+        $this->sendFriendHelper = $sendFriendHelper ?? ObjectManager::getInstance()->get(SendFriendHelper::class);
     }
 
     /**
@@ -68,6 +80,10 @@ class SendEmailToFriend implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
+        if (!$this->sendFriendHelper->isAllowForGuest() && $this->isUserGuest($context->getUserId(), $context->getUserType())) {
+            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
+        }
+
         /** @var SendFriend $sendFriend */
         $sendFriend = $this->sendFriendFactory->create();
 
@@ -194,5 +210,20 @@ class SendEmailToFriend implements ResolverInterface
                 'message' => $args['input']['sender']['message'],
             ],
         ];
+    }
+
+    /**
+     * Checking if current customer is guest
+     *
+     * @param int|null $customerId
+     * @param int|null $customerType
+     * @return bool
+     */
+    private function isUserGuest(?int $customerId, ?int $customerType): bool
+    {
+        if (null === $customerId || null === $customerType) {
+            return true;
+        }
+        return 0 === (int)$customerId || (int)$customerType === UserContextInterface::USER_TYPE_GUEST;
     }
 }
