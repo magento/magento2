@@ -141,6 +141,9 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
             if ($this->getCustomer()->getDefaultBilling()) {
                 $this->updateDefaultBilling($this->getData($postItems[$customerId]));
             }
+            if (!isset($postItems[$customerId]['gender'])) {
+                $postItems[$customerId]['gender'] = '';
+            }
             $this->updateCustomer($this->getData($postItems[$customerId], true));
             $this->saveCustomer($this->getCustomer());
 
