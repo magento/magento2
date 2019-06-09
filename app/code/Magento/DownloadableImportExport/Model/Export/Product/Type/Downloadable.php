@@ -9,6 +9,12 @@ namespace Magento\DownloadableImportExport\Model\Export\Product\Type;
 
 use Magento\CatalogImportExport\Model\Export\Product\Type\AbstractType;
 
+/**
+ * Import entity downloadable product type
+ *
+ * @api
+ * @since 100.0.0
+ */
 class Downloadable extends AbstractType
 {
 }

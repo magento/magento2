@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\DownloadableImportExport\Model\Export;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\Downloadable\Model\Link as DownloadableLink;
@@ -17,6 +18,12 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use function implode;
 
+/**
+ * Class RowCustomizer
+ *
+ * @api
+ * @since 100.0.0
+ */
 class RowCustomizer implements RowCustomizerInterface
 {
     /**
@@ -33,7 +40,7 @@ class RowCustomizer implements RowCustomizerInterface
      */
     protected $downloadableData = [];
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
     /**
@@ -62,7 +69,7 @@ class RowCustomizer implements RowCustomizerInterface
      */
     public function prepareData($collection, $productIds)
     {
-        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
+        /** @var Collection $productCollection */
         $productCollection = clone $collection;
         $productCollection->addAttributeToFilter('entity_id', ['in' => $productIds])
             ->addAttributeToFilter('type_id', ['eq' => DownloadableProductType::TYPE_DOWNLOADABLE]);
@@ -94,7 +101,7 @@ class RowCustomizer implements RowCustomizerInterface
                     DownloadableLink::KEY_SAMPLE_TYPE . '=' . $downloadableLinkDatum->getSampleType(),
                     DownloadableLink::KEY_SAMPLE_FILE . '=' . $downloadableLinkDatum->getSampleFile(),
                     DownloadableLink::KEY_SAMPLE_URL . '=' . $downloadableLinkDatum->getSampleUrl(),
-                    'group_title=Links'
+                    'group_title=Links',
                 ];
             }
             foreach ($links as $link) {
@@ -110,7 +117,7 @@ class RowCustomizer implements RowCustomizerInterface
                     DownloadableSample::KEY_SAMPLE_TYPE . '=' . $sampleLinksDatum->getSampleType(),
                     DownloadableSample::KEY_SAMPLE_FILE . '=' . $sampleLinksDatum->getSampleFile(),
                     DownloadableSample::KEY_SAMPLE_URL . '=' . $sampleLinksDatum->getSampleUrl(),
-                    'group_title=Samples'
+                    'group_title=Samples',
                 ];
             }
             foreach ($links as $link) {
@@ -145,7 +152,7 @@ class RowCustomizer implements RowCustomizerInterface
      * Add data for export
      *
      * @param array $dataRow
-     * @param int $productId
+     * @param int   $productId
      *
      * @return mixed
      */
@@ -161,7 +168,7 @@ class RowCustomizer implements RowCustomizerInterface
      * Calculate the largest links block
      *
      * @param array $additionalRowsCount
-     * @param int $productId
+     * @param int   $productId
      *
      * @return mixed
      */

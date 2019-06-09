@@ -694,7 +694,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      *
      * @param array &$dataRow
      * @param array &$rowCategories
-     * @param int $productId
+     * @param int   $productId
      * @return bool
      */
     protected function updateDataWithCategoryColumns(&$dataRow, &$rowCategories, $productId)
@@ -855,11 +855,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Export process
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function export()
     {
         //Execution time may be very long
+        //@codingStandardsIgnoreStart
         set_time_limit(0);
+        //@codingStandardsIgnoreEnd
 
         $writer = $this->getWriter();
         $page = 0;
@@ -980,8 +983,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Collect export data for all products
      *
      * @return array
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function collectRawData()
     {
