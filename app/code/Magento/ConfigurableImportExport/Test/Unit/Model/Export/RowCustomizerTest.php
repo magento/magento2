@@ -13,6 +13,11 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\ImportExport\Model\Import;
 
+/**
+ * Class RowCustomizerTest
+ *
+ * @package Magento\ConfigurableImportExport\Test\Unit\Model\Export
+ */
 class RowCustomizerTest extends \PHPUnit\Framework\TestCase
 {
     /**

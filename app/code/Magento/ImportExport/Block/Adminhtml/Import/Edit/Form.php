@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
 
 use Magento\ImportExport\Model\Import;
@@ -33,13 +34,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_behaviorFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\ImportExport\Model\Import $importModel
-     * @param \Magento\ImportExport\Model\Source\Import\EntityFactory $entityFactory
+     * @param \Magento\Backend\Block\Template\Context                    $context
+     * @param \Magento\Framework\Registry                                $registry
+     * @param \Magento\Framework\Data\FormFactory                        $formFactory
+     * @param \Magento\ImportExport\Model\Import                         $importModel
+     * @param \Magento\ImportExport\Model\Source\Import\EntityFactory    $entityFactory
      * @param \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory
-     * @param array $data
+     * @param array                                                      $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -129,7 +130,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'disabled' => true,
                     'values' => [
                         ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR => __('Stop on Error'),
-                        ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS => __('Skip error entries')
+                        ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS => __('Skip error entries'),
                     ],
                     'after_element_html' => $this->getDownloadSampleFileHtml(),
                 ]

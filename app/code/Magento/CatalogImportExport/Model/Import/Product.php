@@ -1519,11 +1519,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Gather and save information about product entities.
      *
      * @return $this
+     * @throws LocalizedException
+     * @throws \Zend_Validate_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @throws LocalizedException
      */
     protected function _saveProducts()
     {

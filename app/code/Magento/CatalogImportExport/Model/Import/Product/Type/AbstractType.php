@@ -3,12 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\ImportExport\Model\Import;
 
 /**
  * Import entity abstract product type model
@@ -87,7 +95,7 @@ abstract class AbstractType
      */
     protected $_genericMessageTemplates = [
         RowValidatorInterface::ERROR_INVALID_WEIGHT => 'Weight value is incorrect',
-        RowValidatorInterface::ERROR_INVALID_WEBSITE => 'Provided Website code doesn\'t exist'
+        RowValidatorInterface::ERROR_INVALID_WEBSITE => 'Provided Website code doesn\'t exist',
     ];
 
     /**
@@ -107,7 +115,7 @@ abstract class AbstractType
     /**
      * Product entity object.
      *
-     * @var \Magento\CatalogImportExport\Model\Import\Product
+     * @var Product
      */
     protected $_entityModel;
 
@@ -124,24 +132,24 @@ abstract class AbstractType
     protected $_attrSetColFac;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
+     * @var Collection
      */
     protected $_prodAttrColFac;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     protected $_resource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @var AdapterInterface
      */
     protected $connection;
 
     /**
      * Product metadata pool
      *
-     * @var \Magento\Framework\EntityManager\MetadataPool
+     * @var MetadataPool
      * @since 100.1.0
      */
     protected $metadataPool;
@@ -156,17 +164,17 @@ abstract class AbstractType
     /**
      * AbstractType constructor
      *
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param ResourceConnection $resource
-     * @param array $params
-     * @param MetadataPool|null $metadataPool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory  $attrSetColFac
+     * @param CollectionFactory $prodAttrColFac
+     * @param ResourceConnection                                                       $resource
+     * @param array                                                                    $params
+     * @param MetadataPool|null                                                        $metadataPool
+     * @throws LocalizedException
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
-        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
-        \Magento\Framework\App\ResourceConnection $resource,
+        CollectionFactory $prodAttrColFac,
+        ResourceConnection $resource,
         array $params,
         MetadataPool $metadataPool = null
     ) {
@@ -179,9 +187,9 @@ abstract class AbstractType
             if (!isset($params[0])
                 || !isset($params[1])
                 || !is_object($params[0])
-                || !$params[0] instanceof \Magento\CatalogImportExport\Model\Import\Product
+                || !$params[0] instanceof Product
             ) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the parameters.'));
+                throw new LocalizedException(__('Please correct the parameters.'));
             }
             $this->_entityModel = $params[0];
             $this->_type = $params[1];
@@ -213,9 +221,9 @@ abstract class AbstractType
      * Add attribute parameters to appropriate attribute set.
      *
      * @param string $attrSetName Name of attribute set.
-     * @param array $attrParams Refined attribute parameters.
-     * @param mixed $attribute
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @param array  $attrParams Refined attribute parameters.
+     * @param mixed  $attribute
+     * @return AbstractType
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _addAttributeParams($attrSetName, array $attrParams, $attribute)
@@ -250,7 +258,7 @@ abstract class AbstractType
     protected function _getProductAttributes($attrSetData)
     {
         if (is_array($attrSetData)) {
-            return $this->_attributes[$attrSetData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET]];
+            return $this->_attributes[$attrSetData[Product::COL_ATTR_SET]];
         } else {
             return $this->_attributes[$attrSetData];
         }
@@ -313,7 +321,7 @@ abstract class AbstractType
      * Attach Attributes By Id
      *
      * @param string $attributeSetName
-     * @param array $attributeIds
+     * @param array  $attributeIds
      * @return void
      */
     protected function attachAttributesById($attributeSetName, $attributeIds)
@@ -322,7 +330,7 @@ abstract class AbstractType
             ['main_table.attribute_id', 'main_table.attribute_code'],
             [
                 ['in' => $attributeIds],
-                ['in' => $this->_forcedAttributesCodes]
+                ['in' => $this->_forcedAttributesCodes],
             ]
         ) as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
@@ -339,7 +347,7 @@ abstract class AbstractType
                         'frontend_label' => $attribute->getFrontendLabel(),
                         'is_static' => $attribute->isStatic(),
                         'apply_to' => $attribute->getApplyTo(),
-                        'type' => \Magento\ImportExport\Model\Import::getAttributeType($attribute),
+                        'type' => Import::getAttributeType($attribute),
                         'default_value' => strlen(
                             $attribute->getDefaultValue()
                         ) ? $attribute->getDefaultValue() : null,
@@ -416,7 +424,7 @@ abstract class AbstractType
      * Validate particular attributes columns.
      *
      * @param array $rowData
-     * @param int $rowNum
+     * @param int   $rowNum
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -460,8 +468,8 @@ abstract class AbstractType
      * Validate row attributes. Pass VALID row data ONLY as argument.
      *
      * @param array $rowData
-     * @param int $rowNum
-     * @param bool $isNewProduct Optional
+     * @param int   $rowNum
+     * @param bool  $isNewProduct Optional
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -469,8 +477,8 @@ abstract class AbstractType
     {
         $error = false;
         $rowScope = $this->_entityModel->getRowScope($rowData);
-        if (\Magento\CatalogImportExport\Model\Import\Product::SCOPE_NULL != $rowScope
-            && !empty($rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU])
+        if (Product::SCOPE_NULL != $rowScope
+            && !empty($rowData[Product::COL_SKU])
         ) {
             foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
                 // check value for non-empty in the case of required attribute?
@@ -479,12 +487,12 @@ abstract class AbstractType
                 } elseif ($this->_isAttributeRequiredCheckNeeded($attrCode) && $attrParams['is_required']) {
                     // For the default scope - if this is a new product or
                     // for an old product, if the imported doc has the column present for the attrCode
-                    if (\Magento\CatalogImportExport\Model\Import\Product::SCOPE_DEFAULT == $rowScope &&
+                    if (Product::SCOPE_DEFAULT == $rowScope &&
                         ($isNewProduct ||
-                        array_key_exists(
-                            $attrCode,
-                            $rowData
-                        ))
+                            array_key_exists(
+                                $attrCode,
+                                $rowData
+                            ))
                     ) {
                         $this->_entityModel->addRowError(
                             RowValidatorInterface::ERROR_VALUE_IS_REQUIRED,
@@ -518,7 +526,7 @@ abstract class AbstractType
      * set default values if needed.
      *
      * @param array $rowData
-     * @param bool $withDefaultValue
+     * @param bool  $withDefaultValue
      *
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -536,7 +544,8 @@ abstract class AbstractType
                     $resultAttrs[$attrCode] = $attrParams['options'][strtolower($rowData[$attrCode])];
                 } elseif ('multiselect' == $attrParams['type']) {
                     $resultAttrs[$attrCode] = [];
-                    foreach ($this->_entityModel->parseMultiselectValues($rowData[$attrCode], $this->_entityModel->getMultipleLineSeparator()) as $value) {
+                    foreach ($this->_entityModel->parseMultiselectValues($rowData[$attrCode],
+                        $this->_entityModel->getMultipleLineSeparator()) as $value) {
                         $resultAttrs[$attrCode][] = $attrParams['options'][strtolower($value)];
                     }
                     $resultAttrs[$attrCode] = implode(',', $resultAttrs[$attrCode]);
@@ -588,14 +597,14 @@ abstract class AbstractType
     /**
      * Get product metadata pool
      *
-     * @return \Magento\Framework\EntityManager\MetadataPool
+     * @return MetadataPool
      * @since 100.1.0
      */
     protected function getMetadataPool()
     {
         if (!$this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+            $this->metadataPool = ObjectManager::getInstance()
+                ->get(MetadataPool::class);
         }
         return $this->metadataPool;
     }
@@ -610,7 +619,7 @@ abstract class AbstractType
     {
         if (!$this->productEntityLinkField) {
             $this->productEntityLinkField = $this->metadataPool
-                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getMetadata(ProductInterface::class)
                 ->getLinkField();
         }
         return $this->productEntityLinkField;
