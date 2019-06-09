@@ -248,9 +248,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testExportWithFieldsEnclosure()
     {
-        $this->model->setParameters([
-            \Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE => 1
-        ]);
+        $this->model->setParameters(
+            [\Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE => 1]
+        );
 
         $this->model->setWriter(
             $this->objectManager->create(
@@ -278,11 +278,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             )
         );
 
-        $this->model->setParameters([
-            \Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP => [
-                'category_ids' => '2,13'
+        $this->model->setParameters(
+            [
+                \Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP => [
+                    'category_ids' => '2,13'
+                ]
             ]
-        ]);
+        );
 
         $exportData = $this->model->export();
 

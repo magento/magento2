@@ -5,12 +5,12 @@
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
+use Magento\Catalog\Model\Product as ProductEntity;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
+use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
 use Magento\ImportExport\Model\Import;
-use \Magento\Store\Model\Store;
-use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
-use Magento\Catalog\Model\Product as ProductEntity;
+use Magento\Store\Model\Store;
 
 /**
  * Export entity product model
@@ -675,7 +675,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      *
      * @param array &$dataRow
      * @param array &$rowCategories
-     * @param int $productId
+     * @param int    $productId
      * @return bool
      */
     protected function updateDataWithCategoryColumns(&$dataRow, &$rowCategories, $productId)
@@ -787,9 +787,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 case 'g':
                     $memoryLimit *= 1024;
                 // fall-through intentional
+                // no break
                 case 'm':
                     $memoryLimit *= 1024;
                 // fall-through intentional
+                // no break
                 case 'k':
                     $memoryLimit *= 1024;
                     break;
@@ -836,11 +838,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Export process
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function export()
     {
         //Execution time may be very long
+        //@codingStandardsIgnoreStart
         set_time_limit(0);
+        //@codingStandardsIgnoreEnd
 
         $writer = $this->getWriter();
         $page = 0;
@@ -961,8 +966,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Collect export data for all products
      *
      * @return array
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function collectRawData()
     {
@@ -1081,6 +1088,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Collect multi raw data from
      *
      * @return array
+     * @throws \Exception
      */
     protected function collectMultirawData()
     {
@@ -1587,6 +1595,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Get product entity link field
      *
      * @return string
+     * @throws \Exception
      * @since 100.1.0
      */
     protected function getProductEntityLinkField()
