@@ -2927,20 +2927,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Parse values from multiple attributes fields
-     *
-     * @param string $labelRow
-     * @return array
-     */
-    private function parseMultipleValues($labelRow)
-    {
-        return $this->parseMultiselectValues(
-            $labelRow,
-            $this->getMultipleLineSeparator()
-        );
-    }
-
-    /**
      * Check if product exists for specified SKU
      *
      * @param string $sku
