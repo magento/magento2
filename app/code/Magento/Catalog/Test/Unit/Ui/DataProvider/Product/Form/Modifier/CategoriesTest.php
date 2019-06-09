@@ -97,12 +97,15 @@ class CategoriesTest extends AbstractModifierTest
      */
     protected function createModel()
     {
-        return $this->objectManager->getObject(Categories::class, [
-            'locator' => $this->locatorMock,
-            'categoryCollectionFactory' => $this->categoryCollectionFactoryMock,
-            'arrayManager' => $this->arrayManagerMock,
-            'authorization' => $this->authorizationMock
-        ]);
+        return $this->objectManager->getObject(
+            Categories::class,
+            [
+                'locator' => $this->locatorMock,
+                'categoryCollectionFactory' => $this->categoryCollectionFactoryMock,
+                'arrayManager' => $this->arrayManagerMock,
+                'authorization' => $this->authorizationMock
+            ]
+        );
     }
 
     public function testModifyData()

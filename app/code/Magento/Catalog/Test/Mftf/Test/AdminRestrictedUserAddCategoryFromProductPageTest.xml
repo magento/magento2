@@ -74,8 +74,8 @@
         <!--Log out of admin and login with newly created user-->
         <comment userInput="Log out of admin and login with newly created user" stepKey="commentLoginWithNewUser"/>
         <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
-        <actionGroup ref="LoginNewUser" stepKey="loginActionGroup">
-            <argument name="user" value="admin2"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUser">
+            <argument name="adminUser" value="admin2"/>
         </actionGroup>
         <!--Go to create product page-->
         <comment userInput="Go to create product page" stepKey="commentGoCreateProductPage"/>
@@ -88,5 +88,23 @@
             <argument name="categoryName" value="$$createCategory.name$$"/>
         </actionGroup>
         <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <!--Assert that category exist in field-->
+        <comment userInput="Assert that category exist in field" stepKey="commentAssertion"/>
+        <grabTextFrom selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="grabCategoryName"/>
+        <assertContains stepKey="assertThatCategory">
+            <expectedResult type="variable">$$createCategory.name$$</expectedResult>
+            <actualResult type="variable">$grabCategoryName</actualResult>
+        </assertContains>
+        <!--Remove the category from the product and assert that it removed-->
+        <comment userInput="Remove the category from the product and assert that it removed" stepKey="AssertCategoryRemoved"/>
+        <actionGroup ref="removeCategoryFromProduct" stepKey="removeCategoryFromProduct">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProductAfterRemovingCategory"/>
+        <grabTextFrom selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="grabCategoryFieldContent"/>
+        <assertNotContains stepKey="assertThatCategoryRemoved">
+            <expectedResult type="variable">$$createCategory.name$$</expectedResult>
+            <actualResult type="variable">$grabCategoryFieldContent</actualResult>
+        </assertNotContains>
     </test>
 </tests>
