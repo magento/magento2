@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Controller\Download;
 
@@ -121,10 +122,10 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
      * Ends execution process
      *
      * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     protected function endExecute()
     {
+        // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
         exit(0);
     }
 }

@@ -192,7 +192,7 @@
         </arguments>
         <!--TODO use other action group for filtering grid when MQE-539 is implemented -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
-        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
         <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
@@ -201,8 +201,9 @@
         <click selector="{{AdminProductGridSection.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGrid"/>
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
-        <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
-        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmProductDelete"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="record(s) have been deleted." stepKey="seeSuccessMessage"/>
     </actionGroup>
 
     <actionGroup name="deleteProductByName" extends="deleteProductBySku">
@@ -255,7 +256,7 @@
 
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Change status')}}" stepKey="clickChangeStatusAction"/>
-        <click selector="{{AdminProductGridSection.changeStatus('status')}}" stepKey="clickChangeStatusDisabled" parameterized="true"/>
+        <click selector="{{AdminProductGridSection.changeStatus('status')}}" stepKey="clickChangeStatusDisabled"/>
         <waitForPageLoad stepKey="waitForStatusToBeChanged"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) have been updated." stepKey="seeSuccessMessage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForMaskToDisappear"/>
@@ -287,5 +288,14 @@
         <click stepKey="openSelectedProduct" selector="{{AdminProductGridSection.productRowBySku(productSku)}}"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
         <waitForElementVisible selector="{{AdminHeaderSection.pageTitle}}" stepKey="waitForProductTitle"/>
+    </actionGroup>
+
+    <actionGroup name="deleteProductsIfTheyExist">
+        <conditionalClick selector="{{AdminProductGridSection.multicheckDropdown}}" dependentSelector="{{AdminProductGridSection.firstProductRow}}" visible="true" stepKey="openMulticheckDropdown"/>
+        <conditionalClick selector="{{AdminProductGridSection.multicheckOption('Select All')}}" dependentSelector="{{AdminProductGridSection.firstProductRow}}" visible="true" stepKey="selectAllProductInFilteredGrid"/>
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
+        <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="waitForModalPopUp"/>
+        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
     </actionGroup>
 </actionGroups>

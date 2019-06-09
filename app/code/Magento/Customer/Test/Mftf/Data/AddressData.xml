@@ -191,6 +191,23 @@
         <data key="default_billing">true</data>
         <data key="default_shipping">false</data>
     </entity>
+    <entity name="addressNoZipNoState" type="address">
+        <data key="country_id">United Kingdom</data>
+        <array key="street">
+            <item>3962 Horner Street</item>
+        </array>
+        <data key="company">Magento</data>
+        <data key="telephone">334-200-4061</data>
+        <data key="city">London</data>
+        <data key="firstname">Fn</data>
+        <data key="lastname">Ln</data>
+        <data key="middlename">Mn</data>
+        <data key="prefix">Mr</data>
+        <data key="suffix">Sr</data>
+        <data key="vat_id">U1234567891</data>
+        <data key="default_shipping">true</data>
+        <data key="default_billing">true</data>
+    </entity>
     <entity name="updateCustomerUKAddress" type="address">
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
@@ -236,5 +253,49 @@
         <data key="city">Denver</data>
         <data key="state">Colorado</data>
         <data key="postcode">12345</data>
+    </entity>
+    <entity name="PolandAddress" type="address">
+        <data key="firstname">Mag</data>
+        <data key="lastname">Ento</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>Piwowarska 6</item>
+        </array>
+        <data key="city">Bielsko-Biała</data>
+        <data key="state"> Bielsko</data>
+        <data key="country_id">PL</data>
+        <data key="country">Poland</data>
+        <data key="postcode">43-310</data>
+        <data key="telephone">799885616</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionUT</requiredEntity>
+    </entity>
+    <entity name="DE_Address_Berlin_Not_Default_Address" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>Augsburger Strabe 41</item>
+        </array>
+        <data key="city">Berlin</data>
+        <data key="country_id">DE</data>
+        <data key="postcode">10789</data>
+        <data key="telephone">333-33-333-33</data>
+        <data key="country">Germany</data>
+    </entity>
+    <entity name="US_Address_California">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>6161 West Centinela Avenue</item>
+        </array>
+        <data key="city">Culver City</data>
+        <data key="country_id">United States</data>
+        <data key="country">United States</data>
+        <data key="state">California</data>
+        <data key="postcode">90230</data>
+        <data key="telephone">555-55-555-55</data>
     </entity>
 </entities>

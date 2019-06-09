@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateSearchTermEntityTest">
+        <annotations>
+            <stories value="Search terms"/>
+            <title value="Create search term test"/>
+            <description value="Admin should be able to create search term"/>
+            <testCaseId value="MC-13989"/>
+            <severity value="CRITICAL"/>
+            <group value="CatalogSearch"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create simple product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+        </before>
+        <after>
+            <!-- Delete created search term -->
+            <actionGroup ref="AssertSearchTermSuccessDeleteMessage" stepKey="deleteSearchTerm">
+                <argument name="searchQuery" value="$$createSimpleProduct.sku$$"/>
+            </actionGroup>
+
+            <!-- Delete created product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Go to the search terms page and create new search term -->
+        <actionGroup ref="AssertSearchTermSaveSuccessMessage" stepKey="createNewSearchTerm">
+            <argument name="searchQuery" value="$$createSimpleProduct.sku$$"/>
+            <argument name="storeValue" value="{{SimpleTerm.store_id}}"/>
+            <argument name="redirectUrl" value="{{SimpleTerm.redirect}}"/>
+            <argument name="displayInSuggestedTerm" value="{{SimpleTerm.display_in_terms}}"/>
+        </actionGroup>
+
+        <!-- Go to storefront -->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Assert created search term on storefront -->
+        <actionGroup ref="AssertSearchTermOnFrontend" stepKey="assertCreatedSearchTermOnFrontend">
+            <argument name="searchQuery" value="$$createSimpleProduct.sku$$"/>
+            <argument name="redirectUrl" value="{{SimpleTerm.redirect}}"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -6,6 +6,14 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Elasticsearch\Model\Config">
+        <arguments>
+            <argument name="engineList" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="string">elasticsearch6</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">
         <arguments>
             <argument name="engines" xsi:type="array">
@@ -44,7 +52,7 @@
                 <item name="elasticsearch6" xsi:type="string">\Magento\Elasticsearch6\Model\Client\ElasticsearchFactory</item>
             </argument>
             <argument name="clientOptions" xsi:type="array">
-                <item name="elasticsearch6" xsi:type="string">\Magento\Elasticsearch6\Model\Config</item>
+                <item name="elasticsearch6" xsi:type="string">\Magento\Elasticsearch\Model\Config</item>
             </argument>
         </arguments>
     </type>
@@ -158,8 +166,40 @@
     <type name="Magento\Search\Model\Search\PageSizeProvider">
         <arguments>
             <argument name="pageSizeBySearchEngine" xsi:type="array">
-                <item name="elasticsearch6" xsi:type="number">2147483647</item>
+                <item name="elasticsearch6" xsi:type="number">10000</item>
             </argument>
         </arguments>
     </type>
+
+    <virtualType name="elasticsearchLayerCategoryItemCollectionProvider" type="Magento\Elasticsearch\Model\Layer\Category\ItemCollectionProvider">
+        <arguments>
+            <argument name="factories" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="object">elasticsearchCategoryCollectionFactory</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\CatalogSearch\Model\Search\ItemCollectionProvider">
+        <arguments>
+            <argument name="factories" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="object">elasticsearchAdvancedCollectionFactory</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategyProvider">
+        <arguments>
+            <argument name="strategies" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="object">Magento\Elasticsearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="elasticsearchLayerSearchItemCollectionProvider" type="Magento\Elasticsearch\Model\Layer\Search\ItemCollectionProvider">
+        <arguments>
+            <argument name="factories" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="object">elasticsearchFulltextSearchCollectionFactory</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

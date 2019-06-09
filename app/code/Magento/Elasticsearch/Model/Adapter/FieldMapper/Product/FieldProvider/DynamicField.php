@@ -137,10 +137,12 @@ class DynamicField implements FieldProviderInterface
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $groups = $this->groupRepository->getList($searchCriteria)->getItems();
         $priceAttribute = $this->attributeAdapterProvider->getByAttributeCode('price');
+        $ctx = isset($context['websiteId']) ? ['websiteId' => $context['websiteId']] : [];
         foreach ($groups as $group) {
+            $ctx['customerGroupId'] = $group->getId();
             $groupPriceKey = $this->fieldNameResolver->getFieldName(
                 $priceAttribute,
-                ['customerGroupId' => $group->getId(), 'websiteId' => $context['websiteId']]
+                $ctx
             );
             $allAttributes[$groupPriceKey] = [
                 'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_FLOAT),

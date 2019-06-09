@@ -14,6 +14,9 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test change customer password
+ */
 class ChangeCustomerPasswordTest extends GraphQlAbstract
 {
     /**
@@ -50,7 +53,7 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
         $query = $this->getChangePassQuery($oldCustomerPassword, $newCustomerPassword);
         $headerMap = $this->getCustomerAuthHeaders($customerEmail, $oldCustomerPassword);
 
-        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $response = $this->graphQlMutation($query, [], '', $headerMap);
         $this->assertEquals($customerEmail, $response['changeCustomerPassword']['email']);
 
         try {
@@ -69,7 +72,7 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
     public function testChangePasswordIfUserIsNotAuthorizedTest()
     {
         $query = $this->getChangePassQuery('currentpassword', 'newpassword');
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -77,7 +80,6 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
      */
     public function testChangeWeakPassword()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/190');
         $customerEmail = 'customer@example.com';
         $oldCustomerPassword = 'password';
         $newCustomerPassword = 'weakpass';
@@ -88,13 +90,13 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
         $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/Minimum of different classes of characters in password is.*/');
 
-        $this->graphQlQuery($query, [], '', $headerMap);
+        $this->graphQlMutation($query, [], '', $headerMap);
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The password doesn't match this account. Verify the password and try again.
+     * @expectedExceptionMessage Invalid login or password.
      */
     public function testChangePasswordIfPasswordIsInvalid()
     {
@@ -106,7 +108,7 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
         $query = $this->getChangePassQuery($incorrectPassword, $newCustomerPassword);
 
         $headerMap = $this->getCustomerAuthHeaders($customerEmail, $oldCustomerPassword);
-        $this->graphQlQuery($query, [], '', $headerMap);
+        $this->graphQlMutation($query, [], '', $headerMap);
     }
 
     private function getChangePassQuery($currentPassword, $newPassword)

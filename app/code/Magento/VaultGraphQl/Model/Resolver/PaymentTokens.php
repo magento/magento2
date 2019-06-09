@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Vault\Model\PaymentTokenManagement;
-use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
+use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 
 /**
  * Customers Payment Tokens resolver, used for GraphQL request processing.
@@ -24,20 +24,20 @@ class PaymentTokens implements ResolverInterface
     private $paymentTokenManagement;
 
     /**
-     * @var CheckCustomerAccount
+     * @var GetCustomer
      */
-    private $checkCustomerAccount;
+    private $getCustomer;
 
     /**
      * @param PaymentTokenManagement $paymentTokenManagement
-     * @param CheckCustomerAccount $checkCustomerAccount
+     * @param GetCustomer $getCustomer
      */
     public function __construct(
         PaymentTokenManagement $paymentTokenManagement,
-        CheckCustomerAccount $checkCustomerAccount
+        GetCustomer $getCustomer
     ) {
         $this->paymentTokenManagement = $paymentTokenManagement;
-        $this->checkCustomerAccount = $checkCustomerAccount;
+        $this->getCustomer = $getCustomer;
     }
 
     /**
@@ -50,12 +50,9 @@ class PaymentTokens implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $currentUserId = $context->getUserId();
-        $currentUserType = $context->getUserType();
+        $customer = $this->getCustomer->execute($context);
 
-        $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
-
-        $tokens = $this->paymentTokenManagement->getVisibleAvailableTokens($currentUserId);
+        $tokens = $this->paymentTokenManagement->getVisibleAvailableTokens($customer->getId());
         $result = [];
 
         foreach ($tokens as $token) {
@@ -66,7 +63,6 @@ class PaymentTokens implements ResolverInterface
                 'details' => $token->getTokenDetails(),
             ];
         }
-
         return ['items' => $result];
     }
 }

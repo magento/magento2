@@ -90,14 +90,17 @@ class Collection
      */
     public function addParentProduct(Product $product) : void
     {
-        if (isset($this->parentProducts[$product->getId()])) {
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $productId = $product->getData($linkField);
+
+        if (isset($this->parentProducts[$productId])) {
             return;
         }
 
         if (!empty($this->childrenMap)) {
             $this->childrenMap = [];
         }
-        $this->parentProducts[$product->getId()] = $product;
+        $this->parentProducts[$productId] = $product;
     }
 
     /**
@@ -140,16 +143,12 @@ class Collection
             return $this->childrenMap;
         }
 
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         foreach ($this->parentProducts as $product) {
             $attributeData = $this->getAttributesCodes($product);
             /** @var ChildCollection $childCollection */
             $childCollection = $this->childCollectionFactory->create();
-            $childCollection->addAttributeToSelect($attributeData);
-
-            /** @var Product $product */
-            $product->setData($linkField, $product->getId());
             $childCollection->setProductFilter($product);
+            $childCollection->addAttributeToSelect($attributeData);
 
             /** @var Product $childProduct */
             foreach ($childCollection->getItems() as $childProduct) {

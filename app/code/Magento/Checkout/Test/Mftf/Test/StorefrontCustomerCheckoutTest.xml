@@ -12,7 +12,7 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Checkout via the Admin"/>
-            <title value="Customer Checkout"/>
+            <title value="Customer Checkout via the Admin"/>
             <description value="Should be able to place an order as a customer."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-5922"/>
@@ -186,20 +186,20 @@
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity2"/>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2" />
 
-        <click stepKey="changeShippingAddress" selector="{{CheckoutShippingMethodsSection.shipHereButton}}"/>
-        <waitForElementNotVisible stepKey="waitForShippingMethodLoaderNotVisible" selector="{{CheckoutShippingMethodsSection.shippingMethodLoader}}" time="30"/>
-        <waitForElementVisible stepKey="waitForShippingMethodRadioToBeVisible" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" time="30"/>
+        <click selector="{{CheckoutShippingMethodsSection.shipHereButton}}" stepKey="changeShippingAddress"/>
+        <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodLoader}}" time="30" stepKey="waitForShippingMethodLoaderNotVisible"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" time="30" stepKey="waitForShippingMethodRadioToBeVisible"/>
         <waitForPageLoad stepKey="waitForPageLoad23"/>
-        <click stepKey="selectFirstShippingMethod2" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
-        <waitForElement stepKey="waitForShippingMethodSelect2" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
-        <click stepKey="clickNextOnShippingMethodLoad2" selector="{{CheckoutShippingMethodsSection.next}}" />
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod2"/>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30"  stepKey="waitForShippingMethodSelect2"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}"  stepKey="clickNextOnShippingMethodLoad2"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
-        <waitForElement stepKey="waitForPlaceOrderButton2" selector="{{CheckoutPaymentSection.placeOrder}}" time="30" />
-        <see stepKey="seeBillingAddressIsCorrect2" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{UK_Not_Default_Address.street[0]}}" />
-        <click stepKey="clickPlaceOrderButton2" selector="{{CheckoutPaymentSection.placeOrder}}" />
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton2"/>
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_NY.street[0]}}" stepKey="seeBillingAddressIsCorrect2" />
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton2"/>
         <waitForPageLoad stepKey="waitForOrderSuccessPage2"/>
-        <see stepKey="seeSuccessMessage2" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" />
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="seeSuccessMessage2"/>
     </test>
     <test name="StorefrontCustomerCheckoutTestWithRestrictedCountriesForPayment">
         <annotations>
@@ -216,16 +216,18 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCLI stepKey="allowSpecificValue" command="config:set payment/checkmo/allowspecific 1" />
-            <magentoCLI stepKey="specificCountryValue" command="config:set payment/checkmo/specificcountry GB" />
+            <magentoCLI command="config:set checkout/options/display_billing_address_on 1"  stepKey="setShowBillingAddressOnPaymentPage" />
+            <magentoCLI command="config:set payment/checkmo/allowspecific 1" stepKey="allowSpecificValue"  />
+            <magentoCLI command="config:set payment/checkmo/specificcountry GB" stepKey="specificCountryValue" />
             <createData entity="Simple_US_Customer" stepKey="simpleuscustomer"/>
         </before>
         <after>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <magentoCLI stepKey="allowSpecificValue" command="config:set payment/checkmo/allowspecific 0" />
-            <magentoCLI stepKey="specificCountryValue" command="config:set payment/checkmo/specificcountry ''" />
+            <magentoCLI command="config:set payment/checkmo/allowspecific 0" stepKey="allowSpecificValue" />
+            <magentoCLI command="config:set payment/checkmo/specificcountry ''" stepKey="specificCountryValue" />
+            <magentoCLI command="config:set checkout/options/display_billing_address_on 0" stepKey="setDisplayBillingAddressOnPaymentMethod" />
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
         </after>
         <!-- Login as Customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
@@ -250,15 +252,17 @@
         <click stepKey="clickNextButton" selector="{{CheckoutShippingMethodsSection.next}}" />
         <waitForPageLoad stepKey="waitBillingForm"/>
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
-        <dontsee selector="{{CheckoutPaymentSection.paymentMethodByName('Check / Money order')}}" stepKey="paymentMethodDoesNotAvailable"/>
+        <dontSee selector="{{CheckoutPaymentSection.paymentMethodByName('Check / Money order')}}" stepKey="paymentMethodDoesNotAvailable"/>
 
         <!-- Fill UK Address and verify that payment available and checkout successful -->
-        <click selector="{{CheckoutHeaderSection.shippingMethodStep}}" stepKey="goToShipping" />
-        <click selector="{{CheckoutShippingSection.newAddressButton}}" stepKey="fillNewAddress" />
-        <actionGroup ref="LoggedInUserCheckoutAddNewShippingSectionWithoutRegionActionGroup" stepKey="customerCheckoutFillingShippingSectionUK">
-            <argument name="customerVar" value="CustomerEntityOne" />
-            <argument name="customerAddressVar" value="UK_Not_Default_Address" />
+        <uncheckOption selector="{{StorefrontCheckoutPaymentMethodSection.billingAddressSameAsShippingShared}}" stepKey="uncheckBillingAddressSameAsShippingCheckCheckBox"/>
+        <selectOption selector="{{CheckoutPaymentSection.billingAddressSelectShared}}" userInput="New Address" stepKey="clickOnNewAddress"/>
+        <waitForPageLoad stepKey="waitNewAddressBillingForm"/>
+        <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="changeAddress">
+            <argument name="Address" value="updateCustomerUKAddress"/>
+            <argument name="classPrefix" value="[aria-hidden=false]"/>
         </actionGroup>
+        <click selector="{{CheckoutPaymentSection.addressAction('Update')}}" stepKey="clickUpdateBillingAddressButton" />
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="customerSelectCheckMoneyOrderPayment" />
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceorder">
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />

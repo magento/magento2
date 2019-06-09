@@ -4,16 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 
 /**
  * Product view template
  *
- * @see \Magento\Catalog\Block\Product\View\Description
+ * @var $block \Magento\Catalog\Block\Product\View\Description
  */
 ?>
 <?php
-$_helper = $this->helper('Magento\Catalog\Helper\Output');
+$_helper = $this->helper(Magento\Catalog\Helper\Output::class);
 $_product = $block->getProduct();
 $_call = $block->getAtCall();
 $_code = $block->getAtCode();
@@ -32,15 +32,19 @@ if ($_attributeLabel && $_attributeLabel == 'default') {
     $_attributeLabel = $_product->getResource()->getAttribute($_code)->getStoreLabel();
 }
 if ($_attributeType && $_attributeType == 'text') {
-    $_attributeValue = ($_helper->productAttribute($_product, $_product->$_call(), $_code)) ? $_product->getAttributeText($_code) : '';
+    $_attributeValue = ($_helper->productAttribute($_product, $_product->$_call(), $_code))
+        ? $_product->getAttributeText($_code)
+        : '';
 } else {
     $_attributeValue = $_helper->productAttribute($_product, $_product->$_call(), $_code);
 }
 ?>
 
-<?php if ($_attributeValue): ?>
-<div class="product attribute <?= /* @escapeNotVerified */ $_className ?>">
-    <?php if ($renderLabel): ?><strong class="type"><?= /* @escapeNotVerified */ $_attributeLabel ?></strong><?php endif; ?>
-    <div class="value" <?= /* @escapeNotVerified */ $_attributeAddAttribute ?>><?= /* @escapeNotVerified */ $_attributeValue ?></div>
+<?php if ($_attributeValue) :?>
+<div class="product attribute <?= $block->escapeHtmlAttr($_className) ?>">
+    <?php if ($renderLabel) :?>
+        <strong class="type"><?= $block->escapeHtml($_attributeLabel) ?></strong>
+    <?php endif; ?>
+    <div class="value" <?= /* @noEscape */ $_attributeAddAttribute ?>><?= /* @noEscape */ $_attributeValue ?></div>
 </div>
 <?php endif; ?>

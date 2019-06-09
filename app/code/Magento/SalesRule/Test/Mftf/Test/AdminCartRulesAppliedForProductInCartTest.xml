@@ -18,29 +18,36 @@
             <testCaseId value="MAGETWO-96722"/>
             <useCaseId value="MAGETWO-96410"/>
             <group value="SalesRule"/>
+            <skip>
+                <issueId value="MC-16684"/>
+            </skip>
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-
             <!--Create category and product-->
             <createData entity="_defaultCategory" stepKey="defaultCategory"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
                 <field key="price">200</field>
                 <field key="quantity">500</field>
             </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
+
         <after>
             <!--Delete created data-->
             <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
 
-            <actionGroup stepKey="deleteProduct1" ref="deleteProductBySku">
+            <actionGroup ref="deleteProductBySku" stepKey="deleteBundleProduct">
                 <argument name="sku" value="{{BundleProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters"/>
+
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
                 <argument name="ruleName" value="{{PriceRuleWithCondition.name}}"/>
             </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters1"/>
 
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
@@ -57,12 +64,14 @@
         <pressKey selector="{{AdminProductFormSection.productSku}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="enter"/>
 
         <!--Off dynamic price and set value-->
+        <scrollToTopOfPage stepKey="scrollToTopOfThePageToSeePriceTypeElement"/>
         <click  selector="{{AdminProductFormBundleSection.dynamicPrice}}" stepKey="offDynamicPrice"/>
         <fillField selector="{{AdminProductFormBundleSection.priceField}}" userInput="0" stepKey="setProductPrice"/>
 
         <!-- Add category to product -->
         <click selector="{{AdminProductFormBundleSection.categoriesDropDown}}" stepKey="dropDownCategories"/>
         <fillField selector="{{AdminProductFormBundleSection.searchForCategory}}" userInput="$$defaultCategory.name$$" stepKey="searchForCategory"/>
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.selectCategory}}" stepKey="waitForElementLoaded"/>
         <click selector="{{AdminProductFormBundleSection.selectCategory}}" stepKey="selectCategory"/>
         <click selector="{{AdminProductFormBundleSection.categoriesLabel}}" stepKey="clickOnCategoriesLabelToCloseOptions"/>
 
@@ -92,7 +101,7 @@
         </actionGroup>
 
         <!--Go to Storefront and add product to cart and checkout from cart-->
-        <amOnPage url="/$$simpleProduct.name$$.html" stepKey="GoToProduct"/>
+        <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="2" stepKey="setQuantity"/>
         <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="AddProductToCard">
             <argument name="productName" value="$$simpleProduct.name$$"/>
