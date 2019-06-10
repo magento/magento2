@@ -136,4 +136,25 @@
     <actionGroup name="selectNotLoggedInCustomerGroupActionGroup">
         <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
     </actionGroup>
+
+    <!-- Open rule for Edit -->
+    <actionGroup name="OpenCatalogPriceRule">
+        <arguments>
+            <argument name="ruleName" type="string" defaultValue="CustomCatalogRule.name"/>
+        </arguments>
+        <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToAdminCatalogPriceRuleGridPage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <fillField selector="{{AdminCatalogPriceRuleGridSection.filterByRuleName}}" userInput="{{ruleName}}" stepKey="filterByRuleName"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch"/>
+        <click selector="{{AdminGridTableSection.row('1')}}" stepKey="clickEdit"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <actionGroup name="RemoveCatalogPriceRule" extends="OpenCatalogPriceRule">
+        <click selector="{{AdminMainActionsSection.delete}}" after="waitForPageLoad" stepKey="clickToDelete"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" after="clickToDelete" stepKey="waitForElementVisible"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" after="waitForElementVisible" stepKey="clickToConfirm"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" after="clickToConfirm" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the rule." after="waitForSuccessMessage" stepKey="verifyRuleIsDeleted"/>
+    </actionGroup>
 </actionGroups>

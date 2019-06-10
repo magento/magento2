@@ -141,6 +141,12 @@
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
     </actionGroup>
 
+    <actionGroup name="newAddConfigurableProductToOrder" extends="addConfigurableProductToOrder">
+        <remove keyForRemoval="waitForConfigurablePopover"/>
+        <remove keyForRemoval="selectionConfigurableOption"/>
+        <selectOption selector="{{AdminOrderFormConfigureProductSection.selectOption}}" userInput="{{option.value}}" stepKey="selectOption" after="waitForOptionsToLoad"/>
+    </actionGroup>
+
     <!--Add configurable product to order -->
     <actionGroup name="addConfigurableProductToOrderFromAdmin" extends="addConfigurableProductToOrder">
         <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}" stepKey="waitForConfigurablePopover"/>
@@ -415,6 +421,7 @@
             <argument name="customer"/>
         </arguments>
         <amOnPage stepKey="navigateToNewOrderPage" url="{{AdminOrderCreatePage.url}}"/>
+        <waitForPageLoad stepKey="waitForNewOrderPageOpened"/>
         <click stepKey="chooseCustomer" selector="{{AdminOrdersGridSection.customerInOrdersSection(customer.firstname)}}"/>
         <waitForPageLoad stepKey="waitForStoresPageOpened"/>
         <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickOnAddProducts"/>

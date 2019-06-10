@@ -20,7 +20,7 @@
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
             <magentoCLI command="config:set {{EnablePaymentBankTransferConfigData.path}} {{EnablePaymentBankTransferConfigData.value}}" stepKey="enableBankTransferPayment"/>
-            <magentoCLI command="config:set {{CatalogInventoryOptionsCanSubtractEnable.path}} {{CatalogInventoryOptionsCanSubtractEnable.value}}" stepKey="enableCatalogInventoryStock"/>
+            <magentoCLI command="config:set {{EnableCatalogInventoryConfigData.path}} {{EnableCatalogInventoryConfigData.value}}" stepKey="enableCatalogInventoryStock"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct">
                 <field key="price">10.00</field>
             </createData>
