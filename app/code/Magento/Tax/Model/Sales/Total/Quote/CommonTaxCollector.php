@@ -350,7 +350,7 @@ class CommonTaxCollector extends AbstractTotal
         $useBaseCurrency
     ) {
         $items = $shippingAssignment->getItems();
-        if (!count($items)) {
+        if (empty($items)) {
             return [];
         }
 
@@ -475,7 +475,7 @@ class CommonTaxCollector extends AbstractTotal
     {
         $items = $shippingAssignment->getItems();
         $address = $shippingAssignment->getShipping()->getAddress();
-        if (!count($items)) {
+        if (empty($items)) {
             return $this->quoteDetailsDataObjectFactory->create();
         }
 
@@ -685,6 +685,9 @@ class CommonTaxCollector extends AbstractTotal
     {
         //The price should be base price
         $quoteItem->setPrice($baseItemTaxDetails->getPrice());
+        if ($quoteItem->getCustomPrice() && $this->taxHelper->applyTaxOnCustomPrice()) {
+            $quoteItem->setCustomPrice($baseItemTaxDetails->getPrice());
+        }
         $quoteItem->setConvertedPrice($itemTaxDetails->getPrice());
         $quoteItem->setPriceInclTax($itemTaxDetails->getPriceInclTax());
         $quoteItem->setRowTotal($itemTaxDetails->getRowTotal());

@@ -19,6 +19,7 @@ use Magento\Customer\Model\Customer\CredentialsValidator;
 use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
+use Magento\Directory\Model\AllowedCountries;
 use Magento\Eav\Model\Validator\Attribute\Backend;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -340,6 +341,11 @@ class AccountManagement implements AccountManagementInterface
     private $addressRegistry;
 
     /**
+     * @var AllowedCountries
+     */
+    private $allowedCountriesReader;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -371,8 +377,10 @@ class AccountManagement implements AccountManagementInterface
      * @param CollectionFactory|null $visitorCollectionFactory
      * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @param AddressRegistry|null $addressRegistry
+     * @param AllowedCountries|null $allowedCountriesReader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __construct(
         CustomerFactory $customerFactory,
@@ -405,7 +413,8 @@ class AccountManagement implements AccountManagementInterface
         SaveHandlerInterface $saveHandler = null,
         CollectionFactory $visitorCollectionFactory = null,
         SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        AddressRegistry $addressRegistry = null
+        AddressRegistry $addressRegistry = null,
+        AllowedCountries $allowedCountriesReader = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -445,6 +454,8 @@ class AccountManagement implements AccountManagementInterface
             ?: ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
         $this->addressRegistry = $addressRegistry
             ?: ObjectManager::getInstance()->get(AddressRegistry::class);
+        $this->allowedCountriesReader = $allowedCountriesReader
+            ?: ObjectManager::getInstance()->get(AllowedCountries::class);
     }
 
     /**
@@ -464,7 +475,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resendConfirmation($email, $websiteId = null, $redirectUrl = '')
     {
@@ -487,7 +498,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function activate($email, $confirmationKey)
     {
@@ -496,7 +507,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function activateById($customerId, $confirmationKey)
     {
@@ -536,7 +547,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function authenticate($username, $password)
     {
@@ -571,7 +582,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateResetPasswordLinkToken($customerId, $resetPasswordLinkToken)
     {
@@ -580,7 +591,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function initiatePasswordReset($email, $template, $websiteId = null)
     {
@@ -666,7 +677,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resetPassword($email, $resetToken, $newPassword)
     {
@@ -695,7 +706,12 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
         $this->getAuthentication()->unlock($customer->getId());
         $this->destroyCustomerSessions($customer->getId());
-        $this->sessionManager->destroy();
+        if ($this->sessionManager->isSessionExists() && !headers_sent()) {
+            //delete old session and move data to the new session
+            //use this instead of $this->sessionManager->regenerateId because last one doesn't delete old session
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            session_regenerate_id(true);
+        }
         $this->customerRepository->save($customer);
 
         return true;
@@ -787,7 +803,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfirmationStatus($customerId)
     {
@@ -803,7 +819,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '', $extensions = [])
     {
@@ -824,7 +840,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -882,6 +898,9 @@ class AccountManagement implements AccountManagementInterface
         }
         try {
             foreach ($customerAddresses as $address) {
+                if (!$this->isAddressAllowedForWebsite($address, $customer->getStoreId())) {
+                    continue;
+                }
                 if ($address->getId()) {
                     $newAddress = clone $address;
                     $newAddress->setId(null);
@@ -906,7 +925,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultBillingAddress($customerId)
     {
@@ -915,7 +934,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultShippingAddress($customerId)
     {
@@ -960,7 +979,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function changePassword($email, $currentPassword, $newPassword)
     {
@@ -973,7 +992,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function changePasswordById($customerId, $currentPassword, $newPassword)
     {
@@ -1032,6 +1051,8 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
+     * Get EAV validator
+     *
      * @return Backend
      */
     private function getEavValidator()
@@ -1043,7 +1064,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate(CustomerInterface $customer)
     {
@@ -1068,7 +1089,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isEmailAvailable($customerEmail, $websiteId = null)
     {
@@ -1084,7 +1105,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function isCustomerInStore($customerWebsiteId, $storeId)
     {
@@ -1535,6 +1556,7 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * Destroy all active customer sessions by customer id (current session will not be destroyed).
+     *
      * Customer sessions which should be deleted are collecting  from the "customer_visitor" table considering
      * configured session lifetime.
      *
@@ -1571,5 +1593,19 @@ class AccountManagement implements AccountManagementInterface
     private function setIgnoreValidationFlag(Customer $customer)
     {
         $customer->setData('ignore_validation_flag', true);
+    }
+
+    /**
+     * Check is address allowed for store
+     *
+     * @param AddressInterface $address
+     * @param int|null $storeId
+     * @return bool
+     */
+    private function isAddressAllowedForWebsite(AddressInterface $address, $storeId): bool
+    {
+        $allowedCountries = $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $storeId);
+
+        return in_array($address->getCountryId(), $allowedCountries);
     }
 }

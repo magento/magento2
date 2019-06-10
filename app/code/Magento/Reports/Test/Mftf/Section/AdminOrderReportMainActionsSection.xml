@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderReportMainActionsSection">
-        <element name="showReport" type="button" time="30" selector="#filter_form_submit"/>
-        <element name="refreshStatistics" type="text" time="30" selector="//a[contains(text(), 'here')]"/>
+        <element name="showReport" type="button" timeout="30" selector="#filter_form_submit"/>
+        <element name="refreshStatistics" type="text" timeout="30" selector="//a[contains(text(), 'here')]"/>
     </section>
 </sections>

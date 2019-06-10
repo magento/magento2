@@ -6,22 +6,51 @@
   */
 -->
 
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
-    <!--Add a custom option of type "file" to a product-->
-    <actionGroup name="AddProductCustomOptionFile">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddProductCustomOption">
         <arguments>
-            <argument name="option" defaultValue="ProductOptionFile"/>
+            <argument name="option"/>
         </arguments>
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
         <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" stepKey="waitForOption"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{option.title}}" stepKey="fillTitle"/>
         <click selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}" stepKey="openTypeSelect"/>
-        <click selector="{{AdminProductCustomizableOptionsSection.optionType('File')}}" stepKey="selectTypeFile"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionType(option.type_label)}}" stepKey="selectTypeFile"/>
         <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.optionPrice}}" stepKey="waitForElements"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.optionPrice}}" userInput="{{option.price}}" stepKey="fillPrice"/>
         <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceType}}" userInput="{{option.price_type}}" stepKey="selectPriceType"/>
-        <fillField selector="{{AdminProductCustomizableOptionsSection.optionFileExtensions}}" userInput="{{option.file_extension}}" stepKey="fillCompatibleExtensions"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionSku}}" userInput="{{option.title}}" stepKey="fillSku"/>
+    </actionGroup>
+    <!--Add a custom option of type "file" to a product-->
+    <actionGroup name="AddProductCustomOptionFile" extends="AddProductCustomOption">
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionFileExtensions}}" userInput="{{option.file_extension}}" after="fillSku" stepKey="fillCompatibleExtensions"/>
+    </actionGroup>
+    <actionGroup name="ImportProductCustomizableOptions">
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <click selector="{{AdminProductCustomizableOptionsSection.importOptions}}" stepKey="clickImportOptions"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsImportModalSection.selectProductTitle}}" stepKey="waitForTitleVisible"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickResetFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="clickFilterButton"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsImportModalSection.nameFilter}}" stepKey="waitForNameField"/>
+        <fillField selector="{{AdminProductCustomizableOptionsImportModalSection.nameFilter}}" userInput="{{productName}}" stepKey="fillProductName"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <checkOption selector="{{AdminDataGridTableSection.rowCheckbox('1')}}"  stepKey="checkProductCheckbox"/>
+        <click selector="{{AdminProductCustomizableOptionsImportModalSection.importButton}}" stepKey="clickImport"/>
+    </actionGroup>
+    <actionGroup name="CheckCustomizableOptionImport">
+        <arguments>
+            <argument name="option"/>
+            <argument name="optionIndex" type="string"/>
+        </arguments>
+        <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionTitleInputByIndex(optionIndex)}}" stepKey="grabOptionTitle"/>
+        <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionPriceByIndex(optionIndex)}}" stepKey="grabOptionPrice"/>
+        <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionSkuByIndex(optionIndex)}}" stepKey="grabOptionSku"/>
+        <assertEquals expected="{{option.title}}" expectedType="string" actual="$grabOptionTitle" stepKey="assertOptionTitle"/>
+        <assertEquals expected="{{option.price}}" expectedType="string" actual="$grabOptionPrice" stepKey="assertOptionPrice"/>
+        <assertEquals expected="{{option.title}}" expectedType="string" actual="$grabOptionSku" stepKey="assertOptionSku"/>
     </actionGroup>
 </actionGroups>
+
