@@ -9,8 +9,9 @@ use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
- * Bse abstract form element.
+ * Base abstract form element.
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.1.0
  */
@@ -86,11 +87,14 @@ abstract class AbstractOptionsField extends AbstractElement
      */
     protected function convertOptionsValueToString(array $options)
     {
-        array_walk($options, function (&$value) {
-            if (isset($value['value']) && is_scalar($value['value'])) {
-                $value['value'] = (string)$value['value'];
+        array_walk(
+            $options,
+            static function (&$value) {
+                if (isset($value['value']) && is_scalar($value['value'])) {
+                    $value['value'] = (string)$value['value'];
+                }
             }
-        });
+        );
         return $options;
     }
 }
