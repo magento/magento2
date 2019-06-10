@@ -13,7 +13,7 @@
             <title value="Disabled variation of configurable product can't be added to shopping cart via admin"/>
             <description value="Disabled variation of configurable product can't be added to shopping cart via admin"/>
             <severity value="AVERAGE"/>
-            <testCaseId value="MAGETWO-99240"/>
+            <testCaseId value="MC-17373"/>
             <useCaseId value="MAGETWO-72172"/>
             <group value="ConfigurableProduct"/>
         </annotations>
