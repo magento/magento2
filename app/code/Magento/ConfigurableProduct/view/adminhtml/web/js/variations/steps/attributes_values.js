@@ -223,6 +223,12 @@ define([
                     });
 
                     if (option['is_new'] === true) {
+                        if (!attribute.isValidOption(option)) {
+                            throw new Error($.mage.__(
+                                'The value of attribute ""%1"" must be unique').replace("\"%1\"", attribute.label)
+                            );
+                        }
+
                         newOptions.push(option);
                     }
                 });
