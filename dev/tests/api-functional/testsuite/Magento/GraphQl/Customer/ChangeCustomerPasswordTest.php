@@ -70,7 +70,7 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
         $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
 
         $response = $this->graphQlMutation($query, [], '', $headerMap);
-        $this->assertEquals($customerEmail, $response['changePassword']['email']);
+        $this->assertEquals($customerEmail, $response['changeCustomerPassword']['email']);
 
         try {
             // registry contains the old password hash so needs to be reset
