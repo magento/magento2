@@ -16,6 +16,9 @@
             <severity value="CRITICAL"/>
             <group value="urlRewrite"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-17181"/>
+            </skip>
         </annotations>
 
         <before>
