@@ -13,7 +13,7 @@ namespace Magento\Checkout\Block\Cart;
  * custom_items weren't set to cart block
  *
  * @api
- * @since 100.2.0
+ * @since 100.1.7
  */
 class Grid extends \Magento\Checkout\Block\Cart
 {
@@ -56,7 +56,6 @@ class Grid extends \Magento\Checkout\Block\Cart
      * @param \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory $itemCollectionFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param array $data
-     * @since 100.2.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -89,7 +88,7 @@ class Grid extends \Magento\Checkout\Block\Cart
      * Configuration path is Store->Configuration->Sales->Checkout->Shopping Cart->Number of items to display pager
      *
      * @return void
-     * @since 100.2.0
+     * @since 100.1.7
      */
     protected function _construct()
     {
@@ -103,7 +102,7 @@ class Grid extends \Magento\Checkout\Block\Cart
 
     /**
      * {@inheritdoc}
-     * @since 100.2.0
+     * @since 100.1.7
      */
     protected function _prepareLayout()
     {
@@ -128,7 +127,7 @@ class Grid extends \Magento\Checkout\Block\Cart
      * Prepare quote items collection for pager
      *
      * @return \Magento\Quote\Model\ResourceModel\Quote\Item\Collection
-     * @since 100.2.0
+     * @since 100.1.7
      */
     public function getItemsForGrid()
     {
@@ -147,7 +146,7 @@ class Grid extends \Magento\Checkout\Block\Cart
 
     /**
      * {@inheritdoc}
-     * @since 100.2.0
+     * @since 100.1.7
      */
     public function getItems()
     {

@@ -10,7 +10,7 @@ use Magento\Config\Model\Config\StructureElementInterface;
 /**
  * @api
  * @since 100.0.2
- * @deprecated
+ * @deprecated 101.1.0
  * @see StructureElementInterface
  */
 interface ElementInterface

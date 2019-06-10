@@ -288,7 +288,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
      * Retrieve all ids from collection
      *
      * @return int[]
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getAllIds()
     {

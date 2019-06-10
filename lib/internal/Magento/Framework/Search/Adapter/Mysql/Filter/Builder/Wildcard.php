@@ -10,7 +10,7 @@ use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 /**
  * Wildcard filter builder.
  *
- * @deprecated
+ * @deprecated 102.0.0
  * @see \Magento\ElasticSearch
  */
 class Wildcard implements FilterInterface

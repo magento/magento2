@@ -17,6 +17,7 @@ namespace Magento\Framework\ObjectManager;
  * the classes they were introduced for.
  *
  * @api
+ * @since 100.0.2
  */
 interface ContextInterface
 {

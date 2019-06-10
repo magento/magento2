@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Element;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class RendererList extends AbstractBlock
 {

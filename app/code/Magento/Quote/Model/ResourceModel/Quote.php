@@ -254,7 +254,7 @@ class Quote extends AbstractDb
      *
      * @param \Magento\Catalog\Model\Product $product
      *
-     * @deprecated 101.0.1
+     * @deprecated 101.0.3
      * @see \Magento\Quote\Model\ResourceModel\Quote::subtractProductFromQuotes
      *
      * @return $this

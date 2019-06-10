@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * Abstract class provides sorting routing to sort total information based on configuration settings.
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractTotalsProcessor
 {

@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel;
 /**
  * CatalogSearch Fulltext Index Engine resource model
  *
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class Engine implements EngineInterface

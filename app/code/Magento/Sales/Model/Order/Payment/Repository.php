@@ -131,7 +131,7 @@ class Repository implements OrderPaymentRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

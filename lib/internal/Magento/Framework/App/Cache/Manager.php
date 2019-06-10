@@ -12,6 +12,7 @@ use Magento\Framework\App;
  * Cache status manager
  *
  * @api
+ * @since 100.0.2
  */
 class Manager
 {

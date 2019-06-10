@@ -9,6 +9,7 @@ namespace Magento\Framework\App\Config\Data;
  * Processes data from admin store configuration fields
  *
  * @api
+ * @since 100.0.2
  */
 interface ProcessorInterface
 {

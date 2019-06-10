@@ -9,6 +9,7 @@ namespace Magento\Framework\Url;
  * Base64 encoder for URLs
  *
  * @api
+ * @since 100.0.2
  */
 interface EncoderInterface
 {

@@ -1145,7 +1145,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected function _parseOptions(\Magento\Quote\Model\Quote\Item $item, $additionalOptions)
     {
@@ -1215,7 +1215,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param array $options
      * @return $this
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected function _assignOptionsToItem(\Magento\Quote\Model\Quote\Item $item, $options)
     {

@@ -7,6 +7,7 @@ namespace Magento\Framework\Indexer;
 
 /**
  * @api Retrieve indexer by id, for example when indexer need to be invalidated
+ * @since 100.0.2
  */
 class IndexerRegistry
 {

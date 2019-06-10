@@ -18,6 +18,7 @@ use Magento\Payment\Model\Config as PaymentConfig;
  * Block for representing the payment form
  *
  * @api
+ * @since 100.3.0
  */
 class Form extends Cc
 {
@@ -54,6 +55,7 @@ class Form extends Cc
      * Check if cvv validation is available
      *
      * @return boolean
+     * @since 100.3.0
      */
     public function isCvvEnabled(): bool
     {

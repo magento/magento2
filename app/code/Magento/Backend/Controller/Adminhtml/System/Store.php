@@ -88,7 +88,7 @@ abstract class Store extends Action
      *
      * @return bool
      *
-     * @deprecated Backup module is to be removed.
+     * @deprecated 100.2.7 Backup module is to be removed.
      */
     protected function _backupDatabase()
     {

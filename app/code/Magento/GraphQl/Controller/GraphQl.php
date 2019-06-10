@@ -27,12 +27,13 @@ use Magento\Framework\App\ObjectManager;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.3.0
  */
 class GraphQl implements FrontControllerInterface
 {
     /**
      * @var \Magento\Framework\Webapi\Response
-     * @deprecated
+     * @deprecated 100.3.2
      */
     private $response;
 
@@ -123,6 +124,7 @@ class GraphQl implements FrontControllerInterface
      *
      * @param RequestInterface $request
      * @return ResponseInterface
+     * @since 100.3.0
      */
     public function dispatch(RequestInterface $request) : ResponseInterface
     {

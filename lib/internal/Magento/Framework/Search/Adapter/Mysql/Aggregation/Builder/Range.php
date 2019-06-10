@@ -17,7 +17,7 @@ use Magento\Framework\Translate\AdapterInterface;
 /**
  * MySQL search aggregation range builder.
  *
- * @deprecated
+ * @deprecated 102.0.0
  * @see \Magento\ElasticSearch
  */
 class Range implements BucketInterface

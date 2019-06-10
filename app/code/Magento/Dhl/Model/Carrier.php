@@ -1292,7 +1292,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param \Magento\Framework\DataObject $request
      * @return $this|\Magento\Framework\DataObject|boolean
-     * @deprecated
+     * @deprecated 100.2.3
      */
     public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
     {

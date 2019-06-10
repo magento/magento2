@@ -587,6 +587,7 @@ class Import extends AbstractModel
      *
      * @return Import\AbstractSource
      * @throws LocalizedException
+     * @since 100.2.7
      */
     public function uploadFileAndGetSource()
     {

@@ -12,6 +12,7 @@ namespace Magento\Framework\App;
  * Note: Area code communication and emulation will be removed from this class.
  *
  * @api
+ * @since 100.0.2
  */
 class State
 {
@@ -219,7 +220,7 @@ class State
      * Get Instance of AreaList
      *
      * @return AreaList
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getAreaListInstance()
     {

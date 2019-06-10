@@ -203,7 +203,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 
     /**
      * @inheritdoc
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getMeta()
     {
@@ -413,7 +413,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @param \Magento\Catalog\Model\Category $category
      * @param array $categoryData
      * @return array
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @since 101.0.0
      */
     protected function addUseDefaultSettings($category, $categoryData)
@@ -617,7 +617,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * Retrieve scope overridden value
      *
      * @return ScopeOverriddenValue
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      */
     private function getScopeOverriddenValue()
     {
@@ -634,7 +634,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * Retrieve array manager
      *
      * @return ArrayManager
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      */
     private function getArrayManager()
     {
@@ -652,7 +652,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      *
      * @return FileInfo
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      */
     private function getFileInfo()
     {

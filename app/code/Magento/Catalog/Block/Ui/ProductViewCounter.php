@@ -24,7 +24,7 @@ use Magento\Store\Model\StoreManager;
  * by customer on frontend and data to synchronize this tracks with backend
  *
  * @api
- * @since 101.1.0
+ * @since 102.0.0
  */
 class ProductViewCounter extends Template
 {
@@ -108,7 +108,7 @@ class ProductViewCounter extends Template
      * requests and will be flushed with full page cache
      *
      * @return string {JSON encoded data}
-     * @since 101.1.0
+     * @since 102.0.0
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */

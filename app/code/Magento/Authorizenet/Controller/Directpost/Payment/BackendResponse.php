@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class BackendResponse
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
+ * @deprecated 100.3.1 Authorize.net is removing all support for this payment method
  */
 class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Payment implements
     CsrfAwareActionInterface,

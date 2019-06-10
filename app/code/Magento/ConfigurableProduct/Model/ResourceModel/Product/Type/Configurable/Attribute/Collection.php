@@ -41,7 +41,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Product instance
      *
      * @var \Magento\Catalog\Model\Product
-     * @deprecated Now collection supports fetching options for multiple products. This field will be set to first
+     * @deprecated 100.3.0 Now collection supports fetching options for multiple products. This field will be set to first
      * element of products array.
      */
     protected $_product;
@@ -174,6 +174,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return $this
      * @throws \Exception
+     * @since 100.3.0
      */
     protected function _beforeLoad()
     {

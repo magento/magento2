@@ -21,7 +21,7 @@ use Magento\Framework\Event\Manager;
 /**
  * Data Provider for catalog search.
  *
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class DataProvider implements DataProviderInterface

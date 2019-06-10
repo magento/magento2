@@ -16,6 +16,7 @@ use InvalidArgumentException;
  * Option to make instant purchase.
  *
  * @api
+ * @since 100.2.0
  */
 class InstantPurchaseOption
 {
@@ -82,6 +83,7 @@ class InstantPurchaseOption
      * Checks if option available
      *
      * @return bool
+     * @since 100.2.0
      */
     public function isAvailable(): bool
     {
@@ -98,6 +100,7 @@ class InstantPurchaseOption
      *
      * @return PaymentTokenInterface
      * @throws LocalizedException if payment token is not defined
+     * @since 100.2.0
      */
     public function getPaymentToken(): PaymentTokenInterface
     {
@@ -114,6 +117,7 @@ class InstantPurchaseOption
      *
      * @return Address
      * @throws LocalizedException if shipping address is not defined
+     * @since 100.2.0
      */
     public function getShippingAddress(): Address
     {
@@ -128,6 +132,7 @@ class InstantPurchaseOption
      *
      * @return Address
      * @throws LocalizedException if billing address is not defined
+     * @since 100.2.0
      */
     public function getBillingAddress(): Address
     {
@@ -142,6 +147,7 @@ class InstantPurchaseOption
      *
      * @return ShippingMethodInterface
      * @throws LocalizedException if shipping method is not defined
+     * @since 100.2.0
      */
     public function getShippingMethod(): ShippingMethodInterface
     {
