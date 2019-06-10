@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Exception\AuthenticationException;
@@ -42,12 +43,18 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
      */
     private $customerAuthUpdate;
 
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
     protected function setUp()
     {
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
         $this->accountManagement = Bootstrap::getObjectManager()->get(AccountManagementInterface::class);
         $this->customerRegistry = Bootstrap::getObjectManager()->get(CustomerRegistry::class);
         $this->customerAuthUpdate = Bootstrap::getObjectManager()->get(CustomerAuthUpdate::class);
+        $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
     }
 
     /**
@@ -56,19 +63,19 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
     public function testChangePassword()
     {
         $customerEmail = 'customer@example.com';
-        $oldCustomerPassword = 'password';
-        $newCustomerPassword = 'anotherPassword1';
+        $currentPassword = 'password';
+        $newPassword = 'anotherPassword1';
 
-        $query = $this->getChangePassQuery($oldCustomerPassword, $newCustomerPassword);
-        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $oldCustomerPassword);
+        $query = $this->getQuery($currentPassword, $newPassword);
+        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
 
         $response = $this->graphQlMutation($query, [], '', $headerMap);
-        $this->assertEquals($customerEmail, $response['changeCustomerPassword']['email']);
+        $this->assertEquals($customerEmail, $response['changePassword']['email']);
 
         try {
             // registry contains the old password hash so needs to be reset
             $this->customerRegistry->removeByEmail($customerEmail);
-            $this->accountManagement->authenticate($customerEmail, $newCustomerPassword);
+            $this->accountManagement->authenticate($customerEmail, $newPassword);
         } catch (LocalizedException $e) {
             $this->fail('Password was not changed: ' . $e->getMessage());
         }
@@ -80,7 +87,7 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
      */
     public function testChangePasswordIfUserIsNotAuthorizedTest()
     {
-        $query = $this->getChangePassQuery('currentpassword', 'newpassword');
+        $query = $this->getQuery('currentpassword', 'newpassword');
         $this->graphQlMutation($query);
     }
 
@@ -90,11 +97,11 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
     public function testChangeWeakPassword()
     {
         $customerEmail = 'customer@example.com';
-        $oldCustomerPassword = 'password';
-        $newCustomerPassword = 'weakpass';
+        $currentPassword = 'password';
+        $newPassword = 'weakpass';
 
-        $query = $this->getChangePassQuery($oldCustomerPassword, $newCustomerPassword);
-        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $oldCustomerPassword);
+        $query = $this->getQuery($currentPassword, $newPassword);
+        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/Minimum of different classes of characters in password is.*/');
@@ -110,13 +117,13 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
     public function testChangePasswordIfPasswordIsInvalid()
     {
         $customerEmail = 'customer@example.com';
-        $oldCustomerPassword = 'password';
-        $newCustomerPassword = 'anotherPassword1';
-        $incorrectPassword = 'password-incorrect';
+        $currentPassword = 'password';
+        $newPassword = 'anotherPassword1';
+        $incorrectCurrentPassword = 'password-incorrect';
 
-        $query = $this->getChangePassQuery($incorrectPassword, $newCustomerPassword);
+        $query = $this->getQuery($incorrectCurrentPassword, $newPassword);
 
-        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $oldCustomerPassword);
+        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
         $this->graphQlMutation($query, [], '', $headerMap);
     }
 
@@ -128,13 +135,13 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
     public function testChangePasswordIfCurrentPasswordIsEmpty()
     {
         $customerEmail = 'customer@example.com';
-        $oldCustomerPassword = 'password';
-        $newCustomerPassword = 'anotherPassword1';
-        $currentCustomerPassword = '';
+        $currentPassword = 'password';
+        $newPassword = 'anotherPassword1';
+        $incorrectCurrentPassword = '';
 
-        $query = $this->getChangePassQuery($currentCustomerPassword, $newCustomerPassword);
+        $query = $this->getQuery($incorrectCurrentPassword, $newPassword);
 
-        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $oldCustomerPassword);
+        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
         $this->graphQlMutation($query, [], '', $headerMap);
     }
 
@@ -146,29 +153,33 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
     public function testChangePasswordIfNewPasswordIsEmpty()
     {
         $customerEmail = 'customer@example.com';
-        $currentCustomerPassword = 'password';
-        $newCustomerPassword = '';
+        $currentPassword = 'password';
+        $incorrectNewPassword = '';
 
-        $query = $this->getChangePassQuery($currentCustomerPassword, $newCustomerPassword);
+        $query = $this->getQuery($currentPassword, $incorrectNewPassword);
 
-        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentCustomerPassword);
+        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
         $this->graphQlMutation($query, [], '', $headerMap);
     }
 
     /**
+     * @magentoApiDataFixture Magento/GraphQl/Customer/_files/enable_customer_account_confirmation.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Account is not confirmed.
+     * @expectedExceptionMessage This account isn't confirmed. Verify and try again.
      */
-    public function testChangeCustomerAddressIfAccountIsNotConfirmed()
+    public function testChangePasswordIfAccountIsNotConfirmed()
     {
         $customerEmail = 'customer@example.com';
-        $currentCustomerPassword = 'password';
-        $newCustomerPassword = '';
+        $currentPassword = 'password';
+        $newPassword = 'anotherPassword1';
 
-        $query = $this->getChangePassQuery($currentCustomerPassword, $newCustomerPassword);
+        /* get header map before setting the customer unconfirmed */
+        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
 
-        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentCustomerPassword);
+        $this->setCustomerConfirmation(1);
+        $query = $this->getQuery($currentPassword, $newPassword);
+
         $this->graphQlMutation($query, [], '', $headerMap);
     }
 
@@ -180,13 +191,13 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
     public function testChangePasswordIfCustomerIsLocked()
     {
         $customerEmail = 'customer@example.com';
-        $currentCustomerPassword = 'password';
-        $newCustomerPassword = 'anotherPassword1';
+        $currentPassword = 'password';
+        $newPassword = 'anotherPassword1';
 
         $this->lockCustomer(1);
-        $query = $this->getChangePassQuery($currentCustomerPassword, $newCustomerPassword);
+        $query = $this->getQuery($currentPassword, $newPassword);
 
-        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentCustomerPassword);
+        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
         $this->graphQlMutation($query, [], '', $headerMap);
     }
 
@@ -204,12 +215,25 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
     }
 
     /**
+     * @param int $customerId
+     *
+     * @return void
+     * @throws LocalizedException
+     */
+    private function setCustomerConfirmation(int $customerId): void
+    {
+        $customer = $this->customerRepository->getById($customerId);
+        $customer->setConfirmation('d5a21f15bd4cc21bd1b21ef6d9989a38');
+        $this->customerRepository->save($customer);
+    }
+
+    /**
      * @param $currentPassword
      * @param $newPassword
      *
      * @return string
      */
-    private function getChangePassQuery($currentPassword, $newPassword)
+    private function getQuery($currentPassword, $newPassword)
     {
         $query = <<<QUERY
 mutation {
