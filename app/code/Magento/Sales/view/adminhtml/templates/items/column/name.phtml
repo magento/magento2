@@ -28,7 +28,7 @@
                     <?php else : ?>
                         <?php $_option = $block->getFormattedOption($_option['value']); ?>
                         <?= $block->escapeHtml($_option['value']) ?>
-                        <?php if (isset($_option['remainder']) && $_option['remainder']): ?>
+                        <?php if (isset($_option['remainder']) && $_option['remainder']) : ?>
                             <?php $dots = 'dots' . uniqid(); ?>
                             <span id="<?= /* @noEscape */ $dots; ?>"> ...</span>
                             <?php  $id = 'id' . uniqid(); ?>

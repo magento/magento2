@@ -93,10 +93,10 @@
                             <?php if ($block->canApplyCustomPrice($_item)) : ?>
                                 <div class="custom-price-block">
                                     <input type="checkbox"
-                                           class="admin__control-checkbox"
-                                           id="item_use_custom_price_<?= (int) $_item->getId() ?>"
-                                           <?php if ($_isCustomPrice) : ?> checked="checked"<?php endif; ?>
-                                           onclick="order.toggleCustomPrice(this, 'item_custom_price_<?= (int) $_item->getId() ?>', 'item_tier_block_<?= (int) $_item->getId() ?>');"/>
+                                        class="admin__control-checkbox"
+                                        id="item_use_custom_price_<?= (int) $_item->getId() ?>"
+                                        <?php if ($_isCustomPrice) : ?> checked="checked"<?php endif; ?>
+                                        onclick="order.toggleCustomPrice(this, 'item_custom_price_<?= (int) $_item->getId() ?>', 'item_tier_block_<?= (int) $_item->getId() ?>');"/>
                                     <label
                                         class="normal admin__field-label"
                                         for="item_use_custom_price_<?= (int) $_item->getId() ?>">
@@ -125,11 +125,11 @@
                             <?= /* @noEscape */ $block->formatPrice(-$_item->getTotalDiscountAmount()) ?>
                             <div class="discount-price-block">
                                 <input id="item_use_discount_<?= (int) $_item->getId() ?>"
-                                       class="admin__control-checkbox"
-                                       name="item[<?= (int) $_item->getId() ?>][use_discount]"
-                                       <?php if (!$_item->getNoDiscount()) : ?>checked="checked"<?php endif; ?>
-                                       value="1"
-                                       type="checkbox" />
+                                    class="admin__control-checkbox"
+                                    name="item[<?= (int) $_item->getId() ?>][use_discount]"
+                                    <?php if (!$_item->getNoDiscount()) : ?>checked="checked"<?php endif; ?>
+                                    value="1"
+                                    type="checkbox" />
                                 <label
                                     for="item_use_discount_<?= (int) $_item->getId() ?>"
                                     class="normal admin__field-label">

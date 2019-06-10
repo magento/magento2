@@ -56,8 +56,7 @@ endif; ?>
     <?php if ($block->getIsShipping()) : ?>
         <div class="admin__field admin__field-option admin__field-shipping-same-as-billing">
             <input type="checkbox" id="order-shipping_same_as_billing" name="shipping_same_as_billing"
-                   onclick="order.setShippingAsBilling(this.checked)" class="admin__control-checkbox"
-                   <?php if ($block->getIsAsBilling()) : ?>checked<?php endif; ?> />
+                   onclick="order.setShippingAsBilling(this.checked)" class="admin__control-checkbox" <?php if ($block->getIsAsBilling()) : ?>checked<?php endif; ?> />
             <label for="order-shipping_same_as_billing" class="admin__field-label">
                 <?= $block->escapeHtml(__('Same As Billing Address')) ?>
             </label>
