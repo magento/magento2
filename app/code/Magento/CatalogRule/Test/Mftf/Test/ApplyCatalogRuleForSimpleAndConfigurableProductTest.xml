@@ -17,6 +17,9 @@
             <testCaseId value="MC-14770"/>
             <group value="CatalogRule"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
          </annotations>
         <before>
             <!-- Login as Admin -->
