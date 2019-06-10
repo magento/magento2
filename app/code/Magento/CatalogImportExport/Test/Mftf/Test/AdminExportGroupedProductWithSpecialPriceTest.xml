@@ -18,6 +18,9 @@
             <testCaseId value="MC-14009"/>
             <group value="catalog_import_export"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-15934"/>
+            </skip>
         </annotations>
         <before>
             <!-- Create first simple product and add special price  -->
@@ -82,6 +85,7 @@
 
         <!-- Run cron -->
         <magentoCLI command="cron:run" stepKey="runCron3"/>
+        <magentoCLI command="cron:run" stepKey="runCron4"/>
 
         <!-- Download product -->
         <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">

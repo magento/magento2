@@ -64,12 +64,6 @@ class BraintreeCc extends PaymentCc
             );
             $this->browser->switchToFrame($iframeLocator);
             $element = $this->browser->find('body');
-            $this->browser->waitUntil(
-                function () use ($element) {
-                    $fieldElement = $element->find('input');
-                    return $fieldElement->isVisible() ? true : null;
-                }
-            );
             $this->_fill([$mapping[$field]], $element);
             $this->browser->switchToFrame();
         }
