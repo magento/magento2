@@ -257,9 +257,11 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         // Add attribute value to result set if needed
         if (isset($column)) {
-            $this->_select->columns([
-                $column => $columnValue
-            ]);
+            $this->_select->columns(
+                [
+                    $column => $columnValue
+                ]
+            );
         }
     }
 
