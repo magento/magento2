@@ -795,7 +795,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param StockItemImporterInterface|null $stockItemImporter
      * @param DateTimeFactory $dateTimeFactory
      * @param ProductRepositoryInterface|null $productRepository
-     * @oaram LinkProcessor|null $linkProcessor
+     * @param LinkProcessor|null $linkProcessor
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -1496,13 +1496,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         return [$images, $labels];
     }
 
+    // phpcs:disable Generic.Metrics.NestingLevel
+
     /**
      * Gather and save information about product entities.
+     *
+     * FIXME: Reduce nesting level
      *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @throws LocalizedException
      */
@@ -1879,6 +1884,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         return $this;
     }
+
+    // phpcs:enable
 
     /**
      * Prepare array with image states (visible or hidden from product page)
