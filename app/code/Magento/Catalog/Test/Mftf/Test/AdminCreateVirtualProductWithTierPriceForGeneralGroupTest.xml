@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateVirtualProductWithTierPriceForGeneralGroupTest">
+        <annotations>
+            <stories value="Create virtual product"/>
+            <title value="Create virtual product with tier price for General group"/>
+            <description value="Test log in to Create virtual product and Create virtual product with tier price for General group"/>
+            <testCaseId value="MC-6033"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-17181"/>
+            </skip>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+            <createData entity="Simple_US_CA_Customer" stepKey="customer" />
+        </before>
+        <after>
+            <deleteData stepKey="deleteSimpleSubCategory" createDataKey="categoryEntity"/>
+            <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
+        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
+        <waitForPageLoad stepKey="waitForProductToggleToSelectProduct"/>
+        <click selector="{{AdminProductGridActionSection.addVirtualProduct}}" stepKey="clickVirtualProduct"/>
+
+        <!-- Create virtual product with tier price for general group -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{virtualProductGeneralGroup.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{virtualProductGeneralGroup.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{virtualProductGeneralGroup.price}}" stepKey="fillProductPrice"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="clickCustomerGroupPriceAddButton"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceWebsiteSelect('0')}}" userInput="{{tierPriceOnGeneralGroup.website}}" stepKey="selectProductTierPriceWebsite"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" userInput="{{tierPriceOnGeneralGroup.customer_group}}" stepKey="selectProductTierPriceGroup"/>
+        <scrollTo selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" x="50" y="0" stepKey="scrollToProductTierPriceQuantityInputTextBox"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" userInput="{{tierPriceOnGeneralGroup.qty}}" stepKey="fillProductTierPriceQuantityInput"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceFixedPriceInput('0')}}" userInput="{{tierPriceOnGeneralGroup.price}}" stepKey="fillProductTierPriceFixedPrice"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
+        <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{virtualProductGeneralGroup.productTaxClass}}" stepKey="selectProductTaxClass"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{virtualProductGeneralGroup.quantity}}" stepKey="fillProductQuantity"/>
+        <click selector="{{AdminProductFormSection.productStockStatus}}" stepKey="clickProductStockStatus"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{virtualProductGeneralGroup.visibility}}" stepKey="selectVisibility"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSectionHeader"/>
+        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{virtualProductGeneralGroup.urlKey}}" stepKey="fillUrlKeyInput"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+
+        <!-- Verify we see success message -->
+        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
+
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage1"/>
+        <waitForPageLoad stepKey="waitForProductCatalogPage1"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="checkRetailCustomerTaxClass" />
+        <fillField selector="{{AdminProductGridFilterSection.keywordSearch}}" userInput="{{virtualProductGeneralGroup.name}}" stepKey="fillVirtualProductName"/>
+        <click selector="{{AdminProductGridFilterSection.keywordSearchButton}}" stepKey="clickKeywordSearchButton"/>
+        <waitForPageLoad stepKey="waitForProductSearch"/>
+        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyCreatedVirtualProduct"/>
+        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
+
+        <!-- Verify we see created virtual product with tier price for general group(from the above step) in the product form page -->
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{virtualProductGeneralGroup.name}}" stepKey="seeProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{virtualProductGeneralGroup.sku}}" stepKey="seeProductSku"/>
+        <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="{{virtualProductGeneralGroup.price}}" stepKey="seeProductPrice"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink1"/>
+        <seeOptionIsSelected selector="{{AdminProductFormAdvancedPricingSection.productTierPriceWebsiteSelect('0')}}" userInput="{{tierPriceOnGeneralGroup.website}}" stepKey="seeProductTierPriceWebsite"/>
+        <seeOptionIsSelected selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" userInput="{{tierPriceOnGeneralGroup.customer_group}}" stepKey="seeProductTierPriceGroup"/>
+        <seeInField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" userInput="{{tierPriceOnGeneralGroup.qty}}" stepKey="seeProductTierPriceQuantityInput"/>
+        <seeInField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceFixedPriceInput('0')}}" userInput="{{tierPriceOnGeneralGroup.price}}" stepKey="seeProductTierPriceFixedPrice"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.advancedPricingCloseButton}}" stepKey="clickAdvancedPricingCloseButton"/>
+        <seeInField selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{virtualProductGeneralGroup.productTaxClass}}" stepKey="seeProductTaxClass"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{virtualProductGeneralGroup.quantity}}" stepKey="seeProductQuantity"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{virtualProductGeneralGroup.status}}" stepKey="seeProductStockStatus"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDownToVerify"/>
+        <grabMultiple selector="{{AdminProductFormSection.selectMultipleCategories}}" stepKey="selectedCategories" />
+        <assertEquals stepKey="assertSelectedCategories">
+            <actualResult type="variable">selectedCategories</actualResult>
+            <expectedResult type="array">[$$categoryEntity.name$$]</expectedResult>
+        </assertEquals>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneOnCategorySelect"/>
+        <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{virtualProductGeneralGroup.visibility}}" stepKey="seeVisibility"/>
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
+        <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{virtualProductGeneralGroup.urlKey}}" stepKey="seeUrlKey"/>
+
+        <!--Verify customer see created virtual product on category page -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <see selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{virtualProductGeneralGroup.name}}" stepKey="seeVirtualProductNameOnCategoryPage"/>
+
+        <!-- Verify customer see created virtual product with tier price for general group(from above step) in storefront page with customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$customer$$" />
+        </actionGroup>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefront"/>
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
+        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{virtualProductGeneralGroup.name}}" stepKey="fillVirtualProductNameInSearchTextBox"/>
+        <waitForPageLoad stepKey="waitForSearchTextBox"/>
+        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
+        <waitForPageLoad stepKey="waitForSearch"/>
+        <see selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{virtualProductGeneralGroup.name}}" stepKey="seeVirtualProductName"/>
+        <grabTextFrom selector="{{StorefrontQuickSearchResultsSection.asLowAsLabel}}" stepKey="tierPriceTextOnStorefrontPage"/>
+
+        <!-- Verify customer see created virtual product with tier price -->
+        <assertEquals stepKey="assertTierPriceTextOnCategoryPage">
+            <expectedResult type="string">As low as ${{tierPriceOnGeneralGroup.price}}</expectedResult>
+            <actualResult type="variable">tierPriceTextOnStorefrontPage</actualResult>
+        </assertEquals>
+        <click selector="{{StorefrontQuickSearchResultsSection.productLink}}" stepKey="openSearchedProduct"/>
+        <waitForPageLoad stepKey="waitForProductPageToBeLoaded"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.tierPriceText}}" stepKey="tierPriceText"/>
+        <assertEquals stepKey="assertTierPriceTextOnProductPage">
+            <expectedResult type="string">Buy {{tierPriceOnGeneralGroup.qty}} for ${{tierPriceOnGeneralGroup.price}} each and save 20%</expectedResult>
+            <actualResult type="variable">tierPriceText</actualResult>
+        </assertEquals>
+    </test>
+</tests>

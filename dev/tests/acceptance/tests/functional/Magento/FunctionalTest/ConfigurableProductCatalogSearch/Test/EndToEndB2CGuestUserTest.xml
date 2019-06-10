@@ -26,5 +26,5 @@
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="searchGrabConfigProductPageImageSrc" after="searchAssertConfigProductPage"/>
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$searchGrabConfigProductPageImageSrc" stepKey="searchAssertConfigProductPageImageNotDefault" after="searchGrabConfigProductPageImageSrc"/>
-   </test>
+    </test>
 </tests>

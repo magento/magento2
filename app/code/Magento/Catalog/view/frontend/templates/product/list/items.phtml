@@ -4,7 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+// phpcs:disable Generic.WhiteSpace.ScopeIndent.Incorrect
 
 /* @var $block \Magento\Catalog\Block\Product\AbstractProduct */
 ?>
@@ -29,7 +30,7 @@ switch ($type = $block->getType()) {
             $templateType = null;
             $description = false;
         }
-    break;
+        break;
 
     case 'related':
         /** @var \Magento\Catalog\Block\Product\ProductList\Related $block */
@@ -49,7 +50,7 @@ switch ($type = $block->getType()) {
             $templateType = null;
             $description = false;
         }
-    break;
+        break;
 
     case 'upsell-rule':
         if ($exist = $block->hasItems()) {
@@ -68,7 +69,7 @@ switch ($type = $block->getType()) {
             $description = false;
             $canItemsAddToCart = false;
         }
-    break;
+        break;
 
     case 'upsell':
         /** @var \Magento\Catalog\Block\Product\ProductList\Upsell $block */
@@ -88,7 +89,7 @@ switch ($type = $block->getType()) {
             $description = false;
             $canItemsAddToCart = false;
         }
-    break;
+        break;
 
     case 'crosssell-rule':
         /** @var \Magento\Catalog\Block\Product\ProductList\Crosssell $block */
@@ -106,7 +107,7 @@ switch ($type = $block->getType()) {
             $description = false;
             $canItemsAddToCart = false;
         }
-    break;
+        break;
 
     case 'crosssell':
         /** @var \Magento\Catalog\Block\Product\ProductList\Crosssell $block */
@@ -124,7 +125,7 @@ switch ($type = $block->getType()) {
             $description = false;
             $canItemsAddToCart = false;
         }
-    break;
+        break;
 
     case 'new':
         if ($exist = $block->getProductCollection()) {
@@ -144,117 +145,117 @@ switch ($type = $block->getType()) {
             $description = ($mode == 'list') ? true : false;
             $canItemsAddToCart = false;
         }
-    break;
+        break;
 
     default:
         $exist = null;
 }
 ?>
 
-<?php if ($exist):?>
+<?php if ($exist) :?>
 
-    <?php if ($type == 'related' || $type == 'upsell'): ?>
-        <?php if ($type == 'related'): ?>
-            <div class="block <?= /* @escapeNotVerified */ $class ?>" data-mage-init='{"relatedProducts":{"relatedCheckbox":".related.checkbox"}}' data-limit="<?= /* @escapeNotVerified */ $limit ?>" data-shuffle="<?= /* @escapeNotVerified */ $shuffle ?>">
-        <?php else: ?>
-            <div class="block <?= /* @escapeNotVerified */ $class ?>" data-mage-init='{"upsellProducts":{}}' data-limit="<?= /* @escapeNotVerified */ $limit ?>" data-shuffle="<?= /* @escapeNotVerified */ $shuffle ?>">
+<?php if ($type == 'related' || $type == 'upsell') :?>
+<?php if ($type == 'related') :?>
+<div class="block <?= $block->escapeHtmlAttr($class) ?>" data-mage-init='{"relatedProducts":{"relatedCheckbox":".related.checkbox"}}' data-limit="<?= $block->escapeHtmlAttr($limit) ?>" data-shuffle="<?= /* @noEscape */ $shuffle ?>">
+    <?php else :?>
+    <div class="block <?= $block->escapeHtmlAttr($class) ?>" data-mage-init='{"upsellProducts":{}}' data-limit="<?= $block->escapeHtmlAttr($limit) ?>" data-shuffle="<?= /* @noEscape */ $shuffle ?>">
         <?php endif; ?>
-    <?php else: ?>
-        <div class="block <?= /* @escapeNotVerified */ $class ?>">
-    <?php endif; ?>
-    <div class="block-title title">
-        <strong id="block-<?= /* @escapeNotVerified */ $class ?>-heading" role="heading" aria-level="2"><?= /* @escapeNotVerified */ $title ?></strong>
-    </div>
-    <div class="block-content content" aria-labelledby="block-<?= /* @escapeNotVerified */ $class ?>-heading">
-        <?php if ($type == 'related' && $canItemsAddToCart): ?>
-        <div class="block-actions">
-            <?= /* @escapeNotVerified */ __('Check items to add to the cart or') ?>
-            <button type="button" class="action select" role="select-all"><span><?= /* @escapeNotVerified */ __('select all') ?></span></button>
-        </div>
-        <?php endif; ?>
-        <div class="products wrapper grid products-grid products-<?= /* @escapeNotVerified */ $type ?>">
-            <ol class="products list items product-items">
-                <?php foreach ($items as $_item): ?>
-                <?php $available = ''; ?>
-                <?php if (!$_item->isComposite() && $_item->isSaleable() && $type == 'related'): ?>
-                    <?php if (!$_item->getRequiredOptions()): ?>
-                        <?php $available = 'related-available'; ?>
-                    <?php endif; ?>
+        <?php else :?>
+        <div class="block <?= $block->escapeHtmlAttr($class) ?>">
+            <?php endif; ?>
+            <div class="block-title title">
+                <strong id="block-<?= $block->escapeHtmlAttr($class) ?>-heading" role="heading" aria-level="2"><?= $block->escapeHtml($title) ?></strong>
+            </div>
+            <div class="block-content content" aria-labelledby="block-<?= $block->escapeHtmlAttr($class) ?>-heading">
+                <?php if ($type == 'related' && $canItemsAddToCart) :?>
+                    <div class="block-actions">
+                        <?= $block->escapeHtml(__('Check items to add to the cart or')) ?>
+                        <button type="button" class="action select" role="button"><span><?= $block->escapeHtml(__('select all')) ?></span></button>
+                    </div>
                 <?php endif; ?>
-                <?php if ($type == 'related' || $type == 'upsell'): ?>
-                    <li class="item product product-item" style="display: none;">
-                <?php else: ?>
-                    <li class="item product product-item">
-                <?php endif; ?>
-                <div class="product-item-info <?= /* @escapeNotVerified */ $available ?>">
-                    <?= /* @escapeNotVerified */ '<!-- ' . $image . '-->' ?>
-                    <a href="<?= /* @escapeNotVerified */ $block->getProductUrl($_item) ?>" class="product photo product-item-photo">
-                        <?= $block->getImage($_item, $image)->toHtml() ?>
-                    </a>
-                    <div class="product details product-item-details">
-                        <strong class="product name product-item-name"><a class="product-item-link" title="<?= $block->escapeHtml($_item->getName()) ?>" href="<?= /* @escapeNotVerified */ $block->getProductUrl($_item) ?>">
-                            <?= $block->escapeHtml($_item->getName()) ?></a>
-                        </strong>
-
-                        <?= /* @escapeNotVerified */ $block->getProductPrice($_item) ?>
-
-                            <?php if ($templateType): ?>
-                                <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
-                            <?php endif; ?>
-
-                            <?php if ($canItemsAddToCart && !$_item->isComposite() && $_item->isSaleable() && $type == 'related'): ?>
-                                <?php if (!$_item->getRequiredOptions()): ?>
-                                    <div class="field choice related">
-                                        <input type="checkbox" class="checkbox related" id="related-checkbox<?= /* @escapeNotVerified */ $_item->getId() ?>" name="related_products[]" value="<?= /* @escapeNotVerified */ $_item->getId() ?>" />
-                                        <label class="label" for="related-checkbox<?= /* @escapeNotVerified */ $_item->getId() ?>"><span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span></label>
-                                    </div>
+                <div class="products wrapper grid products-grid products-<?= $block->escapeHtmlAttr($type) ?>">
+                    <ol class="products list items product-items">
+                        <?php foreach ($items as $_item) :?>
+                            <?php $available = ''; ?>
+                            <?php if (!$_item->isComposite() && $_item->isSaleable() && $type == 'related') :?>
+                                <?php if (!$_item->getRequiredOptions()) :?>
+                                    <?php $available = 'related-available'; ?>
                                 <?php endif; ?>
                             <?php endif; ?>
+                            <?php if ($type == 'related' || $type == 'upsell') :?>
+                                <li class="item product product-item" style="display: none;">
+                            <?php else :?>
+                                <li class="item product product-item">
+                            <?php endif; ?>
+                            <div class="product-item-info <?= /* @noEscape */ $available ?>">
+                                <?= /* @noEscape */ '<!-- ' . $image . '-->' ?>
+                                <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>" class="product photo product-item-photo">
+                                    <?= $block->getImage($_item, $image)->toHtml() ?>
+                                </a>
+                                <div class="product details product-item-details">
+                                    <strong class="product name product-item-name"><a class="product-item-link" title="<?= $block->escapeHtml($_item->getName()) ?>" href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>">
+                                            <?= $block->escapeHtml($_item->getName()) ?></a>
+                                    </strong>
 
-                            <?php if ($showAddTo || $showCart): ?>
-                                <div class="product actions product-item-actions">
-                                    <?php if ($showCart): ?>
-                                        <div class="actions-primary">
-                                            <?php if ($_item->isSaleable()): ?>
-                                                <?php if ($_item->getTypeInstance()->hasRequiredOptions($_item)): ?>
-                                                    <button class="action tocart primary" data-mage-init='{"redirectUrl": {"url": "<?= /* @escapeNotVerified */ $block->getAddToCartUrl($_item) ?>"}}' type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>">
-                                                        <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
-                                                    </button>
-                                                <?php else: ?>
-                                                    <?php $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
-                                                    $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
-                                                    ?>
-                                                    <button class="action tocart primary"
-                                                            data-post='<?= /* @escapeNotVerified */ $postData ?>'
-                                                            type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>">
-                                                        <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
-                                                    </button>
-                                                <?php endif; ?>
-                                            <?php else: ?>
-                                                <?php if ($_item->getIsSalable()): ?>
-                                                    <div class="stock available"><span><?= /* @escapeNotVerified */ __('In stock') ?></span></div>
-                                                <?php else: ?>
-                                                    <div class="stock unavailable"><span><?= /* @escapeNotVerified */ __('Out of stock') ?></span></div>
-                                                <?php endif; ?>
-                                            <?php endif; ?>
-                                        </div>
+                                    <?= /* @noEscape */ $block->getProductPrice($_item) ?>
+
+                                    <?php if ($templateType) :?>
+                                        <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
                                     <?php endif; ?>
 
-                                    <?php if ($showAddTo): ?>
-                                        <div class="secondary-addto-links actions-secondary" data-role="add-to-links">
-                                            <?php if ($addToBlock = $block->getChildBlock('addto')): ?>
-                                                <?= $addToBlock->setProduct($_item)->getChildHtml() ?>
+                                    <?php if ($canItemsAddToCart && !$_item->isComposite() && $_item->isSaleable() && $type == 'related') :?>
+                                        <?php if (!$_item->getRequiredOptions()) :?>
+                                            <div class="field choice related">
+                                                <input type="checkbox" class="checkbox related" id="related-checkbox<?= $block->escapeHtmlAttr($_item->getId()) ?>" name="related_products[]" value="<?= $block->escapeHtmlAttr($_item->getId()) ?>" />
+                                                <label class="label" for="related-checkbox<?= $block->escapeHtmlAttr($_item->getId()) ?>"><span><?= $block->escapeHtml(__('Add to Cart')) ?></span></label>
+                                            </div>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+
+                                    <?php if ($showAddTo || $showCart) :?>
+                                        <div class="product actions product-item-actions">
+                                            <?php if ($showCart) :?>
+                                                <div class="actions-primary">
+                                                    <?php if ($_item->isSaleable()) :?>
+                                                        <?php if ($_item->getTypeInstance()->hasRequiredOptions($_item)) :?>
+                                                            <button class="action tocart primary" data-mage-init='{"redirectUrl": {"url": "<?= $block->escapeUrl($block->getAddToCartUrl($_item)) ?>"}}' type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
+                                                                <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                                                            </button>
+                                                        <?php else :?>
+                                                            <?php $postDataHelper = $this->helper(Magento\Framework\Data\Helper\PostHelper::class);
+                                                            $postData = $postDataHelper->getPostData($block->escapeUrl($block->getAddToCartUrl($_item)), ['product' => $_item->getEntityId()])
+                                                            ?>
+                                                            <button class="action tocart primary"
+                                                                    data-post='<?= /* @noEscape */ $postData ?>'
+                                                                    type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
+                                                                <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                                                            </button>
+                                                        <?php endif; ?>
+                                                    <?php else :?>
+                                                        <?php if ($_item->getIsSalable()) :?>
+                                                            <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
+                                                        <?php else :?>
+                                                            <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
+                                                        <?php endif; ?>
+                                                    <?php endif; ?>
+                                                </div>
+                                            <?php endif; ?>
+
+                                            <?php if ($showAddTo) :?>
+                                                <div class="secondary-addto-links actions-secondary" data-role="add-to-links">
+                                                    <?php if ($addToBlock = $block->getChildBlock('addto')) :?>
+                                                        <?= $addToBlock->setProduct($_item)->getChildHtml() ?>
+                                                    <?php endif; ?>
+                                                </div>
                                             <?php endif; ?>
                                         </div>
                                     <?php endif; ?>
                                 </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </li>
-                <?php endforeach ?>
-            </ol>
+                            </div>
+                            </li>
+                        <?php endforeach ?>
+                    </ol>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-<?php endif;?>
+        <?php endif;?>

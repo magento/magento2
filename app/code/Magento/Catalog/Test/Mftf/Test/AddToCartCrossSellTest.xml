@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddToCartCrossSellTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Promote Products as Cross-Sells"/>
+            <title value="Admin should be able to add cross-sell to products."/>
+            <description value="Create products, add products to cross sells, and check that they appear in the Shopping Cart page."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-9143"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category1"/>
+            <createData entity="_defaultProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="simpleProduct2">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="simpleProduct3">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="logInAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimp1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimp2"/>
+            <deleteData createDataKey="simpleProduct3" stepKey="deleteSimp3"/>
+            <deleteData createDataKey="category1" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Go to simpleProduct1, add simpleProduct2 and simpleProduct3 as cross-sell-->
+        <amOnPage url="{{AdminProductEditPage.url($simpleProduct1.id$)}}" stepKey="goToProduct1"/>
+        <click stepKey="openHeader1" selector="{{AdminProductFormRelatedUpSellCrossSellSection.sectionHeader}}"/>
+
+        <actionGroup ref="addCrossSellProductBySku" stepKey="addProduct2ToSimp1">
+            <argument name="sku" value="$simpleProduct2.sku$"/>
+        </actionGroup>
+        <actionGroup ref="addCrossSellProductBySku" stepKey="addProduct3ToSimp1">
+            <argument name="sku" value="$simpleProduct3.sku$"/>
+        </actionGroup>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+
+        <!-- Go to simpleProduct3, add simpleProduct1 and simpleProduct2 as cross-sell-->
+        <amOnPage url="{{AdminProductEditPage.url($simpleProduct3.id$)}}" stepKey="goToProduct3"/>
+        <click stepKey="openHeader2" selector="{{AdminProductFormRelatedUpSellCrossSellSection.sectionHeader}}"/>
+
+        <actionGroup ref="addCrossSellProductBySku" stepKey="addProduct1ToSimp3">
+            <argument name="sku" value="$simpleProduct1.sku$"/>
+        </actionGroup>
+        <actionGroup ref="addCrossSellProductBySku" stepKey="addProduct2ToSimp3">
+            <argument name="sku" value="$simpleProduct2.sku$"/>
+        </actionGroup>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave2"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+
+        <!-- Go to frontend, add simpleProduct1 to cart-->
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addSimp1ToCart">
+            <argument name="product" value="$simpleProduct1$"/>
+        </actionGroup>
+
+        <!-- Check that cart page contains cross-sell to simpleProduct2 and simpleProduct3-->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCart1"/>
+        <waitForPageLoad stepKey="waitForCartToLoad"/>
+        <waitForElementVisible selector="{{CheckoutCartCrossSellSection.products}}" stepKey="waitForCrossSellLoading"/>
+        <see stepKey="seeProduct2InCrossSell" selector="{{CheckoutCartCrossSellSection.products}}" userInput="$simpleProduct2.name$"/>
+        <see stepKey="seeProduct3InCrossSell" selector="{{CheckoutCartCrossSellSection.products}}" userInput="$simpleProduct3.name$"/>
+
+        <!-- Add simpleProduct3 to cart, check cross-sell contains product2 but not product3-->
+        <click stepKey="addSimp3ToCart" selector="{{CheckoutCartCrossSellSection.productRowByName($simpleProduct3.name$)}}{{CheckoutCartCrossSellSection.addToCart}}"/>
+        <waitForPageLoad stepKey="waitForCartToLoad2"/>
+        <see stepKey="seeProduct2StillInCrossSell" selector="{{CheckoutCartCrossSellSection.products}}" userInput="$simpleProduct2.name$"/>
+        <dontSee stepKey="dontSeeProduct3InCrossSell" selector="{{CheckoutCartCrossSellSection.products}}" userInput="$simpleProduct3.name$"/>
+
+        <!-- Add simpleProduct2 to cart, check cross-sell doesn't contain product 2 anymore.-->
+        <click stepKey="addSimp2ToCart" selector="{{CheckoutCartCrossSellSection.productRowByName($simpleProduct2.name$)}}{{CheckoutCartCrossSellSection.addToCart}}"/>
+        <waitForPageLoad stepKey="waitForCartToLoad3"/>
+        <dontSee stepKey="dontSeeProduct2InCrossSell" selector="{{CheckoutCartCrossSellSection.products}}" userInput="$simpleProduct2.name$"/>
+    </test>
+</tests>

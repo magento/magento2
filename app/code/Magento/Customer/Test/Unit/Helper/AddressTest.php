@@ -416,32 +416,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test is required filed by attribute code
-     *
-     * @param string $attributeCode
-     * @param bool $isMetadataExists
-     * @dataProvider isAttributeRequiredDataProvider
-     * @covers \Magento\Customer\Helper\Address::isAttributeRequired()
-     * @return void
-     */
-    public function testIsAttributeRequired($attributeCode, $isMetadataExists)
-    {
-        $attributeMetadata = null;
-        if ($isMetadataExists) {
-            $attributeMetadata = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
-                ->getMockForAbstractClass();
-            $attributeMetadata->expects($this->once())
-                ->method('isRequired')
-                ->willReturn(true);
-        }
-        $this->addressMetadataService->expects($this->once())
-            ->method('getAttributeMetadata')
-            ->with($attributeCode)
-            ->willReturn($attributeMetadata);
-        $this->assertEquals($isMetadataExists, $this->helper->isAttributeRequired($attributeCode));
-    }
-
-    /**
      * Data provider for test  testIsAttributeRequire
      *
      * @return array

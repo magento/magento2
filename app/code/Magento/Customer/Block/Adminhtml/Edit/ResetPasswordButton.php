@@ -27,6 +27,7 @@ class ResetPasswordButton extends GenericButton implements ButtonProviderInterfa
                 'class' => 'reset reset-password',
                 'on_click' => sprintf("location.href = '%s';", $this->getResetPasswordUrl()),
                 'sort_order' => 60,
+                'aclResource' => 'Magento_Customer::reset_password',
             ];
         }
         return $data;

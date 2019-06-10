@@ -23,6 +23,7 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\Model\Cart\CartInterface
@@ -397,6 +398,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function initRuleData()
     {
+        $this->_coreRegistry->unregister('rule_data');
         $this->_coreRegistry->register(
             'rule_data',
             new \Magento\Framework\DataObject(
@@ -414,7 +416,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     /**
      * Set collect totals flag for quote
      *
-     * @param   bool $flag
+     * @param bool $flag
+     *
      * @return $this
      */
     public function setRecollect($flag)
@@ -582,6 +585,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         }
 
         $quote->getShippingAddress()->unsCachedItemsAll();
+        $quote->getBillingAddress()->unsCachedItemsAll();
         $quote->setTotalsCollectedFlag(false);
 
         $this->quoteRepository->save($quote);
@@ -1127,6 +1131,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->recollectCart();
             throw $e;
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
@@ -1788,7 +1793,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 ->setWebsiteId($store->getWebsiteId())
                 ->setCreatedAt(null);
             $customer = $this->_validateCustomerData($customer);
-        } else if (!$customer->getId()) {
+        } elseif (!$customer->getId()) {
             /** Create new customer */
             $customerBillingAddressDataObject = $this->getBillingAddress()->exportCustomerAddress();
             $customer->setSuffix($customerBillingAddressDataObject->getSuffix())
@@ -1860,6 +1865,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         } elseif ($addressType == \Magento\Quote\Model\Quote\Address::ADDRESS_TYPE_SHIPPING) {
             try {
                 $billingAddressDataObject = $this->accountManagement->getDefaultBillingAddress($customer->getId());
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (\Exception $e) {
                 /** Billing address does not exist. */
             }
@@ -2001,6 +2007,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             } else {
                 try {
                     $method->validate();
+                    // phpcs:ignore Magento2.Exceptions.ThrowCatch
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     $this->_errors[] = $e->getMessage();
                 }
