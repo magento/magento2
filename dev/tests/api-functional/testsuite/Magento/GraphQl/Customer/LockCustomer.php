@@ -36,7 +36,10 @@ class LockCustomer
     }
 
     /**
+     * Lock customer by ID.
+     *
      * @param int $customerId
+     *
      * @return void
      */
     public function execute(int $customerId): void

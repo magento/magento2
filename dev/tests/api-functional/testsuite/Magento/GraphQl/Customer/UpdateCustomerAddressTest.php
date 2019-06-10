@@ -164,28 +164,25 @@ MUTATION;
     }
 
     /**
-     * Update address with invalid ID
+     * Update address with missing ID input.
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider invalidIdDataProvider
-     * @param string $addressId
-     * @param $exceptionMessage
      */
-    public function testCreateCustomerAddressWithInvalidId($addressId, $exceptionMessage)
+    public function testUpdateCustomerAddressWithMissingId()
     {
         $userName = 'customer@example.com';
         $password = 'password';
 
         $updateAddress = $this->getAddressData();
-        $defaultShippingText = $updateAddress['default_shipping'] ? "true": "false";
-        $defaultBillingText = $updateAddress['default_billing'] ? "true": "false";
+        $defaultShippingText = $updateAddress['default_shipping'] ? 'true' : 'false';
+        $defaultBillingText = $updateAddress['default_billing'] ? 'true' : 'false';
 
         $mutation
             = <<<MUTATION
 mutation {
-  updateCustomerAddress($addressId, input: {
+  updateCustomerAddress(, input: {
     region: {
         region: "{$updateAddress['region']['region']}"
         region_id: {$updateAddress['region']['region_id']}
@@ -212,9 +209,67 @@ mutation {
 }
 MUTATION;
 
-        self::expectException(Exception::class);
-        self::expectExceptionMessage($exceptionMessage);
-        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));    }
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'GraphQL response contains errors: Field "updateCustomerAddress" argument "id" of type "Int!" is ' .
+            'required but not provided.'
+        );
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * Update address with invalid ID input.
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testUpdateCustomerAddressWithInvalidIdType()
+    {
+        $this->markTestSkipped(
+            'Type validation returns wrong message https://github.com/magento/graphql-ce/issues/735'
+        );
+        $userName = 'customer@example.com';
+        $password = 'password';
+
+        $updateAddress = $this->getAddressData();
+        $defaultShippingText = $updateAddress['default_shipping'] ? 'true' : 'false';
+        $defaultBillingText = $updateAddress['default_billing'] ? 'true' : 'false';
+
+        $mutation
+            = <<<MUTATION
+mutation {
+  updateCustomerAddress(id: "", input: {
+    region: {
+        region: "{$updateAddress['region']['region']}"
+        region_id: {$updateAddress['region']['region_id']}
+        region_code: "{$updateAddress['region']['region_code']}"
+    }
+    country_id: {$updateAddress['country_id']}
+    street: ["{$updateAddress['street'][0]}","{$updateAddress['street'][1]}"]
+    company: "{$updateAddress['company']}"
+    telephone: "{$updateAddress['telephone']}"
+    fax: "{$updateAddress['fax']}"
+    postcode: "{$updateAddress['postcode']}"
+    city: "{$updateAddress['city']}"
+    firstname: "{$updateAddress['firstname']}"
+    lastname: "{$updateAddress['lastname']}"
+    middlename: "{$updateAddress['middlename']}"
+    prefix: "{$updateAddress['prefix']}"
+    suffix: "{$updateAddress['suffix']}"
+    vat_id: "{$updateAddress['vat_id']}"
+    default_shipping: {$defaultShippingText}
+    default_billing: {$defaultBillingText}
+  }) {
+    id
+  }
+}
+MUTATION;
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Expected type Int!, found ""');
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
 
     /**
      * @return array
@@ -222,7 +277,8 @@ MUTATION;
     public function invalidIdDataProvider()
     {
         return [
-            ['', 'GraphQL response contains errors: Field "updateCustomerAddress" argument "id" of type "Int!" is required but not provided.'],
+            ['', 'GraphQL response contains errors: Field "updateCustomerAddress" argument "id" of type "Int!" ' .
+                'is required but not provided.'],
             //TODO: why here the internal server error being trowed?
             ['id: ""', 'GraphQL response contains errors: Internal server error']
         ];
@@ -235,9 +291,9 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @dataProvider invalidInputDataProvider
      * @param string $input
-     * @param $exceptionMessage
+     * @param string $exceptionMessage
      */
-    public function testUpdateCustomerAddressWithInvalidInput($input, $exceptionMessage)
+    public function testUpdateCustomerAddressWithInvalidInput(string $input, string $exceptionMessage)
     {
         $userName = 'customer@example.com';
         $password = 'password';
@@ -252,9 +308,10 @@ mutation {
 }
 MUTATION;
 
-        self::expectException(Exception::class);
-        self::expectExceptionMessage($exceptionMessage);
-        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));    }
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage($exceptionMessage);
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
 
     /**
      * @return array
@@ -282,14 +339,14 @@ MUTATION;
 
         $mutation = $this->getMutation($addressId);
 
-       $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @expectedException Exception
-     * @expectedExceptionMessage GraphQL response contains errors: Current customer does not have permission to address with ID "1"
+     * @expectedExceptionMessage Current customer does not have permission to address with ID "1"
      */
     public function testUpdateAnotherCustomerAddress()
     {
@@ -307,7 +364,7 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
      * @expectedException Exception
-     * @expectedExceptionMessage The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.
+     * @expectedExceptionMessage The account sign-in was incorrect or your account is disabled temporarily.
      */
     public function testUpdateCustomerAddressIfAccountIsNotConfirmed()
     {
@@ -324,7 +381,7 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @expectedException Exception
-     * @expectedExceptionMessage GraphQL response contains errors: The account is locked.
+     * @expectedExceptionMessage The account is locked.
      */
     public function testUpdateCustomerAddressIfAccountIsLocked()
     {

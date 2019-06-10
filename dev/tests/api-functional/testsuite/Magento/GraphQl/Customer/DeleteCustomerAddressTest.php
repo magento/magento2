@@ -158,39 +158,48 @@ MUTATION;
     }
 
     /**
-     * Delete address with invalid ID
+     * Delete address with missing ID input.
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
-     * @dataProvider invalidIdDataProvider
-     * @param string $addressId
-     * @param $exceptionMessage
+     * @expectedException Exception
+     * @expectedExceptionMessage Syntax Error: Expected Name, found )
      * @throws Exception
      */
-    public function testCreateCustomerAddressWithInvalidId($addressId, $exceptionMessage)
+    public function testDeleteCustomerAddressWithMissingData()
     {
         $userName = 'customer@example.com';
         $password = 'password';
         $mutation
             = <<<MUTATION
 mutation {
-  deleteCustomerAddress($addressId)
+  deleteCustomerAddress()
 }
 MUTATION;
-
-        self::expectException(Exception::class);
-        self::expectExceptionMessage($exceptionMessage);
-        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));    }
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
 
     /**
-     * @return array
+     * Delete address with incorrect ID input type.
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
+     * @expectedException Exception
+     * @expectedExceptionMessage Expected type Int!, found "".
+     * @throws Exception
      */
-    public function invalidIdDataProvider()
+    public function testDeleteCustomerAddressWithIncorrectIdType()
     {
-        return [
-            ['', 'GraphQL response contains errors: Syntax Error: Expected Name, found )'],
-            //TODO: why here the internal server error being trowed?
-            ['id: ""', 'GraphQL response contains errors: Internal server error']
-        ];
+        $this->markTestSkipped(
+            'Type validation returns wrong message https://github.com/magento/graphql-ce/issues/735'
+        );
+        $userName = 'customer@example.com';
+        $password = 'password';
+        $mutation
+            = <<<MUTATION
+mutation {
+  deleteCustomerAddress(id: "string")
+}
+MUTATION;
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**
@@ -198,7 +207,7 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      *
      * @expectedException Exception
-     * @expectedExceptionMessage GraphQL response contains errors: Current customer does not have permission to address with ID "2"
+     * @expectedExceptionMessage Current customer does not have permission to address with ID "2"
      */
     public function testDeleteAnotherCustomerAddress()
     {
@@ -221,7 +230,7 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
      *
      * @expectedException Exception
-     * @expectedExceptionMessage The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.
+     * @expectedExceptionMessage The account sign-in was incorrect or your account is disabled temporarily.
      */
     public function testDeleteInactiveCustomerAddress()
     {
@@ -243,7 +252,7 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      *
      * @expectedException Exception
-     * @expectedExceptionMessage GraphQL response contains errors: The account is locked
+     * @expectedExceptionMessage The account is locked
      */
     public function testDeleteCustomerAddressIfAccountIsLocked()
     {
