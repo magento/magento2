@@ -7,6 +7,7 @@ namespace Magento\Framework\CompiledInterception\Generator;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\ReaderInterface;
+use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Interception\PluginList\PluginList;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\Config\Reader\Dom;
@@ -22,14 +23,14 @@ class CompiledPluginList extends PluginList
     /**
      * CompiledPluginList constructor.
      * @param ObjectManager $objectManager
-     * @param string $scope
+     * @param ScopeInterface $scope
      * @param null|ReaderInterface $reader
      * @param null|ConfigInterface $omConfig
      * @param null|string $cachePath
      */
     public function __construct(
-        $objectManager,
-        $scope,
+        ObjectManager $objectManager,
+        ScopeInterface $scope,
         ReaderInterface $reader = null,
         ConfigInterface $omConfig = null,
         $cachePath = null
@@ -40,15 +41,15 @@ class CompiledPluginList extends PluginList
         }
         parent::__construct(
             $reader,
-            new StaticScope($scope),
+            $scope,
             new FileCache($cachePath),
             new ObjectManagerRelationsRuntime(),
             $omConfig,
             new InterceptionDefinitionRuntime(),
             $objectManager,
             new ObjectManagerDefinitionRuntime(),
-            ['first' => 'global'],
-            'compiled_plugins_' . $scope,
+            ['global'],
+            'compiled_plugins',
             new NoSerialize()
         );
     }
@@ -76,5 +77,13 @@ class CompiledPluginList extends PluginList
     public function getPluginType($type, $code)
     {
         return $this->_inherited[$type][$code]['instance'];
+    }
+
+    /**
+     * @param ScopeInterface $scope
+     */
+    public function setScope(ScopeInterface $scope)
+    {
+        $this->_configScope = $scope;
     }
 }

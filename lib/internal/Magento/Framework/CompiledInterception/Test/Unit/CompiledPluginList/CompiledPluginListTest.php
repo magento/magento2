@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\CompiledInterception\Test\Unit\CompiledPluginList;
 
+use Magento\Framework\CompiledInterception\Generator\StaticScope;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\CompiledInterception\Generator\CompiledPluginList;
 use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item;
@@ -49,7 +50,7 @@ class CompiledPluginListTest extends \PHPUnit\Framework\TestCase
                 CompiledPluginList::class,
                 [
                     'objectManager' => $omMock,
-                    'scope' => $readerLine[0],
+                    'scope' => new StaticScope($readerLine[0]),
                     'reader' => $readerMock,
                     'omConfig' => $omConfigMock,
                     'cachePath' => false

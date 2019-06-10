@@ -41,11 +41,9 @@ class StaticScope implements ScopeInterface
      * Unused interface method
      *
      * @param string $scope
-     * @throws \Exception
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setCurrentScope($scope)
     {
-        throw new \RuntimeException('readonly');
+        $this->scope = $scope;
     }
 }
