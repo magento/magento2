@@ -39,6 +39,8 @@ class GetCartForUser
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param CartRepositoryInterface $cartRepository
      * @param StoreManagerInterface $storeManager
+     * @param GetCustomer $getCustomer
+     * @param ContextInterface $context
      */
     public function __construct(
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
@@ -62,6 +64,9 @@ class GetCartForUser
      */
     public function execute(string $cartHash, ?int $customerId): Quote
     {
+        /* verify customer is confirmed and not locked  */
+        $this->getCustomer->execute($this->context);
+
         try {
             $cartId = $this->maskedQuoteIdToQuoteId->execute($cartHash);
         } catch (NoSuchEntityException $exception) {
