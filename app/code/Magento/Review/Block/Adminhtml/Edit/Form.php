@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 
+
 /**
  * Adminhtml Review Edit Form
  */
@@ -69,6 +70,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     protected function _prepareForm()
     {
