@@ -107,7 +107,8 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
      * @param string $password
      * @return string
      */
-    private function getQuery(string $email, string $password) : string {
+    private function getQuery(string $email, string $password) : string
+    {
         return <<<MUTATION
 mutation {
 	generateCustomerToken(
