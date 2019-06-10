@@ -70,9 +70,11 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
      * Get backend model name.
      *
      * @return string
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getBackendModelName()
     {
+        // phpcs:enable Magento2.Functions.StaticFunction
         return \Magento\Weee\Model\Attribute\Backend\Weee\Tax::class;
     }
 
