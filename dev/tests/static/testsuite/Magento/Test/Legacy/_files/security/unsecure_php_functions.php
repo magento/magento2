@@ -36,6 +36,12 @@ return [
     'eval' => [
         'replacement' => '',
         'exclude' => [
+            // allowing in this file so that an error isn't raised for its use of the JS eval function
+            [
+                'type' => 'module',
+                'name' => 'Magento_Config',
+                'path' => 'view/adminhtml/templates/system/config/js.phtml'
+            ],
             [
                 'type' => 'module',
                 'name' => 'Magento_Catalog',
