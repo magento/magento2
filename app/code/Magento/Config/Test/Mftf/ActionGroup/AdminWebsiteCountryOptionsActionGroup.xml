@@ -12,29 +12,27 @@
         <arguments>
             <argument name="country" type="string"/>
         </arguments>
-        <conditionalClick selector="{{CountryOptionsSection.countryOptions}}" dependentSelector="{{CountryOptionsSection.countryOptionsOpen}}" visible="false" stepKey="openCountryOptionsTab"/>
-        <waitForElementVisible selector="{{CountryOptionsSection.allowedCountries}}" stepKey="waitAllowedCountriesToBeVisible"/>
-        <uncheckOption selector="{{CountryOptionsSection.generalCountryDefaultInherit}}" stepKey="uncheckDefaultCountryInheritCheckbox"/>
-        <selectOption selector="{{CountryOptionsSection.generalCountryDefault}}" userInput="{{country}}" stepKey="chooseDefaultCountry"/>
-        <uncheckOption selector="{{CountryOptionsSection.generalCountryAllowInherit}}" stepKey="uncheckAllowInheritCheckbox"/>
-        <selectOption selector="{{CountryOptionsSection.allowedCountries}}" userInput="{{country}}" stepKey="chooseAllowedCountries"/>
-        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
-        <waitForPageLoad stepKey="waitForSavingSystemConfiguration"/>
-        <see userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
+        <conditionalClick selector="{{AdminConfigurationGeneralCountryOptionsSection.countryOptions}}" dependentSelector="{{AdminConfigurationGeneralCountryOptionsSection.countryOptionsOpen}}" visible="false" stepKey="openCountryOptionsTab"/>
+        <waitForElementVisible selector="{{AdminConfigurationGeneralCountryOptionsSection.allowedCountries}}" stepKey="waitAllowedCountriesToBeVisible"/>
+        <uncheckOption selector="{{AdminConfigurationGeneralCountryOptionsSection.generalCountryDefaultInherit}}" stepKey="uncheckDefaultCountryInheritCheckbox"/>
+        <selectOption selector="{{AdminConfigurationGeneralCountryOptionsSection.generalCountryDefault}}" userInput="{{country}}" stepKey="chooseDefaultCountry"/>
+        <uncheckOption selector="{{AdminConfigurationGeneralCountryOptionsSection.generalCountryAllowInherit}}" stepKey="uncheckAllowInheritCheckbox"/>
+        <selectOption selector="{{AdminConfigurationGeneralCountryOptionsSection.allowedCountries}}" userInput="{{country}}" stepKey="chooseAllowedCountries"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
     </actionGroup>
     <actionGroup name="AllowAllCountriesExceptOneActionGroup" extends="AllowOnlyOneCountryActionGroup">
         <remove keyForRemoval="uncheckDefaultCountryInheritCheckbox"/>
         <remove keyForRemoval="chooseDefaultCountry"/>
         <remove keyForRemoval="chooseAllowedCountries"/>
-        <unselectOption selector="{{CountryOptionsSection.allowedCountries}}" userInput="{{country}}" after="uncheckAllowInheritCheckbox" stepKey="unselectCountry"/>
+        <unselectOption selector="{{AdminConfigurationGeneralCountryOptionsSection.allowedCountries}}" userInput="{{country}}" after="uncheckAllowInheritCheckbox" stepKey="unselectCountry"/>
     </actionGroup>
     <actionGroup name="SetWebsiteCountryOptionsToDefaultActionGroup">
-        <conditionalClick selector="{{CountryOptionsSection.countryOptions}}" dependentSelector="{{CountryOptionsSection.countryOptionsOpen}}" visible="false" stepKey="openCountryOptionsTab"/>
-        <waitForElementVisible selector="{{CountryOptionsSection.topDestinations}}" stepKey="waitCheckboxToBeVisible"/>
-        <checkOption selector="{{CountryOptionsSection.generalCountryAllowInherit}}" stepKey="setAllowInheritToDefault"/>
-        <checkOption selector="{{CountryOptionsSection.generalCountryDefaultInherit}}" stepKey="setDefaultCountryInheritToDefault"/>
-        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
-        <waitForPageLoad stepKey="waitForSavingSystemConfiguration"/>
-        <see userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
+        <conditionalClick selector="{{AdminConfigurationGeneralCountryOptionsSection.countryOptions}}" dependentSelector="{{AdminConfigurationGeneralCountryOptionsSection.countryOptionsOpen}}" visible="false" stepKey="openCountryOptionsTab"/>
+        <waitForElementVisible selector="{{AdminConfigurationGeneralCountryOptionsSection.topDestinations}}" stepKey="waitCheckboxToBeVisible"/>
+        <checkOption selector="{{AdminConfigurationGeneralCountryOptionsSection.generalCountryAllowInherit}}" stepKey="setAllowInheritToDefault"/>
+        <checkOption selector="{{AdminConfigurationGeneralCountryOptionsSection.generalCountryDefaultInherit}}" stepKey="setDefaultCountryInheritToDefault"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>

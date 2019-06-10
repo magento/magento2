@@ -32,14 +32,4 @@
         <element name="addStoreCodeToUrl" type="select" selector="#web_url_use_store"/>
         <element name="systemValueForStoreCode" type="checkbox" selector="#web_url_use_store_inherit"/>
     </section>
-    <section name="CountryOptionsSection">
-        <element name="allowedCountries" type="select" selector="#general_country_allow"/>
-        <element name="notAllowedCountry" type="button" selector="#general_country_allow option:not([selected])"/>
-        <element name="generalCountryAllowInherit" type="checkbox" selector="#general_country_allow_inherit"/>
-        <element name="generalCountryDefaultInherit" type="checkbox" selector="#general_country_default_inherit"/>
-        <element name="generalCountryDefault" type="select" selector="#general_country_default"/>
-        <element name="countryOptions" type="button" selector="#general_country-head"/>
-        <element name="countryOptionsOpen" type="button" selector="#general_country-head.open"/>
-        <element name="topDestinations" type="select" selector="#general_country_destinations"/>
-    </section>
 </sections>

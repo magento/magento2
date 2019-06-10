@@ -12,6 +12,7 @@
             <title value="Country filter on Customers page when allowed countries restriction for a default website is applied"/>
             <description value="Country filter on Customers page when allowed countries restriction for a default website is applied"/>
             <features value="Customer"/>
+            <stories value="Customer grid filter by country"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-17282"/>
             <useCaseId value="MAGETWO-86624"/>
@@ -44,7 +45,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{CustomWebSite.name}}"/>
             </actionGroup>
-            <actionGroup ref="NavigateToConfigurationGeneralPage" stepKey="navigateToConfigGeneralPage"/>
+            <amOnPage url="{{AdminConfigurationGeneralSectionPage.url('#general_country-link')}}" stepKey="goToConfigurationSectionPage"/>
             <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="adminSwitchWebsiteActionGroup">
                 <argument name="scopeName" value="_defaultWebsite.name"/>
             </actionGroup>
@@ -53,8 +54,8 @@
         </after>
 
         <!--Check that all countries are allowed initially and get amount-->
-        <actionGroup ref="NavigateToConfigurationGeneralPage" stepKey="navigateToConfigGeneralPage"/>
-        <executeJS function="return document.querySelectorAll('{{CountryOptionsSection.allowedCountries}} option').length" stepKey="countriesAmount"/>
+        <amOnPage url="{{AdminConfigurationGeneralSectionPage.url('#general_country-link')}}" stepKey="goToCountryConfigurationSectionPage"/>
+        <executeJS function="return document.querySelectorAll('{{AdminConfigurationGeneralCountryOptionsSection.allowedCountries}} option').length" stepKey="countriesAmount"/>
 
         <!-- Switch to first website, allow only Canada and set Canada as default country -->
         <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="adminSwitchWebsite">
