@@ -22,11 +22,6 @@ class LinkProcessor
     /**
      * @var array
      */
-    private $_linkNameToId = [];
-
-    /**
-     * @var array
-     */
     private $linkNameToId;
 
     /**
@@ -86,7 +81,7 @@ class LinkProcessor
         $nextLinkId = $this->resourceHelper->getNextAutoincrement($mainTable);
 
         // pre-load 'position' attributes ID for each link type once
-        foreach ($this->_linkNameToId as $linkId) {
+        foreach ($this->linkNameToId as $linkId) {
             $select = $importEntity->getConnection()->select()->from(
                 $resource->getTable('catalog_product_link_attribute'),
                 ['id' => 'product_link_attribute_id']
@@ -138,7 +133,7 @@ class LinkProcessor
             $productIds[] = $productId;
             $productLinkKeys = $this->fetchProductLinks($importEntity, $resource, $productId);
             $linkNameToId = array_filter(
-                $this->_linkNameToId,
+                $this->linkNameToId,
                 function ($linkName) use ($rowData) {
                     return isset($rowData[$linkName . 'sku']);
                 },
