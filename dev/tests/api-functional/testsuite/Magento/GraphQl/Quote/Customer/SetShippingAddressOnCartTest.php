@@ -664,8 +664,7 @@ QUERY;
     private function assignQuoteToCustomer(
         string $reservedOrderId = 'test_order_with_simple_product_without_address',
         int $customerId = 1
-    ): string
-    {
+    ): string {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
         $quote->setCustomerId($customerId);
