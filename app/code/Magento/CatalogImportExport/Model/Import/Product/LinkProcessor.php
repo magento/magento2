@@ -30,6 +30,10 @@ class LinkProcessor
         '_crosssell_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL,
         '_upsell_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL,
     ];
+    /**
+     * @var array
+     */
+    private $linkNameToId;
 
     /** @var LinkFactory */
     private $linkFactory;
@@ -38,21 +42,24 @@ class LinkProcessor
     private $resourceHelper;
 
     /** @var SkuProcessor */
-    protected $skuProcessor;
+    private $skuProcessor;
 
     /** @var LoggerInterface */
-    protected $logger;
+    private $logger;
 
     public function __construct(
         LinkFactory $linkFactory,
         Helper $resourceHelper,
         SkuProcessor $skuProcessor,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        array $linkNameToId
     ) {
         $this->linkFactory = $linkFactory;
         $this->resourceHelper = $resourceHelper;
         $this->skuProcessor = $skuProcessor;
         $this->logger = $logger;
+
+        $this->linkNameToId = $linkNameToId;
     }
 
     /**
@@ -90,6 +97,11 @@ class LinkProcessor
         }
 
         return $this;
+    }
+
+    public function addNameToIds($nameToIds)
+    {
+        $this->linkNameToId = array_merge($nameToIds, $this->linkNameToId);
     }
 
     /**

@@ -222,6 +222,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Links attribute name-to-link type ID.
      *
+     * @deprecated use DI for LinkProcessor class if you want to add additional types
+     *
      * @var array
      */
     protected $_linkNameToId = [
@@ -882,6 +884,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             ->get(StockItemImporterInterface::class);
         $this->linkProcessor = $linkProcessor ?? ObjectManager::getInstance()
                 ->get(LinkProcessor::class);
+        $this->linkProcessor->addNameToIds($this->_linkNameToId);
+
         parent::__construct(
             $jsonHelper,
             $importExportData,
