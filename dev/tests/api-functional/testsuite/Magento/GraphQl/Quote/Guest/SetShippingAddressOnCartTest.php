@@ -294,7 +294,8 @@ QUERY;
         return [
             'missed_shipping_addresses' => [
                 'cart_id: "cart_id_value"',
-                'Field SetShippingAddressesOnCartInput.shipping_addresses of required type [ShippingAddressInput]! was not provided.',
+                'Field SetShippingAddressesOnCartInput.shipping_addresses of required type [ShippingAddressInput]! ' .
+                'was not provided.',
             ],
             'missed_city' => [
                 'shipping_addresses: [ { address: { save_in_address_book: false } } ]',

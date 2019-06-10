@@ -412,7 +412,8 @@ QUERY;
         return [
             'missed_shipping_addresses' => [
                 'cart_id: "cart_id_value"',
-                'Field SetShippingAddressesOnCartInput.shipping_addresses of required type [ShippingAddressInput]! was not provided.',
+                'Field SetShippingAddressesOnCartInput.shipping_addresses of required type [ShippingAddressInput]! ' .
+                'was not provided.',
             ],
             'missed_city' => [
                 'shipping_addresses: [ { address: { save_in_address_book: false } } ]',
@@ -663,7 +664,8 @@ QUERY;
     private function assignQuoteToCustomer(
         string $reservedOrderId = 'test_order_with_simple_product_without_address',
         int $customerId = 1
-    ): string {
+    ): string
+    {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
         $quote->setCustomerId($customerId);
