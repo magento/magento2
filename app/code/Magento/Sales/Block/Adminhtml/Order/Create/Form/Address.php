@@ -9,6 +9,8 @@ use Magento\Backend\Model\Session\Quote;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Eav\Model\AttributeDataFactory;
 
 /**
  * Order create address form
@@ -191,17 +193,19 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
         $emptyAddressForm = $this->_customerFormFactory->create(
             'customer_address',
             'adminhtml_customer_address',
-            [\Magento\Customer\Api\Data\AddressInterface::COUNTRY_ID => $defaultCountryId]
+            [AddressInterface::COUNTRY_ID => $defaultCountryId]
         );
-        $data = [0 => $emptyAddressForm->outputData(\Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_JSON)];
+        $data = [0 => $emptyAddressForm->outputData(AttributeDataFactory::OUTPUT_FORMAT_JSON)];
         foreach ($this->getAddressCollection() as $address) {
             $addressForm = $this->_customerFormFactory->create(
                 'customer_address',
                 'adminhtml_customer_address',
-                $this->addressMapper->toFlatArray($address)
+                $this->addressMapper->toFlatArray($address),
+                false,
+                false
             );
             $data[$address->getId()] = $addressForm->outputData(
-                \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_JSON
+                AttributeDataFactory::OUTPUT_FORMAT_JSON
             );
         }
 
