@@ -32,7 +32,7 @@ $_order = $_item->getOrder();
         <?php endif; ?>
         <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="item-qty"><?= /* @escapeNotVerified */  $_item->getQtyOrdered() * 1 ?></td>
+    <td class="item-qty"><?= /* @escapeNotVerified */  ($_item->getQtyOrdered() * 1) - ($_item->getQtyCanceled() * 1) ?></td>
     <td class="item-price">
         <?= /* @escapeNotVerified */  $block->getItemPrice($_item) ?>
     </td>
