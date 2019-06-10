@@ -19,6 +19,7 @@
         <uncheckOption selector="{{AdminConfigurationGeneralCountryOptionsSection.generalCountryAllowInherit}}" stepKey="uncheckAllowInheritCheckbox"/>
         <selectOption selector="{{AdminConfigurationGeneralCountryOptionsSection.allowedCountries}}" userInput="{{country}}" stepKey="chooseAllowedCountries"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
     </actionGroup>
     <actionGroup name="AllowAllCountriesExceptOneActionGroup" extends="AllowOnlyOneCountryActionGroup">
@@ -33,6 +34,7 @@
         <checkOption selector="{{AdminConfigurationGeneralCountryOptionsSection.generalCountryAllowInherit}}" stepKey="setAllowInheritToDefault"/>
         <checkOption selector="{{AdminConfigurationGeneralCountryOptionsSection.generalCountryDefaultInherit}}" stepKey="setDefaultCountryInheritToDefault"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>
