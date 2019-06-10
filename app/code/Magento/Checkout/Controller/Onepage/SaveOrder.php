@@ -6,10 +6,14 @@
 
 namespace Magento\Checkout\Controller\Onepage;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\PaymentException;
 
-class SaveOrder extends \Magento\Checkout\Controller\Onepage
+/**
+ * One Page Checkout saveOrder action
+ */
+class SaveOrder extends \Magento\Checkout\Controller\Onepage implements HttpPostActionInterface
 {
     /**
      * Create order action

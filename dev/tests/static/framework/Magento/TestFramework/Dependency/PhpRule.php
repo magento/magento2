@@ -304,6 +304,9 @@ class PhpRule implements RuleInterface
                     $item['action_name'] ?? UrlInterface::DEFAULT_ACTION_NAME
                 );
                 if (!in_array($currentModule, $modules)) {
+                    if (count($modules) === 1) {
+                        $modules = reset($modules);
+                    }
                     $dependencies[] = [
                         'module' => $modules,
                         'type' => RuleInterface::TYPE_HARD,

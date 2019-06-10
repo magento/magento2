@@ -8,6 +8,8 @@ namespace Magento\Catalog\Block\Adminhtml\Product;
 use Magento\Store\Model\Store;
 
 /**
+ * Catalog product grid
+ *
  * @api
  * @since 100.0.2
  */
