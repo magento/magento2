@@ -43,7 +43,7 @@
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStoreGroup">
                 <argument name="storeGroupName" value="$$storeGroup.group[name]$$"/>
             </actionGroup>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
         <!-- Change products visibility on store-view level -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct1">
