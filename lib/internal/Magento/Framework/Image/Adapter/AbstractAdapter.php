@@ -307,7 +307,7 @@ abstract class AbstractAdapter implements AdapterInterface
         if ($this->_fileType) {
             return $this->_fileType;
         } else {
-            if ($this->_canProcess() && filesize($this->_fileName) > 0) {
+            if ($this->_canProcess()) {
                 list($this->_imageSrcWidth, $this->_imageSrcHeight, $this->_fileType) = getimagesize($this->_fileName);
                 return $this->_fileType;
             }
@@ -709,7 +709,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function _canProcess()
     {
-        return !empty($this->_fileName);
+        return !empty($this->_fileName) && filesize($this->_fileName) > 0;
     }
 
     /**
