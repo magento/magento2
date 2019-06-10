@@ -19,6 +19,7 @@ namespace Magento\Backend\Block\Template;
  * @api
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Context extends \Magento\Framework\View\Element\Template\Context
@@ -174,7 +175,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
-     * Get Backend Session
+     * Get backend session instance.
      *
      * @return \Magento\Backend\Model\Session
      */
@@ -184,7 +185,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
-     * Get Math Random
+     * Get math random instance.
      *
      * @return \Magento\Framework\Math\Random
      */
@@ -194,7 +195,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
-     * Get Form Key
+     * Get form key instance.
      *
      * @return \Magento\Framework\Data\Form\FormKey
      */
@@ -204,7 +205,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
-     * Get Class Name Builder
+     * Get name builder instance.
      *
      * @return \Magento\Framework\Code\NameBuilder
      */

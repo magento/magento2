@@ -1076,6 +1076,7 @@ class Checkout
      */
     protected function _matchShippingMethodCode(Address $address, $selectedCode)
     {
+        $address->collectShippingRates();
         $options = $this->_prepareShippingOptions($address, false);
         foreach ($options as $option) {
             if ($selectedCode === $option['code'] // the proper case as outlined in documentation

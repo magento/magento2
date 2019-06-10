@@ -11,7 +11,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\QuoteGraphQl\Model\Cart\ExtractDataFromAddress;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\QuoteGraphQl\Model\Cart\ExtractQuoteAddressData;
 
 /**
  * @inheritdoc
@@ -19,16 +20,16 @@ use Magento\QuoteGraphQl\Model\Cart\ExtractDataFromAddress;
 class BillingAddress implements ResolverInterface
 {
     /**
-     * @var ExtractDataFromAddress
+     * @var ExtractQuoteAddressData
      */
-    private $extractDataFromAddress;
+    private $extractQuoteAddressData;
 
     /**
-     * @param ExtractDataFromAddress $extractDataFromAddress
+     * @param ExtractQuoteAddressData $extractQuoteAddressData
      */
-    public function __construct(ExtractDataFromAddress $extractDataFromAddress)
+    public function __construct(ExtractQuoteAddressData $extractQuoteAddressData)
     {
-        $this->extractDataFromAddress = $extractDataFromAddress;
+        $this->extractQuoteAddressData = $extractQuoteAddressData;
     }
 
     /**
@@ -39,6 +40,7 @@ class BillingAddress implements ResolverInterface
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
+        /** @var CartInterface $cart */
         $cart = $value['model'];
 
         $billingAddress = $cart->getBillingAddress();
@@ -46,7 +48,7 @@ class BillingAddress implements ResolverInterface
             return null;
         }
 
-        $addressData = $this->extractDataFromAddress->execute($billingAddress);
+        $addressData = $this->extractQuoteAddressData->execute($billingAddress);
         return $addressData;
     }
 }

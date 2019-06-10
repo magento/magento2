@@ -24,6 +24,7 @@ use Magento\Customer\Api\Data\GroupSearchResultsInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
     as FieldNameResolver;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -66,6 +67,11 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
     private $categoryList;
 
     /**
+     * @var Collection
+     */
+    private $categoryCollection;
+
+    /**
      * @var FieldNameResolver
      */
     private $fieldNameResolver;
@@ -100,6 +106,10 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
         $this->categoryList = $this->getMockBuilder(CategoryListInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->categoryCollection = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAllIds'])
+            ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -113,6 +123,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                 'attributeAdapterProvider' => $this->attributeAdapterProvider,
                 'categoryList' => $this->categoryList,
                 'fieldNameResolver' => $this->fieldNameResolver,
+                'categoryCollection' => $this->categoryCollection,
             ]
         );
     }
@@ -124,7 +135,6 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
      * @param $groupId
      * @param array $expected
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testGetAllAttributesTypes(
         $complexType,
@@ -138,10 +148,6 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
         $this->searchCriteriaBuilder->expects($this->any())
             ->method('create')
             ->willReturn($searchCriteria);
-        $categorySearchResults = $this->getMockBuilder(CategorySearchResultsInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getItems'])
-            ->getMockForAbstractClass();
         $groupSearchResults = $this->getMockBuilder(GroupSearchResultsInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getItems'])
@@ -156,19 +162,10 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
         $groupSearchResults->expects($this->any())
             ->method('getItems')
             ->willReturn([$group]);
-        $category = $this->getMockBuilder(CategoryInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getId'])
-            ->getMockForAbstractClass();
-        $category->expects($this->any())
-            ->method('getId')
-            ->willReturn($categoryId);
-        $categorySearchResults->expects($this->any())
-            ->method('getItems')
-            ->willReturn([$category]);
-        $this->categoryList->expects($this->any())
-            ->method('getList')
-            ->willReturn($categorySearchResults);
+
+        $this->categoryCollection->expects($this->any())
+            ->method('getAllIds')
+            ->willReturn([$categoryId]);
 
         $categoryAttributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()

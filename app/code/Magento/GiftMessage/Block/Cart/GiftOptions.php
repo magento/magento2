@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\GiftMessage\Block\Cart;
 
 use Magento\Backend\Block\Template\Context;
@@ -10,6 +11,8 @@ use Magento\Framework\Json\Encoder;
 use Magento\GiftMessage\Model\CompositeConfigProvider;
 
 /**
+ * Gift options cart block.
+ *
  * @api
  * @since 100.0.2
  */
@@ -63,6 +66,8 @@ class GiftOptions extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Retrieve encoded js layout.
+     *
      * @return string
      */
     public function getJsLayout()
@@ -76,7 +81,7 @@ class GiftOptions extends \Magento\Backend\Block\Template
     /**
      * Retrieve gift message configuration
      *
-     * @return array
+     * @return string
      */
     public function getGiftOptionsConfigJson()
     {

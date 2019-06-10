@@ -4,41 +4,51 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Framework\Data\Form\Element;
+
+use Magento\Framework\Data\Form\ElementFactory;
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * Tests for \Magento\Framework\Data\Form\Element\Date
  */
-namespace Magento\Framework\Data\Form\Element;
-
 class DateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Data\Form\ElementFactory
+     * @var ElementFactory
      */
-    protected $_elementFactory;
+    private $elementFactory;
 
     /**
-     * SetUp method
+     * @inheritdoc
      */
     protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_elementFactory = $objectManager->create(\Magento\Framework\Data\Form\ElementFactory::class);
+        $objectManager = Bootstrap::getObjectManager();
+        $this->elementFactory = $objectManager->create(ElementFactory::class);
     }
 
     /**
+     * Test get value
+     *
+     * @param array $data
+     * @param string $expect
+     * @return void
      * @dataProvider getValueDataProvider
      */
-    public function testGetValue(array $data, $expect)
+    public function testGetValue(array $data, string $expect): void
     {
-        /** @var $date \Magento\Framework\Data\Form\Element\Date */
-        $date = $this->_elementFactory->create(\Magento\Framework\Data\Form\Element\Date::class, $data);
+        /** @var $date Date */
+        $date = $this->elementFactory->create(Date::class, $data);
         $this->assertEquals($expect, $date->getValue());
     }
 
     /**
+     * Get value test data provider
+     *
      * @return array
      */
-    public function getValueDataProvider()
+    public function getValueDataProvider(): array
     {
         $testTimestamp = strtotime('2014-05-18 12:08:16');
         $date = new \DateTime('@' . $testTimestamp);
@@ -56,15 +66,22 @@ class DateTest extends \PHPUnit\Framework\TestCase
                     'time_format' => 'h:mm a',
                     'value' => $testTimestamp,
                 ],
-                $date->format('g:i A')
+                $date->format('g:i A'),
             ],
             [
                 [
                     'date_format' => 'MM/d/yy',
                     'value' => $testTimestamp,
                 ],
-                $date->format('m/j/y')
-            ]
+                $date->format('m/j/y'),
+            ],
+            [
+                [
+                    'date_format' => 'd-MM-Y',
+                    'value' => $date->format('d-m-Y'),
+                ],
+                $date->format('d-m-Y'),
+            ],
         ];
     }
 }

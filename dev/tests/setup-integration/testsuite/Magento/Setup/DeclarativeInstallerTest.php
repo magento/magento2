@@ -251,6 +251,45 @@ class DeclarativeInstallerTest extends SetupTestCase
 
     /**
      * @moduleName Magento_TestSetupDeclarationModule1
+     * @moduleName Magento_TestSetupDeclarationModule3
+     */
+    public function testInstallationWithDroppingTablesFromSecondaryModule()
+    {
+        $modules = [
+            'Magento_TestSetupDeclarationModule1',
+            'Magento_TestSetupDeclarationModule3',
+        ];
+
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule3',
+            'drop_table_with_external_dependency',
+            'db_schema.xml',
+            'etc'
+        );
+
+        foreach ($modules as $moduleName) {
+            $this->moduleManager->updateRevision(
+                $moduleName,
+                'without_setup_version',
+                'module.xml',
+                'etc'
+            );
+        }
+
+        try {
+            $this->cliCommand->install($modules);
+        } catch (\Exception $e) {
+            $installException = $e->getPrevious();
+            self::assertSame(1, $installException->getCode());
+            self::assertContains(
+                'The reference table named "reference_table" is disabled',
+                $installException->getMessage()
+            );
+        }
+    }
+
+    /**
+     * @moduleName Magento_TestSetupDeclarationModule1
      * @dataProviderFromFile Magento/TestSetupDeclarationModule1/fixture/declarative_installer/rollback.php
      * @throws \Exception
      */

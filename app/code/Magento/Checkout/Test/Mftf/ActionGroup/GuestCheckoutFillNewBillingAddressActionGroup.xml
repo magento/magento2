@@ -70,6 +70,6 @@
             <argument name="paymentMethod" type="string"/>
         </arguments>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" after="waitForLoading3" stepKey="waitForPaymentSectionLoaded"/>
-        <conditionalClick selector="{{CheckoutPaymentSection.paymentMethodByName(paymentMethod)}}" dependentSelector="{{CheckoutPaymentSection.billingAddress}}" visible="false" parametrized="true" before="enterFirstName" stepKey="clickCheckMoneyOrderPayment"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.paymentMethodByName(paymentMethod)}}" dependentSelector="{{CheckoutPaymentSection.billingAddress}}" visible="false" before="enterFirstName" stepKey="clickCheckMoneyOrderPayment"/>
     </actionGroup>
 </actionGroups>
