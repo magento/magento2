@@ -43,35 +43,43 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <!-- Go to Stores > Product -->
+        <!-- Go to Stores > Product, click "Add New Attribute" -->
         <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="openProductAttributePage"/>
-
-        <!-- Create new product attribute -->
         <click selector="{{AdminProductAttributeGridSection.createNewAttributeBtn}}" stepKey="createNewAttribute"/>
+
+        <!-- Input value for Default Label. Verify dropdown of "Catalog Input Type for Store Owner" -->
         <actionGroup ref="AdminFillProductAttributePropertiesActionGroup" stepKey="fillAttributeProperties">
             <argument name="attributeName" value="{{productTextEditorAttribute.attribute_code}}"/>
             <argument name="attributeType" value="{{productTextEditorAttribute.frontend_input}}"/>
         </actionGroup>
 
-        <!-- Update product attribute input type and assert WYSIWYG -->
+        <!-- Input value for "Catalog Input Type for Store Owner" -->
         <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="{{productAttributeWysiwyg.frontend_input}}" stepKey="updateInputType"/>
+
+        <!-- Click on "Storefront Properties" tab on left menu -->
         <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
         <dontSeeElement selector="{{StorefrontPropertiesSection.EnableWYSIWYG}}" stepKey="dontSeeWYSIWYGEnableField"/>
 
-        <!-- Change attribute visibility and input type -->
+        <!-- Selection for "Visible on Catalog Pages on Storefront" -->
         <selectOption selector="{{StorefrontPropertiesSection.visibleOnCatalogPagesOnStorefront}}" userInput="Yes" stepKey="enableVisibleOnStorefront"/>
         <scrollToTopOfPage stepKey="scrollToPageTop"/>
+
+        <!-- Go back to "Properties" tab on left menu -->
         <click selector="{{AttributePropertiesSection.propertiesTab}}" stepKey="clickPropertiesTab"/>
+
+        <!-- Updated value for "Catalog Input Type for Store Owner" -->
         <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="{{productTextEditorAttribute.frontend_input}}" stepKey="returnInputType"/>
+
+        <!-- Save Product Attribute -->
         <actionGroup ref="saveProductAttribute" stepKey="saveAttribute"/>
 
         <!-- Go to Store > Attribute Set -->
         <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
 
-        <!-- Open Default attribute -->
+        <!-- From grid, click on attribute set Default -->
         <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
 
-        <!-- Add created attribute to Default attribute and save -->
+        <!-- Add Product Attribute to Default attribute by dragging and dropping this to the 'Project Details' folder. Then Save. -->
         <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
             <argument name="group" value="Product Details"/>
             <argument name="attribute" value="{{productTextEditorAttribute.attribute_code}}"/>
@@ -84,7 +92,7 @@
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
 
-        <!-- Select attribute set: Default -->
+        <!-- On product page, select Attribute Set: "Default" -->
         <actionGroup ref="AdminProductPageSelectAttributeSet" stepKey="selectAttributeSet">
             <argument name="attributeSetName" value="Default"/>
         </actionGroup>
@@ -106,7 +114,7 @@
         <!-- Add content into attribute -->
         <fillField selector="{{ProductDescriptionWysiwygSection.attributeEditArea(productTextEditorAttribute.attribute_code)}}" userInput="This content from product page" stepKey="setContent"/>
 
-        <!-- Fill and save product form -->
+        <!-- Fill up all required fields for product form -->
         <actionGroup ref="fillMainProductForm" stepKey="fillProductForm"/>
         <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
 
