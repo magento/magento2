@@ -16,30 +16,37 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class LinkProcessor
- *
  */
 class LinkProcessor
 {
     /**
      * @var array
      */
-    private $_linkNameToId;
+    private $_linkNameToId = [];
 
     /**
      * @var array
      */
     private $linkNameToId;
 
-    /** @var LinkFactory */
+    /**
+     * @var LinkFactory 
+     */
     private $linkFactory;
 
-    /** @var Helper */
+    /**
+     * @var Helper 
+     */
     private $resourceHelper;
 
-    /** @var SkuProcessor */
+    /**
+     * @var SkuProcessor 
+     */
     private $skuProcessor;
 
-    /** @var LoggerInterface */
+    /**
+     * @var LoggerInterface 
+     */
     private $logger;
 
     public function __construct(
@@ -70,7 +77,9 @@ class LinkProcessor
         Data $dataSourceModel,
         string $linkField
     ) {
-        /** @var Link $resource */
+        /**
+         * @var Link $resource
+         */
         $resource = $this->linkFactory->create();
         $mainTable = $resource->getMainTable();
         $positionAttrId = [];
@@ -88,7 +97,7 @@ class LinkProcessor
             $positionAttrId[$linkId] = $importEntity->getConnection()->fetchOne($select, $bind);
         }
         while ($bunch = $dataSourceModel->getNextBunch()) {
-            $this->processLinkBunches($importEntity, $dataSourceModel, $linkField, $bunch, $resource, $nextLinkId, $positionAttrId);
+            $this->processLinkBunches($importEntity, $linkField, $bunch, $resource, $nextLinkId, $positionAttrId);
         }
 
         return $this;
@@ -103,8 +112,8 @@ class LinkProcessor
      * Processes link bunches
      *
      * @param array $bunch
-     * @param Link $resource
-     * @param int $nextLinkId
+     * @param Link  $resource
+     * @param int   $nextLinkId
      * @param array $positionAttrId
      *
      * @return void
@@ -112,7 +121,6 @@ class LinkProcessor
      */
     private function processLinkBunches(
         Product $importEntity,
-        Data $dataSourceModel,
         string $linkField,
         array $bunch,
         Link $resource,
@@ -191,7 +199,7 @@ class LinkProcessor
     /**
      * Check if product exists for specified SKU
      *
-     * @param string $sku
+     * @param  string $sku
      * @return bool
      */
     private function isSkuExist(Product $importEntity, $sku)
@@ -204,7 +212,7 @@ class LinkProcessor
      * Fetches Product Links
      *
      * @param Link $resource
-     * @param int $productId
+     * @param int  $productId
      *
      * @return array
      */
@@ -245,7 +253,7 @@ class LinkProcessor
     /**
      * Saves information about product links
      *
-     * @param Link $resource
+     * @param Link  $resource
      * @param array $productIds
      * @param array $linkRows
      * @param array $positionRows
