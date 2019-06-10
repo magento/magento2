@@ -48,7 +48,7 @@
         <actionGroup ref="GuestCheckoutFillingShippingSectionWithoutPaymentsActionGroup" stepKey="guestCheckoutFillingShippingSection">
             <argument name="customerVar" value="Simple_US_Customer"/>
             <argument name="customerAddressVar" value="US_Address_TX"/>
-            <argument name="shippingMethod" value="Flat Rate" type="string"/>
+            <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>
 
         <waitForElementVisible selector="{{CheckoutPaymentSection.noPaymentMethods}}" stepKey="waitMessage"/>

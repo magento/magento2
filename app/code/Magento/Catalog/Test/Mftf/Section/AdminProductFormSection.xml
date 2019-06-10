@@ -42,6 +42,7 @@
         <element name="requiredSkuIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=sku]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
         <element name="customAttributeDropdownField" type="select" selector="select[name='product[{{attributeCode}}]']" parameterized="true"/>
         <element name="customAttributeInputField" type="select" selector="input[name='product[{{attributeCode}}]']" parameterized="true"/>
+        <element name="customAttributeSelectOptions" type="select" selector="select[name='product[{{attributeCode}}]'] option" parameterized="true"/>
     </section>
     <section name="ProductInWebsitesSection">
         <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
