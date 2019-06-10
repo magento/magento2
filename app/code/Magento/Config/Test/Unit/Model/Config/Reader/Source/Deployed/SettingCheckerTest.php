@@ -96,13 +96,18 @@ class SettingCheckerTest extends \PHPUnit\Framework\TestCase
 
         $this->configMock->expects($this->any())
             ->method('get')
-            ->willReturnMap(array_merge([
-                [
-                    'system/' . $scope . "/" . ($scopeCode ? $scopeCode . '/' : '') . $path,
-                    null,
-                    $confValue
-                ],
-            ], $configMap));
+            ->willReturnMap(
+                array_merge(
+                    [
+                        [
+                            'system/' . $scope . "/" . ($scopeCode ? $scopeCode . '/' : '') . $path,
+                            null,
+                            $confValue
+                        ],
+                    ],
+                    $configMap
+                )
+            );
 
         $this->assertSame($expectedResult, $this->checker->isReadOnly($path, $scope, $scopeCode));
     }
