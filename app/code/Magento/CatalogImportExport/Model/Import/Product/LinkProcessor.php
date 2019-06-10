@@ -25,25 +25,34 @@ class LinkProcessor
     private $linkNameToId;
 
     /**
-     * @var LinkFactory 
+     * @var LinkFactory
      */
     private $linkFactory;
 
     /**
-     * @var Helper 
+     * @var Helper
      */
     private $resourceHelper;
 
     /**
-     * @var SkuProcessor 
+     * @var SkuProcessor
      */
     private $skuProcessor;
 
     /**
-     * @var LoggerInterface 
+     * @var LoggerInterface
      */
     private $logger;
 
+    /**
+     * LinkProcessor constructor.
+     *
+     * @param LinkFactory $linkFactory
+     * @param Helper $resourceHelper
+     * @param SkuProcessor $skuProcessor
+     * @param LoggerInterface $logger
+     * @param array $linkNameToId
+     */
     public function __construct(
         LinkFactory $linkFactory,
         Helper $resourceHelper,
@@ -64,6 +73,9 @@ class LinkProcessor
      *
      * Must be called after ALL products saving done.
      *
+     * @param Product $importEntity
+     * @param Data $dataSourceModel
+     * @param string $linkField
      * @return $this
      * @throws LocalizedException
      */
@@ -71,10 +83,7 @@ class LinkProcessor
         Product $importEntity,
         Data $dataSourceModel,
         string $linkField
-    ) {
-        /**
-         * @var Link $resource
-         */
+    ): void {
         $resource = $this->linkFactory->create();
         $mainTable = $resource->getMainTable();
         $positionAttrId = [];
@@ -94,11 +103,15 @@ class LinkProcessor
         while ($bunch = $dataSourceModel->getNextBunch()) {
             $this->processLinkBunches($importEntity, $linkField, $bunch, $resource, $nextLinkId, $positionAttrId);
         }
-
-        return $this;
     }
 
-    public function addNameToIds($nameToIds)
+    /**
+     * Add link types (exists for backwards compatibility)
+     *
+     * @deprecated Use DI to inject to the constructor
+     * @param array $nameToIds
+     */
+    public function addNameToIds(array $nameToIds): void
     {
         $this->linkNameToId = array_merge($nameToIds, $this->linkNameToId);
     }
@@ -106,9 +119,11 @@ class LinkProcessor
     /**
      * Processes link bunches
      *
+     * @param Product $importEntity
+     * @param string $linkField
      * @param array $bunch
-     * @param Link  $resource
-     * @param int   $nextLinkId
+     * @param Link $resource
+     * @param int $nextLinkId
      * @param array $positionAttrId
      *
      * @return void
@@ -194,10 +209,11 @@ class LinkProcessor
     /**
      * Check if product exists for specified SKU
      *
-     * @param  string $sku
+     * @param Product $importEntity
+     * @param string $sku
      * @return bool
      */
-    private function isSkuExist(Product $importEntity, $sku)
+    private function isSkuExist(Product $importEntity, string $sku): bool
     {
         $sku = strtolower($sku);
         return isset($importEntity->getOldSku()[$sku]);
@@ -206,8 +222,9 @@ class LinkProcessor
     /**
      * Fetches Product Links
      *
+     * @param Product $importEntity
      * @param Link $resource
-     * @param int  $productId
+     * @param int $productId
      *
      * @return array
      */
@@ -248,15 +265,21 @@ class LinkProcessor
     /**
      * Saves information about product links
      *
-     * @param Link  $resource
+     * @param Product $importEntity
+     * @param Link $resource
      * @param array $productIds
      * @param array $linkRows
      * @param array $positionRows
      *
      * @throws LocalizedException
      */
-    private function saveLinksData(Product $importEntity, Link $resource, array $productIds, array $linkRows, array $positionRows)
-    {
+    private function saveLinksData(
+        Product $importEntity,
+        Link $resource,
+        array $productIds,
+        array $linkRows,
+        array $positionRows
+    ) {
         $mainTable = $resource->getMainTable();
         if (Import::BEHAVIOR_APPEND != $importEntity->getBehavior() && $productIds) {
             $importEntity->getConnection()->delete(
