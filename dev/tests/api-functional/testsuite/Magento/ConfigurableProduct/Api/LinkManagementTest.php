@@ -178,7 +178,6 @@ class LinkManagementTest extends WebapiAbstract
             $position++;
         }
 
-        // Validating initial attribute and option numbers
         $this->assertArrayHasKey($attributesToAdd[0], $attributeOptions);
         $this->assertArrayHasKey($attributesToAdd[1], $attributeOptions);
         $this->assertCount(4, $attributeOptions[$attributesToAdd[0]]);
