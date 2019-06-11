@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Ui\Component\Form;
 use Magento\Framework\UrlInterface;
-use Magento\Framework\Module\Manager as ModuleManager;
+use \Magento\Framework\Module\ModuleManagerInterface as ModuleManager;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -59,7 +59,7 @@ class Review extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function modifyMeta(array $meta)
@@ -117,7 +117,7 @@ class Review extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function modifyData(array $data)
@@ -133,7 +133,6 @@ class Review extends AbstractModifier
      * Retrieve module manager instance using dependency lookup to keep this class backward compatible.
      *
      * @return ModuleManager
-     *
      * @deprecated 100.2.0
      */
     private function getModuleManager()
