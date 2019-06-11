@@ -287,8 +287,8 @@ class Config extends \Magento\Framework\DataObject
      *
      * @param Field $field
      * @param string $fieldId Need for support of clone_field feature
-     * @param array $oldConfig Need for compatibility with _processGroup()
-     * @param array $extraOldGroups Need for compatibility with _processGroup()
+     * @param array &$oldConfig Need for compatibility with _processGroup()
+     * @param array &$extraOldGroups Need for compatibility with _processGroup()
      * @return string
      */
     private function getFieldPath(Field $field, string $fieldId, array &$oldConfig, array &$extraOldGroups): string
@@ -337,8 +337,8 @@ class Config extends \Magento\Framework\DataObject
      * @param string $sectionId
      * @param string $groupId
      * @param array $groupData
-     * @param array $oldConfig
-     * @param array $extraOldGroups
+     * @param array &$oldConfig
+     * @param array &$extraOldGroups
      * @return array
      */
     private function getChangedPaths(
@@ -384,8 +384,8 @@ class Config extends \Magento\Framework\DataObject
      * @param array $groupData
      * @param array $groups
      * @param string $sectionPath
-     * @param array $extraOldGroups
-     * @param array $oldConfig
+     * @param array &$extraOldGroups
+     * @param array &$oldConfig
      * @param \Magento\Framework\DB\Transaction $saveTransaction
      * @param \Magento\Framework\DB\Transaction $deleteTransaction
      * @return void
@@ -681,7 +681,7 @@ class Config extends \Magento\Framework\DataObject
      * Get config data value
      *
      * @param string $path
-     * @param null|bool $inherit
+     * @param null|bool &$inherit
      * @param null|array $configData
      * @return \Magento\Framework\Simplexml\Element
      */
