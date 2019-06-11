@@ -78,6 +78,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-97001"/>
             <group value="checkout"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
         <before>
             <magentoCLI stepKey="disableSidebar" command="config:set checkout/sidebar/display 0" />

@@ -65,5 +65,4 @@
         <scrollToTopOfPage stepKey="ScrollToTop"/>
         <click selector="{{CaptchaFormsDisplayingSection.captcha}}" stepKey="ClickToCloseCaptcha"/>
     </test>
-
 </tests>
