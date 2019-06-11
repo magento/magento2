@@ -11,8 +11,10 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * The event listener which instantiates ObjectManager before test run
  */
-class ReplaceObjectManager extends \PHPUnit\Framework\BaseTestListener
+class ReplaceObjectManager implements \PHPUnit\Framework\TestListener
 {
+    use \PHPUnit\Framework\TestListenerDefaultImplementation;
+
     /**
      * Replaces ObjectManager before run for each test
      *
@@ -25,7 +27,7 @@ class ReplaceObjectManager extends \PHPUnit\Framework\BaseTestListener
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function startTest(\PHPUnit\Framework\Test $test)
+    public function startTest(\PHPUnit\Framework\Test $test): void
     {
         if ($test instanceof \PHPUnit\Framework\TestCase) {
             $objectManagerMock = $test->getMockBuilder(ObjectManagerInterface::class)
