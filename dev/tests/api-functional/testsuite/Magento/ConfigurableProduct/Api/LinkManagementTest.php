@@ -142,12 +142,10 @@ class LinkManagementTest extends WebapiAbstract
     public function testConfigurableOptionPositionPreservation()
     {
         $productSku = 'configurable-product-sku';
-
         $childProductSkus = [
             'simple-product-sku-1',
             'simple-product-sku-2'
         ];
-
         $attributesToAdd = [
             'custom_attr_1',
             'custom_attr_2',
@@ -214,7 +212,6 @@ class LinkManagementTest extends WebapiAbstract
             $this->assertTrue($res);
         }
 
-        // confirm that the simple product was added
         $childProductsDiff = array_diff(
             $childProductSkus,
             array_column(
@@ -231,14 +228,12 @@ class LinkManagementTest extends WebapiAbstract
             $attributesAfterAssign[0]['position'],
             'Product 1 attribute option position mismatch'
         );
-
         $this->assertEquals(
             $attributesBeforeAssign[1]['position'],
             $attributesAfterAssign[1]['position'],
             'Product 2 attribute option position mismatch'
         );
 
-        // remove products used during the test
         foreach ($childProductSkus as $childSku) {
             $this->deleteProduct($childSku);
         }
