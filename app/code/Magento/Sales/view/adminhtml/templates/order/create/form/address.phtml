@@ -31,7 +31,7 @@ if ($block->getIsShipping()) :
     <script>
     require(["Magento_Sales/order/create/form"], function(){
         order.shippingAddressContainer = '<?= $block->escapeJs($_fieldsContainerId) ?>';
-        order.setAddresses(<?= /* @noEscape  */ $block->getAddressCollectionJson() ?>);
+        order.setAddresses(<?= /* @noEscape */ $block->getAddressCollectionJson() ?>);
     });
     </script>
     <?php
