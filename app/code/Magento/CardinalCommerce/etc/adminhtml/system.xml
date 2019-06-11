@@ -36,7 +36,7 @@
                         <config_path>three_d_secure/cardinal/api_identifier</config_path>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     </field>
-                    <field id="debug" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="debug" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Debug</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>three_d_secure/cardinal/debug</config_path>

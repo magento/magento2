@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "912e04a44c38c8918799bd01b828fba0",
+    "content-hash": "cac9237019d018c1f7f9463414bc9bef",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -2169,7 +2169,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
+                    "email": "backendtea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -6771,7 +6771,7 @@
             "time": "2019-04-29T20:56:26+00:00"
         },
         {
-            "name": "mikey179/vfsStream",
+            "name": "mikey179/vfsstream",
             "version": "v1.6.5",
             "source": {
                 "type": "git",

@@ -53,7 +53,7 @@ class JwtManagement
             throw new \InvalidArgumentException('Wrong number of segments in JWT');
         }
 
-        list($headB64, $payloadB64, $signatureB64) = $parts;
+        [$headB64, $payloadB64, $signatureB64] = $parts;
 
         $headerJson = $this->urlSafeB64Decode($headB64);
         $header = $this->json->unserialize($headerJson);

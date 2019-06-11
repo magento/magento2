@@ -86,7 +86,7 @@ class DataAssignObserverTest extends TestCase
     /**
      * Tests case when CardinalCommerce is disabled.
      */
-    public function testDoesnttDataWhenEmpty()
+    public function testDoesntSetDataWhenDisabled()
     {
         $config = $this->createMock(Config::class);
         $config->method('isActive')

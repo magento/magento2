@@ -65,8 +65,8 @@ class Authorize3DSecureBuilder implements BuilderInterface
         if ($payment instanceof Payment) {
             $cardinalJwt = (string)$payment->getAdditionalInformation('cardinalJWT');
             $jwtPayload = $this->jwtParser->execute($cardinalJwt);
-            $eciFlag = $jwtPayload['Payload']['Payment']['ExtendedData']['ECIFlag'];
-            $cavv = $jwtPayload['Payload']['Payment']['ExtendedData']['CAVV'];
+            $eciFlag = $jwtPayload['Payload']['Payment']['ExtendedData']['ECIFlag'] ?? '';
+            $cavv = $jwtPayload['Payload']['Payment']['ExtendedData']['CAVV'] ?? '';
             $data = [
                 'transactionRequest' => [
                     'cardholderAuthentication' => [
