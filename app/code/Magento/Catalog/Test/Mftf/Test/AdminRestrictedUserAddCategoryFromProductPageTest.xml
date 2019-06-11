@@ -14,7 +14,7 @@
             <title value="Adding new category from product page by restricted user"/>
             <description value="Adding new category from product page by restricted user"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-99063"/>
+            <testCaseId value="MC-17229"/>
             <useCaseId value="MAGETWO-69893"/>
             <group value="catalog"/>
         </annotations>
