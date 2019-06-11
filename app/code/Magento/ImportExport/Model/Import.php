@@ -564,7 +564,6 @@ class Import extends AbstractModel
             throw new LocalizedException(__('The file cannot be uploaded.'));
         }
 
-
         $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
 
         $uploadedFile = $result['path'] . $result['file'];
