@@ -71,7 +71,13 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
     private $addressRegistry;
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @param Action\Context $context
+     * @param \Magento\Framework\Escaper $escaper
      * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
@@ -86,6 +92,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\Escaper $escaper,
         AddressRegistry $addressRegistry = null
     ) {
         $this->customerRepository = $customerRepository;
@@ -93,6 +100,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
         $this->customerMapper = $customerMapper;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->logger = $logger;
+        $this->escaper = $escaper;
         $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
         parent::__construct($context);
     }
@@ -315,7 +323,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
      */
     protected function getErrorWithCustomerId($errorText)
     {
-        return '[Customer ID: ' . $this->getCustomer()->getId() . '] ' . __($errorText);
+        return '[Customer ID: ' . $this->getCustomer()->getId() . '] ' . $this->escaper->escapeHtml(__($errorText));
     }
 
     /**
