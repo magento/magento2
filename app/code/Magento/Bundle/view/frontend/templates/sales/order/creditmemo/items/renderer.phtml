@@ -67,7 +67,7 @@
     </td>
     <td class="col discount" data-th="<?= $block->escapeHtml(__('Discount Amount')) ?>">
         <?php if ($block->canShowPriceInfo($_item)) : ?>
-            <?= $block->escapeHtml($block->getOrder()->formatPrice(-$_item->getDiscountAmount())) ?>
+            <?= $block->escapeHtml($block->getOrder()->formatPrice(-$_item->getDiscountAmount()), ['span']) ?>
         <?php else : ?>
             &nbsp;
         <?php endif; ?>
