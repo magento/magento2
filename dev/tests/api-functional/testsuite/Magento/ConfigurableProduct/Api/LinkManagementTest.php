@@ -93,7 +93,9 @@ class LinkManagementTest extends WebapiAbstract
         $this->createConfigurableProduct($productSku);
         $attribute = $this->attributeRepository->get('catalog_product', 'test_configurable');
 
-        $this->addOptionToConfigurableProduct($productSku, $attribute->getAttributeId(),
+        $this->addOptionToConfigurableProduct(
+            $productSku,
+            $attribute->getAttributeId(),
             [
                 [
                     'value_index' => $attribute->getOptions()[1]->getValue()
@@ -101,7 +103,8 @@ class LinkManagementTest extends WebapiAbstract
             ]
         );
 
-        $this->createSimpleProduct($childSku,
+        $this->createSimpleProduct(
+            $childSku,
             [
                 [
                     'attribute_code' => 'test_configurable',
@@ -168,7 +171,12 @@ class LinkManagementTest extends WebapiAbstract
             foreach ($options as $option) {
                 $valueIndexesData []['value_index']= $option->getValue();
             }
-            $this->addOptionToConfigurableProduct($productSku, $attribute->getAttributeId(), $valueIndexesData, $position);
+            $this->addOptionToConfigurableProduct(
+                $productSku,
+                $attribute->getAttributeId(),
+                $valueIndexesData,
+                $position
+            );
             $position++;
         }
 
@@ -210,7 +218,9 @@ class LinkManagementTest extends WebapiAbstract
         $childProductsDiff = array_diff(
             $childProductSkus,
             array_column(
-                $this->getChildren($productSku), 'sku')
+                $this->getChildren($productSku),
+                'sku'
+            )
         );
         $this->assertCount(0, $childProductsDiff, 'Added child product count mismatch expected result');
 
@@ -241,7 +251,8 @@ class LinkManagementTest extends WebapiAbstract
      * @param string $sku
      * @return bool
      */
-    private function deleteProduct(string $sku): bool {
+    private function deleteProduct(string $sku): bool
+    {
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/' . $sku,
