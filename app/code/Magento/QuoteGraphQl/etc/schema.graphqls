@@ -142,7 +142,7 @@ type CartPrices {
     grand_total: Money
     subtotal_including_tax: Money
     subtotal_excluding_tax: Money
-    discount: CartDiscountItem
+    discount: CartDiscount
     subtotal_with_discount_excluding_tax: Money
     applied_taxes: [CartTaxItem]
 }
@@ -152,9 +152,9 @@ type CartTaxItem {
     label: String!
 }
 
-type CartDiscountItem {
+type CartDiscount {
     amount: Money!
-    label: String!
+    label: [String!]!
 }
 
 type SetPaymentMethodOnCartOutput {

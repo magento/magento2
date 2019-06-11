@@ -168,7 +168,7 @@ class CartTotalsTest extends GraphQlAbstract
 
         $discountResponse = $response['cart']['prices']['discount'];
         self::assertEquals(-10, $discountResponse['amount']['value']);
-        self::assertEquals('50% Off for all orders', $discountResponse['label']);
+        self::assertEquals(['50% Off for all orders'], $discountResponse['label']);
     }
 
     /**
@@ -188,7 +188,7 @@ class CartTotalsTest extends GraphQlAbstract
 
         $discountResponse = $response['cart']['prices']['discount'];
         self::assertEquals(-11, $discountResponse['amount']['value']);
-        self::assertEquals('50% Off for all orders, Test Coupon for General', $discountResponse['label']);
+        self::assertEquals(['50% Off for all orders', 'Test Coupon for General'], $discountResponse['label']);
     }
 
     /**

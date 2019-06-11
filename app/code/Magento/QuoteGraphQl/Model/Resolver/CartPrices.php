@@ -96,8 +96,8 @@ class CartPrices implements ResolverInterface
     private function getDiscount(Total $total, string $currency)
     {
         return [
-            'label' => $total->getDiscountDescription(),
-            'amount' => ['value' => $total->getDiscountAmount(), "currency" => $currency]
+            'label' => explode(', ', $total->getDiscountDescription()),
+            'amount' => ['value' => $total->getDiscountAmount(), 'currency' => $currency]
         ];
     }
 }
