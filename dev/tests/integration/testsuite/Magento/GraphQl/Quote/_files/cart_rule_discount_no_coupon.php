@@ -15,7 +15,6 @@ use Magento\SalesRule\Model\Data\RuleLabelFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-
 $objectManager = Bootstrap::getObjectManager();
 /** @var RuleRepositoryInterface $ruleRepository */
 $ruleRepository = $objectManager->get(RuleRepositoryInterface::class);
