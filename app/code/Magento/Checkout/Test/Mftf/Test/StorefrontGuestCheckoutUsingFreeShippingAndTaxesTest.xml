@@ -166,8 +166,7 @@
         </actionGroup>
         <reloadPage stepKey="reloadThePage"/>
         <waitForPageLoad stepKey="waitForPageToReload"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.taxAmount}}" stepKey="waitForShippingOption"/>
-        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$9.60" stepKey="seeTaxInTheCartSummary"/>
+        <waitForText selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$9.60" time="90" stepKey="waitForTaxAmount"/>
 
         <!--Select Free Shipping and proceed to checkout -->
         <click selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="selectFlatRateShippingMethod"/>
