@@ -66,13 +66,6 @@ class Products implements ResolverInterface
             ]
         ];
         $searchCriteria = $this->searchCriteriaBuilder->build($field->getName(), $args);
-        if ($args['currentPage'] < 1) {
-            throw new GraphQlInputException(__('currentPage value must be greater than 0.'));
-        }
-        if ($args['pageSize'] < 1) {
-            throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
-        }
-
         $searchCriteria->setCurrentPage($args['currentPage']);
         $searchCriteria->setPageSize($args['pageSize']);
         $searchResult = $this->filterQuery->getResult($searchCriteria, $info);
