@@ -17,7 +17,7 @@ use Magento\Framework\Code\Generator\InterfaceGenerator;
 use Magento\Framework\Dto\DtoConfig;
 use Magento\Framework\Reflection\TypeProcessor;
 
-class GetSourceCode
+class GetDtoSourceCode
 {
     /**
      * @var DtoConfig
@@ -42,16 +42,20 @@ class GetSourceCode
     /**
      * @param DtoConfig $dtoConfig
      * @param TypeProcessor $typeProcessor
+     * @param ClassGenerator|null $classGenerator
+     * @param InterfaceGenerator|null $interfaceGenerator
      */
     public function __construct(
         DtoConfig $dtoConfig,
-        TypeProcessor $typeProcessor
+        TypeProcessor $typeProcessor,
+        ClassGenerator $classGenerator = null,
+        InterfaceGenerator $interfaceGenerator = null
     ) {
         $this->dtoConfig = $dtoConfig;
         $this->typeProcessor = $typeProcessor;
 
-        $this->classGenerator = new ClassGenerator();
-        $this->interfaceGenerator = new InterfaceGenerator();
+        $this->classGenerator = $classGenerator ?: new ClassGenerator();
+        $this->interfaceGenerator = $interfaceGenerator ?: new InterfaceGenerator();
     }
 
     /**

@@ -12,7 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\EntityAbstract;
 use Magento\Framework\Code\Generator\Io;
-use Magento\Framework\Dto\Code\Generator as DtoGenerator;
+use Magento\Framework\Dto\Code\Generator\Dto as DtoGenerator;
 use Magento\Framework\Dto\DtoConfig;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;

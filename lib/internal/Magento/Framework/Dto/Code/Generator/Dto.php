@@ -6,15 +6,19 @@
 
 declare(strict_types=1);
 
-namespace Magento\Framework\Dto\Code;
+namespace Magento\Framework\Dto\Code\Generator;
 
 use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Code\Generator\Io;
+use Magento\Framework\Dto\Code\GetDtoSourceCode;
 use Magento\Framework\Exception\FileSystemException;
 
-class Generator
+/**
+ * Dto generator
+ */
+class Dto
 {
     /**
      * @var array
@@ -27,20 +31,20 @@ class Generator
     private $io;
 
     /**
-     * @var GetSourceCode
+     * @var GetDtoSourceCode
      */
-    private $getSourceCode;
+    private $getDtoSourceCode;
 
     /**
      * Generator constructor.
      * @param DirectoryList $directoryList
-     * @param GetSourceCode $getSourceCode
+     * @param GetDtoSourceCode $getDtoSourceCode
      * @param Io|null $io
      * @throws FileSystemException
      */
     public function __construct(
         DirectoryList $directoryList,
-        GetSourceCode $getSourceCode,
+        GetDtoSourceCode $getDtoSourceCode,
         Io $io = null
     ) {
         if ($io !== null) {
@@ -54,7 +58,7 @@ class Generator
             );
         }
 
-        $this->getSourceCode = $getSourceCode;
+        $this->getDtoSourceCode = $getDtoSourceCode;
     }
 
     /**
@@ -105,7 +109,7 @@ class Generator
     {
         try {
             if ($this->validateData($className)) {
-                $sourceCode = $this->getSourceCode->execute($className);
+                $sourceCode = $this->getDtoSourceCode->execute($className);
                 if ($sourceCode) {
                     $fileName = $this->io->generateResultFileName($className);
                     $this->io->writeResultFile($fileName, $sourceCode);

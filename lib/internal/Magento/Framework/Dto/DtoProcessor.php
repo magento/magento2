@@ -10,16 +10,12 @@ namespace Magento\Framework\Dto;
 
 use Exception;
 use LogicException;
-use Magento\Framework\Api\AbstractSimpleObject;
-use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ExtensionAttribute\InjectorProcessor;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessor;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Api\ObjectFactory;
 use Magento\Framework\Api\SimpleDataObjectConverter;
-use Magento\Framework\DataObject;
-use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\NameFinder;
@@ -35,26 +31,6 @@ use Zend\Code\Reflection\ClassReflection;
  */
 class DtoProcessor
 {
-    /**
-     * Strategy for setter hydration
-     */
-    public const HYDRATOR_STRATEGY_SETTER = 'setter';
-
-    /**
-     * Strategy for constructor parameters injection
-     */
-    public const HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM = 'constructor';
-
-    /**
-     * Strategy for constructor data parameter injection
-     */
-    public const HYDRATOR_STRATEGY_CONSTRUCTOR_DATA = 'data';
-
-    /**
-     * List of orphan parameters
-     */
-    public const HYDRATOR_STRATEGY_ORPHAN = 'orphan';
-
     /**
      * @var ConfigInterface
      */
@@ -96,6 +72,12 @@ class DtoProcessor
     private $injectorProcessor;
 
     /**
+     * @var DtoConfig
+     */
+    private $dtoConfig;
+
+    /**
+     * @param DtoConfig $dtoConfig
      * @param ObjectFactory $objectFactory
      * @param TypeProcessor $typeProcessor
      * @param ConfigInterface $config
@@ -106,6 +88,7 @@ class DtoProcessor
      * @param MethodsMap $methodsMap
      */
     public function __construct(
+        DtoConfig $dtoConfig,
         ObjectFactory $objectFactory,
         TypeProcessor $typeProcessor,
         ConfigInterface $config,
@@ -123,57 +106,7 @@ class DtoProcessor
         $this->joinProcessor = $joinProcessor;
         $this->methodsMap = $methodsMap;
         $this->injectorProcessor = $injectorProcessor;
-    }
-
-    /**
-     * Return true if a class is a data object using "data" constructor field
-     *
-     * @param string $className
-     * @return bool
-     */
-    private function isDataObject(string $className): bool
-    {
-        $className = $this->getRealClassName($className);
-        return
-            is_subclass_of($className, AbstractSimpleObject::class) ||
-            is_subclass_of($className, DataObject::class);
-    }
-
-    /**
-     * Return true if a class is extensible through extension attributes
-     *
-     * @param string $className
-     * @return bool
-     */
-    private function isExtensibleObject(string $className): bool
-    {
-        return
-            is_subclass_of($className, ExtensibleDataInterface::class);
-    }
-
-    /**
-     * Return true if a class is extensible through custom attributes
-     *
-     * @param string $className
-     * @return bool
-     */
-    private function isCustomAttributesObject(string $className): bool
-    {
-        return
-            is_subclass_of($className, CustomAttributesDataInterface::class);
-    }
-
-    /**
-     * Return true if a class is inherited from \Magento\Framework\Model\AbstractModel and requires setDataChange
-     *
-     * @param string $className
-     * @return bool
-     */
-    private function isDataModel(string $className): bool
-    {
-        $className = $this->getRealClassName($className);
-        return
-            is_subclass_of($className, AbstractModel::class);
+        $this->dtoConfig = $dtoConfig;
     }
 
     /**
@@ -187,6 +120,7 @@ class DtoProcessor
         $preferenceClass = $this->config->getPreference($className);
         return $preferenceClass ?: $className;
     }
+
 
     /**
      * @param $value
@@ -230,7 +164,7 @@ class DtoProcessor
      */
     private function createObjectByType($value, string $type)
     {
-        if (is_object($value) || is_array($value) || ($type === 'mixed') || ($type === 'array')) {
+        if (is_object($value) || ($type === 'array')) {
             return $value;
         }
 
@@ -249,127 +183,6 @@ class DtoProcessor
         }
 
         return $this->createFromArray($value, $type);
-    }
-
-    /**
-     * Return true if class is immutable
-     *
-     * @param string $className
-     * @return bool
-     */
-    public function isImmutable(string $className): bool
-    {
-        // TODO: Add a cache layer here
-        $methods = get_class_methods($className);
-
-        foreach ($methods as $method) {
-            if (preg_match('/^set[A-Z]/', $method)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Return the strategy for values injection.
-     *
-     *
-     * @param string $className
-     * @param array $data
-     * @return array
-     * @throws ReflectionException
-     */
-    public function getValuesHydratingStrategy(string $className, array $data): array
-    {
-        // TODO:: Add a cache layer here
-        $strategy = [
-            self::HYDRATOR_STRATEGY_SETTER => [],
-            self::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM => [],
-            self::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA => [],
-            self::HYDRATOR_STRATEGY_ORPHAN => [],
-        ];
-
-        $class = new ClassReflection($className);
-        $realClassName = $this->getRealClassName($className);
-        $realClass = new ClassReflection($realClassName);
-
-        // Enumerate parameters and types
-        $paramTypes = [];
-        foreach ($data as $propertyName => $propertyValue) {
-            $type = $this->getPropertyTypeFromGetterMethod($class, $propertyName);
-            $paramTypes[$propertyName] = $type;
-        }
-
-        $requiredConstructorParams = [];
-
-        // Check for constructor parameters
-        $constructor = $realClass->getConstructor();
-        if ($constructor !== null) {
-            // Inject data constructor parameter
-            if ($this->isDataObject($realClass->getName())) {
-                foreach ($data as $propertyName => $propertyValue) {
-                    $type = $paramTypes[$propertyName];
-                    if ($paramTypes[$propertyName] !== '') {
-                        $strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA][$propertyName] = [
-                            'type' => $type
-                        ];
-                    }
-                }
-            }
-
-            // Inject into named parameters if a getter method exists
-            $parameters = $constructor->getParameters();
-            foreach ($parameters as $parameter) {
-                $snakeCaseProperty = SimpleDataObjectConverter::camelCaseToSnakeCase($parameter->getName());
-                $type = $paramTypes[$snakeCaseProperty] ?? '';
-
-                if (($type !== '') && isset($data[$snakeCaseProperty])) {
-                    unset($strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA][$snakeCaseProperty]);
-                    $strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM][$snakeCaseProperty] = [
-                        'parameter' => $parameter->getName(),
-                        'type' => $type
-                    ];
-
-                    if (!$parameter->isDefaultValueAvailable()) {
-                        $requiredConstructorParams[] = $snakeCaseProperty;
-                    }
-                }
-            }
-        }
-
-        // Fall back to setters if defined
-        foreach ($data as $propertyName => $propertyValue) {
-            $camelCaseProperty = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName);
-            try {
-                $setterMethod = $this->nameFinder->getSetterMethodName($class, $camelCaseProperty);
-                $type = $paramTypes[$propertyName] ?? '';
-                if ($type !== '') {
-                    if (in_array($propertyName, $requiredConstructorParams, true)) {
-                        continue;
-                    }
-
-                    unset(
-                        $strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA][$propertyName],
-                        $strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM][$propertyName]
-                    );
-
-                    $strategy[self::HYDRATOR_STRATEGY_SETTER][$propertyName] = [
-                        'type' => $type,
-                        'method' => $setterMethod
-                    ];
-                }
-
-            } catch (LogicException $e) {
-                if (!isset($strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA][$propertyName]) &&
-                    !isset($strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM][$propertyName])
-                ) {
-                    $strategy[self::HYDRATOR_STRATEGY_ORPHAN][] = $propertyName;
-                }
-            }
-        }
-
-        return $strategy;
     }
 
     /**
@@ -397,42 +210,6 @@ class DtoProcessor
     }
 
     /**
-     * Return true if the array is associative
-     *
-     * @param array $arr
-     * @return bool
-     */
-    private function isAssociativeArray(array $arr): bool
-    {
-        if ([] === $arr) {
-            return false;
-        }
-
-        return array_keys($arr) !== range(0, count($arr) - 1);
-    }
-
-    /**
-     * @param array $customAttributes
-     * @return array
-     */
-    private function extractCustomAttributes(array $customAttributes): array
-    {
-        if (!$this->isAssociativeArray($customAttributes)) {
-            return $customAttributes;
-        }
-
-        $out = [];
-        foreach ($customAttributes as $attributeCode => $attributeValue) {
-            $out[] = [
-                'attribute_code' => $attributeCode,
-                'value' => $attributeValue
-            ];
-        }
-
-        return $out;
-    }
-
-    /**
      * Inject extension attributes from an array definition
      *
      * @param string $type
@@ -448,12 +225,10 @@ class DtoProcessor
         );
 
         $extensionAttributes = $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] ?? [];
-        if ($this->isExtensibleObject($type)) {
-            $extensionAttributes = array_replace(
-                $extensionAttributes,
-                $this->injectorProcessor->execute($type, $extensionAttributes)
-            );
-        }
+        $extensionAttributes = array_replace(
+            $extensionAttributes,
+            $this->injectorProcessor->execute($type, $extensionAttributes)
+        );
 
         foreach ($extensionAttributes as $attributeName => $attributeValue) {
             if (!is_array($attributeValue) && !is_object($attributeValue)) {
@@ -484,12 +259,15 @@ class DtoProcessor
      *
      * @param array $data
      * @param string $type
-     * @param string $interfaceName
      * @return object
      * @throws ReflectionException
      */
-    public function createFromArray(array $data, string $type, ?string $interfaceName = null)
+    public function createFromArray(array $data, string $type)
     {
+        if (!$this->dtoConfig->isDto($type)) {
+            throw new LogicException($type . ' is not configured as DTO');
+        }
+
         // Normalize snake case properties
         foreach ($data as $k => $v) {
             $snakeCaseKey = SimpleDataObjectConverter::camelCaseToSnakeCase($k);
@@ -499,62 +277,29 @@ class DtoProcessor
             }
         }
 
-        if ($this->isExtensibleObject($type)) {
-            if (!isset($data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]) ||
-                !is_object($data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY])
-            ) {
-                $data = $this->injectExtensionAttributesByArray($type, $data);
-            }
-
-            $data = $this->joinProcessor->extractExtensionAttributes($type, $data);
-        }
-
-        if (isset($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]) &&
-            $this->isCustomAttributesObject($type)
+        if (!isset($data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]) ||
+            !is_object($data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY])
         ) {
-            $data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES] = $this->extractCustomAttributes(
-                $data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]
-            );
+            $data = $this->injectExtensionAttributesByArray($type, $data);
         }
 
-        $interfaceName = $interfaceName ?: $type;
-        $strategy = $this->getValuesHydratingStrategy($interfaceName, $data);
+        $data = $this->joinProcessor->extractExtensionAttributes($type, $data);
+
+        $dtoConfig = $this->dtoConfig->get($type);
 
         $constructorParams = [];
-        foreach ($strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM] as $paramData => $info) {
-            $paramConstructor = $info['parameter'];
-            $paramType = $info['type'];
-            $constructorParams[$paramConstructor] = $this->createObjectByType($data[$paramData], $paramType);
-        }
+        foreach ($data as $k => $v) {
+            $propertyName = SimpleDataObjectConverter::snakeCaseToCamelCase($k);
 
-        if (!empty($strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA])) {
-            $constructorParams['data'] = [];
-
-            foreach ($strategy[self::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA] as $paramData => $info) {
-                $paramType = $info['type'];
-                $constructorParams['data'][$paramData] = $this->createObjectByType($data[$paramData], $paramType);
+            if (!isset($dtoConfig['properties'][$propertyName])) {
+                continue;
             }
+
+            $constructorParams[$propertyName] =
+                $this->createObjectByType($v, $dtoConfig['properties'][$propertyName]['type']);
         }
 
-        $resObject = $this->objectFactory->create($type, $constructorParams);
-
-        foreach ($strategy[self::HYDRATOR_STRATEGY_SETTER] as $paramData => $info) {
-            $methodName = $info['method'];
-            $paramType = $info['type'];
-            $resObject->$methodName($this->createObjectByType($data[$paramData], $paramType));
-        }
-
-        if ($resObject instanceof CustomAttributesDataInterface) {
-            foreach ($strategy[self::HYDRATOR_STRATEGY_ORPHAN] as $paramName) {
-                $resObject->setCustomAttribute($paramName, $data[$paramName]);
-            }
-        }
-
-        if ($this->isDataModel($interfaceName)) {
-            $resObject->setDataChanges(true);
-        }
-
-        return $resObject;
+        return $this->objectFactory->create($type, $constructorParams);
     }
 
     /**
@@ -562,19 +307,17 @@ class DtoProcessor
      *
      * @param $sourceObject
      * @param array $data
-     * @param string|null $objectType
      * @return object
      * @throws ReflectionException
      */
     public function createUpdatedObjectFromArray(
         $sourceObject,
-        array $data,
-        ?string $objectType = null
+        array $data
     ) {
-        $sourceObjectData = $this->getObjectData($sourceObject, $objectType);
+        $sourceObjectData = $this->getObjectData($sourceObject);
         $data = array_replace($sourceObjectData, $data);
 
-        return $this->createFromArray($data, get_class($sourceObject), $objectType);
+        return $this->createFromArray($data, get_class($sourceObject));
     }
 
     /**
@@ -604,17 +347,17 @@ class DtoProcessor
      * Merge data into object data
      *
      * @param $sourceObject
-     * @param string|null $objectType
      * @return array
      * @throws ReflectionException
      */
-    public function getObjectData($sourceObject, ?string $objectType = null): array
+    public function getObjectData($sourceObject): array
     {
+        $objectType = get_class($sourceObject);
+
         if ($sourceObject === null || !is_object($sourceObject)) {
             return [];
         }
 
-        $objectType = $objectType ?: get_class($sourceObject);
         $sourceObjectMethods = $this->methodsMap->getMethodsMap($objectType);
 
         $res = [];
@@ -635,23 +378,8 @@ class DtoProcessor
                         continue;
                     }
 
-                    if (($propertyName === 'extension_attributes') &&
-                        empty($value) &&
-                        $this->isExtensibleObject($objectType)
-                    ) {
+                    if (($propertyName === 'extension_attributes') && empty($value)) {
                         continue;
-                    }
-
-                    if ($this->isCustomAttributesObject($objectType)) {
-                        if (($propertyName === 'custom_attributes') &&
-                            empty($value)
-                        ) {
-                            continue;
-                        }
-
-                        if ($propertyName === 'custom_attributes_codes') {
-                            continue;
-                        }
                     }
 
                     if ($value !== null) {

@@ -3,19 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
-namespace Magento\Framework\Api\TestDtoClasses;
+namespace Magento\Framework\Dto\Test\Unit\Code\Generator\Mock;
 
-class TestDto2
+class SampleDto
 {
     /**
-     * @var int
+     * @var string
      */
     private $param1;
 
     /**
-     * @var float
+     * @var string
      */
     private $param2;
 
@@ -25,13 +26,13 @@ class TestDto2
     private $param3;
 
     /**
-     * @param int $param1
-     * @param float $param2
+     * @param string $param1
+     * @param string $param2
      * @param string $param3
      */
     public function __construct(
-        int $param1,
-        float $param2,
+        string $param1,
+        string $param2,
         string $param3
     ) {
         $this->param1 = $param1;
@@ -40,17 +41,17 @@ class TestDto2
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getParam1(): int
+    public function getParam1(): string
     {
         return $this->param1;
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getParam2(): float
+    public function getParam2(): string
     {
         return $this->param2;
     }

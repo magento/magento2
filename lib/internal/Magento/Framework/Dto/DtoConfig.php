@@ -47,4 +47,20 @@ class DtoConfig extends Data
     {
         return (bool) $this->get($className, false);
     }
+
+    /**
+     * Return true if a class is defined as immutable DTO
+     *
+     * @param string $className
+     * @return bool
+     */
+    public function isImmutable(string $className): bool
+    {
+        $config = $this->get($className);
+        if (!$config) {
+            return false;
+        }
+
+        return !$config['mutable'];
+    }
 }

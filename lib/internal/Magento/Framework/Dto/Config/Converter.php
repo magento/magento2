@@ -6,6 +6,7 @@ namespace Magento\Framework\Dto\Config;
 use DOMDocument;
 use DOMNode;
 use DOMNodeList;
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Config\ConverterInterface;
 
 class Converter implements ConverterInterface
@@ -51,7 +52,7 @@ class Converter implements ConverterInterface
 
             $properties = $dto->getElementsByTagName('property');
             foreach ($properties as $property) {
-                $propertyId = $property->getAttribute('name');
+                $propertyId = SimpleDataObjectConverter::snakeCaseToCamelCase($property->getAttribute('name'));
                 $propertyType = $property->getAttribute('type');
                 $propertyOptional = filter_var($property->getAttribute('optional'), FILTER_VALIDATE_BOOLEAN);
                 $propertyNullable = filter_var($property->getAttribute('nullable'), FILTER_VALIDATE_BOOLEAN);

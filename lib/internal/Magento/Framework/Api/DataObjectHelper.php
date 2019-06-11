@@ -10,10 +10,12 @@ namespace Magento\Framework\Api;
 use LogicException;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Dto\DtoConfig;
 use Magento\Framework\Dto\DtoProcessor;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
+use ReflectionException;
 
 /**
  * Data object helper.
@@ -58,6 +60,11 @@ class DataObjectHelper
     private $dtoProcessor;
 
     /**
+     * @var DtoConfig|null
+     */
+    private $dtoConfig;
+
+    /**
      * @param ObjectFactory $objectFactory
      * @param DataObjectProcessor $objectProcessor
      * @param TypeProcessor $typeProcessor
@@ -65,6 +72,7 @@ class DataObjectHelper
      * @param JoinProcessorInterface $joinProcessor
      * @param MethodsMap $methodsMapProcessor
      * @param DtoProcessor $dtoProcessor
+     * @param DtoConfig|null $dtoConfig
      */
     public function __construct(
         ObjectFactory $objectFactory,
@@ -73,7 +81,8 @@ class DataObjectHelper
         ExtensionAttributesFactory $extensionFactory,
         JoinProcessorInterface $joinProcessor,
         MethodsMap $methodsMapProcessor,
-        DtoProcessor $dtoProcessor = null
+        DtoProcessor $dtoProcessor = null,
+        DtoConfig $dtoConfig = null
     ) {
         $this->objectFactory = $objectFactory;
         $this->objectProcessor = $objectProcessor;
@@ -83,6 +92,8 @@ class DataObjectHelper
         $this->methodsMapProcessor = $methodsMapProcessor;
         $this->dtoProcessor = $dtoProcessor ?:
             ObjectManager::getInstance()->get(DtoProcessor::class);
+        $this->dtoConfig = $dtoConfig ?:
+            ObjectManager::getInstance()->get(DtoConfig::class);
     }
 
     /**
@@ -92,9 +103,14 @@ class DataObjectHelper
      * @param array $data
      * @param string $interfaceName
      * @return $this
+     * @throws ReflectionException
      */
     public function populateWithArray($dataObject, array $data, $interfaceName)
     {
+        if ($this->dtoConfig->isDto($dataObject) || $this->dtoConfig->isDto($interfaceName)) {
+            return $this->dtoProcessor->createFromArray($data, $interfaceName);
+        }
+
         if ($dataObject instanceof ExtensibleDataInterface) {
             $data = $this->joinProcessor->extractExtensionAttributes(get_class($dataObject), $data);
         }

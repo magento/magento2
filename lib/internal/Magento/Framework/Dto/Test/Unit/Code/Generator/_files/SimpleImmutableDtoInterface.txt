@@ -1,0 +1,31 @@
+declare(strict_types=1);
+
+namespace Magento\Framework\Dto\Test\Unit\Code\Generator;
+
+interface TestDtoInterface extends \Magento\Framework\Api\ImmutableExtensibleDataInterface
+{
+    /**
+     * @return string
+     */
+    public function getProp1() : string;
+
+    /**
+     * @return string|null
+     */
+    public function getProp2() : ?string;
+
+    /**
+     * @return string|null
+     */
+    public function getProp3() : ?string;
+
+    /**
+     * @return string|null
+     */
+    public function getProp4() : ?string;
+
+    /**
+     * @return \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoExtensionInterface|null
+     */
+    public function getExtensionAttributes() : ?\Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoExtensionInterface;
+}

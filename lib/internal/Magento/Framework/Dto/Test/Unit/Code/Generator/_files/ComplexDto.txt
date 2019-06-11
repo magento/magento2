@@ -1,0 +1,72 @@
+declare(strict_types=1);
+
+namespace Magento\Framework\Dto\Test\Unit\Code\Generator;
+
+class TestDto implements TestDtoInterface
+{
+    /**
+     * @var array
+     */
+    private $prop1 = null;
+
+    /**
+     * @var \Magento\Framework\Dto\Test\Unit\Code\Generator\TestObject
+     */
+    private $prop2 = null;
+
+    /**
+     * @var \Magento\Framework\Dto\Test\Unit\Code\Generator\TestObject[]
+     */
+    private $prop3 = null;
+
+    /**
+     * @var \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoExtensionInterface
+     */
+    private $extensionAttributes = null;
+
+    /**
+     * @param array $prop1
+     * @param \Magento\Framework\Dto\Test\Unit\Code\Generator\TestObject $prop2
+     * @param \Magento\Framework\Dto\Test\Unit\Code\Generator\TestObject[] $prop3
+     * @param \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoExtensionInterface|null $extensionAttributes
+     */
+    public function __construct(array $prop1, \Magento\Framework\Dto\Test\Unit\Code\Generator\TestObject $prop2, array $prop3, ?\Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoExtensionInterface $extensionAttributes = null)
+    {
+        $this->prop1 = $prop1;
+        $this->prop2 = $prop2;
+        $this->prop3 = $prop3;
+        $this->extensionAttributes = $extensionAttributes;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProp1() : array
+    {
+        return $this->prop1;
+    }
+
+    /**
+     * @return \Magento\Framework\Dto\Test\Unit\Code\Generator\TestObject
+     */
+    public function getProp2() : \Magento\Framework\Dto\Test\Unit\Code\Generator\TestObject
+    {
+        return $this->prop2;
+    }
+
+    /**
+     * @return \Magento\Framework\Dto\Test\Unit\Code\Generator\TestObject[]
+     */
+    public function getProp3() : array
+    {
+        return $this->prop3;
+    }
+
+    /**
+     * @return \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoExtensionInterface|null
+     */
+    public function getExtensionAttributes() : ?\Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoExtensionInterface
+    {
+        return $this->extensionAttributes;
+    }
+}

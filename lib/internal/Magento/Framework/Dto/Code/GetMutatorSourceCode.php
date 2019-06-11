@@ -1,37 +1,70 @@
 <?php
 /**
- * DTO mutator generator
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
-namespace Magento\Framework\ObjectManager\Code\Generator;
+namespace Magento\Framework\Dto\Code;
 
-use Magento\Framework\Dto\DtoProcessor;
 use Magento\Framework\Api\SimpleDataObjectConverter;
-use Magento\Framework\Code\Generator\EntityAbstract;
+use Magento\Framework\Code\Generator\ClassGenerator;
+use Magento\Framework\Code\Generator\CodeGeneratorInterface;
+use Magento\Framework\Dto\DtoProcessor;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 
-/**
- * Class Mutator
- *
- * @package Magento\Framework\ObjectManager\Code\Generator
- */
-class Mutator extends EntityAbstract
+class GetMutatorSourceCode
 {
     /**
-     * Entity type
+     * @var CodeGeneratorInterface
      */
-    public const ENTITY_TYPE = 'mutator';
+    private $classGenerator;
 
     /**
-     * @inheritDoc
+     * @param ClassGenerator|null $classGenerator
      */
-    protected function _getClassProperties()
+    public function __construct(
+        ClassGenerator $classGenerator = null
+    ) {
+        $this->classGenerator = $classGenerator ?: new ClassGenerator();
+    }
+
+    /**
+     * @param string $sourceCode
+     * @return string
+     */
+    private function fixCodeStyle($sourceCode): string
+    {
+        $sourceCode = preg_replace("/{\n{2,}/m", "{\n", $sourceCode);
+        $sourceCode = preg_replace("/\n{2,}}/m", "\n}", $sourceCode);
+        return $sourceCode;
+    }
+
+    /**
+     * @param string $sourceClassName
+     * @param string $resultClassName
+     * @return string
+     * @throws ReflectionException
+     */
+    public function execute(string $sourceClassName, string $resultClassName): string
+    {
+        $methods = $this->getClassMethods($sourceClassName, $resultClassName);
+
+        $this->classGenerator
+            ->setName($resultClassName)
+            ->addProperties($this->getClassProperties())
+            ->addMethods($methods);
+
+        return 'declare(strict_types=1);' . "\n\n" . $this->fixCodeStyle($this->classGenerator->generate());
+    }
+
+    /**
+     * @return array
+     */
+    private function getClassProperties(): array
     {
         $dtoProcessor = [
             'name' => 'dtoProcessor',
@@ -66,9 +99,9 @@ class Mutator extends EntityAbstract
     }
 
     /**
-     * @inheritDoc
+     * @return array
      */
-    protected function _getDefaultConstructorDefinition()
+    private function getConstructor(): array
     {
         return [
             'name' => '__construct',
@@ -80,7 +113,7 @@ class Mutator extends EntityAbstract
             ],
             'body' => '$this->dtoProcessor = $dtoProcessor;',
             'docblock' => [
-                'shortDescription' => ucfirst(static::ENTITY_TYPE) . ' constructor',
+                'shortDescription' => 'Mutator constructor',
                 'tags' => [
                     [
                         'name' => 'param',
@@ -94,28 +127,29 @@ class Mutator extends EntityAbstract
     /**
      * Get mutate method
      *
+     * @param string $sourceClassName
      * @return array
      */
-    private function getMutateMethod(): array
+    private function getMutateMethod(string $sourceClassName): array
     {
         return [
             'name' => 'mutate',
             'parameters' => [
                 [
                     'name' => 'sourceObject',
-                    'type' => $this->getSourceClassName(),
+                    'type' => $sourceClassName,
                 ],
             ],
             'body' => '$res = $this->dtoProcessor->createUpdatedObjectFromArray($sourceObject, $this->data);' . "\n" .
                 '$this->data = [];' . "\n" .
                 'return $res;',
-            'returnType' => $this->getSourceClassName(),
+            'returnType' => $sourceClassName,
             'docblock' => [
-                'shortDescription' => ucfirst(static::ENTITY_TYPE) . ' constructor',
+                'shortDescription' => 'Mutator constructor',
                 'tags' => [
                     [
                         'name' => 'sourceObject',
-                        'description' => $this->getSourceClassName(),
+                        'description' => $sourceClassName,
                     ],
                 ]
             ]
@@ -123,16 +157,19 @@ class Mutator extends EntityAbstract
     }
 
     /**
+     * @param string $resultClassName
      * @param string $propertyCamelCase
      * @param ReflectionMethod $method
      * @return array
      */
-    private function generateWithMethod(string $propertyCamelCase, ReflectionMethod $method): array
-    {
+    private function generateWithMethods(
+        string $resultClassName,
+        string $propertyCamelCase,
+        ReflectionMethod $method
+    ): array {
         $snakeCaseName = SimpleDataObjectConverter::camelCaseToSnakeCase($propertyCamelCase);
         $docBlockType = $method->getReturnType();
         $valueType = $method->getReturnType();
-        $mutatorClassName = $this->getSourceClassName() . 'Mutator';
 
         return [
             'name' => 'with' . $propertyCamelCase,
@@ -142,7 +179,7 @@ class Mutator extends EntityAbstract
                     'type' => $valueType
                 ]
             ],
-            'returnType' => $mutatorClassName,
+            'returnType' => $resultClassName,
             'body' => "\$this->data['" . $snakeCaseName . "'] = \$value;\nreturn \$this;",
             'docblock' => [
                 'shortDescription' => 'Mutator for ' . $snakeCaseName,
@@ -153,7 +190,7 @@ class Mutator extends EntityAbstract
                     ],
                     [
                         'name' => 'return',
-                        'description' => $mutatorClassName
+                        'description' => $resultClassName
                     ],
                 ],
             ],
@@ -161,15 +198,16 @@ class Mutator extends EntityAbstract
     }
 
     /**
-     * @inheritDoc
+     * @param string $sourceClassName
+     * @param string $resultClassName
+     * @return array
      * @throws ReflectionException
      */
-    protected function _getClassMethods()
+    private function getClassMethods(string $sourceClassName, string $resultClassName): array
     {
-        $generatedMethods = [$this->_getDefaultConstructorDefinition()];
+        $generatedMethods = [$this->getConstructor()];
 
-        $typeName = $this->getSourceClassName();
-        $reflection = new ReflectionClass($typeName);
+        $reflection = new ReflectionClass($sourceClassName);
 
         $methods = $reflection->getMethods(ReflectionMethod::IS_PUBLIC);
         foreach ($methods as $method) {
@@ -177,20 +215,16 @@ class Mutator extends EntityAbstract
                 preg_match('/^(is|get)([A-Z]\w*)$/', $method->getName(), $matches)
             ) {
                 $camelCaseName = $matches[2];
-                $generatedMethods[] = $this->generateWithMethod($camelCaseName, $method);
+                $generatedMethods[] = $this->generateWithMethods(
+                    $resultClassName,
+                    $camelCaseName,
+                    $method
+                );
             }
         }
 
-        $generatedMethods[] = $this->getMutateMethod();
+        $generatedMethods[] = $this->getMutateMethod($sourceClassName);
 
         return $generatedMethods;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function _generateCode()
-    {
-        return 'declare(strict_types=1);' . "\n\n" . parent::_generateCode();
     }
 }
