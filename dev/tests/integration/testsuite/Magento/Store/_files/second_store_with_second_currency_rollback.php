@@ -23,4 +23,5 @@ if ($storeId) {
     );
 }
 
+// phpcs:ignore Magento2.Security.IncludeFile
 require_once 'second_store_rollback.php';

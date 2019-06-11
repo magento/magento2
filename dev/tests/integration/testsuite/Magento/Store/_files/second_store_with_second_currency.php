@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+// phpcs:ignore Magento2.Security.IncludeFile
 require_once __DIR__ . '/second_store.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
