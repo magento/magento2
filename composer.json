@@ -89,8 +89,8 @@
         "magento/magento2-functional-testing-framework": "~2.4.0",
         "pdepend/pdepend": "2.5.2",
         "phpmd/phpmd": "@stable",
-        "phpunit/phpunit": "~6.5.0",
-        "sebastian/phpcpd": "~3.0.0",
+        "phpunit/phpunit": "~7.5.0",
+        "sebastian/phpcpd": "~4.0.0",
         "squizlabs/php_codesniffer": "3.3.1"
     },
     "suggest": {
