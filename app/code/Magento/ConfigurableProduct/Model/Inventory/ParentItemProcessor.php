@@ -52,7 +52,7 @@ class ParentItemProcessor
     }
 
     /**
-     * Process pare
+     * Process parent products
      *
      * @param Product $product
      * @return void
