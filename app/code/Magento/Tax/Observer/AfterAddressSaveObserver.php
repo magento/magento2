@@ -8,11 +8,14 @@ namespace Magento\Tax\Observer;
 use Magento\Customer\Model\Address;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Module\Manager;
+use Magento\Framework\Module\ModuleManagerInterface;
 use Magento\PageCache\Model\Config;
 use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Tax\Helper\Data;
 
+/**
+ * After address save observer.
+ */
 class AfterAddressSaveObserver implements ObserverInterface
 {
     /**
@@ -23,7 +26,7 @@ class AfterAddressSaveObserver implements ObserverInterface
     /**
      * Module manager
      *
-     * @var Manager
+     * @var ModuleManagerInterface
      */
     private $moduleManager;
 
@@ -43,13 +46,13 @@ class AfterAddressSaveObserver implements ObserverInterface
 
     /**
      * @param Data $taxHelper
-     * @param Manager $moduleManager
+     * @param ModuleManagerInterface $moduleManager
      * @param Config $cacheConfig
      * @param TaxAddressManagerInterface $addressManager
      */
     public function __construct(
         Data $taxHelper,
-        Manager $moduleManager,
+        ModuleManagerInterface $moduleManager,
         Config $cacheConfig,
         TaxAddressManagerInterface $addressManager
     ) {
@@ -60,6 +63,8 @@ class AfterAddressSaveObserver implements ObserverInterface
     }
 
     /**
+     * Execute.
+     *
      * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
