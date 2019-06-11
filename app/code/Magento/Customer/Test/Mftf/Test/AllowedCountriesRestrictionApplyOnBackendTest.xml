@@ -12,7 +12,7 @@
             <title value="Country filter on Customers page when allowed countries restriction for a default website is applied"/>
             <description value="Country filter on Customers page when allowed countries restriction for a default website is applied"/>
             <features value="Customer"/>
-            <stories value="Customer grid filter by country"/>
+            <stories value="Admin Customer Grid"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-17282"/>
             <useCaseId value="MAGETWO-86624"/>
