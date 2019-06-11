@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "33e7703ac47e1c27235b830825e14800",
+    "content-hash": "f208adf6f5c6685484ce11c84b942f2f",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -6771,7 +6771,7 @@
             "time": "2019-04-29T20:56:26+00:00"
         },
         {
-            "name": "mikey179/vfsStream",
+            "name": "mikey179/vfsstream",
             "version": "v1.6.5",
             "source": {
                 "type": "git",
