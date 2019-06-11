@@ -6,6 +6,9 @@
  */
 namespace Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit;
 
+/**
+ * @deprecated
+ */
 class Duplicate extends \Magento\Catalog\Controller\Adminhtml\Product\Duplicate
 {
 }

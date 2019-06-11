@@ -157,9 +157,19 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
                 );
 
                 if ($redirectBack === 'duplicate') {
-                    $product->unsetData('quantity_and_stock_status');
-                    $newProduct = $this->productCopier->copy($product);
-                    $this->checkUniqueAttributes($product);
+                    if ($product->getStoreId() === \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
+                        $productToDuplicate = $product;
+                    } else {
+                        $productToDuplicate = $this->productRepository->get(
+                            $product->getSku(),
+                            false,
+                            \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                            true
+                        );
+                    }
+
+                    $productToDuplicate->unsetData('quantity_and_stock_status');
+                    $newProduct = $this->productCopier->copy($productToDuplicate);
                     $this->messageManager->addSuccessMessage(__('You duplicated the product.'));
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {

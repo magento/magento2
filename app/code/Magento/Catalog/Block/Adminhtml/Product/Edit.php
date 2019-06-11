@@ -242,6 +242,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @deprecated
      */
     public function getDuplicateUrl()
     {

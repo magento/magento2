@@ -3,10 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option\Repository;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Catalog product copier.
@@ -18,41 +25,48 @@ use Magento\Catalog\Model\Product;
 class Copier
 {
     /**
-     * @var Option\Repository
-     */
-    protected $optionRepository;
-
-    /**
      * @var CopyConstructorInterface
      */
     protected $copyConstructor;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var ProductFactory
      */
     protected $productFactory;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool
+     * @var Option\Repository
+     */
+    protected $optionRepository;
+
+    /**
+     * @var MetadataPool
      */
     protected $metadataPool;
 
     /**
      * @param CopyConstructorInterface $copyConstructor
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param ProductFactory $productFactory
+     * @param ProductRepositoryInterface|null $productRepository
+     * @param MetadataPool|null $metadataPool
      */
     public function __construct(
         CopyConstructorInterface $copyConstructor,
-        \Magento\Catalog\Model\ProductFactory $productFactory
+        ProductFactory $productFactory,
+        Repository $optionRepository = null,
+        MetadataPool $metadataPool = null
     ) {
         $this->productFactory = $productFactory;
         $this->copyConstructor = $copyConstructor;
+        $this->optionRepository = $optionRepository ?: ObjectManager::getInstance()->get(Repository::class);
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**
      * Create product duplicate
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Catalog\Model\Product|\Magento\Catalog\Api\Data\ProductInterface $product
+     *
      * @return \Magento\Catalog\Model\Product
      */
     public function copy(Product $product)
@@ -61,7 +75,7 @@ class Copier
         $product->getCategoryIds();
 
         /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */
-        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
 
         /** @var \Magento\Catalog\Model\Product $duplicate */
         $duplicate = $this->productFactory->create();
@@ -79,11 +93,12 @@ class Copier
         $this->copyConstructor->build($product, $duplicate);
         $this->setDefaultUrl($product, $duplicate);
         $this->setStoresUrl($product, $duplicate);
-        $this->getOptionRepository()->duplicate($product, $duplicate);
+        $this->optionRepository->duplicate($product, $duplicate);
         $product->getResource()->duplicate(
             $product->getData($metadata->getLinkField()),
             $duplicate->getData($metadata->getLinkField())
         );
+
         return $duplicate;
     }
 
@@ -92,7 +107,9 @@ class Copier
      *
      * @param Product $product
      * @param Product $duplicate
+     *
      * @return void
+     * @throws \Exception
      */
     private function setDefaultUrl(Product $product, Product $duplicate) : void
     {
@@ -114,7 +131,9 @@ class Copier
      *
      * @param Product $product
      * @param Product $duplicate
+     *
      * @return void
+     * @throws \Exception
      */
     private function setStoresUrl(Product $product, Product $duplicate) : void
     {
@@ -158,38 +177,8 @@ class Copier
     private function modifyUrl(string $urlKey) : string
     {
         return preg_match('/(.*)-(\d+)$/', $urlKey, $matches)
-                    ? $matches[1] . '-' . ($matches[2] + 1)
-                    : $urlKey . '-1';
-    }
-
-    /**
-     * Returns product option repository.
-     *
-     * @return Option\Repository
-     * @deprecated 101.0.0
-     */
-    private function getOptionRepository()
-    {
-        if (null === $this->optionRepository) {
-            $this->optionRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Model\Product\Option\Repository::class);
-        }
-        return $this->optionRepository;
-    }
-
-    /**
-     * Returns metadata pool.
-     *
-     * @return \Magento\Framework\EntityManager\MetadataPool
-     * @deprecated 101.0.0
-     */
-    private function getMetadataPool()
-    {
-        if (null === $this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
-        }
-        return $this->metadataPool;
+            ? $matches[1] . '-' . ($matches[2] + 1)
+            : $urlKey . '-1';
     }
 
     /**
@@ -198,7 +187,7 @@ class Copier
      * @param array $productData
      * @return array
      */
-    private function removeStockItem(array $productData)
+    private function removeStockItem(array $productData) : array
     {
         if (isset($productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY])) {
             $extensionAttributes = $productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY];
@@ -206,6 +195,7 @@ class Copier
                 $extensionAttributes->setData('stock_item', null);
             }
         }
+
         return $productData;
     }
 }
