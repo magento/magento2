@@ -69,12 +69,18 @@ class InlineEdit extends \Magento\Backend\App\Action
     private $addressRegistry;
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @param Action\Context $context
      * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Escaper $escaper
      * @param AddressRegistry|null $addressRegistry
      */
     public function __construct(
@@ -84,6 +90,7 @@ class InlineEdit extends \Magento\Backend\App\Action
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\Escaper $escaper,
         AddressRegistry $addressRegistry = null
     ) {
         $this->customerRepository = $customerRepository;
@@ -91,6 +98,7 @@ class InlineEdit extends \Magento\Backend\App\Action
         $this->customerMapper = $customerMapper;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->logger = $logger;
+        $this->escaper = $escaper;
         $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
         parent::__construct($context);
     }
@@ -230,10 +238,10 @@ class InlineEdit extends \Magento\Backend\App\Action
             $this->disableAddressValidation($customer);
             $this->customerRepository->save($customer);
         } catch (\Magento\Framework\Exception\InputException $e) {
-            $this->getMessageManager()->addError($this->getErrorWithCustomerId($e->getMessage()));
+            $this->getMessageManager()->addError($this->getErrorWithCustomerId($this->escaper->escapeHtml($e->getMessage())));
             $this->logger->critical($e);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->getMessageManager()->addError($this->getErrorWithCustomerId($e->getMessage()));
+            $this->getMessageManager()->addError($this->getErrorWithCustomerId($this->escaper->escapeHtml($e->getMessage())));
             $this->logger->critical($e);
         } catch (\Exception $e) {
             $this->getMessageManager()->addError($this->getErrorWithCustomerId('We can\'t save the customer.'));
