@@ -236,9 +236,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         SitemapConfigReaderInterface $configReader = null,
         \Magento\Sitemap\Model\SitemapItemInterfaceFactory $sitemapItemFactory = null
     ) {
-        $this->_escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Escaper::class
-        );
+        $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
         $documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(DocumentRoot::class);
         $this->_directory = $filesystem->getDirectoryWrite($documentRoot->getPath());

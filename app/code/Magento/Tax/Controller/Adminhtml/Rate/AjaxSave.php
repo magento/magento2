@@ -7,6 +7,11 @@
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Magento\Tax\Model\Calculation\Rate\Converter;
+use Magento\Tax\Api\TaxRateRepositoryInterface;
+use Magento\Framework\Escaper;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
@@ -15,27 +20,25 @@ use Magento\Framework\Controller\ResultFactory;
 class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate implements HttpPostActionInterface
 {
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     private $escaper;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Tax\Model\Calculation\Rate\Converter $taxRateConverter
-     * @param \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository
-     * @param \Magento\Framework\Escaper|null $escaper
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param Converter $taxRateConverter
+     * @param TaxRateRepositoryInterface $taxRateRepository
+     * @param Escaper $escaper
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Tax\Model\Calculation\Rate\Converter $taxRateConverter,
-        \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository,
-        \Magento\Framework\Escaper $escaper = null
+        Context $context,
+        Registry $coreRegistry,
+        Converter $taxRateConverter,
+        TaxRateRepositoryInterface $taxRateRepository,
+        Escaper $escaper
     ) {
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Escaper::class
-        );
+        $this->escaper = $escaper;
         parent::__construct($context, $coreRegistry, $taxRateConverter, $taxRateRepository);
     }
 

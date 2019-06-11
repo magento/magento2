@@ -57,8 +57,8 @@ class Edit extends \Magento\Backend\Block\Widget
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Product $productHelper
+     * @param \Magento\Framework\Escaper $escaper
      * @param array $data
-     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -66,16 +66,14 @@ class Edit extends \Magento\Backend\Block\Widget
         \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Product $productHelper,
-        array $data = [],
-        \Magento\Framework\Escaper $escaper = null
+        \Magento\Framework\Escaper $escaper,
+        array $data = []
     ) {
         $this->_productHelper = $productHelper;
         $this->_attributeSetFactory = $attributeSetFactory;
         $this->_coreRegistry = $registry;
         $this->jsonEncoder = $jsonEncoder;
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Escaper::class
-        );
+        $this->escaper = $escaper;
         parent::__construct($context, $data);
     }
 

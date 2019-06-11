@@ -100,13 +100,13 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Escaper $escaper = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->_backendConfig    = $backendConfig;
-        $this->_inboxFactory     = $inboxFactory;
-        $this->curlFactory       = $curlFactory;
+        $this->_backendConfig = $backendConfig;
+        $this->_inboxFactory = $inboxFactory;
+        $this->curlFactory = $curlFactory;
         $this->_deploymentConfig = $deploymentConfig;
-        $this->productMetadata   = $productMetadata;
-        $this->urlBuilder        = $urlBuilder;
-        $this->escaper           = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+        $this->productMetadata = $productMetadata;
+        $this->urlBuilder = $urlBuilder;
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
             \Magento\Framework\Escaper::class
         );
     }
