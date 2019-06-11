@@ -34,7 +34,24 @@
         <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName(product.name)}}" stepKey="assertProductName"/>
         <see userInput="${{product.price}}.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName(product.name)}}" stepKey="AssertProductPrice"/>
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
+        <executeInSelenium function="function(\Facebook\WebDriver\Remote\RemoteWebDriver $webdriver) use($I) {
+            $selProdName = '//main//li[.//a[contains(text(), \'' . {{product.name}} . '\' )]]//div[@data-container=\'product-grid\']';
+            $I->assertEquals('2', $webdriver->findElement(\Facebook\WebDriver\WebDriverBy::xpath($selProdName))->getCSSValue('z-index'));
+        }" stepKey="assertProductContainerIsOpened"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productAddToCartByName(product.name)}}" stepKey="AssertAddToCart" />
+    </actionGroup>
+
+    <actionGroup name="StorefrontCheckAddToCartButtonAbsence">
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+        </arguments>
+        <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName(product.name)}}" stepKey="assertProductName"/>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
+        <executeInSelenium function="function(\Facebook\WebDriver\Remote\RemoteWebDriver $webdriver) use($I) {
+            $selProdName = '//main//li[.//a[contains(text(), \'' . {{product.name}} . '\' )]]//div[@data-container=\'product-grid\']';
+            $I->assertEquals('2', $webdriver->findElement(\Facebook\WebDriver\WebDriverBy::xpath($selProdName))->getCSSValue('z-index'));
+        }" stepKey="assertProductContainerIsOpened"/>
+        <dontSeeElement selector="{{StorefrontCategoryProductSection.productAddToCartByName(product.name)}}" stepKey="checkAddToCartButtonAbsence"/>
     </actionGroup>
 
     <actionGroup name="StorefrontSwitchCategoryViewToListMode">
