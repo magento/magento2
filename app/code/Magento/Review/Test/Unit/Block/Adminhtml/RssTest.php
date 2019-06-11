@@ -81,7 +81,9 @@ class RssTest extends \PHPUnit\Framework\TestCase
                         ],
                 ],
         ];
-        $productModel = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product::class, [
+        $productModel = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product::class,
+            [
                 'getStoreId',
                 'getId',
                 'getReviewId',
@@ -90,7 +92,8 @@ class RssTest extends \PHPUnit\Framework\TestCase
                 'getTitle',
                 'getNickname',
                 'getProductUrl'
-            ]);
+            ]
+        );
         $storeModel = $this->createMock(\Magento\Store\Model\Store::class);
         $this->storeManagerInterface->expects($this->once())->method('getStore')->will($this->returnValue($storeModel));
         $storeModel->expects($this->once())->method('getName')
