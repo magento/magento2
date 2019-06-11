@@ -53,7 +53,7 @@
         <data key="label">Yes</data>
         <data key="value">1</data>
     </entity>
-    <entity name="EnableFlatRateDefaultPrice">
+    <entity name="EnableFlatRateDefaultPriceConfigData">
         <data key="path">carriers/flatrate/price</data>
         <data key="scope">carriers</data>
         <data key="scope_id">1</data>

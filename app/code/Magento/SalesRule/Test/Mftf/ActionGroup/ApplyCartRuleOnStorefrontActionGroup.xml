@@ -13,6 +13,8 @@
             <argument name="couponCode" type="string"/>
         </arguments>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart" />
+        <waitForPageLoad stepKey="waitForAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <waitForText userInput="You added {{product.name}} to your shopping cart." stepKey="waitForText"/>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckoutPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
