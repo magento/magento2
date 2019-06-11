@@ -302,9 +302,9 @@ MUTATION;
     public function invalidInputDataProvider()
     {
         return [
-            ['', 'GraphQL response contains errors: Syntax Error: Expected Name, found )'],
-            ['input: ""', 'GraphQL response contains errors: Expected type CustomerAddressInput!, found "".'],
-            ['input: "foo"', 'GraphQL response contains errors: Expected type CustomerAddressInput!, found "foo".']
+            ['', 'Syntax Error: Expected Name, found )'],
+            ['input: ""', 'Expected type CustomerAddressInput!, found "".'],
+            ['input: "foo"', 'Expected type CustomerAddressInput!, found "foo".']
         ];
     }
 

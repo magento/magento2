@@ -211,8 +211,7 @@ MUTATION;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'GraphQL response contains errors: Field "updateCustomerAddress" argument "id" of type "Int!" is ' .
-            'required but not provided.'
+            'Field "updateCustomerAddress" argument "id" of type "Int!" is required but not provided.'
         );
         $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
@@ -272,19 +271,6 @@ MUTATION;
     }
 
     /**
-     * @return array
-     */
-    public function invalidIdDataProvider()
-    {
-        return [
-            ['', 'GraphQL response contains errors: Field "updateCustomerAddress" argument "id" of type "Int!" ' .
-                'is required but not provided.'],
-            //TODO: why here the internal server error being trowed?
-            ['id: ""', 'GraphQL response contains errors: Internal server error']
-        ];
-    }
-
-    /**
      * Update address with invalid input
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
@@ -319,9 +305,9 @@ MUTATION;
     public function invalidInputDataProvider()
     {
         return [
-            ['', 'GraphQL response contains errors: "input" value should be specified'],
-            ['input: ""', 'GraphQL response contains errors: Expected type CustomerAddressInput, found "".'],
-            ['input: "foo"', 'GraphQL response contains errors: Expected type CustomerAddressInput, found "foo".']
+            ['', '"input" value must be specified'],
+            ['input: ""', 'Expected type CustomerAddressInput, found ""'],
+            ['input: "foo"', 'Expected type CustomerAddressInput, found "foo"']
         ];
     }
 
@@ -329,7 +315,7 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @expectedException Exception
-     * @expectedExceptionMessage GraphQL response contains errors: Could not find a address with ID "9999"
+     * @expectedExceptionMessage Could not find a address with ID "9999"
      */
     public function testUpdateNotExistingCustomerAddress()
     {
