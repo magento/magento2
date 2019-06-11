@@ -568,8 +568,10 @@ define([
          * Remove element from selected array
          */
         removeSelected: function (value, data, event) {
-            event ? event.stopPropagation() : false;
-            this.value.remove(value);
+            if (! this.disabled()) {
+                event ? event.stopPropagation() : false;
+                this.value.remove(value);
+            }
         },
 
         /**
@@ -661,7 +663,9 @@ define([
          * @returns {Object} Chainable
          */
         toggleListVisible: function () {
-            this.listVisible(!this.listVisible());
+            if (! this.disabled()) {
+                this.listVisible(!this.listVisible());
+            }
 
             return this;
         },
