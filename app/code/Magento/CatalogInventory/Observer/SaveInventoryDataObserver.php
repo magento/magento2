@@ -13,6 +13,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\StockItemValidator;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\ConfigurableProduct\Model\Inventory\ParentItemProcessor;
 
 /**
  * Saves stock data from a product to the Stock Item
@@ -40,7 +41,7 @@ class SaveInventoryDataObserver implements ObserverInterface
     private $stockItemValidator;
 
     /**
-     * @var array
+     * @var ParentItemProcessor[]
      */
     private $parentItemProcessorPool;
 
