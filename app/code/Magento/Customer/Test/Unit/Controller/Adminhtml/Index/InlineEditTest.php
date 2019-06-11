@@ -9,6 +9,7 @@ use Magento\Customer\Model\AddressRegistry;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Escaper;
 
 /**
  * Unit tests for Inline customer edit
@@ -78,6 +79,9 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
     /** @var array */
     private $items;
 
+    /** @var \Magento\Framework\Escaper */
+    private $escaper;
+
     /**
      * Sets up mocks
      *
@@ -86,7 +90,7 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
+        $this->escaper = new Escaper();
         $this->request = $this->getMockForAbstractClass(
             \Magento\Framework\App\RequestInterface::class,
             [],
@@ -172,7 +176,8 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
                 'addressDataFactory' => $this->addressDataFactory,
                 'addressRepository' => $this->addressRepository,
                 'logger' => $this->logger,
-                'addressRegistry' => $this->addressRegistry
+                'escaper' => $this->escaper,
+                'addressRegistry' => $this->addressRegistry,
             ]
         );
         $reflection = new \ReflectionClass(get_class($this->controller));
@@ -365,6 +370,7 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($this->customerData)
             ->willThrowException($exception);
+
         $this->messageManager->expects($this->once())
             ->method('addError')
             ->with('[Customer ID: 12] Exception message');
