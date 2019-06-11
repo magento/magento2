@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateSimpleProductReassignSource">
+        <annotations>
+            <stories value="Add Simple Product"/>
+            <title value="Simple Product created and source can be reassigned"/>
+            <description value="You should be able to create a New Product via the Admin, then reassign previously assigned source."/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGridPage"/>
+            <waitForPageLoad time="30" stepKey="waitForProductGridPageLoad"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropDown"/>
+        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
+
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSource">
+            <argument name="sourceCode" value="{{_defaultSource.source_code}}"/>
+        </actionGroup>
+        <actionGroup ref="UnassignSourceFromProductActionGroup" stepKey="unassignSource">
+            <argument name="sourceCode" value="{{_defaultSource.source_code}}"/>
+        </actionGroup>
+        <comment userInput="Reassign of the same source should be possible." stepKey="reassignShouldBePossible"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="reassignSource">
+            <argument name="sourceCode" value="{{_defaultSource.source_code}}"/>
+        </actionGroup>
+    </test>
+</tests>
