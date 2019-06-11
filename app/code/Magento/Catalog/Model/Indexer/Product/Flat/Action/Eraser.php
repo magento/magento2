@@ -10,6 +10,8 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Flat item eraser. Used to clear items from the catalog flat table.
@@ -30,6 +32,11 @@ class Eraser
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
+
+    /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -80,17 +87,22 @@ class Eraser
     {
         /* @var $statusAttribute \Magento\Eav\Model\Entity\Attribute */
         $statusAttribute = $this->productIndexerHelper->getAttribute('status');
+        $productEntityAlias = $this->getProductEntityTableAlias();
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+        $linkField = $metadata->getLinkField();
 
         $select = $this->getSelectForProducts($ids);
         $select->joinLeft(
             ['status_global_attr' => $statusAttribute->getBackendTable()],
             ' status_global_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
+            . ' AND status_global_attr.'. $linkField .' = '. $productEntityAlias . '.' . $linkField
             . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID,
             []
         );
         $select->joinLeft(
             ['status_attr' => $statusAttribute->getBackendTable()],
             ' status_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
+            . ' AND status_attr.'. $linkField .' = '. $productEntityAlias . '.' . $linkField
             . ' AND status_attr.store_id = ' . $storeId,
             []
         );
@@ -118,11 +130,22 @@ class Eraser
     private function getSelectForProducts(array $ids)
     {
         $productTable = $this->productIndexerHelper->getTable('catalog_product_entity');
+        $productTableAlias = $this->getProductEntityTableAlias();
         $select = $this->connection->select()
-            ->from(['product_table' => $productTable])
+            ->from([$productTableAlias => $productTable])
             ->columns('entity_id')
-            ->where('product_table.entity_id IN(?)', $ids);
+            ->where($productTableAlias . '.entity_id IN(?)', $ids);
         return $select;
+    }
+
+    /**
+     * Get product table alias.
+     *
+     * @return string
+     */
+    private function getProductEntityTableAlias()
+    {
+        return 'product_table';
     }
 
     /**
@@ -150,5 +173,19 @@ class Eraser
                 ['entity_id IN(?)' => $productId]
             );
         }
+    }
+
+    /**
+     * Get MetadataPool instance
+     *
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }
