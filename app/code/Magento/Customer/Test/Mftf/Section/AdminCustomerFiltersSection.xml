@@ -16,5 +16,6 @@
         <element name="clearFilters" type="button" selector=".admin__data-grid-header button[data-action='grid-filter-reset']" timeout="30"/>
         <element name="clearAll" type="button" selector=".admin__data-grid-header .action-tertiary.action-clear"/>
         <element name="viewDropdown" type="button" selector=".admin__data-grid-action-bookmarks button.admin__action-dropdown"/>
+        <element name="clearAll" type="button" selector=".admin__data-grid-header .action-tertiary.action-clear" timeout="30"/>
     </section>
 </sections>
