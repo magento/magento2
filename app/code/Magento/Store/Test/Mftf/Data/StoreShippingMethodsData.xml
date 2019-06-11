@@ -36,9 +36,9 @@
     </entity>
 
     <entity name="MinimumOrderAmount100" type="minimum_order_amount">
-        <requiredEntity type="free_shipping_subtotal">Price</requiredEntity>
+        <requiredEntity type="free_shipping_subtotal">FreeShippingSubtotal100</requiredEntity>
     </entity>
-    <entity name="Price" type="free_shipping_subtotal">
+    <entity name="FreeShippingSubtotal100" type="free_shipping_subtotal">
         <data key="value">100</data>
     </entity>
 
