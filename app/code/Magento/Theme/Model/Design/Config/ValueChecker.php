@@ -83,13 +83,11 @@ class ValueChecker
      */
     protected function isEqual($value, $defaultValue)
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        switch (gettype($value)) {
-            case 'array':
-                return $this->isEqualArrays($value, $defaultValue);
-            default:
-                return $value === $defaultValue;
+        if (is_array($value)) {
+            return $this->isEqualArrays($value, $defaultValue);
         }
+
+        return $value === $defaultValue;
     }
 
     /**
