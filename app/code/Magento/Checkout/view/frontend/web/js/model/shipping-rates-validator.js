@@ -194,7 +194,7 @@ define([
                 ),
                 address;
 
-            if (this.validateAddressData(addressFlat)) {
+            if (!this.validateAddressData(addressFlat)) {
                 addressFlat = uiRegistry.get('checkoutProvider').shippingAddress;
                 address = addressConverter.formAddressDataToQuoteAddress(addressFlat);
                 selectShippingAddress(address);
