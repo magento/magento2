@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Setup\Patch\Data;
 
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
+use Magento\Sales\Setup\SalesSetup;
 use Magento\Sales\Setup\SalesSetupFactory;
 
 /**
@@ -44,16 +46,16 @@ class UpdateCreditmemoGridCurrencyCode implements DataPatchInterface, PatchVersi
      */
     public function apply()
     {
+        /** @var SalesSetup $salesSetup */
         $salesSetup = $this->salesSetupFactory->create(['setup' => $this->moduleDataSetup]);
+        /** @var Mysql $connection */
         $connection = $salesSetup->getConnection();
         $creditMemoGridTable = $salesSetup->getTable('sales_creditmemo_grid');
         $orderTable = $salesSetup->getTable('sales_order');
-        // phpcs:disable Magento2.SQL.RawQuery
-        $sql = "UPDATE {$creditMemoGridTable} AS scg 
-        JOIN {$orderTable} AS so ON so.entity_id = scg.order_id 
-        SET scg.order_currency_code = so.order_currency_code, 
-        scg.base_currency_code = so.base_currency_code;";
-
+        $select = $connection->select();
+        $condition = 'so.entity_id = scg.order_id';
+        $select->join(['so' => $orderTable], $condition, ['order_currency_code', 'base_currency_code']);
+        $sql = $connection->updateFromSelect($select, ['scg' => $creditMemoGridTable]);
         $connection->query($sql);
     }
 
