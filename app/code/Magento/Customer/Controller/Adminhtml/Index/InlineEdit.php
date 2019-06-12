@@ -82,8 +82,8 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Escaper $escaper
      * @param AddressRegistry|null $addressRegistry
+     * @param \Magento\Framework\Escaper $escaper
      */
     public function __construct(
         Action\Context $context,
@@ -92,16 +92,16 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Escaper $escaper,
-        AddressRegistry $addressRegistry = null
+        AddressRegistry $addressRegistry = null,
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->customerRepository = $customerRepository;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->customerMapper = $customerMapper;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->logger = $logger;
-        $this->escaper = $escaper;
         $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
         parent::__construct($context);
     }
 
