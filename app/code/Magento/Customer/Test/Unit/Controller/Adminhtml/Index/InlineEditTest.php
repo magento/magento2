@@ -174,8 +174,8 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
                 'addressDataFactory' => $this->addressDataFactory,
                 'addressRepository' => $this->addressRepository,
                 'logger' => $this->logger,
-                'escaper' => $this->escaper,
                 'addressRegistry' => $this->addressRegistry,
+                'escaper' => $this->escaper,
             ]
         );
         $reflection = new \ReflectionClass(get_class($this->controller));
