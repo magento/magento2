@@ -38,7 +38,7 @@ class ExportStockIndexDataTest extends WebapiAbstract
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     * @dataProvider       executeDataProvider
+     * @dataProvider executeDataProvider
      * @magentoDbIsolation disabled
      */
     public function testExportStockData(string $type, string $code, int $expectedResult): void
@@ -56,7 +56,7 @@ class ExportStockIndexDataTest extends WebapiAbstract
 
         $res = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
-            : $this->_webApiCall($serviceInfo, ['salesChannelCode' => $code]);
+            : $this->_webApiCall($serviceInfo, ['salesChannelCode' => $code, 'salesChannelType' => $type]);
 
         self::assertEquals($expectedResult, count($res));
     }
