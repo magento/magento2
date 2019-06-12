@@ -128,6 +128,7 @@ class StockRegistry implements StockRegistryInterface
 
     /**
      * Retrieve Product stock status
+     *
      * @param int $productId
      * @param int $scopeId
      * @return int
@@ -211,9 +212,9 @@ class StockRegistry implements StockRegistryInterface
      */
     protected function getScopeId($scopeId)
     {
-        if (!$scopeId !== null) {
+        if ($scopeId !== null) {
             if (!is_numeric($scopeId)) {
-                throw new InputException(__("Expected a numeric value, got %s", $scopeId));
+                throw new InputException(__("Expected a numeric value, got %type", ["type" => $scopeId]));
             }
             return $scopeId;
         }
