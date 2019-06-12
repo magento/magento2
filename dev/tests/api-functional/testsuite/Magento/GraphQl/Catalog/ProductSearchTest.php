@@ -381,8 +381,10 @@ QUERY;
 }
 QUERY;
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: currentPage value 2 specified is greater ' .
-            'than the 1 page(s) available');
+        $this->expectExceptionMessage(
+            'GraphQL response contains errors: currentPage value 2 specified is greater ' .
+            'than the 1 page(s) available'
+        );
         $this->graphQlQuery($query);
     }
 
@@ -1043,8 +1045,10 @@ QUERY;
 QUERY;
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: currentPage value 2 specified is greater ' .
-            'than the 1 page(s) available.');
+        $this->expectExceptionMessage(
+            'GraphQL response contains errors: currentPage value 2 specified is greater ' .
+            'than the 1 page(s) available.'
+        );
         $this->graphQlQuery($query);
     }
 
@@ -1075,8 +1079,10 @@ QUERY;
 QUERY;
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: \'search\' or \'filter\' input argument is ' .
-            'required.');
+        $this->expectExceptionMessage(
+            'GraphQL response contains errors: \'search\' or \'filter\' input argument is ' .
+            'required.'
+        );
         $this->graphQlQuery($query);
     }
 
@@ -1140,7 +1146,7 @@ QUERY;
     private function assertProductItems(array $filteredProducts, array $actualResponse)
     {
         $productItemsInResponse = array_map(null, $actualResponse['products']['items'], $filteredProducts);
-
+        // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
         for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
             $this->assertNotEmpty($productItemsInResponse[$itemIndex]);
             $this->assertResponseFields(
