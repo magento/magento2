@@ -15,10 +15,13 @@
             <testCaseId value="MC-14720"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
 
         <before>
-            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!--Create  simple product-->
             <createData entity="SimpleProduct2" stepKey="simpleProduct1">
                 <field key="price">10.00</field>
