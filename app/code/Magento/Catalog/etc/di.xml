@@ -706,7 +706,7 @@
                 <item name="Magento\Catalog\Model\Product\Attribute\Backend\Sku" xsi:type="string">string</item>
                 <item name="Magento\Catalog\Model\Product\Attribute\Backend\Category" xsi:type="string">int[]</item>
                 <item name="Magento\Catalog\Model\Product\Attribute\Backend\Stock" xsi:type="string">Magento\CatalogInventory\Api\Data\StockItemInterface[]</item>
-                <item name="Magento\Catalog\Model\Category\Attribute\Backend\Sortby" xsi:type="string">string[]</item>
+                <item name="Magento\Catalog\Model\Category\Attribute\Backend\Sortby" xsi:type="string">string</item>
             </argument>
         </arguments>
     </type>
