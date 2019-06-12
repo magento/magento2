@@ -6,12 +6,13 @@
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\GetStoresWithDefaultValuesUsed;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Class ProductProcessUrlRewriteSavingObserver
@@ -34,19 +35,28 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
     private $productUrlPathGenerator;
 
     /**
+     * @var GetStoresWithDefaultValuesUsed
+     */
+    private $getStoresWithDefaultValuesUsed;
+
+    /**
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
      * @param ProductUrlPathGenerator|null $productUrlPathGenerator
+     * @param GetStoresWithDefaultValuesUsed|null $getStoresWithDefaultValuesUsed
      */
     public function __construct(
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
         UrlPersistInterface $urlPersist,
-        ProductUrlPathGenerator $productUrlPathGenerator = null
+        ProductUrlPathGenerator $productUrlPathGenerator = null,
+        GetStoresWithDefaultValuesUsed $getStoresWithDefaultValuesUsed = null
     ) {
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
         $this->productUrlPathGenerator = $productUrlPathGenerator ?: ObjectManager::getInstance()
             ->get(ProductUrlPathGenerator::class);
+        $this->getStoresWithDefaultValuesUsed = $getStoresWithDefaultValuesUsed ?? ObjectManager::getInstance()
+                ->get(GetStoresWithDefaultValuesUsed::class);
     }
 
     /**
@@ -75,7 +85,12 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
                     [
                         UrlRewrite::ENTITY_ID => $product->getId(),
                         UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
-                        UrlRewrite::STORE_ID => $product->getStoreId()
+                        UrlRewrite::STORE_ID => $product->getStoreId() ?:
+                            $this->getStoresWithDefaultValuesUsed->execute(
+                                'visibility',
+                                $product->getId(),
+                                Product::ENTITY
+                            )
                     ]
                 );
             }
