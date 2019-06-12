@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Usps;
 
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
-use Magento\GraphQl\Quote\GetQuoteShippingAddressIdByReservedQuoteId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -47,7 +46,7 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * Defines carrier label for "USPS" shipping method
      */
-    const CARRIER_LABEL = 'United States Postal Service';
+    const CARRIER_TITLE = 'United States Postal Service';
 
     /**
      * Defines carrier code for "USPS" shipping method
@@ -65,11 +64,6 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     private $getMaskedQuoteIdByReservedOrderId;
 
     /**
-     * @var GetQuoteShippingAddressIdByReservedQuoteId
-     */
-    private $getQuoteShippingAddressIdByReservedQuoteId;
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -77,9 +71,6 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
         $objectManager = Bootstrap::getObjectManager();
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->getQuoteShippingAddressIdByReservedQuoteId = $objectManager->get(
-            GetQuoteShippingAddressIdByReservedQuoteId::class
-        );
     }
 
     /**
@@ -99,9 +90,8 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     {
         $quoteReservedId = 'test_quote';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
-        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
 
-        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
+        $query = $this->getQuery($maskedQuoteId, self::CARRIER_CODE, $methodCode);
         $response = $this->sendRequestWithToken($query);
 
         self::assertArrayHasKey('setShippingMethodsOnCart', $response);
@@ -118,10 +108,13 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
         self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
 
-        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
+        self::assertArrayHasKey('carrier_title', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(self::CARRIER_TITLE, $shippingAddress['selected_shipping_method']['carrier_title']);
+
+        self::assertArrayHasKey('method_title', $shippingAddress['selected_shipping_method']);
         self::assertEquals(
-            self::CARRIER_LABEL . ' - ' . $methodLabel,
-            $shippingAddress['selected_shipping_method']['label']
+            self::CARRIER_TITLE . ' - ' . $methodLabel,
+            $shippingAddress['selected_shipping_method']['method_title']
         );
     }
 
@@ -163,9 +156,8 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     {
         $quoteReservedId = 'test_quote';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
-        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
 
-        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
+        $query = $this->getQuery($maskedQuoteId, self::CARRIER_CODE, $methodCode);
         $response = $this->sendRequestWithToken($query);
 
         self::assertArrayHasKey('setShippingMethodsOnCart', $response);
@@ -182,10 +174,13 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
         self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
 
-        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
+        self::assertArrayHasKey('carrier_title', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(self::CARRIER_TITLE, $shippingAddress['selected_shipping_method']['carrier_title']);
+
+        self::assertArrayHasKey('method_title', $shippingAddress['selected_shipping_method']);
         self::assertEquals(
-            self::CARRIER_LABEL . ' - ' . $methodLabel,
-            $shippingAddress['selected_shipping_method']['label']
+            self::CARRIER_TITLE . ' - ' . $methodLabel,
+            $shippingAddress['selected_shipping_method']['method_title']
         );
     }
 
@@ -211,7 +206,6 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * Generates query for setting the specified shipping method on cart
      *
-     * @param int $shippingAddressId
      * @param string $maskedQuoteId
      * @param string $carrierCode
      * @param string $methodCode
@@ -219,7 +213,6 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
      */
     private function getQuery(
         string $maskedQuoteId,
-        int $shippingAddressId,
         string $carrierCode,
         string $methodCode
     ): string {
@@ -229,7 +222,6 @@ mutation {
     cart_id: "$maskedQuoteId"
     shipping_methods: [
       {
-        cart_address_id: $shippingAddressId
         carrier_code: "$carrierCode"
         method_code: "$methodCode"
       }
@@ -240,7 +232,8 @@ mutation {
         selected_shipping_method {
           carrier_code
           method_code
-          label
+          carrier_title
+          method_title
         }
       }
     } 
