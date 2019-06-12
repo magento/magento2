@@ -50,6 +50,7 @@ class PluginTest extends AbstractController
      */
     public function testAddActionProductWithInvalidCredentials()
     {
+        $this->getRequest()->setMethod('POST');
         $this->getRequest()->setPostValue(
             [
                 'login' => [
