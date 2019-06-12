@@ -555,9 +555,14 @@ class Import extends AbstractModel
         $entity = $this->getEntity();
         /** @var $uploader Uploader */
         $uploader = $this->_uploaderFactory->create(['fileId' => self::FIELD_NAME_SOURCE_FILE]);
+        $uploader->setAllowedExtensions(['csv', 'zip']);
         $uploader->skipDbProcessing(true);
         $fileName = $this->random->getRandomString(32) . '.' . $uploader->getFileExtension();
-        $result = $uploader->save($this->getWorkingDir(), $fileName);
+        try {
+            $result = $uploader->save($this->getWorkingDir(), $fileName);
+        } catch (\Exception $e) {
+            throw new LocalizedException(__('The file cannot be uploaded.'));
+        }
 
         $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
 
