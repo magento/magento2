@@ -11,8 +11,8 @@
     <test name="AdminFixedTaxValSavedForSpecificWebsiteTest">
         <annotations>
             <features value="Tax"/>
-            <title value="Cannot Save FPT (Fixed Product Tax) On Catalog Product For Specific Website"/>
-            <description value="Cannot Save FPT (Fixed Product Tax) On Catalog Product For Specific Website"/>
+            <title value="Fixed Product Tax value is saved correctly for Specific Website"/>
+            <description value="Fixed Product Tax value is saved correctly for Specific Website"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-17182"/>
             <useCaseId value=" MC-17014"/>
