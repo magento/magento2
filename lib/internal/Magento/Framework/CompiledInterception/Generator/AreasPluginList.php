@@ -5,17 +5,15 @@
  */
 namespace Magento\Framework\CompiledInterception\Generator;
 
-use Magento\Framework\App\AreaList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\Scope;
 
 class AreasPluginList
 {
-    /**
-     * @var Scope
-     */
+    /** @var Scope */
     private $scope;
 
+    /** @var null */
     private $plugins;
 
     /**
@@ -40,14 +38,19 @@ class AreasPluginList
             $this->plugins = [];
             //this is to emulate order M2 is reading scopes config to use scope cache
             //"global|primary" should be loaded first and then "global|primary|frontend" etc.
-            $core = new CompiledPluginList(ObjectManager::getInstance(), new StaticScope('primary'));
-            $core->getNext('dummy', 'dummy');
-            $this->plugins['primary'] = $core;
+            $defaultScopePluginList = $defaultScope = null;
             foreach ($this->scope->getAllScopes() as $scope) {
-                $this->plugins[$scope] = clone $core;
-                $this->plugins[$scope]->setScope(new StaticScope($scope));
-                $this->plugins[$scope]->getNext('dummy', 'dummy');
+                if ($defaultScopePluginList === null) {
+                    $defaultScopePluginList = new CompiledPluginList(ObjectManager::getInstance(), new StaticScope($scope));
+                    $defaultScopePluginList->getNext('dummy', 'dummy');
+                    $defaultScope = $scope;
+                } else {
+                    $this->plugins[$scope] = clone $defaultScopePluginList;
+                    $this->plugins[$scope]->setScope(new StaticScope($scope));
+                    //$this->plugins[$scope]->getNext('dummy', 'dummy');
+                }
             }
+            $this->plugins[$defaultScope] = $defaultScopePluginList;
         }
         return $this->plugins;
     }

@@ -84,6 +84,5 @@ public function methodX($arg) {
 
 #### CONS
 
-* Each time after making change in etc plugins config, `generated/code/*` needs to be purged
-* Tiny longer code generation step when run with no cache
+* Each time after making change in etc plugins config, `generated/code/*` and `var/cache/*` needs to be purged
 * As this does not load plugins at runtime, might not work in an edge case of plugging into core Magento classes like `PluginsList` etc.

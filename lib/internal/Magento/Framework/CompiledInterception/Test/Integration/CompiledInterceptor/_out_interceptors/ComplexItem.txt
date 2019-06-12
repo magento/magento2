@@ -53,7 +53,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
         		});
         		
         		return (($tmp = $this->____plugin_advanced_plugin()->afterGetName($this, $result)) !== null) ? $tmp : $result;
-        	case 'backend':
+        	default:
         		$this->____plugin_advanced_plugin()->beforeGetName($this);
         		
         		$result = $this->____plugin_advanced_plugin()->aroundGetName($this, function(){
@@ -65,8 +65,6 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
         		});
         		
         		return (($tmp = $this->____plugin_advanced_plugin()->afterGetName($this, $result)) !== null) ? $tmp : $result;
-        	default:
-        		return parent::getName();
         }
     }
 

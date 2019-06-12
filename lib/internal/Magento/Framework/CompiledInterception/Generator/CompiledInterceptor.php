@@ -13,6 +13,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Code\Generator\EntityAbstract;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Interception\DefinitionInterface;
+use Magento\Setup\Module\Di\App\Task\Operation\Area;
 
 /**
  * Compiled interceptors generator, please see ../README.md for details
@@ -545,23 +546,30 @@ class CompiledInterceptor extends EntityAbstract
         $parameters = $method->getParameters();
         $returnsVoid = ($method->hasReturnType() && $method->getReturnType()->getName() == 'void');
 
-        $body = [
-            'switch ($this->____scope->getCurrentScope()) {'
-        ];
+        $cases = $this->getScopeCasesFromConfig($config);
 
-        foreach ($this->getScopeCasesFromConfig($config) as $case) {
-            $body = array_merge($body, $case['cases']);
-            $this->addCodeSubBlock(
-                $body,
-                $this->getMethodSourceFromConfig($method->getName(), $case['conf'], $parameters, $returnsVoid),
-                2
-            );
-            if ($returnsVoid) {
-                $body[] = "\t\tbreak;";
+        if (count($cases) == 1) {
+            $body = $this->getMethodSourceFromConfig($method->getName(), $cases[0]['conf'], $parameters, $returnsVoid);
+        } else {
+            $body = [
+                'switch ($this->____scope->getCurrentScope()) {'
+            ];
+
+            foreach ($cases as $case) {
+                $body = array_merge($body, $case['cases']);
+                $this->addCodeSubBlock(
+                    $body,
+                    $this->getMethodSourceFromConfig($method->getName(), $case['conf'], $parameters, $returnsVoid),
+                    2
+                );
+                if ($returnsVoid) {
+                    $body[] = "\t\tbreak;";
+                }
             }
+
+            $body[] = "}";
         }
 
-        $body[] = "}";
         $returnType = $method->getReturnType();
         $returnTypeValue = $returnType
             ? ($returnType->allowsNull() ? '?' : '') . $returnType->getName()
@@ -589,16 +597,16 @@ class CompiledInterceptor extends EntityAbstract
         $cases = [];
         //group cases by config
         foreach ($config as $scope => $conf) {
+            $caseStr = "\tcase '$scope':";
             foreach ($cases as &$case) {
                 if ($case['conf'] == $conf) {
-                    $case['cases'][] = "\tcase '$scope':";
+                    $case['cases'][] = $caseStr;
                     continue 2;
                 }
             }
-            $cases[] = ['cases'=>["\tcase '$scope':"], 'conf'=>$conf];
+            $cases[] = ['cases'=>[$caseStr], 'conf'=>$conf];
         }
-        //call parent method for scopes with no plugins (or when no scope is set)
-        $cases[] = ['cases'=>["\tdefault:"], 'conf'=>[]];
+        $cases[count($cases) - 1]['cases'] = ["\tdefault:"];
         return $cases;
     }
 
@@ -699,6 +707,10 @@ class CompiledInterceptor extends EntityAbstract
             if ($pluginChain) {
                 $result[$scope] = $pluginChain;
             }
+        }
+        //if plugins are not empty make sure default case will be handled
+        if (!empty($result) && !$pluginChain) {
+            $result[$scope] = [];
         }
         return $result;
     }
