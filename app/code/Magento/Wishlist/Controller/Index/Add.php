@@ -141,6 +141,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
                     'referer' => $referer
                 ]
             );
+            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage(
                 __('We can\'t add the item to Wish List right now: %1.', $e->getMessage())
