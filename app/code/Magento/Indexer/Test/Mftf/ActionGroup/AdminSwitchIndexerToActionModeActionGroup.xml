@@ -17,6 +17,6 @@
         <selectOption userInput="{{action}}" selector="{{AdminIndexManagementSection.massActionSelect}}" stepKey="selectAction"/>
         <click selector="{{AdminIndexManagementSection.massActionSubmit}}" stepKey="clickSubmit"/>
         <waitForPageLoad stepKey="waitForSubmit"/>
-        <see selector="{{AdminIndexManagementSection.successMessage}}" userInput="1 indexer(s) are in &quot;{{action}}&quot; mode." stepKey="seeMessage"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="1 indexer(s) are in &quot;{{action}}&quot; mode." stepKey="seeMessage"/>
     </actionGroup>
 </actionGroups>

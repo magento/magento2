@@ -87,7 +87,7 @@
         <selectOption userInput="Yes" selector="{{AdminCatalogSearchEngineConfigurationSection.selectUseCategoriesPatForProductUrls}}" stepKey="selectYes"/>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForSaving"/>
-        <see selector="{{AdminIndexManagementSection.successMessage}}"  userInput="You saved the configuration." stepKey="seeMessage"/>
+        <see selector="{{AdminMessagesSection.successMessage}}"  userInput="You saved the configuration." stepKey="seeMessage"/>
 
         <!-- Navigate to the Catalog > Products -->
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="onCatalogProductPage"/>
@@ -111,7 +111,7 @@
         <waitForPageLoad stepKey="waitForSavingProduct"/>
 
         <!--Product is saved -->
-        <see userInput="You saved the product." selector="{{AdminIndexManagementSection.successMessage}}" stepKey="seeSuccessMessage"/>
+        <see userInput="You saved the product." selector="{{AdminMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
 
         <!-- Run cron -->
         <magentoCLI command="cron:run" stepKey="runCron"/>
@@ -184,7 +184,7 @@
         <waitForPageLoad stepKey="waitForSaveChanges"/>
 
         <!-- Product is saved successfully -->
-        <see userInput="You saved the product." selector="{{AdminIndexManagementSection.successMessage}}" stepKey="seeSaveMessage"/>
+        <see userInput="You saved the product." selector="{{AdminMessagesSection.successMessage}}" stepKey="seeSaveMessage"/>
 
         <!-- Run cron -->
         <magentoCLI command="cron:run" stepKey="runCron2"/>
