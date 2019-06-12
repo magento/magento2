@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-58179"/>
             <group value="checkout"/>
+            <skip>
+                <issueId value="MC-16684"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
