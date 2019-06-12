@@ -9,10 +9,10 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOpenCustomerGroupEditPageFromGridActionGroup">
         <arguments>
-            <argument name="groupName" type="string"/>
+            <argument name="groupCode" type="string"/>
         </arguments>
         <conditionalClick selector="{{AdminCustomerGroupMainSection.selectFirstRow}}" dependentSelector="{{AdminCustomerGroupMainSection.selectFirstRow}}" visible="true" stepKey="clickSelectButton"/>
-        <click selector="{{AdminCustomerGroupMainSection.editButtonByCustomerGroupCode(groupName)}}" stepKey="clickOnEditCustomerGroup" />
+        <click selector="{{AdminCustomerGroupMainSection.editButtonByCustomerGroupCode(groupCode)}}" stepKey="clickOnEditCustomerGroup" />
         <waitForPageLoad stepKey="waitForCustomerGroupEditPage"/>
     </actionGroup>
 </actionGroups>
