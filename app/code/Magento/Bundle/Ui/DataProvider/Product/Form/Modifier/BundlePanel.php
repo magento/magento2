@@ -14,6 +14,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\UrlInterface;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form;
+use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\Component\Modal;
 
 /**
@@ -69,13 +70,26 @@ class BundlePanel extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function modifyMeta(array $meta)
     {
         $meta = $this->removeFixedTierPrice($meta);
-        $path = $this->arrayManager->findPath(static::CODE_BUNDLE_DATA, $meta, null, 'children');
+
+        $groupCode = static::CODE_BUNDLE_DATA;
+        $path = $this->arrayManager->findPath($groupCode, $meta, null, 'children');
+        if (empty($path)) {
+            $meta[$groupCode]['children'] = [];
+            $meta[$groupCode]['arguments']['data']['config'] = [
+                'componentType' => Fieldset::NAME,
+                'label' => __('Bundle Items'),
+                'collapsible' => true
+            ];
+
+            $path = $this->arrayManager->findPath($groupCode, $meta, null, 'children');
+        }
 
         $meta = $this->arrayManager->merge(
             $path,
@@ -220,7 +234,7 @@ class BundlePanel extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -315,7 +329,11 @@ class BundlePanel extends AbstractModifier
                         'additionalClasses' => 'admin__field-wide',
                         'dataScope' => 'data.bundle_options',
                         'isDefaultFieldScope' => 'is_default',
+<<<<<<< HEAD
                         'bundleSelectionsName' => 'product_bundle_container.bundle_selections'
+=======
+                        'bundleSelectionsName' => 'product_bundle_container.bundle_selections',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     ],
                 ],
             ],
@@ -380,9 +398,15 @@ class BundlePanel extends AbstractModifier
                                                 ],
                                                 'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
                                                 'imports' => [
+<<<<<<< HEAD
                                                     'inputType' => '${$.provider}:${$.dataScope}.type'
                                                 ],
                                                 'source' => 'product'
+=======
+                                                    'inputType' => '${$.provider}:${$.dataScope}.type',
+                                                ],
+                                                'source' => 'product',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                                             ],
                                         ],
                                     ],
@@ -601,11 +625,19 @@ class BundlePanel extends AbstractModifier
                         'component' => 'Magento_Ui/js/dynamic-rows/record',
                         'is_collection' => true,
                         'imports' => [
+<<<<<<< HEAD
                             'inputType' => '${$.parentName}:inputType'
                         ],
                         'exports' => [
                             'isDefaultValue' => '${$.parentName}:isDefaultValue.${$.index}'
                         ]
+=======
+                            'inputType' => '${$.parentName}:inputType',
+                        ],
+                        'exports' => [
+                            'isDefaultValue' => '${$.parentName}:isDefaultValue.${$.index}',
+                        ],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     ],
                 ],
             ],
@@ -705,8 +737,13 @@ class BundlePanel extends AbstractModifier
                                 'valueMap' => ['true' => '1', 'false' => '0'],
                                 'sortOrder' => 110,
                                 'imports' => [
+<<<<<<< HEAD
                                     'inputType' => '${$.parentName}:inputType'
                                 ]
+=======
+                                    'inputType' => '${$.parentName}:inputType',
+                                ],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                             ],
                         ],
                     ],

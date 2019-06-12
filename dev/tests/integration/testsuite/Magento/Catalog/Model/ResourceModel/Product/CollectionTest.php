@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+/**
+ * Collection test
+ */
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -128,6 +131,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoDbIsolation disabled
      */
@@ -158,6 +162,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * Test addAttributeToSort() with attribute 'is_saleable' works properly on frontend.
      *
      * @dataProvider addAttributeToSortDataProvider
@@ -211,6 +217,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $productTable = $this->collection->getTable('catalog_product_entity');
         $urlRewriteTable = $this->collection->getTable('url_rewrite');
 
+<<<<<<< HEAD
+=======
+        // phpcs:ignore
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $expected = 'SELECT `e`.*, `alias`.`request_path` FROM `' . $productTable . '` AS `e`'
             . ' LEFT JOIN `' . $urlRewriteTable . '` AS `alias` ON (alias.entity_id =e.entity_id)'
             . ' AND (alias.entity_type = \'product\')';
@@ -222,10 +232,30 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/few_simple_products.php
      * @magentoDbIsolation enabled
      */
+<<<<<<< HEAD
     public function testAddAttributeToFilterAffectsGetSize()
+=======
+    public function testAddAttributeToFilterAffectsGetSize(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $this->assertEquals(10, $this->collection->getSize());
         $this->collection->addAttributeToFilter('sku', 'Product1');
         $this->assertEquals(1, $this->collection->getSize());
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * Add tier price attribute filter to collection
+     *
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/few_simple_products.php
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     */
+    public function testAddAttributeTierPriceToFilter(): void
+    {
+        $this->assertEquals(11, $this->collection->getSize());
+        $this->collection->addAttributeToFilter('tier_price', ['gt' => 0]);
+        $this->assertEquals(1, $this->collection->getSize());
+    }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 }

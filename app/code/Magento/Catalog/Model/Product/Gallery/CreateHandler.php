@@ -102,6 +102,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Execute create handler
+     *
      * @param object $product
      * @param array $arguments
      * @return object
@@ -204,6 +206,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Returns media gallery attribute instance
+     *
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
      * @since 101.0.0
      */
@@ -219,17 +223,22 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Process delete images
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $images
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @since 101.0.0
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function processDeletedImages($product, array &$images)
     {
     }
 
     /**
+     * Process images
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $images
      * @return void
@@ -292,6 +301,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Duplicate attribute
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      * @since 101.0.0
@@ -308,7 +319,7 @@ class CreateHandler implements ExtensionInterface
 
         $this->resourceModel->duplicate(
             $this->getAttribute()->getAttributeId(),
-            isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : [],
+            $mediaGalleryData['duplicate'] ?? [],
             $product->getOriginalLinkId(),
             $product->getData($this->metadata->getLinkField())
         );
@@ -360,6 +371,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Returns file name according to tmp name
+     *
      * @param string $file
      * @return string
      * @since 101.0.0
@@ -388,6 +401,7 @@ class CreateHandler implements ExtensionInterface
             $destinationFile = $forTmp
                 ? $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getTmpMediaPath($file))
                 : $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getMediaPath($file));
+            // phpcs:disable Magento2.Functions.DiscouragedFunction
             $destFile = dirname($file) . '/' . FileUploader::getNewFileName($destinationFile);
         }
 
@@ -408,6 +422,7 @@ class CreateHandler implements ExtensionInterface
             $destinationFile = $this->getUniqueFileName($file);
 
             if (!$this->mediaDirectory->isFile($this->mediaConfig->getMediaPath($file))) {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception();
             }
 
@@ -425,6 +440,7 @@ class CreateHandler implements ExtensionInterface
             }
 
             return str_replace('\\', '/', $destinationFile);
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             $file = $this->mediaConfig->getMediaPath($file);
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -447,8 +463,15 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+<<<<<<< HEAD
      * @param \Magento\Catalog\Model\Product $product
      * @param $mediaAttrCode
+=======
+     * Process media attribute
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $mediaAttrCode
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param array $clearImages
      * @param array $newImages
      */
@@ -476,8 +499,15 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+<<<<<<< HEAD
      * @param \Magento\Catalog\Model\Product $product
      * @param $mediaAttrCode
+=======
+     * Process media attribute label
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $mediaAttrCode
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param array $clearImages
      * @param array $newImages
      * @param array $existImages

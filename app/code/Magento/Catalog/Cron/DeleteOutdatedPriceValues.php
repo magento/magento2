@@ -12,6 +12,8 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Store\Model\Store;
 
 /**
+ * Cron job for removing outdated prices.
+ *
  * Cron operation is responsible for deleting all product prices on WEBSITE level
  * in case 'Catalog Price Scope' configuration parameter is set to GLOBAL.
  */
@@ -54,7 +56,11 @@ class DeleteOutdatedPriceValues
      */
     public function execute()
     {
+<<<<<<< HEAD
         if ($this->isPriceScopeSetToGlobal() === false) {
+=======
+        if (!$this->isPriceScopeSetToGlobal()) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             return;
         }
 
@@ -76,7 +82,11 @@ class DeleteOutdatedPriceValues
     /**
      * Checks if price scope config option explicitly equal to global value.
      *
+<<<<<<< HEAD
      * Such strict comparision is required to prevent price deleting when
+=======
+     * Such strict comparison is required to prevent price deleting when
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * price scope config option is null for some reason.
      *
      * @return bool

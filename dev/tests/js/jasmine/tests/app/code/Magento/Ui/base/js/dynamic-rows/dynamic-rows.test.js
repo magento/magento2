@@ -151,12 +151,20 @@ define([
                     }
                 }],
                 result = [{
+<<<<<<< HEAD
+=======
+                    defaultLabelVisible: true,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     label: 'Label 2',
                     name: 'Name 2',
                     required: false,
                     columnsHeaderClasses: '',
                     sortOrder: 5
                 }, {
+<<<<<<< HEAD
+=======
+                    defaultLabelVisible: true,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     label: 'Label 1',
                     name: 'Name 1',
                     required: false,

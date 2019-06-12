@@ -7,7 +7,11 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <entity name="productAttributeOption1" type="ProductAttributeOption">
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
         <data key="label" unique="suffix">option1</data>
@@ -24,10 +28,14 @@
         <requiredEntity type="StoreLabel">Option2Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option2Store1</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="ProductAttributeOptionGetter" type="ProductAttributeOption">
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
     </entity>
     <entity name="ProductAttributeOption3" type="ProductAttributeOption">
+=======
+    <entity name="productAttributeOption3" type="ProductAttributeOption">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
         <data key="label" unique="suffix">option3</data>
         <data key="is_default">false</data>
@@ -35,7 +43,11 @@
         <requiredEntity type="StoreLabel">Option3Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option3Store1</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="ProductAttributeOption4" type="ProductAttributeOption">
+=======
+    <entity name="productAttributeOption4" type="ProductAttributeOption">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
         <data key="label" unique="suffix">option4</data>
         <data key="is_default">false</data>
@@ -43,7 +55,11 @@
         <requiredEntity type="StoreLabel">Option4Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option4Store1</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="ProductAttributeOption5" type="ProductAttributeOption">
+=======
+    <entity name="productAttributeOption5" type="ProductAttributeOption">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
         <data key="label" unique="suffix">option5</data>
         <data key="is_default">false</data>
@@ -51,7 +67,11 @@
         <requiredEntity type="StoreLabel">Option5Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option5Store1</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="ProductAttributeOption6" type="ProductAttributeOption">
+=======
+    <entity name="productAttributeOption6" type="ProductAttributeOption">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
         <data key="label" unique="suffix">option6</data>
         <data key="is_default">false</data>
@@ -59,4 +79,37 @@
         <requiredEntity type="StoreLabel">Option6Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option6Store1</requiredEntity>
     </entity>
+<<<<<<< HEAD
+=======
+    <entity name="ProductAttributeOptionGetter" type="ProductAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+    </entity>
+    <entity name="productAttributeOption" type="ProductAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label" unique="suffix">customOption</data>
+        <data key="is_default">false</data>
+        <data key="sort_order">0</data>
+    </entity>
+    <entity name="ProductAttributeOption7" type="ProductAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label" unique="suffix">Green</data>
+        <data key="is_default">false</data>
+        <data key="sort_order">3</data>
+        <requiredEntity type="StoreLabel">Option7Store0</requiredEntity>
+        <requiredEntity type="StoreLabel">Option8Store1</requiredEntity>
+    </entity>
+    <entity name="ProductAttributeOption8" type="ProductAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label" unique="suffix">Red</data>
+        <data key="is_default">false</data>
+        <data key="sort_order">3</data>
+        <requiredEntity type="StoreLabel">Option9Store0</requiredEntity>
+        <requiredEntity type="StoreLabel">Option10Store1</requiredEntity>
+    </entity>
+    <entity name="ProductAttributeOption8" type="ProductAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label" unique="suffix">White</data>
+        <data key="value" unique="suffix">white</data>
+    </entity>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </entities>

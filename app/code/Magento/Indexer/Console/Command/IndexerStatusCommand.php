@@ -9,6 +9,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Indexer;
 use Magento\Framework\Mview;
+<<<<<<< HEAD
+=======
+use Symfony\Component\Console\Helper\Table;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 /**
  * Command for displaying status of indexers.
@@ -32,7 +36,11 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+<<<<<<< HEAD
         $table = $this->getHelperSet()->get('table');
+=======
+        $table = new Table($output);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $table->setHeaders(['Title', 'Status', 'Update On', 'Schedule Status', 'Schedule Updated']);
 
         $rows = [];
@@ -63,7 +71,11 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
         });
 
         $table->addRows($rows);
+<<<<<<< HEAD
         $table->render($output);
+=======
+        $table->render();
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**

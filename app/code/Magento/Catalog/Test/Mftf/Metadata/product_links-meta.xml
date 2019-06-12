@@ -14,4 +14,11 @@
             <value>product_link</value>
         </array>
     </operation>
+<<<<<<< HEAD
+=======
+    <operation name="UpdateProductLinks" dataType="product_links" type="update" auth="adminOauth" url="/V1/products/{sku}/links" method="PUT">
+        <contentType>application/json</contentType>
+        <field key="entity">product_link</field>
+    </operation>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </operations>

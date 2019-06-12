@@ -122,6 +122,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
+     * Initialize address model
+     *
      * @return void
      */
     protected function _construct()
@@ -165,17 +167,21 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
-     * {@inheritdoc}
+     * Create address data object based on current address model.
+     *
+     * @param int|null $defaultBillingAddressId
+     * @param int|null $defaultShippingAddressId
+     * @return AddressInterface
+     * Use Api/Data/AddressInterface as a result of service operations. Don't rely on the model to provide
+     * the instance of Api/Data/AddressInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getDataModel($defaultBillingAddressId = null, $defaultShippingAddressId = null)
     {
         if ($this->getCustomerId() || $this->getParentId()) {
-            if ($this->getCustomer()->getDefaultBillingAddress()) {
-                $defaultBillingAddressId = $this->getCustomer()->getDefaultBillingAddress()->getId();
-            }
-            if ($this->getCustomer()->getDefaultShippingAddress()) {
-                $defaultShippingAddressId = $this->getCustomer()->getDefaultShippingAddress()->getId();
-            }
+            $customer = $this->getCustomer();
+            $defaultBillingAddressId = $customer->getDefaultBilling() ?: $defaultBillingAddressId;
+            $defaultShippingAddressId = $customer->getDefaultShipping() ?: $defaultShippingAddressId;
         }
         return parent::getDataModel($defaultBillingAddressId, $defaultShippingAddressId);
     }
@@ -258,6 +264,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
+     * Clone address
+     *
      * @return void
      */
     public function __clone()
@@ -298,6 +306,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
+     * Create customer model
+     *
      * @return Customer
      */
     protected function _createCustomer()
@@ -353,7 +363,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
-     * {@inheritdoc}
+     * Get a list of custom attribute codes.
+     *
+     * By default, entity can be extended only using extension attributes functionality.
+     *
+     * @return string[]
      * @since 100.0.6
      */
     protected function getCustomAttributesCodes()
@@ -363,6 +377,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
     /**
      * Get new AttributeList dependency for application code.
+     *
      * @return \Magento\Customer\Model\Address\CustomAttributeListInterface
      * @deprecated 100.0.6
      */

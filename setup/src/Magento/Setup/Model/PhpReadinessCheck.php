@@ -179,6 +179,7 @@ class PhpReadinessCheck
 
     /**
      * Checks php memory limit
+     *
      * @return array
      */
     public function checkMemoryLimit()
@@ -235,6 +236,7 @@ class PhpReadinessCheck
 
     /**
      * Checks if xdebug.max_nesting_level is set 200 or more
+     *
      * @return array
      * @SuppressWarnings(PHPMD.LongVariable)
      */

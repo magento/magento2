@@ -7,6 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminProductFormActionSection">
         <element name="saveButton" type="button" selector="#save-button" timeout="30"/>
@@ -14,5 +15,18 @@
         <element name="saveAndClose" type="button" selector="span[id='save_and_close']" timeout="30"/>
         <element name="changeStoreButton" type="button" selector="#store-change-button"/>
         <element name="selectStoreView" type="button" selector="//ul[@data-role='stores-list']/li/a[normalize-space(.)='{{var1}}']" timeout="10" parameterized="true"/>
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormActionSection">
+        <element name="backButton" type="button" selector="#back" timeout="30"/>
+        <element name="addAttributeButton" type="button" selector="#addAttribute" timeout="30"/>
+        <element name="saveButton" type="button" selector="#save-button" timeout="30"/>
+        <element name="saveArrow" type="button" selector="button[data-ui-id='save-button-dropdown']" timeout="30"/>
+        <element name="saveAndClose" type="button" selector="span[title='Save &amp; Close']" timeout="30"/>
+        <element name="changeStoreButton" type="button" selector="#store-change-button" timeout="10"/>
+        <element name="selectStoreView" type="button" selector="//ul[@data-role='stores-list']/li/a[normalize-space(.)='{{var1}}']" timeout="10" parameterized="true"/>
+        <element name="selectTaxClass" type="select" selector="select[name='product[tax_class_id]']"/>
+        <element name="saveAndDuplicate" type="button" selector="span[id='save_and_duplicate']" timeout="30"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </section>
 </sections>

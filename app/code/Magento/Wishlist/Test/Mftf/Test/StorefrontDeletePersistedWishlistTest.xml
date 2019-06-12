@@ -6,6 +6,7 @@
   */
 -->
 
+<<<<<<< HEAD
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="StorefrontDeletePersistedWishlistTest">
         <annotations>
@@ -14,6 +15,21 @@
             <title value="Delete a persist wishlist for a customer"/>
             <description value="Delete a persist wishlist for a customer"/>
             <group value="wishlist"/>
+=======
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontDeletePersistedWishlistTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="Delete a persist wishlist for a customer"/>
+            <title value="Customer should be able to delete a persistent wishlist"/>
+            <description value="Customer should be able to delete a persistent wishlist"/>
+            <severity value="AVERAGE"/>
+            <group value="wishlist"/>
+            <testCaseId value="MC-4110"/>
+            <skip>
+                <issueId value="MQE-1145"/>
+            </skip>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </annotations>
         <before>
             <createData stepKey="category" entity="SimpleSubCategory"/>

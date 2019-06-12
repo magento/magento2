@@ -6,5 +6,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<<<<<<< HEAD
     <preference for="Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator" type="Magento\CatalogUrlRewrite\Model\WebapiProductUrlPathGenerator"/>
+=======
+    <type name="Magento\Webapi\Controller\Rest\InputParamsResolver">
+        <plugin name="product_save_rewrites_history_rest_plugin" type="Magento\CatalogUrlRewrite\Plugin\Webapi\Controller\Rest\InputParamsResolver" sortOrder="1" disabled="false" />
+    </type>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </config>

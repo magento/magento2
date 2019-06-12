@@ -13,6 +13,10 @@
         <observer name="second_name" instance="Some_Test_Value_Two" />
     </event>
     <event name="authorization_roles_save_before123">
+<<<<<<< HEAD
         <observer name="second_name" instance="Some_Test_Value_Two" />
+=======
+        <observer name="second_name" instance="Some_Test_Value_Two"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </event>
 </config>

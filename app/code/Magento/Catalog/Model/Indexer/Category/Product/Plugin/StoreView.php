@@ -51,7 +51,11 @@ class StoreView extends StoreGroup
      */
     public function afterDelete(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $store)
     {
+<<<<<<< HEAD
         $this->tableMaintainer->dropTablesForStore($store->getId());
+=======
+        $this->tableMaintainer->dropTablesForStore((int)$store->getId());
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $objectResource;
     }
 }

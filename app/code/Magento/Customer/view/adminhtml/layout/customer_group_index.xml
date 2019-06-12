@@ -8,6 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
+<<<<<<< HEAD
             <block class="Magento\Customer\Block\Adminhtml\Group" name="adminhtml.block.customer.group.grid.container">
                 <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.block.customer.group.grid" as="grid">
                     <arguments>
@@ -50,6 +51,9 @@
                     </block>
                 </block>
             </block>
+=======
+            <uiComponent name="customer_group_listing"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </referenceContainer>
     </body>
 </page>

@@ -7,16 +7,30 @@
 -->
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <page name="AdminProductCreatePage" url="catalog/product/new/set/{{set}}/type/{{type}}/" area="admin" module="Magento_Catalog" parameterized="true">
         <section name="AdminProductFormSection"/>
         <section name="AdminProductFormActionSection"/>
         <section name="AdminProductSEOSection"/>
         <section name="AdminProductImagesSection"/>
+<<<<<<< HEAD
         <section name="AdminProductMessagesSection"/>
         <section name="AdminMessagesSection"/>
         <section name="AdminProductCustomizableOptionsSection" />
         <section name="AdminAddProductsToOptionPanelSection" />
         <section name="AdminProductFormAdvancedPricingSection"/>
+=======
+        <section name="AdminAddProductsToOptionPanel"/>
+        <section name="AdminProductMessagesSection"/>
+        <section name="AdminProductAttributesSection"/>
+        <section name="AdminProductFormRelatedUpSellCrossSellSection"/>
+        <section name="AdminProductFormAdvancedPricingSection"/>
+        <section name="AdminProductFormAdvancedInventorySection"/>
+        <section name="AdminAddAttributeModalSection"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </page>
 </pages>

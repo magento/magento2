@@ -285,6 +285,18 @@ class PageRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Create page with the same identifier after one was removed.
+     */
+    public function testCreateSamePage()
+    {
+        $pageIdentifier = 'page-' . uniqid();
+
+        $pageId = $this->createPageWithIdentifier($pageIdentifier);
+        $this->deletePageByIdentifier($pageId);
+        $this->createPageWithIdentifier($pageIdentifier);
+    }
+
+    /**
      * @return PageInterface[]
      */
     private function prepareCmsPages()
@@ -315,5 +327,56 @@ class PageRepositoryTest extends WebapiAbstract
         }
 
         return $result;
+    }
+
+    /**
+     * Create page with hard-coded identifier to test with create-delete-create flow.
+     * @param string $identifier
+     * @return string
+     */
+    private function createPageWithIdentifier($identifier)
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        $requestData = ['page' =>
+            [
+                PageInterface::IDENTIFIER => $identifier,
+                PageInterface::TITLE => 'Page title',
+            ],
+        ];
+
+        $result = $this->_webApiCall($serviceInfo, $requestData);
+        return $result['id'];
+    }
+
+    /**
+     * Remove page with hard-coded-identifier
+     * @param string $pageId
+     * @return void
+     */
+    private function deletePageByIdentifier($pageId)
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $pageId,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'DeleteById',
+            ],
+        ];
+
+        $this->_webApiCall($serviceInfo, [PageInterface::PAGE_ID => $pageId]);
     }
 }

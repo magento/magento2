@@ -144,14 +144,12 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
         );
         $this->ruleCollectionFactory = $this->createPartialMock(
             \Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory::class,
-            ['create', 'addFieldToFilter']
+            ['create']
         );
         $this->backend = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class);
         $this->select = $this->createMock(\Magento\Framework\DB\Select::class);
         $this->metadataPool = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
-        $metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $metadata = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
         $this->metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
         $this->connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $this->db = $this->createMock(\Zend_Db_Statement_Interface::class);
@@ -181,10 +179,23 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
         $this->rules->expects($this->any())->method('getWebsiteIds')->will($this->returnValue([1]));
         $this->rules->expects($this->any())->method('getCustomerGroupIds')->will($this->returnValue([1]));
 
+<<<<<<< HEAD
         $this->ruleCollectionFactory->expects($this->any())->method('create')->will($this->returnSelf());
         $this->ruleCollectionFactory->expects($this->any())->method('addFieldToFilter')->will(
             $this->returnValue([$this->rules])
         );
+=======
+        $ruleCollection = $this->createMock(\Magento\CatalogRule\Model\ResourceModel\Rule\Collection::class);
+        $this->ruleCollectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($ruleCollection);
+        $ruleCollection->expects($this->once())
+            ->method('addFieldToFilter')
+            ->willReturnSelf();
+        $ruleIterator = new \ArrayIterator([$this->rules]);
+        $ruleCollection->method('getIterator')
+            ->willReturn($ruleIterator);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $this->product->expects($this->any())->method('load')->will($this->returnSelf());
         $this->product->expects($this->any())->method('getId')->will($this->returnValue(1));
@@ -213,6 +224,7 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
+<<<<<<< HEAD
         $this->reindexRuleProductPrice =
             $this->getMockBuilder(\Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice::class)
                 ->disableOriginalConstructor()
@@ -226,6 +238,22 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
             'reindexRuleProductPrice' => $this->reindexRuleProductPrice,
             'reindexRuleGroupWebsite' => $this->reindexRuleGroupWebsite
         ]);
+=======
+        $this->reindexRuleProductPrice = $this->createMock(
+            \Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice::class
+        );
+        $this->reindexRuleGroupWebsite = $this->createMock(
+            \Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite::class
+        );
+        $this->setProperties(
+            $this->indexBuilder,
+            [
+                'metadataPool' => $this->metadataPool,
+                'reindexRuleProductPrice' => $this->reindexRuleProductPrice,
+                'reindexRuleGroupWebsite' => $this->reindexRuleGroupWebsite,
+            ]
+        );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -255,7 +283,11 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('getBackend')
             ->will($this->returnValue($backendModelMock));
 
+<<<<<<< HEAD
         $iterator = new \ArrayIterator([$this->product]);
+=======
+        $iterator = [$this->product];
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->productLoader->expects($this->once())
             ->method('getProducts')
             ->willReturn($iterator);

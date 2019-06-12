@@ -256,9 +256,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         foreach ($this as $item) {
             /** @var ProductInterface $product */
             $product = $productCollection->getItemById($item->getProductId());
+<<<<<<< HEAD
             $isValidProduct = $this->isValidProduct($product);
             $qtyOptions = [];
             if ($isValidProduct) {
+=======
+            $qtyOptions = [];
+            if ($product && $this->isValidProduct($product)) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 $product->setCustomOptions([]);
                 $optionProductIds = $this->getOptionProductIds($item, $product, $productCollection);
                 foreach ($optionProductIds as $optionProductId) {
@@ -343,7 +348,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @see \Magento\CatalogInventory\Helper\Stock::addIsInStockFilterToCollection
      */
-    private function skipStockStatusFilter(ProductCollection $productCollection)
+    private function skipStockStatusFilter(ProductCollection $productCollection): void
     {
         $productCollection->setFlag('has_stock_status_filter', true);
     }
@@ -353,7 +358,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @return void
      */
+<<<<<<< HEAD
     private function removeItemsWithAbsentProducts()
+=======
+    private function removeItemsWithAbsentProducts(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         if (count($this->_productIds) === 0) {
             return;

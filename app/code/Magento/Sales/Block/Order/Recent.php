@@ -82,7 +82,11 @@ class Recent extends \Magento\Framework\View\Element\Template
     /**
      * Get recently placed orders. By default they will be limited by 5.
      */
+<<<<<<< HEAD
     protected function getRecentOrders()
+=======
+    private function getRecentOrders()
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $orders = $this->_orderCollectionFactory->create()->addAttributeToSelect(
             '*'

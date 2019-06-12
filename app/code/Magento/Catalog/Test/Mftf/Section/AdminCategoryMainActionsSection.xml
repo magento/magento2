@@ -7,6 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminCategoryMainActionsSection">
         <element name="SaveButton" type="button" selector=".page-actions-inner #save" timeout="30"/>
@@ -14,5 +15,16 @@
         <element name="categoryStoreViewDropdownToggle" type="button" selector="#store-change-button"/>
         <element name="categoryStoreViewOption" type="button" selector="//div[contains(@class, 'store-switcher')]//a[normalize-space()='{{store}}']" parameterized="true"/>
         <element name="categoryStoreViewModalAccept" type="button" selector=".modal-popup.confirm._show .action-accept"/>
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCategoryMainActionsSection">
+        <element name="SaveButton" type="button" selector=".page-actions-inner #save" timeout="30"/>
+        <element name="DeleteButton" type="button" selector=".page-actions-inner #delete" timeout="30"/>
+        <element name="CategoryStoreViewDropdownToggle" type="button" selector="#store-change-button"/>
+        <element name="CategoryStoreViewOption" type="button" selector="//div[contains(@class, 'store-switcher')]//a[normalize-space()='{{store}}']" parameterized="true"/>
+        <element name="CategoryStoreViewModalAccept" type="button" selector=".modal-popup.confirm._show .action-accept"/>
+        <element name="allStoreViews" type="button" selector=".store-switcher .store-switcher-all" timeout="30"/>
+        <element name="storeSwitcher" type="text" selector=".store-switcher"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </section>
 </sections>

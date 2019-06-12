@@ -67,13 +67,20 @@ class Storage
      *
      * @return void
      */
+<<<<<<< HEAD
     private function addRecord(string $customerId, string $addressId)
+=======
+    private function addRecord(string $customerId, string $addressId): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         if (!$customerId || !$addressId) {
             return;
         }
+<<<<<<< HEAD
         $customerId = (string)$customerId;
         $addressId = (string)$addressId;
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         if (!array_key_exists($customerId, $this->addresses)) {
             $this->addresses[$customerId] = [];
         }
@@ -90,7 +97,11 @@ class Storage
      *
      * @return void
      */
+<<<<<<< HEAD
     private function loadAddresses(array $customerIds)
+=======
+    private function loadAddresses(array $customerIds): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         /** @var AddressCollection $collection */
         $collection = $this->addressCollectionFactory->create();
@@ -121,7 +132,11 @@ class Storage
     {
         return array_key_exists($forCustomerId, $this->addresses)
             && in_array(
+<<<<<<< HEAD
                 (string)$addressId,
+=======
+                $addressId,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 $this->addresses[$forCustomerId],
                 true
             );
@@ -133,7 +148,11 @@ class Storage
      * @param string[] $forCustomersIds
      * @return void
      */
+<<<<<<< HEAD
     public function prepareAddresses(array $forCustomersIds)
+=======
+    public function prepareAddresses(array $forCustomersIds): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         if (!$forCustomersIds) {
             return;

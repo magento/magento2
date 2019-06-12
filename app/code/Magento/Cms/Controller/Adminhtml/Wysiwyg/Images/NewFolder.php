@@ -6,12 +6,20 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
+<<<<<<< HEAD
+=======
+use Magento\Framework\App\Action\HttpPostActionInterface;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Creates new folder.
  */
+<<<<<<< HEAD
 class NewFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
+=======
+class NewFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images implements HttpPostActionInterface
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -28,7 +36,10 @@ class NewFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\App\Filesystem\DirectoryResolver|null $directoryResolver
+<<<<<<< HEAD
      * @throws \RuntimeException
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

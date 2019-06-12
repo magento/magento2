@@ -8,13 +8,10 @@ namespace Magento\NewRelicReporting\Test\Unit\Model\Module;
 use Magento\NewRelicReporting\Model\Module\Collect;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\ModuleListInterface;
-use Magento\Framework\Module\Manager;
 use Magento\NewRelicReporting\Model\Module;
 
 /**
  * Class CollectTest
- *
- * @codingStandardsIgnoreFile
  */
 class CollectTest extends \PHPUnit\Framework\TestCase
 {
@@ -44,7 +41,8 @@ class CollectTest extends \PHPUnit\Framework\TestCase
     protected $moduleFactoryMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory
+     * |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleCollectionFactoryMock;
 
@@ -65,9 +63,15 @@ class CollectTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->moduleFactoryMock = $this->createPartialMock(\Magento\NewRelicReporting\Model\ModuleFactory::class, ['create']);
+        $this->moduleFactoryMock = $this->createPartialMock(
+            \Magento\NewRelicReporting\Model\ModuleFactory::class,
+            ['create']
+        );
 
-        $this->moduleCollectionFactoryMock = $this->createPartialMock(\Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory::class, ['create']);
+        $this->moduleCollectionFactoryMock = $this->createPartialMock(
+            \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory::class,
+            ['create']
+        );
 
         $this->model = new Collect(
             $this->moduleListMock,
@@ -86,7 +90,8 @@ class CollectTest extends \PHPUnit\Framework\TestCase
     public function testGetModuleDataWithoutRefresh()
     {
         $moduleCollectionMock = $this->getMockBuilder(
-            \Magento\NewRelicReporting\Model\ResourceModel\Module\Collection::class)
+            \Magento\NewRelicReporting\Model\ResourceModel\Module\Collection::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $itemMock = $this->createMock(\Magento\NewRelicReporting\Model\Module::class);
@@ -156,10 +161,6 @@ class CollectTest extends \PHPUnit\Framework\TestCase
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
 
-        $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->will(
-            $this->returnValue(false)
-        );
-
         $this->assertInternalType(
             'array',
             $this->model->getModuleData()
@@ -175,11 +176,15 @@ class CollectTest extends \PHPUnit\Framework\TestCase
     public function testGetModuleDataRefresh($data)
     {
         $moduleCollectionMock = $this->getMockBuilder(
-            \Magento\NewRelicReporting\Model\ResourceModel\Module\Collection::class)
+            \Magento\NewRelicReporting\Model\ResourceModel\Module\Collection::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \Magento\NewRelicReporting\Model\Module|\PHPUnit_Framework_MockObject_MockObject $itemMock */
-        $itemMock = $this->createPartialMock(\Magento\NewRelicReporting\Model\Module::class, ['getName', 'getData', 'setData', 'getState', 'save']);
+        $itemMock = $this->createPartialMock(
+            \Magento\NewRelicReporting\Model\Module::class,
+            ['getName', 'getData', 'setData', 'getState', 'save']
+        );
         $modulesMockArray = [
             'Module_Name1' => [
                 'name' => 'Module_Name1',
@@ -246,10 +251,6 @@ class CollectTest extends \PHPUnit\Framework\TestCase
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
 
-        $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->will(
-            $this->returnValue(true)
-        );
-
         $this->assertInternalType(
             'array',
             $this->model->getModuleData()
@@ -265,11 +266,15 @@ class CollectTest extends \PHPUnit\Framework\TestCase
     public function testGetModuleDataRefreshOrStatement($data)
     {
         $moduleCollectionMock = $this->getMockBuilder(
-            \Magento\NewRelicReporting\Model\ResourceModel\Module\Collection::class)
+            \Magento\NewRelicReporting\Model\ResourceModel\Module\Collection::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \Magento\NewRelicReporting\Model\Module|\PHPUnit_Framework_MockObject_MockObject $itemMock */
-        $itemMock = $this->createPartialMock(\Magento\NewRelicReporting\Model\Module::class, ['getName', 'getData', 'setData', 'getState', 'save']);
+        $itemMock = $this->createPartialMock(
+            \Magento\NewRelicReporting\Model\Module::class,
+            ['getName', 'getData', 'setData', 'getState', 'save']
+        );
         $modulesMockArray = [
             'Module_Name1' => [
                 'name' => 'Module_Name1',
@@ -335,10 +340,6 @@ class CollectTest extends \PHPUnit\Framework\TestCase
         $this->moduleListMock->expects($this->any())
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
-
-        $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->will(
-            $this->returnValue(true)
-        );
 
         $this->assertInternalType(
             'array',

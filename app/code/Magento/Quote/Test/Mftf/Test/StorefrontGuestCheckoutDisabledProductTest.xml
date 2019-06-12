@@ -14,7 +14,11 @@
             <title value="Remove item from cart if product disabled"/>
             <description value="Remove item from cart if simple or configurable product is disabled"/>
             <severity value="MAJOR"/>
+<<<<<<< HEAD
             <testCaseId value="MAGETWO-95844"/>
+=======
+            <testCaseId value="MAGETWO-95857"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <group value="checkout"/>
         </annotations>
         <before>
@@ -22,12 +26,25 @@
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+<<<<<<< HEAD
             <!-- Create the configurable product based on the data in the /data folder -->
             <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!-- Make the configurable product have two options, that are children of the default attribute set -->
             <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createConfigProductAttribute"/>
+=======
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create the configurable product based on the data in the /data folder -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Make the configurable product have two options, that are children of the default attribute set -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </createData>
@@ -43,6 +60,7 @@
             <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </getData>
+<<<<<<< HEAD
             <!-- Create the 2 children that will be a part of the configurable product -->
             <createData entity="SimpleOption" stepKey="createConfigChildProduct1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
@@ -53,6 +71,19 @@
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption2"/>
             </createData>
+=======
+
+            <!-- Create the 2 children that will be a part of the configurable product -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <!-- Assign the two products to the configurable product -->
             <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
                 <requiredEntity createDataKey="createConfigProduct"/>
@@ -71,21 +102,37 @@
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+<<<<<<< HEAD
+=======
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteProduct2"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+<<<<<<< HEAD
         </after>
         <!--  Step 1: Add simple product to shopping cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
+=======
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductListing"/>
+            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetGridToDefaultKeywordSearch"/>
+        </after>
+        <!-- Step 1: Add simple product to shopping cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
+        <actionGroup ref="AddSimpleProductToCart" stepKey="cartAddSimpleProductToCart">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="productCount" value="1"/>
         </actionGroup>
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="goToConfigProductPage"/>
+<<<<<<< HEAD
         <waitForPageLoad stepKey="waitForStoreFrontLoad"/>
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption1.value$$" stepKey="selectOption"/>
         <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart" />
         <waitForElement selector="{{StorefrontMessagesSection.messageProductAddedToCart($$createConfigProduct.name$$)}}" time="30" stepKey="assertMessage"/>
@@ -94,8 +141,11 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <!-- Find the first simple product that we just created using the product grid and go to its page-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+<<<<<<< HEAD
         <waitForPageLoad stepKey="waitForAdminProductGridLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
             <argument name="product" value="$$createConfigChildProduct1$$"/>
         </actionGroup>
@@ -104,18 +154,57 @@
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <!-- Disabled child configurable product -->
         <click selector="{{AdminProductFormSection.enableProductAttributeLabel}}" stepKey="clickDisableProduct"/>
+<<<<<<< HEAD
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
         <waitForPageLoad stepKey="waitForProductPageSaved"/>
+=======
+        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <!-- Disabled simple product from grid -->
         <actionGroup ref="ChangeStatusProductUsingProductGridActionGroup" stepKey="disabledProductFromGrid">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="status" value="Disable"/>
         </actionGroup>
         <closeTab stepKey="closeTab"/>
+<<<<<<< HEAD
         <!--Check cart-->
         <reloadPage stepKey="reloadPage"/>
         <waitForPageLoad stepKey="waitForCheckoutPageReload2"/>
         <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickMiniCart"/>
         <dontSeeElement selector="{{StorefrontMiniCartSection.quantity}}" stepKey="dontSeeCartItem"/>
+=======
+        <!-- Check cart -->
+        <reloadPage stepKey="reloadPage"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageReload"/>
+        <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickMiniCart"/>
+        <dontSeeElement selector="{{StorefrontMiniCartSection.quantity}}" stepKey="dontSeeCartItem"/>
+        <!-- Add simple product to shopping cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct2.name$$)}}" stepKey="amOnSimpleProductPage2"/>
+        <actionGroup ref="AddSimpleProductToCart" stepKey="cartAddSimpleProductToCart2">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckoutCartPage"/>
+        <!-- Disabled via admin panel -->
+        <openNewTab stepKey="openNewTab2"/>
+        <!-- Find the first simple product that we just created using the product grid and go to its page -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage2"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct2">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage2"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+        <!-- Disabled simple product from grid -->
+        <actionGroup ref="ChangeStatusProductUsingProductGridActionGroup" stepKey="disabledProductFromGrid2">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+            <argument name="status" value="Disable"/>
+        </actionGroup>
+        <closeTab stepKey="closeTab2"/>
+        <!--Check cart-->
+        <reloadPage stepKey="reloadPage2"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageReload2"/>
+        <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickMiniCart2"/>
+        <dontSeeElement selector="{{StorefrontMiniCartSection.quantity}}" stepKey="dontSeeCartItem2"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </test>
 </tests>

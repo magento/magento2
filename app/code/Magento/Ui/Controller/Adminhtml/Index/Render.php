@@ -5,17 +5,36 @@
  */
 namespace Magento\Ui\Controller\Adminhtml\Index;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Ui\Controller\Adminhtml\AbstractAction;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
+<<<<<<< HEAD
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Element\UiComponentFactory;
+=======
+use Magento\Ui\Model\UiComponentTypeResolver;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Controller\Result\JsonFactory;
 
+/**
+ * Render a component.
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class Render extends AbstractAction
 {
     /**
+<<<<<<< HEAD
+=======
+     * @var \Magento\Ui\Model\UiComponentTypeResolver
+     */
+    private $contentTypeResolver;
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @var JsonFactory
      */
     private $resultJsonFactory;
@@ -33,6 +52,10 @@ class Render extends AbstractAction
     /**
      * @param Context $context
      * @param UiComponentFactory $factory
+<<<<<<< HEAD
+=======
+     * @param UiComponentTypeResolver $contentTypeResolver
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param JsonFactory|null $resultJsonFactory
      * @param Escaper|null $escaper
      * @param LoggerInterface|null $logger
@@ -40,11 +63,19 @@ class Render extends AbstractAction
     public function __construct(
         Context $context,
         UiComponentFactory $factory,
+<<<<<<< HEAD
+=======
+        UiComponentTypeResolver $contentTypeResolver,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         JsonFactory $resultJsonFactory = null,
         Escaper $escaper = null,
         LoggerInterface $logger = null
     ) {
         parent::__construct($context, $factory);
+<<<<<<< HEAD
+=======
+        $this->contentTypeResolver = $contentTypeResolver;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->resultJsonFactory = $resultJsonFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Controller\Result\JsonFactory::class);
         $this->escaper = $escaper ?: \Magento\Framework\App\ObjectManager::getInstance()
@@ -54,18 +85,24 @@ class Render extends AbstractAction
     }
 
     /**
+<<<<<<< HEAD
      * Action for AJAX request.
      *
      * @return void|\Magento\Framework\Controller\ResultInterface
+=======
+     * @inheritdoc
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function execute()
     {
         if ($this->_request->getParam('namespace') === null) {
             $this->_redirect('admin/noroute');
+
             return;
         }
 
         try {
+<<<<<<< HEAD
             $component = $this->factory->create($this->_request->getParam('namespace'));
             if ($this->validateAclResource($component->getContext()->getDataProvider()->getConfigData())) {
                 $this->prepareComponent($component);
@@ -75,6 +112,27 @@ class Render extends AbstractAction
                 }
 
                 $this->_response->appendBody((string) $component->render());
+=======
+            $component = $this->factory->create($this->getRequest()->getParam('namespace'));
+            if ($this->validateAclResource($component->getContext()->getDataProvider()->getConfigData())) {
+                $this->prepareComponent($component);
+                $this->getResponse()->appendBody((string)$component->render());
+
+                $contentType = $this->contentTypeResolver->resolve($component->getContext());
+                $this->getResponse()->setHeader('Content-Type', $contentType, true);
+            } else {
+                /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+                $resultJson = $this->resultJsonFactory->create();
+                $resultJson->setStatusHeader(
+                    \Zend\Http\Response::STATUS_CODE_403,
+                    \Zend\Http\AbstractMessage::VERSION_11,
+                    'Forbidden'
+                );
+                return $resultJson->setData([
+                        'error' => $this->escaper->escapeHtml('Forbidden'),
+                        'errorcode' => 403
+                ]);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->logger->critical($e);
@@ -89,6 +147,10 @@ class Render extends AbstractAction
                 \Zend\Http\AbstractMessage::VERSION_11,
                 'Bad Request'
             );
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             return $resultJson->setData($result);
         } catch (\Exception $e) {
             $this->logger->critical($e);
@@ -103,6 +165,10 @@ class Render extends AbstractAction
                 \Zend\Http\AbstractMessage::VERSION_11,
                 'Bad Request'
             );
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             return $resultJson->setData($result);
         }
     }

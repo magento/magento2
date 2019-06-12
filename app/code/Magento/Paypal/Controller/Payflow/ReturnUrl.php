@@ -1,16 +1,22 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Payflow;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
 use Magento\Paypal\Controller\Payflow;
 use Magento\Paypal\Model\Config;
 use Magento\Sales\Model\Order;
 
-class ReturnUrl extends Payflow
+/**
+ * Paypal Payflow ReturnUrl controller class
+ */
+class ReturnUrl extends Payflow implements CsrfAwareActionInterface, HttpGetActionInterface
 {
     /**
      * @var array of allowed order states on frontend
@@ -29,6 +35,23 @@ class ReturnUrl extends Payflow
         Config::METHOD_PAYFLOWPRO,
         Config::METHOD_PAYFLOWLINK
     ];
+
+    /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
+    }
 
     /**
      * When a customer return to website from payflow gateway.

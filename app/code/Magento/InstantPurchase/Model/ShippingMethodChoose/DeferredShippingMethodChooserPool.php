@@ -16,9 +16,13 @@ class DeferredShippingMethodChooserPool
     private $choosers;
 
     /**
+<<<<<<< HEAD
      * DeferredShippingMethodChooserPool constructor.
      *
      * @param array $choosers
+=======
+     * @param DeferredShippingMethodChooserInterface[] $choosers
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function __construct(array $choosers)
     {
@@ -34,8 +38,12 @@ class DeferredShippingMethodChooserPool
     }
 
     /**
+<<<<<<< HEAD
      * @param $type
      *
+=======
+     * @param string $type
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return DeferredShippingMethodChooserInterface
      */
     public function get($type) : DeferredShippingMethodChooserInterface

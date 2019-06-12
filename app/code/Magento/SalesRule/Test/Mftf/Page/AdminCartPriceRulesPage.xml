@@ -6,10 +6,17 @@
   */
 -->
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
     <page name="AdminCartPriceRulesPage" url="sales_rule/promo_quote/" area="admin" module="Magento_SalesRule">
         <section name="AdminCartPriceRulesSection"/>
         <section name="AdminCartPriceRulesFormSection"/>
         <section name="AdminCartPriceRuleDiscountSection"/>
+=======
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+    <page name="AdminCartPriceRulesPage" url="sales_rule/promo_quote/" area="admin" module="SalesRule">
+        <section name="AdminCartPriceRulesSection"/>
+        <section name="AdminCartPriceRulesFormSection"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </page>
 </pages>

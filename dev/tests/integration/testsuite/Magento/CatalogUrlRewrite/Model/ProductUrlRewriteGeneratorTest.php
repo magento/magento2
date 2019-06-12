@@ -30,6 +30,10 @@ class ProductUrlRewriteGeneratorTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
+<<<<<<< HEAD
+=======
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
@@ -45,10 +49,13 @@ class ProductUrlRewriteGeneratorTest extends TestCase
         $generator = $this->objectManager->get(ProductUrlRewriteGenerator::class);
         $urls = $generator->generate($product);
 
-        $actualUrls = array_map(function ($url) {
-            /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite $url */
-            return $url->getRequestPath();
-        }, $urls);
+        $actualUrls = array_map(
+            function ($url) {
+                /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite $url */
+                return $url->getRequestPath();
+            },
+            $urls
+        );
 
         self::assertTrue(in_array('p002.html', $actualUrls));
         self::assertTrue(in_array('cat-1/p002.html', $actualUrls));

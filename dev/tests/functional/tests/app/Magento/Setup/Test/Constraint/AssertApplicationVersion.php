@@ -24,7 +24,7 @@ class AssertApplicationVersion extends AbstractConstraint
      */
     public function processAssert(Dashboard $dashboard, $version)
     {
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             $version,
             $dashboard->getApplicationVersion()->getVersion(),
             'Application version is incorrect.'

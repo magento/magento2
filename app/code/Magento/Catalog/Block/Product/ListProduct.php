@@ -151,6 +151,33 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         }
 
         return $this->getDefaultListingMode();
+<<<<<<< HEAD
+    }
+
+    /**
+     * Get listing mode for products if toolbar is removed from layout.
+     * Use the general configuration for product list mode from config path catalog/frontend/list_mode as default value
+     * or mode data from block declaration from layout.
+     *
+     * @return string
+     */
+    private function getDefaultListingMode()
+    {
+        // default Toolbar when the toolbar layout is not used
+        $defaultToolbar = $this->getToolbarBlock();
+        $availableModes = $defaultToolbar->getModes();
+
+        // layout config mode
+        $mode = $this->getData('mode');
+
+        if (!$mode || !isset($availableModes[$mode])) {
+            // default config mode
+            $mode = $defaultToolbar->getCurrentMode();
+        }
+
+        return $mode;
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -178,8 +205,9 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
-     * Need use as _prepareLayout - but problem in declaring collection from
-     * another block (was problem with search result)
+     * Need use as _prepareLayout - but problem in declaring collection from another block.
+     * (was problem with search result)
+     *
      * @return $this
      */
     protected function _beforeToHtml()
@@ -188,7 +216,13 @@ class ListProduct extends AbstractProduct implements IdentityInterface
 
         $this->addToolbarBlock($collection);
 
+<<<<<<< HEAD
         $collection->load();
+=======
+        if (!$collection->isLoaded()) {
+            $collection->load();
+        }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         return parent::_beforeToHtml();
     }
@@ -262,6 +296,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
+     * Set collection.
+     *
      * @param AbstractCollection $collection
      * @return $this
      */
@@ -272,7 +308,13 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
+<<<<<<< HEAD
      * @param array|string|integer| Element $code
+=======
+     * Add attribute.
+     *
+     * @param array|string|integer|Element $code
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return $this
      */
     public function addAttribute($code)
@@ -282,6 +324,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
+     * Get price block template.
+     *
      * @return mixed
      */
     public function getPriceBlockTemplate()
@@ -364,13 +408,22 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         return [
             'action' => $url,
             'data' => [
+<<<<<<< HEAD
                 'product' => $product->getEntityId(),
+=======
+                'product' => (int) $product->getEntityId(),
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlHelper->getEncodedUrl($url),
             ]
         ];
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get product price.
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param Product $product
      * @return string
      */
@@ -396,8 +449,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
-     * Specifies that price rendering should be done for the list of products
-     * i.e. rendering happens in the scope of product list, but not single product
+     * Specifies that price rendering should be done for the list of products.
+     * (rendering happens in the scope of product list, but not single product)
      *
      * @return Render
      */
@@ -463,7 +516,11 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         if ($origCategory) {
             $layer->setCurrentCategory($origCategory);
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->addToolbarBlock($collection);
 
         $this->_eventManager->dispatch(

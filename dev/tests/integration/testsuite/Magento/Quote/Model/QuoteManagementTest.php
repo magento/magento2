@@ -12,9 +12,17 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
+<<<<<<< HEAD
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+=======
+use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\ExpectationFailedException;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 /**
  * Class for testing QuoteManagement model
@@ -102,6 +110,36 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Tries to create an order using quote with empty customer email.
+     *
+     * Order should not start placing if order validation is failed.
+     *
+     * @magentoDataFixture Magento/Quote/Fixtures/quote_without_customer_email.php
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Email has a wrong format
+     */
+    public function testSubmitWithEmptyCustomerEmail()
+    {
+        $quote = $this->getQuote('test01');
+        $orderManagement = $this->createMock(OrderManagementInterface::class);
+        $orderManagement->expects($this->never())
+            ->method('place');
+        $cartManagement = $this->objectManager->create(
+            CartManagementInterface::class,
+            ['orderManagement' => $orderManagement]
+        );
+
+        try {
+            $cartManagement->placeOrder($quote->getId());
+        } catch (ExpectationFailedException $e) {
+            $this->fail('Place order method was not expected to be called if order validation is failed');
+        }
+    }
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * Gets quote by reserved order ID.
      *
      * @param string $reservedOrderId

@@ -16,6 +16,7 @@ use Psr\Log\LoggerInterface as Logger;
 /**
  * Base items collection class
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -217,7 +218,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     {
         if ($this->_totalRecords === null) {
             $sql = $this->getSelectCountSql();
-            $this->_totalRecords = $this->getConnection()->fetchOne($sql, $this->_bindParams);
+            $this->_totalRecords = $this->_totalRecords ?? $this->getConnection()->fetchOne($sql, $this->_bindParams);
         }
         return (int)$this->_totalRecords;
     }
@@ -237,7 +238,8 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
         $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
 
-        if (!count($this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP))) {
+        $part = $this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP);
+        if (!is_array($part) || !count($part)) {
             $countSelect->columns(new \Zend_Db_Expr('COUNT(*)'));
             return $countSelect;
         }
@@ -275,7 +277,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * self::setOrder() alias
+     * Sets order and direction.
      *
      * @param string $field
      * @param string $direction
@@ -364,11 +366,14 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
     /**
      * Hook for operations before rendering filters
+     *
      * @return void
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function _renderFiltersBefore()
     {
     }
+    // phpcs:enable
 
     /**
      * Add field filter to collection
@@ -601,6 +606,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     }
 
     /**
+     * Returns an items collection.
      * Returns a collection item that corresponds to the fetched row
      * and moves the internal data pointer ahead
      *
@@ -727,6 +733,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     public function printLogQuery($printQuery = false, $logQuery = false, $sql = null)
     {
         if ($printQuery || $this->getFlag('print_query')) {
+            // phpcs:ignore Magento2.Security.LanguageConstruct
             echo $sql === null ? $this->getSelect()->__toString() : $sql;
         }
 
@@ -819,11 +826,13 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Init select
      *
      * @return void
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function _initSelect()
     {
         // no implementation, should be overridden in children classes
     }
+    // phpcs:enable
 
     /**
      * Join extension attribute.
@@ -887,9 +896,14 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * @inheritdoc
      * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         return array_diff(
             parent::__sleep(),
             ['_fetchStrategy', '_logger', '_conn', 'extensionAttributesJoinProcessor']
@@ -899,9 +913,14 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * @inheritdoc
      * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_logger = $objectManager->get(Logger::class);

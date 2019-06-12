@@ -20,6 +20,7 @@ class GenericTest extends \PHPUnit\Framework\TestCase
         $frontendMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
 
         $poolMock = $this->createMock(\Magento\Framework\App\Cache\Type\FrontendPool::class);
+        /** @noinspection PhpUndefinedFieldInspection */
         $poolMock->expects(
             $this->atLeastOnce()
         )->method(
@@ -33,6 +34,7 @@ class GenericTest extends \PHPUnit\Framework\TestCase
         $model = new $className($poolMock);
 
         // Test initialization was done right
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->assertEquals($className::CACHE_TAG, $model->getTag(), 'The tag is wrong');
 
         // Test that frontend is now engaged in operations

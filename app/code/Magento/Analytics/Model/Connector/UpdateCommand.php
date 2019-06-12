@@ -15,7 +15,10 @@ use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
 
 /**
+<<<<<<< HEAD
  * Class UpdateCommand
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  * Command executes in case change store url
  */
 class UpdateCommand implements CommandInterface
@@ -102,8 +105,14 @@ class UpdateCommand implements CommandInterface
             if (!$result) {
                 $this->logger->warning(
                     sprintf(
+<<<<<<< HEAD
                         'Update of the subscription for MBI service has been failed: %s',
                         !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
+=======
+                        'Update of the subscription for MBI service has been failed: %s. Content-Type: %s',
+                        !empty($response->getBody()) ? $response->getBody() : 'Response body is empty',
+                        $response->getHeader('Content-Type')
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     )
                 );
             }

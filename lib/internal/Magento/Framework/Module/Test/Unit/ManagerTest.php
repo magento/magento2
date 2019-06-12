@@ -5,6 +5,12 @@
  */
 namespace Magento\Framework\Module\Test\Unit;
 
+<<<<<<< HEAD
+=======
+/**
+ * Manager test
+ */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -13,7 +19,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     const XML_PATH_OUTPUT_ENABLED = 'custom/is_module_output_enabled';
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     private $_model;
 
@@ -35,11 +41,15 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $this->_moduleList = $this->getMockForAbstractClass(\Magento\Framework\Module\ModuleListInterface::class);
         $this->_moduleList->expects($this->any())
             ->method('getOne')
-            ->will($this->returnValueMap([
-                ['Module_One', ['name' => 'One_Module', 'setup_version' => '1']],
-                ['Module_Two', ['name' => 'Two_Module', 'setup_version' => '2']],
-                ['Module_Three', ['name' => 'Two_Three']],
-            ]));
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['Module_One', ['name' => 'One_Module', 'setup_version' => '1']],
+                        ['Module_Two', ['name' => 'Two_Module', 'setup_version' => '2']],
+                        ['Module_Three', ['name' => 'Two_Three']],
+                    ]
+                )
+            );
         $this->_outputConfig = $this->getMockForAbstractClass(\Magento\Framework\Module\Output\ConfigInterface::class);
         $this->_model = new \Magento\Framework\Module\Manager(
             $this->_outputConfig,
@@ -52,16 +62,21 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testIsEnabled()
     {
-        $this->_moduleList->expects($this->exactly(2))->method('has')->will($this->returnValueMap([
-            ['Module_Exists', true],
-            ['Module_NotExists', false],
-        ]));
+        $this->_moduleList->expects($this->exactly(2))->method('has')->will(
+            $this->returnValueMap(
+                [
+                    ['Module_Exists', true],
+                    ['Module_NotExists', false],
+                ]
+            )
+        );
         $this->assertTrue($this->_model->isEnabled('Module_Exists'));
         $this->assertFalse($this->_model->isEnabled('Module_NotExists'));
     }
 
     public function testIsOutputEnabledReturnsFalseForDisabledModule()
     {
+        $this->_moduleList->expects($this->once())->method('has')->with('Disabled_Module')->willReturn(false);
         $this->_outputConfig->expects($this->any())->method('isSetFlag')->will($this->returnValue(true));
         $this->assertFalse($this->_model->isOutputEnabled('Disabled_Module'));
     }

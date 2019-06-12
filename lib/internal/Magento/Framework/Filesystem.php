@@ -71,6 +71,20 @@ class Filesystem
     }
 
     /**
+     * Create an instance of directory with read permissions by path.
+     *
+     * @param string $path
+     * @param string $driverCode
+     *
+     * @return \Magento\Framework\Filesystem\Directory\ReadInterface
+     *
+     */
+    public function getDirectoryReadByPath($path, $driverCode = DriverPool::FILE)
+    {
+        return $this->readFactory->create($path, $driverCode);
+    }
+
+    /**
      * Create an instance of directory with write permissions
      *
      * @param string $directoryCode

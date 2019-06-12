@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\CatalogInventory\Test\Unit\Model\ResourceModel;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
@@ -116,7 +121,11 @@ class StockTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
+<<<<<<< HEAD
     public function testLockProductsStock($websiteId, array $productIds, array $products, array $result)
+=======
+    public function testLockProductsStock(int $websiteId, array $productIds, array $products, array $result)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $this->selectMock->expects($this->exactly(2))
             ->method('from')
@@ -176,7 +185,11 @@ class StockTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+<<<<<<< HEAD
     public function productsDataProvider()
+=======
+    public function productsDataProvider(): array
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         return [
             [

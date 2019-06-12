@@ -36,9 +36,10 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
             'selector' => '.price-to .price',
         ],
         'price_excluding_tax' => [
-            'selector' => '.price-excluding-tax .price'
+            'selector' => '.price-excluding-tax .price',
         ],
         'price_including_tax' => [
+<<<<<<< HEAD
             'selector' => '.price-including-tax .price'
         ],
         'old_price_from' => [
@@ -46,6 +47,15 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
         ],
         'old_price_to' => [
             'selector' => '.price-to .old-price .price-wrapper'
+=======
+            'selector' => '.price-including-tax .price',
+        ],
+        'old_price_from' => [
+            'selector' => '.price-from .old-price .price-wrapper',
+        ],
+        'old_price_to' => [
+            'selector' => '.price-to .old-price .price-wrapper',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ],
     ];
 
@@ -151,7 +161,11 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
     }
 
     /**
+<<<<<<< HEAD
      * Get min old price
+=======
+     * Get min old price.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param string $currency
      * @return string|null
@@ -162,7 +176,11 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
     }
 
     /**
+<<<<<<< HEAD
      * Get max old price
+=======
+     * Get max old price.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param string $currency
      * @return string|null

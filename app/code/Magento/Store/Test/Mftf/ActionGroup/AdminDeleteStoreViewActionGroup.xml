@@ -7,7 +7,11 @@
 -->
 <!-- Test XML Example -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+=======
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <actionGroup name="AdminDeleteStoreViewActionGroup">
         <arguments>
             <argument name="customStore" defaultValue="customStore"/>
@@ -23,6 +27,44 @@
         <click selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="clickDeleteStoreViewAgain"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.title}}" stepKey="waitingForWarningModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreDelete"/>
+<<<<<<< HEAD
         <see userInput="You deleted the store view." stepKey="seeDeleteMessage"/>
     </actionGroup>
 </actionGroups>
+=======
+        <waitForPageLoad stepKey="waitForSuccessMessage"/>
+        <see userInput="You deleted the store view." stepKey="seeDeleteMessage"/>
+    </actionGroup>
+    <actionGroup name="DeleteCustomStoreViewBackupEnabledYesActionGroup">
+        <arguments>
+            <argument name="storeViewName" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{storeViewName}}" selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="fillSearchStoreViewField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickEditExistingStoreViewRow"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <click selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="clickDeleteStoreViewButtonOnEditStorePage"/>
+        <selectOption userInput="Yes" selector="{{AdminStoreBackupOptionsSection.createBackupSelect}}" stepKey="setCreateDbBackupToYes"/>
+        <click selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="clickDeleteStoreViewButtonOnDeleteStorePage"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.title}}" stepKey="waitingForWarningModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreViewDelete"/>
+        <waitForPageLoad stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminStoresGridSection.successMessage}}" userInput="The database was backed up." stepKey="seeAssertDatabaseBackedUpMessage"/>
+        <see selector="{{AdminStoresGridSection.successMessage}}" userInput="You deleted the store view." stepKey="seeAssertSuccessDeleteStoreViewMessage"/>
+    </actionGroup>
+    <actionGroup name="AssertStoreViewNotInGrid">
+        <arguments>
+            <argument name="storeViewName" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{storeViewName}}" selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="fillSearchStoreViewField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <see selector="{{AdminStoresGridSection.emptyText}}" userInput="We couldn't find any records." stepKey="seeAssertStoreViewNotInGridMessage"/>
+    </actionGroup>
+</actionGroups>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc

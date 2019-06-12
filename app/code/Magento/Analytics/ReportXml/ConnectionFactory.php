@@ -11,8 +11,11 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
+<<<<<<< HEAD
  * Class ConnectionFactory
  *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  * Creates connection instance for export according to existing one
  * This connection does not use buffered statement, also this connection is not persistent
  */
@@ -29,8 +32,11 @@ class ConnectionFactory
     private $objectManager;
 
     /**
+<<<<<<< HEAD
      * ConnectionFactory constructor.
      *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param ResourceConnection $resourceConnection
      * @param ObjectManagerInterface $objectManager
      */

@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\LayeredNavigation\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\Category;
@@ -11,7 +16,11 @@ use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
+<<<<<<< HEAD
  * Assertion that category name and products qty are correct in category layered navigation
+=======
+ * Assertion that category name and products qty are correct in category layered navigation.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  */
 class AssertProductsCount extends AbstractConstraint
 {
@@ -30,7 +39,11 @@ class AssertProductsCount extends AbstractConstraint
     private $catalogCategoryView;
 
     /**
+<<<<<<< HEAD
      * Assert that category name and products cont in layered navigation are correct
+=======
+     * Assert that category name and products cont in layered navigation are correct.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param CatalogCategoryView $catalogCategoryView
      * @param Category $category
@@ -42,7 +55,11 @@ class AssertProductsCount extends AbstractConstraint
         CatalogCategoryView $catalogCategoryView,
         Category $category,
         BrowserInterface $browser,
+<<<<<<< HEAD
         $productsCount
+=======
+        string $productsCount
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ) {
         $this->browser = $browser;
         $this->catalogCategoryView = $catalogCategoryView;
@@ -50,7 +67,11 @@ class AssertProductsCount extends AbstractConstraint
             $parentCategory = $category->getDataFieldConfig('parent_id')['source']->getParentCategory();
             if ($parentCategory && $parentCategory->getData('is_anchor') == 'No') {
                 $this->openCategory($parentCategory);
+<<<<<<< HEAD
                 \PHPUnit_Framework_Assert::assertTrue(
+=======
+                \PHPUnit\Framework\Assert::assertTrue(
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     $this->catalogCategoryView->getLayeredNavigationBlock()->isCategoryVisible(
                         $category,
                         $productsCount

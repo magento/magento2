@@ -7,7 +7,11 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+=======
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <test name="AdminCreateProductCustomAttributeSet">
         <annotations>
             <features value="Catalog"/>
@@ -15,13 +19,19 @@
             <title value="Admin should be able to create a simple product using a custom attribute set"/>
             <description value="Admin should be able to create a simple product using a custom attribute set"/>
             <severity value="AVERAGE"/>
+<<<<<<< HEAD
             <testCaseId value="MAGETWO-79284"/>
             <group value="catalog"/>
             <group value="attributeSet"/>
+=======
+            <testCaseId value="MC-244"/>
+            <group value="Catalog"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </annotations>
 
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+<<<<<<< HEAD
 
             <!-- Create the new attribute set -->
             <actionGroup ref="CreateAttributeSetActionGroup" stepKey="createAttributeSet">
@@ -32,10 +42,13 @@
             <actionGroup ref="CreateNewGroupInAttributeSetActionGroup" stepKey="createNewGroup"/>
             <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute('manufacturer')}}" selector2="{{AdminProductAttributeSetSection.attribute('TestGroupName')}}" stepKey="assignManufacturer"/>
             <click selector="{{AdminProductAttributeSetSection.save}}" stepKey="clickSave2"/>
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </before>
 
         <after>
             <!-- Delete the new attribute set -->
+<<<<<<< HEAD
             <actionGroup ref="DeleteAttributeSetActionGroup" stepKey="deleteAttributeSet">
                 <argument name="name" value="{{ProductAttributeFrontendLabel.label}}"/>
             </actionGroup>
@@ -43,6 +56,35 @@
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 
+=======
+            <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
+            <waitForPageLoad stepKey="wait1"/>
+            <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="filterByName"/>
+            <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickSearch"/>
+            <click selector="{{AdminProductAttributeSetGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
+            <waitForPageLoad stepKey="wait2"/>
+            <click selector="{{AdminProductAttributeSetSection.deleteBtn}}" stepKey="clickDelete"/>
+            <click selector="{{AdminProductAttributeSetSection.modalOk}}" stepKey="confirmDelete"/>
+            <waitForPageLoad stepKey="wait3"/>
+
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Create a new attribute set -->
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <click selector="{{AdminProductAttributeSetGridSection.addAttributeSetBtn}}" stepKey="clickAddAttributeSet"/>
+        <fillField selector="{{AdminProductAttributeSetSection.name}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillName"/>
+        <selectOption selector="{{AdminProductAttributeSetSection.basedOn}}" userInput="Default" stepKey="selectDefaultSet"/>
+        <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickSave1"/>
+        <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute('meta_keyword')}}" selector2="{{AdminProductAttributeSetSection.attribute('manufacturer')}}" stepKey="unassign1"/>
+        <click selector="{{AdminProductAttributeSetSection.addNewGroupBtn}}" stepKey="clickAddNewGroup"/>
+        <fillField selector="{{AdminProductAttributeSetSection.newGroupName}}" userInput="TestGroupName" stepKey="fillNewGroupName"/>
+        <click selector="{{AdminProductAttributeSetSection.modalOk}}" stepKey="clickOkInModal"/>
+        <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute('manufacturer')}}" selector2="{{AdminProductAttributeSetSection.attribute('TestGroupName')}}" stepKey="assignManufacturer"/>
+        <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickSave2"/>
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <!-- Go to new product page and see a default attribute -->
         <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToNewProductPage"/>
         <waitForPageLoad stepKey="wait2"/>
@@ -55,10 +97,16 @@
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
         <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="searchForAttrSet"/>
+<<<<<<< HEAD
         <waitForElementVisible selector="{{AdminProductFormSection.attributeSetSearchCount}}" stepKey="waitLoadOption"/>
         <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
 
         <!-- See new attribute set -->
+=======
+        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+
+        <!-- See new attibute set -->
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <seeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('testgroupname')}}" stepKey="seeTestGroupName"/>
         <dontSeeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('meta_keyword')}}" stepKey="dontSeeMetaKeyword"/>
 

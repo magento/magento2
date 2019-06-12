@@ -7,6 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="StorefrontCreateCustomerTest">
         <annotations>
@@ -14,6 +15,15 @@
             <stories value="Create a Customer via the Storefront"/>
             <title value="You should be able to create a customer via the storefront"/>
             <description value="You should be able to create a customer via the storefront."/>
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCreateCustomerTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Create a Customer via the Storefront"/>
+            <title value="Admin should be able to create a customer via the storefront"/>
+            <description value="Admin should be able to create a customer via the storefront"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-23546"/>
             <group value="customer"/>
@@ -23,6 +33,7 @@
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
 
+<<<<<<< HEAD
         <amOnPage stepKey="amOnStorefrontPage"  url="/"/>
         <click stepKey="clickOnCreateAccountLink" selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}"/>
         <fillField  stepKey="fillFirstName" userInput="{{CustomerEntityOne.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}"/>
@@ -35,5 +46,10 @@
         <see stepKey="seeFirstName" userInput="{{CustomerEntityOne.firstname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
         <see stepKey="seeLastName" userInput="{{CustomerEntityOne.lastname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
         <see stepKey="seeEmail" userInput="{{CustomerEntityOne.email}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+=======
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+        </actionGroup>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </test>
 </tests>

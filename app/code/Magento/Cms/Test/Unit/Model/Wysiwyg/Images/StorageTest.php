@@ -111,7 +111,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         'jpg' => 'image/jpg',
         'jpeg' => 'image/jpeg',
         'png' => 'image/png',
+<<<<<<< HEAD
         'gif' => 'image/png'
+=======
+        'gif' => 'image/png',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ];
 
     /**
@@ -184,7 +188,18 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
             ->setMethods(
+<<<<<<< HEAD
                 ['getCurrentPath', 'getName', 'getSessionId', 'getCookieLifetime', 'getCookiePath', 'getCookieDomain']
+=======
+                [
+                    'getCurrentPath',
+                    'getName',
+                    'getSessionId',
+                    'getCookieLifetime',
+                    'getCookiePath',
+                    'getCookieDomain',
+                ]
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             )
             ->disableOriginalConstructor()
             ->getMock();
@@ -195,7 +210,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $allowedExtensions = [
             'allowed' => $this->allowedImageExtensions,
+<<<<<<< HEAD
             'image_allowed' => $this->allowedImageExtensions
+=======
+            'image_allowed' => $this->allowedImageExtensions,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -218,9 +237,15 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                 'resizeParameters' => $this->resizeParameters,
                 'dirs' => [
                     'exclude' => [],
+<<<<<<< HEAD
                     'include' => []
                 ],
                 'extensions' => $allowedExtensions
+=======
+                    'include' => [],
+                ],
+                'extensions' => $allowedExtensions,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         );
     }
@@ -243,26 +268,36 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Cms\Model\Wysiwyg\Images\Storage::deleteDirectory
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Directory /storage/some/another/dir is not under storage root path.
      */
     public function testDeleteDirectoryOverRoot()
     {
+<<<<<<< HEAD
         $this->expectException(
             \Magento\Framework\Exception\LocalizedException::class,
             sprintf('Directory %s is not under storage root path.', self::INVALID_DIRECTORY_OVER_ROOT)
         );
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->will($this->returnArgument(0));
         $this->imagesStorage->deleteDirectory(self::INVALID_DIRECTORY_OVER_ROOT);
     }
 
     /**
      * @covers \Magento\Cms\Model\Wysiwyg\Images\Storage::deleteDirectory
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage We can't delete root directory /storage/root/dir right now.
      */
     public function testDeleteRootDirectory()
     {
+<<<<<<< HEAD
         $this->expectException(
             \Magento\Framework\Exception\LocalizedException::class,
             sprintf('We can\'t delete root directory %s right now.', self::STORAGE_ROOT_DIR)
         );
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->will($this->returnArgument(0));
         $this->imagesStorage->deleteDirectory(self::STORAGE_ROOT_DIR);
     }
@@ -318,8 +353,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                 'resizeParameters' => $this->resizeParameters,
                 'dirs' => [
                     'exclude' => $exclude,
-                    'include' => $include
-                ]
+                    'include' => $include,
+                ],
             ]
         );
 
@@ -344,11 +379,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'exclude' => [
-                    ['name' => 'dress']
+                    ['name' => 'dress'],
                 ],
                 'include' => [],
                 'filenames' => [],
-                'expectRemoveKeys' => []
+                'expectRemoveKeys' => [],
             ],
             [
                 'exclude' => [],
@@ -356,36 +391,36 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                 'filenames' => [
                     '/dress',
                 ],
-                'expectRemoveKeys' => []
+                'expectRemoveKeys' => [],
             ],
             [
                 'exclude' => [
-                    ['name' => 'dress']
+                    ['name' => 'dress'],
                 ],
                 'include' => [],
                 'filenames' => [
                     '/collection',
                 ],
-                'expectRemoveKeys' => []
+                'expectRemoveKeys' => [],
             ],
             [
                 'exclude' => [
                     ['name' => 'gear', 'regexp' => 1],
                     ['name' => 'home', 'regexp' => 1],
                     ['name' => 'collection'],
-                    ['name' => 'dress']
+                    ['name' => 'dress'],
                 ],
                 'include' => [
                     ['name' => 'home', 'regexp' => 1],
-                    ['name' => 'collection']
+                    ['name' => 'collection'],
                 ],
                 'filenames' => [
                     '/dress',
                     '/collection',
-                    '/gear'
+                    '/gear',
                 ],
-                'expectRemoveKeys' => [[0], [2]]
-            ]
+                'expectRemoveKeys' => [[0], [2]],
+            ],
         ];
     }
 
@@ -413,6 +448,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $storageCollectionMock->expects($this->once())
             ->method('setCollectRecursively')
             ->with(false)
+            ->willReturnSelf();
+        $storageCollectionMock->expects($this->once())
+            ->method('setOrder')
+            ->with('basename', \Magento\Framework\Data\Collection\Filesystem::SORT_ORDER_ASC)
             ->willReturnSelf();
         $storageCollectionMock->expects($this->once())
             ->method('getIterator')
@@ -448,7 +487,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                     'setFilesDispersion',
                     'checkMimeType',
                     'save',
+<<<<<<< HEAD
                     'getUploadedFileName'
+=======
+                    'getUploadedFileName',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ]
             )
             ->getMock();
@@ -468,21 +511,33 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             [
                 [$realPath, $realPath],
                 [$thumbnailTargetPath, $thumbnailTargetPath],
+<<<<<<< HEAD
                 [$thumbnailDestination, $thumbnailDestination]
+=======
+                [$thumbnailDestination, $thumbnailDestination],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         );
         $this->directoryMock->expects($this->atLeastOnce())->method('isFile')
             ->willReturnMap(
                 [
                     [$realPath, true],
+<<<<<<< HEAD
                     [$thumbnailDestination, true]
+=======
+                    [$thumbnailDestination, true],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ]
             );
         $this->directoryMock->expects($this->atLeastOnce())->method('isExist')
             ->willReturnMap(
                 [
                     [$realPath, true],
+<<<<<<< HEAD
                     [$thumbnailTargetPath, true]
+=======
+                    [$thumbnailTargetPath, true],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ]
             );
 

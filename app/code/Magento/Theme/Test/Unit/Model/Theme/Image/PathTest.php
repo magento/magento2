@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test of image path model
  */
@@ -71,7 +69,10 @@ class PathTest extends \PHPUnit\Framework\TestCase
     public function testGetPreviewImageUrl()
     {
         /** @var $theme \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject */
-        $theme = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['getPreviewImage', 'isPhysical', '__wakeup']);
+        $theme = $this->createPartialMock(
+            \Magento\Theme\Model\Theme::class,
+            ['getPreviewImage', 'isPhysical', '__wakeup']
+        );
         $theme->expects($this->any())
             ->method('getPreviewImage')
             ->will($this->returnValue('image.png'));
@@ -88,7 +89,10 @@ class PathTest extends \PHPUnit\Framework\TestCase
         $expectedPath = 'theme/preview/preview.jpg';
 
         /** @var $theme \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject */
-        $theme = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['getPreviewImage', 'isPhysical', '__wakeup']);
+        $theme = $this->createPartialMock(
+            \Magento\Theme\Model\Theme::class,
+            ['getPreviewImage', 'isPhysical', '__wakeup']
+        );
 
         $this->mediaDirectory->expects($this->once())
             ->method('getAbsolutePath')

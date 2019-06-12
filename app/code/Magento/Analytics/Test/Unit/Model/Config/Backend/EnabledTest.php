@@ -13,9 +13,12 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Psr\Log\LoggerInterface;
 
+<<<<<<< HEAD
 /**
  * Class EnabledTest
  */
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class EnabledTest extends \PHPUnit\Framework\TestCase
 {
     /**

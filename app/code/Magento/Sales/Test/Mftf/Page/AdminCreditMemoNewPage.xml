@@ -7,8 +7,17 @@
 -->
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
     <page name="AdminCreditMemoNewPage" url="sales/order_creditmemo/new/order_id/" area="admin" module="Magento_Sales">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+    <page name="AdminCreditMemoNewPage" url="sales/order_creditmemo/new/order_id/" area="admin" module="Magento_Sales">
+        <section name="AdminCreditMemoOrderInformationSection"/>
+        <section name="AdminCreditMemoAddressInformationSection"/>
+        <section name="AdminCreditMemoPaymentShippingSection"/>
+        <section name="AdminCreditMemoItemsSection"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <section name="AdminCreditMemoTotalSection"/>
     </page>
 </pages>

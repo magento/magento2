@@ -31,6 +31,12 @@ class TokenFormatterTest extends \PHPUnit\Framework\TestCase
         'expirationDate' => '07-07-2025'
     ];
 
+<<<<<<< HEAD
+=======
+    /**
+     * Test setup
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     protected function setUp()
     {
         $this->paymentTokenMock = $this->getMockBuilder(PaymentTokenInterface::class)
@@ -39,6 +45,12 @@ class TokenFormatterTest extends \PHPUnit\Framework\TestCase
         $this->paypalTokenFormatter = new PaypalTokenFormatter();
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * testFormatPaymentTokenWithKnownCardType
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function testFormatPaymentTokenWithKnownCardType()
     {
         $this->tokenDetails['type'] = key(PaypalTokenFormatter::$baseCardTypes);
@@ -59,6 +71,12 @@ class TokenFormatterTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($formattedString, $this->paypalTokenFormatter->formatPaymentToken($this->paymentTokenMock));
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * testFormatPaymentTokenWithUnknownCardType
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function testFormatPaymentTokenWithUnknownCardType()
     {
         $this->paymentTokenMock->expects($this->once())
@@ -78,6 +96,12 @@ class TokenFormatterTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($formattedString, $this->paypalTokenFormatter->formatPaymentToken($this->paymentTokenMock));
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * testFormatPaymentTokenWithWrongData
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function testFormatPaymentTokenWithWrongData()
     {
         unset($this->tokenDetails['type']);

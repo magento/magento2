@@ -19,7 +19,10 @@ class AggregateParent implements \Magento\Test\Di\Aggregate\AggregateInterface
 
     /**
      * AggregateParent constructor.
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param \Magento\Test\Di\DiInterface $interface
      * @param \Magento\Test\Di\DiParent $parent
      * @param \Magento\Test\Di\Child $child

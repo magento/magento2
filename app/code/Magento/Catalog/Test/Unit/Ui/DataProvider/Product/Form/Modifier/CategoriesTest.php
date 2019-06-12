@@ -116,6 +116,7 @@ class CategoriesTest extends AbstractModifierTest
 
     /**
      * @param bool $locked
+<<<<<<< HEAD
      * @return void
      * @dataProvider modifyMetaLockedDataProvider
      */
@@ -157,26 +158,12 @@ class CategoriesTest extends AbstractModifierTest
     }
 
     public function testModifyMetaWithCaching()
+=======
+     * @dataProvider modifyMetaLockedDataProvider
+     */
+    public function testModifyMetaLocked($locked)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
-        $this->arrayManagerMock->expects($this->exactly(2))
-            ->method('findPath')
-            ->willReturn(true);
-        $cacheManager = $this->getMockBuilder(CacheInterface::class)
-            ->getMockForAbstractClass();
-        $cacheManager->expects($this->once())
-            ->method('load')
-            ->with(Categories::CATEGORY_TREE_ID . '_');
-        $cacheManager->expects($this->once())
-            ->method('save');
-        
-        $modifier = $this->createModel();
-        $cacheContextProperty = new \ReflectionProperty(
-            Categories::class,
-            'cacheManager'
-        );
-        $cacheContextProperty->setAccessible(true);
-        $cacheContextProperty->setValue($modifier, $cacheManager);
-
         $groupCode = 'test_group_code';
         $meta = [
             $groupCode => [
@@ -187,6 +174,28 @@ class CategoriesTest extends AbstractModifierTest
                 ],
             ],
         ];
-        $modifier->modifyMeta($meta);
+
+        $this->arrayManagerMock->expects($this->any())
+            ->method('findPath')
+            ->willReturn('path');
+
+        $this->productMock->expects($this->any())
+            ->method('isLockedAttribute')
+            ->willReturn($locked);
+
+        $this->arrayManagerMock->expects($this->any())
+            ->method('merge')
+            ->willReturnArgument(2);
+
+        $modifyMeta = $this->createModel()->modifyMeta($meta);
+        $this->assertEquals($locked, $modifyMeta['arguments']['data']['config']['disabled']);
+    }
+
+    /**
+     * @return array
+     */
+    public function modifyMetaLockedDataProvider()
+    {
+        return [[true], [false]];
     }
 }

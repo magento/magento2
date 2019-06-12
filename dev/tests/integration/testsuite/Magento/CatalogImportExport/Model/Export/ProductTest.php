@@ -70,7 +70,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
-     * @magentoDbIsolationEnabled
+     * @magentoDbIsolation enabled
      */
     public function testExport()
     {
@@ -95,7 +95,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data_special_chars.php
-     * @magentoDbIsolationEnabled
+     * @magentoDbIsolation enabled
      */
     public function testExportSpecialChars()
     {
@@ -106,11 +106,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
         $exportData = $this->model->export();
         $this->assertContains('simple ""1""', $exportData);
+        $this->assertContains('Category with slash\/ symbol', $exportData);
     }
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
-     * @magentoDbIsolationEnabled
+     * @magentoDbIsolation enabled
      */
     public function testExportWithProductLinks()
     {
@@ -325,8 +326,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
+<<<<<<< HEAD
      */
     public function testExportWithCustomOptions()
+=======
+     * @return void
+     */
+    public function testExportWithCustomOptions(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $storeCode = 'default';
         $expectedData = [];
@@ -358,9 +365,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product->setOptions($newCustomOptions);
         $productRepository->save($product);
         $this->model->setWriter(
+<<<<<<< HEAD
             $this->objectManager->create(
                 \Magento\ImportExport\Model\Export\Adapter\Csv::class
             )
+=======
+            $this->objectManager->create(\Magento\ImportExport\Model\Export\Adapter\Csv::class)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         );
         $exportData = $this->model->export();
         /** @var $varDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
@@ -377,14 +388,25 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 $customOptionData[$storeCode] = $this->parseExportedCustomOption($data[2][$columnNumber]);
             }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         self::assertSame($expectedData, $customOptionData);
     }
 
     /**
+<<<<<<< HEAD
      * @param $exportedCustomOption
      * @return array
      */
     private function parseExportedCustomOption($exportedCustomOption)
+=======
+     * @param string $exportedCustomOption
+     * @return array
+     */
+    private function parseExportedCustomOption(string $exportedCustomOption): array
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $customOptions = explode('|', $exportedCustomOption);
         $optionItems = [];
@@ -405,6 +427,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 $optionItems[$optionName] = [];
             }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $optionItems;
     }
 }

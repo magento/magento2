@@ -14,12 +14,20 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * test for \Magento\MediaStorage\Model\File\Storage\Response::sendResponse()
+<<<<<<< HEAD
      */
     public function testSendResponse()
+=======
+     *
+     * @return void
+     */
+    public function testSendResponse(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $expectedHeaders = [
             [
                 'field_name' => 'X-Content-Type-Options',
+<<<<<<< HEAD
                 'field_value' => 'nosniff'
             ],
             [
@@ -29,6 +37,17 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             [
                 'field_name' => 'X-Frame-Options',
                 'field_value' => 'SAMEORIGIN'
+=======
+                'field_value' => 'nosniff',
+            ],
+            [
+                'field_name' => 'X-XSS-Protection',
+                'field_value' => '1; mode=block',
+            ],
+            [
+                'field_name' => 'X-Frame-Options',
+                'field_value' => 'SAMEORIGIN',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ],
         ];
         $filePath = realpath(__DIR__ . '/../../../_files/test_file.html');
@@ -48,7 +67,11 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         foreach ($frameworkResponse->getHeaders() as $responseHeader) {
             $actualHeaders[] = [
                 'field_name' => $responseHeader->getFieldName(),
+<<<<<<< HEAD
                 'field_value' => $responseHeader->getFieldValue()
+=======
+                'field_value' => $responseHeader->getFieldValue(),
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ];
         }
         foreach ($expectedHeaders as $expected) {

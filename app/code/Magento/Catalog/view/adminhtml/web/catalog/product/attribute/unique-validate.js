@@ -10,11 +10,17 @@ define([
     'use strict';
 
     return function (config) {
-        var _config = jQuery.extend({
-            element: null,
-            message: '',
-            uniqueClass: 'required-unique'
-        }, config);
+        var msg = '',
+            _config = jQuery.extend({
+                element: null,
+                message: '',
+                uniqueClass: 'required-unique'
+            }, config),
+
+            /** @inheritdoc */
+            messager = function () {
+                return msg;
+            };
 
         if (typeof _config.element === 'string') {
             jQuery.validator.addMethod(
@@ -25,21 +31,27 @@ define([
                             .closest('table')
                             .find('.' + _config.uniqueClass + ':visible'),
                         valuesHash = {},
-                        isValid = true;
+                        isValid = true,
+                        duplicates = [];
 
                     inputs.each(function (el) {
                         var inputValue = inputs[el].value;
 
                         if (typeof valuesHash[inputValue] !== 'undefined') {
                             isValid = false;
+                            duplicates.push(inputValue);
                         }
                         valuesHash[inputValue] = el;
                     });
 
+                    if (!isValid) {
+                        msg = _config.message + ' (' + duplicates.join(', ') + ')';
+                    }
+
                     return isValid;
                 },
 
-                _config.message
+                messager
             );
         }
     };

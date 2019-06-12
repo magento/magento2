@@ -37,6 +37,8 @@ class ValidatorInfo extends Validator
     protected $fileRelativePath;
 
     /**
+     * Construct method
+     *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\File\Size $fileSize
@@ -56,6 +58,8 @@ class ValidatorInfo extends Validator
     }
 
     /**
+     * Setter method for property "useQuotePath"
+     *
      * @param mixed $useQuotePath
      * @return $this
      */
@@ -66,6 +70,8 @@ class ValidatorInfo extends Validator
     }
 
     /**
+     * Validate method for the option value depends on an option
+     *
      * @param array $optionValue
      * @param \Magento\Catalog\Model\Product\Option $option
      * @return bool
@@ -105,13 +111,15 @@ class ValidatorInfo extends Validator
             }
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Please specify product\'s required option(s).')
+                __("The product's required option(s) weren't entered. Make sure the options are entered and try again.")
             );
         }
         return $result;
     }
 
     /**
+     * Method for creation secret key for the given file
+     *
      * @param string $fileRelativePath
      * @return string
      */
@@ -121,6 +129,8 @@ class ValidatorInfo extends Validator
     }
 
     /**
+     * Calculates path for the file
+     *
      * @param array $optionValue
      * @return void
      */

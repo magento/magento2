@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="NoErrorCartCheckoutForProductsDeletedFromMiniCartTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Delete product from Storefront checkout"/>
+            <title value="Delete product from Checkout"/>
+            <description value="No error from cart should be thrown for product deleted from minicart"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-91451"/>
+            <group value="checkout"/>
+        </annotations>
+        <!-- Preconditions  -->
+        <before>
+            <!--  Simple product is created with price = 100 -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <field key="price">100.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addProductToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createSimpleProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
+        <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
+        <!-- open the minicart -->
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickShowMinicart1"/>
+        <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="editProductFromMiniCart"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickShowMinicart2"/>
+        <click selector="{{StorefrontMinicartSection.deleteMiniCartItem}}" stepKey="deleteMiniCartItem"/>
+        <waitForElementVisible selector="{{StoreFrontRemoveItemModalSection.message}}" stepKey="waitFortheConfirmationModal"/>
+        <see selector="{{StoreFrontRemoveItemModalSection.message}}" userInput="Are you sure you would like to remove this item from the shopping cart?" stepKey="seeDeleteConfirmationMessage"/>
+        <click selector="{{StoreFrontRemoveItemModalSection.ok}}" stepKey="confirmDelete"/>
+        <waitForPageLoad stepKey="waitForDeleteToFinish"/>
+        <click selector="{{CheckoutCartProductSection.RemoveItem}}" stepKey="deleteProductFromCheckoutCart"/>
+        <waitForPageLoad stepKey="WaitForPageLoad3"/>
+        <see userInput="You have no items in your shopping cart." stepKey="seeNoItemsInShoppingCart"/>
+    </test>
+</tests>

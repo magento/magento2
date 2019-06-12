@@ -12,11 +12,16 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\CacheInterface;
+<<<<<<< HEAD
 use Magento\Framework\Config\DataInterfaceFactory;
 
 /**
  * Class CanViewNotificationTest
  */
+=======
+use Magento\User\Model\User;
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CanViewNotification */
@@ -37,6 +42,7 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
     /** @var  $cacheStorageMock \PHPUnit_Framework_MockObject_MockObject|CacheInterface */
     private $cacheStorageMock;
 
+<<<<<<< HEAD
     /** @var  $dataInterfaceFactoryMock \PHPUnit_Framework_MockObject_MockObject|DataInterfaceFactory */
     private $dataInterfaceFactoryMock;
 
@@ -46,13 +52,25 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create', 'get'])
             ->getMock();
+=======
+    /**
+     * @var User|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $userMock;
+
+    public function setUp()
+    {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->cacheStorageMock = $this->getMockBuilder(CacheInterface::class)
             ->getMockForAbstractClass();
         $this->logMock = $this->getMockBuilder(Log::class)
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
+<<<<<<< HEAD
             ->setMethods(['getUser', 'getId'])
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->getMock();
         $this->viewerLoggerMock = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
@@ -60,6 +78,10 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
         $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+<<<<<<< HEAD
+=======
+        $this->userMock = $this->createMock(User::class);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $objectManager = new ObjectManager($this);
         $this->canViewNotification = $objectManager->getObject(
             CanViewNotification::class,
@@ -68,13 +90,17 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
                 'session' => $this->sessionMock,
                 'productMetadata' => $this->productMetadataMock,
                 'cacheStorage' => $this->cacheStorageMock,
+<<<<<<< HEAD
                 'configFactory' => $this->dataInterfaceFactoryMock,
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         );
     }
 
     public function testIsVisibleLoadDataFromCache()
     {
+<<<<<<< HEAD
         $this->dataInterfaceFactoryMock->expects($this->once())
             ->method('create')
             ->with(['componentName' => 'release_notification'])
@@ -87,6 +113,12 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             ->method('getUser')
             ->willReturn($this->sessionMock);
         $this->sessionMock->expects($this->once())
+=======
+        $this->sessionMock->expects($this->once())
+            ->method('getUser')
+            ->willReturn($this->userMock);
+        $this->userMock->expects($this->once())
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->method('getId')
             ->willReturn(1);
         $this->cacheStorageMock->expects($this->once())
@@ -100,6 +132,7 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
      * @param bool $expected
      * @param string $version
      * @param string|null $lastViewVersion
+<<<<<<< HEAD
      * @param string $releaseContentVersion
      * @dataProvider isVisibleProvider
      */
@@ -113,17 +146,31 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with('release_notification/arguments/data/releaseContentVersion')
             ->willReturn($releaseContentVersion);
+=======
+     * @dataProvider isVisibleProvider
+     */
+    public function testIsVisible($expected, $version, $lastViewVersion)
+    {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->cacheStorageMock->expects($this->once())
             ->method('load')
             ->with('release-notification-popup-1')
             ->willReturn(false);
         $this->sessionMock->expects($this->once())
             ->method('getUser')
+<<<<<<< HEAD
             ->willReturn($this->sessionMock);
         $this->sessionMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
         $this->productMetadataMock->expects($this->any())
+=======
+            ->willReturn($this->userMock);
+        $this->userMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $this->productMetadataMock->expects($this->once())
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->method('getVersion')
             ->willReturn($version);
         $this->logMock->expects($this->once())
@@ -145,6 +192,7 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
     public function isVisibleProvider()
     {
         return [
+<<<<<<< HEAD
             [false, '2.2.1-dev', '999.999.999-alpha', '2.2.0'],
             [true, '2.2.1-dev', '2.0.0', '2.2.1'],
             [true, '2.2.1-dev', null, '2.2.1'],
@@ -155,6 +203,15 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             [false, '2.2.5', '2.2.4', '2.2.4'],
             [true, '2.2.6', '2.2.5', '2.2.6'],
             [true, '2.2.7', '2.2.6', '2.2.7'],
+=======
+            [false, '2.2.1-dev', '999.999.999-alpha'],
+            [true, '2.2.1-dev', '2.0.0'],
+            [true, '2.2.1-dev', null],
+            [false, '2.2.1-dev', '2.2.1'],
+            [true, '2.2.1-dev', '2.2.0'],
+            [true, '2.3.0', '2.2.0'],
+            [false, '2.2.2', '2.2.2'],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
     }
 }

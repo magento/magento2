@@ -6,9 +6,15 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+<<<<<<< HEAD
     <testCase name="Magento\Ui\Test\TestCase\GridFilteringDeletedEntityTest" summary="Grid filtering by deleted entity" ticketId="MAGETWO-71940">
         <variation name="GridFilteringDeletedEntityTestVariation1">
             <data name="tag" xsi:type="string">severity:S2</data>
+=======
+    <testCase name="Magento\Ui\Test\TestCase\GridFilteringDeletedEntityTest" summary="Grid filtering by deleted entity" ticketId="MAGETWO-88982">
+        <variation name="GridFilteringDeletedEntityTestVariation1">
+            <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="0" xsi:type="string">Magento\Store\Test\TestStep\DeleteWebsitesEntityStep</item>

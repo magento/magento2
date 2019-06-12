@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Model;
 
 use Magento\Framework\App\ResourceConnection;
@@ -85,7 +87,11 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
                 'cartManagement' => $this->cartManagementMock,
                 'cartRepository' => $this->cartRepositoryMock,
                 'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
+<<<<<<< HEAD
                 'connectionPull' => $this->resourceConnectionMock,
+=======
+                'connectionPool' => $this->resourceConnectionMock,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         );
         $objectManager->setBackwardCompatibleProperty($this->model, 'logger', $this->loggerMock);
@@ -132,7 +138,6 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedExceptionMessage An error occurred on the server. Please try to place the order again.
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSavePaymentInformationAndPlaceOrderException()
@@ -167,10 +172,14 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $adapterMockForCheckout->expects($this->once())->method('rollback');
 
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
-        $exception = new \Exception(__('DB exception'));
+        $exception = new \Magento\Framework\Exception\CouldNotSaveException(__('DB exception'));
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->willThrowException($exception);
 
         $this->model->savePaymentInformationAndPlaceOrder($cartId, $email, $paymentMock, $billingAddressMock);
+
+        $this->expectExceptionMessage(
+            'A server error stopped your order from being placed. Please try to place your order again.'
+        );
     }
 
     public function testSavePaymentInformation()
@@ -213,7 +222,7 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
      * @expectedExceptionMessage DB exception
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function testSavePaymentInformationAndPlaceOrderWithLocolizedException()
+    public function testSavePaymentInformationAndPlaceOrderWithLocalizedException()
     {
         $cartId = 100;
         $email = 'email@magento.com';
@@ -266,8 +275,15 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
      * @param \PHPUnit_Framework_MockObject_MockObject $billingAddressMock
      * @return void
      */
+<<<<<<< HEAD
     private function getMockForAssignBillingAddress($cartId, $billingAddressMock)
     {
+=======
+    private function getMockForAssignBillingAddress(
+        int $cartId,
+        \PHPUnit_Framework_MockObject_MockObject $billingAddressMock
+    ) : void {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $quoteIdMask = $this->createPartialMock(QuoteIdMask::class, ['getQuoteId', 'load']);
         $this->quoteIdMaskFactoryMock->method('create')
             ->willReturn($quoteIdMask);
@@ -280,9 +296,17 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $billingAddressId = 1;
         $quote = $this->createMock(Quote::class);
         $quoteBillingAddress = $this->createMock(Address::class);
+<<<<<<< HEAD
         $quoteShippingAddress = $this->createPartialMock(
             Address::class,
             ['setLimitCarrier', 'getShippingMethod']
+=======
+        $shippingRate = $this->createPartialMock(\Magento\Quote\Model\Quote\Address\Rate::class, []);
+        $shippingRate->setCarrier('flatrate');
+        $quoteShippingAddress = $this->createPartialMock(
+            Address::class,
+            ['setLimitCarrier', 'getShippingMethod', 'getShippingRateByCode']
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         );
         $this->cartRepositoryMock->method('getActive')
             ->with($cartId)
@@ -302,6 +326,12 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $quote->expects($this->once())
             ->method('setBillingAddress')
             ->with($billingAddressMock);
+<<<<<<< HEAD
+=======
+        $quoteShippingAddress->expects($this->any())
+            ->method('getShippingRateByCode')
+            ->willReturn($shippingRate);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $quote->expects($this->once())
             ->method('setDataChanges')
             ->willReturnSelf();

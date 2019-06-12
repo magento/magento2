@@ -118,7 +118,11 @@ class CaptureStrategyCommand implements CommandInterface
     }
 
     /**
+<<<<<<< HEAD
      * Gets command name.
+=======
+     * Get execution command name.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param PaymentDataObjectInterface $paymentDO
      * @return string

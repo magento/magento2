@@ -7,9 +7,16 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminNewAttributePanelSection">
         <element name="addVisualSwatchOption" type="button" selector="#add_new_swatch_visual_option_button"/>
+=======
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminNewAttributePanel">
+        <element name="addVisualSwatchOption" type="button" selector="button#add_new_swatch_visual_option_button"/>
+        <element name="addTextSwatchOption" type="button" selector="button#add_new_swatch_text_option_button"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <element name="visualSwatchOptionAdminValue" type="input" selector="[data-role='swatch-visual-options-container'] input[name='optionvisual[value][option_{{row}}][0]']" parameterized="true"/>
         <element name="visualSwatchOptionDefaultStoreValue" type="input" selector="[data-role='swatch-visual-options-container'] input[name='optionvisual[value][option_{{row}}][1]']" parameterized="true"/>
     </section>

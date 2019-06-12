@@ -45,7 +45,7 @@ class AssertVersionOnGrid extends AbstractConstraint
                 $version = '';
         }
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $grid->getVersion($extension) === $version,
             'Version of extension is not correct.'
         );

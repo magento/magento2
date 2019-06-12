@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\Search\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

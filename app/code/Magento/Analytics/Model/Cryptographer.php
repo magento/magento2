@@ -56,6 +56,7 @@ class Cryptographer
             try {
                 $source = (string)$source;
             } catch (\Exception $e) {
+<<<<<<< HEAD
                 throw new LocalizedException(__('Input data must be string or convertible into string.'));
             }
         } elseif (!$source) {
@@ -63,6 +64,20 @@ class Cryptographer
         }
         if (!$this->validateCipherMethod($this->cipherMethod)) {
             throw new LocalizedException(__('Not valid cipher method.'));
+=======
+                throw new LocalizedException(
+                    __(
+                        'The data is invalid. '
+                        . 'Enter the data as a string or data that can be converted into a string and try again.'
+                    )
+                );
+            }
+        } elseif (!$source) {
+            throw new LocalizedException(__('The data is invalid. Enter the data as a string and try again.'));
+        }
+        if (!$this->validateCipherMethod($this->cipherMethod)) {
+            throw new LocalizedException(__('The data is invalid. Use a valid cipher method and try again.'));
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
         $initializationVector = $this->getInitializationVector();
 
@@ -90,7 +105,11 @@ class Cryptographer
     {
         $token = $this->analyticsToken->getToken();
         if (!$token) {
+<<<<<<< HEAD
             throw new LocalizedException(__('Encryption key can\'t be empty.'));
+=======
+            throw new LocalizedException(__('Enter the encryption key and try again.'));
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
         return hash('sha256', $token);
     }
@@ -124,7 +143,16 @@ class Cryptographer
      */
     private function validateCipherMethod($cipherMethod)
     {
+<<<<<<< HEAD
         $methods = openssl_get_cipher_methods();
+=======
+        $methods = array_map(
+            'strtolower',
+            openssl_get_cipher_methods()
+        );
+        $cipherMethod = strtolower($cipherMethod);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return (false !== array_search($cipherMethod, $methods));
     }
 }

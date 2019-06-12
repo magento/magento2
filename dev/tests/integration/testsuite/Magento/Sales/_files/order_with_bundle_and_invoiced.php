@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
@@ -27,7 +31,11 @@ $orderItems = [
         OrderItemInterface::ROW_TOTAL => 102,
         OrderItemInterface::PRODUCT_TYPE => 'bundle',
         'product_options' => [
+<<<<<<< HEAD
             'product_calculations' => 0
+=======
+            'product_calculations' => 0,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ],
         'children' => [
             [
@@ -41,12 +49,21 @@ $orderItems = [
                 OrderItemInterface::PRODUCT_TYPE => 'simple',
                 'product_options' => [
                     'bundle_selection_attributes' => [
+<<<<<<< HEAD
                         'qty' => 2
                     ],
                 ],
             ]
         ],
     ]
+=======
+                        'qty' => 2,
+                    ],
+                ],
+            ],
+        ],
+    ],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 ];
 
 /** @var OrderItemRepositoryInterface $itemRepository */
@@ -58,7 +75,10 @@ foreach ($order->getAllItems() as $item) {
 }
 
 if (!function_exists('saveOrderItems')) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     /**
      * Save Order Items.
      *

@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\Sales\Model\Service;
 
 use Magento\Backend\App\Area\FrontNameResolver;
@@ -203,10 +208,19 @@ class PaymentFailuresService implements PaymentFailuresInterface
      * @param Quote $quote
      * @return string
      */
+<<<<<<< HEAD
     private function getShippingMethod(Quote $quote)
     {
         $shippingMethod = '';
         if ($shippingInfo = $quote->getShippingAddress()->getShippingMethod()) {
+=======
+    private function getShippingMethod(Quote $quote): string
+    {
+        $shippingMethod = '';
+        $shippingInfo = $quote->getShippingAddress()->getShippingMethod();
+
+        if ($shippingInfo) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $data = explode('_', $shippingInfo);
             $shippingMethod = $data[0];
         }
@@ -220,12 +234,18 @@ class PaymentFailuresService implements PaymentFailuresInterface
      * @param Quote $quote
      * @return string
      */
+<<<<<<< HEAD
     private function getPaymentMethod(Quote $quote)
     {
         $paymentMethod = '';
         if ($paymentInfo = $quote->getPayment()) {
             $paymentMethod = $paymentInfo->getMethod();
         }
+=======
+    private function getPaymentMethod(Quote $quote): string
+    {
+        $paymentMethod = $quote->getPayment()->getMethod() ?? '';
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         return $paymentMethod;
     }
@@ -298,7 +318,11 @@ class PaymentFailuresService implements PaymentFailuresInterface
      */
     private function getCustomerName(Quote $quote): string
     {
+<<<<<<< HEAD
         $customer = __('Guest');
+=======
+        $customer = __('Guest')->render();
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         if (!$quote->getCustomerIsGuest()) {
             $customer = $quote->getCustomer()->getFirstname() . ' ' .
                         $quote->getCustomer()->getLastname();

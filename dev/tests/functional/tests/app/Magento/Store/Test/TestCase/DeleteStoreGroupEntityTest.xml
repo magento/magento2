@@ -8,7 +8,11 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Store\Test\TestCase\DeleteStoreGroupEntityTest" summary="Delete Store Group" ticketId="MAGETWO-27596">
         <variation name="DeleteStoreGroupEntityTestVariation1">
+<<<<<<< HEAD
             <data name="tag" xsi:type="string">severity:S3</data>
+=======
+            <data name="tag" xsi:type="string">severity:S3, mftf_migrated:yes</data>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <data name="storeGroup/dataset" xsi:type="string">custom</data>
             <data name="createBackup" xsi:type="string">Yes</data>
             <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupSuccessDeleteAndBackupMessages" />

@@ -67,7 +67,11 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
     private $observer;
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
+=======
+     * Set up
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     protected function setUp()
     {
@@ -174,7 +178,11 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
      * Tests quantity verifications for configurable product.
      *
      * @param int $quantity - quantity of configurable option.
+<<<<<<< HEAD
      * @param string $errorMessage - expected error message.
+=======
+     * @param string $errorMessageRegexp - expected error message regexp.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return void
      * @throws CouldNotSaveException
      * @throws LocalizedException
@@ -183,7 +191,11 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
+<<<<<<< HEAD
     public function testConfigurableWithOptions(int $quantity, string $errorMessage)
+=======
+    public function testConfigurableWithOptions(int $quantity, string $errorMessageRegexp): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
@@ -221,6 +233,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
+<<<<<<< HEAD
         if (!empty($errorMessage)) {
             $this->expectException(LocalizedException::class);
             $this->expectExceptionMessage($errorMessage);
@@ -232,16 +245,34 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
 
         if (empty($errorMessage)) {
             self::assertEquals('Configurable Product', $result->getName());
+=======
+        try {
+            /** @var Quote $cart */
+            $cart = $this->objectManager->create(CartInterface::class);
+            $result = $cart->addProduct($product, $request);
+
+            if (empty($errorMessageRegexp)) {
+                self::assertEquals('Configurable Product', $result->getName());
+            }
+        } catch (LocalizedException $e) {
+            self::assertEquals(1, preg_match($errorMessageRegexp, $e->getMessage()));
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
     }
 
     /**
+<<<<<<< HEAD
      * Provides request quantity for configurable option and corresponding error message.
+=======
+     * Provides request quantity for configurable option
+     * and corresponding error message.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @return array
      */
     public function quantityDataProvider(): array
     {
+<<<<<<< HEAD
         return [
             [
                 'quantity' => 1,
@@ -255,6 +286,24 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
                 'quantity' => 1000,
                 'error' => ''
             ],
+=======
+        $qtyRegexp = '/You can buy (this product|Configurable OptionOption 1) only in quantities of 500 at a time/';
+
+        return [
+            [
+                'quantity' => 1,
+                'error_regexp' => '/The fewest you may purchase is 500/'
+            ],
+            [
+                'quantity' => 501,
+                'error_regexp' => $qtyRegexp
+            ],
+            [
+                'quantity' => 1000,
+                'error_regexp' => ''
+            ],
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
     }
 
@@ -262,7 +311,11 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
      * Gets \Magento\Quote\Model\Quote\Item from \Magento\Quote\Model\Quote by product id
      *
      * @param Quote $quote
+<<<<<<< HEAD
      * @param $productId
+=======
+     * @param int $productId
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return \Magento\Quote\Model\Quote\Item
      */
     private function _getQuoteItemIdByProductId($quote, $productId)

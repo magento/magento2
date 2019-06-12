@@ -6,11 +6,20 @@
   */
 -->
 
+<<<<<<< HEAD
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+=======
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <entity name="Wishlist" type="wishlist">
         <data key="id">null</data>
         <var key="product" entityType="product" entityKey="id"/>
         <var key="customer_email" entityType="customer" entityKey="email"/>
         <var key="customer_password" entityType="customer" entityKey="password"/>
+<<<<<<< HEAD
+=======
+        <data key="shareInfo_emails">JohnDoe123456789@example.com,JohnDoe987654321@example.com,JohnDoe123456abc@example.com</data>
+        <data key="shareInfo_message">Sharing message.</data>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </entity>
 </entities>

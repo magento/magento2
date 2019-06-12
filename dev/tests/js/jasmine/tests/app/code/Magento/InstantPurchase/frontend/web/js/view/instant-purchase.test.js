@@ -41,6 +41,14 @@ define([
 
         afterEach(function () {
             $('#product_addtocart_form').remove();
+<<<<<<< HEAD
+=======
+
+            try {
+                injector.clean();
+                injector.remove();
+            } catch (e) {}
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         });
 
         it('Check initialized data.', function () {

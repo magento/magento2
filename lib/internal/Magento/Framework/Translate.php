@@ -3,10 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 namespace Magento\Framework;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Translate library
@@ -56,7 +63,7 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected $_viewDesign;
 
     /**
-     * @var \Magento\Framework\Cache\FrontendInterface $cache
+     * @var \Magento\Framework\Cache\FrontendInterface
      */
     protected $_cache;
 
@@ -121,6 +128,11 @@ class Translate implements \Magento\Framework\TranslateInterface
     private $serializer;
 
     /**
+     * @var DriverInterface
+     */
+    private $fileDriver;
+
+    /**
      * @param \Magento\Framework\View\DesignInterface $viewDesign
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
@@ -134,6 +146,7 @@ class Translate implements \Magento\Framework\TranslateInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\File\Csv $csvParser
      * @param \Magento\Framework\App\Language\Dictionary $packDictionary
+     * @param DriverInterface|null $fileDriver
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -150,7 +163,8 @@ class Translate implements \Magento\Framework\TranslateInterface
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\File\Csv $csvParser,
-        \Magento\Framework\App\Language\Dictionary $packDictionary
+        \Magento\Framework\App\Language\Dictionary $packDictionary,
+        DriverInterface $fileDriver = null
     ) {
         $this->_viewDesign = $viewDesign;
         $this->_cache = $cache;
@@ -165,13 +179,22 @@ class Translate implements \Magento\Framework\TranslateInterface
         $this->directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_csvParser = $csvParser;
         $this->packDictionary = $packDictionary;
+<<<<<<< HEAD
+=======
+        $this->fileDriver = $fileDriver
+            ?? ObjectManager::getInstance()->get(File::class);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $this->_config = [
             self::CONFIG_AREA_KEY => null,
             self::CONFIG_LOCALE_KEY => null,
             self::CONFIG_SCOPE_KEY => null,
             self::CONFIG_THEME_KEY => null,
+<<<<<<< HEAD
             self::CONFIG_MODULE_KEY => null
+=======
+            self::CONFIG_MODULE_KEY => null,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
     }
 
@@ -196,7 +219,12 @@ class Translate implements \Magento\Framework\TranslateInterface
         );
 
         if (!$forceReload) {
+<<<<<<< HEAD
             if (false !== $data = $this->_loadCache()) {
+=======
+            $data = $this->_loadCache();
+            if (false !== $data) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 $this->_data = $data;
                 return $this;
             }
@@ -265,6 +293,7 @@ class Translate implements \Magento\Framework\TranslateInterface
 
     /**
      * Retrieve name of the current module
+     *
      * @return mixed
      */
     protected function getControllerModuleName()
@@ -327,16 +356,27 @@ class Translate implements \Magento\Framework\TranslateInterface
     }
 
     /**
-     * Load current theme translation
+     * Load current theme translation according to fallback
      *
      * @return $this
      */
     protected function _loadThemeTranslation()
     {
+<<<<<<< HEAD
         $file = $this->_getThemeTranslationFile($this->getLocale());
         if ($file) {
             $this->_addData($this->_getFileData($file));
+=======
+        $themeFiles = $this->getThemeTranslationFilesList($this->getLocale());
+
+        /** @var string $file */
+        foreach ($themeFiles as $file) {
+            if ($file) {
+                $this->_addData($this->_getFileData($file));
+            }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
+
         return $this;
     }
 
@@ -378,10 +418,73 @@ class Translate implements \Magento\Framework\TranslateInterface
     }
 
     /**
+     * Get theme translation locale file name
+     *
+     * @param string|null $locale
+     * @param array $config
+     * @return string|null
+     */
+    private function getThemeTranslationFileName(?string $locale, array $config): ?string
+    {
+        $fileName = $this->_viewFileSystem->getLocaleFileName(
+            'i18n' . '/' . $locale . '.csv',
+            $config
+        );
+
+        return $fileName ? $fileName : null;
+    }
+
+    /**
+     * Get parent themes for the current theme in fallback order
+     *
+     * @return array
+     */
+    private function getParentThemesList(): array
+    {
+        $themes = [];
+
+        $parentTheme = $this->_viewDesign->getDesignTheme()->getParentTheme();
+        while ($parentTheme) {
+            $themes[] = $parentTheme;
+            $parentTheme = $parentTheme->getParentTheme();
+        }
+        $themes = array_reverse($themes);
+
+        return $themes;
+    }
+
+    /**
+     * Retrieve translation files for themes according to fallback
+     *
+     * @param string $locale
+     *
+     * @return array
+     */
+    private function getThemeTranslationFilesList($locale): array
+    {
+        $translationFiles = [];
+
+        /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
+        foreach ($this->getParentThemesList() as $theme) {
+            $config = $this->_config;
+            $config['theme'] = $theme->getCode();
+            $translationFiles[] = $this->getThemeTranslationFileName($locale, $config);
+        }
+
+        $translationFiles[] = $this->getThemeTranslationFileName($locale, $this->_config);
+
+        return $translationFiles;
+    }
+
+    /**
      * Retrieve translation file for theme
      *
      * @param string $locale
      * @return string
+     *
+     * @deprecated
+     *
+     * @see \Magento\Framework\Translate::getThemeTranslationFilesList
      */
     protected function _getThemeTranslationFile($locale)
     {
@@ -400,7 +503,7 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected function _getFileData($file)
     {
         $data = [];
-        if ($this->directory->isExist($this->directory->getRelativePath($file))) {
+        if ($this->fileDriver->isExists($file)) {
             $this->_csvParser->setDelimiter(',');
             $data = $this->_csvParser->getDataPairs($file);
         }
@@ -463,11 +566,10 @@ class Translate implements \Magento\Framework\TranslateInterface
     /**
      * Retrieve cache identifier
      *
-     * @param bool $forceReload
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function getCacheId($forceReload = false)
+    protected function getCacheId()
     {
         $_cacheId = \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER;
         $_cacheId .= '_' . $this->_config[self::CONFIG_LOCALE_KEY];

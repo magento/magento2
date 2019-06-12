@@ -9,6 +9,13 @@
 \Magento\Framework\DB\Adapter\DuplicateException
 \Magento\Framework\DB\DataConverter\DataConversionException
 \Magento\Framework\DB\FieldDataConversionException
+<<<<<<< HEAD
 \Magento\Signifyd\Model\SignifydGateway\GatewayException
 \Magento\Signifyd\Model\SignifydGateway\ApiCallException
 \Magento\Catalog\Model\Product\Image\NotLoadInfoImageException
+=======
+\Magento\Catalog\Model\Product\Image\NotLoadInfoImageException
+\Magento\Signifyd\Model\SignifydGateway\GatewayException
+\Magento\Signifyd\Model\SignifydGateway\ApiCallException
+\Magento\Framework\MessageQueue\ConnectionLostException
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc

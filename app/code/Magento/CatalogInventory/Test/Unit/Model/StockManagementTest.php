@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\CatalogInventory\Test\Unit\Model;
 
 use Magento\CatalogInventory\Model\StockState;
@@ -143,9 +148,15 @@ class StockManagementTest extends \PHPUnit\Framework\TestCase
     public function testRegisterProductsSale(
         array $items,
         array $lockedItems,
+<<<<<<< HEAD
         $canSubtract,
         $isQty,
         $verifyStock = true
+=======
+        bool $canSubtract,
+        bool $isQty,
+        bool $verifyStock = true
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ) {
         $this->stockResourceMock
             ->expects($this->once())
@@ -234,7 +245,11 @@ class StockManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+<<<<<<< HEAD
     public function productsWithCorrectQtyDataProvider()
+=======
+    public function productsWithCorrectQtyDataProvider(): array
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         return [
             [
@@ -274,7 +289,11 @@ class StockManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+<<<<<<< HEAD
     public function productsWithIncorrectQtyDataProvider()
+=======
+    public function productsWithIncorrectQtyDataProvider(): array
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         return [
             [

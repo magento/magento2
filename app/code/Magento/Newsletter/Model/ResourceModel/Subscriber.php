@@ -5,6 +5,9 @@
  */
 namespace Magento\Newsletter\Model\ResourceModel;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Newsletter subscriber resource model
  *
@@ -49,27 +52,36 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $mathRandom;
 
     /**
+     * Store manager
+     *
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param string $connectionName
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Math\Random $mathRandom,
-        $connectionName = null
+        $connectionName = null,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->_date = $date;
         $this->mathRandom = $mathRandom;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
         parent::__construct($context, $connectionName);
     }
 
     /**
-     * Initialize resource model
-     * Get tablename from config
+     * Initialize resource model. Get tablename from config
      *
      * @return void
      */
@@ -118,6 +130,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function loadByCustomerData(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
+<<<<<<< HEAD
         $select = $this->connection
             ->select()
             ->from($this->getMainTable())
@@ -131,11 +144,26 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'store_id' => $customer->getStoreId()
                 ]
             );
+=======
+        $storeIds = $this->storeManager->getWebsite($customer->getWebsiteId())->getStoreIds();
 
-        if ($result) {
-            return $result;
+        if ($customer->getId()) {
+            $select = $this->connection
+                ->select()
+                ->from($this->getMainTable())
+                ->where('customer_id = ?', $customer->getId())
+                ->where('store_id IN (?)', $storeIds)
+                ->limit(1);
+
+            $result = $this->connection->fetchRow($select);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
+
+            if ($result) {
+                return $result;
+            }
         }
 
+<<<<<<< HEAD
         $select = $this->connection
             ->select()
             ->from($this->getMainTable())
@@ -149,9 +177,21 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'store_id' => $customer->getStoreId()
                 ]
             );
+=======
+        if ($customer->getEmail()) {
+            $select = $this->connection
+                ->select()
+                ->from($this->getMainTable())
+                ->where('subscriber_email = ?', $customer->getEmail())
+                ->where('store_id IN (?)', $storeIds)
+                ->limit(1);
 
-        if ($result) {
-            return $result;
+            $result = $this->connection->fetchRow($select);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
+
+            if ($result) {
+                return $result;
+            }
         }
 
         return [];

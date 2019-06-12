@@ -61,6 +61,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Text validation
+     *
      * @param mixed $attrCode
      * @param string $type
      * @return bool
@@ -108,6 +110,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Numeric validation
+     *
      * @param mixed $attrCode
      * @param string $type
      * @return bool
@@ -135,6 +139,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Is required attribute valid
+     *
      * @param string $attrCode
      * @param array $attributeParams
      * @param array $rowData
@@ -153,10 +159,17 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             $doCheck = true;
         }
 
-        return $doCheck ? isset($rowData[$attrCode]) && strlen(trim($rowData[$attrCode])) : true;
+        if ($doCheck === true) {
+            return isset($rowData[$attrCode])
+                && strlen(trim($rowData[$attrCode]))
+                && trim($rowData[$attrCode]) !== $this->context->getEmptyAttributeValueConstant();
+        }
+        return true;
     }
 
     /**
+     * Is attribute valid
+     *
      * @param string $attrCode
      * @param array $attrParams
      * @param array $rowData
@@ -191,6 +204,11 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         if (!strlen(trim($rowData[$attrCode]))) {
             return true;
         }
+
+        if ($rowData[$attrCode] === $this->context->getEmptyAttributeValueConstant() && !$attrParams['is_required']) {
+            return true;
+        }
+
         switch ($attrParams['type']) {
             case 'varchar':
             case 'text':
@@ -211,6 +229,12 @@ class Validator extends AbstractValidator implements RowValidatorInterface
                     if (!$valid) {
                         break;
                     }
+                }
+
+                $uniqueValues = array_unique($values);
+                if (count($uniqueValues) != count($values)) {
+                    $valid = false;
+                    $this->_addMessages([RowValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES]);
                 }
                 break;
             case 'datetime':
@@ -242,6 +266,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Set invalid attribute
+     *
      * @param string|null $attribute
      * @return void
      * @since 100.1.0
@@ -252,6 +278,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Get invalid attribute
+     *
      * @return string
      * @since 100.1.0
      */
@@ -261,6 +289,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Is valid attributes
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -287,7 +317,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid($value)
     {
@@ -318,6 +348,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Init
+     *
      * @param \Magento\CatalogImportExport\Model\Import\Product $context
      * @return $this
      */

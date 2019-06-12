@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Model\Product;
 
 use Magento\Catalog\Model\Product\Type as ProductType;
@@ -96,7 +97,9 @@ class VariationHandler
                 $configurableAttribute = json_decode($simpleProductData['configurable_attribute'], true);
                 unset($simpleProductData['configurable_attribute']);
             } else {
-                throw new LocalizedException(__('Configuration must have specified attributes'));
+                throw new LocalizedException(
+                    __('Contribution must have attributes specified. Enter attributes and try again.')
+                );
             }
 
             $this->fillSimpleProductData(
@@ -200,7 +203,9 @@ class VariationHandler
         $postData['stock_data'] = array_diff_key((array)$parentProduct->getStockData(), array_flip($keysFilter));
         if (!isset($postData['stock_data']['is_in_stock'])) {
             $stockStatus = $parentProduct->getQuantityAndStockStatus();
-            $postData['stock_data']['is_in_stock'] = $stockStatus['is_in_stock'];
+            if (isset($stockStatus['is_in_stock'])) {
+                $postData['stock_data']['is_in_stock'] = $stockStatus['is_in_stock'];
+            }
         }
         $postData = $this->processMediaGallery($product, $postData);
         $postData['status'] = isset($postData['status'])
@@ -259,6 +264,8 @@ class VariationHandler
     }
 
     /**
+     * Process media gallery for product
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $productData
      *

@@ -7,7 +7,11 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+=======
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <!-- Add Product to Compare from the category page and check message -->
     <actionGroup name="StorefrontAddCategoryProductToCompareActionGroup">
         <arguments>
@@ -34,16 +38,28 @@
         <arguments>
             <argument name="productVar"/>
         </arguments>
+<<<<<<< HEAD
         <waitForElement selector="{{StorefrontComparisonSidebarSection.productTitleByName(productVar.name)}}" stepKey="waitForProduct"/>
+=======
+        <waitForElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName(productVar.name)}}" stepKey="waitForProduct"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </actionGroup>
 
     <!-- Open and check comparison page -->
     <actionGroup name="StorefrontOpenAndCheckComparisionActionGroup">
+<<<<<<< HEAD
         <click selector="{{StorefrontComparisonSidebarSection.compare}}" stepKey="clickCompare"/>
         <waitForLoadingMaskToDisappear stepKey="waitForComparePageloaded" />
         <seeInCurrentUrl url="{{StorefrontProductComparePage.url}}" stepKey="checkUrl"/>
         <seeInTitle userInput="Products Comparison List" stepKey="assertPageNameInTitle"/>
         <see userInput="Compare Products" selector="{{StorefrontProductCompareMainSection.pageName}}" stepKey="assertPageName"/>
+=======
+        <click selector="{{StorefrontComparisonSidebarSection.Compare}}" stepKey="clickCompare"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForComparePageloaded" />
+        <seeInCurrentUrl url="{{StorefrontProductComparePage.url}}" stepKey="checkUrl"/>
+        <seeInTitle userInput="Products Comparison List" stepKey="assertPageNameInTitle"/>
+        <see userInput="Compare Products" selector="{{StorefrontProductCompareMainSection.PageName}}" stepKey="assertPageName"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </actionGroup>
 
     <!-- Check the simple product in comparison page -->
@@ -51,10 +67,18 @@
         <arguments>
             <argument name="productVar"/>
         </arguments>
+<<<<<<< HEAD
         <seeElement selector="{{StorefrontProductCompareMainSection.productLinkByName(productVar.name)}}" stepKey="assertProductName"/>
         <see userInput="${{productVar.price}}.00" selector="{{StorefrontProductCompareMainSection.productPriceByName(productVar.name)}}" stepKey="assertProductPrice1"/>
         <see userInput="{{productVar.sku}}" selector="{{StorefrontProductCompareMainSection.productAttributeByCodeAndProductName('SKU', productVar.name)}}" stepKey="assertProductPrice2"/>
         <seeElement selector="{{StorefrontProductCompareMainSection.productAddToCartByName(productVar.name)}}" stepKey="assertProductAddToCart"/>
+=======
+        <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName(productVar.name)}}" stepKey="assertProductName"/>
+        <see userInput="${{productVar.price}}.00" selector="{{StorefrontProductCompareMainSection.ProductPriceByName(productVar.name)}}" stepKey="assertProductPrice1"/>
+        <see userInput="{{productVar.sku}}" selector="{{StorefrontProductCompareMainSection.ProductAttributeByCodeAndProductName('SKU', productVar.name)}}" stepKey="assertProductPrice2"/>
+        <!-- @TODO: MAGETWO-80272 Move to Magento_Checkout -->
+        <seeElement selector="{{StorefrontProductCompareMainSection.ProductAddToCartByName(productVar.name)}}" stepKey="assertProductAddToCart"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </actionGroup>
 
     <!-- Clear the compare list -->

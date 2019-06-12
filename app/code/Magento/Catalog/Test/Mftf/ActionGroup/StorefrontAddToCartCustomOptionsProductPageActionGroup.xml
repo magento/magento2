@@ -6,14 +6,25 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+=======
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <!--Click Add to Cart button in storefront product page-->
     <actionGroup name="StorefrontAddToCartCustomOptionsProductPageActionGroup">
         <arguments>
             <argument name="productName"/>
         </arguments>
+<<<<<<< HEAD
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <see selector="{{StorefrontProductPageSection.successMsg}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
+=======
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </actionGroup>
 </actionGroups>

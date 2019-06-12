@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\CatalogInventory\Model\Plugin;
 
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
@@ -34,7 +39,11 @@ class PriceIndexUpdater
      * @return Item
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+<<<<<<< HEAD
     public function afterSave(Item $subject, Item $result, AbstractModel $model)
+=======
+    public function afterSave(Item $subject, Item $result, AbstractModel $model): Item
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $fields = [
             'is_in_stock',
@@ -53,7 +62,11 @@ class PriceIndexUpdater
 
     /**
      * @param Item $subject
+<<<<<<< HEAD
      * @param $result
+=======
+     * @param mixed $result
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param int $websiteId
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -65,7 +78,11 @@ class PriceIndexUpdater
 
     /**
      * @param Item $subject
+<<<<<<< HEAD
      * @param $result
+=======
+     * @param mixed $result
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param int $websiteId
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

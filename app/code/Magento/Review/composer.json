@@ -1,7 +1,11 @@
 {
     "name": "magento/module-review",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
+<<<<<<< HEAD
         "php": "~7.0.13|~7.1.0",
         "magento/module-store": "100.2.*",
         "magento/module-catalog": "102.0.*",
@@ -12,13 +16,28 @@
         "magento/module-newsletter": "100.2.*",
         "magento/framework": "101.0.*",
         "magento/module-ui": "101.0.*"
+=======
+        "php": "~7.1.3||~7.2.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog": "*",
+        "magento/module-customer": "*",
+        "magento/module-eav": "*",
+        "magento/module-newsletter": "*",
+        "magento/module-store": "*",
+        "magento/module-theme": "*",
+        "magento/module-ui": "*"
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     },
     "suggest": {
-        "magento/module-cookie": "100.2.*",
-        "magento/module-review-sample-data": "Sample Data version:100.2.*"
+        "magento/module-cookie": "*",
+        "magento/module-review-sample-data": "*"
     },
     "type": "magento2-module",
+<<<<<<< HEAD
     "version": "100.2.6",
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     "license": [
         "OSL-3.0",
         "AFL-3.0"

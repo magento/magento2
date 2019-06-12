@@ -5,6 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminSubmitConfigurableProductOrderTest">
@@ -24,22 +25,65 @@
             <createData entity="Simple_US_CA_Customer" stepKey="createSimpleCustomer"/>
             <!-- Create the category -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
+=======
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSubmitConfigurableProductOrderTest">
+        <annotations>
+            <title value="Create Order in Admin and update product configuration"/>
+            <stories value="MAGETWO-59632: Create Sales > Order from admin add configurable product and change options click OK does not update Items Ordered List"/>
+            <description value="Create Order in Admin and update product configuration"/>
+            <features value="Sales"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MAGETWO-59633"/>
+            <group value="Sales"/>
+            <skip>
+                <issueId value="MAGETWO-96196"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <!--Set default flat rate shipping method settings-->
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+
+            <!--Create simple customer-->
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+
+            <!-- Create the category -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <!-- Create the configurable product and add it to the category -->
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+<<<<<<< HEAD
             <!-- Create an attribute with two options to be used in the first child product -->
             <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createConfigProductAttribute"/>
+=======
+
+            <!-- Create an attribute with two options to be used in the first child product -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </createData>
             <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </createData>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <!-- Add the attribute we just created to default attribute set -->
             <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </createData>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <!-- Get the option of the attribute we created -->
             <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
@@ -47,6 +91,10 @@
             <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </getData>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <!-- Create a simple product and give it the attribute with option -->
             <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
@@ -56,6 +104,10 @@
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption2"/>
             </createData>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <!-- Create the configurable product -->
             <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
                 <requiredEntity createDataKey="createConfigProduct"/>
@@ -63,6 +115,10 @@
                 <requiredEntity createDataKey="getConfigAttributeOption1"/>
                 <requiredEntity createDataKey="getConfigAttributeOption2"/>
             </createData>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <!-- Add simple product to the configurable product -->
             <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
                 <requiredEntity createDataKey="createConfigProduct"/>
@@ -72,24 +128,41 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
+<<<<<<< HEAD
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <!--Create new customer order-->
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$createSimpleCustomer$$"/>
         </actionGroup>
+=======
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <!--Create new customer order-->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <!--Add configurable product to order-->
         <actionGroup ref="addConfigurableProductToOrderFromAdmin" stepKey="addConfigurableProductToOrder">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="attribute" value="$$createConfigProductAttribute$$"/>
             <argument name="option" value="$$getConfigAttributeOption1$$"/>
         </actionGroup>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <!--Configure ordered configurable product-->
         <actionGroup ref="configureOrderedConfigurableProduct" stepKey="configureOrderedConfigurableProduct">
             <argument name="attribute" value="$$createConfigProductAttribute$$"/>
             <argument name="option" value="$$getConfigAttributeOption2$$"/>
             <argument name="quantity" value="2"/>
         </actionGroup>
+<<<<<<< HEAD
         <!--Select FlatRate shipping method-->
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="orderSelectFlatRateShippingMethod"/>
         <!--Submit order-->
@@ -99,6 +172,26 @@
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
             <deleteData createDataKey="createSimpleCustomer" stepKey="deleteSimpleCustomer"/>
+=======
+
+        <!--Select FlatRate shipping method-->
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="orderSelectFlatRateShippingMethod"/>
+
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="SelectCheckMoneyPaymentMethod" stepKey="selectCheckMoneyPayment"/>
+
+        <!--Submit order-->
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+
+        <!--Verify order information-->
+        <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
+
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>

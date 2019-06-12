@@ -141,7 +141,12 @@ class ProcessorFacade
                     ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK_ENV)
                     : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK_CONFIG)
                 )
+<<<<<<< HEAD
                 : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_DEFAULT);
+=======
+                : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_DEFAULT)
+            ;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $message =
             $lock

@@ -8,7 +8,24 @@ namespace Magento\Framework\Interception\Code\Generator;
 class TSample
 {
     private $value;
+    private $variadicValue;
 
+<<<<<<< HEAD
+=======
+    public function returnVoid() : void
+    {
+        // Nothing to do here
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getNullableValue() : ?string
+    {
+        return null;
+    }
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     /**
      * @return string
      */
@@ -23,5 +40,31 @@ class TSample
     public function setValue(string $value)
     {
         $this->value = $value;
+    }
+
+    /**
+     * @param string ...$variadicValue
+     */
+    public function typeHintedFirstVariadicParameter(string ...$variadicValue)
+    {
+        $this->variadicValue = $variadicValue;
+    }
+
+    /**
+     * @param string $value
+     * @param string ...$variadicValue
+     */
+    public function typeHintedSecondVariadicParameter(string $value, string ...$variadicValue)
+    {
+        $this->value = $value;
+        $this->variadicValue = $variadicValue;
+    }
+
+    /**
+     * @param string ...$variadicValue
+     */
+    public function byRefTypeHintedVariadic(string & ...$variadicValue)
+    {
+        $this->variadicValue = $variadicValue;
     }
 }

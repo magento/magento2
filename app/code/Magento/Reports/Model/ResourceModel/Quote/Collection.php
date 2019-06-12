@@ -59,7 +59,11 @@ class Collection extends \Magento\Quote\Model\ResourceModel\Quote\Collection
      * @param bool $withAdmin
      * @return $this
      */
+<<<<<<< HEAD
     public function addStoreFilter(array $storeIds, bool $withAdmin = true)
+=======
+    public function addStoreFilter(array $storeIds, $withAdmin = true)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         if ($withAdmin) {
             $storeIds[] = Store::DEFAULT_STORE_ID;

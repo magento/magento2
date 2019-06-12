@@ -5,7 +5,11 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+=======
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <section name="AdminEditRoleInfoSection">
         <element name="roleName" type="input" selector="#role_name"/>
         <element name="password" type="input" selector="#current_password"/>
@@ -17,9 +21,13 @@
         <element name="message" type="text" selector=".modal-popup.confirm div.modal-content"/>
         <element name="cancel" type="button" selector=".modal-popup.confirm button.action-dismiss"/>
         <element name="ok" type="button" selector=".modal-popup.confirm button.action-accept" timeout="60"/>
+<<<<<<< HEAD
         <element name="resourceAccess" type="select" selector="#all"/>
         <element name="activeResourceAccessOptionByLabel" type="select" selector="//*[@id='all']/option[text()='{{resource}}' and @selected]" parameterized="true"/>
         <element name="resourceAccessOptionByLabel" type="select" selector="//*[@id='all']/option[text()='{{resource}}']" parameterized="true"/>
         <element name="resource" type="checkbox" selector="//*[@data-role='resource-tree']//li[@data-id='{{resource}}']/a/*[contains(@class, 'jstree-checkbox')]" parameterized="true"/>
+=======
+        <element name="blockName" type="checkbox" selector="//*[text()='{{var}}']//*[@class='jstree-checkbox']" parameterized="true"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </section>
 </sections>

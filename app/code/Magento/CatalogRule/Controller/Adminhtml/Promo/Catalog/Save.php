@@ -6,6 +6,7 @@
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
@@ -13,9 +14,11 @@ use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
+ * Save action for catalog rule
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
+class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog implements HttpPostActionInterface
 {
     /**
      * @var DataPersistorInterface
@@ -39,7 +42,9 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
     }
 
     /**
-     * @return void
+     * Execute save action from catalog rule
+     *
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()

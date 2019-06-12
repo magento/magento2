@@ -30,7 +30,7 @@ class AssertChildProductsGeneratedSku extends AbstractConstraint
             $filter = ['name' => $variation['name']];
             $productGrid->getProductGrid()->search($filter);
             $itemId = $productGrid->getProductGrid()->getFirstItemId();
-            \PHPUnit_Framework_Assert::assertContains(
+            \PHPUnit\Framework\Assert::assertContains(
                 $product->getSku(),
                 $productGrid->getProductGrid()->getColumnValue($itemId, 'SKU'),
                 'Product sku is not generated from parent sku.'

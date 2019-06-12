@@ -69,10 +69,14 @@ class ConcealInProductionWithoutScdOnDemandTest extends \PHPUnit\Framework\TestC
         );
     }
 
+<<<<<<< HEAD
     /**
      * @return void
      */
     public function testIsHiddenScdOnDemandEnabled()
+=======
+    public function testIsHiddenScdOnDemandEnabled(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $path = 'section1/group1/field1';
         $this->deploymentConfigMock->expects($this->once())
@@ -85,10 +89,14 @@ class ConcealInProductionWithoutScdOnDemandTest extends \PHPUnit\Framework\TestC
         $this->assertFalse($this->model->isHidden($path));
     }
 
+<<<<<<< HEAD
     /**
      * @return void
      */
     public function testIsDisabledScdOnDemandEnabled()
+=======
+    public function testIsDisabledScdOnDemandEnabled(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $path = 'section1/group1/field1';
         $this->deploymentConfigMock->expects($this->once())
@@ -105,9 +113,14 @@ class ConcealInProductionWithoutScdOnDemandTest extends \PHPUnit\Framework\TestC
      * @param bool $isHidden
      *
      * @dataProvider visibilityDataProvider
+<<<<<<< HEAD
      * @return void
      */
     public function testIsHiddenScdOnDemandDisabled(bool $isHidden)
+=======
+     */
+    public function testIsHiddenScdOnDemandDisabled(bool $isHidden): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $path = 'section1/group1/field1';
         $this->deploymentConfigMock->expects($this->once())
@@ -126,9 +139,14 @@ class ConcealInProductionWithoutScdOnDemandTest extends \PHPUnit\Framework\TestC
      * @param bool $isDisabled
      *
      * @dataProvider visibilityDataProvider
+<<<<<<< HEAD
      * @return void
      */
     public function testIsDisabledScdOnDemandDisabled(bool $isDisabled)
+=======
+     */
+    public function testIsDisabledScdOnDemandDisabled(bool $isDisabled): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $path = 'section1/group1/field1';
         $this->deploymentConfigMock->expects($this->once())

@@ -7,7 +7,11 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+=======
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <section name="AdminDataGridHeaderSection">
         <!--Search by keyword element-->
         <element name="search" type="input" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] input[placeholder='Search by keyword']"/>
@@ -19,12 +23,20 @@
         <element name="cancelFilters" type="button" selector="button[data-action='grid-filter-cancel']" timeout="30"/>
         <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
         <element name="clearFilters" type="button" selector=".admin__data-grid-header [data-action='grid-filter-reset']" timeout="30"/>
+<<<<<<< HEAD
         <element name="removeFilter" type="button" selector=".admin__data-grid-filters-current._show .action-remove" timeout="30"/>
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <!--Grid view bookmarks-->
         <element name="bookmarkToggle" type="button" selector="div.admin__data-grid-action-bookmarks button[data-bind='toggleCollapsible']" timeout="30"/>
         <element name="bookmarkOption" type="button" selector="//div[contains(@class, 'admin__data-grid-action-bookmarks')]/ul/li/div/a[text() = '{{label}}']" parameterized="true" timeout="30"/>
         <!--Visible columns management-->
         <element name="columnsToggle" type="button" selector="div.admin__data-grid-action-columns button[data-bind='toggleCollapsible']" timeout="30"/>
         <element name="columnCheckbox" type="checkbox" selector="//div[contains(@class,'admin__data-grid-action-columns')]//div[contains(@class, 'admin__field-option')]//label[text() = '{{column}}']/preceding-sibling::input" parameterized="true"/>
+<<<<<<< HEAD
+=======
+        <element name="perPage" type="select" selector="#product_attributes_listing.product_attributes_listing.listing_top.listing_paging_sizes"/>
+        <element name="attributeName" type="input" selector="//div[text()='{{arg}}']/../preceding-sibling::td//input" parameterized="true"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </section>
 </sections>

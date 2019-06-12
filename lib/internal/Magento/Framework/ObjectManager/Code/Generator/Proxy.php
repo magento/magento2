@@ -5,8 +5,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\ObjectManager\Code\Generator;
 
+/**
+ * Class Proxy
+ *
+ * @package Magento\Framework\ObjectManager\Code\Generator
+ */
 class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
 {
     /**
@@ -20,6 +26,8 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
     const NON_INTERCEPTABLE_INTERFACE = \Magento\Framework\ObjectManager\NoninterceptableInterface::class;
 
     /**
+     * Returns default result class name
+     *
      * @param string $modelClassName
      * @return string
      */
@@ -112,13 +120,16 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         $reflectionClass = new \ReflectionClass($this->getSourceClassName());
         $publicMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
         foreach ($publicMethods as $method) {
-            if (!($method->isConstructor() ||
+            if (!(
+                    $method->isConstructor() ||
                     $method->isFinal() ||
                     $method->isStatic() ||
-                    $method->isDestructor()) && !in_array(
-                        $method->getName(),
-                        ['__sleep', '__wakeup', '__clone']
-                    )
+                    $method->isDestructor()
+                )
+                && !in_array(
+                    $method->getName(),
+                    ['__sleep', '__wakeup', '__clone']
+                )
             ) {
                 $methods[] = $this->_getMethodInfo($method);
             }
@@ -128,6 +139,8 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
     }
 
     /**
+     * Generates code
+     *
      * @return string
      */
     protected function _generateCode()
@@ -160,12 +173,21 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
             $parameters[] = $this->_getMethodParameterInfo($parameter);
         }
 
+        $returnTypeValue = $this->getReturnTypeValue($method->getReturnType());
         $methodInfo = [
             'name' => $method->getName(),
             'parameters' => $parameters,
-            'body' => $this->_getMethodBody($method->getName(), $parameterNames),
+            'body' => $this->_getMethodBody(
+                $method->getName(),
+                $parameterNames,
+                $returnTypeValue === 'void'
+            ),
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
+<<<<<<< HEAD
             'returnType' => $this->getReturnTypeValue($method->getReturnType()),
+=======
+            'returntype' => $returnTypeValue,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
 
         return $methodInfo;
@@ -214,20 +236,28 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
      *
      * @param string $name
      * @param array $parameters
+     * @param bool $withoutReturn
      * @return string
      */
-    protected function _getMethodBody($name, array $parameters = [])
-    {
+    protected function _getMethodBody(
+        $name,
+        array $parameters = [],
+        bool $withoutReturn = false
+    ) {
         if (count($parameters) == 0) {
             $methodCall = sprintf('%s()', $name);
         } else {
             $methodCall = sprintf('%s(%s)', $name, implode(', ', $parameters));
         }
-        return 'return $this->_getSubject()->' . $methodCall . ';';
+
+        return ($withoutReturn ? '' : 'return ')
+            . '$this->_getSubject()->' . $methodCall . ';';
     }
 
     /**
-     * {@inheritdoc}
+     * Validates data
+     *
+     * @return bool
      */
     protected function _validateData()
     {
@@ -252,6 +282,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
      * @param mixed $returnType
      * @return null|string
      */
+<<<<<<< HEAD
     private function getReturnTypeValue($returnType)
     {
         $returnTypeValue = null;
@@ -262,6 +293,17 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
                 : (string)$returnType;
         }
 
+=======
+    private function getReturnTypeValue($returnType): ?string
+    {
+        $returnTypeValue = null;
+        if ($returnType) {
+            $returnTypeValue = ($returnType->allowsNull() ? '?' : '');
+            $returnTypeValue .= ($returnType->getName() === 'self')
+                ? $this->getSourceClassName()
+                : $returnType->getName();
+        }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $returnTypeValue;
     }
 }

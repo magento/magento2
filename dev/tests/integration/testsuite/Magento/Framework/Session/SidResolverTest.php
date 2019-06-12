@@ -114,7 +114,7 @@ class SidResolverTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects(
             $this->any()
         )->method(
-            'getValue'
+            'isSetFlag'
         )->with(
             \Magento\Framework\Session\SidResolver::XML_PATH_USE_FRONTEND_SID,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -154,10 +154,12 @@ class SidResolverTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSessionIdQueryParamCustom()
     {
+        $this->session->destroy();
         $oldSessionName = $this->session->getName();
         $this->session->setName($this->customSessionName);
         $this->assertEquals($this->customSessionQueryParam, $this->model->getSessionIdQueryParam($this->session));
         $this->session->setName($oldSessionName);
+        $this->session->start();
     }
 
     public function testSetGetUseSessionVar()
@@ -173,6 +175,7 @@ class SidResolverTest extends \PHPUnit\Framework\TestCase
      * @return array
      */
     public function dataProviderSessionInUrl()
+<<<<<<< HEAD
     {
         return [
             [true],
@@ -194,6 +197,29 @@ class SidResolverTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getValue'
+=======
+    {
+        return [
+            [true],
+            [false],
+        ];
+    }
+
+    /**
+     * Testing "Use SID in URLs" flag.
+     * Checking that the method returns config value if not explicitly
+     * overridden.
+     *
+     * @param bool $configValue Use SID on frontend config value.
+     * @dataProvider dataProviderSessionInUrl
+     */
+    public function testSetGetUseSessionInUrl($configValue)
+    {
+        $this->scopeConfig->expects(
+            $this->any()
+        )->method(
+            'isSetFlag'
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         )->with(
             \Magento\Framework\Session\SidResolver::XML_PATH_USE_FRONTEND_SID,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE

@@ -106,6 +106,10 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
                 'received'
             ]);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->customerFactory = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -113,6 +117,10 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->dataObjectHelper = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->subscriber = $this->objectManager->getObject(
             \Magento\Newsletter\Model\Subscriber::class,
             [
@@ -211,6 +219,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
 
     public function testUpdateSubscription()
     {
+        $storeId = 2;
         $customerId = 1;
         $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMock();
@@ -232,7 +241,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
             ->method('getConfirmationStatus')
             ->with($customerId)
             ->willReturn('account_confirmation_required');
-        $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
+        $customerDataMock->expects($this->exactly(2))->method('getStoreId')->willReturn($storeId);
         $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
 
         $storeModel = $this->getMockBuilder(\Magento\Store\Model\Store::class)
@@ -246,6 +255,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
 
     public function testUnsubscribeCustomerById()
     {
+        $storeId = 2;
         $customerId = 1;
         $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMock();
@@ -263,7 +273,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
             );
         $customerDataMock->expects($this->atLeastOnce())->method('getId')->willReturn('id');
         $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
-        $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
+        $customerDataMock->expects($this->exactly(2))->method('getStoreId')->willReturn($storeId);
         $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
         $this->sendEmailCheck();
 
@@ -272,6 +282,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
 
     public function testSubscribeCustomerById()
     {
+        $storeId = 2;
         $customerId = 1;
         $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMock();
@@ -289,7 +300,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
             );
         $customerDataMock->expects($this->atLeastOnce())->method('getId')->willReturn('id');
         $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
-        $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
+        $customerDataMock->expects($this->exactly(2))->method('getStoreId')->willReturn($storeId);
         $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
         $this->sendEmailCheck();
 
@@ -298,6 +309,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
 
     public function testSubscribeCustomerById1()
     {
+        $storeId = 2;
         $customerId = 1;
         $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMock();
@@ -315,7 +327,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
             );
         $customerDataMock->expects($this->atLeastOnce())->method('getId')->willReturn('id');
         $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
-        $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
+        $customerDataMock->expects($this->exactly(2))->method('getStoreId')->willReturn($storeId);
         $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
         $this->sendEmailCheck();
         $this->customerAccountManagement->expects($this->once())
@@ -329,6 +341,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
 
     public function testSubscribeCustomerByIdAfterConfirmation()
     {
+        $storeId = 2;
         $customerId = 1;
         $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMock();
@@ -346,7 +359,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
             );
         $customerDataMock->expects($this->atLeastOnce())->method('getId')->willReturn('id');
         $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
-        $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
+        $customerDataMock->expects($this->exactly(2))->method('getStoreId')->willReturn($storeId);
         $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
         $this->sendEmailCheck();
         $this->customerAccountManagement->expects($this->never())->method('getConfirmationStatus');

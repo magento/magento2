@@ -14,6 +14,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -52,6 +53,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
     /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter */
     private $extensibleDataObjectConverter;
+
+    /** @var StoreManagerInterface */
+    private $storeManager;
 
     /** @var  \Magento\Framework\Api\DataObjectHelper */
     protected $dataObjectHelper;
@@ -114,6 +118,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->extensibleDataObjectConverter = $this->objectManager
             ->create(\Magento\Framework\Api\ExtensibleDataObjectConverter::class);
+
+        $this->storeManager = $this->objectManager
+            ->create(StoreManagerInterface::class);
     }
 
     /**
@@ -179,7 +186,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      *
      * @expectedException \Magento\Framework\Exception\InvalidEmailOrPasswordException
-     * @expectedExceptionMessage The password doesn't match this account.
+     * @expectedExceptionMessage The password doesn't match this account. Verify the password and try again.
      */
     public function testChangePasswordWrongPassword()
     {
@@ -301,9 +308,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->accountManagement->validateResetPasswordLinkToken(1, $invalidToken);
             $this->fail('Expected exception not thrown.');
         } catch (InputException $ie) {
-            $this->assertEquals('%fieldName is a required field.', $ie->getRawMessage());
-            $this->assertEquals('resetPasswordLinkToken is a required field.', $ie->getMessage());
-            $this->assertEquals('resetPasswordLinkToken is a required field.', $ie->getLogMessage());
+            $this->assertEquals('"%fieldName" is required. Enter and try again.', $ie->getRawMessage());
+            $this->assertEquals('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getMessage());
+            $this->assertEquals('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getLogMessage());
             $this->assertEmpty($ie->getErrors());
         }
     }
@@ -350,9 +357,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->accountManagement->validateResetPasswordLinkToken(1, null);
             $this->fail('Expected exception not thrown.');
         } catch (InputException $ie) {
-            $this->assertEquals('%fieldName is a required field.', $ie->getRawMessage());
-            $this->assertEquals('resetPasswordLinkToken is a required field.', $ie->getMessage());
-            $this->assertEquals('resetPasswordLinkToken is a required field.', $ie->getLogMessage());
+            $this->assertEquals('"%fieldName" is required. Enter and try again.', $ie->getRawMessage());
+            $this->assertEquals('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getMessage());
+            $this->assertEquals('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getLogMessage());
             $this->assertEmpty($ie->getErrors());
         }
     }
@@ -364,12 +371,19 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     {
         $token = 'randomStr123';
         $this->setResetPasswordData($token, 'Y-m-d H:i:s');
+<<<<<<< HEAD
 
         $this->assertTrue(
             $this->accountManagement->validateResetPasswordLinkToken(0, $token)
         );
     }
 
+=======
+        $this->assertTrue(
+            $this->accountManagement->validateResetPasswordLinkToken(null, $token)
+        );
+    }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     /**
      * @magentoDataFixture Magento/Customer/_files/two_customers.php
      * @expectedException \Magento\Framework\Exception\State\ExpiredException
@@ -379,8 +393,12 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $token = 'randomStr123';
         $this->setResetPasswordData($token, 'Y-m-d H:i:s', 1);
         $this->setResetPasswordData($token, 'Y-m-d H:i:s', 2);
+<<<<<<< HEAD
 
         $this->accountManagement->validateResetPasswordLinkToken(0, $token);
+=======
+        $this->accountManagement->validateResetPasswordLinkToken(null, $token);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -475,7 +493,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->accountManagement->resetPassword('customer@example.com', $resetToken, $password);
             $this->fail('Expected exception not thrown.');
         } catch (ExpiredException $e) {
-            $this->assertEquals('Reset password token expired.', $e->getMessage());
+            $this->assertEquals('The password token is expired. Reset and try again.', $e->getMessage());
         }
     }
 
@@ -494,9 +512,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->accountManagement->resetPassword('customer@example.com', $invalidToken, $password);
             $this->fail('Expected exception not thrown.');
         } catch (InputException $ie) {
-            $this->assertEquals('%fieldName is a required field.', $ie->getRawMessage());
-            $this->assertEquals('resetPasswordLinkToken is a required field.', $ie->getMessage());
-            $this->assertEquals('resetPasswordLinkToken is a required field.', $ie->getLogMessage());
+            $this->assertEquals('"%fieldName" is required. Enter and try again.', $ie->getRawMessage());
+            $this->assertEquals('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getMessage());
+            $this->assertEquals('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getLogMessage());
             $this->assertEmpty($ie->getErrors());
         }
     }
@@ -545,6 +563,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     {
         $resetToken = 'lsdj579slkj5987slkj595lkj';
         $password = 'new_Password123';
+<<<<<<< HEAD
 
         $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s');
         $this->assertTrue(
@@ -552,6 +571,13 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+=======
+        $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s');
+        $this->assertTrue(
+            $this->accountManagement->resetPassword(null, $resetToken, $password)
+        );
+    }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     /**
      * @magentoDataFixture Magento/Customer/_files/two_customers.php
      * @expectedException \Magento\Framework\Exception\State\ExpiredException
@@ -560,10 +586,16 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     {
         $resetToken = 'lsdj579slkj5987slkj595lkj';
         $password = 'new_Password123';
+<<<<<<< HEAD
 
         $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s', 1);
         $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s', 2);
         $this->accountManagement->resetPassword('', $resetToken, $password);
+=======
+        $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s', 1);
+        $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s', 2);
+        $this->accountManagement->resetPassword(null, $resetToken, $password);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -630,7 +662,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->accountManagement->createAccount($customerEntity);
             $this->fail('Expected exception not thrown');
         } catch (InputException $ie) {
-            $this->assertEquals('Please enter a customer email.', $ie->getMessage());
+            $this->assertEquals('The customer email is missing. Enter and try again.', $ie->getMessage());
         }
     }
 
@@ -851,6 +883,44 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Customer has two addresses one of it is allowed in website and second is not
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
+     * @magentoDataFixture Magento/Store/_files/websites_different_countries.php
+     * @magentoConfigFixture fixture_second_store_store general/country/allow UA
+     * @return void
+     */
+    public function testCreateNewCustomerWithPasswordHashWithNotAllowedCountry()
+    {
+        $customerId = 1;
+        $allowedCountryIdForSecondWebsite = 'UA';
+        $store = $this->storeManager->getStore('fixture_second_store');
+        $customerData = $this->customerRepository->getById($customerId);
+        $customerData->getAddresses()[1]->setRegion(null)->setCountryId($allowedCountryIdForSecondWebsite)
+            ->setRegionId(null);
+        $customerData->setStoreId($store->getId())->setWebsiteId($store->getWebsiteId())->setId(null);
+        $encryptor = $this->objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
+        /** @var \Magento\Framework\Math\Random $mathRandom */
+        $password = $this->objectManager->get(\Magento\Framework\Math\Random::class)->getRandomString(8);
+        $passwordHash = $encryptor->getHash($password, true);
+        $savedCustomer = $this->accountManagement->createAccountWithPasswordHash(
+            $customerData,
+            $passwordHash
+        );
+        $this->assertCount(
+            1,
+            $savedCustomer->getAddresses(),
+            'The wrong address quantity was saved'
+        );
+        $this->assertSame(
+            'UA',
+            $savedCustomer->getAddresses()[0]->getCountryId(),
+            'The address with the disallowed country was saved'
+        );
+    }
+
+    /**
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
@@ -1015,6 +1085,10 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      * @param $resetToken
      * @param $date
      * @param int $customerIdFromFixture Which customer to use.
+<<<<<<< HEAD
+=======
+     * @throws \Exception
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     protected function setResetPasswordData(
         $resetToken,

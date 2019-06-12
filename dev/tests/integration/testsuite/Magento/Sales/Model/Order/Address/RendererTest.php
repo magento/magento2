@@ -36,6 +36,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
      */
     private $config;
 
+    /**
+     * Set up
+     */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();

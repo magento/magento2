@@ -8,9 +8,13 @@
 /* @var $block \Magento\Customer\Block\CustomerScopeData */
 ?>
 <script type="text/x-magento-init">
+<<<<<<< HEAD
 <?php
     /* @noEscape */
     echo \Magento\Framework\Serialize\JsonConverter::convert([
+=======
+<?= /* @noEscape */ $block->encodeConfiguration([
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         '*' => ['Magento_Customer/js/invalidation-processor' => [
             'invalidationRules' => [
                 'website-rule' => [
@@ -23,5 +27,5 @@
             ]
         ]],
     ]);
-    ?>
+?>
 </script>

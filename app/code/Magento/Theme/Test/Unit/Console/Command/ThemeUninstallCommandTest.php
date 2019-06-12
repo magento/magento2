@@ -57,7 +57,7 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * Theme Validator
      *
-     * @var ThemeValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ThemeValidator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $themeValidator;
 

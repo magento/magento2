@@ -237,7 +237,7 @@ class Url
      */
     public function getEmailConfirmationUrl($email = null)
     {
-        return $this->urlBuilder->getUrl('customer/account/confirmation', ['email' => $email]);
+        return $this->urlBuilder->getUrl('customer/account/confirmation', ['_query' => ['email' => $email]]);
     }
 
     /**

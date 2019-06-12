@@ -13,7 +13,11 @@ use Magento\Config\Test\Page\Adminhtml\AdminAccountSharing;
  * Steps:
  * 1. Log in to Admin.
  * 2. Go to Stores>Configuration>Advanced>admin>Security.
+<<<<<<< HEAD
  * 3. Verify admin Account Sharing option availability.
+=======
+ * 3. * 7. Verify admin Account Sharing option availability.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  *
  * @group Config_(PS)
  * @ZephyrId MAGETWO-47822

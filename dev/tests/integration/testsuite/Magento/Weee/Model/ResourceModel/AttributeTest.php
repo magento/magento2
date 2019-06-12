@@ -13,7 +13,12 @@ use Magento\Eav\Model\Entity\Attribute as EavAttribute;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
+<<<<<<< HEAD
  * Test class for Catalog attribute resource model.
+=======
+ * Test class for Magento\Catalog\Model\ResourceModel\Attribute class
+ * with backend model Magento\Weee\Model\Attribute\Backend\Weee\Tax.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  *
  * @see Magento\Catalog\Model\ResourceModel\Attribute
  */
@@ -44,6 +49,12 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
+<<<<<<< HEAD
+=======
+    /**
+     * @inheritdoc
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -65,7 +76,11 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      * @param int $attributeId
      * @return array|false
      */
+<<<<<<< HEAD
     private function getEavEntityAttributeRow($entityTypeId, $attributeSetId, $attributeId)
+=======
+    private function getEavEntityAttributeRow(int $entityTypeId, int $attributeSetId, int $attributeId)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $connection = $this->productResource->getConnection();
         $select = $connection->select()
@@ -83,16 +98,26 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Weee/_files/fixed_product_attribute.php
      * @return void
      */
+<<<<<<< HEAD
     public function testDeleteEntityFixedTax()
+=======
+    public function testDeleteEntityFixedTax() : void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         /* @var EavAttribute $attribute */
         $attribute = $this->objectManager->get(EavAttribute::class);
         $attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'fixed_product_attribute');
 
         $entityEavAttributeRow = $this->getEavEntityAttributeRow(
+<<<<<<< HEAD
             $attribute->getEntityTypeId(),
             4,
             $attribute->getId()
+=======
+            (int)$attribute->getEntityTypeId(),
+            4,
+            (int)$attribute->getId()
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         );
         $this->assertNotEmpty(
             $entityEavAttributeRow['entity_attribute_id'],
@@ -103,6 +128,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->model->deleteEntity($attribute);
 
         $entityEavAttributeRow = $this->getEavEntityAttributeRow(
+<<<<<<< HEAD
             $attribute->getEntityTypeId(),
             4,
             $attribute->getId()
@@ -110,6 +136,15 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty(
             $entityEavAttributeRow,
             'The record is not remove from table `eav_entity_attribute` for `fixed_product_attribute`'
+=======
+            (int)$attribute->getEntityTypeId(),
+            4,
+            (int)$attribute->getId()
+        );
+        $this->assertEmpty(
+            $entityEavAttributeRow,
+            'The record was not removed from table `eav_entity_attribute` for `fixed_product_attribute`'
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         );
     }
 }

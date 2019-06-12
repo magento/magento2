@@ -13,7 +13,11 @@
     data-mage-init='{
         "Magento_Backend/js/media-uploader" : {
             "maxFileSize": <?= /* @escapeNotVerified */ $block->getFileSizeService()->getMaxFileSize() ?>,
+<<<<<<< HEAD
             "maxWidth":<?= /* @escapeNotVerified */ $block->getImageUploadMaxWidth() ?> ,
+=======
+            "maxWidth": <?= /* @escapeNotVerified */ $block->getImageUploadMaxWidth() ?>,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             "maxHeight": <?= /* @escapeNotVerified */ $block->getImageUploadMaxHeight() ?>,
             "isResizeEnabled": <?= /* @noEscape */ $block->getImageUploadConfigData()->getIsResizeEnabled() ?>
         }

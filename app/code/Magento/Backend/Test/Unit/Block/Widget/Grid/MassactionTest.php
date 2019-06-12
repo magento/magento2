@@ -270,6 +270,7 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * @param array $items
      * @param string $result
      *
@@ -326,6 +327,8 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param string $itemId
      * @param array|\Magento\Framework\DataObject $item
      * @param int $count

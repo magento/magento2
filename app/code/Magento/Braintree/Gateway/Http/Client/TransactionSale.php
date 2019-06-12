@@ -19,7 +19,11 @@ class TransactionSale extends AbstractTransaction
         // sending store id and other additional keys are restricted by Braintree API
         unset($data['store_id']);
 
+<<<<<<< HEAD
         return $this->adapterFactory->create($storeId)
             ->sale($data);
+=======
+        return $this->adapterFactory->create($storeId)->sale($data);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 }

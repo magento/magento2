@@ -26,6 +26,15 @@ class RuleProductPricesPersistor
     private $dateFormat;
 
     /**
+<<<<<<< HEAD
+     * @var TableSwapper
+=======
+     * @var ActiveTableSwitcher
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
+     */
+    private $tableSwapper;
+
+    /**
      * @var TableSwapper
      */
     private $tableSwapper;
@@ -35,8 +44,11 @@ class RuleProductPricesPersistor
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ActiveTableSwitcher $activeTableSwitcher
      * @param TableSwapper|null $tableSwapper
+<<<<<<< HEAD
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime $dateFormat,
@@ -46,6 +58,10 @@ class RuleProductPricesPersistor
     ) {
         $this->dateFormat = $dateFormat;
         $this->resource = $resource;
+<<<<<<< HEAD
+=======
+        $this->activeTableSwitcher = $activeTableSwitcher;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->tableSwapper = $tableSwapper ??
             ObjectManager::getInstance()->get(TableSwapper::class);
     }
@@ -72,25 +88,19 @@ class RuleProductPricesPersistor
             );
         }
 
-        $productIds = [];
-
-        try {
-            foreach ($priceData as $key => $data) {
-                $productIds['product_id'] = $data['product_id'];
-                $priceData[$key]['rule_date'] = $this->dateFormat->formatDate($data['rule_date'], false);
-                $priceData[$key]['latest_start_date'] = $this->dateFormat->formatDate(
-                    $data['latest_start_date'],
-                    false
-                );
-                $priceData[$key]['earliest_end_date'] = $this->dateFormat->formatDate(
-                    $data['earliest_end_date'],
-                    false
-                );
-            }
-            $connection->insertOnDuplicate($indexTable, $priceData);
-        } catch (\Exception $e) {
-            throw $e;
+        foreach ($priceData as $key => $data) {
+            $priceData[$key]['rule_date'] = $this->dateFormat->formatDate($data['rule_date'], false);
+            $priceData[$key]['latest_start_date'] = $this->dateFormat->formatDate(
+                $data['latest_start_date'],
+                false
+            );
+            $priceData[$key]['earliest_end_date'] = $this->dateFormat->formatDate(
+                $data['earliest_end_date'],
+                false
+            );
         }
+        $connection->insertOnDuplicate($indexTable, $priceData);
+
         return true;
     }
 }

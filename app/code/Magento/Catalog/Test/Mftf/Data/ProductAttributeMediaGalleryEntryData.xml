@@ -7,10 +7,17 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="ProductAttributeMediaGalleryEntryMagentoLogo" type="media_gallery_entries">
         <data key="media_type">image</data>
         <data key="label" unique="suffix">Magento Logo</data>
+=======
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ApiProductAttributeMediaGalleryEntryTestImage" type="ProductAttributeMediaGalleryEntry">
+        <data key="media_type">image</data>
+        <data key="label" unique="suffix">Test Image </data>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <data key="position">1</data>
         <array key="types">
             <item>image</item>
@@ -18,6 +25,20 @@
             <item>thumbnail</item>
         </array>
         <data key="disabled">false</data>
+<<<<<<< HEAD
         <requiredEntity type="image_content">MagentoLogoImageContent</requiredEntity>
+=======
+        <requiredEntity type="ImageContent">TestImageContent</requiredEntity>
+    </entity>
+    <entity name="ApiProductAttributeMediaGalleryEntryMagentoLogo" type="ProductAttributeMediaGalleryEntry">
+        <data key="media_type">image</data>
+        <data key="label" unique="suffix">Magento Logo </data>
+        <data key="position">1</data>
+        <array key="types">
+            <item>small_image</item>
+        </array>
+        <data key="disabled">false</data>
+        <requiredEntity type="ImageContent">MagentoLogoImageContent</requiredEntity>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </entity>
 </entities>

@@ -59,7 +59,7 @@ class CartItemProcessor implements CartItemProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convertToBuyRequest(CartItemInterface $cartItem)
     {
@@ -78,7 +78,7 @@ class CartItemProcessor implements CartItemProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function processOptions(CartItemInterface $cartItem)
     {

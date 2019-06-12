@@ -100,7 +100,11 @@ class AssociatedProducts
      * @param CurrencyInterface $localeCurrency
      * @param JsonHelper $jsonHelper
      * @param ImageHelper $imageHelper
+<<<<<<< HEAD
      * @param Escaper $escaper
+=======
+     * @param Escaper|null $escaper
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -292,7 +296,11 @@ class AssociatedProducts
                             'catalog/product/edit',
                             ['id' => $product->getId()]
                         ) . '" target="_blank">' . $this->escaper->escapeHtml($product->getName()) . '</a>',
+<<<<<<< HEAD
                         'sku' => $this->escaper->escapeHtml($product->getSku()),
+=======
+                        'sku' => $product->getSku(),
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                         'name' => $this->escaper->escapeHtml($product->getName()),
                         'qty' => $this->getProductStockQty($product),
                         'price' => $price,

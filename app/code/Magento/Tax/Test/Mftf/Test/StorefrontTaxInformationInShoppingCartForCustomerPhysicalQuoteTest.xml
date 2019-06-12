@@ -7,6 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="StorefrontTaxInformationInShoppingCartForCustomerPhysicalQuoteTest">
         <annotations>
@@ -15,6 +16,17 @@
             <description value="Tax information are updating/recalculating on fly in shopping cart for Customer with default addresses (physical quote)"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-78957"/>
+=======
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontTaxInformationInShoppingCartForCustomerPhysicalQuoteTest">
+        <annotations>
+            <features value="Tax"/>
+            <stories value="Shopping cart taxes"/>
+            <title value="Tax information are updating/recalculating on fly in shopping cart for Customer with default addresses (physical quote)"/>
+            <description value="Tax information are updating/recalculating on fly in shopping cart for Customer with default addresses (physical quote)"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-41932"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <group value="checkout"/>
             <group value="tax"/>
         </annotations>
@@ -31,14 +43,22 @@
             <createData entity="Tax_Config_NY" stepKey="taxConfigurationNYWithFPTEnable"/>
             <!--  Store>Configuration; Sales>Tax FPT Enable -->
             <createData entity="WeeeConfigEnable" stepKey="enableFPT"/>
+<<<<<<< HEAD
             <!-- Customer is created with default addresses: -->
             <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <!--  Simple product is created  Price = 10;  FPT United States/California/10,United States/New York/20 -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <field key="price">10.00</field>
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+<<<<<<< HEAD
+=======
+            <!-- Customer is created with default addresses: -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
                 <argument name="product" value="$$createSimpleProduct$$"/>
@@ -56,12 +76,22 @@
                 <argument name="stateForFPT" value="New York"/>
                 <argument name="valueForFPT" value="20"/>
             </actionGroup>
+<<<<<<< HEAD
             <actionGroup ref="SaveProductOnProductPageOnAdmin" stepKey="saveProduct"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
             <actionGroup ref="AdminResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
         </before>
         <after>
+=======
+            <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetGridToDefaultKeywordSearch"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
@@ -72,9 +102,15 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--  Test Steps  -->
+<<<<<<< HEAD
         <!--  Step 1: Go to Storefront as logged in Customer:  -->
         <actionGroup ref="CustomerLoginOnStorefront" stepKey="customerLogin">
             <argument name="customer" value="$$createCustomer$$" />
+=======
+        <!--  Step 1: Go to Storefront as logged in Customer  -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$" />
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </actionGroup>
         <!--  Step 2: Add simple product to shopping cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
@@ -84,6 +120,7 @@
             <argument name="productCount" value="1"/>
         </actionGroup>
         <!--  Step 3: Go to Shopping Cart -->
+<<<<<<< HEAD
         <actionGroup ref="StorefrontViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <!--  Step 4: Open Estimate Shipping and Tax section -->
         <conditionalClick  selector="{{StorefrontCheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{StorefrontCheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
@@ -115,5 +152,42 @@
         <see selector="{{StorefrontCheckoutCartSummarySection.taxAmount}}" userInput="$0.84" stepKey="checkTaxAmountNY" />
         <see selector="{{StorefrontCheckoutCartSummarySection.rate}}" userInput="US-NY-*-Rate 1 (8.375%)" stepKey="checkRateNY" />
         <see selector="{{StorefrontCheckoutCartSummarySection.amountFPT}}" userInput="$20" stepKey="checkAmountFPTNY" />
+=======
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <!--  Step 4: Open Estimate Shipping and Tax section -->
+        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country}}" stepKey="checkCustomerCountry" />
+        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="checkCustomerRegion" />
+        <grabValueFrom  selector="{{CheckoutCartSummarySection.postcode}}" stepKey="grabTextPostCode"/>
+        <assertEquals  message="Customer postcode is invalid" stepKey="checkCustomerPostcode">
+            <expectedResult type="string">{{US_Address_CA.postcode}}</expectedResult>
+            <actualResult type="variable">grabTextPostCode</actualResult>
+        </assertEquals>
+        <see selector="{{CheckoutCartSummarySection.amountFPT}}" userInput="$10" stepKey="checkFPTAmountCA" />
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$0.83" stepKey="checkTaxAmountCA" />
+        <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary" />
+        <click selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="taxSummary"/>
+        <see selector="{{CheckoutCartSummarySection.rate}}" userInput="US-CA-*-Rate 1 (8.25%)" stepKey="checkRateCA" />
+        <!--  Step 5: Change Data -->
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="Switzerland" stepKey="selectSwitzerlandCountry"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Aargau" stepKey="selectAargauRegion"/>
+        <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="1234" stepKey="inputPostCode"/>
+        <!--  Step 6: Select shipping rate again(it need for get new totals request - performance reason) -->
+        <click selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectflatRateShippingMethodShippingMethod"/>
+        <scrollTo selector="{{CheckoutCartSummarySection.taxAmount}}" stepKey="scrollToTaxSummary2" />
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$0.00" stepKey="checkTaxAmount" />
+        <dontSeeElement selector="{{CheckoutCartSummarySection.amountFPT}}" stepKey="checkFPTIsNotDisplayed" />
+        <!--  Step 7: Change Data -->
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUnitedStatesCountry"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="New York" stepKey="selectNewYorkRegion"/>
+        <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="12345" stepKey="inputPostCode2"/>
+        <!--  Step 8: Select shipping rate again(it need for get new totals request - performance reason) -->
+        <click selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectflatRateShippingMethodShippingMethod2"/>
+        <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary3" />
+        <click selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="taxSummary3"/>
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$0.84" stepKey="checkTaxAmountNY" />
+        <see selector="{{CheckoutCartSummarySection.rate}}" userInput="US-NY-*-Rate 1 (8.375%)" stepKey="checkRateNY" />
+        <see selector="{{CheckoutCartSummarySection.amountFPT}}" userInput="$20" stepKey="checkFPTAmountNY" />
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </test>
 </tests>

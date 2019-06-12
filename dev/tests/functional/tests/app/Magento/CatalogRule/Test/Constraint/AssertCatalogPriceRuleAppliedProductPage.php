@@ -59,14 +59,21 @@ class AssertCatalogPriceRuleAppliedProductPage extends AbstractConstraint
             if ($productPrice[$key]['regular'] !== 'No') {
                 $actualPrice['regular'] = $productPriceBlock->getOldPrice();
                 $actualPrice['discount_amount'] = $actualPrice['regular'] - $actualPrice['special'];
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 $actualPrice['price_from'] = $productPriceBlock->getPriceFrom();
                 $actualPrice['price_to'] = $productPriceBlock->getPriceTo();
                 $actualPrice['old_price_from'] = $productPriceBlock->getOldPriceFrom();
                 $actualPrice['old_price_to'] = $productPriceBlock->getOldPriceTo();
             }
             $diff = $this->verifyData($productPrice[$key], $actualPrice);
+<<<<<<< HEAD
             \PHPUnit_Framework_Assert::assertTrue(
+=======
+            \PHPUnit\Framework\Assert::assertTrue(
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 empty($diff),
                 implode(' ', $diff)
             );

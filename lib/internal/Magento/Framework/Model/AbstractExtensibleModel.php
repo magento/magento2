@@ -69,6 +69,9 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
         if (isset($data['id'])) {
             $this->setId($data['id']);
         }
+        if (isset($data[self::EXTENSION_ATTRIBUTES_KEY]) && is_array($data[self::EXTENSION_ATTRIBUTES_KEY])) {
+            $this->populateExtensionAttributes($data[self::EXTENSION_ATTRIBUTES_KEY]);
+        }
     }
 
     /**
@@ -155,7 +158,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomAttributes(array $attributes)
     {
@@ -163,7 +166,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
@@ -179,7 +182,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * Added custom attributes support.
      */
@@ -197,7 +200,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * Unset customAttributesChanged flag
      */
@@ -336,22 +339,47 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      */
     protected function _getExtensionAttributes()
     {
+        if (!$this->getData(self::EXTENSION_ATTRIBUTES_KEY)) {
+            $this->populateExtensionAttributes([]);
+        }
         return $this->getData(self::EXTENSION_ATTRIBUTES_KEY);
     }
 
     /**
+     * Instantiate extension attributes object and populate it with the provided data.
+     *
+     * @param array $extensionAttributesData
+     * @return void
+     */
+    private function populateExtensionAttributes(array $extensionAttributesData = [])
+    {
+        $extensionAttributes = $this->extensionAttributesFactory->create(get_class($this), $extensionAttributesData);
+        $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         return array_diff(parent::__sleep(), ['extensionAttributesFactory', 'customAttributeFactory']);
     }
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->extensionAttributesFactory = $objectManager->get(ExtensionAttributesFactory::class);

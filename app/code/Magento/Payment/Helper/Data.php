@@ -84,6 +84,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get config name of method model
+     *
      * @param string $code
      * @return string
      */
@@ -151,15 +153,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         @uasort(
             $res,
             function (MethodInterface $a, MethodInterface $b) {
-                if ((int)$a->getConfigData('sort_order') < (int)$b->getConfigData('sort_order')) {
-                    return -1;
-                }
-
-                if ((int)$a->getConfigData('sort_order') > (int)$b->getConfigData('sort_order')) {
-                    return 1;
-                }
-
-                return 0;
+                return (int)$a->getConfigData('sort_order') <=> (int)$b->getConfigData('sort_order');
             }
         );
 
@@ -267,10 +261,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $groupRelations = [];
 
         foreach ($this->getPaymentMethods() as $code => $data) {
-            if (isset($data['title'])) {
-                $methods[$code] = $data['title'];
-            } else {
-                $methods[$code] = $this->getMethodInstance($code)->getConfigData('title', $store);
+            if (!empty($data['active'])) {
+                $storedTitle = $this->getMethodInstance($code)->getConfigData('title', $store);
+                if (isset($storedTitle)) {
+                    $methods[$code] = $storedTitle;
+                } elseif (isset($data['title'])) {
+                    $methods[$code] = $data['title'];
+                }
             }
             if ($asLabelValue && $withGroups && isset($data['group'])) {
                 $groupRelations[$code] = $data['group'];

@@ -5,10 +5,14 @@
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 
-class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
+/**
+ * Controller class Delete. Represents adminhtml request flow for a sitemap deletion
+ */
+class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Filesystem
@@ -53,9 +57,13 @@ class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
                 $sitemap->load($id);
                 // delete file
                 $sitemapPath = $sitemap->getSitemapPath();
+                if ($sitemapPath && $sitemapPath[0] === DIRECTORY_SEPARATOR) {
+                    $sitemapPath = mb_substr($sitemapPath, 1);
+                }
                 $sitemapFilename = $sitemap->getSitemapFilename();
-
-                $path = $directory->getRelativePath($sitemapPath . $sitemapFilename);
+                $path = $directory->getRelativePath(
+                    $sitemapPath .$sitemapFilename
+                );
                 if ($sitemap->getSitemapFilename() && $directory->isFile($path)) {
                     $directory->delete($path);
                 }

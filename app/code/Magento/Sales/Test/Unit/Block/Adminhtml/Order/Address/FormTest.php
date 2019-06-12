@@ -17,11 +17,18 @@ use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Block\Adminhtml\Order\Address\Form;
+<<<<<<< HEAD
+=======
+use Magento\Sales\Model\AdminOrder\Create;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Backend\Model\Session\Quote as QuoteSession;
+<<<<<<< HEAD
 use Magento\Sales\Model\AdminOrder\Create;
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -54,6 +61,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     private $countriesCollection;
 
     /**
+<<<<<<< HEAD
      * @var Create|MockObject
      */
     private $orderCreate;
@@ -62,6 +70,16 @@ class FormTest extends \PHPUnit\Framework\TestCase
      * @var QuoteSession|MockObject
      */
     private $sessionQuote;
+=======
+     * @var QuoteSession|MockObject
+     */
+    private $sessionQuote;
+
+    /**
+     * @var Create|MockObject
+     */
+    private $orderCreate;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
     protected function setUp()
     {
@@ -77,6 +95,10 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getStoreId', 'getStore'])
             ->getMock();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->orderCreate = $this->getMockBuilder(Create::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -127,6 +149,10 @@ class FormTest extends \PHPUnit\Framework\TestCase
                 $select,
                 null
             );
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $address->method('getOrder')
             ->willReturn($order);
         $order->method('getStoreId')

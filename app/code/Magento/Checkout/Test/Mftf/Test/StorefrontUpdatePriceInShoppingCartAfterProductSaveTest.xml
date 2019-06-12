@@ -5,8 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+=======
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <test name="StorefrontUpdatePriceInShoppingCartAfterProductSaveTest">
         <annotations>
             <features value="Checkout"/>
@@ -14,11 +20,22 @@
             <title value="Update price in shopping cart after product save"/>
             <description value="Price in shopping cart should be updated after product save with changed price"/>
             <severity value="CRITICAL"/>
+<<<<<<< HEAD
             <testCaseId value="MAGETWO-77832"/>
             <group value="checkout"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct3" stepKey="createSimpleProduct">
+=======
+            <testCaseId value="MAGETWO-58179"/>
+            <group value="checkout"/>
+            <skip>
+                <issueId value="MC-16684"/>
+            </skip>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 <field key="price">100</field>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -29,7 +46,11 @@
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="SetCustomerDataLifetimeActionGroup" stepKey="setDefaultCustomerDataLifetime"/>
+<<<<<<< HEAD
             <magentoCLI command="indexer:reindex customer_grid" stepKey="reindex"/>
+=======
+            <magentoCLI command="indexer:reindex customer_grid" stepKey="reindexCustomerGrid"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Go to product page-->

@@ -131,6 +131,8 @@ class Grid extends AbstractGrid
     }
 
     /**
+     * Get order id field.
+     *
      * @return string
      */
     public function getOrderIdField()

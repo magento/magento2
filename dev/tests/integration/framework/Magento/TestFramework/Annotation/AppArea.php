@@ -26,6 +26,10 @@ class AppArea
         \Magento\Framework\App\Area::AREA_WEBAPI_REST,
         \Magento\Framework\App\Area::AREA_WEBAPI_SOAP,
         \Magento\Framework\App\Area::AREA_CRONTAB,
+<<<<<<< HEAD
+=======
+        \Magento\Framework\App\Area::AREA_GRAPHQL
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ];
 
     /**

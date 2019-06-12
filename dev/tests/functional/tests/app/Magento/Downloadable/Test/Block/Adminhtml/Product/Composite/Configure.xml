@@ -7,7 +7,6 @@
 -->
 <mapping strict="0">
     <fields>
-        <qty />
         <link>
             <selector>//*[@id="downloadable-links-list"]/*[contains(.,"%link_name%")]//input</selector>
             <strategy>xpath</strategy>

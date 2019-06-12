@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 namespace Magento\UrlRewrite\Model\StoreSwitcher;
 
@@ -39,6 +43,11 @@ class RewriteUrl implements StoreSwitcherInterface
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Switch to another store.
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param StoreInterface $fromStore
      * @param StoreInterface $targetStore
      * @param string $redirectUrl
@@ -65,17 +74,42 @@ class RewriteUrl implements StoreSwitcherInterface
             UrlRewrite::STORE_ID => $oldStoreId,
         ]);
         if ($oldRewrite) {
+<<<<<<< HEAD
             // look for url rewrite match on the target store
             $currentRewrite = $this->urlFinder->findOneByData([
                 UrlRewrite::REQUEST_PATH => $urlPath,
                 UrlRewrite::STORE_ID => $targetStore->getId(),
             ]);
             if (null === $currentRewrite) {
+=======
+            $targetUrl = $targetStore->getBaseUrl();
+            // look for url rewrite match on the target store
+            $currentRewrite = $this->urlFinder->findOneByData([
+                UrlRewrite::TARGET_PATH => $oldRewrite->getTargetPath(),
+                UrlRewrite::STORE_ID => $targetStore->getId(),
+            ]);
+            if ($currentRewrite) {
+                $targetUrl .= $currentRewrite->getRequestPath();
+            }
+        } else {
+            $existingRewrite = $this->urlFinder->findOneByData([
+                UrlRewrite::REQUEST_PATH => $urlPath
+            ]);
+            $currentRewrite = $this->urlFinder->findOneByData([
+                UrlRewrite::REQUEST_PATH => $urlPath,
+                UrlRewrite::STORE_ID => $targetStore->getId(),
+            ]);
+
+            if ($existingRewrite && !$currentRewrite) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 /** @var \Magento\Framework\App\Response\Http $response */
                 $targetUrl = $targetStore->getBaseUrl();
             }
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $targetUrl;
     }
 }

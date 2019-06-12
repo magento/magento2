@@ -43,11 +43,17 @@ class BillingAddressValidationRule implements QuoteValidationRuleInterface
     public function validate(Quote $quote): array
     {
         $validationErrors = [];
+<<<<<<< HEAD
 
         $billingAddress = $quote->getBillingAddress();
         $billingAddress->setStoreId($quote->getStoreId());
         $validationResult = $billingAddress->validate();
 
+=======
+        $billingAddress = $quote->getBillingAddress();
+        $billingAddress->setStoreId($quote->getStoreId());
+        $validationResult = $billingAddress->validate();
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         if ($validationResult !== true) {
             $validationErrors = [__($this->generalMessage)];
         }

@@ -20,7 +20,7 @@ class Html extends AbstractAdapter
     const HTML_FILTER = "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/i";
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _parse()
     {
@@ -31,8 +31,12 @@ class Html extends AbstractAdapter
 
         $results = [];
         preg_match_all(Filter::CONSTRUCTION_PATTERN, $data, $results, PREG_SET_ORDER);
+<<<<<<< HEAD
         $resultsCount = count($results);
         for ($i = 0; $i < $resultsCount; $i++) {
+=======
+        for ($i = 0, $count = count($results); $i < $count; $i++) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             if ($results[$i][1] === Filter::TRANS_DIRECTIVE_NAME) {
                 $directive = [];
                 if (preg_match(Filter::TRANS_DIRECTIVE_REGEX, $results[$i][2], $directive) !== 1) {
@@ -44,8 +48,12 @@ class Html extends AbstractAdapter
         }
 
         preg_match_all(self::HTML_FILTER, $data, $results, PREG_SET_ORDER);
+<<<<<<< HEAD
         $resultsCount = count($results);
         for ($i = 0; $i < $resultsCount; $i++) {
+=======
+        for ($i = 0, $count = count($results); $i < $count; $i++) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             if (!empty($results[$i]['value'])) {
                 $this->_addPhrase($results[$i]['value']);
             }

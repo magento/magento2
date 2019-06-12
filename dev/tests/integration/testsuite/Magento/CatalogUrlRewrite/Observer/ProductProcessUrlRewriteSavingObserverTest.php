@@ -11,12 +11,22 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 
 /**
  * @magentoAppArea adminhtml
+<<<<<<< HEAD
+=======
+ * @magentoDbIsolation disabled
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  */
 class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
 
+<<<<<<< HEAD
+=======
+    /**
+     * Set up
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -86,6 +96,10 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
 
         $product->setData('save_rewrites_history', true);
         $product->setUrlKey('new-url');
+<<<<<<< HEAD
+=======
+        $product->setUrlPath('new-path');
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $product->save();
 
         $expected = [
@@ -148,6 +162,10 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
 
         $product->setData('save_rewrites_history', true);
         $product->setUrlKey('new-url');
+<<<<<<< HEAD
+=======
+        $product->setUrlPath('new-path');
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $product->save();
 
         $expected = [
@@ -203,6 +221,10 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
 
         $product->setData('save_rewrites_history', false);
         $product->setUrlKey('new-url');
+<<<<<<< HEAD
+=======
+        $product->setUrlPath('new-path');
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $product->save();
 
         $expected = [

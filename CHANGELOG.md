@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2.2.6
 =============
 * GitHub issues:
@@ -2010,10 +2011,15 @@
     * [#9588](https://github.com/magento/magento2/pull/9588) -- Support controller src_type for head links (by @kassner)
     * [#9904](https://github.com/magento/magento2/pull/9904) -- Fixed pointless exception in logs every time a category with image is saved (by @woutersamaey)
     * [#10059](https://github.com/magento/magento2/pull/10059) -- Fix fetching quote item by id (by @mladenilic)
+=======
+2.3.0
+=============
+To get detailed information about changes in Magento 2.3.0, see the [Release Notes](https://devdocs.magento.com/guides/v2.3/release-notes/bk-release-notes.html)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 2.1.0
 =============
-To get detailed information about changes in Magento 2.1.0, please visit [Magento Community Edition (CE) Release Notes](http://devdocs.magento.com/guides/v2.1/release-notes/ReleaseNotes2.1.0CE.html "Magento Community Edition (CE) Release Notes")
+To get detailed information about changes in Magento 2.1.0, please visit [Magento Community Edition (CE) Release Notes](https://devdocs.magento.com/guides/v2.1/release-notes/ReleaseNotes2.1.0CE.html "Magento Community Edition (CE) Release Notes")
 
 2.0.0
 =============
@@ -2166,7 +2172,7 @@ To get detailed information about changes in Magento 2.1.0, please visit [Magent
     * Updated styles 
 * Sample Data:
     * Improved sample data installation UX
-    * Updated sample data with Product Heros, color swatches, MAP and rule based product relations
+    * Updated sample data with Product Heroes, color swatches, MAP and rule based product relations
     * Improved sample data upgrade flow
     * Added the ability to log errors and set the error flag during sample data installation
 * Various improvements:
@@ -2498,7 +2504,7 @@ Tests:
     * Fixed an issue where found records in global search in Backend could not be selected via keyboard
     * Fixed an issue where Category menu items went out of screen when page side was reached
     * Fixed an issue where subcategories in menu were shown instantly when user moved mouse quickly
-    * Fixed an issue where popup header was our of window range while creating group product
+    * Fixed an issue where popup header was out of window range while creating group product
     * Fixed an issue where region field was absent in customer address form on backend for "United Kingdom" country
     * Fixed an ability to edit the Order from Admin panel
     * Fixed an issue where email could not be retrieved from \Magento\Quote\Api\Data\AddressInterface after adding an address on OnePageCheckout
@@ -2635,7 +2641,7 @@ Tests:
     * Fixed an issue where filters were not shown on product reviews report grid
     * Fixed an issue where second customer address was not deleted from customer account
     * Fixed an issue where custom options pop-up was still displayed after submit
-    * Fixed an issue where Second Product was not added to Shopping Cart from Wishlist at first atempt
+    * Fixed an issue where Second Product was not added to Shopping Cart from Wishlist at first attempt
     * Fixed an issue where customer invalid email message was not displayed
     * Fixed an issue where All Access Tokens for Customer without Tokens could not be revoked
     * Fixed an issue where it was impossible to add Product to Shopping Cart from shared Wishlist
@@ -2794,7 +2800,7 @@ Tests:
     * Refactored controller actions in the Product area
     * Moved commands cache.php, indexer.php, log.php, test.php, compiler.php, singletenant\_compiler.php, generator.php, pack.php, deploy.php and file\_assembler.php to the new bin/magento CLI framework
 * Data Migration Tool
-    * The Data Migraiton Tool is published in the separate [repository](https://github.com/magento/data-migration-tool-ce "Data Migration Tool repository")
+    * The Data Migration Tool is published in the separate [repository](https://github.com/magento/data-migration-tool-ce "Data Migration Tool repository")
 * Fixed bugs
     * Fixed an issue where error appeared during placing order with virtual product
     * Fixed an issue where billing and shipping sections didn't contain address information on order print
@@ -3034,7 +3040,7 @@ Tests:
     * Improved backend menu keyboard accessibility
     * Accessibility improvements: WAI-ARIA in a product item on a category page and related products
     * Checkout flow code can work with a separate DB storage
-    * <a href="http://devdocs.magento.com/guides/v1.0/release-notes/changes.html#change-devrc-unit">Unit tests moved to module directories</a>
+    * <a href="https://devdocs.magento.com/guides/v1.0/release-notes/changes.html#change-devrc-unit">Unit tests moved to module directories</a>
     * Addressed naming inconsistencies in REST routes
     * Added Advanced Developer workflow for frontend developers
 * Setup
@@ -4293,7 +4299,7 @@ Tests:
   * Fixed an issue where no results were found for Coupons reports
   * Fixed an issue with incremental Qty setting
   * Fixed an issue with allowing importing of negative weight values
-  * Fixed an issue with Inventory - Only X left Treshold being not dependent on Qty for Item's Status to Become Out of Stock
+  * Fixed an issue with Inventory - Only X left Threshold being not dependent on Qty for Item's Status to Become Out of Stock
   * Fixed an issue where the "Catalog Search Index index was rebuilt." message was displayed when reindexing the Catalog Search index
  * Search module:
   * Integrated the Search library to the advanced search functionality
@@ -4715,7 +4721,7 @@ Tests:
    * Ability to support extensible service data objects
    * No Code Duplication in Root Templates
  * Fixed bugs:
-   * Persistance session application. Loggin out the customer
+   * Persistence session application. Logging out the customer
    * Placing the order with two terms and conditions
    * Saving of custom option by service catalogProductCustomOptionsWriteServiceV1
    * Placing the order on frontend if enter in the street address line 1 and 2 255 symbols
@@ -4974,7 +4980,7 @@ Tests:
   * Fixed an issue with incorrect items label for the cases when there are more than one item in the category
   * Fixed an issue when configurable product was out of stock in Google Shopping while being in stock in the Magento backend
   * Fixed an issue when swipe gesture in menu widget was not supported on mobile
-  * Fixed an issue when it was impossible to enter alpha-numeric zip code on the stage of  estimating shipping and tax rates
+  * Fixed an issue when it was impossible to enter alphanumeric zip code on the stage of  estimating shipping and tax rates
   * Fixed an issue when custom price was not applied when editing an order
   * Fixed an issue when items were not returned to stock after unsuccessful order was placed
   * Fixed an issue when error message appeared "Cannot save the credit memo” while creating credit memo
@@ -6145,7 +6151,7 @@ Tests:
   * Moved Multishipping functionality to newly created module Multishipping
   * Extracted Product duplication behavior from Product model to Product\Copier model
   * Replaced event "catalog_model_product_duplicate" with composite Product\Copier model
-  * Replaced event "catalog_product_prepare_save" with controller product initialization helper that can be customozed via plugins
+  * Replaced event "catalog_product_prepare_save" with controller product initialization helper that can be customized via plugins
   * Consolidated Authorize.Net functionality in single module Authorizenet
   * Eliminated dependency of Sales module on Shipping and Usa modules
   * Eliminated dependency of Shipping module on Customer module
@@ -6344,7 +6350,7 @@ Tests:
   * Fixed order placing with virtual product using Express Checkout
   * Fixed the error during order placement with Recurring profile payment
   * Fixed wrong redirect after customer registration during multishipping checkout
-  * Fixed inability to crate shipping labels
+  * Fixed inability to create shipping labels
   * Fixed inability to switch language, if the default language is English
   * Fixed an issue with incorrect XML appearing in cache after some actions on the frontend
   * Fixed product export

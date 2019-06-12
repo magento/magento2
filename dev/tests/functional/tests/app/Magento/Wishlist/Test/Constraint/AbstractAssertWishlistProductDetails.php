@@ -43,6 +43,6 @@ abstract class AbstractAssertWishlistProductDetails extends AbstractAssertForm
             $this->sortDataByPath($expectedOptions, '::title'),
             $this->sortDataByPath($actualOptions, '::title')
         );
-        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
+        \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
     }
 }

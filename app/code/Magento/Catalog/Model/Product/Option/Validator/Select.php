@@ -8,6 +8,9 @@ namespace Magento\Catalog\Model\Product\Option\Validator;
 
 use Magento\Catalog\Model\Product\Option;
 
+/**
+ * Select validator class
+ */
 class Select extends DefaultValidator
 {
     /**
@@ -83,7 +86,11 @@ class Select extends DefaultValidator
         if (!$priceType && !$price) {
             return true;
         }
+<<<<<<< HEAD
         if (!$this->isInRange($priceType, $this->priceTypes)) {
+=======
+        if (!$this->isInRange($priceType, $this->priceTypes) || !$this->isNumber($price)) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             return false;
         }
 

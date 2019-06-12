@@ -1,16 +1,28 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 namespace Magento\Newsletter\Controller\Manage;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
+<<<<<<< HEAD
+=======
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Newsletter\Model\Subscriber;
 
-class Save extends \Magento\Newsletter\Controller\Manage
+/**
+ * Customers newsletter subscription save controller
+ */
+class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
@@ -60,7 +72,7 @@ class Save extends \Magento\Newsletter\Controller\Manage
     /**
      * Save newsletter subscription preference action
      *
-     * @return void|null
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function execute()
     {
@@ -81,6 +93,11 @@ class Save extends \Magento\Newsletter\Controller\Manage
                 $isSubscribedParam = (boolean)$this->getRequest()
                     ->getParam('is_subscribed', false);
                 if ($isSubscribedParam !== $isSubscribedState) {
+<<<<<<< HEAD
+=======
+                    // No need to validate customer and customer address while saving subscription preferences
+                    $this->setIgnoreValidationFlag($customer);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     $this->customerRepository->save($customer);
                     if ($isSubscribedParam) {
                         $subscribeModel = $this->subscriberFactory->create()
@@ -103,6 +120,17 @@ class Save extends \Magento\Newsletter\Controller\Manage
                 $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
             }
         }
-        $this->_redirect('customer/account/');
+        return $this->_redirect('customer/account/');
+    }
+
+    /**
+     * Set ignore_validation_flag to skip unnecessary address and customer validation
+     *
+     * @param CustomerInterface $customer
+     * @return void
+     */
+    private function setIgnoreValidationFlag(CustomerInterface $customer): void
+    {
+        $customer->setData('ignore_validation_flag', true);
     }
 }

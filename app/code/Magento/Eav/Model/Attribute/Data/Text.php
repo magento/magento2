@@ -51,12 +51,12 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
     /**
      * Validate data
+     *
      * Return true or array of errors
      *
      * @param array|string $value
      * @return bool|array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validateValue($value)
     {
@@ -68,24 +68,27 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
             $value = $this->getEntity()->getDataUsingMethod($attribute->getAttributeCode());
         }
 
-        if ($attribute->getIsRequired() && empty($value) && $value !== '0') {
-            $label = __($attribute->getStoreLabel());
-            $errors[] = __('"%1" is a required value.', $label);
-        }
-
-        if (!$errors && !$attribute->getIsRequired() && empty($value)) {
+        if (!$attribute->getIsRequired() && empty($value)) {
             return true;
         }
 
+<<<<<<< HEAD
         $result = $this->validateLength($attribute, $value);
         if (count($result) !== 0) {
             $errors = array_merge($errors, $result);
+=======
+        if (empty($value) && $value !== '0' && $attribute->getDefaultValue() === null) {
+            $label = __($attribute->getStoreLabel());
+            $errors[] = __('"%1" is a required value.', $label);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
 
-        $result = $this->_validateInputRule($value);
-        if ($result !== true) {
-            $errors = array_merge($errors, $result);
-        }
+        $validateLengthResult = $this->validateLength($attribute, $value);
+        $errors = array_merge($errors, $validateLengthResult);
+
+        $validateInputRuleResult = $this->validateInputRule($value);
+        $errors = array_merge($errors, $validateInputRuleResult);
+
         if (count($errors) == 0) {
             return true;
         }
@@ -120,7 +123,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
     }
 
     /**
-     * Return formated attribute value from entity model
+     * Return formatted attribute value from entity model
      *
      * @param string $format
      * @return string|array
@@ -141,7 +144,11 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @param string $value
      * @return array errors
      */
+<<<<<<< HEAD
     private function validateLength(\Magento\Eav\Model\Attribute $attribute, $value): array
+=======
+    private function validateLength(\Magento\Eav\Model\Attribute $attribute, string $value): array
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $errors = [];
         $length = $this->_string->strlen(trim($value));
@@ -162,4 +169,19 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
         return $errors;
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * Validate value by attribute input validation rule.
+     *
+     * @param string $value
+     * @return array
+     */
+    private function validateInputRule(string $value): array
+    {
+        $result = $this->_validateInputRule($value);
+        return \is_array($result) ? $result : [];
+    }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 }

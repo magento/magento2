@@ -1,0 +1,13 @@
+{
+    "captcha_log": {
+        "column": {
+            "type": true,
+            "value": true,
+            "count": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

@@ -8,6 +8,16 @@ namespace Magento\Framework\Mail\Template;
 
 use Magento\Framework\Mail\MessageInterface;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class TransportBuilderByStore
+ *
+ * @deprecated The ability to set From address based on store is now available
+ * in the \Magento\Framework\Mail\Template\TransportBuilder class
+ * @see \Magento\Framework\Mail\Template\TransportBuilder::setFromByStore
+ */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class TransportBuilderByStore
 {
     /**
@@ -47,7 +57,11 @@ class TransportBuilderByStore
     public function setFromByStore($from, $store)
     {
         $result = $this->senderResolver->resolve($from, $store);
+<<<<<<< HEAD
         $this->message->setFrom($result['email'], $result['name']);
+=======
+        $this->message->setFromAddress($result['email'], $result['name']);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         return $this;
     }

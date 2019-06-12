@@ -78,7 +78,11 @@ class RouteParamsResolver
                 $storeCode
             );
 
+<<<<<<< HEAD
             if ($useStoreInUrl && !$this->storeManager->hasSingleStore()) {
+=======
+            if (!$useStoreInUrl && !$this->storeManager->hasSingleStore()) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 $this->queryParamsResolver->setQueryParam('___store', $storeCode);
             }
         }

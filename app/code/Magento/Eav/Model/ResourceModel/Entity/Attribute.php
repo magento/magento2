@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model\ResourceModel\Entity;
 
 use Magento\Eav\Model\Config;
@@ -224,6 +225,8 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Returns config instance
+     *
      * @return Config
      * @deprecated 100.0.7
      */
@@ -296,10 +299,10 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Save in set including
      *
      * @param AbstractModel $object
-     * @param null $attributeEntityId
-     * @param null $attributeSetId
-     * @param null $attributeGroupId
-     * @param null $attributeSortOrder
+     * @param int|null $attributeEntityId
+     * @param int|null $attributeSetId
+     * @param int|null $attributeGroupId
+     * @param int|null $attributeSortOrder
      * @return $this
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -393,7 +396,9 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _checkDefaultOptionValue($values)
     {
         if (!isset($values[0])) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Default option value is not defined'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __("The default option isn't defined. Set the option and try again.")
+            );
         }
     }
 
@@ -633,6 +638,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Load additional attribute data.
+     *
      * Load label of current active store
      *
      * @param EntityAttribute|AbstractModel $object
@@ -719,9 +725,14 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return array
      * @since 100.0.7
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $properties = parent::__sleep();
         $properties = array_diff($properties, ['_storeManager']);
         return $properties;
@@ -732,9 +743,14 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      * @since 100.0.7
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         parent::__wakeup();
         $this->_storeManager = \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Store\Model\StoreManagerInterface::class);

@@ -84,7 +84,11 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         $websiteMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->assertEquals(
             $objectResourceMock,
             $this->model->afterDelete($subjectMock, $objectResourceMock, $websiteMock)
@@ -101,6 +105,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         $this->tableMaintainer->expects($this->never())->method('dropTablesForDimensions')->with(
             [$dimensionMock]
         );
+<<<<<<< HEAD
 
         $this->dimensionModeConfiguration->expects($this->once())->method('getDimensionConfiguration')->willReturn(
             []
@@ -144,6 +149,51 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->method('isObjectNew')
             ->willReturn(true);
 
+=======
+
+        $this->dimensionModeConfiguration->expects($this->once())->method('getDimensionConfiguration')->willReturn(
+            []
+        );
+
+        $subjectMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class);
+        $objectResourceMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class);
+        $websiteMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
+        $websiteMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->assertEquals(
+            $objectResourceMock,
+            $this->model->afterDelete($subjectMock, $objectResourceMock, $websiteMock)
+        );
+    }
+
+    public function testAfterSave()
+    {
+        $dimensionMock = $this->createMock(\Magento\Framework\Indexer\Dimension::class);
+
+        $this->dimensionFactory->expects($this->once())->method('create')->willReturn(
+            $dimensionMock
+        );
+        $this->tableMaintainer->expects($this->once())->method('createTablesForDimensions')->with(
+            [$dimensionMock]
+        );
+
+        $this->dimensionModeConfiguration->expects($this->once())->method('getDimensionConfiguration')->willReturn(
+            [\Magento\Store\Model\Indexer\WebsiteDimensionProvider::DIMENSION_NAME]
+        );
+
+        $subjectMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class);
+        $objectResourceMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class);
+        $websiteMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
+        $websiteMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $websiteMock->expects($this->once())
+            ->method('isObjectNew')
+            ->willReturn(true);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->assertEquals(
             $objectResourceMock,
             $this->model->afterSave($subjectMock, $objectResourceMock, $websiteMock)

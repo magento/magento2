@@ -35,7 +35,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $serializer;
+    private $serializerMock;
 
     protected function setUp()
     {
@@ -49,7 +49,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
             \Magento\Checkout\Block\Checkout\LayoutProcessorInterface::class
         );
 
-        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\Serializer\JsonHexTag::class);
 
         $this->model = new \Magento\Checkout\Block\Onepage(
             $contextMock,
@@ -57,7 +57,8 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
             $this->configProviderMock,
             [$this->layoutProcessorMock],
             [],
-            $this->serializer
+            $this->serializerMock,
+            $this->serializerMock
         );
     }
 
@@ -93,6 +94,10 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $processedLayout = ['layout' => ['processed' => true]];
         $jsonLayout = '{"layout":{"processed":true}}';
         $this->layoutProcessorMock->expects($this->once())->method('process')->with([])->willReturn($processedLayout);
+<<<<<<< HEAD
+=======
+        $this->serializerMock->expects($this->once())->method('serialize')->willReturn($jsonLayout);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $this->assertEquals($jsonLayout, $this->model->getJsLayout());
     }
@@ -101,6 +106,10 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
     {
         $checkoutConfig = ['checkout', 'config'];
         $this->configProviderMock->expects($this->once())->method('getConfig')->willReturn($checkoutConfig);
+<<<<<<< HEAD
+=======
+        $this->serializerMock->expects($this->once())->method('serialize')->willReturn(json_encode($checkoutConfig));
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $this->assertEquals(json_encode($checkoutConfig), $this->model->getSerializedCheckoutConfig());
     }

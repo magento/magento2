@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\Paypal\Model\Adminhtml;
 
 use Magento\Checkout\Model\Session;
@@ -59,7 +64,11 @@ class Express extends PaypalExpress
      * @param LocalizedExceptionFactory $exception
      * @param TransactionRepositoryInterface $transactionRepository
      * @param BuilderInterface $transactionBuilder
+<<<<<<< HEAD
      * @param AuthorizeCommand $authCommand*
+=======
+     * @param AuthorizeCommand $authCommand
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param AbstractResource $resource
      * @param AbstractDb $resourceCollection
      * @param array $data
@@ -160,7 +169,11 @@ class Express extends PaypalExpress
     }
 
     /**
+<<<<<<< HEAD
      * Checks if payment authorization allowed
+=======
+     * Checks if payment authorization allowed.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param Payment $payment
      * @return bool
@@ -169,7 +182,12 @@ class Express extends PaypalExpress
     public function isOrderAuthorizationAllowed(Payment $payment): bool
     {
         if ($payment->getMethod() === Config::METHOD_EXPRESS &&
+<<<<<<< HEAD
             $payment->getMethodInstance()->getConfigPaymentAction() === AbstractMethod::ACTION_ORDER) {
+=======
+            $payment->getMethodInstance()->getConfigPaymentAction() === AbstractMethod::ACTION_ORDER
+        ) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             return !$this->hasAuthorization($payment);
         }
 

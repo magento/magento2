@@ -8,6 +8,48 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+<<<<<<< HEAD
+=======
+    <entity name="BundleProduct" type="product">
+        <data key="name" unique="suffix">BundleProduct</data>
+        <data key="name2" unique="suffix">BundleProduct2</data>
+        <data key="sku" unique="suffix">bundleproduct</data>
+        <data key="sku2" unique="suffix">bundleproduct2</data>
+        <data key="type_id">bundle</data>
+        <data key="attribute_set_id">4</data>
+        <data key="optionTitle1">BundleOption</data>
+        <data key="optionInputType1">checkbox</data>
+        <data key="defaultQuantity">10</data>
+        <data key="status">1</data>
+        <data key="urlKey" unique="suffix">bundleproduct</data>
+        <data key="urlKey2" unique="suffix">bundleproduct2</data>
+        <data key="default_quantity1">10</data>
+        <data key="default_quantity2">20</data>
+        <data key="quantity">30</data>
+        <data key="set">4</data>
+        <data key="type">bundle</data>
+        <data key="price">10</data>
+        <data key="fixedPrice">10</data>
+        <data key="fixedPriceFormatted">$10.00</data>
+        <data key="defaultAttribute">Default</data>
+    </entity>
+    <entity name="FixedBundleProduct" type="product2">
+        <data key="name" unique="suffix">FixedBundleProduct</data>
+        <data key="sku" unique="suffix">fixed-bundle-product</data>
+        <data key="type_id">bundle</data>
+        <data key="attribute_set_id">4</data>
+        <data key="price">1.23</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="urlKey" unique="suffix">fixed-bundle-product</data>
+        <requiredEntity type="custom_attribute">CustomAttributeCategoryIds</requiredEntity>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributePriceView</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeFixPrice</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeFixWeight</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeFixSku</requiredEntity>
+    </entity>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <entity name="ApiBundleProduct" type="product2">
         <data key="name" unique="suffix">Api Bundle Product</data>
         <data key="sku" unique="suffix">api-bundle-product</data>
@@ -52,4 +94,23 @@
         <requiredEntity type="custom_attribute">CustomAttributeFixPrice</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributePriceView</requiredEntity>
     </entity>
+<<<<<<< HEAD
+=======
+    <entity name="BundleProductPriceViewRange" type="product2">
+        <data key="name" unique="suffix">BundleProduct</data>
+        <data key="sku" unique="suffix">bundle-product</data>
+        <data key="type_id">bundle</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="urlKey" unique="suffix">bundle-product</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeCategoryIds</requiredEntity>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">ApiProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute">ApiProductShortDescription</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeDynamicPrice</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributePriceViewRange</requiredEntity>
+    </entity>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </entities>

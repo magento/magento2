@@ -79,7 +79,11 @@ class DateTime
      * @param int $time
      * @return string The given time in given format
      *
+<<<<<<< HEAD
      * @deprecated 101.0.1
+=======
+     * @deprecated
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @see Use Intl library for datetime handling: http://php.net/manual/en/book.intl.php
      *
      * @codeCoverageIgnore
@@ -95,7 +99,11 @@ class DateTime
      * @param string $timeStr
      * @return int
      *
+<<<<<<< HEAD
      * @deprecated 101.0.1
+=======
+     * @deprecated
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @see Use Intl library for datetime handling: http://php.net/manual/en/book.intl.php
      *
      * @codeCoverageIgnore

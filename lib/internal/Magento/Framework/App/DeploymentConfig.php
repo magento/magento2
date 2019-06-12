@@ -70,6 +70,14 @@ class DeploymentConfig
         if ($key === null) {
             return $this->flatData;
         }
+<<<<<<< HEAD
+=======
+
+        if (array_key_exists($key, $this->flatData) && $this->flatData[$key] === null) {
+            return '';
+        }
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $this->flatData[$key] ?? $defaultValue;
     }
 
@@ -146,6 +154,8 @@ class DeploymentConfig
     }
 
     /**
+     * Array keys conversion
+     *
      * Convert associative array of arbitrary depth to a flat associative array with concatenated key path as keys
      * each level of array is accessible by path key
      *

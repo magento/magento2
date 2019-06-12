@@ -71,6 +71,11 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Convert condition to filter group
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param ConditionInterface $condition
      * @return null|\Magento\Framework\Api\CombinedFilterGroup|\Magento\Framework\Api\Filter
      * @throws InputException
@@ -89,6 +94,11 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Convert combined condition to filter group
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param Combine $combinedCondition
      * @return null|\Magento\Framework\Api\CombinedFilterGroup
      * @throws InputException
@@ -121,6 +131,11 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Convert simple condition to filter group
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param ConditionInterface $productCondition
      * @return FilterGroup|Filter
      * @throws InputException
@@ -139,6 +154,11 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Convert simple condition with array value to filter group
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param ConditionInterface $productCondition
      * @return FilterGroup
      * @throws InputException
@@ -161,6 +181,11 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get glue for multiple values by operator
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param string $operator
      * @return string
      */
@@ -183,6 +208,7 @@ class ConditionsToSearchCriteriaMapper
     private function reverseSqlOperatorInFilter(Filter $filter)
     {
         $operatorsMap = [
+<<<<<<< HEAD
             'eq'    => 'neq',
             'neq'   => 'eq',
             'gteq'  => 'lt',
@@ -193,6 +219,18 @@ class ConditionsToSearchCriteriaMapper
             'nlike' => 'like',
             'in'    => 'nin',
             'nin'   => 'in',
+=======
+            'eq' => 'neq',
+            'neq' => 'eq',
+            'gteq' => 'lt',
+            'lteq' => 'gt',
+            'gt' => 'lteq',
+            'lt' => 'gteq',
+            'like' => 'nlike',
+            'nlike' => 'like',
+            'in' => 'nin',
+            'nin' => 'in',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
 
         if (!array_key_exists($filter->getConditionType(), $operatorsMap)) {
@@ -211,6 +249,11 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Convert filters array into combined filter group
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param array $filters
      * @param string $combinationMode
      * @return FilterGroup
@@ -227,6 +270,11 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Creating of filter object by filtering params
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param string $field
      * @param string $value
      * @param string $conditionType
@@ -254,6 +302,7 @@ class ConditionsToSearchCriteriaMapper
     private function mapRuleOperatorToSQLCondition(string $ruleOperator): string
     {
         $operatorsMap = [
+<<<<<<< HEAD
             '=='    => 'eq',    // is
             '!='    => 'neq',   // is not
             '>='    => 'gteq',  // equals or greater than
@@ -264,6 +313,19 @@ class ConditionsToSearchCriteriaMapper
             '!{}'   => 'nlike', // does not contains
             '()'    => 'in',    // is one of
             '!()'   => 'nin',   // is not one of
+=======
+            '==' => 'eq',    // is
+            '!=' => 'neq',   // is not
+            '>=' => 'gteq',  // equals or greater than
+            '<=' => 'lteq',  // equals or less than
+            '>' => 'gt',    // greater than
+            '<' => 'lt',    // less than
+            '{}' => 'like',  // contains
+            '!{}' => 'nlike', // does not contains
+            '()' => 'in',    // is one of
+            '!()' => 'nin',   // is not one of
+            '<=>' => 'is_null'
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
 
         if (!array_key_exists($ruleOperator, $operatorsMap)) {
@@ -289,8 +351,13 @@ class ConditionsToSearchCriteriaMapper
     private function mapRuleAggregatorToSQLAggregator(string $ruleAggregator): string
     {
         $operatorsMap = [
+<<<<<<< HEAD
             'all'    => 'AND',
             'any'    => 'OR',
+=======
+            'all' => 'AND',
+            'any' => 'OR',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
 
         if (!array_key_exists(strtolower($ruleAggregator), $operatorsMap)) {

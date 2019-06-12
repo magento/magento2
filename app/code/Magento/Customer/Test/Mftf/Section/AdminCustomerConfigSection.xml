@@ -5,9 +5,18 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCustomerConfigSection">
         <element name="customerDataLifetime" type="input" selector="#customer_online_customers_section_data_lifetime"/>
+=======
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerConfigSection">
+        <element name="customerDataLifetime" type="input" selector="#customer_online_customers_section_data_lifetime"/>
+        <element name="accountSharingOptionsTab" type="button" selector="#customer_account_share-head"/>
+        <element name="shareCustomerAccountInherit" type="checkbox" selector="#customer_account_share_scope_inherit"/>
+        <element name="shareCustomerAccount" type="select" selector="#customer_account_share_scope"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </section>
 </sections>

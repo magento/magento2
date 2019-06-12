@@ -160,7 +160,11 @@ interface AccountManagementInterface
     /**
      * Check if password reset token is valid.
      *
+<<<<<<< HEAD
      * @param int $customerId If 0 is given then a customer
+=======
+     * @param int $customerId If null is given then a customer
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * will be matched by the RP token.
      * @param string $resetPasswordLinkToken
      *

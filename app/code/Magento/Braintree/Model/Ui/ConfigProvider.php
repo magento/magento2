@@ -13,6 +13,8 @@ use Magento\Framework\Session\SessionManagerInterface;
 
 /**
  * Class ConfigProvider
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class ConfigProvider implements ConfigProviderInterface
 {
@@ -72,26 +74,41 @@ class ConfigProvider implements ConfigProviderInterface
                     'clientToken' => $this->getClientToken(),
                     'ccTypesMapper' => $this->config->getCcTypesMapper(),
                     'sdkUrl' => $this->config->getSdkUrl(),
+<<<<<<< HEAD
+=======
+                    'hostedFieldsSdkUrl' => $this->config->getHostedFieldsSdkUrl(),
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     'countrySpecificCardTypes' => $this->config->getCountrySpecificCardTypeConfig($storeId),
                     'availableCardTypes' => $this->config->getAvailableCardTypes($storeId),
                     'useCvv' => $this->config->isCvvEnabled($storeId),
                     'environment' => $this->config->getEnvironment($storeId),
+<<<<<<< HEAD
                     'kountMerchantId' => $this->config->getKountMerchantId($storeId),
                     'hasFraudProtection' => $this->config->hasFraudProtection($storeId),
                     'merchantId' => $this->config->getMerchantId($storeId),
                     'ccVaultCode' => self::CC_VAULT_CODE
+=======
+                    'hasFraudProtection' => $this->config->hasFraudProtection($storeId),
+                    'merchantId' => $this->config->getMerchantId($storeId),
+                    'ccVaultCode' => self::CC_VAULT_CODE,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ],
                 Config::CODE_3DSECURE => [
                     'enabled' => $this->config->isVerify3DSecure($storeId),
                     'thresholdAmount' => $this->config->getThresholdAmount($storeId),
+<<<<<<< HEAD
                     'specificCountries' => $this->config->get3DSecureSpecificCountries($storeId)
+=======
+                    'specificCountries' => $this->config->get3DSecureSpecificCountries($storeId),
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ],
-            ]
+            ],
         ];
     }
 
     /**
      * Generate a new client token if necessary
+     *
      * @return string
      */
     public function getClientToken()

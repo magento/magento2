@@ -6,8 +6,11 @@
 namespace Magento\Analytics\ReportXml\DB;
 
 /**
+<<<<<<< HEAD
  * Class NameResolver
  *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  * Resolver for source names
  */
 class NameResolver

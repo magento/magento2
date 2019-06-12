@@ -4,15 +4,22 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Trigger;
+<<<<<<< HEAD
 use Magento\Framework\DB\Ddl\TriggerFactory;
 use Magento\Framework\Mview\ViewInterface;
+=======
+use Magento\Framework\Mview\View\StateInterface;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
+/**
+ * Class Subscription
+ *
+ * @package Magento\Framework\Mview\View
+ */
 class Subscription implements SubscriptionInterface
 {
     /**
@@ -55,6 +62,14 @@ class Subscription implements SubscriptionInterface
     protected $linkedViews = [];
 
     /**
+     * List of columns that can be updated in a subscribed table
+     * without creating a new change log entry
+     *
+     * @var array
+     */
+    private $ignoredUpdateColumns = [];
+
+    /**
      * @var Resource
      */
     protected $resource;
@@ -83,7 +98,11 @@ class Subscription implements SubscriptionInterface
         ViewInterface $view,
         $tableName,
         $columnName,
+<<<<<<< HEAD
         array $ignoredUpdateColumns = []
+=======
+        $ignoredUpdateColumns = []
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ) {
         $this->connection = $resource->getConnection();
         $this->triggerFactory = $triggerFactory;
@@ -200,7 +219,10 @@ class Subscription implements SubscriptionInterface
             case Trigger::EVENT_INSERT:
                 $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
                 break;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             case Trigger::EVENT_UPDATE:
                 $tableName = $this->resource->getTableName($this->getTableName());
                 $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
@@ -225,6 +247,7 @@ class Subscription implements SubscriptionInterface
                     }
                 }
                 break;
+<<<<<<< HEAD
 
             case Trigger::EVENT_DELETE:
                 $trigger = "INSERT IGNORE INTO %s (%s) VALUES (OLD.%s);";
@@ -234,6 +257,14 @@ class Subscription implements SubscriptionInterface
                 return '';
         }
 
+=======
+            case Trigger::EVENT_DELETE:
+                $trigger = "INSERT IGNORE INTO %s (%s) VALUES (OLD.%s);";
+                break;
+            default:
+                return '';
+        }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return sprintf(
             $trigger,
             $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),

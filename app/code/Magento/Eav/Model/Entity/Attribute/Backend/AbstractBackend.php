@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -238,7 +240,13 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
             && $attribute->isValueEmpty($attribute->getDefaultValue())
         ) {
             $label = $attribute->getFrontend()->getLabel();
+<<<<<<< HEAD
             throw new LocalizedException(__('The value of attribute "%1" must be set', $label));
+=======
+            throw new LocalizedException(
+                __('The "%1" attribute value is empty. Set the attribute and try again.', $label)
+            );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
 
         if ($attribute->getIsUnique()
@@ -251,7 +259,9 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
         if ($attribute->getIsUnique()) {
             if (!$attribute->getEntity()->checkAttributeUniqueValue($attribute, $object)) {
                 $label = $attribute->getFrontend()->getLabel();
-                throw new LocalizedException(__('The value of attribute "%1" must be unique', $label));
+                throw new LocalizedException(
+                    __('The value of the "%1" attribute isn\'t unique. Set a unique value and try again.', $label)
+                );
             }
         }
 
@@ -343,9 +353,8 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     }
 
     /**
-     * By default attribute value is considered scalar that can be stored in a generic way
+     * By default attribute value is considered scalar that can be stored in a generic way {@inheritdoc}
      *
-     * {@inheritdoc}
      * @codeCoverageIgnore
      */
     public function isScalar()

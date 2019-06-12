@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Customers defined options
  */
@@ -344,9 +342,15 @@ class Option extends Widget
                                 $_value->getStoreTitle() === null,
                                 $_value->getOptionTypeId()
                             );
+<<<<<<< HEAD
                             $value['optionValues'][$i]['scopeTitleDisabled'] = (
                                 $_value->getStoreTitle() === null
                             ) ? 'disabled' : null;
+=======
+                            $value['optionValues'][$i]['scopeTitleDisabled'] = $_value->getStoreTitle() === null
+                                ? 'disabled'
+                                : null;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                             if ($scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE) {
                                 $value['optionValues'][$i]['checkboxScopePrice'] = $this->getCheckboxScopeHtml(
                                     $_value->getOptionId(),
@@ -355,9 +359,15 @@ class Option extends Widget
                                     $_value->getOptionTypeId(),
                                     ['$(this).up(1).previous()']
                                 );
+<<<<<<< HEAD
                                 $value['optionValues'][$i]['scopePriceDisabled'] = (
                                     $_value->getStorePrice() === null
                                 ) ? 'disabled' : null;
+=======
+                                $value['optionValues'][$i]['scopePriceDisabled'] = $_value->getStorePrice() === null
+                                    ? 'disabled'
+                                    : null;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                             }
                         }
                         $i++;

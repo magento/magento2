@@ -8,6 +8,9 @@ namespace Magento\Payment\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Verify order payment observer
+ */
 class SalesOrderBeforeSaveObserver implements ObserverInterface
 {
     /**

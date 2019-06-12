@@ -17,6 +17,7 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
  * 1. Create items
  *
  * Steps:
+<<<<<<< HEAD
  * 1. Navigate to backend.
  * 2. Go to grid page
  * 3. Filter grid using provided columns
@@ -24,12 +25,26 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
  *
  * @group Ui
  * @ZephyrId MAGETWO-71940
+=======
+ * 1. Log in to Admin.
+ * 2. Go to grid page.
+ * 3. Apply filter by Store View.
+ * 4. Delete Website.
+ * 5. Go to grid page.
+ * 6. Perform Asserts.
+ *
+ * @group Ui
+ * @ZephyrId MAGETWO-89042
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  */
 class GridFilteringDeletedEntityTest extends Injectable
 {
     /* tags */
     const SEVERITY = 'S2';
+<<<<<<< HEAD
     const STABLE = 'no';
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     const MVP = 'no';
     /* end tags */
 

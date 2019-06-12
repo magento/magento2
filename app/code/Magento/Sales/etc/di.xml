@@ -476,7 +476,10 @@
             <argument name="entityRelationComposite" xsi:type="object">CreditmemoRelationsComposite</argument>
         </arguments>
     </type>
+<<<<<<< HEAD
     
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <virtualType name="Magento\Sales\Model\ResourceModel\Provider\NotSyncedOrderDataProvider" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
         <arguments>
             <argument name="providers" xsi:type="array">
@@ -746,6 +749,10 @@
     <virtualType name="ShippingAddressAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
         <arguments>
             <argument name="columns" xsi:type="array">
+                <item name="company" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">company</item>
+                </item>
                 <item name="street" xsi:type="array">
                     <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
                     <item name="columnName" xsi:type="string">street</item>
@@ -769,6 +776,10 @@
     <virtualType name="BillingAddressAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
         <arguments>
             <argument name="columns" xsi:type="array">
+                <item name="company" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">company</item>
+                </item>
                 <item name="street" xsi:type="array">
                     <item name="tableAlias" xsi:type="string">sales_billing_address</item>
                     <item name="columnName" xsi:type="string">street</item>
@@ -981,6 +992,13 @@
     <type name="Magento\Sales\Model\ResourceModel\Order\Handler\Address">
         <plugin name="addressUpdate" type="Magento\Sales\Model\Order\Invoice\Plugin\AddressUpdate"/>
     </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="encyption_payment_data_update" xsi:type="object">Magento\Sales\Console\Command\EncryptionPaymentDataUpdateCommand</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">
@@ -1001,4 +1019,12 @@
     <preference
             for="Magento\Sales\Api\OrderCustomerDelegateInterface"
             type="Magento\Sales\Model\Order\OrderCustomerDelegate" />
+<<<<<<< HEAD
+=======
+    <type name="Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityChecker">
+        <arguments>
+            <argument name="productAvailabilityChecks" xsi:type="array" />
+        </arguments>
+    </type>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </config>

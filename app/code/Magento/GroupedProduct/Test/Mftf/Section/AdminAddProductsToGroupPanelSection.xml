@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminAddProductsToGroupPanel">
+        <element name="addSelectedProducts" type="button" selector=".product_form_product_form_grouped_grouped_products_modal button.action-primary" timeout="30"/>
+        <element name="filters" type="button" selector=".product_form_product_form_grouped_grouped_products_modal [data-action='grid-filter-expand']" timeout="30"/>
+        <element name="applyFilters" type="button" selector=".product_form_product_form_grouped_grouped_products_modal [data-action='grid-filter-apply']" timeout="30"/>
+        <element name="nameFilter" type="input" selector=".product_form_product_form_grouped_grouped_products_modal [name='name']"/>
+        <element name="firstCheckbox" type="input" selector="tr[data-repeat-index='0'] .admin__control-checkbox"/>
+        <element name="nThCheckbox" type="input" selector="tr[data-repeat-index='{{n}}'] .admin__control-checkbox" parameterized="true"/>
+        <element name="clearFilters" type="button" selector=".product_form_product_form_grouped_grouped_products_modal [data-action='grid-filter-reset']" timeout="30"/>
+    </section>
+
+    <section name="AdminAddedProductsToGroupGrid">
+        <element name="inputByProductName" type="input" selector="//div[@data-index='grouped']//table//tr[td[@data-index='name']//span[text()='{{productName}}']]//td[@data-index='qty']//input" parameterized="true"/>
+    </section>
+</sections>

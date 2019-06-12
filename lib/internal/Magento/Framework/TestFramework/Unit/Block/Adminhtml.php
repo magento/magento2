@@ -197,9 +197,9 @@ class Adminhtml extends \PHPUnit\Framework\TestCase
      * @param \PHPUnit_Framework_MockObject_MockObject                       $object
      * @param string                                                        $stubName
      * @param mixed                                                         $return
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount|null        $expects
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount|null        $expects
      *
-     * @return \PHPUnit_Framework_MockObject_Builder_InvocationMocker
+     * @return \PHPUnit\Framework\MockObject\Builder\InvocationMocker
      */
     protected function _setStub(
         \PHPUnit_Framework_MockObject_MockObject $object,

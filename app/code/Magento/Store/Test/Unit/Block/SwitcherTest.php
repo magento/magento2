@@ -28,6 +28,12 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $store;
 
+<<<<<<< HEAD
+=======
+    /**
+     * @return void
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     protected function setUp()
     {
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)->getMock();
@@ -48,6 +54,9 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetTargetStorePostData()
     {
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
@@ -79,6 +88,7 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider isStoreInUrlDataProvider
+     * @param bool $isUseStoreInUrl
      */
     public function testIsStoreInUrl($isUseStoreInUrl)
     {

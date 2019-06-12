@@ -11,6 +11,8 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
+ * Product attribute repository
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInterface
@@ -78,7 +80,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($attributeCode)
     {
@@ -89,7 +91,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -100,12 +102,17 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function save(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {
+        $attribute->setEntityTypeId(
+            $this->eavConfig
+                ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
+                ->getId()
+        );
         if ($attribute->getAttributeId()) {
             $existingModel = $this->get($attribute->getAttributeCode());
 
@@ -118,9 +125,12 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $attribute->setAttributeId($existingModel->getAttributeId());
             $attribute->setIsUserDefined($existingModel->getIsUserDefined());
             $attribute->setFrontendInput($existingModel->getFrontendInput());
+<<<<<<< HEAD
             if ($attribute->getIsUserDefined()) {
                 $this->processAttributeData($attribute);
             }
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
             $this->updateDefaultFrontendLabel($attribute, $existingModel);
         } else {
@@ -138,11 +148,22 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $this->validateCode($attribute->getAttributeCode());
             $this->validateFrontendInput($attribute->getFrontendInput());
 
+<<<<<<< HEAD
             $this->processAttributeData($attribute);
             $attribute->setEntityTypeId(
                 $this->eavConfig
                     ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
                     ->getId()
+=======
+            $attribute->setBackendType(
+                $attribute->getBackendTypeByInput($attribute->getFrontendInput())
+            );
+            $attribute->setSourceModel(
+                $this->productHelper->getAttributeSourceModelByInputType($attribute->getFrontendInput())
+            );
+            $attribute->setBackendModel(
+                $this->productHelper->getAttributeBackendModelByInputType($attribute->getFrontendInput())
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             );
             $attribute->setIsUserDefined(1);
         }
@@ -175,7 +196,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {
@@ -184,7 +205,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($attributeCode)
     {
@@ -195,7 +216,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
@@ -251,6 +272,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
+<<<<<<< HEAD
      * Process attribute data based on attribute frontend input type.
      *
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
@@ -270,6 +292,8 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * This method sets default frontend value using given default frontend value or frontend value from admin store
      * if default frontend value is not presented.
      * If both default frontend label and admin store frontend label are not given it throws exception

@@ -18,6 +18,7 @@ Import,Import
 "Import Settings","Import Settings"
 "Import Behavior","Import Behavior"
 " "," "
+"Validation Strategy","Validation Strategy"
 "Stop on Error","Stop on Error"
 "Skip error entries","Skip error entries"
 "Allowed Errors Count","Allowed Errors Count"
@@ -119,3 +120,6 @@ User,User
 "Error File","Error File"
 "Execution Time","Execution Time"
 Summary,Summary
+"New product data is added to existing product data entries in the database. All fields except SKU can be updated.","New product data is added to existing product data entries in the database. All fields except SKU can be updated."
+"All existing product data is replaced with the imported new data. <b>Exercise caution when replacing data. All existing product data will be completely cleared and all references in the system will be lost.</b>","All existing product data is replaced with the imported new data. <b>Exercise caution when replacing data. All existing product data will be completely cleared and all references in the system will be lost.</b>"
+"Any entities in the import data that match existing entities in the database are deleted from the database.","Any entities in the import data that match existing entities in the database are deleted from the database."

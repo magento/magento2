@@ -15,7 +15,11 @@ use Magento\Framework\Pricing\Price\AbstractPrice;
 class ConfigurableProduct extends AbstractPrice
 {
     /**
+<<<<<<< HEAD
      * Price type final
+=======
+     * Price type final.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     const PRICE_CODE = 'final_price';
 
@@ -25,7 +29,11 @@ class ConfigurableProduct extends AbstractPrice
     private $item;
 
     /**
+<<<<<<< HEAD
      * Get Configured Price Amount object by price type
+=======
+     * Get Configured Price Amount object by price type.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
@@ -34,11 +42,19 @@ class ConfigurableProduct extends AbstractPrice
         /** @var \Magento\Wishlist\Model\Item\Option $customOption */
         $customOption = $this->getProduct()->getCustomOption('simple_product');
         $product = $customOption ? $customOption->getProduct() : $this->getProduct();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $product->getPriceInfo()->getPrice(ConfiguredPriceInterface::CONFIGURED_PRICE_CODE)->getAmount();
     }
 
     /**
+<<<<<<< HEAD
      * Get Configured Regular Price Amount object by price type
+=======
+     * Get Configured Regular Price Amount object by price type.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
@@ -47,6 +63,10 @@ class ConfigurableProduct extends AbstractPrice
         /** @var \Magento\Wishlist\Model\Item\Option $customOption */
         $customOption = $this->getProduct()->getCustomOption('simple_product');
         $product = $customOption ? $customOption->getProduct() : $this->getProduct();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $product->getPriceInfo()->getPrice(ConfiguredPriceInterface::CONFIGURED_REGULAR_PRICE_CODE)->getAmount();
     }
 

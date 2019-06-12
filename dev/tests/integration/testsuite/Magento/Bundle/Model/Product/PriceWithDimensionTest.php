@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\Bundle\Model\Product;
 
 /**
@@ -18,6 +23,12 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
+<<<<<<< HEAD
+=======
+    /**
+     * Set up
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -25,6 +36,12 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Get tier price
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function testGetTierPrice()
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */

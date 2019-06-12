@@ -81,7 +81,11 @@
                            name="vat_id"
                            value="<?= $block->escapeHtmlAttr($block->getAddress()->getVatId()) ?>"
                            title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?>"
+<<<<<<< HEAD
                            class="input-text <?= $block->escapeHtmlAttr($this->helper(\Magento\Customer\Helper\Address::class)->getAttributeValidationClass('vat_id')) ?>"
+=======
+                           class="input-text <?= $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('vat_id')) ?>"
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                            id="vat_id">
                 </div>
             </div>
@@ -104,7 +108,11 @@
             <div class="control">
                 <select id="region_id" name="region_id"
                         title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('region') ?>"
+<<<<<<< HEAD
                         class="validate-select" <?= /* @noEscape */ !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>>
+=======
+                        class="validate-select region_id" <?= /* @noEscape */ !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     <option value=""><?= $block->escapeHtml(__('Please select a region, state or province.')) ?></option>
                 </select>
                 <input type="text"
@@ -112,7 +120,11 @@
                        name="region"
                        value="<?= $block->escapeHtmlAttr($block->getRegion()) ?>"
                        title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('region') ?>"
+<<<<<<< HEAD
                        class="input-text validate-not-number-first <?= $block->escapeHtmlAttr($this->helper(\Magento\Customer\Helper\Address::class)->getAttributeValidationClass('region')) ?>"<?= !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>/>
+=======
+                       class="input-text validate-not-number-first <?= $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region')) ?>"<?= !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             </div>
         </div>
         <div class="field zip required">
@@ -125,7 +137,14 @@
                        value="<?= $block->escapeHtmlAttr($block->getAddress()->getPostcode()) ?>"
                        title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?>"
                        id="zip"
+<<<<<<< HEAD
                        class="input-text validate-zip-international <?= $block->escapeHtmlAttr($this->helper(\Magento\Customer\Helper\Address::class)->getAttributeValidationClass('postcode')) ?>">
+=======
+                       class="input-text validate-zip-international <?= $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('postcode')) ?>">
+                <div role="alert" class="message warning" style="display:none">
+                    <span></span>
+                </div>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             </div>
         </div>
         <div class="field country required">
@@ -184,7 +203,9 @@
 <script type="text/x-magento-init">
     {
         "#form-validate": {
-            "addressValidation": {}
+            "addressValidation": {
+                "postCodes": <?= /* @noEscape */ $block->getPostCodeConfig()->getSerializedPostCodes(); ?>
+            }
         },
         "#country": {
             "regionUpdater": {

@@ -48,6 +48,7 @@
             <tag name="webapi_failed" />
         </observer>
     </preset>
+<<<<<<< HEAD
     <preset name="debug" extends="base">
         <observer class="Magento\Mtf\System\Observer\Screenshot">
             <tag name="exception"/>
@@ -79,6 +80,34 @@
             <tag name="open_after"/>
             <tag name="forward"/>
             <tag name="back"/>
+=======
+    <preset name="detailed" extends="base">
+        <observer class="Magento\Mtf\System\Observer\ClientError">
+            <tag name="page_changed" />
+            <tag name="exception" />
+        </observer>
+        <observer class="Magento\Mtf\System\Observer\Log">
+            <tag name="execution" />
+            <tag name="persist_before" />
+            <tag name="persist_after" />
+            <tag name="exception" />
+            <tag name="click_before" />
+            <tag name="set_value" />
+            <tag name="is_visible" />
+            <tag name="find" />
+            <tag name="reopen" />
+            <tag name="switch_to_frame" />
+            <tag name="get_value" />
+        </observer>
+        <observer class="Magento\Mtf\System\Observer\SourceCode">
+            <tag name="exception" />
+            <tag name="page_changed" />
+        </observer>
+        <observer class="Magento\Mtf\System\Observer\Screenshot">
+            <tag name="click_before" />
+            <tag name="page_changed" />
+            <tag name="exception" />
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </observer>
     </preset>
 </config>

@@ -50,7 +50,11 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
     private $customerSecureMock;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+=======
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $scopeConfigMock;
 
@@ -65,7 +69,11 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
+<<<<<<< HEAD
      * @var SenderResolverInterface | \PHPUnit_Framework_MockObject_MockObject
+=======
+     * @var SenderResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $senderResolverMock;
 
@@ -112,7 +120,11 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
                 'customerViewHelper' => $this->customerViewHelperMock,
                 'dataProcessor' => $this->dataProcessorMock,
                 'scopeConfig' => $this->scopeConfigMock,
+<<<<<<< HEAD
                 'senderResolver' => $this->senderResolverMock
+=======
+                'senderResolver' => $this->senderResolverMock,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         );
     }
@@ -216,7 +228,11 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
             ->with('name', $customerName)
             ->willReturnSelf();
 
+<<<<<<< HEAD
         /** @var CustomerInterface | \PHPUnit_Framework_MockObject_MockObject $savedCustomer */
+=======
+        /** @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject $savedCustomer */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $savedCustomer = clone $origCustomer;
 
         $origCustomer->expects($this->any())
@@ -321,14 +337,22 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
         $sender = 'Sender';
         $senderValues = ['name' => $sender, 'email' => $sender];
         $storeIds = [1, 2];
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->senderResolverMock
             ->expects($this->once())
             ->method('resolve')
             ->with($sender, $customerStoreId)
             ->willReturn($senderValues);
 
+<<<<<<< HEAD
         /** @var CustomerInterface | \PHPUnit_Framework_MockObject_MockObject $customer */
+=======
+        /** @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject $customer */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->any())
             ->method('getWebsiteId')
@@ -355,6 +379,14 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
         $websiteMock->expects($this->any())
             ->method('getStoreIds')
             ->willReturn($storeIds);
+<<<<<<< HEAD
+=======
+
+        $this->storeManagerMock->expects($this->any())
+            ->method('getWebsite')
+            ->with($customerWebsiteId)
+            ->willReturn($websiteMock);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $this->storeManagerMock->expects($this->any())
             ->method('getWebsite')
@@ -405,6 +437,7 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
 
         $this->model->passwordReminder($customer);
     }
+<<<<<<< HEAD
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -508,7 +541,99 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
             $customerName,
             ['customer' => $this->customerSecureMock, 'store' => $this->storeMock]
         );
+=======
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testPasswordReminderCustomerWithoutStoreId()
+    {
+        $customerId = 1;
+        $customerWebsiteId = 1;
+        $customerStoreId = null;
+        $customerEmail = 'email@email.com';
+        $customerData = ['key' => 'value'];
+        $customerName = 'Customer Name';
+        $templateIdentifier = 'Template Identifier';
+        $sender = 'Sender';
+        $senderValues = ['name' => $sender, 'email' => $sender];
+        $storeIds = [1, 2];
+        $defaultStoreId = reset($storeIds);
+        $this->senderResolverMock
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($sender, $defaultStoreId)
+            ->willReturn($senderValues);
+        /** @var CustomerInterface | \PHPUnit_Framework_MockObject_MockObject $customer */
+        $customer = $this->createMock(CustomerInterface::class);
+        $customer->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn($customerWebsiteId);
+        $customer->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn($customerStoreId);
+        $customer->expects($this->any())
+            ->method('getId')
+            ->willReturn($customerId);
+        $customer->expects($this->any())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+        $this->storeMock->expects($this->any())
+            ->method('getId')
+            ->willReturn($defaultStoreId);
+        $this->storeManagerMock->expects($this->at(0))
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+        $this->storeManagerMock->expects($this->at(1))
+            ->method('getStore')
+            ->with($defaultStoreId)
+            ->willReturn($this->storeMock);
+        $websiteMock = $this->createPartialMock(\Magento\Store\Model\Website::class, ['getStoreIds']);
+        $websiteMock->expects($this->any())
+            ->method('getStoreIds')
+            ->willReturn($storeIds);
+        $this->storeManagerMock->expects($this->any())
+            ->method('getWebsite')
+            ->with($customerWebsiteId)
+            ->willReturn($websiteMock);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
+
+        $this->customerRegistryMock->expects($this->once())
+            ->method('retrieveSecureData')
+            ->with($customerId)
+            ->willReturn($this->customerSecureMock);
+        $this->dataProcessorMock->expects($this->once())
+            ->method('buildOutputDataArray')
+            ->with($customer, CustomerInterface::class)
+            ->willReturn($customerData);
+        $this->customerViewHelperMock->expects($this->any())
+            ->method('getCustomerName')
+            ->with($customer)
+            ->willReturn($customerName);
+        $this->customerSecureMock->expects($this->once())
+            ->method('addData')
+            ->with($customerData)
+            ->willReturnSelf();
+        $this->customerSecureMock->expects($this->once())
+            ->method('setData')
+            ->with('name', $customerName)
+            ->willReturnSelf();
+        $this->scopeConfigMock->expects($this->at(0))
+            ->method('getValue')
+            ->with(EmailNotification::XML_PATH_REMIND_EMAIL_TEMPLATE, ScopeInterface::SCOPE_STORE, $defaultStoreId)
+            ->willReturn($templateIdentifier);
+        $this->scopeConfigMock->expects($this->at(1))
+            ->method('getValue')
+            ->with(EmailNotification::XML_PATH_FORGOT_EMAIL_IDENTITY, ScopeInterface::SCOPE_STORE, $defaultStoreId)
+            ->willReturn($sender);
+        $this->mockDefaultTransportBuilder(
+            $templateIdentifier,
+            $defaultStoreId,
+            $senderValues,
+            $customerEmail,
+            $customerName,
+            ['customer' => $this->customerSecureMock, 'store' => $this->storeMock]
+        );
         $this->model->passwordReminder($customer);
     }
 
@@ -532,7 +657,11 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
             ->with($sender, $customerStoreId)
             ->willReturn($senderValues);
 
+<<<<<<< HEAD
         /** @var CustomerInterface | \PHPUnit_Framework_MockObject_MockObject $customer */
+=======
+        /** @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject $customer */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->any())
             ->method('getStoreId')
@@ -615,6 +744,7 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
         $templateIdentifier = 'Template Identifier';
         $sender = 'Sender';
         $senderValues = ['name' => $sender, 'email' => $sender];
+<<<<<<< HEAD
 
         $this->senderResolverMock
             ->expects($this->once())
@@ -623,6 +753,16 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
             ->willReturn($senderValues);
 
         /** @var CustomerInterface | \PHPUnit_Framework_MockObject_MockObject $customer */
+=======
+
+        $this->senderResolverMock
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($sender, $customerStoreId)
+            ->willReturn($senderValues);
+
+        /** @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject $customer */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->any())
             ->method('getStoreId')
@@ -689,7 +829,11 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * Create defaul mock for $this->transportBuilderMock
+=======
+     * Create default mock for $this->transportBuilderMock.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param string $templateIdentifier
      * @param int $customerStoreId
@@ -697,6 +841,7 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
      * @param string $customerEmail
      * @param string $customerName
      * @param array $templateVars
+<<<<<<< HEAD
      */
     protected function mockDefaultTransportBuilder(
         $templateIdentifier,
@@ -706,6 +851,19 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
         $customerName,
         array $templateVars = []
     ) {
+=======
+     *
+     * @return void
+     */
+    private function mockDefaultTransportBuilder(
+        string $templateIdentifier,
+        int $customerStoreId,
+        array $senderValues,
+        string $customerEmail,
+        string $customerName,
+        array $templateVars = []
+    ): void {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
 
         $this->transportBuilderMock->expects($this->once())

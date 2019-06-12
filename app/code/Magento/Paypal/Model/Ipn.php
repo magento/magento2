@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Model;
 
 use Exception;
@@ -108,9 +106,10 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
         $parameters = ['params' => [$methodCode, $order->getStoreId()]];
         $this->_config = $this->_configFactory->create($parameters);
         if (!$this->_config->isMethodActive($methodCode) || !$this->_config->isMethodAvailable()) {
-            throw new Exception(sprintf('Method "%s" is not available.', $methodCode));
+            throw new Exception(sprintf('The "%s" method isn\'t available.', $methodCode));
         }
-        /** @link https://cms.paypal.com/cgi-bin/marketingweb?cmd=_render-content&content_ID=developer/e_howto_admin_IPNIntro */
+        /** @link https://cms.paypal.com/cgi-bin/marketingweb?cmd=_render-content&content_ID=
+         * developer/e_howto_admin_IPNIntro */
         // verify merchant email intended to receive notification
         $merchantEmail = $this->_config->getValue('businessAccount');
         if (!$merchantEmail) {
@@ -119,7 +118,11 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
         $receiver = $this->getRequestData('business') ?: $this->getRequestData('receiver_email');
         if (strtolower($merchantEmail) != strtolower($receiver)) {
             throw new Exception(
-                sprintf('The requested %s and configured %s merchant emails do not match.', $receiver, $merchantEmail)
+                sprintf(
+                    'The requested "%s" and the configured "%s" merchant emails don\'t match.',
+                    $receiver,
+                    $merchantEmail
+                )
             );
         }
 
@@ -137,7 +140,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
         $incrementId = $this->getRequestData('invoice');
         $this->_order = $this->_orderFactory->create()->loadByIncrementId($incrementId);
         if (!$this->_order->getId()) {
-            throw new Exception(sprintf('Wrong order ID: "%s".', $incrementId));
+            throw new Exception(sprintf('The "%s" order ID is incorrect. Verify the ID and try again.', $incrementId));
         }
         return $this->_order;
     }
@@ -267,7 +270,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
                 $this->_registerPaymentVoid();
                 break;
             default:
-                throw new Exception("Cannot handle payment status '{$paymentStatus}'.");
+                throw new Exception("The '{$paymentStatus}' payment status couldn't be handled.");
         }
     }
 
@@ -357,7 +360,13 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
             $this->_registerPaymentAuthorization();
             return;
         }
+<<<<<<< HEAD
 
+=======
+        if ('order' === $reason) {
+            throw new Exception('The "order" authorizations aren\'t implemented.');
+        }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         // case when was placed using PayPal standard
         if (\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT == $this->_order->getState()
             && !$this->getRequestData('transaction_entity')
@@ -369,9 +378,13 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
         $this->_importPaymentInformation();
 
         $this->_order->getPayment()
+<<<<<<< HEAD
             ->setPreparedMessage(
                 $this->_createIpnComment($this->_paypalInfo->explainPendingReason($reason))
             )
+=======
+            ->setPreparedMessage($this->_createIpnComment($this->_paypalInfo->explainPendingReason($reason)))
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->setTransactionId($this->getRequestData('txn_id'))
             ->setIsTransactionClosed(0)
             ->update(false);
@@ -456,9 +469,13 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
         $reason = $this->getRequestData('reason_code');
         $isRefundFinal = !$this->_paypalInfo->isReversalDisputable($reason);
         $payment = $this->_order->getPayment()
+<<<<<<< HEAD
             ->setPreparedMessage(
                 $this->_createIpnComment($this->_paypalInfo->explainReasonCode($reason))
             )
+=======
+            ->setPreparedMessage($this->_createIpnComment($this->_paypalInfo->explainReasonCode($reason)))
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->setTransactionId($this->getRequestData('txn_id'))
             ->setParentTransactionId($this->getRequestData('parent_txn_id'))
             ->setIsTransactionClosed($isRefundFinal)

@@ -6,11 +6,16 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Magento_CatalogSearch" setup_version="2.0.0">
+    <module name="Magento_CatalogSearch" >
         <sequence>
             <module name="Magento_Search"/>
             <module name="Magento_Catalog"/>
             <module name="Magento_Indexer"/>
+<<<<<<< HEAD
+=======
+            <module name="Magento_CatalogRule" />
+            <module name="Magento_CatalogInventory" />
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </sequence>
     </module>
 </config>

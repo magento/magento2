@@ -95,8 +95,12 @@ class ShoppingCartPerCustomerTest extends Injectable
 
         $customers = [];
         $cartFixtures = [];
+<<<<<<< HEAD
         $checkoutDataCount = count($checkoutData);
         for ($i = 0; $i < $checkoutDataCount; $i++) {
+=======
+        for ($i = 0, $count = count($checkoutData); $i < $count; $i++) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $customers[$i] = $this->fixtureFactory->createByCode('customer', ['dataset' => $customerDataset]);
             $customers[$i]->persist();
 

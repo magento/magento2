@@ -11,9 +11,12 @@ use Magento\Analytics\Model\FileInfoManager;
 use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+<<<<<<< HEAD
 /**
  * Class FileInfoManagerTest
  */
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class FileInfoManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**

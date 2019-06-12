@@ -11,10 +11,17 @@ $permissions = $block->getData('permissions');
 ?>
 <?php if ($permissions && $permissions->hasAccessToAdditionalActions()): ?>
     <div class="additional-cache-management">
+<<<<<<< HEAD
         <?php if ($permissions->hasAccessToFlushCatalogImages()): ?>
             <h2>
                 <span><?= $block->escapeHtml(__('Additional Cache Management')); ?></span>
             </h2>
+=======
+        <h2>
+            <span><?= $block->escapeHtml(__('Additional Cache Management')); ?></span>
+        </h2>
+        <?php if ($permissions->hasAccessToFlushCatalogImages()): ?>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <p>
                 <button onclick="setLocation('<?= $block->escapeJs($block->getCleanImagesUrl()); ?>')" type="button">
                     <?= $block->escapeHtml(__('Flush Catalog Images Cache')); ?>

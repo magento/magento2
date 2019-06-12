@@ -69,6 +69,10 @@ class FormTest extends TestCase
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $context->method('getStoreManager')
             ->willReturn($this->storeManager);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->quoteSession = $this->getMockBuilder(QuoteSession::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCustomerId', 'getQuoteId', 'getStoreId', 'getStore', 'getQuote'])

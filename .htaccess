@@ -28,6 +28,11 @@
     #AddHandler x-mapp-php5 .php
 
 ############################################
+## enable usage of methods arguments in backtrace
+
+    SetEnv MAGE_DEBUG_SHOW_ARGS 1
+
+############################################
 ## default index file
 
     DirectoryIndex index.php
@@ -345,6 +350,29 @@
         <IfVersion >= 2.4>
             Require all denied
         </IfVersion>
+<<<<<<< HEAD
+    </Files>
+    <Files auth.json>
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
+    </Files>
+    <Files magento_umask>
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
+<<<<<<< HEAD
+=======
     </Files>
     <Files auth.json>
         <IfVersion < 2.4>
@@ -355,7 +383,7 @@
             Require all denied
         </IfVersion>
     </Files>
-    <Files magento_umask>
+    <Files .user.ini>
         <IfVersion < 2.4>
             order allow,deny
             deny from all
@@ -363,6 +391,7 @@
         <IfVersion >= 2.4>
             Require all denied
         </IfVersion>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </Files>
 
 # For 404s and 403s that aren't handled by the application, show plain 404 response

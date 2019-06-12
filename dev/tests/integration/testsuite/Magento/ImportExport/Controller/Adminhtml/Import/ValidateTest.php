@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
 use Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
@@ -17,12 +19,22 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     /**
      * @dataProvider validationDataProvider
      * @param string $fileName
+     * @param string $mimeType
      * @param string $message
      * @param string $delimiter
+<<<<<<< HEAD
+=======
+     * @throws \Magento\Framework\Exception\FileSystemException
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @backupGlobals enabled
      * @magentoDbIsolation enabled
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
+<<<<<<< HEAD
     public function testValidationReturn($fileName, $message, $delimiter)
+=======
+    public function testValidationReturn(string $fileName, string $mimeType, string $message, string $delimiter): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $validationStrategy = ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR;
 
@@ -50,7 +62,7 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $_FILES = [
             'import_file' => [
                 'name' => $fileName,
-                'type' => 'text/csv',
+                'type' => $mimeType,
                 'tmp_name' => $target,
                 'error' => 0,
                 'size' => filesize($target)
@@ -59,10 +71,7 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
 
         $this->_objectManager->configure(
             [
-                'preferences' => [
-                    \Magento\Framework\HTTP\Adapter\FileTransferFactory::class =>
-                        \Magento\ImportExport\Controller\Adminhtml\Import\HttpFactoryMock::class
-                ]
+                'preferences' => [FileTransferFactory::class => HttpFactoryMock::class]
             ]
         );
 
@@ -79,29 +88,54 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     /**
      * @return array
      */
-    public function validationDataProvider()
+    public function validationDataProvider(): array
     {
         return [
             [
                 'file_name' => 'catalog_product.csv',
+<<<<<<< HEAD
+=======
+                'mime-type' => 'text/csv',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 'message' => 'File is valid',
                 'delimiter' => ',',
             ],
             [
                 'file_name' => 'test.txt',
+<<<<<<< HEAD
+=======
+                'mime-type' => 'text/csv',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 'message' => '\'txt\' file extension is not supported',
                 'delimiter' => ',',
             ],
             [
                 'file_name' => 'incorrect_catalog_product_comma.csv',
+<<<<<<< HEAD
+=======
+                'mime-type' => 'text/csv',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 'message' => 'Download full report',
                 'delimiter' => ',',
             ],
             [
                 'file_name' => 'incorrect_catalog_product_semicolon.csv',
+<<<<<<< HEAD
                 'message' => 'Download full report',
                 'delimiter' => ';',
             ],
+=======
+                'mime-type' => 'text/csv',
+                'message' => 'Download full report',
+                'delimiter' => ';',
+            ],
+            [
+                'file_name' => 'catalog_product.zip',
+                'mime-type' => 'application/zip',
+                'message' => 'File is valid',
+                'delimiter' => ',',
+            ],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
     }
 }

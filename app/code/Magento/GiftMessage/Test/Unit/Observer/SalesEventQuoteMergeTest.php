@@ -27,7 +27,11 @@ class SalesEventQuoteMergeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+<<<<<<< HEAD
     public function setUp()
+=======
+    public function setUp(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $objectManger = new ObjectManager($this);
         $this->salesEventQuoteMerge = $objectManger->getObject(SalesEventQuoteMerge::class);
@@ -40,7 +44,11 @@ class SalesEventQuoteMergeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
+<<<<<<< HEAD
     public function testExecute($giftMessageId)
+=======
+    public function testExecute($giftMessageId): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $sourceQuoteMock = $this->createPartialMock(Quote::class, ['getGiftMessageId']);
         $sourceQuoteMock->expects($this->once())

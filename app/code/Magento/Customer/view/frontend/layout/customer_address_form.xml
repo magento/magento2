@@ -20,6 +20,10 @@
             <block class="Magento\Customer\Block\Address\Edit" name="customer_address_edit" template="Magento_Customer::address/edit.phtml" cacheable="false">
                 <arguments>
                     <argument name="attribute_data" xsi:type="object">Magento\Customer\Block\DataProviders\AddressAttributeData</argument>
+<<<<<<< HEAD
+=======
+                    <argument name="post_code_config" xsi:type="object">Magento\Customer\Block\DataProviders\PostCodesPatternsAttributeData</argument>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 </arguments>
             </block>
         </referenceContainer>

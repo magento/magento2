@@ -15,6 +15,10 @@ define([
                 categoryIdSelector: 'input[name="id"]',
                 categoryPathSelector: 'input[name="path"]',
                 categoryParentSelector: 'input[name="parent"]',
+<<<<<<< HEAD
+=======
+                categoryLevelSelector: 'input[name="level"]',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 refreshUrl: config.refreshUrl
             },
 
@@ -47,6 +51,10 @@ define([
                     $(this.options.categoryIdSelector).val(data.id).change();
                     $(this.options.categoryPathSelector).val(data.path).change();
                     $(this.options.categoryParentSelector).val(data.parentId).change();
+<<<<<<< HEAD
+=======
+                    $(this.options.categoryLevelSelector).val(data.level).change();
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 }
             }
         };

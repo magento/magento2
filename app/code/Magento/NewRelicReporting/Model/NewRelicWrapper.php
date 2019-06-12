@@ -21,7 +21,7 @@ class NewRelicWrapper
      */
     public function addCustomParameter($param, $value)
     {
-        if (extension_loaded('newrelic')) {
+        if ($this->isExtensionInstalled()) {
             newrelic_add_custom_parameter($param, $value);
             return true;
         }
@@ -36,7 +36,11 @@ class NewRelicWrapper
      */
     public function reportError($exception)
     {
+<<<<<<< HEAD
         if (extension_loaded('newrelic')) {
+=======
+        if ($this->isExtensionInstalled()) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             newrelic_notice_error($exception->getMessage(), $exception);
         }
     }
@@ -49,12 +53,32 @@ class NewRelicWrapper
      */
     public function setAppName(string $appName)
     {
+<<<<<<< HEAD
         if (extension_loaded('newrelic')) {
+=======
+        if ($this->isExtensionInstalled()) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             newrelic_set_appname($appName);
         }
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Wrapper for 'newrelic_name_transaction'
+     *
+     * @param string $transactionName
+     * @return void
+     */
+    public function setTransactionName(string $transactionName): void
+    {
+        if ($this->isExtensionInstalled()) {
+            newrelic_name_transaction($transactionName);
+        }
+    }
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * Checks whether newrelic-php5 agent is installed
      *
      * @return bool

@@ -7,7 +7,11 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+=======
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <actionGroup name="AssignAttributeToGroup">
         <arguments>
             <argument name="group" type="string"/>
@@ -15,7 +19,11 @@
         </arguments>
         <conditionalClick selector="{{AdminProductAttributeSetEditSection.attributeGroupExtender(group)}}" dependentSelector="{{AdminProductAttributeSetEditSection.attributeGroupCollapsed(group)}}" visible="true" stepKey="extendGroup"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
+<<<<<<< HEAD
         <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.unassignedAttribute(attribute)}}" selector2="{{AdminProductAttributeSetEditSection.lineItemAttributeGroup(group, '1')}}" stepKey="dragAndDropToGroupProductDetails"/>
+=======
+        <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.unassignedAttribute(attribute)}}" selector2="{{AdminProductAttributeSetEditSection.xThLineItemAttributeGroup(group, '1')}}" stepKey="dragAndDropToGroupProductDetails"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <see userInput="{{attribute}}" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
     </actionGroup>
@@ -26,7 +34,11 @@
         </arguments>
         <conditionalClick selector="{{AdminProductAttributeSetEditSection.attributeGroupExtender(group)}}" dependentSelector="{{AdminProductAttributeSetEditSection.attributeGroupCollapsed(group)}}" visible="true" stepKey="extendGroup"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
+<<<<<<< HEAD
         <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.assignedAttribute(attribute)}}" selector2="{{AdminProductAttributeSetEditSection.lineItemUnassignedAttribute('1')}}" stepKey="dragAndDropToUnassigned"/>
+=======
+        <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.assignedAttribute(attribute)}}" selector2="{{AdminProductAttributeSetEditSection.xThLineItemUnassignedAttribute('1')}}" stepKey="dragAndDropToUnassigned"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <see userInput="{{attribute}}" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassigned"/>
     </actionGroup>
@@ -34,4 +46,67 @@
         <click selector="{{AdminProductAttributeSetActionSection.save}}" stepKey="clickSave"/>
         <see userInput="You saved the attribute set" selector="{{AdminMessagesSection.success}}" stepKey="successMessage"/>
     </actionGroup>
+<<<<<<< HEAD
+=======
+    <actionGroup name="CreateDefaultAttributeSet">
+        <!--Generic atrribute set creation-->
+        <arguments>
+            <argument name="label" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <click selector="{{AdminProductAttributeSetGridSection.addAttributeSetBtn}}" stepKey="clickAddAttributeSet"/>
+        <fillField selector="{{AdminProductAttributeSetSection.name}}" userInput="{{label}}" stepKey="fillName"/>
+        <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickSave1"/>
+    </actionGroup>
+    <actionGroup name="goToAttributeGridPage">
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
+    </actionGroup>
+    <actionGroup name="goToAttributeSetByName">
+        <arguments>
+            <argument name="name" type="string"/>
+        </arguments>
+        <click selector="{{AdminProductAttributeSetGridSection.resetFilter}}" stepKey="clickResetButton"/>
+        <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="{{name}}" stepKey="filterByName"/>
+        <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickSearch"/>
+        <click selector="{{AdminProductAttributeSetGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+    <!-- Filter By Attribute Label -->
+    <actionGroup name="filterProductAttributeByAttributeLabel">
+        <arguments>
+            <argument name="productAttributeLabel" type="string"/>
+        </arguments>
+        <fillField selector="{{AdminProductAttributeGridSection.attributeLabelFilter}}" userInput="{{productAttributeLabel}}" stepKey="setAttributeLabel"/>
+        <waitForPageLoad stepKey="waitForUserInput"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
+    </actionGroup>
+    <actionGroup name="FilterProductAttributeSetGridByAttributeSetName">
+        <arguments>
+            <argument name="name" type="string"/>
+        </arguments>
+        <click selector="{{AdminProductAttributeSetGridSection.resetFilter}}" stepKey="clickResetButton"/>
+        <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="{{name}}" stepKey="filterByName"/>
+        <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickSearch"/>
+        <click selector="{{AdminProductAttributeSetGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+    </actionGroup>
+
+    <!-- Delete attribute set -->
+    <actionGroup name="deleteAttributeSetByLabel">
+        <arguments>
+            <argument name="label" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
+        <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
+        <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="{{label}}" stepKey="filterByName"/>
+        <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickSearch"/>
+        <click selector="{{AdminProductAttributeSetGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
+        <waitForPageLoad stepKey="waitForClick"/>
+        <click selector="{{AdminProductAttributeSetSection.deleteBtn}}" stepKey="clickDelete"/>
+        <click selector="{{AdminProductAttributeSetSection.modalOk}}" stepKey="confirmDelete"/>
+        <waitForPageLoad stepKey="waitForDeleteToFinish"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="The attribute set has been removed." stepKey="seeDeleteMessage"/>
+    </actionGroup>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </actionGroups>

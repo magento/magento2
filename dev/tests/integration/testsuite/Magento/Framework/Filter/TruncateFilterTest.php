@@ -10,13 +10,17 @@ namespace Magento\Framework\Filter;
 class TruncateFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
+<<<<<<< HEAD
      * @dataProvider truncateDataProvider
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param string $expectedValue
      * @param string $expectedRemainder
      * @param string $string
      * @param int $length
      * @param string $etc
      * @param bool $breakWords
+<<<<<<< HEAD
      * @return void
      */
     public function testFilter(
@@ -26,6 +30,17 @@ class TruncateFilterTest extends \PHPUnit\Framework\TestCase
         int $length = 5,
         string $etc = '...',
         bool $breakWords = true
+=======
+     * @dataProvider truncateDataProvider
+     */
+    public function testFilter(
+        $expectedValue,
+        $expectedRemainder,
+        $string,
+        $length = 5,
+        $etc = '...',
+        $breakWords = true
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ) {
         /** @var TruncateFilter $truncateFilter */
         $truncateFilter = \Magento\TestFramework\ObjectManager::getInstance()->create(
@@ -41,9 +56,12 @@ class TruncateFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedRemainder, $result->getRemainder());
     }
 
+<<<<<<< HEAD
     /**
      * @return array
      */
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function truncateDataProvider() : array
     {
         return [
@@ -58,8 +76,13 @@ class TruncateFilterTest extends \PHPUnit\Framework\TestCase
                 '123 456 789',
                 8,
                 '..',
+<<<<<<< HEAD
                 false,
             ],
+=======
+                false
+            ]
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
     }
 }

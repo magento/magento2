@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Security\Model\SecurityChecker;
 
 use Magento\Framework\Exception\SecurityViolationException;
@@ -76,7 +77,8 @@ class Frequency implements SecurityCheckerInterface
                 )) {
                 throw new SecurityViolationException(
                     __(
-                        'Too many password reset requests. Please wait and try again or contact %1.',
+                        'We received too many requests for password resets. '
+                        . 'Please wait and try again later or contact %1.',
                         $this->securityConfig->getCustomerServiceEmail()
                     )
                 );

@@ -52,6 +52,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->_storageMock = $this->createPartialMock(
@@ -82,6 +85,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testSetCustomerAsLoggedIn()
     {
         $customer = $this->createMock(\Magento\Customer\Model\Customer::class);
@@ -102,6 +108,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($customer, $this->_model->getCustomer());
     }
 
+    /**
+     * @return void
+     */
     public function testSetCustomerDataAsLoggedIn()
     {
         $customer = $this->createMock(\Magento\Customer\Model\Customer::class);
@@ -126,6 +135,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($customer, $this->_model->getCustomer());
     }
 
+    /**
+     * @return void
+     */
     public function testAuthenticate()
     {
         $urlMock = $this->createMock(\Magento\Framework\Url::class);
@@ -150,6 +162,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->_model->authenticate());
     }
 
+    /**
+     * @return void
+     */
     public function testLoginById()
     {
         $customerId = 1;
@@ -165,7 +180,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $customerId
+     * @param int $customerId
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function prepareLoginDataMock($customerId)
@@ -242,6 +257,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testSetCustomerRemovesFlagThatShowsIfCustomerIsEmulated()
     {
         $customerMock = $this->createMock(\Magento\Customer\Model\Customer::class);

@@ -17,7 +17,16 @@ define([
 ], function ($, Component, ko, customer, checkEmailAvailability, loginAction, quote, checkoutData, fullScreenLoader) {
     'use strict';
 
-    var validatedEmail = checkoutData.getValidatedEmailValue();
+    var validatedEmail;
+
+    if (!checkoutData.getValidatedEmailValue() &&
+        window.checkoutConfig.validatedEmailValue
+    ) {
+        checkoutData.setInputFieldEmailValue(window.checkoutConfig.validatedEmailValue);
+        checkoutData.setValidatedEmailValue(window.checkoutConfig.validatedEmailValue);
+    }
+
+    validatedEmail = checkoutData.getValidatedEmailValue();
 
     if (validatedEmail && !customer.isLoggedIn()) {
         quote.guestEmail = validatedEmail;
@@ -33,6 +42,9 @@ define([
             listens: {
                 email: 'emailHasChanged',
                 emailFocused: 'validateEmail'
+            },
+            ignoreTmpls: {
+                email: true
             }
         },
         checkDelay: 2000,
@@ -41,6 +53,19 @@ define([
         isCustomerLoggedIn: customer.isLoggedIn,
         forgotPasswordUrl: window.checkoutConfig.forgotPasswordUrl,
         emailCheckTimeout: 0,
+
+        /**
+         * Initializes regular properties of instance.
+         *
+         * @returns {Object} Chainable.
+         */
+        initConfig: function () {
+            this._super();
+
+            this.isPasswordVisible = this.resolveInitialPasswordVisibility();
+
+            return this;
+        },
 
         /**
          * Initializes observable properties of instance
@@ -164,7 +189,11 @@ define([
         },
 
         /**
+<<<<<<< HEAD
          * Resolves an initial sate of a login form.
+=======
+         * Resolves an initial state of a login form.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
          *
          * @returns {Boolean} - initial visibility state.
          */

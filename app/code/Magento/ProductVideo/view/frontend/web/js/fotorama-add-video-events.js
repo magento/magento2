@@ -179,12 +179,23 @@ define([
          * @private
          */
         clearEvents: function () {
+<<<<<<< HEAD
             this.fotoramaItem.off(
                 'fotorama:show.' + this.PV +
                 ' fotorama:showend.' + this.PV +
                 ' fotorama:fullscreenenter.' + this.PV +
                 ' fotorama:fullscreenexit.' + this.PV
             );
+=======
+            if (this.fotoramaItem !== undefined) {
+                this.fotoramaItem.off(
+                    'fotorama:show.' + this.PV +
+                    ' fotorama:showend.' + this.PV +
+                    ' fotorama:fullscreenenter.' + this.PV +
+                    ' fotorama:fullscreenexit.' + this.PV
+                );
+            }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         },
 
         /**

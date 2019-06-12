@@ -23,7 +23,10 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $roleId
      * @param $parentRoleId
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return array
      * @throws \Zend_Acl_Role_Registry_Exception
      */

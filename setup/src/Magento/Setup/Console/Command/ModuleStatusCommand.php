@@ -60,6 +60,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
         $moduleName = (string)$input->getArgument('module');
         if ($moduleName) {
             return $this->showSpecificModule($moduleName, $output);
+<<<<<<< HEAD
         }
 
         $onlyEnabled = $input->getOption('enabled');
@@ -67,6 +68,15 @@ class ModuleStatusCommand extends AbstractSetupCommand
             return $this->showEnabledModules($output);
         }
 
+=======
+        }
+
+        $onlyEnabled = $input->getOption('enabled');
+        if ($onlyEnabled) {
+            return $this->showEnabledModules($output);
+        }
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $onlyDisabled = $input->getOption('disabled');
         if ($onlyDisabled) {
             return $this->showDisabledModules($output);
@@ -111,6 +121,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
         $enabledModules = $this->getEnabledModules();
         $enabledModuleNames = $enabledModules->getNames();
         if (count($enabledModuleNames) === 0) {
+<<<<<<< HEAD
             $output->writeln('None');
             return Cli::RETURN_FAILURE;
         }
@@ -130,6 +141,27 @@ class ModuleStatusCommand extends AbstractSetupCommand
             return Cli::RETURN_FAILURE;
         }
       
+=======
+            $output->writeln('None');
+            return Cli::RETURN_FAILURE;
+        }
+
+        $output->writeln(join("\n", $enabledModuleNames));
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * @param OutputInterface $output
+     */
+    private function showDisabledModules(OutputInterface $output)
+    {
+        $disabledModuleNames = $this->getDisabledModuleNames();
+        if (count($disabledModuleNames) === 0) {
+            $output->writeln('None');
+            return Cli::RETURN_FAILURE;
+        }
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $output->writeln(join("\n", $disabledModuleNames));
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }

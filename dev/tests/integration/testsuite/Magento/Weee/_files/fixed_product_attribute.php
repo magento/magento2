@@ -28,7 +28,10 @@ $attributeData = [
 ];
 
 /** @var \Magento\Catalog\Model\Entity\Attribute $attribute */
+<<<<<<< HEAD
 // $attribute = $objectManager->create(\Magento\Catalog\Model\Entity\Attribute::class);
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 $attribute = $objectManager->create(\Magento\Eav\Model\Entity\Attribute::class);
 $attribute->setData($attributeData);
 $attribute->save();

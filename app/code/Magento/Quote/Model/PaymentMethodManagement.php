@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Model;
 
 use Magento\Framework\Exception\State\InvalidTransitionException;
@@ -65,7 +67,13 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
             $address = $quote->getShippingAddress();
             // check if shipping address is set
             if ($address->getCountryId() === null) {
+<<<<<<< HEAD
                 throw new InvalidTransitionException(__('Shipping address is not set'));
+=======
+                throw new InvalidTransitionException(
+                    __('The shipping address is missing. Set the address and try again.')
+                );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             }
             $address->setCollectShippingRates(true);
         }

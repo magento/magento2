@@ -13,6 +13,7 @@
             <argument name="productName" defaultValue="Api Dynamic Bundle Product" type="string"/>
         </arguments>
         <!--Create 4 simple products-->
+<<<<<<< HEAD
         <createData entity="SimpleProduct3" stepKey="simpleProduct1">
             <field key="price">4.99</field>
         </createData>
@@ -23,6 +24,18 @@
             <field key="price">7.33</field>
         </createData>
         <createData entity="SimpleProduct3" stepKey="simpleProduct4">
+=======
+        <createData entity="SimpleProduct2" stepKey="simpleProduct1">
+            <field key="price">4.99</field>
+        </createData>
+        <createData entity="SimpleProduct2" stepKey="simpleProduct2">
+            <field key="price">2.89</field>
+        </createData>
+        <createData entity="SimpleProduct2" stepKey="simpleProduct3">
+            <field key="price">7.33</field>
+        </createData>
+        <createData entity="SimpleProduct2" stepKey="simpleProduct4">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <field key="price">18.25</field>
         </createData>
         <!-- Create the bundle product based -->
@@ -62,6 +75,7 @@
             <argument name="productName" defaultValue="Api Fixed Bundle Product" type="string"/>
         </arguments>
         <!--Create 4 simple products-->
+<<<<<<< HEAD
         <createData entity="SimpleProduct3" stepKey="simpleProduct1">
             <field key="price">4.99</field>
         </createData>
@@ -72,6 +86,18 @@
             <field key="price">7.33</field>
         </createData>
         <createData entity="SimpleProduct3" stepKey="simpleProduct4">
+=======
+        <createData entity="SimpleProduct2" stepKey="simpleProduct1">
+            <field key="price">4.99</field>
+        </createData>
+        <createData entity="SimpleProduct2" stepKey="simpleProduct2">
+            <field key="price">2.89</field>
+        </createData>
+        <createData entity="SimpleProduct2" stepKey="simpleProduct3">
+            <field key="price">7.33</field>
+        </createData>
+        <createData entity="SimpleProduct2" stepKey="simpleProduct4">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <field key="price">18.25</field>
         </createData>
         <!-- Create the bundle product based -->
@@ -106,4 +132,65 @@
             <requiredEntity createDataKey="simpleProduct4"/>
         </createData>
     </actionGroup>
+<<<<<<< HEAD
+=======
+    <actionGroup name="AdminCreateApiDynamicBundleProductAllOptionTypesActionGroup">
+        <arguments>
+            <argument name="productName" defaultValue="Api Dynamic Bundle Product" type="string"/>
+        </arguments>
+        <!-- Create simple products -->
+        <createData entity="SimpleProduct2" stepKey="simpleProduct1">
+            <field key="price">10</field>
+        </createData>
+        <createData entity="SimpleProduct2" stepKey="simpleProduct2">
+            <field key="price">20</field>
+        </createData>
+        <!-- Create Bundle product -->
+        <createData entity="ApiBundleProduct" stepKey="createBundleProduct">
+            <field key="name">{{productName}}</field>
+        </createData>
+        <createData entity="DropDownBundleOption" stepKey="createDropDownBundleOption">
+            <requiredEntity createDataKey="createBundleProduct"/>
+            <field key="title">Drop-down Option</field>
+        </createData>
+        <createData entity="RadioButtonsOption" stepKey="createBundleRadioButtonsOption">
+            <requiredEntity createDataKey="createBundleProduct"/>
+            <field key="title">Radio Buttons Option</field>
+        </createData>
+        <createData entity="CheckboxOption" stepKey="createBundleCheckboxOption">
+            <requiredEntity createDataKey="createBundleProduct"/>
+            <field key="title">Checkbox Option</field>
+        </createData>
+        <createData entity="ApiBundleLink" stepKey="linkCheckboxOptionToProduct1">
+            <requiredEntity createDataKey="createBundleProduct"/>
+            <requiredEntity createDataKey="createBundleCheckboxOption"/>
+            <requiredEntity createDataKey="simpleProduct1"/>
+        </createData>
+        <createData entity="ApiBundleLink" stepKey="linkCheckboxOptionToProduct2">
+            <requiredEntity createDataKey="createBundleProduct"/>
+            <requiredEntity createDataKey="createBundleCheckboxOption"/>
+            <requiredEntity createDataKey="simpleProduct2"/>
+        </createData>
+        <createData entity="ApiBundleLink" stepKey="linkDropDownOptionToProduct1">
+            <requiredEntity createDataKey="createBundleProduct"/>
+            <requiredEntity createDataKey="createDropDownBundleOption"/>
+            <requiredEntity createDataKey="simpleProduct1"/>
+        </createData>
+        <createData entity="ApiBundleLink" stepKey="linkDropDownOptionToProduct2">
+            <requiredEntity createDataKey="createBundleProduct"/>
+            <requiredEntity createDataKey="createDropDownBundleOption"/>
+            <requiredEntity createDataKey="simpleProduct2"/>
+        </createData>
+        <createData entity="ApiBundleLink" stepKey="linkRadioButtonsOptionToProduct1">
+            <requiredEntity createDataKey="createBundleProduct"/>
+            <requiredEntity createDataKey="createBundleRadioButtonsOption"/>
+            <requiredEntity createDataKey="simpleProduct1"/>
+        </createData>
+        <createData entity="ApiBundleLink" stepKey="linkRadioButtonsOptionToProduct2">
+            <requiredEntity createDataKey="createBundleProduct"/>
+            <requiredEntity createDataKey="createBundleRadioButtonsOption"/>
+            <requiredEntity createDataKey="simpleProduct2"/>
+        </createData>
+    </actionGroup>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </actionGroups>

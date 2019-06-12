@@ -18,8 +18,12 @@
 //  _____________________________________________
 
 .currency-addon {
+    border: 1px solid rgb(173,173,173);
     position: relative;
+<<<<<<< HEAD
     border: 1px solid #adadad;
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     display: -webkit-inline-flex;
     display: -ms-inline-flexbox;
     -webkit-flex-direction: row;
@@ -28,6 +32,7 @@
     display: inline-flex;
     flex-flow: row nowrap;
     width: 100%;
+<<<<<<< HEAD
     position: relative;
 
     .admin__control-text {
@@ -42,6 +47,22 @@
         background-color: transparent;
         border-color: transparent;
         box-shadow: none;
+=======
+
+    .admin__control-text {
+        -ms-flex-order: 1;
+        -webkit-appearance: none;
+        -webkit-flex-grow: 1;
+        -webkit-flex-shrink: 1;
+        -webkit-order: 1;
+        appearance: none;
+        background-color: transparent;
+        border-color: transparent;
+        box-shadow: none;
+        flex-grow: 1;
+        flex-shrink: 1;
+        order: 1;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         vertical-align: top;
 
         &:focus {
@@ -52,17 +73,29 @@
     }
 
     label.error {
+<<<<<<< HEAD
         position: absolute;
         left: 0;
+=======
+        left: 0;
+        position: absolute;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         top: 33px;
     }
 
     .currency-symbol {
+        -webkit-flex-basis: auto;
+        -webkit-flex-grow: 0;
+        -webkit-flex-shrink: 0;
         border: solid @currency-addon-symbol__border-color;
         border-width: 0;
         box-sizing: border-box;
         color: @currency-addon-symbol__color;
+        flex-basis: auto;
+        flex-grow: 0;
+        flex-shrink: 0;
         height: @currency-addon-symbol__height;
+<<<<<<< HEAD
         padding: 7px 0 0 @indent__xs;
         position: static;
         transition: @smooth__border-color;
@@ -74,6 +107,13 @@
         flex-shrink: 0;
         z-index: 1;
         order: 0;
+=======
+        order: 0;
+        padding: 7px 0 0 @indent__xs;
+        position: static;
+        transition: @smooth__border-color;
+        z-index: 1;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     ._error & {

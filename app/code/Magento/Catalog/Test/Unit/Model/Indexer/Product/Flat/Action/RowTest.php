@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -14,7 +12,11 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+<<<<<<< HEAD
  */ 
+=======
+ */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class RowTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -82,7 +84,13 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $this->storeManager->expects($this->any())->method('getStores')->willReturn([$this->store]);
         $this->flatItemEraser = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser::class);
         $this->flatItemWriter = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer::class);
+<<<<<<< HEAD
         $this->flatTableBuilder = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class);
+=======
+        $this->flatTableBuilder = $this->createMock(
+            \Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class
+        );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->productIndexerHelper = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
         $statusAttributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
@@ -100,10 +108,17 @@ class RowTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->connection->expects($this->any())->method('select')->willReturn($selectMock);
+<<<<<<< HEAD
         $selectMock->expects($this->any())->method('from')->with(
             $attributeTable,
             ['value']
         )->willReturnSelf();
+=======
+        $selectMock->method('from')
+            ->willReturnSelf();
+        $selectMock->method('joinLeft')
+            ->willReturnSelf();
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $selectMock->expects($this->any())->method('where')->willReturnSelf();
         $selectMock->expects($this->any())->method('order')->willReturnSelf();
         $selectMock->expects($this->any())->method('limit')->willReturnSelf();
@@ -119,6 +134,7 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $productMetadata->expects($this->any())->method('getLinkField')->willReturn('entity_id');
 
         $this->model = $objectManager->getObject(
+<<<<<<< HEAD
             \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class, [
             'resource'         => $this->resource,
             'storeManager'     => $this->storeManager,
@@ -127,6 +143,18 @@ class RowTest extends \PHPUnit\Framework\TestCase
             'flatItemWriter'   => $this->flatItemWriter,
             'flatTableBuilder' => $this->flatTableBuilder,
         ]);
+=======
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class,
+            [
+                'resource'         => $this->resource,
+                'storeManager'     => $this->storeManager,
+                'productHelper'    => $this->productIndexerHelper,
+                'flatItemEraser'   => $this->flatItemEraser,
+                'flatItemWriter'   => $this->flatItemWriter,
+                'flatTableBuilder' => $this->flatTableBuilder,
+            ]
+        );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $objectManager->setBackwardCompatibleProperty($this->model, 'metadataPool', $metadataPool);
     }

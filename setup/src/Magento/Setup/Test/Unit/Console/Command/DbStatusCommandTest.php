@@ -7,6 +7,7 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Module\DbVersionInfo;
+use Magento\Framework\Setup\UpToDateValidatorInterface;
 use Magento\Setup\Console\Command\DbStatusCommand;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\ObjectManagerProvider;
@@ -35,6 +36,11 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
     private $command;
 
     /**
+     * @var array | Mock[]
+     */
+    private $validators;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -51,35 +57,47 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->validators = [
+            'declarative_schema' => $this->getMockBuilder(UpToDateValidatorInterface::class)->getMock(),
+            'up_to_date_schema' => $this->getMockBuilder(UpToDateValidatorInterface::class)->getMock(),
+            'up_to_date_data' => $this->getMockBuilder(UpToDateValidatorInterface::class)->getMock(),
+            'old_validator' => $this->getMockBuilder(UpToDateValidatorInterface::class)->getMock(),
+        ];
 
         $objectManagerProvider->expects($this->any())
             ->method('get')
             ->will($this->returnValue($objectManager));
-        $objectManager->expects($this->any())
+        $objectManager->expects(self::exactly(4))
             ->method('get')
-            ->will($this->returnValue($this->dbVersionInfo));
-
+            ->willReturnOnConsecutiveCalls(
+                $this->validators['declarative_schema'],
+                $this->validators['up_to_date_schema'],
+                $this->validators['up_to_date_data'],
+                $this->validators['old_validator']
+            );
         $this->command = new DbStatusCommand($objectManagerProvider, $this->deploymentConfig);
     }
 
-    /**
-     * @param array $outdatedInfo
-     * @param string $expectedMessage
-     * @param int $expectedCode
-     *
-     * @dataProvider executeDataProvider
-     */
-    public function testExecute(array $outdatedInfo, $expectedMessage, $expectedCode)
+    public function testExecute()
     {
+        $this->validators['old_validator']->expects(self::once())
+            ->method('isUpToDate')
+            ->willReturn(true);
+        $this->validators['up_to_date_schema']->expects(self::once())
+            ->method('isUpToDate')
+            ->willReturn(true);
+        $this->validators['up_to_date_data']->expects(self::once())
+            ->method('isUpToDate')
+            ->willReturn(true);
+        $this->validators['declarative_schema']->expects(self::once())
+            ->method('isUpToDate')
+            ->willReturn(true);
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
             ->will($this->returnValue(true));
-        $this->dbVersionInfo->expects($this->once())
-            ->method('getDbVersionErrors')
-            ->will($this->returnValue($outdatedInfo));
-
         $tester = new CommandTester($this->command);
         $tester->execute([]);
+<<<<<<< HEAD
 
         $this->assertStringMatchesFormat($expectedMessage, $tester->getDisplay());
         $this->assertSame($expectedCode, $tester->getStatusCode());
@@ -143,6 +161,10 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
                 Cli::RETURN_FAILURE,
             ],
         ];
+=======
+        $this->assertStringMatchesFormat('All modules are up to date.', $tester->getDisplay());
+        $this->assertSame(0, $tester->getStatusCode());
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     public function testExecuteNotInstalled()
@@ -150,9 +172,6 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
             ->will($this->returnValue(false));
-        $this->dbVersionInfo->expects($this->never())
-            ->method('getDbVersionErrors');
-
         $tester = new CommandTester($this->command);
         $tester->execute([]);
 

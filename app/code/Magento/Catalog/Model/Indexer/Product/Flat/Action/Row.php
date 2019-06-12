@@ -90,11 +90,13 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
             $tableExists = $this->_isFlatTableExists($store->getId());
             if ($tableExists) {
                 $this->flatItemEraser->removeDeletedProducts($ids, $store->getId());
+                $this->flatItemEraser->removeDisabledProducts($ids, $store->getId());
             }
 
             /* @var $status \Magento\Eav\Model\Entity\Attribute */
             $status = $this->_productIndexerHelper->getAttribute(ProductInterface::STATUS);
             $statusTable = $status->getBackend()->getTable();
+<<<<<<< HEAD
             $statusConditions = [
                 'store_id IN(0,' . (int)$store->getId() . ')',
                 'attribute_id = ' . (int)$status->getId(),
@@ -104,6 +106,19 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
             $select->from($statusTable, ['value'])
                 ->where(implode(' AND ', $statusConditions))
                 ->order('store_id DESC')
+=======
+            $catalogProductEntityTable = $this->_productIndexerHelper->getTable('catalog_product_entity');
+            $statusConditions = [
+                's.store_id IN(0,' . (int)$store->getId() . ')',
+                's.attribute_id = ' . (int)$status->getId(),
+                'e.entity_id = ' . (int)$id,
+            ];
+            $select = $this->_connection->select();
+            $select->from(['e' => $catalogProductEntityTable], ['s.value'])
+                ->where(implode(' AND ', $statusConditions))
+                ->joinLeft(['s' => $statusTable], "e.{$linkField} = s.{$linkField}", [])
+                ->order('s.store_id DESC')
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ->limit(1);
             $result = $this->_connection->query($select);
             $status = $result->fetchColumn(0);

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
@@ -219,6 +220,16 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     private $accountConfirmation;
 
     /**
+<<<<<<< HEAD
+=======
+     * Caching property to store customer address data models by the address ID.
+     *
+     * @var array
+     */
+    private $storedAddress;
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -313,7 +324,10 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $addressesData = [];
         /** @var \Magento\Customer\Model\Address $address */
         foreach ($this->getAddresses() as $address) {
-            $addressesData[] = $address->getDataModel();
+            if (!isset($this->storedAddress[$address->getId()])) {
+                $this->storedAddress[$address->getId()] = $address->getDataModel();
+            }
+            $addressesData[] = $this->storedAddress[$address->getId()];
         }
         $customerDataObject = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray(
@@ -385,7 +399,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $this->loadByEmail($login);
         if ($this->getConfirmation() && $this->isConfirmationRequired()) {
             throw new EmailNotConfirmedException(
-                __('This account is not confirmed.')
+                __("This account isn't confirmed. Verify and try again.")
             );
         }
         if (!$this->validatePassword($password)) {
@@ -755,7 +769,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
 
         if (!isset($types[$type])) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Please correct the transactional account email type.')
+                __('The transactional account email type is incorrect. Verify and try again.')
             );
         }
 
@@ -1044,17 +1058,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Prepare customer for delete
-     *
-     * @return $this
-     */
-    public function beforeDelete()
-    {
-        //TODO : Revisit and figure handling permissions in MAGETWO-11084 Implementation: Service Context Provider
-        return parent::beforeDelete();
-    }
-
-    /**
      * Processing object after save data
      *
      * @return $this
@@ -1243,7 +1246,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
             throw new AuthenticationException(
-                __('Please enter a valid password reset token.')
+                __('A valid password reset token is missing. Enter and try again.')
             );
         }
         $this->_getResource()->changeResetPasswordLinkToken($this, $passwordLinkToken);
@@ -1294,6 +1297,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Create Address from Factory
+     *
      * @return Address
      */
     protected function _createAddressInstance()
@@ -1302,6 +1307,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Create Address Collection from Factory
+     *
      * @return \Magento\Customer\Model\ResourceModel\Address\Collection
      */
     protected function _createAddressCollection()
@@ -1310,6 +1317,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get Template Types
+     *
      * @return array
      */
     protected function getTemplateTypes()

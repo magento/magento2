@@ -8,7 +8,6 @@ namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -30,6 +29,9 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
      */
     private $allowedCountriesReader;
 
+    /**
+     * Test setUp
+     */
     public function setUp()
     {
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
@@ -41,6 +43,9 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test for getAllowedCountries
+     */
     public function testGetAllowedCountriesWithEmptyFilter()
     {
         $website1 = $this->createMock(WebsiteInterface::class);
@@ -58,6 +63,9 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['AM' => 'AM'], $this->allowedCountriesReader->getAllowedCountries());
     }
 
+    /**
+     * Test for getAllowedCountries
+     */
     public function testGetAllowedCountries()
     {
         $this->scopeConfigMock->expects($this->once())
@@ -71,6 +79,12 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Test for getAllowedCountries
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function testGetAllowedCountriesDefaultScope()
     {
         $this->storeManagerMock->expects($this->never())

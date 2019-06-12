@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
  */
 class ItemResolverComposite implements ItemResolverInterface
 {
+<<<<<<< HEAD
     /**
      * @var string[]
      */
@@ -23,6 +24,12 @@ class ItemResolverComposite implements ItemResolverInterface
     /**
      * @var ItemResolverInterface[]
      */
+=======
+    /** @var string[] */
+    private $itemResolvers = [];
+
+    /** @var ItemResolverInterface[] */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     private $itemResolversInstances = [];
 
     /**
@@ -36,10 +43,16 @@ class ItemResolverComposite implements ItemResolverInterface
     /**
      * {@inheritdoc}
      */
+<<<<<<< HEAD
     public function getFinalProduct(ItemInterface $item): ProductInterface
     {
         $finalProduct = $item->getProduct();
 
+=======
+    public function getFinalProduct(ItemInterface $item) : ProductInterface
+    {
+        $finalProduct = $item->getProduct();
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         foreach ($this->itemResolvers as $resolver) {
             $resolvedProduct = $this->getItemResolverInstance($resolver)->getFinalProduct($item);
             if ($resolvedProduct !== $finalProduct) {
@@ -47,7 +60,10 @@ class ItemResolverComposite implements ItemResolverInterface
                 break;
             }
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $finalProduct;
     }
 
@@ -57,12 +73,19 @@ class ItemResolverComposite implements ItemResolverInterface
      * @param string $className
      * @return ItemResolverInterface
      */
+<<<<<<< HEAD
     private function getItemResolverInstance(string $className): ItemResolverInterface
+=======
+    private function getItemResolverInstance(string $className) : ItemResolverInterface
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         if (!isset($this->itemResolversInstances[$className])) {
             $this->itemResolversInstances[$className] = ObjectManager::getInstance()->get($className);
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $this->itemResolversInstances[$className];
     }
 }

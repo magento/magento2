@@ -80,7 +80,7 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
 
         $this->_updateFreeMethodQuote($request);
 
-        if ($request->getFreeShipping() || $request->getBaseSubtotalInclTax() >= $this->getConfigData(
+        if ($request->getFreeShipping() || $request->getPackageValueWithDiscount() >= $this->getConfigData(
             'free_shipping_subtotal'
         )
         ) {
@@ -138,6 +138,8 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
     }
 
     /**
+     * Returns allowed shipping methods
+     *
      * @return array
      */
     public function getAllowedMethods()

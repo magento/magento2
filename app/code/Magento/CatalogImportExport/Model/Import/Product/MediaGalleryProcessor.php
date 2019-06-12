@@ -174,7 +174,11 @@ class MediaGalleryProcessor
      * @param string $field
      * @return void
      */
+<<<<<<< HEAD
     private function updateMediaGalleryField(array $data, string $field)
+=======
+    private function updateMediaGalleryField(array $data, $field)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $insertData = [];
         foreach ($data as $datum) {
@@ -363,6 +367,11 @@ class MediaGalleryProcessor
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get resource.
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel
      */
     private function getResource()

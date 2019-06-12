@@ -10,9 +10,14 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 
 /**
+<<<<<<< HEAD
  * Class SelectBuilder
  *
  * Responsible for Select object creation, works as a builder. Returns Select as result;
+=======
+ * Responsible for Select object creation, works as a builder. Returns Select as result;
+ *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  * Used in SQL assemblers.
  */
 class SelectBuilder

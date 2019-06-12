@@ -82,7 +82,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
     public function testCustomer()
     {
-        $this->address->unsetData('cusomer_id');
+        $this->address->unsetData('customer_id');
         $this->assertFalse($this->address->getCustomer());
 
         $this->address->setCustomerId(self::ORIG_CUSTOMER_ID);

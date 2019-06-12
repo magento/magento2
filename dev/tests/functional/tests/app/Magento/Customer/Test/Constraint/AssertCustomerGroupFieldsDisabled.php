@@ -27,7 +27,7 @@ class AssertCustomerGroupFieldsDisabled extends AbstractConstraint
         array $disabledFields
     ) {
         foreach ($disabledFields as $field) {
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 $customerGroupEdit->getPageMainForm()->isFieldDisabled($field),
                 "Field $field is not disabled."
             );

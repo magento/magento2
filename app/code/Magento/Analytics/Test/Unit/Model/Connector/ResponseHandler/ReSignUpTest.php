@@ -10,9 +10,12 @@ use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Analytics\Model\Connector\ResponseHandler\ReSignUp;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
 
+<<<<<<< HEAD
 /**
  * Class ReSignUpTest
  */
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class ReSignUpTest extends \PHPUnit\Framework\TestCase
 {
     public function testHandleResult()

@@ -10,7 +10,11 @@ Prerequisites to display the Instant Purchase button:
 
 ## Structure
 
+<<<<<<< HEAD
 In addition to [a typical file structure for a Magento 2 module](http://devdocs.magento.com/guides/v2.2/extension-dev-guide/build/module-file-structure.html) `PaymentMethodsIntegration` directory contains interfaces and basic implementation of integration vault payment method to the instant purchase.
+=======
+In addition to [a typical file structure for a Magento 2 module](https://devdocs.magento.com/guides/v2.2/extension-dev-guide/build/module-file-structure.html) `PaymentMethodsIntegration` directory contains interfaces and basic implementation of integration vault payment method to the instant purchase.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 ## Extensibility
 
@@ -22,7 +26,11 @@ All payments created for instant purchase also have `'instant-purchase' => true`
 
 ### Payment method integration
 
+<<<<<<< HEAD
 Instant purchase support may be implemented for any payment method with [vault support](http://devdocs.magento.com/guides/v2.1/payments-integrations/vault/vault-intro.html).
+=======
+Instant purchase support may be implemented for any payment method with [vault support](https://devdocs.magento.com/guides/v2.1/payments-integrations/vault/vault-intro.html).
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 Basic implementation provided in `Magento\InstantPurchase\PaymentMethodIntegration` should be enough in most cases. It is not enabled by default to avoid issues on production sites and authors of vault payment method should verify correct work for instant purchase manually.
 To enable basic implementation just add single option to configuration of payemnt method in `config.xml`:
 
@@ -52,7 +60,11 @@ Basic implementation is a good start point but it's recommended to provide own i
 
 The `Magento_InstantPurchase` module does not introduce backward incompatible changes.
 
+<<<<<<< HEAD
 You can track [backward incompatible changes in patch releases](http://devdocs.magento.com/guides/v2.2/release-notes/changes/ce_changes.html).
+=======
+You can track [backward incompatible changes in patch releases](https://devdocs.magento.com/guides/v2.2/release-notes/changes/ce_changes.html).
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 ***
 

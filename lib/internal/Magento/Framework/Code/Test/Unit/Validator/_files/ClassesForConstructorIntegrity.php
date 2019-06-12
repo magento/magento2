@@ -5,8 +5,8 @@
  */
 
 /**
- * @codingStandardsIgnoreFile
  * Coding Standards have to be ignored in this file, as it is just a data source for tests.
+ * @codingStandardsIgnoreStart
  */
 
 class ClassA
@@ -59,7 +59,10 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * Context constructor.
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param ClassA $exA
      * @param ClassB $exB
      * @param ClassC $exC

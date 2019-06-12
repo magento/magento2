@@ -8,8 +8,7 @@ define([
     'underscore',
     'ko',
     'uiComponent',
-    'Magento_Checkout/js/model/step-navigator',
-    'jquery/jquery.hashchange'
+    'Magento_Checkout/js/model/step-navigator'
 ], function ($, _, ko, Component, stepNavigator) {
     'use strict';
 
@@ -27,7 +26,11 @@ define([
             var stepsValue;
 
             this._super();
+<<<<<<< HEAD
             $(window).hashchange(_.bind(stepNavigator.handleHash, stepNavigator));
+=======
+            window.addEventListener('hashchange', _.bind(stepNavigator.handleHash, stepNavigator));
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
             if (!window.location.hash) {
                 stepsValue = stepNavigator.steps();

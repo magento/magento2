@@ -3,9 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 
 namespace Magento\Bundle\Model\Product;
 
+=======
+declare(strict_types=1);
+
+namespace Magento\Bundle\Model\Product;
+
+use Magento\Catalog\Api\ProductRepositoryInterface;
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 /**
  * Test class for \Magento\Bundle\Model\Product\SaveHandler
  * The tested class used indirectly
@@ -28,19 +37,40 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     private $store;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     private $productRepository;
 
+=======
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @inheritdoc
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->store = $this->objectManager->create(\Magento\Store\Model\Store::class);
+<<<<<<< HEAD
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $this->productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
     }
 
     public function testOptionTitlesOnDifferentStores()
+=======
+        /** @var ProductRepositoryInterface $productRepository */
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+    }
+
+    /**
+     * @return void
+     */
+    public function testOptionTitlesOnDifferentStores(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         /**
          * @var \Magento\Bundle\Model\Product\OptionList $optionList

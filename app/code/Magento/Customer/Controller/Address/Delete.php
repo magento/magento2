@@ -6,9 +6,16 @@
  */
 namespace Magento\Customer\Controller\Address;
 
-class Delete extends \Magento\Customer\Controller\Address
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+/**
+ * Delete customer address controller action.
+ */
+class Delete extends \Magento\Customer\Controller\Address implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
+     * @inheritdoc
      * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()

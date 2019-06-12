@@ -6,6 +6,10 @@
 
 namespace Magento\Translation\Model\Json;
 
+<<<<<<< HEAD
+=======
+use Magento\Framework\App\Area;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\App\AreaList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\TranslateInterface;
@@ -13,6 +17,10 @@ use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\View\Asset\PreProcessorInterface;
 use Magento\Framework\View\DesignInterface;
+<<<<<<< HEAD
+=======
+use Magento\Backend\App\Area\FrontNameResolver;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Translation\Model\Js\Config;
 use Magento\Translation\Model\Js\DataProviderInterface;
 
@@ -68,7 +76,11 @@ class PreProcessor implements PreProcessorInterface
         $this->dataProvider = $dataProvider;
         $this->areaList = $areaList;
         $this->translate = $translate;
+<<<<<<< HEAD
         $this->viewDesign = $viewDesign ?: ObjectManager::getInstance()->get(DesignInterface::class);
+=======
+        $this->viewDesign = $viewDesign ?? ObjectManager::getInstance()->get(DesignInterface::class);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -84,21 +96,28 @@ class PreProcessor implements PreProcessorInterface
             $context = $chain->getAsset()->getContext();
 
             $themePath = '*/*';
-            $areaCode = \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;
+            $areaCode = FrontNameResolver::AREA_CODE;
 
             if ($context instanceof FallbackContext) {
                 $themePath = $context->getThemePath();
                 $areaCode = $context->getAreaCode();
 
                 $this->viewDesign->setDesignTheme($themePath, $areaCode);
+<<<<<<< HEAD
 
                 $this->translate
                     ->setLocale($context->getLocale())
                     ->loadData($areaCode);
+=======
             }
 
-            $area = $this->areaList->getArea($areaCode);
-            $area->load(\Magento\Framework\App\Area::PART_TRANSLATE);
+            if ($areaCode !== FrontNameResolver::AREA_CODE) {
+                $area = $this->areaList->getArea($areaCode);
+                $area->load(Area::PART_TRANSLATE);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
+            }
+
+            $this->translate->setLocale($context->getLocale())->loadData($areaCode, true);
 
             $chain->setContent(json_encode($this->dataProvider->getData($themePath)));
             $chain->setContentType('json');

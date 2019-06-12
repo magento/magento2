@@ -7,9 +7,19 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontQuickSearchSection">
         <element name="searchPhrase" type="input" selector="#search" timeout="10"/>
         <element name="searchButton" type="button" selector="button.action.search" timeout="30"/>
+=======
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontQuickSearchSection">
+        <element name="searchPhrase" type="input" selector="#search"/>
+        <element name="searchButton" type="button" selector="button.action.search" timeout="30"/>
+        <element name="searchMiniForm" type="input" selector="#search_mini_form"/>
+        <element name="searchDropDownSuggestion" type="text" selector="//div[@id='search_autocomplete']/ul/li/span"/>
+        <element name="searchDropDownName" type="text" selector="//div[@id='search_autocomplete']//span[contains(., '{{searchQuery}}')]" parameterized="true"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </section>
 </sections>

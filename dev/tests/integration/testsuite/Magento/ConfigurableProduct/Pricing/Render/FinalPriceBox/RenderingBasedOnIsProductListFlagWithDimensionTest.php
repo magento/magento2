@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -42,6 +47,12 @@ class RenderingBasedOnIsProductListFlagWithDimensionTest extends \PHPUnit\Framew
      */
     private $finalPriceBox;
 
+<<<<<<< HEAD
+=======
+    /**
+     * Set up
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     protected function setUp()
     {
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);

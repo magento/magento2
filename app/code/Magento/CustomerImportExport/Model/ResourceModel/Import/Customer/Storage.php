@@ -5,6 +5,10 @@
  */
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Customer;
 
+<<<<<<< HEAD
+=======
+use Magento\CustomerImportExport\Test\Unit\Model\Import\CustomerCompositeTest;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
@@ -13,11 +17,16 @@ use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
 use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator;
 
 /**
+<<<<<<< HEAD
  * Helper class to help dealing with existent customers.
+=======
+ * Storage to check existing customers.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  */
 class Storage
 {
     /**
+<<<<<<< HEAD
      * @deprecated
      */
     protected $_isCollectionLoaded = false;
@@ -28,6 +37,8 @@ class Storage
     protected $_customerCollection;
 
     /**
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * Existing customers information. In form of:
      *
      * [customer email] => array(
@@ -61,6 +72,14 @@ class Storage
     private $customerCollectionFactory;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var CustomerCollection
+     */
+    public $_customerCollection;
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param CustomerCollectionFactory $collectionFactory
      * @param CollectionByPagesIteratorFactory $colIteratorFactory
      * @param array $data
@@ -78,33 +97,62 @@ class Storage
             $data['collection_by_pages_iterator']
         ) ? $data['collection_by_pages_iterator'] : $colIteratorFactory->create();
         $this->customerCollectionFactory = $collectionFactory;
+<<<<<<< HEAD
     }
 
     /**
+=======
+    }
+
+    /**
+     * Create new collection to load customer data with proper filters.
+     *
+     * @param array[] $customerIdentifiers With keys "email" and "website_id".
+     *
+     * @return CustomerCollection
+     */
+    private function prepareCollection(array $customerIdentifiers): CustomerCollection
+    {
+        /** @var CustomerCollection $collection */
+        $collection = $this->customerCollectionFactory->create();
+        $collection->removeAttributeToSelect();
+        $select = $collection->getSelect();
+        $customerTableId = array_keys($select->getPart(Select::FROM))[0];
+        $select->where(
+            $customerTableId .'.email in (?)',
+            array_map(
+                function (array $customer) {
+                    return $customer['email'];
+                },
+                $customerIdentifiers
+            )
+        );
+
+        return $collection;
+    }
+
+    /**
+     * Load customers' data that can be found by given identifiers.
+     *
+     * @param array $customerIdentifiers With keys "email" and "website_id".
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return void
      *
      * @deprecated
      * @see prepareCustomers
      */
-    public function load()
+    private function loadCustomersData(array $customerIdentifiers)
     {
-        if ($this->_isCollectionLoaded == false) {
-            $collection = clone $this->_customerCollection;
-            $collection->removeAttributeToSelect();
-            $tableName = $collection->getResource()->getEntityTable();
-            $collection->getSelect()->from($tableName, ['entity_id', 'website_id', 'email']);
-
-            $this->_byPagesIterator->iterate(
-                $this->_customerCollection,
-                $this->_pageSize,
-                [[$this, 'addCustomer']]
-            );
-
-            $this->_isCollectionLoaded = true;
-        }
+        $this->_byPagesIterator->iterate(
+            $this->prepareCollection($customerIdentifiers),
+            $this->_pageSize,
+            [[$this, 'addCustomer']]
+        );
     }
 
     /**
+<<<<<<< HEAD
      * Create new collection to load customer data with proper filters.
      *
      * @param array[] $customerIdentifiers With keys "email" and "website_id".
@@ -155,34 +203,73 @@ class Storage
      * @return $this
      */
     public function addCustomer(DataObject $customer)
+=======
+     * Add a customer by an array
+     *
+     * @param array $customer
+     * @return $this
+     */
+    public function addCustomerByArray(array $customer): Storage
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
-        $email = strtolower(trim($customer->getEmail()));
+        $email = strtolower(trim($customer['email']));
         if (!isset($this->_customerIds[$email])) {
             $this->_customerIds[$email] = [];
         }
+<<<<<<< HEAD
         $this->_customerIds[$email][$customer->getWebsiteId()]
             = $customer->getId();
+=======
+        $this->_customerIds[$email][$customer['website_id']] = $customer['entity_id'];
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         return $this;
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Add customer to array
+     *
+     * @deprecated @see addCustomerByArray
+     * @param DataObject $customer
+     * @return $this
+     */
+    public function addCustomer(DataObject $customer): Storage
+    {
+        $customerData = $customer->toArray();
+        if (!isset($customerData['entity_id']) && isset($customer['id'])) {
+            $customerData['entity_id'] = $customerData['id'];
+        }
+        $this->addCustomerByArray($customerData);
+
+        return $this;
+    }
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * Find customer ID for unique pair of email and website ID.
      *
      * @param string $email
      * @param int $websiteId
      * @return bool|int
      */
-    public function getCustomerId($email, $websiteId)
+    public function getCustomerId(string $email, int $websiteId)
     {
         $email = mb_strtolower($email);
         //Trying to load the customer.
+<<<<<<< HEAD
         if (!array_key_exists($email, $this->_customerIds)
             || !array_key_exists($websiteId, $this->_customerIds[$email])
         ) {
             $this->loadCustomersData([
                 ['email' => $email, 'website_id' => $websiteId]
             ]);
+=======
+        if (!array_key_exists($email, $this->_customerIds) || !array_key_exists($websiteId, $this->_customerIds[$email])
+        ) {
+            $this->loadCustomersData([['email' => $email, 'website_id' => $websiteId]]);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
 
         if (isset($this->_customerIds[$email][$websiteId])) {
@@ -198,7 +285,11 @@ class Storage
      * @param array[] $customersToFind With keys: email, website_id.
      * @return void
      */
+<<<<<<< HEAD
     public function prepareCustomers(array $customersToFind)
+=======
+    public function prepareCustomers(array $customersToFind): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $identifiers = [];
         foreach ($customersToFind as $customerToFind) {
@@ -212,7 +303,11 @@ class Storage
                 $uniqueKey = $email .'_' .$websiteId;
                 $identifiers[$uniqueKey] = [
                     'email' => $email,
+<<<<<<< HEAD
                     'website_id' => $websiteId
+=======
+                    'website_id' => $websiteId,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ];
                 //Recording that we've searched for a customer.
                 if (!array_key_exists($email, $this->_customerIds)) {

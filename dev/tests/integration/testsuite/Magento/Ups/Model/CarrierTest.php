@@ -3,11 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ups\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Quote\Model\Quote\Address\RateRequestFactory;
 
+<<<<<<< HEAD
+=======
+/**
+ * Integration tests for Carrier model class
+ */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -15,11 +23,17 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     private $carrier;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->carrier = Bootstrap::getObjectManager()->create(Carrier::class);
     }
 
+    /**
+     * @return void
+     */
     public function testGetShipAcceptUrl()
     {
         $this->assertEquals('https://wwwcie.ups.com/ups.app/xml/ShipAccept', $this->carrier->getShipAcceptUrl());
@@ -35,6 +49,9 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('https://onlinetools.ups.com/ups.app/xml/ShipAccept', $this->carrier->getShipAcceptUrl());
     }
 
+    /**
+     * @return void
+     */
     public function testGetShipConfirmUrl()
     {
         $this->assertEquals('https://wwwcie.ups.com/ups.app/xml/ShipConfirm', $this->carrier->getShipConfirmUrl());
@@ -55,6 +72,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoConfigFixture current_store carriers/ups/active 1
+<<<<<<< HEAD
+=======
+     * @magentoConfigFixture current_store carriers/ups/type UPS
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @magentoConfigFixture current_store carriers/ups/allowed_methods 1DA,GND
      * @magentoConfigFixture current_store carriers/ups/free_method GND
      */
@@ -69,7 +90,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $rateRequest->setFreeMethodWeight(0);
         $rateRequest->setLimitCarrier($this->carrier::CODE);
         $rateRequest->setFreeShipping(true);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $rateResult = $this->carrier->collectRates($rateRequest);
         $result = $rateResult->asArray();
         $methods = $result[$this->carrier::CODE]['methods'];

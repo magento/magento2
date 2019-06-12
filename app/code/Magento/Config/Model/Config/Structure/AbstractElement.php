@@ -5,15 +5,18 @@
  */
 namespace Magento\Config\Model\Config\Structure;
 
+use Magento\Config\Model\Config\StructureElementInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ObjectManager;
 
 /**
+ * Abstract element.
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
-abstract class AbstractElement implements ElementInterface
+abstract class AbstractElement implements StructureElementInterface
 {
     /**
      * Element data
@@ -37,7 +40,7 @@ abstract class AbstractElement implements ElementInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
@@ -47,11 +50,15 @@ abstract class AbstractElement implements ElementInterface
     private $elementVisibility;
 
     /**
+     * Construct.
+     *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      */
-    public function __construct(StoreManagerInterface $storeManager, \Magento\Framework\Module\Manager $moduleManager)
-    {
+    public function __construct(
+        StoreManagerInterface $storeManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+    ) {
         $this->_storeManager = $storeManager;
         $this->moduleManager = $moduleManager;
     }

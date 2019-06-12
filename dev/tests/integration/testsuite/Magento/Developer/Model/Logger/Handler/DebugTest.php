@@ -5,34 +5,20 @@
  */
 namespace Magento\Developer\Model\Logger\Handler;
 
-use Magento\Config\Console\Command\ConfigSetCommand;
-use Magento\Framework\App\Config;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Config\Setup\ConfigOptionsList;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Logger\Monolog;
+use Magento\Framework\Shell;
+use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Deploy\Model\Mode;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Magento\TestFramework\ObjectManager;
 
 /**
- * Preconditions
- *  - Developer mode enabled
- *  - Log file isn't exists
- *  - 'Log to file' setting are enabled
- *
- * Test steps
- *  - Enable production mode without compilation
- *  - Try to log message into log file
- *  - Assert that log file isn't exists
- *  - Assert that 'Log to file' setting are disabled
- *
- *  - Enable 'Log to file' setting
- *  - Try to log message into debug file
- *  - Assert that log file is exists
- *  - Assert that log file contain logged message
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DebugTest extends \PHPUnit\Framework\TestCase
 {
@@ -42,73 +28,80 @@ class DebugTest extends \PHPUnit\Framework\TestCase
     private $logger;
 
     /**
-     * @var Mode
-     */
-    private $mode;
-
-    /**
-     * @var InputInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $inputMock;
-
-    /**
-     * @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $outputMock;
-
-    /**
-     * @var ConfigSetCommand
-     */
-    private $configSetCommand;
-
-    /**
      * @var WriteInterface
      */
     private $etcDirectory;
 
     /**
-     * @var Config
+     * @var ObjectManager
      */
-    private $appConfig;
+    private $objectManager;
 
+    /**
+     * @var Shell
+     */
+    private $shell;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
+     * @var string
+     */
+    private $debugLogPath = '';
+
+    /**
+     * @var string
+     */
+    private static $backupFile = 'env.base.php';
+
+    /**
+     * @var string
+     */
+    private static $configFile = 'env.php';
+
+    /**
+     * @var Debug
+     */
+    private $debugHandler;
+
+    /**
+     * @inheritdoc
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Exception
+     */
     public function setUp()
     {
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->shell = $this->objectManager->get(Shell::class);
+        $this->logger = $this->objectManager->get(Monolog::class);
+        $this->deploymentConfig = $this->objectManager->get(DeploymentConfig::class);
+
         /** @var Filesystem $filesystem */
-        $filesystem = Bootstrap::getObjectManager()->create(Filesystem::class);
+        $filesystem = $this->objectManager->create(Filesystem::class);
         $this->etcDirectory = $filesystem->getDirectoryWrite(DirectoryList::CONFIG);
-        $this->etcDirectory->copyFile('env.php', 'env.base.php');
-
-        $this->inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
-        $this->outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
-        $this->logger = Bootstrap::getObjectManager()->get(Monolog::class);
-        $this->mode = Bootstrap::getObjectManager()->create(
-            Mode::class,
-            [
-                'input' => $this->inputMock,
-                'output' => $this->outputMock
-            ]
-        );
-        $this->configSetCommand = Bootstrap::getObjectManager()->create(ConfigSetCommand::class);
-        $this->appConfig = Bootstrap::getObjectManager()->create(Config::class);
-
-        // Preconditions
-        $this->mode->enableDeveloperMode();
-        $this->enableDebugging();
-        if (file_exists($this->getDebuggerLogPath())) {
-            unlink($this->getDebuggerLogPath());
-        }
+        $this->etcDirectory->copyFile(self::$configFile, self::$backupFile);
     }
 
+    /**
+     * @inheritdoc
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
     public function tearDown()
     {
-        $this->etcDirectory->delete('env.php');
-        $this->etcDirectory->renameFile('env.base.php', 'env.php');
+        $this->reinitDeploymentConfig();
+        $this->etcDirectory->delete(self::$backupFile);
     }
 
-    private function enableDebugging()
+    /**
+     * @param bool $flag
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function enableDebugging(bool $flag)
     {
+<<<<<<< HEAD
         $this->inputMock = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
         $this->outputMock = $this->getMockBuilder(OutputInterface::class)
@@ -135,34 +128,141 @@ class DebugTest extends \PHPUnit\Framework\TestCase
             ->method('writeln')
             ->with('<info>Value was saved in app/etc/env.php and locked.</info>');
         $this->assertFalse((bool)$this->configSetCommand->run($this->inputMock, $this->outputMock));
-    }
-
-    public function testDebugInProductionMode()
-    {
-        $message = 'test message';
-
-        $this->mode->enableProductionModeMinimal();
-        $this->logger->debug($message);
-        $this->assertFileNotExists($this->getDebuggerLogPath());
-        $this->assertFalse((bool)$this->appConfig->getValue('dev/debug/debug_logging'));
-
-        $this->enableDebugging();
-        $this->logger->debug($message);
-
-        $this->assertFileExists($this->getDebuggerLogPath());
-        $this->assertContains($message, file_get_contents($this->getDebuggerLogPath()));
+=======
+        $this->shell->execute(
+            PHP_BINARY . ' -f %s setup:config:set -n --%s=%s --%s=%s',
+            [
+                BP . '/bin/magento',
+                ConfigOptionsList::INPUT_KEY_DEBUG_LOGGING,
+                (int)$flag,
+                InitParamListener::BOOTSTRAP_PARAM,
+                urldecode(http_build_query(Bootstrap::getInstance()->getAppInitParams())),
+            ]
+        );
+        $this->deploymentConfig->resetData();
+        $this->assertSame((int)$flag, $this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_DEBUG_LOGGING));
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
-     * @return bool|string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testDebugInProductionMode()
+    {
+        $message = 'test message';
+        $this->reinitDebugHandler(State::MODE_PRODUCTION);
+
+        $this->removeDebugLog();
+        $this->logger->debug($message);
+        $this->assertFileNotExists($this->getDebuggerLogPath());
+        $this->assertNull($this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_DEBUG_LOGGING));
+
+        $this->checkCommonFlow($message);
+        $this->reinitDeploymentConfig();
+    }
+
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testDebugInDeveloperMode()
+    {
+        $message = 'test message';
+        $this->reinitDebugHandler(State::MODE_DEVELOPER);
+
+        $this->removeDebugLog();
+        $this->logger->debug($message);
+        $this->assertFileExists($this->getDebuggerLogPath());
+        $this->assertContains($message, file_get_contents($this->getDebuggerLogPath()));
+        $this->assertNull($this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_DEBUG_LOGGING));
+
+        $this->checkCommonFlow($message);
+        $this->reinitDeploymentConfig();
+    }
+
+    /**
+     * @return string
      */
     private function getDebuggerLogPath()
     {
-        foreach ($this->logger->getHandlers() as $handler) {
-            if ($handler instanceof Debug) {
-                return $handler->getUrl();
+        if (!$this->debugLogPath) {
+            foreach ($this->logger->getHandlers() as $handler) {
+                if ($handler instanceof Debug) {
+                    $this->debugLogPath = $handler->getUrl();
+                }
             }
         }
-        return false;
+
+        return $this->debugLogPath;
+    }
+
+    /**
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    private function reinitDeploymentConfig()
+    {
+        $this->etcDirectory->delete(self::$configFile);
+        $this->etcDirectory->copyFile(self::$backupFile, self::$configFile);
+    }
+
+    /**
+     * @param string $instanceMode
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function reinitDebugHandler(string $instanceMode)
+    {
+        $this->debugHandler = $this->objectManager->create(
+            Debug::class,
+            [
+                'filePath' => Bootstrap::getInstance()->getAppTempDir(),
+                'state' => $this->objectManager->create(
+                    State::class,
+                    [
+                        'mode' => $instanceMode,
+                    ]
+                ),
+            ]
+        );
+        $this->logger->setHandlers(
+            [
+                $this->debugHandler,
+            ]
+        );
+    }
+
+    /**
+     * @return void
+     */
+    private function detachLogger()
+    {
+        $this->debugHandler->close();
+    }
+
+    /**
+     * @return void
+     */
+    private function removeDebugLog()
+    {
+        $this->detachLogger();
+        if (file_exists($this->getDebuggerLogPath())) {
+            unlink($this->getDebuggerLogPath());
+        }
+    }
+
+    /**
+     * @param string $message
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function checkCommonFlow(string $message)
+    {
+        $this->enableDebugging(true);
+        $this->removeDebugLog();
+        $this->logger->debug($message);
+        $this->assertFileExists($this->getDebuggerLogPath());
+        $this->assertContains($message, file_get_contents($this->getDebuggerLogPath()));
+
+        $this->enableDebugging(false);
+        $this->removeDebugLog();
+        $this->logger->debug($message);
+        $this->assertFileNotExists($this->getDebuggerLogPath());
     }
 }

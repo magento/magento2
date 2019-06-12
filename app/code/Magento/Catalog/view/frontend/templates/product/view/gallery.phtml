@@ -10,7 +10,26 @@
  * @var $block \Magento\Catalog\Block\Product\View\Gallery
  */
 ?>
+
+<?php
+$images = $block->getGalleryImages()->getItems();
+$mainImage = current(array_filter($images, function ($img) use ($block) {
+    return $block->isMainImage($img);
+}));
+
+if (!empty($images) && empty($mainImage)) {
+    $mainImage = $block->getGalleryImages()->getFirstItem();
+}
+
+$helper = $block->getData('imageHelper');
+$mainImageData = $mainImage ?
+    $mainImage->getData('medium_image_url') :
+    $helper->getDefaultPlaceholderUrl('image');
+
+?>
+
 <div class="gallery-placeholder _block-content-loading" data-gallery-role="gallery-placeholder">
+<<<<<<< HEAD
     <div data-role="loader" class="loading-mask">
         <div class="loader">
             <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif')) ?>"
@@ -29,13 +48,15 @@
         },
         thumbBarHeight = 0,
         loader = document.querySelectorAll('[data-gallery-role="gallery-placeholder"] [data-role="loader"]')[0];
+=======
+    <img
+        alt="main product photo"
+        class="gallery-placeholder__image"
+        src="<?= /* @noEscape */ $mainImageData ?>"
+    />
+</div>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
-    if (config.navtype === 'horizontal') {
-        thumbBarHeight = config.thumbheight;
-    }
-
-    loader.style.paddingBottom = ( config.height / config.width * 100) + "%";
-</script>
 <script type="text/x-magento-init">
     {
         "[data-gallery-role=gallery-placeholder]": {
@@ -43,6 +64,7 @@
                 "mixins":["magnifier/magnify"],
                 "magnifierOpts": <?= /* @noEscape */ $block->getMagnifier() ?>,
                 "data": <?= /* @noEscape */ $block->getGalleryImagesJson() ?>,
+<<<<<<< HEAD
                 "options": {
                     "nav": "<?= $block->escapeHtml($block->getVar("gallery/nav")) ?>",
                     <?php if (($block->getVar("gallery/loop"))) : ?>
@@ -117,6 +139,11 @@
                     "transition": "<?= $block->escapeHtml($block->getVar("gallery/fullscreen/transition/effect")) ?>"
                 },
                 "breakpoints": <?= /* @noEscape */ $block->getBreakpoints() ?>
+=======
+                "options": <?= /* @noEscape */ $block->getGalleryOptions()->getOptionsJson() ?>,
+                "fullscreen": <?= /* @noEscape */ $block->getGalleryOptions()->getFSOptionsJson() ?>,
+                 "breakpoints": <?= /* @noEscape */ $block->getBreakpoints() ?>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             }
         }
     }

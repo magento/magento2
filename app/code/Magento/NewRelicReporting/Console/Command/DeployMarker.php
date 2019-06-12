@@ -54,7 +54,11 @@ class DeployMarker extends Command
                 'Deploy Message?'
             )
             ->addArgument(
+<<<<<<< HEAD
                 'changelog',
+=======
+                'change_log',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 InputArgument::REQUIRED,
                 'Change Log?'
             )
@@ -73,7 +77,11 @@ class DeployMarker extends Command
     {
         $this->deploymentsFactory->create()->setDeployment(
             $input->getArgument('message'),
+<<<<<<< HEAD
             $input->getArgument('changelog'),
+=======
+            $input->getArgument('change_log'),
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $this->serviceShellUser->get($input->getArgument('user'))
         );
         $output->writeln('<info>NewRelic deployment information sent</info>');

@@ -8,6 +8,12 @@ namespace Magento\Framework\Mail;
 use Zend\Mime\Mime;
 use Zend\Mime\Part;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class Message for email transportation
+ */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class Message implements MailMessageInterface
 {
     /**
@@ -34,7 +40,11 @@ class Message implements MailMessageInterface
     }
 
     /**
+<<<<<<< HEAD
      * {@inheritdoc}
+=======
+     * @inheritdoc
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @deprecated
      * @see \Magento\Framework\Mail\Message::setBodyText
@@ -47,7 +57,11 @@ class Message implements MailMessageInterface
     }
 
     /**
+<<<<<<< HEAD
      * {@inheritdoc}
+=======
+     * @inheritdoc
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @deprecated
      * @see \Magento\Framework\Mail\Message::setBodyText
@@ -56,7 +70,11 @@ class Message implements MailMessageInterface
     public function setBody($body)
     {
         if (is_string($body) && $this->messageType === MailMessageInterface::TYPE_HTML) {
+<<<<<<< HEAD
             $body = $this->createHtmlMimeFromString($body);
+=======
+            $body = self::createHtmlMimeFromString($body);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
         $this->zendMessage->setBody($body);
         return $this;
@@ -89,10 +107,30 @@ class Message implements MailMessageInterface
 
     /**
      * @inheritdoc
+<<<<<<< HEAD
      */
     public function setFrom($fromAddress)
     {
         $this->zendMessage->setFrom($fromAddress);
+=======
+     *
+     * @deprecated This function is missing the from name. The
+     * setFromAddress() function sets both from address and from name.
+     * @see setFromAddress()
+     */
+    public function setFrom($fromAddress)
+    {
+        $this->setFromAddress($fromAddress, null);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setFromAddress($fromAddress, $fromName = null)
+    {
+        $this->zendMessage->setFrom($fromAddress, $fromName);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $this;
     }
 
@@ -102,12 +140,43 @@ class Message implements MailMessageInterface
     public function addTo($toAddress)
     {
         $this->zendMessage->addTo($toAddress);
+<<<<<<< HEAD
+=======
         return $this;
     }
 
     /**
      * @inheritdoc
      */
+    public function addCc($ccAddress)
+    {
+        $this->zendMessage->addCc($ccAddress);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addBcc($bccAddress)
+    {
+        $this->zendMessage->addBcc($bccAddress);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setReplyTo($replyToAddress)
+    {
+        $this->zendMessage->setReplyTo($replyToAddress);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+<<<<<<< HEAD
     public function addCc($ccAddress)
     {
         $this->zendMessage->addCc($ccAddress);
@@ -138,6 +207,27 @@ class Message implements MailMessageInterface
     public function getRawMessage()
     {
         return $this->zendMessage->toString();
+=======
+    public function getRawMessage()
+    {
+        return $this->zendMessage->toString();
+    }
+
+    /**
+     * Create HTML mime message from the string.
+     *
+     * @param string $htmlBody
+     * @return \Zend\Mime\Message
+     */
+    private function createHtmlMimeFromString($htmlBody)
+    {
+        $htmlPart = new Part($htmlBody);
+        $htmlPart->setCharset($this->zendMessage->getEncoding());
+        $htmlPart->setType(Mime::TYPE_HTML);
+        $mimeMessage = new \Zend\Mime\Message();
+        $mimeMessage->addPart($htmlPart);
+        return $mimeMessage;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -157,6 +247,7 @@ class Message implements MailMessageInterface
         $this->setMessageType(self::TYPE_TEXT);
         return $this->setBody($text);
     }
+<<<<<<< HEAD
 
     /**
      * Create HTML mime message from the string.
@@ -173,4 +264,6 @@ class Message implements MailMessageInterface
         $mimeMessage->addPart($htmlPart);
         return $mimeMessage;
     }
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 }

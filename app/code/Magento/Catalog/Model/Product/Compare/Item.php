@@ -158,8 +158,13 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
     {
         if ($product instanceof Product) {
             $this->setProductId($product->getId());
+<<<<<<< HEAD
         } elseif ((int)$product) {
             $this->setProductId((int)$product);
+=======
+        } elseif ((int) $product) {
+            $this->setProductId((int) $product);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
 
         return $this;
@@ -220,7 +225,7 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
     }
 
     /**
-     * Retrieve Customer Id if loggined
+     * Retrieve Customer Id if logged in
      *
      * @return int
      */

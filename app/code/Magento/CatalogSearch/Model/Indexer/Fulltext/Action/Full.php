@@ -333,6 +333,10 @@ class Full
                 'relation.parent_id = cpe.' . $linkField,
                 ['cpe.entity_id']
             );
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $connection->fetchCol($select);
     }
 
@@ -399,7 +403,11 @@ class Full
             }
             $products = $this->dataProvider
                 ->getSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $this->batchSize);
+<<<<<<< HEAD
         };
+=======
+        }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**

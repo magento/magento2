@@ -3,8 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Mview\Test\Unit\View;
 
+/**
+ * Test Coverage for Changelog View.
+ *
+ * @see \Magento\Framework\Mview\View\Changelog
+ */
 class ChangelogTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -44,8 +50,8 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Write DB connection is not available
+     * @expectedException \Magento\Framework\DB\Adapter\ConnectionException
+     * @expectedExceptionMessage The write connection to the database isn't available. Please try again later.
      */
     public function testCheckConnectionException()
     {
@@ -73,7 +79,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException \DomainException
      * @expectedExceptionMessage View's identifier is not set
      */
     public function testGetNameWithException()
@@ -100,6 +106,10 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(10, $this->model->getVersion());
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\RuntimeException
+     * @expectedExceptionMessage Table status for viewIdtest_cl is incorrect. Can`t fetch version id.
+     */
     public function testGetVersionWithExceptionNoAutoincrement()
     {
         $changelogTableName = 'viewIdtest_cl';
@@ -110,10 +120,6 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
             ->method('fetchRow')
             ->will($this->returnValue([]));
 
-        $this->expectException(
-            'Exception',
-            "Table status for `{$changelogTableName}` is incorrect. Can`t fetch version id."
-        );
         $this->model->setViewId('viewIdtest');
         $this->model->getVersion();
     }
@@ -216,10 +222,10 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->connectionMock->expects($this->once())
             ->method('fetchCol')
             ->with($selectMock)
-            ->will($this->returnValue(['some_data']));
+            ->will($this->returnValue([1]));
 
         $this->model->setViewId('viewIdtest');
-        $this->assertEquals(['some_data'], $this->model->getList(1, 2));
+        $this->assertEquals([1], $this->model->getList(1, 2));
     }
 
     public function testGetListWithException()

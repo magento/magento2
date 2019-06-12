@@ -16,6 +16,10 @@ use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**
  * Prepare base select for Product Price index limited by specified dimensions: website and customer group
+<<<<<<< HEAD
+=======
+ *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BaseFinalPrice
@@ -36,7 +40,11 @@ class BaseFinalPrice
     private $joinAttributeProcessor;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Framework\Module\Manager
+=======
+     * @var \Magento\Framework\Module\ModuleManagerInterface
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $moduleManager;
 
@@ -66,16 +74,28 @@ class BaseFinalPrice
     private $metadataPool;
 
     /**
+<<<<<<< HEAD
      * BaseFinalPrice constructor.
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param JoinAttributeProcessor $joinAttributeProcessor
      * @param \Magento\Framework\Module\Manager $moduleManager
+=======
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param JoinAttributeProcessor $joinAttributeProcessor
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         JoinAttributeProcessor $joinAttributeProcessor,
+<<<<<<< HEAD
         \Magento\Framework\Module\Manager $moduleManager,
+=======
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         $connectionName = 'indexer'
@@ -89,6 +109,11 @@ class BaseFinalPrice
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Build query for base final price.
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param Dimension[] $dimensions
      * @param string $productType
      * @param array $entityIds
@@ -196,11 +221,21 @@ class BaseFinalPrice
         );
         $tierPrice = $this->getTotalTierPriceExpression($price);
         $tierPriceExpr = $connection->getIfNullSql($tierPrice, $maxUnsignedBigint);
+<<<<<<< HEAD
         $finalPrice = $connection->getLeastSql([
             $price,
             $specialPriceExpr,
             $tierPriceExpr,
         ]);
+=======
+        $finalPrice = $connection->getLeastSql(
+            [
+            $price,
+            $specialPriceExpr,
+            $tierPriceExpr,
+            ]
+        );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $select->columns(
             [
@@ -217,11 +252,16 @@ class BaseFinalPrice
         $select->where("e.type_id = ?", $productType);
 
         if ($entityIds !== null) {
+<<<<<<< HEAD
             if (count($entityIds) > 1) {
                 $select->where(sprintf('e.entity_id BETWEEN %s AND %s', min($entityIds), max($entityIds)));
             } else {
                 $select->where('e.entity_id = ?', $entityIds);
             }
+=======
+            $select->where(sprintf('e.entity_id BETWEEN %s AND %s', min($entityIds), max($entityIds)));
+            $select->where('e.entity_id IN(?)', $entityIds);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
 
         /**
@@ -261,7 +301,12 @@ class BaseFinalPrice
                 ]
             ),
             'NULL',
+<<<<<<< HEAD
             $this->getConnection()->getLeastSql([
+=======
+            $this->getConnection()->getLeastSql(
+                [
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 $this->getConnection()->getIfNullSql(
                     $this->getTierPriceExpressionForTable('tier_price_1', $priceExpression),
                     $maxUnsignedBigint
@@ -278,14 +323,23 @@ class BaseFinalPrice
                     $this->getTierPriceExpressionForTable('tier_price_4', $priceExpression),
                     $maxUnsignedBigint
                 ),
+<<<<<<< HEAD
             ])
+=======
+                ]
+            )
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         );
     }
 
     /**
      * Get tier price expression for table
      *
+<<<<<<< HEAD
      * @param $tableAlias
+=======
+     * @param string $tableAlias
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param \Zend_Db_Expr $priceExpression
      * @return \Zend_Db_Expr
      */
@@ -305,7 +359,11 @@ class BaseFinalPrice
     /**
      * Get connection
      *
+<<<<<<< HEAD
      * return \Magento\Framework\DB\Adapter\AdapterInterface
+=======
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @throws \DomainException
      */
     private function getConnection(): \Magento\Framework\DB\Adapter\AdapterInterface

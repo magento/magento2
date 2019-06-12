@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Address;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
@@ -24,9 +26,11 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
+ * Customer Address Form Post Controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FormPost extends \Magento\Customer\Controller\Address
+class FormPost extends \Magento\Customer\Controller\Address implements HttpPostActionInterface
 {
     /**
      * @var RegionFactory
@@ -118,8 +122,18 @@ class FormPost extends \Magento\Customer\Controller\Address
             \Magento\Customer\Api\Data\AddressInterface::class
         );
         $addressDataObject->setCustomerId($this->_getSession()->getCustomerId())
-            ->setIsDefaultBilling($this->getRequest()->getParam('default_billing', false))
-            ->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false));
+            ->setIsDefaultBilling(
+                $this->getRequest()->getParam(
+                    'default_billing',
+                    isset($existingAddressData['default_billing']) ? $existingAddressData['default_billing'] : false
+                )
+            )
+            ->setIsDefaultShipping(
+                $this->getRequest()->getParam(
+                    'default_shipping',
+                    isset($existingAddressData['default_shipping']) ? $existingAddressData['default_shipping'] : false
+                )
+            );
 
         return $addressDataObject;
     }

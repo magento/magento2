@@ -52,8 +52,12 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
         }
 
         $file = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\ReadInterface::class);
+<<<<<<< HEAD
         $dataCount = count($data);
         for ($i = 0; $i < $dataCount; $i++) {
+=======
+        for ($i = 0, $count = count($data); $i < $count; $i++) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $file->expects($this->at($i))->method('readCsv')->will($this->returnValue($data[$i]));
         }
         $file->expects($this->at($i))->method('readCsv')->will($this->returnValue(false));

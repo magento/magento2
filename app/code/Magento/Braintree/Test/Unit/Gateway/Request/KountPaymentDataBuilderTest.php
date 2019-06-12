@@ -15,9 +15,7 @@ use Magento\Braintree\Gateway\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class KountPaymentDataBuilderTest
- *
- * @see \Magento\Braintree\Gateway\Request\KountPaymentDataBuilder
+ * Tests \Magento\Braintree\Gateway\Request\KountPaymentDataBuilder.
  */
 class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -39,14 +37,26 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $payment;
 
     /**
+<<<<<<< HEAD
      * @var MockObject
+=======
+     * @var PaymentDataObjectInterface|MockObject
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
-    private $paymentDO;
+    private $paymentDOMock;
 
     protected function setUp()
     {
+<<<<<<< HEAD
         $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $this->config = $this->getMockBuilder(Config::class)
+=======
+        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->configMock = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->paymentMock = $this->getMockBuilder(Payment::class)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->disableOriginalConstructor()
             ->getMock();
         $this->payment = $this->getMockBuilder(Payment::class)
@@ -63,7 +73,12 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $buildSubject = [];
 
+<<<<<<< HEAD
         $this->config->method('hasFraudProtection')
+=======
+        $this->configMock->expects(self::never())
+            ->method('hasFraudProtection')
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->willReturn(true);
 
         $this->builder->build($buildSubject);
@@ -72,7 +87,7 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     public function testBuild()
     {
         $additionalData = [
-            DataAssignObserver::DEVICE_DATA => self::DEVICE_DATA
+            DataAssignObserver::DEVICE_DATA => self::DEVICE_DATA,
         ];
 
         $expectedResult = [
@@ -80,6 +95,7 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
         ];
 
         $order = $this->createMock(OrderAdapterInterface::class);
+<<<<<<< HEAD
         $this->paymentDO->method('getOrder')
             ->willReturn($order);
 
@@ -94,6 +110,28 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->paymentDO->method('getPayment')
             ->willReturn($this->payment);
+=======
+        $this->paymentDOMock->expects(self::once())->method('getOrder')->willReturn($order);
+
+        $buildSubject = ['payment' => $this->paymentDOMock];
+
+        $this->paymentMock->expects(self::exactly(count($additionalData)))
+            ->method('getAdditionalInformation')
+            ->willReturn($additionalData);
+
+        $this->configMock->expects(self::once())
+            ->method('hasFraudProtection')
+            ->willReturn(true);
+
+        $this->paymentDOMock->expects(self::once())
+            ->method('getPayment')
+            ->willReturn($this->paymentMock);
+
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readPayment')
+            ->with($buildSubject)
+            ->willReturn($this->paymentDOMock);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         self::assertEquals(
             $expectedResult,

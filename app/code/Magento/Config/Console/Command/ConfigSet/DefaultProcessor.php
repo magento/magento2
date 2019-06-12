@@ -7,17 +7,19 @@ namespace Magento\Config\Console\Command\ConfigSet;
 
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSetCommand;
+use Magento\Config\Model\Config\Factory as ConfigFactory;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Config\Model\PreparedValueFactory;
-use Magento\Framework\App\Config\Value;
 
 /**
  * Processes default flow of config:set command.
+ *
  * This processor saves the value of configuration into database.
  *
- * {@inheritdoc}
+ * @inheritdoc
  * @api
  * @since 100.2.0
  */
@@ -45,25 +47,35 @@ class DefaultProcessor implements ConfigSetProcessorInterface
     private $preparedValueFactory;
 
     /**
+     * @var ConfigFactory
+     */
+    private $configFactory;
+
+    /**
      * @param PreparedValueFactory $preparedValueFactory The factory for prepared value
      * @param DeploymentConfig $deploymentConfig The deployment configuration reader
      * @param ConfigPathResolver $configPathResolver The resolver for configuration paths according to source type
+     * @param ConfigFactory|null $configFactory
      */
     public function __construct(
         PreparedValueFactory $preparedValueFactory,
         DeploymentConfig $deploymentConfig,
-        ConfigPathResolver $configPathResolver
+        ConfigPathResolver $configPathResolver,
+        ConfigFactory $configFactory = null
     ) {
         $this->preparedValueFactory = $preparedValueFactory;
         $this->deploymentConfig = $deploymentConfig;
         $this->configPathResolver = $configPathResolver;
+
+        $this->configFactory = $configFactory ?? ObjectManager::getInstance()->get(ConfigFactory::class);
     }
 
     /**
      * Processes database flow of config:set command.
+     *
      * Requires installed application.
      *
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.2.0
      */
     public function process($path, $value, $scope, $scopeCode)
@@ -78,12 +90,12 @@ class DefaultProcessor implements ConfigSetProcessorInterface
         }
 
         try {
-            /** @var Value $backendModel */
-            $backendModel = $this->preparedValueFactory->create($path, $value, $scope, $scopeCode);
-            if ($backendModel instanceof Value) {
-                $resourceModel = $backendModel->getResource();
-                $resourceModel->save($backendModel);
-            }
+            $config = $this->configFactory->create(['data' => [
+                'scope' => $scope,
+                'scope_code' => $scopeCode,
+            ]]);
+            $config->setDataByPath($path, $value);
+            $config->save();
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__('%1', $exception->getMessage()), $exception);
         }

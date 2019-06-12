@@ -7,14 +7,21 @@
 -->
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <page name="CheckoutPage" url="/checkout" area="storefront" module="Magento_Checkout">
         <section name="CheckoutShippingSection"/>
         <section name="CheckoutShippingMethodsSection"/>
         <section name="CheckoutOrderSummarySection"/>
         <section name="CheckoutSuccessMainSection"/>
         <section name="CheckoutPaymentSection"/>
+<<<<<<< HEAD
         <section name="CheckoutGuestShippingInfoSection"/>
         <section name="CheckoutAddressPopupSection"/>
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </page>
 </pages>

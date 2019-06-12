@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Console;
 
 use Magento\Framework\App\Bootstrap;
@@ -22,9 +24,10 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Magento 2 CLI Application.
+ *
  * This is the hood for all command line tools supported by Magento.
  *
- * {@inheritdoc}
+ * @inheritdoc
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Cli extends Console\Application
@@ -61,11 +64,11 @@ class Cli extends Console\Application
     /**
      * @param string $name the application name
      * @param string $version the application version
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
     {
         try {
+            // phpcs:ignore Magento2.Security.IncludeFile
             $configuration = require BP . '/setup/config/application.config.php';
             $bootstrapApplication = new Application();
             $application = $bootstrapApplication->bootstrap($configuration);
@@ -78,7 +81,7 @@ class Cli extends Console\Application
             $output->writeln(
                 '<error>' . $exception->getMessage() . '</error>'
             );
-
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit(static::RETURN_FAILURE);
         }
 
@@ -93,7 +96,7 @@ class Cli extends Console\Application
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @throws \Exception The exception in case of unexpected error
      */
@@ -109,7 +112,7 @@ class Cli extends Console\Application
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getDefaultCommands()
     {
@@ -157,6 +160,15 @@ class Cli extends Console\Application
         $params = (new ComplexParameter(self::INPUT_KEY_BOOTSTRAP))->mergeFromArgv($_SERVER, $_SERVER);
         $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
         $params = $this->documentRootResolver($params);
+<<<<<<< HEAD
+=======
+        $requestParams = $this->serviceManager->get('magento-init-params');
+        $appBootstrapKey = Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS;
+
+        if (isset($requestParams[$appBootstrapKey]) && !isset($params[$appBootstrapKey])) {
+            $params[$appBootstrapKey] = $requestParams[$appBootstrapKey];
+        }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $this->objectManager = Bootstrap::create(BP, $params)->getObjectManager();
 
@@ -211,8 +223,12 @@ class Cli extends Console\Application
     }
 
     /**
+<<<<<<< HEAD
      * Provides updated configuration in
      * accordance to document root settings.
+=======
+     * Provides updated configuration in accordance to document root settings.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param array $config
      * @return array

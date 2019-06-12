@@ -4,15 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Helper\Product;
 
 use Magento\Framework\View\Result\Page as ResultPage;
 
 /**
  * Catalog category helper
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class View extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -107,10 +107,18 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Framework\View\Result\Page $resultPage
      * @param \Magento\Catalog\Model\Product $product
+<<<<<<< HEAD
      * @return \Magento\Framework\View\Result\Page
      */
     private function preparePageMetadata(ResultPage $resultPage, $product)
     {
+=======
+     * @return $this
+     */
+    private function preparePageMetadata(ResultPage $resultPage, $product)
+    {
+        $pageLayout = $resultPage->getLayout();
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $pageConfig = $resultPage->getConfig();
 
         $metaTitle = $product->getMetaTitle();
@@ -140,7 +148,11 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
             );
         }
 
+<<<<<<< HEAD
         $pageMainTitle = $resultPage->getLayout()->getBlock('page.main.title');
+=======
+        $pageMainTitle = $pageLayout->getBlock('page.main.title');
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         if ($pageMainTitle) {
             $pageMainTitle->setPageTitle($product->getName());
         }

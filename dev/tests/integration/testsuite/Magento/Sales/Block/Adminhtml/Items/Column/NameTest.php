@@ -26,10 +26,14 @@ class NameTest extends \PHPUnit\Framework\TestCase
         $this->block = $layout->createBlock(Name::class, 'block');
     }
 
+<<<<<<< HEAD
     /**
      * @return void
      */
     public function testTruncateString()
+=======
+    public function testTruncateString() : void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $remainder = '';
         $this->assertEquals(
@@ -38,10 +42,14 @@ class NameTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+<<<<<<< HEAD
     /**
      * @return void
      */
     public function testGetFormattedOption()
+=======
+    public function testGetFormattedOptiong() : void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $this->assertEquals(
             [

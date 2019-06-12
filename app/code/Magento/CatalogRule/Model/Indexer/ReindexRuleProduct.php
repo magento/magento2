@@ -21,6 +21,15 @@ class ReindexRuleProduct
     private $resource;
 
     /**
+<<<<<<< HEAD
+     * @var TableSwapper
+=======
+     * @var ActiveTableSwitcher
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
+     */
+    private $tableSwapper;
+
+    /**
      * @var TableSwapper
      */
     private $tableSwapper;
@@ -29,8 +38,11 @@ class ReindexRuleProduct
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ActiveTableSwitcher $activeTableSwitcher
      * @param TableSwapper|null $tableSwapper
+<<<<<<< HEAD
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -38,6 +50,10 @@ class ReindexRuleProduct
         TableSwapper $tableSwapper = null
     ) {
         $this->resource = $resource;
+<<<<<<< HEAD
+=======
+        $this->activeTableSwitcher = $activeTableSwitcher;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->tableSwapper = $tableSwapper ??
             ObjectManager::getInstance()->get(TableSwapper::class);
     }

@@ -8,10 +8,19 @@ namespace Magento\Braintree\Test\Unit\Gateway\Request;
 use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Request\CustomerDataBuilder;
 use Magento\Payment\Gateway\Data\AddressAdapterInterface;
+<<<<<<< HEAD
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+=======
+use Magento\Braintree\Gateway\SubjectReader;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+
+/**
+ * Tests \Magento\Braintree\Gateway\Request\CustomerDataBuilder.
+ */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class CustomerDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -29,6 +38,14 @@ class CustomerDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $builder;
 
+<<<<<<< HEAD
+=======
+    /**
+     * @var SubjectReader|MockObject
+     */
+    private $subjectReaderMock;
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     protected function setUp()
     {
         $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
@@ -83,7 +100,7 @@ class CustomerDataBuilderTest extends \PHPUnit\Framework\TestCase
                     'last_name' => 'Smith',
                     'company' => 'Magento',
                     'phone' => '555-555-555',
-                    'email' => 'john@magento.com'
+                    'email' => 'john@magento.com',
                 ],
                 [
                     CustomerDataBuilder::CUSTOMER => [
@@ -92,9 +109,9 @@ class CustomerDataBuilderTest extends \PHPUnit\Framework\TestCase
                         CustomerDataBuilder::COMPANY => 'Magento',
                         CustomerDataBuilder::PHONE => '555-555-555',
                         CustomerDataBuilder::EMAIL => 'john@magento.com',
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
     }
 

@@ -17,4 +17,8 @@
             </argument>
         </arguments>
     </type>
+<<<<<<< HEAD
+=======
+    <preference for="Magento\UrlRewrite\Model\UrlFinderInterface" type="Magento\UrlRewrite\Model\CompositeUrlFinder"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </config>

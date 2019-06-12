@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Config;
 
 use Magento\Framework\Config\ConverterInterface as ConfigConverter;
@@ -125,7 +126,12 @@ class Reader implements ReaderInterface
                 );
                 $output = array_replace_recursive($output, $this->converter->convert($configMerger->getDom()));
             } catch (ValidationException $e) {
-                throw new LocalizedException(new Phrase("Invalid XML in file %1:\n%2", [$key, $e->getMessage()]));
+                throw new LocalizedException(
+                    new Phrase(
+                        'The XML in file "%1" is invalid:' . "\n%2\nVerify the XML and try again.",
+                        [$key, $e->getMessage()]
+                    )
+                );
             }
         }
 

@@ -7,16 +7,29 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <section name="CheckoutSuccessMainSection">
         <element name="successTitle" type="text" selector=".page-title"/>
         <element name="success" type="text" selector="div.checkout-success"/>
         <element name="orderNumber" type="text" selector="div.checkout-success > p:nth-child(1) > span"/>
+<<<<<<< HEAD
         <element name="orderNumberLink" type="text" selector="div.checkout-success > p:nth-child(1) > a"/>
         <element name="orderNumber22" type="text" selector=".order-number>strong"/>
         <element name="orderLink" type="text" selector="a[href*=order_id].order-number"/>
         <element name="orderNumberText" type="text" selector=".checkout-success > p:nth-child(1)"/>
         <element name="continueShoppingButton" type="button" selector=".action.primary.continue"/>
         <element name="printLink" type="button" selector=".print"/>
+=======
+        <element name="orderNumber22" type="text" selector=".order-number>strong"/>
+        <element name="orderLink" type="text" selector="a[href*=order_id].order-number" timeout="30"/>
+        <element name="orderNumberText" type="text" selector=".checkout-success > p:nth-child(1)"/>
+        <element name="continueShoppingButton" type="button" selector=".action.primary.continue" timeout="30"/>
+        <element name="createAnAccount" type="button" selector="[data-bind*=&quot;i18n: 'Create an Account'&quot;]" timeout="30"/>
+        <element name="printLink" type="button" selector=".print" timeout="30"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </section>
 </sections>

@@ -6,6 +6,12 @@
 
 namespace Magento\Review\Block\Product;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class ReviewRendererTest
+ */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class ReviewRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**

@@ -22,9 +22,16 @@ class ResetQuoteAddressesTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
      *
+<<<<<<< HEAD
      * @return void
      */
     public function testAfterRemoveItem()
+=======
+     * @magentoAppArea frontend
+     * @return void
+     */
+    public function testAfterRemoveItem(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         /** @var Quote $quote */
         $quote = Bootstrap::getObjectManager()->create(Quote::class);
@@ -52,9 +59,21 @@ class ResetQuoteAddressesTest extends \PHPUnit\Framework\TestCase
         $cart = Bootstrap::getObjectManager()->create(Cart::class);
 
         $activeQuote = $cart->getQuote();
+<<<<<<< HEAD
         $cart->removeItem($activeQuote->getAllVisibleItems()[0]->getId());
         $cart->save();
 
+=======
+        // Dummy data is still persisted here. This is sufficient to check that it is removed
+        $activeQuote->getExtensionAttributes()->setShippingAssignments(['test']);
+
+        $cart->removeItem($activeQuote->getAllVisibleItems()[0]->getId());
+        $cart->save();
+
+        // Check that the shipping assignments were also unset
+        $this->assertEmpty($activeQuote->getExtensionAttributes()->getShippingAssignments());
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         /** @var Quote $quote */
         $quote = Bootstrap::getObjectManager()->create(Quote::class);
         $quote->load('test_order_with_virtual_product', 'reserved_order_id');

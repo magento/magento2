@@ -6,6 +6,11 @@
 
 namespace Magento\Framework\Interception\Code\Generator;
 
+/**
+ * Class Interceptor
+ ˚*
+ * @package Magento\Framework\Interception\Code\Generator
+ */
 class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
 {
     /**
@@ -14,6 +19,8 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
     const ENTITY_TYPE = 'interceptor';
 
     /**
+     * Returns default result class name
+     *
      * @param string $modelClassName
      * @return string
      */
@@ -102,9 +109,11 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             $parameters[] = $this->_getMethodParameterInfo($parameter);
         }
 
+        $returnTypeValue = $this->getReturnTypeValue($method->getReturnType());
         $methodInfo = [
             'name' => ($method->returnsReference() ? '& ' : '') . $method->getName(),
             'parameters' => $parameters,
+<<<<<<< HEAD
             'body' => "\$pluginInfo = \$this->pluginList->getNext(\$this->subjectType, '{$method->getName()}');\n" .
                 "if (!\$pluginInfo) {\n" .
                 "    return parent::{$method->getName()}({$this->_getParameterList(
@@ -114,6 +123,29 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             "    return \$this->___callPlugins('{$method->getName()}', func_get_args(), \$pluginInfo);\n" .
             "}",
             'returnType' => $this->getReturnTypeValue($method->getReturnType()),
+=======
+            'body' => str_replace(
+                [
+                    '%methodName%',
+                    '%return%',
+                    '%parameters%'
+                ],
+                [
+                    $method->getName(),
+                    $returnTypeValue === 'void' ? '' : ' return',
+                    $this->_getParameterList($parameters)
+                ],
+                <<<'METHOD_BODY'
+$pluginInfo = $this->pluginList->getNext($this->subjectType, '%methodName%');
+if (!$pluginInfo) {
+   %return% parent::%methodName%(%parameters%);
+} else {
+   %return% $this->___callPlugins('%methodName%', func_get_args(), $pluginInfo);
+}
+METHOD_BODY
+            ),
+            'returnType' => $returnTypeValue,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
         ];
 
@@ -121,6 +153,8 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
     }
 
     /**
+     * Return parameters list
+     *
      * @param array $parameters
      * @return string
      */
@@ -130,7 +164,13 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             ', ',
             array_map(
                 function ($item) {
-                    return "$" . $item['name'];
+                    $output = '';
+                    if ($item['variadic']) {
+                        $output .= '... ';
+                    }
+
+                    $output .= "\${$item['name']}";
+                    return $output;
                 },
                 $parameters
             )
@@ -153,14 +193,16 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
         } else {
             $this->_classGenerator->setExtendedClass($typeName);
         }
-        $this->_classGenerator->addTrait('\\'. \Magento\Framework\Interception\Interceptor::class);
-        $interfaces[] =  '\\'. \Magento\Framework\Interception\InterceptorInterface::class;
+        $this->_classGenerator->addTrait('\\' . \Magento\Framework\Interception\Interceptor::class);
+        $interfaces[] = '\\' . \Magento\Framework\Interception\InterceptorInterface::class;
         $this->_classGenerator->setImplementedInterfaces($interfaces);
         return parent::_generateCode();
     }
 
     /**
-     * {@inheritdoc}
+     * Validates data
+     *
+     * @return bool
      */
     protected function _validateData()
     {
@@ -190,6 +232,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
      * @param mixed $returnType
      * @return null|string
      */
+<<<<<<< HEAD
     private function getReturnTypeValue($returnType)
     {
         $returnTypeValue = null;
@@ -200,6 +243,17 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
                 : (string)$returnType;
         }
 
+=======
+    private function getReturnTypeValue($returnType): ?string
+    {
+        $returnTypeValue = null;
+        if ($returnType) {
+            $returnTypeValue = ($returnType->allowsNull() ? '?' : '');
+            $returnTypeValue .= ($returnType->getName() === 'self')
+                ? $this->getSourceClassName()
+                : $returnType->getName();
+        }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $returnTypeValue;
     }
 }

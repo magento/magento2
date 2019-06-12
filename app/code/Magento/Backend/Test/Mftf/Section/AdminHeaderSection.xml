@@ -7,8 +7,17 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminHeaderSection">
         <element name="pageTitle" type="text" selector=".page-header h1.page-title"/>
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminHeaderSection">
+        <element name="pageTitle" type="text" selector=".page-header h1.page-title"/>
+        <element name="adminUserAccountText" type="text" selector=".page-header .admin-user-account-text" />
+        <!-- Legacy heading section. Mostly used for admin 404 and 403 pages -->
+        <element name="pageHeading" type="text" selector=".page-content .page-heading"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </section>
 </sections>

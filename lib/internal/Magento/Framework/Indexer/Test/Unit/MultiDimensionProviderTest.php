@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 namespace Magento\Framework\Indexer\Test\Unit;
 
@@ -57,6 +61,7 @@ class MultiDimensionProviderTest extends \PHPUnit\Framework\TestCase
     {
         // prepare expected dimensions
         $dimensionXData = [
+<<<<<<< HEAD
             $this->getDimensionMock('x', 1),
             $this->getDimensionMock('x', 2),
             $this->getDimensionMock('x', 3),
@@ -73,6 +78,24 @@ class MultiDimensionProviderTest extends \PHPUnit\Framework\TestCase
         $dimensionZData = [
             $this->getDimensionMock('z', 1),
             $this->getDimensionMock('z', 2),
+=======
+            $this->getDimensionMock('x', '1'),
+            $this->getDimensionMock('x', '2'),
+            $this->getDimensionMock('x', '3'),
+        ];
+
+        $dimensionYData = [
+            $this->getDimensionMock('y', '1'),
+            $this->getDimensionMock('y', '2'),
+            $this->getDimensionMock('y', '3'),
+            $this->getDimensionMock('y', '4'),
+            $this->getDimensionMock('y', '5'),
+        ];
+
+        $dimensionZData = [
+            $this->getDimensionMock('z', '1'),
+            $this->getDimensionMock('z', '2'),
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
 
         $expectedDimensions = [];
@@ -113,6 +136,7 @@ class MultiDimensionProviderTest extends \PHPUnit\Framework\TestCase
     {
         // prepare expected dimensions
         $dimensionXData = [
+<<<<<<< HEAD
             $this->getDimensionMock('x', 1),
             $this->getDimensionMock('x', 2),
             $this->getDimensionMock('x', 3),
@@ -121,6 +145,16 @@ class MultiDimensionProviderTest extends \PHPUnit\Framework\TestCase
         $dimensionZData = [
             $this->getDimensionMock('z', 1),
             $this->getDimensionMock('z', 2),
+=======
+            $this->getDimensionMock('x', '1'),
+            $this->getDimensionMock('x', '2'),
+            $this->getDimensionMock('x', '3'),
+        ];
+
+        $dimensionZData = [
+            $this->getDimensionMock('z', '1'),
+            $this->getDimensionMock('z', '2'),
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
 
         // collect actual dimensions
@@ -179,6 +213,7 @@ class MultiDimensionProviderTest extends \PHPUnit\Framework\TestCase
 
         // prepare expected dimensions
         $dimensionXData = [
+<<<<<<< HEAD
             $this->getDimensionMock('x', 1),
             $this->getDimensionMock('x', 2),
             $this->getDimensionMock('x', 3),
@@ -190,6 +225,19 @@ class MultiDimensionProviderTest extends \PHPUnit\Framework\TestCase
             $this->getDimensionMock('y', 3),
             $this->getDimensionMock('y', 4),
             $this->getDimensionMock('y', 5),
+=======
+            $this->getDimensionMock('x', '1'),
+            $this->getDimensionMock('x', '2'),
+            $this->getDimensionMock('x', '3'),
+        ];
+
+        $dimensionYData = [
+            $this->getDimensionMock('y', '1'),
+            $this->getDimensionMock('y', '2'),
+            $this->getDimensionMock('y', '3'),
+            $this->getDimensionMock('y', '4'),
+            $this->getDimensionMock('y', '5'),
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
 
         $dimensionZData = [];

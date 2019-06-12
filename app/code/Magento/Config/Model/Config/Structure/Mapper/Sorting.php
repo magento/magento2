@@ -10,6 +10,8 @@
 namespace Magento\Config\Model\Config\Structure\Mapper;
 
 /**
+ * Sorting mapper
+ *
  * @api
  * @since 100.0.2
  */
@@ -30,6 +32,8 @@ class Sorting extends \Magento\Config\Model\Config\Structure\AbstractMapper
     }
 
     /**
+     * Process config
+     *
      * @param array $data
      * @return array
      */

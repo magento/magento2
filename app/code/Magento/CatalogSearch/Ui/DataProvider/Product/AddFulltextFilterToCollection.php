@@ -3,7 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\CatalogSearch\Ui\DataProvider\Product;
 
 use Magento\Framework\Data\Collection;
@@ -11,7 +14,11 @@ use Magento\CatalogSearch\Model\ResourceModel\Search\Collection as SearchCollect
 use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 
 /**
+<<<<<<< HEAD
  * Adds FullText search to Product Data Provider
+=======
+ * Class AddFulltextFilterToCollection
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  */
 class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
 {

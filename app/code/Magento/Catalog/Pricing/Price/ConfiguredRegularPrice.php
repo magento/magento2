@@ -10,14 +10,25 @@ namespace Magento\Catalog\Pricing\Price;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
+<<<<<<< HEAD
 
 /**
  * Configured regular price model
+=======
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
+/**
+ * Configured regular price model.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  */
 class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInterface
 {
     /**
+<<<<<<< HEAD
      * Price type configured
+=======
+     * Price type configured.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     const PRICE_CODE = self::CONFIGURED_REGULAR_PRICE_CODE;
 
@@ -35,7 +46,11 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
      * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
+<<<<<<< HEAD
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+=======
+     * @param PriceCurrencyInterface $priceCurrency
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param ConfiguredOptions $configuredOptions
      * @param ItemInterface|null $item
      */
@@ -43,7 +58,11 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
         Product $saleableItem,
         $quantity,
         CalculatorInterface $calculator,
+<<<<<<< HEAD
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+=======
+        PriceCurrencyInterface $priceCurrency,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ConfiguredOptions $configuredOptions,
         ItemInterface $item = null
     ) {
@@ -56,20 +75,35 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
      * @param ItemInterface $item
      * @return $this
      */
+<<<<<<< HEAD
     public function setItem(ItemInterface $item)
     {
         $this->item = $item;
+=======
+    public function setItem(ItemInterface $item) : ConfiguredRegularPrice
+    {
+        $this->item = $item;
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $this;
     }
 
     /**
+<<<<<<< HEAD
      * Price value of product with configured options
+=======
+     * Price value of product with configured options.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @return bool|float
      */
     public function getValue()
     {
         $basePrice = parent::getValue();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $this->item && $basePrice !== false
             ? $basePrice + $this->configuredOptions->getItemOptionsValue($basePrice, $this->item)
             : $basePrice;

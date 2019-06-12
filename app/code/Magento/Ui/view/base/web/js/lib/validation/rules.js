@@ -11,10 +11,11 @@ define([
     'underscore',
     './utils',
     'moment',
+    'tinycolor',
     'jquery/validate',
     'jquery/ui',
     'mage/translate'
-], function ($, _, utils, moment) {
+], function ($, _, utils, moment, tinycolor) {
     'use strict';
 
     /**
@@ -691,6 +692,24 @@ define([
             },
             $.mage.__('The value is not within the specified range.')
         ],
+        'validate-positive-percent-decimal': [
+            function (value) {
+                var numValue;
+
+                if (utils.isEmptyNoTrim(value) || !/^\s*-?\d*(\.\d*)?\s*$/.test(value)) {
+                    return false;
+                }
+
+                numValue = utils.parseNumber(value);
+
+                if (isNaN(numValue)) {
+                    return false;
+                }
+
+                return utils.isBetween(numValue, 0.01, 100);
+            },
+            $.mage.__('Please enter a valid percentage discount value greater than 0.')
+        ],
         'validate-digits': [
             function (value) {
                 return utils.isEmptyNoTrim(value) || !/[^\d]/.test(value);
@@ -762,7 +781,7 @@ define([
             function (value) {
                 return utils.isEmptyNoTrim(value) || /^[a-z]+[a-z0-9_]+$/.test(value);
             },
-            $.mage.__('Please use only letters (a-z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter.')//eslint-disable-line max-len
+            $.mage.__('Please use only lowercase letters (a-z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter.')//eslint-disable-line max-len
         ],
         'validate-alphanum': [
             function (value) {
@@ -783,6 +802,14 @@ define([
                 return utils.isEmptyNoTrim(value) || test.isValid();
             },
             $.mage.__('Please enter a valid date.')
+        ],
+        'validate-date-range': [
+            function (value, params) {
+                var fromDate = $('input[name*="' + params + '"]').val();
+
+                return moment.utc(value).unix() >= moment.utc(fromDate).unix() || isNaN(moment.utc(value).unix());
+            },
+            $.mage.__('Make sure the To Date is later than or the same as the From Date.')
         ],
         'validate-identifier': [
             function (value) {
@@ -901,12 +928,21 @@ define([
         ],
         'validate-per-page-value-list': [
             function (value) {
+<<<<<<< HEAD
                 var isValid = utils.isEmpty(value),
                     values = value.split(','),
                     i;
 
                 if (isValid) {
                     return true;
+=======
+                var isValid = true,
+                    values = value.split(','),
+                    i;
+
+                if (utils.isEmpty(value)) {
+                    return isValid;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 }
 
                 for (i = 0; i < values.length; i++) {
@@ -1024,6 +1060,22 @@ define([
                 return moment.utc(value, params.dateFormat).unix() <= maxValue;
             },
             $.mage.__('The date is not within the specified range.')
+        ],
+        'validate-color': [
+            function (value) {
+                if (value === '') {
+                    return true;
+                }
+
+                return tinycolor(value).isValid();
+            },
+            $.mage.__('Wrong color format. Please specify color in HEX, RGBa, HSVa, HSLa or use color name.')
+        ],
+        'blacklist-url': [
+            function (value, param) {
+                return new RegExp(param).test(value);
+            },
+            $.mage.__('This link is not allowed.')
         ]
     }, function (data) {
         return {

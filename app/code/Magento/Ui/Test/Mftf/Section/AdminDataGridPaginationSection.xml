@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminDataGridPaginationSection">
+        <element name="perPageDropdown" type="select" selector=".admin__data-grid-pager-wrap .selectmenu"/>
+        <element name="perPageOption" type="button" selector="//div[@class='admin__data-grid-pager-wrap']//div[@class='selectmenu-items _active']//li//button[text()='{{var1}}']" parameterized="true"/>
+        <element name="perPageInput" type="input" selector="//div[contains(@class, 'admin__data-grid-pager-wrap')]//div[contains(@class, 'selectmenu-items _active')]//li[contains(@class, '_edit')]//div[contains(@class, 'selectmenu-item-edit')]//input"/>
+        <element name="perPageApplyInput" type="button" selector="//div[contains(@class, 'admin__data-grid-pager-wrap')]//div[contains(@class, 'selectmenu-items _active')]//li[@class='_edit']//div[contains(@class, 'selectmenu-item-edit')]//button"/>
+        <element name="perPageDropDownItem" type="button" selector="//*[contains(@class, 'selectmenu-items _active')]//button[contains(@class, 'selectmenu-item-action') and text()='{{dropDownItem}}']" timeout="30" parameterized="true"/>
+        <element name="perPageEditCustomValue" type="button" selector="//div[contains(@class, 'selectmenu-items _active')]//div[contains(@class, 'selectmenu-item')]//button[text()='{{perPageCustomValue}}']/following-sibling::button[contains(@class, 'action-edit')]" parameterized="true"/>
+        <element name="perPageDeleteCustomValue" type="button" selector="//div[contains(@class, 'selectmenu-items _active')]//div[contains(@class, 'selectmenu-item')]//button[text()='{{perPageCustomValue}}']/parent::div/preceding-sibling::div/button[contains(@class, 'action-delete')]" parameterized="true"/>
+        <element name="nextPage" type="button" selector="div.admin__data-grid-pager > button.action-next" timeout="30"/>
+        <element name="previousPage" type="button" selector="div.admin__data-grid-pager > button.action-previous" timeout="30"/>
+        <element name="currentPage" type="input" selector="div.admin__data-grid-pager > input[data-ui-id='current-page-input']"/>
+        <element name="totalPages" type="text" selector="div.admin__data-grid-pager > label"/>
+        <element name="perPageDropDownValue" type="input" selector=".selectmenu-value input" timeout="30"/>
+    </section>
+</sections>

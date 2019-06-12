@@ -24,7 +24,11 @@ class Vertical extends \Magento\Framework\App\Config\Value
     public function beforeSave()
     {
         if (empty($this->getValue())) {
+<<<<<<< HEAD
             throw new LocalizedException(__('Please select a vertical.'));
+=======
+            throw new LocalizedException(__('Please select an industry.'));
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
 
         return $this;

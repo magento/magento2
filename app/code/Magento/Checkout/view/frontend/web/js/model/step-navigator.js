@@ -45,7 +45,7 @@ define([
                 return false;
             }
 
-            steps.sort(this.sortItems).forEach(function (element) {
+            steps().sort(this.sortItems).forEach(function (element) {
                 if (element.code == hashString || element.alias == hashString) { //eslint-disable-line eqeqeq
                     element.navigate(element);
                 } else {
@@ -117,7 +117,11 @@ define([
         getActiveItemIndex: function () {
             var activeIndex = 0;
 
+<<<<<<< HEAD
             steps.sort(this.sortItems).some(function (element, index) {
+=======
+            steps().sort(this.sortItems).some(function (element, index) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 if (element.isVisible()) {
                     activeIndex = index;
 
@@ -136,7 +140,7 @@ define([
          */
         isProcessed: function (code) {
             var activeItemIndex = this.getActiveItemIndex(),
-                sortedItems = steps.sort(this.sortItems),
+                sortedItems = steps().sort(this.sortItems),
                 requestedItemIndex = -1;
 
             sortedItems.forEach(function (element, index) {
@@ -153,8 +157,8 @@ define([
          * @param {*} scrollToElementId
          */
         navigateTo: function (code, scrollToElementId) {
-            var sortedItems = steps.sort(this.sortItems),
-                bodyElem = $.browser.safari || $.browser.chrome ? $('body') : $('html');
+            var sortedItems = steps().sort(this.sortItems),
+                bodyElem = $('body');
 
             scrollToElementId = scrollToElementId || null;
 
@@ -198,7 +202,7 @@ define([
             var activeIndex = 0,
                 code;
 
-            steps.sort(this.sortItems).forEach(function (element, index) {
+            steps().sort(this.sortItems).forEach(function (element, index) {
                 if (element.isVisible()) {
                     element.isVisible(false);
                     activeIndex = index;

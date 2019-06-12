@@ -117,7 +117,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Retrieve formated price
+     * Retrieve formatted price
      *
      * @param float $value
      * @return string

@@ -14,6 +14,7 @@
             <title value="Admin order is not restricted by 'Minimum Order Amount' configuration."/>
             <description value="Admin should be able to create an order regardless of the minimum order amount."/>
             <severity value="MAJOR"/>
+<<<<<<< HEAD
             <testCaseId value="MAGETWO-94483"/>
             <group value="sales"/>
         </annotations>
@@ -21,6 +22,16 @@
             <createData entity="EnabledMinimumOrderAmount500" stepKey="enableMinimumOrderAmount"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createProduct">
+=======
+            <testCaseId value="MAGETWO-92925"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <actionGroup ref="EnableAdminAccountSharingActionGroup" stepKey="enableAdminAccountSharing"/>
+            <createData entity="EnabledMinimumOrderAmount500" stepKey="enableMinimumOrderAmount"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -31,15 +42,26 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <createData entity="DisabledMinimumOrderAmount" stepKey="disableMinimumOrderAmount"/>
             <actionGroup ref="ClearCacheActionGroup" stepKey="clearCacheAfter"/>
+<<<<<<< HEAD
             <actionGroup ref="logout" stepKey="logout"/>
+=======
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </after>
 
         <!--Admin creates order-->
         <comment userInput="Admin creates order" stepKey="adminCreateOrder"/>
         <actionGroup ref="navigateToNewOrderPageNewCustomerSingleStore" stepKey="navigateToNewOrderPage"/>
+<<<<<<< HEAD
 
         <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
             <argument name="product" value="_defaultProduct"/>
+=======
+        <conditionalClick selector="{{AdminOrderFormStoreSelectorSection.defaultStoreViewButton}}" dependentSelector="{{AdminOrderFormStoreSelectorSection.storeSelectorContainer}}" visible="true" stepKey="selectFirstStoreViewIfAppears"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappearedAfterStoreSelected"/>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="SimpleProduct"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </actionGroup>
 
         <!--Fill customer group information-->
@@ -54,16 +76,29 @@
 
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
 
+<<<<<<< HEAD
+=======
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="SelectCheckMoneyPaymentMethod" stepKey="selectCheckMoneyPayment"/>
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <!--Verify totals on Order page-->
         <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleProduct.subtotal}}" stepKey="seeOrderSubTotal"/>
         <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="${{AdminOrderSimpleProduct.shipping}}" stepKey="seeOrderShipping"/>
         <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="${{AdminOrderSimpleProduct.grandTotal}}" stepKey="seeCorrectGrandTotal"/>
 
         <!--Submit Order and verify information-->
+<<<<<<< HEAD
         <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="clickSubmitOrder"/>
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage"/>
 
         <see selector="{{AdminMessagesSection.success}}" userInput="You created the order." stepKey="seeSuccessMessage"/>
+=======
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage"/>
+
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingStatus"/>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
         <assertNotEmpty actual="$orderId" stepKey="assertOrderIdIsNotEmpty"/>
@@ -73,7 +108,11 @@
             <argument name="billingAddress" value="US_Address_TX"/>
         </actionGroup>
         <actionGroup ref="seeProductInItemsOrdered" stepKey="seeSimpleProductInItemsOrdered">
+<<<<<<< HEAD
             <argument name="product" value="_defaultProduct"/>
+=======
+            <argument name="product" value="SimpleProduct"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </actionGroup>
     </test>
 </tests>

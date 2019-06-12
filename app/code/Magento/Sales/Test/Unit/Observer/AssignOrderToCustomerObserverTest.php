@@ -69,6 +69,20 @@ class AssignOrderToCustomerObserverTest extends TestCase
         $orderMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $this->orderRepositoryMock->expects($this->once())->method('get')->with($orderId)
             ->willReturn($orderMock);
+<<<<<<< HEAD
+=======
+
+        $orderMock->expects($this->once())->method('setCustomerId')->willReturn($orderMock);
+        $orderMock->expects($this->once())->method('setCustomerIsGuest')->willReturn($orderMock);
+        $orderMock->expects($this->once())->method('setCustomerEmail')->willReturn($orderMock);
+        $orderMock->expects($this->once())->method('setCustomerFirstname')->willReturn($orderMock);
+        $orderMock->expects($this->once())->method('setCustomerLastname')->willReturn($orderMock);
+        $orderMock->expects($this->once())->method('setCustomerMiddlename')->willReturn($orderMock);
+        $orderMock->expects($this->once())->method('setCustomerPrefix')->willReturn($orderMock);
+        $orderMock->expects($this->once())->method('setCustomerSuffix')->willReturn($orderMock);
+        $orderMock->expects($this->once())->method('setCustomerGroupId')->willReturn($orderMock);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         if (!$customerId) {
             $this->orderRepositoryMock->expects($this->once())->method('save')->with($orderMock);
             $this->sut->execute($observerMock);

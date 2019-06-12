@@ -9,7 +9,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\CacheInterface;
-use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json as Serializer;
 use Magento\Eav\Model\Entity\Attribute;
 
@@ -44,9 +44,9 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
     private $cache;
 
     /**
-     * @var StoreResolverInterface
+     * @var StoreManagerInterface
      */
-    private $storeResolver;
+    private $storeManager;
 
     /**
      * @var Serializer
@@ -60,7 +60,7 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
 
         $this->defaultFrontend = $this->objectManager->get(DefaultFrontend::class);
         $this->cache = $this->objectManager->get(CacheInterface::class);
-        $this->storeResolver = $this->objectManager->get(StoreResolverInterface::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $this->serializer = $this->objectManager->get(Serializer::class);
         $this->attribute = $this->objectManager->get(Attribute::class);
 
@@ -80,7 +80,10 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
+<<<<<<< HEAD
      * @return void
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function testAttributeEntityValueNotSet()
     {
@@ -89,7 +92,10 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
         $entity->load(1);
         $frontEnd = $this->attribute->loadByCode('catalog_product', 'dropdown_attribute');
         $value = $frontEnd->getFrontend()->getValue($entity);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->assertFalse($value);
     }
 
@@ -101,6 +107,6 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
     {
         return 'attribute-navigation-option-' .
             $this->defaultFrontend->getAttribute()->getAttributeCode() . '-' .
-            $this->storeResolver->getCurrentStoreId();
+            $this->storeManager->getStore()->getId();
     }
 }

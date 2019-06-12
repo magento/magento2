@@ -6,7 +6,11 @@
   */
 -->
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
             xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+=======
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <operation name="CreateUser" dataType="user" type="create"
                auth="adminFormKey" url="/admin/user/save/" method="POST" successRegex="/messages-message-success/" returnRegex="" >
         <contentType>application/x-www-form-urlencoded</contentType>
@@ -19,5 +23,11 @@
         <field key="interface_locale">string</field>
         <field key="is_active">boolean</field>
         <field key="current_password">string</field>
+<<<<<<< HEAD
+=======
+        <array key="roles">
+            <value>string</value>
+        </array>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </operation>
 </operations>

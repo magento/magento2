@@ -795,4 +795,9 @@ Created,Created
 "PDF Shipments","PDF Shipments"
 "PDF Creditmemos","PDF Creditmemos"
 Refunds,Refunds
+<<<<<<< HEAD
 "Shipment with requested ID %1 doesn't correspond with Order with requested ID %2.","Shipment with requested ID %1 doesn't correspond with Order with requested ID %2."
+=======
+"Allow Zero GrandTotal for Creditmemo","Allow Zero GrandTotal for Creditmemo"
+"Allow Zero GrandTotal","Allow Zero GrandTotal"
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc

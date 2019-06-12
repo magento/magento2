@@ -9,6 +9,7 @@ namespace Magento\Webapi\Model;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Webapi\Authorization;
+use Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface;
 use Magento\Webapi\Model\Cache\Type\Webapi;
 
 /**
@@ -27,9 +28,9 @@ abstract class AbstractSchemaGenerator
     protected $typeProcessor;
 
     /**
-     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface
+     * @var \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface
      */
-    protected $customAttributeTypeLocator;
+    protected $serviceTypeList;
 
     /**
      * @var ServiceMetadata
@@ -53,7 +54,7 @@ abstract class AbstractSchemaGenerator
      *
      * @param Webapi $cache
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
-     * @param \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
+     * @param \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface $serviceTypeList
      * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
      * @param Authorization $authorization
      * @param Json|null $serializer
@@ -61,14 +62,14 @@ abstract class AbstractSchemaGenerator
     public function __construct(
         Webapi $cache,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
-        \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
+        ServiceTypeListInterface $serviceTypeList,
         ServiceMetadata $serviceMetadata,
         Authorization $authorization,
         Json $serializer = null
     ) {
         $this->cache = $cache;
         $this->typeProcessor = $typeProcessor;
-        $this->customAttributeTypeLocator = $customAttributeTypeLocator;
+        $this->serviceTypeList = $serviceTypeList;
         $this->serviceMetadata = $serviceMetadata;
         $this->authorization = $authorization;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);

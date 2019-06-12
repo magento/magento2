@@ -37,6 +37,10 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
      */
     public function testConfigurableShipOrder()
     {
+<<<<<<< HEAD
+=======
+        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/1335');
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $productsQuantity = 1;
 
         /** @var \Magento\Sales\Model\Order $existingOrder */
@@ -132,6 +136,42 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Tests that not providing a tracking number produces the correct error. See MAGETWO-95429
+     * @expectedException \Exception
+     * @codingStandardsIgnoreStart
+     * @expectedExceptionMessageRegExp /Shipment Document Validation Error\(s\):(?:\n|\\n)Please enter a tracking number./
+     * @codingStandardsIgnoreEnd
+     * @magentoApiDataFixture Magento/Sales/_files/order_new.php
+     */
+    public function testShipOrderWithoutTrackingNumberReturnsError()
+    {
+        $this->_markTestAsRestOnly('SOAP requires an tracking number to be provided so this case is not possible.');
+
+        /** @var \Magento\Sales\Model\Order $existingOrder */
+        $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
+            ->loadByIncrementId('100000001');
+
+        $requestData = [
+            'orderId' => $existingOrder->getId(),
+            'comment' => [
+                'comment' => 'Test Comment',
+                'is_visible_on_front' => 1,
+            ],
+            'tracks' => [
+                [
+                    'title' => 'Simple shipment track',
+                    'carrier_code' => 'UPS'
+                ]
+            ]
+        ];
+
+        $this->_webApiCall($this->getServiceInfo($existingOrder), $requestData);
+    }
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @magentoApiDataFixture Magento/Bundle/_files/order_with_bundle_shipped_separately.php
      */
     public function testPartialShipOrderWithBundleShippedSeparately()

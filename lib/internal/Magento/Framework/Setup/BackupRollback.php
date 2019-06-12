@@ -7,8 +7,11 @@
 namespace Magento\Framework\Setup;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Backup\Factory;
 use Magento\Framework\Backup\Exception\NotEnoughPermissions;
+<<<<<<< HEAD
+=======
+use Magento\Framework\Backup\Factory;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\Backup\Filesystem\Helper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Driver\File;
@@ -127,7 +130,7 @@ class BackupRollback
         $this->log->log($granularType . ' backup is starting...');
         $fsBackup->create();
         $this->log->log(
-            $granularType. ' backup filename: ' . $fsBackup->getBackupFilename()
+            $granularType . ' backup filename: ' . $fsBackup->getBackupFilename()
             . ' (The archive can be uncompressed with 7-Zip on Windows systems)'
         );
         $this->log->log($granularType . ' backup path: ' . $fsBackup->getBackupPath());
@@ -140,16 +143,17 @@ class BackupRollback
      *
      * @param string $rollbackFile
      * @param string $type
+     * @param boolean $keepSourceFile
      * @return void
      * @throws LocalizedException
      */
-    public function codeRollback($rollbackFile, $type = Factory::TYPE_FILESYSTEM)
+    public function codeRollback($rollbackFile, $type = Factory::TYPE_FILESYSTEM, $keepSourceFile = false)
     {
         if (preg_match('/[0-9]_(filesystem)_(code|media)\.(tgz)$/', $rollbackFile) !== 1) {
-            throw new LocalizedException(new Phrase('Invalid rollback file.'));
+            throw new LocalizedException(new Phrase('The rollback file is invalid. Verify the file and try again.'));
         }
         if (!$this->file->isExists($this->backupsDir . '/' . $rollbackFile)) {
-            throw new LocalizedException(new Phrase('The rollback file does not exist.'));
+            throw new LocalizedException(new Phrase("The rollback file doesn't exist. Verify the file and try again."));
         }
         /** @var \Magento\Framework\Backup\Filesystem $fsRollback */
         $fsRollback = $this->objectManager->create(\Magento\Framework\Backup\Filesystem::class);
@@ -171,7 +175,7 @@ class BackupRollback
         );
         if (!$filesInfo['writable']) {
             throw new NotEnoughPermissions(
-                new Phrase('Unable to make rollback because not all files are writable')
+                new Phrase("The rollback can't be executed because not all files are writable.")
             );
         }
         $fsRollback->setRootDir($this->directoryList->getRoot());
@@ -179,6 +183,7 @@ class BackupRollback
         $fsRollback->setBackupsDir($this->backupsDir);
         $fsRollback->setBackupExtension('tgz');
         $time = explode('_', $rollbackFile);
+        $fsRollback->setKeepSourceFile($keepSourceFile);
         $fsRollback->setTime($time[0]);
         $this->log->log($granularType . ' rollback is starting ...');
         $fsRollback->rollback();
@@ -216,16 +221,17 @@ class BackupRollback
      * Roll back database
      *
      * @param string $rollbackFile
+     * @param boolean $keepSourceFile
      * @return void
      * @throws LocalizedException
      */
-    public function dbRollback($rollbackFile)
+    public function dbRollback($rollbackFile, $keepSourceFile = false)
     {
         if (preg_match('/[0-9]_(db)(.*?).(sql)$/', $rollbackFile) !== 1) {
-            throw new LocalizedException(new Phrase('Invalid rollback file.'));
+            throw new LocalizedException(new Phrase('The rollback file is invalid. Verify the file and try again.'));
         }
         if (!$this->file->isExists($this->backupsDir . '/' . $rollbackFile)) {
-            throw new LocalizedException(new Phrase('The rollback file does not exist.'));
+            throw new LocalizedException(new Phrase("The rollback file doesn't exist. Verify the file and try again."));
         }
         /** @var \Magento\Framework\Backup\Db $dbRollback */
         $dbRollback = $this->objectManager->create(\Magento\Framework\Backup\Db::class);
@@ -239,6 +245,7 @@ class BackupRollback
         }
         $dbRollback->setTime($time[0]);
         $this->log->log('DB rollback is starting...');
+        $dbRollback->setKeepSourceFile($keepSourceFile);
         $dbRollback->setResourceModel($this->objectManager->create(\Magento\Backup\Model\ResourceModel\Db::class));
         if ($dbRollback->getBackupFilename() !== $rollbackFile) {
             $correctName = $this->getCorrectFileNameWithoutPrefix($dbRollback, $rollbackFile);

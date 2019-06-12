@@ -10,7 +10,6 @@ use \Magento\Catalog\Model\ResourceModel\Product\Option\Value;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @codingStandardsIgnoreFile
  */
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
@@ -82,17 +81,28 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->entityFactoryMock = $this->createPartialMock(\Magento\Framework\Data\Collection\EntityFactory::class, ['create']);
+        $this->entityFactoryMock = $this->createPartialMock(
+            \Magento\Framework\Data\Collection\EntityFactory::class,
+            ['create']
+        );
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->fetchStrategyMock = $this->createPartialMock(\Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class, ['fetchAll']);
+        $this->fetchStrategyMock = $this->createPartialMock(
+            \Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class,
+            ['fetchAll']
+        );
         $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\Manager::class);
-        $this->optionsFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory::class, ['create']);
+        $this->optionsFactoryMock = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory::class,
+            ['create']
+        );
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
         $this->joinProcessor = $this->getMockBuilder(
-            \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->resourceMock = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product\Option::class, ['getConnection', '__wakeup', 'getMainTable', 'getTable']);
+            \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class
+        )->disableOriginalConstructor()->getMockForAbstractClass();
+        $this->resourceMock = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Option::class,
+            ['getConnection', '__wakeup', 'getMainTable', 'getTable']
+        );
         $this->selectMock = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['from', 'reset', 'join']);
         $this->connection =
             $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['select']);

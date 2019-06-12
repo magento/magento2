@@ -1,10 +1,16 @@
 <?php
 /**
+<<<<<<< HEAD
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+=======
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 declare(strict_types=1);
 
 namespace Magento\Customer\Model\Delegation;
@@ -15,7 +21,11 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 
 /**
+<<<<<<< HEAD
  * @inheritDoc
+=======
+ * {@inheritdoc}
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  */
 class AccountDelegation implements AccountDelegationInterface
 {
@@ -42,7 +52,11 @@ class AccountDelegation implements AccountDelegationInterface
     }
 
     /**
+<<<<<<< HEAD
      * @inheritDoc
+=======
+     * {@inheritdoc}
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function createRedirectForNew(
         CustomerInterface $customer,
@@ -50,7 +64,11 @@ class AccountDelegation implements AccountDelegationInterface
     ): Redirect {
         $this->storage->storeNewOperation($customer, $mixedData);
 
+<<<<<<< HEAD
         return $this->redirectFactory->create()
             ->setPath('customer/account/create');
+=======
+        return $this->redirectFactory->create()->setPath('customer/account/create');
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 }

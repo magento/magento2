@@ -7,7 +7,16 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ConfigurableProductOneOption" type="ConfigurableProductOption">
+        <var key="attribute_id" entityKey="attribute_id" entityType="ProductAttribute" />
+        <data key="label">option</data>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+    </entity>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <entity name="ConfigurableProductTwoOptions" type="ConfigurableProductOption">
         <var key="attribute_id" entityKey="attribute_id" entityType="ProductAttribute" />
         <data key="label">option</data>

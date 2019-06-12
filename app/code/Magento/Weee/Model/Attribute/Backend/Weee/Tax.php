@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Weee\Model\Attribute\Backend\Weee;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -90,7 +91,8 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
             $key1 = implode('-', [$tax['website_id'], $tax['country'], $state]);
             if (!empty($dup[$key1])) {
                 throw new LocalizedException(
-                    __('You must set unique country-state combinations within the same fixed product tax')
+                    __('Set unique country-state combinations within the same fixed product tax. '
+                        . 'Verify the combinations and try again.')
                 );
             }
             $dup[$key1] = 1;
@@ -185,7 +187,11 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     }
 
     /**
+<<<<<<< HEAD
      * {@inheritdoc}
+=======
+     * @inheritdoc
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function getEntityIdField()
     {

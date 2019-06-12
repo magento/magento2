@@ -4,6 +4,13 @@
  * See COPYING.txt for license details.
  */
 
+<<<<<<< HEAD
+=======
+/**
+ * PHP Coding Standards fixer configuration
+ */
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 $finder = PhpCsFixer\Finder::create()
     ->name('*.phtml')
     ->exclude('dev/tests/functional/generated')

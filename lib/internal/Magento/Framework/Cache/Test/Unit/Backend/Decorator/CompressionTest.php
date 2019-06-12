@@ -132,7 +132,10 @@ class CompressionTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $data
      * @param $cacheId
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return bool
      */
     public static function mockSave($data, $cacheId)
@@ -143,7 +146,10 @@ class CompressionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $cacheId
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return bool|mixed
      */
     public static function mockLoad($cacheId)

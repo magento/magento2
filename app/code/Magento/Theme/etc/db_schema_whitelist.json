@@ -1,0 +1,49 @@
+{
+    "theme": {
+        "column": {
+            "theme_id": true,
+            "parent_id": true,
+            "theme_path": true,
+            "theme_title": true,
+            "preview_image": true,
+            "is_featured": true,
+            "area": true,
+            "type": true,
+            "code": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "theme_file": {
+        "column": {
+            "theme_files_id": true,
+            "theme_id": true,
+            "file_path": true,
+            "file_type": true,
+            "content": true,
+            "sort_order": true,
+            "is_temporary": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "THEME_FILE_THEME_ID_THEME_THEME_ID": true
+        }
+    },
+    "design_change": {
+        "column": {
+            "design_change_id": true,
+            "store_id": true,
+            "design": true,
+            "date_from": true,
+            "date_to": true
+        },
+        "index": {
+            "DESIGN_CHANGE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DESIGN_CHANGE_STORE_ID_STORE_STORE_ID": true
+        }
+    }
+}

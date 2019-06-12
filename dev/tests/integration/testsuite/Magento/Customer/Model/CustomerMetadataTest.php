@@ -54,16 +54,23 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCustomAttributesMetadata()
     {
-        $customAttributesMetadata = $this->service->getCustomAttributesMetadata();
-        $this->assertCount(0, $customAttributesMetadata, "Invalid number of attributes returned.");
+        $customAttributesMetadataQty = count($this->service->getCustomAttributesMetadata()) ;
 
         // Verify the consistency of getCustomerAttributeMetadata() function from the 2nd call of the same service
-        $customAttributesMetadata1 = $this->service->getCustomAttributesMetadata();
-        $this->assertCount(0, $customAttributesMetadata1, "Invalid number of attributes returned.");
+        $customAttributesMetadata1Qty = count($this->service->getCustomAttributesMetadata());
+        $this->assertEquals(
+            $customAttributesMetadataQty,
+            $customAttributesMetadata1Qty,
+            "Invalid number of attributes returned."
+        );
 
         // Verify the consistency of getCustomAttributesMetadata() function from the 2nd service
-        $customAttributesMetadata2 = $this->serviceTwo->getCustomAttributesMetadata();
-        $this->assertCount(0, $customAttributesMetadata2, "Invalid number of attributes returned.");
+        $customAttributesMetadata2Qty = count($this->serviceTwo->getCustomAttributesMetadata());
+        $this->assertEquals(
+            $customAttributesMetadataQty,
+            $customAttributesMetadata2Qty,
+            "Invalid number of attributes returned."
+        );
     }
 
     public function testGetNestedOptionsCustomerAttributesMetadata()
@@ -233,11 +240,21 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $this->assertNotEmpty($attributes);
+<<<<<<< HEAD
         // remove odd extension attributes
         $allAtrributes = $expectAttrsWithVals;
         $allAtrributes['created_at'] = $attributes['created_at'];
         $allAtrributes['updated_at'] = $attributes['updated_at'];
         $attributes = array_intersect_key($attributes, $allAtrributes);
+=======
+
+        // remove odd extension attributes
+        $allAttributes = $expectAttrsWithVals;
+        $allAttributes['created_at'] = $attributes['created_at'];
+        $allAttributes['updated_at'] = $attributes['updated_at'];
+        $attributes = array_intersect_key($attributes, $allAttributes);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         foreach ($attributes as $attributeCode => $attributeValue) {
             $this->assertNotNull($attributeCode);
             $this->assertNotNull($attributeValue);

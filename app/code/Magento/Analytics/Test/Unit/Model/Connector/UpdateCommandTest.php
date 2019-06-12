@@ -15,9 +15,12 @@ use Psr\Log\LoggerInterface;
 use Magento\Analytics\Model\Connector\UpdateCommand;
 use Magento\Analytics\Model\Connector\Http\ClientInterface;
 
+<<<<<<< HEAD
 /**
  * Class SignUpCommandTest
  */
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class UpdateCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**

@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 namespace Magento\Bundle\Model\Product;
 
@@ -12,7 +16,10 @@ use \Magento\Bundle\Api\Data\LinkInterface;
  * @magentoDbIsolation disabled
  * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
  * @group indexer_dimension
+<<<<<<< HEAD
  * @magentoAppArea frontend
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  */
 class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
 {
@@ -369,8 +376,13 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
 
     /**
      * Fixed bundle product with required option, custom option and without any discounts
+<<<<<<< HEAD
      * @param $selectionsPriceType
      * @param $customOptionsPriceType
+=======
+     * @param string $selectionsPriceType
+     * @param string $customOptionsPriceType
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return array
      */
     private function getBundleConfiguration3($selectionsPriceType, $customOptionsPriceType)

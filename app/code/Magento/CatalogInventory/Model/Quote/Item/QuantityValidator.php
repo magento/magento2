@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogInventory\Model\Quote\Item;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
@@ -19,9 +20,18 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote\Item;
 
 /**
+ * Quote item quantity validator.
+ *
  * @api
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+<<<<<<< HEAD
+=======
+ *
+ * @deprecated 2.3.0 Replaced with Multi Source Inventory
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  */
 class QuantityValidator
 {
@@ -69,7 +79,10 @@ class QuantityValidator
      *
      * @param \Magento\Framework\DataObject $result
      * @param Item $quoteItem
+<<<<<<< HEAD
      * @param bool $removeError
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return void
      */
     private function addErrorInfoToQuote($result, $quoteItem)
@@ -115,7 +128,19 @@ class QuantityValidator
         /* @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
         $stockItem = $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
         if (!$stockItem instanceof StockItemInterface) {
-            throw new LocalizedException(__('The stock item for Product is not valid.'));
+            throw new LocalizedException(__('The Product stock item is invalid. Verify the stock item and try again.'));
+        }
+
+        if (($options = $quoteItem->getQtyOptions()) && $qty > 0) {
+            foreach ($options as $option) {
+                $this->optionInitializer->initialize($option, $quoteItem, $qty);
+            }
+        } else {
+            $this->stockItemInitializer->initialize($stockItem, $quoteItem, $qty);
+        }
+
+        if ($quoteItem->getQuote()->getIsSuperMode()) {
+            return;
         }
 
         if (($options = $quoteItem->getQtyOptions()) && $qty > 0) {
@@ -178,9 +203,9 @@ class QuantityValidator
             if ($stockStatus) {
                 $this->checkOptionsQtyIncrements($quoteItem, $options);
             }
+
             // variable to keep track if we have previously encountered an error in one of the options
             $removeError = true;
-
             foreach ($options as $option) {
                 $result = $option->getStockStateResult();
                 if ($result->getHasError()) {
@@ -212,7 +237,11 @@ class QuantityValidator
      * @param array $options
      * @return void
      */
+<<<<<<< HEAD
     private function checkOptionsQtyIncrements(Item $quoteItem, array $options)
+=======
+    private function checkOptionsQtyIncrements(Item $quoteItem, array $options): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $removeErrors = true;
         foreach ($options as $option) {
@@ -235,7 +264,14 @@ class QuantityValidator
 
         if ($removeErrors) {
             // Delete error from item and its quote, if it was set due to qty problems
+<<<<<<< HEAD
             $this->_removeErrorsFromQuoteAndItem($quoteItem, Data::ERROR_QTY_INCREMENTS);
+=======
+            $this->_removeErrorsFromQuoteAndItem(
+                $quoteItem,
+                Data::ERROR_QTY_INCREMENTS
+            );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
     }
 

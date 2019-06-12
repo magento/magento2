@@ -14,8 +14,24 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
 
+<<<<<<< HEAD
 /** @var Rule $salesRule */
 $salesRule = getSalesRule('5$ fixed discount on whole cart');
+=======
+/** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+$searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+$searchCriteria = $searchCriteriaBuilder->addFilter('name', '5$ fixed discount on whole cart')
+    ->create();
+
+/** @var RuleRepositoryInterface $ruleRepository */
+$ruleRepository = Bootstrap::getObjectManager()->get(RuleRepositoryInterface::class);
+$items = $ruleRepository->getList($searchCriteria)
+    ->getItems();
+
+$salesRule = array_pop($items);
+
+/** @var Rule $salesRule */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 if ($salesRule !== null) {
     /** @var RuleRepositoryInterface $ruleRepository */
     $ruleRepository = $objectManager->get(RuleRepositoryInterface::class);
@@ -29,6 +45,7 @@ if ($coupon->getCouponId()) {
     $couponRepository = $objectManager->get(CouponRepositoryInterface::class);
     $couponRepository->deleteById($coupon->getCouponId());
 }
+<<<<<<< HEAD
 
 function getSalesRule(string $name)
 {
@@ -44,3 +61,5 @@ function getSalesRule(string $name)
 
     return array_pop($items);
 }
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc

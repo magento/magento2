@@ -7,7 +7,11 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <test name="StorefrontAddBundleProductWithZeroPriceToShoppingCartTest">
         <annotations>
             <features value="Bundle"/>
@@ -15,7 +19,11 @@
             <title value="Add Bundle product with zero price to shopping cart"/>
             <description value="Add Bundle product with zero price to shopping cart"/>
             <severity value="CRITICAL"/>
+<<<<<<< HEAD
             <testCaseId value="MAGETWO-83535"/>
+=======
+            <testCaseId value="MAGETWO-95167"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <group value="bundle"/>
         </annotations>
         <before>
@@ -52,10 +60,16 @@
         </after>
         <!--Open category page-->
         <amOnPage url="{{StorefrontCategoryPage.url($$createSubCategory.custom_attributes[url_key]$$)}}" stepKey="amOnCategoryPage"/>
+<<<<<<< HEAD
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <!--Add bundle product to cart-->
         <actionGroup ref="StorefrontAddCategoryBundleProductToCartActionGroup" stepKey="addBundleProductToCart">
             <argument name="product" value="$$apiBundleProduct$$"/>
+=======
+        <!--Add bundle product to cart-->
+        <actionGroup ref="StorefrontAddBundleProductFromCategoryToCartActionGroup" stepKey="addBundleProductToCart">
+            <argument name="productName" value="$$apiBundleProduct.name$$"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
 
@@ -72,6 +86,10 @@
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+<<<<<<< HEAD
+=======
+        <waitForPageLoad stepKey="waitForAdminOrderPageLoad"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <scrollTo selector="{{AdminOrderTotalSection.subTotal}}" stepKey="scrollToOrderTotalSection"/>
         <see selector="{{AdminOrderTotalSection.subTotal}}"  userInput="$0.00" stepKey="checkSubtotal"/>
     </test>

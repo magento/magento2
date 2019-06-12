@@ -21,6 +21,12 @@ $product->setTypeId(
     4
 )->setCustomAttribute(
     'tax_class_id',
+<<<<<<< HEAD
+=======
+    1
+)->setCustomAttribute(
+    'tax_class_id',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     1
 )->setWebsiteIds(
     [1]

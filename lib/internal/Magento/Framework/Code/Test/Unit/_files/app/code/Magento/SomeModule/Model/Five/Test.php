@@ -16,7 +16,10 @@ class Test extends \Magento\SomeModule\Model\Three\Test
 
     /**
      * Test constructor.
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param \Magento\SomeModule\Model\Proxy $proxy
      */
     public function __construct(\Magento\SomeModule\Model\Proxy $proxy)

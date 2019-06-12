@@ -39,7 +39,13 @@ class BulkException extends AbstractAggregateException
     }
 
     /**
+<<<<<<< HEAD
      * @param $data array
+=======
+     * Add data
+     *
+     * @param array $data
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function addData($data)
     {
@@ -47,6 +53,11 @@ class BulkException extends AbstractAggregateException
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Retrieve data
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return array
      */
     public function getData()

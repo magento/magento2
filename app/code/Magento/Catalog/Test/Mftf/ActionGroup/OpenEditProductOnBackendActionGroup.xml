@@ -5,15 +5,26 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+=======
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <actionGroup name="OpenEditProductOnBackendActionGroup">
         <arguments>
             <argument name="product" defaultValue="product"/>
         </arguments>
+<<<<<<< HEAD
         <click stepKey="clickOnProductRow" selector="{{AdminProductGridSection.firstRow}}"/>
         <waitForPageLoad time="30" stepKey="waitForProductPageLoad"/>
         <seeInField stepKey="seeProductSkuOnEditProductPage" selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" />
+=======
+        <click selector="{{AdminProductGridSection.productRowBySku(product.sku)}}" stepKey="clickOnProductRow"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageLoad"/>
+        <seeInField userInput="{{product.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="seeProductSkuOnEditProductPage"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </actionGroup>
 </actionGroups>

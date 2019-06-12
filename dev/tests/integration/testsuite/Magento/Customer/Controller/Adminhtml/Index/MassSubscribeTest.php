@@ -68,20 +68,28 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
         /** @var CustomerInterface $customer2 */
         $customer2 = $customerRepository->get('customer2@example.com');
 
+<<<<<<< HEAD
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $params = [
             'selected' => [
                 $customer1->getId(),
                 $customer2->getId(),
             ],
             'namespace' => 'customer_listing',
+<<<<<<< HEAD
             'form_key' => $formKey->getFormKey()
         ];
 
         $this->getRequest()->setParams($params);
         $this->getRequest()->setMethod('POST');
+=======
+        ];
+        $this->getRequest()->setParams($params);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $this->dispatch('backend/customer/index/massSubscribe');
 
@@ -111,6 +119,7 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
      */
     public function testMassSubscriberActionNoSelection()
     {
+<<<<<<< HEAD
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
 
@@ -121,11 +130,22 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
 
         $this->getRequest()->setParams($params);
         $this->getRequest()->setMethod('POST');
+=======
+        $params = [
+            'namespace' => 'customer_listing'
+        ];
+
+        $this->getRequest()->setParams($params);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->dispatch('backend/customer/index/massSubscribe');
 
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
         $this->assertSessionMessages(
+<<<<<<< HEAD
             self::equalTo(['Please select item(s).']),
+=======
+            self::equalTo(['An item needs to be selected. Select and try again.']),
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             MessageInterface::TYPE_ERROR
         );
     }

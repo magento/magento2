@@ -18,7 +18,7 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     /**
      * {@inheritdoc}
      */
-    public function publicChildMethod(\Zend\Code\Generator\ClassGenerator $classGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = array())
+    public function publicChildMethod(\Zend\Code\Generator\ClassGenerator $classGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicChildMethod');
         if (!$pluginInfo) {
@@ -57,6 +57,35 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     /**
      * {@inheritdoc}
      */
+<<<<<<< HEAD
+=======
+    public function public71($arg1, string $arg2, ?int $arg3, ?int $arg4 = null) : void
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'public71');
+        if (!$pluginInfo) {
+            parent::public71($arg1, $arg2, $arg3, $arg4);
+        } else {
+            $this->___callPlugins('public71', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function public71Another(?\DateTime $arg1, $arg2 = false) : ?string
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'public71Another');
+        if (!$pluginInfo) {
+            return parent::public71Another($arg1, $arg2);
+        } else {
+            return $this->___callPlugins('public71Another', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function publicWithSelf($arg = false) : \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicWithSelf');
@@ -70,7 +99,11 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     /**
      * {@inheritdoc}
      */
+<<<<<<< HEAD
     public function publicParentMethod(\Zend\Code\Generator\DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = array())
+=======
+    public function publicParentMethod(\Zend\Code\Generator\DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicParentMethod');
         if (!$pluginInfo) {

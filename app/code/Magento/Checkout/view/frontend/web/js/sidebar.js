@@ -25,6 +25,7 @@ define([
             }
         },
         scrollHeight: 0,
+        shoppingCartUrl: window.checkout.shoppingCartUrl,
 
         /**
          * Create sidebar.
@@ -227,6 +228,13 @@ define([
 
             if (!_.isUndefined(productData)) {
                 $(document).trigger('ajax:updateCartItemQty');
+<<<<<<< HEAD
+=======
+
+                if (window.location.href === this.shoppingCartUrl) {
+                    window.location.reload(false);
+                }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             }
             this._hideItemButton(elem);
         },
@@ -251,6 +259,7 @@ define([
          */
         _removeItemAfter: function (elem) {
             var productData = this._getProductById(Number(elem.data('cart-item')));
+<<<<<<< HEAD
 
             if (!_.isUndefined(productData)) {
                 $(document).trigger('ajax:removeFromCart', {
@@ -259,6 +268,16 @@ define([
             }
         },
 
+=======
+
+            if (!_.isUndefined(productData)) {
+                $(document).trigger('ajax:removeFromCart', {
+                    productIds: [productData['product_id']]
+                });
+            }
+        },
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         /**
          * Retrieves product data by Id.
          *

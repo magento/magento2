@@ -7,9 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Filter\TruncateFilter;
 
+<<<<<<< HEAD
 /**
  * Resulting class for truncate filter
  */
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class Result
 {
     /**
@@ -23,6 +26,10 @@ class Result
     private $remainder;
 
     /**
+<<<<<<< HEAD
+=======
+     * Result constructor.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param string $value
      * @param string $remainder
      */
@@ -38,7 +45,11 @@ class Result
      * @param string $value
      * @return void
      */
+<<<<<<< HEAD
     public function setValue(string $value)
+=======
+    public function setValue(string $value) : void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $this->value = $value;
     }
@@ -59,7 +70,11 @@ class Result
      * @param string $remainder
      * @return void
      */
+<<<<<<< HEAD
     public function setRemainder(string $remainder)
+=======
+    public function setRemainder(string $remainder) : void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $this->remainder = $remainder;
     }

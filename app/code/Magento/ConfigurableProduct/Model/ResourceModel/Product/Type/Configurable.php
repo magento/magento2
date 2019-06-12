@@ -19,6 +19,9 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
+/**
+ * Configurable product resource model.
+ */
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

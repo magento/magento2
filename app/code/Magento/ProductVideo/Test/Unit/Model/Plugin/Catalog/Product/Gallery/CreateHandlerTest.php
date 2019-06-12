@@ -72,7 +72,11 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
      * @param array $expectedSave
      * @param int $rowSaved
      */
+<<<<<<< HEAD
     public function testAfterExecute($image, $expectedSave, $rowSaved)
+=======
+    public function testAfterExecute($image, $expectedSave, $rowSaved): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $this->product->expects($this->once())
             ->method('getData')
@@ -229,7 +233,11 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests empty media gallery
      */
+<<<<<<< HEAD
     public function testAfterExecuteEmpty()
+=======
+    public function testAfterExecuteEmpty(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $this->product->expects($this->once())
             ->method('getData')
@@ -249,7 +257,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testBeforeExecute()
+    public function testBeforeExecute(): void
     {
         $mediaData = [
             'images' => [

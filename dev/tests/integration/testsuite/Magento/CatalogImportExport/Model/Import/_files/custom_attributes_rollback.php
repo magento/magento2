@@ -8,7 +8,11 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 $attributeCodes = [
     'test_attribute',
+<<<<<<< HEAD
     ];
+=======
+];
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 foreach ($attributeCodes as $attributeCode) {
     /** @var \Magento\Eav\Model\Entity\Attribute $attribute */

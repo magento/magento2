@@ -40,7 +40,7 @@ class AssertProductAttributeIsHtmlAllowed extends AbstractConstraint
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $catalogProductView->getAdditionalInformationBlock()->hasHtmlTagInAttributeValue($attribute),
             'Attribute is not visible with HTML tags on frontend.'
         );

@@ -8,9 +8,24 @@ namespace Magento\Framework\Reflection\Test\Unit;
 
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Reflection\Test\Unit\Fixture\TSample;
+<<<<<<< HEAD
 use Magento\Framework\Reflection\TypeProcessor;
 use Zend\Code\Reflection\ClassReflection;
 
+=======
+use Magento\Framework\Reflection\Test\Unit\Fixture\TSampleInterface;
+use Magento\Framework\Reflection\Test\Unit\Fixture\UseClasses\SampleOne;
+use Magento\Framework\Reflection\Test\Unit\Fixture\UseClasses\SampleOne\SampleThree;
+use Magento\Framework\Reflection\Test\Unit\Fixture\UseClasses\SampleTwo;
+use Magento\Framework\Reflection\Test\Unit\Fixture\UseClasses\SampleTwo\SampleFour;
+use Magento\Framework\Reflection\Test\Unit\Fixture\UseSample;
+use Magento\Framework\Reflection\TypeProcessor;
+use Zend\Code\Reflection\ClassReflection;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -53,7 +68,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Data type "NonExistentType" is not declared.
+     * @expectedExceptionMessage The "NonExistentType" data type isn't declared. Verify the type and try again.
      */
     public function testGetTypeDataInvalidArgumentException()
     {
@@ -161,7 +176,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid parameter type "\Magento\TestModule3\V1\Parameter[]".
+     * @expectedExceptionMessage The "\Magento\TestModule3\V1\Parameter[]" parameter type is invalid. Verify the parameter and try again.
      */
     public function testTranslateTypeNameInvalidArgumentException()
     {
@@ -233,7 +248,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\SerializationException
-     * @expectedExceptionMessage Invalid type for value: "integer". Expected Type: "int[]".
+     * @expectedExceptionMessage The "integer" value's type is invalid. The "int[]" type was expected. Verify and try again.
      */
     public function testProcessSimpleTypeInvalidType()
     {
@@ -252,6 +267,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
         $methodReflection = $class->getMethod('setName');
         $paramsReflection = $methodReflection->getParameters();
         $this->typeProcessor->getParamType($paramsReflection[0]);
+<<<<<<< HEAD
     }
 
     /**
@@ -279,6 +295,35 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
         return [
             ['method name' => 'addData', 'type' => 'array[]'],
             ['method name' => 'addObjectList', 'type' => 'TSampleInterface[]']
+=======
+    }
+
+    /**
+     * Checks a case for different array param types.
+     *
+     * @param string $methodName
+     * @param string $type
+     * @dataProvider arrayParamTypeDataProvider
+     */
+    public function testGetArrayParamType(string $methodName, string $type)
+    {
+        $class = new ClassReflection(DataObject::class);
+        $methodReflection = $class->getMethod($methodName);
+        $params = $methodReflection->getParameters();
+        $this->assertEquals($type, $this->typeProcessor->getParamType(array_pop($params)));
+    }
+
+    /**
+     * Get list of methods with expected param types.
+     *
+     * @return array
+     */
+    public function arrayParamTypeDataProvider()
+    {
+        return [
+            ['method name' => 'addData', 'type' => 'array[]'],
+            ['method name' => 'addObjectList', 'type' => '\\' . TSampleInterface::class . '[]']
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
     }
 
@@ -353,5 +398,186 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
         $classReflection = new ClassReflection(TSample::class);
         $methodReflection = $classReflection->getMethod('getName');
         $this->typeProcessor->getGetterReturnType($methodReflection);
+<<<<<<< HEAD
+=======
+    }
+
+    /**
+     * Simple and complex data provider
+     *
+     * @return array
+     */
+    public function simpleAndComplexDataProvider(): array
+    {
+        return [
+            ['string', true],
+            ['array', true],
+            ['int', true],
+            ['SomeClass', false],
+            ['\\My\\Namespace\\Model\\Class', false],
+            ['Some\\Other\\Class', false],
+        ];
+    }
+
+    /**
+     * Test simple type detection method
+     *
+     * @dataProvider simpleAndComplexDataProvider
+     * @param string $type
+     * @param bool $expectedValue
+     */
+    public function testIsSimpleType(string $type, bool $expectedValue)
+    {
+        self::assertEquals($expectedValue, $this->typeProcessor->isSimpleType($type));
+    }
+
+    /**
+     * Simple and complex data provider
+     *
+     * @return array
+     */
+    public function basicClassNameProvider(): array
+    {
+        return [
+            ['SomeClass[]', 'SomeClass'],
+            ['\\My\\Namespace\\Model\\Class[]', '\\My\\Namespace\\Model\\Class'],
+            ['Some\\Other\\Class[]', 'Some\\Other\\Class'],
+            ['SomeClass', 'SomeClass'],
+            ['\\My\\Namespace\\Model\\Class', '\\My\\Namespace\\Model\\Class'],
+            ['Some\\Other\\Class', 'Some\\Other\\Class'],
+        ];
+    }
+
+    /**
+     * Extract basic class name
+     *
+     * @dataProvider basicClassNameProvider
+     * @param string $type
+     * @param string $expectedValue
+     */
+    public function testBasicClassName(string $type, string $expectedValue)
+    {
+        self::assertEquals($expectedValue, $this->typeProcessor->getBasicClassName($type));
+    }
+
+    /**
+     * Fully qualified class names data provider
+     *
+     * @return array
+     */
+    public function isFullyQualifiedClassNamesDataProvider(): array
+    {
+        return [
+            ['SomeClass', false],
+            ['\\My\\Namespace\\Model\\Class', true],
+            ['Some\\Other\\Class', false],
+        ];
+    }
+
+    /**
+     * Test fully qualified class name detector
+     *
+     * @dataProvider isFullyQualifiedClassNamesDataProvider
+     * @param string $type
+     * @param bool $expectedValue
+     */
+    public function testIsFullyQualifiedClassName(string $type, bool $expectedValue)
+    {
+        self::assertEquals($expectedValue, $this->typeProcessor->isFullyQualifiedClassName($type));
+    }
+
+    /**
+     * Test alias mapping
+     */
+    public function testGetAliasMapping()
+    {
+        $sourceClass = new ClassReflection(UseSample::class);
+        $aliasMap = $this->typeProcessor->getAliasMapping($sourceClass);
+
+        self::assertEquals([
+            'SampleOne' => SampleOne::class,
+            'Sample2' => SampleTwo::class,
+        ], $aliasMap);
+    }
+
+    /**
+     * Resolve fully qualified class names data provider
+     *
+     * @return array
+     */
+    public function resolveFullyQualifiedClassNamesDataProvider(): array
+    {
+        return [
+            [UseSample::class, 'string', 'string'],
+            [UseSample::class, 'string[]', 'string[]'],
+
+            [UseSample::class, 'SampleOne', '\\' . SampleOne::class],
+            [UseSample::class, 'Sample2', '\\' . SampleTwo::class],
+            [
+                UseSample::class,
+                '\\Magento\\Framework\\Reflection\\Test\\Unit\\Fixture\\UseClasses\\SampleOne',
+                '\\' . SampleOne::class
+            ],
+            [
+                UseSample::class,
+                '\\Magento\\Framework\\Reflection\\Test\\Unit\\Fixture\\UseClasses\\SampleTwo',
+                '\\' . SampleTwo::class
+            ],
+            [UseSample::class, 'UseClasses\\SampleOne', '\\' . SampleOne::class],
+            [UseSample::class, 'UseClasses\\SampleTwo', '\\' . SampleTwo::class],
+
+            [UseSample::class, 'SampleOne[]', '\\' . SampleOne::class . '[]'],
+            [UseSample::class, 'Sample2[]', '\\' . SampleTwo::class . '[]'],
+            [
+                UseSample::class,
+                '\\Magento\\Framework\\Reflection\\Test\\Unit\\Fixture\\UseClasses\\SampleOne[]',
+                '\\' . SampleOne::class . '[]'
+            ],
+            [
+                UseSample::class,
+                '\\Magento\\Framework\\Reflection\\Test\\Unit\\Fixture\\UseClasses\\SampleTwo[]',
+                '\\' . SampleTwo::class . '[]'
+            ],
+            [UseSample::class, 'UseClasses\\SampleOne[]', '\\' . SampleOne::class . '[]'],
+            [UseSample::class, 'UseClasses\\SampleTwo[]', '\\' . SampleTwo::class . '[]'],
+
+            [UseSample::class, 'SampleOne\SampleThree', '\\' . SampleThree::class],
+            [UseSample::class, 'SampleOne\SampleThree[]', '\\' . SampleThree::class . '[]'],
+
+            [UseSample::class, 'Sample2\SampleFour', '\\' . SampleFour::class],
+            [UseSample::class, 'Sample2\SampleFour[]', '\\' . SampleFour::class . '[]'],
+
+            [UseSample::class, 'Sample2\NotExisting', 'Sample2\NotExisting'],
+            [UseSample::class, 'Sample2\NotExisting[]', 'Sample2\NotExisting[]'],
+
+            [
+                UseSample::class,
+                '\\Magento\\Framework\\Reflection\\Test\\Unit\\Fixture\\UseClasses\\NotExisting',
+                '\\Magento\\Framework\\Reflection\\Test\\Unit\\Fixture\\UseClasses\\NotExisting'
+            ],
+            [
+                UseSample::class,
+                '\\Magento\\Framework\\Reflection\\Test\\Unit\\Fixture\\UseClasses\\NotExisting[]',
+                '\\Magento\\Framework\\Reflection\\Test\\Unit\\Fixture\\UseClasses\\NotExisting[]'
+            ],
+        ];
+    }
+
+    /**
+     * Resolve fully qualified class names
+     *
+     * @dataProvider resolveFullyQualifiedClassNamesDataProvider
+     * @param string $className
+     * @param string $type
+     * @param string $expectedValue
+     * @throws \ReflectionException
+     */
+    public function testResolveFullyQualifiedClassNames(string $className, string $type, string $expectedValue)
+    {
+        $sourceClass = new ClassReflection($className);
+        $fullyQualified = $this->typeProcessor->resolveFullyQualifiedClassName($sourceClass, $type);
+
+        self::assertEquals($expectedValue, $fullyQualified);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 }

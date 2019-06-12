@@ -8,6 +8,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Analytics\Test\TestCase\AdvancedReportingButtonTest" summary="Navigate through Advanced Reporting button on dashboard to Sign Up page" ticketId="MAGETWO-63715">
         <variation name="AdvancedReportingButtonTest">
+<<<<<<< HEAD
+=======
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <data name="advancedReportingLink" xsi:type="string">https://advancedreporting.rjmetrics.com/report</data>
             <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingPage" />
         </variation>

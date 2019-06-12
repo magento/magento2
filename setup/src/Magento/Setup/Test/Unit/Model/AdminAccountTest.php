@@ -365,7 +365,7 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Password is a required field
+     * @expectedExceptionMessage "Password" is required. Enter and try again.
      */
     public function testSaveExceptionPasswordEmpty()
     {

@@ -46,8 +46,8 @@ class AllowedCountries
     /**
      * Retrieve all allowed countries for scope or scopes
      *
-     * @param string | null $scopeCode
      * @param string $scope
+     * @param string|null $scopeCode
      * @return array
      * @since 100.1.2
      */

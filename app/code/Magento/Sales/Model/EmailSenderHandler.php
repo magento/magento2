@@ -60,6 +60,10 @@ class EmailSenderHandler
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      * @param IdentityInterface|null $identityContainer
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+<<<<<<< HEAD
+=======
+     * @throws \InvalidArgumentException
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function __construct(
         \Magento\Sales\Model\Order\Email\Sender $emailSender,

@@ -15,6 +15,20 @@
             <xs:element name="settings" minOccurs="0" maxOccurs="1">
                 <xs:complexType>
                     <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:group ref="abstractSettings"/>
+                        <xs:group ref="componentCheckboxsetSettings"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="ui_element_attributes"/>
+    </xs:complexType>
+
+    <xs:complexType name="formElementCheckboxset">
+        <xs:sequence>
+            <xs:element name="settings" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
                         <xs:group ref="componentCheckboxsetSettings"/>
                     </xs:choice>
                 </xs:complexType>
@@ -25,7 +39,6 @@
 
     <xs:group name="componentCheckboxsetSettings">
         <xs:choice>
-            <xs:group ref="abstractSettings"/>
             <xs:element ref="multiple"/>
             <xs:element name="options" type="optionsType"/>
         </xs:choice>

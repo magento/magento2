@@ -13,9 +13,17 @@ use Magento\Directory\Helper\Data;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\Group;
+<<<<<<< HEAD
+=======
+use Magento\Store\Model\Store;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\ObjectManager;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\Url\Helper\Data as UrlHelper;
 
 /**
+ * Switcher block
+ *
  * @api
  * @since 100.0.2
  */
@@ -37,8 +45,11 @@ class Switcher extends \Magento\Framework\View\Element\Template
     private $urlHelper;
 
     /**
+<<<<<<< HEAD
      * Constructs
      *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
@@ -56,6 +67,8 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get current website Id.
+     *
      * @return int|null|string
      */
     public function getCurrentWebsiteId()
@@ -64,6 +77,8 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get current group Id.
+     *
      * @return int|null|string
      */
     public function getCurrentGroupId()
@@ -72,6 +87,8 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get current Store Id.
+     *
      * @return int
      */
     public function getCurrentStoreId()
@@ -80,6 +97,8 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get raw groups.
+     *
      * @return array
      */
     public function getRawGroups()
@@ -97,6 +116,8 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get raw stores.
+     *
      * @return array
      */
     public function getRawStores()
@@ -168,6 +189,8 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get stores.
+     *
      * @return \Magento\Store\Model\Store[]
      */
     public function getStores()
@@ -187,6 +210,8 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get current store code.
+     *
      * @return string
      */
     public function getCurrentStoreCode()
@@ -195,6 +220,8 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Is store in url.
+     *
      * @return bool
      */
     public function isStoreInUrl()
@@ -206,7 +233,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get store code
+     * Get store code.
      *
      * @return string
      */
@@ -216,7 +243,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get store name
+     * Get store name.
      *
      * @return null|string
      */
@@ -226,16 +253,20 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Returns target store post data
+     * Returns target store post data.
      *
-     * @param \Magento\Store\Model\Store $store
+     * @param Store $store
      * @param array $data
      * @return string
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getTargetStorePostData(\Magento\Store\Model\Store $store, $data = [])
+    public function getTargetStorePostData(Store $store, $data = [])
     {
+<<<<<<< HEAD
         $data[\Magento\Store\Api\StoreResolverInterface::PARAM_NAME] = $store->getCode();
+=======
+        $data[\Magento\Store\Model\StoreManagerInterface::PARAM_NAME] = $store->getCode();
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $data['___from_store'] = $this->_storeManager->getStore()->getCode();
 
         $urlOnTargetStore = $store->getCurrentUrl(false);

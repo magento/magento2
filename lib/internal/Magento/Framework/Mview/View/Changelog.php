@@ -3,10 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Mview\View;
 
+<<<<<<< HEAD
+=======
+use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\Exception\RuntimeException;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\Phrase;
 
+/**
+ * Class Changelog for manipulations with the mview_state table.
+ */
 class Changelog implements ChangelogInterface
 {
     /**
@@ -40,6 +49,7 @@ class Changelog implements ChangelogInterface
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @throws ConnectionException
      */
     public function __construct(\Magento\Framework\App\ResourceConnection $resource)
     {
@@ -52,12 +62,14 @@ class Changelog implements ChangelogInterface
      * Check DB connection
      *
      * @return void
-     * @throws \Exception
+     * @throws ConnectionException
      */
     protected function checkConnection()
     {
         if (!$this->connection) {
-            throw new \Exception('Write DB connection is not available');
+            throw new ConnectionException(
+                new Phrase("The write connection to the database isn't available. Please try again later.")
+            );
         }
     }
 
@@ -153,14 +165,15 @@ class Changelog implements ChangelogInterface
             (int)$toVersionId
         );
 
-        return $this->connection->fetchCol($select);
+        return array_map('intval', $this->connection->fetchCol($select));
     }
 
     /**
      * Get maximum version_id from changelog
+     *
      * @return int
      * @throws ChangelogTableNotExistsException
-     * @throws \Exception
+     * @throws RuntimeException
      */
     public function getVersion()
     {
@@ -172,7 +185,9 @@ class Changelog implements ChangelogInterface
         if (isset($row['Auto_increment'])) {
             return (int)$row['Auto_increment'] - 1;
         } else {
-            throw new \Exception("Table status for `{$changelogTableName}` is incorrect. Can`t fetch version id.");
+            throw new RuntimeException(
+                new Phrase("Table status for %1 is incorrect. Can`t fetch version id.", [$changelogTableName])
+            );
         }
     }
 
@@ -181,13 +196,15 @@ class Changelog implements ChangelogInterface
      *
      * Build a changelog name by concatenating view identifier and changelog name suffix.
      *
-     * @throws \Exception
+     * @throws \DomainException
      * @return string
      */
     public function getName()
     {
         if (strlen($this->viewId) == 0) {
-            throw new \Exception("View's identifier is not set");
+            throw new \DomainException(
+                new Phrase("View's identifier is not set")
+            );
         }
         return $this->viewId . '_' . self::NAME_SUFFIX;
     }
@@ -215,6 +232,8 @@ class Changelog implements ChangelogInterface
     }
 
     /**
+     * Get view's identifier
+     *
      * @return string
      */
     public function getViewId()

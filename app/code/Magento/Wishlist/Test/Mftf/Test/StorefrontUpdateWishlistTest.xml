@@ -5,6 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="StorefrontUpdateWishlistTest">
@@ -15,10 +16,23 @@
             <features value="Wishlist"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94905"/>
+=======
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontUpdateWishlistTest">
+        <annotations>
+            <title value="Displaying of message after Wish List update"/>
+            <stories value="MAGETWO-91666: Wishlist update does not return a success message"/>
+            <description value="Displaying of message after Wish List update"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-94296"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <group value="Wishlist"/>
         </annotations>
 
         <before>
+<<<<<<< HEAD
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -45,14 +59,48 @@
 
         <actionGroup ref="StorefrontCustomerEditProductInWishlist" stepKey="updateProductInWishlist">
             <argument name="product" value="$$createProduct$$"/>
+=======
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+        </before>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="category" value="$$category$$"/>
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addProductToWishlist">
+            <argument name="productVar" value="$$product$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlist" stepKey="checkProductInWishlist">
+            <argument name="productVar" value="$$product$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCustomerEditProductInWishlist" stepKey="updateProductInWishlist">
+            <argument name="product" value="$$product$$"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <argument name="description" value="some text"/>
             <argument name="quantity" value="2"/>
         </actionGroup>
 
         <after>
+<<<<<<< HEAD
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+=======
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </after>
     </test>
 </tests>

@@ -6,8 +6,14 @@
  */
 namespace Magento\User\Controller\Adminhtml\Auth;
 
-use Magento\Security\Model\SecurityManager;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Security\Model\SecurityManager;
+<<<<<<< HEAD
+use Magento\Framework\App\ObjectManager;
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Backend\App\Action\Context;
 use Magento\User\Model\UserFactory;
 use Magento\User\Model\ResourceModel\User\CollectionFactory;
@@ -16,8 +22,19 @@ use Magento\Security\Model\PasswordResetRequestEvent;
 use Magento\Framework\Exception\SecurityViolationException;
 use Magento\User\Controller\Adminhtml\Auth;
 use Magento\Backend\Helper\Data;
+<<<<<<< HEAD
 
 class Forgotpassword extends Auth
+=======
+use Magento\User\Model\Spi\NotificatorInterface;
+
+/**
+ * Initiate forgot-password process.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostActionInterface
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 {
     /**
      * @var SecurityManager
@@ -25,6 +42,14 @@ class Forgotpassword extends Auth
     protected $securityManager;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var NotificatorInterface
+     */
+    private $notificator;
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * User model factory
      *
      * @var CollectionFactory
@@ -41,13 +66,23 @@ class Forgotpassword extends Auth
      * @param UserFactory $userFactory
      * @param SecurityManager $securityManager
      * @param CollectionFactory $userCollectionFactory
+<<<<<<< HEAD
+=======
+     * @param Data $backendDataHelper
+     * @param NotificatorInterface|null $notificator
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function __construct(
         Context $context,
         UserFactory $userFactory,
         SecurityManager $securityManager,
         CollectionFactory $userCollectionFactory = null,
+<<<<<<< HEAD
         Data $backendDataHelper = null
+=======
+        Data $backendDataHelper = null,
+        ?NotificatorInterface $notificator = null
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ) {
         parent::__construct($context, $userFactory);
         $this->securityManager = $securityManager;
@@ -55,6 +90,11 @@ class Forgotpassword extends Auth
                 ObjectManager::getInstance()->get(CollectionFactory::class);
         $this->backendDataHelper = $backendDataHelper ?:
                 ObjectManager::getInstance()->get(Data::class);
+<<<<<<< HEAD
+=======
+        $this->notificator = $notificator
+            ?? ObjectManager::getInstance()->get(NotificatorInterface::class);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -96,7 +136,7 @@ class Forgotpassword extends Auth
                                 $newPassResetToken = $this->backendDataHelper->generateResetPasswordLinkToken();
                                 $user->changeResetPasswordLinkToken($newPassResetToken);
                                 $user->save();
-                                $user->sendPasswordResetConfirmationEmail();
+                                $this->notificator->sendForgotPassword($user);
                             }
                             break;
                         }

@@ -36,7 +36,9 @@ define([
      * @returns {Array}
      */
     $.fn.comments = function () {
-        var elements = [];
+        var elements = [],
+            contents,
+            elementContents;
 
         /**
          * @param {jQuery} element - Comment holder
@@ -49,7 +51,7 @@ define([
             // prevent cross origin iframe content reading
             if ($(element).prop('tagName') === 'IFRAME') {
                 iframeHostName = $('<a>').prop('href', $(element).prop('src'))
-                                             .prop('hostname');
+                    .prop('hostname');
 
                 if (window.location.hostname !== iframeHostName) {
                     return [];
@@ -57,6 +59,7 @@ define([
             }
 
             /**
+<<<<<<< HEAD
              * Rewrite jQuery contents method
              *
              * @param {Object} el
@@ -69,6 +72,18 @@ define([
                         return $.nodeName(elem, 'iframe') ?
                                elem.contentDocument || (elem.contentWindow ? elem.contentWindow.document : []) :
                                $.merge([], elem.childNodes);
+=======
+             * Rewrite jQuery contents().
+             *
+             * @param {jQuery} elem
+             */
+            contents = function (elem) {
+                return $.map(elem, function (el) {
+                    try {
+                        return $.nodeName(el, 'iframe') ?
+                            el.contentDocument || (el.contentWindow ? el.contentWindow.document : []) :
+                            $.merge([], el.childNodes);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     } catch (e) {
                         consoleLogger.error(e);
 

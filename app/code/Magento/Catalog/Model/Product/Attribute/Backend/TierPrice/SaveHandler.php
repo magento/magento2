@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\Catalog\Model\Product\Attribute\Backend\TierPrice;
 
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
@@ -16,7 +21,11 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice;
 /**
  * Process tier price data for handled new product
  */
+<<<<<<< HEAD
 class SaveHandler implements ExtensionInterface
+=======
+class SaveHandler extends AbstractHandler
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -29,11 +38,14 @@ class SaveHandler implements ExtensionInterface
     private $attributeRepository;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Customer\Api\GroupManagementInterface
      */
     private $groupManagement;
 
     /**
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @var \Magento\Framework\EntityManager\MetadataPool
      */
     private $metadataPoll;
@@ -57,9 +69,16 @@ class SaveHandler implements ExtensionInterface
         MetadataPool $metadataPool,
         Tierprice $tierPriceResource
     ) {
+<<<<<<< HEAD
         $this->storeManager = $storeManager;
         $this->attributeRepository = $attributeRepository;
         $this->groupManagement = $groupManagement;
+=======
+        parent::__construct($groupManagement);
+
+        $this->storeManager = $storeManager;
+        $this->attributeRepository = $attributeRepository;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->metadataPoll = $metadataPool;
         $this->tierPriceResource = $tierPriceResource;
     }
@@ -70,8 +89,11 @@ class SaveHandler implements ExtensionInterface
      * @param \Magento\Catalog\Api\Data\ProductInterface|object $entity
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
+<<<<<<< HEAD
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @throws \Magento\Framework\Exception\InputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -89,7 +111,11 @@ class SaveHandler implements ExtensionInterface
             $isGlobal = $attribute->isScopeGlobal() || $websiteId === 0;
             $identifierField = $this->metadataPoll->getMetadata(ProductInterface::class)->getLinkField();
             $priceRows = array_filter($priceRows);
+<<<<<<< HEAD
             $productId = $entity->getData($identifierField);
+=======
+            $productId = (int) $entity->getData($identifierField);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
             // prepare and save data
             foreach ($priceRows as $data) {
@@ -113,6 +139,7 @@ class SaveHandler implements ExtensionInterface
 
         return $entity;
     }
+<<<<<<< HEAD
 
     /**
      * Get additional tier price fields
@@ -165,4 +192,6 @@ class SaveHandler implements ExtensionInterface
 
         return $tierPrice;
     }
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 }

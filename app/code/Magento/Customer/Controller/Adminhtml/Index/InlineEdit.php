@@ -8,16 +8,26 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 use Magento\Backend\App\Action;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+<<<<<<< HEAD
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 use Magento\Framework\Message\MessageInterface;
+=======
+use Magento\Customer\Model\AddressRegistry;
+use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Customer\Ui\Component\Listing\AttributeRepository;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\App\ObjectManager;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 /**
  * Customer inline edit action
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InlineEdit extends \Magento\Backend\App\Action
+class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -62,12 +72,18 @@ class InlineEdit extends \Magento\Backend\App\Action
     private $emailNotification;
 
     /**
+     * @var AddressRegistry
+     */
+    private $addressRegistry;
+
+    /**
      * @param Action\Context $context
      * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Psr\Log\LoggerInterface $logger
+     * @param AddressRegistry|null $addressRegistry
      */
     public function __construct(
         Action\Context $context,
@@ -75,13 +91,15 @@ class InlineEdit extends \Magento\Backend\App\Action
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        AddressRegistry $addressRegistry = null
     ) {
         $this->customerRepository = $customerRepository;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->customerMapper = $customerMapper;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->logger = $logger;
+        $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
         parent::__construct($context);
     }
 
@@ -145,7 +163,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      * Receive entity(customer|customer_address) data from request
      *
      * @param array $data
-     * @param null $isCustomerData
+     * @param mixed $isCustomerData
      * @return array
      */
     protected function getData(array $data, $isCustomerData = null)
@@ -218,6 +236,8 @@ class InlineEdit extends \Magento\Backend\App\Action
     protected function saveCustomer(CustomerInterface $customer)
     {
         try {
+            // No need to validate customer address during inline edit action
+            $this->disableAddressValidation($customer);
             $this->customerRepository->save($customer);
         } catch (\Magento\Framework\Exception\InputException $e) {
             $this->getMessageManager()->addError($this->getErrorWithCustomerId($e->getMessage()));
@@ -302,5 +322,19 @@ class InlineEdit extends \Magento\Backend\App\Action
     protected function getErrorWithCustomerId($errorText)
     {
         return '[Customer ID: ' . $this->getCustomer()->getId() . '] ' . __($errorText);
+    }
+
+    /**
+     * Disable Customer Address Validation
+     *
+     * @param CustomerInterface $customer
+     * @throws NoSuchEntityException
+     */
+    private function disableAddressValidation($customer)
+    {
+        foreach ($customer->getAddresses() as $address) {
+            $addressModel = $this->addressRegistry->retrieve($address->getId());
+            $addressModel->setShouldIgnoreValidation(true);
+        }
     }
 }

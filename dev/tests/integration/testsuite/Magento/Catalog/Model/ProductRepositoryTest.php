@@ -3,11 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+<<<<<<< HEAD
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -26,16 +33,20 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     private $productRepository;
 
     /**
+<<<<<<< HEAD
      * @var ProductResource
      */
     private $productResource;
 
     /**
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
      */
     protected function setUp()
@@ -150,16 +161,53 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             $nameUpdated,
             $product->getName()
         );
+=======
+     * Sets up common objects
+     */
+    protected function setUp()
+    {
+        $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()->create(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        );
+
+        $this->searchCriteriaBuilder = \Magento\Framework\App\ObjectManager::getInstance()->create(
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
+        );
+    }
+
+    /**
+     * Checks filtering by store_id
+     *
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     */
+    public function testFilterByStoreId()
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter('store_id', '1', 'eq')
+            ->create();
+        $list = $this->productRepository->getList($searchCriteria);
+        $count = $list->getTotalCount();
+
+        $this->assertGreaterThanOrEqual(1, $count);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
      * Check a case when product should be retrieved with different SKU variations.
      *
      * @param string $sku
+<<<<<<< HEAD
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @dataProvider skuDataProvider
      */
     public function testGetProduct(string $sku)
+=======
+     * @return void
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @dataProvider skuDataProvider
+     */
+    public function testGetProduct(string $sku) : void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $expectedSku = 'simple';
         $product = $this->productRepository->get($sku);
@@ -178,11 +226,16 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         return [
             ['sku' => 'simple'],
             ['sku' => 'Simple'],
+<<<<<<< HEAD
             ['sku' => 'simple ']
+=======
+            ['sku' => 'simple '],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
     }
 
     /**
+<<<<<<< HEAD
      * Checks filtering by store_id.
      *
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
@@ -197,5 +250,52 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $count = $list->getTotalCount();
 
         $this->assertGreaterThanOrEqual(1, $count);
+=======
+     * Test save product with gallery image
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_image.php
+     *
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    public function testSaveProductWithGalleryImage(): void
+    {
+        /** @var $mediaConfig \Magento\Catalog\Model\Product\Media\Config */
+        $mediaConfig = Bootstrap::getObjectManager()
+            ->get(\Magento\Catalog\Model\Product\Media\Config::class);
+
+        /** @var $mediaDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
+        $mediaDirectory = Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Filesystem::class)
+            ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
+
+        $product = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
+        $product->load(1);
+
+        $path = $mediaConfig->getBaseMediaPath() . '/magento_image.jpg';
+        $absolutePath = $mediaDirectory->getAbsolutePath() . $path;
+        $product->addImageToMediaGallery($absolutePath, [
+            'image',
+            'small_image',
+        ], false, false);
+
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $productRepository->save($product);
+
+        $gallery = $product->getData('media_gallery');
+        $this->assertArrayHasKey('images', $gallery);
+        $images = array_values($gallery['images']);
+
+        $this->assertNotEmpty($gallery);
+        $this->assertTrue(isset($images[0]['file']));
+        $this->assertStringStartsWith('/m/a/magento_image', $images[0]['file']);
+        $this->assertArrayHasKey('media_type', $images[0]);
+        $this->assertEquals('image', $images[0]['media_type']);
+        $this->assertStringStartsWith('/m/a/magento_image', $product->getData('image'));
+        $this->assertStringStartsWith('/m/a/magento_image', $product->getData('small_image'));
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 }

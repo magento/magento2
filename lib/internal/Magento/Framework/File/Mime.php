@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\File;
 
+/**
+ * Utility for mime type retrieval
+ */
 class Mime
 {
     /**
@@ -60,9 +63,15 @@ class Mime
     ];
 
     /**
+<<<<<<< HEAD
      * List of mime types that can be defined by file extension
      *
      * @var array $defineByExtensionList
+=======
+     * List of mime types that can be defined by file extension.
+     *
+     * @var array
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $defineByExtensionList = [
         'txt'  => 'text/plain',
@@ -73,7 +82,11 @@ class Mime
         'js'   => 'application/javascript',
         'json' => 'application/json',
         'xml'  => 'application/xml',
+<<<<<<< HEAD
         'svg' => 'image/svg+xml'
+=======
+        'svg' => 'image/svg+xml',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ];
 
     /**
@@ -107,6 +120,10 @@ class Mime
 
     /**
      * Get mime type by the native mime_content_type function.
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * Search for extended mime type if mime_content_type() returned 'application/octet-stream' or 'text/plain'
      *
      * @param string $file
@@ -117,7 +134,11 @@ class Mime
         $extension = $this->getFileExtension($file);
         $result = mime_content_type($file);
         if (isset($this->mimeTypes[$extension], $this->defineByExtensionList[$extension])
+<<<<<<< HEAD
             && strpos($result, 'text/') === 0
+=======
+            && (strpos($result, 'text/') === 0 || strpos($result, 'image/svg') === 0)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ) {
             $result = $this->mimeTypes[$extension];
         }
@@ -126,7 +147,11 @@ class Mime
     }
 
     /**
+<<<<<<< HEAD
      * Get file extension by file name
+=======
+     * Get file extension by file name.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param string $file
      * @return string

@@ -5,12 +5,21 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
     <page name="AdminProductIndexPage" url="catalog/product/index" area="admin" module="Magento_Catalog">
         <section name="AdminProductGridActionSection" />
         <section name="AdminProductGridFilterSection" />
+=======
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+    <page name="AdminProductIndexPage" url="catalog/product/index" area="admin" module="Magento_Catalog">
+        <section name="AdminProductGridActionSection" />
+        <section name="AdminProductGridFilterSection" />
+        <section name="AdminProductGridPaginationSection"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <section name="AdminProductGridSection" />
         <section name="AdminMessagesSection" />
         <section name="AdminProductFiltersSection" />

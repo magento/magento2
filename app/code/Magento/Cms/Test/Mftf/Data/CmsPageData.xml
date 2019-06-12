@@ -7,15 +7,36 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+=======
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <entity name="_defaultCmsPage" type="cms_page">
         <data key="title">Test CMS Page</data>
         <data key="content_heading">Test Content Heading</data>
         <data key="content">Sample page content. Yada yada yada.</data>
         <data key="identifier" unique="suffix">test-page-</data>
     </entity>
+<<<<<<< HEAD
     <entity name="simpleCmsPage" type="cms_page">
         <data key="title">Test CMS Page</data>
+=======
+    <entity name="_newDefaultCmsPage" type="cms_page">
+        <data key="title" unique="suffix">Test CMS Page</data>
+        <data key="content_heading">Test Content Heading</data>
+        <data key="content">Sample page content. Yada yada yada.</data>
+        <data key="identifier" unique="suffix">test-page-</data>
+    </entity>
+    <entity name="_duplicatedCMSPage" type="cms_page">
+        <data key="title">testpage</data>
+        <data key="content_heading">Test Content Heading</data>
+        <data key="content">Sample page content. Yada yada yada.</data>
+        <data key="identifier" unique="suffix">testpage-</data>
+    </entity>
+    <entity name="simpleCmsPage" type="cms_page">
+        <data key="title" unique="suffix">Test CMS Page</data>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <data key="content_heading">Test Content Heading</data>
         <data key="content">Sample page content. Yada yada yada.</data>
         <data key="identifier" unique="suffix">test-page-</data>
@@ -26,6 +47,23 @@
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
         <data key="file">magento.jpg</data>
+<<<<<<< HEAD
+=======
+        <data key="value">magento.jpg</data>
+        <data key="fileName">magento</data>
+        <data key="extension">jpg</data>
+        <data key="content">Image content. Yeah.</data>
+        <data key="height">1000</data>
+    </entity>
+    <entity name="ImageUpload_1" type="uploadImage">
+        <data key="title" unique="suffix">Image1</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="file">magento-again.jpg</data>
+        <data key="fileName">magento-again</data>
+        <data key="value">magento-again.jpg</data>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <data key="content">Image content. Yeah.</data>
         <data key="height">1000</data>
     </entity>
@@ -34,6 +72,7 @@
         <data key="price">1.00</data>
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
+<<<<<<< HEAD
         <data key="file">magento2.jpg</data>
         <data key="content">Image content. Yeah.</data>
         <data key="height">1000</data>
@@ -41,4 +80,43 @@
     <entity name="ImageFolder" type="uploadImage">
         <data key="name" unique="suffix">Test</data>
     </entity>
+=======
+        <data key="value">magento2.jpg</data>
+        <data key="fileName">magento2</data>
+        <data key="extension">jpg</data>
+        <data key="content">Image content. Yeah.</data>
+        <data key="height">1000</data>
+    </entity>
+    <entity name="ImageUpload3" type="uploadImage">
+        <data key="title" unique="suffix">Image1</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="value">magento3.jpg</data>
+        <data key="file">magento3.jpg</data>
+        <data key="fileName">magento3</data>
+        <data key="extension">jpg</data>
+        <data key="content">Image content. Yeah.</data>
+        <data key="height">1000</data>
+        <data key="path">wysiwyg</data>
+    </entity>
+    <entity name="ImageFolder" type="uploadImage">
+        <data key="name" unique="suffix">Test</data>
+    </entity>
+    <entity name="_longContentCmsPage" type="cms_page">
+        <data key="title">Test CMS Page</data>
+        <data key="content_heading">Test Content Heading</data>
+        <data key="content">1&lt;br/&gt;2&lt;br/&gt;3&lt;br/&gt;4&lt;br/&gt;5&lt;br/&gt;6&lt;br/&gt;7&lt;br/&gt;8&lt;br/&gt;9&lt;br/&gt;10&lt;br/&gt;11&lt;br/&gt;12&lt;br/&gt;13&lt;br/&gt;14&lt;br/&gt;15&lt;br/&gt;16&lt;br/&gt;17&lt;br/&gt;18&lt;br/&gt;19&lt;br/&gt;20&lt;br/&gt;line21&lt;br/&gt;22&lt;br/&gt;23&lt;br/&gt;24&lt;br/&gt;25&lt;br/&gt;26&lt;br/&gt;line27&lt;br/&gt;2&lt;br/&gt;3&lt;br/&gt;4&lt;br/&gt;5</data>
+        <data key="identifier" unique="suffix">test-page-</data>
+    </entity>
+    <entity name="_emptyCmsPage" type="cms_page">
+        <data key="title" unique="suffix">Test CMS Page</data>
+        <data key="identifier" unique="suffix">test-page-</data>
+    </entity>
+    <entity name="_emptyCmsBlock" type="block">
+        <data key="title" unique="suffix">Test CMS Block</data>
+        <data key="identifier" unique="suffix" >block</data>
+        <data key="active">true</data>
+    </entity>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </entities>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Elasticsearch:etc/esconfig.xsd">
+    <stemmer>
+        <type>stemmer</type>
+        <default>english</default>
+        <en_US>english</en_US>
+        <de_DE>german</de_DE>
+    </stemmer>
+    <stopwords_file>
+        <default>stopwords.csv</default>
+        <en_US>stopwords_en_US.csv</en_US>
+    </stopwords_file>
+</config>

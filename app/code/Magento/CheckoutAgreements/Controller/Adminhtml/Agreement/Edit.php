@@ -12,8 +12,14 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\App\ObjectManager;
 use Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit as BlockEdit;
+<<<<<<< HEAD
 
 class Edit extends Agreement
+=======
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
+class Edit extends Agreement implements HttpGetActionInterface
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 {
     /**
      * @var AgreementFactory

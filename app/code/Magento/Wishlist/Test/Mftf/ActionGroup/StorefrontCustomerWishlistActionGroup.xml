@@ -7,14 +7,23 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+=======
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <!-- Add Product to wishlist from the category page and check message -->
     <actionGroup name="StorefrontCustomerAddCategoryProductToWishlistActionGroup">
         <arguments>
             <argument name="productVar"/>
         </arguments>
+<<<<<<< HEAD
         <moveMouseOver selector="{{StorefrontCategoryProductSection.productInfoByName(productVar.name)}}" stepKey="addCategoryProductToWishlistMoveMouseOverProduct" />
         <click selector="{{StorefrontCategoryProductSection.productAddToWishlistByName(productVar.name)}}" stepKey="addCategoryProductToWishlistClickAddProductToWishlist"/>
+=======
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productVar.name)}}" stepKey="addCategoryProductToWishlistMoveMouseOverProduct" />
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToWishlistByName(productVar.name)}}" stepKey="addCategoryProductToWishlistClickAddProductToWishlist"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addCategoryProductToWishlistWaitForSuccessMessage"/>
         <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been added to your Wish List." stepKey="addCategoryProductToWishlistSeeProductNameAddedToWishlist"/>
         <seeCurrentUrlMatches regex="~/wishlist_id/\d+/$~" stepKey="seeCurrentUrlMatches"/>
@@ -25,9 +34,16 @@
         <arguments>
             <argument name="productVar"/>
         </arguments>
+<<<<<<< HEAD
         <click selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="addProductToWishlistClickAddToWishlist" />
         <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addProductToWishlistWaitForSuccessMessage"/>
         <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been added to your Wish List." stepKey="addProductToWishlistSeeProductNameAddedToWishlist"/>
+=======
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="WaitForWishList"/>
+        <click selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="addProductToWishlistClickAddToWishlist" />
+        <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addProductToWishlistWaitForSuccessMessage"/>
+        <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been added to your Wish List. Click here to continue shopping." stepKey="addProductToWishlistSeeProductNameAddedToWishlist"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <seeCurrentUrlMatches regex="~/wishlist_id/\d+/$~" stepKey="seeCurrentUrlMatches"/>
     </actionGroup>
 
@@ -36,11 +52,19 @@
         <arguments>
             <argument name="productVar"/>
         </arguments>
+<<<<<<< HEAD
         <waitForElement selector="{{StorefrontCustomerWishlistProductSection.productTitleByName(productVar.name)}}" time="30" stepKey="assertWishlistProductName"/>
         <see userInput="${{productVar.price}}.00" selector="{{StorefrontCustomerWishlistProductSection.productPriceByName(productVar.name)}}" stepKey="assertWishlistProductPrice"/>
         <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productInfoByName(productVar.name)}}" stepKey="wishlistMoveMouseOverProduct" />
         <seeElement selector="{{StorefrontCustomerWishlistProductSection.productAddToCartByName(productVar.name)}}" stepKey="assertWishlistAddToCart" />
         <seeElement selector="{{StorefrontCustomerWishlistProductSection.productImageByName(productVar.name)}}" stepKey="assertWishlistProductImage" />
+=======
+        <waitForElement selector="{{StorefrontCustomerWishlistProductSection.ProductTitleByName(productVar.name)}}" time="30" stepKey="assertWishlistProductName"/>
+        <see userInput="${{productVar.price}}.00" selector="{{StorefrontCustomerWishlistProductSection.ProductPriceByName(productVar.name)}}" stepKey="AssertWishlistProductPrice"/>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productVar.name)}}" stepKey="wishlistMoveMouseOverProduct" />
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductAddToCartByName(productVar.name)}}" stepKey="AssertWishlistAddToCart" />
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductImageByName(productVar.name)}}" stepKey="AssertWishlistProductImage" />
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </actionGroup>
 
     <!-- Check product in wishlist sidebar -->
@@ -48,10 +72,17 @@
         <arguments>
             <argument name="productVar"/>
         </arguments>
+<<<<<<< HEAD
         <waitForElement selector="{{StorefrontCustomerWishlistSidebarSection.productTitleByName(productVar.name)}}" time="30" stepKey="assertWishlistSidebarProductName"/>
         <see userInput="${{productVar.price}}.00" selector="{{StorefrontCustomerWishlistSidebarSection.productPriceByName(productVar.name)}}" stepKey="assertWishlistSidebarProductPrice"/>
         <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.productAddToCartByName(productVar.name)}}" stepKey="assertWishlistSidebarAddToCart" />
         <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.productImageByName(productVar.name)}}" stepKey="assertWishlistSidebarProductImage" />
+=======
+        <waitForElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductTitleByName(productVar.name)}}" time="30" stepKey="assertWishlistSidebarProductName"/>
+        <see userInput="${{productVar.price}}.00" selector="{{StorefrontCustomerWishlistSidebarSection.ProductPriceByName(productVar.name)}}" stepKey="AssertWishlistSidebarProductPrice"/>
+        <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductAddToCartByName(productVar.name)}}" stepKey="AssertWishlistSidebarAddToCart" />
+        <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductImageByName(productVar.name)}}" stepKey="AssertWishlistSidebarProductImage" />
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </actionGroup>
 
     <!--Remove a product from the wishlist using the sidebar -->
@@ -59,9 +90,15 @@
         <arguments>
             <argument name="product"/>
         </arguments>
+<<<<<<< HEAD
         <click selector="{{StorefrontCustomerWishlistSidebarSection.productRemoveByName(product.name)}}" stepKey="removeProductFromWishlistUsingSidebarClickRemoveItemFromWishlist"/>
         <waitForElement selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="removeProductFromWishlistUsingSidebarWaitForSuccessMessage"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="{{product.name}} has been removed from your Wish List." stepKey="removeProductFromWishlistUsingSidebarSeeProductNameRemovedFromWishlist"/>
+=======
+        <click selector="{{StorefrontCustomerWishlistSidebarSection.ProductRemoveByName(product.name)}}" stepKey="RemoveProductFromWishlistUsingSidebarClickRemoveItemFromWishlist"/>
+        <waitForElement selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="RemoveProductFromWishlistUsingSidebarWaitForSuccessMessage"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="{{product.name}} has been removed from your Wish List." stepKey="RemoveProductFromWishlistUsingSidebarSeeProductNameRemovedFromWishlist"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </actionGroup>
 
     <!--Add a product to the cart from the wishlist using the sidebar -->
@@ -69,9 +106,15 @@
         <arguments>
             <argument name="product"/>
         </arguments>
+<<<<<<< HEAD
         <click selector="{{StorefrontCustomerWishlistSidebarSection.productAddToCartByName(product.name)}}" stepKey="addProductToCartFromWishlistUsingSidebarClickAddToCartFromWishlist"/>
         <waitForElement selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="addProductToCartFromWishlistUsingSidebarWaitForSuccessMessage"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added {{product.name}} to your shopping cart." stepKey="addProductToCartFromWishlistUsingSidebarSeeProductNameAddedToCartFromWishlist"/>
+=======
+        <click selector="{{StorefrontCustomerWishlistSidebarSection.ProductAddToCartByName(product.name)}}" stepKey="AddProductToCartFromWishlistUsingSidebarClickAddToCartFromWishlist"/>
+        <waitForElement selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="AddProductToCartFromWishlistUsingSidebarWaitForSuccessMessage"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added {{product.name}} to your shopping cart." stepKey="AddProductToCartFromWishlistUsingSidebarSeeProductNameAddedToCartFromWishlist"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </actionGroup>
 
     <actionGroup name="StorefrontCustomerEditProductInWishlist">
@@ -80,11 +123,29 @@
             <argument name="description" type="string"/>
             <argument name="quantity" type="string"/>
         </arguments>
+<<<<<<< HEAD
         <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productInfoByName(product.name)}}" stepKey="mouseOverOnProduct"/>
         <fillField selector="{{StorefrontCustomerWishlistProductSection.productDescription(product.name)}}" userInput="{{description}}" stepKey="fillDescription"/>
         <fillField selector="{{StorefrontCustomerWishlistProductSection.productQuantity(product.name)}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
         <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productAddAllToCart}}" stepKey="mouseOver"/>
         <click selector="{{StorefrontCustomerWishlistProductSection.productUpdateWishList}}" stepKey="submitUpdateWishlist"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="{{product.name}} has been updated in your Wish List." stepKey="successMessage"/>
+=======
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(product.name)}}" stepKey="mouseOverOnProduct"/>
+        <fillField selector="{{StorefrontCustomerWishlistProductSection.ProductDescription(product.name)}}" userInput="{{description}}" stepKey="fillDescription"/>
+        <fillField selector="{{StorefrontCustomerWishlistProductSection.ProductQuantity(product.name)}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductAddAllToCart}}" stepKey="mouseOver"/>
+        <click selector="{{StorefrontCustomerWishlistProductSection.ProductUpdateWishList}}" stepKey="submitUpdateWishlist"/>
+        <see selector="{{StorefrontCustomerWishlistProductSection.ProductSuccessUpdateMessage}}" userInput="{{product.name}} has been updated in your Wish List." stepKey="successMessage"/>
+    </actionGroup>
+
+    <!-- Share wishlist -->
+    <actionGroup name="StorefrontCustomerShareWishlistActionGroup">
+        <click selector="{{StorefrontCustomerWishlistProductSection.productShareWishList}}" stepKey="clickMyWishListButton"/>
+        <fillField userInput="{{Wishlist.shareInfo_emails}}" selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistEmail}}" stepKey="fillEmailsForShare"/>
+        <fillField userInput="{{Wishlist.shareInfo_message}}" selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistTextMessage}}" stepKey="fillShareMessage"/>
+        <click selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistButton}}" stepKey="sendWishlist"/>
+        <see selector="{{StorefrontCustomerWishlistProductSection.productSuccessShareMessage}}" userInput="Your wish list has been shared." stepKey="successMessage"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </actionGroup>
 </actionGroups>

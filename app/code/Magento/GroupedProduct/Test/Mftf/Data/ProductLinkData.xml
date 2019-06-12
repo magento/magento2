@@ -16,7 +16,17 @@
         <data key="position">1</data>
         <requiredEntity type="product_link_extension_attribute">Qty1000</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="ProductLinkSimple2" type="product_link" extends="ProductLinkSimple1">
         <data key="position">2</data>
+=======
+    <entity name="ProductLinkSimple2" type="product_link">
+        <var key="sku" entityKey="sku" entityType="product3"/>
+        <var key="linked_product_sku" entityKey="sku" entityType="product"/>
+        <data key="link_type">associated</data>
+        <data key="linked_product_type">simple</data>
+        <data key="position">2</data>
+        <requiredEntity type="product_link_extension_attribute">Qty1000</requiredEntity>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </entity>
 </entities>

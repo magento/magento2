@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Model\Ui;
 
 use Magento\Braintree\Gateway\Config\Config;
@@ -52,11 +54,19 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
         $this->braintreeAdapter = $this->getMockBuilder(BraintreeAdapter::class)
             ->disableOriginalConstructor()
             ->getMock();
+<<<<<<< HEAD
         /** @var BraintreeAdapterFactory|MockObject $adapterFactory */
         $adapterFactory = $this->getMockBuilder(BraintreeAdapterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $adapterFactory->method('create')
+=======
+        /** @var BraintreeAdapterFactory|MockObject $adapterFactoryMock */
+        $adapterFactoryMock = $this->getMockBuilder(BraintreeAdapterFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $adapterFactoryMock->method('create')
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->willReturn($this->braintreeAdapter);
 
         $this->session = $this->getMockBuilder(Session::class)
@@ -68,7 +78,11 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->configProvider = new ConfigProvider(
             $this->config,
+<<<<<<< HEAD
             $adapterFactory,
+=======
+            $adapterFactoryMock,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $this->session
         );
     }
@@ -119,6 +133,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                     'isActive' => true,
                     'getCcTypesMapper' => ['visa' => 'VI', 'american-express'=> 'AE'],
                     'getSdkUrl' => self::SDK_URL,
+                    'getHostedFieldsSdkUrl' => 'https://sdk.com/test.js',
                     'getCountrySpecificCardTypeConfig' => [
                         'GB' => ['VI', 'AE'],
                         'US' => ['DI', 'JCB']
@@ -129,7 +144,6 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                     'getThresholdAmount' => 20,
                     'get3DSecureSpecificCountries' => ['GB', 'US', 'CA'],
                     'getEnvironment' => 'test-environment',
-                    'getKountMerchantId' => 'test-kount-merchant-id',
                     'getMerchantId' => 'test-merchant-id',
                     'hasFraudProtection' => true,
                 ],
@@ -140,6 +154,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'clientToken' => self::CLIENT_TOKEN,
                             'ccTypesMapper' => ['visa' => 'VI', 'american-express' => 'AE'],
                             'sdkUrl' => self::SDK_URL,
+                            'hostedFieldsSdkUrl' => 'https://sdk.com/test.js',
                             'countrySpecificCardTypes' =>[
                                 'GB' => ['VI', 'AE'],
                                 'US' => ['DI', 'JCB']
@@ -147,7 +162,6 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'availableCardTypes' => ['AE', 'VI', 'MC', 'DI', 'JCB'],
                             'useCvv' => true,
                             'environment' => 'test-environment',
-                            'kountMerchantId' => 'test-kount-merchant-id',
                             'merchantId' => 'test-merchant-id',
                             'hasFraudProtection' => true,
                             'ccVaultCode' => ConfigProvider::CC_VAULT_CODE

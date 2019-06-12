@@ -9,14 +9,22 @@
 namespace Magento\Framework\Mail\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\MessageInterfaceFactory;
+<<<<<<< HEAD
 use Magento\Framework\Mail\TransportInterface;
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Phrase;
 
 /**
+ * TransportBuilder
+ *
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TransportBuilder
 {
@@ -89,7 +97,11 @@ class TransportBuilder
     protected $mailTransportFactory;
 
     /**
+<<<<<<< HEAD
      * @var MessageInterfaceFactory
+=======
+     * @var \Magento\Framework\Mail\MessageInterfaceFactory
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $messageFactory;
 
@@ -99,7 +111,11 @@ class TransportBuilder
      * @param SenderResolverInterface $senderResolver
      * @param ObjectManagerInterface $objectManager
      * @param TransportInterfaceFactory $mailTransportFactory
+<<<<<<< HEAD
      * @param MessageInterfaceFactory|null $messageFactory
+=======
+     * @param MessageInterfaceFactory $messageFactory
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -173,13 +189,31 @@ class TransportBuilder
     /**
      * Set mail from address
      *
+     * @deprecated This function sets the from address but does not provide
+     * a way of setting the correct from addresses based on the scope.
+     * @see setFromByScope()
+     *
      * @param string|array $from
      * @return $this
+     * @throws \Magento\Framework\Exception\MailException
      */
     public function setFrom($from)
     {
-        $result = $this->_senderResolver->resolve($from);
-        $this->message->setFrom($result['email'], $result['name']);
+        return $this->setFromByScope($from, null);
+    }
+
+    /**
+     * Set mail from address by scopeId
+     *
+     * @param string|array $from
+     * @param string|int $scopeId
+     * @return $this
+     * @throws \Magento\Framework\Exception\MailException
+     */
+    public function setFromByScope($from, $scopeId = null)
+    {
+        $result = $this->_senderResolver->resolve($from, $scopeId);
+        $this->message->setFromAddress($result['email'], $result['name']);
         return $this;
     }
 
@@ -234,7 +268,12 @@ class TransportBuilder
     /**
      * Get mail transport
      *
+<<<<<<< HEAD
      * @return TransportInterface
+=======
+     * @return \Magento\Framework\Mail\TransportInterface
+     * @throws LocalizedException
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function getTransport()
     {
@@ -272,23 +311,30 @@ class TransportBuilder
     }
 
     /**
-     * Prepare message
+     * Prepare message.
      *
      * @return $this
+     * @throws LocalizedException if template type is unknown
      */
     protected function prepareMessage()
     {
         $template = $this->getTemplate();
-        $types = [
-            TemplateTypesInterface::TYPE_TEXT => MessageInterface::TYPE_TEXT,
-            TemplateTypesInterface::TYPE_HTML => MessageInterface::TYPE_HTML,
-        ];
-
         $body = $template->processTemplate();
-        $this->message->setMessageType($types[$template->getType()])
-            ->setBody($body)
-            ->setSubject(html_entity_decode($template->getSubject(), ENT_QUOTES));
+        switch ($template->getType()) {
+            case TemplateTypesInterface::TYPE_TEXT:
+                $this->message->setBodyText($body);
+                break;
 
+            case TemplateTypesInterface::TYPE_HTML:
+                $this->message->setBodyHtml($body);
+                break;
+
+            default:
+                throw new LocalizedException(
+                    new Phrase('Unknown template type')
+                );
+        }
+        $this->message->setSubject(html_entity_decode($template->getSubject(), ENT_QUOTES));
         return $this;
     }
 }

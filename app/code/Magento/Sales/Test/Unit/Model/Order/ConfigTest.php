@@ -38,6 +38,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $storeManagerMock;
 
+<<<<<<< HEAD
+=======
+    /**
+     * @return void
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -47,6 +53,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'storeManager' => $this->storeManagerMock,
         ]);
         $this->statusFactoryMock = $this->getMockBuilder(\Magento\Sales\Model\Order\StatusFactory::class)
+<<<<<<< HEAD
+=======
+            ->disableOriginalConstructor()
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->setMethods(['load', 'create'])
             ->getMock();
         $this->orderStatusCollectionFactoryMock = $this->createPartialMock(
@@ -63,6 +73,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             );
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvisibleOnFrontStatuses()
     {
         $statuses = [
@@ -109,6 +122,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedResult, $result);
     }
 
+    /**
+     * @return void
+     */
     public function testGetStateLabelByStateAndStatus()
     {
         $statuses = [

@@ -68,7 +68,11 @@ class CurrencyConfigTest extends TestCase
     }
 
     /**
+<<<<<<< HEAD
      * Test get currency config for admin and storefront areas.
+=======
+     * Test get currency config for admin, crontab and storefront areas.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @dataProvider getConfigCurrenciesDataProvider
      * @return void
@@ -91,7 +95,11 @@ class CurrencyConfigTest extends TestCase
             ->method('getCode')
             ->willReturn('testCode');
 
+<<<<<<< HEAD
         if ($areCode === Area::AREA_ADMINHTML) {
+=======
+        if (in_array($areCode, [Area::AREA_ADMINHTML, Area::AREA_CRONTAB])) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $this->storeManager->expects(self::once())
                 ->method('getStores')
                 ->willReturn([$store]);
@@ -121,6 +129,10 @@ class CurrencyConfigTest extends TestCase
     {
         return [
             ['areaCode' => Area::AREA_ADMINHTML],
+<<<<<<< HEAD
+=======
+            ['areaCode' => Area::AREA_CRONTAB],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ['areaCode' => Area::AREA_FRONTEND],
         ];
     }

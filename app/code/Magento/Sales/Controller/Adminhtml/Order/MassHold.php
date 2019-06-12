@@ -5,7 +5,11 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+<<<<<<< HEAD
 use Magento\Framework\Exception\NotFoundException;
+=======
+use Magento\Framework\App\Action\HttpPostActionInterface;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
@@ -16,7 +20,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 /**
  * Class MassHold
  */
-class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
+class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -78,13 +82,13 @@ class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAct
         $countNonHoldOrder = $collection->count() - $countHoldOrder;
 
         if ($countNonHoldOrder && $countHoldOrder) {
-            $this->messageManager->addError(__('%1 order(s) were not put on hold.', $countNonHoldOrder));
+            $this->messageManager->addErrorMessage(__('%1 order(s) were not put on hold.', $countNonHoldOrder));
         } elseif ($countNonHoldOrder) {
-            $this->messageManager->addError(__('No order(s) were put on hold.'));
+            $this->messageManager->addErrorMessage(__('No order(s) were put on hold.'));
         }
 
         if ($countHoldOrder) {
-            $this->messageManager->addSuccess(__('You have put %1 order(s) on hold.', $countHoldOrder));
+            $this->messageManager->addSuccessMessage(__('You have put %1 order(s) on hold.', $countHoldOrder));
         }
 
         $resultRedirect = $this->resultRedirectFactory->create();

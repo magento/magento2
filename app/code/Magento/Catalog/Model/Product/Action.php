@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Product;
 
 /**
@@ -170,5 +168,7 @@ class Action extends \Magento\Framework\Model\AbstractModel
         if (!$categoryIndexer->isScheduled()) {
             $categoryIndexer->reindexList(array_unique($productIds));
         }
+
+        $this->_eventManager->dispatch('catalog_product_to_website_change', ['products' => $productIds]);
     }
 }

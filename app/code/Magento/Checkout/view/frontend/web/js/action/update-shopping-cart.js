@@ -14,7 +14,12 @@ define([
     $.widget('mage.updateShoppingCart', {
         options: {
             validationURL: '',
+<<<<<<< HEAD
             eventName: 'updateCartItemQty'
+=======
+            eventName: 'updateCartItemQty',
+            updateCartActionContainer: ''
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         },
 
         /** @inheritdoc */
@@ -31,7 +36,13 @@ define([
          * @return {Boolean}
          */
         onSubmit: function (event) {
+<<<<<<< HEAD
             if (!this.options.validationURL) {
+=======
+            var action = this.element.find(this.options.updateCartActionContainer).val();
+
+            if (!this.options.validationURL || action === 'empty_cart') {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 return true;
             }
 

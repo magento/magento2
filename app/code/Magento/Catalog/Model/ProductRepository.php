@@ -1,14 +1,19 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model;
 
+<<<<<<< HEAD
+=======
+use Magento\Catalog\Api\CategoryLinkManagementInterface;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
+use Magento\Catalog\Model\ProductRepository\MediaGalleryProcessor;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Eav\Model\Entity\Attribute\Exception as AttributeException;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
@@ -23,6 +28,10 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+<<<<<<< HEAD
+=======
+use Magento\Framework\Exception\StateException;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\Exception\TemporaryState\CouldNotSaveException as TemporaryCouldNotSaveException;
 use Magento\Framework\Exception\ValidatorException;
 
@@ -120,14 +129,22 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
     /**
      * @deprecated
+<<<<<<< HEAD
      * @see \Magento\Catalog\Model\MediaGalleryProcessor
+=======
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @var ImageContentInterfaceFactory
      */
     protected $contentFactory;
 
     /**
      * @deprecated
+<<<<<<< HEAD
      * @see \Magento\Catalog\Model\MediaGalleryProcessor
+=======
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @var ImageProcessorInterface
      */
     protected $imageProcessor;
@@ -138,9 +155,20 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $extensionAttributesJoinProcessor;
 
     /**
+<<<<<<< HEAD
      * @var ProductRepository\MediaGalleryProcessor
+=======
+     * @deprecated
+     *
+     * @var \Magento\Catalog\Model\Product\Gallery\Processor
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     protected $mediaGalleryProcessor;
+
+    /**
+     * @var MediaGalleryProcessor
+     */
+    private $mediaProcessor;
 
     /**
      * @var CollectionProcessorInterface
@@ -163,6 +191,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private $readExtensions;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var CategoryLinkManagementInterface
+     */
+    private $linkManagement;
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * ProductRepository constructor.
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
@@ -187,7 +223,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param CollectionProcessorInterface $collectionProcessor [optional]
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param int $cacheLimit [optional]
+<<<<<<< HEAD
      * @param ReadExtensions|null $readExtensions
+=======
+     * @param ReadExtensions $readExtensions
+     * @param CategoryLinkManagementInterface $linkManagement
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -215,7 +256,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         CollectionProcessorInterface $collectionProcessor = null,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         $cacheLimit = 1000,
+<<<<<<< HEAD
         ReadExtensions $readExtensions = null
+=======
+        ReadExtensions $readExtensions = null,
+        CategoryLinkManagementInterface $linkManagement = null
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -240,6 +286,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->cacheLimit = (int)$cacheLimit;
         $this->readExtensions = $readExtensions ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(ReadExtensions::class);
+<<<<<<< HEAD
+=======
+        $this->linkManagement = $linkManagement ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(CategoryLinkManagementInterface::class);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -250,9 +301,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $cacheKey = $this->getCacheKey([$editMode, $storeId]);
         $cachedProduct = $this->getProductFromLocalCache($sku, $cacheKey);
         if ($cachedProduct === null || $forceReload) {
+<<<<<<< HEAD
+=======
+            $product = $this->productFactory->create();
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $productId = $this->resourceModel->getIdBySku($sku);
             if (!$productId) {
-                throw new NoSuchEntityException(__('Requested product doesn\'t exist'));
+                throw new NoSuchEntityException(
+                    __("The product that was requested doesn't exist. Verify the product and try again.")
+                );
             }
 
             $product = $this->getById($productId, $editMode, $storeId, $forceReload);
@@ -280,7 +338,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             }
             $product->load($productId);
             if (!$product->getId()) {
-                throw new NoSuchEntityException(__('Requested product doesn\'t exist'));
+                throw new NoSuchEntityException(
+                    __("The product that was requested doesn't exist. Verify the product and try again.")
+                );
             }
             $this->cacheProduct($cacheKey, $product);
         }
@@ -342,6 +402,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if ($createNew) {
             $product = $this->productFactory->create();
             $this->assignProductToWebsites($product);
+<<<<<<< HEAD
             if (isset($productData['price']) && !isset($productData['product_type'])) {
                 $product->setTypeId(Product\Type::TYPE_SIMPLE);
             }
@@ -353,6 +414,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $this->removeProductFromLocalCache($productData['sku']);
                 $product = $this->get($productData['sku']);
             }
+=======
+        } else {
+            $this->removeProductFromLocalCache($productData['sku']);
+            $product = $this->get($productData['sku']);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
 
         foreach ($productData as $key => $value) {
@@ -370,7 +436,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
     {
+<<<<<<< HEAD
         if ($this->storeManager->getStore(true)->getCode() === \Magento\Store\Model\Store::ADMIN_CODE) {
+=======
+        if ($this->storeManager->getStore(true)->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $websiteIds = array_keys($this->storeManager->getWebsites());
         } else {
             $websiteIds = [$this->storeManager->getStore()->getWebsiteId()];
@@ -380,6 +450,31 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Process new gallery media entry.
+     *
+     * @deprecated
+     * @see MediaGalleryProcessor::processNewMediaGalleryEntry()
+     *
+     * @param ProductInterface $product
+     * @param array $newEntry
+     * @return $this
+     * @throws InputException
+     * @throws StateException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function processNewMediaGalleryEntry(
+        ProductInterface $product,
+        array  $newEntry
+    ) {
+        $this->getMediaGalleryProcessor()->processNewMediaGalleryEntry($product, $newEntry);
+
+        return $this;
+    }
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * Process product links, creating new links, updating and deleting existing links
      *
      * @param ProductInterface $product
@@ -422,7 +517,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                     $linkedSku = $link->getLinkedProductSku();
                     if (!isset($linkedProductIds[$linkedSku])) {
                         throw new NoSuchEntityException(
-                            __('Product with SKU "%1" does not exist', $linkedSku)
+                            __('The Product with the "%1" SKU doesn\'t exist.', $linkedSku)
                         );
                     }
                     $linkDataArray['product_id'] = $linkedProductIds[$linkedSku];
@@ -435,6 +530,29 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         $product->setProductLinks($newLinks);
 
+<<<<<<< HEAD
+=======
+    /**
+     * Process Media gallery data before save product.
+     *
+     * Compare Media Gallery Entries Data with existing Media Gallery
+     * * If Media entry has not value_id set it as new
+     * * If Existing entry 'value_id' absent in Media Gallery set 'removed' flag
+     * * Merge Existing and new media gallery
+     *
+     * @param ProductInterface $product contains only existing media gallery items
+     * @param array $mediaGalleryEntries array which contains all media gallery items
+     * @return $this
+     * @throws InputException
+     * @throws StateException
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function processMediaGallery(ProductInterface $product, $mediaGalleryEntries)
+    {
+        $this->getMediaGalleryProcessor()->processMediaGallery($product, $mediaGalleryEntries);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $this;
     }
 
@@ -445,6 +563,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function save(ProductInterface $product, $saveOptions = false)
     {
+        $assignToCategories = false;
         $tierPrices = $product->getData('tier_price');
 
         try {
@@ -462,6 +581,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $extensionAttributes = $product->getExtensionAttributes();
             if (empty($extensionAttributes->__toArray())) {
                 $product->setExtensionAttributes($existingProduct->getExtensionAttributes());
+<<<<<<< HEAD
+=======
+                $assignToCategories = true;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             }
         } catch (NoSuchEntityException $e) {
             $existingProduct = null;
@@ -501,9 +624,21 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         if ($tierPrices !== null) {
             $product->setData('tier_price', $tierPrices);
+<<<<<<< HEAD
         }
 
         $this->saveProduct($product);
+=======
+        }
+
+        $this->saveProduct($product);
+        if ($assignToCategories === true && $product->getCategoryIds()) {
+            $this->linkManagement->assignProductToCategories(
+                $product->getSku(),
+                $product->getCategoryIds()
+            );
+        }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->removeProductFromLocalCache($product->getSku());
         unset($this->instancesById[$product->getId()]);
 
@@ -522,10 +657,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             unset($this->instancesById[$product->getId()]);
             $this->resourceModel->delete($product);
         } catch (ValidatorException $e) {
-            throw new CouldNotSaveException(__($e->getMessage()));
+            throw new CouldNotSaveException(__($e->getMessage()), $e);
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\StateException(
-                __('Unable to remove product %1', $sku)
+                __('The "%1" product couldn\'t be removed.', $sku),
+                $e
             );
         }
         $this->removeProductFromLocalCache($sku);
@@ -589,12 +725,19 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param Collection $collection
      * @return Collection
      */
+<<<<<<< HEAD
     private function addExtensionAttributes(Collection $collection): Collection
+=======
+    private function addExtensionAttributes(Collection $collection) : Collection
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         foreach ($collection->getItems() as $item) {
             $this->readExtensions->execute($item);
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $collection;
     }
 
@@ -645,6 +788,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Retrieve media gallery processor.
      *
+<<<<<<< HEAD
      * @return ProductRepository\MediaGalleryProcessor
      */
     private function getMediaGalleryProcessor()
@@ -655,6 +799,18 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
 
         return $this->mediaGalleryProcessor;
+=======
+     * @return MediaGalleryProcessor
+     */
+    private function getMediaGalleryProcessor()
+    {
+        if (null === $this->mediaProcessor) {
+            $this->mediaProcessor = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(MediaGalleryProcessor::class);
+        }
+
+        return $this->mediaProcessor;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -684,9 +840,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private function getProductFromLocalCache(string $sku, string $cacheKey)
     {
         $preparedSku = $this->prepareSku($sku);
+<<<<<<< HEAD
         if (!isset($this->instances[$preparedSku])) {
             return null;
         }
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         return $this->instances[$preparedSku][$cacheKey] ?? null;
     }
@@ -697,7 +856,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param string $sku
      * @return void
      */
+<<<<<<< HEAD
     private function removeProductFromLocalCache(string $sku)
+=======
+    private function removeProductFromLocalCache(string $sku) :void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $preparedSku = $this->prepareSku($sku);
         unset($this->instances[$preparedSku]);
@@ -708,8 +871,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      *
      * @param Product $product
      * @param string $cacheKey
+<<<<<<< HEAD
      */
     private function saveProductInLocalCache(Product $product, string $cacheKey)
+=======
+     * @return void
+     */
+    private function saveProductInLocalCache(Product $product, string $cacheKey) : void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $preparedSku = $this->prepareSku($product->getSku());
         $this->instances[$preparedSku][$cacheKey] = $product;
@@ -735,7 +904,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @throws CouldNotSaveException
      * @throws LocalizedException
      */
+<<<<<<< HEAD
     private function saveProduct($product)
+=======
+    private function saveProduct($product): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         try {
             $this->removeProductFromLocalCache($product->getSku());
@@ -769,8 +942,17 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             throw new CouldNotSaveException(__($e->getMessage()));
         } catch (LocalizedException $e) {
             throw $e;
+<<<<<<< HEAD
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Unable to save product'), $e);
+=======
+            // phpcs:disable Magento2.Exceptions.ThrowCatch
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(
+                __('The product was unable to be saved. Please try again.'),
+                $e
+            );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
     }
 }

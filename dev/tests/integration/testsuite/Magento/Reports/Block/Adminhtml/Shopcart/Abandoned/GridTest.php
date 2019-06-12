@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Reports\Block\Adminhtml\Shopcart\Abandoned;
 
 use Magento\Quote\Model\Quote;
@@ -21,7 +23,7 @@ class GridTest extends \Magento\Reports\Block\Adminhtml\Shopcart\GridTestAbstrac
     /**
      * @return void
      */
-    public function testGridContent()
+    public function testGridContent(): void
     {
         /** @var LayoutInterface $layout */
         $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);
@@ -40,7 +42,11 @@ class GridTest extends \Magento\Reports\Block\Adminhtml\Shopcart\GridTestAbstrac
     /**
      * @return void
      */
+<<<<<<< HEAD
     public function testPageSizeIsSetToNullWhenExportCsvFile()
+=======
+    public function testPageSizeIsSetToNullWhenExportCsvFile(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         /** @var LayoutInterface $layout */
         $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);

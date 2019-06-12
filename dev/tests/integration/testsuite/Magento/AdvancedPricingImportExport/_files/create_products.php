@@ -16,7 +16,11 @@ $productModel->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setWebsiteIds([1])
     ->setCategoryIds([])
+<<<<<<< HEAD
     ->setStockData(['qty' => 100, 'is_in_stock' => 1])
+=======
+    ->setStockData(['qty' => 100, 'is_in_stock' => 1, 'manage_stock' => 1])
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ->setIsObjectNew(true)
     ->save();
 

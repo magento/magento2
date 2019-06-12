@@ -1,3 +1,8 @@
 "Theme phrase will be translated","Theme phrase is translated"
+<<<<<<< HEAD
 "Magento_Catalog module phrase will be override by theme translation","Magento_Catalog module phrase is override by theme translation"
 "Magento_Store module phrase will be override by theme translation","Magento_Store module phrase is override by theme translation"
+=======
+"Magento_Catalog module phrase will be overridden by theme translation","Magento_Catalog module phrase is overridden by theme translation"
+"Magento_Store module phrase will be overridden by theme translation","Magento_Store module phrase is overridden by theme translation"
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc

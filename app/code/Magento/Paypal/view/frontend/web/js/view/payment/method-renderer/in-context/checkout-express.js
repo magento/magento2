@@ -2,6 +2,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 define(
     [
         'underscore',
@@ -95,41 +96,105 @@ define(
 
                 return this;
             },
+=======
+define([
+    'jquery',
+    'Magento_Paypal/js/view/payment/method-renderer/paypal-express-abstract',
+    'Magento_Paypal/js/in-context/express-checkout-wrapper',
+    'Magento_Paypal/js/action/set-payment-method',
+    'Magento_Checkout/js/model/payment/additional-validators',
+    'Magento_Ui/js/model/messageList',
+    'Magento_Ui/js/lib/view/utils/async'
+], function ($, Component, Wrapper, setPaymentMethod, additionalValidators, messageList) {
+    'use strict';
 
-            /**
-             * @returns {Object}
-             */
-            initClient: function () {
-                var selector = '#' + this.getButtonId();
+    return Component.extend(Wrapper).extend({
+        defaults: {
+            template: 'Magento_Paypal/payment/paypal-express-in-context',
+            validationElements: 'input'
+        },
 
-                _.each(this.clientConfig, function (fn, name) {
-                    if (typeof fn === 'function') {
-                        this.clientConfig[name] = fn.bind(this);
-                    }
-                }, this);
+        /**
+         * Listens element on change and validate it.
+         *
+         * @param {HTMLElement} context
+         */
+        initListeners: function (context) {
+            $.async(this.validationElements, context, function (element) {
+                $(element).on('change', function () {
+                    this.validate();
+                }.bind(this));
+            }.bind(this));
+        },
 
-                if (!clientInit) {
-                    domObserver.get(selector, function () {
-                        paypalExpressCheckout.checkout.setup(this.merchantId, this.clientConfig);
-                        clientInit = true;
-                        domObserver.off(selector);
-                    }.bind(this));
-                } else {
-                    domObserver.get(selector, function () {
-                        $(selector).on('click', this.clientConfig.click);
-                        domObserver.off(selector);
-                    }.bind(this));
+        /**
+         *  Validates Smart Buttons
+         */
+        validate: function () {
+            this._super();
+
+            if (this.actions) {
+                additionalValidators.validate(true) ? this.actions.enable() : this.actions.disable();
+            }
+        },
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
+
+        /** @inheritdoc */
+        beforePayment: function (resolve, reject) {
+            var promise = $.Deferred();
+
+            setPaymentMethod(this.messageContainer).done(function () {
+                return promise.resolve();
+            }).fail(function (response) {
+                var error;
+
+                try {
+                    error = JSON.parse(response.responseText);
+                } catch (exception) {
+                    error = this.paymentActionError;
                 }
 
-                return this;
-            },
+                this.addError(error);
 
-            /**
-             * @returns {String}
-             */
-            getButtonId: function () {
-                return this.inContextId;
-            }
-        });
-    }
-);
+                return reject(new Error(error));
+            }.bind(this));
+
+            return promise;
+        },
+
+        /**
+         * Populate client config with all required data
+         *
+         * @return {Object}
+         */
+        prepareClientConfig: function () {
+            this._super();
+            this.clientConfig.quoteId = window.checkoutConfig.quoteData['entity_id'];
+            this.clientConfig.customerId = window.customerData.id;
+            this.clientConfig.merchantId = this.merchantId;
+            this.clientConfig.button = 0;
+            this.clientConfig.commit = true;
+
+            return this.clientConfig;
+        },
+
+        /**
+         * Adding logic to be triggered onClick action for smart buttons component
+         */
+        onClick: function () {
+            additionalValidators.validate();
+            this.selectPaymentMethod();
+        },
+
+        /**
+         * Adds error message
+         *
+         * @param {String} message
+         */
+        addError: function (message) {
+            messageList.addErrorMessage({
+                message: message
+            });
+        }
+    });
+});

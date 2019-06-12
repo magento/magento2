@@ -27,16 +27,32 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @var BraintreeAdapterFactory|MockObject
+<<<<<<< HEAD
+=======
+     */
+    private $adapterFactoryMock;
+
+    /**
+     * @var EntityFactoryInterface|MockObject
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $adapterFactory;
 
     /**
+<<<<<<< HEAD
      * @var EntityFactoryInterface|MockObject
+=======
+     * @var FilterMapper|MockObject
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $entityFactory;
 
     /**
+<<<<<<< HEAD
      * @var FilterMapper|MockObject
+=======
+     * @var DocumentInterface|MockObject
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $filterMapper;
 
@@ -68,11 +84,19 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['search'])
             ->disableOriginalConstructor()
             ->getMock();
+<<<<<<< HEAD
         $this->adapterFactory = $this->getMockBuilder(BraintreeAdapterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->adapterFactory->method('create')
             ->willReturn($this->braintreeAdapter);
+=======
+        $this->adapterFactoryMock = $this->getMockBuilder(BraintreeAdapterFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->adapterFactoryMock->method('create')
+            ->willReturn($this->braintreeAdapterMock);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -91,9 +115,15 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->transactionMap);
 
         $collection = new TransactionsCollection(
+<<<<<<< HEAD
             $this->entityFactory,
             $this->adapterFactory,
             $this->filterMapper
+=======
+            $this->entityFactoryMock,
+            $this->adapterFactoryMock,
+            $this->filterMapperMock
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         );
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
@@ -118,9 +148,15 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->transactionMap);
 
         $collection = new TransactionsCollection(
+<<<<<<< HEAD
             $this->entityFactory,
             $this->adapterFactory,
             $this->filterMapper
+=======
+            $this->entityFactoryMock,
+            $this->adapterFactoryMock,
+            $this->filterMapperMock
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         );
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
@@ -133,22 +169,34 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetItemsWithLimit()
     {
-        $transations = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
+        $transactions = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
 
         $this->filterMapper->method('getFilter')
             ->willReturn(new BraintreeSearchNodeStub());
 
+<<<<<<< HEAD
         $this->braintreeAdapter->method('search')
             ->willReturn($transations);
+=======
+        $this->braintreeAdapterMock->expects($this->once())
+            ->method('search')
+            ->willReturn($transactions);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $this->entityFactory->expects(self::exactly(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT))
             ->method('create')
             ->willReturn($this->transactionMap);
 
         $collection = new TransactionsCollection(
+<<<<<<< HEAD
             $this->entityFactory,
             $this->adapterFactory,
             $this->filterMapper
+=======
+            $this->entityFactoryMock,
+            $this->adapterFactoryMock,
+            $this->filterMapperMock
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         );
         $collection->setPageSize(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT);
 
@@ -163,22 +211,34 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetItemsWithNullLimit()
     {
-        $transations = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
+        $transactions = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
 
         $this->filterMapper->method('getFilter')
             ->willReturn(new BraintreeSearchNodeStub());
 
+<<<<<<< HEAD
         $this->braintreeAdapter->method('search')
             ->willReturn($transations);
+=======
+        $this->braintreeAdapterMock->expects($this->once())
+            ->method('search')
+            ->willReturn($transactions);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $this->entityFactory->expects(self::exactly(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT))
             ->method('create')
             ->willReturn($this->transactionMap);
 
         $collection = new TransactionsCollection(
+<<<<<<< HEAD
             $this->entityFactory,
             $this->adapterFactory,
             $this->filterMapper
+=======
+            $this->entityFactoryMock,
+            $this->adapterFactoryMock,
+            $this->filterMapperMock
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         );
         $collection->setPageSize(null);
 
@@ -201,9 +261,15 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
             ->willReturn(new BraintreeSearchNodeStub());
 
         $collection = new TransactionsCollection(
+<<<<<<< HEAD
             $this->entityFactory,
             $this->adapterFactory,
             $this->filterMapper
+=======
+            $this->entityFactoryMock,
+            $this->adapterFactoryMock,
+            $this->filterMapperMock
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         );
 
         self::assertInstanceOf(

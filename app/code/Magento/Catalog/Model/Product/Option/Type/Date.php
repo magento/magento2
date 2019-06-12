@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
@@ -11,6 +12,7 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
  * Catalog product option date type
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
@@ -101,11 +103,19 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $this->setUserValue(
                 [
                     'date' => isset($value['date']) ? $value['date'] : '',
+<<<<<<< HEAD
                     'year' => isset($value['year']) ? (int)$value['year'] : 0,
                     'month' => isset($value['month']) ? (int)$value['month'] : 0,
                     'day' => isset($value['day']) ? (int)$value['day'] : 0,
                     'hour' => isset($value['hour']) ? (int)$value['hour'] : 0,
                     'minute' => isset($value['minute']) ? (int)$value['minute'] : 0,
+=======
+                    'year' => isset($value['year']) ? (int) $value['year'] : 0,
+                    'month' => isset($value['month']) ? (int) $value['month'] : 0,
+                    'day' => isset($value['day']) ? (int) $value['day'] : 0,
+                    'hour' => isset($value['hour']) ? (int) $value['hour'] : 0,
+                    'minute' => isset($value['minute']) ? (int) $value['minute'] : 0,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     'day_part' => isset($value['day_part']) ? $value['day_part'] : '',
                     'date_internal' => isset($value['date_internal']) ? $value['date_internal'] : '',
                 ]
@@ -122,7 +132,10 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 );
             } else {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Please specify product\'s required option(s).')
+                    __(
+                        "The product's required option(s) weren't entered. "
+                        . "Make sure the options are entered and try again."
+                    )
                 );
             }
         } else {
@@ -143,7 +156,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function prepareForCart()
     {
         if ($this->getIsValid() && $this->getUserValue() !== null) {
-            $option = $this->getOption();
             $value = $this->getUserValue();
 
             if (isset($value['date_internal']) && $value['date_internal'] != '') {

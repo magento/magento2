@@ -48,7 +48,10 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
             $shippingAddress = $quote->getShippingAddress();
             $shippingAddress->setStoreId($quote->getStoreId());
             $validationResult = $shippingAddress->validate();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             if ($validationResult !== true) {
                 $validationErrors = [__($this->generalMessage)];
             }

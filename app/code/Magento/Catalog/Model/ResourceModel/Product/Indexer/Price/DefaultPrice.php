@@ -10,6 +10,7 @@ use Magento\Framework\Indexer\DimensionalIndexerInterface;
 
 /**
  * Default Product Type Price Indexer Resource model
+ *
  * For correctly work need define product type id
  *
  * @api
@@ -39,7 +40,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     /**
      * Core data
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
@@ -72,7 +73,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param string|null $connectionName
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param PriceModifierInterface[] $priceModifiers
@@ -82,7 +83,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
+<<<<<<< HEAD
         \Magento\Framework\Module\Manager $moduleManager,
+=======
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $connectionName = null,
         IndexTableStructureFactory $indexTableStructureFactory = null,
         array $priceModifiers = []
@@ -208,6 +213,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     }
 
     /**
+     * Reindex prices.
+     *
      * @param null|int|array $entityIds
      * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
      */
@@ -256,7 +263,12 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $tableName = $this->_getDefaultFinalPriceTable();
         $this->getConnection()->delete($tableName);
 
+<<<<<<< HEAD
         $finalPriceTable = $this->indexTableStructureFactory->create([
+=======
+        $finalPriceTable = $this->indexTableStructureFactory->create(
+            [
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             'tableName' => $tableName,
             'entityField' => 'entity_id',
             'customerGroupField' => 'customer_group_id',
@@ -267,7 +279,12 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             'minPriceField' => 'min_price',
             'maxPriceField' => 'max_price',
             'tierPriceField' => 'tier_price',
+<<<<<<< HEAD
         ]);
+=======
+            ]
+        );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         return $finalPriceTable;
     }
@@ -459,6 +476,18 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             "{$specialPrice} IS NOT NULL AND ({$specialFromExpr}) AND ({$specialToExpr})",
             $specialPrice,
             $maxUnsignedBigint
+<<<<<<< HEAD
+=======
+        );
+        $tierPrice = $this->getTotalTierPriceExpression($price);
+        $tierPriceExpr = $connection->getIfNullSql($tierPrice, $maxUnsignedBigint);
+        $finalPrice = $connection->getLeastSql(
+            [
+            $price,
+            $specialPriceExpr,
+            $tierPriceExpr,
+            ]
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         );
         $tierPrice = $this->getTotalTierPriceExpression($price);
         $tierPriceExpr = $connection->getIfNullSql($tierPrice, $maxUnsignedBigint);
@@ -547,7 +576,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param IndexTableStructure $finalPriceTable
      * @return void
      */
+<<<<<<< HEAD
     private function modifyPriceIndex(IndexTableStructure $finalPriceTable)
+=======
+    private function modifyPriceIndex(IndexTableStructure $finalPriceTable) : void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         foreach ($this->priceModifiers as $priceModifier) {
             $priceModifier->modifyPrice($finalPriceTable);
@@ -604,7 +637,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             []
         )->joinLeft(
             ['otps' => $this->getTable('catalog_product_option_type_price')],
-            'otps.option_type_id = otpd.option_type_id AND otpd.store_id = cs.store_id',
+            'otps.option_type_id = otpd.option_type_id AND otps.store_id = cs.store_id',
             []
         )->group(
             ['i.entity_id', 'i.customer_group_id', 'i.website_id', 'o.option_id']
@@ -802,6 +835,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     }
 
     /**
+     * Check if product exists.
+     *
      * @return bool
      */
     protected function hasEntity()
@@ -823,6 +858,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get total tier price expression.
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param \Zend_Db_Expr $priceExpression
      * @return \Zend_Db_Expr
      */
@@ -841,7 +881,12 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
                 ]
             ),
             'NULL',
+<<<<<<< HEAD
             $this->getConnection()->getLeastSql([
+=======
+            $this->getConnection()->getLeastSql(
+                [
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 $this->getConnection()->getIfNullSql(
                     $this->getTierPriceExpressionForTable('tier_price_1', $priceExpression),
                     $maxUnsignedBigint
@@ -858,10 +903,25 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
                     $this->getTierPriceExpressionForTable('tier_price_4', $priceExpression),
                     $maxUnsignedBigint
                 ),
+<<<<<<< HEAD
             ])
         );
     }
 
+=======
+                ]
+            )
+        );
+    }
+
+    /**
+     * Get tier price expression for table.
+     *
+     * @param string $tableAlias
+     * @param \Zend_Db_Expr $priceExpression
+     * @return \Zend_Db_Expr
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     private function getTierPriceExpressionForTable($tableAlias, \Zend_Db_Expr $priceExpression)
     {
         return $this->getConnection()->getCheckSql(

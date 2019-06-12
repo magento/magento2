@@ -78,13 +78,17 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
+<<<<<<< HEAD
      * Save only newly created attributes for configurable product
+=======
+     * Save only newly created attributes for configurable product.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param ProductInterface $product
      * @param array $attributes
      * @return array
      */
-    private function saveConfigurableProductAttributes(ProductInterface $product, array $attributes)
+    private function saveConfigurableProductAttributes(ProductInterface $product, array $attributes): array
     {
         $ids = [];
         $existingAttributeIds = [];
@@ -104,12 +108,16 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
+<<<<<<< HEAD
      * Remove product attributes which no longer used
+=======
+     * Remove product attributes which no longer used.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param ProductInterface $product
      * @return void
      */
-    private function deleteConfigurableProductAttributes(ProductInterface $product)
+    private function deleteConfigurableProductAttributes(ProductInterface $product): void
     {
         $newAttributeIds = [];
         foreach ($product->getExtensionAttributes()->getConfigurableProductOptions() as $option) {
@@ -121,6 +129,7 @@ class SaveHandler implements ExtensionInterface
             ) {
                 $this->optionRepository->deleteById($product->getSku(), $option->getId());
             }
+<<<<<<< HEAD
         }
     }
 
@@ -137,7 +146,25 @@ class SaveHandler implements ExtensionInterface
             && $option->getPosition() == $attribute->getPosition()
         ) {
             return false;
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
+        return true;
+    }
+
+    /**
+     * Check if existing option is changed.
+     *
+     * @param OptionInterface $option
+     * @param Attribute $attribute
+     * @return bool
+     */
+    private function isOptionChanged(OptionInterface $option, Attribute $attribute): bool
+    {
+        if ($option->getLabel() == $attribute->getLabel() && $option->getPosition() == $attribute->getPosition()) {
+            return false;
+        }
+
         return true;
     }
 }

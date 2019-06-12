@@ -32,7 +32,7 @@ class AssertCustomerGroupNotOnCartPriceRuleForm extends AbstractConstraint
 
         /** @var RuleInformation $ruleInformationTab */
         $ruleInformationTab = $promoQuoteNew->getSalesRuleForm()->getSection('rule_information');
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $ruleInformationTab->isVisibleCustomerGroup($customerGroup),
             "Customer group {$customerGroup->getCustomerGroupCode()} is still in cart price rule page."
         );

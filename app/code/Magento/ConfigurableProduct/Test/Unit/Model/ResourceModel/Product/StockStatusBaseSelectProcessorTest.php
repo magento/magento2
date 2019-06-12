@@ -52,7 +52,11 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
             StockStatusBaseSelectProcessor::class,
             [
                 'stockConfig' => $this->stockConfigMock,
+<<<<<<< HEAD
                 'stockStatusResource' => $this->stockStatusResourceMock
+=======
+                'stockStatusResource' => $this->stockStatusResourceMock,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         );
     }
@@ -107,7 +111,11 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'Out of stock products are being displayed' => [true],
+<<<<<<< HEAD
             'Out of stock products are NOT being displayed' => [false]
+=======
+            'Out of stock products are NOT being displayed' => [false],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
     }
 }

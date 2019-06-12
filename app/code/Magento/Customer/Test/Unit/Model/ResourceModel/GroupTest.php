@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -51,17 +49,27 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     {
         $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->customerVat = $this->createMock(\Magento\Customer\Model\Vat::class);
-        $this->customersFactory = $this->createPartialMock(\Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class, ['create']);
-        $this->groupManagement = $this->createPartialMock(\Magento\Customer\Api\GroupManagementInterface::class, ['getDefaultGroup', 'getNotLoggedInGroup', 'isReadOnly', 'getLoggedInGroups', 'getAllCustomersGroup']);
+        $this->customersFactory = $this->createPartialMock(
+            \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class,
+            ['create']
+        );
+        $this->groupManagement = $this->createPartialMock(
+            \Magento\Customer\Api\GroupManagementInterface::class,
+            ['getDefaultGroup', 'getNotLoggedInGroup', 'isReadOnly', 'getLoggedInGroups', 'getAllCustomersGroup']
+        );
 
         $this->groupModel = $this->createMock(\Magento\Customer\Model\Group::class);
 
         $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resource);
 
-        $this->relationProcessorMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class);
+        $this->relationProcessorMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class
+        );
 
-        $this->snapshotMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class);
+        $this->snapshotMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class
+        );
 
         $transactionManagerMock = $this->createMock(
             \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface::class
@@ -89,7 +97,6 @@ class GroupTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test for save() method when we try to save entity with system's reserved ID.
-     * 
      * @return void
      */
     public function testSaveWithReservedId()
@@ -143,7 +150,10 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         $dbAdapter = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($dbAdapter));
 
-        $customer = $this->createPartialMock(\Magento\Customer\Model\Customer::class, ['__wakeup', 'load', 'getId', 'getStoreId', 'setGroupId', 'save']);
+        $customer = $this->createPartialMock(
+            \Magento\Customer\Model\Customer::class,
+            ['__wakeup', 'load', 'getId', 'getStoreId', 'setGroupId', 'save']
+        );
         $customerId = 1;
         $customer->expects($this->once())->method('getId')->will($this->returnValue($customerId));
         $customer->expects($this->once())->method('load')->with($customerId)->will($this->returnSelf());

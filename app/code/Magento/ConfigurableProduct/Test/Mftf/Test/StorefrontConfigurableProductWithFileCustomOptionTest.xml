@@ -7,16 +7,28 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+=======
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <test name="StorefrontConfigurableProductWithFileCustomOptionTest">
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Add configurable product to cart"/>
+<<<<<<< HEAD
             <title value="Correct error message and redirect with invalid file custom option"/>
             <description value="Configurable product has file custom option. When adding to cart with an invalid filetype, the correct error message is shown, and options remain selected."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-93318"/>
             <group value="configurableProduct"/>
+=======
+            <title value="Correct error message and redirect with invalid file option"/>
+            <description value="Configurable product has file custom option. When adding to cart with an invalid filetype, the correct error message is shown, and options remain selected."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-93059"/>
+            <group value="ConfigurableProduct"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </annotations>
 
         <before>
@@ -25,6 +37,7 @@
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+<<<<<<< HEAD
             <actionGroup ref="DeleteAllProductsOnProductsGridPageFilteredByName" stepKey="deleteAllCreatedProducts">
                 <argument name="product" value="BaseConfigurableProduct"/>
             </actionGroup>
@@ -32,6 +45,9 @@
                 <argument name="productAttribute" value="colorProductAttribute"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logoutAdminUserAfterTest"/>
+=======
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </after>
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -44,23 +60,37 @@
         <!--Add custom option to configurable product-->
         <actionGroup ref="AddProductCustomOptionFile" stepKey="addCustomOptionToProduct"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <!--Go to storefront-->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForHomePageLoad"/>
         <click selector="{{StorefrontNavigationSection.topCategory($$createCategory.name$$)}}" stepKey="goToCategoryStorefront"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+<<<<<<< HEAD
         <see selector="{{StorefrontCategoryMainSection.categoryTitle}}" userInput="$$createCategory.name$$" stepKey="seeOnCategoryPage"/>
         <!--Add configurable product to cart-->
         <moveMouseOver selector="{{StorefrontCategoryProductSection.productTitleByName(BaseConfigurableProduct.name)}}" stepKey="hoverProductInGrid"/>
         <click selector="{{StorefrontCategoryProductSection.productAddToCartByName(BaseConfigurableProduct.name)}}" stepKey="tryAddToCartFromCategoryPage"/>
+=======
+        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="$$createCategory.name$$" stepKey="seeOnCategoryPage"/>
+        <!--Add configurable product to cart-->
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductTitleByName(BaseConfigurableProduct.name)}}" stepKey="hoverProductInGrid"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(BaseConfigurableProduct.name)}}" stepKey="tryAddToCartFromCategoryPage"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <waitForPageLoad stepKey="waitForRedirectToProductPage"/>
         <seeInCurrentUrl url="{{StorefrontProductPage.url(BaseConfigurableProduct.urlKey)}}" stepKey="seeOnProductPage"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="{{colorProductAttribute2.name}}" stepKey="selectColor"/>
         <!--Try invalid file-->
         <attachFile selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" userInput="lorem_ipsum.docx" stepKey="attachInvalidFile"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCartInvalidFile"/>
+<<<<<<< HEAD
         <waitForPageLoad time="30" stepKey="waitForAddToCartWithError"/>
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <waitForElementVisible selector="{{StorefrontProductPageSection.alertMessage}}" stepKey="waitForErrorMessageInvalidFile"/>
         <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="The file 'lorem_ipsum.docx' for '{{ProductOptionFile.title}}' has an invalid extension." stepKey="seeMessageInvalidFile"/>
         <!--Option remains selected-->
@@ -68,18 +98,31 @@
         <!--Try valid file-->
         <attachFile selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" userInput="{{MagentoLogo.file}}" stepKey="attachValidFile"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$11.99" stepKey="seePriceUpdated"/>
+<<<<<<< HEAD
         <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="BaseConfigurableProduct.name"/>
         </actionGroup>
+=======
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCartValidFile"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" stepKey="waitForSuccessMessage"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="You added {{BaseConfigurableProduct.name}} to your shopping cart." stepKey="seeSuccessMessage"/>
 
         <!--Check item in cart-->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCart"/>
         <waitForPageLoad stepKey="waitForCartPageLoad"/>
+<<<<<<< HEAD
         <seeElement selector="{{CheckoutCartProductSection.productLinkByName(BaseConfigurableProduct.name)}}" stepKey="seeProductInCart"/>
         <see selector="{{CheckoutCartProductSection.productOptionByNameAndAttribute(BaseConfigurableProduct.name, colorProductAttribute.default_label)}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeSelectedOption"/>
         <see selector="{{CheckoutCartProductSection.productOptionByNameAndAttribute(BaseConfigurableProduct.name, ProductOptionFile.title)}}" userInput="{{MagentoLogo.file}}" stepKey="seeCorrectOptionFile"/>
         <!--Delete cart item-->
         <click selector="{{CheckoutCartProductSection.removeItem}}" stepKey="deleteCartItem"/>
+=======
+        <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName(BaseConfigurableProduct.name)}}" stepKey="seeProductInCart"/>
+        <see selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute(BaseConfigurableProduct.name, colorProductAttribute.default_label)}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeSelectedOption"/>
+        <see selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute(BaseConfigurableProduct.name, ProductOptionFile.title)}}" userInput="{{MagentoLogo.file}}" stepKey="seeCorrectOptionFile"/>
+        <!--Delete cart item-->
+        <click selector="{{CheckoutCartProductSection.RemoveItem}}" stepKey="deleteCartItem"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </test>
 </tests>

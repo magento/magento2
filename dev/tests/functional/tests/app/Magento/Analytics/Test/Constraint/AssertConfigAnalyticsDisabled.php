@@ -25,19 +25,30 @@ class AssertConfigAnalyticsDisabled extends AbstractConstraint
     {
         $openAnalyticsConfigStep->run();
 
+<<<<<<< HEAD
         \PHPUnit_Framework_Assert::assertFalse(
             (bool)$configAnalytics->getAnalyticsForm()->isAnalyticsEnabled(),
             'Magento Advanced Reporting service is not disabled.'
         );
         \PHPUnit_Framework_Assert::assertEquals(
+=======
+        \PHPUnit\Framework\Assert::assertFalse(
+            (bool)$configAnalytics->getAnalyticsForm()->isAnalyticsEnabled(),
+            'Magento Advanced Reporting service is not disabled.'
+        );
+        \PHPUnit\Framework\Assert::assertEquals(
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $configAnalytics->getAnalyticsForm()->getAnalyticsStatus(),
             'Subscription status: Disabled',
             'Magento Advanced Reporting service subscription status is not disabled.'
         );
+<<<<<<< HEAD
         \PHPUnit_Framework_Assert::assertFalse(
             (bool)$configAnalytics->getAnalyticsForm()->getAnalyticsVerticalScope(),
             'Industry Data is visible.'
         );
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**

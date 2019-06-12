@@ -43,7 +43,11 @@ class WindowsSmtpConfigTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
+<<<<<<< HEAD
     public function setUp()
+=======
+    public function setUp(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $objectManager = new ObjectManager($this);
 
@@ -65,7 +69,11 @@ class WindowsSmtpConfigTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
+<<<<<<< HEAD
     public function testBeforeSendMessageOsWindows()
+=======
+    public function testBeforeSendMessageOsWindows(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $this->osInfoMock->expects($this->once())
             ->method('isWindows')
@@ -86,7 +94,11 @@ class WindowsSmtpConfigTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
+<<<<<<< HEAD
     public function testBeforeSendMessageOsIsWindows()
+=======
+    public function testBeforeSendMessageOsIsWindows(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $this->osInfoMock->expects($this->once())
             ->method('isWindows')

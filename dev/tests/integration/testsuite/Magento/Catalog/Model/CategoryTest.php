@@ -324,6 +324,10 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/categories.php
      * @magentoDbIsolation disabled
+<<<<<<< HEAD
+=======
+     * @return void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function testCreateSubcategoryWithMultipleStores()
     {

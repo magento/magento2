@@ -3,11 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 declare(strict_types=1);
 
 namespace Magento\Checkout\Controller\Account;
 
+<<<<<<< HEAD
+=======
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Checkout\Model\Session;
@@ -16,7 +23,11 @@ use Magento\Sales\Api\OrderCustomerDelegateInterface;
 /**
  * Redirect guest customer for registration.
  */
+<<<<<<< HEAD
 class DelegateCreate extends Action
+=======
+class DelegateCreate extends Action implements HttpGetActionInterface
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 {
     /**
      * @var OrderCustomerDelegateInterface
@@ -44,7 +55,11 @@ class DelegateCreate extends Action
     }
 
     /**
+<<<<<<< HEAD
      * @inheritDoc
+=======
+     * {@inheritdoc}
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function execute()
     {

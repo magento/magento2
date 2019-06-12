@@ -9,6 +9,9 @@ namespace Magento\SalesRule\Model\ResourceModel\Rule;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Quote\Model\Quote\Address;
+use Magento\SalesRule\Api\Data\CouponInterface;
+use Magento\SalesRule\Model\Coupon;
+use Magento\SalesRule\Model\Rule;
 
 /**
  * Sales Rules resource collection model.
@@ -80,6 +83,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
+     * Map data for associated entities
+     *
      * @param string $entityType
      * @param string $objectField
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -105,15 +110,20 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
         $associatedEntities = $this->getConnection()->fetchAll($select);
 
-        array_map(function ($associatedEntity) use ($entityInfo, $ruleIdField, $objectField) {
-            $item = $this->getItemByColumnValue($ruleIdField, $associatedEntity[$ruleIdField]);
-            $itemAssociatedValue = $item->getData($objectField) === null ? [] : $item->getData($objectField);
-            $itemAssociatedValue[] = $associatedEntity[$entityInfo['entity_id_field']];
-            $item->setData($objectField, $itemAssociatedValue);
-        }, $associatedEntities);
+        array_map(
+            function ($associatedEntity) use ($entityInfo, $ruleIdField, $objectField) {
+                $item = $this->getItemByColumnValue($ruleIdField, $associatedEntity[$ruleIdField]);
+                $itemAssociatedValue = $item->getData($objectField) ?? [];
+                $itemAssociatedValue[] = $associatedEntity[$entityInfo['entity_id_field']];
+                $item->setData($objectField, $itemAssociatedValue);
+            },
+            $associatedEntities
+        );
     }
 
     /**
+     *  Add website ids and customer group ids to rules data
+     *
      * @return $this
      * @throws \Exception
      * @since 100.1.0
@@ -137,6 +147,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param string $couponCode
      * @param string|null $now
      * @param Address $address allow extensions to further filter out rules based on quote address
+     * @throws \Zend_Db_Select_Exception
      * @use $this->addWebsiteGroupDateFilter()
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return $this
@@ -149,13 +160,11 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         Address $address = null
     ) {
         if (!$this->getFlag('validation_filter')) {
-            /* We need to overwrite joinLeft if coupon is applied */
-            $this->getSelect()->reset();
-            parent::_initSelect();
+            $this->prepareSelect($websiteId, $customerGroupId, $now);
 
-            $this->addWebsiteGroupDateFilter($websiteId, $customerGroupId, $now);
-            $select = $this->getSelect();
+            $noCouponRules = $this->getNoCouponCodeSelect();
 
+<<<<<<< HEAD
             $connection = $this->getConnection();
             if (strlen($couponCode)) {
                 $select->joinLeft(
@@ -214,17 +223,122 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                     null,
                     Select::TYPE_CONDITION
                 );
+=======
+            if ($couponCode) {
+                $couponRules = $this->getCouponCodeSelect($couponCode);
+
+                $allAllowedRules = $this->getConnection()->select();
+                $allAllowedRules->union([$noCouponRules, $couponRules], Select::SQL_UNION_ALL);
+
+                $wrapper = $this->getConnection()->select();
+                $wrapper->from($allAllowedRules);
+
+                $this->_select = $wrapper;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             } else {
-                $this->addFieldToFilter(
-                    'main_table.coupon_type',
-                    \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON
-                );
+                $this->_select = $noCouponRules;
             }
+
             $this->setOrder('sort_order', self::SORT_ORDER_ASC);
             $this->setFlag('validation_filter', true);
         }
 
         return $this;
+    }
+
+    /**
+     * Recreate the default select object for specific needs of salesrule evaluation with coupon codes.
+     *
+     * @param int $websiteId
+     * @param int $customerGroupId
+     * @param string $now
+     */
+    private function prepareSelect($websiteId, $customerGroupId, $now)
+    {
+        $this->getSelect()->reset();
+        parent::_initSelect();
+
+        $this->addWebsiteGroupDateFilter($websiteId, $customerGroupId, $now);
+    }
+
+    /**
+     * Return select object to determine all active rules not needing a coupon code.
+     *
+     * @return Select
+     */
+    private function getNoCouponCodeSelect()
+    {
+        $noCouponSelect = clone $this->getSelect();
+
+        $noCouponSelect->where(
+            'main_table.coupon_type = ?',
+            Rule::COUPON_TYPE_NO_COUPON
+        );
+
+        $noCouponSelect->columns([Coupon::KEY_CODE => new \Zend_Db_Expr('NULL')]);
+
+        return $noCouponSelect;
+    }
+
+    /**
+     * Determine all active rules that are valid for the given coupon code.
+     *
+     * @param string $couponCode
+     * @return Select
+     */
+    private function getCouponCodeSelect($couponCode)
+    {
+        $couponSelect = clone $this->getSelect();
+
+        $this->joinCouponTable($couponCode, $couponSelect);
+
+        $notExpired = $this->getConnection()->quoteInto(
+            '(rule_coupons.expiration_date IS NULL OR rule_coupons.expiration_date >= ?)',
+            $this->_date->date()->format('Y-m-d')
+        );
+
+        $isAutogenerated =
+            $this->getConnection()->quoteInto('main_table.coupon_type = ?', Rule::COUPON_TYPE_AUTO)
+            . ' AND ' .
+            $this->getConnection()->quoteInto('rule_coupons.type = ?', CouponInterface::TYPE_GENERATED);
+
+        $isValidSpecific =
+            $this->getConnection()->quoteInto('(main_table.coupon_type = ?)', Rule::COUPON_TYPE_SPECIFIC)
+            . ' AND (' .
+            '(main_table.use_auto_generation = 1 AND rule_coupons.type = 1)'
+            . ' OR ' .
+            '(main_table.use_auto_generation = 0 AND rule_coupons.type = 0)'
+            . ')';
+
+        $couponSelect->where(
+            "$notExpired AND ($isAutogenerated OR $isValidSpecific)",
+            null,
+            Select::TYPE_CONDITION
+        );
+
+        return $couponSelect;
+    }
+
+    /**
+     * Join coupong table to select.
+     *
+     * @param string $couponCode
+     * @param Select $couponSelect
+     */
+    private function joinCouponTable($couponCode, Select $couponSelect)
+    {
+        $couponJoinCondition =
+            'main_table.rule_id = rule_coupons.rule_id'
+            . ' AND ' .
+            $this->getConnection()->quoteInto('main_table.coupon_type <> ?', Rule::COUPON_TYPE_NO_COUPON)
+            . ' AND ' .
+            $this->getConnection()->quoteInto('rule_coupons.code = ?', $couponCode);
+
+        $couponSelect->joinInner(
+            ['rule_coupons' => $this->getTable('salesrule_coupon')],
+            $couponJoinCondition,
+            [Coupon::KEY_CODE]
+        );
     }
 
     /**
@@ -366,6 +480,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
+     * Getter for _associatedEntitiesMap property
+     *
      * @return array
      * @deprecated 100.1.0
      */
@@ -380,6 +496,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
+     * Getter for dateApplier property
+     *
      * @return DateApplier
      * @deprecated 100.1.0
      */

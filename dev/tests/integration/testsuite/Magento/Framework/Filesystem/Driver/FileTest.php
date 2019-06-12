@@ -7,11 +7,15 @@
  */
 namespace Magento\Framework\Filesystem\Driver;
 
+<<<<<<< HEAD
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+=======
+use Magento\Framework\Exception\FileSystemException;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 class FileTest extends \PHPUnit\Framework\TestCase
 {
@@ -106,6 +110,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * Check, driver can create file with content or without one.
      *
      * @dataProvider createFileDataProvider
@@ -146,12 +151,18 @@ class FileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * Tests creation and removing of symlinks.
      *
      * @throws FileSystemException
      * @return void
      */
+<<<<<<< HEAD
     public function testSymlinks()
+=======
+    public function testSymlinks(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $sourceDirectory = $this->generatedPath . '/source';
         $destinationDirectory = $this->generatedPath . '/destination';
@@ -173,7 +184,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
      * @throws FileSystemException
      * @return void
      */
+<<<<<<< HEAD
     private function removeGeneratedDirectory()
+=======
+    private function removeGeneratedDirectory(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         if (is_dir($this->generatedPath)) {
             $this->driver->deleteDirectory($this->generatedPath);

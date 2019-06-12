@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\CatalogRule\Model\Indexer\IndexBuilder;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -42,7 +47,11 @@ class ProductLoader
      * @param array $productIds
      * @return ProductInterface[]
      */
+<<<<<<< HEAD
     public function getProducts($productIds)
+=======
+    public function getProducts(array $productIds): array
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $this->searchCriteriaBuilder->addFilter('entity_id', $productIds, 'in');
         $searchCriteria = $this->searchCriteriaBuilder->create();

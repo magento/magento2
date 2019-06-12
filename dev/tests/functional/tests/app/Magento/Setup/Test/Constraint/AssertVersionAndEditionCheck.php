@@ -21,7 +21,11 @@ class AssertVersionAndEditionCheck extends AbstractConstraint
      * @param array $upgrade
      * @return void
      */
+<<<<<<< HEAD
     public function processAssert(SetupWizard $setupWizard, array $upgrade)
+=======
+    public function processAssert(SetupWizard $setupWizard, array $upgrade) :void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $message = "We're ready to upgrade {$upgrade['package']} to {$upgrade['version']}.";
         if ($upgrade['otherComponents'] === 'Yes' && isset($upgrade['selectedPackages'])) {
@@ -30,7 +34,11 @@ class AssertVersionAndEditionCheck extends AbstractConstraint
             }
         }
         $actualMessage = $setupWizard->getSystemUpgrade()->getUpgradeMessage();
+<<<<<<< HEAD
         \PHPUnit_Framework_Assert::assertContains(
+=======
+        \PHPUnit\Framework\Assert::assertContains(
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $message,
             $actualMessage,
             "Updater application check is incorrect: \n"

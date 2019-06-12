@@ -7,7 +7,11 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <section name="AdminOrderItemsOrderedSection">
         <element name="itemProductName" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-product .product-title" parameterized="true"/>
         <element name="itemProductSku" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-product .product-sku-block" parameterized="true"/>
@@ -23,7 +27,14 @@
 
         <element name="productNameColumn" type="text" selector=".edit-order-table .col-product .product-title"/>
         <element name="productNameOptions" type="text" selector=".edit-order-table .col-product .item-options"/>
+<<<<<<< HEAD
         <element name="productSkuColumn" type="text" selector=".edit-order-table .col-product .product-sku-block"/>
+=======
+        <element name="productName" type="text" selector="#order-items_grid  span[id*=order_item]"/>
+        <element name="productNameOptionsLink" type="text" selector="//table[contains(@class, 'edit-order-table')]//td[contains(@class, 'col-product')]//a[text() = '{{var1}}']" parameterized="true"/>
+        <element name="productSkuColumn" type="text" selector=".edit-order-table .col-product .product-sku-block"/>
+        <element name="productTotal" type="text" selector="#order-items_grid .col-total"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <element name="statusColumn" type="text" selector=".edit-order-table .col-status"/>
         <element name="originalPriceColumn" type="text" selector=".edit-order-table .col-original-price .price"/>
         <element name="priceColumn" type="text" selector=".edit-order-table .col-price .price"/>
@@ -34,4 +45,8 @@
         <element name="discountAmountColumn" type="text" selector=".edit-order-table .col-discont .price"/>
         <element name="totalColumn" type="text" selector=".edit-order-table .col-total .price"/>
     </section>
+<<<<<<< HEAD
 </sections>
+=======
+</sections>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc

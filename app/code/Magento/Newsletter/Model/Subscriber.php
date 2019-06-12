@@ -7,6 +7,11 @@ namespace Magento\Newsletter\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+<<<<<<< HEAD
+=======
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\Api\DataObjectHelper;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -32,6 +37,7 @@ use Magento\Framework\Api\DataObjectHelper;
  * @method int getSubscriberId()
  * @method Subscriber setSubscriberId(int $value)
  *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  *
@@ -100,7 +106,11 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Date
+<<<<<<< HEAD
      * @var DateTime
+=======
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $dateTime;
 
@@ -157,7 +167,11 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+<<<<<<< HEAD
      * @param DateTime|null $dateTime
+=======
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime|null $dateTime
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param CustomerInterfaceFactory|null $customerFactory
      * @param DataObjectHelper|null $dataObjectHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -176,7 +190,11 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
+<<<<<<< HEAD
         DateTime $dateTime = null,
+=======
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime = null,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         CustomerInterfaceFactory $customerFactory = null,
         DataObjectHelper $dataObjectHelper = null
     ) {
@@ -185,6 +203,13 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->_customerSession = $customerSession;
+        $this->dateTime = $dateTime ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Stdlib\DateTime\DateTime::class
+        );
+        $this->customerFactory = $customerFactory ?: ObjectManager::getInstance()
+            ->get(CustomerInterfaceFactory::class);
+        $this->dataObjectHelper = $dataObjectHelper ?: ObjectManager::getInstance()
+            ->get(DataObjectHelper::class);
         $this->customerRepository = $customerRepository;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->inlineTranslation = $inlineTranslation;
@@ -389,6 +414,12 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         try {
             $customerData = $this->customerRepository->getById($customerId);
             $customerData->setStoreId($this->_storeManager->getStore()->getId());
+<<<<<<< HEAD
+=======
+            if ($customerData->getWebsiteId() === null) {
+                $customerData->setWebsiteId($this->_storeManager->getStore()->getWebsiteId());
+            }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $data = $this->getResource()->loadByCustomerData($customerData);
             $this->addData($data);
             if (!empty($data) && $customerData->getId() && !$this->getCustomerId()) {
@@ -396,6 +427,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
                 $this->setSubscriberConfirmCode($this->randomSequence());
                 $this->save();
             }
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (NoSuchEntityException $e) {
         }
         return $this;
@@ -487,7 +519,9 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
                 $this->sendConfirmationSuccessEmail();
             }
             return $this->getStatus();
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception($e->getMessage());
         }
     }
@@ -525,7 +559,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * unsubscribe the customer with the id provided
+     * Unsubscribe the customer with the id provided
      *
      * @param int $customerId
      * @return $this
@@ -553,7 +587,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $customerId
      * @param bool $subscribe indicates whether the customer should be subscribed or unsubscribed
-     * @return  $this
+     * @return $this
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -585,7 +619,12 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             if (AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED
                 == $this->customerAccountManagement->getConfirmationStatus($customerId)
             ) {
-                $status = self::STATUS_UNCONFIRMED;
+                if ($this->getId() && $this->getStatus() == self::STATUS_SUBSCRIBED) {
+                    // if a customer was already subscribed then keep the subscribed
+                    $status = self::STATUS_SUBSCRIBED;
+                } else {
+                    $status = self::STATUS_UNCONFIRMED;
+                }
             } elseif ($isConfirmNeed) {
                 if ($this->getStatus() != self::STATUS_SUBSCRIBED) {
                     $status = self::STATUS_NOT_ACTIVE;
@@ -612,16 +651,17 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $this->setStatus($status);
 
+        $storeId = $customerData->getStoreId();
+        if ((int)$customerData->getStoreId() === 0) {
+            $storeId = $this->_storeManager->getWebsite($customerData->getWebsiteId())->getDefaultStore()->getId();
+        }
+
         if (!$this->getId()) {
-            $storeId = $customerData->getStoreId();
-            if ($customerData->getStoreId() == 0) {
-                $storeId = $this->_storeManager->getWebsite($customerData->getWebsiteId())->getDefaultStore()->getId();
-            }
             $this->setStoreId($storeId)
                 ->setCustomerId($customerData->getId())
                 ->setEmail($customerData->getEmail());
         } else {
-            $this->setStoreId($customerData->getStoreId())
+            $this->setStoreId($storeId)
                 ->setEmail($customerData->getEmail());
         }
 
@@ -674,7 +714,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Mark receiving subscriber of queue newsletter
      *
      * @param  \Magento\Newsletter\Model\Queue $queue
-     * @return boolean
+     * @return Subscriber
      */
     public function received(\Magento\Newsletter\Model\Queue $queue)
     {

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -16,7 +14,10 @@ use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
+<<<<<<< HEAD
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 /**
  * Class AbstractAction
@@ -127,6 +128,11 @@ abstract class AbstractAction
     private $queryGenerator;
 
     /**
+     * @var int
+     */
+    private $currentStoreId = 0;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
@@ -167,6 +173,7 @@ abstract class AbstractAction
     {
         foreach ($this->storeManager->getStores() as $store) {
             if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
+                $this->currentStoreId = $store->getId();
                 $this->reindexRootCategory($store);
                 $this->reindexAnchorCategories($store);
                 $this->reindexNonAnchorCategories($store);
@@ -391,7 +398,11 @@ abstract class AbstractAction
             [
                 'cc.entity_id',
                 'ccp.product_id',
+<<<<<<< HEAD
                 'visibility'
+=======
+                'visibility',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         );
     }
@@ -414,8 +425,16 @@ abstract class AbstractAction
      * @param int $range
      * @return Select[]
      */
+<<<<<<< HEAD
     protected function prepareSelectsByRange(Select $select, $field, $range = self::RANGE_CATEGORY_STEP)
     {
+=======
+    protected function prepareSelectsByRange(
+        Select $select,
+        string $field,
+        int $range = self::RANGE_CATEGORY_STEP
+    ) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         if ($this->isRangingNeeded()) {
             $iterator = $this->queryGenerator->generate(
                 $field,
@@ -480,10 +499,14 @@ abstract class AbstractAction
             'is_anchor'
         )->getId();
         $statusAttributeId = $this->config->getAttribute(Product::ENTITY, 'status')->getId();
+<<<<<<< HEAD
         $visibilityAttributeId = $this->config->getAttribute(
             Product::ENTITY,
             'visibility'
         )->getId();
+=======
+        $visibilityAttributeId = $this->config->getAttribute(Product::ENTITY, 'visibility')->getId();
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $rootCatIds = explode('/', $this->getPathFromCategoryId($store->getRootCategoryId()));
         array_pop($rootCatIds);
 
@@ -507,6 +530,10 @@ abstract class AbstractAction
         )->joinInner(
             ['ccp' => $this->getTable('catalog_category_product')],
             'ccp.category_id = cc2.child_id',
+            []
+        )->joinLeft(
+            ['ccp2' => $this->getTable('catalog_category_product')],
+            'ccp2.category_id = cc2.parent_id AND ccp.product_id = ccp2.product_id',
             []
         )->joinInner(
             ['cpe' => $this->getTable('catalog_product_entity')],
@@ -570,7 +597,9 @@ abstract class AbstractAction
             [
                 'category_id' => 'cc.entity_id',
                 'product_id' => 'ccp.product_id',
-                'position' => new \Zend_Db_Expr('ccp.position + 10000'),
+                'position' => new \Zend_Db_Expr(
+                    $this->connection->getIfNullSql('ccp2.position', 'ccp.position + 10000')
+                ),
                 'is_parent' => new \Zend_Db_Expr('0'),
                 'store_id' => new \Zend_Db_Expr($store->getId()),
                 'visibility' => new \Zend_Db_Expr($this->connection->getIfNullSql('cpvs.value', 'cpvd.value')),
@@ -583,6 +612,8 @@ abstract class AbstractAction
     }
 
     /**
+     * Get temporary table name
+     *
      * Get temporary table name for concurrent indexing in persistent connection
      * Temp table name is NOT shared between action instances and each action has it's own temp tree index
      *
@@ -594,7 +625,11 @@ abstract class AbstractAction
         if (empty($this->tempTreeIndexTableName)) {
             $this->tempTreeIndexTableName = $this->connection->getTableName('temp_catalog_category_tree_index')
                 . '_'
+<<<<<<< HEAD
                 . substr(md5(time() . random_int(0, 999999999)), 0, 8);
+=======
+                . substr(sha1(time() . random_int(0, 999999999)), 0, 8);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
 
         return $this->tempTreeIndexTableName;
@@ -638,7 +673,10 @@ abstract class AbstractAction
             ['child_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX]
         );
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         // Drop the temporary table in case it already exists on this (persistent?) connection.
         $this->connection->dropTemporaryTable($temporaryName);
         $this->connection->createTemporaryTable($temporaryTable);
@@ -656,6 +694,7 @@ abstract class AbstractAction
      */
     protected function fillTempCategoryTreeIndex($temporaryName)
     {
+<<<<<<< HEAD
         $offset = 0;
         $limit = 500;
 
@@ -673,6 +712,41 @@ abstract class AbstractAction
             $values = [];
 
             foreach ($categories as $category) {
+=======
+        $isActiveAttributeId = $this->config->getAttribute(
+            \Magento\Catalog\Model\Category::ENTITY,
+            'is_active'
+        )->getId();
+        $categoryMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
+        $categoryLinkField = $categoryMetadata->getLinkField();
+        $selects = $this->prepareSelectsByRange(
+            $this->connection->select()
+                ->from(
+                    ['c' => $this->getTable('catalog_category_entity')],
+                    ['entity_id', 'path']
+                )->joinInner(
+                    ['ccacd' => $this->getTable('catalog_category_entity_int')],
+                    'ccacd.' . $categoryLinkField . ' = c.' . $categoryLinkField . ' AND ccacd.store_id = 0' .
+                    ' AND ccacd.attribute_id = ' . $isActiveAttributeId,
+                    []
+                )->joinLeft(
+                    ['ccacs' => $this->getTable('catalog_category_entity_int')],
+                    'ccacs.' . $categoryLinkField . ' = c.' . $categoryLinkField
+                    . ' AND ccacs.attribute_id = ccacd.attribute_id AND ccacs.store_id = ' .
+                    $this->currentStoreId,
+                    []
+                )->where(
+                    $this->connection->getIfNullSql('ccacs.value', 'ccacd.value') . ' = ?',
+                    1
+                ),
+            'entity_id'
+        );
+
+        foreach ($selects as $select) {
+            $values = [];
+
+            foreach ($this->connection->fetchAll($select) as $category) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 foreach (explode('/', $category['path']) as $parentId) {
                     if ($parentId !== $category['entity_id']) {
                         $values[] = [$parentId, $category['entity_id']];
@@ -683,6 +757,7 @@ abstract class AbstractAction
             if (count($values) > 0) {
                 $this->connection->insertArray($temporaryName, ['parent_id', 'child_id'], $values);
             }
+<<<<<<< HEAD
 
             $offset += $limit;
             $categoriesSelect = $this->connection->select()
@@ -692,6 +767,8 @@ abstract class AbstractAction
                 )->limit($limit, $offset);
 
             $categories = $this->connection->fetchAll($categoriesSelect);
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
     }
 
@@ -741,6 +818,7 @@ abstract class AbstractAction
     protected function getAllProducts(Store $store)
     {
         if (!isset($this->productsSelects[$store->getId()])) {
+<<<<<<< HEAD
             $statusAttributeId = $this->config->getAttribute(
                 Product::ENTITY,
                 'status'
@@ -749,6 +827,10 @@ abstract class AbstractAction
                 Product::ENTITY,
                 'visibility'
             )->getId();
+=======
+            $statusAttributeId = $this->config->getAttribute(Product::ENTITY, 'status')->getId();
+            $visibilityAttributeId = $this->config->getAttribute(Product::ENTITY, 'visibility')->getId();
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
             $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
             $linkField = $metadata->getLinkField();

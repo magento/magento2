@@ -78,7 +78,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
 
         $productID = $product->getId();
         if (!isset($productPositions[$productID])) {
-            throw new InputException(__('Category does not contain specified product'));
+            throw new InputException(__("The category doesn't contain the specified product."));
         }
         $backupPosition = $productPositions[$productID];
         unset($productPositions[$productID]);

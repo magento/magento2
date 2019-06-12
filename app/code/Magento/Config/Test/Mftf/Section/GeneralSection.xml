@@ -7,7 +7,11 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <section name="ContentManagementSection">
         <element name="WYSIWYGOptions" type="button" selector="#cms_wysiwyg-head"/>
         <element name="CheckIfTabExpand" type="button" selector="#cms_wysiwyg-head:not(.open)"/>
@@ -15,7 +19,13 @@
         <element name="EnableWYSIWYG" type="button" selector="#cms_wysiwyg_enabled"/>
         <element name="SwitcherSystemValue" type="button" selector="#cms_wysiwyg_editor_inherit"/>
         <element name="Switcher" type="button" selector="#cms_wysiwyg_editor" />
+<<<<<<< HEAD
         <element name="Save" type="button" selector="#save" timeout="30"/>
+=======
+        <element name="StaticURL" type="button" selector="#cms_wysiwyg_use_static_urls_in_catalog" />
+        <element name="Save" type="button" selector="#save" timeout="30"/>
+        <element name="StoreConfigurationPageSuccessMessage" type="text" selector="#messages [data-ui-id='messages-message-success']"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </section>
     <section name="WebSection">
         <element name="DefaultLayoutsTab" type="button" selector="#web_default_layouts-head"/>
@@ -32,4 +42,17 @@
         <element name="addStoreCodeToUrl" type="select" selector="#web_url_use_store"/>
         <element name="systemValueForStoreCode" type="checkbox" selector="#web_url_use_store_inherit"/>
     </section>
+<<<<<<< HEAD
+=======
+    <section name="CountryOptionsSection">
+        <element name="countryOptions" type="button" selector="#general_country-head"/>
+        <element name="countryOptionsOpen" type="button" selector="#general_country-head.open"/>
+        <element name="topDestinations" type="select" selector="#general_country_destinations"/>
+    </section>
+    <section name="StateOptionsSection">
+        <element name="stateOptions" type="button" selector="#general_region-head"/>
+        <element name="countriesWithRequiredRegions" type="select" selector="#general_region_state_required"/>
+        <element name="allowToChooseState" type="select" selector="general_region_display_all"/>
+    </section>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </sections>

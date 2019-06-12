@@ -5,7 +5,11 @@
 "Time value has an unsupported format","Time value has an unsupported format"
 "Cron settings can't be saved","Cron settings can't be saved"
 "There was an error save new configuration value.","There was an error save new configuration value."
+<<<<<<< HEAD
 "Please select a vertical.","Please select a vertical."
+=======
+"Please select an industry.","Please select an industry."
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 "--Please Select--","--Please Select--"
 "Command was not found.","Command was not found."
 "Input data must be string or convertible into string.","Input data must be string or convertible into string."
@@ -18,7 +22,11 @@
 "File is not ready yet.","File is not ready yet."
 "Your Base URL has been changed and your reports are being updated. Advanced Reporting will be available once this change has been processed. Please try again later.","Your Base URL has been changed and your reports are being updated. Advanced Reporting will be available once this change has been processed. Please try again later."
 "Failed to synchronize data to the Magento Business Intelligence service. ","Failed to synchronize data to the Magento Business Intelligence service. "
+<<<<<<< HEAD
 "<a href=""%1"">Retry Synchronization</a>","<a href=""%1"">Retry Synchronization</a>"
+=======
+"Retry Synchronization","Retry Synchronization"
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 TestMessage,TestMessage
 "Error message","Error message"
 "Apps and Games","Apps and Games"

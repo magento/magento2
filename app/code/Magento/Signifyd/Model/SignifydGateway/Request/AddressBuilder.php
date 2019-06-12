@@ -41,6 +41,10 @@ class AddressBuilder
     {
         $lines = is_array($street) ? $street : [];
 
+<<<<<<< HEAD
         return isset($lines[$number - 1]) ? $lines[$number - 1] : '';
+=======
+        return $lines[$number - 1] ?? '';
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 }

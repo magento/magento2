@@ -7,13 +7,21 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+=======
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <!-- Check the simple product on the product page -->
     <actionGroup name="StorefrontCheckSimpleProduct">
         <arguments>
             <argument name="product"/>
         </arguments>
         <seeInCurrentUrl url="/{{product.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
+<<<<<<< HEAD
+=======
+        <seeInTitle userInput="{{product.name}}" stepKey="AssertProductNameInTitle"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
         <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
         <see userInput="${{product.price}}.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
@@ -22,4 +30,51 @@
         <see userInput="{{product.custom_attributes[description]}}" selector="{{StorefrontProductInfoMainSection.productDescription}}" stepKey="assertProductDescription"/>
         <see userInput="{{product.custom_attributes[short_description]}}" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" stepKey="assertProductShortDescription"/>
     </actionGroup>
+<<<<<<< HEAD
+=======
+
+    <!-- Assert product image in Storefront Product page -->
+    <actionGroup name="assertProductImageStorefrontProductPage">
+        <arguments>
+            <argument name="product"/>
+            <argument name="image" defaultValue="MagentoLogo"/>
+        </arguments>
+        <seeInCurrentUrl url="/{{product.urlKey}}.html" stepKey="checkUrl"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile(image.filename)}}" stepKey="seeImage"/>
+    </actionGroup>
+
+    <!-- Assert product image in Storefront Product page -->
+    <actionGroup name="assertProductImageStorefrontProductPage2">
+        <arguments>
+            <argument name="product"/>
+            <argument name="image" defaultValue="MagentoLogo"/>
+        </arguments>
+        <seeInCurrentUrl url="/{{product.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile(image.filename)}}" stepKey="seeImage"/>
+    </actionGroup>
+
+    <!-- Assert no product image in Storefront Product page -->
+    <actionGroup name="assertProductImageNotInStorefrontProductPage">
+        <arguments>
+            <argument name="product"/>
+            <argument name="image" defaultValue="MagentoLogo"/>
+        </arguments>
+        <seeInCurrentUrl url="/{{product.urlKey}}.html" stepKey="checkUrl"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.imageFile(image.filename)}}" stepKey="seeImage"/>
+    </actionGroup>
+
+    <!-- Assert no product image in Storefront Product page -->
+    <actionGroup name="assertProductImageNotInStorefrontProductPage2">
+        <arguments>
+            <argument name="product"/>
+            <argument name="image" defaultValue="MagentoLogo"/>
+        </arguments>
+        <seeInCurrentUrl url="/{{product.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.imageFile(image.filename)}}" stepKey="seeImage"/>
+    </actionGroup>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </actionGroups>

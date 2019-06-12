@@ -30,7 +30,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_VERIFY_SPECIFIC = 'verify_specific_countries';
     const VALUE_3DSECURE_ALL = 0;
     const CODE_3DSECURE = 'three_d_secure';
-    const KEY_KOUNT_MERCHANT_ID = 'kount_id';
     const FRAUD_PROTECTION = 'fraudprotection';
 
     /**
@@ -131,7 +130,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function isCvvEnabled($storeId = null)
     {
+<<<<<<< HEAD
         return (bool)$this->getValue(self::KEY_USE_CVV, $storeId);
+=======
+        return (bool) $this->getValue(self::KEY_USE_CVV, $storeId);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -142,7 +145,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function isVerify3DSecure($storeId = null)
     {
+<<<<<<< HEAD
         return (bool)$this->getValue(self::KEY_VERIFY_3DSECURE, $storeId);
+=======
+        return (bool) $this->getValue(self::KEY_VERIFY_3DSECURE, $storeId);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -169,6 +176,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         }
 
         return explode(',', $this->getValue(self::KEY_VERIFY_SPECIFIC, $storeId));
+<<<<<<< HEAD
     }
 
     /**
@@ -185,14 +193,28 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * Gets Kount merchant ID.
+=======
+    }
+
+    /**
+     * Gets value of configured environment.
+     *
+     * Possible values: production or sandbox.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param int|null $storeId
      * @return string
      * @internal param null $storeId
      */
+<<<<<<< HEAD
     public function getKountMerchantId($storeId = null)
     {
         return $this->getValue(Config::KEY_KOUNT_MERCHANT_ID, $storeId);
+=======
+    public function getEnvironment($storeId = null)
+    {
+        return $this->getValue(Config::KEY_ENVIRONMENT, $storeId);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -218,6 +240,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
+     * Returns SDK url.
+     *
      * @return string
      */
     public function getSdkUrl()
@@ -226,6 +250,19 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Gets Hosted Fields SDK Url
+     *
+     * @return string
+     */
+    public function getHostedFieldsSdkUrl(): string
+    {
+        return $this->getValue('hosted_fields_sdk_url');
+    }
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * Checks if fraud protection is enabled.
      *
      * @param int|null $storeId
@@ -233,7 +270,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function hasFraudProtection($storeId = null)
     {
+<<<<<<< HEAD
         return (bool)$this->getValue(Config::FRAUD_PROTECTION, $storeId);
+=======
+        return (bool) $this->getValue(Config::FRAUD_PROTECTION, $storeId);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -244,7 +285,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function isActive($storeId = null)
     {
+<<<<<<< HEAD
         return (bool)$this->getValue(self::KEY_ACTIVE, $storeId);
+=======
+        return (bool) $this->getValue(self::KEY_ACTIVE, $storeId);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**

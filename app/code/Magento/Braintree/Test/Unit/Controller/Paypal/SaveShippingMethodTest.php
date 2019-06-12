@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Braintree\Test\Unit\Controller\Paypal;
 
 use Magento\Quote\Model\Quote;
@@ -225,7 +226,10 @@ class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
 
         $this->messageManagerMock->expects(self::once())
             ->method('addExceptionMessage')
-            ->with(self::isInstanceOf('\InvalidArgumentException'), 'We can\'t initialize checkout.');
+            ->with(
+                self::isInstanceOf('\InvalidArgumentException'),
+                'Checkout failed to initialize. Verify and try again.'
+            );
 
         $this->urlMock->expects(self::once())
             ->method('getUrl')
@@ -265,7 +269,10 @@ class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
 
         $this->messageManagerMock->expects(self::once())
             ->method('addExceptionMessage')
-            ->with(self::isInstanceOf('\InvalidArgumentException'), 'We can\'t initialize checkout.');
+            ->with(
+                self::isInstanceOf('\InvalidArgumentException'),
+                'Checkout failed to initialize. Verify and try again.'
+            );
 
         $this->urlMock->expects(self::once())
             ->method('getUrl')

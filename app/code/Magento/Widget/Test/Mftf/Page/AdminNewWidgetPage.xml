@@ -7,8 +7,13 @@
 -->
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
     <page name="AdminNewWidgetPage" url="admin/admin/widget_instance/new/" area="admin" module="Magento_Widget">
+=======
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+    <page name="AdminNewWidgetPage" url="admin/widget_instance/new/" area="admin" module="Magento_Widget">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <section name="AdminNewWidgetSection"/>
     </page>
 </pages>

@@ -20,6 +20,7 @@ use Psr\Log\LoggerInterface;
 class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Session|\PHPUnit_Framework_MockObject_MockObject */
+<<<<<<< HEAD
     private $session;
 
     /** @var \Magento\Customer\Model\Customer\NotificationStorage|\PHPUnit_Framework_MockObject_MockObject */
@@ -36,6 +37,27 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
 
     /** @var AbstractAction|\PHPUnit_Framework_MockObject_MockObject */
     private $abstractAction;
+=======
+    private $sessionMock;
+
+    /** @var NotificationStorage|\PHPUnit_Framework_MockObject_MockObject */
+    private $notificationStorageMock;
+
+    /** @var CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $customerRepositoryMock;
+
+    /** @var State|\PHPUnit_Framework_MockObject_MockObject */
+    private $appStateMock;
+
+    /** @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $requestMock;
+
+    /** @var AbstractAction|\PHPUnit_Framework_MockObject_MockObject */
+    private $abstractActionMock;
+
+    /** @var LoggerInterface */
+    private $loggerMock;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
     /** @var CustomerNotification */
     private $plugin;
@@ -45,12 +67,23 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+<<<<<<< HEAD
         $this->session = $this->getMockBuilder(Session::class)
+=======
+        $this->sessionMock = $this->getMockBuilder(Session::class)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->disableOriginalConstructor()
+            ->setMethods(['getCustomerId', 'setCustomerData', 'setCustomerGroupId', 'regenerateId'])
             ->getMock();
+<<<<<<< HEAD
         $this->notificationStorage = $this->getMockBuilder(NotificationStorage::class)
+=======
+        $this->notificationStorageMock = $this->getMockBuilder(NotificationStorage::class)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->disableOriginalConstructor()
+            ->setMethods(['isExists', 'remove'])
             ->getMock();
+<<<<<<< HEAD
         $this->customerRepository = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
         $this->abstractAction = $this->getMockBuilder(AbstractAction::class)
             ->disableOriginalConstructor()
@@ -66,16 +99,44 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
         $this->request->method('isPost')->willReturn(true);
         $this->session->method('getCustomerId')->willReturn(self::$customerId);
         $this->notificationStorage->expects($this->any())
+=======
+        $this->customerRepositoryMock = $this->getMockBuilder(CustomerRepositoryInterface::class)
+            ->getMockForAbstractClass();
+        $this->abstractActionMock = $this->getMockBuilder(AbstractAction::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->setMethods(['isPost'])
+            ->getMockForAbstractClass();
+        $this->appStateMock = $this->getMockBuilder(State::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAreaCode'])
+            ->getMock();
+
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->appStateMock->method('getAreaCode')->willReturn(Area::AREA_FRONTEND);
+        $this->requestMock->method('isPost')->willReturn(true);
+        $this->sessionMock->method('getCustomerId')->willReturn(self::$customerId);
+        $this->notificationStorageMock->expects($this->any())
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->method('isExists')
             ->with(NotificationStorage::UPDATE_CUSTOMER_SESSION, self::$customerId)
             ->willReturn(true);
 
         $this->plugin = new CustomerNotification(
+<<<<<<< HEAD
             $this->session,
             $this->notificationStorage,
             $this->appState,
             $this->customerRepository,
             $this->logger
+=======
+            $this->sessionMock,
+            $this->notificationStorageMock,
+            $this->appStateMock,
+            $this->customerRepositoryMock,
+            $this->loggerMock
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         );
     }
 
@@ -85,6 +146,7 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
 
         $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $customerMock->method('getGroupId')->willReturn($customerGroupId);
+<<<<<<< HEAD
         $this->customerRepository->expects($this->once())
             ->method('getById')
             ->with(self::$customerId)
@@ -97,16 +159,40 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
             ->with(NotificationStorage::UPDATE_CUSTOMER_SESSION, self::$customerId);
 
         $this->plugin->beforeDispatch($this->abstractAction, $this->request);
+=======
+        $customerMock->method('getId')->willReturn(self::$customerId);
+
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->with(self::$customerId)
+            ->willReturn($customerMock);
+        $this->notificationStorageMock->expects($this->once())
+            ->method('remove')
+            ->with(NotificationStorage::UPDATE_CUSTOMER_SESSION, self::$customerId);
+
+        $this->sessionMock->expects($this->once())->method('setCustomerData')->with($customerMock);
+        $this->sessionMock->expects($this->once())->method('setCustomerGroupId')->with($customerGroupId);
+        $this->sessionMock->expects($this->once())->method('regenerateId');
+
+        $this->plugin->beforeDispatch($this->abstractActionMock, $this->requestMock);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     public function testBeforeDispatchWithNoCustomerFound()
     {
+<<<<<<< HEAD
         $this->customerRepository->method('getById')
             ->with(self::$customerId)
             ->willThrowException(new NoSuchEntityException());
         $this->logger->expects($this->once())
+=======
+        $this->customerRepositoryMock->method('getById')
+            ->with(self::$customerId)
+            ->willThrowException(new NoSuchEntityException());
+        $this->loggerMock->expects($this->once())
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->method('error');
 
-        $this->plugin->beforeDispatch($this->abstractAction, $this->request);
+        $this->plugin->beforeDispatch($this->abstractActionMock, $this->requestMock);
     }
 }

@@ -11,7 +11,11 @@
             <block class="Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Tree" name="wysiwyg_images.tree" template="Magento_Cms::browser/tree.phtml"/>
             <block class="Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content\Uploader" name="wysiwyg_images.uploader" template="Magento_Cms::browser/content/uploader.phtml">
                 <arguments>
+<<<<<<< HEAD
                     <argument name="image_upload_config_data" xsi:type="object">Magento\Backend\Block\DataProviders\UploadConfig</argument>
+=======
+                    <argument name="image_upload_config_data" xsi:type="object">Magento\Backend\Block\DataProviders\ImageUploadConfig</argument>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 </arguments>
             </block>
         </block>

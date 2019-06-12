@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 declare(strict_types=1);
 
 namespace Magento\Cms\Model\Wysiwyg\Images;
@@ -11,11 +15,15 @@ use Magento\Cms\Helper\Wysiwyg\Images;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * Wysiwyg Images model
+ * Wysiwyg Images model.
+ *
+ * Tightly connected with controllers responsible for managing files so it uses session and is (sort of) a part
+ * of the presentation layer.
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  *
  * @api
  * @since 100.0.2
@@ -243,10 +251,12 @@ class Storage extends \Magento\Framework\DataObject
     protected function removeItemFromCollection($collection, $conditions)
     {
         $regExp = $conditions['reg_exp'] ? '~' . implode('|', array_keys($conditions['reg_exp'])) . '~i' : null;
-        $storageRootLength = strlen($this->_cmsWysiwygImages->getStorageRoot());
+        $storageRoot = $this->_cmsWysiwygImages->getStorageRoot();
+        $storageRootLength = strlen($storageRoot);
 
         foreach ($collection as $key => $value) {
-            $rootChildParts = explode('/', substr($value->getFilename(), $storageRootLength));
+            $mediaSubPathname = substr($value->getFilename(), $storageRootLength);
+            $rootChildParts = explode('/', '/' . ltrim($mediaSubPathname, '/'));
 
             if (array_key_exists($rootChildParts[1], $conditions['plain'])
                 || ($regExp && preg_match($regExp, $value->getFilename()))) {
@@ -270,7 +280,8 @@ class Storage extends \Magento\Framework\DataObject
         $collection = $this->getCollection($path)
             ->setCollectDirs(true)
             ->setCollectFiles(false)
-            ->setCollectRecursively(false);
+            ->setCollectRecursively(false)
+            ->setOrder('basename', \Magento\Framework\Data\Collection\Filesystem::SORT_ORDER_ASC);
 
         $conditions = $this->getConditionsForExcludeDirs();
 
@@ -320,6 +331,8 @@ class Storage extends \Magento\Framework\DataObject
             $item->setName($item->getBasename());
             $item->setShortName($this->_cmsWysiwygImages->getShortFilename($item->getBasename()));
             $item->setUrl($this->_cmsWysiwygImages->getCurrentUrl() . $item->getBasename());
+            $item->setSize(filesize($item->getFilename()));
+            $item->setMimeType(\mime_content_type($item->getFilename()));
 
             if ($this->isImage($item->getBasename())) {
                 $thumbUrl = $this->getThumbnailUrl($item->getFilename(), true);
@@ -747,7 +760,11 @@ class Storage extends \Magento\Framework\DataObject
     }
 
     /**
+<<<<<<< HEAD
      * Prepare mime types config settings
+=======
+     * Prepare mime types config settings.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param string|null $type Type of storage, e.g. image, media etc.
      * @return array Array of allowed file extensions
@@ -760,7 +777,11 @@ class Storage extends \Magento\Framework\DataObject
     }
 
     /**
+<<<<<<< HEAD
      * Get list of allowed file extensions with mime type in values
+=======
+     * Get list of allowed file extensions with mime type in values.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param string|null $type
      * @return array
@@ -772,6 +793,10 @@ class Storage extends \Magento\Framework\DataObject
         } else {
             $allowed = $this->_extensions['allowed'];
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $allowed;
     }
 }

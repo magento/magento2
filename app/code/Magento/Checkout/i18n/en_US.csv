@@ -181,3 +181,8 @@ Payment,Payment
 "Item in Cart","Item in Cart"
 "Items in Cart","Items in Cart"
 "Close","Close"
+<<<<<<< HEAD
+=======
+"Show Cross-sell Items in the Shopping Cart","Show Cross-sell Items in the Shopping Cart"
+"You added %1 to your <a href=""%2"">shopping cart</a>.","You added %1 to your <a href=""%2"">shopping cart</a>."
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc

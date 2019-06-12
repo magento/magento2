@@ -11,8 +11,14 @@
     <!-- ko if: isFormVisible -->
     <p data-bind="i18n: 'You can track your order status by creating an account.'"></p>
     <p><span data-bind="i18n: 'Email Address'"></span>: <span data-bind="text: getEmailAddress()"></span></p>
+<<<<<<< HEAD
     <form method="get" data-bind="attr: { action: getUrl() }">
         <input type="submit" class="action primary" data-bind="value: $t('Create an Account')" />
     </form>
+=======
+    <a class="action primary" data-bind="attr: { href: getUrl() }">
+        <span data-bind="i18n: 'Create an Account'" />
+    </a>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <!--/ko-->
 </div>

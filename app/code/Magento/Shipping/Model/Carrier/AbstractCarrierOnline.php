@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Shipping\Model\Carrier;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -183,11 +184,11 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     /**
      * Return code of carrier
      *
-     * @return string
+     * @return string|null
      */
     public function getCarrierCode()
     {
-        return isset($this->_code) ? $this->_code : null;
+        return $this->_code ?? null;
     }
 
     /**
@@ -215,6 +216,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
 
     /**
      * Check if carrier has shipping tracking option available
+     *
      * All \Magento\Usa carriers have shipping tracking option available
      *
      * @return boolean
@@ -398,8 +400,8 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
 
     /**
      * Checks whether some request to rates have already been done, so we have cache for it
-     * Used to reduce number of same requests done to carrier service during one session
      *
+     * Used to reduce number of same requests done to carrier service during one session
      * Returns cached response or null
      *
      * @param string|array $requestParams
@@ -409,7 +411,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     {
         $key = $this->_getQuotesCacheKey($requestParams);
 
-        return isset(self::$_quotesCache[$key]) ? self::$_quotesCache[$key] : null;
+        return self::$_quotesCache[$key] ?? null;
     }
 
     /**
@@ -442,8 +444,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     }
 
     /**
-     * Prepare shipment request.
-     * Validate and correct request information
+     * Prepare shipment request. Validate and correct request information
      *
      * @param \Magento\Framework\DataObject $request
      * @return void
@@ -557,8 +558,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     }
 
     /**
-     * For multi package shipments. Delete requested shipments if the current shipment
-     * request is failed
+     * For multi package shipments. Delete requested shipments if the current shipment. Request is failed
      *
      * @param array $data
      * @return bool
@@ -624,6 +624,8 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     }
 
     /**
+     * Set Raw Request
+     *
      * @param \Magento\Framework\DataObject|null $request
      * @return $this
      * @api
@@ -669,7 +671,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     public function parseXml($xmlContent, $customSimplexml = 'SimpleXMLElement')
     {
         if (!$this->xmlSecurity->scan($xmlContent)) {
-            throw new LocalizedException(__('Security validation of XML document has been failed.'));
+            throw new LocalizedException(__('The security validation of the XML document has failed.'));
         }
 
         $xmlElement = simplexml_load_string($xmlContent, $customSimplexml);
@@ -679,6 +681,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
 
     /**
      * Checks if shipping method can collect rates
+     *
      * @return bool
      */
     public function canCollectRates()
@@ -688,6 +691,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
 
     /**
      * Debug errors if showmethod is unset
+     *
      * @param Error $errors
      *
      * @return void

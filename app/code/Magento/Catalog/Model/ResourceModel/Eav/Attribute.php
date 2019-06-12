@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\ResourceModel\Eav;
 
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
@@ -23,7 +21,6 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * @method int setSearchWeight(int $value)
  * @method bool getIsUsedForPriceRules()
  * @method int setIsUsedForPriceRules(int $value)
- * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -83,6 +80,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     protected $_indexerEavProcessor;
 
     /**
+     * @var \Magento\Eav\Api\Data\AttributeExtensionFactory
+     */
+    private $eavAttributeFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -98,14 +100,15 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Eav\Processor $indexerEavProcessor
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productFlatIndexerHelper
      * @param LockValidatorInterface $lockValidator
-     * @param DateTimeFormatterInterface $dateTimeFormatter
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @param \Magento\Eav\Api\Data\AttributeExtensionFactory|null $eavAttributeFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -131,12 +134,15 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         LockValidatorInterface $lockValidator,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Eav\Api\Data\AttributeExtensionFactory $eavAttributeFactory = null
     ) {
         $this->_indexerEavProcessor = $indexerEavProcessor;
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
         $this->_productFlatIndexerHelper = $productFlatIndexerHelper;
         $this->attrLockValidator = $lockValidator;
+        $this->eavAttributeFactory = $eavAttributeFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Eav\Api\Data\AttributeExtensionFactory::class);
         parent::__construct(
             $context,
             $registry,
@@ -161,6 +167,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
+     * Init model
+     *
      * @return void
      */
     protected function _construct()
@@ -228,8 +236,20 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         ) {
             $this->_indexerEavProcessor->markIndexerAsInvalid();
         }
+        
+        $this->_source = null;
 
         return parent::afterSave();
+    }
+
+    /**
+     * Is attribute enabled for flat indexing
+     *
+     * @return bool
+     */
+    public function isEnabledInFlat()
+    {
+        return $this->_isEnabledInFlat();
     }
 
     /**
@@ -346,6 +366,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
 
     /**
      * Retrieve apply to products array
+     *
      * Return empty array if applied to all products
      *
      * @return string[]
@@ -491,8 +512,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
+     * @inheritdoc
      * @codeCoverageIgnoreStart
-     * {@inheritdoc}
      */
     public function getIsWysiwygEnabled()
     {
@@ -500,7 +521,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsHtmlAllowedOnFront()
     {
@@ -508,7 +529,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUsedForSortBy()
     {
@@ -516,7 +537,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsFilterable()
     {
@@ -524,7 +545,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsFilterableInSearch()
     {
@@ -532,7 +553,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsUsedInGrid()
     {
@@ -540,7 +561,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsVisibleInGrid()
     {
@@ -548,7 +569,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsFilterableInGrid()
     {
@@ -556,7 +577,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPosition()
     {
@@ -564,7 +585,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsSearchable()
     {
@@ -572,7 +593,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsVisibleInAdvancedSearch()
     {
@@ -580,7 +601,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsComparable()
     {
@@ -588,7 +609,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsUsedForPromoRules()
     {
@@ -596,7 +617,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsVisibleOnFront()
     {
@@ -604,7 +625,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUsedInProductListing()
     {
@@ -612,7 +633,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsVisible()
     {
@@ -622,7 +643,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     //@codeCoverageIgnoreEnd
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getScope()
     {
@@ -704,7 +725,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     /**
      * Set apply to value for the element
      *
-     * @param string []|string
+     * @param string[]|string $applyTo
      * @return $this
      */
     public function setApplyTo($applyTo)
@@ -813,7 +834,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function afterDelete()
     {
@@ -824,9 +845,14 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     /**
      * @inheritdoc
      * @since 100.0.9
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $this->unsetData('entity_type');
         return array_diff(
             parent::__sleep(),
@@ -837,9 +863,14 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     /**
      * @inheritdoc
      * @since 100.0.9
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_indexerEavProcessor = $objectManager->get(\Magento\Catalog\Model\Indexer\Product\Flat\Processor::class);

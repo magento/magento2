@@ -5,6 +5,9 @@
  */
 namespace Magento\Paypal\Controller\Transparent;
 
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\LayoutFactory;
@@ -18,9 +21,9 @@ use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Framework\Session\Generic as Session;
 
 /**
- * Class Response
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Response extends \Magento\Framework\App\Action\Action
+class Response extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
 {
     /**
      * Core registry
@@ -87,8 +90,30 @@ class Response extends \Magento\Framework\App\Action\Action
         $this->responseValidator = $responseValidator;
         $this->resultLayoutFactory = $resultLayoutFactory;
         $this->transparent = $transparent;
+<<<<<<< HEAD
         $this->sessionTransparent = $sessionTransparent ? : $this->_objectManager->get(Session::class);
         $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(PaymentFailuresInterface::class);
+=======
+        $this->sessionTransparent = $sessionTransparent ?: $this->_objectManager->get(Session::class);
+        $this->paymentFailures = $paymentFailures ?: $this->_objectManager->get(PaymentFailuresInterface::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**

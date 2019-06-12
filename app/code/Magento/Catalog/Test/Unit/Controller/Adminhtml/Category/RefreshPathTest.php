@@ -14,7 +14,11 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
+<<<<<<< HEAD
  * Test for class RefreshPath.
+=======
+ * Test for class Magento\Catalog\Controller\Adminhtml\Category\RefreshPath.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  */
 class RefreshPathTest extends \PHPUnit\Framework\TestCase
 {
@@ -29,7 +33,11 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
     private $contextMock;
 
     /**
+<<<<<<< HEAD
      * {@inheritDoc}
+=======
+     * @inheritDoc
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     protected function setUp()
     {
@@ -53,7 +61,11 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
+<<<<<<< HEAD
     private function setObjectProperty($object, string $propertyName, $value)
+=======
+    private function setObjectProperty($object, string $propertyName, $value) : void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $reflectionClass = new \ReflectionClass($object);
         $reflectionProperty = $reflectionClass->getProperty($propertyName);
@@ -64,10 +76,17 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+<<<<<<< HEAD
     public function testExecute()
     {
         $value = ['id' => 3, 'path' => '1/2/3', 'parentId' => 2];
         $result = '{"id":3,"path":"1/2/3","parentId":"2"}';
+=======
+    public function testExecute() : void
+    {
+        $value = ['id' => 3, 'path' => '1/2/3', 'parentId' => 2, 'level' => 2];
+        $result = '{"id":3,"path":"1/2/3","parentId":"2","level":"2"}';
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $requestMock = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
 
@@ -116,7 +135,11 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+<<<<<<< HEAD
     public function testExecuteWithoutCategoryId()
+=======
+    public function testExecuteWithoutCategoryId() : void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $requestMock = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
 

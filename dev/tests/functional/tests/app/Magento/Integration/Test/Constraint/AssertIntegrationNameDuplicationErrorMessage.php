@@ -15,7 +15,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertIntegrationNameDuplicationErrorMessage extends AbstractConstraint
 {
-    const ERROR_DUPLICATE_INTEGRATION_NAME = "Integration with name '%s' exists.";
+    const ERROR_DUPLICATE_INTEGRATION_NAME = 'The integration with name "%s" exists.';
 
     /**
      * Assert error message is displayed in message block.
@@ -30,7 +30,7 @@ class AssertIntegrationNameDuplicationErrorMessage extends AbstractConstraint
     ) {
         $expectedMessage = sprintf(self::ERROR_DUPLICATE_INTEGRATION_NAME, $integration->getName());
         $actualMessage = $integrationIndexPage->getMessagesBlock()->getErrorMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $expectedMessage,
             $actualMessage,
             'Wrong error message is displayed.'

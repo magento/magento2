@@ -87,7 +87,7 @@ class AggregationResolverTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testIsNotAplicable()
+    public function testIsNotApplicable()
     {
         $documentIds = [1];
         $this->aggregationChecker

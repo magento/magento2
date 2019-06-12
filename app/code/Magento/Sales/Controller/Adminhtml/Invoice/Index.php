@@ -6,6 +6,8 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Invoice;
 
-class Index extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\Index
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\Index implements HttpGetActionInterface
 {
 }

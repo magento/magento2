@@ -83,7 +83,7 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function processAuthenticationFailure($customerId)
     {
@@ -120,7 +120,7 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function unlock($customerId)
     {
@@ -152,7 +152,7 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isLocked($customerId)
     {
@@ -161,13 +161,18 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function authenticate($customerId, $password)
     {
         $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
+<<<<<<< HEAD
         $hash = $customerSecure->getPasswordHash();
         if (!$hash || !$this->encryptor->validateHash($password, $hash)) {
+=======
+        $hash = $customerSecure->getPasswordHash() ?? '';
+        if (!$this->encryptor->validateHash($password, $hash)) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $this->processAuthenticationFailure($customerId);
             if ($this->isLocked($customerId)) {
                 throw new UserLockedException(__('The account is locked.'));

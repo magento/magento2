@@ -3,17 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
+use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
+use Magento\Framework\Setup\Declaration\Schema\Request;
+use Magento\Setup\Model\AdminAccount;
+use Magento\Setup\Model\ConfigModel;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Framework\Setup\ConsoleLogger;
+<<<<<<< HEAD
 use Magento\Setup\Model\AdminAccount;
 use Symfony\Component\Console\Input\InputOption;
 use Magento\Setup\Model\ConfigModel;
+=======
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\ArrayInput;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -40,6 +51,28 @@ class InstallCommand extends AbstractSetupCommand
     const INPUT_KEY_USE_SAMPLE_DATA = 'use-sample-data';
 
     /**
+<<<<<<< HEAD
+=======
+     * List of comma-separated module names. That must be enabled during installation.
+     * Available magic param all.
+     */
+    const INPUT_KEY_ENABLE_MODULES = 'enable-modules';
+
+    /**
+     * List of comma-separated module names. That must be avoided during installation.
+     * List of comma-separated module names. That must be avoided during installation.
+     * Available magic param all.
+     */
+    const INPUT_KEY_DISABLE_MODULES = 'disable-modules';
+
+    /**
+     * If this flag is enabled, than all your old scripts with format:
+     * InstallSchema, UpgradeSchema will be converted to new db_schema.xml format.
+     */
+    const CONVERT_OLD_SCRIPTS_KEY = 'convert-old-scripts';
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * Parameter indicating command for interactive setup
      */
     const INPUT_KEY_INTERACTIVE_SETUP = 'interactive';
@@ -50,6 +83,19 @@ class InstallCommand extends AbstractSetupCommand
     const INPUT_KEY_INTERACTIVE_SETUP_SHORTCUT = 'i';
 
     /**
+<<<<<<< HEAD
+=======
+     * Parameter says that in this mode all destructive operations, like column removal will be dumped
+     */
+    const INPUT_KEY_SAFE_INSTALLER_MODE = 'safe-mode';
+
+    /**
+     * Parameter allows to restore data, that was dumped with safe mode before
+     */
+    const INPUT_KEY_DATA_RESTORE = 'data-restore';
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * Regex for sales_order_increment_prefix validation.
      */
     const SALES_ORDER_INCREMENT_PREFIX_RULE = '/^.{0,20}$/';
@@ -98,7 +144,7 @@ class InstallCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -125,10 +171,57 @@ class InstallCommand extends AbstractSetupCommand
                 'Use sample data'
             ),
             new InputOption(
+<<<<<<< HEAD
                 self::INPUT_KEY_INTERACTIVE_SETUP,
                 self::INPUT_KEY_INTERACTIVE_SETUP_SHORTCUT,
                 InputOption::VALUE_NONE,
                 'Interactive Magento instalation'
+=======
+                self::INPUT_KEY_ENABLE_MODULES,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'List of comma-separated module names. That must be included during installation. '
+                . 'Available magic param "all".'
+            ),
+            new InputOption(
+                self::INPUT_KEY_DISABLE_MODULES,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'List of comma-separated module names. That must be avoided during installation. '
+                . 'Available magic param "all".'
+            ),
+            new InputOption(
+                self::CONVERT_OLD_SCRIPTS_KEY,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Allows to convert old scripts (InstallSchema, UpgradeSchema) to db_schema.xml format',
+                false
+            ),
+            new InputOption(
+                self::INPUT_KEY_INTERACTIVE_SETUP,
+                self::INPUT_KEY_INTERACTIVE_SETUP_SHORTCUT,
+                InputOption::VALUE_NONE,
+                'Interactive Magento installation'
+            ),
+            new InputOption(
+                OperationsExecutor::KEY_SAFE_MODE,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Safe installation of Magento with dumps on destructive operations, like column removal'
+            ),
+            new InputOption(
+                OperationsExecutor::KEY_DATA_RESTORE,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Restore removed data from dumps'
+            ),
+            new InputOption(
+                DryRunLogger::INPUT_KEY_DRY_RUN_MODE,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Magento Installation will be run in dry-run mode',
+                false
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ),
         ]);
         $this->setName('setup:install')
@@ -138,7 +231,7 @@ class InstallCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -153,7 +246,7 @@ class InstallCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
@@ -167,9 +260,22 @@ class InstallCommand extends AbstractSetupCommand
                 if (array_key_exists($option->getName(), $inputOptions)) {
                     $configOptionsToValidate[$option->getName()] = $inputOptions[$option->getName()];
                 }
+<<<<<<< HEAD
             }
         }
 
+        if ($inputOptions['interactive']) {
+            $command = '';
+            foreach ($configOptionsToValidate as $key => $value) {
+                $command .= " --{$key}={$value}";
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
+            }
+            $output->writeln("<comment>Try re-running command: php bin/magento setup:install{$command}</comment>");
+        }
+
+<<<<<<< HEAD
+=======
         if ($inputOptions['interactive']) {
             $command = '';
             foreach ($configOptionsToValidate as $key => $value) {
@@ -178,6 +284,7 @@ class InstallCommand extends AbstractSetupCommand
             $output->writeln("<comment>Try re-running command: php bin/magento setup:install{$command}</comment>");
         }
 
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $errors = $this->configModel->validate($configOptionsToValidate);
         $errors = array_merge($errors, $this->validateAdmin($input));
         $errors = array_merge($errors, $this->validate($input));
@@ -200,11 +307,11 @@ class InstallCommand extends AbstractSetupCommand
      * @param InputInterface $input
      * @return string[] Array of error messages
      */
-    public function validate(InputInterface $input)
+    public function validate(InputInterface $input) : array
     {
         $errors = [];
         $value = $input->getOption(self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX);
-        if (preg_match(self::SALES_ORDER_INCREMENT_PREFIX_RULE, $value) != 1) {
+        if (preg_match(self::SALES_ORDER_INCREMENT_PREFIX_RULE, (string) $value) != 1) {
             $errors[] = 'Validation failed, ' . self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX
                 . ' must be 20 characters or less';
         }
@@ -220,7 +327,11 @@ class InstallCommand extends AbstractSetupCommand
      * @param OutputInterface $output
      * @return string[] Array of inputs
      */
+<<<<<<< HEAD
     private function interactiveQuestions(InputInterface $input, OutputInterface $output)
+=======
+    private function interactiveQuestions(InputInterface $input, OutputInterface $output) : array
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $helper = $this->getHelper('question');
         $configOptionsToValidate = [];
@@ -356,6 +467,10 @@ class InstallCommand extends AbstractSetupCommand
         ) {
             return $this->adminUser->validate($input);
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return [];
     }
 }

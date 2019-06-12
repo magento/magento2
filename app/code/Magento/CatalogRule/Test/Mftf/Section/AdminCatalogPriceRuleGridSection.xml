@@ -9,7 +9,11 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCatalogPriceRuleGridSection">
         <element name="filterByRuleName" type="input" selector="#promo_catalog_grid_filter_name"/>
+<<<<<<< HEAD
         <element name="attribute" type="text" selector="//td[contains(text(), '{{arg}}')]" parameterized="true"/>
+=======
+        <element name="attribute" type="text" selector="//*[@id='promo_catalog_grid_table']//td[contains(text(), '{{attributeValue}}')]" parameterized="true"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <element name="applyRulesButton" type="button" selector="#apply_rules" timeout="30"/>
     </section>
 </sections>

@@ -7,7 +7,11 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+=======
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <test name="AdminAssignProductAttributeToAttributeSetTest">
         <annotations>
             <features value="Catalog"/>
@@ -15,11 +19,19 @@
             <title value="Admin should be able to assign attributes to an attribute set"/>
             <description value="Admin should be able to assign attributes to an attribute set"/>
             <severity value="CRITICAL"/>
+<<<<<<< HEAD
             <testCaseId value="MAGETWO-76299"/>
             <group value="attributeSet"/>
         </annotations>
         <before>
             <createData entity="productAttributeWithDropdownTwoOptions" stepKey="attribute"/>
+=======
+            <testCaseId value="MC-168"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="productDropDownAttribute" stepKey="attribute"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
             <createData entity="productAttributeOption1" stepKey="option1">
                 <requiredEntity createDataKey="attribute"/>
@@ -36,7 +48,11 @@
         </after>
 
         <!-- Go to default attribute set edit page -->
+<<<<<<< HEAD
         <amOnPage url="{{AdminProductAttributeSetEditPage.url(AddToDefaultSet.attributeSetId)}}" stepKey="onAttributeSetEdit"/>
+=======
+        <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <!-- Assert created attribute in unassigned section -->
         <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassigned"/>
         <!-- Assign attribute to a group -->

@@ -250,6 +250,7 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
                 'productCollectionFactory' => $productCollectionFactory,
                 'storeManager' => $this->storeManager,
                 'currencyFactory' => $currencyFactory,
+                'collectionProvider' => null
             ]
         );
         $instance->addFilters($values);
@@ -274,7 +275,10 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $optionText
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function createSource($optionText = 'optionText')

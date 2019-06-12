@@ -36,11 +36,14 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $storeMock;
 
+<<<<<<< HEAD
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $transportBuilderByStore;
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     protected function setUp()
     {
         $templateId = 'test_template_id';
@@ -82,10 +85,16 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
                 'setTemplateIdentifier',
                 'setTemplateOptions',
                 'setTemplateVars',
+<<<<<<< HEAD
             ]
         );
 
         $this->transportBuilderByStore = $this->createMock(TransportBuilderByStore::class);
+=======
+                'setFromByScope',
+            ]
+        );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $this->templateContainerMock->expects($this->once())
             ->method('getTemplateId')
@@ -109,9 +118,15 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
         $this->identityContainerMock->expects($this->once())
             ->method('getEmailIdentity')
             ->will($this->returnValue($emailIdentity));
+<<<<<<< HEAD
         $this->transportBuilderByStore->expects($this->once())
             ->method('setFromByStore')
             ->with($this->equalTo($emailIdentity));
+=======
+        $this->transportBuilder->expects($this->once())
+            ->method('setFromByScope')
+            ->with($this->equalTo($emailIdentity), 1);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $this->identityContainerMock->expects($this->once())
             ->method('getEmailCopyTo')
@@ -129,6 +144,8 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $customerName = 'test_name';
         $customerEmail = 'test_email';
+        $identity = 'email_identity_test';
+
         $transportMock = $this->createMock(
             \Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock::class
         );
@@ -151,6 +168,12 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
         $this->storeMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
+<<<<<<< HEAD
+=======
+        $this->transportBuilder->expects($this->once())
+            ->method('setFromByScope')
+            ->with($identity, 1);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->transportBuilder->expects($this->once())
             ->method('addTo')
             ->with($this->equalTo($customerEmail), $this->equalTo($customerName));
@@ -164,6 +187,7 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
 
     public function testSendCopyTo()
     {
+        $identity = 'email_identity_test';
         $transportMock = $this->createMock(
             \Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock::class
         );
@@ -177,6 +201,12 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
         $this->transportBuilder->expects($this->once())
             ->method('addTo')
             ->with($this->equalTo('example@mail.com'));
+<<<<<<< HEAD
+=======
+        $this->transportBuilder->expects($this->once())
+            ->method('setFromByScope')
+            ->with($identity, 1);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->identityContainerMock->expects($this->once())
             ->method('getStore')
             ->willReturn($this->storeMock);

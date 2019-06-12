@@ -53,12 +53,22 @@ define([
 
         /**
          * @private
+<<<<<<< HEAD
          * @param {String} url
          */
         _redirect: function (url) {
             var urlParts = url.split('#'),
                 locationParts = window.location.href.split('#'),
                 forceReload = urlParts[0] === locationParts[0];
+=======
+         */
+        _redirect: function (url) {
+            var urlParts, locationParts, forceReload;
+
+            urlParts = url.split('#');
+            locationParts = window.location.href.split('#');
+            forceReload = urlParts[0] === locationParts[0];
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
             window.location.assign(url);
 
@@ -89,10 +99,15 @@ define([
         ajaxSubmit: function (form) {
             var self = this,
                 productIds = idsResolver(form),
+<<<<<<< HEAD
                 formData = new FormData(form[0]);
+=======
+                formData;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
             $(self.options.minicartSelector).trigger('contentLoading');
             self.disableAddToCartButton(form);
+            formData = new FormData(form[0]);
 
             $.ajax({
                 url: form.attr('action'),
@@ -164,6 +179,19 @@ define([
                 },
 
                 /** @inheritdoc */
+<<<<<<< HEAD
+=======
+                error: function (res) {
+                    $(document).trigger('ajax:addToCart:error', {
+                        'sku': form.data().productSku,
+                        'productIds': productIds,
+                        'form': form,
+                        'response': res
+                    });
+                },
+
+                /** @inheritdoc */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 complete: function (res) {
                     if (res.state() === 'rejected') {
                         location.reload();

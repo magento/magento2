@@ -64,7 +64,11 @@ abstract class Download extends \Magento\Framework\App\Action\Action
         $contentDisposition = $helper->getContentDisposition();
         if (!$contentDisposition || in_array($contentType, $this->disallowedContentTypes)) {
             // For security reasons we force browsers to download the file instead of opening it.
+<<<<<<< HEAD
             $contentDisposition = \Zend_Mime::DISPOSITION_ATTACHMENT;
+=======
+            $contentDisposition = \Magento\Framework\HTTP\Mime::DISPOSITION_ATTACHMENT;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
 
         $response->setHeader('Content-Disposition', $contentDisposition  . '; filename=' . $fileName);

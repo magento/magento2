@@ -3,17 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\Store;
+<<<<<<< HEAD
 use Magento\Config\Model\Config\Factory as ConfigFactory;
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndex;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 
 $objectManager = Bootstrap::getObjectManager();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 /** @var Registry $registry */
 $registry = $objectManager->get(Registry::class);
 $registry->unregister('isSecureArea');
@@ -25,6 +35,11 @@ if ($store->load('fixture_second_store', 'code')->getId()) {
     $store->delete();
 }
 
+<<<<<<< HEAD
+=======
+//Deleting the second website.
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 $configResource = $objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
 //Restoring allowed countries.
 $configResource->deleteConfig(

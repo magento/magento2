@@ -8,7 +8,11 @@ namespace Magento\Customer\Model;
 use Magento\Config\Model\Config\Source\Nooptreq as NooptreqSource;
 use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Framework\Escaper;
+use Magento\Store\Api\Data\StoreInterface;
 
+/**
+ * Customer Options.
+ */
 class Options
 {
     /**
@@ -38,7 +42,7 @@ class Options
     /**
      * Retrieve name prefix dropdown options
      *
-     * @param null $store
+     * @param null|string|bool|int|StoreInterface $store
      * @return array|bool
      */
     public function getNamePrefixOptions($store = null)
@@ -52,7 +56,7 @@ class Options
     /**
      * Retrieve name suffix dropdown options
      *
-     * @param null $store
+     * @param null|string|bool|int|StoreInterface $store
      * @return array|bool
      */
     public function getNameSuffixOptions($store = null)
@@ -64,7 +68,13 @@ class Options
     }
 
     /**
+<<<<<<< HEAD
      * @param $options
+=======
+     * Unserialize and clear name prefix or suffix options.
+     *
+     * @param string $options
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param bool $isOptional
      * @return array|bool
      *
@@ -80,6 +90,8 @@ class Options
      * Unserialize and clear name prefix or suffix options
      * If field is optional, add an empty first option.
      *
+     * If field is optional, add an empty first option.
+     *
      * @param string $options
      * @param bool $isOptional
      * @return array|bool
@@ -91,7 +103,7 @@ class Options
             return false;
         }
         $result = [];
-        $options = explode(';', $options);
+        $options = array_filter(explode(';', $options));
         foreach ($options as $value) {
             $value = $this->escaper->escapeHtml(trim($value));
             $result[$value] = $value;

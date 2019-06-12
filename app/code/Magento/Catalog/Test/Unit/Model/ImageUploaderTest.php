@@ -127,7 +127,11 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
             'image/jpg',
             'image/jpeg',
             'image/gif',
+<<<<<<< HEAD
             'image/png'
+=======
+            'image/png',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
         /** @var \Magento\MediaStorage\Model\File\Uploader|\PHPUnit_Framework_MockObject_MockObject $uploader */
         $uploader = $this->createMock(\Magento\MediaStorage\Model\File\Uploader::class);

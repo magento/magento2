@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\UrlRewrite\Model\StoreSwitcher;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -50,7 +55,11 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      * @throws StoreSwitcher\CannotSwitchStoreException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+<<<<<<< HEAD
     public function testSwitchToNonExistingPage()
+=======
+    public function testSwitchToNonExistingPage(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $fromStoreCode = 'default';
         /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
@@ -78,7 +87,11 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      * @throws StoreSwitcher\CannotSwitchStoreException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+<<<<<<< HEAD
     public function testSwitchToExistingPage()
+=======
+    public function testSwitchToExistingPage(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $fromStoreCode = 'default';
         /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
@@ -90,7 +103,12 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
         $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
         $toStore = $storeRepository->get($toStoreCode);
 
+<<<<<<< HEAD
         $redirectUrl = $expectedUrl = "http://localhost/page-c";
+=======
+        $redirectUrl = "http://localhost/index.php/page-c/";
+        $expectedUrl = "http://localhost/index.php/page-c-on-2nd-store";
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $this->assertEquals($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
     }
@@ -101,7 +119,11 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      * @param StoreInterface $targetStore
      * @return void
      */
+<<<<<<< HEAD
     private function setBaseUrl(StoreInterface $targetStore)
+=======
+    private function setBaseUrl(StoreInterface $targetStore): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $configValue = $this->objectManager->create(Value::class);
         $configValue->load('web/unsecure/base_url', 'path');

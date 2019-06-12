@@ -7,8 +7,14 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontProductCompareMainSection">
         <element name="productAddToCartByName" type="button" selector="//*[@id='product-comparison']//td[.//strong[@class='product-item-name']/a[contains(text(), '{{var1}}')]]//button[contains(@class, 'tocart')]" parameterized="true"/>
+=======
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontProductCompareMainSection">
+        <element name="ProductAddToCartByName" type="button" selector="//*[@id='product-comparison']//td[.//strong[@class='product-item-name']/a[contains(text(), '{{var1}}')]]//button[contains(@class, 'tocart')]" parameterized="true"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </section>
 </sections>

@@ -1,2 +1,6 @@
 # Format: <componentType=module|library|theme|language|*> <componentName> <globPattern> or simply <globPattern>
+<<<<<<< HEAD
 * * /
+=======
+* * /
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc

@@ -1,12 +1,15 @@
-// 3RD PARTY LIBS
 app/code/Magento/Customer/view/frontend/web/js/zxcvbn.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/swagger-ui-bundle.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/swagger-ui-standalone-preset.js
+<<<<<<< HEAD
 
 // MINIFIED FILES
 app/code/**/*.min.js
 
 // TO REFACTORING
+=======
+app/code/Magento/Tinymce3/view/base/web/tiny_mce/**/*.js
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 app/code/Magento/Authorizenet/view/adminhtml/web/js/direct-post.js
 app/code/Magento/Catalog/view/adminhtml/web/catalog/product/composite/configure.js
 app/code/Magento/Rule/view/adminhtml/web/rules.js
@@ -18,5 +21,7 @@ lib/web/mage/adminhtml/tools.js
 lib/web/mage/adminhtml/varienLoader.js
 lib/web/magnifier/magnifier.js
 lib/web/magnifier/magnify.js
-lib/web/varien/form.js
 lib/web/varien/js.js
+
+// MINIFIED FILES
+app/code/**/*.min.js

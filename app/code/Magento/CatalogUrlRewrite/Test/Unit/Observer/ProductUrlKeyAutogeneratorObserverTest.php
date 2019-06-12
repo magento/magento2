@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -24,7 +29,11 @@ class ProductUrlKeyAutogeneratorObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
+<<<<<<< HEAD
     protected function setUp()
+=======
+    protected function setUp(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $this->productUrlPathGenerator = $this->getMockBuilder(ProductUrlPathGenerator::class)
             ->disableOriginalConstructor()
@@ -39,7 +48,14 @@ class ProductUrlKeyAutogeneratorObserverTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+<<<<<<< HEAD
     public function testExecuteWithUrlKey()
+=======
+    /**
+     * @return void
+     */
+    public function testExecuteWithUrlKey(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $urlKey = 'product_url_key';
 
@@ -65,7 +81,14 @@ class ProductUrlKeyAutogeneratorObserverTest extends \PHPUnit\Framework\TestCase
         $this->productUrlKeyAutogeneratorObserver->execute($observer);
     }
 
+<<<<<<< HEAD
     public function testExecuteWithEmptyUrlKey()
+=======
+    /**
+     * @return void
+     */
+    public function testExecuteWithEmptyUrlKey(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()

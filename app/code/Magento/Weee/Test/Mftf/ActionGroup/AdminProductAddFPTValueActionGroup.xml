@@ -6,7 +6,11 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+=======
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <!--Navigate to create product page from product grid page-->
     <actionGroup name="AdminProductAddFPTValueActionGroup">
         <arguments>
@@ -15,9 +19,14 @@
             <argument name="stateForFPT" type="string"/>
             <argument name="valueForFPT" type="string"/>
         </arguments>
+<<<<<<< HEAD
         <scrollToTopOfPage stepKey="scrollToTopOfThePageToShowAttributeEditor"/>
         <click selector="{{AdminProductAddFPTValueSection.addFPT(FPTAttributeCode)}}" stepKey="clickAddFPTButton1"/>
         <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+=======
+        <click selector="{{AdminProductAddFPTValueSection.addFPT(FPTAttributeCode)}}" stepKey="clickAddFPTButton1"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <selectOption selector="{{AdminProductAddFPTValueSection.selectCountryForFPT(FPTAttributeCode)}}" userInput="{{countryForFPT}}" stepKey="selectcountryForFPT"/>
         <selectOption selector="{{AdminProductAddFPTValueSection.selectStateForFPT(FPTAttributeCode)}}" userInput="{{stateForFPT}}" stepKey="selectstateForFPT"/>
         <fillField selector="{{AdminProductAddFPTValueSection.setTaxValueForFPT(FPTAttributeCode)}}" userInput="{{valueForFPT}}" stepKey="setTaxvalueForFPT"/>

@@ -1,0 +1,28 @@
+{
+    "checkout_agreement": {
+        "column": {
+            "agreement_id": true,
+            "name": true,
+            "content": true,
+            "content_height": true,
+            "checkbox_text": true,
+            "is_active": true,
+            "is_html": true,
+            "mode": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "checkout_agreement_store": {
+        "column": {
+            "agreement_id": true,
+            "store_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CHKT_AGRT_STORE_AGRT_ID_CHKT_AGRT_AGRT_ID": true,
+            "CHECKOUT_AGREEMENT_STORE_STORE_ID_STORE_STORE_ID": true
+        }
+    }
+}

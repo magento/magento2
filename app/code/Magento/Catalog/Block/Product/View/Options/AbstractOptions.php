@@ -9,11 +9,15 @@
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
+
 namespace Magento\Catalog\Block\Product\View\Options;
 
 use Magento\Catalog\Pricing\Price\CustomOptionPriceInterface;
 
 /**
+ * Product options section abstract block.
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -46,7 +50,7 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
-     * @param \Magento\Catalog\Helper\Data $catalogData,
+     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param array $data
      */
     public function __construct(
@@ -123,6 +127,11 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Retrieve formatted price.
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return string
      *
      * @deprecated
@@ -134,7 +143,11 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
     }
 
     /**
+<<<<<<< HEAD
      * Return formated price
+=======
+     * Return formatted price
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param array $value
      * @param bool $flag

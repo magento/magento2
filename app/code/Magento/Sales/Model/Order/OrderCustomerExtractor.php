@@ -3,7 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 declare(strict_types=1);
 
 namespace Magento\Sales\Model\Order;
@@ -12,7 +15,10 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Framework\DataObject\Copy as CopyService;
+<<<<<<< HEAD
 use Magento\Customer\Api\Data\AddressInterface;
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory as AddressFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory as RegionFactory;
@@ -121,7 +127,11 @@ class OrderCustomerExtractor
                 // create new customer address only if it is unique
                 $customerAddress = $this->addressFactory->create(['data' => $addressData]);
                 $customerAddress->setIsDefaultBilling(false);
+<<<<<<< HEAD
                 $customerAddress->setIsDefaultBilling(false);
+=======
+                $customerAddress->setIsDefaultShipping(false);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 if (is_string($orderAddress->getRegion())) {
                     /** @var RegionInterface $region */
                     $region = $this->regionFactory->create();

@@ -14,6 +14,12 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
+<<<<<<< HEAD
+=======
+            /**
+             * @param string $filename
+             */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             function ($filename) {
                 $dom = new \DOMDocument();
                 $xmlFile = file_get_contents($filename);
@@ -66,7 +72,11 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
         $componentRegistrar = new ComponentRegistrar();
         $codeXml = [];
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
+<<<<<<< HEAD
             $codeXml = array_merge($codeXml, $this->_getFiles($modulePath, '*.xml', '/.\/Test\/Unit/'));
+=======
+            $codeXml = array_merge($codeXml, $this->_getFiles($modulePath, '*.xml', '/.\/Test\/./'));
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
         $this->_filterSpecialCases($codeXml);
         $designXml = [];
@@ -104,11 +114,14 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
         $list = [
             '#etc/countries.xml$#',
             '#conf/schema.xml$#',
-            '#conf/solrconfig.xml$#',
             '#layout/swagger_index_index.xml$#',
             '#Doc/etc/doc/vars.xml$#',
             '#phpunit.xml$#',
+<<<<<<< HEAD
             '#app/code/(?!Magento)(.*?)/.*?/Test/.*\.xml$#',
+=======
+            '#etc/db_schema.xml$#',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             '#Test/Mftf#',
         ];
 

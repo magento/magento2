@@ -7,6 +7,10 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Shipping\Model\Shipping" type="Magento\Shipping\Model\Shipping\Labels" />
+<<<<<<< HEAD
+=======
+    <preference for="Magento\Shipping\Model\ShipmentProviderInterface" type="Magento\Shipping\Model\ShipmentProvider" />
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
     <type name="Magento\Shipping\Helper\Data">
         <arguments>

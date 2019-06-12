@@ -3,14 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
+/**
+ * Fetch Rates Test
+ */
 class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * Test fetch action without service
+     *
+     * @return void
      */
-    public function testFetchRatesActionWithoutService()
+    public function testFetchRatesActionWithoutService(): void
     {
         $request = $this->getRequest();
         $request->setParam(
@@ -20,15 +26,17 @@ class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->dispatch('backend/admin/system_currency/fetchRates');
 
         $this->assertSessionMessages(
-            $this->contains('Please specify a correct Import Service.'),
+            $this->contains('The Import Service is incorrect. Verify the service and try again.'),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
 
     /**
      * Test save action with nonexistent service
+     *
+     * @return void
      */
-    public function testFetchRatesActionWithNonexistentService()
+    public function testFetchRatesActionWithNonexistentService(): void
     {
         $request = $this->getRequest();
         $request->setParam(
@@ -38,7 +46,7 @@ class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->dispatch('backend/admin/system_currency/fetchRates');
 
         $this->assertSessionMessages(
-            $this->contains('We can\'t initialize the import model.'),
+            $this->contains("The import model can't be initialized. Verify the model and try again."),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

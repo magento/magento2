@@ -408,7 +408,13 @@ abstract class AbstractEntity
             if ($source->valid()) {
                 try {
                     $rowData = $source->current();
+<<<<<<< HEAD
                     $skuSet[$rowData['sku']] = true;
+=======
+                    if (array_key_exists('sku', $rowData)) {
+                        $skuSet[$rowData['sku']] = true;
+                    }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 } catch (\InvalidArgumentException $e) {
                     $this->addRowError($e->getMessage(), $this->_processedRowsCount);
                     $this->_processedRowsCount++;
@@ -436,7 +442,11 @@ abstract class AbstractEntity
                 $source->next();
             }
         }
+<<<<<<< HEAD
         $this->_processedEntitiesCount = count($skuSet);
+=======
+        $this->_processedEntitiesCount = (count($skuSet)) ? : $this->_processedRowsCount;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         return $this;
     }
@@ -554,7 +564,13 @@ abstract class AbstractEntity
             $this->_parameters['behavior']
         ) ||
             $this->_parameters['behavior'] != ImportExport::BEHAVIOR_APPEND &&
+<<<<<<< HEAD
             $this->_parameters['behavior'] != ImportExport::BEHAVIOR_REPLACE &&
+=======
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_ADD_UPDATE &&
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_REPLACE &&
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_CUSTOM &&
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $this->_parameters['behavior'] != ImportExport::BEHAVIOR_DELETE
         ) {
             return ImportExport::getDefaultBehavior();
@@ -828,6 +844,8 @@ abstract class AbstractEntity
     }
 
     /**
+     * Get error aggregator object
+     *
      * @return ProcessingErrorAggregatorInterface
      */
     public function getErrorAggregator()

@@ -8,6 +8,9 @@ namespace Magento\Sales\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class Download. Represents download logic for files
+ */
 class Download
 {
     /**
@@ -36,6 +39,8 @@ class Download
     protected $rootDirBasePath;
 
     /**
+     * Constructor method
+     *
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDatabase
      * @param \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageDatabaseFactory
@@ -84,6 +89,8 @@ class Download
     }
 
     /**
+     * Method checks, if file can be returned depends on the given filepath
+     *
      * @param string $relativePath
      * @return bool
      */

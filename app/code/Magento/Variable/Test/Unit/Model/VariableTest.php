@@ -6,6 +6,7 @@
 namespace Magento\Variable\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Variable\Model\ResourceModel\Variable\Collection;
 
 /**
  * Unit test for class Magento\Variable\Model\Variable.
@@ -13,27 +14,52 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class VariableTest extends \PHPUnit\Framework\TestCase
 {
     /**
+<<<<<<< HEAD
      * @var \Magento\Variable\Model\Variable
+=======
+     * @var  \Magento\Variable\Model\Variable
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $model;
 
     /**
+<<<<<<< HEAD
      * @var \PHPUnit_Framework_MockObject_MockObject
+=======
+     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $escaperMock;
 
     /**
+<<<<<<< HEAD
      * @var \PHPUnit_Framework_MockObject_MockObject
+=======
+     * @var \Magento\Variable\Model\ResourceModel\Variable|\PHPUnit_Framework_MockObject_MockObject
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $resourceMock;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Framework\Phrase
+=======
+     * @var \Magento\Variable\Model\ResourceModel\Variable\Collection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resourceCollectionMock;
+
+    /**
+     * @var  \Magento\Framework\Phrase
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $validationFailedPhrase;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+=======
+     * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $objectManager;
 
@@ -46,11 +72,15 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock = $this->getMockBuilder(\Magento\Variable\Model\ResourceModel\Variable::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->resourceCollectionMock = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = $this->objectManager->getObject(
             \Magento\Variable\Model\Variable::class,
             [
                 'escaper' => $this->escaperMock,
-                'resource' => $this->resourceMock
+                'resource' => $this->resourceMock,
+                'resourceCollection' => $this->resourceCollectionMock,
             ]
         );
         $this->validationFailedPhrase = __('Validation has failed.');
@@ -111,6 +141,54 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->model->validate($variableArray));
     }
 
+<<<<<<< HEAD
+=======
+    public function testGetVariablesOptionArrayNoGroup()
+    {
+        $origOptions = [
+            ['value' => 'VAL', 'label' => 'LBL'],
+        ];
+
+        $transformedOptions = [
+            ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')],
+        ];
+
+        $this->resourceCollectionMock->expects($this->any())
+            ->method('toOptionArray')
+            ->willReturn($origOptions);
+        $this->escaperMock->expects($this->once())
+            ->method('escapeHtml')
+            ->with($origOptions[0]['label'])
+            ->willReturn($origOptions[0]['label']);
+        $this->assertEquals($transformedOptions, $this->model->getVariablesOptionArray());
+    }
+
+    public function testGetVariablesOptionArrayWithGroup()
+    {
+        $origOptions = [
+            ['value' => 'VAL', 'label' => 'LBL'],
+        ];
+
+        $transformedOptions = [
+            [
+                'label' => __('Custom Variables'),
+                'value' => [
+                    ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')],
+                ],
+            ],
+        ];
+
+        $this->resourceCollectionMock->expects($this->any())
+            ->method('toOptionArray')
+            ->willReturn($origOptions);
+        $this->escaperMock->expects($this->atLeastOnce())
+            ->method('escapeHtml')
+            ->with($origOptions[0]['label'])
+            ->willReturn($origOptions[0]['label']);
+        $this->assertEquals($transformedOptions, $this->model->getVariablesOptionArray(true));
+    }
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     /**
      * @return array
      */
@@ -122,7 +200,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         return [
             'Empty Variable' => [[], null, true],
             'IDs match' => [$variable, 'matching_id', true],
-            'IDs do not match' => [$variable, 'non_matching_id', __('Variable Code must be unique.')]
+            'IDs do not match' => [$variable, 'non_matching_id', __('Variable Code must be unique.')],
         ];
     }
 
@@ -133,7 +211,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'Missing code' => ['', 'some-name'],
-            'Missing name' => ['some-code', '']
+            'Missing name' => ['some-code', ''],
         ];
     }
 }

@@ -38,6 +38,10 @@ class ProductCategoryCondition implements CustomConditionInterface
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
+<<<<<<< HEAD
+=======
+     * @param \Magento\Catalog\Model\CategoryRepository $categoryRepository
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,
@@ -48,6 +52,11 @@ class ProductCategoryCondition implements CustomConditionInterface
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Builds condition to filter product collection by categories
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param Filter $filter
      * @return string
      */
@@ -109,14 +118,24 @@ class ProductCategoryCondition implements CustomConditionInterface
      * Map equal and not equal conditions to in and not in
      *
      * @param string $conditionType
+<<<<<<< HEAD
      * @return mixed
+=======
+     * @return string
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private function mapConditionType(string $conditionType): string
     {
         $conditionsMap = [
+<<<<<<< HEAD
             'eq'    => 'in',
             'neq'   => 'nin',
             'like'  => 'in',
+=======
+            'eq' => 'in',
+            'neq' => 'nin',
+            'like' => 'in',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             'nlike' => 'nin',
         ];
         return $conditionsMap[$conditionType] ?? $conditionType;

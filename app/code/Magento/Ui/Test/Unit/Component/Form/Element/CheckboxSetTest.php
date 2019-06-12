@@ -15,7 +15,7 @@ use Magento\Ui\Component\Form\Element\CheckboxSet;
 class CheckboxSetTest extends AbstractElementTest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getModelName()
     {
@@ -23,7 +23,11 @@ class CheckboxSetTest extends AbstractElementTest
     }
 
     /**
+<<<<<<< HEAD
      * @return mixed|void
+=======
+     * @inheritdoc
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function testGetComponentName()
     {

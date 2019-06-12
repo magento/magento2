@@ -17,6 +17,12 @@ use Magento\Newsletter\Model\ResourceModel\Problem as ProblemResource;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class ProblemTest
+ */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class ProblemTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -59,6 +65,12 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
      */
     private $problemModel;
 
+<<<<<<< HEAD
+=======
+    /**
+     * @inheritdoc
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
@@ -68,6 +80,10 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->subscriberFactoryMock = $this->getMockBuilder(SubscriberFactory::class)
+<<<<<<< HEAD
+=======
+            ->disableOriginalConstructor()
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->getMock();
         $this->subscriberMock = $this->getMockBuilder(Subscriber::class)
             ->disableOriginalConstructor()
@@ -98,6 +114,12 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * @return void
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function testAddSubscriberData()
     {
         $subscriberId = 1;
@@ -111,6 +133,12 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($subscriberId, $this->problemModel->getSubscriberId());
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * @return void
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function testAddQueueData()
     {
         $queueId = 1;
@@ -127,6 +155,12 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($queueId, $this->problemModel->getQueueId());
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * @return void
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function testAddErrorData()
     {
         $exceptionMessage = 'Some message';
@@ -140,17 +174,35 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($exceptionCode, $this->problemModel->getProblemErrorCode());
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * @return void
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function testGetSubscriberWithNoSubscriberId()
     {
         self::assertNull($this->problemModel->getSubscriber());
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * @return void
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function testGetSubscriber()
     {
         $this->setSubscriber();
         self::assertEquals($this->subscriberMock, $this->problemModel->getSubscriber());
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * @return void
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function testUnsubscribeWithNoSubscriber()
     {
         $this->subscriberMock->expects($this->never())
@@ -162,6 +214,12 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($this->problemModel, $result);
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * @return void
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function testUnsubscribe()
     {
         $this->setSubscriber();

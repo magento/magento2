@@ -44,6 +44,7 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
      * ]
      * @param string $phrase
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getSynonymsForPhrase($phrase)
     {
@@ -66,7 +67,11 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
             $synonyms = [$word];
 
             if ($synonymGroups) {
+<<<<<<< HEAD
                 $pattern = $this->getSearchPattern(array_slice($words, $offset));
+=======
+                $pattern = $this->getSearchPattern(\array_slice($words, $offset));
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 $position = $this->findInArray($pattern, $synonymGroups);
                 if ($position !== null) {
                     $synonyms = explode(',', $synonymGroups[$position]);
@@ -98,6 +103,10 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
             }
             $position++;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return null;
     }
 
@@ -134,7 +143,11 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
     {
         $patterns = [];
         for ($lastItem = count($words); $lastItem > 0; $lastItem--) {
+<<<<<<< HEAD
             $phrase = implode("\s+", array_slice($words, 0, $lastItem));
+=======
+            $phrase = implode("\s+", \array_slice($words, 0, $lastItem));
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $patterns[] = '^' . $phrase . ',';
             $patterns[] = ',' . $phrase . ',';
             $patterns[] = ',' . $phrase . '$';
@@ -151,11 +164,19 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
      *
      * @param string $phrase
      * @return string[]
+<<<<<<< HEAD
+=======
+     * @throws \Magento\Framework\Exception\LocalizedException
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private function getSynonymGroupsByPhrase(string $phrase): array
     {
         $result = [];
 
+<<<<<<< HEAD
+=======
+        /** @var array $synonymGroups */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $synonymGroups = $this->synReaderModel->loadByPhrase($phrase)->getData();
         foreach ($synonymGroups as $row) {
             $result[] = $row['synonyms'];

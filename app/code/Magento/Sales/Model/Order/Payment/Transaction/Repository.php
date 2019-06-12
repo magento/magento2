@@ -92,17 +92,19 @@ class Repository implements TransactionRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($id)
     {
         if (!$id) {
-            throw new \Magento\Framework\Exception\InputException(__('ID required'));
+            throw new \Magento\Framework\Exception\InputException(__('An ID is needed. Set the ID and try again.'));
         }
         if (!$this->entityStorage->has($id)) {
             $entity = $this->metaData->getNewInstance()->load($id);
             if (!$entity->getTransactionId()) {
-                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
+                throw new NoSuchEntityException(
+                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
+                );
             }
             $this->entityStorage->add($entity);
         }
@@ -112,12 +114,10 @@ class Repository implements TransactionRepositoryInterface
     /**
      * @param int $transactionType
      * @param int $paymentId
-     * @param int $orderId
      * @return bool|\Magento\Framework\Model\AbstractModel|mixed
      * @throws \Magento\Framework\Exception\InputException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getByTransactionType($transactionType, $paymentId, $orderId)
+    public function getByTransactionType($transactionType, $paymentId)
     {
         $identityFieldsForCache = [$transactionType, $paymentId];
         $cacheStorage = 'txn_type';

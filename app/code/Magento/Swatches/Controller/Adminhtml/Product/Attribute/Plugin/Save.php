@@ -16,6 +16,8 @@ use Magento\Swatches\Model\Swatch;
 class Save
 {
     /**
+     * Performs the conversion of the frontend input value.
+     *
      * @param Attribute\Save $subject
      * @param RequestInterface $request
      * @return array

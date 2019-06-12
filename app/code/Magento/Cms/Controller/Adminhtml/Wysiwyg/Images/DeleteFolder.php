@@ -6,12 +6,20 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
+<<<<<<< HEAD
+=======
+use Magento\Framework\App\Action\HttpPostActionInterface;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Delete image folder.
  */
+<<<<<<< HEAD
 class DeleteFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
+=======
+class DeleteFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images implements HttpPostActionInterface
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory

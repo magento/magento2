@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// @codingStandardsIgnoreFile
-//"swatchRenderer": {
 ?>
 <?php /** @var $block \Magento\Swatches\Block\Product\Renderer\Configurable */ ?>
 <div class="swatch-opt" data-role="swatch-options"></div>
@@ -13,6 +11,7 @@
     {
         "[data-role=swatch-options]": {
             "Magento_Swatches/js/swatch-renderer": {
+<<<<<<< HEAD
                 "jsonConfig": <?= /* @escapeNotVerified */ $swatchOptions = $block->getJsonConfig() ?>,
                 "jsonSwatchConfig": <?php /* @noEscape */ echo $block->getJsonSwatchConfig(); ?>,
                 "mediaCallback": "<?= /* @escapeNotVerified */ $block->getMediaCallback() ?>",
@@ -22,6 +21,13 @@
             },
             "Magento_Swatches/js/configurable-customer-data": {
                     "swatchOptions": <?php /* @noEscape */ echo $swatchOptions ?>
+=======
+                "jsonConfig": <?= /* @noEscape */ $swatchOptions = $block->getJsonConfig() ?>,
+                "jsonSwatchConfig": <?= /* @noEscape */ $swatchOptions = $block->getJsonSwatchConfig() ?>,
+                "mediaCallback": "<?= $block->escapeJs($block->escapeUrl($block->getMediaCallback())) ?>",
+                "gallerySwitchStrategy": "<?= $block->escapeJs($block->getVar('gallery_switch_strategy', 'Magento_ConfigurableProduct')) ?: 'replace'; ?>",
+                "jsonSwatchImageSizeConfig": <?= /* @noEscape */ $block->getJsonSwatchSizeConfig() ?>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             }
         },
         "*" : {

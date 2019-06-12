@@ -155,7 +155,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertCodingStyle($contents)
     {
-        $this->assertNotRegExp('/" :\s*["{]/', $contents, 'Coding style: no space before colon.');
+        $this->assertNotRegExp('/" :\s*["{]/', $contents, 'Coding style: there should be no space before colon.');
         $this->assertNotRegExp('/":["{]/', $contents, 'Coding style: a space is necessary after colon.');
     }
 
@@ -172,7 +172,6 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         $this->assertObjectHasAttribute('name', $json);
         $this->assertObjectHasAttribute('license', $json);
         $this->assertObjectHasAttribute('type', $json);
-        $this->assertObjectHasAttribute('version', $json);
         $this->assertObjectHasAttribute('require', $json);
         $this->assertEquals($packageType, $json->type);
         if ($packageType !== 'project') {
@@ -191,11 +190,13 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 $this->assertDependsOnFramework($json->require);
                 $this->assertRequireInSync($json);
                 $this->assertAutoload($json);
+                $this->assertNoVersionSpecified($json);
                 break;
             case 'magento2-language':
                 $this->assertRegExp('/^magento\/language\-[a-z]{2}_([a-z]{4}_)?[a-z]{2}$/', $json->name);
                 $this->assertDependsOnFramework($json->require);
                 $this->assertRequireInSync($json);
+                $this->assertNoVersionSpecified($json);
                 break;
             case 'magento2-theme':
                 $this->assertRegExp('/^magento\/theme-(?:adminhtml|frontend)(\-[a-z0-9_]+)+$/', $json->name);
@@ -203,6 +204,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertDependsOnFramework($json->require);
                 $this->assertRequireInSync($json);
+                $this->assertNoVersionSpecified($json);
                 break;
             case 'magento2-library':
                 $this->assertDependsOnPhp($json->require);
@@ -210,9 +212,11 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertRequireInSync($json);
                 $this->assertAutoload($json);
+                $this->assertNoVersionSpecified($json);
                 break;
             case 'project':
                 $this->checkProject();
+                $this->assertNoVersionSpecified($json);
                 break;
             default:
                 throw new \InvalidArgumentException("Unknown package type {$packageType}");
@@ -233,6 +237,17 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Checks if package vendor is Magento.
+     *
+     * @param string $packageName
+     * @return bool
+     */
+    private function isVendorMagento(string $packageName): bool
+    {
+        return strpos($packageName, 'magento/') === 0;
+    }
+
+    /**
      * Assert that component registrar is autoloaded in composer json
      *
      * @param \StdClass $json
@@ -245,6 +260,19 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         $this->assertObjectHasAttribute('files', $json->autoload, $error);
         $this->assertTrue(in_array("registration.php", $json->autoload->files), $error);
         $this->assertFileExists("$dir/registration.php");
+    }
+
+    /**
+     * Version must not be specified in the root and package composer JSON files in Git.
+     *
+     * All versions are added by tools during release publication by version setter tool.
+     *
+     * @param \StdClass $json
+     */
+    private function assertNoVersionSpecified(\StdClass $json)
+    {
+        $errorMessage = 'Version must not be specified in the root and package composer JSON files in Git';
+        $this->assertObjectNotHasAttribute('version', $json, $errorMessage);
     }
 
     /**
@@ -351,6 +379,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertRequireInSync(\StdClass $json)
     {
+<<<<<<< HEAD
         if (preg_match('/magento\/project-*/', self::$rootJson['name']) == 1) {
             return;
         }
@@ -421,7 +450,45 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
 
             if (!empty($errors)) {
                 $this->fail(join("\n", $errors));
+=======
+        if (preg_match('/magento\/project-*/', self::$rootJson['name']) == 1) {
+            return;
+        }
+        if (!in_array($json->name, self::$rootComposerModuleBlacklist) && isset($json->require)) {
+            $this->checkPackageInRootComposer($json);
+        }
+    }
+
+    /**
+     * Check if package is reflected in root composer.json
+     *
+     * @param \StdClass $json
+     * @return void
+     */
+    private function checkPackageInRootComposer(\StdClass $json)
+    {
+        $name = $json->name;
+        $errors = [];
+        foreach (array_keys((array)$json->require) as $depName) {
+            if ($depName == 'magento/magento-composer-installer') {
+                // Magento Composer Installer is not needed for already existing components
+                continue;
             }
+            if (!isset(self::$rootJson['require-dev'][$depName]) && !isset(self::$rootJson['require'][$depName])
+                && !isset(self::$rootJson['replace'][$depName])) {
+                $errors[] = "'$name' depends on '$depName'";
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
+            }
+        }
+        if (!empty($errors)) {
+            $this->fail(
+                "The following dependencies are missing in root 'composer.json',"
+                . " while declared in child components.\n"
+                . "Consider adding them to 'require-dev' section (if needed for child components only),"
+                . " to 'replace' section (if they are present in the project),"
+                . " to 'require' section (if needed for the skeleton).\n"
+                . join("\n", $errors)
+            );
         }
     }
 
@@ -452,7 +519,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     {
         list($vendor, $name) = explode('_', $moduleName, 2);
         $package = 'module';
-        foreach (preg_split('/([A-Z][a-z\d]+)/', $name, -1, PREG_SPLIT_DELIM_CAPTURE) as $chunk) {
+        foreach (preg_split('/([A-Z\d][a-z]*)/', $name, -1, PREG_SPLIT_DELIM_CAPTURE) as $chunk) {
             $package .= $chunk ? "-{$chunk}" : '';
         }
         return strtolower("{$vendor}/{$package}");

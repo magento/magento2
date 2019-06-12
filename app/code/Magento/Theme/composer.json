@@ -1,7 +1,11 @@
 {
     "name": "magento/module-theme",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
+<<<<<<< HEAD
         "php": "~7.0.13|~7.1.0",
         "magento/module-store": "100.2.*",
         "magento/module-customer": "101.0.*",
@@ -14,15 +18,32 @@
         "magento/module-ui": "101.0.*",
         "magento/framework": "101.0.*",
         "magento/module-require-js": "100.2.*"
+=======
+        "php": "~7.1.3||~7.2.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-cms": "*",
+        "magento/module-config": "*",
+        "magento/module-customer": "*",
+        "magento/module-eav": "*",
+        "magento/module-media-storage": "*",
+        "magento/module-require-js": "*",
+        "magento/module-store": "*",
+        "magento/module-ui": "*",
+        "magento/module-widget": "*"
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     },
     "suggest": {
-        "magento/module-translation": "100.2.*",
-        "magento/module-theme-sample-data": "Sample Data version:100.2.*",
-        "magento/module-deploy": "100.2.*",
-        "magento/module-directory": "100.2.*"
+        "magento/module-translation": "*",
+        "magento/module-theme-sample-data": "*",
+        "magento/module-deploy": "*",
+        "magento/module-directory": "*"
     },
     "type": "magento2-module",
+<<<<<<< HEAD
     "version": "100.2.6",
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     "license": [
         "OSL-3.0",
         "AFL-3.0"

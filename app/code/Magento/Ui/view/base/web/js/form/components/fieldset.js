@@ -68,7 +68,7 @@ define([
 
         /**
          * Calls parent's initElement method.
-         * Assignes callbacks on various events of incoming element.
+         * Assigns callbacks on various events of incoming element.
          *
          * @param  {Object} elem
          * @return {Object} - reference to instance
@@ -162,6 +162,37 @@ define([
             }
 
             this.error(hasErrors || message);
+
+            if (hasErrors || message) {
+                this.open();
+            }
+        },
+
+        /**
+         * Returns errors of children if exist
+         *
+         * @param {Boolean} hasErrors
+         * @param {*} container
+         * @return {Boolean}
+         * @private
+         */
+        _isChildrenHasErrors: function (hasErrors, container) {
+            var self = this;
+
+            if (hasErrors === false && container.hasOwnProperty('elems')) {
+                hasErrors = container.elems.some('error');
+
+                if (hasErrors === false && container.hasOwnProperty('_elems')) {
+                    container._elems.forEach(function (child) {
+
+                        if (hasErrors === false) {
+                            hasErrors = self._isChildrenHasErrors(hasErrors, child);
+                        }
+                    });
+                }
+            }
+
+            return hasErrors;
         },
 
         /**

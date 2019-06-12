@@ -7,7 +7,11 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <test name="CheckCheckoutSuccessPageAsRegisterCustomer">
         <annotations>
             <features value="Checkout"/>
@@ -15,12 +19,20 @@
             <title value="Customer Checkout"/>
             <description value="To be sure that other elements of Success page are shown for placed order as registered Customer."/>
             <severity value="CRITICAL"/>
+<<<<<<< HEAD
             <testCaseId value="MAGETWO-77616"/>
+=======
+            <testCaseId value="MC-16488"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <group value="checkout"/>
         </annotations>
 
         <before>
+<<<<<<< HEAD
             <createData entity="SimpleOne" stepKey="createSimpleProduct"/>
+=======
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <createData entity="Simple_US_Customer" stepKey="createSimpleUsCustomer">
                 <field key="group_id">1</field>
             </createData>
@@ -30,14 +42,23 @@
             <!--Logout from customer account-->
             <amOnPage url="customer/account/logout/" stepKey="logoutCustomerOne"/>
             <waitForPageLoad stepKey="waitLogoutCustomerOne"/>
+<<<<<<< HEAD
             <actionGroup ref="logout" stepKey="logoutAdminUserAfterTest"/>
+=======
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
         </after>
 
         <!--Log in to Storefront as Customer-->
+<<<<<<< HEAD
         <actionGroup ref="CustomerLoginOnStorefront" stepKey="signUpNewUser">
             <argument name="customer" value="$$createSimpleUsCustomer$$"/>
+=======
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUpNewUser">
+            <argument name="Customer" value="$$createSimpleUsCustomer$$"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </actionGroup>
 
         <!--Go to product page-->
@@ -55,18 +76,28 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask2"/>
         <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+<<<<<<< HEAD
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoadedTest3"/>
 
         <!--Click Place Order button-->
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
+=======
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <!--Click Place Order button-->
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
         <see selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order number is: " stepKey="seeOrderNumber"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessNotify"/>
 
         <click selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="clickOrderLink"/>
+<<<<<<< HEAD
         <waitForPageLoad stepKey="waitPageOrder"/>
         <seeInCurrentUrl url="{{OrderDetailsPage.url}}" stepKey="seeMyOrderPage"/>
+=======
+        <seeInCurrentUrl url="{{StorefrontCustomerOrderPage.url}}" stepKey="seeMyOrderPage"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         <!--Go to product page-->
         <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage2"/>
@@ -83,6 +114,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
         <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton2"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext2"/>
+<<<<<<< HEAD
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoadedTest4"/>
 
         <!--Click Place Order button-->
@@ -92,6 +124,16 @@
         <click selector="{{CheckoutSuccessMainSection.continueShoppingButton}}" stepKey="clickContinueShoppingButton"/>
         <waitForPageLoad stepKey="waitHomePage"/>
         <see userInput="Home Page" selector="{{StorefrontHeaderSection.mainTitle}}" stepKey="seeHomePageTitle"/>
+=======
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
+
+        <!--Click Place Order button-->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder2"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage2"/>
+        <click selector="{{CheckoutSuccessMainSection.continueShoppingButton}}" stepKey="clickContinueShoppingButton"/>
+        <see userInput="Home Page" selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="seeHomePageTitle"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <seeCurrentUrlEquals url="{{_ENV.MAGENTO_BASE_URL}}" stepKey="seeHomePageUrl"/>
 
         <!--Go to product page-->
@@ -109,12 +151,22 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
         <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton3"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext3"/>
+<<<<<<< HEAD
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoadedTest5"/>
 
         <!--Click Place Order button-->
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear3"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder3"/>
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle3"/>
+=======
+
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment3"/>
+
+        <!--Click Place Order button-->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder3"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage3"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         <!--Check "Print Receipt" button is presented (desktop only)-->
         <seeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeVisiblePrint"/>
@@ -127,7 +179,10 @@
 
         <!--See print page-->
         <click selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="clickPrintLink"/>
+<<<<<<< HEAD
         <waitForPageLoad stepKey="waitPrintPage"/>
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <switchToWindow stepKey="switchToWindow"/>
         <switchToNextTab stepKey="switchToTab"/>
         <seeInCurrentUrl url="sales/order/print/order_id" stepKey="seePrintPage"/>
@@ -138,15 +193,26 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Success page elements are presented for placed order as Guest"/>
+<<<<<<< HEAD
             <title value="Customer Checkout"/>
             <description value="To be sure that other elements of Success page are presented for placed order as Guest."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-77614"/>
+=======
+            <title value="Guest Checkout - elements of success page are presented for placed order as guest"/>
+            <description value="To be sure that other elements of Success page are presented for placed order as Guest"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16490"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <group value="checkout"/>
         </annotations>
 
         <before>
+<<<<<<< HEAD
             <createData entity="SimpleOne" stepKey="createSimpleProduct"/>
+=======
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </before>
 
         <after>
@@ -171,6 +237,12 @@
             <argument name="customerAddressVar" value="CustomerAddressSimple" />
         </actionGroup>
 
+<<<<<<< HEAD
+=======
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <!--Click Place Order button-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
@@ -185,9 +257,14 @@
         <see selector="{{CheckoutSuccessRegisterSection.customerEmail}}" userInput="Email Address: {{CustomerEntityOne.email}}" stepKey="seeCustomerEmail"/>
         <seeElement selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="seeVisibleCreateAccountButton"/>
         <click selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="clickCreateAccountButton"/>
+<<<<<<< HEAD
         <waitForPageLoad stepKey="waitAccountPage"/>
         <seeInCurrentUrl url="{{StorefrontCustomerCreatePage.url}}" stepKey="seeHomePageUrl"/>
         <see userInput="Create New Customer Account" selector="{{StorefrontHeaderSection.mainTitle}}" stepKey="seeHomePageTitle"/>
+=======
+        <seeInCurrentUrl url="{{StorefrontCustomerCreatePage.url}}" stepKey="seeCreateAccountPage"/>
+        <see userInput="Create New Customer Account" selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="seeCreateAccountPageTitle"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         <!--Go to product page-->
         <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage2"/>
@@ -200,12 +277,16 @@
 
         <!--Go to Checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection2">
             <argument name="customerVar" value="CustomerEntityOne" />
             <argument name="customerAddressVar" value="CustomerAddressSimple" />
         </actionGroup>
 
+<<<<<<< HEAD
         <!--Click Place Order button-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder2"/>
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle2"/>
@@ -213,5 +294,18 @@
         <waitForPageLoad stepKey="waitHomePage2"/>
         <seeCurrentUrlEquals url="{{_ENV.MAGENTO_BASE_URL}}" stepKey="seeHomePageUrl2"/>
         <see userInput="Home Page" selector="{{StorefrontHeaderSection.mainTitle}}" stepKey="seeHomePageTitle2"/>
+=======
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
+
+        <!--Click Place Order button-->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder2"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage2"/>
+
+        <!--Continue shopping-->
+        <click selector="{{CheckoutSuccessMainSection.continueShoppingButton}}" stepKey="clickContinueShoppingButton"/>
+        <seeCurrentUrlEquals url="{{_ENV.MAGENTO_BASE_URL}}" stepKey="seeHomePageUrl"/>
+        <see userInput="Home Page" selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="seeHomePageTitle"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </test>
 </tests>

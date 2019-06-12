@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory as EavAttributeFactory;
 use Magento\Catalog\Ui\DataProvider\CatalogEavValidationRules;
@@ -31,8 +32,14 @@ use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
+<<<<<<< HEAD
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
 use \Magento\Catalog\Model\Product\Type as ProductType;
+=======
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav\CompositeConfigProcessor;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 /**
  * Class Eav
@@ -202,6 +209,20 @@ class Eav extends AbstractModifier
     private $attributeCollectionFactory;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var CompositeConfigProcessor
+     */
+    private $wysiwygConfigProcessor;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * Eav constructor.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param LocatorInterface $locator
      * @param CatalogEavValidationRules $catalogEavValidationRules
      * @param Config $eavConfig
@@ -221,6 +242,11 @@ class Eav extends AbstractModifier
      * @param DataPersistorInterface $dataPersistor
      * @param array $attributesToDisable
      * @param array $attributesToEliminate
+<<<<<<< HEAD
+=======
+     * @param CompositeConfigProcessor|null $wysiwygConfigProcessor
+     * @param ScopeConfigInterface|null $scopeConfig
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param AttributeCollectionFactory $attributeCollectionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -244,6 +270,11 @@ class Eav extends AbstractModifier
         DataPersistorInterface $dataPersistor,
         $attributesToDisable = [],
         $attributesToEliminate = [],
+<<<<<<< HEAD
+=======
+        CompositeConfigProcessor $wysiwygConfigProcessor = null,
+        ScopeConfigInterface $scopeConfig = null,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         AttributeCollectionFactory $attributeCollectionFactory = null
     ) {
         $this->locator = $locator;
@@ -265,12 +296,19 @@ class Eav extends AbstractModifier
         $this->dataPersistor = $dataPersistor;
         $this->attributesToDisable = $attributesToDisable;
         $this->attributesToEliminate = $attributesToEliminate;
+<<<<<<< HEAD
+=======
+        $this->wysiwygConfigProcessor = $wysiwygConfigProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(CompositeConfigProcessor::class);
+        $this->scopeConfig = $scopeConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+        ->get(ScopeConfigInterface::class);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->attributeCollectionFactory = $attributeCollectionFactory
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -381,7 +419,7 @@ class Eav extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -538,8 +576,13 @@ class Eav extends AbstractModifier
     /**
      * Loads attributes for specified groups at once
      *
+<<<<<<< HEAD
      * @param AttributeGroupInterface[] ...$groups
      * @return @return ProductAttributeInterface[]
+=======
+     * @param AttributeGroupInterface[] $groups
+     * @return ProductAttributeInterface[]
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private function loadAttributesForGroups(array $groups)
     {
@@ -642,9 +685,15 @@ class Eav extends AbstractModifier
             'formElement' => $this->getFormElementsMapValue($attribute->getFrontendInput()),
             'visible' => $attribute->getIsVisible(),
             'required' => $attribute->getIsRequired(),
+<<<<<<< HEAD
             'notice' => $attribute->getNote(),
             'default' => (!$this->isProductExists()) ? $attribute->getDefaultValue() : null,
             'label' => $attribute->getDefaultFrontendLabel(),
+=======
+            'notice' => $attribute->getNote() === null ? null : __($attribute->getNote()),
+            'default' => (!$this->isProductExists()) ? $this->getAttributeDefaultValue($attribute) : null,
+            'label' => __($attribute->getDefaultFrontendLabel()),
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             'code' => $attributeCode,
             'source' => $groupCode,
             'scopeLabel' => $this->getScopeLabel($attribute),
@@ -655,7 +704,11 @@ class Eav extends AbstractModifier
         // TODO: Refactor to $attribute->getOptions() when MAGETWO-48289 is done
         $attributeModel = $this->getAttributeModel($attribute);
         if ($attributeModel->usesSource()) {
+<<<<<<< HEAD
             $options = $attributeModel->getSource()->getAllOptions();
+=======
+            $options = $attributeModel->getSource()->getAllOptions(true, true);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $meta = $this->arrayManager->merge($configPath, $meta, [
                 'options' => $this->convertOptionsValueToString($options),
             ]);
@@ -676,7 +729,12 @@ class Eav extends AbstractModifier
         }
 
         $product = $this->locator->getProduct();
+<<<<<<< HEAD
         if (in_array($attributeCode, $this->attributesToDisable) || $product->isLockedAttribute($attributeCode)) {
+=======
+        if (in_array($attributeCode, $this->attributesToDisable)
+            || $product->isLockedAttribute($attributeCode)) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $meta = $this->arrayManager->merge($configPath, $meta, [
                 'disabled' => true,
             ]);
@@ -712,22 +770,58 @@ class Eav extends AbstractModifier
     }
 
     /**
+<<<<<<< HEAD
      * Convert options value to string
+=======
+     * Returns attribute default value, based on db setting or setting in the system configuration.
+     *
+     * @param ProductAttributeInterface $attribute
+     * @return null|string
+     */
+    private function getAttributeDefaultValue(ProductAttributeInterface $attribute)
+    {
+        if ($attribute->getAttributeCode() === 'page_layout') {
+            $defaultValue = $this->scopeConfig->getValue(
+                'web/default_layouts/default_product_layout',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $this->storeManager->getStore()
+            );
+            $attribute->setDefaultValue($defaultValue);
+        }
+        return $attribute->getDefaultValue();
+    }
+
+    /**
+     * Convert options value to string.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param array $options
      * @return array
      */
+<<<<<<< HEAD
     private function convertOptionsValueToString(array $options): array
+=======
+    private function convertOptionsValueToString(array $options) : array
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         array_walk($options, function (&$value) {
             if (isset($value['value']) && is_scalar($value['value'])) {
                 $value['value'] = (string)$value['value'];
             }
         });
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $options;
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Adds 'use default value' checkbox.
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param ProductAttributeInterface $attribute
      * @param array $meta
      * @return array
@@ -861,13 +955,7 @@ class Eav extends AbstractModifier
 
         $meta['arguments']['data']['config']['formElement'] = WysiwygElement::NAME;
         $meta['arguments']['data']['config']['wysiwyg'] = true;
-        $meta['arguments']['data']['config']['wysiwygConfigData'] = [
-            'add_variables' => false,
-            'add_widgets' => false,
-            'add_directives' => true,
-            'use_container' => true,
-            'container_class' => 'hor-scroll',
-        ];
+        $meta['arguments']['data']['config']['wysiwygConfigData'] = $this->wysiwygConfigProcessor->process($attribute);
 
         return $meta;
     }

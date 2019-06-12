@@ -7,7 +7,11 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <entity name="SamplePaypalConfig" type="paypal_config_state">
         <requiredEntity type="business_account">SampleBusinessAccount</requiredEntity>
         <requiredEntity type="api_username">SampleApiUsername</requiredEntity>
@@ -38,6 +42,12 @@
     <entity name="SampleUseProxy" type="use_proxy">
         <data key="value">0</data>
     </entity>
+<<<<<<< HEAD
+=======
+    <entity name="SampleMerchantID" type="use_proxy">
+        <data key="value">someMerchantId</data>
+    </entity>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
     <!-- default configuration used to restore Magento config -->
     <entity name="DefaultPayPalConfig" type="paypal_config_state">
@@ -58,4 +68,45 @@
     <entity name="DefaultApiSignature" type="api_signature">
         <data key="value"/>
     </entity>
+<<<<<<< HEAD
+=======
+    <entity name="Payer" type="paypal_buyer">
+        <data key="buyerEmail">buyer.mpi@gmail.com</data>
+        <data key="buyerPassword">12345678</data>
+    </entity>
+    <entity name="PayPalLabel" type="paypal">
+        <data key="checkout">checkout</data>
+        <data key="credit">credit</data>
+        <data key="pay">pay</data>
+        <data key="buynow">buy now</data>
+        <data key="paypal">pay pal</data>
+        <data key="installment">installment</data>
+    </entity>
+    <entity name="PayPalLayout" type="paypal">
+        <data key="horizontal">horizontal</data>
+        <data key="vertical">vertical</data>
+    </entity>
+    <entity name="PayPalSize" type="paypal">
+        <data key="medium">medium</data>
+        <data key="large">large</data>
+        <data key="responsive">responsive</data>
+    </entity>
+    <entity name="PayPalShape" type="paypal">
+        <data key="pill">pill</data>
+        <data key="rectangle">rectangle</data>
+    </entity>
+    <entity name="PayPalColor" type="paypal">
+        <data key="gold">gold</data>
+        <data key="blue">blue</data>
+        <data key="silver">silver</data>
+        <data key="black">black</data>
+    </entity>
+    <entity name="SamplePaypalExpressConfig" type="paypal_express_config">
+        <data key="paypal_express_email">myBusinessAccount@magento.com</data>
+        <data key="paypal_express_api_username">myApiUsername.magento.com</data>
+        <data key="paypal_express_api_password">somePassword</data>
+        <data key="paypal_express_api_signature">someApiSignature</data>
+        <data key="paypal_express_merchantID">someMerchantId</data>
+    </entity>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </entities>

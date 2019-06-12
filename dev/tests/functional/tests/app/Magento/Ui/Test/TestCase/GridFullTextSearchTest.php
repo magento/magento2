@@ -20,7 +20,11 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
  * 1. Navigate to backend.
  * 2. Go to grid page
  * 3. Perform full text search
+<<<<<<< HEAD
  * 4. Perform Asserts
+=======
+ * 5. Perform Asserts
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  *
  * @group Ui
  * @ZephyrId MAGETWO-41330

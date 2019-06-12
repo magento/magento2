@@ -31,6 +31,7 @@
                         <?= $block->escapeHtml($block->getCustomizedOptionValue($_option)) ?>
                     <?php else: ?>
                         <?php $_option = $block->getFormattedOption($_option['value']); ?>
+<<<<<<< HEAD
                         <?= $block->escapeHtml($_option['value']) ?>
                         <?php if (isset($_option['remainder']) && $_option['remainder']): ?>
                             <?php $dots = 'dots' . uniqid(); ?>
@@ -39,6 +40,14 @@
                             <span id="<?= /* @noEscape */ $id; ?>"><?= $block->escapeHtml($_option['remainder']) ?></span>
                             <script>
                                 require(['prototype'], function(){
+=======
+                        <?php $dots = 'dots' . uniqid(); ?>
+                        <?= $block->escapeHtml($_option['value']) ?><?php if (isset($_option['remainder']) && $_option['remainder']): ?> <span id="<?= /* @noEscape */ $dots; ?>"> ...</span>
+                            <?php  $id = 'id' . uniqid(); ?>
+                            <span id="<?= /* @noEscape */ $id; ?>"><?= $block->escapeHtml($_option['remainder']) ?></span>
+                            <script>
+                                require(['prototype'], function() {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                                     $('<?= /* @noEscape */ $id; ?>').hide();
                                     $('<?= /* @noEscape */ $id; ?>').up().observe('mouseover', function(){$('<?= /* @noEscape */ $id; ?>').show();});
                                     $('<?= /* @noEscape */ $id; ?>').up().observe('mouseover', function(){$('<?= /* @noEscape */ $dots; ?>').hide();});

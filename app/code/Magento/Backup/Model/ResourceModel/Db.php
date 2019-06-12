@@ -115,7 +115,11 @@ class Db
     }
 
     /**
+<<<<<<< HEAD
      * Return triggers for table(s)
+=======
+     * Return triggers for table(s).
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param string|null $tableName
      * @param bool $addDropIfExists
@@ -135,6 +139,10 @@ class Db
         } else {
             $triggerScript = $this->getTableTriggersSql($tableName, $addDropIfExists);
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $triggerScript;
     }
 

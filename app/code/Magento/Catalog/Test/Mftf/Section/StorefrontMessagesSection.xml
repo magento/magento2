@@ -7,10 +7,18 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontMessagesSection">
         <element name="test" type="input" selector=".test"/>
         <element name="success" type="text" selector="div.message-success.success.message"/>
         <element name="error" type="text" selector="div.message-error.error.message"/>
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontMessagesSection">
+        <element name="success" type="text" selector="div.message-success.success.message"/>
+        <element name="error" type="text" selector="div.message-error.error.message"/>
+        <element name="noticeMessage" type="text" selector="div.message.notice div"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </section>
 </sections>

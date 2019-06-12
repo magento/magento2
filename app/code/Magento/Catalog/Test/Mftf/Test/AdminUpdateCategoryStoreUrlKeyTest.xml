@@ -7,7 +7,11 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+=======
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <test name="AdminUpdateCategoryStoreUrlKeyTest">
         <annotations>
             <features value="SEO-friendly URL Key Update"/>
@@ -15,6 +19,7 @@
             <title value="SEO-friendly URL should update regardless of scope or redirect change."/>
             <description value="SEO-friendly URL should update regardless of scope or redirect change."/>
             <severity value="CRITICAL"/>
+<<<<<<< HEAD
             <testCaseId value="MAGETWO-92916"/>
             <group value="category"/>
         </annotations>
@@ -29,16 +34,37 @@
         </before>
         <after>
             <!-- Delete category and logout from admin account -->
+=======
+            <testCaseId value="MAGETWO-92338"/>
+            <group value="category"/>
+        </annotations>
+        <after>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <actionGroup ref="DeleteCategory" stepKey="deleteCategory">
                 <argument name="categoryEntity" value="_defaultCategory"/>
             </actionGroup>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
 
+<<<<<<< HEAD
         <!--Switch to "Default Store View" scope-->
         <actionGroup ref="switchCategoryStoreView" stepKey="SwitchStoreView">
             <argument name="store" value="_defaultStore.name"/>
             <argument name="catName" value="_defaultCategory.name"/>
+=======
+        <!-- Create category, change store view to default -->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="CreateCategory" stepKey="createCategory">
+            <argument name="categoryEntity" value="_defaultCategory"/>
+        </actionGroup>
+
+        <!--Switch to "Default Store View" scope-->
+        <actionGroup ref="switchCategoryStoreView" stepKey="SwitchStoreView">
+            <argument name="Store" value="_defaultStore.name"/>
+            <argument name="CatName" value="_defaultCategory.name"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </actionGroup>
         <!--See "Use Default Value" checkboxes-->
         <seeElement selector="{{AdminCategoryBasicFieldSection.enableUseDefault}}" stepKey="seeUseDefaultEnable"/>
@@ -46,13 +72,20 @@
         <seeElement selector="{{AdminCategoryBasicFieldSection.categoryNameUseDefault}}" stepKey="seeUseDefaultName"/>
         <!-- Update SEO key, uncheck "Create Redirect", confirm in frontend -->
         <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="openSeoSection"/>
+<<<<<<< HEAD
         <uncheckOption selector="{{AdminCategorySEOSection.urlKeyDefaultValueCheckbox}}" stepKey="uncheckUseDefaultUrlKey"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{_defaultCategory.name_lwr}}-hattest" stepKey="enterURLKey"/>
         <uncheckOption selector="{{AdminCategorySEOSection.urlKeyRedirectCheckbox}}"  stepKey="uncheckRedirect1"/>
+=======
+        <uncheckOption selector="{{AdminCategorySEOSection.UrlKeyDefaultValueCheckbox}}" stepKey="uncheckUseDefaultUrlKey"/>
+        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{_defaultCategory.name_lwr}}-hattest" stepKey="enterURLKey"/>
+        <uncheckOption selector="{{AdminCategorySEOSection.UrlKeyRedirectCheckbox}}"  stepKey="uncheckRedirect1"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryAfterFirstSeoUpdate"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessage"/>
         <amOnPage url="" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForFrontendLoad"/>
+<<<<<<< HEAD
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="clickCategory"/>
         <see selector="{{StorefrontCategoryMainSection.categoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="assertCategoryOnStorefront"/>
         <seeInTitle userInput="{{_defaultCategory.name}}" stepKey="seeCategoryNameInTitle"/>
@@ -66,13 +99,38 @@
         <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="openSeoSection2"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{_defaultCategory.name_lwr}}" stepKey="enterOriginalURLKey"/>
         <uncheckOption selector="{{AdminCategorySEOSection.urlKeyRedirectCheckbox}}"  stepKey="uncheckRedirect2"/>
+=======
+        <click stepKey="clickCategory" selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}"/>
+        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="assertCategoryOnStorefront"/>
+        <seeInTitle userInput="{{_defaultCategory.name}}" stepKey="seeCategoryNameInTitle"/>
+        <seeInCurrentUrl stepKey="verifyUrlKey" url="{{_defaultCategory.name_lwr}}-hattest.html"/>
+
+        <!-- Update SEO key to original, uncheck "Create Redirect", confirm in frontend, delete category -->
+        <!--Switch to "Default Store View" scope-->
+        <actionGroup ref="switchCategoryStoreView" stepKey="SwitchStoreView2">
+            <argument name="Store" value="_defaultStore.name"/>
+            <argument name="CatName" value="_defaultCategory.name"/>
+        </actionGroup>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="openSeoSection2"/>
+        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{_defaultCategory.name_lwr}}" stepKey="enterOriginalURLKey"/>
+        <uncheckOption selector="{{AdminCategorySEOSection.UrlKeyRedirectCheckbox}}"  stepKey="uncheckRedirect2"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryAfterOriginalSeoKey"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessageAfterOriginalSeoKey"/>
         <amOnPage url="" stepKey="goToStorefrontAfterOriginalSeoKey"/>
         <waitForPageLoad stepKey="waitForFrontendLoadAfterOriginalSeoKey"/>
+<<<<<<< HEAD
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="clickCategoryAfterOriginalSeoKey"/>
         <see selector="{{StorefrontCategoryMainSection.categoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="assertCategoryOnStorefront2"/>
         <seeInTitle userInput="{{_defaultCategory.name}}" stepKey="seeCategoryNameInTitle2"/>
         <seeInCurrentUrl url="{{_defaultCategory.name_lwr}}.html" stepKey="verifyUrlKeyAfterOriginalSeoKey"/>
     </test>
 </tests>
+=======
+        <click stepKey="clickCategoryAfterOriginalSeoKey" selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}"/>
+        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="assertCategoryOnStorefront2"/>
+        <seeInTitle userInput="{{_defaultCategory.name}}" stepKey="seeCategoryNameInTitle2"/>
+        <seeInCurrentUrl stepKey="verifyUrlKeyAfterOriginalSeoKey" url="{{_defaultCategory.name_lwr}}.html"/>
+    </test>
+</tests>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc

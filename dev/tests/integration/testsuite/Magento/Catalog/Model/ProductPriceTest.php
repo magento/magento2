@@ -29,12 +29,21 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
      */
     private $productRepository;
 
+<<<<<<< HEAD
+=======
+    /**
+     * @inheritdoc
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     protected function setUp()
     {
         $this->_model = Bootstrap::getObjectManager()->create(Product::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
     }
 
+    /**
+     * @return void
+     */
     public function testGetPrice()
     {
         $this->assertEmpty($this->_model->getPrice());
@@ -42,6 +51,9 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(10.0, $this->_model->getPrice());
     }
 
+    /**
+     * @return void
+     */
     public function testGetPriceModel()
     {
         $default = $this->_model->getPriceModel();
@@ -73,6 +85,9 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('<span class="price">$0.00</span>', $this->_model->getFormatedPrice());
     }
 
+    /**
+     * @return void
+     */
     public function testSetGetFinalPrice()
     {
         $this->assertEquals(0, $this->_model->getFinalPrice());
@@ -84,8 +99,14 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Catalog/_files/product_with_options.php
+<<<<<<< HEAD
      */
     public function testGetMinPrice()
+=======
+     * @return void
+     */
+    public function testGetMinPrice(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $product = $this->productRepository->get('simple');
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
@@ -101,7 +122,11 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
      */
+<<<<<<< HEAD
     public function testGetMinPriceForComposite()
+=======
+    public function testGetMinPriceForComposite(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $confProduct = $this->productRepository->get('configurable');
         $collection = Bootstrap::getObjectManager()->create(Collection::class);

@@ -14,6 +14,8 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\App\ObjectManager;
 
 /**
+ * Validator class. Represents logic for validation file given from product option
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ValidatorFile extends Validator
@@ -70,6 +72,11 @@ class ValidatorFile extends Validator
     private $random;
 
     /**
+<<<<<<< HEAD
+=======
+     * Constructor method
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\File\Size $fileSize
@@ -96,6 +103,8 @@ class ValidatorFile extends Validator
     }
 
     /**
+     * Setter method for the product
+     *
      * @param Product $product
      * @return $this
      */
@@ -106,6 +115,8 @@ class ValidatorFile extends Validator
     }
 
     /**
+     * Validation method
+     *
      * @param \Magento\Framework\DataObject $processingParams
      * @param \Magento\Catalog\Model\Product\Option $option
      * @return array
@@ -126,7 +137,10 @@ class ValidatorFile extends Validator
             $runValidation = $option->getIsRequire() || $upload->isUploaded($file);
             if (!$runValidation) {
                 throw new \Magento\Framework\Validator\Exception(
-                    __('Validation failed. Required options were not filled or the file was not uploaded.')
+                    __(
+                        'The validation failed. '
+                        . 'Make sure the required options are entered and the file is uploaded, then try again.'
+                    )
                 );
             }
 
@@ -139,10 +153,14 @@ class ValidatorFile extends Validator
             if ($this->validateContentLength()) {
                 $value = $this->fileSize->getMaxFileSizeInMb();
                 throw new LocalizedException(
-                    __('The file you uploaded is larger than %1 Megabytes allowed by server', $value)
+                    __(
+                        "The file was too big and couldn't be uploaded. "
+                        . "Use a file smaller than %1 MBs and try to upload again.",
+                        $value
+                    )
                 );
             } else {
-                throw new ProductException(__('Option required.'));
+                throw new ProductException(__("The required option wasn't entered. Enter the option and try again."));
             }
         }
 
@@ -192,7 +210,7 @@ class ValidatorFile extends Validator
                         $imageSize = getimagesize($fileInfo['tmp_name']);
                     }
                 } else {
-                    throw new LocalizedException(__('The file is empty. Please choose another one'));
+                    throw new LocalizedException(__('The file is empty. Select another file and try again.'));
                 }
 
                 if (!empty($imageSize)) {
@@ -219,7 +237,9 @@ class ValidatorFile extends Validator
                 throw new LocalizedException(__(implode("\n", $errors)));
             }
         } else {
-            throw new LocalizedException(__('Please specify product\'s required option(s).'));
+            throw new LocalizedException(
+                __("The product's required option(s) weren't entered. Make sure the options are entered and try again.")
+            );
         }
         return $userValue;
     }
@@ -244,6 +264,8 @@ class ValidatorFile extends Validator
     }
 
     /**
+     * Validate contents length method
+     *
      * @return bool
      * @todo need correctly name
      */

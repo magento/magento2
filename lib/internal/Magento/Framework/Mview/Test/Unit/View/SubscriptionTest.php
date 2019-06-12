@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Mview\Test\Unit\View;
 
 use \Magento\Framework\Mview\View\Subscription;
@@ -52,10 +50,22 @@ class SubscriptionTest extends \PHPUnit\Framework\TestCase
 
         $this->triggerFactoryMock = $this->createMock(\Magento\Framework\DB\Ddl\TriggerFactory::class);
         $this->viewCollectionMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\View\CollectionInterface::class, [], '', false, false, true, []
+            \Magento\Framework\Mview\View\CollectionInterface::class,
+            [],
+            '',
+            false,
+            false,
+            true,
+            []
         );
         $this->viewMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\ViewInterface::class, [], '', false, false, true, []
+            \Magento\Framework\Mview\ViewInterface::class,
+            [],
+            '',
+            false,
+            false,
+            true,
+            []
         );
 
         $this->resourceMock->expects($this->any())
@@ -148,7 +158,13 @@ class SubscriptionTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnSelf());
 
         $changelogMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\View\ChangelogInterface::class, [], '', false, false, true, []
+            \Magento\Framework\Mview\View\ChangelogInterface::class,
+            [],
+            '',
+            false,
+            false,
+            true,
+            []
         );
         $changelogMock->expects($this->exactly(3))
             ->method('getName')
@@ -166,7 +182,13 @@ class SubscriptionTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($triggerMock));
 
         $otherChangelogMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\View\ChangelogInterface::class, [], '', false, false, true, []
+            \Magento\Framework\Mview\View\ChangelogInterface::class,
+            [],
+            '',
+            false,
+            false,
+            true,
+            []
         );
         $otherChangelogMock->expects($this->exactly(3))
             ->method('getName')
@@ -176,7 +198,13 @@ class SubscriptionTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('entity_id'));
 
         $otherViewMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\ViewInterface::class, [], '', false, false, true, []
+            \Magento\Framework\Mview\ViewInterface::class,
+            [],
+            '',
+            false,
+            false,
+            true,
+            []
         );
         $otherViewMock->expects($this->exactly(1))
             ->method('getId')
@@ -239,7 +267,13 @@ class SubscriptionTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($triggerMock));
 
         $otherChangelogMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\View\ChangelogInterface::class, [], '', false, false, true, []
+            \Magento\Framework\Mview\View\ChangelogInterface::class,
+            [],
+            '',
+            false,
+            false,
+            true,
+            []
         );
         $otherChangelogMock->expects($this->exactly(3))
             ->method('getName')
@@ -249,7 +283,13 @@ class SubscriptionTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('entity_id'));
 
         $otherViewMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\ViewInterface::class, [], '', false, false, true, []
+            \Magento\Framework\Mview\ViewInterface::class,
+            [],
+            '',
+            false,
+            false,
+            true,
+            []
         );
         $otherViewMock->expects($this->exactly(1))
             ->method('getId')

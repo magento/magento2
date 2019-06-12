@@ -4,6 +4,7 @@ app/design/adminhtml/Magento/backend/Magento_ConfigurableProduct/web/css/source/
 app/design/adminhtml/Magento/backend/Magento_Developer/web/css/source/_module-old.less
 app/design/adminhtml/Magento/backend/Magento_Enterprise/web/css/source/_module-old.less
 app/design/adminhtml/Magento/backend/Magento_Msrp/web/css/source/_module-old.less
+app/design/adminhtml/Magento/backend/Magento_Sales/web/css/source/module/_order.less
 app/design/adminhtml/Magento/backend/Magento_Tax/web/css/source/_module-old.less
 app/design/adminhtml/Magento/backend/Magento_Theme/web/css/source/_module-old.less
 app/design/adminhtml/Magento/backend/Magento_Ui/web/css/source/_module-old.less
@@ -22,5 +23,9 @@ app/design/adminhtml/Magento/backend/web/mui/clearless/_settings.less
 app/design/adminhtml/Magento/backend/web/mui/clearless/_sprites.less
 app/design/adminhtml/Magento/backend/web/mui/styles/_abstract.less
 app/design/adminhtml/Magento/backend/web/mui/styles/_table.less
+<<<<<<< HEAD
 app/design/adminhtml/Magento/backend/web/mui/styles/_vars.less
 app/design/frontend/Magento/blank/web/css/source/_email-base.less
+=======
+app/design/adminhtml/Magento/backend/web/mui/styles/_vars.less
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc

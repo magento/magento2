@@ -77,7 +77,11 @@ class GridTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
+<<<<<<< HEAD
     public function getSalesRepresentativeIdDataProvider(): array
+=======
+    public function getSalesRepresentativeIdDataProvider()
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         return [
             'Data for US locale' =>             ['08/15/2018', '08/20/2018', 'day', 'en_US', 6],

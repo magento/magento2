@@ -40,7 +40,7 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSelect(AbstractAttribute $superAttribute, int $productId, ScopeInterface $scope)
     {

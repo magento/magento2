@@ -6,6 +6,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Noroute;
 
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class Index extends \Magento\Backend\App\Action
 {
     /**
@@ -45,5 +48,15 @@ class Index extends \Magento\Backend\App\Action
         $resultPage->setHeader('Status', '404 File not found');
         $resultPage->addHandle('adminhtml_noroute');
         return $resultPage;
+    }
+
+    /**
+     * Error page should be public accessible. Do not check keys to avoid redirect loop
+     *
+     * @return bool
+     */
+    protected function _validateSecretKey()
+    {
+        return true;
     }
 }

@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Model\Category\Link;
 
 use Magento\Catalog\Api\Data\CategoryLinkInterface;
-use Magento\Catalog\Model\Indexer\Product\Category;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
@@ -40,6 +39,8 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
+     * Execute
+     *
      * @param object $entity
      * @param array $arguments
      * @return object
@@ -78,6 +79,8 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
+     * Get category links positions
+     *
      * @param object $entity
      * @return array
      */
@@ -106,12 +109,13 @@ class SaveHandler implements ExtensionInterface
      */
     private function mergeCategoryLinks($newCategoryPositions, $oldCategoryPositions)
     {
-        $result = [];
         if (empty($newCategoryPositions)) {
-            return $result;
+            return [];
         }
 
+        $categoryPositions = array_combine(array_column($oldCategoryPositions, 'category_id'), $oldCategoryPositions);
         foreach ($newCategoryPositions as $newCategoryPosition) {
+<<<<<<< HEAD
             $key = array_search(
                 $newCategoryPosition['category_id'],
                 array_column($oldCategoryPositions, 'category_id')
@@ -124,9 +128,15 @@ class SaveHandler implements ExtensionInterface
             ) {
                 $result[] = $newCategoryPositions[$key];
                 unset($oldCategoryPositions[$key]);
+=======
+            $categoryId = $newCategoryPosition['category_id'];
+            if (!isset($categoryPositions[$categoryId])) {
+                $categoryPositions[$categoryId] = ['category_id' => $categoryId];
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             }
+            $categoryPositions[$categoryId]['position'] = $newCategoryPosition['position'];
         }
-        $result = array_merge($result, $oldCategoryPositions);
+        $result = array_values($categoryPositions);
 
         return $result;
     }

@@ -198,7 +198,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
                 [
                     ['price' => new \Magento\Framework\DataObject(
                         ['base_amount' => $baseAmount, 'value' => $basePriceValue]
-                    )]
+                    )],
                 ],
                 true,
                 true
@@ -263,8 +263,8 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $preconfiguredValues = new \Magento\Framework\DataObject(
             [
                 'bundle_option' => [
-                    1 => 123123111
-                ]
+                    1 => 123123111,
+                ],
             ]
         );
         $this->product->expects($this->once())
@@ -333,7 +333,10 @@ class BundleTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $price
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function getPriceInfoMock($price)
@@ -362,7 +365,10 @@ class BundleTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $prices
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function getPriceMock($prices)

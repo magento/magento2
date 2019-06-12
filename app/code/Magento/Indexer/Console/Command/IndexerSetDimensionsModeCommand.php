@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 namespace Magento\Indexer\Console\Command;
 
@@ -42,8 +46,13 @@ class IndexerSetDimensionsModeCommand extends AbstractIndexerCommand
     private $dimensionProviders;
 
     /**
+<<<<<<< HEAD
      * @param ObjectManagerFactory    $objectManagerFactory
      * @param ScopeConfigInterface    $configReader
+=======
+     * @param ObjectManagerFactory $objectManagerFactory
+     * @param ScopeConfigInterface $configReader
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param ModeSwitcherInterface[] $dimensionSwitchers
      */
     public function __construct(
@@ -69,6 +78,12 @@ class IndexerSetDimensionsModeCommand extends AbstractIndexerCommand
 
     /**
      * {@inheritdoc}
+<<<<<<< HEAD
+=======
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -184,7 +199,11 @@ class IndexerSetDimensionsModeCommand extends AbstractIndexerCommand
      *
      * @param string $inputKey
      * @param string $inputIndexer
+<<<<<<< HEAD
      * @param array  $acceptedValues
+=======
+     * @param array $acceptedValues
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return string[]
      */
     private function validateArgument(string $inputKey, string $inputIndexer, array $acceptedValues): array

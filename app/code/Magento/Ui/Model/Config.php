@@ -11,6 +11,11 @@ use Magento\Framework\View\Element\Template;
 class Config
 {
     /**
+     * Wysiwyg editor configuration path
+     */
+    const WYSIWYG_EDITOR_CONFIG_PATH = 'cms/wysiwyg/editor';
+
+    /**
      * Configuration path to session storage logging setting
      */
     const XML_PATH_LOGGING = 'dev/js/session_storage_logging';

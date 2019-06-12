@@ -30,6 +30,7 @@
                 <flat_catalog_category>0</flat_catalog_category>
                 <default_sort_by>position</default_sort_by>
                 <parse_url_directives>1</parse_url_directives>
+                <remember_pagination>0</remember_pagination>
             </frontend>
             <product>
                 <flat>
@@ -61,6 +62,7 @@
             <media_storage_configuration>
                 <allowed_resources>
                     <tmp_images_folder>tmp</tmp_images_folder>
+                    <catalog_product_images>media/catalog/product/cache/</catalog_product_images>
                     <catalog_images_folder>catalog</catalog_images_folder>
                     <product_custom_options_fodler>custom_options</product_custom_options_fodler>
                 </allowed_resources>

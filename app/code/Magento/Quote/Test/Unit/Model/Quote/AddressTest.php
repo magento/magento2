@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
 use Magento\Directory\Model\Currency;
@@ -172,7 +170,13 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+<<<<<<< HEAD
         $this->attributeList = $this->createMock(\Magento\Quote\Model\Quote\Address\CustomAttributeListInterface::class);
+=======
+        $this->attributeList = $this->createMock(
+            \Magento\Quote\Model\Quote\Address\CustomAttributeListInterface::class
+        );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->attributeList->method('getAttributes')->willReturn([]);
 
         $this->address = $objectManager->getObject(
@@ -194,7 +198,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->address->setQuote($this->quote);
     }
 
-    public function testValidateMiniumumAmountDisabled()
+    public function testValidateMinimumAmountDisabled()
     {
         $storeId = 1;
 
@@ -210,12 +214,13 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    public function testValidateMiniumumAmountVirtual()
+    public function testValidateMinimumAmountVirtual()
     {
         $storeId = 1;
         $scopeConfigValues = [
             ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
+            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
         ];
 
@@ -234,12 +239,13 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    public function testValidateMiniumumAmount()
+    public function testValidateMinimumAmount()
     {
         $storeId = 1;
         $scopeConfigValues = [
             ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
+            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
         ];
 
@@ -257,12 +263,37 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    public function testValidateMiniumumAmountNegative()
+    public function testValidateMiniumumAmountWithoutDiscount()
     {
         $storeId = 1;
         $scopeConfigValues = [
             ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
+            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, false],
+            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
+        ];
+
+        $this->quote->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $this->quote->expects($this->once())
+            ->method('getIsVirtual')
+            ->willReturn(false);
+
+        $this->scopeConfig->expects($this->once())
+            ->method('isSetFlag')
+            ->willReturnMap($scopeConfigValues);
+
+        $this->assertTrue($this->address->validateMinimumAmount());
+    }
+
+    public function testValidateMinimumAmountNegative()
+    {
+        $storeId = 1;
+        $scopeConfigValues = [
+            ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
+            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
         ];
 

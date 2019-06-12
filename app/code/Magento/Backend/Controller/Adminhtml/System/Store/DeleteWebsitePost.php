@@ -6,13 +6,18 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Exception\NotFoundException;
 
-class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Store
+/**
+ * Delete website.
+ */
+class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Store implements HttpPostActionInterface
 {
     /**
+     * @inheritDoc
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @throws NotFoundException
      */

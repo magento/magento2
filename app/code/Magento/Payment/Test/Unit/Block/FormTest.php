@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Payment\Test\Unit\Block;
 
 use Magento\Framework\DataObject;
@@ -38,13 +36,13 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->_storeManager = $this->getMockBuilder(
             \Magento\Store\Model\StoreManager::class
         )->setMethods(
-                ['getStore']
-            )->disableOriginalConstructor()->getMock();
+            ['getStore']
+        )->disableOriginalConstructor()->getMock();
         $this->_eventManager = $this->getMockBuilder(
             \Magento\Framework\Event\ManagerInterface::class
         )->setMethods(
-                ['dispatch']
-            )->disableOriginalConstructor()->getMock();
+            ['dispatch']
+        )->disableOriginalConstructor()->getMock();
         $this->_escaper = $helper->getObject(\Magento\Framework\Escaper::class);
         $context = $helper->getObject(
             \Magento\Framework\View\Element\Template\Context::class,

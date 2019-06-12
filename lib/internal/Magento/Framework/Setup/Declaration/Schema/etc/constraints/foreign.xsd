@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/constraints/constraint.xsd" />
+    <!--@TODO: why we need to specify table?-->
+    <xs:complexType name="foreign">
+        <xs:annotation>
+            <xs:documentation>
+                With help of this element, foreign key constraint can be described.
+                This constraint allows to have reference
+                For this you need 4 settings, described below.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence />
+
+        <xs:attribute name="table" type="xs:string" />
+        <xs:attribute name="column" type="xs:string" />
+        <xs:attribute name="referenceColumn" type="xs:string" />
+        <xs:attribute name="referenceTable" type="xs:string" />
+        <xs:attribute name="onDelete" type="referenceOptionsType"  />
+
+        <xs:attributeGroup ref="baseConstraint" />
+    </xs:complexType>
+    
+    <xs:simpleType name="referenceOptionsType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CASCADE" />
+            <xs:enumeration value="SET NULL" />
+            <xs:enumeration value="NO ACTION" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

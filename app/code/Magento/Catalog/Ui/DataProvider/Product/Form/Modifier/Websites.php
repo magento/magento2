@@ -89,7 +89,7 @@ class Websites extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -117,7 +117,7 @@ class Websites extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -165,7 +165,7 @@ class Websites extends AbstractModifier
         $websitesList = $this->getWebsitesList();
         $isNewProduct = !$this->locator->getProduct()->getId();
         $tooltip = [
-            'link' => 'http://docs.magento.com/m2/ce/user_guide/configuration/scope.html',
+            'link' => 'https://docs.magento.com/m2/ce/user_guide/configuration/scope.html',
             'description' => __(
                 'If your Magento installation has multiple websites, ' .
                 'you can edit the scope to use the product on specific sites.'
@@ -333,6 +333,8 @@ class Websites extends AbstractModifier
     }
 
     /**
+     * Returns websites options list.
+     *
      * @return array
      * @since 101.0.0
      */

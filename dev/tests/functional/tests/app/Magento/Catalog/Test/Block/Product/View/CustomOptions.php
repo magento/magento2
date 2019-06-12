@@ -128,7 +128,8 @@ class CustomOptions extends Form
      *
      * @var string
      */
-    private $validationErrorMessage = '//div[@class="mage-error"][contains(text(), "required field")]';
+    private $validationErrorMessage = '//div[@class="mage-error"][contains(text(), "required field")' .
+    'and not(contains(@style,\'display\'))]';
 
     /**
      * Get product options
@@ -148,6 +149,7 @@ class CustomOptions extends Form
         foreach ($dataOptions as $option) {
             $title = $option['title'];
             if (!isset($listCustomOptions[$title])) {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception("Can't find option: \"{$title}\"");
             }
 
@@ -232,8 +234,13 @@ class CustomOptions extends Form
             'options' => [
                 [
                     'price' => (float)$price,
+<<<<<<< HEAD
                     'max_characters' => $maxCharacters
                 ]
+=======
+                    'max_characters' => $maxCharacters,
+                ],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         ];
     }
@@ -344,8 +351,13 @@ class CustomOptions extends Form
         return [
             'options' => [
                 [
+<<<<<<< HEAD
                     'price' => (float)$price
                 ]
+=======
+                    'price' => (float)$price,
+                ],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         ];
     }

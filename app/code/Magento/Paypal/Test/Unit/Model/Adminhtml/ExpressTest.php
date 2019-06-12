@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\Paypal\Test\Unit\Model\Adminhtml;
 
 use Magento\Payment\Model\MethodInterface;
@@ -18,6 +23,12 @@ use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use PHPUnit\Framework\TestCase;
 
+<<<<<<< HEAD
+=======
+/**
+ * Test ability to make an authorization calls to Paypal API from admin.
+ */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class ExpressTest extends TestCase
 {
     /**
@@ -87,7 +98,11 @@ class ExpressTest extends TestCase
             Express::class,
             [
                 'data' => [$this->pro],
+<<<<<<< HEAD
                 'transactionRepository' => $this->transactionRepository
+=======
+                'transactionRepository' => $this->transactionRepository,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         );
 
@@ -102,7 +117,11 @@ class ExpressTest extends TestCase
                 'getOrder',
                 'addTransaction',
                 'addTransactionCommentsToOrder',
+<<<<<<< HEAD
                 'setAmountAuthorized'
+=======
+                'setAmountAuthorized',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         );
         $this->payment->method('getMethodInstance')
@@ -176,8 +195,17 @@ class ExpressTest extends TestCase
      * @throws LocalizedException
      * @dataProvider paymentDataProvider
      */
+<<<<<<< HEAD
     public function testIsOrderAuthorizationAllowed($method, $action, $authorizedAmount, $isAuthAllowed)
     {
+=======
+    public function testIsOrderAuthorizationAllowed(
+        string $method,
+        string $action,
+        float $authorizedAmount,
+        bool $isAuthAllowed
+    ) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->payment->method('getMethod')
             ->willReturn($method);
 
@@ -203,7 +231,11 @@ class ExpressTest extends TestCase
             ['paypal_express', 'capture', 0, false],
             ['paypal_express', 'order', 0, true],
             ['braintree', 'authorize', 10, false],
+<<<<<<< HEAD
             ['braintree', 'authorize', 0, false]
+=======
+            ['braintree', 'authorize', 0, false],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
     }
 }

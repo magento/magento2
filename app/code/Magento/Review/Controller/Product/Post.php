@@ -5,11 +5,12 @@
  */
 namespace Magento\Review\Controller\Product;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Review\Controller\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Review\Model\Review;
 
-class Post extends ProductController
+class Post extends ProductController implements HttpPostActionInterface
 {
     /**
      * Submit new review action

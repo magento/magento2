@@ -5,6 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminRemoveProductWeeeAttributeOptionTest">
@@ -14,6 +15,18 @@
             <description value="Weee attribute options can be removed in product page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-94817"/>
+=======
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRemoveProductWeeeAttributeOptionTest">
+        <annotations>
+            <stories value="Weee attribute options can be removed in product page"/>
+            <title value="Weee attribute options can be removed in product page"/>
+            <description value="Weee attribute options can be removed in product page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-95033"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <group value="weee"/>
         </annotations>
         <before>
@@ -21,7 +34,11 @@
             <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet">
                 <requiredEntity createDataKey="createProductFPTAttribute"/>
             </createData>
+<<<<<<< HEAD
             <createData entity="SimpleOne" stepKey="createSimpleProduct"/>
+=======
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProductInitial">
                 <argument name="product" value="$$createSimpleProduct$$"/>
@@ -34,16 +51,28 @@
                 <argument name="stateForFPT" value="California"/>
                 <argument name="valueForFPT" value="10"/>
             </actionGroup>
+<<<<<<< HEAD
             <actionGroup ref="SaveProductOnProductPageOnAdmin" stepKey="saveProductInitial"/>
+=======
+            <actionGroup ref="saveProductForm" stepKey="saveProductInitial"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </before>
         <after>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductListing"/>
             <waitForPageLoad stepKey="waitForProductListingPageLoad"/>
+<<<<<<< HEAD
             <actionGroup ref="AdminResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
+=======
+            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetGridToDefaultKeywordSearch"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <actionGroup ref="logout" stepKey="logout"/>
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
         </after>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <!--  Test Steps  -->
         <!--  Step 1: Open created product edit page  -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
@@ -53,9 +82,14 @@
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <!--  Step 2: Remove weee attribute options  -->
+<<<<<<< HEAD
         <scrollTo stepKey="scrollToProductDetails" selector="[data-index='product-details']" x="0" y="-80" />
         <click selector="{{AdminProductAddFPTValueSection.removeRowByIndex('$$createProductFPTAttribute.attribute_code$$','1')}}" stepKey="removeAttributeOption"/>
         <actionGroup ref="SaveProductOnProductPageOnAdmin" stepKey="saveProduct"/>
+=======
+        <click selector="{{AdminProductAddFPTValueSection.removeRowByIndex('$$createProductFPTAttribute.attribute_code$$','1')}}" stepKey="removeAttributeOption"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <!--  Assert weee attribute options are empty -->
         <dontSeeElement selector="{{AdminProductAddFPTValueSection.removeRowByIndex('$$createProductFPTAttribute.attribute_code$$','1')}}" stepKey="dontSeeOptions"/>
     </test>

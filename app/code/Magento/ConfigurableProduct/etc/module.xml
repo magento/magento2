@@ -6,7 +6,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+<<<<<<< HEAD
     <module name="Magento_ConfigurableProduct" setup_version="2.2.1">
+=======
+    <module name="Magento_ConfigurableProduct" >
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <sequence>
             <module name="Magento_Catalog"/>
             <module name="Magento_Msrp"/>

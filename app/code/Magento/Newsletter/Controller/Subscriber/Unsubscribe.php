@@ -1,12 +1,12 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Newsletter\Controller\Subscriber;
 
+<<<<<<< HEAD
 /**
  * Controller for unsubscribing customers.
  */
@@ -15,6 +15,19 @@ class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber
     /**
      * Unsubscribe newsletter
      * @return \Magento\Backend\Model\View\Result\Redirect
+=======
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+/**
+ * Controller for unsubscribing customers.
+ */
+class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber implements HttpGetActionInterface
+{
+    /**
+     * Unsubscribe newsletter.
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function execute()
     {
@@ -24,17 +37,23 @@ class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber
         if ($id && $code) {
             try {
                 $this->_subscriberFactory->create()->load($id)->setCheckCode($code)->unsubscribe();
-                $this->messageManager->addSuccess(__('You unsubscribed.'));
+                $this->messageManager->addSuccessMessage(__('You unsubscribed.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addException($e, $e->getMessage());
+                $this->messageManager->addErrorMessage($e, $e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while unsubscribing you.'));
+                $this->messageManager->addErrorMessage($e, __('Something went wrong while unsubscribing you.'));
             }
         }
+<<<<<<< HEAD
         /** @var \Magento\Backend\Model\View\Result\Redirect $redirect */
         $redirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
         $redirectUrl = $this->_redirect->getRedirectUrl();
 
+=======
+        /** @var \Magento\Framework\Controller\Result\Redirect $redirect */
+        $redirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
+        $redirectUrl = $this->_redirect->getRedirectUrl();
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $redirect->setUrl($redirectUrl);
     }
 }

@@ -357,12 +357,20 @@ define([
             var element;
 
             _.each(this.disabledAttributes, function (attribute) {
+<<<<<<< HEAD
                 registry.get('code = ' + attribute, 'index = ' + attribute).disabled(false);
+=======
+                registry.get('inputName = ' + 'product[' + attribute + ']').disabled(false);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             });
             this.disabledAttributes = [];
 
             _.each(attributes, function (attribute) {
+<<<<<<< HEAD
                 element = registry.get('code = ' + attribute.code, 'index = ' + attribute.code);
+=======
+                element = registry.get('inputName = ' + 'product[' + attribute.code + ']');
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
                 if (!_.isUndefined(element)) {
                     element.disabled(true);
@@ -383,26 +391,48 @@ define([
          * Chose action for the form save button
          */
         saveFormHandler: function () {
-            this.serializeData();
+            this.formElement().validate();
+
+            if (this.formElement().source.get('params.invalid') === false) {
+                this.serializeData();
+            }
 
             if (this.checkForNewAttributes()) {
                 this.formSaveParams = arguments;
                 this.attributeSetHandlerModal().openModal();
             } else {
+                if (this.validateForm(this.formElement())) {
+                    this.clearOutdatedData();
+                }
                 this.formElement().save(arguments[0], arguments[1]);
+
+                if (this.formElement().source.get('params.invalid')) {
+                    this.unserializeData();
+                }
             }
+        },
+
+        /**
+         * @param {Object} formElement
+         *
+         * Validates each form element and returns true, if all elements are valid.
+         */
+        validateForm: function (formElement) {
+            formElement.validate();
+
+            return !formElement.additionalInvalid && !formElement.source.get('params.invalid');
         },
 
         /**
          * Serialize data for specific form fields
          *
-         * Get data from outdated fields, serialize it and produce new form fields.
+         * Serializes some complex data fields
          *
-         * Outdated fields:
+         * Original fields:
          *   - configurable-matrix;
          *   - associated_product_ids.
          *
-         * New fields:
+         * Serialized fields in request:
          *   - configurable-matrix-serialized;
          *   - associated_product_ids_serialized.
          */
@@ -410,6 +440,7 @@ define([
             if (this.source.data['configurable-matrix']) {
                 this.source.data['configurable-matrix-serialized'] =
                     JSON.stringify(this.source.data['configurable-matrix']);
+<<<<<<< HEAD
                 delete this.source.data['configurable-matrix'];
             }
 
@@ -417,6 +448,49 @@ define([
                 this.source.data['associated_product_ids_serialized'] =
                     JSON.stringify(this.source.data['associated_product_ids']);
                 delete this.source.data['associated_product_ids'];
+=======
+            }
+
+            if (this.source.data['associated_product_ids']) {
+                this.source.data['associated_product_ids_serialized'] =
+                    JSON.stringify(this.source.data['associated_product_ids']);
+            }
+        },
+
+        /**
+         * Clear outdated data for specific form fields
+         *
+         * Outdated fields:
+         *   - configurable-matrix;
+         *   - associated_product_ids.
+         */
+        clearOutdatedData: function () {
+            if (this.source.data['configurable-matrix']) {
+                delete this.source.data['configurable-matrix'];
+            }
+
+            if (this.source.data['associated_product_ids']) {
+                delete this.source.data['associated_product_ids'];
+            }
+        },
+
+        /**
+         * Unserialize data for specific form fields
+         *
+         * Unserializes some fields that were serialized this.serializeData
+         */
+        unserializeData: function () {
+            if (this.source.data['configurable-matrix-serialized']) {
+                this.source.data['configurable-matrix'] =
+                    JSON.parse(this.source.data['configurable-matrix-serialized']);
+                delete this.source.data['configurable-matrix-serialized'];
+            }
+
+            if (this.source.data['associated_product_ids_serialized']) {
+                this.source.data['associated_product_ids'] =
+                    JSON.parse(this.source.data['associated_product_ids_serialized']);
+                delete this.source.data['associated_product_ids_serialized'];
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             }
         },
 
@@ -443,20 +517,20 @@ define([
          * @returns {Boolean}
          */
         addNewAttributeSetHandler: function () {
-            var choosenAttributeSetOption;
+            var chosenAttributeSetOption;
 
             this.formElement().validate();
 
             if (this.formElement().source.get('params.invalid') === false) {
-                choosenAttributeSetOption = this.attributeSetSelection;
+                chosenAttributeSetOption = this.attributeSetSelection;
 
-                if (choosenAttributeSetOption === 'new') {
+                if (chosenAttributeSetOption === 'new') {
                     this.createNewAttributeSet();
 
                     return false;
                 }
 
-                if (choosenAttributeSetOption === 'existing') {
+                if (chosenAttributeSetOption === 'existing') {
                     this.set(
                         'skeletonAttributeSet',
                         this.attributeSetId
@@ -467,6 +541,10 @@ define([
 
                 return true;
             }
+
+            this.unserializeData();
+
+            return false;
         },
 
         /**
@@ -490,7 +568,7 @@ define([
                 dataType: 'json',
                 showLoader: true,
                 context: this
-            }).success(function (data) {
+            }).done(function (data) {
                 if (!data.error) {
                     this.set(
                         'skeletonAttributeSet',
@@ -505,7 +583,7 @@ define([
                 }
 
                 return false;
-            }).error(function (xhr) {
+            }).fail(function (xhr) {
                 if (xhr.statusText === 'abort') {
                     return;
                 }

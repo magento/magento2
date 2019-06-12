@@ -10,6 +10,8 @@
 namespace Magento\Config\Model\Config\Backend\Log;
 
 /**
+ * Cron logger configuration
+ *
  * @api
  * @since 100.0.2
  */

@@ -7,6 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AddressStateFieldShouldNotAcceptJustIntegerValuesTest">
         <annotations>
@@ -15,6 +16,17 @@
             <description value="Address State field should not allow just integer values"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-93291"/>
+=======
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddressStateFieldShouldNotAcceptJustIntegerValuesTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="MAGETWO-91465"/>
+            <title value="Guest Checkout - address State field should not allow just integer values"/>
+            <description value="Address State field should not allow just integer values"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-6223"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <group value="checkout"/>
         </annotations>
         <before>
@@ -36,7 +48,11 @@
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart" />
+<<<<<<< HEAD
         <selectOption selector="{{CheckoutShippingSection.country}}" userInput="{{UK_Address.country_id}}" stepKey="selectCounty"/>
+=======
+        <selectOption stepKey="selectCounty" selector="{{CheckoutShippingSection.country}}" userInput="{{UK_Address.country_id}}"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <waitForPageLoad stepKey="waitFormToReload"/>
         <fillField selector="{{CheckoutShippingSection.stateInput}}" userInput="1" stepKey="enterStateAsIntegerValue"/>
         <waitForPageLoad stepKey="waitforFormValidation"/>

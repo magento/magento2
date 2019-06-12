@@ -110,7 +110,10 @@ class LockValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $exception
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validate($exception)

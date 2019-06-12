@@ -47,7 +47,11 @@ The following interfaces (marked with the `@api` annotation) provide methods tha
 
 - might be used by `Magento\Signifyd\Api\CaseRepositoryInterface` to retrieve a list of case entities by specific conditions
 
+<<<<<<< HEAD
 For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.1/extension-dev-guide/api-concepts.html).
+=======
+For information about a public API in Magento 2, see [Public interfaces & APIs](https://devdocs.magento.com/guides/v2.1/extension-dev-guide/api-concepts.html).
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 ## Additional information
 
@@ -67,12 +71,22 @@ The Debug Mode may be enabled in the module configuration. This logs the communi
 
 The Magento_Signifyd module does not introduce backward incompatible changes.
 
+<<<<<<< HEAD
 You can track [backward incompatible changes in patch releases](http://devdocs.magento.com/guides/v2.0/release-notes/changes/ee_changes.html).
+=======
+You can track [backward incompatible changes in patch releases](https://devdocs.magento.com/guides/v2.0/release-notes/changes/ee_changes.html).
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 ### Processing supplementary payment information
 
 To improve the accuracy of Signifyd's transaction estimation, you may perform these operations (links lead to the Magento Developer Documentation Portal):
 
+<<<<<<< HEAD
 - [Provide custom AVS/CVV mapping](http://devdocs.magento.com/guides/v2.2/payments-integrations/signifyd/signifyd.html#provide-avscvv-response-codes)
 
 - [Retrieve payment method for a placed order](http://devdocs.magento.com/guides/v2.2/payments-integrations/signifyd/signifyd.html#retrieve-payment-method-for-a-placed-order)
+=======
+- [Provide custom AVS/CVV mapping](https://devdocs.magento.com/guides/v2.2/payments-integrations/signifyd/signifyd.html#provide-avscvv-response-codes)
+
+- [Retrieve payment method for a placed order](https://devdocs.magento.com/guides/v2.2/payments-integrations/signifyd/signifyd.html#retrieve-payment-method-for-a-placed-order)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc

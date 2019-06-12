@@ -7,6 +7,7 @@
 -->
 <page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+<<<<<<< HEAD
         <referenceContainer name="sidebar.main">
             <block class="Magento\Framework\View\Element\Template" name="customer_account_navigation_block" template="Magento_Theme::html/collapsible.phtml" before="-">
                 <arguments>
@@ -53,6 +54,14 @@
                 </block>
             </block>
         </referenceContainer>
+=======
+        <referenceBlock name="sidebar.main.account_nav">
+            <arguments>
+                <argument name="block_title" translate="true" xsi:type="string">My Account</argument>
+                <argument name="block_css" xsi:type="string">block-collapsible-nav</argument>
+            </arguments>
+        </referenceBlock>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <move element="page.main.title" destination="content.top" before="-"/>
     </body>
 </page>

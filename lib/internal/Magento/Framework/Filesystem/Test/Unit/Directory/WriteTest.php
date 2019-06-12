@@ -165,6 +165,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     public function testRenameFile($sourcePath, $targetPath, $targetDir)
     {
         if ($targetDir !== null) {
+            /** @noinspection PhpUndefinedFieldInspection */
             $targetDir->driver = $this->getMockBuilder(DriverInterface::class)->getMockForAbstractClass();
             $targetDirPath = 'TARGET_PATH/';
             $targetDir->expects($this->once())

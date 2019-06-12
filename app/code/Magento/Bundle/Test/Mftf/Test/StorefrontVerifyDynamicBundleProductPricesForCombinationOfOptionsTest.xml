@@ -7,6 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="StorefrontVerifyDynamicBundleProductPricesForCombinationOfOptionsTest">
         <annotations>
@@ -15,6 +16,17 @@
             <description value="Verify prices for various configurations of Dynamic Bundle product"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-78827"/>
+=======
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyDynamicBundleProductPricesForCombinationOfOptionsTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="View bundle products"/>
+            <title value="Verify dynamic bundle product prices for combination of options"/>
+            <description value="Verify prices for various configurations of Dynamic Bundle product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-43619"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <group value="bundle"/>
         </annotations>
         <before>
@@ -23,6 +35,7 @@
             <!--Create 5 simple product-->
             <createData entity="SimpleProduct2" stepKey="simpleProduct1">
                 <field key="price">4.99</field>
+<<<<<<< HEAD
                 <requiredEntity createDataKey="createSubCategory"/>
             </createData>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2">
@@ -40,6 +53,20 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct5">
                 <field key="price">10.00</field>
                 <requiredEntity createDataKey="createSubCategory"/>
+=======
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2">
+                <field key="price">2.89</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct3">
+                <field key="price">7.33</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct4">
+                <field key="price">18.25</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct5">
+                <field key="price">10.00</field>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             </createData>
 
             <!--Add special price to simple product-->

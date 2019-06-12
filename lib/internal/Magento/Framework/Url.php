@@ -390,7 +390,11 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     {
         if ($this->_request->isSecure()) {
             if ($this->getRouteParamsResolver()->hasData('secure')) {
+<<<<<<< HEAD
                 return (bool)$this->getRouteParamsResolver()->getData('secure');
+=======
+                return (bool) $this->getRouteParamsResolver()->getData('secure');
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             }
             return true;
         }

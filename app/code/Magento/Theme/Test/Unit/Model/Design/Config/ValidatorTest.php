@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
 
@@ -37,7 +41,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
+<<<<<<< HEAD
     public function setUp()
+=======
+    protected function setUp()
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $this->objectManager = new ObjectManager($this);
         $this->templateFactory = $this->getMockBuilder(\Magento\Framework\Mail\TemplateInterfaceFactory::class)
@@ -66,7 +74,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+<<<<<<< HEAD
     public function testGetDefaultTemplateTextDefaultScope()
+=======
+    public function testGetDefaultTemplateTextDefaultScope(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $templateId = 'email_template';
         $designData = [
@@ -112,7 +124,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      * @param array $data
      * @return \Magento\Theme\Model\Data\Design\Config\Data
      */
+<<<<<<< HEAD
     private function getDesignConfigData(array $data = [])
+=======
+    private function getDesignConfigData(array $data = []): \Magento\Theme\Model\Data\Design\Config\Data
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         return $this->objectManager->getObject(
             \Magento\Theme\Model\Data\Design\Config\Data::class,

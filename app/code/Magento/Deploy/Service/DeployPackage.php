@@ -32,7 +32,7 @@ class DeployPackage
     private $appState;
 
     /**
-     * Locale resolver inetrface
+     * Locale resolver interface
      *
      * Check if given locale code is a valid one
      *
@@ -112,6 +112,8 @@ class DeployPackage
     }
 
     /**
+     * Execute package deploy procedure when area already emulated
+     *
      * @param Package $package
      * @param array $options
      * @param bool $skipLogging
@@ -141,7 +143,9 @@ class DeployPackage
                 $this->errorsCount++;
                 $this->logger->critical($errorMessage);
             } catch (\Exception $exception) {
-                $this->logger->critical($exception->getTraceAsString());
+                $this->logger->critical(
+                    'Compilation from source ' . $file->getSourcePath() . ' failed' . PHP_EOL . (string)$exception
+                );
                 $this->errorsCount++;
             }
         }
@@ -204,6 +208,7 @@ class DeployPackage
     private function checkIfCanCopy(PackageFile $file, Package $package, Package $parentPackage = null)
     {
         return $parentPackage
+<<<<<<< HEAD
             && $file->getOrigPackage() !== $package
             && (
                 $file->getArea() !== $package->getArea()
@@ -212,6 +217,16 @@ class DeployPackage
             )
             && $file->getOrigPackage() === $parentPackage
             && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
+=======
+        && $file->getOrigPackage() !== $package
+        && (
+            $file->getArea() !== $package->getArea()
+            || $file->getTheme() !== $package->getTheme()
+            || $file->getLocale() !== $package->getLocale()
+        )
+        && $file->getOrigPackage() === $parentPackage
+        && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -224,7 +239,12 @@ class DeployPackage
     private function checkFileSkip($filePath, array $options)
     {
         if ($filePath !== '.') {
+<<<<<<< HEAD
+=======
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $basename = pathinfo($filePath, PATHINFO_BASENAME);
             if ($ext === 'less' && strpos($basename, '_') === 0) {
                 return true;

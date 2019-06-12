@@ -7,6 +7,10 @@ namespace Magento\Sales\Model\Service;
 
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Payment\Gateway\Command\CommandException;
+<<<<<<< HEAD
+=======
+use Psr\Log\LoggerInterface;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 /**
  * Class OrderService
@@ -56,6 +60,14 @@ class OrderService implements OrderManagementInterface
     private $paymentFailures;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * Constructor
      *
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
@@ -65,7 +77,12 @@ class OrderService implements OrderManagementInterface
      * @param \Magento\Sales\Model\OrderNotifier $notifier
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender $orderCommentSender
+<<<<<<< HEAD
      * @param \Magento\Sales\Api\PaymentFailuresInterface|null $paymentFailures
+=======
+     * @param \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures
+     * @param LoggerInterface $logger
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function __construct(
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
@@ -75,7 +92,12 @@ class OrderService implements OrderManagementInterface
         \Magento\Sales\Model\OrderNotifier $notifier,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender $orderCommentSender,
+<<<<<<< HEAD
         \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures = null
+=======
+        \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures,
+        LoggerInterface $logger
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ) {
         $this->orderRepository = $orderRepository;
         $this->historyRepository = $historyRepository;
@@ -84,8 +106,13 @@ class OrderService implements OrderManagementInterface
         $this->notifier = $notifier;
         $this->eventManager = $eventManager;
         $this->orderCommentSender = $orderCommentSender;
+<<<<<<< HEAD
         $this->paymentFailures = $paymentFailures ? : \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Sales\Api\PaymentFailuresInterface::class);
+=======
+        $this->paymentFailures = $paymentFailures;
+        $this->logger = $logger;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -189,25 +216,37 @@ class OrderService implements OrderManagementInterface
     }
 
     /**
+     * Perform place order.
+     *
      * @param \Magento\Sales\Api\Data\OrderInterface $order
      * @return \Magento\Sales\Api\Data\OrderInterface
      * @throws \Exception
      */
     public function place(\Magento\Sales\Api\Data\OrderInterface $order)
     {
-        // transaction will be here
-        //begin transaction
         try {
             $order->place();
-            return $this->orderRepository->save($order);
-            //commit
+        } catch (CommandException $e) {
+            $this->paymentFailures->handle((int)$order->getQuoteId(), __($e->getMessage()));
+            throw $e;
+        }
+
+        try {
+            $order = $this->orderRepository->save($order);
         } catch (\Exception $e) {
+<<<<<<< HEAD
             if ($e instanceof CommandException) {
                 $this->paymentFailures->handle((int)$order->getQuoteId(), __($e->getMessage()));
             }
+=======
+            $this->logger->critical(
+                'Saving order ' . $order->getIncrementId() . ' failed: ' . $e->getMessage()
+            );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             throw $e;
-            //rollback;
         }
+
+        return $order;
     }
 
     /**

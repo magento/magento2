@@ -60,4 +60,7 @@
     <event name="store_save_after">
         <observer name="synchronize_website_attributes" instance="Magento\Catalog\Observer\SynchronizeWebsiteAttributesOnStoreChange" />
     </event>
+    <event name="catalog_product_save_commit_after">
+        <observer name="magento_image_resize" instance="Magento\Catalog\Observer\ImageResizeAfterProductSave" />
+    </event>
 </config>

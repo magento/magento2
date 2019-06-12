@@ -25,6 +25,7 @@
                     <backend_model>Magento\Developer\Model\Config\Backend\AllowedIps</backend_model>
                 </field>
             </group>
+<<<<<<< HEAD
             <group id="debug" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <field id="debug_logging" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Log to File</label>
@@ -32,6 +33,8 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </section>
     </system>
 </config>

@@ -3,8 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 
 declare(strict_types=1);
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\Framework\Lock\Backend;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -14,6 +19,7 @@ use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Phrase;
 
+<<<<<<< HEAD
 class Database implements \Magento\Framework\Lock\LockManagerInterface
 {
     /** @var ResourceConnection */
@@ -31,6 +37,34 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     /**
      * Database constructor.
      *
+=======
+/**
+ * Implementation of the lock manager on the basis of MySQL.
+ */
+class Database implements \Magento\Framework\Lock\LockManagerInterface
+{
+    /**
+     * @var ResourceConnection
+     */
+    private $resource;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
+     * @var string Lock prefix
+     */
+    private $prefix;
+
+    /**
+     * @var string|false Holds current lock name if set, otherwise false
+     */
+    private $currentLock = false;
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param ResourceConnection $resource
      * @param DeploymentConfig $deploymentConfig
      * @param string|null $prefix
@@ -53,9 +87,19 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @return bool
      * @throws InputException
      * @throws AlreadyExistsException
+<<<<<<< HEAD
      */
     public function lock(string $name, int $timeout = -1): bool
     {
+=======
+     * @throws \Zend_Db_Statement_Exception
+     */
+    public function lock(string $name, int $timeout = -1): bool
+    {
+        if (!$this->deploymentConfig->isDbAvailable()) {
+            return true;
+        };
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $name = $this->addPrefix($name);
 
         /**
@@ -66,7 +110,11 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
         if ($this->currentLock) {
             throw new AlreadyExistsException(
                 new Phrase(
+<<<<<<< HEAD
                     'Current connection is already holding lock for $1, only single lock allowed',
+=======
+                    'Current connection is already holding lock for %1, only single lock allowed',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     [$this->currentLock]
                 )
             );
@@ -90,9 +138,20 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @param string $name lock name
      * @return bool
      * @throws InputException
+<<<<<<< HEAD
      */
     public function unlock(string $name): bool
     {
+=======
+     * @throws \Zend_Db_Statement_Exception
+     */
+    public function unlock(string $name): bool
+    {
+        if (!$this->deploymentConfig->isDbAvailable()) {
+            return true;
+        };
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $name = $this->addPrefix($name);
 
         $result = (bool)$this->resource->getConnection()->query(
@@ -113,9 +172,20 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @param string $name lock name
      * @return bool
      * @throws InputException
+<<<<<<< HEAD
      */
     public function isLocked(string $name): bool
     {
+=======
+     * @throws \Zend_Db_Statement_Exception
+     */
+    public function isLocked(string $name): bool
+    {
+        if (!$this->deploymentConfig->isDbAvailable()) {
+            return false;
+        };
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $name = $this->addPrefix($name);
 
         return (bool)$this->resource->getConnection()->query(
@@ -130,7 +200,11 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * Limited to 64 characters in MySQL.
      *
      * @param string $name
+<<<<<<< HEAD
      * @return string $name
+=======
+     * @return string
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @throws InputException
      */
     private function addPrefix(string $name): string

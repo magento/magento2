@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 namespace Magento\Catalog\Test\Unit\Model\Attribute\Backend\TierPrice;
 
@@ -16,6 +20,10 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice;
 
 /**
  * Unit tests for \Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler
+<<<<<<< HEAD
+=======
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  */
 class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -93,7 +101,11 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+<<<<<<< HEAD
     public function testExecute()
+=======
+    public function testExecute(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $newTierPrices = [
             ['website_id' => 0, 'price_qty' => 2, 'cust_group' => 0, 'price' => 15],
@@ -118,8 +130,18 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
                 ['entity_id', $productId]
             ]
         );
+<<<<<<< HEAD
         $product->expects($this->atLeastOnce())->method('getOrigData')->with('tier_price')
             ->willReturn($originalTierPrices);
+=======
+        $product->expects($this->atLeastOnce())->method('getOrigData')
+            ->willReturnMap(
+                [
+                    ['tier_price', $originalTierPrices],
+                    ['entity_id', $productId]
+                ]
+            );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $product->expects($this->atLeastOnce())->method('getStoreId')->willReturn(0);
         $product->expects($this->atLeastOnce())->method('setData')->with('tier_price_changed', 1);
         $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
@@ -163,7 +185,11 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
      * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Tier prices data should be array, but actually other type is received
      */
+<<<<<<< HEAD
     public function testExecuteWithException()
+=======
+    public function testExecuteWithException(): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject $attribute */
         $attribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeInterface::class)

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test class for \Magento\Paypal\Model\Pro
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -25,8 +23,9 @@ class ProTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Paypal\Model\Pro
      */
     protected $pro;
+
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected  $apiMock;
+    protected $apiMock;
 
     protected function setUp()
     {
@@ -215,7 +214,16 @@ class ProTest extends \PHPUnit\Framework\TestCase
         );
         $this->apiMock = $this->getMockBuilder($apiType)
             ->setConstructorArgs($args)
-            ->setMethods(['__wakeup', 'getTransactionId', 'getDataUsingMethod', 'setAuthorizationId', 'setIsCaptureComplete', 'setAmount', ])
+            ->setMethods(
+                [
+                    '__wakeup',
+                    'getTransactionId',
+                    'getDataUsingMethod',
+                    'setAuthorizationId',
+                    'setIsCaptureComplete',
+                    'setAmount'
+                ]
+            )
             ->getMock();
 
         $apiFactory->expects(static::any())->method('create')->with($apiType)->willReturn($this->apiMock);
@@ -231,7 +239,11 @@ class ProTest extends \PHPUnit\Framework\TestCase
         $paymentMock = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
             ->disableOriginalConstructor()
             ->setMethods([
+<<<<<<< HEAD
                 'getParentTransactionId', 'getOrder', 'getShouldCloseParentTransaction', 'isCaptureFinal'
+=======
+                'getParentTransactionId', 'getOrder', 'getShouldCloseParentTransaction', 'isCaptureFinal',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ])
             ->getMock();
         $parentTransactionId = 43;

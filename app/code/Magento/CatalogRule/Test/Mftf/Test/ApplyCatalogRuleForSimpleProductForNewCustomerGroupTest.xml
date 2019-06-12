@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ApplyCatalogRuleForSimpleProductForNewCustomerGroupTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Apply catalog price rule"/>
+            <title value="Admin should be able to apply the catalog price rule for simple product for new customer group"/>
+            <description value="Admin should be able to apply the catalog price rule for simple product for new customer group"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14772"/>
+            <group value="CatalogRule"/>
+            <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
+        </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create new customer group -->
+            <createData entity="CustomCustomerGroup" stepKey="customerGroup" />
+
+            <!--Creating customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer" >
+                <field key="group_id">$customerGroup.id$</field>
+            </createData>
+
+            <!-- Create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- Create Simple Product -->
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">56.78</field>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete products and category -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Delete customer group -->
+            <deleteData createDataKey="customerGroup" stepKey="deleteCustomerGroup"/>
+
+            <!-- Delete the catalog price rule -->
+            <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+                <argument name="name" value="{{CatalogRuleByFixed.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+            </actionGroup>
+
+            <!-- Logout -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!-- 1. Begin creating a new catalog price rule -->
+        <actionGroup ref="newCatalogPriceRuleByUIWithConditionIsCategory" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
+            <argument name ="categoryId" value="$createCategory.id$"/>
+            <argument name="catalogRule" value="CatalogRuleByFixed"/>
+        </actionGroup>
+
+        <!-- Select custom customer group -->
+        <actionGroup ref="CatalogSelectCustomerGroupActionGroup" stepKey="selectCustomCustomerGroup">
+            <argument name="customerGroupName" value="$customerGroup.code$"/>
+        </actionGroup>
+
+        <!-- Save and apply the new catalog price rule -->
+        <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
+
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
+        <!-- Navigate to category on store front -->
+        <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPage"/>
+
+        <!-- Check product 1 name on store front category page -->
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProductName">
+            <argument name="productInfo" value="$createSimpleProduct.name$"/>
+            <argument name="productNumber" value="1"/>
+        </actionGroup>
+
+        <!-- Check product 1 has no discounts applied on store front category page -->
+        <actionGroup ref="AssertDontSeeProductDetailsOnStorefrontActionGroup" stepKey="storefrontProductRegularPrice">
+            <argument name="productInfo" value="$44.48"/>
+            <argument name="productNumber" value="1"/>
+        </actionGroup>
+
+        <!-- Check product 1 price on store front category page -->
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProductPrice">
+            <argument name="productInfo" value="$56.78"/>
+            <argument name="productNumber" value="1"/>
+        </actionGroup>
+
+        <!-- Navigate to product 1 on store front -->
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct.name$)}}" stepKey="goToProductPage"/>
+
+        <!-- Add product 1 to cart -->
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddSimpleProductToCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert sub total on mini shopping cart -->
+        <actionGroup ref="AssertSubTotalOnStorefrontMiniCartActionGroup" stepKey="assertSubTotalOnStorefrontMiniCart">
+            <argument name="subTotal" value="$56.78"/>
+        </actionGroup>
+
+        <!--Login to storefront as previously created customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Navigate to category on store front as customer-->
+        <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPageAsCustomer"/>
+
+        <!-- Check simple product name on store front category page -->
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProductNameAsCustomer">
+            <argument name="productInfo" value="$createSimpleProduct.name$"/>
+            <argument name="productNumber" value="1"/>
+        </actionGroup>
+
+        <!-- Check simple product price on store front category page as customer -->
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProductPriceAsCustomer">
+            <argument name="productInfo" value="$44.48"/>
+            <argument name="productNumber" value="1"/>
+        </actionGroup>
+
+        <!-- Check simple product regular price on store front category page as customer -->
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProductRegularPriceAsCustomer">
+            <argument name="productInfo" value="$56.78"/>
+            <argument name="productNumber" value="1"/>
+        </actionGroup>
+
+        <!-- Navigate to simple product on store front as customer -->
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct.name$)}}" stepKey="goToProductPage1AsCustomer"/>
+
+        <!-- Assert regular and special price as customer-->
+        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertStorefrontProductPrices">
+            <argument name="productPrice" value="$56.78"/>
+            <argument name="productFinalPrice" value="$44.48"/>
+        </actionGroup>
+
+        <!-- Add simple product to cart as customer -->
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddSimpleProductToCartAsCustomer">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert sub total on mini shopping cart as customer -->
+        <actionGroup ref="AssertSubTotalOnStorefrontMiniCartActionGroup" stepKey="assertSubTotalOnStorefrontMiniCartAsCustomer">
+            <argument name="subTotal" value="$88.96"/>
+        </actionGroup>
+
+    </test>
+</tests>

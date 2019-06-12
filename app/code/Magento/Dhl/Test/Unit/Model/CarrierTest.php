@@ -3,17 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Dhl\Test\Unit\Model;
 
 use Magento\Dhl\Model\Carrier;
 use Magento\Dhl\Model\Validator\XmlValidator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+<<<<<<< HEAD
+=======
+use Magento\Framework\App\ProductMetadataInterface;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Module\Dir\Reader;
+<<<<<<< HEAD
+=======
+use Magento\Framework\Stdlib\DateTime\DateTime;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
@@ -32,7 +41,10 @@ use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\Website;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
+<<<<<<< HEAD
 use Magento\Store\Model\ScopeInterface;
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -80,14 +92,29 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     private $xmlValidator;
 
     /**
+<<<<<<< HEAD
      * @var Request|MockObject
-     */
-    private $request;
-
-    /**
+=======
      * @var LoggerInterface|MockObject
      */
     private $logger;
+
+    /**
+     * @var DateTime|MockObject
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
+     */
+    private $coreDateMock;
+
+    /**
+<<<<<<< HEAD
+     * @var LoggerInterface|MockObject
+     */
+    private $logger;
+=======
+     * @var ProductMetadataInterface
+     */
+    private $productMetadataMock;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
     /**
      * @inheritdoc
@@ -96,6 +123,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
+<<<<<<< HEAD
         $this->request = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -125,17 +153,21 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $readFactory = $this->getReadFactory();
         $storeManager = $this->getStoreManager();
 
+=======
+        $this->scope = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->error = $this->getMockBuilder(Error::class)
             ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
             ->getMock();
         $this->errorFactory = $this->getMockBuilder(ErrorFactory::class)
+<<<<<<< HEAD
+=======
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->errorFactory->method('create')
             ->willReturn($this->error);
-
-        $carrierHelper = $this->getCarrierHelper();
 
         $this->xmlValidator = $this->getMockBuilder(XmlValidator::class)
             ->disableOriginalConstructor()
@@ -143,23 +175,58 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
+        $this->coreDateMock = $this->getMockBuilder(DateTime::class)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
+            ->disableOriginalConstructor()
+            ->getMock();
+<<<<<<< HEAD
+        $this->errorFactory->method('create')
+            ->willReturn($this->error);
+
+        $carrierHelper = $this->getCarrierHelper();
+
+        $this->xmlValidator = $this->getMockBuilder(XmlValidator::class)
+=======
+        $this->coreDateMock->method('date')
+            ->willReturn('currentTime');
+
+        $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->productMetadataMock->method('getName')
+            ->willReturn('Software_Product_Name_30_Char_123456789');
+        $this->productMetadataMock->method('getVersion')
+            ->willReturn('10Char_Ver123456789');
+
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+
         $this->model = $this->objectManager->getObject(
             Carrier::class,
             [
                 'scopeConfig' => $this->scope,
+<<<<<<< HEAD
                 'xmlSecurity' => new Security(),
                 'logger' => $this->logger,
                 'xmlElFactory' => $xmlElFactory,
                 'rateFactory' => $rateFactory,
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 'rateErrorFactory' => $this->errorFactory,
-                'rateMethodFactory' => $rateMethodFactory,
-                'httpClientFactory' => $httpClientFactory,
-                'readFactory' => $readFactory,
-                'storeManager' => $storeManager,
-                'configReader' => $configReader,
-                'carrierHelper' => $carrierHelper,
+                'logger' => $this->logger,
+                'xmlSecurity' => new Security(),
+                'xmlElFactory' => $this->getXmlFactory(),
+                'rateFactory' => $this->getRateFactory(),
+                'rateMethodFactory' => $this->getRateMethodFactory(),
+                'carrierHelper' => $this->getCarrierHelper(),
+                'configReader' => $this->getConfigReader(),
+                'storeManager' => $this->getStoreManager(),
+                'readFactory' => $this->getReadFactory(),
+                'httpClientFactory' => $this->getHttpClientFactory(),
                 'data' => ['id' => 'dhl', 'store' => '1'],
                 'xmlValidator' => $this->xmlValidator,
+                'coreDate' => $this->coreDateMock,
+                'productMetadata' => $this->productMetadataMock
             ]
         );
     }
@@ -176,14 +243,14 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/dhl/shipment_days' => 'Mon,Tue,Wed,Thu,Fri,Sat',
             'carriers/dhl/intl_shipment_days' => 'Mon,Tue,Wed,Thu,Fri,Sat',
             'carriers/dhl/allowed_methods' => 'IE',
-            'carriers/dhl/international_searvice' => 'IE',
+            'carriers/dhl/international_service' => 'IE',
             'carriers/dhl/gateway_url' => 'https://xmlpi-ea.dhl.com/XMLShippingServlet',
             'carriers/dhl/id' => 'some ID',
             'carriers/dhl/password' => 'some password',
             'carriers/dhl/content_type' => 'N',
             'carriers/dhl/nondoc_methods' => '1,3,4,8,P,Q,E,F,H,J,M,V,Y',
             'carriers/dhl/showmethod' => 1,
-            'carriers/dhl/title' => 'dhl Title',
+            'carriers/dhl/title' => 'DHL Title',
             'carriers/dhl/specificerrmsg' => 'dhl error message',
             'carriers/dhl/unit_of_measure' => 'K',
             'carriers/dhl/size' => '1',
@@ -191,11 +258,20 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/dhl/width' => '1.6',
             'carriers/dhl/depth' => '1.6',
             'carriers/dhl/debug' => 1,
+<<<<<<< HEAD
             'shipping/origin/country_id' => 'GB',
+=======
+            'shipping/origin/country_id' => 'GB'
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
         return isset($pathMap[$path]) ? $pathMap[$path] : null;
     }
 
+    /**
+     * Prepare shipping label content test
+     *
+     * @throws \ReflectionException
+     */
     public function testPrepareShippingLabelContent()
     {
         $xml = simplexml_load_file(
@@ -207,6 +283,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Prepare shipping label content exception test
+     *
      * @dataProvider prepareShippingLabelContentExceptionDataProvider
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Unable to retrieve shipping label
@@ -217,6 +295,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Prepare shipping label content exception data provider
+     *
      * @return array
      */
     public function prepareShippingLabelContentExceptionDataProvider()
@@ -236,8 +316,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Invoke prepare shipping label content
+     *
      * @param \SimpleXMLElement $xml
      * @return \Magento\Framework\DataObject
+     * @throws \ReflectionException
      */
     protected function _invokePrepareShippingLabelContent(\SimpleXMLElement $xml)
     {
@@ -247,8 +330,17 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         return $method->invoke($model, $xml);
     }
 
+    /**
+     * Tests that valid rates are returned when sending a quotes request.
+     */
     public function testCollectRates()
     {
+<<<<<<< HEAD
+=======
+        $requestData = require __DIR__ . '/_files/dhl_quote_request_data.php';
+        $responseXml = file_get_contents(__DIR__ . '/_files/dhl_quote_response.xml');
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->scope->method('getValue')
             ->willReturnCallback([$this, 'scopeConfigGetValue']);
 
@@ -256,18 +348,24 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->httpResponse->method('getBody')
+<<<<<<< HEAD
             ->willReturn(file_get_contents(__DIR__ . '/_files/success_dhl_response_rates.xml'));
+=======
+            ->willReturn($responseXml);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
-        /** @var RateRequest $request */
-        $request = $this->objectManager->getObject(
-            RateRequest::class,
-            require __DIR__ . '/_files/rates_request_data_dhl.php'
-        );
+        $this->coreDateMock->method('date')
+            ->willReturnCallback(function () {
+                return date(\DATE_RFC3339);
+            });
+
+        $request = $this->objectManager->getObject(RateRequest::class, $requestData);
 
         $reflectionClass = new \ReflectionObject($this->httpClient);
         $rawPostData = $reflectionClass->getProperty('raw_post_data');
         $rawPostData->setAccessible(true);
 
+<<<<<<< HEAD
         $this->logger->expects(self::once())
             ->method('debug')
             ->with(self::stringContains('<SiteID>****</SiteID><Password>****</Password>'));
@@ -277,8 +375,33 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         self::assertContains('<Height>0.630</Height>', $rawPostData->getValue($this->httpClient));
         self::assertContains('<Width>0.630</Width>', $rawPostData->getValue($this->httpClient));
         self::assertContains('<Depth>0.630</Depth>', $rawPostData->getValue($this->httpClient));
+=======
+        $this->logger->expects($this->once())
+            ->method('debug')
+            ->with($this->stringContains('<SiteID>****</SiteID><Password>****</Password>'));
+
+        $expectedRates = require __DIR__ . '/_files/dhl_quote_response_rates.php';
+        $actualRates = $this->model->collectRates($request)->getAllRates();
+
+        self::assertEquals(count($expectedRates), count($actualRates));
+
+        foreach ($actualRates as $i => $actualRate) {
+            $actualRate = $actualRate->getData();
+            unset($actualRate['method_title']);
+            self::assertEquals($expectedRates[$i], $actualRate);
+        }
+
+        $requestXml = $rawPostData->getValue($this->httpClient);
+        self::assertContains('<Weight>18.223</Weight>', $requestXml);
+        self::assertContains('<Height>0.630</Height>', $requestXml);
+        self::assertContains('<Width>0.630</Width>', $requestXml);
+        self::assertContains('<Depth>0.630</Depth>', $requestXml);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
+    /**
+     * Tests that an error is returned when attempting to collect rates for an inactive shipping method.
+     */
     public function testCollectRatesErrorMessage()
     {
         $this->scope->method('getValue')
@@ -296,26 +419,89 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->error, $this->model->collectRates($request));
     }
 
-    public function testCollectRatesFail()
+    /**
+     * Test request to shipment sends valid xml values.
+     *
+     * @dataProvider requestToShipmentDataProvider
+     * @param string $origCountryId
+     * @param string $expectedRegionCode
+     * @param string $destCountryId
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \ReflectionException
+     */
+    public function testRequestToShipment(string $origCountryId, string $expectedRegionCode, string $destCountryId)
     {
-        $this->scope->expects($this->once())->method('isSetFlag')->willReturn(true);
+        $scopeConfigValueMap = [
+            ['carriers/dhl/account', 'store', null, '1234567890'],
+            ['carriers/dhl/gateway_url', 'store', null, 'https://xmlpi-ea.dhl.com/XMLShippingServlet'],
+            ['carriers/dhl/id', 'store', null, 'some ID'],
+            ['carriers/dhl/password', 'store', null, 'some password'],
+            ['carriers/dhl/content_type', 'store', null, 'N'],
+            ['carriers/dhl/nondoc_methods', 'store', null, '1,3,4,8,P,Q,E,F,H,J,M,V,Y'],
+            ['shipping/origin/country_id', 'store', null, $origCountryId],
+        ];
 
-        $request = new RateRequest();
-        $request->setPackageWeight(1);
+        $this->scope->method('getValue')
+            ->willReturnMap($scopeConfigValueMap);
 
-        $this->assertFalse(false, $this->model->collectRates($request));
+        $this->httpResponse->method('getBody')
+            ->willReturn(utf8_encode(file_get_contents(__DIR__ . '/_files/response_shipping_label.xml')));
+
+        $request = $this->getRequest($origCountryId, $destCountryId);
+
+        $this->logger->method('debug')
+            ->with($this->stringContains('<SiteID>****</SiteID><Password>****</Password>'));
+
+        $result = $this->model->requestToShipment($request);
+
+        $reflectionClass = new \ReflectionObject($this->httpClient);
+        $rawPostData = $reflectionClass->getProperty('raw_post_data');
+        $rawPostData->setAccessible(true);
+
+        $this->assertNotNull($result);
+        $requestXml = $rawPostData->getValue($this->httpClient);
+        $requestElement = new Element($requestXml);
+
+        $messageReference = $requestElement->Request->ServiceHeader->MessageReference->__toString();
+        $this->assertStringStartsWith('MAGE_SHIP_', $messageReference);
+        $this->assertGreaterThanOrEqual(28, strlen($messageReference));
+        $this->assertLessThanOrEqual(32, strlen($messageReference));
+        $requestElement->Request->ServiceHeader->MessageReference = 'MAGE_SHIP_28TO32_Char_CHECKED';
+
+        $this->assertXmlStringEqualsXmlString(
+            $this->getExpectedRequestXml($origCountryId, $destCountryId, $expectedRegionCode)->asXML(),
+            $requestElement->asXML()
+        );
     }
 
     /**
-     * Test request to shipment sends valid xml values.
+     * Prepare and retrieve request object
+     *
+     * @param string $origCountryId
+     * @param string $destCountryId
+     * @return Request|MockObject
      */
-    public function testRequestToShipment()
+    private function getRequest(string $origCountryId, string $destCountryId)
     {
+<<<<<<< HEAD
         $this->scope->method('getValue')
             ->willReturnCallback([$this, 'scopeConfigGetValue']);
 
         $this->httpResponse->method('getBody')
             ->willReturn(utf8_encode(file_get_contents(__DIR__ . '/_files/response_shipping_label.xml')));
+=======
+        $order = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $order->method('getSubtotal')
+            ->willReturn('10.00');
+
+        $shipment = $this->getMockBuilder(Order\Shipment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $shipment->method('getOrder')
+            ->willReturn($order);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $packages = [
             'package' => [
@@ -334,9 +520,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                         'name' => 'item_name',
                     ],
                 ],
-            ]
+            ],
         ];
 
+<<<<<<< HEAD
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -344,8 +531,31 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturn('10.00');
 
         $shipment = $this->getMockBuilder(Order\Shipment::class)
+=======
+        $methods = [
+            'getPackages' => $packages,
+            'getOrigCountryId' => $origCountryId,
+            'getDestCountryId' => $destCountryId,
+            'getShipperAddressCountryCode' => $origCountryId,
+            'getRecipientAddressCountryCode' => $destCountryId,
+            'setPackages' => null,
+            'setPackageWeight' => null,
+            'setPackageValue' => null,
+            'setValueWithDiscount' => null,
+            'setPackageCustomsValue' => null,
+            'setFreeMethodWeight' => null,
+            'getPackageWeight' => '0.454000000001',
+            'getFreeMethodWeight' => '0.454000000001',
+            'getOrderShipment' => $shipment,
+        ];
+
+        /** @var Request|MockObject $request */
+        $request = $this->getMockBuilder(Request::class)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->disableOriginalConstructor()
+            ->setMethods(array_keys($methods))
             ->getMock();
+<<<<<<< HEAD
         $shipment->method('getOrder')
             ->willReturn($order);
 
@@ -376,13 +586,57 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->with(self::stringContains('<SiteID>****</SiteID><Password>****</Password>'));
 
         $result = $this->model->requestToShipment($this->request);
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
-        $reflectionClass = new \ReflectionObject($this->httpClient);
-        $rawPostData = $reflectionClass->getProperty('raw_post_data');
-        $rawPostData->setAccessible(true);
+        foreach ($methods as $method => $return) {
+            $return ? $request->method($method)->willReturn($return) : $request->method($method)->willReturnSelf();
+        }
 
-        $this->assertNotNull($result);
-        $this->assertContains('<Weight>0.454</Weight>', $rawPostData->getValue($this->httpClient));
+        return $request;
+    }
+
+    /**
+     * Prepare and retrieve expected request xml element
+     *
+     * @param string $origCountryId
+     * @param string $destCountryId
+     * @return Element
+     */
+    private function getExpectedRequestXml(string $origCountryId, string $destCountryId, string $regionCode)
+    {
+        $requestXmlPath = $origCountryId == $destCountryId
+            ? '/_files/domestic_shipment_request.xml'
+            : '/_files/shipment_request.xml';
+
+        $expectedRequestElement = new Element(file_get_contents(__DIR__ . $requestXmlPath));
+
+        $expectedRequestElement->Consignee->CountryCode = $destCountryId;
+        $expectedRequestElement->Consignee->CountryName = $this->getCountryName($destCountryId);
+
+        $expectedRequestElement->Shipper->CountryCode = $origCountryId;
+        $expectedRequestElement->Shipper->CountryName = $this->getCountryName($origCountryId);
+
+        $expectedRequestElement->RegionCode = $regionCode;
+
+        return $expectedRequestElement;
+    }
+
+    /**
+     * Get Country Name by Country Code
+     *
+     * @param string $countryCode
+     * @return string
+     */
+    private function getCountryName($countryCode)
+    {
+        $countryNames = [
+            'US' => 'United States of America',
+            'SG' => 'Singapore',
+            'GB' => 'United Kingdom',
+            'DE' => 'Germany',
+        ];
+        return $countryNames[$countryCode];
     }
 
     /**
@@ -472,6 +726,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     public function dhlProductsDataProvider() : array
     {
         return [
+<<<<<<< HEAD
             'doc' => [
                 'docType' => Carrier::DHL_CONTENT_TYPE_DOC,
                 'products' => [
@@ -514,11 +769,197 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                     'V' => 'Europack',
                     'Y' => 'Express 12:00',
                 ]
+=======
+            [
+                'GB', 'EU', 'US'
+            ],
+            [
+                'SG', 'AP', 'US'
+            ],
+            [
+                'DE', 'EU', 'DE'
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         ];
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get DHL products test
+     *
+     * @dataProvider dhlProductsDataProvider
+     * @param string $docType
+     * @param array $products
+     */
+    public function testGetDhlProducts(string $docType, array $products)
+    {
+        $this->assertEquals($products, $this->model->getDhlProducts($docType));
+    }
+
+    /**
+     * DHL products data provider
+     *
+     * @return array
+     */
+    public function dhlProductsDataProvider(): array
+    {
+        return [
+            'doc' => [
+                'docType' => Carrier::DHL_CONTENT_TYPE_DOC,
+                'products' => [
+                    '2' => 'Easy shop',
+                    '5' => 'Sprintline',
+                    '6' => 'Secureline',
+                    '7' => 'Express easy',
+                    '9' => 'Europack',
+                    'B' => 'Break bulk express',
+                    'C' => 'Medical express',
+                    'D' => 'Express worldwide',
+                    'U' => 'Express worldwide',
+                    'K' => 'Express 9:00',
+                    'L' => 'Express 10:30',
+                    'G' => 'Domestic economy select',
+                    'W' => 'Economy select',
+                    'I' => 'Domestic express 9:00',
+                    'N' => 'Domestic express',
+                    'O' => 'Others',
+                    'R' => 'Globalmail business',
+                    'S' => 'Same day',
+                    'T' => 'Express 12:00',
+                    'X' => 'Express envelope',
+                ],
+            ],
+            'non-doc' => [
+                'docType' => Carrier::DHL_CONTENT_TYPE_NON_DOC,
+                'products' => [
+                    '1' => 'Domestic express 12:00',
+                    '3' => 'Easy shop',
+                    '4' => 'Jetline',
+                    '8' => 'Express easy',
+                    'P' => 'Express worldwide',
+                    'Q' => 'Medical express',
+                    'E' => 'Express 9:00',
+                    'F' => 'Freight worldwide',
+                    'H' => 'Economy select',
+                    'J' => 'Jumbo box',
+                    'M' => 'Express 10:30',
+                    'V' => 'Europack',
+                    'Y' => 'Express 12:00',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Tests that the built MessageReference string is of the appropriate format.
+     *
+     * @dataProvider buildMessageReferenceDataProvider
+     * @param $servicePrefix
+     * @throws \ReflectionException
+     */
+    public function testBuildMessageReference($servicePrefix)
+    {
+        $method = new \ReflectionMethod($this->model, 'buildMessageReference');
+        $method->setAccessible(true);
+
+        $messageReference = $method->invoke($this->model, $servicePrefix);
+        $this->assertGreaterThanOrEqual(28, strlen($messageReference));
+        $this->assertLessThanOrEqual(32, strlen($messageReference));
+    }
+
+    /**
+     * Build message reference data provider
+     *
+     * @return array
+     */
+    public function buildMessageReferenceDataProvider()
+    {
+        return [
+            'quote_prefix' => ['QUOT'],
+            'shipval_prefix' => ['SHIP'],
+            'tracking_prefix' => ['TRCK']
+        ];
+    }
+
+    /**
+     * Tests that an exception is thrown when an invalid service prefix is provided.
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Invalid service prefix
+     */
+    public function testBuildMessageReferenceInvalidPrefix()
+    {
+        $method = new \ReflectionMethod($this->model, 'buildMessageReference');
+        $method->setAccessible(true);
+
+        $method->invoke($this->model, 'INVALID');
+    }
+
+    /**
+     * Tests that the built software name string is of the appropriate format.
+     *
+     * @dataProvider buildSoftwareNameDataProvider
+     * @param $productName
+     * @throws \ReflectionException
+     */
+    public function testBuildSoftwareName($productName)
+    {
+        $method = new \ReflectionMethod($this->model, 'buildSoftwareName');
+        $method->setAccessible(true);
+
+        $this->productMetadataMock->method('getName')->willReturn($productName);
+
+        $softwareName = $method->invoke($this->model);
+        $this->assertLessThanOrEqual(30, strlen($softwareName));
+    }
+
+    /**
+     * Data provider for testBuildSoftwareName
+     *
+     * @return array
+     */
+    public function buildSoftwareNameDataProvider()
+    {
+        return [
+            'valid_length' => ['Magento'],
+            'exceeds_length' => ['Product_Name_Longer_Than_30_Char']
+        ];
+    }
+
+    /**
+     * Tests that the built software version string is of the appropriate format.
+     *
+     * @dataProvider buildSoftwareVersionProvider
+     * @param $productVersion
+     * @throws \ReflectionException
+     */
+    public function testBuildSoftwareVersion($productVersion)
+    {
+        $method = new \ReflectionMethod($this->model, 'buildSoftwareVersion');
+        $method->setAccessible(true);
+
+        $this->productMetadataMock->method('getVersion')->willReturn($productVersion);
+
+        $softwareVersion = $method->invoke($this->model);
+        $this->assertLessThanOrEqual(10, strlen($softwareVersion));
+    }
+
+    /**
+     * Data provider for testBuildSoftwareVersion
+     *
+     * @return array
+     */
+    public function buildSoftwareVersionProvider()
+    {
+        return [
+            'valid_length' => ['2.3.1'],
+            'exceeds_length' => ['dev-MC-1000']
+        ];
+    }
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * Creates mock for XML factory.
      *
      * @return ElementFactory|MockObject
@@ -576,6 +1017,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+<<<<<<< HEAD
         $rateMethod = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
             ->setMethods(['setPrice'])
@@ -584,11 +1026,30 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $rateMethodFactory->method('create')
             ->willReturn($rateMethod);
+=======
+
+        $rateMethodFactory->method('create')
+            ->willReturnCallback(function () {
+                $rateMethod = $this->getMockBuilder(Method::class)
+                    ->disableOriginalConstructor()
+                    ->setMethods(['setPrice'])
+                    ->getMock();
+                $rateMethod->method('setPrice')
+                    ->willReturnSelf();
+
+                return $rateMethod;
+            });
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         return $rateMethodFactory;
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get config reader
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return MockObject
      */
     private function getConfigReader(): MockObject
@@ -603,6 +1064,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get read factory
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return MockObject
      */
     private function getReadFactory(): MockObject
@@ -621,6 +1087,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get store manager
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return MockObject
      */
     private function getStoreManager(): MockObject
@@ -642,6 +1113,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get carrier helper
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return CarrierHelper
      */
     private function getCarrierHelper(): CarrierHelper
@@ -652,7 +1128,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $carrierHelper = $this->objectManager->getObject(
             CarrierHelper::class,
             [
+<<<<<<< HEAD
                 'localeResolver' => $localeResolver
+=======
+                'localeResolver' => $localeResolver,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         );
 
@@ -660,6 +1140,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get HTTP client factory
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return MockObject
      */
     private function getHttpClientFactory(): MockObject

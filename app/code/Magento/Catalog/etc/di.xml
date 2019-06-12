@@ -70,7 +70,13 @@
     <preference for="Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface" type="Magento\Catalog\Model\ProductRender\FormattedPriceInfo" />
     <preference for="Magento\Framework\Indexer\BatchProviderInterface" type="Magento\Framework\Indexer\BatchProvider" />
     <preference for="Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface" type="Magento\Catalog\Model\Indexer\Product\Price\InvalidateIndex" />
+<<<<<<< HEAD
     <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite" />
+=======
+    <preference for="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface" type="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactory" />
+    <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite" />
+    <preference for="Magento\Catalog\Api\Data\MassActionInterface" type="\Magento\Catalog\Model\MassAction" />
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -167,8 +173,15 @@
     </type>
     <type name="Magento\Catalog\Helper\Data">
         <arguments>
-            <argument name="templateFilterModel" xsi:type="string">Magento\Catalog\Model\Template\Filter</argument>
+            <argument name="templateFilterModel" xsi:type="string">Magento\Widget\Model\Template\Filter</argument>
             <argument name="catalogSession" xsi:type="object">Magento\Catalog\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Helper\Output">
+        <arguments>
+            <argument name="directivePatterns" xsi:type="array">
+                <item name="construct" xsi:type="const">\Magento\Framework\Filter\Template::CONSTRUCTION_PATTERN</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Config\Source\GridPerPage">
@@ -554,14 +567,8 @@
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="imagesResizeCommand" xsi:type="object">Magento\Catalog\Console\Command\ImagesResizeCommand</item>
                 <item name="productAttributesCleanUp" xsi:type="object">Magento\Catalog\Console\Command\ProductAttributesCleanUp</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Catalog\Console\Command\ImagesResizeCommand">
-        <arguments>
-            <argument name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Config\View">
@@ -594,6 +601,13 @@
         </arguments>
     </type>
     <type name="Magento\Sales\Api\OrderItemRepositoryInterface">
+        <arguments>
+            <argument name="processorPool" xsi:type="array">
+                <item name="custom_options" xsi:type="object">Magento\Catalog\Model\ProductOptionProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\ProductOption">
         <arguments>
             <argument name="processorPool" xsi:type="array">
                 <item name="custom_options" xsi:type="object">Magento\Catalog\Model\ProductOptionProcessor</item>
@@ -682,15 +696,21 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Eav\Model\EavCustomAttributeTypeLocator">
-         <arguments>
-            <argument name="serviceEntityTypeMap" xsi:type="array">
+    <type name="Magento\Framework\Webapi\ServiceTypeToEntityTypeMap">
+        <arguments>
+            <argument name="serviceTypeToEntityTypeMap" xsi:type="array">
                 <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="const">Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE</item>
+                <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="const">Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE</item>
             </argument>
-            <argument name="serviceBackendModelDataInterfaceMap" xsi:type="array">
-                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
-                    <item name="Magento\Catalog\Model\Product\Attribute\Backend\Media" xsi:type="string">Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface</item>
-                </item>
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\TypeLocator\ComplexType">
+         <arguments>
+            <argument name="backendModelToAttributeTypeMap" xsi:type="array">
+                <item name="Magento\Catalog\Model\Product\Attribute\Backend\Sku" xsi:type="string">string</item>
+                <item name="Magento\Catalog\Model\Product\Attribute\Backend\Category" xsi:type="string">int[]</item>
+                <item name="Magento\Catalog\Model\Product\Attribute\Backend\Stock" xsi:type="string">Magento\CatalogInventory\Api\Data\StockItemInterface[]</item>
+                <item name="Magento\Catalog\Model\Category\Attribute\Backend\Sortby" xsi:type="string">string[]</item>
             </argument>
         </arguments>
     </type>
@@ -1149,4 +1169,15 @@
             </argument>
         </arguments>
     </type>
+<<<<<<< HEAD
+=======
+    <type name="Magento\Catalog\Model\Product\Option\Type\Select">
+        <arguments>
+            <argument name="singleSelectionTypes" xsi:type="array">
+                <item name="drop_down" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN</item>
+                <item name="radio" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO</item>
+            </argument>
+        </arguments>
+    </type>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </config>

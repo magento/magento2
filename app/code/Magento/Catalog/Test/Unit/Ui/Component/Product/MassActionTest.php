@@ -12,9 +12,12 @@ use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
+<<<<<<< HEAD
 /**
  * Test for Magento\Catalog\Ui\Component\Product\MassAction class.
  */
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class MassActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -37,9 +40,12 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
      */
     private $massAction;
 
+<<<<<<< HEAD
     /**
      * @inheritdoc
      */
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
@@ -54,14 +60,21 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
             [
                 'authorization' => $this->authorizationMock,
                 'context' => $this->contextMock,
+<<<<<<< HEAD
                 'data' => [],
+=======
+                'data' => []
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         );
     }
 
+<<<<<<< HEAD
     /**
      * @return void
      */
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function testGetComponentName()
     {
         $this->assertTrue($this->massAction->getComponentName() === MassAction::NAME);
@@ -75,12 +88,17 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @dataProvider getPrepareDataProvider
      */
+<<<<<<< HEAD
     public function testPrepare(
         string $componentName,
         array $componentData,
         bool $isAllowed = true,
         bool $expectActionConfig = true
     ) {
+=======
+    public function testPrepare($componentName, $componentData, $isAllowed = true, $expectActionConfig = true)
+    {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -116,7 +134,11 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                 [
                     'type' => 'first_action',
                     'label' => 'First Action',
+<<<<<<< HEAD
                     'url' => '/module/controller/firstAction',
+=======
+                    'url' => '/module/controller/firstAction'
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ],
             ],
             [
@@ -128,14 +150,24 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                         [
                             'type' => 'second_sub_action1',
                             'label' => 'Second Sub Action 1',
+<<<<<<< HEAD
                             'url' => '/module/controller/secondSubAction1',
+=======
+                            'url' => '/module/controller/secondSubAction1'
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                         ],
                         [
                             'type' => 'second_sub_action2',
                             'label' => 'Second Sub Action 2',
+<<<<<<< HEAD
                             'url' => '/module/controller/secondSubAction2',
                         ],
                     ],
+=======
+                            'url' => '/module/controller/secondSubAction2'
+                        ],
+                    ]
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ],
             ],
             [
@@ -147,14 +179,24 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                         [
                             'type' => 'enable',
                             'label' => 'Second Sub Action 1',
+<<<<<<< HEAD
                             'url' => '/module/controller/enable',
+=======
+                            'url' => '/module/controller/enable'
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                         ],
                         [
                             'type' => 'disable',
                             'label' => 'Second Sub Action 2',
+<<<<<<< HEAD
                             'url' => '/module/controller/disable',
                         ],
                     ],
+=======
+                            'url' => '/module/controller/disable'
+                        ],
+                    ]
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ],
             ],
             [
@@ -166,24 +208,41 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                         [
                             'type' => 'enable',
                             'label' => 'Second Sub Action 1',
+<<<<<<< HEAD
                             'url' => '/module/controller/enable',
+=======
+                            'url' => '/module/controller/enable'
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                         ],
                         [
                             'type' => 'disable',
                             'label' => 'Second Sub Action 2',
+<<<<<<< HEAD
                             'url' => '/module/controller/disable',
                         ],
                     ],
                 ],
                 false,
                 false,
+=======
+                            'url' => '/module/controller/disable'
+                        ],
+                    ]
+                ],
+                false,
+                false
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ],
             [
                 'delete_component',
                 [
                     'type' => 'delete',
                     'label' => 'First Action',
+<<<<<<< HEAD
                     'url' => '/module/controller/delete',
+=======
+                    'url' => '/module/controller/delete'
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ],
             ],
             [
@@ -191,17 +250,28 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                 [
                     'type' => 'delete',
                     'label' => 'First Action',
+<<<<<<< HEAD
                     'url' => '/module/controller/delete',
                 ],
                 false,
                 false,
+=======
+                    'url' => '/module/controller/delete'
+                ],
+                false,
+                false
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ],
             [
                 'attributes_component',
                 [
                     'type' => 'delete',
                     'label' => 'First Action',
+<<<<<<< HEAD
                     'url' => '/module/controller/attributes',
+=======
+                    'url' => '/module/controller/attributes'
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ],
             ],
             [
@@ -209,10 +279,17 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                 [
                     'type' => 'delete',
                     'label' => 'First Action',
+<<<<<<< HEAD
                     'url' => '/module/controller/attributes',
                 ],
                 false,
                 false,
+=======
+                    'url' => '/module/controller/attributes'
+                ],
+                false,
+                false
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ],
         ];
     }
@@ -223,6 +300,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
      * @param int $callNum
      * @param string $resource
      * @param bool $isAllowed
+<<<<<<< HEAD
      * @return void
      * @dataProvider isActionAllowedDataProvider
      */
@@ -233,6 +311,12 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
         string $resource = '',
         bool $isAllowed = true
     ) {
+=======
+     * @dataProvider isActionAllowedDataProvider
+     */
+    public function testIsActionAllowed($expected, $actionType, $callNum, $resource = '', $isAllowed = true)
+    {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->authorizationMock->expects($this->exactly($callNum))
             ->method('isAllowed')
             ->with($resource)
@@ -244,7 +328,11 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+<<<<<<< HEAD
     public function isActionAllowedDataProvider(): array
+=======
+    public function isActionAllowedDataProvider()
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         return [
             'other' => [true, 'other', 0,],
@@ -254,6 +342,10 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
             'status-not-allowed' => [false, 'status', 1, 'Magento_Catalog::products', false],
             'attributes-allowed' => [true, 'attributes', 1, 'Magento_Catalog::update_attributes'],
             'attributes-not-allowed' => [false, 'attributes', 1, 'Magento_Catalog::update_attributes', false],
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
     }
 }

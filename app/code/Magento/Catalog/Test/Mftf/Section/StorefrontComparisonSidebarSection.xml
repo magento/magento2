@@ -7,11 +7,20 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontComparisonSidebarSection">
         <element name="compare" type="button" selector="div.block-compare a.compare"/>
         <element name="clearAll" type="button" selector="div.block-compare a.clear"/>
         <element name="productTitleByName" type="button" selector="//main//ol[@id='compare-items']//a[@class='product-item-link'][text()='{{var1}}']" parameterized="true"/>
         <element name="noItemsMessage" type="text" selector="div.block-compare div.empty"/>
+=======
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontComparisonSidebarSection">
+        <element name="Compare" type="button" selector="//main//div[contains(@class, 'block-compare')]//a[contains(@class, 'action compare')]"/>
+        <element name="ClearAll" type="button" selector="//main//div[contains(@class, 'block-compare')]//a[contains(@class, 'action clear')]"/>
+        <element name="ProductTitleByName" type="button" selector="//main//ol[@id='compare-items']//a[@class='product-item-link'][text()='{{var1}}']" parameterized="true"/>
+        <element name="NoItemsMessage" type="text" selector="//main//div[contains(@class, 'block-compare')]//div[@class='empty']"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </section>
 </sections>

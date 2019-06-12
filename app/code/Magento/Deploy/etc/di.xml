@@ -71,6 +71,7 @@
             </argument>
         </arguments>
     </type>
+<<<<<<< HEAD
     <type name="Magento\Deploy\App\Mode\ConfigProvider">
         <arguments>
             <argument name="config" xsi:type="array">
@@ -85,4 +86,6 @@
             </argument>
         </arguments>
     </type>
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </config>

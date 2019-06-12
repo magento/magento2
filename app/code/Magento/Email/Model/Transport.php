@@ -11,7 +11,11 @@ use Magento\Framework\Mail\Message;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Phrase;
 use Magento\Store\Model\ScopeInterface;
+<<<<<<< HEAD
 use Zend\Mail\Message as ZendMessage;
+=======
+use Zend\Mail\Message;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Zend\Mail\Transport\Sendmail;
 
 /**
@@ -45,6 +49,7 @@ class Transport implements TransportInterface
 
     /**
      * @var string|null
+<<<<<<< HEAD
      */
     private $returnPathValue;
 
@@ -55,10 +60,13 @@ class Transport implements TransportInterface
 
     /**
      * @var Message
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
-    private $message;
+    private $returnPathValue;
 
     /**
+<<<<<<< HEAD
      * @var ZendMessage
      */
     private $zendMessage;
@@ -73,6 +81,25 @@ class Transport implements TransportInterface
         Message $message,
         ScopeConfigInterface $scopeConfig,
         ZendMessage $zendMessage,
+=======
+     * @var Sendmail
+     */
+    private $zendTransport;
+
+    /**
+     * @var MessageInterface
+     */
+    private $message;
+
+    /**
+     * @param MessageInterface $message Email message object
+     * @param ScopeConfigInterface $scopeConfig Core store config
+     * @param null|string|array|\Traversable $parameters Config options for sendmail parameters
+     */
+    public function __construct(
+        MessageInterface $message,
+        ScopeConfigInterface $scopeConfig,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $parameters = null
     ) {
         $this->isSetReturnPath = (int) $scopeConfig->getValue(
@@ -86,7 +113,10 @@ class Transport implements TransportInterface
 
         $this->zendTransport = new Sendmail($parameters);
         $this->message = $message;
+<<<<<<< HEAD
         $this->zendMessage = $zendMessage;
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -95,6 +125,7 @@ class Transport implements TransportInterface
     public function sendMessage()
     {
         try {
+<<<<<<< HEAD
             $message = $this->zendMessage->fromString($this->message->getRawMessage());
             if (2 === $this->isSetReturnPath && $this->returnPathValue) {
                 $message->setSender($this->returnPathValue);
@@ -105,6 +136,18 @@ class Transport implements TransportInterface
             }
 
             $this->zendTransport->send($message);
+=======
+            $zendMessage = Message::fromString($this->message->getRawMessage())->setEncoding('utf-8');
+            if (2 === $this->isSetReturnPath && $this->returnPathValue) {
+                $zendMessage->setSender($this->returnPathValue);
+            } elseif (1 === $this->isSetReturnPath && $zendMessage->getFrom()->count()) {
+                $fromAddressList = $zendMessage->getFrom();
+                $fromAddressList->rewind();
+                $zendMessage->setSender($fromAddressList->current()->getEmail());
+            }
+
+            $this->zendTransport->send($zendMessage);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         } catch (\Exception $e) {
             throw new MailException(new Phrase($e->getMessage()), $e);
         }

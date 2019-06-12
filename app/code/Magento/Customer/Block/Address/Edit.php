@@ -5,7 +5,11 @@
  */
 namespace Magento\Customer\Block\Address;
 
+<<<<<<< HEAD
 use Magento\Customer\Model\AttributeChecker;
+=======
+use Magento\Framework\Exception\LocalizedException;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\ObjectManager;
 
@@ -49,9 +53,15 @@ class Edit extends \Magento\Directory\Block\Data
     protected $dataObjectHelper;
 
     /**
+<<<<<<< HEAD
      * @var AttributeChecker
      */
     private $attributeChecker;
+=======
+     * @var \Magento\Customer\Api\AddressMetadataInterface
+     */
+    private $addressMetadata;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
     /**
      * Constructor
@@ -68,7 +78,12 @@ class Edit extends \Magento\Directory\Block\Data
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array $data
+<<<<<<< HEAD
      * @param AttributeChecker $attributeChecker
+=======
+     * @param \Magento\Customer\Api\AddressMetadataInterface|null $addressMetadata
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -84,15 +99,23 @@ class Edit extends \Magento\Directory\Block\Data
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         array $data = [],
+<<<<<<< HEAD
         AttributeChecker $attributeChecker = null
+=======
+        \Magento\Customer\Api\AddressMetadataInterface $addressMetadata = null
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ) {
         $this->_customerSession = $customerSession;
         $this->_addressRepository = $addressRepository;
         $this->addressDataFactory = $addressDataFactory;
         $this->currentCustomer = $currentCustomer;
         $this->dataObjectHelper = $dataObjectHelper;
+<<<<<<< HEAD
         $this->attributeChecker = $attributeChecker ?: ObjectManager::getInstance()->get(AttributeChecker::class);
 
+=======
+        $this->addressMetadata = $addressMetadata;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         parent::__construct(
             $context,
             $directoryHelper,
@@ -113,6 +136,32 @@ class Edit extends \Magento\Directory\Block\Data
     {
         parent::_prepareLayout();
 
+        $this->initAddressObject();
+
+        $this->pageConfig->getTitle()->set($this->getTitle());
+
+        if ($postedData = $this->_customerSession->getAddressFormData(true)) {
+            $postedData['region'] = [
+                'region_id' => isset($postedData['region_id']) ? $postedData['region_id'] : null,
+                'region' => $postedData['region'],
+            ];
+            $this->dataObjectHelper->populateWithArray(
+                $this->_address,
+                $postedData,
+                \Magento\Customer\Api\Data\AddressInterface::class
+            );
+        }
+        $this->precheckRequiredAttributes();
+        return $this;
+    }
+
+    /**
+     * Initialize address object.
+     *
+     * @return void
+     */
+    private function initAddressObject()
+    {
         // Init address object
         if ($addressId = $this->getRequest()->getParam('id')) {
             try {
@@ -134,7 +183,9 @@ class Edit extends \Magento\Directory\Block\Data
             $this->_address->setLastname($customer->getLastname());
             $this->_address->setSuffix($customer->getSuffix());
         }
+    }
 
+<<<<<<< HEAD
         $this->pageConfig->getTitle()->set($this->getTitle());
 
         if ($postedData = $this->_customerSession->getAddressFormData(true)) {
@@ -149,9 +200,26 @@ class Edit extends \Magento\Directory\Block\Data
                 $postedData,
                 \Magento\Customer\Api\Data\AddressInterface::class
             );
+=======
+    /**
+     * Precheck attributes that may be required in attribute configuration.
+     *
+     * @return void
+     */
+    private function precheckRequiredAttributes()
+    {
+        $precheckAttributes = $this->getData('check_attributes_on_render');
+        $requiredAttributesPrechecked = [];
+        if (!empty($precheckAttributes) && is_array($precheckAttributes)) {
+            foreach ($precheckAttributes as $attributeCode) {
+                $attributeMetadata = $this->addressMetadata->getAttributeMetadata($attributeCode);
+                if ($attributeMetadata && $attributeMetadata->isRequired()) {
+                    $requiredAttributesPrechecked[$attributeCode] = $attributeCode;
+                }
+            }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
-
-        return $this;
+        $this->setData('required_attributes_prechecked', $requiredAttributesPrechecked);
     }
 
     /**

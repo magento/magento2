@@ -6,7 +6,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+<<<<<<< HEAD
     <testCase name="Magento\LayeredNavigation\Test\TestCase\ProductsCountInLayeredNavigationTest" summary="Check configurable products count in child categories of non-anchor category" ticketId="MAGETWO-82891">
+=======
+    <testCase name="Magento\LayeredNavigation\Test\TestCase\ProductsCountInLayeredNavigationTest" summary="Check configurable products count in child categories of non-anchor category" ticketId="MAGETWO-90123">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <variation name="ProductsCountInLayeredNavigationTestVariation1" summary="Check configurable products count with disabled by massaction products">
             <data name="runReindex" xsi:type="boolean">true</data>
             <data name="flushCache" xsi:type="boolean">true</data>

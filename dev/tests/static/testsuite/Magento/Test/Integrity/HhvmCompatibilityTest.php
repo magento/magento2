@@ -56,7 +56,11 @@ class HhvmCompatibilityTest extends \PHPUnit\Framework\TestCase
         'max_input_vars' => [
             'integration/testsuite/Magento/Swatches/Controller/Adminhtml/Product/AttributeTest.php',
             'integration/testsuite/Magento/Catalog/Controller/Adminhtml/Product/AttributeTest.php',
+<<<<<<< HEAD
         ],
+=======
+        ]
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ];
 
     /**

@@ -7,7 +7,11 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <section name="AdminCategoryBasicFieldSection">
         <element name="IncludeInMenu" type="checkbox" selector="input[name='include_in_menu']"/>
         <element name="includeInMenuLabel" type="text" selector="input[name='include_in_menu']+label"/>
@@ -16,7 +20,40 @@
         <element name="enableCategoryLabel" type="text" selector="input[name='is_active']+label"/>
         <element name="enableUseDefault" type="checkbox" selector="input[name='use_default[is_active]']"/>
         <element name="CategoryNameInput" type="input" selector="input[name='name']"/>
+<<<<<<< HEAD
         <element name="categoryNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
+=======
+        <element name="RequiredFieldIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
+        <element name="RequiredFieldIndicatorColor" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('color');"/>
+        <element name="categoryNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
+        <element name="ContentTab" type="input" selector="input[name='name']"/>
+        <element name="FieldError" type="text" selector=".admin__field-error[data-bind='attr: {for: {{field}}}, text: error']" parameterized="true"/>
+        <element name="panelFieldControl" type="input" selector='//aside//div[@data-index="{{arg1}}"]/descendant::*[@name="{{arg2}}"]' parameterized="true"/>
+        <element name="productsInCategory" type="input" selector="div[data-index='assign_products']" timeout="30"/>
+    </section>
+    <section name="CategoryContentSection">
+        <element name="SelectFromGalleryBtn" type="button" selector="//label[text()='Select from Gallery']"/>
+        <element name="ImagePlaceHolder" type="button" selector=".file-uploader-summary.product-image-wrapper"/>
+        <element name="Upload" type="button" selector=".file-uploader-area input"/>
+    </section>
+    <section name="CategoryDesignSection">
+        <element name="DesignTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Design']"/>
+        <element name="LayoutDropdown" type="select" selector="select[name='page_layout']"/>
+    </section>
+    <section name="CategoryDisplaySettingsSection">
+        <element name="DisplaySettingTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Display Settings']"/>
+        <element name="layeredNavigationPriceInput" type="input" selector="input[name='filter_price_range']"/>
+        <element name="FieldError" type="text" selector=".admin__field-error[data-bind='attr: {for: {{field}}}, text: error']" parameterized="true"/>
+        <element name="filterPriceRangeUseConfig" type="checkbox" selector="input[name='use_config[filter_price_range]']"/>
+        <element name="RequiredFieldIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index={{arg1}}]&gt;.admin__field-label span'), ':after').getPropertyValue('content');" parameterized="true"/>
+        <element name="displayMode" type="button" selector="select[name='display_mode']"/>
+        <element name="anchor" type="checkbox" selector="input[name='is_anchor']"/>
+        <element name="productListCheckBox" type="checkbox" selector="input[name='use_config[available_sort_by]']" />
+        <element name="productList" type="text" selector="select[name='available_sort_by']"/>
+        <element name="defaultProductLisCheckBox" type="checkbox" selector="input[name='use_config[default_sort_by]']"/>
+        <element name="defaultProductList" type="text" selector="select[name='default_sort_by']"/>
+        <element name="layeredNavigationPriceCheckBox" type="checkbox" selector="input[name='use_config[filter_price_range]']"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </section>
     <section name="CatalogWYSIWYGSection">
         <element name="ShowHideBtn" type="button" selector="#togglecategory_form_description"/>

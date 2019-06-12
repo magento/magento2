@@ -1,15 +1,18 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Controller\Adminhtml\Index;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
-class Create extends \Magento\Backup\Controller\Adminhtml\Index
+/**
+ * Create backup controller
+ */
+class Create extends \Magento\Backup\Controller\Adminhtml\Index implements HttpPostActionInterface
 {
     /**
      * Create backup action.
@@ -19,7 +22,11 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
      */
     public function execute()
     {
+<<<<<<< HEAD
         if (!$this->requestAllowed()) {
+=======
+        if (!$this->isRequestAllowed()) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             return $this->_redirect('*/*/index');
         }
 
@@ -55,7 +62,9 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
             $this->_coreRegistry->register('backup_manager', $backupManager);
 
             if ($this->getRequest()->getParam('maintenance_mode')) {
-                if (!$this->maintenanceMode->set(true)) {
+                $this->maintenanceMode->set(true);
+
+                if (!$this->maintenanceMode->isOn()) {
                     $response->setError(
                         __(
                             'You need more permissions to activate maintenance mode right now.'
@@ -112,7 +121,11 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
      *
      * @return bool
      */
+<<<<<<< HEAD
     private function requestAllowed()
+=======
+    private function isRequestAllowed()
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         return $this->getRequest()->isAjax() && $this->getRequest()->isPost();
     }

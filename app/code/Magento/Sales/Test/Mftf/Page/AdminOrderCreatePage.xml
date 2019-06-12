@@ -7,6 +7,7 @@
 -->
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
     <page name="AdminOrderCreatePage" url="sales/order_create/index" area="admin" module="Magento_Sales">
         <section name="AdminOrderFormSelectWebsiteSection"/>
@@ -18,5 +19,18 @@
         <section name="AdminOrderFormTotalSection"/>
         <section name="AdminOrderCustomersGridSection"/>
         <section name="AdminOrderFormConfigureProductSection"/>
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+    <page name="AdminOrderCreatePage" url="sales/order_create/index" area="admin" module="Magento_Sales">
+        <section name="AdminOrderFormActionSection"/>
+        <section name="AdminOrderFormItemsSection"/>
+        <section name="AdminOrderFormConfigureProductSection"/>
+        <section name="AdminOrderFormAccountSection"/>
+        <section name="AdminOrderFormBillingAddressSection"/>
+        <section name="AdminOrderFormShippingAddressSection"/>
+        <section name="AdminOrderFormPaymentSection"/>
+        <section name="AdminOrderFormTotalSection"/>
+        <section name="AdminOrderFormStoreSelectorSection"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </page>
 </pages>

@@ -4,14 +4,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
+<<<<<<< HEAD
+=======
+use Magento\Framework\App\Action\HttpPostActionInterface;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Upload image.
  */
+<<<<<<< HEAD
 class Upload extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
+=======
+class Upload extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images implements HttpPostActionInterface
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -57,13 +68,28 @@ class Upload extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
                     __('Directory %1 is not under storage root path.', $path)
                 );
             }
+<<<<<<< HEAD
             $result = $this->getStorage()->uploadFile($path, $this->getRequest()->getParam('type'));
+=======
+            $uploaded = $this->getStorage()->uploadFile($path, $this->getRequest()->getParam('type'));
+            $response = [
+                'name' => $uploaded['name'],
+                'type' => $uploaded['type'],
+                'error' => $uploaded['error'],
+                'size' => $uploaded['size'],
+                'file' => $uploaded['file']
+            ];
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         } catch (\Exception $e) {
-            $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
+            $response = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         
+<<<<<<< HEAD
         return $resultJson->setData($result);
+=======
+        return $resultJson->setData($response);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 }

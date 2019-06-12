@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\Paypal\Block\Adminhtml\Order;
 
 use Magento\Backend\Block\Widget\Context;
@@ -15,7 +20,11 @@ use Magento\Sales\Model\Order;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
+<<<<<<< HEAD
  * Adminhtml sales order view
+=======
+ * Adminhtml sales order view.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  * @api
  */
 class View extends OrderView
@@ -24,6 +33,10 @@ class View extends OrderView
      * @var Express
      */
     private $express;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     /**
      * @param Context $context
      * @param Registry $registry
@@ -52,7 +65,11 @@ class View extends OrderView
     }
 
     /**
+<<<<<<< HEAD
      * Constructor
+=======
+     * Constructor.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @return void
      * @throws LocalizedException
@@ -62,7 +79,11 @@ class View extends OrderView
         parent::_construct();
 
         $order = $this->getOrder();
+<<<<<<< HEAD
         if (!$order) {
+=======
+        if ($order === null) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             return;
         }
         $message = __('Are you sure you want to authorize full order amount?');
@@ -72,7 +93,11 @@ class View extends OrderView
                 [
                     'label' => __('Authorize'),
                     'class' => 'authorize',
+<<<<<<< HEAD
                     'onclick' => "confirmSetLocation('{$message}', '{$this->getPaymentAuthorizationUrl()}')"
+=======
+                    'onclick' => "confirmSetLocation('{$message}', '{$this->getPaymentAuthorizationUrl()}')",
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ]
             );
         }

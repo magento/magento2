@@ -1,13 +1,24 @@
 {
     "name": "magento/module-swatches-layered-navigation",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
+<<<<<<< HEAD
         "php": "~7.0.13|~7.1.0",
         "magento/framework": "101.0.*",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
     "version": "100.2.2",
+=======
+        "php": "~7.1.3||~7.2.0",
+        "magento/framework": "*",
+        "magento/magento-composer-installer": "*"
+    },
+    "type": "magento2-module",
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     "license": [
         "OSL-3.0",
         "AFL-3.0"

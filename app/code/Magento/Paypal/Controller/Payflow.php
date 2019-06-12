@@ -44,7 +44,11 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
     protected $_redirectBlockName = 'payflow.link.iframe';
 
     /**
+<<<<<<< HEAD
      * @var PaymentFailuresInterface
+=======
+     * @var \Magento\Sales\Api\PaymentFailuresInterface
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $paymentFailures;
 
@@ -55,7 +59,11 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
      * @param \Magento\Paypal\Model\PayflowlinkFactory $payflowModelFactory
      * @param \Magento\Paypal\Helper\Checkout $checkoutHelper
      * @param \Psr\Log\LoggerInterface $logger
+<<<<<<< HEAD
      * @param PaymentFailuresInterface|null $paymentFailures
+=======
+     * @param \Magento\Sales\Api\PaymentFailuresInterface|null $paymentFailures
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -64,7 +72,11 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
         \Magento\Paypal\Model\PayflowlinkFactory $payflowModelFactory,
         \Magento\Paypal\Helper\Checkout $checkoutHelper,
         \Psr\Log\LoggerInterface $logger,
+<<<<<<< HEAD
         PaymentFailuresInterface $paymentFailures = null
+=======
+        \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures = null
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ) {
         parent::__construct($context);
 
@@ -73,7 +85,13 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
         $this->_logger = $logger;
         $this->_payflowModelFactory = $payflowModelFactory;
         $this->_checkoutHelper = $checkoutHelper;
+<<<<<<< HEAD
         $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(PaymentFailuresInterface::class);
+=======
+        $this->paymentFailures = $paymentFailures ?: $this->_objectManager->get(
+            \Magento\Sales\Api\PaymentFailuresInterface::class
+        );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**

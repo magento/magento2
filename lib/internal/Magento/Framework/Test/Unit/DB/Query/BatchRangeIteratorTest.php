@@ -116,6 +116,6 @@ class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
             $iterations++;
         }
 
-        $this->assertEquals(10, $iterations);
+        $this->assertEquals(11, $iterations);
     }
 }

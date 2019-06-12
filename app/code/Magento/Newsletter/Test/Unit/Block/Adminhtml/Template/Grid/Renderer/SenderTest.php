@@ -35,6 +35,11 @@ class SenderTest extends \PHPUnit\Framework\TestCase
      * @dataProvider rendererDataProvider
      * @param array $expectedSender
      * @param array $passedSender
+<<<<<<< HEAD
+=======
+     *
+     * @return void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function testRender(array $passedSender, array $expectedSender)
     {

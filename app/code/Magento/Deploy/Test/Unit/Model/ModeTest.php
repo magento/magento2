@@ -228,7 +228,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             ->method('getConfigs')
             ->with('developer', 'production')
             ->willReturn([
-                'dev/debug/debug_logging' => 0
+                'dev/debug/debug_logging' => 0,
             ]);
         $this->emulatedAreaProcessor->expects($this->once())
             ->method('process')

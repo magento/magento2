@@ -20,8 +20,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\ReleaseNotification\Controller\Adminhtml\Notification\MarkUserNotified;
 
 /**
+<<<<<<< HEAD
  * Class MarkUserNotifiedTest
  *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase

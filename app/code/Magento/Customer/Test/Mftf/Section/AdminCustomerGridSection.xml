@@ -5,6 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminCustomerGridSection">
@@ -15,5 +16,18 @@
         <element name="multicheckOption" type="button" selector="//div[@data-role='grid-wrapper']//th[contains(@class, data-grid-multicheck-cell)]//li//span[text() = '{{label}}']" parameterized="true"/>
         <element name="bulkActionDropdown" type="button" selector="div.admin__data-grid-header-row.row div.action-select-wrap button.action-select"/>
         <element name="bulkActionOption" type="button" selector="//div[contains(@class,'admin__data-grid-header-row') and contains(@class, 'row')]//div[contains(@class, 'action-select-wrap')]//ul/li/span[text() = '{{label}}']" parameterized="true"/>
+=======
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerGridSection">
+        <element name="customerGrid" type="text" selector="table[data-role='grid']"/>
+        <element name="firstRowEditLink" type="text" selector="tr[data-repeat-index='0'] .action-menu-item" timeout="30"/>
+        <element name="gridRow" type="text" selector="//*[@data-role='sticky-el-root']/parent::div/parent::div/following-sibling::div//tbody//*[@class='data-row'][{{row}}]" parameterized="true"/>
+        <element name="selectFirstRow" type="checkbox" selector="//td[@class='data-grid-checkbox-cell']"/>
+        <element name="customerCheckboxByEmail" type="checkbox" selector="//tr[@class='data-row' and //div[text()='{{customerEmail}}']]//input[@type='checkbox']" parameterized="true" timeout="30"/>
+        <element name="customerEditLinkByEmail" type="text" selector="//tr[@class='data-row' and //div[text()='{{customerEmail}}']]//a[@class='action-menu-item']" parameterized="true" timeout="30"/>
+        <element name="customerGroupByEmail" type="text" selector="//tr[@class='data-row' and //div[text()='{{customerEmail}}']]//div[text()='{{customerGroup}}']" parameterized="true"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </section>
 </sections>

@@ -6,7 +6,11 @@
  */
 -->
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+=======
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <entity name="EnabledMinimumOrderAmount500" type="sales_minimum_order">
         <requiredEntity type="active">EnableMinimumOrderCheck</requiredEntity>
         <requiredEntity type="amount">MinimumOrderAmount500</requiredEntity>
@@ -24,4 +28,8 @@
     <entity name="DisableMinimumOrderCheck" type="active">
         <data key="value">0</data>
     </entity>
+<<<<<<< HEAD
 </entities>
+=======
+</entities>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc

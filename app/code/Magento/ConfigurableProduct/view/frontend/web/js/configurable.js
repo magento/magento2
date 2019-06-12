@@ -291,6 +291,8 @@ define([
             images = this.options.spConfig.images[this.simpleProduct];
 
             if (images) {
+                images = this._sortImages(images);
+
                 if (this.options.gallerySwitchStrategy === 'prepend') {
                     images = images.concat(initialImages);
                 }
@@ -309,7 +311,17 @@ define([
                 $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
             }
 
-            galleryObject.first();
+        },
+
+        /**
+         * Sorting images array
+         *
+         * @private
+         */
+        _sortImages: function (images) {
+            return _.sortBy(images, function (image) {
+                return image.position;
+            });
         },
 
         /**
@@ -361,10 +373,18 @@ define([
                 allowedProducts,
                 i,
                 j,
+<<<<<<< HEAD
                 basePrice = parseFloat(this.options.spConfig.prices.basePrice.amount),
                 optionFinalPrice,
                 optionPriceDiff,
                 optionPrices = this.options.spConfig.optionPrices;
+=======
+                finalPrice = parseFloat(this.options.spConfig.prices.finalPrice.amount),
+                optionFinalPrice,
+                optionPriceDiff,
+                optionPrices = this.options.spConfig.optionPrices,
+                allowedProductMinPrice;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
             this._clearSelect(element);
             element.options[0] = new Option('', '');
@@ -395,9 +415,15 @@ define([
 
                         if (typeof allowedProducts[0] !== 'undefined' &&
                             typeof optionPrices[allowedProducts[0]] !== 'undefined') {
+<<<<<<< HEAD
 
                             optionFinalPrice = parseFloat(optionPrices[allowedProducts[0]].finalPrice.amount);
                             optionPriceDiff = optionFinalPrice - basePrice;
+=======
+                            allowedProductMinPrice = this._getAllowedProductWithMinPrice(allowedProducts);
+                            optionFinalPrice = parseFloat(optionPrices[allowedProductMinPrice].finalPrice.amount);
+                            optionPriceDiff = optionFinalPrice - finalPrice;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
                             if (optionPriceDiff !== 0) {
                                 options[i].label = options[i].label + ' ' + priceUtils.formatPrice(
@@ -477,22 +503,54 @@ define([
         _getPrices: function () {
             var prices = {},
                 elements = _.toArray(this.options.settings),
-                hasProductPrice = false;
+                allowedProduct;
 
             _.each(elements, function (element) {
                 var selected = element.options[element.selectedIndex],
                     config = selected && selected.config,
                     priceValue = {};
 
-                if (config && config.allowedProducts.length === 1 && !hasProductPrice) {
+                if (config && config.allowedProducts.length === 1) {
                     priceValue = this._calculatePrice(config);
-                    hasProductPrice = true;
+                } else if (element.value) {
+                    allowedProduct = this._getAllowedProductWithMinPrice(config.allowedProducts);
+                    priceValue = this._calculatePrice({
+                        'allowedProducts': [
+                            allowedProduct
+                        ]
+                    });
                 }
 
-                prices[element.attributeId] = priceValue;
+                if (!_.isEmpty(priceValue)) {
+                    prices.prices = priceValue;
+                }
             }, this);
 
             return prices;
+        },
+
+        /**
+         * Get product with minimum price from selected options.
+         *
+         * @param {Array} allowedProducts
+         * @returns {String}
+         * @private
+         */
+        _getAllowedProductWithMinPrice: function (allowedProducts) {
+            var optionPrices = this.options.spConfig.optionPrices,
+                product = {},
+                optionMinPrice, optionFinalPrice;
+
+            _.each(allowedProducts, function (allowedProduct) {
+                optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
+
+                if (_.isEmpty(product) || optionFinalPrice < optionMinPrice) {
+                    optionMinPrice = optionFinalPrice;
+                    product = allowedProduct;
+                }
+            }, this);
+
+            return product;
         },
 
         /**
@@ -563,6 +621,34 @@ define([
                 $(this.options.slyOldPriceSelector).show();
             } else {
                 $(this.options.slyOldPriceSelector).hide();
+            }
+
+            $(document).trigger('updateMsrpPriceBlock',
+                [
+                    optionId,
+                    this.options.spConfig.optionPrices
+                ]
+            );
+        },
+
+        /**
+         * Show or hide normal price label
+         *
+         * @private
+         */
+        _displayNormalPriceLabel: function () {
+            var shouldBeShown = false;
+
+            _.each(this.options.settings, function (element) {
+                if (element.value === '') {
+                    shouldBeShown = true;
+                }
+            });
+
+            if (shouldBeShown) {
+                $(this.options.normalPriceLabelSelector).show();
+            } else {
+                $(this.options.normalPriceLabelSelector).hide();
             }
         },
 

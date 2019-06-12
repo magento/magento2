@@ -71,6 +71,7 @@ class Term extends Template
      * Load terms and try to sort it by names
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _loadTerms()
     {
@@ -95,8 +96,13 @@ class Term extends Template
                     continue;
                 }
                 $term->setRatio(($term->getPopularity() - $this->_minPopularity) / $range);
+<<<<<<< HEAD
                 $temp[$term->getData('query_text')] = $term;
                 $termKeys[] = $term->getData('query_text');
+=======
+                $temp[$term->getQueryText()] = $term;
+                $termKeys[] = $term->getQueryText();
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             }
             natcasesort($termKeys);
 
@@ -109,6 +115,7 @@ class Term extends Template
 
     /**
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getTerms()
     {
@@ -128,7 +135,11 @@ class Term extends Template
          * url encoding will be done in Url.php http_build_query
          * so no need to explicitly called urlencode for the text
          */
+<<<<<<< HEAD
         $url->setQueryParam('q', $obj->getData('query_text'));
+=======
+        $url->setQueryParam('q', $obj->getQueryText());
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $url->getUrl('catalogsearch/result');
     }
 

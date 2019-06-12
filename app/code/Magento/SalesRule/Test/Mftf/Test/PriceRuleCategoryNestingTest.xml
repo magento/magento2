@@ -1,10 +1,14 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 <!--
  /**
   * Copyright © Magento, Inc. All rights reserved.
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="PriceRuleCategoryNestingTest">
@@ -13,6 +17,18 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-88031"/>
             <group value="sale_rules"/>
+=======
+<tests xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <test name="PriceRuleCategoryNestingTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Create categories"/>
+            <title value="Category nesting level must be the same as were created in categories."/>
+            <description value="Category nesting level must be the same as were created in categories."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-91101"/>
+            <group value="SalesRule"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="subcategory1"/>

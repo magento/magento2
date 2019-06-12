@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Model\ResourceModel\Group\Grid;
 
 use Magento\Framework\Data\Collection\EntityFactory;
@@ -71,7 +69,12 @@ class ServiceCollection extends AbstractServiceCollection
             $groups = $searchResults->getItems();
             foreach ($groups as $group) {
                 $groupItem = new \Magento\Framework\DataObject();
-                $groupItem->addData($this->simpleDataObjectConverter->toFlatArray($group, \Magento\Customer\Api\Data\GroupInterface::class));
+                $groupItem->addData(
+                    $this->simpleDataObjectConverter->toFlatArray(
+                        $group,
+                        \Magento\Customer\Api\Data\GroupInterface::class
+                    )
+                );
                 $this->_addItem($groupItem);
             }
             $this->_setIsLoaded();

@@ -7,7 +7,11 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <entity name="BaseConfigurableProduct" type="product">
         <data key="sku" unique="suffix">configurable</data>
         <data key="type_id">configurable</data>
@@ -22,10 +26,13 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="ConfigurableProductAddChild" type="ConfigurableProductAddChild">
         <var key="sku" entityKey="sku" entityType="product" />
         <var key="childSku" entityKey="sku" entityType="product2"/>
     </entity>
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <entity name="ApiConfigurableProduct" type="product">
         <data key="sku" unique="suffix">api-configurable-product</data>
         <data key="type_id">configurable</data>
@@ -33,6 +40,11 @@
         <data key="visibility">4</data>
         <data key="name" unique="suffix">API Configurable Product</data>
         <data key="urlKey" unique="suffix">api-configurable-product</data>
+<<<<<<< HEAD
+=======
+        <data key="price">123.00</data>
+        <data key="weight">2</data>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <data key="status">1</data>
         <data key="quantity">100</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
@@ -49,4 +61,24 @@
         <data key="quantity">100</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
     </entity>
+<<<<<<< HEAD
+=======
+    <entity name="ApiConfigurableProductWithDescription" type="product">
+        <data key="sku" unique="suffix">api-configurable-product</data>
+        <data key="type_id">configurable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">API Configurable Product</data>
+        <data key="urlKey" unique="suffix">api-configurable-product</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
+    </entity>
+    <entity name="ConfigurableProductAddChild" type="ConfigurableProductAddChild">
+        <var key="sku" entityKey="sku" entityType="product" />
+        <var key="childSku" entityKey="sku" entityType="product2"/>
+    </entity>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </entities>

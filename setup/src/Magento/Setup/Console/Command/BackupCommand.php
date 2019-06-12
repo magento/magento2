@@ -123,7 +123,10 @@ class BackupCommand extends AbstractSetupCommand
             // We need exit code higher than 0 here as an indication
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $returnValue = $this->maintenanceModeEnabler->executeInMaintenanceMode(
             function () use ($input, $output) {
                 try {
@@ -157,6 +160,10 @@ class BackupCommand extends AbstractSetupCommand
             $output,
             false
         );
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $returnValue;
     }
 

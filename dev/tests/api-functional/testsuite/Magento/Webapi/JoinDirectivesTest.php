@@ -11,6 +11,9 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 
+/**
+ * Test join directives.
+ */
 class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     /**
@@ -43,7 +46,8 @@ class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     }
 
     /**
-     * Rollback rules
+     * Rollback rules.
+     *
      * @magentoApiDataFixture Magento/SalesRule/_files/rules_rollback.php
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      */

@@ -30,7 +30,7 @@ class AssertAddedProductToCartSuccessMessage extends AbstractConstraint
      */
     public function processAssert(CheckoutCart $checkoutCart, FixtureInterface $product)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             sprintf(self::SUCCESS_MESSAGE, $product->getName()),
             $checkoutCart->getMessagesBlock()->getSuccessMessage()
         );

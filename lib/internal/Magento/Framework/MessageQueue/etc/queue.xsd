@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="urn:magento:framework-message-queue:etc/queue_base.xsd" />
+    <xs:element name="config">
+        <xs:annotation>
+            <xs:documentation>
+                @deprecated
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="broker" type="brokerType"/>
+            </xs:choice>
+        </xs:complexType>
+        <xs:unique name="broker-unique-name">
+            <xs:selector xpath="broker"/>
+            <xs:field xpath="@topic"/>
+        </xs:unique>
+        <xs:unique name="broker-queue-unique-name">
+            <xs:selector xpath="broker/queue"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+    </xs:element>
+</xs:schema>

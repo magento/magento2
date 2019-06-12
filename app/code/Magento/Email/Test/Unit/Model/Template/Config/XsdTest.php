@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Email\Test\Unit\Model\Template\Config;
 
 class XsdTest extends \PHPUnit\Framework\TestCase
@@ -34,6 +32,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
      */
     public function mergedXmlDataProvider()
     {
+        // @codingStandardsIgnoreStart
         return [
             'valid' => [
                 '<config><template id="test" label="Test" file="test.txt" type="text" module="Module" area="frontend"/></config>',
@@ -108,6 +107,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
                 ["Element 'template', attribute 'unknown': The attribute 'unknown' is not allowed."],
             ]
         ];
+        // @codingStandardsIgnoreEnd
     }
 
     /**

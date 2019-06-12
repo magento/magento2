@@ -5,7 +5,11 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+=======
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <section name="AdminNewStoreSection">
         <element name="storeNameTextField" type="input" selector="#store_name"/>
         <element name="storeCodeTextField" type="input" selector="#store_code"/>

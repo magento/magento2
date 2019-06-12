@@ -102,6 +102,9 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->with($dictionaryPath)
             ->will($this->returnValue($this->dictionaryMock));
+        $this->dictionaryMock->expects($this->once())
+            ->method('getPhrases')
+            ->will($this->returnValue([]));
 
         $this->_generator->generate($dictionaryPath, $localeString, $mode, $allowDuplicates);
     }

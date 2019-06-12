@@ -5,8 +5,13 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="SetSalesMinimumOrder" dataType="sales_minimum_order" type="create" auth="adminFormKey" url="/admin/system_config/save/section/sales/" method="POST" successRegex="/messages-message-success/">
+=======
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="SetSalesMinimumOrder" dataType="sales_minimum_order" type="create" auth="adminFormKey" url="/admin/system_config/save/section/sales/" method="POST">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <object key="groups" dataType="sales_minimum_order">
             <object key="minimum_order" dataType="sales_minimum_order">
                 <object key="fields" dataType="sales_minimum_order">
@@ -20,4 +25,8 @@
             </object>
         </object>
     </operation>
+<<<<<<< HEAD
 </operations>
+=======
+</operations>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc

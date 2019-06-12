@@ -76,6 +76,13 @@ class Options extends Section
     protected $staticDataRow = '[data-index="container_type_static"] div:nth-child(%d)';
 
     /**
+     * Locator for file_extension field.
+     *
+     * @var string
+     */
+    private $hintMessage = "div[data-index='file_extension'] div[id^='notice']";
+
+    /**
      * Sort rows data.
      *
      * @var array
@@ -347,7 +354,8 @@ class Options extends Section
     {
         $option = substr($inputType, strpos($inputType, "/") + 1);
         $option = str_replace([' ', '&'], "", $option);
-        if ($end = strpos($option, '-')) {
+        $end = strpos($option, '-');
+        if ($end !== false) {
             $option = substr($option, 0, $end) . ucfirst(substr($option, ($end + 1)));
         }
 
@@ -402,4 +410,24 @@ class Options extends Section
     {
         return $this->_rootElement->getElements($this->hintMessage);
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * @inheritdoc
+     */
+    protected function _fill(array $fields, SimpleElement $element = null)
+    {
+        $context = ($element === null) ? $this->_rootElement : $element;
+        foreach ($fields as $name => $field) {
+            $element = $this->getElement($context, $field);
+            if (!$element->isDisabled()) {
+                $element->getContext()->hover();
+                $element->setValue($field['value']);
+            } else {
+                throw new \Exception("Unable to set value to field '$name' as it's disabled.");
+            }
+        }
+    }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 }

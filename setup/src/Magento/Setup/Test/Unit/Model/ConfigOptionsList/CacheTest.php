@@ -28,6 +28,9 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      */
     private $deploymentConfigMock;
 
+    /**
+     * Tests setup
+     */
     protected function setUp()
     {
         $this->validatorMock = $this->createMock(RedisConnectionValidator::class);
@@ -36,10 +39,17 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->configOptionsList = new CacheConfigOptionsList($this->validatorMock);
     }
 
+    /**
+     * testGetOptions
+     */
     public function testGetOptions()
     {
         $options = $this->configOptionsList->getOptions();
+<<<<<<< HEAD
         $this->assertCount(5, $options);
+=======
+        $this->assertCount(8, $options);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -60,8 +70,26 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey(4, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[4]);
         $this->assertEquals('cache-backend-redis-password', $options[4]->getName());
+<<<<<<< HEAD
+=======
+
+        $this->assertArrayHasKey(5, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[5]);
+        $this->assertEquals('cache-backend-redis-compress-data', $options[5]->getName());
+
+        $this->assertArrayHasKey(6, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[6]);
+        $this->assertEquals('cache-backend-redis-compression-lib', $options[6]->getName());
+
+        $this->assertArrayHasKey(7, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[7]);
+        $this->assertEquals('cache-id-prefix', $options[7]->getName());
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
+    /**
+     * testCreateConfigCacheRedis
+     */
     public function testCreateConfigCacheRedis()
     {
         $this->deploymentConfigMock->method('get')->willReturn('');
@@ -75,8 +103,16 @@ class CacheTest extends \PHPUnit\Framework\TestCase
                             'server' => '',
                             'port' => '',
                             'database' => '',
+<<<<<<< HEAD
                             'password' => ''
                         ]
+=======
+                            'password' => '',
+                            'compress_data' => '',
+                            'compression_lib' => '',
+                        ],
+                        'id_prefix' => $this->expectedIdPrefix(),
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     ]
                 ]
             ]
@@ -87,6 +123,9 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
 
+    /**
+     * testCreateConfigWithRedisConfig
+     */
     public function testCreateConfigWithRedisConfig()
     {
         $expectedConfigData = [
@@ -98,17 +137,28 @@ class CacheTest extends \PHPUnit\Framework\TestCase
                             'server' => 'localhost',
                             'port' => '1234',
                             'database' => '5',
+<<<<<<< HEAD
                             'password' => ''
                         ]
+=======
+                            'password' => '',
+                            'compress_data' => '1',
+                            'compression_lib' => 'gzip',
+                        ],
+                        'id_prefix' => $this->expectedIdPrefix(),
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     ]
                 ]
             ]
         ];
+
         $options = [
             'cache-backend' => 'redis',
             'cache-backend-redis-server' => 'localhost',
             'cache-backend-redis-port' => '1234',
-            'cache-backend-redis-db' => '5'
+            'cache-backend-redis-db' => '5',
+            'cache-backend-redis-compress-data' => '1',
+            'cache-backend-redis-compression-lib' => 'gzip'
         ];
 
         $configData = $this->configOptionsList->createConfig($options, $this->deploymentConfigMock);
@@ -116,6 +166,57 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
 
+    /**
+     * testCreateConfigCacheRedis
+     */
+    public function testCreateConfigWithFileCache()
+    {
+        $this->deploymentConfigMock->method('get')->willReturn('');
+
+        $expectedConfigData = [
+            'cache' => [
+                'frontend' => [
+                    'default' => [
+                        'id_prefix' => $this->expectedIdPrefix(),
+                    ]
+                ]
+            ]
+        ];
+
+        $configData = $this->configOptionsList->createConfig([], $this->deploymentConfigMock);
+
+        $this->assertEquals($expectedConfigData, $configData->getData());
+    }
+
+    /**
+     * testCreateConfigCacheRedis
+     */
+    public function testCreateConfigWithIdPrefix()
+    {
+        $this->deploymentConfigMock->method('get')->willReturn('');
+
+        $explicitPrefix = 'XXX_';
+        $expectedConfigData = [
+            'cache' => [
+                'frontend' => [
+                    'default' => [
+                        'id_prefix' => $explicitPrefix,
+                    ]
+                ]
+            ]
+        ];
+
+        $configData = $this->configOptionsList->createConfig(
+            ['cache-id-prefix' => $explicitPrefix],
+            $this->deploymentConfigMock
+        );
+
+        $this->assertEquals($expectedConfigData, $configData->getData());
+    }
+
+    /**
+     * testValidateWithValidInput
+     */
     public function testValidateWithValidInput()
     {
         $options = [
@@ -124,7 +225,11 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         ];
         $this->validatorMock->expects($this->once())
             ->method('isValidConnection')
+<<<<<<< HEAD
             ->with(['host'=>'localhost', 'db'=>'', 'port'=>'', 'password'=> ''])
+=======
+            ->with(['host'=>'localhost', 'db'=>'', 'port'=>'', 'password'=>''])
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->willReturn(true);
 
         $errors = $this->configOptionsList->validate($options, $this->deploymentConfigMock);
@@ -132,6 +237,9 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($errors);
     }
 
+    /**
+     * testValidateWithInvalidInput
+     */
     public function testValidateWithInvalidInput()
     {
         $invalidCacheOption = 'clay-tablet';
@@ -141,5 +249,15 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
         $this->assertCount(1, $errors);
         $this->assertEquals("Invalid cache handler 'clay-tablet'", $errors[0]);
+    }
+
+    /**
+     * The default ID prefix, based on installation directory
+     *
+     * @return string
+     */
+    private function expectedIdPrefix(): string
+    {
+        return substr(\md5(dirname(__DIR__, 8)), 0, 3) . '_';
     }
 }

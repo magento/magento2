@@ -1,0 +1,120 @@
+{
+    "paypal_billing_agreement": {
+        "column": {
+            "agreement_id": true,
+            "customer_id": true,
+            "method_code": true,
+            "reference_id": true,
+            "status": true,
+            "created_at": true,
+            "updated_at": true,
+            "store_id": true,
+            "agreement_label": true
+        },
+        "index": {
+            "PAYPAL_BILLING_AGREEMENT_CUSTOMER_ID": true,
+            "PAYPAL_BILLING_AGREEMENT_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "PAYPAL_BILLING_AGREEMENT_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "PAYPAL_BILLING_AGREEMENT_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "paypal_billing_agreement_order": {
+        "column": {
+            "agreement_id": true,
+            "order_id": true
+        },
+        "index": {
+            "PAYPAL_BILLING_AGREEMENT_ORDER_ORDER_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "PAYPAL_BILLING_AGRT_ORDER_AGRT_ID_PAYPAL_BILLING_AGRT_AGRT_ID": true,
+            "PAYPAL_BILLING_AGREEMENT_ORDER_ORDER_ID_SALES_ORDER_ENTITY_ID": true
+        }
+    },
+    "paypal_settlement_report": {
+        "column": {
+            "report_id": true,
+            "report_date": true,
+            "account_id": true,
+            "filename": true,
+            "last_modified": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "PAYPAL_SETTLEMENT_REPORT_REPORT_DATE_ACCOUNT_ID": true
+        }
+    },
+    "paypal_settlement_report_row": {
+        "column": {
+            "row_id": true,
+            "report_id": true,
+            "transaction_id": true,
+            "invoice_id": true,
+            "paypal_reference_id": true,
+            "paypal_reference_id_type": true,
+            "transaction_event_code": true,
+            "transaction_initiation_date": true,
+            "transaction_completion_date": true,
+            "transaction_debit_or_credit": true,
+            "gross_transaction_amount": true,
+            "gross_transaction_currency": true,
+            "fee_debit_or_credit": true,
+            "fee_amount": true,
+            "fee_currency": true,
+            "custom_field": true,
+            "consumer_id": true,
+            "payment_tracking_id": true,
+            "store_id": true
+        },
+        "index": {
+            "PAYPAL_SETTLEMENT_REPORT_ROW_REPORT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_E183E488F593E0DE10C6EBFFEBAC9B55": true
+        }
+    },
+    "paypal_cert": {
+        "column": {
+            "cert_id": true,
+            "website_id": true,
+            "content": true,
+            "updated_at": true
+        },
+        "index": {
+            "PAYPAL_CERT_WEBSITE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "PAYPAL_CERT_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true
+        }
+    },
+    "paypal_payment_transaction": {
+        "column": {
+            "transaction_id": true,
+            "txn_id": true,
+            "additional_information": true,
+            "created_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "PAYPAL_PAYMENT_TRANSACTION_TXN_ID": true
+        }
+    },
+    "quote_payment": {
+        "column": {
+            "paypal_payer_id": true,
+            "paypal_payer_status": true,
+            "paypal_correlation_id": true
+        }
+    },
+    "sales_order": {
+        "column": {
+            "paypal_ipn_customer_notified": true
+        }
+    }
+}

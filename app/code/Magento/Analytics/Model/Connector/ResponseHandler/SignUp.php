@@ -6,7 +6,10 @@
 namespace Magento\Analytics\Model\Connector\ResponseHandler;
 
 use Magento\Analytics\Model\AnalyticsToken;
+<<<<<<< HEAD
 use Magento\Analytics\Model\Connector\Http\ConverterInterface;
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Analytics\Model\Connector\Http\ResponseHandlerInterface;
 
 /**
@@ -20,6 +23,7 @@ class SignUp implements ResponseHandlerInterface
     private $analyticsToken;
 
     /**
+<<<<<<< HEAD
      * @var ConverterInterface
      */
     private $converter;
@@ -34,6 +38,14 @@ class SignUp implements ResponseHandlerInterface
     ) {
         $this->analyticsToken = $analyticsToken;
         $this->converter = $converter;
+=======
+     * @param AnalyticsToken $analyticsToken
+     */
+    public function __construct(
+        AnalyticsToken $analyticsToken
+    ) {
+        $this->analyticsToken = $analyticsToken;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**

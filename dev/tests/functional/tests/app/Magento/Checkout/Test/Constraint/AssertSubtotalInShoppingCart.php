@@ -61,7 +61,7 @@ class AssertSubtotalInShoppingCart extends AbstractAssertForm
         }
 
         $error = $this->verifyData($productsData, $cartData, true);
-        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
+        \PHPUnit\Framework\Assert::assertEmpty($error, $error);
     }
 
     /**

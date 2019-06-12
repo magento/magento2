@@ -7,9 +7,12 @@ namespace Magento\Analytics\Test\Unit\Model\Connector\ResponseHandler;
 
 use Magento\Analytics\Model\Connector\ResponseHandler\OTP;
 
+<<<<<<< HEAD
 /**
  * Class OTPTest
  */
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class OTPTest extends \PHPUnit\Framework\TestCase
 {
     public function testHandleResult()

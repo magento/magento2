@@ -31,6 +31,14 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * @var string
      */
+<<<<<<< HEAD
+=======
+    private $fullDirectoryPath;
+
+    /**
+     * @var string
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     private $fileName = 'magento_small_image.jpg';
 
     /**
@@ -49,10 +57,26 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+<<<<<<< HEAD
+=======
+        $directoryName = 'directory1';
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
         $this->imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+<<<<<<< HEAD
+=======
+        $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot() . '/' . $directoryName;
+        $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
+        $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
+        $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
+        copy($fixtureDir . '/' . $this->fileName, $filePath);
+        $path = $this->fullDirectoryPath . '/.htaccess';
+        if (!$this->mediaDirectory->isFile($path)) {
+            $this->mediaDirectory->writeFile($path, "Order deny,allow\nDeny from all");
+        }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->model = $this->objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::class);
     }
 
@@ -64,6 +88,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute()
     {
+<<<<<<< HEAD
         $directoryName = 'directory1';
         $fullDirectoryPath = $this->imagesHelper->getStorageRoot() . '/' . $directoryName;
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($fullDirectoryPath));
@@ -78,11 +103,61 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(
             $this->mediaDirectory->isExist(
                 $this->mediaDirectory->getRelativePath($fullDirectoryPath . '/' . $this->fileName)
+=======
+        $this->model->getRequest()->setMethod('POST')
+            ->setPostValue('files', [$this->imagesHelper->idEncode($this->fileName)]);
+        $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
+        $this->model->execute();
+
+        $this->assertFalse(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . '/' . $this->fileName)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             )
         );
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Check that htaccess file couldn't be removed via
+     * \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::execute method
+     *
+     * @return void
+     */
+    public function testDeleteHtaccess()
+    {
+        $this->model->getRequest()->setMethod('POST')
+            ->setPostValue('files', [$this->imagesHelper->idEncode('.htaccess')]);
+        $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
+        $this->model->execute();
+
+        $this->assertTrue(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . '/' . '.htaccess')
+            )
+        );
+    }
+
+    /**
+     * Execute method with traversal file path to check that there is no ability to remove file which is not
+     * under media directory.
+     *
+     * @return void
+     */
+    public function testExecuteWithWrongFileName()
+    {
+        $fileName = '/../../../etc/env.php';
+        $this->model->getRequest()->setMethod('POST')
+            ->setPostValue('files', [$this->imagesHelper->idEncode($fileName)]);
+        $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
+        $this->model->execute();
+
+        $this->assertFileExists($this->fullDirectoryPath . $fileName);
+    }
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * Execute method with correct directory path and file name to check that files under linked media directory
      * can be removed.
      *

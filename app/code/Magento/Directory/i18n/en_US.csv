@@ -51,4 +51,8 @@ Service,Service
 "The account this API request is coming from is inactive.","The account this API request is coming from is inactive."
 "The """%1"" is not allowed as base currency for your subscription plan.","The """%1"" is not allowed as base currency for your subscription plan."
 "An invalid base currency has been entered.","An invalid base currency has been entered."
+<<<<<<< HEAD
 "Currency rates can't be retrieved.","Currency rates can't be retrieved."
+=======
+"Currency rates can't be retrieved.","Currency rates can't be retrieved."
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc

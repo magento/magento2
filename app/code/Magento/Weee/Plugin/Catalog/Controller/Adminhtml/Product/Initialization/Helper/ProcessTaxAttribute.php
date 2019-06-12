@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\Weee\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 
 use Magento\Catalog\Model\Product;
@@ -28,6 +33,11 @@ class ProcessTaxAttribute
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Handles product tax attributes data initialization.
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param Helper $subject
      * @param Product $result
      * @param Product $product

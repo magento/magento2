@@ -543,13 +543,17 @@ define([
                     data = this.createHeaderTemplate(cell.config);
                     cell.config.labelVisible = false;
                     _.extend(data, {
+                        defaultLabelVisible: data.visible(),
                         label: cell.config.label,
                         name: cell.name,
                         required: !!cell.config.validation,
                         columnsHeaderClasses: cell.config.columnsHeaderClasses,
                         sortOrder: cell.config.sortOrder
                     });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     labels.push(data);
                 }, this);
                 this.labels(_.sortBy(labels, 'sortOrder'));
@@ -907,7 +911,7 @@ define([
             prop = prop || this.identificationProperty;
 
             return _.reject(this.getChildItems(), function (recordData) {
-                return ~~recordData[prop] === ~~id;
+                return recordData[prop].toString() === id.toString();
             }, this);
         },
 

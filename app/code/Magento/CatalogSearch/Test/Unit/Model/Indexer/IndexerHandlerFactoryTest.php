@@ -6,46 +6,43 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer;
 
 use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Search\EngineResolverInterface;
 
 class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var IndexerHandlerFactory */
-    protected $model;
+    private $model;
 
     /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $objectManagerMock;
+    private $objectManagerMock;
 
-    /** @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $scopeConfigMock;
+    /** @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $engineResolverMock;
 
     protected function setUp()
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+        $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
             ->getMockForAbstractClass();
     }
 
     public function testCreate()
     {
-        $configPath = 'config_path';
         $currentHandler = 'current_handler';
-        $currentHandlerClass = 'current_handler_class';
+        $currentHandlerClass = IndexerInterface::class;
         $handlers = [
             $currentHandler => $currentHandlerClass,
         ];
         $data = ['data'];
 
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with($configPath, ScopeInterface::SCOPE_STORE)
+        $this->engineResolverMock->expects($this->once())
+            ->method('getCurrentSearchEngine')
             ->willReturn($currentHandler);
 
-        $indexerMock = $this->getMockBuilder(IndexerInterface::class)
+        $indexerMock = $this->getMockBuilder($currentHandlerClass)
             ->getMockForAbstractClass();
 
         $this->objectManagerMock->expects($this->once())
@@ -59,8 +56,7 @@ class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->model = new IndexerHandlerFactory(
             $this->objectManagerMock,
-            $this->scopeConfigMock,
-            $configPath,
+            $this->engineResolverMock,
             $handlers
         );
 
@@ -73,20 +69,17 @@ class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateWithoutHandlers()
     {
-        $configPath = 'config_path';
         $currentHandler = 'current_handler';
         $handlers = [];
         $data = ['data'];
 
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with($configPath, ScopeInterface::SCOPE_STORE)
+        $this->engineResolverMock->expects($this->once())
+            ->method('getCurrentSearchEngine')
             ->willReturn($currentHandler);
 
         $this->model = new IndexerHandlerFactory(
             $this->objectManagerMock,
-            $this->scopeConfigMock,
-            $configPath,
+            $this->engineResolverMock,
             $handlers
         );
 
@@ -99,20 +92,18 @@ class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateWithWrongHandler()
     {
-        $configPath = 'config_path';
         $currentHandler = 'current_handler';
-        $currentHandlerClass = 'current_handler_class';
+        $currentHandlerClass = \stdClass::class;
         $handlers = [
             $currentHandler => $currentHandlerClass,
         ];
         $data = ['data'];
 
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with($configPath, ScopeInterface::SCOPE_STORE)
+        $this->engineResolverMock->expects($this->once())
+            ->method('getCurrentSearchEngine')
             ->willReturn($currentHandler);
 
-        $indexerMock = $this->getMockBuilder(\stdClass::class)
+        $indexerMock = $this->getMockBuilder($currentHandlerClass)
             ->getMockForAbstractClass();
 
         $this->objectManagerMock->expects($this->once())
@@ -122,8 +113,7 @@ class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->model = new IndexerHandlerFactory(
             $this->objectManagerMock,
-            $this->scopeConfigMock,
-            $configPath,
+            $this->engineResolverMock,
             $handlers
         );
 
@@ -136,20 +126,18 @@ class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateWithoutAvailableHandler()
     {
-        $configPath = 'config_path';
         $currentHandler = 'current_handler';
-        $currentHandlerClass = 'current_handler_class';
+        $currentHandlerClass = IndexerInterface::class;
         $handlers = [
             $currentHandler => $currentHandlerClass,
         ];
         $data = ['data'];
 
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with($configPath, ScopeInterface::SCOPE_STORE)
+        $this->engineResolverMock->expects($this->once())
+            ->method('getCurrentSearchEngine')
             ->willReturn($currentHandler);
 
-        $indexerMock = $this->getMockBuilder(IndexerInterface::class)
+        $indexerMock = $this->getMockBuilder($currentHandlerClass)
             ->getMockForAbstractClass();
 
         $this->objectManagerMock->expects($this->once())
@@ -163,8 +151,7 @@ class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->model = new IndexerHandlerFactory(
             $this->objectManagerMock,
-            $this->scopeConfigMock,
-            $configPath,
+            $this->engineResolverMock,
             $handlers
         );
 

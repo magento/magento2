@@ -4,11 +4,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Directory\Model\RegionFactory;
+<<<<<<< HEAD
+=======
+use Magento\Sales\Api\OrderAddressRepositoryInterface;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\Data\OrderAddressInterface;
@@ -24,11 +29,22 @@ use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
+<<<<<<< HEAD
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddressSave extends Order
+=======
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+/**
+ * Sales address save
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class AddressSave extends Order implements HttpPostActionInterface
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 {
     /**
      * Authorization level of a basic admin session
@@ -41,6 +57,15 @@ class AddressSave extends Order
      * @var RegionFactory
      */
     private $regionFactory;
+<<<<<<< HEAD
+=======
+
+    /**
+     * @var OrderAddressRepositoryInterface
+     */
+    private $orderAddressRepository;
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     /**
      * @param Context $context
      * @param Registry $coreRegistry
@@ -54,6 +79,10 @@ class AddressSave extends Order
      * @param OrderRepositoryInterface $orderRepository
      * @param LoggerInterface $logger
      * @param RegionFactory|null $regionFactory
+<<<<<<< HEAD
+=======
+     * @param OrderAddressRepositoryInterface|null $orderAddressRepository
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -69,9 +98,18 @@ class AddressSave extends Order
         OrderManagementInterface $orderManagement,
         OrderRepositoryInterface $orderRepository,
         LoggerInterface $logger,
+<<<<<<< HEAD
         RegionFactory $regionFactory = null
     ) {
         $this->regionFactory = $regionFactory ?: ObjectManager::getInstance()->get(RegionFactory::class);
+=======
+        RegionFactory $regionFactory = null,
+        OrderAddressRepositoryInterface $orderAddressRepository = null
+    ) {
+        $this->regionFactory = $regionFactory ?: ObjectManager::getInstance()->get(RegionFactory::class);
+        $this->orderAddressRepository = $orderAddressRepository ?: ObjectManager::getInstance()
+            ->get(OrderAddressRepositoryInterface::class);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         parent::__construct(
             $context,
             $coreRegistry,
@@ -105,26 +143,34 @@ class AddressSave extends Order
         if ($data && $address->getId()) {
             $address->addData($data);
             try {
-                $address->save();
+                $this->orderAddressRepository->save($address);
                 $this->_eventManager->dispatch(
                     'admin_sales_order_address_update',
                     [
                         'order_id' => $address->getParentId()
                     ]
                 );
-                $this->messageManager->addSuccess(__('You updated the order address.'));
+                $this->messageManager->addSuccessMessage(__('You updated the order address.'));
                 return $resultRedirect->setPath('sales/*/view', ['order_id' => $address->getParentId()]);
             } catch (LocalizedException $e) {
+<<<<<<< HEAD
                 $this->messageManager->addError($e->getMessage());
+=======
+                $this->messageManager->addErrorMessage($e->getMessage());
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('We can\'t update the order address right now.'));
+                $this->messageManager->addExceptionMessage($e, __('We can\'t update the order address right now.'));
             }
             return $resultRedirect->setPath('sales/*/address', ['address_id' => $address->getId()]);
         } else {
             return $resultRedirect->setPath('sales/*/');
         }
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     /**
      * Update region data
      *

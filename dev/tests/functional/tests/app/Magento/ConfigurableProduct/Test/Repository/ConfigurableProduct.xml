@@ -1146,6 +1146,10 @@
                 </item>
             </field>
         </dataset>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <dataset name="product_with_3_sizes">
             <field name="name" xsi:type="string">Configurable product with sizes %isolation%</field>
             <field name="sku" xsi:type="string">sku_configurable_product_with_sizes_%isolation%</field>

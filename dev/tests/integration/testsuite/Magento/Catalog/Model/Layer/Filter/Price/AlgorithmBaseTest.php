@@ -38,7 +38,7 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider pricesSegmentationDataProvider
      * @covers       \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
      */
@@ -112,8 +112,12 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
         $items = $model->calculateSeparators($interval);
         $this->assertEquals(array_keys($intervalItems), array_keys($items));
 
+<<<<<<< HEAD
         $intervalItemsCount = count($intervalItems);
         for ($i = 0; $i < $intervalItemsCount; ++$i) {
+=======
+        for ($i = 0, $count = count($intervalItems); $i < $count; ++$i) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $this->assertInternalType('array', $items[$i]);
             $this->assertEquals($intervalItems[$i]['from'], $items[$i]['from']);
             $this->assertEquals($intervalItems[$i]['to'], $items[$i]['to']);

@@ -4,11 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
+use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 
 /**
  * Catalog entity abstract model
@@ -39,16 +41,18 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
      * @param array $data
+     * @param UniqueValidationInterface|null $uniqueValidator
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Factory $modelFactory,
-        $data = []
+        $data = [],
+        UniqueValidationInterface $uniqueValidator = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_modelFactory = $modelFactory;
-        parent::__construct($context, $data);
+        parent::__construct($context, $data, $uniqueValidator);
     }
 
     /**
@@ -80,7 +84,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _isApplicableAttribute($object, $attribute)
     {
-        $applyTo = $attribute->getApplyTo();
+        $applyTo = $attribute->getApplyTo() ?: [];
         return (count($applyTo) == 0 || in_array($object->getTypeId(), $applyTo))
             && $attribute->isInSet($object->getAttributeSetId());
     }
@@ -88,18 +92,21 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Check whether attribute instance (attribute, backend, frontend or source) has method and applicable
      *
-     * @param AbstractAttribute|\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend|\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend|\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource $instance
+     * @param AbstractAttribute|AbstractBackend|AbstractFrontend|AbstractSource $instance
      * @param string $method
      * @param array $args array of arguments
      * @return boolean
      */
     protected function _isCallableAttributeInstance($instance, $method, $args)
     {
-        if ($instance instanceof \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+        if ($instance instanceof AbstractBackend
             && ($method == 'beforeSave' || $method == 'afterSave')
         ) {
             $attributeCode = $instance->getAttribute()->getAttributeCode();
-            if (isset($args[0]) && $args[0] instanceof \Magento\Framework\DataObject && $args[0]->getData($attributeCode) === false) {
+            if (isset($args[0])
+                && $args[0] instanceof \Magento\Framework\DataObject
+                && $args[0]->getData($attributeCode) === false
+            ) {
                 return false;
             }
         }
@@ -109,6 +116,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 
     /**
      * Retrieve select object for loading entity attributes values
+     *
      * Join attribute store value
      *
      * @param \Magento\Framework\DataObject $object
@@ -241,6 +249,10 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 
     /**
      * Check if attribute present for non default Store View.
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * Prevent "delete" query locking in a case when nothing to delete
      *
      * @param AbstractAttribute $attribute
@@ -482,7 +494,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * Retrieve attribute's raw value from DB.
      *
      * @param int $entityId
-     * @param int|string|array $attribute atrribute's ids or codes
+     * @param int|string|array $attribute attribute's ids or codes
      * @param int|\Magento\Store\Model\Store $store
      * @return bool|string|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\Sales\Test\Unit\Model\Order\Shipment;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -179,7 +184,11 @@ class CommentRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('send')
             ->willThrowException(new \Exception());
         $this->loggerMock->expects($this->once())
+<<<<<<< HEAD
             ->method('warning');
+=======
+            ->method('critical');
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $this->commentRepository->save($this->commentMock);
     }

@@ -37,6 +37,11 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     protected $_sectionMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_jsonMock;
+
     protected function setUp()
     {
         $this->_systemConfigMock = $this->createMock(\Magento\Config\Model\Config\Structure::class);
@@ -67,12 +72,15 @@ class EditTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_sectionMock)
         );
 
+        $this->_jsonMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+
         $data = [
             'data' => ['systemConfig' => $this->_systemConfigMock],
             'request' => $this->_requestMock,
             'layout' => $this->_layoutMock,
             'urlBuilder' => $this->_urlModelMock,
             'configStructure' => $this->_systemConfigMock,
+            'jsonSerializer' => $this->_jsonMock,
         ];
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -163,5 +171,86 @@ class EditTest extends \PHPUnit\Framework\TestCase
 
         $this->_object->setNameInLayout($expectedBlock);
         $this->_object->setLayout($this->_layoutMock);
+    }
+
+    /**
+     * @param array $requestData
+     * @param array $expected
+     * @dataProvider getConfigSearchParamsJsonData
+     */
+    public function testGetConfigSearchParamsJson(array $requestData, array $expected)
+    {
+        $requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+
+        $requestMock->expects($this->any())
+            ->method('getParam')
+            ->will($this->returnValueMap($requestData));
+        $this->_jsonMock->expects($this->once())
+            ->method('serialize')
+            ->with($expected);
+
+        $data = [
+            'data' => ['systemConfig' => $this->_systemConfigMock],
+            'request' => $requestMock,
+            'layout' => $this->_layoutMock,
+            'urlBuilder' => $this->_urlModelMock,
+            'configStructure' => $this->_systemConfigMock,
+            'jsonSerializer' => $this->_jsonMock,
+        ];
+
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $object = $helper->getObject(\Magento\Config\Block\System\Config\Edit::class, $data);
+
+        $object->getConfigSearchParamsJson();
+    }
+
+    /**
+     * @return array
+     */
+    public function getConfigSearchParamsJsonData()
+    {
+        return [
+            [
+                [
+                    ['section', null, null],
+                    ['group', null,  null],
+                    ['field', null,  null],
+                ],
+                [],
+            ],
+            [
+                [
+                    ['section', null, 'section_code'],
+                    ['group', null,  null],
+                    ['field', null,  null],
+                ],
+                [
+                    'section' => 'section_code',
+                ],
+            ],
+            [
+                [
+                    ['section', null, 'section_code'],
+                    ['group', null,  'group_code'],
+                    ['field', null,  null],
+                ],
+                [
+                    'section' => 'section_code',
+                    'group' => 'group_code',
+                ],
+            ],
+            [
+                [
+                    ['section', null, 'section_code'],
+                    ['group', null,  'group_code'],
+                    ['field', null,  'field_code'],
+                ],
+                [
+                    'section' => 'section_code',
+                    'group' => 'group_code',
+                    'field' => 'field_code',
+                ],
+            ],
+        ];
     }
 }

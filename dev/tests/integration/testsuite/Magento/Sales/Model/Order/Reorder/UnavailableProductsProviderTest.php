@@ -9,8 +9,11 @@ use Magento\Sales\Api\Data\OrderInterfaceFactory;
 
 /**
  * Class UnavailableProductsProviderTest
+<<<<<<< HEAD
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  */
 class UnavailableProductsProviderTest extends \PHPUnit\Framework\TestCase
 {

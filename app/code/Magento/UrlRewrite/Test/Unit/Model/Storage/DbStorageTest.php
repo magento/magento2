@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
 
 use Magento\Framework\DB\Select;
@@ -64,7 +62,8 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->method('select')
             ->will($this->returnValue($this->select));
 
-        $this->storage = (new ObjectManager($this))->getObject(\Magento\UrlRewrite\Model\Storage\DbStorage::class,
+        $this->storage = (new ObjectManager($this))->getObject(
+            \Magento\UrlRewrite\Model\Storage\DbStorage::class,
             [
                 'urlRewriteFactory' => $this->urlRewriteFactory,
                 'dataObjectHelper' => $this->dataObjectHelper,
@@ -455,6 +454,10 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
         $urlFirst->expects($this->any())
             ->method('getStoreId')
             ->willReturn('store_id_1');
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $urlSecond->expects($this->any())
             ->method('getEntityType')
             ->willReturn('category');
@@ -478,10 +481,6 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->with(DbStorage::TABLE_NAME)
             ->will($this->returnValue('table_name'));
 
-        $this->connectionMock->expects($this->any())
-            ->method('query')
-            ->with('sql delete query');
-
         // insert
 
         $urlFirst->expects($this->any())
@@ -495,10 +494,6 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->method('getTableName')
             ->with(DbStorage::TABLE_NAME)
             ->will($this->returnValue('table_name'));
-
-        $this->connectionMock->expects($this->once())
-            ->method('insertMultiple')
-            ->with('table_name', [['row1'], ['row2']]);
 
         $this->storage->replace([$urlFirst, $urlSecond]);
     }

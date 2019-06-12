@@ -36,7 +36,11 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
+<<<<<<< HEAD
      * @expectedExceptionMessage Cannot assign customer to the given cart. You don't have permission for this operation.
+=======
+     * @expectedExceptionMessage You don't have the correct permissions to assign the customer to the cart.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function testBeforeAssignCustomer()
     {

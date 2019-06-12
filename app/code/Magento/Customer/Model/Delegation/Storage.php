@@ -1,10 +1,16 @@
 <?php
 /**
+<<<<<<< HEAD
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+=======
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 declare(strict_types=1);
 
 namespace Magento\Customer\Model\Delegation;
@@ -90,10 +96,15 @@ class Storage
      *
      * @return void
      */
+<<<<<<< HEAD
     public function storeNewOperation(
         CustomerInterface $customer,
         array $delegatedData
     ) {
+=======
+    public function storeNewOperation(CustomerInterface $customer, array $delegatedData): void
+    {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         /** @var Customer $customer */
         $customerData = $customer->__toArray();
         $addressesData = [];
@@ -107,7 +118,11 @@ class Storage
         $this->session->setDelegatedNewCustomerData([
             'customer' => $customerData,
             'addresses' => $addressesData,
+<<<<<<< HEAD
             'delegated_data' => $delegatedData
+=======
+            'delegated_data' => $delegatedData,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ]);
     }
 
@@ -124,7 +139,11 @@ class Storage
             $this->logger->error($exception);
             $serialized = null;
         }
+<<<<<<< HEAD
         if (!$serialized) {
+=======
+        if ($serialized === null) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             return null;
         }
 
@@ -149,7 +168,11 @@ class Storage
             'customer' => $this->customerFactory->create(
                 ['data' => $customerData]
             ),
+<<<<<<< HEAD
             'additionalData' => $serialized['delegated_data']
+=======
+            'additionalData' => $serialized['delegated_data'],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ]);
     }
 }

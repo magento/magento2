@@ -5,6 +5,8 @@
  */
 namespace Magento\Ui\TemplateEngine\Xhtml;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\View\Layout\Generator\Structure;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Template;
@@ -43,24 +45,32 @@ class Result implements ResultInterface
     protected $logger;
 
     /**
+     * @var JsonHexTag
+     */
+    private $jsonSerializer;
+
+    /**
      * @param Template $template
      * @param CompilerInterface $compiler
      * @param UiComponentInterface $component
      * @param Structure $structure
      * @param LoggerInterface $logger
+     * @param JsonHexTag $jsonSerializer
      */
     public function __construct(
         Template $template,
         CompilerInterface $compiler,
         UiComponentInterface $component,
         Structure $structure,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        JsonHexTag $jsonSerializer = null
     ) {
         $this->template = $template;
         $this->compiler = $compiler;
         $this->component = $component;
         $this->structure = $structure;
         $this->logger = $logger;
+        $this->jsonSerializer = $jsonSerializer ?? ObjectManager::getInstance()->get(JsonHexTag::class);
     }
 
     /**
@@ -81,7 +91,11 @@ class Result implements ResultInterface
     public function appendLayoutConfiguration()
     {
         $layoutConfiguration = $this->wrapContent(
+<<<<<<< HEAD
             json_encode($this->structure->generate($this->component), JSON_HEX_TAG)
+=======
+            $this->jsonSerializer->serialize($this->structure->generate($this->component))
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         );
         $this->template->append($layoutConfiguration);
     }
@@ -105,7 +119,7 @@ class Result implements ResultInterface
             $this->compiler->compile($templateRootElement, $this->component, $this->component);
             $this->appendLayoutConfiguration();
             $result = $this->compiler->postprocessing($this->template->__toString());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage());
             $result = $e->getMessage();
         }

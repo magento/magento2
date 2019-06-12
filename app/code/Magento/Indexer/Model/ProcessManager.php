@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\Indexer\Model;
 
 /**
@@ -69,6 +74,10 @@ class ProcessManager
     private function simpleThreadExecute($userFunctions)
     {
         foreach ($userFunctions as $userFunction) {
+<<<<<<< HEAD
+=======
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             call_user_func($userFunction);
         }
     }
@@ -77,6 +86,10 @@ class ProcessManager
      * Execute user functions in multiThreads mode
      *
      * @param \Traversable $userFunctions
+<<<<<<< HEAD
+=======
+     * @throws \RuntimeException
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function multiThreadsExecute($userFunctions)
@@ -84,6 +97,10 @@ class ProcessManager
         $this->resource->closeConnection(null);
         $threadNumber = 0;
         foreach ($userFunctions as $userFunction) {
+<<<<<<< HEAD
+=======
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $pid = pcntl_fork();
             if ($pid == -1) {
                 throw new \RuntimeException('Unable to fork a new process');
@@ -93,6 +110,10 @@ class ProcessManager
                 $this->startChildProcess($userFunction);
             }
         }
+<<<<<<< HEAD
+=======
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock,Magento2.Functions.DiscouragedFunction
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         while (pcntl_waitpid(0, $status) != -1) {
             //Waiting for the completion of child processes
         }
@@ -107,7 +128,11 @@ class ProcessManager
      *
      * @return bool
      */
+<<<<<<< HEAD
     private function isCanBeParalleled()
+=======
+    private function isCanBeParalleled(): bool
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         return function_exists('pcntl_fork');
     }
@@ -117,7 +142,11 @@ class ProcessManager
      *
      * @return bool
      */
+<<<<<<< HEAD
     private function isSetupMode()
+=======
+    private function isSetupMode(): bool
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         return $this->registry->registry('setup-mode-enabled') ?: false;
     }
@@ -126,12 +155,22 @@ class ProcessManager
      * Start child process
      *
      * @param callable $userFunction
+<<<<<<< HEAD
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
     private function startChildProcess($userFunction)
     {
         $status = call_user_func($userFunction);
         $status = is_integer($status) ? $status : 0;
+=======
+     */
+    private function startChildProcess(callable $userFunction)
+    {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $status = call_user_func($userFunction);
+        $status = is_int($status) ? $status : 0;
+        // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         exit($status);
     }
 
@@ -140,12 +179,23 @@ class ProcessManager
      *
      * @param int $threadNumber
      */
+<<<<<<< HEAD
     private function executeParentProcess(&$threadNumber)
     {
         $threadNumber++;
         if ($threadNumber >= $this->threadsCount) {
             pcntl_wait($status);
             if (pcntl_wexitstatus($status) !== 0) {
+=======
+    private function executeParentProcess(int &$threadNumber)
+    {
+        $threadNumber++;
+        if ($threadNumber >= $this->threadsCount) {
+            // phpcs:disable Magento2.Functions.DiscouragedFunction
+            pcntl_wait($status);
+            if (pcntl_wexitstatus($status) !== 0) {
+                // phpcs:enable
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 $this->failInChildProcess = true;
             }
             $threadNumber--;

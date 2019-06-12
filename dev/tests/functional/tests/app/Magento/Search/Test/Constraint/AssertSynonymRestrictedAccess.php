@@ -31,7 +31,7 @@ class AssertSynonymRestrictedAccess extends AbstractConstraint
     {
         $synonymGroupIndex->open();
 
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             self::ACCESS_DENIED_TEXT,
             $dashboard->getErrorBlock()->getContent(),
             'Synonym group index page is available.'

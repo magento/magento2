@@ -3,14 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Test\Unit\Controller\Adminhtml\Index;
 
+<<<<<<< HEAD
 use Magento\Ui\Controller\Adminhtml\Index\Render;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+=======
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Controller\Adminhtml\Index\Render;
+use Magento\Ui\Model\UiComponentTypeResolver;
+use Zend\Http\AbstractMessage;
+use Zend\Http\Response;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 /**
  * Test for Magento\Ui\Controller\Adminhtml\Index\Render
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class RenderTest extends \PHPUnit\Framework\TestCase
 {
@@ -65,7 +78,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     private $helperMock;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $uiComponentContextMock;
 
@@ -81,6 +94,14 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     private $uiComponentMock;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var \PHPUnit_Framework_MockObject_MockObject|UiComponentTypeResolver
+     */
+    private $uiComponentTypeResolverMock;
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resultJsonFactoryMock;
@@ -91,8 +112,15 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     private $loggerMock;
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
      */
+=======
+     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $escaperMock;
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     protected function setUp()
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
@@ -119,7 +147,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->uiComponentContextMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\UiComponent\ContextInterface::class
+            ContextInterface::class
         );
         $this->dataProviderMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class
@@ -163,7 +191,59 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $this->uiComponentContextMock->expects($this->once())
             ->method('getDataProvider')
             ->willReturn($this->dataProviderMock);
+        $this->uiComponentTypeResolverMock = $this->getMockBuilder(UiComponentTypeResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->escaperMock = $this->createMock(Escaper::class);
+        $this->escaperMock->expects($this->any())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
 
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+
+        $this->render = $this->objectManagerHelper->getObject(
+            \Magento\Ui\Controller\Adminhtml\Index\Render::class,
+            [
+                'context' => $this->contextMock,
+                'factory' => $this->uiFactoryMock,
+                'contentTypeResolver' => $this->uiComponentTypeResolverMock,
+                'resultJsonFactory' => $this->resultJsonFactoryMock,
+                'logger' => $this->loggerMock,
+                'escaper' => $this->escaperMock,
+            ]
+        );
+    }
+
+    public function testExecuteAjaxRequestException()
+    {
+        $name = 'test-name';
+        $renderedData = '<html>data</html>';
+
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->with('namespace')
+            ->willReturn($name);
+        $this->requestMock->expects($this->any())
+            ->method('getParams')
+            ->willReturn([]);
+        $this->responseMock->expects($this->once())
+            ->method('appendBody')
+            ->willThrowException(new \Exception('exception'));
+
+        $jsonResultMock = $this->getMockBuilder(Json::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setData'])
+            ->getMock();
+
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($jsonResultMock);
+
+        $jsonResultMock->expects($this->once())
+            ->method('setData')
+            ->willReturnSelf();
+
+<<<<<<< HEAD
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->render = $this->objectManagerHelper->getObject(
@@ -175,6 +255,30 @@ class RenderTest extends \PHPUnit\Framework\TestCase
                 'logger' => $this->loggerMock
             ]
         );
+=======
+        $this->loggerMock->expects($this->once())
+            ->method('critical')
+            ->willReturnSelf();
+
+        $this->dataProviderMock->expects($this->once())
+            ->method('getConfigData')
+            ->willReturn([]);
+
+        $this->uiComponentMock->expects($this->once())
+            ->method('render')
+            ->willReturn($renderedData);
+        $this->uiComponentMock->expects($this->once())
+            ->method('getChildComponents')
+            ->willReturn([]);
+        $this->uiComponentMock->expects($this->once())
+            ->method('getContext')
+            ->willReturn($this->uiComponentContextMock);
+        $this->uiFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->uiComponentMock);
+
+        $this->render->executeAjaxRequest();
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     public function testExecuteAjaxRequestException()
@@ -218,6 +322,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             ->with('Content-Type', 'application/json')
             ->willReturnSelf();
 
+<<<<<<< HEAD
         $this->render->executeAjaxRequest();
     }
 
@@ -234,6 +339,26 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             ->method('setHeader')
             ->with('Content-type', 'application/json')
             ->willReturnSelf();
+=======
+        $this->uiComponentMock->expects($this->once())
+            ->method('render')
+            ->willReturn($renderedData);
+        $this->uiComponentMock->expects($this->once())
+            ->method('getChildComponents')
+            ->willReturn([]);
+        $this->uiComponentMock->expects($this->any())
+            ->method('getContext')
+            ->willReturn($this->uiComponentContextMock);
+        $this->uiFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->uiComponentMock);
+        $this->uiComponentTypeResolverMock->expects($this->once())
+            ->method('resolve')
+            ->with($this->uiComponentContextMock)
+            ->willReturn('application/json');
+        $this->responseMock->expects($this->once())->method('setHeader')
+            ->with('Content-Type', 'application/json', true);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $this->render->executeAjaxRequest();
     }
@@ -248,6 +373,34 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     {
         $name = 'test-name';
         $renderedData = '<html>data</html>';
+
+        if (false === $isAllowed) {
+            $jsonResultMock = $this->getMockBuilder(Json::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['setStatusHeader', 'setData'])
+                ->getMock();
+
+            $jsonResultMock->expects($this->at(0))
+                ->method('setStatusHeader')
+                ->with(
+                    Response::STATUS_CODE_403,
+                    AbstractMessage::VERSION_11,
+                    'Forbidden'
+                )
+                ->willReturnSelf();
+
+            $jsonResultMock->expects($this->at(1))
+                ->method('setData')
+                ->with([
+                    'error' => 'Forbidden',
+                    'errorcode' => 403
+                ])
+                ->willReturnSelf();
+
+            $this->resultJsonFactoryMock->expects($this->any())
+                ->method('create')
+                ->willReturn($jsonResultMock);
+        }
 
         $this->requestMock->expects($this->any())
             ->method('getParam')

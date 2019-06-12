@@ -83,7 +83,10 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->blockModel->setData(Block::CONTENT, 'test');
         $this->objectManager->setBackwardCompatibleProperty($this->blockModel, '_hasDataChanges', true);
         $this->eventManagerMock->expects($this->atLeastOnce())->method('dispatch');
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $expected = $this->blockModel;
         $actual = $this->blockModel->beforeSave();
         self::assertEquals($expected, $actual);
@@ -141,7 +144,10 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     {
         $identifier = 'test01';
         $this->blockModel->setData(Block::IDENTIFIER, $identifier);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $expected = $identifier;
         $actual = $this->blockModel->getIdentifier();
         self::assertEquals($expected, $actual);

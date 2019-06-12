@@ -34,6 +34,16 @@ define([
         });
     });
 
+<<<<<<< HEAD
+=======
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+    });
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     describe('Magento_CheckoutAgreements/js/model/place-order-mixin', function () {
         it('mixin is applied to Magento_Checkout/js/action/place-order', function () {
             var placeOrderMixins = defaultContext.config.config.mixins['Magento_Checkout/js/action/place-order'];

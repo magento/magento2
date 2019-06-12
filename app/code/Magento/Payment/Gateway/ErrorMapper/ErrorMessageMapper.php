@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\Payment\Gateway\ErrorMapper;
 
 use Magento\Framework\Config\DataInterface;
@@ -13,6 +18,11 @@ use Magento\Framework\Config\DataInterface;
  * For example, during authorization payment operation the payment integration can validate error messages
  * related to credit card details and customer address data.
  * In that case, this implementation can be extended via di.xml and configured with appropriate mappers.
+<<<<<<< HEAD
+=======
+ *
+ * @api
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  */
 class ErrorMessageMapper implements ErrorMessageMapperInterface
 {

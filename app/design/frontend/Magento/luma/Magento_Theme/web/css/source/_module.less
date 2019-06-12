@@ -82,6 +82,17 @@
 
     .page-main {
         .lib-vendor-prefix-flex-grow(1);
+<<<<<<< HEAD
+=======
+    }
+
+    .page-main {
+        > .page-title-wrapper {
+            .page-title {
+                hyphens: auto;
+            }
+        }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     //
@@ -110,6 +121,10 @@
             > li {
                 font-size: @font-size__base;
                 margin: 0 0 0 15px;
+
+                &.customer-welcome {
+                    margin: 0 0 0 5px;
+                }
 
                 > a {
                     .lib-link(
@@ -148,6 +163,12 @@
         .page-print & {
             display: inline-block;
             float: none;
+        }
+    }
+
+    .page-print {
+        .nav-toggle {
+            display: none;
         }
     }
 
@@ -319,6 +340,23 @@
             }
         }
     }
+    .page-header {
+        .switcher {
+            .options {
+                ul.dropdown {
+                    right: 0;
+                    &:before {
+                        left: auto;
+                        right: 10px;
+                    }
+                    &:after {
+                        left: auto;
+                        right: 9px;
+                    }
+                }
+            }
+        }
+    }
 
     //
     //  Widgets
@@ -342,6 +380,10 @@
         .widget.block {
             .lib-css(margin, @indent__base 0);
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         .links .widget.block {
             margin: 0;
         }
@@ -428,7 +470,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .logo {
         margin-bottom: 13px;
         margin-top: 4px;
@@ -441,7 +483,11 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .cms-page-view .page-main {
+<<<<<<< HEAD
         padding-top: 41px;
+=======
+        padding-top: 0;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         position: relative;
     }
 }
@@ -454,12 +500,6 @@
     html,
     body {
         height: 100%; // Stretch screen area for sticky footer
-    }
-
-    body {
-        .ie9 & {
-            .lib-css(background-color, @copyright__background-color);
-        }
     }
 
     .navigation ul {
@@ -638,11 +678,6 @@
         > .widget {
             box-sizing: border-box;
             width: 100%;
-        }
-
-        .ie10 &,
-        .ie11 & {
-            height: 100%;
         }
     }
 

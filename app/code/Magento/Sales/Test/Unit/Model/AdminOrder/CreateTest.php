@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Model\AdminOrder;
 
 use Magento\Backend\Model\Session\Quote as SessionQuote;
@@ -20,6 +18,10 @@ use Magento\Customer\Model\Metadata\FormFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+<<<<<<< HEAD
+=======
+use Magento\Quote\Api\CartRepositoryInterface;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
@@ -43,12 +45,20 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     private $adminOrderCreate;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+=======
+     * @var CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $quoteRepository;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Quote\Model\QuoteFactory|\PHPUnit_Framework_MockObject_MockObject
+=======
+     * @var QuoteFactory|\PHPUnit_Framework_MockObject_MockObject
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private $quoteFactory;
 
@@ -95,7 +105,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $this->itemUpdater = $this->createMock(Updater::class);
 
+<<<<<<< HEAD
         $this->quoteRepository = $this->getMockBuilder(\Magento\Quote\Api\CartRepositoryInterface::class)
+=======
+        $this->quoteRepository = $this->getMockBuilder(CartRepositoryInterface::class)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->disableOriginalConstructor()
             ->setMethods(['getForCustomer'])
             ->getMockForAbstractClass();
@@ -172,8 +186,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $quote = $this->createMock(Quote::class);
         $quote->method('getCustomer')->willReturn($customer);
+<<<<<<< HEAD
         $quote->method('addData')
             ->with(
+=======
+        $quote->method('addData')->with(
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             [
                 'customer_group_id' => $attributes[1][1],
                 'customer_tax_class_id' => $taxClassId
@@ -182,7 +200,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->dataObjectHelper->method('populateWithArray')
             ->with(
                 $customer,
+<<<<<<< HEAD
                 ['group_id' => 1], CustomerInterface::class
+=======
+                ['group_id' => 1],
+                CustomerInterface::class
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             );
 
         $this->formFactory->method('create')
@@ -285,6 +308,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $address->method('setFreeShipping')
             ->with(0)
             ->willReturnSelf();
+<<<<<<< HEAD
 
         $object = $this->adminOrderCreate->applyCoupon($couponCode);
         self::assertEquals($this->adminOrderCreate, $object);
@@ -309,6 +333,29 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomerId')
             ->willReturn($customerId);
 
+=======
+
+        $object = $this->adminOrderCreate->applyCoupon($couponCode);
+        self::assertEquals($this->adminOrderCreate, $object);
+    }
+
+    public function testGetCustomerCart()
+    {
+        $storeId = 2;
+        $customerId = 2;
+        $cartResult = [
+            'cart' => true,
+        ];
+
+        $this->quoteFactory->expects($this->once())
+            ->method('create');
+        $this->sessionQuote->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $this->sessionQuote->expects($this->once())
+            ->method('getCustomerId')
+            ->willReturn($customerId);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->quoteRepository->expects($this->once())
             ->method('getForCustomer')
             ->with($customerId, [$storeId])

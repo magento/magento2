@@ -6,25 +6,65 @@
 
 namespace Magento\Reports\Block\Adminhtml\Sales\Sales;
 
+<<<<<<< HEAD
 use Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency;
+=======
+use Magento\Framework\DataObject;
+use Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency;
+use Magento\Framework\App\ObjectManager;
+use Magento\Sales\Model\Order\ConfigFactory;
+use Magento\Sales\Model\Order;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 /**
  * Adminhtml sales report grid block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 {
     /**
-     * GROUP BY criteria
-     *
      * @var string
      */
     protected $_columnGroupBy = 'period';
 
     /**
-     * {@inheritdoc}
+     * @var ConfigFactory
+     */
+    private $configFactory;
+
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Helper\Data $backendHelper
+     * @param \Magento\Reports\Model\ResourceModel\Report\Collection\Factory $resourceFactory
+     * @param \Magento\Reports\Model\Grouped\CollectionFactory $collectionFactory
+     * @param \Magento\Reports\Helper\Data $reportsData
+     * @param array $data
+     * @param ConfigFactory|null $configFactory
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Helper\Data $backendHelper,
+        \Magento\Reports\Model\ResourceModel\Report\Collection\Factory $resourceFactory,
+        \Magento\Reports\Model\Grouped\CollectionFactory $collectionFactory,
+        \Magento\Reports\Helper\Data $reportsData,
+        array $data = [],
+        ConfigFactory $configFactory = null
+    ) {
+        parent::__construct(
+            $context,
+            $backendHelper,
+            $resourceFactory,
+            $collectionFactory,
+            $reportsData,
+            $data
+        );
+        $this->configFactory = $configFactory ?: ObjectManager::getInstance()->get(ConfigFactory::class);
+    }
+
+    /**
+     * Reports grid constructor
+     *
      * @codeCoverageIgnore
      */
     protected function _construct()
@@ -34,7 +74,9 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * {@inheritdoc}
+     * Return collection name based on report_type
+     *
+     * @return string
      */
     public function getResourceCollectionName()
     {
@@ -44,7 +86,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * {@inheritdoc}
+     * Initialize reports grid columns
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -327,5 +369,31 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
         $this->addExportType('*/*/exportSalesExcel', __('Excel XML'));
 
         return parent::_prepareColumns();
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * Filter canceled statuses for orders.
+     *
+     * @return Grid
+     */
+    protected function _prepareCollection()
+    {
+        /** @var DataObject $filterData */
+        $filterData = $this->getData('filter_data');
+        if (!$filterData->hasData('order_statuses')) {
+            $orderConfig = $this->configFactory->create();
+            $statusValues = [];
+            $canceledStatuses = $orderConfig->getStateStatuses(Order::STATE_CANCELED);
+            $statusCodes = array_keys($orderConfig->getStatuses());
+            foreach ($statusCodes as $code) {
+                if (!isset($canceledStatuses[$code])) {
+                    $statusValues[] = $code;
+                }
+            }
+            $filterData->setData('order_statuses', $statusValues);
+        }
+        return parent::_prepareCollection();
     }
 }

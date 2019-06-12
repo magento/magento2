@@ -79,6 +79,7 @@
                                 if (isset($methodsForms[$code])) {
                                     $block->setMethodFormTemplate($code, $methodsForms[$code]);
                                 }
+<<<<<<< HEAD
                             ?>
                             <dt class="item-title">
                                 <?php if ($methodsCount > 1) : ?>
@@ -109,6 +110,47 @@
                                         <?= /* @noEscape */ $html; ?>
                                     </dd>
                                 <?php endif; ?>
+=======
+                                ?>
+                                <div data-bind="scope: 'payment_method_<?= $block->escapeHtml($code);?>'">
+                                    <dt class="item-title">
+                                        <?php if ($methodsCount > 1) : ?>
+                                            <input type="radio"
+                                                   id="p_method_<?= $block->escapeHtml($code); ?>"
+                                                   value="<?= $block->escapeHtml($code); ?>"
+                                                   name="payment[method]"
+                                                   title="<?= $block->escapeHtml($_method->getTitle()) ?>"
+                                                   data-bind="
+                                                       value: getCode(),
+                                                       checked: isChecked,
+                                                       click: selectPaymentMethod,
+                                                       visible: isRadioButtonVisible()"
+                                                <?php if ($checked) : ?>
+                                                    checked="checked"
+                                                <?php endif; ?>
+                                                   class="radio"/>
+                                        <?php else : ?>
+                                            <input type="radio"
+                                                   id="p_method_<?= $block->escapeHtml($code); ?>"
+                                                   value="<?= $block->escapeHtml($code); ?>"
+                                                   name="payment[method]"
+                                                   data-bind="
+                                                       value: getCode(),
+                                                       afterRender: selectPaymentMethod"
+                                                   checked="checked"
+                                                   class="radio solo method" />
+                                        <?php endif; ?>
+                                        <label for="p_method_<?= $block->escapeHtml($code); ?>">
+                                            <?= $block->escapeHtml($_method->getTitle()) ?>
+                                        </label>
+                                    </dt>
+                                    <?php if ($html = $block->getChildHtml('payment.method.' . $code)) : ?>
+                                        <dd class="item-content <?= $checked ? '' : 'no-display'; ?>">
+                                            <?= /* @noEscape */ $html; ?>
+                                        </dd>
+                                    <?php endif; ?>
+                                </div>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                             <?php endforeach; ?>
                         </dl>
                         <?= $block->getChildHtml('payment_methods_after') ?>
@@ -119,7 +161,11 @@
         </div>
     </div>
     <div class="actions-toolbar">
+<<<<<<< HEAD
         <div class="primary">
+=======
+        <div class="primary" id="parent-payment-continue">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <button id="payment-continue"
                     type="button"
                     class="action primary continue">
@@ -151,4 +197,35 @@
             }
         });
     });
+<<<<<<< HEAD
+=======
+</script>
+
+<script>
+    //<![CDATA[
+    require(
+        [
+            'Magento_Checkout/js/model/quote',
+            'jquery',
+            'domReady!'
+        ], function(quote, $) {
+            quote.billingAddress({
+                    city: '<?= /* @noEscape */ $block->getAddress()->getCity() ?>',
+                    company: '<?= /* @noEscape */ $block->getAddress()->getCompany(); ?>',
+                    countryId: '<?= /* @noEscape */ $block->getAddress()->getCountryId(); ?>',
+                    customerAddressId: '<?= /* @noEscape */ $block->getAddress()->getCustomerAddressId(); ?>',
+                    customerId: '<?= /* @noEscape */ $block->getAddress()->getCustomerId(); ?>',
+                    fax: '<?= /* @noEscape */ $block->getAddress()->getFax(); ?>',
+                    firstname: '<?= /* @noEscape */ $block->getAddress()->getFirstname(); ?>',
+                    lastname: '<?= /* @noEscape */ $block->getAddress()->getLastname(); ?>',
+                    postcode: '<?= /* @noEscape */ $block->getAddress()->getPostcode(); ?>',
+                    regionId: '<?= /* @noEscape */ $block->getAddress()->getRegionId(); ?>',
+                    regionCode: '<?= /* @noEscape */ $block->getAddress()->getRegionCode() ?>',
+                    region: '<?= /* @noEscape */ $block->getAddress()->getRegion(); ?>',
+                    street: <?= /* @noEscape */ json_encode($block->getAddress()->getStreet()); ?>,
+                    telephone: '<?= /* @noEscape */ $block->getAddress()->getTelephone(); ?>'
+            });
+        });
+    //]]>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </script>

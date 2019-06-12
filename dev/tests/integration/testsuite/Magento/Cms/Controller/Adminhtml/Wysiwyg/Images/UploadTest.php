@@ -4,9 +4,20 @@
  * See COPYING.txt for license details.
  */
 
+<<<<<<< HEAD
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+=======
+declare(strict_types=1);
+
+namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Controller\Result\Json as JsonResponse;
+use Magento\Framework\App\Response\HttpFactory as ResponseFactory;
+use Magento\Framework\App\Response\Http as Response;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
 /**
  * Test for \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Upload class.
@@ -26,6 +37,14 @@ class UploadTest extends \PHPUnit\Framework\TestCase
     /**
      * @var string
      */
+<<<<<<< HEAD
+=======
+    private $fullDirectoryPath;
+
+    /**
+     * @var string
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     private $fileName = 'magento_small_image.jpg';
 
     /**
@@ -39,13 +58,32 @@ class UploadTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var HttpFactory
+     */
+    private $responseFactory;
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @inheritdoc
      */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+<<<<<<< HEAD
         $this->filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+=======
+        $directoryName = 'directory1';
+        $this->filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
+        /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
+        $imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
+        $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->fullDirectoryPath = $imagesHelper->getStorageRoot() . DIRECTORY_SEPARATOR . $directoryName;
+        $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
+        $this->responseFactory = $this->objectManager->get(ResponseFactory::class);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->model = $this->objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Upload::class);
         $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
         $tmpFile = $this->filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath() . $this->fileName;
@@ -70,6 +108,7 @@ class UploadTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute()
     {
+<<<<<<< HEAD
         $directoryName = 'directory1';
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
         $imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
@@ -86,6 +125,30 @@ class UploadTest extends \PHPUnit\Framework\TestCase
                 )
             )
         );
+=======
+        $this->model->getRequest()->setParams(['type' => 'image/png']);
+        $this->model->getRequest()->setMethod('POST');
+        $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
+        /** @var JsonResponse $jsonResponse */
+        $jsonResponse = $this->model->execute();
+        /** @var Response $response */
+        $jsonResponse->renderResult($response = $this->responseFactory->create());
+        $data = json_decode($response->getBody(), true);
+
+        $this->assertTrue(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath(
+                    $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName
+                )
+            )
+        );
+        //Asserting that response contains only data needed by clients.
+        $keys = ['name', 'type', 'error', 'size', 'file'];
+        sort($keys);
+        $dataKeys = array_keys($data);
+        sort($dataKeys);
+        $this->assertEquals($keys, $dataKeys);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
@@ -108,6 +171,45 @@ class UploadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Execute method with traversal directory path to check that there is no ability to create file not
+     * under media directory.
+     *
+     * @return void
+     */
+    public function testExecuteWithWrongPath()
+    {
+        $dirPath = '/../../../etc/';
+        $this->model->getRequest()->setParams(['type' => 'image/png']);
+        $this->model->getStorage()->getSession()->setCurrentPath($dirPath);
+        $this->model->execute();
+
+        $this->assertFileNotExists(
+            $this->fullDirectoryPath . $dirPath . $this->fileName
+        );
+    }
+
+    /**
+     * Execute method with traversal file path to check that there is no ability to create file not
+     * under media directory.
+     *
+     * @return void
+     */
+    public function testExecuteWithWrongFileName()
+    {
+        $newFilename = '/../../../../etc/new_file.png';
+        $_FILES['image']['name'] = $newFilename;
+        $_FILES['image']['tmp_name'] = __DIR__ . DIRECTORY_SEPARATOR . $this->fileName;
+        $this->model->getRequest()->setParams(['type' => 'image/png']);
+        $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
+        $this->model->execute();
+
+        $this->assertFileNotExists($this->fullDirectoryPath . $newFilename);
+    }
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @inheritdoc
      */
     public static function tearDownAfterClass()

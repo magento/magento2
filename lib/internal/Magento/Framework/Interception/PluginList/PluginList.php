@@ -30,7 +30,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      *
      * @var array
      */
-    protected $_inherited;
+    protected $_inherited = [];
 
     /**
      * Inherited plugin data, preprocessed for read
@@ -295,7 +295,7 @@ class PluginList extends Scoped implements InterceptionPluginList
                 $virtualTypes = [];
                 foreach ($this->_scopePriorityScheme as $scopeCode) {
                     if (false == isset($this->_loadedScopes[$scopeCode])) {
-                        $data = $this->_reader->read($scopeCode);
+                        $data = $this->_reader->read($scopeCode) ?: [];
                         unset($data['preferences']);
                         if (count($data) > 0) {
                             $this->_inherited = [];

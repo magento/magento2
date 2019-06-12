@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
@@ -33,9 +32,13 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->entitySnapshotMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class);
+        $this->entitySnapshotMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class
+        );
 
-        $this->entityRelationCompositeMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite::class);
+        $this->entityRelationCompositeMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite::class
+        );
 
         $this->addressResource = (new ObjectManagerHelper($this))->getObject(
             \Magento\Customer\Test\Unit\Model\ResourceModel\SubResourceModelAddress::class,
@@ -60,7 +63,9 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testSave($addressId, $isDefaultBilling, $isDefaultShipping)
     {
         /** @var $address \Magento\Customer\Model\Address|\PHPUnit_Framework_MockObject_MockObject */
-        $address = $this->createPartialMock(\Magento\Customer\Model\Address::class, [
+        $address = $this->createPartialMock(
+            \Magento\Customer\Model\Address::class,
+            [
                 '__wakeup',
                 'getId',
                 'getEntityTypeId',
@@ -71,7 +76,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
                 'beforeSave',
                 'afterSave',
                 'isSaveAllowed'
-            ]);
+            ]
+        );
         $this->entitySnapshotMock->expects($this->once())->method('isModified')->willReturn(true);
         $this->entityRelationCompositeMock->expects($this->once())->method('processRelations');
         $address->expects($this->once())->method('isSaveAllowed')->willReturn(true);
@@ -157,7 +163,10 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     protected function prepareEavConfig()
     {
-        $attributeMock = $this->createPartialMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class, ['getAttributeCode', 'getBackend', '__wakeup']);
+        $attributeMock = $this->createPartialMock(
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            ['getAttributeCode', 'getBackend', '__wakeup']
+        );
         $attributeMock->expects($this->any())
             ->method('getAttributeCode')
             ->willReturn('entity_id');
@@ -167,12 +176,18 @@ class AddressTest extends \PHPUnit\Framework\TestCase
                 $this->createMock(\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class)
             );
 
-        $this->eavConfigType = $this->createPartialMock(\Magento\Eav\Model\Entity\Type::class, ['getEntityIdField', 'getId', 'getEntityTable', '__wakeup']);
+        $this->eavConfigType = $this->createPartialMock(
+            \Magento\Eav\Model\Entity\Type::class,
+            ['getEntityIdField', 'getId', 'getEntityTable', '__wakeup']
+        );
         $this->eavConfigType->expects($this->any())->method('getEntityIdField')->willReturn(false);
         $this->eavConfigType->expects($this->any())->method('getId')->willReturn(false);
         $this->eavConfigType->expects($this->any())->method('getEntityTable')->willReturn('customer_address_entity');
 
-        $eavConfig = $this->createPartialMock(\Magento\Eav\Model\Config::class, ['getEntityType', 'getEntityAttributeCodes', 'getAttribute']);
+        $eavConfig = $this->createPartialMock(
+            \Magento\Eav\Model\Config::class,
+            ['getEntityType', 'getEntityAttributeCodes', 'getAttribute']
+        );
         $eavConfig->expects($this->any())
             ->method('getEntityType')
             ->with('customer_address')
@@ -246,6 +261,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
  * Class SubResourceModelAddress
  * Mock method getAttributeLoader
  * @package Magento\Customer\Test\Unit\Model\ResourceModel
+ * @codingStandardsIgnoreStart
  */
 class SubResourceModelAddress extends \Magento\Customer\Model\ResourceModel\Address
 {
@@ -253,7 +269,10 @@ class SubResourceModelAddress extends \Magento\Customer\Model\ResourceModel\Addr
 
     /**
      * @param null $object
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return \Magento\Customer\Model\ResourceModel\Address|\Magento\Eav\Model\Entity\AbstractEntity
      */
     public function loadAllAttributes($object = null)
@@ -277,3 +296,4 @@ class SubResourceModelAddress extends \Magento\Customer\Model\ResourceModel\Addr
         return $this->attributeLoader;
     }
 }
+// @codingStandardsIgnoreEnd

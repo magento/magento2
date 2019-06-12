@@ -55,7 +55,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['eav_setup_test'],
-            ['_29_characters_29_characters_'],
+            ['characters_59_characters_59_characters_59_characters_59_59_'],
         ];
     }
 
@@ -66,7 +66,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider addAttributeThrowExceptionDataProvider
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage An attribute code must not be less than 1 and more than 30 characters.
+     * @expectedExceptionMessage An attribute code must not be less than 1 and more than 60 characters.
      */
     public function testAddAttributeThrowException($attributeCode)
     {
@@ -86,7 +86,34 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
             [null],
             [''],
             [' '],
-            ['more_than_30_characters_more_than'],
+            ['more_than_60_characters_more_than_more_than_60_characters_more'],
+        ];
+    }
+
+    /**
+     * Verify that add attribute throw exception if attribute_code is not valid.
+     *
+     * @param string|null $attributeCode
+     *
+     * @dataProvider addInvalidAttributeThrowExceptionDataProvider
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in this field,
+     */
+    public function testAddInvalidAttributeThrowException($attributeCode)
+    {
+        $attributeData = $this->getAttributeData();
+        $this->eavSetup->addAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode, $attributeData);
+    }
+    /**
+     * Data provider for testAddInvalidAttributeThrowException().
+     *
+     * @return array
+     */
+    public function addInvalidAttributeThrowExceptionDataProvider()
+    {
+        return [
+            ['1first_character_is_not_letter'],
+            ['attribute.with.dots'],
         ];
     }
 

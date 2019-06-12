@@ -4,6 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 /** @var \Magento\Eav\Api\AttributeRepositoryInterface $repository */
 $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Eav\Api\AttributeRepositoryInterface::class);
@@ -33,8 +38,13 @@ $salesRule->setData(
         'website_ids' => [
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\Store\Model\StoreManagerInterface::class
+<<<<<<< HEAD
             )->getWebsite()->getId()
         ]
+=======
+            )->getWebsite()->getId(),
+        ],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ]
 );
 
@@ -47,6 +57,7 @@ $salesRule->getConditions()->loadArray([
     'aggregator' => 'all',
     'conditions' =>
         [
+<<<<<<< HEAD
                 [
                     'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
                     'attribute' => null,
@@ -65,6 +76,26 @@ $salesRule->getConditions()->loadArray([
                                 ],
                         ],
                 ],
+=======
+            [
+                'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
+                'attribute' => null,
+                'operator' => null,
+                'value' => '1',
+                'is_value_processed' => null,
+                'aggregator' => 'all',
+                'conditions' =>
+                    [
+                        [
+                            'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                            'attribute' => 'sku',
+                            'operator' => '!=',
+                            'value' => 'product-bundle',
+                            'is_value_processed' => false,
+                        ],
+                    ],
+            ],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ],
 ]);
 

@@ -1,6 +1,7 @@
 {
     "name": "magento/module-signifyd",
     "description": "Submitting Case Entry to Signifyd on Order Creation",
+<<<<<<< HEAD
     "require": {
         "php": "~7.0.13|~7.1.0",
         "magento/module-config": "101.0.*",
@@ -20,6 +21,30 @@
     "version": "100.2.3",
     "license": [
         "proprietary"
+=======
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-checkout": "*",
+        "magento/module-config": "*",
+        "magento/module-customer": "*",
+        "magento/module-directory": "*",
+        "magento/module-payment": "*",
+        "magento/module-sales": "*",
+        "magento/module-store": "*",
+        "php": "~7.1.3||~7.2.0"
+    },
+    "suggest": {
+        "magento/module-config": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ],
     "autoload": {
         "files": [

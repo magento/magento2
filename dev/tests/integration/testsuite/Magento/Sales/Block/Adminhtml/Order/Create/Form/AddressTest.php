@@ -122,6 +122,13 @@ class AddressTest extends \PHPUnit\Framework\TestCase
                 'postcode' => '90230',
                 'telephone' => '3468676',
                 'vat_id' => false,
+<<<<<<< HEAD
+=======
+                'prefix' => false,
+                'middlename' => false,
+                'suffix' => false,
+                'fax' => false
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ],
             $addresses[1]->getId() => [
                 'telephone' => '845454465',
@@ -135,6 +142,13 @@ class AddressTest extends \PHPUnit\Framework\TestCase
                 'region' => false,
                 'region_id' => 0,
                 'vat_id' => false,
+<<<<<<< HEAD
+=======
+                'prefix' => false,
+                'middlename' => false,
+                'suffix' => false,
+                'fax' => false
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         ];
 

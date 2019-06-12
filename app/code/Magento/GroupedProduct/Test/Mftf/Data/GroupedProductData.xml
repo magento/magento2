@@ -8,13 +8,42 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+<<<<<<< HEAD
     <entity name="ApiGroupedProduct" type="product3">
         <data key="sku" unique="suffix">api-grouped-product</data>
+=======
+    <entity name="GroupedProduct" type="product">
+        <data key="sku" unique="suffix">groupedproduct</data>
+        <data key="type_id">grouped</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">GroupedProduct</data>
+        <data key="status">1</data>
+        <data key="urlKey" unique="suffix">groupedproduct</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+    </entity>
+    <entity name="ApiGroupedProduct" type="product3">
+        <data key="sku" unique="suffix">apiGroupedProduct</data>
         <data key="type_id">grouped</data>
         <data key="attribute_set_id">4</data>
         <data key="name" unique="suffix">Api Grouped Product</data>
         <data key="status">1</data>
         <data key="urlKey" unique="suffix">api-grouped-product</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
+    </entity>
+    <entity name="ApiGroupedProduct2" type="product3">
+        <data key="sku" unique="suffix">apiGroupedProduct</data>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
+        <data key="type_id">grouped</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">Api Grouped Product</data>
+        <data key="status">1</data>
+        <data key="urlKey" unique="suffix">api-grouped-product</data>
+<<<<<<< HEAD
+=======
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
         <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>

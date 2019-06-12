@@ -6,12 +6,20 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
+<<<<<<< HEAD
+=======
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+<<<<<<< HEAD
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
+=======
+class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set implements HttpPostActionInterface
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory

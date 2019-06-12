@@ -43,7 +43,11 @@ class RequestSender
      * @return \Zend_Http_Response
      * @throws ApiCallException
      */
+<<<<<<< HEAD
     public function send(ZendClient $client, $storeId = null)
+=======
+    public function send(ZendClient $client, $storeId = null): \Zend_Http_Response
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         try {
             $response = $client->request();

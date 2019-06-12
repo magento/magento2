@@ -7,9 +7,15 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="EmailTemplate" type="template">
         <data key="templateName" unique="suffix">Template</data>
         <data key="templateSubject" unique="suffix">Template Subject</data>
+=======
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="EmailTemplate" type="template">
+        <data key="templateName" unique="suffix">Template</data>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </entity>
 </entities>

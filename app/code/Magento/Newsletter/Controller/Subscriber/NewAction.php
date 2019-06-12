@@ -4,12 +4,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Newsletter\Controller\Subscriber;
 
 use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\Action\Context;
+<<<<<<< HEAD
+=======
+use Magento\Framework\App\Action\HttpPostActionInterface;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
@@ -22,9 +27,15 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
 
 /**
+ * New newsletter subscription action
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+<<<<<<< HEAD
 class NewAction extends SubscriberController
+=======
+class NewAction extends SubscriberController implements HttpPostActionInterface
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 {
     /**
      * @var CustomerAccountManagement
@@ -77,8 +88,9 @@ class NewAction extends SubscriberController
     protected function validateEmailAvailable($email)
     {
         $websiteId = $this->_storeManager->getStore()->getWebsiteId();
-        if ($this->_customerSession->getCustomerDataObject()->getEmail() !== $email
-            && !$this->customerAccountManagement->isEmailAvailable($email, $websiteId)
+        if ($this->_customerSession->isLoggedIn()
+            && ($this->_customerSession->getCustomerDataObject()->getEmail() !== $email
+            && !$this->customerAccountManagement->isEmailAvailable($email, $websiteId))
         ) {
             throw new LocalizedException(
                 __('This email address is already assigned to another user.')
@@ -127,7 +139,11 @@ class NewAction extends SubscriberController
     /**
      * New subscription action
      *
+<<<<<<< HEAD
      * @return void
+=======
+     * @return \Magento\Framework\Controller\Result\Redirect
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function execute()
     {
@@ -151,15 +167,37 @@ class NewAction extends SubscriberController
                 $status = (int) $this->_subscriberFactory->create()->subscribe($email);
                 $this->messageManager->addSuccessMessage($this->getSuccessMessage($status));
             } catch (LocalizedException $e) {
+<<<<<<< HEAD
                 $this->messageManager->addExceptionMessage(
                     $e,
                     __('There was a problem with the subscription: %1', $e->getMessage())
                 );
+=======
+                $this->messageManager->addErrorMessage($e->getMessage());
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             } catch (\Exception $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong with the subscription.'));
             }
         }
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+        /** @var \Magento\Framework\Controller\Result\Redirect $redirect */
+        $redirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
+        $redirectUrl = $this->_redirect->getRedirectUrl();
+        return $redirect->setUrl($redirectUrl);
+    }
+
+    /**
+     * Get success message
+     *
+     * @param int $status
+     * @return Phrase
+     */
+    private function getSuccessMessage(int $status): Phrase
+    {
+        if ($status === Subscriber::STATUS_NOT_ACTIVE) {
+            return __('The confirmation request has been sent.');
+        }
+
+        return __('Thank you for your subscription.');
     }
 
     /**

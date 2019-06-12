@@ -234,7 +234,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             } catch (FailureToSendException $fse) {
                 $this->assertTrue(self::$isSetCookieInvoked);
                 $this->assertSame(
-                    'Unable to delete the cookie with cookieName = exception_cookie_name',
+                    'The cookie with "exception_cookie_name" cookieName couldn\'t be deleted.',
                     $fse->getMessage()
                 );
             }
@@ -878,6 +878,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
         }
 
         /**
+<<<<<<< HEAD
          * Assert cookie set with zero duration
          *
          * Suppressing UnusedPrivateMethod, since PHPMD doesn't detect callback method use.
@@ -902,6 +903,8 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
         }
 
         /**
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
          * @param $get
          * @param $default
          * @param $return

@@ -6,7 +6,11 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+=======
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <actionGroup name="AdminDeleteWebsiteActionGroup">
         <arguments>
             <argument name="websiteName" type="string"/>
@@ -19,9 +23,17 @@
         <click selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="clickEditExistingStoreRow"/>
         <waitForPageLoad stepKey="waitForStoreToLoad"/>
         <click selector="{{AdminStoresMainActionsSection.deleteButton}}" stepKey="clickDeleteWebsiteButtonOnEditWebsitePage"/>
+<<<<<<< HEAD
+=======
+        <waitForPageLoad stepKey="waitForDeleteStoreGroupSectionLoad" time="30"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <selectOption userInput="No" selector="{{AdminStoresDeleteStoreGroupSection.createDbBackup}}" stepKey="setCreateDbBackupToNo"/>
         <click selector="{{AdminStoresDeleteStoreGroupSection.deleteStoreGroupButton}}" stepKey="clickDeleteWebsiteButton"/>
         <waitForElementVisible selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="waitForStoreGridToReload"/>
         <see userInput="You deleted the website." stepKey="seeSavedMessage"/>
+<<<<<<< HEAD
+=======
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter2"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </actionGroup>
 </actionGroups>

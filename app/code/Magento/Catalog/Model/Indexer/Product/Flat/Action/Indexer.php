@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Model\Store;
 
 /**
  * Class Indexer
@@ -53,7 +54,7 @@ class Indexer
      * @param int $storeId
      * @param int $productId
      * @param string $valueFieldSuffix
-     * @return \Magento\Catalog\Model\Indexer\Product\Flat
+     * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -84,7 +85,11 @@ class Indexer
                         [
                             'entity_id' => 'e.entity_id',
                             'attribute_id' => 't.attribute_id',
+<<<<<<< HEAD
                             'value' => $this->_connection->getIfNullSql('`t2`.`value`', '`t`.`value`'),
+=======
+                            'value' => 't.value'
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                         ]
                     );
 
@@ -99,32 +104,34 @@ class Indexer
                         sprintf('e.%s = t.%s ', $linkField, $linkField) . $this->_connection->quoteInto(
                             ' AND t.attribute_id IN (?)',
                             array_keys($ids)
-                        ) . ' AND t.store_id = 0',
-                        []
-                    )->joinLeft(
-                        ['t2' => $tableName],
-                        sprintf('t.%s = t2.%s ', $linkField, $linkField) .
-                        ' AND t.attribute_id = t2.attribute_id  ' .
-                        $this->_connection->quoteInto(
-                            ' AND t2.store_id = ?',
-                            $storeId
-                        ),
+                        ) . ' AND ' . $this->_connection->quoteInto('t.store_id IN(?)', [
+                                Store::DEFAULT_STORE_ID,
+                                $storeId
+                            ]),
                         []
                     )->where(
                         'e.entity_id = ' . $productId
+<<<<<<< HEAD
                     );
+=======
+                    )->order('t.store_id ASC');
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     $cursor = $this->_connection->query($select);
                     while ($row = $cursor->fetch(\Zend_Db::FETCH_ASSOC)) {
                         $updateData[$ids[$row['attribute_id']]] = $row['value'];
                         $valueColumnName = $ids[$row['attribute_id']] . $valueFieldSuffix;
                         if (isset($describe[$valueColumnName])) {
-                            $valueColumns[$row['value']] = $valueColumnName;
+                            $valueColumns[$row['attribute_id']] = [
+                                'value' => $row['value'],
+                                'column_name' => $valueColumnName
+                            ];
                         }
                     }
 
                     //Update not simple attributes (eg. dropdown)
                     if (!empty($valueColumns)) {
-                        $valueIds = array_keys($valueColumns);
+                        $valueIds = array_column($valueColumns, 'value');
+                        $optionIdToAttributeName = array_column($valueColumns, 'column_name', 'value');
 
                         $select = $this->_connection->select()->from(
                             ['t' => $this->_productIndexerHelper->getTable('eav_attribute_option_value')],
@@ -133,14 +140,14 @@ class Indexer
                             $this->_connection->quoteInto('t.option_id IN (?)', $valueIds)
                         )->where(
                             $this->_connection->quoteInto('t.store_id IN(?)', [
-                                \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                                Store::DEFAULT_STORE_ID,
                                 $storeId
                             ])
                         )
                         ->order('t.store_id ASC');
                         $cursor = $this->_connection->query($select);
                         while ($row = $cursor->fetch(\Zend_Db::FETCH_ASSOC)) {
-                            $valueColumnName = $valueColumns[$row['option_id']];
+                            $valueColumnName = $optionIdToAttributeName[$row['option_id']];
                             if (isset($describe[$valueColumnName])) {
                                 $updateData[$valueColumnName] = $row['value'];
                             }
@@ -150,6 +157,7 @@ class Indexer
                     $columnNames = array_keys($columns);
                     $columnNames[] = 'attribute_set_id';
                     $columnNames[] = 'type_id';
+                    $columnNames[] = $linkField;
                     $select->from(
                         ['e' => $entityTableName],
                         $columnNames
@@ -159,6 +167,7 @@ class Indexer
                     $cursor = $this->_connection->query($select);
                     $row = $cursor->fetch(\Zend_Db::FETCH_ASSOC);
                     if (!empty($row)) {
+                        $linkFieldId = $linkField;
                         foreach ($row as $columnName => $value) {
                             $updateData[$columnName] = $value;
                         }
@@ -170,7 +179,11 @@ class Indexer
         if (!empty($updateData)) {
             $updateData += ['entity_id' => $productId];
             if ($linkField !== $metadata->getIdentifierField()) {
+<<<<<<< HEAD
                 $updateData += [$linkField => $productId];
+=======
+                $updateData += [$linkField => $linkFieldId];
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             }
             $updateFields = [];
             foreach ($updateData as $key => $value) {
@@ -183,6 +196,8 @@ class Indexer
     }
 
     /**
+     * Get MetadataPool instance
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()

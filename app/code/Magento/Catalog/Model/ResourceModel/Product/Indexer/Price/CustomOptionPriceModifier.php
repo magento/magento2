@@ -89,7 +89,11 @@ class CustomOptionPriceModifier implements PriceModifierInterface
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+<<<<<<< HEAD
     public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = [])
+=======
+    public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = []) : void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         // no need to run all queries if current products have no custom options
         if (!$this->checkIfCustomOptionsExist($priceTable)) {
@@ -127,6 +131,11 @@ class CustomOptionPriceModifier implements PriceModifierInterface
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Check if custom options exist.
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param IndexTableStructure $priceTable
      * @return bool
      * @throws \Exception
@@ -154,6 +163,11 @@ class CustomOptionPriceModifier implements PriceModifierInterface
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get connection.
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     private function getConnection()
@@ -211,7 +225,11 @@ class CustomOptionPriceModifier implements PriceModifierInterface
         } else {
             $select->joinLeft(
                 ['otps' => $this->getTable('catalog_product_option_type_price')],
+<<<<<<< HEAD
                 'otps.option_type_id = otpd.option_type_id AND otpd.store_id = cwd.default_store_id',
+=======
+                'otps.option_type_id = otpd.option_type_id AND otps.store_id = cwd.default_store_id',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 []
             );
 
@@ -373,6 +391,11 @@ class CustomOptionPriceModifier implements PriceModifierInterface
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get select for update.
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param string $sourceTable
      * @return \Magento\Framework\DB\Select
      */
@@ -402,6 +425,11 @@ class CustomOptionPriceModifier implements PriceModifierInterface
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get table name.
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param string $tableName
      * @return string
      */
@@ -411,6 +439,11 @@ class CustomOptionPriceModifier implements PriceModifierInterface
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Is price scope global.
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return bool
      */
     private function isPriceGlobal(): bool

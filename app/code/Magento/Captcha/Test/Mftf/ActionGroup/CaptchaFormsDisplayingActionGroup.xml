@@ -7,6 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CaptchaFormsDisplayingActionGroup">
         <click selector="{{AdminCaptchaFormsDisplayingSection.store}}" stepKey="clickToGoStores"/>
@@ -19,5 +20,19 @@
         <click selector="{{AdminCaptchaFormsDisplayingSection.customerConfig}}" stepKey="clickToGoCustomerConfiguration"/>
         <scrollTo selector="{{AdminCaptchaFormsDisplayingSection.captcha}}" stepKey="scrollToCaptcha"/>
         <conditionalClick selector="{{AdminCaptchaFormsDisplayingSection.captcha}}" dependentSelector="{{AdminCaptchaFormsDisplayingSection.dependent}}" visible="false" stepKey="clickToOpenCaptcha"/>
+=======
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CaptchaFormsDisplayingActionGroup">
+        <click selector="{{CaptchaFormsDisplayingSection.store}}" stepKey="ClickToGoStores"/>
+        <waitForPageLoad stepKey="waitForStoresLoaded"/>
+        <click selector="{{CaptchaFormsDisplayingSection.config}}" stepKey="ClickToGoConfiguration"/>
+        <waitForPageLoad stepKey="waitForConfigurationsLoaded"/>
+        <scrollTo selector="{{CaptchaFormsDisplayingSection.customer}}" x="0" y="-80" stepKey="ScrollToCustomers"/>
+        <click selector="{{CaptchaFormsDisplayingSection.customer}}" stepKey="ClickToCustomers"/>
+        <waitForPageLoad stepKey="waitForCustomerConfigurationsLoaded"/>
+        <click selector="{{CaptchaFormsDisplayingSection.customerConfig}}" stepKey="ClickToGoCustomerConfiguration"/>
+        <scrollTo selector="{{CaptchaFormsDisplayingSection.captcha}}" stepKey="scrollToCaptcha"/>
+        <conditionalClick selector="{{CaptchaFormsDisplayingSection.captcha}}" dependentSelector="{{CaptchaFormsDisplayingSection.dependent}}" visible="false" stepKey="ClickToOpenCaptcha"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </actionGroup>
 </actionGroups>

@@ -10,10 +10,15 @@ use Magento\Checkout\Helper\Data as CheckoutHelper;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
+use Magento\Customer\Model\Address\CustomerAddressDataProvider;
 use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\Url as CustomerUrlManager;
 use Magento\Eav\Api\AttributeOptionManagementInterface;
+<<<<<<< HEAD
+=======
+use Magento\Framework\Api\CustomAttributesDataInterface;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\ObjectManager;
@@ -22,15 +27,22 @@ use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 use Magento\Framework\UrlInterface;
 use Magento\Quote\Api\CartItemRepositoryInterface as QuoteItemRepository;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
+use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface as ShippingMethodManager;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Ui\Component\Form\Element\Multiline;
 
 /**
+<<<<<<< HEAD
  * Default Config Provider.
+=======
+ * Default Config Provider
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class DefaultConfigProvider implements ConfigProviderInterface
 {
@@ -175,6 +187,14 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private $addressMetadata;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var CustomerAddressDataProvider
+     */
+    private $customerAddressData;
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRepository $customerRepository
@@ -203,6 +223,10 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param UrlInterface $urlBuilder
      * @param AddressMetadataInterface $addressMetadata
      * @param AttributeOptionManagementInterface $attributeOptionManager
+<<<<<<< HEAD
+=======
+     * @param CustomerAddressDataProvider|null $customerAddressData
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -234,7 +258,12 @@ class DefaultConfigProvider implements ConfigProviderInterface
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
         UrlInterface $urlBuilder,
         AddressMetadataInterface $addressMetadata = null,
+<<<<<<< HEAD
         AttributeOptionManagementInterface $attributeOptionManager = null
+=======
+        AttributeOptionManagementInterface $attributeOptionManager = null,
+        CustomerAddressDataProvider $customerAddressData = null
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
@@ -265,20 +294,46 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->addressMetadata = $addressMetadata ?: ObjectManager::getInstance()->get(AddressMetadataInterface::class);
         $this->attributeOptionManager = $attributeOptionManager ??
             ObjectManager::getInstance()->get(AttributeOptionManagementInterface::class);
+<<<<<<< HEAD
     }
 
     /**
      * @inheritdoc
+=======
+        $this->customerAddressData = $customerAddressData ?:
+            ObjectManager::getInstance()->get(CustomerAddressDataProvider::class);
+    }
+
+    /**
+     * Return configuration array
+     *
+     * @return array|mixed
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function getConfig()
     {
-        $quoteId = $this->checkoutSession->getQuote()->getId();
+        $quote = $this->checkoutSession->getQuote();
+        $quoteId = $quote->getId();
+        $email = $quote->getShippingAddress()->getEmail();
+        $quoteItemData = $this->getQuoteItemData();
         $output['formKey'] = $this->formKey->getFormKey();
         $output['customerData'] = $this->getCustomerData();
         $output['quoteData'] = $this->getQuoteData();
-        $output['quoteItemData'] = $this->getQuoteItemData();
+        $output['quoteItemData'] = $quoteItemData;
+        $output['quoteMessages'] = $this->getQuoteItemsMessages($quoteItemData);
         $output['isCustomerLoggedIn'] = $this->isCustomerLoggedIn();
         $output['selectedShippingMethod'] = $this->getSelectedShippingMethod();
+        if ($email && !$this->isCustomerLoggedIn()) {
+            $shippingAddressFromData = $this->getAddressFromData($quote->getShippingAddress());
+            $billingAddressFromData = $this->getAddressFromData($quote->getBillingAddress());
+            $output['shippingAddressFromData'] = $shippingAddressFromData;
+            if ($shippingAddressFromData != $billingAddressFromData) {
+                $output['billingAddressFromData'] = $billingAddressFromData;
+            }
+            $output['validatedEmailValue'] = $email;
+        }
         $output['storeCode'] = $this->getStoreCode();
         $output['isGuestCheckoutAllowed'] = $this->isGuestCheckoutAllowed();
         $output['registerUrl'] = $this->getRegisterUrl();
@@ -289,14 +344,15 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $output['staticBaseUrl'] = $this->getStaticBaseUrl();
         $output['priceFormat'] = $this->localeFormat->getPriceFormat(
             null,
-            $this->checkoutSession->getQuote()->getQuoteCurrencyCode()
+            $quote->getQuoteCurrencyCode()
         );
         $output['basePriceFormat'] = $this->localeFormat->getPriceFormat(
             null,
-            $this->checkoutSession->getQuote()->getBaseCurrencyCode()
+            $quote->getBaseCurrencyCode()
         );
         $output['postCodes'] = $this->postCodesConfig->getPostCodes();
         $output['imageData'] = $this->imageProvider->getImages($quoteId);
+
         $output['totalsData'] = $this->getTotalsData();
         $output['shippingPolicy'] = [
             'isEnabled' => $this->scopeConfig->isSetFlag(
@@ -337,12 +393,14 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @return array
      */
-    private function getCustomerData()
+    private function getCustomerData(): array
     {
         $customerData = [];
         if ($this->isCustomerLoggedIn()) {
+            /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
             $customer = $this->customerRepository->getById($this->customerSession->getCustomerId());
             $customerData = $customer->__toArray();
+<<<<<<< HEAD
             foreach ($customer->getAddresses() as $key => $address) {
                 $customerData['addresses'][$key]['inline'] = $this->getCustomerAddressInline($address);
                 if ($address->getCustomAttributes()) {
@@ -351,11 +409,15 @@ class DefaultConfigProvider implements ConfigProviderInterface
                     );
                 }
             }
+=======
+            $customerData['addresses'] = $this->customerAddressData->getAddressDataByCustomer($customer);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
         return $customerData;
     }
 
     /**
+<<<<<<< HEAD
      * Filter not visible on storefront custom attributes.
      *
      * @param array $attributes
@@ -390,6 +452,9 @@ class DefaultConfigProvider implements ConfigProviderInterface
 
     /**
      * Retrieve quote data.
+=======
+     * Retrieve quote data
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @return array
      */
@@ -431,6 +496,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
                     $quoteItem->getProduct(),
                     'product_thumbnail_image'
                 )->getUrl();
+                $quoteItemData[$index]['message'] = $quoteItem->getMessage();
             }
         }
         return $quoteItemData;
@@ -525,7 +591,43 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Retrieve store code.
+=======
+     * Create address data appropriate to fill checkout address form
+     *
+     * @param AddressInterface $address
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getAddressFromData(AddressInterface $address)
+    {
+        $addressData = [];
+        $attributesMetadata = $this->addressMetadata->getAllAttributesMetadata();
+        foreach ($attributesMetadata as $attributeMetadata) {
+            if (!$attributeMetadata->isVisible()) {
+                continue;
+            }
+            $attributeCode = $attributeMetadata->getAttributeCode();
+            $attributeData = $address->getData($attributeCode);
+            if ($attributeData) {
+                if ($attributeMetadata->getFrontendInput() === Multiline::NAME) {
+                    $attributeData = \is_array($attributeData) ? $attributeData : explode("\n", $attributeData);
+                    $attributeData = (object)$attributeData;
+                }
+                if ($attributeMetadata->isUserDefined()) {
+                    $addressData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES][$attributeCode] = $attributeData;
+                    continue;
+                }
+                $addressData[$attributeCode] = $attributeData;
+            }
+        }
+        return $addressData;
+    }
+
+    /**
+     * Retrieve store code
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @return string
      * @codeCoverageIgnore
@@ -580,7 +682,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return quote totals data.
+=======
+     * Return quote totals data
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @return array
      */
@@ -612,7 +718,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Returns active carriers codes.
+=======
+     * Returns active carriers codes
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @return array
      */
@@ -626,7 +736,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Returns origin country code.
+=======
+     * Returns origin country code
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @return string
      */
@@ -640,9 +754,16 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Returns array of payment methods.
      *
      * @return array
+=======
+     * Returns array of payment methods
+     *
+     * @return array $paymentMethods
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private function getPaymentMethods()
     {
@@ -660,6 +781,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Set Labels to custom Attributes.
      *
      * @param array $customAttributes
@@ -708,5 +830,22 @@ class DefaultConfigProvider implements ConfigProviderInterface
         }
 
         return $attributeOptionLabels;
+=======
+     * Get notification messages for the quote items
+     *
+     * @param array $quoteItemData
+     * @return array
+     */
+    private function getQuoteItemsMessages(array $quoteItemData): array
+    {
+        $quoteItemsMessages = [];
+        if ($quoteItemData) {
+            foreach ($quoteItemData as $item) {
+                $quoteItemsMessages[$item['item_id']] = $item['message'];
+            }
+        }
+
+        return $quoteItemsMessages;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 }

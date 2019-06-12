@@ -59,7 +59,11 @@ class AccountConfirmationTest extends \PHPUnit\Framework\TestCase
         $websiteId = 1;
 
         $this->scopeConfig->expects($this->any())
+<<<<<<< HEAD
             ->method('getValue')
+=======
+            ->method('isSetFlag')
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->with(
                 $this->accountConfirmation::XML_PATH_IS_CONFIRM,
                 ScopeInterface::SCOPE_WEBSITES,

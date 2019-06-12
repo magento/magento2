@@ -34,7 +34,7 @@
                         <item name="block-totals" xsi:type="array">
                             <item name="children" xsi:type="array">
                                 <item name="subtotal" xsi:type="array">
-                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/subtotal</item>
+                                    <item name="component" xsi:type="string">Magento_Tax/js/view/checkout/summary/subtotal</item>
                                     <item name="config" xsi:type="array">
                                         <item name="template" xsi:type="string">Magento_Tax/checkout/summary/subtotal</item>
                                         <item name="excludingTaxMessage" xsi:type="string" translate="true">(Excl. Tax)</item>
@@ -42,7 +42,7 @@
                                     </item>
                                 </item>
                                 <item name="shipping" xsi:type="array">
-                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/cart/totals/shipping</item>
+                                    <item name="component" xsi:type="string">Magento_Tax/js/view/checkout/cart/totals/shipping</item>
                                     <item name="sortOrder" xsi:type="string">20</item>
                                     <item name="config" xsi:type="array">
                                         <item name="template" xsi:type="string">Magento_Tax/checkout/cart/totals/shipping</item>
@@ -51,21 +51,21 @@
                                     </item>
                                 </item>
                                 <item name="before_grandtotal" xsi:type="array">
-                                    <item name="component"  xsi:type="string">uiComponent</item>
+                                    <item name="component" xsi:type="string">uiComponent</item>
                                     <item name="sortOrder" xsi:type="string">30</item>
                                     <item name="children" xsi:type="array">
                                         <!-- merge your components here -->
                                     </item>
                                 </item>
                                 <item name="tax" xsi:type="array">
-                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/cart/totals/tax</item>
+                                    <item name="component" xsi:type="string">Magento_Tax/js/view/checkout/cart/totals/tax</item>
                                     <item name="config" xsi:type="array">
                                         <item name="template" xsi:type="string">Magento_Tax/checkout/cart/totals/tax</item>
                                         <item name="title" xsi:type="string" translate="true">Tax</item>
                                     </item>
                                 </item>
                                 <item name="grand-total" xsi:type="array">
-                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/cart/totals/grand-total</item>
+                                    <item name="component" xsi:type="string">Magento_Tax/js/view/checkout/cart/totals/grand-total</item>
                                     <item name="config" xsi:type="array">
                                         <item name="template" xsi:type="string">Magento_Tax/checkout/cart/totals/grand-total</item>
                                         <item name="exclTaxLabel" xsi:type="string" translate="true">Order Total Excl. Tax</item>

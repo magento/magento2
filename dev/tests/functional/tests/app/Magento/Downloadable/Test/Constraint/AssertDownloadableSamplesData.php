@@ -58,7 +58,7 @@ class AssertDownloadableSamplesData extends AbstractAssertForm
             ? $this->preparePageData($pageOptions['downloadable_options']['downloadable_sample'])
             : [];
         $error = $this->verifyData($fixtureSampleLinks, $pageSampleLinks);
-        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
+        \PHPUnit\Framework\Assert::assertEmpty($error, $error);
     }
 
     /**

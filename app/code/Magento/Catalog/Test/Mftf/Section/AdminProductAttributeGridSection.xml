@@ -7,6 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminProductAttributeGridSection">
         <element name="attributeCode" type="text" selector="//td[contains(text(),'{{var1}}')]" parameterized="true"/>
@@ -17,5 +18,23 @@
         <element name="firstRow" type="button" selector="//*[@id='attributeGrid_table']/tbody/tr[1]" timeout="30"/>
         <element name="attributeCodeFilterInput" type="input" selector=".admin__data-grid-filters input[name='attribute_code']"/>
         <element name="filterByAttributeCode" type="input" selector="#attributeGrid_filter_attribute_code"/>
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductAttributeGridSection">
+        <element name="AttributeCode" type="text" selector="//td[contains(text(),'{{var1}}')]" parameterized="true" timeout="30"/>
+        <element name="createNewAttributeBtn" type="button" selector="#add"/>
+        <element name="GridFilterFrontEndLabel" type="input" selector="#attributeGrid_filter_frontend_label"/>
+        <element name="Search" type="button" selector="button[data-action=grid-filter-apply]" timeout="30"/>
+        <element name="ResetFilter" type="button" selector="button[data-action='grid-filter-reset']" timeout="30"/>
+        <element name="FirstRow" type="button" selector="//*[@id='attributeGrid_table']/tbody/tr[1]" timeout="30"/>
+        <element name="FilterByAttributeCode" type="input" selector="#attributeGrid_filter_attribute_code"/>
+        <element name="attributeLabelFilter" type="input" selector="//input[@name='frontend_label']"/>
+        <element name="attributeCodeColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'col-attr-code col-attribute_code')]"/>
+        <element name="defaultLabelColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'col-label col-frontend_label')]"/>
+        <element name="isVisibleColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'a-center col-is_visible')]"/>
+        <element name="scopeColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'a-center col-is_global')]"/>
+        <element name="isSearchableColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'a-center col-is_searchable')]"/>
+        <element name="isComparableColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'a-center col-is_comparable')]"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </section>
 </sections>

@@ -36,7 +36,11 @@ class BraintreeAdapterFactory
     /**
      * Creates instance of Braintree Adapter.
      *
+<<<<<<< HEAD
      * @param int $storeId if null is provided as an argument, then current scope will be resolved
+=======
+     * @param int|null $storeId if null is provided as an argument, then current scope will be resolved
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * by \Magento\Framework\App\Config\ScopeCodeResolver (useful for most cases) but for adminhtml area the store
      * should be provided as the argument for correct config settings loading.
      * @return BraintreeAdapter
@@ -49,7 +53,11 @@ class BraintreeAdapterFactory
                 'merchantId' => $this->config->getMerchantId($storeId),
                 'publicKey' => $this->config->getValue(Config::KEY_PUBLIC_KEY, $storeId),
                 'privateKey' => $this->config->getValue(Config::KEY_PRIVATE_KEY, $storeId),
+<<<<<<< HEAD
                 'environment' => $this->config->getEnvironment($storeId)
+=======
+                'environment' => $this->config->getEnvironment($storeId),
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         );
     }

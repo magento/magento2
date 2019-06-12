@@ -8,6 +8,8 @@ namespace Magento\Backend\Block\Widget;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 
 /**
+ * Tabs widget
+ *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2
@@ -117,7 +119,11 @@ class Tabs extends \Magento\Backend\Block\Widget
         if (empty($tabId)) {
             throw new \Exception(__('Please correct the tab configuration and try again. Tab Id should be not empty'));
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         if (is_array($tab)) {
             $this->_tabs[$tabId] = new \Magento\Framework\DataObject($tab);
         } elseif ($tab instanceof \Magento\Framework\DataObject) {
@@ -164,7 +170,7 @@ class Tabs extends \Magento\Backend\Block\Widget
      */
     protected function _addTabByName($tab, $tabId)
     {
-        if (strpos($tab, '\Block\\')) {
+        if (strpos($tab, '\Block\\') !== false) {
             $this->_tabs[$tabId] = $this->getLayout()->createBlock($tab, $this->getNameInLayout() . '_tab_' . $tabId);
         } elseif ($this->getChildBlock($tab)) {
             $this->_tabs[$tabId] = $this->getChildBlock($tab);
@@ -178,6 +184,8 @@ class Tabs extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get active tab id
+     *
      * @return string
      */
     public function getActiveTabId()
@@ -187,6 +195,7 @@ class Tabs extends \Magento\Backend\Block\Widget
 
     /**
      * Set Active Tab
+     *
      * Tab has to be not hidden and can show
      *
      * @param string $tabId
@@ -231,7 +240,7 @@ class Tabs extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _beforeToHtml()
     {
@@ -280,6 +289,7 @@ class Tabs extends \Magento\Backend\Block\Widget
 
         return $this->applyTabsCorrectOrder($orderByPosition, $orderByIdentity);
     }
+<<<<<<< HEAD
     
     /**
      * @param array $orderByPosition
@@ -306,6 +316,36 @@ class Tabs extends \Magento\Backend\Block\Widget
             $grandPosition = $orderByIdentity[$tab->getAfter()]->getPosition();
             $newPosition   = $grandPosition + $positionFactor;
 
+=======
+
+    /**
+     * Apply tabs order
+     *
+     * @param array $orderByPosition
+     * @param array $orderByIdentity
+     *
+     * @return array
+     */
+    private function applyTabsCorrectOrder(array $orderByPosition, array $orderByIdentity)
+    {
+        $positionFactor = 1;
+
+        /**
+         * Rearrange the positions by using the after tag for each tab.
+         *
+         * @var int $position
+         * @var TabInterface $tab
+         */
+        foreach ($orderByPosition as $position => $tab) {
+            if (!$tab->getAfter() || !in_array($tab->getAfter(), array_keys($orderByIdentity))) {
+                $positionFactor = 1;
+                continue;
+            }
+
+            $grandPosition = $orderByIdentity[$tab->getAfter()]->getPosition();
+            $newPosition   = $grandPosition + $positionFactor;
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             unset($orderByPosition[$position]);
             $orderByPosition[$newPosition] = $tab;
             $tab->setPosition($newPosition);
@@ -338,6 +378,11 @@ class Tabs extends \Magento\Backend\Block\Widget
     }
     
     /**
+<<<<<<< HEAD
+=======
+     * Get js object name
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @return string
      */
     public function getJsObjectName()
@@ -346,6 +391,8 @@ class Tabs extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get tabs ids
+     *
      * @return string[]
      */
     public function getTabsIds()
@@ -358,6 +405,8 @@ class Tabs extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get tab id
+     *
      * @param \Magento\Framework\DataObject|TabInterface $tab
      * @param bool $withPrefix
      * @return string
@@ -371,6 +420,8 @@ class Tabs extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * CVan show tab
+     *
      * @param \Magento\Framework\DataObject|TabInterface $tab
      * @return bool
      */
@@ -383,6 +434,8 @@ class Tabs extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get tab is hidden
+     *
      * @param \Magento\Framework\DataObject|TabInterface $tab
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
@@ -396,6 +449,8 @@ class Tabs extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get tab url
+     *
      * @param \Magento\Framework\DataObject|TabInterface $tab
      * @return string
      */
@@ -414,6 +469,8 @@ class Tabs extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get tab title
+     *
      * @param \Magento\Framework\DataObject|TabInterface $tab
      * @return string
      */
@@ -426,6 +483,8 @@ class Tabs extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get tab class
+     *
      * @param \Magento\Framework\DataObject|TabInterface $tab
      * @return string
      */
@@ -441,6 +500,8 @@ class Tabs extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get tab label
+     *
      * @param \Magento\Framework\DataObject|TabInterface $tab
      * @return string
      */
@@ -453,6 +514,8 @@ class Tabs extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get tab content
+     *
      * @param \Magento\Framework\DataObject|TabInterface $tab
      * @return string
      */
@@ -468,7 +531,8 @@ class Tabs extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Mark tabs as dependant of each other
+     * Mark tabs as dependent of each other
+     *
      * Arbitrary number of tabs can be specified, but at least two
      *
      * @param string $tabOneId

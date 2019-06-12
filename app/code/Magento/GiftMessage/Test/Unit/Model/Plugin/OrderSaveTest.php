@@ -128,7 +128,11 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
+<<<<<<< HEAD
      * @expectedExceptionMessage Could not add gift message to order: "Test message"
+=======
+     * @expectedExceptionMessage The gift message couldn't be added to the "Test message" order.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function testAfterSaveIfGiftMessagesNotExist()
     {
@@ -155,7 +159,11 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
+<<<<<<< HEAD
      * @expectedExceptionMessage Could not add gift message to order's item: "Test message"
+=======
+     * @expectedExceptionMessage The gift message couldn't be added to the "Test message" order item.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function testAfterSaveIfItemGiftMessagesNotExist()
     {

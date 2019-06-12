@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CheckoutCartCrossSellSection">
+        <element name="title" type="text" selector=".block.crosssell .block-title"/>
+        <element name="products" type="block" selector=".block.crosssell .block-content"/>
+        <element name="productRowByName" type="block" selector="//li[@class='item product product-item'and .//a[@title='{{name}}']]" parameterized="true"/>
+        <element name="addToCart" type="block" selector="//button[@title='Add to Cart']"/>
+    </section>
+</sections>

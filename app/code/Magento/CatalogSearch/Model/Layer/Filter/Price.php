@@ -86,6 +86,8 @@ class Price extends AbstractFilter
     }
 
     /**
+     * Get resource model.
+     *
      * @return \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
      */
     public function getResource()
@@ -223,6 +225,8 @@ class Price extends AbstractFilter
     }
 
     /**
+     * Get 'to' part of the filter.
+     *
      * @param float $from
      * @return float
      */
@@ -237,6 +241,8 @@ class Price extends AbstractFilter
     }
 
     /**
+     * Get 'from' part of the filter.
+     *
      * @param float $from
      * @return float
      */
@@ -251,6 +257,8 @@ class Price extends AbstractFilter
     }
 
     /**
+     * Prepare filter data.
+     *
      * @param string $key
      * @param int $count
      * @return array

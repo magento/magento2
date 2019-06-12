@@ -51,6 +51,7 @@ class CustomerTokenManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCustomerSessionTokensNegative($customerId, bool $isLoggedCustomer)
     {
+<<<<<<< HEAD
         $this->customerSession->method('getCustomerId')
             ->willReturn($customerId);
 
@@ -66,6 +67,13 @@ class CustomerTokenManagementTest extends \PHPUnit\Framework\TestCase
             [],
             $this->tokenManagement->getCustomerSessionTokens()
         );
+=======
+        $this->customerSession->method('getCustomerId')->willReturn($customerId);
+        $this->customerSession->method('isLoggedIn')->willReturn($isLoggedCustomer);
+        $this->paymentTokenManagement->expects(static::never())->method('getVisibleAvailableTokens');
+
+        static::assertEquals([], $this->tokenManagement->getCustomerSessionTokens());
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**

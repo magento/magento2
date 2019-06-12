@@ -47,9 +47,12 @@
                                                                         <item name="paypal_express" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">false</item>
                                                                         </item>
+<<<<<<< HEAD
                                                                         <item name="paypal_express_bml" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">false</item>
                                                                         </item>
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                                                                         <item name="payflow_express_bml" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">false</item>
                                                                         </item>

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <?php
+=======
+<?php declare(strict_types=1);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -40,9 +44,15 @@ class HiddenTest extends \PHPUnit\Framework\TestCase
             foreach ($value as $item) {
                 $this->assertContains($item, $html);
             }
+<<<<<<< HEAD
         } else {
             $this->assertContains($value, $html);
         }
+=======
+            return;
+        }
+        $this->assertContains($value, $html);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**

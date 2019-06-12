@@ -35,6 +35,7 @@
                                     id="<?= $block->escapeHtmlAttr(str_replace(' ', '_', $_rating->getRatingCode())) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>"
                                     value="<?= $block->escapeHtmlAttr($_option->getId()) ?>"
                                     class="radio"
+<<<<<<< HEAD
                                     data-validate="{ 'rating-required':true}"
                                     aria-labelledby="<?= $block->escapeHtmlAttr(str_replace(' ', '_', $_rating->getRatingCode())) ?>_rating_label <?= $block->escapeHtmlAttr(str_replace(' ', '_', $_rating->getRatingCode())) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>_label" />
                                 <label
@@ -42,6 +43,15 @@
                                     for="<?= $block->escapeHtmlAttr(str_replace(' ', '_', $_rating->getRatingCode())) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>"
                                     title="<?= $block->escapeHtmlAttr(__('%1 %2', $iterator, $iterator > 1 ? __('stars') : __('star'))) ?>"
                                     id="<?= $block->escapeHtmlAttr(str_replace(' ', '_', $_rating->getRatingCode())) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>_label">
+=======
+                                    data-validate="{'rating-required':true}"
+                                    aria-labelledby="<?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_rating_label <?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>_label" />
+                                <label
+                                    class="rating-<?= $block->escapeHtmlAttr($iterator) ?>"
+                                    for="<?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>"
+                                    title="<?= $block->escapeHtmlAttr(__('%1 %2', $iterator, $iterator > 1 ? __('stars') : __('star'))) ?>"
+                                    id="<?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>_label">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                                     <span><?= $block->escapeHtml(__('%1 %2', $iterator, $iterator > 1 ? __('stars') : __('star'))) ?></span>
                                 </label>
                             <?php $iterator++; ?>

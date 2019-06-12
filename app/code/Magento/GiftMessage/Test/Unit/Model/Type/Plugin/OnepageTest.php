@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\GiftMessage\Test\Unit\Model\Type\Plugin;
 
 use Magento\GiftMessage\Model\Type\Plugin\Onepage;
@@ -62,6 +60,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $subjectMock = $this->createMock(\Magento\Checkout\Model\Type\Onepage::class);
         $this->assertEquals(
             ['expected result'],
-            $this->plugin->afterSaveShippingMethod($subjectMock, ['expected result']));
+            $this->plugin->afterSaveShippingMethod($subjectMock, ['expected result'])
+        );
     }
 }

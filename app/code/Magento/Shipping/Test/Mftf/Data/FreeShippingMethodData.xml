@@ -5,18 +5,35 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
 
+=======
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <!-- Enable Free Shipping method -->
     <entity name="FreeShippinMethodConfig" type="free_shipping_method">
         <requiredEntity type="active">freeActiveEnable</requiredEntity>
     </entity>
+<<<<<<< HEAD
 
     <entity name="freeActiveEnable" type="active">
         <data key="value">1</data>
     </entity>
 
+=======
+    <entity name="freeActiveEnable" type="active">
+        <data key="value">1</data>
+    </entity>
+    <!-- Disable Free Shipping method -->
+    <entity name="FreeShippingMethodDisableConfig" type="free_shipping_method">
+        <requiredEntity type="active">freeActiveDisable</requiredEntity>
+    </entity>
+    <entity name="freeActiveDisable" type="active">
+        <data key="value">0</data>
+    </entity>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <!-- Free Shipping method default setup -->
     <entity name="FreeShippinMethodDefault" type="free_shipping_method">
         <requiredEntity type="active">freeActiveDefault</requiredEntity>
@@ -29,7 +46,10 @@
         <requiredEntity type="showmethod">freeShowmethodDefault</requiredEntity>
         <requiredEntity type="sort_order">freeSortOrderDefault</requiredEntity>
     </entity>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <entity name="freeActiveDefault" type="active">
         <data key="value">0</data>
     </entity>
@@ -57,7 +77,10 @@
     <entity name="freeSortOrderDefault" type="sort_order">
         <data key="value" />
     </entity>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <!--Set Free Shipping Subtotal to 101-->
     <entity name="setFreeShippingSubtotal" type="free_shipping_method">
         <requiredEntity type="free_shipping_subtotal">freeShippingSubtotal</requiredEntity>

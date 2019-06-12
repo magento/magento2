@@ -17,8 +17,13 @@
         <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
         <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+<<<<<<< HEAD
         <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickCart"/>
         <click selector="{{StorefrontMiniCartSection.goToCheckout}}" stepKey="goToCheckout"/>
+=======
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
@@ -30,4 +35,11 @@
         <click selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="clickOrderLink"/>
         <click selector="{{StorefrontCustomerOrderViewSection.printOrderLink}}" stepKey="clickPrintOrderLink"/>
     </actionGroup>
+<<<<<<< HEAD
+=======
+    <actionGroup name="CreateOrderToPrintPageWithSelectedPaymentMethodActionGroup" extends="CreateOrderToPrintPageActionGroup">
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" after="clickNext" stepKey="waitForPaymentSectionLoaded"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.billingAddress}}" visible="false" before="waitForPlaceOrderButton" stepKey="clickCheckMoneyOrderPayment"/>
+    </actionGroup>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </actionGroups>

@@ -75,6 +75,8 @@ class Config
     }
 
     /**
+     * Get collection.
+     *
      * @return \Magento\Sales\Model\ResourceModel\Order\Status\Collection
      */
     protected function _getCollection()
@@ -86,6 +88,8 @@ class Config
     }
 
     /**
+     * Get state.
+     *
      * @param string $state
      * @return Status
      */
@@ -105,7 +109,7 @@ class Config
      * @param   string $state
      * @return  string|null
      */
-    public function getStateDefaultStatus($state)
+    public function getStateDefaultStatus($state): ?string
     {
         $status = false;
         $stateNode = $this->_getState($state);
@@ -119,11 +123,19 @@ class Config
     /**
      * Get status label for a specified area
      *
+<<<<<<< HEAD
      * @param string $code
      * @param string $area
      * @return string
      */
     private function getStatusLabelForArea(string $code, string $area): string
+=======
+     * @param string|null $code
+     * @param string $area
+     * @return string|null
+     */
+    private function getStatusLabelForArea(?string $code, string $area): ?string
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $code = $this->maskStatusForArea($area, $code);
         $status = $this->orderStatusFactory->create()->load($code);
@@ -138,8 +150,13 @@ class Config
     /**
      * Retrieve status label for detected area
      *
+<<<<<<< HEAD
      * @param string $code
      * @return string
+=======
+     * @param string|null $code
+     * @return string|null
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @throws LocalizedException
      */
     public function getStatusLabel($code)
@@ -151,10 +168,17 @@ class Config
     /**
      * Retrieve status label for area
      *
+<<<<<<< HEAD
      * @param string $code
      * @return string
      */
     public function getStatusFrontendLabel(string $code): string
+=======
+     * @param string|null $code
+     * @return string|null
+     */
+    public function getStatusFrontendLabel(?string $code): ?string
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         return $this->getStatusLabelForArea($code, \Magento\Framework\App\Area::AREA_FRONTEND);
     }
@@ -275,8 +299,9 @@ class Config
     }
 
     /**
-     * Get existing order statuses
-     * Visible or invisible on frontend according to passed param
+     * Get existing order statuses.
+     *
+     * Visible or invisible on frontend according to passed param.
      *
      * @param bool $visibility
      * @return array

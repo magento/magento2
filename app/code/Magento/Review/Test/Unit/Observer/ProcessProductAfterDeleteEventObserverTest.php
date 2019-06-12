@@ -31,24 +31,41 @@ class ProcessProductAfterDeleteEventObserverTest extends TestCase
     /**
      * @var Review|PHPUnit_Framework_MockObject_MockObject
      */
+<<<<<<< HEAD
     private $_resourceReviewMock;
+=======
+    private $resourceReviewMock;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
     /**
      * @var Rating|PHPUnit_Framework_MockObject_MockObject
      */
+<<<<<<< HEAD
     private $_resourceRatingMock;
+=======
+    private $resourceRatingMock;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
     /**
      * Set up
      */
     protected function setUp()
     {
+<<<<<<< HEAD
         $this->_resourceReviewMock = $this->createMock(Review::class);
         $this->_resourceRatingMock = $this->createMock(Rating::class);
 
         $this->observer = new ProcessProductAfterDeleteEventObserver(
             $this->_resourceReviewMock,
             $this->_resourceRatingMock
+=======
+        $this->resourceReviewMock = $this->createMock(Review::class);
+        $this->resourceRatingMock = $this->createMock(Rating::class);
+
+        $this->observer = new ProcessProductAfterDeleteEventObserver(
+            $this->resourceReviewMock,
+            $this->resourceRatingMock
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         );
     }
 
@@ -80,10 +97,17 @@ class ProcessProductAfterDeleteEventObserverTest extends TestCase
         $observerMock->expects($this->once())
             ->method('getEvent')
             ->willReturn($eventMock);
+<<<<<<< HEAD
         $this->_resourceReviewMock->expects($this->once())
             ->method('deleteReviewsByProductId')
             ->willReturnSelf();
         $this->_resourceRatingMock->expects($this->once())
+=======
+        $this->resourceReviewMock->expects($this->once())
+            ->method('deleteReviewsByProductId')
+            ->willReturnSelf();
+        $this->resourceRatingMock->expects($this->once())
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->method('deleteAggregatedRatingsByProductId')
             ->willReturnSelf();
 
@@ -109,10 +133,17 @@ class ProcessProductAfterDeleteEventObserverTest extends TestCase
         $observerMock->expects($this->once())
             ->method('getEvent')
             ->willReturn($eventMock);
+<<<<<<< HEAD
         $this->_resourceReviewMock->expects($this->never())
             ->method('deleteReviewsByProductId')
             ->willReturnSelf();
         $this->_resourceRatingMock->expects($this->never())
+=======
+        $this->resourceReviewMock->expects($this->never())
+            ->method('deleteReviewsByProductId')
+            ->willReturnSelf();
+        $this->resourceRatingMock->expects($this->never())
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->method('deleteAggregatedRatingsByProductId')
             ->willReturnSelf();
 

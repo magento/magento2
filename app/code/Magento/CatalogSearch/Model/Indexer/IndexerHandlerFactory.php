@@ -5,12 +5,13 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Search\EngineResolverInterface;
 
 /**
+ * Indexer handler factory.
+ *
  * @api
  * @since 100.0.2
  */
@@ -31,35 +32,25 @@ class IndexerHandlerFactory
     protected $handlers = null;
 
     /**
-     * @var ScopeConfigInterface
+     * @var EngineResolverInterface
      */
-    private $scopeConfig;
-
-    /**
-     * Configuration path by which current indexer handler stored
-     *
-     * @var string
-     */
-    private $configPath;
+    private $engineResolver;
 
     /**
      * Factory constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @param ScopeConfigInterface $scopeConfig
-     * @param string $configPath
+     * @param EngineResolverInterface $engineResolver
      * @param string[] $handlers
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        ScopeConfigInterface $scopeConfig,
-        $configPath,
+        EngineResolverInterface $engineResolver,
         array $handlers = []
     ) {
         $this->_objectManager = $objectManager;
-        $this->scopeConfig = $scopeConfig;
-        $this->configPath = $configPath;
         $this->handlers = $handlers;
+        $this->engineResolver = $engineResolver;
     }
 
     /**
@@ -70,7 +61,7 @@ class IndexerHandlerFactory
      */
     public function create(array $data = [])
     {
-        $currentHandler = $this->scopeConfig->getValue($this->configPath, ScopeInterface::SCOPE_STORE);
+        $currentHandler = $this->engineResolver->getCurrentSearchEngine();
         if (!isset($this->handlers[$currentHandler])) {
             throw new \LogicException(
                 'There is no such indexer handler: ' . $currentHandler

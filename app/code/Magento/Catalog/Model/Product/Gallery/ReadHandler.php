@@ -47,6 +47,8 @@ class ReadHandler implements ExtensionInterface
     }
 
     /**
+     * Execute read handler for catalog product gallery
+     *
      * @param Product $entity
      * @param array $arguments
      * @return object
@@ -69,6 +71,8 @@ class ReadHandler implements ExtensionInterface
     }
 
     /**
+     * Add media data to product
+     *
      * @param Product $product
      * @param array $mediaEntries
      * @return void
@@ -86,6 +90,8 @@ class ReadHandler implements ExtensionInterface
     }
 
     /**
+     * Get attribute
+     *
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
      * @since 101.0.0
      */
@@ -99,6 +105,8 @@ class ReadHandler implements ExtensionInterface
     }
 
     /**
+     * Find default value
+     *
      * @param string $key
      * @param string[] &$image
      * @return string

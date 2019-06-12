@@ -1,7 +1,11 @@
 {
     "name": "magento/module-google-analytics",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
+<<<<<<< HEAD
         "php": "~7.0.13|~7.1.0",
         "magento/module-store": "100.2.*",
         "magento/module-sales": "101.0.*",
@@ -13,6 +17,18 @@
     },
     "type": "magento2-module",
     "version": "100.2.4",
+=======
+        "php": "~7.1.3||~7.2.0",
+        "magento/framework": "*",
+        "magento/module-cookie": "*",
+        "magento/module-sales": "*",
+        "magento/module-store": "*"
+    },
+    "suggest": {
+        "magento/module-config": "*"
+    },
+    "type": "magento2-module",
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     "license": [
         "OSL-3.0",
         "AFL-3.0"

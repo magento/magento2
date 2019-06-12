@@ -40,4 +40,10 @@
             </argument>
         </arguments>
     </type>
+<<<<<<< HEAD
+=======
+    <type name="Symfony\Component\Console\Command\Command">
+        <plugin name="newrelic-describe-commands"  type="Magento\NewRelicReporting\Plugin\CommandPlugin"/>
+    </type>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </config>

@@ -24,5 +24,10 @@ return [
     \Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface::class =>
         \Magento\TestFramework\Db\ConnectionAdapter::class,
     \Magento\Framework\Filesystem\DriverInterface::class => \Magento\Framework\Filesystem\Driver\File::class,
-    \Magento\Framework\App\Config\ScopeConfigInterface::class => \Magento\TestFramework\App\Config::class
+    \Magento\Framework\App\Config\ScopeConfigInterface::class => \Magento\TestFramework\App\Config::class,
+    \Magento\Framework\App\ResourceConnection\ConfigInterface::class =>
+        \Magento\Framework\App\ResourceConnection\Config::class,
+    \Magento\Framework\Lock\Backend\Cache::class =>
+        \Magento\TestFramework\Lock\Backend\DummyLocker::class,
+    \Magento\Framework\Session\SessionStartChecker::class => \Magento\TestFramework\Session\SessionStartChecker::class,
 ];

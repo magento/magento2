@@ -3,7 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 declare(strict_types=1);
 
 namespace Magento\Sales\Observer;
@@ -32,7 +35,11 @@ class AssignOrderToCustomerObserver implements ObserverInterface
     }
 
     /**
+<<<<<<< HEAD
      * @inheritDoc
+=======
+     * @inheritdoc
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function execute(Observer $observer)
     {
@@ -45,9 +52,22 @@ class AssignOrderToCustomerObserver implements ObserverInterface
             $orderId = $delegateData['__sales_assign_order_id'];
             $order = $this->orderRepository->get($orderId);
             if (!$order->getCustomerId()) {
+<<<<<<< HEAD
                 //if customer ID wasn't already assigned then assigning.
                 $order->setCustomerId($customer->getId());
                 $order->setCustomerIsGuest(0);
+=======
+                //assign customer info to order after customer creation.
+                $order->setCustomerId($customer->getId())
+                    ->setCustomerIsGuest(0)
+                    ->setCustomerEmail($customer->getEmail())
+                    ->setCustomerFirstname($customer->getFirstname())
+                    ->setCustomerLastname($customer->getLastname())
+                    ->setCustomerMiddlename($customer->getMiddlename())
+                    ->setCustomerPrefix($customer->getPrefix())
+                    ->setCustomerSuffix($customer->getSuffix())
+                    ->setCustomerGroupId($customer->getGroupId());
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 $this->orderRepository->save($order);
             }
         }

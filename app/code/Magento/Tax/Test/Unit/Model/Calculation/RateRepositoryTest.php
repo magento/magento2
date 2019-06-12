@@ -252,7 +252,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
         foreach ($taxRateData as $key => $value) {
             // convert key from snake case to upper case
             $taxRateMock->expects($this->any())
-                ->method('get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key))))
+                ->method('get' . str_replace('_', '', ucwords($key, '_')))
                 ->will($this->returnValue($value));
         }
 
@@ -395,7 +395,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage percentage_rate is a required field.
+     * @expectedExceptionMessage "percentage_rate" is required. Enter and try again.
      */
     public function testValidateWithNoRate()
     {
@@ -433,7 +433,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage percentage_rate is a required field.
+     * @expectedExceptionMessage "percentage_rate" is required. Enter and try again.
      */
     public function testValidateWithWrongRate()
     {

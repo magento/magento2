@@ -6,10 +6,11 @@
 
 namespace Magento\Swatches\Helper;
 
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product as ModelProduct;
+use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
@@ -60,13 +61,6 @@ class Data
     protected $swatchCollectionFactory;
 
     /**
-     * Catalog Image Helper
-     *
-     * @var Image
-     */
-    protected $imageHelper;
-
-    /**
      * Product metadata pool
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
@@ -102,11 +96,19 @@ class Data
     private $swatchTypeChecker;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var UrlBuilder
+     */
+    private $imageUrlBuilder;
+
+    /**
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param CollectionFactory $productCollectionFactory
      * @param ProductRepositoryInterface $productRepository
      * @param StoreManagerInterface $storeManager
      * @param SwatchCollectionFactory $swatchCollectionFactory
-     * @param Image $imageHelper
+     * @param UrlBuilder $urlBuilder
      * @param Json|null $serializer
      * @param SwatchAttributesProvider $swatchAttributesProvider
      * @param SwatchAttributeType|null $swatchTypeChecker
@@ -116,7 +118,7 @@ class Data
         ProductRepositoryInterface $productRepository,
         StoreManagerInterface $storeManager,
         SwatchCollectionFactory $swatchCollectionFactory,
-        Image $imageHelper,
+        UrlBuilder $urlBuilder,
         Json $serializer = null,
         SwatchAttributesProvider $swatchAttributesProvider = null,
         SwatchAttributeType $swatchTypeChecker = null
@@ -125,15 +127,20 @@ class Data
         $this->productRepository = $productRepository;
         $this->storeManager = $storeManager;
         $this->swatchCollectionFactory = $swatchCollectionFactory;
-        $this->imageHelper = $imageHelper;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->create(Json::class);
         $this->swatchAttributesProvider = $swatchAttributesProvider
             ?: ObjectManager::getInstance()->get(SwatchAttributesProvider::class);
         $this->swatchTypeChecker = $swatchTypeChecker
             ?: ObjectManager::getInstance()->create(SwatchAttributeType::class);
+<<<<<<< HEAD
+=======
+        $this->imageUrlBuilder = $urlBuilder;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**
+     * Assemble Additional Data for Eav Attribute
+     *
      * @param Attribute $attribute
      * @return $this
      */
@@ -183,6 +190,8 @@ class Data
     }
 
     /**
+     * Load first variation
+     *
      * @param string $attributeCode swatch_image|image
      * @param ModelProduct $configurableProduct
      * @param array $requiredAttributes
@@ -206,6 +215,8 @@ class Data
     }
 
     /**
+     * Load first variation with swatch image
+     *
      * @param Product $configurableProduct
      * @param array $requiredAttributes
      * @return bool|Product
@@ -216,6 +227,8 @@ class Data
     }
 
     /**
+     * Load first variation with image
+     *
      * @param Product $configurableProduct
      * @param array $requiredAttributes
      * @return bool|Product
@@ -248,17 +261,14 @@ class Data
         $this->addFilterByParent($productCollection, $parentId);
 
         $configurableAttributes = $this->getAttributesFromConfigurable($parentProduct);
-        $allAttributesArray = [];
+
+        $resultAttributesToFilter = [];
         foreach ($configurableAttributes as $attribute) {
-            if (!empty($attribute['default_value'])) {
-                $allAttributesArray[$attribute['attribute_code']] = $attribute['default_value'];
+            $attributeCode = $attribute->getData('attribute_code');
+            if (array_key_exists($attributeCode, $attributes)) {
+                $resultAttributesToFilter[$attributeCode] = $attributes[$attributeCode];
             }
         }
-
-        $resultAttributesToFilter = array_merge(
-            $attributes,
-            array_diff_key($allAttributesArray, $attributes)
-        );
 
         $this->addFilterByAttributes($productCollection, $resultAttributesToFilter);
 
@@ -271,6 +281,8 @@ class Data
     }
 
     /**
+     * Add filter by attribute
+     *
      * @param ProductCollection $productCollection
      * @param array $attributes
      * @return void
@@ -283,6 +295,8 @@ class Data
     }
 
     /**
+     * Add filter by parent
+     *
      * @param ProductCollection $productCollection
      * @param integer $parentId
      * @return void
@@ -301,6 +315,7 @@ class Data
 
     /**
      * Method getting full media gallery for current Product
+     *
      * Array structure: [
      *  ['image'] => 'http://url/pub/media/catalog/product/2/0/blabla.jpg',
      *  ['mediaGallery'] => [
@@ -309,15 +324,19 @@ class Data
      *      ...,
      *      ]
      * ]
+     *
      * @param ModelProduct $product
+     *
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getProductMediaGallery(ModelProduct $product)
+    public function getProductMediaGallery(ModelProduct $product): array
     {
         $baseImage = null;
         $gallery = [];
 
         $mediaGallery = $product->getMediaGalleryEntries();
+<<<<<<< HEAD
         foreach ($mediaGallery as $mediaEntry) {
             if ($mediaEntry->isDisabled()) {
                 continue;
@@ -330,35 +349,75 @@ class Data
             }
 
             $gallery[$mediaEntry->getId()] = $this->getAllSizeImages($product, $mediaEntry->getFile());
+=======
+        /** @var ProductAttributeMediaGalleryEntryInterface $mediaEntry */
+        foreach ($mediaGallery as $mediaEntry) {
+            if ($mediaEntry->isDisabled()) {
+                continue;
+            }
+            if (!$baseImage || $this->isMainImage($mediaEntry)) {
+                $baseImage = $mediaEntry;
+            }
+
+            $gallery[$mediaEntry->getId()] = $this->collectImageData($mediaEntry);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
 
         if (!$baseImage) {
             return [];
         }
 
+<<<<<<< HEAD
         $resultGallery = $this->getAllSizeImages($product, $baseImage);
+=======
+        $resultGallery = $this->collectImageData($baseImage);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $resultGallery['gallery'] = $gallery;
 
         return $resultGallery;
     }
 
     /**
+<<<<<<< HEAD
      * @param ModelProduct $product
+=======
+     * Checks if image is main image in gallery
+     *
+     * @param ProductAttributeMediaGalleryEntryInterface $mediaEntry
+     * @return bool
+     */
+    private function isMainImage(ProductAttributeMediaGalleryEntryInterface $mediaEntry): bool
+    {
+        return in_array('image', $mediaEntry->getTypes(), true);
+    }
+
+    /**
+     * Returns image data for swatches
+     *
+     * @param ProductAttributeMediaGalleryEntryInterface $mediaEntry
+     * @return array
+     */
+    private function collectImageData(ProductAttributeMediaGalleryEntryInterface $mediaEntry): array
+    {
+        $image = $this->getAllSizeImages($mediaEntry->getFile());
+        $image[ProductAttributeMediaGalleryEntryInterface::POSITION] =  $mediaEntry->getPosition();
+        $image['isMain'] =$this->isMainImage($mediaEntry);
+        return $image;
+    }
+
+    /**
+     * Get all size images
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param string $imageFile
      * @return array
      */
-    private function getAllSizeImages(ModelProduct $product, $imageFile)
+    private function getAllSizeImages($imageFile)
     {
         return [
-            'large' => $this->imageHelper->init($product, 'product_page_image_large_no_frame')
-                ->setImageFile($imageFile)
-                ->getUrl(),
-            'medium' => $this->imageHelper->init($product, 'product_page_image_medium_no_frame')
-                ->setImageFile($imageFile)
-                ->getUrl(),
-            'small' => $this->imageHelper->init($product, 'product_page_image_small')
-                ->setImageFile($imageFile)
-                ->getUrl(),
+            'large' => $this->imageUrlBuilder->getUrl($imageFile, 'product_swatch_image_large'),
+            'medium' => $this->imageUrlBuilder->getUrl($imageFile, 'product_swatch_image_medium'),
+            'small' => $this->imageUrlBuilder->getUrl($imageFile, 'product_swatch_image_small')
         ];
     }
 
@@ -487,6 +546,8 @@ class Data
     }
 
     /**
+     * Add fallback options
+     *
      * @param array $fallbackValues
      * @param array $swatches
      * @return array
@@ -495,12 +556,21 @@ class Data
     {
         $currentStoreId = $this->storeManager->getStore()->getId();
         foreach ($fallbackValues as $optionId => $optionsArray) {
+<<<<<<< HEAD
             if (isset($optionsArray[$currentStoreId], $swatches[$optionId]['type'])
                 && $swatches[$optionId]['type'] === $optionsArray[$currentStoreId]['type']
             ) {
                 $swatches[$optionId] = $optionsArray[$currentStoreId];
             } elseif (isset($optionsArray[$currentStoreId])) {
                 $swatches[$optionId] = $optionsArray[$currentStoreId];
+=======
+            if (isset($optionsArray[$currentStoreId]['type'], $swatches[$optionId]['type'])
+                && $swatches[$optionId]['type'] === $optionsArray[$currentStoreId]['type']
+            ) {
+                $swatches[$optionId] = $optionsArray[$currentStoreId];
+            } elseif (isset($optionsArray[$currentStoreId])) {
+                $swatches[$optionId] = $optionsArray[$currentStoreId];
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             } elseif (isset($optionsArray[self::DEFAULT_STORE_ID])) {
                 $swatches[$optionId] = $optionsArray[self::DEFAULT_STORE_ID];
             }
@@ -517,8 +587,7 @@ class Data
      */
     public function isProductHasSwatch(Product $product)
     {
-        $swatchAttributes = $this->getSwatchAttributes($product);
-        return count($swatchAttributes) > 0;
+        return !empty($this->getSwatchAttributes($product));
     }
 
     /**

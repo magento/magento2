@@ -7,11 +7,22 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <entity name="ProductAttributeFrontendLabel" type="FrontendLabel">
         <data key="store_id">0</data>
         <data key="label" unique="suffix">attribute</data>
     </entity>
+<<<<<<< HEAD
+=======
+    <entity name="ProductAttributeFrontendLabelTwo" type="FrontendLabel">
+        <data key="store_id">0</data>
+        <data key="label" unique="suffix">attributeTwo</data>
+    </entity>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <entity name="ProductAttributeFrontendLabelThree" type="FrontendLabel">
         <data key="store_id">0</data>
         <data key="label" unique="suffix">attributeThree</data>

@@ -57,6 +57,13 @@ class Factory
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Decides which condition builder should be used for passed filter
+     * can be either EAV attribute builder or native attribute builder
+     * "native" attribute means attribute that is in catalog_product_entity table
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param Filter $filter
      * @return CustomConditionInterface
      * @throws \Magento\Framework\Exception\LocalizedException

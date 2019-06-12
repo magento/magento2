@@ -7,7 +7,6 @@ namespace Magento\ProductVideo\Model\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\DB\Select;
-use Magento\ProductVideo\Setup\InstallSchema;
 
 /**
  * Media Resource decorator
@@ -28,6 +27,8 @@ class ExternalVideoResourceBackend
     }
 
     /**
+     * Plugin for after duplicate action
+     *
      * @param Gallery $originalResourceModel
      * @param array $valueIdMap
      * @return array
@@ -46,6 +47,8 @@ class ExternalVideoResourceBackend
     }
 
     /**
+     * Plugin for after create batch base select action
+     *
      * @param Gallery $originalResourceModel
      * @param Select $select
      * @return Select
@@ -53,7 +56,7 @@ class ExternalVideoResourceBackend
     public function afterCreateBatchBaseSelect(Gallery $originalResourceModel, Select $select)
     {
         $select = $select->joinLeft(
-            ['value_video' => $originalResourceModel->getTable(InstallSchema::GALLERY_VALUE_VIDEO_TABLE)],
+            ['value_video' => $originalResourceModel->getTable('catalog_product_entity_media_gallery_value_video')],
             implode(
                 ' AND ',
                 [
@@ -63,7 +66,11 @@ class ExternalVideoResourceBackend
             ),
             []
         )->joinLeft(
-            ['default_value_video' => $originalResourceModel->getTable(InstallSchema::GALLERY_VALUE_VIDEO_TABLE)],
+            [
+                'default_value_video' => $originalResourceModel->getTable(
+                    'catalog_product_entity_media_gallery_value_video'
+                )
+            ],
             implode(
                 ' AND ',
                 [

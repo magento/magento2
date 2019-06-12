@@ -1,10 +1,15 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
+=======
+<?xml version="1.0" encoding="utf-8"?>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 <!--
  /**
   * Copyright © Magento, Inc. All rights reserved.
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
@@ -12,3 +17,15 @@
         <element name="saveButton" type="button" selector="#save" timeout="30"/>
     </section>
 </sections>
+=======
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminConfigSection">
+        <element name="saveButton" type="button" selector="#save"/>
+        <element name="generalTab" type="text" selector="//div[@class='admin__page-nav-title title _collapsible']//strong[text()='General']"/>
+        <element name="generalTabClosed" type="text" selector="//div[@class='admin__page-nav-title title _collapsible' and @aria-expanded='false' or @aria-expanded='0']//strong[text()='General']"/>
+        <element name="generalTabOpened" type="text" selector="//div[@class='admin__page-nav-title title _collapsible' and @aria-expanded='true' or @aria-expanded='1']//strong[text()='General']"/>
+        <element name="defaultConfigButton" type="button" selector="#store-change-button" timeout="30"/>
+        <element name="defaultConfigDropdown" type="button" selector="//ul[@class='dropdown-menu']" timeout="30"/>
+    </section>
+</sections>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc

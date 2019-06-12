@@ -14,7 +14,11 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 class CreditmemoFactory
 {
     /**
+<<<<<<< HEAD
      * Order convert object
+=======
+     * Order convert object.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @var \Magento\Sales\Model\Convert\Order
      */
@@ -103,6 +107,10 @@ class CreditmemoFactory
         $creditmemo->setInvoice($invoice);
 
         $invoiceRefundLimitsQtyList = $this->getInvoiceRefundLimitsQtyList($invoice);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         foreach ($invoice->getAllItems() as $invoiceItem) {
             /** @var OrderItemInterface $orderItem */
             $orderItem = $invoiceItem->getOrderItem();
@@ -116,7 +124,10 @@ class CreditmemoFactory
                 $invoiceItem->getQty()
             );
             $totalQty += $qty;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $item = $this->convertor->itemToCreditmemoItem($orderItem);
             $item->setQty($qty);
             $creditmemo->addItem($item);
@@ -200,6 +211,7 @@ class CreditmemoFactory
     {
         if (isset($data['shipping_amount'])) {
             $creditmemo->setBaseShippingAmount((double)$data['shipping_amount']);
+            $creditmemo->setBaseShippingInclTax((double)$data['shipping_amount']);
         }
         if (isset($data['adjustment_positive'])) {
             $creditmemo->setAdjustmentPositive($data['adjustment_positive']);
@@ -210,11 +222,20 @@ class CreditmemoFactory
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Calculate product options.
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param Item $orderItem
      * @param int $parentQty
      * @return int
      */
+<<<<<<< HEAD
     private function calculateProductOptions(Item $orderItem, $parentQty)
+=======
+    private function calculateProductOptions(Item $orderItem, int $parentQty): int
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $qty = $parentQty;
         $productOptions = $orderItem->getProductOptions();

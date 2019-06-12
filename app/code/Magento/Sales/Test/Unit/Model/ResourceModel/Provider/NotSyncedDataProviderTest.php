@@ -10,6 +10,12 @@ use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider;
 use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class for testing not synchronized DataProvider.
+ */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class NotSyncedDataProviderTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetIdsEmpty()

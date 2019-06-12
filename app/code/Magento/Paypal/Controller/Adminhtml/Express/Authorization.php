@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 namespace Magento\Paypal\Controller\Adminhtml\Express;
 
 use Magento\Framework\App\Response\Http\FileFactory;
@@ -30,7 +35,11 @@ use Psr\Log\LoggerInterface;
 class Authorization extends Order
 {
     /**
+<<<<<<< HEAD
      * Authorization level of a basic admin session
+=======
+     * Authorization level of a basic admin session.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_Paypal::authorization';
@@ -94,14 +103,23 @@ class Authorization extends Order
     public function execute(): Redirect
     {
         $resultRedirect = $this->resultRedirectFactory->create();
+<<<<<<< HEAD
         if ($order = $this->_initOrder()) {
+=======
+        $order = $this->_initOrder();
+        if ($order !== false) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             try {
                 $this->express->authorizeOrder($order);
                 $this->orderRepository->save($order);
                 $this->messageManager->addSuccessMessage(__('Payment authorization has been successfully created.'));
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
+<<<<<<< HEAD
             } catch (\Exception $e) {
+=======
+            } catch (\Throwable $e) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 $this->messageManager->addErrorMessage(__('Unable to make payment authorization.'));
             }
 

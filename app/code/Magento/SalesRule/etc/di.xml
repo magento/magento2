@@ -178,7 +178,12 @@
             </argument>
         </arguments>
     </type>
+<<<<<<< HEAD
     <type name="\Magento\Quote\Model\Cart\CartTotalRepository">
+=======
+
+    <type name="Magento\Quote\Model\Cart\CartTotalRepository">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <plugin name="coupon_label_plugin" type="Magento\SalesRule\Plugin\CartTotalRepository" />
     </type>
     <type name="\Magento\Sales\Model\Order">

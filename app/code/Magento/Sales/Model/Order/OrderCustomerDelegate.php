@@ -3,7 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 declare(strict_types=1);
 
 namespace Magento\Sales\Model\Order;
@@ -14,7 +17,11 @@ use Magento\Sales\Api\OrderCustomerDelegateInterface;
 use Magento\Sales\Observer\AssignOrderToCustomerObserver;
 
 /**
+<<<<<<< HEAD
  * @inheritDoc
+=======
+ * {@inheritdoc}
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  *
  * @see AssignOrderToCustomerObserver
  */
@@ -43,7 +50,11 @@ class OrderCustomerDelegate implements OrderCustomerDelegateInterface
     }
 
     /**
+<<<<<<< HEAD
      * @inheritDoc
+=======
+     * {@inheritdoc}
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function delegateNew(int $orderId): Redirect
     {

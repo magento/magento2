@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Tests for \Magento\Framework\Data\Form\Field\Image
  */
@@ -36,6 +34,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             \Magento\Config\Block\System\Config\Form\Field\Image::class,
             [
                 'urlBuilder' => $this->urlBuilderMock,
+                '_escaper' => $objectManager->getObject(\Magento\Framework\Escaper::class)
             ]
         );
 
@@ -87,7 +86,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 ],
                 '_elementType' => 'field',
                 'path' => 'catalog/placeholder',
-            ]);
+            ]
+        );
 
         $expectedHtmlId = $this->testData['html_id_prefix']
             . $this->testData['html_id']

@@ -7,6 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="LoginAsAdmin">
         <arguments>
@@ -19,3 +20,17 @@
         <closeAdminNotification stepKey="closeAdminNotification"/>
     </actionGroup>
 </actionGroups>
+=======
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="LoginAsAdmin">
+        <arguments>
+            <argument name="adminUser" type="entity" defaultValue="DefaultAdminUser"/>
+        </arguments>
+        <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
+        <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{adminUser.username}}" stepKey="fillUsername"/>
+        <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{adminUser.password}}" stepKey="fillPassword"/>
+        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
+        <closeAdminNotification stepKey="closeAdminNotification"/>
+    </actionGroup>
+</actionGroups>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc

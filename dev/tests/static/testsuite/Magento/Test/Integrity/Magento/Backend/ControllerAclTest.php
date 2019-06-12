@@ -97,7 +97,7 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
                 $inheritanceMessage = "Backend controller $className have to inherit " . AbstractAction::class;
                 $errorMessages[] = $inheritanceMessage;
                 continue;
-            };
+            }
 
             $isAclRedefinedInTheChildClass = $this->isConstantOverwritten($controllerClass)
                 || $this->isMethodOverwritten($controllerClass);
@@ -233,7 +233,11 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
     private function getControllerPath($relativeFilePath)
     {
         if (preg_match('~(Magento\/[^\/]+\/Controller\/Adminhtml\/.*)\.php~', $relativeFilePath, $matches)) {
+<<<<<<< HEAD
             if (count($matches) === 2 && count($partPath = $matches[1]) >= 1) {
+=======
+            if (count($matches) === 2) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 $partPath = $matches[1];
                 return $partPath;
             }

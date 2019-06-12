@@ -14,7 +14,11 @@
             <title value="Free Shipping is not available in Admin if Minimum Order Amount does not match Order total"/>
             <description value="Admin should not be able place order with Free Shipping method if Minimum Order Amount does not match Order total"/>
             <severity value="CRITICAL"/>
+<<<<<<< HEAD
             <testCaseId value="MAGETWO-77572"/>
+=======
+            <testCaseId value="MAGETWO-61001"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <group value="sales"/>
         </annotations>
         <before>
@@ -55,7 +59,11 @@
         <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickGetShippingMehods"/>
         <dontSeeElement selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="seeAbsentFreeShipping"/>
         <!--Submit Order and verify that Order isn't placed-->
+<<<<<<< HEAD
         <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="clickSubmitOrder"/>
+=======
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         <dontSeeElement selector="{{AdminMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
         <seeElement selector="{{AdminMessagesSection.errorMessage}}" stepKey="seeErrorMessage"/>

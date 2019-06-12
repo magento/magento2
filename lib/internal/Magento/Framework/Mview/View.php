@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Mview;
 
 use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
 use Magento\Framework\Mview\View\SubscriptionFactory;
 
 /**
+ * Mview
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class View extends \Magento\Framework\DataObject implements ViewInterface
@@ -282,12 +282,22 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
                     ? $this->changelogBatchSize[$this->getChangelog()->getViewId()]
                     : self::DEFAULT_BATCH_SIZE;
 
+<<<<<<< HEAD
                 for ($versionFrom = $lastVersionId; $versionFrom < $currentVersionId; $versionFrom += $versionBatchSize) {
                     // Don't go past the current version for atomicy.
                     $versionTo = min($currentVersionId, $versionFrom + $versionBatchSize);
                     $ids = array_map('intval', $this->getChangelog()->getList($versionFrom, $versionTo));
 
                     // We run the actual indexer in batches.  Chunked AFTER loading to avoid duplicates in separate chunks.
+=======
+                for ($vsFrom = $lastVersionId; $vsFrom < $currentVersionId; $vsFrom += $versionBatchSize) {
+                    // Don't go past the current version for atomicy.
+                    $versionTo = min($currentVersionId, $vsFrom + $versionBatchSize);
+                    $ids = $this->getChangelog()->getList($vsFrom, $versionTo);
+
+                    // We run the actual indexer in batches.
+                    // Chunked AFTER loading to avoid duplicates in separate chunks.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     $chunks = array_chunk($ids, $batchSize);
                     foreach ($chunks as $ids) {
                         $action->execute($ids);

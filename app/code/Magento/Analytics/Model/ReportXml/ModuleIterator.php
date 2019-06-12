@@ -5,10 +5,17 @@
  */
 namespace Magento\Analytics\Model\ReportXml;
 
+<<<<<<< HEAD
 use Magento\Framework\Module\Manager as ModuleManager;
 
 /**
  * Class ModuleIterator
+=======
+use \Magento\Framework\Module\ModuleManagerInterface as ModuleManager;
+
+/**
+ * Iterator for ReportXml modules
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  */
 class ModuleIterator extends \IteratorIterator
 {
@@ -18,8 +25,11 @@ class ModuleIterator extends \IteratorIterator
     private $moduleManager;
 
     /**
+<<<<<<< HEAD
      * ModuleIterator constructor.
      *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param ModuleManager $moduleManager
      * @param \Traversable $iterator
      */

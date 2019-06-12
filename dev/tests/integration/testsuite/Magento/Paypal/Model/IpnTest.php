@@ -146,7 +146,11 @@ class IpnTest extends \PHPUnit\Framework\TestCase
 
         $creditmemoItems = $order->getCreditmemosCollection()->getItems();
 
+<<<<<<< HEAD
         $this->assertEquals(Order::STATE_CLOSED, $order->getState());
+=======
+        $this->assertEquals(Order::STATE_CLOSED, $order->getState()) ;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->assertEquals(1, count($creditmemoItems));
         $this->assertEquals(10, $order->getSubtotalRefunded());
         $this->assertEquals(10, $order->getBaseSubtotalRefunded());

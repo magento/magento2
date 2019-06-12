@@ -5,7 +5,10 @@
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
+<<<<<<< HEAD
 use Magento\Framework\App\ObjectManager;
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\SalesRule\Model\DeltaPriceRound;
 use Magento\SalesRule\Model\Validator;
@@ -42,14 +45,25 @@ class CartFixed extends AbstractDiscount
         Validator $validator,
         DataFactory $discountDataFactory,
         PriceCurrencyInterface $priceCurrency,
+<<<<<<< HEAD
         DeltaPriceRound $deltaPriceRound = null
     ) {
         $this->deltaPriceRound = $deltaPriceRound ?: ObjectManager::getInstance()->get(DeltaPriceRound::class);
+=======
+        DeltaPriceRound $deltaPriceRound
+    ) {
+        $this->deltaPriceRound = $deltaPriceRound;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         parent::__construct($validator, $discountDataFactory, $priceCurrency);
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Fixed discount for cart calculation
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param \Magento\SalesRule\Model\Rule $rule
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty

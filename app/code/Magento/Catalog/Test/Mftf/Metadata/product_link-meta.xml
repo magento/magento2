@@ -7,7 +7,11 @@
 -->
 
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
             xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <operation name="CreateProductLink" dataType="product_link" type="create">
         <field key="sku">string</field>
         <field key="link_type">string</field>

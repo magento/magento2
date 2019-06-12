@@ -66,13 +66,20 @@ class DatepickerElement extends SimpleElement
         $date = $this->parseDate($value);
         $date[1] = ltrim($date[1], '0');
         $this->click();
+<<<<<<< HEAD
         $this->find($this->datePickerButton, Locator::SELECTOR_XPATH)->click();
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $datapicker = $this->find($this->datePickerBlock, Locator::SELECTOR_XPATH);
+        $datepickerClose = $datapicker->find($this->datePickerButtonClose, Locator::SELECTOR_XPATH);
+        if (!$datepickerClose->isVisible()) {
+            $this->find($this->datePickerButton, Locator::SELECTOR_XPATH)->click();
+        }
         $datapicker->find($this->datePickerYear, Locator::SELECTOR_XPATH, 'select')->setValue($date[2]);
         $datapicker->find($this->datePickerMonth, Locator::SELECTOR_XPATH, 'select')->setValue($date[0]);
         $datapicker->find(sprintf($this->datePickerCalendar, $date[1]), Locator::SELECTOR_XPATH)->click();
         if ($datapicker->isVisible()) {
-            $datapicker->find($this->datePickerButtonClose, Locator::SELECTOR_XPATH)->click();
+            $datepickerClose->click();
         }
     }
 

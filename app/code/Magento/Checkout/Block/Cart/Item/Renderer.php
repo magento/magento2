@@ -23,6 +23,7 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setProductName(string)
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setDeleteUrl(string)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Renderer extends \Magento\Framework\View\Element\Template implements
     \Magento\Framework\DataObject\IdentityInterface
@@ -84,7 +85,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     public $moduleManager;
 
@@ -92,6 +93,9 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * @var InterpretationStrategyInterface
      */
     private $messageInterpretationStrategy;
+
+    /** @var ItemResolverInterface */
+    private $itemResolver;
 
     /**
      * @var ItemResolverInterface
@@ -106,7 +110,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param InterpretationStrategyInterface $messageInterpretationStrategy
      * @param array $data
      * @param ItemResolverInterface|null $itemResolver
@@ -121,7 +125,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         InterpretationStrategyInterface $messageInterpretationStrategy,
         array $data = [],
         ItemResolverInterface $itemResolver = null
@@ -186,6 +190,8 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     }
 
     /**
+     * Override product url.
+     *
      * @param string $productUrl
      * @return $this
      * @codeCoverageIgnore
@@ -314,11 +320,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     }
 
     /**
-     * Retrieve item messages
-     * Return array with keys
-     *
-     * text => the message text
-     * type => type of a message
+     * Retrieve item messages, return array with keys, text => the message text, type => type of a message
      *
      * @return array
      */
@@ -473,6 +475,8 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     }
 
     /**
+     * Get price renderer.
+     *
      * @return \Magento\Framework\Pricing\Render
      * @codeCoverageIgnore
      */
@@ -621,9 +625,6 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      */
     public function getImage($product, $imageId, $attributes = [])
     {
-        return $this->imageBuilder->setProduct($product)
-            ->setImageId($imageId)
-            ->setAttributes($attributes)
-            ->create();
+        return $this->imageBuilder->create($product, $imageId, $attributes);
     }
 }

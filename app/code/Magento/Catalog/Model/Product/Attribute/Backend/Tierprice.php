@@ -13,6 +13,9 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 
+/**
+ * Backend model for Tierprice attribute
+ */
 class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice
 {
     /**
@@ -186,6 +189,10 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
     }
 
     /**
+     * Update Price values in DB
+     *
+     * Updates price values in DB from array comparing to old values. Returns bool if updated
+     *
      * @param array $valuesToUpdate
      * @param array $oldValues
      * @return boolean

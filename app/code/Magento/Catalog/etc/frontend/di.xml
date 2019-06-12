@@ -91,8 +91,39 @@
             </argument>
         </arguments>
     </type>
+<<<<<<< HEAD
+=======
+    <type name="Magento\Catalog\Block\Product\View\Gallery">
+        <arguments>
+            <argument name="galleryImagesConfig" xsi:type="array">
+                <item name="small_image" xsi:type="array">
+                    <item name="image_id" xsi:type="string">product_page_image_small</item>
+                    <item name="data_object_key" xsi:type="string">small_image_url</item>
+                    <item name="json_object_key" xsi:type="string">thumb</item>
+                </item>
+                <item name="medium_image" xsi:type="array">
+                    <item name="image_id" xsi:type="string">product_page_image_medium</item>
+                    <item name="data_object_key" xsi:type="string">medium_image_url</item>
+                    <item name="json_object_key" xsi:type="string">img</item>
+                </item>
+                <item name="large_image" xsi:type="array">
+                    <item name="image_id" xsi:type="string">product_page_image_large</item>
+                    <item name="data_object_key" xsi:type="string">large_image_url</item>
+                    <item name="json_object_key" xsi:type="string">full</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <type name="Magento\Framework\App\ResourceConnection">
         <plugin name="get_catalog_category_product_index_table_name" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\TableResolver"/>
         <plugin name="get_catalog_product_price_index_table_name" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\TableResolver"/>
     </type>
+<<<<<<< HEAD
+=======
+    <type name="Magento\Framework\App\Action\AbstractAction">
+        <plugin name="catalog_app_action_dispatch_controller_context_plugin"
+                type="Magento\Catalog\Plugin\Framework\App\Action\ContextPlugin" />
+    </type>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </config>

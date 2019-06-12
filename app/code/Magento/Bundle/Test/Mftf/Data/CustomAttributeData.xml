@@ -6,7 +6,11 @@
   */
 -->
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <entity name="CustomAttributeDynamicPrice" type="custom_attribute">
         <data key="attribute_code">price_type</data>
         <data key="value">0</data>
@@ -23,4 +27,15 @@
         <data key="attribute_code">price_view</data>
         <data key="value">0</data>
     </entity>
+<<<<<<< HEAD
+=======
+    <entity name="CustomAttributeFixWeight" type="custom_attribute">
+        <data key="attribute_code">weight_type</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="CustomAttributeFixSku" type="custom_attribute">
+        <data key="attribute_code">sku_type</data>
+        <data key="value">1</data>
+    </entity>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </entities>

@@ -7,9 +7,18 @@
 -->
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
     <page name="CheckoutCartPage" url="/checkout/cart" area="storefront" module="Magento_Checkout">
         <section name="CheckoutCartProductSection"/>
         <section name="StorefrontCheckoutCartSummarySection"/>
+=======
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+    <page name="CheckoutCartPage" url="/checkout/cart" module="Magento_Checkout" area="storefront">
+        <section name="CheckoutCartProductSection"/>
+        <section name="CheckoutCartSummarySection"/>
+        <section name="CheckoutCartCrossSellSection"/>
+        <section name="CheckoutCartMessageSection"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </page>
 </pages>

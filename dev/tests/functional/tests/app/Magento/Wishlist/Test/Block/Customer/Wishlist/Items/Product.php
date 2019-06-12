@@ -184,13 +184,37 @@ class Product extends Form
     }
 
     /**
-     * Returns product price
+     * Returns product price.
      *
      * @param string $currency
      * @return string
      */
-    public function getPrice($currency = '$')
+    public function getPrice(string $currency = '$'): string
     {
+        return $this->getPriceBySelector($this->price, $currency);
+    }
+
+    /**
+     * Returns product regular price.
+     *
+     * @param string $currency
+     * @return string
+     */
+    public function getRegularPrice(string $currency = '$'): string
+    {
+        return $this->getPriceBySelector($this->regularPrice, $currency);
+    }
+
+    /**
+     * Returns product price by selector.
+     *
+     * @param string $selector
+     * @param string $currency
+     * @return string
+     */
+    private function getPriceBySelector(string $selector, string $currency = '$'): string
+    {
+<<<<<<< HEAD
         return $this->getPriceBySelector($this->price, $currency);
     }
 
@@ -215,6 +239,10 @@ class Product extends Form
     private function getPriceBySelector(string $selector, $currency = '$')
     {
         $price = $this->_rootElement->find($selector)->getText();
+=======
+        $price = $this->_rootElement->find($selector)->getText();
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return str_replace($currency, '', $price);
     }
 
@@ -223,7 +251,11 @@ class Product extends Form
      *
      * @return string
      */
+<<<<<<< HEAD
     public function getPriceLabel()
+=======
+    public function getPriceLabel(): string
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         return (string)$this->_rootElement->find($this->regularPriceLabel)->getText();
     }

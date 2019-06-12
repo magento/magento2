@@ -141,7 +141,11 @@ class RowParser
      * @throws ColumnNotFoundException
      * @throws RowException
      */
+<<<<<<< HEAD
     private function getRegionIds(array $rowData, $rowNumber, ColumnResolver $columnResolver, $countryId): array
+=======
+    private function getRegionIds(array $rowData, $rowNumber, ColumnResolver $columnResolver, $countryId)
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $regionCode = $columnResolver->getColumnValue(ColumnResolver::COLUMN_REGION, $rowData);
         if ($countryId !== '0' && $this->locationDirectory->hasRegionId($countryId, $regionCode)) {
@@ -158,7 +162,10 @@ class RowParser
                 )
             );
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         return $regionIds;
     }
 

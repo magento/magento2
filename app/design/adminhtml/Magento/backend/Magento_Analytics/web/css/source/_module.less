@@ -84,6 +84,7 @@
 //  ---------------------------------------------
 
 .advanced-reports-subscription-modal {
+<<<<<<< HEAD
   .modal-inner-wrap {
     max-width: 75rem;
     margin-top: 13rem;
@@ -95,9 +96,25 @@
       .action-close {
         display: none;
       }
+=======
+    .modal-inner-wrap {
+        margin-top: 13rem;
+        max-width: 75rem;
+
+        .modal-content,
+        .modal-header {
+            padding-left: 4rem;
+            padding-right: 4rem;
+
+            .action-close {
+                display: none;
+            }
+        }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
   }
 
+<<<<<<< HEAD
   .admin__fieldset {
     padding: 0;
   }
@@ -120,6 +137,29 @@
     background-size: 55px 49.08px;
     padding: 1.5rem 0 2rem 7rem;
   }
+=======
+    .admin__fieldset {
+        padding: 0;
+    }
+}
+
+.advanced-reports-subscription-text {
+    line-height: @line-height__xl;
+    padding-bottom: 8rem;
+}
+
+.advanced-reports-subscription-close {
+    display: block;
+    float: right;
+}
+
+.advanced-reports-subscription-modal {
+    h1:first-of-type {
+        background: url("Magento_Analytics::images/analytics-icon.svg") no-repeat;
+        background-size: 55px 49.08px;
+        padding: 1.5rem 0 2rem 7rem;
+    }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 }
 
 //
@@ -127,19 +167,46 @@
 //  _____________________________________________
 
 .config-additional-comment {
-  border-color: @color-gray80;
-  border-style: solid;
-  border-width: 1px 0;
-  margin: @indent__l 0;
-  padding: @indent__m;
+    border-color: @color-gray80;
+    border-style: solid;
+    border-width: 1px 0;
+    margin: @indent__l 0;
+    padding: @indent__m;
 }
 
 .config-additional-comment-title {
-  margin-bottom: @indent__xs;
+    margin-bottom: @indent__xs;
 }
 
 .config-additional-comment-content {
-  line-height: @line-height__l;
+    line-height: @line-height__l;
+}
+
+.config-vertical-title {
+    clear: both;
+    color: rgb(48, 48, 48);
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: .025em;
+    padding: 1.9rem 2.8rem 1.9rem 0;
+    position: relative;
+}
+
+.config-vertical-comment {
+    line-height: 1.5;
+    margin-bottom: .5em;
+    margin-top: 1rem;
+}
+
+/**
+ * @codingStandardsIgnoreStart
+ */
+#row_analytics_general_vertical {
+    >td.config-vertical-label {
+        >label.admin__field-label {
+            padding-right: 0;
+        }
+    }
 }
 
 .config-vertical-title {

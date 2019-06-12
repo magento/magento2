@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\User\Model;
 
 use Magento\Framework\Validator\EmailAddress;
@@ -32,13 +33,25 @@ class UserValidationRules
     public function addUserInfoRules(\Magento\Framework\Validator\DataObject $validator)
     {
         $userNameNotEmpty = new NotEmpty();
-        $userNameNotEmpty->setMessage(__('User Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
+        $userNameNotEmpty->setMessage(
+            __('"User Name" is required. Enter and try again.'),
+            \Zend_Validate_NotEmpty::IS_EMPTY
+        );
         $firstNameNotEmpty = new NotEmpty();
-        $firstNameNotEmpty->setMessage(__('First Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
+        $firstNameNotEmpty->setMessage(
+            __('"First Name" is required. Enter and try again.'),
+            \Zend_Validate_NotEmpty::IS_EMPTY
+        );
         $lastNameNotEmpty = new NotEmpty();
-        $lastNameNotEmpty->setMessage(__('Last Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
+        $lastNameNotEmpty->setMessage(
+            __('"Last Name" is required. Enter and try again.'),
+            \Zend_Validate_NotEmpty::IS_EMPTY
+        );
         $emailValidity = new EmailAddress();
-        $emailValidity->setMessage(__('Please enter a valid email.'), \Zend_Validate_EmailAddress::INVALID);
+        $emailValidity->setMessage(
+            __('Please enter a valid email.'),
+            \Zend_Validate_EmailAddress::INVALID
+        );
 
         /** @var $validator \Magento\Framework\Validator\DataObject */
         $validator->addRule(

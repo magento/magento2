@@ -202,11 +202,14 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         self::assertNull($address, "When customer has no addresses, null is expected.");
     }
 
+    /**
+     * @return array
+     */
     public function getCustomerDefaultAddressDataProvider()
     {
         return [
             self::ADDRESS_TYPE_SHIPPING => [self::ADDRESS_TYPE_SHIPPING],
-            self::ADDRESS_TYPE_BILLING => [self::ADDRESS_TYPE_BILLING]
+            self::ADDRESS_TYPE_BILLING => [self::ADDRESS_TYPE_BILLING],
         ];
     }
 
@@ -215,6 +218,10 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Multishipping/Fixtures/quote_with_split_items.php
+<<<<<<< HEAD
+=======
+     * @return void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function testCreateOrders()
     {
@@ -225,8 +232,13 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
 
         $this->model->createOrders();
 
+<<<<<<< HEAD
         $orderList = $this->getOrderList($quote->getId());
         self::assertEquals(3, sizeof($orderList));
+=======
+        $orderList = $this->getOrderList((int)$quote->getId());
+        self::assertCount(3, $orderList);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         /**
          * @var Order $firstOrder
@@ -250,7 +262,11 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
                 'street' => ['Main Division 1'],
                 'city' => 'Culver City',
                 'region' => 'California',
+<<<<<<< HEAD
                 'postcode' => 90800
+=======
+                'postcode' => 90800,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         );
         $this->performOrderAddressAssertions(
@@ -259,7 +275,11 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
                 'street' => ['Second Division 2'],
                 'city' => 'Denver',
                 'region' => 'Colorado',
+<<<<<<< HEAD
                 'postcode' => 80203
+=======
+                'postcode' => 80203,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         );
         $this->performOrderAddressAssertions(
@@ -268,7 +288,11 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
                 'street' => ['Third Division 1'],
                 'city' => 'New York',
                 'region' => 'New York',
+<<<<<<< HEAD
                 'postcode' => 10029
+=======
+                'postcode' => 10029,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         );
 
@@ -291,6 +315,10 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Multishipping/Fixtures/quote_with_split_items.php
+<<<<<<< HEAD
+=======
+     * @return void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     public function testCreateOrdersWithSomeFailedOrders()
     {
@@ -319,7 +347,11 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
                     'street' => ['Main Division 1'],
                     'city' => 'Culver City',
                     'region' => 'California',
+<<<<<<< HEAD
                     'postcode' => '90800'
+=======
+                    'postcode' => '90800',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ],
                 $this->model->getQuote()
             ),
@@ -334,7 +366,11 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
                     'street' => ['Second Division 2'],
                     'city' => 'Denver',
                     'region' => 'Colorado',
+<<<<<<< HEAD
                     'postcode' => '80203'
+=======
+                    'postcode' => '80203',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ],
                 $this->model->getQuote()
             ),
@@ -348,7 +384,11 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
                     'street' => ['Third Division 1'],
                     'city' => 'New York',
                     'region' => 'New York',
+<<<<<<< HEAD
                     'postcode' => '10029'
+=======
+                    'postcode' => '10029',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ],
                 $this->model->getQuote()
             ),
@@ -465,6 +505,10 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      *
      * @param float $total
      * @param float $expected
+<<<<<<< HEAD
+=======
+     * @return void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      */
     private function performOrderTotalAssertions(float $total, float $expected)
     {

@@ -10,9 +10,12 @@ use Magento\Analytics\Model\ExportDataHandlerInterface;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+<<<<<<< HEAD
 /**
  * Class CollectDataTest
  */
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 class CollectDataTest extends \PHPUnit\Framework\TestCase
 {
     /**

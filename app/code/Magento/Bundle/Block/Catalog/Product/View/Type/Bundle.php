@@ -92,6 +92,8 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * Return catalog rule processor or creates processor if it does not exist
+     *
      * @deprecated 100.2.0
      * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
      */
@@ -107,6 +109,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 
     /**
      * Returns the bundle product options
+     *
      * Will return cached options data if the product options are already initialized
      * In a case when $stripSelection parameter is true will reload stored bundle selections collection from DB
      *
@@ -141,6 +144,8 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * Return true if product has options
+     *
      * @return bool
      */
     public function hasOptions()
@@ -156,7 +161,6 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * Returns JSON encoded config to be used in JS scripts
      *
      * @return string
-     *
      */
     public function getJsonConfig()
     {
@@ -185,6 +189,10 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                 $configValue = $preConfiguredValues->getData('bundle_option/' . $optionId);
                 if ($configValue) {
                     $defaultValues[$optionId] = $configValue;
+                    $configQty = $preConfiguredValues->getData('bundle_option_qty/' . $optionId);
+                    if ($configQty) {
+                        $options[$optionId]['selections'][$configValue]['qty'] = $configQty;
+                    }
                 }
                 $options = $this->processOptions($optionId, $options, $preConfiguredValues);
             }
@@ -225,10 +233,11 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * Get formed data from option selection item
+     * Get formed data from option selection item.
      *
      * @param Product $product
      * @param Product $selection
+     *
      * @return array
      */
     private function getSelectionItemData(Product $product, Product $selection)
@@ -252,20 +261,25 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             'optionId' => $selection->getId(),
             'prices' => [
                 'oldPrice' => [
+<<<<<<< HEAD
                     'amount' => $oldPrice
+=======
+                    'amount' => $oldPrice,
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 ],
                 'basePrice' => [
-                    'amount' => $basePrice
+                    'amount' => $basePrice,
                 ],
                 'finalPrice' => [
-                    'amount' => $finalPrice
-                ]
+                    'amount' => $finalPrice,
+                ],
             ],
             'priceType' => $selection->getSelectionPriceType(),
             'tierPrice' => $this->getTierPrices($product, $selection),
             'name' => $selection->getName(),
-            'canApplyMsrp' => false
+            'canApplyMsrp' => false,
         ];
+
         return $selection;
     }
 

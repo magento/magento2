@@ -63,7 +63,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
     }
 
     /**
-     * Get minimal and maximal option values
+     * Get minimal and maximal option values.
      *
      * @param string $priceCode
      * @return array
@@ -141,7 +141,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
     }
 
     /**
-     * Return the minimal or maximal price for custom options
+     * Return the minimal or maximal price for custom options.
      *
      * @param bool $getMin
      * @param string $priceCode

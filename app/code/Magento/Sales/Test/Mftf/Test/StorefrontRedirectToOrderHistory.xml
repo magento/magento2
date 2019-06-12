@@ -7,10 +7,18 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="StorefrontRedirectToOrderHistory">
         <annotations>
             <features value="Redirection Rules"/>
+=======
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontRedirectToOrderHistory">
+        <annotations>
+            <features value="Redirection Rules"/>
+            <stories value="Create Invoice"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <title value="Create Invoice"/>
             <description
                     value="Check while order printing URL with an id of not relevant order redirects to order history"/>
@@ -34,12 +42,21 @@
         </after>
 
         <!--Log in to Storefront as Customer 1 -->
+<<<<<<< HEAD
         <actionGroup ref="CustomerLoginOnStorefront" stepKey="signUp">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
 
         <!--Create an order at Storefront as Customer 1 -->
         <actionGroup ref="CreateOrderToPrintPageActionGroup" stepKey="createOrderToPrint">
+=======
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!--Create an order at Storefront as Customer 1 -->
+        <actionGroup ref="CreateOrderToPrintPageWithSelectedPaymentMethodActionGroup" stepKey="createOrderToPrint">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <argument name="Category" value="$$createCategory$$"/>
         </actionGroup>
 
@@ -58,12 +75,21 @@
         <waitForLoadingMaskToDisappear stepKey="waitSignOutPage"/>
 
         <!--Log in to Storefront as Customer 2 -->
+<<<<<<< HEAD
         <actionGroup ref="CustomerLoginOnStorefront" stepKey="signUp2">
             <argument name="customer" value="$$createCustomer2$$"/>
         </actionGroup>
 
         <!--Create an order at Storefront as Customer 2 -->
         <actionGroup ref="CreateOrderToPrintPageActionGroup" stepKey="createOrderToPrint2">
+=======
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp2">
+            <argument name="Customer" value="$$createCustomer2$$"/>
+        </actionGroup>
+
+        <!--Create an order at Storefront as Customer 2 -->
+        <actionGroup ref="CreateOrderToPrintPageWithSelectedPaymentMethodActionGroup" stepKey="createOrderToPrint2">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             <argument name="Category" value="$$createCategory$$"/>
         </actionGroup>
 

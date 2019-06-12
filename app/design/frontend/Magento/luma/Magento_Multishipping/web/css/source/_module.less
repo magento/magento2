@@ -48,7 +48,11 @@
                     }
 
                     .error-block {
+<<<<<<< HEAD
                         color: @color-red10;
+=======
+                        color: @error__color;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
                         .error-label {
                             font-weight: @font-weight__bold;
@@ -230,7 +234,11 @@
             }
 
             .error-description {
+<<<<<<< HEAD
                 color: @color-red10;
+=======
+                color: @error__color;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 font-weight: @font-weight__regular;
                 margin-bottom: @indent__s;
                 margin-top: -@indent__s;
@@ -345,6 +353,25 @@
 
             .data.table {
                 &:extend(.abs-checkout-order-review all);
+<<<<<<< HEAD
+=======
+                &.table-order-review {
+                    > tbody {
+                        > tr {
+                            > td {
+                                &.col {
+                                    &.subtotal {
+                                        border-bottom: none;
+                                    }
+                                    &.qty {
+                                        text-align: center;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             }
         }
 
@@ -374,7 +401,11 @@
                 text-align: right;
 
                 .action {
+<<<<<<< HEAD
                     margin-left: @indent__s;
+=======
+                    margin-left: 0;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
                     &.back {
                         display: block;
@@ -496,4 +527,15 @@
             margin-left: @indent__xl;
         }
     }
+<<<<<<< HEAD
+=======
+    
+    .multicheckout { 
+        .actions-toolbar {
+            > .primary {
+                margin-right: 0;
+            }
+        }
+    }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 }

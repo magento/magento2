@@ -7,6 +7,8 @@
 namespace Magento\Theme\Console\Command;
 
 use Magento\Framework\App\Cache;
+use Magento\Framework\App\Console\MaintenanceModeEnabler;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Framework\App\ObjectManager;

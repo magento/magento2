@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRemoveDefaultImageSimpleProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to remove default images from a Simple Product"/>
+            <description value="Admin should be able to remove default images from a Simple Product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-195"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Create product-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPage"/>
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateSimpleProduct">
+            <argument name="product" value="SimpleProduct3"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillSimpleProductMain">
+            <argument name="product" value="SimpleProduct3"/>
+        </actionGroup>
+
+        <!-- Add image to product -->
+        <actionGroup ref="addProductImage" stepKey="addImageForProductSimple">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+
+        <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
+
+        <!-- Remove image from product -->
+        <actionGroup ref="removeProductImage" stepKey="removeProductImage"/>
+
+        <actionGroup ref="saveProductForm" stepKey="saveProductFormAfterRemove"/>
+
+        <!-- Assert product image not in admin product form -->
+        <actionGroup ref="assertProductImageNotInAdminProductPage" stepKey="assertProductImageNotInAdminProductPage"/>
+
+        <!-- Assert product in storefront product page -->
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPageAfterRemove">
+            <argument name="product" value="SimpleProduct3"/>
+        </actionGroup>
+        <!-- Assert product image not in storefront product page -->
+        <actionGroup ref="assertProductImageNotInStorefrontProductPage" stepKey="assertProductImageNotInStorefrontProductPage">
+            <argument name="product" value="SimpleProduct3"/>
+        </actionGroup>
+    </test>
+</tests>

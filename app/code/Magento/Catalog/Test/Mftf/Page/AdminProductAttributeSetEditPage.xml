@@ -6,9 +6,15 @@
   */
 -->
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
     <page name="AdminProductAttributeSetEditPage" url="catalog/product_set/edit/id/{{var1}}" area="admin" module="Magento_Catalog" parameterized="true">
         <section name="AdminProductAttributeSetEditSection"/>
         <section name="AdminProductAttributeSetActionSection"/>
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+    <page name="AdminProductAttributeSetEditPage" url="catalog/product_set/edit/id" area="admin" module="Catalog">
+        <section name="AdminProductAttributeSetEditSection"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </page>
 </pages>

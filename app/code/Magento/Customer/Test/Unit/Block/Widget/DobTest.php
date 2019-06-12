@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -96,7 +94,10 @@ class DobTest extends \PHPUnit\Framework\TestCase
 
         $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->context->expects($this->any())->method('getLocaleDate')->will($this->returnValue($timezone));
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->setMethods(['escapeHtml'])
@@ -350,13 +351,9 @@ class DobTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMinDateRange($validationRules, $expectedValue)
     {
-        $this->attribute->expects(
-            $this->once()
-        )->method(
-                'getValidationRules'
-            )->will(
-                $this->returnValue($validationRules)
-            );
+        $this->attribute->expects($this->once())
+            ->method('getValidationRules')
+            ->will($this->returnValue($validationRules));
         $this->assertEquals($expectedValue, $this->_block->getMinDateRange());
     }
 
@@ -420,13 +417,9 @@ class DobTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMaxDateRange($validationRules, $expectedValue)
     {
-        $this->attribute->expects(
-            $this->once()
-        )->method(
-                'getValidationRules'
-            )->will(
-                $this->returnValue($validationRules)
-            );
+        $this->attribute->expects($this->once())
+            ->method('getValidationRules')
+            ->will($this->returnValue($validationRules));
         $this->assertEquals($expectedValue, $this->_block->getMaxDateRange());
     }
 
@@ -480,7 +473,11 @@ class DobTest extends \PHPUnit\Framework\TestCase
             );
         $this->assertNull($this->_block->getMaxDateRange());
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function testGetHtmlExtraParamsWithoutRequiredOption()
     {
         $this->escaper->expects($this->any())
@@ -503,6 +500,12 @@ class DobTest extends \PHPUnit\Framework\TestCase
         $this->attribute->expects($this->once())
             ->method("isRequired")
             ->willReturn(true);
+        $this->escaper->expects($this->any())
+            ->method('escapeHtml')
+            ->with('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}')
+            ->will($this->returnValue('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}'));
+
+        $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaper));
 
         $this->escaper->expects($this->any())
             ->method('escapeHtml')

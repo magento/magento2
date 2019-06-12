@@ -5,6 +5,9 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity;
 
+/**
+ * Class AttributeTest.
+ */
 class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -13,11 +16,17 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->_model = $this->createPartialMock(\Magento\Eav\Model\Entity\Attribute::class, ['__wakeup']);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown()
     {
         $this->_model = null;
@@ -27,6 +36,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      * @param string $givenFrontendInput
      * @param string $expectedBackendType
      * @dataProvider dataGetBackendTypeByInput
+     * @return void
      */
     public function testGetBackendTypeByInput($givenFrontendInput, $expectedBackendType)
     {
@@ -113,11 +123,21 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * return void
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function testGetFrontendLabels()
     {
         $attributeId = 1;
         $storeLabels = ['test_attribute_store1'];
         $frontendLabelFactory = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory::class)
+<<<<<<< HEAD
+=======
+            ->disableOriginalConstructor()
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->setMethods(['create'])
             ->getMock();
         $resource = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class)

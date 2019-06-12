@@ -17,6 +17,16 @@ define([
         },
         obj,
         utils;
+<<<<<<< HEAD
+=======
+
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+    });
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
     describe('Magento_Catalog/js/product/storage/storage-service', function () {
         var config = {

@@ -11,11 +11,12 @@
             <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.user.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">permissionsUserGrid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\User\Model\ResourceModel\User\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\User\Model\ResourceModel\User\Collection</argument>
                     <argument name="use_ajax" xsi:type="string">1</argument>
                     <argument name="default_sort" xsi:type="string">username</argument>
                     <argument name="default_dir" xsi:type="string">asc</argument>
                     <argument name="grid_url" xsi:type="url" path="*/*/roleGrid"/>
+                    <argument name="save_parameters_in_session" xsi:type="boolean">true</argument>
                 </arguments>
                 <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="permission.user.grid.columnSet">
                     <arguments>
@@ -74,6 +75,16 @@
                             <argument name="index" xsi:type="string">email</argument>
                         </arguments>
                     </block>
+<<<<<<< HEAD
+=======
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="permission.user.grid.columnSet.role_name" as="role_name">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Role</argument>
+                            <argument name="index" xsi:type="string">role_name</argument>
+                            <argument name="filter_index" xsi:type="string">detail_role.role_name</argument>
+                        </arguments>
+                    </block>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     <block class="Magento\Backend\Block\Widget\Grid\Column" name="permission.user.grid.columnSet.is_active" as="is_active">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Status</argument>

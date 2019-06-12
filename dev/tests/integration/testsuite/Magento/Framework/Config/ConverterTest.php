@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <?php
+=======
+<?php declare(strict_types=1);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,19 +10,25 @@
 
 namespace Magento\Framework\Config;
 
+<<<<<<< HEAD
 use Magento\Framework\ObjectManagerInterface;
 
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 /**
  * Tests Magento\Framework\Config\Convert
  */
 class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
+<<<<<<< HEAD
      * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @var Converter
      */
     private $converter;
@@ -49,10 +59,17 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      */
     public function parseVarElementDataProvider()
     {
+<<<<<<< HEAD
         // @codingStandardsIgnoreStart
         $sourceString = <<<'XML'
 <?xml version="1.0"?>
 <view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
+=======
+        $sourceString = <<<'XML'
+<?xml version="1.0"?>
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <vars module="Magento_Test">    
         <var name="str">some string</var>  
         <var name="int-1">1</var>        
@@ -62,7 +79,10 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     </vars>
  </view>
 XML;
+<<<<<<< HEAD
         // @codingStandardsIgnoreEnd
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $expectedResult = [
             'vars' => [
                 'Magento_Test' => [
@@ -88,7 +108,12 @@ XML;
      */
     protected function setUp()
     {
+<<<<<<< HEAD
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->converter = $this->objectManager->get(Converter::class);
+=======
+        $this->converter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+              ->create(\Magento\Framework\Config\Converter::class);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 }

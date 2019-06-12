@@ -152,13 +152,12 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     /**
      * Set customer registry
      *
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $customerRegistry
      * @return void
      * @deprecated 100.1.0
      */
     public function setCustomerRegistry(\Magento\Customer\Model\CustomerRegistry $customerRegistry)
     {
-
         $this->customerRegistry = $customerRegistry;
     }
 

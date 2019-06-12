@@ -7,6 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="adminProductInWebsiteRole" type="user_role">
         <data key="rolename" unique="suffix">restrictedWebsiteRole</data>
@@ -33,5 +34,23 @@
     <entity name="RoleTest" type="user_role">
         <data key="rolename" unique="suffix">RoleTest</data>
         <data key="current_password">123123q</data>
+=======
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="adminRole" type="role">
+        <data key="name" unique="suffix">adminRole</data>
+        <data key="scope">1</data>
+        <data key="access">1</data>
+    </entity>
+
+    <entity name="roleAdministrator" type="role">
+        <data key="name" unique="suffix">Administrator </data>
+        <data key="resourceAccess">All</data>
+        <data key="resources">[]</data>
+    </entity>
+    <entity name="roleSales" type="role">
+        <data key="name" unique="suffix">Role Sales </data>
+        <data key="resourceAccess">Custom</data>
+        <data key="resources">['Magento_Sales::sales','Magento_Sales::sales_operation','Magento_Sales::actions','Magento_Sales::sales_order','Magento_Sales::create','Magento_Sales::actions_view','Magento_Sales::email','Magento_Sales::reorder','Magento_Sales::actions_edit','Magento_Sales::cancel','Magento_Sales::review_payment','Magento_Sales::capture','Magento_Sales::invoice','Magento_Sales::creditmemo','Magento_Sales::hold','Magento_Sales::unhold','Magento_Sales::ship','Magento_Sales::comment','Magento_Sales::emails','Magento_Backend::system','Magento_Backend::system_other_settings','Magento_AdminNotification::adminnotification','Magento_AdminNotification::show_list']</data>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </entity>
 </entities>

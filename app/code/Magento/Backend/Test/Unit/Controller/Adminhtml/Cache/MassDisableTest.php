@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Cache;
 
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -156,7 +157,11 @@ class MassDisableTest extends \PHPUnit\Framework\TestCase
 
         $this->messageManagerMock->expects($this->once())
             ->method('addErrorMessage')
+<<<<<<< HEAD
             ->with('Specified cache type(s) don\'t exist: someCache')
+=======
+            ->with('These cache type(s) don\'t exist: someCache')
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ->willReturnSelf();
 
         $this->assertSame($this->redirectMock, $this->controller->execute());

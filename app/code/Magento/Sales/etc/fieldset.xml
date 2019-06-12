@@ -279,7 +279,11 @@
                 <aspect name="to_order" />
             </field>
             <field name="base_shipping_discount_tax_compensation_amount">
+<<<<<<< HEAD
                 <aspect name="to_order" targetField="base_shipping_discount_tax_compensation_amnt"/>
+=======
+                <aspect name="to_order" targetField="base_shipping_discount_tax_compensation_amnt" />
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             </field>
             <field name="prefix">
                 <aspect name="to_order_address" />

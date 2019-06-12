@@ -94,7 +94,7 @@ define([
                 $title,
                 $corner;
 
-            if (!$element.size()) {
+            if (!$element.length) {
                 $element = $('<div class="' +
                     $widget.options.tooltipClass +
                     '"><div class="image"></div><div class="title"></div><div class="corner"></div></div>'
@@ -406,7 +406,7 @@ define([
                 if ($widget.options.enableControlLabel) {
                     label +=
                         '<span id="' + controlLabelId + '" class="' + classes.attributeLabelClass + '">' +
-                            item.label +
+                        $('<i></i>').text(item.label).html() +
                         '</span>' +
                         '<span class="' + classes.attributeSelectedOptionLabelClass + '"></span>';
                 }
@@ -414,7 +414,7 @@ define([
                 if ($widget.inProductList) {
                     $widget.productForm.append(input);
                     input = '';
-                    listLabel = 'aria-label="' + item.label + '"';
+                    listLabel = 'aria-label="' + $('<i></i>').text(item.label).html() + '"';
                 } else {
                     listLabel = 'aria-labelledby="' + controlLabelId + '"';
                 }
@@ -493,7 +493,7 @@ define([
                 return '';
             }
 
-            $.each(config.options, function () {
+            $.each(config.options, function (index) {
                 var id,
                     type,
                     value,
@@ -501,7 +501,13 @@ define([
                     label,
                     width,
                     height,
+<<<<<<< HEAD
                     attr;
+=======
+                    attr,
+                    swatchImageWidth,
+                    swatchImageHeight;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
                 if (!optionConfig.hasOwnProperty(this.id)) {
                     return '';
@@ -509,18 +515,24 @@ define([
 
                 // Add more button
                 if (moreLimit === countAttributes++) {
-                    html += '<a href="#" class="' + moreClass + '">' + moreText + '</a>';
+                    html += '<a href="#" class="' + moreClass + '"><span>' + moreText + '</span></a>';
                 }
 
                 id = this.id;
                 type = parseInt(optionConfig[id].type, 10);
-                value = optionConfig[id].hasOwnProperty('value') ? optionConfig[id].value : '';
+                value = optionConfig[id].hasOwnProperty('value') ?
+                    $('<i></i>').text(optionConfig[id].value).html() : '';
                 thumb = optionConfig[id].hasOwnProperty('thumb') ? optionConfig[id].thumb : '';
                 width = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.width : 110;
                 height = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.height : 90;
+<<<<<<< HEAD
                 label = this.label ? this.label : '';
+=======
+                label = this.label ? $('<i></i>').text(this.label).html() : '';
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 attr =
                     ' id="' + controlId + '-item-' + id + '"' +
+                    ' index="' + index + '"' +
                     ' aria-checked="false"' +
                     ' aria-describedby="' + controlId + '"' +
                     ' tabindex="0"' +
@@ -533,6 +545,12 @@ define([
                     ' role="option"' +
                     ' thumb-width="' + width + '"' +
                     ' thumb-height="' + height + '"';
+<<<<<<< HEAD
+=======
+
+                swatchImageWidth = _.has(sizeConfig, 'swatchImage') ? sizeConfig.swatchImage.width : 30;
+                swatchImageHeight = _.has(sizeConfig, 'swatchImage') ? sizeConfig.swatchImage.height : 20;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
                 if (!this.hasOwnProperty('products') || this.products.length <= 0) {
                     attr += ' option-empty="true"';
@@ -552,7 +570,11 @@ define([
                     // Image
                     html += '<div class="' + optionClass + ' image" ' + attr +
                         ' style="background: url(' + value + ') no-repeat center; background-size: initial;width:' +
+<<<<<<< HEAD
                         sizeConfig.swatchImage.width + 'px; height:' + sizeConfig.swatchImage.height + 'px">' + '' +
+=======
+                        swatchImageWidth + 'px; height:' + swatchImageHeight + 'px">' + '' +
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                         '</div>';
                 } else if (type === 3) {
                     // Clear
@@ -684,9 +706,24 @@ define([
                 if (!images) {
                     images = this.options.mediaGalleryInitial;
                 }
+<<<<<<< HEAD
 
                 this.updateBaseImage(images, $main, !this.inProductList, eventName);
+=======
+                this.updateBaseImage(this._sortImages(images), $main, !this.inProductList);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             }
+        },
+
+        /**
+         * Sorting images array
+         *
+         * @private
+         */
+        _sortImages: function (images) {
+            return _.sortBy(images, function (image) {
+                return parseInt(image.position, 10);
+            });
         },
 
         /**
@@ -702,7 +739,8 @@ define([
                 $wrapper = $this.parents('.' + $widget.options.classes.attributeOptionsWrapper),
                 $label = $parent.find('.' + $widget.options.classes.attributeSelectedOptionLabelClass),
                 attributeId = $parent.attr('attribute-id'),
-                $input = $parent.find('.' + $widget.options.classes.attributeInput);
+                $input = $parent.find('.' + $widget.options.classes.attributeInput),
+                checkAdditionalData = JSON.parse(this.options.jsonSwatchConfig[attributeId]['additional_data']);
 
             if ($widget.inProductList) {
                 $input = $widget.productForm.find(
@@ -736,7 +774,20 @@ define([
                 $widget._UpdatePrice();
             }
 
+<<<<<<< HEAD
             $widget._loadMedia(eventName);
+=======
+            $(document).trigger('updateMsrpPriceBlock',
+                [
+                    parseInt($this.attr('index'), 10) + 1,
+                    $widget.options.jsonConfig.optionPrices
+                ]);
+
+            if (checkAdditionalData['update_product_preview_image'] === '1') {
+                $widget._loadMedia();
+            }
+
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             $input.trigger('change');
         },
 
@@ -833,7 +884,7 @@ define([
             $widget._Rewind(controls);
 
             // done if nothing selected
-            if (selected.size() <= 0) {
+            if (selected.length <= 0) {
                 return;
             }
 
@@ -843,7 +894,7 @@ define([
                     id = $this.attr('attribute-id'),
                     products = $widget._CalcProducts(id);
 
-                if (selected.size() === 1 && selected.first().attr('attribute-id') === id) {
+                if (selected.length === 1 && selected.first().attr('attribute-id') === id) {
                     return;
                 }
 
@@ -908,7 +959,8 @@ define([
                 $productPrice = $product.find(this.options.selectorProductPrice),
                 options = _.object(_.keys($widget.optionsMap), {}),
                 result,
-                tierPriceHtml;
+                tierPriceHtml,
+                isShow;
 
             $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
                 var attributeId = $(this).attr('attribute-id');
@@ -925,11 +977,9 @@ define([
                 }
             );
 
-            if (typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount) {
-                $(this.options.slyOldPriceSelector).show();
-            } else {
-                $(this.options.slyOldPriceSelector).hide();
-            }
+            isShow = typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount;
+
+            $product.find(this.options.slyOldPriceSelector)[isShow ? 'show' : 'hide']();
 
             if (typeof result != 'undefined' && result.tierPrices.length) {
                 if (this.options.tierPriceTemplate) {
@@ -974,19 +1024,59 @@ define([
          * @private
          */
         _getPrices: function (newPrices, displayPrices) {
-            var $widget = this;
+            var $widget = this,
+                optionPriceDiff = 0,
+                allowedProduct, optionPrices, basePrice, optionFinalPrice;
 
             if (_.isEmpty(newPrices)) {
-                newPrices = $widget.options.jsonConfig.prices;
+                allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts());
+                optionPrices = this.options.jsonConfig.optionPrices;
+                basePrice = parseFloat(this.options.jsonConfig.prices.basePrice.amount);
+
+                if (!_.isEmpty(allowedProduct)) {
+                    optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
+                    optionPriceDiff = optionFinalPrice - basePrice;
+                }
+
+                if (optionPriceDiff !== 0) {
+                    newPrices  = this.options.jsonConfig.optionPrices[allowedProduct];
+                } else {
+                    newPrices = $widget.options.jsonConfig.prices;
+                }
             }
 
             _.each(displayPrices, function (price, code) {
+
                 if (newPrices[code]) {
                     displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount;
                 }
             });
 
             return displayPrices;
+        },
+
+        /**
+         * Get product with minimum price from selected options.
+         *
+         * @param {Array} allowedProducts
+         * @returns {String}
+         * @private
+         */
+        _getAllowedProductWithMinPrice: function (allowedProducts) {
+            var optionPrices = this.options.jsonConfig.optionPrices,
+                product = {},
+                optionFinalPrice, optionMinPrice;
+
+            _.each(allowedProducts, function (allowedProduct) {
+                optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
+
+                if (_.isEmpty(product) || optionFinalPrice < optionMinPrice) {
+                    optionMinPrice = optionFinalPrice;
+                    product = allowedProduct;
+                }
+            }, this);
+
+            return product;
         },
 
         /**
@@ -1035,12 +1125,14 @@ define([
                 mediaCallData.isAjax = true;
                 $widget._XhrKiller();
                 $widget._EnableProductMediaLoader($this);
-                $widget.xhr = $.get(
-                    $widget.options.mediaCallback,
-                    mediaCallData,
-                    mediaSuccessCallback,
-                    'json'
-                ).done(function () {
+                $widget.xhr = $.ajax({
+                    url: $widget.options.mediaCallback,
+                    cache: true,
+                    type: 'GET',
+                    dataType: 'json',
+                    data: mediaCallData,
+                    success: mediaSuccessCallback
+                }).done(function () {
                     $widget._XhrKiller();
                 });
             }
@@ -1055,7 +1147,7 @@ define([
         _EnableProductMediaLoader: function ($this) {
             var $widget = this;
 
-            if ($('body.catalog-product-view').size() > 0) {
+            if ($('body.catalog-product-view').length > 0) {
                 $this.parents('.column.main').find('.photo.image')
                     .addClass($widget.options.classes.loader);
             } else {
@@ -1074,7 +1166,7 @@ define([
         _DisableProductMediaLoader: function ($this) {
             var $widget = this;
 
-            if ($('body.catalog-product-view').size() > 0) {
+            if ($('body.catalog-product-view').length > 0) {
                 $this.parents('.column.main').find('.photo.image')
                     .removeClass($widget.options.classes.loader);
             } else {
@@ -1187,6 +1279,7 @@ define([
             var justAnImage = images[0],
                 initialImages = this.options.mediaGalleryInitial,
                 imagesToUpdate,
+                gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
                 isInitial;
 
             if (isInProductView) {
@@ -1198,7 +1291,15 @@ define([
                 }
 
                 imagesToUpdate = this._setImageIndex(imagesToUpdate);
-                gallery.updateData(imagesToUpdate);
+
+                if (!_.isUndefined(gallery)) {
+                    gallery.updateData(imagesToUpdate);
+                } else {
+                    context.find(this.options.mediaGallerySelector).on('gallery:loaded', function (loadedGallery) {
+                        loadedGallery = context.find(this.options.mediaGallerySelector).data('gallery');
+                        loadedGallery.updateData(imagesToUpdate);
+                    }.bind(this));
+                }
 
                 if (isInitial) {
                     $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
@@ -1208,9 +1309,7 @@ define([
                         dataMergeStrategy: this.options.gallerySwitchStrategy
                     });
                 }
-
                 gallery.first();
-
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }

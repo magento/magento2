@@ -55,10 +55,15 @@ class GridToCsv extends Action
         parent::__construct($context);
         $this->converter = $converter;
         $this->fileFactory = $fileFactory;
+<<<<<<< HEAD
         $this->filter = $filter
             ?: ObjectManager::getInstance()->get(Filter::class);
         $this->logger = $logger
             ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+=======
+        $this->filter = $filter ?: ObjectManager::getInstance()->get(Filter::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     }
 
     /**

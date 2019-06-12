@@ -26,7 +26,11 @@ class DimensionModes
             $result = [];
             foreach ($dimensions as $dimension) {
                 $result[$dimension->getName()] = $dimension;
+<<<<<<< HEAD
             };
+=======
+            }
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             return $result;
         })(...$dimensions);
     }

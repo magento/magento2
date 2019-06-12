@@ -12,6 +12,9 @@ use Magento\CatalogWidget\Model\RuleFactory;
 use Magento\CatalogWidget\Model\Rule\Condition\Combine as CombineCondition;
 use Magento\CatalogWidget\Model\Rule\Condition\Product as ProductCondition;
 
+/**
+ * Test for Magento\Rule\Model\Condition\Sql\Builder
+ */
 class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -24,7 +27,10 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $this->model = Bootstrap::getObjectManager()->create(Builder::class);
     }
 
-    public function testAttachConditionToCollection()
+    /**
+     * @return void
+     */
+    public function testAttachConditionToCollection(): void
     {
         /** @var ProductCollectionFactory $collectionFactory */
         $collectionFactory = Bootstrap::getObjectManager()->create(ProductCollectionFactory::class);
@@ -40,21 +46,21 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
                     'type' => CombineCondition::class,
                     'aggregator' => 'all',
                     'value' => '1',
-                    'new_child' => ''
+                    'new_child' => '',
                 ],
                 '1--1' => [
                     'type' => ProductCondition::class,
                     'attribute' => 'category_ids',
                     'operator' => '==',
-                    'value' => '3'
+                    'value' => '3',
                 ],
                 '1--2' => [
                     'type' => ProductCondition::class,
                     'attribute' => 'special_to_date',
                     'operator' => '==',
-                    'value' => '2017-09-15'
+                    'value' => '2017-09-15',
                 ],
-            ]
+            ],
         ];
 
         $rule->loadPost($ruleConditionArray);

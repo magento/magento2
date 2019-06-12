@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <!--
  /**
   * Copyright © Magento, Inc. All rights reserved.
@@ -7,10 +8,32 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+=======
+        <!--
+         /**
+          * Copyright © Magento, Inc. All rights reserved.
+          * See COPYING.txt for license details.
+          */
+        -->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <actionGroup name="ClearCacheActionGroup">
         <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/cache/" stepKey="goToNewCustomVarialePage" />
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminCacheManagementSection.FlushMagentoCache}}" stepKey="clickFlushMagentoCache" />
         <waitForPageLoad stepKey="waitForCacheFlush"/>
     </actionGroup>
+<<<<<<< HEAD
+=======
+    <actionGroup name="clearPageCache">
+        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/cache/" stepKey="amOnCacheManagementPage"/>
+        <waitForPageLoad stepKey="waitForCacheManagement"/>
+        <selectOption selector="{{AdminCacheManagementSection.massActionSelect}}" userInput="refresh" stepKey="selectRefresh"/>
+        <click selector="{{AdminCacheManagementSection.pageCacheCheckbox}}" stepKey="selectPageCache"/>
+        <click selector="{{AdminCacheManagementSection.massActionSubmit}}" stepKey="submitCacheForm"/>
+        <waitForPageLoad stepKey="waitForCacheFlush"/>
+    </actionGroup>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 </actionGroups>

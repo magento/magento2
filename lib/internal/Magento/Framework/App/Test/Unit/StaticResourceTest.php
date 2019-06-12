@@ -72,6 +72,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
      * @var LoggerInterface|MockObject
      */
     private $loggerMock;
+<<<<<<< HEAD
 
     /**
      * @var DeploymentConfig|MockObject
@@ -81,6 +82,17 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
     /**
      * @var StaticResource
      */
+=======
+
+    /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfigMock;
+
+    /**
+     * @var StaticResource
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     private $object;
 
     protected function setUp()
@@ -258,6 +270,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
             ->method('getMode')
             ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
         $this->requestMock->expects($this->once())
+<<<<<<< HEAD
             ->method('get')
             ->with('resource')
             ->willReturn('short/path.js');
@@ -276,6 +289,11 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with('resource')
             ->willReturn('frontend/..\..\folder_above/././Magento_Ui/template/messages.html');
+=======
+            ->method('get')
+            ->with('resource')
+            ->willReturn('short/path.js');
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->object->launch();
     }
 
@@ -300,5 +318,23 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
         $this->responseMock->expects($this->once())
             ->method('sendResponse');
         $this->assertTrue($this->object->catchException($bootstrap, $exception));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testLaunchPathAbove()
+    {
+        $path = 'frontend/..\..\folder_above/././Magento_Ui/template/messages.html';
+        $this->stateMock->expects($this->once())
+            ->method('getMode')
+            ->will($this->returnValue(State::MODE_DEVELOPER));
+        $this->requestMock->expects($this->once())
+            ->method('get')
+            ->with('resource')
+            ->willReturn('frontend/..\..\folder_above/././Magento_Ui/template/messages.html');
+        $this->expectExceptionMessage("Requested path '$path' is wrong.");
+
+        $this->object->launch();
     }
 }

@@ -6,6 +6,7 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDeleteUserActionGroup">
         <arguments>
@@ -25,5 +26,40 @@
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
         <waitForPageLoad stepKey="waitForSave" />
         <see userInput="You deleted the user." stepKey="seeUserDeleteMessage"/>
+=======
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteUserActionGroup">
+        <arguments>
+            <argument name="user"/>
+        </arguments>
+        <amOnPage stepKey="amOnAdminUsersPage" url="{{AdminUsersPage.url}}"/>
+        <waitForPageLoad stepKey="waitForAdminUserPageLoad"/>
+        <click stepKey="openTheUser" selector="{{AdminDeleteUserSection.role(user.name)}}"/>
+        <fillField stepKey="TypeCurrentPassword" selector="{{AdminDeleteUserSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click stepKey="clickToDeleteRole" selector="{{AdminDeleteUserSection.delete}}"/>
+        <waitForElementVisible stepKey="wait" selector="{{AdminDeleteRoleSection.confirm}}" time="30"/>
+        <click stepKey="clickToConfirm" selector="{{AdminDeleteUserSection.confirm}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see stepKey="seeDeleteMessageForUser" userInput="You deleted the user."/>
+    </actionGroup>
+    <actionGroup name="AdminDeleteCustomUserActionGroup">
+        <arguments>
+            <argument name="user"/>
+        </arguments>
+        <amOnPage url="{{AdminUsersPage.url}}" stepKey="navigateToUserGrid" />
+        <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{user.username}}" stepKey="enterUserName" />
+        <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearch" />
+        <waitForPageLoad stepKey="waitForGridToLoad"/>
+        <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{user.username}}" stepKey="seeUser" />
+        <click selector="{{AdminUserGridSection.searchResultFirstRow}}" stepKey="openUserEdit"/>
+        <waitForPageLoad stepKey="waitForUserEditPageLoad"/>
+        <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterThePassword" />
+        <click selector="{{AdminMainActionsSection.delete}}" stepKey="deleteUser"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
+        <waitForPageLoad stepKey="waitForSave" />
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the user." stepKey="seeUserDeleteMessage"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </actionGroup>
 </actionGroups>

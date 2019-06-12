@@ -1,12 +1,16 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
+use Magento\Quote\Model\Quote;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -50,18 +54,40 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
     protected $eventManagerMock;
 
     /**
+<<<<<<< HEAD
      * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface
      */
     private $requestMock;
 
+=======
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     */
+    private $requestMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|Quote
+     */
+    private $quoteMock;
+
+    /**
+     * @inheritdoc
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     protected function setUp()
     {
         $this->sessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->persistentHelperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
+<<<<<<< HEAD
         $this->observerMock
             = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getControllerAction',
             '__wakeUp']);
+=======
+        $this->observerMock = $this->createPartialMock(
+            \Magento\Framework\Event\Observer::class,
+            ['getControllerAction','__wakeUp']
+        );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->quoteManagerMock = $this->createMock(\Magento\Persistent\Model\QuoteManager::class);
         $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
@@ -79,6 +105,10 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
             $this->checkoutSessionMock,
             $this->requestMock
         );
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+        ->setMethods(['getCustomerIsGuest', 'getIsPersistent'])
+        ->disableOriginalConstructor()
+        ->getMock();
     }
 
     public function testExecuteWhenCanNotApplyPersistentData()
@@ -87,7 +117,7 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->persistentHelperMock->expects($this->never())->method('isEnabled');
         $this->model->execute($this->observerMock);
     }
@@ -98,13 +128,14 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->persistentHelperMock->expects($this->once())->method('isEnabled')->will($this->returnValue(false));
+            ->willReturn(true);
+        $this->persistentHelperMock->expects($this->once())->method('isEnabled')->willReturn(false);
         $this->eventManagerMock->expects($this->never())->method('dispatch');
         $this->model->execute($this->observerMock);
     }
 
     /**
+<<<<<<< HEAD
      * Test method \Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver::execute when persistent is enabled
      *
      * @param $refererUri
@@ -121,10 +152,30 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
         \PHPUnit_Framework_MockObject_Matcher_InvokedCount $dispatchCounter,
         \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setCustomerIdCounter
     ) {
+=======
+     * Test method \Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver::execute when persistent is enabled.
+     *
+     * @param string $refererUri
+     * @param string $requestUri
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expireCounter
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $dispatchCounter
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setCustomerIdCounter
+     * @return void
+     * @dataProvider requestDataProvider
+     */
+    public function testExecuteWhenPersistentIsEnabled(
+        string $refererUri,
+        string $requestUri,
+        \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expireCounter,
+        \PHPUnit\Framework\MockObject\Matcher\InvokedCount $dispatchCounter,
+        \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setCustomerIdCounter
+    ): void {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->persistentHelperMock
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
+<<<<<<< HEAD
             ->will($this->returnValue(true));
         $this->persistentHelperMock->expects($this->once())->method('isEnabled')->will($this->returnValue(true));
         $this->sessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(false));
@@ -136,13 +187,35 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->atLeastOnce())
             ->method('getQuoteId')
             ->will($this->returnValue(10));
+=======
+            ->willReturn(true);
+        $this->persistentHelperMock->expects($this->once())->method('isEnabled')->willReturn(true);
+        $this->sessionMock->expects($this->once())->method('isPersistent')->willReturn(false);
+        $this->checkoutSessionMock
+            ->method('getQuote')
+            ->willReturn($this->quoteMock);
+        $this->quoteMock->method('getCustomerIsGuest')->willReturn(true);
+        $this->quoteMock->method('getIsPersistent')->willReturn(true);
+        $this->customerSessionMock
+            ->expects($this->atLeastOnce())
+            ->method('isLoggedIn')
+            ->willReturn(false);
+        $this->checkoutSessionMock
+            ->expects($this->atLeastOnce())
+            ->method('getQuoteId')
+            ->willReturn(10);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->eventManagerMock->expects($dispatchCounter)->method('dispatch');
         $this->quoteManagerMock->expects($expireCounter)->method('expire');
         $this->customerSessionMock
             ->expects($setCustomerIdCounter)
             ->method('setCustomerId')
             ->with(null)
+<<<<<<< HEAD
             ->will($this->returnSelf());
+=======
+            ->willReturnSelf();
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         $this->requestMock->expects($this->atLeastOnce())->method('getRequestUri')->willReturn($refererUri);
         $this->requestMock
             ->expects($this->atLeastOnce())

@@ -5,10 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerOrderViewSection">
+=======
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerOrderViewSection">
+        <element name="reorder" type="text" selector="a.action.order" timeout="30"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <element name="orderTitle" type="text" selector=".page-title span"/>
         <element name="myOrdersTable" type="text" selector="#my-orders-table"/>
         <element name="subtotal" type="text" selector=".subtotal .amount"/>
@@ -16,5 +23,10 @@
         <element name="printOrderLink" type="text" selector="a.action.print" timeout="30"/>
         <element name="shippingAddress" type="text" selector=".box.box-order-shipping-address"/>
         <element name="billingAddress" type="text" selector=".box.box-order-billing-address"/>
+<<<<<<< HEAD
+=======
+        <element name="orderStatusInGrid" type="text" selector="//td[contains(.,'{{orderId}}')]/../td[contains(.,'{{status}}')]" parameterized="true"/>
+        <element name="pager" type="block" selector=".pager"/>
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     </section>
 </sections>

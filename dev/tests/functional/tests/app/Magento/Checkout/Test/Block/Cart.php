@@ -107,6 +107,7 @@ class Cart extends Block
     protected $cartItemClass = \Magento\Checkout\Test\Block\Cart\CartItem::class;
 
     /**
+<<<<<<< HEAD
      * Paypal page elements locator.
      *
      * @var string
@@ -114,6 +115,8 @@ class Cart extends Block
     private $popupWindowContent = '#main';
 
     /**
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * Locator for page with ajax loading state.
      *
      * @var string

@@ -10,6 +10,7 @@ use Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable as Rendere
 
 class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
+<<<<<<< HEAD
     /**
      * @var \Magento\Framework\View\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -33,6 +34,21 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /**
      * @var Renderer
      */
+=======
+    /** @var \Magento\Framework\View\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $configManager;
+
+    /** @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject */
+    private $imageHelper;
+
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $scopeConfig;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    private $productConfigMock;
+
+    /** @var Renderer */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     private $renderer;
 
     protected function setUp()
@@ -52,7 +68,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                 'viewConfig' => $this->configManager,
                 'imageHelper' => $this->imageHelper,
                 'scopeConfig' => $this->scopeConfig,
+<<<<<<< HEAD
                 'productConfig' => $this->productConfigMock,
+=======
+                'productConfig' => $this->productConfigMock
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             ]
         );
     }

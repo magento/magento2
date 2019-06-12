@@ -3,10 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 namespace Magento\Framework\App\Test\Unit\Filesystem;
 
 /**
  * Unit tests for the \Magento\Framework\App\Filesystem\DirectoryResolver class
+=======
+declare(strict_types=1);
+
+namespace Magento\Framework\App\Test\Unit\Filesystem;
+
+/**
+ * Unit tests for the \Magento\Framework\App\Filesystem\DirectoryResolver class.
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  */
 class DirectoryResolverTest extends \PHPUnit\Framework\TestCase
 {
@@ -48,8 +57,14 @@ class DirectoryResolverTest extends \PHPUnit\Framework\TestCase
      * @dataProvider validatePathDataProvider
      * @param string $path
      * @param bool $expectedResult
+<<<<<<< HEAD
      */
     public function testValidatePath($path, $expectedResult)
+=======
+     * @return void
+     */
+    public function testValidatePath(string $path, bool $expectedResult): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $rootPath = '/path/root';
         $directoryConfig = 'directory_config';
@@ -76,7 +91,11 @@ class DirectoryResolverTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['/path/root/for/validation', true],
+<<<<<<< HEAD
             ['/path/invalid/for/validation', false]
+=======
+            ['/path/invalid/for/validation', false],
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         ];
     }
 }

@@ -7,6 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="TaxConfig" type="tax_config_state">
       <!-- Calculation settings -->
@@ -62,17 +63,24 @@
     <entity name="EnableCrossBorderTrade" type="cross_border_trade_enabled">
         <data key="value">0</data>
     </entity>
+=======
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <!-- Default Tax Destination Calculation -->
     <entity name="CountryUS" type="country">
         <data key="value">US</data>
     </entity>
+<<<<<<< HEAD
     <entity name="RegionCA" type="region">
         <data key="value">12</data>
     </entity>
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <entity name="AllPostCode" type="postcode">
         <data key="value">*</data>
     </entity>
     <!-- Shopping Cart Display Settings -->
+<<<<<<< HEAD
     <entity name="DisplayPricesCart" type="priceCart">
         <data key="value">1</data>
     </entity>
@@ -82,6 +90,8 @@
     <entity name="DisplayShippingAmountCart" type="shippingCart">
         <data key="value">1</data>
     </entity>
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <entity name="IncludeTaxInOrderTotalCart" type="grandtotalCart">
         <data key="value">1</data>
     </entity>
@@ -91,6 +101,7 @@
     <entity name="DisplayZeroTaxSubtotalCart" type="zero_taxCart">
         <data key="value">1</data>
     </entity>
+<<<<<<< HEAD
     <!-- Orders, Invoices, Credit Memos Display Settings -->
     <entity name="DisplayPricesSales" type="priceSales">
         <data key="value">1</data>
@@ -116,22 +127,42 @@
         <requiredEntity type="region">Region_CA</requiredEntity>
         <requiredEntity type="postcode">AllPostCode</requiredEntity>
         <!-- Shopping Cart Display Settings -->
+=======
+    <entity name="Tax_Config_CA" type="tax_config_state">
+    <!-- Default Tax Destination Calculation -->
+        <requiredEntity type="country">CountryUS</requiredEntity>
+        <requiredEntity type="region">Region_CA</requiredEntity>
+        <requiredEntity type="postcode">AllPostCode</requiredEntity>
+    <!-- Shopping Cart Display Settings -->
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <requiredEntity type="grandtotalCart">IncludeTaxInOrderTotalCart</requiredEntity>
         <requiredEntity type="full_summaryCart">DisplayFullTaxSummaryCart</requiredEntity>
         <requiredEntity type="zero_taxCart">DisplayZeroTaxSubtotalCart</requiredEntity>
     </entity>
 
     <entity name="Tax_Config_NY" type="tax_config_state">
+<<<<<<< HEAD
         <!-- Default Tax Destination Calculation -->
         <requiredEntity type="country">CountryUS</requiredEntity>
         <requiredEntity type="region">Region_NY</requiredEntity>
         <requiredEntity type="postcode">AllPostCode</requiredEntity>
         <!-- Shopping Cart Display Settings -->
+=======
+    <!-- Default Tax Destination Calculation -->
+        <requiredEntity type="country">CountryUS</requiredEntity>
+        <requiredEntity type="region">Region_NY</requiredEntity>
+        <requiredEntity type="postcode">AllPostCode</requiredEntity>
+    <!-- Shopping Cart Display Settings -->
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         <requiredEntity type="grandtotalCart">IncludeTaxInOrderTotalCart</requiredEntity>
         <requiredEntity type="full_summaryCart">DisplayFullTaxSummaryCart</requiredEntity>
         <requiredEntity type="zero_taxCart">DisplayZeroTaxSubtotalCart</requiredEntity>
     </entity>
+<<<<<<< HEAD
 <!-- Set default settings -->
+=======
+    <!-- Set default settings -->
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     <entity name="DefaultTaxConfig" type="tax_config_default">
         <requiredEntity type="taxTotalFlagZero">DefaultTotalFlagZero</requiredEntity>
         <requiredEntity type="taxPostCodeEmpty">EmptyField</requiredEntity>

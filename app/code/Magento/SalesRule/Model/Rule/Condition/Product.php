@@ -161,7 +161,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * Validate Product Rule Condition
      *
      * @param \Magento\Framework\Model\AbstractModel $model
+     *
      * @return bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
@@ -219,6 +221,11 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get locale-based formatted price.
+     *
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @param string $value
      * @return float|null
      */

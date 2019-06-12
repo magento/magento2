@@ -46,6 +46,16 @@ class DirTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('/Test/Module/etc', $this->_model->getDir('Test_Module', 'etc'));
     }
 
+    public function testGetSetupDirModule()
+    {
+        $this->moduleRegistryMock->expects($this->once())
+            ->method('getPath')
+            ->with(ComponentRegistrar::MODULE, 'Test_Module')
+            ->willReturn('/Test/Module');
+
+        $this->assertEquals('/Test/Module/Setup', $this->_model->getDir('Test_Module', 'Setup'));
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Directory type 'unknown' is not recognized

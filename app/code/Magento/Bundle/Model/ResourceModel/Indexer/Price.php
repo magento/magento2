@@ -26,6 +26,7 @@ class Price implements DimensionalIndexerInterface
 {
     /**
      * @var IndexTableStructureFactory
+<<<<<<< HEAD
      */
     private $indexTableStructureFactory;
 
@@ -132,11 +133,125 @@ class Price implements DimensionalIndexerInterface
      *
      * @throws \Exception
      */
+=======
+     */
+    private $indexTableStructureFactory;
+
+    /**
+     * @var TableMaintainer
+     */
+    private $tableMaintainer;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    private $resource;
+
+    /**
+     * @var bool
+     */
+    private $fullReindexAction;
+
+    /**
+     * @var string
+     */
+    private $connectionName;
+
+    /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    private $connection;
+
+    /**
+     * Mapping between dimensions and field in database
+     *
+     * @var array
+     */
+    private $dimensionToFieldMapper = [
+        WebsiteDimensionProvider::DIMENSION_NAME => 'pw.website_id',
+        CustomerGroupDimensionProvider::DIMENSION_NAME => 'cg.customer_group_id',
+    ];
+
+    /**
+     * @var BasePriceModifier
+     */
+    private $basePriceModifier;
+
+    /**
+     * @var JoinAttributeProcessor
+     */
+    private $joinAttributeProcessor;
+
+    /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    private $eventManager;
+
+    /**
+     * @var \Magento\Framework\Module\ModuleManagerInterface
+     */
+    private $moduleManager;
+
+    /**
+     * @param IndexTableStructureFactory $indexTableStructureFactory
+     * @param TableMaintainer $tableMaintainer
+     * @param MetadataPool $metadataPool
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param BasePriceModifier $basePriceModifier
+     * @param JoinAttributeProcessor $joinAttributeProcessor
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param bool $fullReindexAction
+     * @param string $connectionName
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        IndexTableStructureFactory $indexTableStructureFactory,
+        TableMaintainer $tableMaintainer,
+        MetadataPool $metadataPool,
+        \Magento\Framework\App\ResourceConnection $resource,
+        BasePriceModifier $basePriceModifier,
+        JoinAttributeProcessor $joinAttributeProcessor,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        $fullReindexAction = false,
+        $connectionName = 'indexer'
+    ) {
+        $this->indexTableStructureFactory = $indexTableStructureFactory;
+        $this->tableMaintainer = $tableMaintainer;
+        $this->connectionName = $connectionName;
+        $this->metadataPool = $metadataPool;
+        $this->resource = $resource;
+        $this->fullReindexAction = $fullReindexAction;
+        $this->basePriceModifier = $basePriceModifier;
+        $this->joinAttributeProcessor = $joinAttributeProcessor;
+        $this->eventManager = $eventManager;
+        $this->moduleManager = $moduleManager;
+    }
+
+    /**
+     * @inheritdoc
+     * @param array $dimensions
+     * @param \Traversable $entityIds
+     * @throws \Exception
+     */
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     public function executeByDimensions(array $dimensions, \Traversable $entityIds)
     {
         $this->tableMaintainer->createMainTmpTable($dimensions);
 
+<<<<<<< HEAD
         $temporaryPriceTable = $this->indexTableStructureFactory->create([
+=======
+        $temporaryPriceTable = $this->indexTableStructureFactory->create(
+            [
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             'tableName' => $this->tableMaintainer->getMainTmpTable($dimensions),
             'entityField' => 'entity_id',
             'customerGroupField' => 'customer_group_id',
@@ -147,7 +262,12 @@ class Price implements DimensionalIndexerInterface
             'minPriceField' => 'min_price',
             'maxPriceField' => 'max_price',
             'tierPriceField' => 'tier_price',
+<<<<<<< HEAD
         ]);
+=======
+            ]
+        );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 
         $entityIds = iterator_to_array($entityIds);
 
@@ -240,6 +360,7 @@ class Price implements DimensionalIndexerInterface
      *
      * @param array $dimensions
      * @param int $priceType
+     * @param array $dimensions
      * @param int|array $entityIds the entity ids limitation
      * @return void
      * @throws \Exception
@@ -330,11 +451,21 @@ class Price implements DimensionalIndexerInterface
                 'ROUND((1 - ' . $tierExpr . ' / 100) * ' . $price . ', 4)',
                 'NULL'
             );
+<<<<<<< HEAD
             $finalPrice = $connection->getLeastSql([
                 $price,
                 $connection->getIfNullSql($specialPriceExpr, $price),
                 $connection->getIfNullSql($tierPrice, $price),
             ]);
+=======
+            $finalPrice = $connection->getLeastSql(
+                [
+                $price,
+                $connection->getIfNullSql($specialPriceExpr, $price),
+                $connection->getIfNullSql($tierPrice, $price),
+                ]
+            );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         } else {
             $finalPrice = new \Zend_Db_Expr('0');
             $tierPrice = $connection->getCheckSql($tierExpr . ' IS NOT NULL', '0', 'NULL');
@@ -470,10 +601,19 @@ class Price implements DimensionalIndexerInterface
                 'NULL'
             );
 
+<<<<<<< HEAD
             $priceExpr = $connection->getLeastSql([
                 $priceExpr,
                 $connection->getIfNullSql($tierExpr, $priceExpr),
             ]);
+=======
+            $priceExpr = $connection->getLeastSql(
+                [
+                $priceExpr,
+                $connection->getIfNullSql($tierExpr, $priceExpr),
+                ]
+            );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         } else {
             $price = 'idx.min_price * bs.selection_qty';
             $specialExpr = $connection->getCheckSql(
@@ -486,10 +626,19 @@ class Price implements DimensionalIndexerInterface
                 'ROUND((1 - i.tier_percent / 100) * ' . $price . ', 4)',
                 'NULL'
             );
+<<<<<<< HEAD
             $priceExpr = $connection->getLeastSql([
                 $specialExpr,
                 $connection->getIfNullSql($tierExpr, $price),
             ]);
+=======
+            $priceExpr = $connection->getLeastSql(
+                [
+                $specialExpr,
+                $connection->getIfNullSql($tierExpr, $price),
+                ]
+            );
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         }
 
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
@@ -609,9 +758,18 @@ class Price implements DimensionalIndexerInterface
     }
 
     /**
+<<<<<<< HEAD
      * @param IndexTableStructure $priceTable
      */
     private function applyBundlePrice($priceTable)
+=======
+     * Create bundle price.
+     *
+     * @param IndexTableStructure $priceTable
+     * @return void
+     */
+    private function applyBundlePrice($priceTable): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $select = $this->getConnection()->select();
         $select->from(
@@ -634,9 +792,18 @@ class Price implements DimensionalIndexerInterface
     }
 
     /**
+<<<<<<< HEAD
      * @param IndexTableStructure $priceTable
      */
     private function applyBundleOptionPrice($priceTable)
+=======
+     * Make insert/update bundle option price.
+     *
+     * @return void
+     * @param IndexTableStructure $priceTable
+     */
+    private function applyBundleOptionPrice($priceTable): void
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
     {
         $connection = $this->getConnection();
 
@@ -661,7 +828,11 @@ class Price implements DimensionalIndexerInterface
         $select = $connection->select()->join(
             ['io' => $subSelect],
             'i.entity_id = io.entity_id AND i.customer_group_id = io.customer_group_id' .
+<<<<<<< HEAD
             ' AND i.website_id = io.website_id',
+=======
+                ' AND i.website_id = io.website_id',
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
             []
         )->columns(
             [
@@ -692,7 +863,11 @@ class Price implements DimensionalIndexerInterface
     /**
      * Get connection
      *
+<<<<<<< HEAD
      * return \Magento\Framework\DB\Adapter\AdapterInterface
+=======
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      * @throws \DomainException
      */
     private function getConnection(): \Magento\Framework\DB\Adapter\AdapterInterface

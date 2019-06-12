@@ -10,8 +10,11 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Sql\ColumnValueExpression;
 
 /**
+<<<<<<< HEAD
  * Class ColumnsResolver
  *
+=======
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  * Resolves columns names
  */
 class ColumnsResolver
@@ -78,7 +81,11 @@ class ColumnsResolver
             $columnName = $this->nameResolver->getName($attributeData);
             if (isset($attributeData['function'])) {
                 $prefix = '';
+<<<<<<< HEAD
                 if (isset($attributeData['distinct']) && $attributeData['distinct'] == true) {
+=======
+                if (!empty($attributeData['distinct'])) {
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                     $prefix = ' DISTINCT ';
                 }
                 $expression = new ColumnValueExpression(

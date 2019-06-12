@@ -6,7 +6,11 @@
 namespace Magento\Braintree\Test\Unit\Gateway\Validator;
 
 use Magento\Braintree\Gateway\SubjectReader;
+<<<<<<< HEAD
 use Magento\Braintree\Gateway\Validator\ErrorCodeValidator;
+=======
+use Magento\Braintree\Gateway\Validator\ErrorCodeProvider;
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
 use Magento\Braintree\Gateway\Validator\PaymentNonceResponseValidator;
 use Magento\Payment\Gateway\Validator\Result;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
@@ -34,7 +38,11 @@ class PaymentNonceResponseValidatorTest extends \PHPUnit\Framework\TestCase
         $this->validator = new PaymentNonceResponseValidator(
             $this->resultInterfaceFactory,
             new SubjectReader(),
+<<<<<<< HEAD
             new ErrorCodeValidator()
+=======
+            new ErrorCodeProvider()
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
         );
     }
 

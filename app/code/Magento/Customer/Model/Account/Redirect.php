@@ -75,6 +75,11 @@ class Redirect
     private $hostChecker;
 
     /**
+     * @var Session
+     */
+    private $session;
+
+    /**
      * @param RequestInterface $request
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig
@@ -206,9 +211,15 @@ class Redirect
             $referer = $this->request->getParam(CustomerUrl::REFERER_QUERY_PARAM_NAME);
             if ($referer) {
                 $referer = $this->urlDecoder->decode($referer);
+<<<<<<< HEAD
                 preg_match('/logoutSuccess/', $referer, $matches, PREG_OFFSET_CAPTURE);
                 if (!empty($matches)) {
                     $referer = str_replace('logoutSuccess', '', $referer);
+=======
+                preg_match('/logoutSuccess\//', $referer, $matches, PREG_OFFSET_CAPTURE);
+                if (!empty($matches)) {
+                    $referer = str_replace('logoutSuccess/', '', $referer);
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
                 }
                 if ($this->hostChecker->isOwnOrigin($referer)) {
                     $this->applyRedirect($referer);

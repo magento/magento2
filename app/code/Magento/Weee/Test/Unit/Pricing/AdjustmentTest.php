@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Weee\Test\Unit\Pricing;
 
 use \Magento\Weee\Pricing\Adjustment;
@@ -41,7 +39,8 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
-            ->will($this->returnCallback(
+            ->will(
+                $this->returnCallback(
                     function ($arg) {
                         return round($arg * 0.5, 2);
                     }
@@ -49,11 +48,12 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
             );
         $this->priceCurrencyMock->expects($this->any())
             ->method('convert')
-            ->will($this->returnCallback(
-                function ($arg) {
-                    return $arg * 0.5;
-                }
-            )
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        return $arg * 0.5;
+                    }
+                )
             );
 
         $this->adjustment = new Adjustment($this->weeeHelper, $this->priceCurrencyMock, $this->sortOrder);

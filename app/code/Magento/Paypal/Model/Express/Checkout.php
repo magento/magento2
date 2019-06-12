@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Model\Express;
 
 use Magento\Customer\Api\Data\CustomerInterface as CustomerDataObject;
@@ -14,11 +16,16 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
+<<<<<<< HEAD
  * Wrapper that performs Paypal Express and Checkout communication.
+=======
+ * Wrapper that performs Paypal Express and Checkout communication
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Checkout
 {
@@ -365,9 +372,15 @@ class Checkout
     }
 
     /**
+<<<<<<< HEAD
      * Checkout with PayPal image URL getter.
      *
      * Spares API calls of getting "pal" variable, by putting it into cache per store view.
+=======
+     * Checkout with PayPal image URL getter
+     *
+     * Spares API calls of getting "pal" variable, by putting it into cache per store view
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @return string
      */
@@ -604,10 +617,12 @@ class Checkout
      * export shipping address in case address absence
      *
      * @param string $token
+     * @param string|null $payerIdentifier
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function returnFromPaypal($token)
+    public function returnFromPaypal($token, string $payerIdentifier = null)
     {
         $this->_getApi()
             ->setToken($token)
@@ -683,7 +698,8 @@ class Checkout
         $payment = $quote->getPayment();
         $payment->setMethod($this->_methodType);
         $this->_paypalInfo->importToPayment($this->_getApi(), $payment);
-        $payment->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_PAYER_ID, $this->_getApi()->getPayerId())
+        $payerId = $payerIdentifier ? : $this->_getApi()->getPayerId();
+        $payment->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_PAYER_ID, $payerId)
             ->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_TOKEN, $token);
         $quote->collectTotals();
         $this->quoteRepository->save($quote);
@@ -959,7 +975,11 @@ class Checkout
     }
 
     /**
+<<<<<<< HEAD
      * Attempt to collect address shipping rates and return them for further usage in instant update API.
+=======
+     * Attempt to collect address shipping rates and return them for further usage in instant update API
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * Returns empty array if it was impossible to obtain any shipping rate and
      * if there are shipping rates obtained, the method must return one of them as default.
@@ -1045,7 +1065,11 @@ class Checkout
     /**
      * Compare two shipping options based on their amounts.
      *
+<<<<<<< HEAD
      * This function is used as a callback comparison function in shipping options sorting process.
+=======
+     * This function is used as a callback comparison function in shipping options sorting process
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @see self::_prepareShippingOptions()
      * @param \Magento\Framework\DataObject $option1
@@ -1058,7 +1082,11 @@ class Checkout
     }
 
     /**
+<<<<<<< HEAD
      * Try to find whether the code provided by PayPal corresponds to any of possible shipping rates.
+=======
+     * Try to find whether the code provided by PayPal corresponds to any of possible shipping rates
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * This method was created only because PayPal has issues with returning the selected code.
      * If in future the issue is fixed, we don't need to attempt to match it. It would be enough to set the method code
@@ -1070,6 +1098,7 @@ class Checkout
      */
     protected function _matchShippingMethodCode(Address $address, $selectedCode): string
     {
+        $address->collectShippingRates();
         $options = $this->_prepareShippingOptions($address, false);
         foreach ($options as $option) {
             if ($selectedCode === $option['code'] // the proper case as outlined in documentation
@@ -1084,7 +1113,11 @@ class Checkout
     }
 
     /**
+<<<<<<< HEAD
      * Create payment redirect url.
+=======
+     * Create payment redirect url
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param bool|null $button
      * @param string $token
@@ -1108,7 +1141,11 @@ class Checkout
     }
 
     /**
+<<<<<<< HEAD
      * Set shipping options to api.
+=======
+     * Set shipping options to api
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
      *
      * @param \Magento\Paypal\Model\Cart $cart
      * @param \Magento\Quote\Model\Quote\Address|null $address

@@ -1,13 +1,21 @@
 {
   "name": "magento/module-test-join-directives",
   "description": "test integration for join directives",
+  "config": {
+    "sort-packages": true
+  },
   "require": {
+<<<<<<< HEAD
     "php": "~7.0.13|~7.1.0",
     "magento/framework": "0.42.0-beta8",
     "magento/module-sales": "0.42.0-beta8"
+=======
+    "php": "~7.1.3||~7.2.0",
+    "magento/framework": "*",
+    "magento/module-sales": "*"
+>>>>>>> 57ffbd948415822d134397699f69411b67bcf7bc
   },
   "type": "magento2-module",
-  "version": "1.0",
   "extra": {
     "map": [
       [
