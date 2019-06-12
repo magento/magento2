@@ -366,6 +366,7 @@ QUERY;
         $this->assertAttributes($response['category']['products']['items'][0]);
         $this->assertWebsites($firstProduct, $response['category']['products']['items'][0]['websites']);
     }
+
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */

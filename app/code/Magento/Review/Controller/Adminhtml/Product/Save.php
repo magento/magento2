@@ -73,6 +73,14 @@ class Save extends ProductController implements HttpPostActionInterface
             } else {
                 $resultRedirect->setPath('*/*/');
             }
+            $productId = (int)$this->getRequest()->getParam('productId');
+            if ($productId) {
+                $resultRedirect->setPath("catalog/product/edit/id/$productId");
+            }
+            $customerId = (int)$this->getRequest()->getParam('customerId');
+            if ($customerId) {
+                $resultRedirect->setPath("customer/index/edit/id/$customerId");
+            }
             return $resultRedirect;
         }
         $resultRedirect->setPath('review/*/');

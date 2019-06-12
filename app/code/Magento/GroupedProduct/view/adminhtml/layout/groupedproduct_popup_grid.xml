@@ -11,7 +11,7 @@
             <block class="Magento\Backend\Block\Widget\Grid" name="catalog.product.edit.tab.super.group.popup" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">grouped_grid_popup</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection</argument>
                     <argument name="use_ajax" xsi:type="string">1</argument>
                     <argument name="default_sort" xsi:type="string">id</argument>
                     <argument name="default_dir" xsi:type="string">ASC</argument>

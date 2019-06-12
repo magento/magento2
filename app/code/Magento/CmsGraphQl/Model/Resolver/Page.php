@@ -26,6 +26,7 @@ class Page implements ResolverInterface
     private $pageDataProvider;
 
     /**
+     *
      * @param PageDataProvider $pageDataProvider
      */
     public function __construct(
@@ -44,35 +45,18 @@ class Page implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $pageId = $this->getPageId($args);
-        $pageData = $this->getPageData($pageId);
-
-        return $pageData;
-    }
-
-    /**
-     * @param array $args
-     * @return int
-     * @throws GraphQlInputException
-     */
-    private function getPageId(array $args): int
-    {
-        if (!isset($args['id'])) {
-            throw new GraphQlInputException(__('"Page id should be specified'));
+        if (!isset($args['id']) && !isset($args['identifier'])) {
+            throw new GraphQlInputException(__('"Page id/identifier should be specified'));
         }
 
-        return (int)$args['id'];
-    }
+        $pageData = [];
 
-    /**
-     * @param int $pageId
-     * @return array
-     * @throws GraphQlNoSuchEntityException
-     */
-    private function getPageData(int $pageId): array
-    {
         try {
-            $pageData = $this->pageDataProvider->getData($pageId);
+            if (isset($args['id'])) {
+                $pageData = $this->pageDataProvider->getDataByPageId((int)$args['id']);
+            } elseif (isset($args['identifier'])) {
+                $pageData = $this->pageDataProvider->getDataByPageIdentifier((string)$args['identifier']);
+            }
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         }
