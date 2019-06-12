@@ -82,8 +82,7 @@ define([
          * @returns {Array}
          * @private
          */
-        _convertDataNodes(nodes)
-        {
+        _convertDataNodes: function (nodes) {
             var nodesData = [];
 
             nodes.forEach(function(node) {
