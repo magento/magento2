@@ -89,7 +89,7 @@ class File
         if ($directoryInstance->isDirectory($dir)) {
             $paths = $directoryInstance->readRecursively($dir);
             foreach ($paths as $path) {
-                if ($directoryInstance->isDirectory()) {
+                if ($directoryInstance->isDirectory($path)) {
                     continue;
                 }
 
