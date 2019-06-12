@@ -124,18 +124,28 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     public function dataProviderShippingMethods(): array
     {
         return [
-            'Library Mail Parcel' => ['7', 'Library Mail Parcel'],
+            'Library Mail Parcel' =>
+                ['7', 'Library Mail Parcel'],
             'Media Mail Parcel' => ['6', 'Media Mail Parcel'],
-            'Priority Mail 3-Day Small Flat Rate Box' => ['28', 'Priority Mail 3-Day Small Flat Rate Box'],
-            'Priority Mail 3-Day Flat Rate Envelope' => ['16', 'Priority Mail 3-Day Flat Rate Envelope'],
+            'Priority Mail 3-Day Small Flat Rate Box' =>
+                ['28', 'Priority Mail 3-Day Small Flat Rate Box'],
+            'Priority Mail 3-Day Flat Rate Envelope' =>
+                ['16', 'Priority Mail 3-Day Flat Rate Envelope'],
             'Priority Mail 3-Day' => ['1', 'Priority Mail 3-Day'],
-            'Priority Mail 3-Day Small Flat Rate Envelope' => ['42', 'Priority Mail 3-Day Small Flat Rate Envelope'],
-            'Priority Mail 3-Day Medium Flat Rate Box' => ['17', 'Priority Mail 3-Day Medium Flat Rate Box'],
-            'Priority Mail 3-Day Large Flat Rate Box' => ['22', 'Priority Mail 3-Day Large Flat Rate Box'],
-            'Priority Mail Express 2-Day Flat Rate Envelope' => ['13', 'Priority Mail Express 2-Day Flat Rate Envelope'],
-            'Priority Mail Express 2-Day Flat Rate Envelope Hold For Pickup' => ['27', 'Priority Mail Express 2-Day Flat Rate Envelope Hold For Pickup'],
-            'Priority Mail Express 2-Day' => ['3', 'Priority Mail Express 2-Day'],
-            'Priority Mail Express 2-Day Hold For Pickup' => ['2', 'Priority Mail Express 2-Day Hold For Pickup'],
+            'Priority Mail 3-Day Small Flat Rate Envelope' =>
+                ['42', 'Priority Mail 3-Day Small Flat Rate Envelope'],
+            'Priority Mail 3-Day Medium Flat Rate Box' =>
+                ['17', 'Priority Mail 3-Day Medium Flat Rate Box'],
+            'Priority Mail 3-Day Large Flat Rate Box' =>
+                ['22', 'Priority Mail 3-Day Large Flat Rate Box'],
+            'Priority Mail Express 2-Day Flat Rate Envelope' =>
+                ['13', 'Priority Mail Express 2-Day Flat Rate Envelope'],
+            'Priority Mail Express 2-Day Flat Rate Envelope Hold For Pickup' =>
+                ['27', 'Priority Mail Express 2-Day Flat Rate Envelope Hold For Pickup'],
+            'Priority Mail Express 2-Day' =>
+                ['3', 'Priority Mail Express 2-Day'],
+            'Priority Mail Express 2-Day Hold For Pickup' =>
+                ['2', 'Priority Mail Express 2-Day Hold For Pickup'],
         ];
     }
 
@@ -190,16 +200,26 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     public function dataProviderShippingMethodsBasedOnCanadaAddress(): array
     {
         return [
-            'First-Class Package International Service' => ['INT_15', 'First-Class Package International Service'],
-            'Priority Mail International Small Flat Rate Envelope' => ['INT_20', 'Priority Mail International Small Flat Rate Envelope'],
-            'Priority Mail International Flat Rate Envelope' => ['INT_8', 'Priority Mail International Flat Rate Envelope'],
-            'Priority Mail International Small Flat Rate Box' => ['INT_16', 'Priority Mail International Small Flat Rate Box'],
-            'Priority Mail International' => ['INT_2', 'Priority Mail International'],
-            'Priority Mail Express International Flat Rate Envelope' => ['INT_10', 'Priority Mail Express International Flat Rate Envelope'],
-            'Priority Mail Express International' => ['INT_1', 'Priority Mail Express International'],
-            'Priority Mail International Medium Flat Rate Box' => ['INT_9', 'Priority Mail International Medium Flat Rate Box'],
-            'Priority Mail International Large Flat Rate Box' => ['INT_11', 'Priority Mail International Large Flat Rate Box'],
-            'USPS GXG Envelopes' => ['INT_12', 'USPS GXG Envelopes'],
+            'First-Class Package International Service' =>
+                ['INT_15', 'First-Class Package International Service'],
+            'Priority Mail International Small Flat Rate Envelope' =>
+                ['INT_20', 'Priority Mail International Small Flat Rate Envelope'],
+            'Priority Mail International Flat Rate Envelope' =>
+                ['INT_8', 'Priority Mail International Flat Rate Envelope'],
+            'Priority Mail International Small Flat Rate Box' =>
+                ['INT_16', 'Priority Mail International Small Flat Rate Box'],
+            'Priority Mail International' =>
+                ['INT_2', 'Priority Mail International'],
+            'Priority Mail Express International Flat Rate Envelope' =>
+                ['INT_10', 'Priority Mail Express International Flat Rate Envelope'],
+            'Priority Mail Express International' =>
+                ['INT_1', 'Priority Mail Express International'],
+            'Priority Mail International Medium Flat Rate Box' =>
+                ['INT_9', 'Priority Mail International Medium Flat Rate Box'],
+            'Priority Mail International Large Flat Rate Box' =>
+                ['INT_11', 'Priority Mail International Large Flat Rate Box'],
+            'USPS GXG Envelopes' =>
+                ['INT_12', 'USPS GXG Envelopes'],
         ];
     }
 
