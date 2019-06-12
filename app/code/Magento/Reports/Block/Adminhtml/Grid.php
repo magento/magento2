@@ -105,7 +105,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             DecoderInterface::class
         );
 
-        $this->parameters = $parameters ?? new Parameters();
+        $this->parameters = $parameters ?? ObjectManager::getInstance()->get(
+            Parameters::class
+        );
 
         parent::__construct($context, $backendHelper, $data);
     }
