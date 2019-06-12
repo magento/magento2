@@ -16,5 +16,6 @@
         <element name="clearFilters" type="button" selector=".admin__data-grid-header button[data-action='grid-filter-reset']" timeout="30"/>
         <element name="viewDropdown" type="button" selector=".admin__data-grid-action-bookmarks button.admin__action-dropdown"/>
         <element name="countryOptions" type="button" selector=".admin__data-grid-filters select[name=billing_country_id] option"/>
+        <element name="countryOptionsWithoutEmptyOption" type="button" selector=".admin__data-grid-filters select[name=billing_country_id] option:not([value=''])"/>
     </section>
 </sections>

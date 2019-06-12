@@ -55,7 +55,7 @@
 
         <!--Check that all countries are allowed initially and get amount-->
         <amOnPage url="{{AdminConfigurationGeneralSectionPage.url('#general_country-link')}}" stepKey="goToCountryConfigurationSectionPage"/>
-        <executeJS function="return document.querySelectorAll('{{AdminConfigurationGeneralCountryOptionsSection.allowedCountries}} option').length" stepKey="countriesAmount"/>
+        <executeJS function="return document.querySelectorAll('{{AdminConfigurationGeneralCountryOptionsSection.allowedCountriesOptions}}').length" stepKey="countriesAmount"/>
 
         <!-- Switch to first website, allow only Canada and set Canada as default country -->
         <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="adminSwitchWebsite">
@@ -82,7 +82,6 @@
         <!--Go to Customers grid and check that filter countries amount is the same as initial allowed countries amount-->
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomersGrid"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomersGrid"/>
-        <executeJS function="var len = document.querySelectorAll('{{AdminCustomerFiltersSection.countryOptions}}').length; return len-1;" stepKey="actualCountriesAmount"/>
-        <assertEquals expected='($countriesAmount)' actual="($actualCountriesAmount)" stepKey="assertCountryAmounts"/>
+        <seeNumberOfElements userInput="$countriesAmount" selector="{{AdminCustomerFiltersSection.countryOptionsWithoutEmptyOption}}" stepKey="assertCountryAmounts"/>
     </test>
 </tests>
