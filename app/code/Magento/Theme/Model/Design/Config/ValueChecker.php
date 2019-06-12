@@ -8,6 +8,9 @@ namespace Magento\Theme\Model\Design\Config;
 use Magento\Framework\App\Config as AppConfig;
 use Magento\Framework\App\ScopeFallbackResolverInterface;
 
+/**
+ * Class ValueChecker
+ */
 class ValueChecker
 {
     /**
@@ -61,7 +64,7 @@ class ValueChecker
                     $fieldConfig
                 ),
                 $this->valueProcessor->process(
-                    $this->appConfig->getValue($fieldConfig['path'], $scope, $scopeId),
+                    ($this->appConfig->getValue($fieldConfig['path'], $scope, $scopeId) ?? ""),
                     $scope,
                     $scopeId,
                     $fieldConfig
