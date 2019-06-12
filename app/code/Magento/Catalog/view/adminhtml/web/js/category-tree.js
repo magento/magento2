@@ -37,8 +37,8 @@ define([
                             ajax: {
                                 url: options.url,
                                 type: 'POST',
-                                success: $.proxy(function (node) {
-                                    return this._convertData(node[0]);
+                                success: $.proxy(function (nodes) {
+                                    return this._convertDataNodes(nodes);
                                 }, this),
 
                                 /**
@@ -75,6 +75,22 @@ define([
             } else {
                 event.preventDefault();
             }
+        },
+
+        /**
+         * @param nodes {Array}
+         * @returns {Array}
+         * @private
+         */
+        _convertDataNodes(nodes)
+        {
+            var nodesData = [];
+
+            nodes.forEach(function(node) {
+                nodesData.push(this._convertData(node));
+            }, this);
+
+            return nodesData;
         },
 
         /**
