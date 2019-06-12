@@ -15,6 +15,10 @@
             <description value="You should be able to create a New Product via the Admin, then reassign previously assigned source."/>
             <group value="msi"/>
             <group value="multi_mode"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/908790/scenarios/3191702"/>
+            <skip>
+                <issueId value="https://github.com/magento-engcom/msi/issues/2066"/>
+            </skip>
         </annotations>
 
         <before>
