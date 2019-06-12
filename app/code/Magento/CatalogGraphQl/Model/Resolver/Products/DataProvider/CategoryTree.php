@@ -85,7 +85,7 @@ class CategoryTree
     public function getTree(ResolveInfo $resolveInfo, int $rootCategoryId): \Iterator
     {
         $categoryQuery = $resolveInfo->fieldNodes[0];
-        if ($this->isCategoryActive($rootCategoryId) == false) {
+        if ($this->isCategoryActive($rootCategoryId) === false) {
             throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
         }
 
@@ -151,9 +151,11 @@ class CategoryTree
     }
 
     /**
+     * Check if provided category active
+     *
      * @param int $rootCategoryId
      * @return bool
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function isCategoryActive(int $rootCategoryId) : bool
     {
