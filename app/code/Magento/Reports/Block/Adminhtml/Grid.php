@@ -6,6 +6,12 @@
 
 namespace Magento\Reports\Block\Adminhtml;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Helper\Data;
+use Magento\Framework\Url\DecoderInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\Parameters;
+
 /**
  * Backend report grid block
  *
@@ -16,12 +22,12 @@ namespace Magento\Reports\Block\Adminhtml;
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
     /**
-     * @var \Magento\Framework\Url\DecoderInterface
+     * @var DecoderInterface
      */
     private $urlDecoder;
 
     /**
-     * @var \Zend\Stdlib\Parameters
+     * @var Parameters
      */
     private $parameters;
 
@@ -82,24 +88,24 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     protected $_filterValues;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Data $backendHelper
+     * @param Context $context
+     * @param Data $backendHelper
      * @param array $data
-     * @param \Magento\Framework\Url\DecoderInterface|null $urlDecoder
-     * @param \Zend\Stdlib\Parameters $parameters
+     * @param DecoderInterface|null $urlDecoder
+     * @param Parameters $parameters
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Helper\Data $backendHelper,
+        Context $context,
+        Data $backendHelper,
         array $data = [],
-        \Magento\Framework\Url\DecoderInterface $urlDecoder = null,
-        \Zend\Stdlib\Parameters $parameters = null
+        DecoderInterface $urlDecoder = null,
+        Parameters $parameters = null
     ) {
-        $this->urlDecoder = $urlDecoder ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Url\DecoderInterface::class
+        $this->urlDecoder = $urlDecoder ?? ObjectManager::getInstance()->get(
+            DecoderInterface::class
         );
 
-        $this->parameters = $parameters ?? new \Zend\Stdlib\Parameters();
+        $this->parameters = $parameters ?? new Parameters();
 
         parent::__construct($context, $backendHelper, $data);
     }
