@@ -11,6 +11,7 @@
     <test name="AdminEnableAttributeIsUndefinedCatalogPriceRuleTest">
         <annotations>
             <features value="CatalogRule"/>
+            <stories value="Catalog price rule"/>
             <title value="Enable 'is undefined' condition to Scope Catalog Price rules by custom product attribute"/>
             <description value="Enable 'is undefined' condition to Scope Catalog Price rules by custom product attribute"/>
             <severity value="CRITICAL"/>

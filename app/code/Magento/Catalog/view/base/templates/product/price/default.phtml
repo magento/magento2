@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php
@@ -15,7 +12,7 @@
 /** @var \Magento\Framework\Pricing\Price\PriceInterface $priceModel */
 $priceModel = $block->getPriceType('regular_price');
 
-/* @escapeNotVerified */ echo $block->renderAmount($priceModel->getAmount(), [
+/* @noEscape */ echo $block->renderAmount($priceModel->getAmount(), [
     'price_id'          => $block->getPriceId('product-price-'),
     'include_container' => true
 ]);

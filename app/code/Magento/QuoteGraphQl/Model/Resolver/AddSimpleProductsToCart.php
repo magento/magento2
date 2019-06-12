@@ -52,12 +52,12 @@ class AddSimpleProductsToCart implements ResolverInterface
         }
         $maskedCartId = $args['input']['cart_id'];
 
-        if (!isset($args['input']['cartItems']) || empty($args['input']['cartItems'])
-            || !is_array($args['input']['cartItems'])
+        if (!isset($args['input']['cart_items']) || empty($args['input']['cart_items'])
+            || !is_array($args['input']['cart_items'])
         ) {
-            throw new GraphQlInputException(__('Required parameter "cartItems" is missing'));
+            throw new GraphQlInputException(__('Required parameter "cart_items" is missing'));
         }
-        $cartItems = $args['input']['cartItems'];
+        $cartItems = $args['input']['cart_items'];
 
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
         $this->addProductsToCart->execute($cart, $cartItems);

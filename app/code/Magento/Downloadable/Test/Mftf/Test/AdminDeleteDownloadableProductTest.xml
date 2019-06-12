@@ -10,6 +10,7 @@
     <test name="AdminDeleteDownloadableProductTest">
         <annotations>
             <features value="Downloadable"/>
+            <stories value="Downloadable product"/>
             <title value="Delete Downloadable Product"/>
             <description value="Admin should be able to delete a downloadable product"/>
             <testCaseId value="MC-11018"/>
