@@ -74,7 +74,7 @@ class Product
     ): SearchResultsInterface {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
-        $attributes = array_unique(array_merge($attributes, ['small_image', 'thumbnail', 'image']));
+
         $this->collectionProcessor->process($collection, $searchCriteria, $attributes);
 
         if (!$isChildSearch) {
