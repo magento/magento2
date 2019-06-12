@@ -14,8 +14,6 @@ namespace Magento\Catalog\Block\Adminhtml\Product;
 
 /**
  * Class Edit
- *
- * @package Magento\Catalog\Block\Adminhtml\Product
  */
 class Edit extends \Magento\Backend\Block\Widget
 {
