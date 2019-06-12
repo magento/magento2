@@ -37,7 +37,7 @@ class BaseFinalPrice
     private $joinAttributeProcessor;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     private $moduleManager;
 
@@ -69,7 +69,7 @@ class BaseFinalPrice
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param JoinAttributeProcessor $joinAttributeProcessor
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $connectionName
@@ -77,7 +77,7 @@ class BaseFinalPrice
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         JoinAttributeProcessor $joinAttributeProcessor,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         $connectionName = 'indexer'
@@ -200,11 +200,13 @@ class BaseFinalPrice
         );
         $tierPrice = $this->getTotalTierPriceExpression($price);
         $tierPriceExpr = $connection->getIfNullSql($tierPrice, $maxUnsignedBigint);
-        $finalPrice = $connection->getLeastSql([
+        $finalPrice = $connection->getLeastSql(
+            [
             $price,
             $specialPriceExpr,
             $tierPriceExpr,
-        ]);
+            ]
+        );
 
         $select->columns(
             [
@@ -262,7 +264,8 @@ class BaseFinalPrice
                 ]
             ),
             'NULL',
-            $this->getConnection()->getLeastSql([
+            $this->getConnection()->getLeastSql(
+                [
                 $this->getConnection()->getIfNullSql(
                     $this->getTierPriceExpressionForTable('tier_price_1', $priceExpression),
                     $maxUnsignedBigint
@@ -279,7 +282,8 @@ class BaseFinalPrice
                     $this->getTierPriceExpressionForTable('tier_price_4', $priceExpression),
                     $maxUnsignedBigint
                 ),
-            ])
+                ]
+            )
         );
     }
 

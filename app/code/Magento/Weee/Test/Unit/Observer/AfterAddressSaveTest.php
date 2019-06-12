@@ -9,6 +9,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Api\TaxAddressManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * After address save test.
+ */
 class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -24,7 +27,7 @@ class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
     /**
      * Module manager
      *
-     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $moduleManagerMock;
 
@@ -58,7 +61,7 @@ class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCustomerAddress'])
             ->getMock();
 
-        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)
+        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
