@@ -13,6 +13,7 @@ use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Class StockRegistry
@@ -73,7 +74,7 @@ class StockRegistry implements StockRegistryInterface
      */
     public function getStock($scopeId = null)
     {
-        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        $scopeId = $this->getScopeId($scopeId);
         return $this->stockRegistryProvider->getStock($scopeId);
     }
 
@@ -84,7 +85,7 @@ class StockRegistry implements StockRegistryInterface
      */
     public function getStockItem($productId, $scopeId = null)
     {
-        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        $scopeId = $this->getScopeId($scopeId);
         return $this->stockRegistryProvider->getStockItem($productId, $scopeId);
     }
 
@@ -96,7 +97,7 @@ class StockRegistry implements StockRegistryInterface
      */
     public function getStockItemBySku($productSku, $scopeId = null)
     {
-        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        $scopeId = $this->getScopeId($scopeId);
         $productId = $this->resolveProductId($productSku);
         return $this->stockRegistryProvider->getStockItem($productId, $scopeId);
     }
@@ -108,7 +109,7 @@ class StockRegistry implements StockRegistryInterface
      */
     public function getStockStatus($productId, $scopeId = null)
     {
-        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        $scopeId = $this->getScopeId($scopeId);
         return $this->stockRegistryProvider->getStockStatus($productId, $scopeId);
     }
 
@@ -120,7 +121,7 @@ class StockRegistry implements StockRegistryInterface
      */
     public function getStockStatusBySku($productSku, $scopeId = null)
     {
-        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        $scopeId = $this->getScopeId($scopeId);
         $productId = $this->resolveProductId($productSku);
         return $this->getStockStatus($productId, $scopeId);
     }
@@ -133,20 +134,20 @@ class StockRegistry implements StockRegistryInterface
      */
     public function getProductStockStatus($productId, $scopeId = null)
     {
-        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        $scopeId = $this->getScopeId($scopeId);
         $stockStatus = $this->getStockStatus($productId, $scopeId);
         return $stockStatus->getStockStatus();
     }
 
     /**
      * @param string $productSku
-     * @param null $scopeId
+     * @param int $scopeId
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getProductStockStatusBySku($productSku, $scopeId = null)
     {
-        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        $scopeId = $this->getScopeId($scopeId);
         $productId = $this->resolveProductId($productSku);
         return $this->getProductStockStatus($productId, $scopeId);
     }
@@ -199,5 +200,23 @@ class StockRegistry implements StockRegistryInterface
             );
         }
         return $productId;
+    }
+
+    /**
+     * Return either the provided scope ID, or the default one in case of null
+     *
+     * @param int|null $scopeId
+     * @return int
+     * @throws \Magento\Framework\Exception\InputException
+     */
+    protected function getScopeId($scopeId)
+    {
+        if (!$scopeId !== null) {
+            if (!is_numeric($scopeId)) {
+                throw new InputException(__("Expected a numeric value, got %s", $scopeId));
+            }
+            return $scopeId;
+        }
+        return $this->stockConfiguration->getDefaultScopeId();
     }
 }
