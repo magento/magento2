@@ -257,7 +257,7 @@ define([
         /**
          * Creates filter component configuration associated with the provided column.
          *
-         * @param {Column} column - Column component whith a basic filter declaration.
+         * @param {Column} column - Column component with a basic filter declaration.
          * @returns {Object} Filters' configuration.
          */
         buildFilter: function (column) {
@@ -274,7 +274,8 @@ define([
             filter = utils.extend({}, filters.base, filter);
             //Accepting labels as is.
             filter.__disableTmpl = {
-                label: 1
+                label: 1,
+                options: 1
             };
 
             filter = utils.template(filter, {
