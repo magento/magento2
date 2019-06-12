@@ -20,4 +20,15 @@
         <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
     </actionGroup>
+    <actionGroup name="adminSetCustomerActiveViaGrid">
+        <arguments>
+            <argument name="customerEmail" type="string" defaultValue="{{Simple_US_CA_Customer.email}}"/>
+        </arguments>
+        <click selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(customerEmail)}}" stepKey="chooseCustomer" />
+        <click selector="{{AdminCustomerGridMainActionsSection.actions}}" stepKey="openActions"/>
+        <waitForElementVisible selector="{{AdminCustomerGridMainActionsSection.setActive}}" stepKey="waitForDropDownOpen"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.setActive}}" stepKey="setActive"/>
+        <waitForPageLoad stepKey="waitForLoad"/>
+        <see userInput="A total of 1 record(s) were updated." stepKey="seeSuccessMessage"/>
+    </actionGroup>
 </actionGroups>

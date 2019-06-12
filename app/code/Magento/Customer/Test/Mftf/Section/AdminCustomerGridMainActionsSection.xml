@@ -15,5 +15,6 @@
         <element name="actions" type="text" selector=".action-select"/>
         <element name="customerCheckbox" type="button" selector="//*[contains(text(),'{{arg}}')]/parent::td/preceding-sibling::td/label[@class='data-grid-checkbox-cell-inner']//input" parameterized="true"/>
         <element name="ok" type="button" selector="//button[@data-role='action']//span[text()='OK']"/>
+        <element name="setActive" type="button" selector="//*[contains(@class, 'admin__data-grid-header')]//span[contains(@class,'action-menu-item') and text()='Set Active']" timeout="30"/>
     </section>
 </sections>
