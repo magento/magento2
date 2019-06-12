@@ -15,6 +15,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class LinkManagementTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'configurableProductLinkManagementV1';
+    const OPTION_SERVICE_NAME = 'configurableProductOptionRepositoryV1';
     const SERVICE_VERSION = 'V1';
     const RESOURCE_PATH = '/V1/configurable-products';
 
@@ -267,7 +268,7 @@ class LinkManagementTest extends WebapiAbstract
      * @param string $productSku
      * @return array
      */
-    protected function getConfigurableAttribute($productSku): array
+    protected function getConfigurableAttribute(string $productSku): array
     {
         $serviceInfo = [
             'rest' => [
@@ -275,9 +276,9 @@ class LinkManagementTest extends WebapiAbstract
                 'httpMethod' => Request::HTTP_METHOD_GET
             ],
             'soap' => [
-                'service' => self::SERVICE_NAME,
+                'service' => self::OPTION_SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'GetList'
+                'operation' => self::OPTION_SERVICE_NAME . 'GetList'
             ]
         ];
         return $this->_webApiCall($serviceInfo, ['sku' => $productSku]);
