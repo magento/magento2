@@ -125,42 +125,6 @@ class CartTotalsTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/cart_rule_discount_no_coupon.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     */
-    public function testGetDiscountInformation()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlQuery($query);
-
-        $discountResponse = $response['cart']['prices']['discount'];
-        self::assertEquals(-10, $discountResponse['amount']['value']);
-        self::assertEquals(['50% Off for all orders'], $discountResponse['label']);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/cart_rule_discount_no_coupon.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/apply_coupon.php
-     */
-    public function testGetDiscountInformationWithTwoRulesApplied()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlQuery($query);
-
-        $discountResponse = $response['cart']['prices']['discount'];
-        self::assertEquals(-15, $discountResponse['amount']['value']);
-        self::assertEquals(['50% Off for all orders', '5$ fixed discount on whole cart'], $discountResponse['label']);
-    }
-
-    /**
      * Generates GraphQl query for retrieving cart totals
      *
      * @param string $maskedQuoteId
@@ -189,13 +153,6 @@ class CartTotalsTest extends GraphQlAbstract
         currency
       }
       applied_taxes {
-        label
-        amount {
-          value
-          currency
-        }
-      }
-      discount {
         label
         amount {
           value

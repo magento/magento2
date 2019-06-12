@@ -91,10 +91,13 @@ class CartPrices implements ResolverInterface
      *
      * @param Total $total
      * @param string $currency
-     * @return array
+     * @return array|null
      */
     private function getDiscount(Total $total, string $currency)
     {
+        if ($total->getDiscountAmount() === 0) {
+            return null;
+        }
         return [
             'label' => explode(', ', $total->getDiscountDescription()),
             'amount' => ['value' => $total->getDiscountAmount(), 'currency' => $currency]
