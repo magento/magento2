@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontAddProductWithAllTypesOfCustomOptionToTheShoppingCartWithoutAnySelectedOptionTest">
+        <annotations>
+            <stories value="Shopping Cart"/>
+            <title value="Add simple product with all types of custom options to cart without selecting any options"/>
+            <description value="Add simple product with all types of custom options to cart without selecting any options"/>
+            <testCaseId value="MC-14725"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <updateData createDataKey="createProduct" entity="productWithOptions" stepKey="updateProductWithCustomOptions"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        </before>
+        <after>
+            <deleteData  createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData  createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <!-- Open Product page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct1PageAndVerifyProduct">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!--Click on Add To Cart button-->
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+
+        <!--Assert all types of product options field displayed Required message -->
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="assertRequiredProductOptionField">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.requiredCustomField(ProductOptionField.title)}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="assertRequiredProductOptionDropDown">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.requiredCustomField(ProductOptionDropDown.title)}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="assertRequiredProductOptionRadioButton">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.requiredCustomField(ProductOptionRadiobutton.title)}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="assertRequiredProductOptionCheckBox">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.requiredCustomField(ProductOptionCheckbox.title)}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="assertRequiredProductOptionMultiSelect">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.requiredCustomField(ProductOptionMultiSelect.title)}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="assertRequiredProductFileOption">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.requiredCustomFile(ProductOptionFile.title)}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="assertRequiredProductDateOption">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.requiredCustomDate(ProductOptionDate.title)}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="assertRequiredProductDateAndTimeOption">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.requiredCustomDate(ProductOptionDateTime.title)}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="assertRequiredProducTimeOption">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.requiredCustomDate(ProductOptionTime.title)}}"/>
+        </actionGroup>
+
+        <!-- Verify mini cart is empty -->
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="assertEmptryCart">
+            <argument name="selector" value="{{StorefrontMiniCartSection.emptyMiniCart}}"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -7,8 +7,6 @@
  *
  * @var \Magento\Backend\Block\Template $block
  */
-
-// @codingStandardsIgnoreFile
 ?>
 <script>
     require([
@@ -20,11 +18,34 @@
     ], function ($, Confirm) {
 
         window.integration = new Integration(
-            '<?= /* @escapeNotVerified */ $block->getUrl('*/*/permissionsDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]) ?>',
-            '<?= /* @escapeNotVerified */ $block->getUrl('*/*/tokensDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]) ?>',
-            '<?= /* @escapeNotVerified */ $block->getUrl('*/*/tokensExchange', ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]) ?>',
-            '<?= /* @escapeNotVerified */ $block->getUrl('*/*') ?>',
-            '<?= /* @escapeNotVerified */ $block->getUrl('*/*/loginSuccessCallback') ?>'
+            '<?= $block->escapeUrl(
+                $block->getUrl(
+                    '*/*/permissionsDialog',
+                    ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]
+                )
+            ) ?>',
+            '<?= $block->escapeUrl(
+                $block->getUrl(
+                    '*/*/tokensDialog',
+                    ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]
+                )
+            ) ?>',
+            '<?= $block->escapeUrl(
+                $block->getUrl(
+                    '*/*/tokensExchange',
+                    ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]
+                )
+            ) ?>',
+            '<?= $block->escapeUrl(
+                $block->getUrl(
+                    '*/*'
+                )
+            ) ?>',
+            '<?= $block->escapeUrl(
+                $block->getUrl(
+                    '*/*/loginSuccessCallback'
+                )
+            ) ?>'
         );
 
         /**
@@ -34,8 +55,8 @@
             $('div#integrationGrid').on('click', 'button#delete', function (e) {
 
                 new Confirm({
-                    title: '<?= /* @escapeNotVerified */ __('Are you sure?') ?>',
-                    content: "<?= /* @escapeNotVerified */ __("Are you sure you want to delete this integration? You can't undo this action.") ?>",
+                    title: '<?= $block->escapeHtml(__('Are you sure?')) ?>',
+                    content: "<?= $block->escapeHtml(__("Are you sure you want to delete this integration? You can't undo this action.")) ?>",
                     actions: {
                         confirm: function () {
                             $.mage.dataPost().postData({action: $(e.target).data('url'), data: {}});

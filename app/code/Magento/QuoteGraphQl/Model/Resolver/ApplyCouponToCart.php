@@ -75,7 +75,11 @@ class ApplyCouponToCart implements ResolverInterface
         try {
             $this->couponManagement->set($cartId, $couponCode);
         } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+            $message = $e->getMessage();
+            if (preg_match('/The "\d+" Cart doesn\'t contain products/', $message)) {
+                $message = 'Cart does not contain products.';
+            }
+            throw new GraphQlNoSuchEntityException(__($message), $e);
         } catch (CouldNotSaveException $e) {
             throw new LocalizedException(__($e->getMessage()), $e);
         }

@@ -17,5 +17,7 @@
         <element name="shippingAddress" type="textarea" selector="//*[@class='box box-address-shipping']//address"/>
         <element name="billingAddress" type="textarea" selector="//*[@class='box box-address-billing']//address"/>
         <element name="additionalAddress" type="text" selector=".block.block-addresses-list"/>
+        <element name="miniCartTabClosed" type="button" selector=".title[aria-expanded='false']" timeout="30"/>
+        <element name="itemsQtyInCart" type="text" selector=".items-in-cart > .title > strong > span"/>
     </section>
 </sections>

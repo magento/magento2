@@ -13,7 +13,7 @@
                     <argument name="id" xsi:type="string">widgetInstanceGrid</argument>
                     <argument name="default_sort" xsi:type="string">instance_id</argument>
                     <argument name="default_dir" xsi:type="string">ASC</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Widget\Model\ResourceModel\Widget\Instance\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\Widget\Model\ResourceModel\Widget\Instance\Collection</argument>
                 </arguments>
                 <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.widget.instance.grid.columnSet" as="grid.columnSet">
                     <arguments>

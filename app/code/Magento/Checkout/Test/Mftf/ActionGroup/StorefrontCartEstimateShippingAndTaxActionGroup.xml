@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Fill Estimate Shipping and Tax fields -->
+    <actionGroup name="StorefrontCartEstimateShippingAndTaxActionGroup">
+        <arguments>
+            <argument name="estimateAddress" defaultValue="EstimateAddressCalifornia"/>
+        </arguments>
+        <conditionalClick selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="clickOnEstimateShippingAndTax"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.country}}" stepKey="waitForCountrySelectorIsVisible"/>
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="{{estimateAddress.country}}" stepKey="selectCountry"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForCountryLoadingMaskDisappear"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{estimateAddress.state}}" stepKey="selectStateProvince"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForStateLoadingMaskDisappear"/>
+        <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{estimateAddress.zipCode}}" stepKey="fillZipPostalCodeField"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForZipLoadingMaskDisappear"/>
+    </actionGroup>
+</actionGroups>
