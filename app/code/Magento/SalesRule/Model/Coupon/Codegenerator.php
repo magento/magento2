@@ -38,7 +38,7 @@ class Codegenerator extends \Magento\Framework\DataObject implements Codegenerat
         $length = $this->getActualLength();
         $code = '';
         for ($i = 0, $indexMax = strlen($alphabet) - 1; $i < $length; ++$i) {
-            $code .= substr($alphabet, mt_rand(0, $indexMax), 1);
+            $code .= substr($alphabet, random_int(0, $indexMax), 1);
         }
 
         return $code;
@@ -54,7 +54,7 @@ class Codegenerator extends \Magento\Framework\DataObject implements Codegenerat
         $lengthMin = $this->getLengthMin() ? $this->getLengthMin() : static::DEFAULT_LENGTH_MIN;
         $lengthMax = $this->getLengthMax() ? $this->getLengthMax() : static::DEFAULT_LENGTH_MAX;
 
-        return $this->getLength() ? $this->getLength() : mt_rand($lengthMin, $lengthMax);
+        return $this->getLength() ? $this->getLength() : random_int($lengthMin, $lengthMax);
     }
 
     /**

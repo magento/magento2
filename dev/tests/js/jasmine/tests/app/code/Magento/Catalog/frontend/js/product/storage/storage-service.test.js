@@ -12,21 +12,17 @@ define([
 
     var injector = new Squire(),
         mocks = {
-            'Magento_Catalog/js/product/storage/ids-storage': {
-                name: 'IdsStorage',
-                initialize: jasmine.createSpy().and.returnValue({})
-            },
             'Magento_Catalog/js/product/storage/data-storage': {},
             'Magento_Catalog/js/product/storage/ids-storage-compare': {}
         },
-        obj;
+        obj,
+        utils;
 
-    beforeEach(function (done) {
-        injector.mock(mocks);
-        injector.require(['Magento_Catalog/js/product/storage/storage-service'], function (insance) {
-            obj = insance;
-            done();
-        });
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
     });
 
     describe('Magento_Catalog/js/product/storage/storage-service', function () {
@@ -35,6 +31,19 @@ define([
                 className: 'IdsStorage'
             },
             storage;
+
+        beforeEach(function (done) {
+            injector.mock(mocks);
+            injector.require([
+                'Magento_Catalog/js/product/storage/ids-storage',
+                'Magento_Catalog/js/product/storage/storage-service',
+                'mageUtils'
+            ], function (IdsStorage, instance, mageUtils) {
+                obj = instance;
+                utils = mageUtils;
+                done();
+            });
+        });
 
         describe('"createStorage" method', function () {
             it('create new storage', function () {
@@ -64,6 +73,55 @@ define([
                 obj.getStorage(config.namespace);
 
                 expect(typeof obj.getStorage(config.namespace)).toBe('object');
+            });
+        });
+        describe('"add" method', function () {
+            var storageValue;
+
+            beforeEach(function () {
+                storage = new obj.createStorage(config);
+                storageValue = {
+                    'property1': 1
+                };
+
+                storage.set(storageValue);
+            });
+
+            it('method exists', function () {
+                expect(storage.add).toBeDefined();
+                expect(typeof storage.add).toEqual('function');
+            });
+
+            it('update value', function () {
+                spyOn(utils, 'copy').and.callThrough();
+                expect(storage.get()).toEqual(storageValue);
+
+                storageValue = {
+                    'property2': 2
+                };
+
+                storage.add(storageValue);
+
+                expect(utils.copy).toHaveBeenCalled();
+                expect(storage.get()).toEqual(
+                    {
+                        'property1': 1,
+                        'property2': 2
+                    }
+                );
+            });
+
+            it('add empty value', function () {
+                spyOn(utils, 'copy').and.callThrough();
+
+                storage.add({});
+
+                expect(utils.copy).not.toHaveBeenCalled();
+                expect(storage.get()).toEqual(
+                    {
+                        'property1': 1
+                    }
+                );
             });
         });
     });

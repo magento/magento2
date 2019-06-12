@@ -79,6 +79,9 @@ class DateTime
      * @param int $time
      * @return string The given time in given format
      *
+     * @deprecated
+     * @see Use Intl library for datetime handling: http://php.net/manual/en/book.intl.php
+     *
      * @codeCoverageIgnore
      */
     public function gmDate($format, $time)
@@ -91,6 +94,9 @@ class DateTime
      *
      * @param string $timeStr
      * @return int
+     *
+     * @deprecated
+     * @see Use Intl library for datetime handling: http://php.net/manual/en/book.intl.php
      *
      * @codeCoverageIgnore
      */

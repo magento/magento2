@@ -110,7 +110,7 @@ class FileUploader
         $result = $fileProcessor->saveTemporaryFile($this->scope . '[' . $this->getAttributeCode() . ']');
 
         // Update tmp_name param. Required for attribute validation!
-        $result['tmp_name'] = $result['path'] . '/' . ltrim($result['file'], '/');
+        $result['tmp_name'] = ltrim($result['file'], '/');
 
         $result['url'] = $fileProcessor->getViewUrl(
             FileProcessor::TMP_DIR . '/' . ltrim($result['name'], '/'),

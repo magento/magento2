@@ -6,6 +6,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Noroute;
 
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class Index extends \Magento\Backend\App\Action
 {
     /**
@@ -34,7 +37,7 @@ class Index extends \Magento\Backend\App\Action
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->setStatusHeader(404, '1.1', 'Forbidden');
+        $resultPage->setStatusHeader(404, '1.1', 'Not Found');
         $resultPage->setHeader('Status', '404 File not found');
         $resultPage->addHandle('adminhtml_noroute');
         return $resultPage;

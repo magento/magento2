@@ -171,7 +171,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals('%fieldName is a required field.', $errorObj['message']);
+            $this->assertEquals('"%fieldName" is required. Enter and try again.', $errorObj['message']);
             $this->assertEquals(['fieldName' => 'percentage_rate'], $errorObj['parameters']);
         }
     }
@@ -491,7 +491,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, ['rateId' => $taxRateId]);
             $this->fail('Expected exception was not raised');
         } catch (\Exception $e) {
-            $expectedMessage = 'The tax rate cannot be removed. It exists in a tax rule.';
+            $expectedMessage = "The tax rate can't be removed because it exists in a tax rule.";
 
             $this->assertContains(
                 $expectedMessage,

@@ -154,7 +154,16 @@ class CustomOptionsTest extends AbstractModifierTest
             ->method('getAll')
             ->willReturn([]);
 
-        $this->assertArrayHasKey(CustomOptions::GROUP_CUSTOM_OPTIONS_NAME, $this->getModel()->modifyMeta([]));
+        $meta = $this->getModel()->modifyMeta([]);
+
+        $this->assertArrayHasKey(CustomOptions::GROUP_CUSTOM_OPTIONS_NAME, $meta);
+
+        $buttonAdd = $meta['custom_options']['children']['container_header']['children']['button_add'];
+        $buttonAddTargetName = $buttonAdd['arguments']['data']['config']['actions'][0]['targetName'];
+        $expectedTargetName = '${ $.ns }.${ $.ns }.' . CustomOptions::GROUP_CUSTOM_OPTIONS_NAME
+            . '.' . CustomOptions::GRID_OPTIONS_NAME;
+
+        $this->assertEquals($expectedTargetName, $buttonAddTargetName);
     }
 
     /**

@@ -9,6 +9,7 @@ use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Config\Model\Config\PathValidator;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -98,12 +99,35 @@ class ProcessorFacade
      * @param boolean $lock The lock flag
      * @return string Processor response message
      * @throws ValidatorException If some validation is wrong
-     * @throws CouldNotSaveException If cannot save config value
-     * @throws ConfigurationMismatchException If processor can not be instantiated
      * @since 100.2.0
+     * @deprecated
+     * @see processWithLockTarget()
      */
     public function process($path, $value, $scope, $scopeCode, $lock)
     {
+        return $this->processWithLockTarget($path, $value, $scope, $scopeCode, $lock);
+    }
+
+    /**
+     * Processes config:set command with the option to set a target file.
+     *
+     * @param string $path The configuration path in format section/group/field_name
+     * @param string $value The configuration value
+     * @param string $scope The configuration scope (default, website, or store)
+     * @param string $scopeCode The scope code
+     * @param boolean $lock The lock flag
+     * @param string $lockTarget
+     * @return string Processor response message
+     * @throws ValidatorException If some validation is wrong
+     */
+    public function processWithLockTarget(
+        $path,
+        $value,
+        $scope,
+        $scopeCode,
+        $lock,
+        $lockTarget = ConfigFilePool::APP_ENV
+    ) {
         try {
             $this->scopeValidator->isValid($scope, $scopeCode);
             $this->pathValidator->validate($path);
@@ -111,14 +135,24 @@ class ProcessorFacade
             throw new ValidatorException(__($exception->getMessage()), $exception);
         }
 
-        $processor = $lock
-            ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK)
-            : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_DEFAULT);
-        $message = $lock
-            ? 'Value was saved and locked.'
-            : 'Value was saved.';
+        $processor =
+            $lock
+                ? ( $lockTarget == ConfigFilePool::APP_ENV
+                    ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK_ENV)
+                    : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK_CONFIG)
+                )
+                : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_DEFAULT)
+            ;
 
-        // The processing flow depends on --lock option.
+        $message =
+            $lock
+                ? ( $lockTarget == ConfigFilePool::APP_ENV
+                    ? 'Value was saved in app/etc/env.php and locked.'
+                    : 'Value was saved in app/etc/config.php and locked.'
+                )
+                : 'Value was saved.';
+
+        // The processing flow depends on --lock and --share options.
         $processor->process($path, $value, $scope, $scopeCode);
 
         $this->hash->regenerate(System::CONFIG_TYPE);

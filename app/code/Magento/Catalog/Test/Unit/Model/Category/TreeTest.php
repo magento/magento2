@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Category;
 
 class TreeTest extends \PHPUnit\Framework\TestCase
@@ -45,24 +43,32 @@ class TreeTest extends \PHPUnit\Framework\TestCase
      */
     protected $node;
 
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Category\TreeFactory
+     */
+    private $treeResourceFactoryMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->categoryTreeMock = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Category\Tree::class
-            )->disableOriginalConstructor()
-            ->getMock();
+        )->disableOriginalConstructor()->getMock();
 
         $this->categoryCollection = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Category\Collection::class
-            )->disableOriginalConstructor()
-            ->getMock();
+        )->disableOriginalConstructor()->getMock();
 
         $this->storeManagerMock = $this->getMockBuilder(
             \Magento\Store\Model\StoreManagerInterface::class
-            )->disableOriginalConstructor()
-            ->getMock();
+        )->disableOriginalConstructor()->getMock();
+
+        $this->treeResourceFactoryMock = $this->createMock(
+            \Magento\Catalog\Model\ResourceModel\Category\TreeFactory::class
+        );
+        $this->treeResourceFactoryMock->method('create')
+            ->willReturn($this->categoryTreeMock);
 
         $methods = ['create'];
         $this->treeFactoryMock =
@@ -75,7 +81,8 @@ class TreeTest extends \PHPUnit\Framework\TestCase
                     'categoryCollection' => $this->categoryCollection,
                     'categoryTree' => $this->categoryTreeMock,
                     'storeManager' => $this->storeManagerMock,
-                    'treeFactory' => $this->treeFactoryMock
+                    'treeFactory' => $this->treeFactoryMock,
+                    'treeResourceFactory' => $this->treeResourceFactoryMock,
                 ]
             );
     }
@@ -84,14 +91,13 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     {
         $category = $this->getMockBuilder(
             \Magento\Catalog\Model\Category::class
-            )->disableOriginalConstructor()
-            ->getMock();
+        )->disableOriginalConstructor()->getMock();
         $category->expects($this->exactly(2))->method('getId')->will($this->returnValue(1));
 
         $node = $this->getMockBuilder(
             \Magento\Framework\Data\Tree\Node::class
-            )->disableOriginalConstructor()
-            ->getMock();
+        )->disableOriginalConstructor()->getMock();
+
         $node->expects($this->once())->method('loadChildren');
         $this->categoryTreeMock->expects($this->once())->method('loadNode')
             ->with($this->equalTo(1))

@@ -63,7 +63,7 @@ class SectionPoolTest extends \PHPUnit\Framework\TestCase
 
         $this->identifierMock->expects($this->once())
             ->method('markSections')
-            //check also default value for $updateIds = false
+            //check also default value for $forceTimestamp = false
             ->with($allSectionsData, $sectionNames, false)
             ->willReturn($identifierResult);
         $modelResult = $this->model->getSectionsData($sectionNames);

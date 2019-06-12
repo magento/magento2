@@ -7,12 +7,17 @@
 namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
+use Magento\CatalogRule\Model\ResourceModel\Rule\Collection as RuleCollection;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use Magento\CatalogRule\Model\Rule;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
+use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
 
 /**
+ * Catalog rule index builder
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -101,32 +106,32 @@ class IndexBuilder
     protected $connection;
 
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator
+     * @var ProductPriceCalculator
      */
     private $productPriceCalculator;
 
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\ReindexRuleProduct
+     * @var ReindexRuleProduct
      */
     private $reindexRuleProduct;
 
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite
+     * @var ReindexRuleGroupWebsite
      */
     private $reindexRuleGroupWebsite;
 
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder
+     * @var RuleProductsSelectBuilder
      */
     private $ruleProductsSelectBuilder;
 
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice
+     * @var ReindexRuleProductPrice
      */
     private $reindexRuleProductPrice;
 
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor
+     * @var RuleProductPricesPersistor
      */
     private $pricesPersistor;
 
@@ -134,6 +139,16 @@ class IndexBuilder
      * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
      */
     private $activeTableSwitcher;
+
+    /**
+     * @var TableSwapper
+     */
+    private $tableSwapper;
+
+    /**
+     * @var ProductLoader
+     */
+    private $productLoader;
 
     /**
      * @param RuleCollectionFactory $ruleCollectionFactory
@@ -146,13 +161,15 @@ class IndexBuilder
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param int $batchCount
-     * @param \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator|null $productPriceCalculator
-     * @param \Magento\CatalogRule\Model\Indexer\ReindexRuleProduct|null $reindexRuleProduct
-     * @param \Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite|null $reindexRuleGroupWebsite
-     * @param \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder|null $ruleProductsSelectBuilder
-     * @param \Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice|null $reindexRuleProductPrice
-     * @param \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor|null $pricesPersistor
+     * @param ProductPriceCalculator|null $productPriceCalculator
+     * @param ReindexRuleProduct|null $reindexRuleProduct
+     * @param ReindexRuleGroupWebsite|null $reindexRuleGroupWebsite
+     * @param RuleProductsSelectBuilder|null $ruleProductsSelectBuilder
+     * @param ReindexRuleProductPrice|null $reindexRuleProductPrice
+     * @param RuleProductPricesPersistor|null $pricesPersistor
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
+     * @param ProductLoader|null $productLoader
+     * @param TableSwapper|null $tableSwapper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -166,13 +183,15 @@ class IndexBuilder
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         $batchCount = 1000,
-        \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator $productPriceCalculator = null,
-        \Magento\CatalogRule\Model\Indexer\ReindexRuleProduct $reindexRuleProduct = null,
-        \Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite $reindexRuleGroupWebsite = null,
-        \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder $ruleProductsSelectBuilder = null,
-        \Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice $reindexRuleProductPrice = null,
-        \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor $pricesPersistor = null,
-        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null
+        ProductPriceCalculator $productPriceCalculator = null,
+        ReindexRuleProduct $reindexRuleProduct = null,
+        ReindexRuleGroupWebsite $reindexRuleGroupWebsite = null,
+        RuleProductsSelectBuilder $ruleProductsSelectBuilder = null,
+        ReindexRuleProductPrice $reindexRuleProductPrice = null,
+        RuleProductPricesPersistor $pricesPersistor = null,
+        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null,
+        ProductLoader $productLoader = null,
+        TableSwapper $tableSwapper = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -186,27 +205,32 @@ class IndexBuilder
         $this->productFactory = $productFactory;
         $this->batchCount = $batchCount;
 
-        $this->productPriceCalculator = $productPriceCalculator ?: ObjectManager::getInstance()->get(
-            \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator::class
+        $this->productPriceCalculator = $productPriceCalculator ?? ObjectManager::getInstance()->get(
+            ProductPriceCalculator::class
         );
-        $this->reindexRuleProduct = $reindexRuleProduct ?: ObjectManager::getInstance()->get(
-            \Magento\CatalogRule\Model\Indexer\ReindexRuleProduct::class
+        $this->reindexRuleProduct = $reindexRuleProduct ?? ObjectManager::getInstance()->get(
+            ReindexRuleProduct::class
         );
-        $this->reindexRuleGroupWebsite = $reindexRuleGroupWebsite ?: ObjectManager::getInstance()->get(
-            \Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite::class
+        $this->reindexRuleGroupWebsite = $reindexRuleGroupWebsite ?? ObjectManager::getInstance()->get(
+            ReindexRuleGroupWebsite::class
         );
-        $this->ruleProductsSelectBuilder = $ruleProductsSelectBuilder ?: ObjectManager::getInstance()->get(
-            \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder::class
+        $this->ruleProductsSelectBuilder = $ruleProductsSelectBuilder ?? ObjectManager::getInstance()->get(
+            RuleProductsSelectBuilder::class
         );
-        $this->reindexRuleProductPrice = $reindexRuleProductPrice ?: ObjectManager::getInstance()->get(
-            \Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice::class
+        $this->reindexRuleProductPrice = $reindexRuleProductPrice ?? ObjectManager::getInstance()->get(
+            ReindexRuleProductPrice::class
         );
-        $this->pricesPersistor = $pricesPersistor ?: ObjectManager::getInstance()->get(
-            \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor::class
+        $this->pricesPersistor = $pricesPersistor ?? ObjectManager::getInstance()->get(
+            RuleProductPricesPersistor::class
         );
-        $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()->get(
+        $this->activeTableSwitcher = $activeTableSwitcher ?? ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
         );
+        $this->productLoader = $productLoader ?? ObjectManager::getInstance()->get(
+            ProductLoader::class
+        );
+        $this->tableSwapper = $tableSwapper ??
+            ObjectManager::getInstance()->get(TableSwapper::class);
     }
 
     /**
@@ -249,13 +273,14 @@ class IndexBuilder
      */
     protected function doReindexByIds($ids)
     {
-        $this->cleanByIds($ids);
+        $this->cleanProductIndex($ids);
 
-        foreach ($this->getActiveRules() as $rule) {
-            foreach ($ids as $productId) {
-                $this->applyRule($rule, $this->getProduct($productId));
-            }
+        $products = $this->productLoader->getProducts($ids);
+        $activeRules = $this->getActiveRules();
+        foreach ($products as $product) {
+            $this->applyRules($activeRules, $product);
         }
+        $this->reindexRuleGroupWebsite->execute();
     }
 
     /**
@@ -284,13 +309,6 @@ class IndexBuilder
      */
     protected function doReindexFull()
     {
-        $this->connection->truncateTable(
-            $this->getTable($this->activeTableSwitcher->getAdditionalTableName('catalogrule_product'))
-        );
-        $this->connection->truncateTable(
-            $this->getTable($this->activeTableSwitcher->getAdditionalTableName('catalogrule_product_price'))
-        );
-
         foreach ($this->getAllRules() as $rule) {
             $this->reindexRuleProduct->execute($rule, $this->batchCount, true);
         }
@@ -298,14 +316,37 @@ class IndexBuilder
         $this->reindexRuleProductPrice->execute($this->batchCount, null, true);
         $this->reindexRuleGroupWebsite->execute(true);
 
-        $this->activeTableSwitcher->switchTable(
-            $this->connection,
+        $this->tableSwapper->swapIndexTables(
             [
                 $this->getTable('catalogrule_product'),
                 $this->getTable('catalogrule_product_price'),
                 $this->getTable('catalogrule_group_website')
             ]
         );
+    }
+
+    /**
+     * Clean product index
+     *
+     * @param array $productIds
+     * @return void
+     */
+    private function cleanProductIndex(array $productIds): void
+    {
+        $where = ['product_id IN (?)' => $productIds];
+        $this->connection->delete($this->getTable('catalogrule_product'), $where);
+    }
+
+    /**
+     * Clean product price index
+     *
+     * @param array $productIds
+     * @return void
+     */
+    private function cleanProductPriceIndex(array $productIds): void
+    {
+        $where = ['product_id IN (?)' => $productIds];
+        $this->connection->delete($this->getTable('catalogrule_product_price'), $where);
     }
 
     /**
@@ -316,51 +357,35 @@ class IndexBuilder
      */
     protected function cleanByIds($productIds)
     {
-        $query = $this->connection->deleteFromSelect(
-            $this->connection
-                ->select()
-                ->from($this->resource->getTableName('catalogrule_product'), 'product_id')
-                ->distinct()
-                ->where('product_id IN (?)', $productIds),
-            $this->resource->getTableName('catalogrule_product')
-        );
-        $this->connection->query($query);
-
-        $query = $this->connection->deleteFromSelect(
-            $this->connection->select()
-                ->from($this->resource->getTableName('catalogrule_product_price'), 'product_id')
-                ->distinct()
-                ->where('product_id IN (?)', $productIds),
-            $this->resource->getTableName('catalogrule_product_price')
-        );
-        $this->connection->query($query);
+        $this->cleanProductIndex($productIds);
+        $this->cleanProductPriceIndex($productIds);
     }
 
     /**
+     * Assign product to rule
+     *
      * @param Rule $rule
      * @param Product $product
-     * @return $this
-     * @throws \Exception
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @return void
      */
-    protected function applyRule(Rule $rule, $product)
+    private function assignProductToRule(Rule $rule, Product $product): void
     {
-        $ruleId = $rule->getId();
-        $productEntityId = $product->getId();
-        $websiteIds = array_intersect($product->getWebsiteIds(), $rule->getWebsiteIds());
-
         if (!$rule->validate($product)) {
-            return $this;
+            return;
         }
 
+        $ruleId = (int) $rule->getId();
+        $productEntityId = (int) $product->getId();
+        $ruleProductTable = $this->getTable('catalogrule_product');
         $this->connection->delete(
-            $this->resource->getTableName('catalogrule_product'),
+            $ruleProductTable,
             [
-                $this->connection->quoteInto('rule_id = ?', $ruleId),
-                $this->connection->quoteInto('product_id = ?', $productEntityId)
+                'rule_id = ?' => $ruleId,
+                'product_id = ?' => $productEntityId,
             ]
         );
 
+        $websiteIds = array_intersect($product->getWebsiteIds(), $rule->getWebsiteIds());
         $customerGroupIds = $rule->getCustomerGroupIds();
         $fromTime = strtotime($rule->getFromDate());
         $toTime = strtotime($rule->getToDate());
@@ -371,36 +396,44 @@ class IndexBuilder
         $actionStop = $rule->getStopRulesProcessing();
 
         $rows = [];
-        try {
-            foreach ($websiteIds as $websiteId) {
-                foreach ($customerGroupIds as $customerGroupId) {
-                    $rows[] = [
-                        'rule_id' => $ruleId,
-                        'from_time' => $fromTime,
-                        'to_time' => $toTime,
-                        'website_id' => $websiteId,
-                        'customer_group_id' => $customerGroupId,
-                        'product_id' => $productEntityId,
-                        'action_operator' => $actionOperator,
-                        'action_amount' => $actionAmount,
-                        'action_stop' => $actionStop,
-                        'sort_order' => $sortOrder,
-                    ];
+        foreach ($websiteIds as $websiteId) {
+            foreach ($customerGroupIds as $customerGroupId) {
+                $rows[] = [
+                    'rule_id' => $ruleId,
+                    'from_time' => $fromTime,
+                    'to_time' => $toTime,
+                    'website_id' => $websiteId,
+                    'customer_group_id' => $customerGroupId,
+                    'product_id' => $productEntityId,
+                    'action_operator' => $actionOperator,
+                    'action_amount' => $actionAmount,
+                    'action_stop' => $actionStop,
+                    'sort_order' => $sortOrder,
+                ];
 
-                    if (count($rows) == $this->batchCount) {
-                        $this->connection->insertMultiple($this->getTable('catalogrule_product'), $rows);
-                        $rows = [];
-                    }
+                if (count($rows) == $this->batchCount) {
+                    $this->connection->insertMultiple($ruleProductTable, $rows);
+                    $rows = [];
                 }
             }
-
-            if (!empty($rows)) {
-                $this->connection->insertMultiple($this->resource->getTableName('catalogrule_product'), $rows);
-            }
-        } catch (\Exception $e) {
-            throw $e;
         }
+        if ($rows) {
+            $this->connection->insertMultiple($ruleProductTable, $rows);
+        }
+    }
 
+    /**
+     * Apply rule
+     *
+     * @param Rule $rule
+     * @param Product $product
+     * @return $this
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    protected function applyRule(Rule $rule, $product)
+    {
+        $this->assignProductToRule($rule, $product);
         $this->reindexRuleProductPrice->execute($this->batchCount, $product);
         $this->reindexRuleGroupWebsite->execute();
 
@@ -408,6 +441,25 @@ class IndexBuilder
     }
 
     /**
+     * Apply rules
+     *
+     * @param RuleCollection $ruleCollection
+     * @param Product $product
+     * @return void
+     */
+    private function applyRules(RuleCollection $ruleCollection, Product $product): void
+    {
+        foreach ($ruleCollection as $rule) {
+            $this->assignProductToRule($rule, $product);
+        }
+
+        $this->cleanProductPriceIndex([$product->getId()]);
+        $this->reindexRuleProductPrice->execute($this->batchCount, $product);
+    }
+
+    /**
+     * Retrieve table name
+     *
      * @param string $tableName
      * @return string
      */
@@ -417,10 +469,12 @@ class IndexBuilder
     }
 
     /**
+     * Update rule product data
+     *
      * @param Rule $rule
      * @return $this
      * @deprecated 100.2.0
-     * @see \Magento\CatalogRule\Model\Indexer\ReindexRuleProduct::execute
+     * @see ReindexRuleProduct::execute
      */
     protected function updateRuleProductData(Rule $rule)
     {
@@ -442,12 +496,14 @@ class IndexBuilder
     }
 
     /**
+     * Apply all rules
+     *
      * @param Product|null $product
      * @throws \Exception
      * @return $this
      * @deprecated 100.2.0
-     * @see \Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice::execute
-     * @see \Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite::execute
+     * @see ReindexRuleProductPrice::execute
+     * @see ReindexRuleGroupWebsite::execute
      */
     protected function applyAllRules(Product $product = null)
     {
@@ -461,7 +517,7 @@ class IndexBuilder
      *
      * @return $this
      * @deprecated 100.2.0
-     * @see \Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite::execute
+     * @see ReindexRuleGroupWebsite::execute
      */
     protected function updateCatalogRuleGroupWebsiteData()
     {
@@ -481,11 +537,13 @@ class IndexBuilder
     }
 
     /**
+     * Calculate rule product price
+     *
      * @param array $ruleData
-     * @param null $productData
+     * @param array $productData
      * @return float
      * @deprecated 100.2.0
-     * @see \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator::calculate
+     * @see ProductPriceCalculator::calculate
      */
     protected function calcRuleProductPrice($ruleData, $productData = null)
     {
@@ -493,12 +551,14 @@ class IndexBuilder
     }
 
     /**
+     * Get rule products statement
+     *
      * @param int $websiteId
      * @param Product|null $product
      * @return \Zend_Db_Statement_Interface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @deprecated 100.2.0
-     * @see \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder::build
+     * @see RuleProductsSelectBuilder::build
      */
     protected function getRuleProductsStmt($websiteId, Product $product = null)
     {
@@ -506,11 +566,13 @@ class IndexBuilder
     }
 
     /**
+     * Save rule product prices
+     *
      * @param array $arrData
      * @return $this
      * @throws \Exception
      * @deprecated 100.2.0
-     * @see \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor::execute
+     * @see RuleProductPricesPersistor::execute
      */
     protected function saveRuleProductPrices($arrData)
     {
@@ -521,7 +583,7 @@ class IndexBuilder
     /**
      * Get active rules
      *
-     * @return array
+     * @return RuleCollection
      */
     protected function getActiveRules()
     {
@@ -531,7 +593,7 @@ class IndexBuilder
     /**
      * Get active rules
      *
-     * @return array
+     * @return RuleCollection
      */
     protected function getAllRules()
     {
@@ -539,6 +601,8 @@ class IndexBuilder
     }
 
     /**
+     * Get product
+     *
      * @param int $productId
      * @return Product
      */
@@ -551,6 +615,8 @@ class IndexBuilder
     }
 
     /**
+     * Log critical exception
+     *
      * @param \Exception $e
      * @return void
      */

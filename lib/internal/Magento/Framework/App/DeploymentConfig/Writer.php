@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -14,6 +15,7 @@ use Magento\Framework\Phrase;
 
 /**
  * Deployment configuration writer to files: env.php, config.php.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Writer
 {
@@ -144,7 +146,7 @@ class Writer
                     $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile($writeFilePath, $contents);
                 } catch (FileSystemException $e) {
                     throw new FileSystemException(
-                        new Phrase('Deployment config file %1 is not writable.', [$paths[$fileKey]])
+                        new Phrase('The "%1" deployment config file isn\'t writable.', [$paths[$fileKey]])
                     );
                 }
                 if (function_exists('opcache_invalidate')) {

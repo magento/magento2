@@ -78,7 +78,8 @@ class ConditionFactoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->never())
             ->method('create');
 
-        $this->expectException(\InvalidArgumentException::class, 'Class does not exist');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Class does not exist');
 
         $this->conditionFactory->create($type);
     }
@@ -92,7 +93,8 @@ class ConditionFactoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->with($type)
             ->willReturn(new \stdClass());
-        $this->expectException(\InvalidArgumentException::class, 'Class does not implement condition interface');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Class does not implement condition interface');
         $this->conditionFactory->create($type);
     }
 }

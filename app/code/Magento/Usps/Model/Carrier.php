@@ -365,6 +365,16 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     }
 
     /**
+     * @inheritdoc
+     *
+     * Starting from 23.02.2018 USPS doesn't allow to create free shipping labels via their API.
+     */
+    public function isShippingLabelsAvailable()
+    {
+        return false;
+    }
+
+    /**
      * Get quotes
      *
      * @return Result
@@ -439,7 +449,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $package->addChild('FirstClassMailType', 'PARCEL');
             }
             $package->addChild('ZipOrigination', $r->getOrigPostal());
-            //only 5 chars avaialble
+            //only 5 chars available
             $package->addChild('ZipDestination', substr($r->getDestPostal(), 0, 5));
             $package->addChild('Pounds', $r->getWeightPounds());
             $package->addChild('Ounces', $r->getWeightOunces());
@@ -1027,7 +1037,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
             $api = 'TrackV2';
             $request = $xml->asXML();
-            $debugData = ['request' => $request];
+            $debugData = ['request' => $this->filterDebugData($request)];
 
             try {
                 $url = $this->getConfigData('gateway_url');
@@ -1158,6 +1168,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * Return USPS county name by country ISO 3166-1-alpha-2 code
+     *
      * Return false for unknown countries
      *
      * @param string $countryId
@@ -1237,7 +1248,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'FO' => 'Faroe Islands',
             'FR' => 'France',
             'GA' => 'Gabon',
-            'GB' => 'Great Britain and Northern Ireland',
+            'GB' => 'United Kingdom of Great Britain and Northern Ireland',
             'GD' => 'Grenada',
             'GE' => 'Georgia, Republic of',
             'GF' => 'French Guiana',
@@ -1355,7 +1366,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'ST' => 'Sao Tome and Principe',
             'SV' => 'El Salvador',
             'SY' => 'Syrian Arab Republic',
-            'SZ' => 'Swaziland',
+            'SZ' => 'Eswatini',
             'TC' => 'Turks and Caicos Islands',
             'TD' => 'Chad',
             'TG' => 'Togo',
@@ -1423,6 +1434,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \Magento\Framework\DataObject $request
      * @return string
+     * @deprecated This method should not be used anymore.
+     * @see \Magento\Usps\Model\Carrier::_doShipmentRequest method doc block.
      */
     protected function _formUsExpressShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1598,6 +1611,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @deprecated Should not be used anymore.
+     * @see \Magento\Usps\Model\Carrier::_doShipmentRequest doc block.
      */
     protected function _formIntlShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1851,6 +1866,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @deprecated This method must not be used anymore. Starting from 23.02.2018 USPS elimates API usage for
+     * free shipping labels generating.
      */
     protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1886,7 +1903,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
         }
 
-        $debugData = ['request' => $requestXml];
+        $debugData = ['request' => $this->filterDebugData($requestXml)];
         $url = $this->getConfigData('gateway_secure_url');
         if (!$url) {
             $url = $this->_defaultGatewayUrl;
@@ -2039,7 +2056,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (preg_match('/[\\d\\w]{5}\\-[\\d\\w]{4}/', $zipString) != 0) {
             $zip = explode('-', $zipString);
         }
-        for ($i = 0; $i < count($zip); ++$i) {
+        $count = count($zip);
+        for ($i = 0; $i < $count; ++$i) {
             if (strlen($zip[$i]) == 5) {
                 $zip5 = $zip[$i];
             } elseif (strlen($zip[$i]) == 4) {

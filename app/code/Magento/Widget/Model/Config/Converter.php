@@ -222,7 +222,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     {
         $depends = [];
         foreach ($source->childNodes as $childNode) {
-            if ($childNode->nodeName == '#text') {
+            if ($childNode->nodeName === '#text') {
                 continue;
             }
             if ($childNode->nodeName !== 'parameter') {
@@ -231,12 +231,23 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 );
             }
             $parameterAttributes = $childNode->attributes;
-            $depends[$parameterAttributes->getNamedItem(
-                'name'
-            )->nodeValue] = [
-                'value' => $parameterAttributes->getNamedItem('value')->nodeValue,
-            ];
+            $dependencyName = $parameterAttributes->getNamedItem('name')->nodeValue;
+            $dependencyValue = $parameterAttributes->getNamedItem('value')->nodeValue;
+
+            if (!isset($depends[$dependencyName])) {
+                $depends[$dependencyName] = [
+                    'value' => $dependencyValue,
+                ];
+
+                continue;
+            } else if (!isset($depends[$dependencyName]['values'])) {
+                $depends[$dependencyName]['values'] = [$depends[$dependencyName]['value']];
+                unset($depends[$dependencyName]['value']);
+            }
+
+            $depends[$dependencyName]['values'][] = $dependencyValue;
         }
+
         return $depends;
     }
 

@@ -11,7 +11,7 @@
     <type id="customer_account_createpassword" label="Reset a Password"/>
     <type id="customer_account_edit" label="Customer Account Edit Form"/>
     <type id="customer_account_forgotpassword" label="Customer Forgot Password Form"/>
-    <type id="customer_account_index" label="Customer My Account Dashboard"/>
+    <type id="customer_account_index" label="Customer My Account"/>
     <type id="customer_account_login" label="Customer Account Login Form"/>
     <type id="customer_account_logoutsuccess" label="Customer Account Logout Success"/>
     <type id="customer_address_form" label="Customer My Account Address Edit Form"/>

@@ -32,6 +32,9 @@ class NumericTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->model->getNextId());
     }
 
+    /**
+     * @return array
+     */
     public function getLastIdDataProvider()
     {
         return [

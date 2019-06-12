@@ -15,29 +15,40 @@ use Magento\Braintree\Model\Adminhtml\Source\Environment;
 
 /**
  * Class BraintreeAdapter
+ * Use \Magento\Braintree\Model\Adapter\BraintreeAdapterFactory to create new instance of adapter.
  * @codeCoverageIgnore
  */
 class BraintreeAdapter
 {
-
     /**
      * @var Config
      */
     private $config;
 
     /**
-     * @param Config $config
+     * @param string $merchantId
+     * @param string $publicKey
+     * @param string $privateKey
+     * @param string $environment
      */
-    public function __construct(Config $config)
+    public function __construct($merchantId, $publicKey, $privateKey, $environment)
     {
-        $this->config = $config;
-        $this->initCredentials();
+        $this->merchantId($merchantId);
+        $this->publicKey($publicKey);
+        $this->privateKey($privateKey);
+
+        if ($environment === Environment::ENVIRONMENT_PRODUCTION) {
+            $this->environment(Environment::ENVIRONMENT_PRODUCTION);
+        } else {
+            $this->environment(Environment::ENVIRONMENT_SANDBOX);
+        }
     }
 
     /**
      * Initializes credentials.
      *
      * @return void
+     * @deprecated is not used anymore
      */
     protected function initCredentials()
     {

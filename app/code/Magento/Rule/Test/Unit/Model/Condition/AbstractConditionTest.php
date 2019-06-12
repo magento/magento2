@@ -40,6 +40,9 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('category_ids', $this->_condition->getMappedSqlField());
     }
 
+    /**
+     * @return array
+     */
     public function validateAttributeDataProvider()
     {
         return [
@@ -146,6 +149,9 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function validateAttributeArrayInputTypeDataProvider()
     {
         return [

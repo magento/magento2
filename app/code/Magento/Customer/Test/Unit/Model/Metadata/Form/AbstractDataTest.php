@@ -94,6 +94,9 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($bool, $this->_model->isRequestScopeOnly());
     }
 
+    /**
+     * @return array
+     */
     public function trueFalseDataProvider()
     {
         return [[true], [false]];
@@ -122,6 +125,9 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($output, $this->_model->applyInputFilter($input));
     }
 
+    /**
+     * @return array
+     */
     public function applyInputFilterProvider()
     {
         return [
@@ -160,6 +166,9 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($output, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function dateFilterFormatProvider()
     {
         return [[null, 'Whatever I put'], [false, self::MODEL], ['something else', self::MODEL]];
@@ -196,41 +205,39 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests input validation rules.
+     *
      * @param null|string $value
      * @param null|string $label
      * @param null|string $inputValidation
      * @param bool|array  $expectedOutput
      * @dataProvider validateInputRuleDataProvider
      */
-    public function testValidateInputRule($value, $label, $inputValidation, $expectedOutput)
+    public function testValidateInputRule($value, $label, $inputValidation, $expectedOutput): void
     {
         $validationRule = $this->getMockBuilder(\Magento\Customer\Api\Data\ValidationRuleInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
-        $validationRule->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('input_validation'));
-        $validationRule->expects($this->any())
-            ->method('getValue')
-            ->will($this->returnValue($inputValidation));
 
-        $this->_attributeMock->expects($this->any())->method('getStoreLabel')->will($this->returnValue($label));
-        $this->_attributeMock->expects(
-            $this->any()
-        )->method(
-            'getValidationRules'
-        )->will(
-            $this->returnValue(
-                [
-                    $validationRule,
-                ]
-            )
-        );
+        $validationRule->method('getName')
+            ->willReturn('input_validation');
+
+        $validationRule->method('getValue')
+            ->willReturn($inputValidation);
+
+        $this->_attributeMock->method('getStoreLabel')
+            ->willReturn($label);
+
+        $this->_attributeMock->method('getValidationRules')
+            ->willReturn([$validationRule]);
 
         $this->assertEquals($expectedOutput, $this->_model->validateInputRule($value));
     }
 
+    /**
+     * @return array
+     */
     public function validateInputRuleDataProvider()
     {
         return [
@@ -244,6 +251,16 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
                     \Zend_Validate_Alnum::NOT_ALNUM => '"mylabel" contains non-alphabetic or non-numeric characters.'
                 ]
             ],
+            [
+                'abc qaz',
+                'mylabel',
+                'alphanumeric',
+                [
+                    \Zend_Validate_Alnum::NOT_ALNUM => '"mylabel" contains non-alphabetic or non-numeric characters.'
+                ]
+            ],
+            ['abcqaz', 'mylabel', 'alphanumeric', true],
+            ['abc qaz', 'mylabel', 'alphanum-with-spaces', true],
             [
                 '!@#$',
                 'mylabel',
@@ -319,6 +336,9 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $this->_model->getRequestValue($request));
     }
 
+    /**
+     * @return array
+     */
     public function getRequestValueDataProvider()
     {
         $expectedValue = 'EXPECTED_VALUE';

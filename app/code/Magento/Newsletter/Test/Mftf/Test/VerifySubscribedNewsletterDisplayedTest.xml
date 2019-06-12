@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifySubscribedNewsletterDisplayedTest">
+        <annotations>
+            <features value="Newsletter"/>
+            <stories value="MAGETWO-91701: Newsletter subscription is not correctly updated when user is registered on 2 stores"/>
+            <group value="Newsletter"/>
+            <title value="Newsletter subscription when user is registered on 2 stores"/>
+            <description value="Newsletter subscription when user is registered on 2 stores"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-93836"/>
+        </annotations>
+
+        <before>
+            <!--Log in to Magento as admin.-->
+            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="Second"/>
+                <argument name="websiteCode" value="Base2"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="Second"/>
+                <argument name="storeGroupName" value="NewStore"/>
+                <argument name="storeGroupCode" value="Base12"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="staticStoreGroup"/>
+                <argument name="customStore" value="staticStore"/>
+            </actionGroup>
+            <actionGroup ref="EnableWebUrlOptions" stepKey="addStoreCodeToUrls"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
+        </before>
+        <after>
+            <!--Delete created data and set Default Configuration-->
+            <actionGroup ref="ResetWebUrlOptions" stepKey="resetUrlOption"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="Second"/>
+            </actionGroup>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Go to store front (default) and click Create an Account.-->
+        <actionGroup ref="StorefrontCreateNewAccountNewsletterChecked" stepKey="SignUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <!--Sign Out-->
+        <amOnPage url="customer/account/logout/" stepKey="customerOnLogoutPage"/>
+        <waitForPageLoad stepKey="waitLogoutCustomer"/>
+        <!--Create new Account with the same email address. (unchecked Sign Up for Newsletter checkbox)-->
+        <actionGroup ref="StorefrontCreateNewAccountNewsletterUnchecked" stepKey="createNewAccountNewsletterUnchecked">
+            <argument name="Customer" value="CustomerEntityOne"/>
+            <argument name="Store" value="staticStore"/>
+        </actionGroup>
+    </test>
+</tests>

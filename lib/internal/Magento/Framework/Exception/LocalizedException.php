@@ -11,6 +11,8 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\Renderer\Placeholder;
 
 /**
+ * Localized exception
+ *
  * @api
  */
 class LocalizedException extends \Exception
@@ -33,7 +35,7 @@ class LocalizedException extends \Exception
     public function __construct(Phrase $phrase, \Exception $cause = null, $code = 0)
     {
         $this->phrase = $phrase;
-        parent::__construct($phrase->render(), intval($code), $cause);
+        parent::__construct($phrase->render(), (int)$code, $cause);
     }
 
     /**

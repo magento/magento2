@@ -58,6 +58,9 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      */
     protected $setCollection;
 
+    /** @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $scopeResolver;
+
     /**
      *
      * @return void
@@ -170,14 +173,18 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             0 => $this->entityModel,
             1 => 'bundle'
         ];
-
+        $this->scopeResolver = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getScope'])
+            ->getMockForAbstractClass();
         $this->bundle = $this->objectManagerHelper->getObject(
             \Magento\BundleImportExport\Model\Import\Product\Type\Bundle::class,
             [
                 'attrSetColFac' => $this->attrSetColFac,
                 'prodAttrColFac' => $this->prodAttrColFac,
                 'resource' => $this->resource,
-                'params' => $this->params
+                'params' => $this->params,
+                'scopeResolver' => $this->scopeResolver,
             ]
         );
 
@@ -214,7 +221,8 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->will($this->returnValue(
             $allowImport
         ));
-
+        $scope = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)->getMockForAbstractClass();
+        $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($scope);
         $this->connection->expects($this->any())->method('fetchAssoc')->with($this->select)->will($this->returnValue([
             '1' => [
                 'option_id' => '1',
@@ -234,7 +242,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                         'price_type' => 'fixed',
                         'shipment_type' => '1',
                         'default_qty' => '1',
-                        'is_defaul' => '1',
+                        'is_default' => '1',
                         'position' => '1',
                         'option_id' => '1']
                 ]
@@ -256,7 +264,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                         'price_type' => 'percent',
                         'shipment_type' => 0,
                         'default_qty' => '2',
-                        'is_defaul' => '1',
+                        'is_default' => '1',
                         'position' => '6',
                         'option_id' => '6']
                 ]
@@ -316,7 +324,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                          . 'price_type=fixed,'
                          . 'shipment_type=separately,'
                          . 'default_qty=1,'
-                         . 'is_defaul=1,'
+                         . 'is_default=1,'
                          . 'position=1,'
                          . 'option_id=1 | name=Bundle2,'
                          . 'type=dropdown,'
@@ -325,7 +333,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                          . 'price=10,'
                          . 'price_type=fixed,'
                          . 'default_qty=1,'
-                         . 'is_defaul=1,'
+                         . 'is_default=1,'
                          . 'position=2,'
                          . 'option_id=2'
                 ],

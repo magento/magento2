@@ -279,7 +279,7 @@ class GroupRepositoryTest extends WebapiAbstract
         } catch (\Exception $e) {
             // @codingStandardsIgnoreStart
             $this->assertContains(
-                '{"message":"%fieldName is a required field.","parameters":{"fieldName":"code"}',
+                '\"%fieldName\" is required. Enter and try again.","parameters":{"fieldName":"code"}',
                 $e->getMessage(),
                 "Exception does not contain expected message."
             );
@@ -606,7 +606,7 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
             $this->assertContains(
-                '%fieldName is a required field.',
+                '"%fieldName" is required. Enter and try again.',
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );

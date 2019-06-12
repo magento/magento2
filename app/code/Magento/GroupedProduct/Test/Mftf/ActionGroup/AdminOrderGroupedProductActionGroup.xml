@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOrderConfigureGroupedProduct">
+        <arguments>
+            <argument name="productSku" type="string" defaultValue="{{SimpleProduct.sku}}"/>
+            <argument name="productQty" type="string" defaultValue="1"/>
+        </arguments>
+        <click selector="{{AdminOrderFormItemsOrderedSection.configureButtonBySku}}" stepKey="clickConfigure"/>
+        <waitForPageLoad stepKey="waitForConfigurePageLoad"/>
+        <fillField selector="{{AdminOrderFormGroupedProductSection.optionQty(productSku)}}" userInput="{{productQty}}" stepKey="fillOptionQuantity"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOk"/>
+    </actionGroup>
+</actionGroups>

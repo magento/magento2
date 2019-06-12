@@ -68,6 +68,7 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         if (!$role->getTreeLevel()) {
+            $treeLevel = 0;
             if ($role->getPid() > 0) {
                 $select = $this->getConnection()->select()->from(
                     $this->getMainTable(),
@@ -79,8 +80,6 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $binds = ['pid' => (int)$role->getPid()];
 
                 $treeLevel = $this->getConnection()->fetchOne($select, $binds);
-            } else {
-                $treeLevel = 0;
             }
 
             $role->setTreeLevel($treeLevel + 1);

@@ -204,16 +204,6 @@
     }
 }
 
-.eq-ie9 {
-    .hor-scroll {
-        display: inline-block;
-        min-height: 0;
-        overflow-y: hidden;
-        overflow-x: auto;
-        width: 100%;
-    }
-}
-
 td.col-period,
 td.col-date,
 td.col-date_to,
@@ -360,7 +350,7 @@ td.col-type {
             position: relative;
             border-bottom-right-radius: 0;
             box-shadow: none;
-            background: #fff;
+            background: @color-white;
 
             &:after {
                 position: absolute;
@@ -369,7 +359,7 @@ td.col-type {
                 right: 0;
                 height: 2px;
                 margin-top: -1px;
-                background: #fff;
+                background: @color-white;
                 content: '';
                 z-index: 2;
             }
@@ -455,7 +445,6 @@ td.col-type {
 
     .import {
         display: block;
-        vertical-align: top;
     }
 
     .action-reset {

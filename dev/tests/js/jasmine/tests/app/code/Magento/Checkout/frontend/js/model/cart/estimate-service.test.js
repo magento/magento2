@@ -65,6 +65,13 @@ define([
         });
     });
 
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+    });
+
     describe('Magento_Checkout/js/model/cart/estimate-service', function () {
 
         it('test subscribe when billingAddress was changed for  virtual quote', function () {
@@ -140,6 +147,13 @@ define([
                 getType: function () {
                     return 'address_type_test';
                 }
+            });
+            expect(mocks['Magento_Checkout/js/model/cart/totals-processor/default'].estimateTotals).toHaveBeenCalled();
+        });
+
+        it('test subscribe when cart data was changed', function () {
+            mocks['Magento_Customer/js/customer-data'].get('cart')({
+                dataId: 2
             });
             expect(mocks['Magento_Checkout/js/model/cart/totals-processor/default'].estimateTotals).toHaveBeenCalled();
         });

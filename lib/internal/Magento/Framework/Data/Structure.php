@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Data;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -63,7 +64,7 @@ class Structure
                     if ($group !== array_flip($group)) {
                         throw new LocalizedException(
                             new \Magento\Framework\Phrase(
-                                "Invalid format of group '%1': %2",
+                                '"%2" is an invalid format of "%1" group. Verify the format and try again.',
                                 [$groupName, var_export($group, 1)]
                             )
                         );
@@ -94,7 +95,8 @@ class Structure
             if (empty($this->_elements[$parentId][self::CHILDREN][$elementId])) {
                 throw new LocalizedException(
                     new \Magento\Framework\Phrase(
-                        "Broken parent-child relation: the '%1' is not in the nested set of '%2'.",
+                        'The "%1" is not in the nested set of "%2", causing the parent-child relation to break. '
+                        . 'Verify and try again.',
                         [$elementId, $parentId]
                     )
                 );
@@ -107,7 +109,10 @@ class Structure
             $this->_assertArray($children);
             if ($children !== array_flip(array_flip($children))) {
                 throw new LocalizedException(
-                    new \Magento\Framework\Phrase('Invalid format of children: %1', [var_export($children, 1)])
+                    new \Magento\Framework\Phrase(
+                        'The "%1" format of children is invalid. Verify and try again.',
+                        [var_export($children, 1)]
+                    )
                 );
             }
             foreach (array_keys($children) as $childId) {
@@ -118,7 +123,8 @@ class Structure
                 ) {
                     throw new LocalizedException(
                         new \Magento\Framework\Phrase(
-                            "Broken parent-child relation: the '%1' is supposed to have '%2' as parent.",
+                            'The "%1" doesn\'t have "%2" as parent, causing the parent-child relation to break. '
+                            . 'Verify and try again.',
                             [$childId, $elementId]
                         )
                     );
@@ -149,7 +155,7 @@ class Structure
     {
         if (isset($this->_elements[$elementId])) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase("Element with ID '%1' already exists.", [$elementId])
+                new \Magento\Framework\Phrase('An element with a "%1" ID already exists.', [$elementId])
             );
         }
         $this->_elements[$elementId] = [];
@@ -166,7 +172,7 @@ class Structure
      */
     public function getElement($elementId)
     {
-        return isset($this->_elements[$elementId]) ? $this->_elements[$elementId] : false;
+        return $this->_elements[$elementId] ?? false;
     }
 
     /**
@@ -225,7 +231,7 @@ class Structure
                 // break is intentionally omitted
             case self::CHILDREN:
             case self::GROUPS:
-                throw new \InvalidArgumentException("Attribute '{$attribute}' is reserved and cannot be set.");
+                throw new \InvalidArgumentException("The '{$attribute}' attribute is reserved and can't be set.");
             default:
                 $this->_elements[$elementId][$attribute] = $value;
         }
@@ -261,7 +267,7 @@ class Structure
         $this->_assertElementExists($oldId);
         if (!$newId || isset($this->_elements[$newId])) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase("Element with ID '%1' is already defined.", [$newId])
+                new \Magento\Framework\Phrase('An element with a "%1" ID is already defined.', [$newId])
             );
         }
 
@@ -303,13 +309,17 @@ class Structure
     {
         if ($elementId == $parentId) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase("The '%1' cannot be set as child to itself.", [$elementId])
+                new \Magento\Framework\Phrase(
+                    'The "%1" was incorrectly set as a child to itself. Resolve the issue and try again.',
+                    [$elementId]
+                )
             );
         }
         if ($this->_isParentRecursively($elementId, $parentId)) {
             throw new LocalizedException(
                 new \Magento\Framework\Phrase(
-                    "The '%1' is a parent of '%2' recursively, therefore '%3' cannot be set as child to it.",
+                    'The "%3" cannot be set as child to "%1" because "%1" is a parent of "%2" recursively. '
+                    . 'Resolve the issue and try again.',
                     [$elementId, $parentId, $elementId]
                 )
             );
@@ -456,9 +466,7 @@ class Structure
      */
     public function getChildren($parentId)
     {
-        return isset(
-            $this->_elements[$parentId][self::CHILDREN]
-        ) ? $this->_elements[$parentId][self::CHILDREN] : [];
+        return $this->_elements[$parentId][self::CHILDREN] ?? [];
     }
 
     /**
@@ -469,7 +477,7 @@ class Structure
      */
     public function getParentId($childId)
     {
-        return isset($this->_elements[$childId][self::PARENT]) ? $this->_elements[$childId][self::PARENT] : false;
+        return $this->_elements[$childId][self::PARENT] ?? false;
     }
 
     /**
@@ -542,7 +550,10 @@ class Structure
         $index = array_search($childId, array_keys($this->getChildren($parentId)));
         if (false === $index) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase("The '%1' is not a child of '%2'.", [$childId, $parentId])
+                new \Magento\Framework\Phrase(
+                    'The "%1" is not a child of "%2". Resolve the issue and try again.',
+                    [$childId, $parentId]
+                )
             );
         }
         return $index;
@@ -595,7 +606,7 @@ class Structure
         if (!empty($this->_elements[$elementId][self::PARENT])) {
             throw new LocalizedException(
                 new \Magento\Framework\Phrase(
-                    "The element '%1' already has a parent: '%2'",
+                    'The element "%1" can\'t have a parent because "%2" is already the parent of "%1".',
                     [$elementId, $this->_elements[$elementId][self::PARENT]]
                 )
             );
@@ -604,13 +615,16 @@ class Structure
         $children = $this->getChildren($targetParentId);
         if (isset($children[$elementId])) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase("The element '%1' already a child of '%2'", [$elementId, $targetParentId])
+                new \Magento\Framework\Phrase(
+                    'The element "%1" is already a child of "%2".',
+                    [$elementId, $targetParentId]
+                )
             );
         }
         if (false !== array_search($alias, $children)) {
             throw new LocalizedException(
                 new \Magento\Framework\Phrase(
-                    "The element '%1' already has a child with alias '%2'",
+                    'The element "%1" can\'t have a child because "%1" already has a child with alias "%2".',
                     [$targetParentId, $alias]
                 )
             );
@@ -638,7 +652,9 @@ class Structure
     private function _assertElementExists($elementId)
     {
         if (!isset($this->_elements[$elementId])) {
-            throw new \OutOfBoundsException("No element found with ID '{$elementId}'.");
+            throw new \OutOfBoundsException(
+                'The element with the "' . $elementId . '" ID wasn\'t found. Verify the ID and try again.'
+            );
         }
     }
 

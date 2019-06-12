@@ -36,10 +36,10 @@ class AssertProductCanBeOpenedFromSearchResult extends AbstractConstraint
         } while (!$isProductVisible && $resultPage->getBottomToolbar()->nextPage());
 
         $productName = $product->getName();
-        \PHPUnit_Framework_Assert::assertTrue($isProductVisible, "A product with name $productName was not found.");
+        \PHPUnit\Framework\Assert::assertTrue($isProductVisible, "A product with name $productName was not found.");
 
         $resultPage->getListProductBlock()->getProductItem($product)->open();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $productName,
             $catalogProductViewPage->getViewBlock()->getProductName(),
             'Wrong product page has been opened.'

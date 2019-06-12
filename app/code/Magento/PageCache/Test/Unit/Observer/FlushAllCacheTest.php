@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\PageCache\Test\Unit\Observer;
 
 class FlushAllCacheTest extends \PHPUnit\Framework\TestCase
@@ -55,10 +53,10 @@ class FlushAllCacheTest extends \PHPUnit\Framework\TestCase
         $this->_configMock->expects(
             $this->once()
         )->method(
-                'getType'
-            )->will(
-                $this->returnValue(\Magento\PageCache\Model\Config::BUILT_IN)
-            );
+            'getType'
+        )->will(
+            $this->returnValue(\Magento\PageCache\Model\Config::BUILT_IN)
+        );
 
         $this->fullPageCacheMock->expects($this->once())->method('clean');
         $this->_model->execute($this->observerMock);

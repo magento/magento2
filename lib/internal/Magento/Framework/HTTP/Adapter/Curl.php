@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * HTTP CURL Adapter
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Framework\HTTP\Adapter;
 
+/**
+ * Curl http adapter
+ */
 class Curl implements \Zend_Http_Client_Adapter_Interface
 {
     /**
@@ -112,8 +110,8 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     /**
      * Add additional option to cURL
      *
-     * @param  int $option      the CURLOPT_* constants
-     * @param  mixed $value
+     * @param int $option the CURLOPT_* constants
+     * @param mixed $value
      * @return $this
      */
     public function addOption($option, $value)
@@ -139,8 +137,8 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     /**
      * Connect to the remote server
      *
-     * @param string  $host
-     * @param int     $port
+     * @param string $host
+     * @param int $port
      * @param boolean $secure
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -154,7 +152,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * Send request to the remote server
      *
      * @param string $method
-     * @param \Zend_Uri_Http|string $url
+     * @param string $url
      * @param string $http_ver
      * @param array $headers
      * @param string $body
@@ -163,9 +161,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      */
     public function write($method, $url, $http_ver = '1.1', $headers = [], $body = '')
     {
-        if ($url instanceof \Zend_Uri_Http) {
-            $url = $url->getUri();
-        }
         $this->_applyConfig();
 
         // set url to post to
@@ -181,6 +176,12 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
         } elseif ($method == \Zend_Http_Client::GET) {
             curl_setopt($this->_getResource(), CURLOPT_HTTPGET, true);
             curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'GET');
+        }
+
+        if ($http_ver === \Zend_Http_Client::HTTP_1) {
+            curl_setopt($this->_getResource(), CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        } elseif ($http_ver === \Zend_Http_Client::HTTP_0) {
+            curl_setopt($this->_getResource(), CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
         }
 
         if (is_array($headers)) {
@@ -276,7 +277,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     }
 
     /**
-     * curl_multi_* requests support
+     * Curl_multi_* requests support
      *
      * @param array $urls
      * @param array $options

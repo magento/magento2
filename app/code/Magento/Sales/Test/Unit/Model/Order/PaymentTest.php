@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\Model\Context;
@@ -600,6 +601,9 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
     }
 
+    /**
+     * @return array
+     */
     public function acceptPaymentFalseProvider()
     {
         return [
@@ -1523,7 +1527,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $this->orderStateResolver->expects($this->once())->method('getStateForOrder')
             ->with($this->order)
             ->willReturn(Order::STATE_CLOSED);
-        $this->mockGetDefaultStatus(Order::STATE_CLOSED, $status);
+        $this->mockGetDefaultStatus(Order::STATE_CLOSED, $status, ['first, second']);
         $this->assertOrderUpdated(Order::STATE_PROCESSING, $status, $message);
 
         static::assertSame($this->payment, $this->payment->refund($this->creditMemoMock));
@@ -1532,6 +1536,9 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($amount, $this->payment->getData('base_amount_refunded'));
     }
 
+    /**
+     * @return array
+     */
     public function boolProvider()
     {
         return [
@@ -1570,6 +1577,9 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($this->payment->getShouldCloseParentTransaction());
     }
 
+    /**
+     * @return object
+     */
     protected function initPayment()
     {
         return (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
@@ -1589,6 +1599,12 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @param $state
+     * @param null $status
+     * @param null $message
+     * @param null $isCustomerNotified
+     */
     protected function assertOrderUpdated(
         $state,
         $status = null,
@@ -1617,6 +1633,11 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->willReturn($statusHistory);
     }
 
+    /**
+     * @param $state
+     * @param $status
+     * @param array $allStatuses
+     */
     protected function mockGetDefaultStatus($state, $status, $allStatuses = [])
     {
         /** @var \Magento\Sales\Model\Order\Config | \PHPUnit_Framework_MockObject_MockObject $orderConfigMock */
@@ -1642,6 +1663,10 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($orderConfigMock));
     }
 
+    /**
+     * @param $transactionId
+     * @return MockObject
+     */
     protected function getTransactionMock($transactionId)
     {
         $transaction = $this->createPartialMock(\Magento\Sales\Model\Order\Payment\Transaction::class, [

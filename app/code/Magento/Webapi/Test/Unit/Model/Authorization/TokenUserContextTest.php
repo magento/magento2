@@ -6,53 +6,78 @@
 
 namespace Magento\Webapi\Test\Unit\Model\Authorization;
 
+use Magento\Webapi\Model\Authorization\TokenUserContext;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Integration\Model\Oauth\TokenFactory;
+use Magento\Integration\Model\Oauth\Token;
+use Magento\Integration\Api\IntegrationServiceInterface;
+use Magento\Framework\Webapi\Request;
+use Magento\Integration\Helper\Oauth\Data as OauthHelper;
+use Magento\Framework\Stdlib\DateTime\DateTime as Date;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Integration\Model\Integration;
 
 /**
- * Tests \Magento\Webapi\Model\Authorization\TokenUserContext
+ * Tests for TokenUserContext.
  */
 class TokenUserContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Webapi\Model\Authorization\TokenUserContext
+     * @var TokenUserContext
      */
     protected $tokenUserContext;
 
     /**
-     * @var \Magento\Integration\Model\Oauth\TokenFactory
+     * @var TokenFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $tokenFactory;
 
     /**
-     * @var \Magento\Integration\Api\IntegrationServiceInterface
+     * @var IntegrationServiceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $integrationService;
 
     /**
-     * @var \Magento\Framework\Webapi\Request
+     * @var Request|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
 
+    /**
+     * @var OauthHelper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $oauthHelperMock;
+
+    /**
+     * @var Date|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dateMock;
+
+    /**
+     * @var DateTime|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dateTimeMock;
+
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->request = $this->getMockBuilder(\Magento\Framework\Webapi\Request::class)
+        $this->request = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->setMethods(['getHeader'])
             ->getMock();
 
-        $this->tokenFactory = $this->getMockBuilder(\Magento\Integration\Model\Oauth\TokenFactory::class)
+        $this->tokenFactory = $this->getMockBuilder(TokenFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->integrationService = $this->getMockBuilder(\Magento\Integration\Api\IntegrationServiceInterface::class)
+        $this->integrationService = $this->getMockBuilder(IntegrationServiceInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -63,17 +88,45 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                     'findByConsumerId',
                     'findActiveIntegrationByConsumerId',
                     'delete',
-                    'getSelectedResources'
+                    'getSelectedResources',
                 ]
             )
             ->getMock();
 
+        $this->oauthHelperMock = $this->getMockBuilder(OauthHelper::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAdminTokenLifetime', 'getCustomerTokenLifetime'])
+            ->getMock();
+
+        $this->dateMock = $this->getMockBuilder(Date::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['gmtTimestamp'])
+            ->getMock();
+
+        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['strToTime'])
+            ->getMock();
+
+        $this->dateTimeMock->expects($this->any())
+            ->method('strToTime')
+            ->will(
+                $this->returnCallback(
+                    function ($str) {
+                        return strtotime($str);
+                    }
+                )
+            );
+
         $this->tokenUserContext = $this->objectManager->getObject(
-            \Magento\Webapi\Model\Authorization\TokenUserContext::class,
+            TokenUserContext::class,
             [
                 'request' => $this->request,
                 'tokenFactory' => $this->tokenFactory,
-                'integrationService' => $this->integrationService
+                'integrationService' => $this->integrationService,
+                'oauthHelper' => $this->oauthHelperMock,
+                'date' => $this->dateMock,
+                'dateTime' => $this->dateTimeMock,
             ]
         );
     }
@@ -117,7 +170,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
             ->with('Authorization')
             ->will($this->returnValue("Bearer {$bearerToken}"));
 
-        $token = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
+        $token = $this->getMockBuilder(Token::class)
             ->disableOriginalConstructor()
             ->setMethods(['loadByToken', 'getId', '__wakeup'])
             ->getMock();
@@ -145,7 +198,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
             ->with('Authorization')
             ->will($this->returnValue("Bearer {$bearerToken}"));
 
-        $token = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
+        $token = $this->getMockBuilder(Token::class)
             ->disableOriginalConstructor()
             ->setMethods(['loadByToken', 'getId', 'getRevoked', '__wakeup'])
             ->getMock();
@@ -179,10 +232,19 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
             ->with('Authorization')
             ->will($this->returnValue("Bearer {$bearerToken}"));
 
-        $token = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
+        $token = $this->getMockBuilder(Token::class)
             ->disableOriginalConstructor()
-            ->setMethods(['loadByToken', 'getId', 'getUserType', 'getCustomerId', 'getAdminId', '__wakeup'])
-            ->getMock();
+            ->setMethods(
+                [
+                    'loadByToken',
+                    'getId',
+                    'getUserType',
+                    'getCustomerId',
+                    'getAdminId',
+                    '__wakeup',
+                    'getCreatedAt',
+                ]
+            )->getMock();
         $this->tokenFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($token));
@@ -193,17 +255,21 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
         $token->expects($this->once())
             ->method('getId')
             ->will($this->returnValue(1));
-        $token->expects($this->once())
+        $token->expects($this->any())
             ->method('getUserType')
             ->will($this->returnValue($userType));
 
-        $integration = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getId', '__wakeup'])
-            ->getMock();
+        $token->expects($this->any())
+            ->method('getCreatedAt')
+            ->willReturn(date('Y-m-d H:i:s', time()));
 
         switch ($userType) {
             case UserContextInterface::USER_TYPE_INTEGRATION:
+                $integration = $this->getMockBuilder(Integration::class)
+                    ->disableOriginalConstructor()
+                    ->setMethods(['getId', '__wakeup'])
+                    ->getMock();
+
                 $integration->expects($this->once())
                     ->method('getId')
                     ->will($this->returnValue($userId));
@@ -231,6 +297,9 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedUserId, $this->tokenUserContext->getUserId());
     }
 
+    /**
+     * @return array
+     */
     public function getValidTokenData()
     {
         return [
@@ -258,6 +327,210 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                 null,
                 null,
             ]
+        ];
+    }
+
+    /**
+     * @param array $tokenData
+     * @param int $tokenTtl
+     * @param int $currentTime
+     * @param int|null $expectedUserType
+     * @param int|null $expectedUserId
+     * @return void
+     * @dataProvider getExpiredTestTokenData
+     */
+    public function testExpiredToken(
+        array $tokenData,
+        int $tokenTtl,
+        int $currentTime,
+        $expectedUserType,
+        $expectedUserId
+    ) {
+        $bearerToken = 'bearer1234';
+
+        $this->dateMock->expects($this->any())
+            ->method('gmtTimestamp')
+            ->willReturn($currentTime);
+
+        $this->request->expects($this->once())
+            ->method('getHeader')
+            ->with('Authorization')
+            ->will($this->returnValue("Bearer {$bearerToken}"));
+
+        $token = $this->getMockBuilder(Token::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'loadByToken',
+                    'getCreatedAt',
+                    'getId',
+                    'getUserType',
+                    'getCustomerId',
+                    'getAdminId',
+                    '__wakeup',
+                ]
+            )->getMock();
+
+        $token->expects($this->once())
+            ->method('loadByToken')
+            ->with($bearerToken)
+            ->will($this->returnSelf());
+
+        $token->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(1));
+
+        $token->expects($this->any())
+            ->method('getUserType')
+            ->will($this->returnValue($tokenData['user_type']));
+
+        $token->expects($this->any())
+            ->method('getCreatedAt')
+            ->willReturn($tokenData['created_at']);
+
+        $this->tokenFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($token));
+
+        $this->oauthHelperMock->expects($this->any())
+            ->method('getAdminTokenLifetime')
+            ->willReturn($tokenTtl);
+
+        $this->oauthHelperMock->expects($this->any())
+            ->method('getCustomerTokenLifetime')
+            ->willReturn($tokenTtl);
+
+        switch ($tokenData['user_type']) {
+            case UserContextInterface::USER_TYPE_INTEGRATION:
+                $integration = $this->getMockBuilder(Integration::class)
+                    ->disableOriginalConstructor()
+                    ->setMethods(['getId', '__wakeup'])
+                    ->getMock();
+                $integration->expects($this->any())
+                    ->method('getId')
+                    ->will($this->returnValue($tokenData['user_id']));
+
+                $this->integrationService->expects($this->any())
+                    ->method('findByConsumerId')
+                    ->will($this->returnValue($integration));
+                break;
+            case UserContextInterface::USER_TYPE_ADMIN:
+                $token->expects($this->any())
+                    ->method('getAdminId')
+                    ->will($this->returnValue($tokenData['user_id']));
+                break;
+            case UserContextInterface::USER_TYPE_CUSTOMER:
+                $token->expects($this->any())
+                    ->method('getCustomerId')
+                    ->will($this->returnValue($tokenData['user_id']));
+                break;
+        }
+
+        $this->assertEquals($expectedUserType, $this->tokenUserContext->getUserType());
+        $this->assertEquals($expectedUserId, $this->tokenUserContext->getUserId());
+
+        /* check again to make sure that the above method loadByToken in only called once */
+        $this->assertEquals($expectedUserType, $this->tokenUserContext->getUserType());
+        $this->assertEquals($expectedUserId, $this->tokenUserContext->getUserId());
+    }
+
+    /**
+     * Data provider for expired token test.
+     *
+     * @return array
+     */
+    public function getExpiredTestTokenData()
+    {
+        $time = time();
+        return [
+            'token_expired_admin' => [
+                'tokenData' => [
+                    'user_type' => UserContextInterface::USER_TYPE_ADMIN,
+                    'user_id' => 1234,
+                    'created_at' => date('Y-m-d H:i:s', $time - 3600 - 400),
+                ],
+                'tokenTtl' => 1,
+                'currentTime' => $time,
+                'expectedUserType' => null,
+                'expectedUserId' => null,
+            ],
+            'token_vigent_admin' => [
+                'tokenData' => [
+                    'user_type' => UserContextInterface::USER_TYPE_ADMIN,
+                    'user_id' => 1234,
+                    'created_at' => date('Y-m-d H:i:s', $time - 400),
+                ],
+                'tokenTtl' => 1,
+                'currentTime' => $time,
+                'expectedUserType' => UserContextInterface::USER_TYPE_ADMIN,
+                'expectedUserId' => 1234,
+            ],
+            'token_expired_customer' => [
+                'tokenData' => [
+                    'user_type' => UserContextInterface::USER_TYPE_CUSTOMER,
+                    'user_id' => 1234,
+                    'created_at' => date('Y-m-d H:i:s', $time - 3600 - 400),
+                ],
+                'tokenTtl' => 1,
+                'currentTime' => $time,
+                'expectedUserType' => null,
+                'expectedUserId' => null,
+            ],
+            'token_vigent_customer' => [
+                'tokenData' => [
+                    'user_type' => UserContextInterface::USER_TYPE_CUSTOMER,
+                    'user_id' => 1234,
+                    'created_at' => date('Y-m-d H:i:s', $time - 400),
+                ],
+                'tokenTtl' => 1,
+                'currentTime' => $time,
+                'expectedUserType' => UserContextInterface::USER_TYPE_CUSTOMER,
+                'expectedUserId' => 1234,
+            ],
+            'token_expired_integration' => [
+                'tokenData' => [
+                    'user_type' => UserContextInterface::USER_TYPE_INTEGRATION,
+                    'user_id' => 1234,
+                    'created_at' => date('Y-m-d H:i:s', $time - 3600 - 400),
+                ],
+                'tokenTtl' => 1,
+                'currentTime' => $time,
+                'expectedUserType' => UserContextInterface::USER_TYPE_INTEGRATION,
+                'expectedUserId' => 1234,
+            ],
+            'token_vigent_integration' => [
+                'tokenData' => [
+                    'user_type' => UserContextInterface::USER_TYPE_INTEGRATION,
+                    'user_id' => 1234,
+                    'created_at' => date('Y-m-d H:i:s', $time - 400),
+                ],
+                'tokenTtl' => 1,
+                'currentTime' => $time,
+                'expectedUserType' => UserContextInterface::USER_TYPE_INTEGRATION,
+                'expectedUserId' => 1234,
+            ],
+            'token_expired_guest' => [
+                'tokenData' => [
+                    'user_type' => UserContextInterface::USER_TYPE_GUEST,
+                    'user_id' => 1234,
+                    'created_at' => date('Y-m-d H:i:s', $time - 3600 - 400),
+                ],
+                'tokenTtl' => 1,
+                'currentTime' => $time,
+                'expectedUserType' => null,
+                'expectedUserId' => null,
+            ],
+            'token_vigent_guest' => [
+                'tokenData' => [
+                    'user_type' => UserContextInterface::USER_TYPE_GUEST,
+                    'user_id' => 1234,
+                    'created_at' => date('Y-m-d H:i:s', $time - 400),
+                ],
+                'tokenTtl' => 1,
+                'currentTime' => $time,
+                'expectedUserType' => null,
+                'expectedUserId' => null,
+            ],
         ];
     }
 }

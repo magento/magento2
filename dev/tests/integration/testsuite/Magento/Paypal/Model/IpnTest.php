@@ -123,7 +123,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
     /**
      * Refund rest of order amount by Paypal Express IPN message service.
      *
-     * @magentoDataFixture Magento/Paypal/_files/order_express_with_invoice_and_creditmemo.php
+     * @magentoDataFixture Magento/Paypal/_files/order_express_with_invoice_and_shipping.php
      * @magentoConfigFixture current_store payment/paypal_express/active 1
      * @magentoConfigFixture current_store paypal/general/merchant_country US
      */
@@ -147,7 +147,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $creditmemoItems = $order->getCreditmemosCollection()->getItems();
 
         $this->assertEquals(Order::STATE_CLOSED, $order->getState()) ;
-        $this->assertEquals(2, count($creditmemoItems));
+        $this->assertEquals(1, count($creditmemoItems));
         $this->assertEquals(10, $order->getSubtotalRefunded());
         $this->assertEquals(10, $order->getBaseSubtotalRefunded());
         $this->assertEquals(20, $order->getShippingRefunded());

@@ -308,8 +308,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
-     * Initialize rule model data from array.
-     * Set store labels if applicable.
+     * Initialize rule model data from array. Set store labels if applicable.
      *
      * @param array $data
      * @return $this
@@ -501,6 +500,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             $this->getUsesPerCustomer() ? $this->getUsesPerCustomer() : null
         )->setExpirationDate(
             $this->getToDate()
+        )->setType(
+            \Magento\SalesRule\Api\Data\CouponInterface::TYPE_GENERATED
         );
 
         $couponCode = self::getCouponCodeGenerator()->generateCode();
@@ -521,7 +522,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                         $coupon->setCode(
                             $couponCode . self::getCouponCodeGenerator()->getDelimiter() . sprintf(
                                 '%04u',
-                                rand(0, 9999)
+                                random_int(0, 9999)
                             )
                         );
                         continue;
@@ -539,6 +540,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * Get from date.
+     *
      * @return string
      * @since 100.1.0
      */
@@ -548,6 +551,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * Get to date.
+     *
      * @return string
      * @since 100.1.0
      */
@@ -610,6 +615,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * Get conditions field set id.
+     *
      * @param string $formName
      * @return string
      * @since 100.1.0
@@ -620,6 +627,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * Get actions field set id.
+     *
      * @param string $formName
      * @return string
      * @since 100.1.0

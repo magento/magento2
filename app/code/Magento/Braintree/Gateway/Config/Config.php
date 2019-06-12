@@ -30,7 +30,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_VERIFY_SPECIFIC = 'verify_specific_countries';
     const VALUE_3DSECURE_ALL = 0;
     const CODE_3DSECURE = 'three_d_secure';
-    const KEY_KOUNT_MERCHANT_ID = 'kount_id';
     const FRAUD_PROTECTION = 'fraudprotection';
 
     /**
@@ -68,11 +67,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Return the country specific card type config
      *
+     * @param int|null $storeId
      * @return array
      */
-    public function getCountrySpecificCardTypeConfig()
+    public function getCountrySpecificCardTypeConfig($storeId = null)
     {
-        $countryCardTypes = $this->getValue(self::KEY_COUNTRY_CREDIT_CARD);
+        $countryCardTypes = $this->getValue(self::KEY_COUNTRY_CREDIT_CARD, $storeId);
         if (!$countryCardTypes) {
             return [];
         }
@@ -83,11 +83,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Retrieve available credit card types
      *
+     * @param int|null $storeId
      * @return array
      */
-    public function getAvailableCardTypes()
+    public function getAvailableCardTypes($storeId = null)
     {
-        $ccTypes = $this->getValue(self::KEY_CC_TYPES);
+        $ccTypes = $this->getValue(self::KEY_CC_TYPES, $storeId);
 
         return !empty($ccTypes) ? explode(',', $ccTypes) : [];
     }
@@ -108,82 +109,105 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * Get list of card types available for country
+     * Gets list of card types available for country.
+     *
      * @param string $country
+     * @param int|null $storeId
      * @return array
      */
-    public function getCountryAvailableCardTypes($country)
+    public function getCountryAvailableCardTypes($country, $storeId = null)
     {
-        $types = $this->getCountrySpecificCardTypeConfig();
+        $types = $this->getCountrySpecificCardTypeConfig($storeId);
 
         return (!empty($types[$country])) ? $types[$country] : [];
     }
 
     /**
-     * Check if cvv field is enabled
-     * @return boolean
-     */
-    public function isCvvEnabled()
-    {
-        return (bool) $this->getValue(self::KEY_USE_CVV);
-    }
-
-    /**
-     * Check if 3d secure verification enabled
+     * Checks if cvv field is enabled.
+     *
+     * @param int|null $storeId
      * @return bool
      */
-    public function isVerify3DSecure()
+    public function isCvvEnabled($storeId = null)
     {
-        return (bool) $this->getValue(self::KEY_VERIFY_3DSECURE);
+        return (bool) $this->getValue(self::KEY_USE_CVV, $storeId);
     }
 
     /**
-     * Get threshold amount for 3d secure
+     * Checks if 3d secure verification enabled.
+     *
+     * @param int|null $storeId
+     * @return bool
+     */
+    public function isVerify3DSecure($storeId = null)
+    {
+        return (bool) $this->getValue(self::KEY_VERIFY_3DSECURE, $storeId);
+    }
+
+    /**
+     * Gets threshold amount for 3d secure.
+     *
+     * @param int|null $storeId
      * @return float
      */
-    public function getThresholdAmount()
+    public function getThresholdAmount($storeId = null)
     {
-        return (double) $this->getValue(self::KEY_THRESHOLD_AMOUNT);
+        return (double) $this->getValue(self::KEY_THRESHOLD_AMOUNT, $storeId);
     }
 
     /**
-     * Get list of specific countries for 3d secure
+     * Gets list of specific countries for 3d secure.
+     *
+     * @param int|null $storeId
      * @return array
      */
-    public function get3DSecureSpecificCountries()
+    public function get3DSecureSpecificCountries($storeId = null)
     {
-        if ((int) $this->getValue(self::KEY_VERIFY_ALLOW_SPECIFIC) == self::VALUE_3DSECURE_ALL) {
+        if ((int) $this->getValue(self::KEY_VERIFY_ALLOW_SPECIFIC, $storeId) == self::VALUE_3DSECURE_ALL) {
             return [];
         }
 
-        return explode(',', $this->getValue(self::KEY_VERIFY_SPECIFIC));
+        return explode(',', $this->getValue(self::KEY_VERIFY_SPECIFIC, $storeId));
     }
 
     /**
+     * Gets value of configured environment.
+     *
+     * Possible values: production or sandbox.
+     *
+     * @param int|null $storeId
      * @return string
      */
-    public function getEnvironment()
+    public function getEnvironment($storeId = null)
     {
-        return $this->getValue(Config::KEY_ENVIRONMENT);
+        return $this->getValue(Config::KEY_ENVIRONMENT, $storeId);
     }
 
     /**
+     * Gets merchant ID.
+     *
+     * @param int|null $storeId
      * @return string
      */
-    public function getKountMerchantId()
+    public function getMerchantId($storeId = null)
     {
-        return $this->getValue(Config::KEY_KOUNT_MERCHANT_ID);
+        return $this->getValue(Config::KEY_MERCHANT_ID, $storeId);
     }
 
     /**
+     * Gets Merchant account ID.
+     *
+     * @param int|null $storeId
      * @return string
      */
-    public function getMerchantId()
+    public function getMerchantAccountId($storeId = null)
     {
-        return $this->getValue(Config::KEY_MERCHANT_ID);
+        return $this->getValue(self::KEY_MERCHANT_ACCOUNT_ID, $storeId);
     }
 
     /**
+     * Returns SDK url.
+     *
      * @return string
      */
     public function getSdkUrl()
@@ -192,45 +216,52 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * @return bool
+     * Gets Hosted Fields SDK Url
+     *
+     * @return string
      */
-    public function hasFraudProtection()
+    public function getHostedFieldsSdkUrl(): string
     {
-        return (bool) $this->getValue(Config::FRAUD_PROTECTION);
+        return $this->getValue('hosted_fields_sdk_url');
     }
 
     /**
-     * Get Payment configuration status
+     * Checks if fraud protection is enabled.
+     *
+     * @param int|null $storeId
      * @return bool
      */
-    public function isActive()
+    public function hasFraudProtection($storeId = null)
     {
-        return (bool) $this->getValue(self::KEY_ACTIVE);
+        return (bool) $this->getValue(Config::FRAUD_PROTECTION, $storeId);
     }
 
     /**
-     * Get list of configured dynamic descriptors
+     * Gets Payment configuration status.
+     *
+     * @param int|null $storeId
+     * @return bool
+     */
+    public function isActive($storeId = null)
+    {
+        return (bool) $this->getValue(self::KEY_ACTIVE, $storeId);
+    }
+
+    /**
+     * Gets list of configured dynamic descriptors.
+     *
+     * @param int|null $storeId
      * @return array
      */
-    public function getDynamicDescriptors()
+    public function getDynamicDescriptors($storeId = null)
     {
         $values = [];
         foreach (self::$dynamicDescriptorKeys as $key) {
-            $value = $this->getValue('descriptor_' . $key);
+            $value = $this->getValue('descriptor_' . $key, $storeId);
             if (!empty($value)) {
                 $values[$key] = $value;
             }
         }
         return $values;
-    }
-
-    /**
-     * Get Merchant account ID
-     *
-     * @return string
-     */
-    public function getMerchantAccountId()
-    {
-        return $this->getValue(self::KEY_MERCHANT_ACCOUNT_ID);
     }
 }

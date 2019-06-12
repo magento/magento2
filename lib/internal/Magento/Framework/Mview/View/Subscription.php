@@ -4,14 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Trigger;
 use Magento\Framework\Mview\View\StateInterface;
 
+/**
+ * Class Subscription
+ *
+ * @package Magento\Framework\Mview\View
+ */
 class Subscription implements SubscriptionInterface
 {
     /**
@@ -195,33 +198,32 @@ class Subscription implements SubscriptionInterface
      */
     protected function buildStatement($event, $changelog)
     {
-        $columns = [];
-        if ($this->connection->isTableExists($this->getTableName())
-            && $describe = $this->connection->describeTable($this->getTableName())
-        ) {
-            foreach ($describe as $column) {
-                if (in_array($column['COLUMN_NAME'], $this->ignoredUpdateColumns)) {
-                    continue;
-                }
-                $columns[] = sprintf(
-                    'NEW.%1$s != OLD.%1$s',
-                    $this->connection->quoteIdentifier($column['COLUMN_NAME'])
-                );
-            }
-        }
-
         switch ($event) {
             case Trigger::EVENT_INSERT:
                 $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
                 break;
             case Trigger::EVENT_UPDATE:
+                $tableName = $this->resource->getTableName($this->getTableName());
                 $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
-                if ($columns) {
-                    $trigger = sprintf(
-                        "IF (%s) THEN %s END IF;",
-                        implode(' OR ', $columns),
-                        $trigger
-                    );
+                if ($this->connection->isTableExists($tableName) &&
+                    $describe = $this->connection->describeTable($tableName)
+                ) {
+                    $columnNames = array_column($describe, 'COLUMN_NAME');
+                    $columnNames = array_diff($columnNames, $this->ignoredUpdateColumns);
+                    if ($columnNames) {
+                        $columns = [];
+                        foreach ($columnNames as $columnName) {
+                            $columns[] = sprintf(
+                                'NEW.%1$s <=> OLD.%1$s',
+                                $this->connection->quoteIdentifier($columnName)
+                            );
+                        }
+                        $trigger = sprintf(
+                            "IF (%s) THEN %s END IF;",
+                            implode(' OR ', $columns),
+                            $trigger
+                        );
+                    }
                 }
                 break;
             case Trigger::EVENT_DELETE:
@@ -229,7 +231,6 @@ class Subscription implements SubscriptionInterface
                 break;
             default:
                 return '';
-
         }
         return sprintf(
             $trigger,

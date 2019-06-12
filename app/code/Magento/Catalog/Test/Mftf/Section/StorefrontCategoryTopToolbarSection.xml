@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCategoryTopToolbarSection">
+        <element name="gridMode" type="button" selector=".//*[@class='toolbar toolbar-products'][1]//*[@id='mode-grid']" timeout="30"/>
+        <element name="listMode" type="button" selector=".//*[@class='toolbar toolbar-products'][1]//*[@id='mode-list']" timeout="30"/>
+        <element name="sortByDropdown" type="select" selector=".//*[@class='toolbar toolbar-products'][1]//*[@id='sorter']" timeout="30"/>
+        <element name="sortDirectionAsc" type="button" selector=".//*[@class='toolbar toolbar-products'][1]//a[contains(@class, 'sort-asc')]" timeout="30"/>
+        <element name="sortDirectionDesc" type="button" selector=".//*[@class='toolbar toolbar-products'][1]//a[contains(@class, 'sort-desc')]" timeout="30"/>
+    </section>
+</sections>

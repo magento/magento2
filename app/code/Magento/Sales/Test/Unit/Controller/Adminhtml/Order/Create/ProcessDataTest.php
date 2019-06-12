@@ -63,6 +63,9 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
      */
     protected $resultForwardFactory;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -226,7 +229,11 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
         );
         $this->escaper->expects($this->once())->method('escapeHtml')->with($couponCode)->willReturn($couponCode);
 
-        $this->messageManager->expects($this->once())->method('addError')->with($errorMessageManager)->willReturnSelf();
+        $this->messageManager
+            ->expects($this->once())
+            ->method('addErrorMessage')
+            ->with($errorMessageManager)
+            ->willReturnSelf();
 
         $this->resultForward->expects($this->once())
             ->method('forward')
@@ -235,11 +242,14 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Magento\Backend\Model\View\Result\Forward::class, $this->processData->execute());
     }
 
+    /**
+     * @return array
+     */
     public function isApplyDiscountDataProvider()
     {
         return [
             [true, '123', '"%1" coupon code was not applied. Do not apply discount is selected for item(s)', null],
-            [false, '123', '"%1" coupon code is not valid.', '132'],
+            [false, '123', 'The "%1" coupon code isn\'t valid. Verify the code and try again.', '132'],
         ];
     }
 }

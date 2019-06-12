@@ -134,7 +134,7 @@ class Cache
         }
 
         $hash = spl_object_hash($object);
-        if ($idx !== null && strpos($idx, '{')) {
+        if ($idx !== null && strpos($idx, '{') !== false) {
             $idx = str_replace('{hash}', $hash, $idx);
         }
         if (isset($this->_hashes[$hash])) {

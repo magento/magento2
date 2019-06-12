@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Model\Address;
 
 use Magento\Customer\Api\Data\AddressInterface;
@@ -39,7 +37,11 @@ class Mapper
      */
     public function toFlatArray($addressDataObject)
     {
-        $flatAddressArray = $this->extensibleDataObjectConverter->toFlatArray($addressDataObject, [], \Magento\Customer\Api\Data\AddressInterface::class);
+        $flatAddressArray = $this->extensibleDataObjectConverter->toFlatArray(
+            $addressDataObject,
+            [],
+            \Magento\Customer\Api\Data\AddressInterface::class
+        );
         //preserve street
         $street = $addressDataObject->getStreet();
         if (!empty($street) && is_array($street)) {

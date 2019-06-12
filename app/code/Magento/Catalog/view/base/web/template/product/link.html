@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<a class="product-item-link"
+<a if="isAllowed()"
+   class="product-item-link"
    attr="href: $row().url"
    text="label"/>

@@ -196,6 +196,9 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->authentication->processAuthenticationFailure($customerId);
     }
 
+    /**
+     * @return array
+     */
     public function processAuthenticationFailureDataProvider()
     {
         return [

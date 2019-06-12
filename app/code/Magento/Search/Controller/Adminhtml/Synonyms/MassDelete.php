@@ -6,15 +6,17 @@
 
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
 /**
- * Mass-Delete Controller
+ * Mass-Delete Controller.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassDelete extends \Magento\Backend\App\Action
+class MassDelete extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
-     * Authorization level of a basic admin session
+     * Authorization level of a basic admin session.
      *
      * @see _isAllowed()
      */
@@ -56,7 +58,7 @@ class MassDelete extends \Magento\Backend\App\Action
     }
 
     /**
-     * Execute action
+     * Execute action.
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @throws \Magento\Framework\Exception\LocalizedException|\Exception
@@ -72,17 +74,17 @@ class MassDelete extends \Magento\Backend\App\Action
                 $this->synGroupRepository->delete($synonymGroup);
                 $deletedItems++;
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         }
         if ($deletedItems != 0) {
             if ($collectionSize != $deletedItems) {
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __('Failed to delete %1 synonym group(s).', $collectionSize - $deletedItems)
                 );
             }
 
-            $this->messageManager->addSuccess(
+            $this->messageManager->addSuccessMessage(
                 __('A total of %1 synonym group(s) have been deleted.', $deletedItems)
             );
         }

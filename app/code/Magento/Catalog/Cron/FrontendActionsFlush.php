@@ -57,8 +57,7 @@ class FrontendActionsFlush
             ];
         }
 
-        return isset($configuration['lifetime']) ?
-            (int) $configuration['lifetime'] : FrontendStorageConfigurationInterface::DEFAULT_LIFETIME;
+        return (int)$configuration['lifetime'] ?? FrontendStorageConfigurationInterface::DEFAULT_LIFETIME;
     }
 
     /**

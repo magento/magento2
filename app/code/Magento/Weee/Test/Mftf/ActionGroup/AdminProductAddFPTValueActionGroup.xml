@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Navigate to create product page from product grid page-->
+    <actionGroup name="AdminProductAddFPTValueActionGroup">
+        <arguments>
+            <argument name="FPTAttributeCode"/>
+            <argument name="countryForFPT" defaultValue="US" type="string"/>
+            <argument name="stateForFPT" type="string"/>
+            <argument name="valueForFPT" type="string"/>
+        </arguments>
+        <click selector="{{AdminProductAddFPTValueSection.addFPT(FPTAttributeCode)}}" stepKey="clickAddFPTButton1"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <selectOption selector="{{AdminProductAddFPTValueSection.selectCountryForFPT(FPTAttributeCode)}}" userInput="{{countryForFPT}}" stepKey="selectcountryForFPT"/>
+        <selectOption selector="{{AdminProductAddFPTValueSection.selectStateForFPT(FPTAttributeCode)}}" userInput="{{stateForFPT}}" stepKey="selectstateForFPT"/>
+        <fillField selector="{{AdminProductAddFPTValueSection.setTaxValueForFPT(FPTAttributeCode)}}" userInput="{{valueForFPT}}" stepKey="setTaxvalueForFPT"/>
+    </actionGroup>
+</actionGroups>

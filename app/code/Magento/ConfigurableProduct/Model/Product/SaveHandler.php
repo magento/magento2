@@ -10,6 +10,8 @@ use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as ResourceModelConfigurable;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Magento\ConfigurableProduct\Api\Data\OptionInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 
 /**
  * Class SaveHandler
@@ -76,35 +78,66 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
-     * Save attributes for configurable product
+     * Save only newly created attributes for configurable product.
      *
      * @param ProductInterface $product
      * @param array $attributes
      * @return array
      */
-    private function saveConfigurableProductAttributes(ProductInterface $product, array $attributes)
+    private function saveConfigurableProductAttributes(ProductInterface $product, array $attributes): array
     {
         $ids = [];
+        $existingAttributeIds = [];
+        foreach ($this->optionRepository->getList($product->getSku()) as $option) {
+            $existingAttributeIds[$option->getAttributeId()] = $option;
+        }
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
         foreach ($attributes as $attribute) {
-            $attribute->setId(null);
-            $ids[] = $this->optionRepository->save($product->getSku(), $attribute);
+            if (!in_array($attribute->getAttributeId(), array_keys($existingAttributeIds))
+                || $this->isOptionChanged($existingAttributeIds[$attribute->getAttributeId()], $attribute)
+            ) {
+                $attribute->setId(null);
+                $ids[] = $this->optionRepository->save($product->getSku(), $attribute);
+            }
         }
 
         return $ids;
     }
 
     /**
-     * Remove product attributes
+     * Remove product attributes which no longer used.
      *
      * @param ProductInterface $product
      * @return void
      */
-    private function deleteConfigurableProductAttributes(ProductInterface $product)
+    private function deleteConfigurableProductAttributes(ProductInterface $product): void
     {
-        $list = $this->optionRepository->getList($product->getSku());
-        foreach ($list as $item) {
-            $this->optionRepository->deleteById($product->getSku(), $item->getId());
+        $newAttributeIds = [];
+        foreach ($product->getExtensionAttributes()->getConfigurableProductOptions() as $option) {
+            $newAttributeIds[$option->getAttributeId()] = $option;
         }
+        foreach ($this->optionRepository->getList($product->getSku()) as $option) {
+            if (!in_array($option->getAttributeId(), array_keys($newAttributeIds))
+                || $this->isOptionChanged($option, $newAttributeIds[$option->getAttributeId()])
+            ) {
+                $this->optionRepository->deleteById($product->getSku(), $option->getId());
+            }
+        }
+    }
+
+    /**
+     * Check if existing option is changed.
+     *
+     * @param OptionInterface $option
+     * @param Attribute $attribute
+     * @return bool
+     */
+    private function isOptionChanged(OptionInterface $option, Attribute $attribute): bool
+    {
+        if ($option->getLabel() == $attribute->getLabel() && $option->getPosition() == $attribute->getPosition()) {
+            return false;
+        }
+
+        return true;
     }
 }

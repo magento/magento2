@@ -289,9 +289,9 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                     'zip_to' => 'to',
                 ],
                 'error' => [
-                    'country_id is a required field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
+                    '"country_id" is required. Enter and try again.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
                     'Invalid value of "from" provided for the zip_from field.',
                     'Invalid value of "to" provided for the zip_to field.',
                 ],
@@ -303,9 +303,9 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                     'zip_to' => '',
                 ],
                 'error' => [
-                    'country_id is a required field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
+                    '"country_id" is required. Enter and try again.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
                     'Invalid value of "" provided for the zip_from field.',
                     'Invalid value of "" provided for the zip_to field.',
                 ],
@@ -313,10 +313,10 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
             'empty' => [
                 [],
                 'error' => [
-                    'country_id is a required field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
-                    'postcode is a required field.',
+                    '"country_id" is required. Enter and try again.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
+                    '"postcode" is required. Enter and try again.',
                 ],
             ],
             'zipRangeAndPostcode' => [
@@ -327,9 +327,9 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                     'zip_to' => 78780,
                 ],
                 'error' => [
-                    'country_id is a required field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
+                    '"country_id" is required. Enter and try again.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
                 ],
             ],
             'higherRange' => [
@@ -339,9 +339,9 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                     'zip_to' => 78780,
                 ],
                 'error' => [
-                    'country_id is a required field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
+                    '"country_id" is required. Enter and try again.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
                     'Range To should be equal or greater than Range From.',
                 ],
             ],
@@ -349,37 +349,37 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                 ['tax_country_id' => 'XX'],
                 'error' => [
                     'Invalid value of "XX" provided for the country_id field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
-                    'postcode is a required field.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
+                    '"postcode" is required. Enter and try again.',
                 ],
             ],
             'invalidCountry2' => [
                 ['tax_country_id' => ' '],
                 'error' => [
-                    'country_id is a required field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
-                    'postcode is a required field.',
+                    '"country_id" is required. Enter and try again.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
+                    '"postcode" is required. Enter and try again.',
                 ],
             ],
             'invalidRegion1' => [
                 ['tax_region_id' => '-'],
                 'error' => [
-                    'country_id is a required field.',
+                    '"country_id" is required. Enter and try again.',
                     'Invalid value of "-" provided for the region_id field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
-                    'postcode is a required field.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
+                    '"postcode" is required. Enter and try again.',
                 ],
             ],
             'spaceRegion' => [
                 ['tax_region_id' => ' '],
                 'error' => [
-                    'country_id is a required field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
-                    'postcode is a required field.',
+                    '"country_id" is required. Enter and try again.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
+                    '"postcode" is required. Enter and try again.',
                 ],
             ],
             'emptyPercentageRate' => [
@@ -393,7 +393,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                     'zip_to' => 78780,
                 ],
                 'error' => [
-                    'percentage_rate is a required field.',
+                    '"percentage_rate" is required. Enter and try again.',
                 ],
             ]
 
@@ -557,7 +557,6 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
      * @param \Magento\Framework\Api\Filter[] $filters
      * @param \Magento\Framework\Api\Filter[] $filterGroup
      * @param $expectedRateCodes
@@ -629,7 +628,17 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                 ],
                 [],
                 ['US - 42 - 7.5', 'US - 12 - 7.5'],
-            ]
+            ],
+            'like_region_name' => [
+                [
+                    $filterBuilder->setField(Rate::KEY_REGION_NAME)
+                        ->setValue('%NM%')
+                        ->setConditionType('like')
+                        ->create(),
+                ],
+                null,
+                ['US - 42 - 7.5', 'US - 42 - 22'],
+            ],
         ];
     }
 }

@@ -70,6 +70,7 @@ class ImagesAssert
     /**
      * Performs assertions over images
      *
+     * @return bool
      * @throws \AssertionError
      */
     public function assert()
@@ -82,6 +83,8 @@ class ImagesAssert
             $this->assertProductMediaAttributes($product);
             $this->assertProductImageExistsInFS($product);
         }
+
+        return true;
     }
 
     /**

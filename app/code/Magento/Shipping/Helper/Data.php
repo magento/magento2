@@ -4,12 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Shipping data helper
  */
 namespace Magento\Shipping\Helper;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -21,19 +23,28 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_allowedHashKeys = ['ship_id', 'order_id', 'track_id'];
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
+     * @var UrlInterface|null
+     */
+    private $url;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
+     * @param UrlInterface|null $url
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        UrlInterface $url = null
     ) {
         $this->_storeManager = $storeManager;
+        $this->url = $url ?: ObjectManager::getInstance()->get(UrlInterface::class);
+
         parent::__construct($context);
     }
 
@@ -56,7 +67,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve tracking url with params
      *
      * @param  string $key
-     * @param  \Magento\Sales\Model\Order|\Magento\Sales\Model\Order\Shipment|\Magento\Sales\Model\Order\Shipment\Track $model
+     * @param  \Magento\Sales\Model\Order
+     * |\Magento\Sales\Model\Order\Shipment|\Magento\Sales\Model\Order\Shipment\Track $model
      * @param  string $method Optional - method of a model to get id
      * @return string
      */
@@ -64,12 +76,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $urlPart = "{$key}:{$model->{$method}()}:{$model->getProtectCode()}";
         $params = [
+            '_scope' => $model->getStoreId(),
+            '_nosid' => true,
             '_direct' => 'shipping/tracking/popup',
             '_query' => ['hash' => $this->urlEncoder->encode($urlPart)]
         ];
 
-        $storeModel = $this->_storeManager->getStore($model->getStoreId());
-        return $storeModel->getUrl('', $params);
+        return $this->url->getUrl('', $params);
     }
 
     /**

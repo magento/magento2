@@ -5,8 +5,13 @@
  */
 namespace Magento\SalesRule\Model\Quote;
 
+/**
+ * Discount totals calculation model.
+ */
 class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
+    const COLLECTOR_TYPE_CODE = 'discount';
+
     /**
      * Discount calculation object
      *
@@ -43,7 +48,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         \Magento\SalesRule\Model\Validator $validator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
     ) {
-        $this->setCode('discount');
+        $this->setCode(self::COLLECTOR_TYPE_CODE);
         $this->eventManager = $eventManager;
         $this->calculator = $validator;
         $this->storeManager = $storeManager;
@@ -124,21 +129,14 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             }
         }
 
-        /** Process shipping amount discount */
-        $address->setShippingDiscountAmount(0);
-        $address->setBaseShippingDiscountAmount(0);
-        if ($address->getShippingAmount()) {
-            $this->calculator->processShippingAmount($address);
-            $total->addTotalAmount($this->getCode(), -$address->getShippingDiscountAmount());
-            $total->addBaseTotalAmount($this->getCode(), -$address->getBaseShippingDiscountAmount());
-            $total->setShippingDiscountAmount($address->getShippingDiscountAmount());
-            $total->setBaseShippingDiscountAmount($address->getBaseShippingDiscountAmount());
-        }
-
         $this->calculator->prepareDescription($address);
         $total->setDiscountDescription($address->getDiscountDescription());
         $total->setSubtotalWithDiscount($total->getSubtotal() + $total->getDiscountAmount());
         $total->setBaseSubtotalWithDiscount($total->getBaseSubtotal() + $total->getBaseDiscountAmount());
+
+        $address->setDiscountAmount($total->getDiscountAmount());
+        $address->setBaseDiscountAmount($total->getBaseDiscountAmount());
+
         return $this;
     }
 
@@ -179,7 +177,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             $roundingDelta[$key] = 0.0000001;
         }
         foreach ($item->getChildren() as $child) {
-            $ratio = $child->getBaseRowTotal() / $parentBaseRowTotal;
+            $ratio = $parentBaseRowTotal != 0 ? $child->getBaseRowTotal() / $parentBaseRowTotal : 0;
             foreach ($keys as $key) {
                 if (!$item->hasData($key)) {
                     continue;

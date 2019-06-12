@@ -8,6 +8,8 @@ namespace Magento\Deploy\Collector;
 use Magento\Deploy\Source\SourcePool;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFactory;
+use Magento\Deploy\Package\PackageFile;
+use Magento\Framework\Module\ModuleManagerInterface;
 use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 
 /**
@@ -43,6 +45,9 @@ class Collector implements CollectorInterface
      * @var PackageFactory
      */
     private $packageFactory;
+    
+    /** @var \Magento\Framework\Module\ModuleManagerInterface */
+    private $moduleManager;
 
     /**
      * Default values for package primary identifiers
@@ -61,15 +66,19 @@ class Collector implements CollectorInterface
      * @param SourcePool $sourcePool
      * @param FileNameResolver $fileNameResolver
      * @param PackageFactory $packageFactory
+     * @param ModuleManagerInterface|null $moduleManager
      */
     public function __construct(
         SourcePool $sourcePool,
         FileNameResolver $fileNameResolver,
-        PackageFactory $packageFactory
+        PackageFactory $packageFactory,
+        ModuleManagerInterface $moduleManager = null
     ) {
         $this->sourcePool = $sourcePool;
         $this->fileNameResolver = $fileNameResolver;
         $this->packageFactory = $packageFactory;
+        $this->moduleManager = $moduleManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Module\ModuleManagerInterface::class);
     }
 
     /**
@@ -81,19 +90,11 @@ class Collector implements CollectorInterface
         foreach ($this->sourcePool->getAll() as $source) {
             $files = $source->get();
             foreach ($files as $file) {
-                $file->setDeployedFileName($this->fileNameResolver->resolve($file->getFileName()));
-                $params = [
-                    'area' => $file->getArea(),
-                    'theme' => $file->getTheme(),
-                    'locale' => $file->getLocale(),
-                    'module' => $file->getModule(),
-                    'isVirtual' => (!$file->getLocale() || !$file->getTheme() || !$file->getArea())
-                ];
-                foreach ($this->packageDefaultValues as $name => $value) {
-                    if (!isset($params[$name])) {
-                        $params[$name] = $value;
-                    }
+                if ($file->getModule() && !$this->moduleManager->isEnabled($file->getModule())) {
+                    continue;
                 }
+                $file->setDeployedFileName($this->fileNameResolver->resolve($file->getFileName()));
+                $params = $this->getParams($file);
                 $packagePath = "{$params['area']}/{$params['theme']}/{$params['locale']}";
                 if (!isset($packages[$packagePath])) {
                     $packages[$packagePath] = $this->packageFactory->create($params);
@@ -104,5 +105,28 @@ class Collector implements CollectorInterface
             }
         }
         return $packages;
+    }
+
+    /**
+     * Retrieve package params
+     *
+     * @param PackageFile $file
+     * @return array
+     */
+    private function getParams(PackageFile $file)
+    {
+        $params = [
+            'area' => $file->getArea(),
+            'theme' => $file->getTheme(),
+            'locale' => $file->getLocale(),
+            'module' => $file->getModule(),
+            'isVirtual' => (!$file->getLocale() || !$file->getTheme() || !$file->getArea())
+        ];
+        foreach ($this->packageDefaultValues as $name => $value) {
+            if (!isset($params[$name])) {
+                $params[$name] = $value;
+            }
+        }
+        return $params;
     }
 }

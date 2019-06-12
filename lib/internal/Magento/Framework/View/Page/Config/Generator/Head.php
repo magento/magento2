@@ -42,6 +42,7 @@ class Head implements Layout\GeneratorInterface
      */
     protected $assetProperties = [
         'ie_condition',
+        'order'
     ];
 
     /**

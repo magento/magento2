@@ -6,7 +6,9 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
-class Index extends \Magento\Tax\Controller\Adminhtml\Rate
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\Tax\Controller\Adminhtml\Rate implements HttpGetActionInterface
 {
     /**
      * Show Main Grid

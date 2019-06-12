@@ -127,7 +127,7 @@ class DeployStaticContentCommand extends Command
 
         $logger = $this->consoleLoggerFactory->getLogger($output, $verbose);
         if (!$refreshOnly) {
-            $logger->alert(PHP_EOL . "Deploy using {$options[Options::STRATEGY]} strategy");
+            $logger->notice(PHP_EOL . "Deploy using {$options[Options::STRATEGY]} strategy");
         }
 
         $this->mockCache();
@@ -140,7 +140,7 @@ class DeployStaticContentCommand extends Command
         $deployService->deploy($options);
 
         if (!$refreshOnly) {
-            $logger->alert(PHP_EOL . "Execution time: " . (microtime(true) - $time));
+            $logger->notice(PHP_EOL . "Execution time: " . (microtime(true) - $time));
         }
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;

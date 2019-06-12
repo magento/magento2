@@ -7,7 +7,6 @@
 namespace Magento\Framework\Reflection\Test\Unit;
 
 use Zend\Code\Reflection\ClassReflection;
-use Magento\Framework\Exception\SerializationException;
 
 /**
  * NameFinder Unit Test
@@ -27,7 +26,7 @@ class NameFinderTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSetterMethodName()
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $class = new ClassReflection(\Magento\Framework\Reflection\Test\Unit\DataObject::class);
         $setterName = $this->nameFinder->getSetterMethodName($class, 'AttrName');
         $this->assertEquals("setAttrName", $setterName);
 
@@ -37,21 +36,43 @@ class NameFinderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /Property "InvalidAttribute" does not have corresponding setter in class (.*?)/
+     * @codingStandardsIgnoreStart
+     * @expectedExceptionMessage Property "InvalidAttribute" does not have accessor method "setInvalidAttribute" in class "Magento\Framework\Reflection\Test\Unit\DataObject"
+     * @codingStandardsIgnoreEnd
      */
     public function testGetSetterMethodNameInvalidAttribute()
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $class = new ClassReflection(\Magento\Framework\Reflection\Test\Unit\DataObject::class);
         $this->nameFinder->getSetterMethodName($class, 'InvalidAttribute');
     }
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /Property "ActivE" does not have corresponding setter in class (.*?)/
+     * @codingStandardsIgnoreStart
+     * @expectedExceptionMessage Property "ActivE" does not have accessor method "setActivE" in class "Magento\Framework\Reflection\Test\Unit\DataObject"
+     * @codingStandardsIgnoreEnd
      */
     public function testGetSetterMethodNameWrongCamelCasedAttribute()
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $class = new ClassReflection(\Magento\Framework\Reflection\Test\Unit\DataObject::class);
         $this->nameFinder->getSetterMethodName($class, 'ActivE');
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Property "Property" does not have accessor method "getProperty" in class "className".
+     */
+    public function testFindAccessorMethodName()
+    {
+        $reflectionClass = $this->createMock(\Zend\Code\Reflection\ClassReflection::class);
+        $reflectionClass->expects($this->atLeastOnce())->method('hasMethod')->willReturn(false);
+        $reflectionClass->expects($this->atLeastOnce())->method('getName')->willReturn('className');
+
+        $this->nameFinder->findAccessorMethodName(
+            $reflectionClass,
+            'Property',
+            'getProperty',
+            'isProperty'
+        );
     }
 }

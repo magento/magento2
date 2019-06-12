@@ -18,6 +18,13 @@
             <data name="upgrade/optionsMedia" xsi:type="string">No</data>
             <data name="upgrade/optionsDb" xsi:type="string">No</data>
             <data name="upgrade/otherComponents" xsi:type="string">{otherComponents}</data>
+            <!-- If otherComponents value is Yes specify otherComponentsList items-->
+            <data name="upgrade/otherComponentsList" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="name" xsi:type="string">{package_0_name}</item>
+                    <item name="version" xsi:type="string">{package_0_version}</item>
+                </item>
+            </data>
         </variation>
     </testCase>
 </config>

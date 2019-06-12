@@ -3,10 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Helper\ImageFactory as HelperFactory;
+use Magento\Catalog\Model\Product;
 
+/**
+ * @deprecated
+ * @see ImageFactory
+ */
 class ImageBuilder
 {
     /**
@@ -20,7 +27,7 @@ class ImageBuilder
     protected $helperFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $product;
 
@@ -49,10 +56,10 @@ class ImageBuilder
     /**
      * Set product
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return $this
      */
-    public function setProduct(\Magento\Catalog\Model\Product $product)
+    public function setProduct(Product $product)
     {
         $this->product = $product;
         return $this;
@@ -78,9 +85,7 @@ class ImageBuilder
      */
     public function setAttributes(array $attributes)
     {
-        if ($attributes) {
-            $this->attributes = $attributes;
-        }
+        $this->attributes = $attributes;
         return $this;
     }
 
@@ -117,34 +122,16 @@ class ImageBuilder
     /**
      * Create image block
      *
-     * @return \Magento\Catalog\Block\Product\Image
+     * @param Product|null $product
+     * @param string|null $imageId
+     * @param array|null $attributes
+     * @return Image
      */
-    public function create()
+    public function create(Product $product = null, string $imageId = null, array $attributes = null)
     {
-        /** @var \Magento\Catalog\Helper\Image $helper */
-        $helper = $this->helperFactory->create()
-            ->init($this->product, $this->imageId);
-
-        $template = $helper->getFrame()
-            ? 'Magento_Catalog::product/image.phtml'
-            : 'Magento_Catalog::product/image_with_borders.phtml';
-
-        $imagesize = $helper->getResizedImageInfo();
-
-        $data = [
-            'data' => [
-                'template' => $template,
-                'image_url' => $helper->getUrl(),
-                'width' => $helper->getWidth(),
-                'height' => $helper->getHeight(),
-                'label' => $helper->getLabel(),
-                'ratio' =>  $this->getRatio($helper),
-                'custom_attributes' => $this->getCustomAttributes(),
-                'resized_image_width' => !empty($imagesize[0]) ? $imagesize[0] : $helper->getWidth(),
-                'resized_image_height' => !empty($imagesize[1]) ? $imagesize[1] : $helper->getHeight(),
-            ],
-        ];
-
-        return $this->imageFactory->create($data);
+        $product = $product ?? $this->product;
+        $imageId = $imageId ?? $this->imageId;
+        $attributes = $attributes ?? $this->attributes;
+        return $this->imageFactory->create($product, $imageId, $attributes);
     }
 }

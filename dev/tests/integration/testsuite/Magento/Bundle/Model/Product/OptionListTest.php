@@ -21,6 +21,9 @@ class OptionListTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
+    /**
+     * Set up
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -28,6 +31,7 @@ class OptionListTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Bundle/_files/product.php
+     * @magentoDbIsolation disabled
      */
     public function testGetItems()
     {

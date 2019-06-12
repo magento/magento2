@@ -2,4 +2,19 @@
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */;
+ */
+
+/** @var \Magento\Eav\Block\Adminhtml\Attribute\Edit\Js $block */
+
+// @codingStandardsIgnoreFile
+?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "eavInputTypes": {
+                "inputTypes": <?= /* @escapeNotVerified */ json_encode($block->getComaptibleInputTypes())?>,
+                "hints": <?= /* @escapeNotVerified */ json_encode($block->getInputTypeHints())?>
+            }
+        }
+    }
+</script>

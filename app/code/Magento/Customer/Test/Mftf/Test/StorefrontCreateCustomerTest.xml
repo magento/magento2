@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCreateCustomerTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Create a Customer via the Storefront"/>
+            <title value="Admin should be able to create a customer via the storefront"/>
+            <description value="Admin should be able to create a customer via the storefront"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-23546"/>
+            <group value="customer"/>
+            <group value="create"/>
+        </annotations>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+        </actionGroup>
+    </test>
+</tests>

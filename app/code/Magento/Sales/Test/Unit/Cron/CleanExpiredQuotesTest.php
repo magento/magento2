@@ -70,6 +70,9 @@ class CleanExpiredQuotesTest extends \PHPUnit\Framework\TestCase
         $this->observer->execute();
     }
 
+    /**
+     * @return array
+     */
     public function cleanExpiredQuotesDataProvider()
     {
         return [

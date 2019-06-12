@@ -115,6 +115,9 @@ class ToDataModelTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     private function getArrayData()
     {
         return [

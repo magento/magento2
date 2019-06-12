@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminThemeSection">
+        <!--All rows in a specific Column e.g. {{Section.rowsInColumn('columnName')}}-->
+        <element name="allRowsInColumn" type="text" selector="//tr/td[contains(@class, '{{column}}')]" parameterized="true"/>
+        <!--selector for Theme Title column since it needs to be handled separately-->
+        <element name="rowsInThemeTitleColumn" type="text" selector="//tbody/tr/td[contains(@class, 'parent_theme')]/preceding-sibling::td"/>
+        <element name="rowsInColumn" type="text" selector="//tbody/tr/td[contains(@class, '{{column}}')]" parameterized="true"/>
+        <!--Specific cell e.g. {{Section.gridCell('Name')}}-->
+        <element name="gridCell" type="text" selector="//table[@id='theme_grid_table']//td[contains(text(), '{{gridCellText}}')]" parameterized="true"/>
+        <element name="columnHeader" type="text" selector="//thead/tr/th[contains(@class, 'data-grid-th')]/span[text() = '{{label}}']" parameterized="true" timeout="30"/>
+    </section>
+</sections>

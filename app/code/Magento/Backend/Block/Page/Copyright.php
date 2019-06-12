@@ -18,5 +18,5 @@ class Copyright extends \Magento\Backend\Block\Template
      *
      * @var string
      */
-    protected $_template = 'page/copyright.phtml';
+    protected $_template = 'Magento_Backend::page/copyright.phtml';
 }

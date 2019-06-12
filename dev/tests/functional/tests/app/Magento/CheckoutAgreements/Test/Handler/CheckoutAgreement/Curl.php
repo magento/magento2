@@ -55,7 +55,7 @@ class Curl extends AbstractCurl implements CheckoutAgreementInterface
         $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             throw new \Exception("Checkout agreement creating by curl handler was not successful! Response: $response");
         }
         preg_match('~id\/(\d*?)\/~', $response, $matches);

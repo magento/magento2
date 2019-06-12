@@ -337,4 +337,40 @@ class Helper extends \Magento\Framework\DB\Helper
     {
         $this->getConnection()->query('SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ');
     }
+
+    /**
+     * Get create script for triggers.
+     *
+     * @param string $tableName
+     * @param boolean $addDropIfExists
+     * @param boolean $stripDefiner
+     * @return string
+     */
+    public function getTableTriggersSql($tableName, $addDropIfExists = false, $stripDefiner = true)
+    {
+        $script = "--\n-- Triggers structure for table `{$tableName}`\n--\n";
+        $triggers = $this->getConnection()->query('SHOW TRIGGERS LIKE \''. $tableName . '\'')->fetchAll();
+
+        if (!$triggers) {
+            return '';
+        }
+        foreach ($triggers as $trigger) {
+            if ($addDropIfExists) {
+                $script .= 'DROP TRIGGER IF EXISTS ' . $trigger['Trigger'] . ";\n";
+            }
+            $script .= "delimiter ;;\n";
+
+            $triggerData = $this->getConnection()->query('SHOW CREATE TRIGGER '. $trigger['Trigger'])->fetch();
+            if ($stripDefiner) {
+                $cleanedScript = preg_replace('/DEFINER=[^\s]*/', '', $triggerData['SQL Original Statement']);
+                $script .= $cleanedScript . "\n";
+            } else {
+                $script .= $triggerData['SQL Original Statement'] . "\n";
+            }
+            $script .= ";;\n";
+            $script .= "delimiter ;\n";
+        }
+
+        return $script;
+    }
 }

@@ -14,6 +14,8 @@ use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface;
 
 /**
+ * Catalog search request generator.
+ *
  * @api
  * @since 100.0.2
  */
@@ -101,7 +103,7 @@ class RequestGenerator
                 }
             }
             /** @var $attribute Attribute */
-            if (!$attribute->getIsSearchable() || in_array($attribute->getAttributeCode(), ['price', 'sku'], true)) {
+            if (!$attribute->getIsSearchable() || in_array($attribute->getAttributeCode(), ['price'], true)) {
                 // Some fields have their own specific handlers
                 continue;
             }

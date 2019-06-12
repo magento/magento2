@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Model;
 
 use Magento\Framework\Exception\InputException;
@@ -18,6 +19,9 @@ use Magento\Quote\Model\ShippingFactory;
 use Magento\Framework\App\ObjectManager;
 
 /**
+ * Class ShippingInformationManagement
+ *
+ * @package Magento\Checkout\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInformationManagementInterface
@@ -98,8 +102,8 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
-     * @param CartExtensionFactory|null $cartExtensionFactory,
-     * @param ShippingAssignmentFactory|null $shippingAssignmentFactory,
+     * @param CartExtensionFactory|null $cartExtensionFactory
+     * @param ShippingAssignmentFactory|null $shippingAssignmentFactory
      * @param ShippingFactory|null $shippingFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -135,7 +139,14 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     }
 
     /**
-     * {@inheritDoc}
+     * Save address information.
+     *
+     * @param int $cartId
+     * @param \Magento\Checkout\Api\Data\ShippingInformationInterface $addressInformation
+     * @return \Magento\Checkout\Api\Data\PaymentDetailsInterface
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws StateException
      */
     public function saveAddressInformation(
         $cartId,
@@ -150,8 +161,12 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
             $address->setCustomerAddressId(null);
         }
 
+        if ($billingAddress && !$billingAddress->getCustomerAddressId()) {
+            $billingAddress->setCustomerAddressId(null);
+        }
+
         if (!$address->getCountryId()) {
-            throw new StateException(__('Shipping address is not set'));
+            throw new StateException(__('The shipping address is missing. Set the address and try again.'));
         }
 
         /** @var \Magento\Quote\Model\Quote $quote */
@@ -169,12 +184,16 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new InputException(__('Unable to save shipping information. Please check input data.'));
+            throw new InputException(
+                __('The shipping information was unable to be saved. Verify the input data and try again.')
+            );
         }
 
         $shippingAddress = $quote->getShippingAddress();
 
-        if (!$shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod())) {
+        if (!$quote->getIsVirtual()
+            && !$shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod())
+        ) {
             throw new NoSuchEntityException(
                 __('Carrier with such method not found: %1, %2', $carrierCode, $methodCode)
             );
@@ -198,11 +217,15 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     protected function validateQuote(\Magento\Quote\Model\Quote $quote)
     {
         if (0 == $quote->getItemsCount()) {
-            throw new InputException(__('Shipping method is not applicable for empty cart'));
+            throw new InputException(
+                __("The shipping method can't be set for an empty cart. Add an item to cart and try again.")
+            );
         }
     }
 
     /**
+     * Prepare shipping assignment.
+     *
      * @param CartInterface $quote
      * @param AddressInterface $address
      * @param string $method

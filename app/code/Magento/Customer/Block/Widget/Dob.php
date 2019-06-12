@@ -61,15 +61,17 @@ class Dob extends AbstractWidget
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function _construct()
     {
         parent::_construct();
-        $this->setTemplate('widget/dob.phtml');
+        $this->setTemplate('Magento_Customer::widget/dob.phtml');
     }
 
     /**
+     * Check if dob attribute enabled in system
+     *
      * @return bool
      */
     public function isEnabled()
@@ -79,6 +81,8 @@ class Dob extends AbstractWidget
     }
 
     /**
+     * Check if dob attribute marked as required
+     *
      * @return bool
      */
     public function isRequired()
@@ -88,6 +92,8 @@ class Dob extends AbstractWidget
     }
 
     /**
+     * Set date
+     *
      * @param string $date
      * @return $this
      */
@@ -127,13 +133,16 @@ class Dob extends AbstractWidget
     protected function applyOutputFilter($value)
     {
         $filter = $this->getFormFilter();
-        if ($filter) {
+        if ($filter && $value) {
+            $value = date('Y-m-d', $this->getTime());
             $value = $filter->outputFilter($value);
         }
         return $value;
     }
 
     /**
+     * Get day
+     *
      * @return string|bool
      */
     public function getDay()
@@ -142,6 +151,8 @@ class Dob extends AbstractWidget
     }
 
     /**
+     * Get month
+     *
      * @return string|bool
      */
     public function getMonth()
@@ -150,6 +161,8 @@ class Dob extends AbstractWidget
     }
 
     /**
+     * Get year
+     *
      * @return string|bool
      */
     public function getYear()
@@ -165,6 +178,19 @@ class Dob extends AbstractWidget
     public function getLabel()
     {
         return __('Date of Birth');
+    }
+
+    /**
+     * Retrieve store attribute label
+     *
+     * @param string $attributeCode
+     *
+     * @return string
+     */
+    public function getStoreLabel($attributeCode)
+    {
+        $attribute = $this->_getAttribute($attributeCode);
+        return $attribute ? __($attribute->getStoreLabel()) : '';
     }
 
     /**
@@ -186,7 +212,8 @@ class Dob extends AbstractWidget
             'max_date' => '-1d',
             'change_month' => 'true',
             'change_year' => 'true',
-            'show_on' => 'both'
+            'show_on' => 'both',
+            'first_day' => $this->getFirstDay()
         ]);
         return $this->dateElement->getHtml();
     }
@@ -208,17 +235,14 @@ class Dob extends AbstractWidget
      */
     public function getHtmlExtraParams()
     {
-        $extraParams = [
-            "'validate-date-au':true"
-        ];
-
+        $validators = [];
         if ($this->isRequired()) {
-            $extraParams[] = 'required:true';
+            $validators['required'] = true;
         }
-
-        $extraParams = implode(', ', $extraParams);
-
-        return 'data-validate="{' . $extraParams . '}"';
+        $validators['validate-date'] = [
+            'dateFormat' => $this->getDateFormat()
+        ];
+        return 'data-validate="' . $this->_escaper->escapeHtml(json_encode($validators)) . '"';
     }
 
     /**
@@ -228,7 +252,7 @@ class Dob extends AbstractWidget
      */
     public function getDateFormat()
     {
-        return $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
+        return $this->_localeDate->getDateFormatWithLongYear();
     }
 
     /**
@@ -306,5 +330,18 @@ class Dob extends AbstractWidget
             }
         }
         return null;
+    }
+
+    /**
+     * Return first day of the week
+     *
+     * @return int
+     */
+    public function getFirstDay()
+    {
+        return (int)$this->_scopeConfig->getValue(
+            'general/locale/firstday',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

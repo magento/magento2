@@ -1,12 +1,16 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
-class NewAction extends \Magento\Cms\Controller\Adminhtml\Block
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
+/**
+ * Create CMS block action.
+ */
+class NewAction extends \Magento\Cms\Controller\Adminhtml\Block implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory

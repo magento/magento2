@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Comment;
 
 /**
@@ -82,7 +83,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
                 ],
                 [
                     'parent_id' => 'Parent Creditmemo Id can not be empty',
-                    'comment' => 'Comment is a required field'
+                    'comment' => '"Comment" is required. Enter and try again.'
                 ]
             ]
         ];

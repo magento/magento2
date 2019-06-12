@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Layout;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -39,7 +37,8 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
         $this->resultLayout = $this->createMock(\Magento\Framework\View\Layout::class);
         $this->depersonalizeCheckerMock = $this->createMock(\Magento\PageCache\Model\DepersonalizeChecker::class);
 
-        $this->plugin = (new ObjectManager($this))->getObject(\Magento\Catalog\Model\Layout\DepersonalizePlugin::class,
+        $this->plugin = (new ObjectManager($this))->getObject(
+            \Magento\Catalog\Model\Layout\DepersonalizePlugin::class,
             ['catalogSession' => $this->catalogSessionMock, 'depersonalizeChecker' => $this->depersonalizeCheckerMock]
         );
     }

@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Store\Test\Unit\Model\App;
 
 /**
@@ -161,7 +159,10 @@ class EmulationTest extends \PHPUnit\Framework\TestCase
             ->method('setCurrentStore')->with(self::NEW_STORE_ID);
 
         // Test
-        $result = $this->model->startEnvironmentEmulation(self::NEW_STORE_ID, \Magento\Framework\App\Area::AREA_FRONTEND);
+        $result = $this->model->startEnvironmentEmulation(
+            self::NEW_STORE_ID,
+            \Magento\Framework\App\Area::AREA_FRONTEND
+        );
         $this->assertNull($result);
     }
 

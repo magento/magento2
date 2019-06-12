@@ -58,6 +58,16 @@ define([
             }
             delete addressData['region_id'];
 
+            if (addressData['custom_attributes']) {
+                addressData['custom_attributes'] = Object.entries(addressData['custom_attributes'])
+                    .map(function (customAttribute) {
+                        return {
+                            'attribute_code': customAttribute[0],
+                            'value': customAttribute[1]
+                        };
+                    });
+            }
+
             return address(addressData);
         },
 
@@ -72,19 +82,19 @@ define([
                 output = {},
                 streetObject;
 
-            if ($.isArray(addrs.street)) {
-                streetObject = {};
-                addrs.street.forEach(function (value, index) {
-                    streetObject[index] = value;
-                });
-                addrs.street = streetObject;
-            }
-
             $.each(addrs, function (key) {
                 if (addrs.hasOwnProperty(key) && !$.isFunction(addrs[key])) {
                     output[self.toUnderscore(key)] = addrs[key];
                 }
             });
+
+            if ($.isArray(addrs.street)) {
+                streetObject = {};
+                addrs.street.forEach(function (value, index) {
+                    streetObject[index] = value;
+                });
+                output.street = streetObject;
+            }
 
             return output;
         },

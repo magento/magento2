@@ -44,7 +44,7 @@ class SqlCollector
      */
     private function addSql($sql, $bind)
     {
-        preg_match('~INSERT INTO `(.*)` \((.*)\) VALUES (\(.*\))+~', $sql, $queryMatches);
+        preg_match('~(?:INSERT|REPLACE)\s+(?:IGNORE)?\s*INTO `(.*)` \((.*)\) VALUES (\(.*\))+~', $sql, $queryMatches);
         if ($queryMatches) {
             $table = $queryMatches[1];
             $fields = preg_replace('~[\s+`]+~', '', $queryMatches[2]);
@@ -121,10 +121,23 @@ class SqlCollector
         $this->getProfiler()->setEnabled(false);
         $queries = $this->getProfiler()->getQueryProfiles() ?: [];
         foreach ($queries as $query) {
-            if ($query->getQueryType() === Profiler::INSERT) {
+            if ($query->getQueryType() === Profiler::INSERT || $this->isReplaceQuery($query)) {
+                // For generator we do not care about REPLACE query and can use INSERT instead
+                // due to it's not support parallel execution
                 $this->addSql($query->getQuery(), $query->getQueryParams());
             }
         }
+    }
+
+    /**
+     * Detect "REPLACE INTO ..." query.
+     *
+     * @param Profiler $query
+     * @return bool
+     */
+    private function isReplaceQuery($query)
+    {
+        return $query->getQueryType() === Profiler::QUERY && 0 === stripos(ltrim($query->getQuery()), 'replace');
     }
 
     /**

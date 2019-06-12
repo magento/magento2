@@ -1,2 +1,2 @@
-theme * /
-library * /
+# Format: <componentType=module|library|theme|language|*> <componentName> <globPattern> or simply <globPattern>
+* * /

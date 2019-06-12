@@ -62,12 +62,12 @@ class AssertHttpsHeaderOptionsAvailable extends AbstractConstraint
                 $group = $systemConfigEdit->getForm()->getGroup($tabName, $groupName);
                 $group->setValue($tabName, $groupName, $fieldName, 'Yes');
                 $group->setValue($tabName, $groupName, $fieldName, 'No');
-                \PHPUnit_Framework_Assert::assertTrue(
+                \PHPUnit\Framework\Assert::assertTrue(
                     true,
                     $fieldName . " configuration is enabled with options Yes & No."
                 );
             } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
-                \PHPUnit_Framework_Assert::assertFalse(
+                \PHPUnit\Framework\Assert::assertFalse(
                     true,
                     $fieldName . " configuration is not enabled with options Yes & No."
                 );

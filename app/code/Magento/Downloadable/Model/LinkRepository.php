@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Downloadable\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -176,20 +177,22 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
             return $this->updateLink($product, $link, $isGlobalScopeContent);
         } else {
             if ($product->getTypeId() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
-                throw new InputException(__('Provided product must be type \'downloadable\'.'));
+                throw new InputException(
+                    __('The product needs to be the downloadable type. Verify the product and try again.')
+                );
             }
             $validateLinkContent = !($link->getLinkType() === 'file' && $link->getLinkFile());
             $validateSampleContent = !($link->getSampleType() === 'file' && $link->getSampleFile());
             if (!$this->contentValidator->isValid($link, $validateLinkContent, $validateSampleContent)) {
-                throw new InputException(__('Provided link information is invalid.'));
+                throw new InputException(__('The link information is invalid. Verify the link and try again.'));
             }
 
             if (!in_array($link->getLinkType(), ['url', 'file'], true)) {
-                throw new InputException(__('Invalid link type.'));
+                throw new InputException(__('The link type is invalid. Verify and try again.'));
             }
             $title = $link->getTitle();
             if (empty($title)) {
-                throw new InputException(__('Link title cannot be empty.'));
+                throw new InputException(__('The link title is empty. Enter the link title and try again.'));
             }
             return $this->saveLink($product, $link, $isGlobalScopeContent);
         }
@@ -207,7 +210,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         $isGlobalScopeContent
     ) {
         $linkData = [
-            'link_id' => (int)$link->getid(),
+            'link_id' => (int)$link->getId(),
             'is_delete' => 0,
             'type' => $link->getLinkType(),
             'sort_order' => $link->getSortOrder(),
@@ -283,18 +286,22 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         /** @var $existingLink \Magento\Downloadable\Model\Link */
         $existingLink = $this->linkFactory->create()->load($link->getId());
         if (!$existingLink->getId()) {
-            throw new NoSuchEntityException(__('There is no downloadable link with provided ID.'));
+            throw new NoSuchEntityException(
+                __('No downloadable link with the provided ID was found. Verify the ID and try again.')
+            );
         }
         $linkFieldValue = $product->getData(
             $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()
         );
         if ($existingLink->getProductId() != $linkFieldValue) {
-            throw new InputException(__('Provided downloadable link is not related to given product.'));
+            throw new InputException(
+                __("The downloadable link isn't related to the product. Verify the link and try again.")
+            );
         }
         $validateLinkContent = !($link->getLinkFileContent() === null);
         $validateSampleContent = !($link->getSampleFileContent() === null);
         if (!$this->contentValidator->isValid($link, $validateLinkContent, $validateSampleContent)) {
-            throw new InputException(__('Provided link information is invalid.'));
+            throw new InputException(__('The link information is invalid. Verify the link and try again.'));
         }
         if ($isGlobalScopeContent) {
             $product->setStoreId(0);
@@ -302,7 +309,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         $title = $link->getTitle();
         if (empty($title)) {
             if ($isGlobalScopeContent) {
-                throw new InputException(__('Link title cannot be empty.'));
+                throw new InputException(__('The link title is empty. Enter the link title and try again.'));
             }
         }
 
@@ -325,12 +332,14 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         /** @var $link \Magento\Downloadable\Model\Link */
         $link = $this->linkFactory->create()->load($id);
         if (!$link->getId()) {
-            throw new NoSuchEntityException(__('There is no downloadable link with provided ID.'));
+            throw new NoSuchEntityException(
+                __('No downloadable link with the provided ID was found. Verify the ID and try again.')
+            );
         }
         try {
             $link->delete();
         } catch (\Exception $exception) {
-            throw new StateException(__('Cannot delete link with id %1', $link->getId()), $exception);
+            throw new StateException(__('The link with "%1" ID can\'t be deleted.', $link->getId()), $exception);
         }
         return true;
     }

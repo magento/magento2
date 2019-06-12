@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Integration\Model;
 
 use Magento\Integration\Model\Integration as IntegrationModel;
@@ -129,7 +130,7 @@ class IntegrationService implements \Magento\Integration\Api\IntegrationServiceI
     {
         $integration = $this->_integrationFactory->create()->load($name, 'name');
         if ($integration->getId()) {
-            throw new IntegrationException(__('Integration with name \'%1\' exists.', $name));
+            throw new IntegrationException(__('The integration with name "%1" exists.', $name));
         }
     }
 
@@ -144,7 +145,7 @@ class IntegrationService implements \Magento\Integration\Api\IntegrationServiceI
     {
         $integration = $this->_integrationFactory->create()->load($integrationId);
         if (!$integration->getId()) {
-            throw new IntegrationException(__('Integration with ID \'%1\' does not exist.', $integrationId));
+            throw new IntegrationException(__('The integration with ID "%1" doesn\'t exist.', $integrationId));
         }
         return $integration;
     }

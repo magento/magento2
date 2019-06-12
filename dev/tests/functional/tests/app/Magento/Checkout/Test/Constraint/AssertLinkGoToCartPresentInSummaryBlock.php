@@ -21,7 +21,7 @@ class AssertLinkGoToCartPresentInSummaryBlock extends AbstractConstraint
     {
         $reviewBlock = $checkoutPage->getReviewBlock();
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $reviewBlock->getGoToCartLink()->isVisible(),
             'Go to Cart link not present in summary block'
         );

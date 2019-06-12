@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ImportExport\Helper;
 
 /**
@@ -65,7 +63,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getLocalValidPaths()
     {
-        $paths = $this->scopeConfig->getValue(self::XML_PATH_EXPORT_LOCAL_VALID_PATH, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $paths = $this->scopeConfig->getValue(
+            self::XML_PATH_EXPORT_LOCAL_VALID_PATH,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         return $paths;
     }
 
@@ -76,6 +77,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getBunchSize()
     {
-        return (int)$this->scopeConfig->getValue(self::XML_PATH_BUNCH_SIZE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (int)$this->scopeConfig->getValue(
+            self::XML_PATH_BUNCH_SIZE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

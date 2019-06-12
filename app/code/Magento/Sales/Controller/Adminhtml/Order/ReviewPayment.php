@@ -53,15 +53,15 @@ class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
                         throw new \Exception(sprintf('Action "%s" is not supported.', $action));
                 }
                 $this->orderRepository->save($order);
-                $this->messageManager->addSuccess($message);
+                $this->messageManager->addSuccessMessage($message);
             } else {
                 $resultRedirect->setPath('sales/*/');
                 return $resultRedirect;
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t update the payment right now.'));
+            $this->messageManager->addErrorMessage(__('We can\'t update the payment right now.'));
             $this->logger->critical($e);
         }
         $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getEntityId()]);

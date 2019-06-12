@@ -11,9 +11,21 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * Interface StockStatusInterface
  * @api
  * @since 100.0.2
+ *
+ * @deprecated 2.3.0 Replaced with Multi Source Inventory
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
  */
 interface StockStatusInterface extends ExtensibleDataInterface
 {
+    /**#@+
+     * Stock Status values.
+     */
+    const STATUS_OUT_OF_STOCK = 0;
+
+    const STATUS_IN_STOCK = 1;
+    /**#@-*/
+
     /**#@+
      * Stock status object data keys
      */

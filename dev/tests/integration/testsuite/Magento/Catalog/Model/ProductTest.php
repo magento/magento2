@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -17,6 +20,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
@@ -30,6 +35,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -40,6 +48,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @return void
+     */
     public static function tearDownAfterClass()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -61,6 +73,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return void
+     */
     public function testCanAffectOptions()
     {
         $this->assertFalse($this->_model->canAffectOptions());
@@ -100,6 +115,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $crud->testCrud();
     }
 
+    /**
+     * @return void
+     */
     public function testCleanCache()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -120,6 +138,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testAddImageToMediaGallery()
     {
         // Model accepts only files in tmp media path, we need to copy fixture file there
@@ -327,6 +348,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($model->getIsVirtual());
     }
 
+    /**
+     * @return void
+     */
     public function testToArray()
     {
         $this->assertEquals([], $this->_model->toArray());
@@ -334,6 +358,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['sku' => 'sku', 'name' => 'name'], $this->_model->toArray());
     }
 
+    /**
+     * @return void
+     */
     public function testFromArray()
     {
         $this->_model->fromArray(['sku' => 'sku', 'name' => 'name', 'stock_item' => ['key' => 'value']]);
@@ -405,6 +432,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testProcessBuyRequest()
     {
         $request = new \Magento\Framework\DataObject();
@@ -413,6 +443,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('errors', $result->getData());
     }
 
+    /**
+     * @return void
+     */
     public function testValidate()
     {
         $this->_model->setTypeId(
@@ -481,8 +514,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $validationResult = $this->_model->validate();
         $this->assertCount(1, $validationResult);
+
         $this->assertContains(
-            'The value of attribute "' . $attribute->getDefaultFrontendLabel() . '" must be unique',
+            'The value of the "' . $attribute->getDefaultFrontendLabel() .
+            '" attribute isn\'t unique. Set a unique value and try again.',
             $validationResult
         );
     }
@@ -529,6 +564,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests Customizable Options price values including negative value.
+     *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_custom_options.php
      * @magentoAppIsolation enabled
      */
@@ -538,15 +575,61 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $options = $this->_model->getOptions();
         $this->assertNotEmpty($options);
         $expectedValue = [
-            '3-1-select' => 3000.00,
+            '3-1-select' => -3000.00,
             '3-2-select' => 5000.00,
             '4-1-radio' => 600.234,
             '4-2-radio' => 40000.00
         ];
         foreach ($options as $option) {
+            if (!$option->getValues()) {
+                continue;
+            }
             foreach ($option->getValues() as $value) {
-                $this->assertEquals($expectedValue[$value->getSku()], floatval($value->getPrice()));
+                $this->assertEquals($expectedValue[$value->getSku()], (float)$value->getPrice());
             }
         }
+    }
+
+    /**
+     * Check stock status changing if backorders functionality enabled.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
+     * @dataProvider productWithBackordersDataProvider
+     * @param int $qty
+     * @param int $stockStatus
+     * @param bool $expectedStockStatus
+     *
+     * @return void
+     */
+    public function testSaveWithBackordersEnabled(int $qty, int $stockStatus, bool $expectedStockStatus): void
+    {
+        $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $this->assertEquals(false, $stockItem->getIsInStock());
+        $stockData = [
+            'backorders' => 1,
+            'qty' => $qty,
+            'is_in_stock' => $stockStatus,
+        ];
+        $product->setStockData($stockData);
+        $product->save();
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+
+        $this->assertEquals($expectedStockStatus, $stockItem->getIsInStock());
+    }
+
+    /**
+     * DataProvider for the testSaveWithBackordersEnabled()
+     * @return array
+     */
+    public function productWithBackordersDataProvider(): array
+    {
+        return [
+            [0, 0, false],
+            [0, 1, true],
+            [-1, 0, false],
+            [-1, 1, true],
+            [1, 1, true],
+        ];
     }
 }

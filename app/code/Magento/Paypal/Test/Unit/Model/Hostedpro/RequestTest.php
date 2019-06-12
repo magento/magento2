@@ -371,6 +371,9 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function amountWithoutTaxZeroSubtotalDataProvider()
     {
         return [

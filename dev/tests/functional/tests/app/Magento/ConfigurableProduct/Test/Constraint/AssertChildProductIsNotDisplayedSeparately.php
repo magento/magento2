@@ -61,7 +61,7 @@ class AssertChildProductIsNotDisplayedSeparately extends AbstractConstraint
             }
         }
 
-        \PHPUnit_Framework_Assert::assertEmpty($errors, implode(' ', $errors));
+        \PHPUnit\Framework\Assert::assertEmpty($errors, implode(' ', $errors));
     }
 
     /**

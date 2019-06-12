@@ -38,7 +38,10 @@
         </span>
         <span class="message-text">Checking for a new version...</span>
     </div>
-    <div class="message message-error" ng-show="upgradeProcessError">
+    <div
+        class="message"
+        ng-class="upgradeAlreadyLatestVersion ? 'message-success' : 'message-error'"
+        ng-show="upgradeProcessError">
             <span class="message-text" ng-bind-html="upgradeProcessErrorMessage"></span>
     </div>
     <div class="message" ng-show="upgradeProcessed && !upgradeProcessError && currentVersion">
@@ -125,7 +128,7 @@
     </div>
     <div class="row" ng-show="componentsProcessed && total == 0">
         <label class="form-label">
-            <b>We didn't find any components to upgrade. Click "Next" to continue.<br/>
+            <strong>We didn't find any components to upgrade. Click "Next" to continue.</strong><br/>
         </label>
     </div>
     <div class="admin__data-grid-outer-wrap" ng-show="componentsProcessed && total > 0">

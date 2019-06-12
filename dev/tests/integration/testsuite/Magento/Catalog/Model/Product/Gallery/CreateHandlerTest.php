@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Framework\Exception\FileSystemException;
@@ -84,7 +85,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         try {
             $this->createHandler->execute($product);
         } catch (FileSystemException $exception) {
-            $this->assertContains('doesn\'t exist or not a file', $exception->getLogMessage());
+            $this->assertContains(" file doesn't exist.", $exception->getLogMessage());
             $this->assertNotContains('../', $exception->getLogMessage());
             throw $exception;
         }

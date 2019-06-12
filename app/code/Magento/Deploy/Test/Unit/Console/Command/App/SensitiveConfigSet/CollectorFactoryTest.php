@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Test\Unit\Console\Command\App\SensitiveConfigSet;
 
 use Magento\Deploy\Console\Command\App\SensitiveConfigSet\CollectorFactory;
@@ -60,7 +61,7 @@ class CollectorFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Class for type "dummyType" was not declared
+     * @expectedExceptionMessage The class for "dummyType" type wasn't declared. Enter the class and try again.
      */
     public function testCreateNonExisted()
     {

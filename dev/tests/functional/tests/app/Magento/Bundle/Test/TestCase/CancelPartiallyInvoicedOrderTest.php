@@ -20,7 +20,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 3. Open the created order.
  * 4. Create partial invoice
  * 4. Do cancel Order.
- * 5. Perform all assetions.
+ * 5. Perform all assertions.
  *
  * @group Order_Management
  * @ZephyrId MAGETWO-67787

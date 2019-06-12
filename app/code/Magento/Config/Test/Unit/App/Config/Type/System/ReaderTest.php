@@ -84,10 +84,6 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ->method('process')
             ->with($data)
             ->willReturn($data);
-        $this->postProcessor->expects($this->once())
-            ->method('process')
-            ->with($data)
-            ->willReturn($data);
         $this->assertEquals($data, $this->model->read());
     }
 }

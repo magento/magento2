@@ -284,7 +284,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
      */
     private function splitPath($path)
     {
-        if (strpos($path, '::') > 0) {
+        if (strpos($path, '::') !== false) {
             list($module, $path) = explode('::', $path);
             return [
                 'module' => $module != 'Lib' ? $module : null,

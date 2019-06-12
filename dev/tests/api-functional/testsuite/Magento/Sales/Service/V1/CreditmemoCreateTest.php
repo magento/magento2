@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Service\V1;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -40,7 +38,6 @@ class CreditmemoCreateTest extends WebapiAbstract
         $orderCollection = $this->objectManager->get(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
         $order = $orderCollection->getFirstItem();
 
-//        $order = $this->objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId('100000001');
         /** @var \Magento\Sales\Model\Order\Item $orderItem */
         $orderItem = current($order->getAllItems());
         $items = [

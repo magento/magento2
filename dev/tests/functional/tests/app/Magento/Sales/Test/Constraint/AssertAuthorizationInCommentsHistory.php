@@ -43,7 +43,7 @@ class AssertAuthorizationInCommentsHistory extends AbstractConstraint
         $orderComments = $infoTab->getCommentsHistoryBlock()->getComments();
         $commentsMessages = array_column($orderComments, 'comment');
 
-        \PHPUnit_Framework_Assert::assertRegExp(
+        \PHPUnit\Framework\Assert::assertRegExp(
             sprintf(self::AUTHORIZED_AMOUNT_PATTERN, $prices['grandTotal']),
             implode('. ', $commentsMessages),
             'Incorrect authorized amount value for the order #' . $orderId

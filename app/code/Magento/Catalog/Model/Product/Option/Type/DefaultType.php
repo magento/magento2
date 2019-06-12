@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -193,7 +191,10 @@ class DefaultType extends \Magento\Framework\DataObject
      */
     public function getConfigData($key)
     {
-        return $this->_scopeConfig->getValue('catalog/custom_options/' . $key, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(
+            'catalog/custom_options/' . $key,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -211,7 +212,9 @@ class DefaultType extends \Magento\Framework\DataObject
 
         $option = $this->getOption();
         if (!isset($values[$option->getId()]) && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
-            throw new LocalizedException(__('Please specify product\'s required option(s).'));
+            throw new LocalizedException(
+                __("The product's required option(s) weren't entered. Make sure the options are entered and try again.")
+            );
         } elseif (isset($values[$option->getId()])) {
             $this->setUserValue($values[$option->getId()]);
             $this->setIsValid(true);
@@ -276,7 +279,7 @@ class DefaultType extends \Magento\Framework\DataObject
      */
     public function getCustomizedView($optionInfo)
     {
-        return isset($optionInfo['value']) ? $optionInfo['value'] : $optionInfo;
+        return $optionInfo['value'] ?? $optionInfo;
     }
 
     /**
@@ -338,7 +341,7 @@ class DefaultType extends \Magento\Framework\DataObject
     {
         $option = $this->getOption();
 
-        return $this->_getChargableOptionPrice($option->getPrice(), $option->getPriceType() == 'percent', $basePrice);
+        return $this->_getChargeableOptionPrice($option->getPrice(), $option->getPriceType() == 'percent', $basePrice);
     }
 
     /**
@@ -392,14 +395,27 @@ class DefaultType extends \Magento\Framework\DataObject
     }
 
     /**
-     * Return final chargable price for option
+     * @param float $price Price of option
+     * @param boolean $isPercent Price type - percent or fixed
+     * @param float $basePrice For percent price type
+     * @return float
+     * @deprecated 102.0.4 typo in method name
+     * @see _getChargeableOptionPrice
+     */
+    protected function _getChargableOptionPrice($price, $isPercent, $basePrice)
+    {
+        return $this->_getChargeableOptionPrice($price, $isPercent, $basePrice);
+    }
+
+    /**
+     * Return final chargeable price for option
      *
      * @param float $price Price of option
      * @param boolean $isPercent Price type - percent or fixed
      * @param float $basePrice For percent price type
      * @return float
      */
-    protected function _getChargableOptionPrice($price, $isPercent, $basePrice)
+    protected function _getChargeableOptionPrice($price, $isPercent, $basePrice)
     {
         if ($isPercent) {
             return $basePrice * $price / 100;

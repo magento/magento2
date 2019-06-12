@@ -95,12 +95,13 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
 
         if (isset($itemsArray[$item->getOrderItem()->getId()])) {
             return $itemsArray[$item->getOrderItem()->getId()];
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
+     * Check if item can be shipped separately
+     *
      * @param mixed $item
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -137,6 +138,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
+     * Check if child items calculated
+     *
      * @param mixed $item
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -175,6 +178,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
+     * Retrieve selection attributes values
+     *
      * @param mixed $item
      * @return mixed|null
      */
@@ -192,6 +197,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
+     * Retrieve order item options array
+     *
      * @return array
      */
     public function getOrderOptions()
@@ -213,18 +220,21 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
+     * Retrieve order item
+     *
      * @return mixed
      */
     public function getOrderItem()
     {
         if ($this->getItem() instanceof \Magento\Sales\Model\Order\Item) {
             return $this->getItem();
-        } else {
-            return $this->getItem()->getOrderItem();
         }
+        return $this->getItem()->getOrderItem();
     }
 
     /**
+     * Get html info for item
+     *
      * @param mixed $item
      * @return string
      */
@@ -247,6 +257,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
+     * Check if we can show price info for this item
+     *
      * @param object $item
      * @return bool
      */

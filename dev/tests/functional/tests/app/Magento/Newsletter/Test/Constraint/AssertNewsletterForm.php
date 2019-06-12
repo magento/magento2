@@ -30,7 +30,7 @@ class AssertNewsletterForm extends AbstractAssertForm
         $templateIndex->open()->getNewsletterTemplateGrid()->searchAndOpen(['code' => $template->getCode()]);
         $errors = $this->verifyData($template->getData(), $templateEdit->getEditForm()->getData($template));
 
-        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
+        \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
     }
 
     /**

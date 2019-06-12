@@ -6,9 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Magento_User" setup_version="2.0.3">
+    <module name="Magento_User" >
         <sequence>
             <module name="Magento_Backend"/>
+            <module name="Magento_Config"/>
         </sequence>
     </module>
 </config>

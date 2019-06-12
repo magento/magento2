@@ -64,7 +64,11 @@
             </parameter>
             <parameter name="cache_lifetime" xsi:type="text" visible="true">
                 <label translate="true">Cache Lifetime (Seconds)</label>
-                <description translate="true">86400 by default, if not set. To refresh instantly, clear the Blocks HTML Output cache.</description>
+                <description translate="true">
+                    <![CDATA[Time in seconds between the widget updates.
+                    <br/>If not set, equals to 86400 seconds (24 hours). To update widget instantly, go to Cache Management and clear Blocks HTML Output cache.
+                    <br/>Widget will not show products that begin to match the specified conditions until cache is refreshed.]]>
+                </description>
             </parameter>
         </parameters>
         <containers>
@@ -163,7 +167,7 @@
         </parameters>
     </widget>
     <widget id="catalog_recently_viewed" class="Magento\Catalog\Block\Widget\RecentlyViewed"
-            placeholder_image="Magento_Catalog::images/product_widget_viewed.gif">
+            placeholder_image="Magento_Catalog::images/product_widget_viewed.png">
         <label translate="true">Recently Viewed Products</label>
         <description translate="true">List of Products Recently Viewed by Visitor</description>
         <parameters>
@@ -235,7 +239,7 @@
         </containers>
     </widget>
     <widget id="catalog_recently_compared" class="Magento\Catalog\Block\Widget\RecentlyCompared"
-            placeholder_image="Magento_Catalog::images/product_widget_viewed.gif">
+            placeholder_image="Magento_Catalog::images/product_widget_viewed.png">
         <label translate="true">Recently Compared Products</label>
         <description translate="true">List of Products Recently Compared by Visitor</description>
         <parameters>
@@ -292,7 +296,7 @@
         </parameters>
         <containers>
             <container name="sidebar.main">
-                <template name="default" value="list" />
+                <template name="default" value="sidebar" />
             </container>
             <container name="content">
                 <template name="grid" value="grid" />

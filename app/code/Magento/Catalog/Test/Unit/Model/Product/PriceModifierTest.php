@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
 class PriceModifierTest extends \PHPUnit\Framework\TestCase
@@ -56,7 +54,7 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedMessage This product doesn't have tier price
+     * @expectedExceptionMessage Product hasn't group price with such data: customerGroupId = '1', website = 1, qty = 3
      */
     public function testRemoveWhenTierPricesNotExists()
     {
@@ -72,7 +70,7 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedMessage For current  customerGroupId = '10' with 'qty' = 15 any tier price exist'.
+     * @expectedExceptionMessage Product hasn't group price with such data: customerGroupId = '10', website = 1, qty = 5
      */
     public function testRemoveTierPriceForNonExistingCustomerGroup()
     {
@@ -83,7 +81,7 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->prices));
         $this->productMock->expects($this->never())->method('setData');
         $this->productRepositoryMock->expects($this->never())->method('save');
-        $this->priceModifier->removeTierPrice($this->productMock, 10, 15, 1);
+        $this->priceModifier->removeTierPrice($this->productMock, 10, 5, 1);
     }
 
     public function testSuccessfullyRemoveTierPriceSpecifiedForAllGroups()

@@ -8,7 +8,7 @@ namespace Magento\Wishlist\Test\Unit\CustomerData;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type\AbstractType;
-use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Pricing\Render;
 use Magento\Wishlist\Block\Customer\Sidebar;
@@ -24,19 +24,22 @@ use Magento\Wishlist\Model\ResourceModel\Item\Collection;
 class WishlistTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Wishlist */
-    protected $model;
+    private $model;
 
     /** @var Data|\PHPUnit_Framework_MockObject_MockObject */
-    protected $wishlistHelperMock;
+    private $wishlistHelperMock;
 
     /** @var Sidebar|\PHPUnit_Framework_MockObject_MockObject */
-    protected $sidebarMock;
+    private $sidebarMock;
 
     /** @var Image|\PHPUnit_Framework_MockObject_MockObject */
-    protected $catalogImageHelperMock;
+    private $catalogImageHelperMock;
 
     /** @var ViewInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $viewMock;
+    private $viewMock;
+
+    /** @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    private $itemResolver;
 
     protected function setUp()
     {
@@ -60,11 +63,16 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->catalogImageHelperMock);
 
+        $this->itemResolver = $this->createMock(
+            ItemResolverInterface::class
+        );
+
         $this->model = new Wishlist(
             $this->wishlistHelperMock,
             $this->sidebarMock,
             $imageHelperFactory,
-            $this->viewMock
+            $this->viewMock,
+            $this->itemResolver
         );
     }
 
@@ -77,6 +85,8 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $imageLabel = 'image_label';
         $imageWidth = 'image_width';
         $imageHeight = 'image_height';
+        $productSku = 'product_sku';
+        $productId = 'product_id';
         $productUrl = 'product_url';
         $productName = 'product_name';
         $productPrice = 'product_price';
@@ -91,12 +101,14 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             'items' => [
                 [
                     'image' => [
-                        'template' => 'Magento_Catalog/product/image',
+                        'template' => 'Magento_Catalog/product/image_with_borders',
                         'src' => $imageUrl,
                         'alt' => $imageLabel,
                         'width' => $imageWidth,
                         'height' => $imageHeight,
                     ],
+                    'product_sku' => $productSku,
+                    'product_id' => $productId,
                     'product_url' => $productUrl,
                     'product_name' => $productName,
                     'product_price' => $productPrice,
@@ -158,6 +170,10 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->method('getProduct')
             ->willReturn($productMock);
 
+        $this->itemResolver->expects($this->once())
+            ->method('getFinalProduct')
+            ->willReturn($productMock);
+
         $this->catalogImageHelperMock->expects($this->once())
             ->method('init')
             ->with($productMock, 'wishlist_sidebar_block', [])
@@ -186,6 +202,12 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->with($itemMock, [])
             ->willReturn($productUrl);
 
+        $productMock->expects($this->once())
+            ->method('getSku')
+            ->willReturn($productSku);
+        $productMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($productId);
         $productMock->expects($this->once())
             ->method('getName')
             ->willReturn($productName);
@@ -227,11 +249,11 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
 
         $this->wishlistHelperMock->expects($this->once())
             ->method('getAddToCartParams')
-            ->with($itemMock, true)
+            ->with($itemMock)
             ->willReturn($itemAddParams);
         $this->wishlistHelperMock->expects($this->once())
             ->method('getRemoveParams')
-            ->with($itemMock, true)
+            ->with($itemMock)
             ->willReturn($itemRemoveParams);
 
         $this->assertEquals($result, $this->model->getSectionData());
@@ -246,6 +268,8 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $imageLabel = 'image_label';
         $imageWidth = 'image_width';
         $imageHeight = 'image_height';
+        $productSku = 'product_sku';
+        $productId = 'product_id';
         $productUrl = 'product_url';
         $productName = 'product_name';
         $productPrice = 'product_price';
@@ -266,12 +290,14 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             'items' => [
                 [
                     'image' => [
-                        'template' => 'Magento_Catalog/product/image',
+                        'template' => 'Magento_Catalog/product/image_with_borders',
                         'src' => $imageUrl,
                         'alt' => $imageLabel,
                         'width' => $imageWidth,
                         'height' => $imageHeight,
                     ],
+                    'product_sku' => $productSku,
+                    'product_id' => $productId,
                     'product_url' => $productUrl,
                     'product_name' => $productName,
                     'product_price' => $productPrice,
@@ -282,12 +308,14 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
                 ],
                 [
                     'image' => [
-                        'template' => 'Magento_Catalog/product/image',
+                        'template' => 'Magento_Catalog/product/image_with_borders',
                         'src' => $imageUrl,
                         'alt' => $imageLabel,
                         'width' => $imageWidth,
                         'height' => $imageHeight,
                     ],
+                    'product_sku' => $productSku,
+                    'product_id' => $productId,
                     'product_url' => $productUrl,
                     'product_name' => $productName,
                     'product_price' => $productPrice,
@@ -343,6 +371,10 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->method('getProduct')
             ->willReturn($productMock);
 
+        $this->itemResolver->expects($this->exactly(2))
+            ->method('getFinalProduct')
+            ->willReturn($productMock);
+
         $this->catalogImageHelperMock->expects($this->exactly(2))
             ->method('init')
             ->with($productMock, 'wishlist_sidebar_block', [])
@@ -374,6 +406,14 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $productMock->expects($this->exactly(2))
             ->method('getName')
             ->willReturn($productName);
+
+        $productMock->expects($this->exactly(2))
+            ->method('getId')
+            ->willReturn($productId);
+
+        $productMock->expects($this->exactly(2))
+            ->method('getSku')
+            ->willReturn($productSku);
 
         $this->sidebarMock->expects($this->exactly(2))
             ->method('getProductPriceHtml')
@@ -411,11 +451,11 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
 
         $this->wishlistHelperMock->expects($this->exactly(2))
             ->method('getAddToCartParams')
-            ->with($itemMock, true)
+            ->with($itemMock)
             ->willReturn($itemAddParams);
         $this->wishlistHelperMock->expects($this->exactly(2))
             ->method('getRemoveParams')
-            ->with($itemMock, true)
+            ->with($itemMock)
             ->willReturn($itemRemoveParams);
 
         $this->assertEquals($result, $this->model->getSectionData());

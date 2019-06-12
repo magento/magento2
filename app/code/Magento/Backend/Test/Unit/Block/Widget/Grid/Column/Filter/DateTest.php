@@ -30,6 +30,12 @@ class DateTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $localeDateMock;
 
+    /** @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject */
+    private $escaperMock;
+
+    /** @var \Magento\Backend\Block\Context|\PHPUnit_Framework_MockObject_MockObject */
+    private $contextMock;
+
     protected function setUp()
     {
         $this->mathRandomMock = $this->getMockBuilder(\Magento\Framework\Math\Random::class)
@@ -58,6 +64,17 @@ class DateTest extends \PHPUnit\Framework\TestCase
             ->setMethods([])
             ->getMock();
 
+        $this->escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->contextMock = $this->getMockBuilder(\Magento\Backend\Block\Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->contextMock->expects($this->once())->method('getEscaper')->willReturn($this->escaperMock);
+        $this->contextMock->expects($this->once())->method('getLocaleDate')->willReturn($this->localeDateMock);
+
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
             \Magento\Backend\Block\Widget\Grid\Column\Filter\Date::class,
@@ -65,7 +82,8 @@ class DateTest extends \PHPUnit\Framework\TestCase
                 'mathRandom' => $this->mathRandomMock,
                 'localeResolver' => $this->localeResolverMock,
                 'dateTimeFormatter' => $this->dateTimeFormatterMock,
-                'localeDate' => $this->localeDateMock
+                'localeDate' => $this->localeDateMock,
+                'context' => $this->contextMock,
             ]
         );
         $this->model->setColumn($this->columnMock);
@@ -97,5 +115,17 @@ class DateTest extends \PHPUnit\Framework\TestCase
         $output = $this->model->getHtml();
         $this->assertContains('id="' . $uniqueHash . '_from" value="' . $yesterday->getTimestamp(), $output);
         $this->assertContains('id="' . $uniqueHash . '_to" value="' . $tomorrow->getTimestamp(), $output);
+    }
+
+    public function testGetEscapedValueEscapeString()
+    {
+        $value = "\"><img src=x onerror=alert(2) />";
+        $array = [
+            'orig_from' => $value,
+            'from' => $value,
+        ];
+        $this->model->setValue($array);
+        $this->escaperMock->expects($this->once())->method('escapeHtml')->with($value);
+        $this->model->getEscapedValue('from');
     }
 }

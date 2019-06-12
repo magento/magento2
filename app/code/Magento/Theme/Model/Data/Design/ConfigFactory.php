@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Theme\Model\Data\Design;
 
 use Magento\Framework\App\ScopeValidatorInterface;
@@ -88,7 +89,7 @@ class ConfigFactory
     public function create($scope, $scopeId, array $data = [])
     {
         if (!$this->scopeValidator->isValidScope($scope, $scopeId)) {
-            throw new LocalizedException(__('Invalid scope or scope id'));
+            throw new LocalizedException(__('The scope or scope ID is invalid. Verify both and try again.'));
         }
         $designConfigData = $this->getDesignConfigData($scope, $scopeId);
 

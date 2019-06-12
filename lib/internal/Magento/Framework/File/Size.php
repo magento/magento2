@@ -36,7 +36,7 @@ class Size
      */
     public function getPostMaxSize()
     {
-        return $this->_iniget('post_max_size');
+        return $this->_iniGet('post_max_size');
     }
 
     /**
@@ -46,7 +46,7 @@ class Size
      */
     public function getUploadMaxSize()
     {
-        return $this->_iniget('upload_max_filesize');
+        return $this->_iniGet('upload_max_filesize');
     }
 
     /**
@@ -56,7 +56,7 @@ class Size
      * @param int $mode
      * @return float
      */
-    public function getMaxFileSizeInMb($precision = 0, $mode = PHP_ROUND_HALF_DOWN)
+    public function getMaxFileSizeInMb($precision = 0, $mode = \PHP_ROUND_HALF_DOWN)
     {
         return $this->getFileSizeInMb($this->getMaxFileSize(), $precision, $mode);
     }
@@ -69,7 +69,7 @@ class Size
      * @param int $mode
      * @return float
      */
-    public function getFileSizeInMb($fileSize, $precision = 0, $mode = PHP_ROUND_HALF_DOWN)
+    public function getFileSizeInMb($fileSize, $precision = 0, $mode = \PHP_ROUND_HALF_DOWN)
     {
         return round($fileSize / (1024 * 1024), $precision, $mode);
     }

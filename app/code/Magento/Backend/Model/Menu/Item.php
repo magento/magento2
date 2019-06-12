@@ -145,7 +145,7 @@ class Item
     protected $_moduleList;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     private $_moduleManager;
 
@@ -163,7 +163,7 @@ class Item
      * @param \Magento\Backend\Model\MenuFactory $menuFactory
      * @param \Magento\Backend\Model\UrlInterface $urlModel
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param array $data
      */
     public function __construct(
@@ -173,7 +173,7 @@ class Item
         \Magento\Backend\Model\MenuFactory $menuFactory,
         \Magento\Backend\Model\UrlInterface $urlModel,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         array $data = []
     ) {
         $this->_validator = $validator;
@@ -503,12 +503,11 @@ class Item
         $this->_tooltip = $this->_getArgument($data, 'toolTip');
         $this->_title = $this->_getArgument($data, 'title');
         $this->target = $this->_getArgument($data, 'target');
+        $this->_submenu = null;
         if (isset($data['sub_menu'])) {
             $menu = $this->_menuFactory->create();
             $menu->populateFromArray($data['sub_menu']);
             $this->_submenu = $menu;
-        } else {
-            $this->_submenu = null;
         }
     }
 }

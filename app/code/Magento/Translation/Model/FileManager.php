@@ -129,11 +129,12 @@ class FileManager
     public function getTranslationFileVersion()
     {
         $translationFile = $this->getTranslationFileFullPath();
-        if (!$this->driverFile->isExists($translationFile)) {
-            $this->updateTranslationFileContent($this->translationFile->getTranslationFileContent());
+        $translationFileHash = '';
+
+        if ($this->driverFile->isExists($translationFile)) {
+            $translationFileHash = sha1_file($translationFile);
         }
 
-        $translationFileHash = sha1_file($translationFile);
         return sha1($translationFileHash . $this->getTranslationFilePath());
     }
 }

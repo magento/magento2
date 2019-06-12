@@ -25,7 +25,7 @@ class AssertTotalPaypalReview extends AbstractConstraint
     {
         $reviewTotal = $expressReview->getExpressMainReviewBlock()->getReviewBlock()->getTotal();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $reviewTotal,
             number_format($total, 2),
             'Total price: \'' . $reviewTotal

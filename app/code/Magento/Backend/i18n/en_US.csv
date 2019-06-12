@@ -214,10 +214,13 @@ YTD,YTD
 "Admin session lifetime must be greater than or equal to 60 seconds","Admin session lifetime must be greater than or equal to 60 seconds"
 Order,Order
 "Order #%1","Order #%1"
-"Access denied","Access denied"
-"Please try to sign out and sign in again.","Please try to sign out and sign in again."
-"If you continue to receive this message, please contact the store owner.","If you continue to receive this message, please contact the store owner."
 "You need more permissions to access this.","You need more permissions to access this."
+"Sorry, you need permissions to view this content.","Sorry, you need permissions to view this content."
+"Next steps","Next steps"
+"If you think this is an error, try signing out and signing in again.","If you think this is an error, try signing out and signing in again."
+"Contact a system administrator or store owner to gain permissions.","Contact a system administrator or store owner to gain permissions."
+"Return to","Return to"
+"previous page","previous page"
 "Welcome, please sign in","Welcome, please sign in"
 Username,Username
 "user name","user name"
@@ -402,9 +405,9 @@ Web,Web
 "Url Options","Url Options"
 "Add Store Code to Urls","Add Store Code to Urls"
 "
-                        <strong style=""color:red"">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third party services (e.g. PayPal etc.).
+                        <strong style=""color:red"">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.).
                     ","
-                        <strong style=""color:red"">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third party services (e.g. PayPal etc.).
+                        <strong style=""color:red"">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.).
                     "
 "Auto-redirect to Base URL","Auto-redirect to Base URL"
 "Search Engine Optimization","Search Engine Optimization"
@@ -444,7 +447,7 @@ Tags,Tags
 "<h1 class=""page-heading"">404 Error</h1><p>Page not found.</p>","<h1 class=""page-heading"">404 Error</h1><p>Page not found.</p>"
 "Community Edition","Community Edition"
 "Default Theme","Default Theme"
-"If no value is specified, the system default is used. The system default may be modified by third party extensions.","If no value is specified, the system default is used. The system default may be modified by third party extensions."
+"If no value is specified, the system default is used. The system default may be modified by third-party extensions.","If no value is specified, the system default is used. The system default may be modified by third-party extensions."
 "Applied Theme","Applied Theme"
 "Design Rule","Design Rule"
 "User Agent Rules","User Agent Rules"
@@ -458,4 +461,3 @@ Pagination,Pagination
 "Alternative text for the next pages link in the pagination menu. If empty, default arrow image is used.","Alternative text for the next pages link in the pagination menu. If empty, default arrow image is used."
 "Anchor Text for Next","Anchor Text for Next"
 "Theme Name","Theme Name"
-"Config","Config"

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\ImportExport\Model\Import;
@@ -122,7 +123,10 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
         );
 
         $this->addMessageTemplate(self::ERROR_WEBSITE_IS_EMPTY, __('Please specify a website.'));
-        $this->addMessageTemplate(self::ERROR_EMAIL_IS_EMPTY, __('Please specify an email.'));
+        $this->addMessageTemplate(
+            self::ERROR_EMAIL_IS_EMPTY,
+            __("An email wasn't specified. Enter the email and try again.")
+        );
         $this->addMessageTemplate(self::ERROR_INVALID_WEBSITE, __('We found an invalid value in a website column.'));
         $this->addMessageTemplate(self::ERROR_INVALID_EMAIL, __('Please enter a valid email.'));
         $this->addMessageTemplate(self::ERROR_VALUE_IS_REQUIRED, __('Please make sure attribute "%s" is not empty.'));

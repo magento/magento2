@@ -5,9 +5,10 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 
-class Index extends TermController
+class Index extends TermController implements HttpGetActionInterface
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Page

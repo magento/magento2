@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Model\Api;
 
 use Magento\Payment\Model\Cart;
@@ -846,7 +844,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         $request = $this->_exportToRequest($this->_getExpressCheckoutDetailsRequest);
         $response = $this->call(self::GET_EXPRESS_CHECKOUT_DETAILS, $request);
         $this->_importFromResponse($this->_paymentInformationResponse, $response);
-        $this->_exportAddressses($response);
+        $this->_exportAddresses($response);
     }
 
     /**
@@ -1027,7 +1025,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     }
 
     /**
-     * Set Customer BillingA greement call
+     * Set Customer BillingAgreement call
      *
      * @return void
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_SetCustomerBillingAgreement
@@ -1427,7 +1425,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         $nvpstr = strpos($nvpstr, "\r\n\r\n") !== false ? substr($nvpstr, strpos($nvpstr, "\r\n\r\n") + 4) : $nvpstr;
 
         while (strlen($nvpstr)) {
-            //postion of Key
+            //position of Key
             $keypos = strpos($nvpstr, '=');
             //position of value
             $valuepos = strpos($nvpstr, '&') ? strpos($nvpstr, '&') : strlen($nvpstr);
@@ -1435,7 +1433,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             /*getting the Key and Value values and storing in a Associative Array*/
             $keyval = substr($nvpstr, $intial, $keypos);
             $valval = substr($nvpstr, $keypos + 1, $valuepos - $keypos - 1);
-            //decoding the respose
+            //decoding the response
             $nvpArray[urldecode($keyval)] = urldecode($valval);
             $nvpstr = substr($nvpstr, $valuepos + 1, strlen($nvpstr));
         }
@@ -1463,8 +1461,21 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param array $data
      * @return void
+     * @deprecated 100.2.2 typo in method name
+     * @see _exportAddresses
      */
     protected function _exportAddressses($data)
+    {
+        $this->_exportAddresses($data);
+    }
+
+    /**
+     * Create billing and shipping addresses basing on response data
+     *
+     * @param array $data
+     * @return void
+     */
+    protected function _exportAddresses($data)
     {
         $address = new \Magento\Framework\DataObject();
         \Magento\Framework\DataObject\Mapper::accumulateByMap($data, $address, $this->_billingAddressMap);

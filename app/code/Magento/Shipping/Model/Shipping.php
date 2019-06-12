@@ -259,7 +259,7 @@ class Shipping implements RateCollectorInterface
         $carrier->setActiveFlag($this->_availabilityConfigField);
         $result = $carrier->checkAvailableShipCountries($request);
         if (false !== $result && !$result instanceof \Magento\Quote\Model\Quote\Address\RateResult\Error) {
-            $result = $carrier->proccessAdditionalValidation($request);
+            $result = $carrier->processAdditionalValidation($request);
         }
         /*
          * Result will be false if the admin set not to show the shipping module

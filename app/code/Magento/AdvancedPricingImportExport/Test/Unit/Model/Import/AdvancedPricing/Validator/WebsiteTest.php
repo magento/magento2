@@ -27,7 +27,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->webSiteModel = $this->getMockBuilder(\Magento\Store\Model\WebSite::class)
+        $this->webSiteModel = $this->getMockBuilder(\Magento\Store\Model\Website::class)
             ->setMethods(['getBaseCurrency'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -103,17 +103,20 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         $this->webSiteModel->expects($this->once())->method('getBaseCurrency')->willReturn($currency);
 
         $expectedResult = AdvancedPricing::VALUE_ALL_WEBSITES . ' [' . $currencyCode . ']';
-        $this->websiteString = $this->getMockBuilder(
+        $websiteString = $this->getMockBuilder(
             \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website::class
         )
             ->setMethods(['_clearMessages', '_addMessages'])
             ->setConstructorArgs([$this->storeResolver, $this->webSiteModel])
             ->getMock();
-        $result = $this->websiteString->getAllWebsitesValue();
+        $result = $websiteString->getAllWebsitesValue();
 
         $this->assertEquals($expectedResult, $result);
     }
 
+    /**
+     * @return array
+     */
     public function isValidReturnDataProvider()
     {
         return [

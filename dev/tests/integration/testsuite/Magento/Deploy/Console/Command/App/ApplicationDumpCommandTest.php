@@ -176,7 +176,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
             ->with(['system' => $comment]);
         $outputMock->expects($this->at(1))
             ->method('writeln')
-            ->with('<info>Done.</info>');
+            ->with($this->matchesRegularExpression('/<info>Done. Config types dumped: [a-z0-9,\s]+<\/info>/'));
 
         /** @var ApplicationDumpCommand command */
         $command = $this->objectManager->create(ApplicationDumpCommand::class);

@@ -11,6 +11,7 @@ use Magento\Customer\Api\Data\OptionInterface;
 use Magento\Customer\Api\Data\OptionInterfaceFactory;
 use Magento\Customer\Api\Data\ValidationRuleInterface;
 use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
+use Magento\Customer\Model\Data\AttributeMetadata;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**
@@ -120,7 +121,7 @@ class AttributeMetadataHydrator
     {
         return $this->dataObjectProcessor->buildOutputDataArray(
             $attributeMetadata,
-            AttributeMetadataInterface::class
+            AttributeMetadata::class
         );
     }
 }

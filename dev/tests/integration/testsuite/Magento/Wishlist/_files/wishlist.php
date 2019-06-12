@@ -12,14 +12,4 @@ $wishlist = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
 );
 $wishlist->loadByCustomerId($customer->getId(), true);
 $item = $wishlist->addNewItem($product, new \Magento\Framework\DataObject([]));
-//    'product' => '1',
-//    'related_product' => '',
-//    'options' => array(
-//        1 => '1-text',
-//        2 => array('month' => 1, 'day' => 1, 'year' => 2001, 'hour' => 1, 'minute' => 1),
-//        3 => '1',
-//        4 => '1',
-//    ),
-//    'validate_datetime_2' => '',
-//    'qty' => '1',
 $wishlist->setSharingCode('fixture_unique_code')->save();

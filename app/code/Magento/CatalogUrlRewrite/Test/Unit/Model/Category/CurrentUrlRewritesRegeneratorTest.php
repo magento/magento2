@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// @codingStandardsIgnoreFile
+
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category;
 
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
@@ -50,11 +50,14 @@ class CurrentUrlRewritesRegeneratorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->urlRewriteFactory->expects($this->once())->method('create')
             ->willReturn($this->urlRewrite);
-        $mergeDataProviderFactory = $this->createPartialMock(\Magento\UrlRewrite\Model\MergeDataProviderFactory::class, ['create']);
+        $mergeDataProviderFactory = $this->createPartialMock(
+            \Magento\UrlRewrite\Model\MergeDataProviderFactory::class,
+            ['create']
+        );
         $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider;
         $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
 
-        $this->currentUrlRewritesRegenerator = (new ObjectManager($this))->getObject(   
+        $this->currentUrlRewritesRegenerator = (new ObjectManager($this))->getObject(
             \Magento\CatalogUrlRewrite\Model\Category\CurrentUrlRewritesRegenerator::class,
             [
                 'categoryUrlPathGenerator' => $this->categoryUrlPathGenerator,
@@ -249,7 +252,7 @@ class CurrentUrlRewritesRegeneratorTest extends \PHPUnit\Framework\TestCase
                 ->disableOriginalConstructor()->getMock();
             foreach ($urlRewrite as $key => $value) {
                 $url->expects($this->any())
-                    ->method('get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key))))
+                    ->method('get' . str_replace('_', '', ucwords($key, '_')))
                     ->will($this->returnValue($value));
             }
             $rewrites[] = $url;

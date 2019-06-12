@@ -61,6 +61,9 @@ class CoreTest extends \PHPUnit\Framework\TestCase
         $core->setBackend($this->_mockBackend);
     }
 
+    /**
+     * @return array
+     */
     public function setBackendExceptionProvider()
     {
         return [

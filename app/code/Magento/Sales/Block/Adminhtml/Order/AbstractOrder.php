@@ -135,7 +135,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Retrieve subtotal price include tax html formated content
+     * Retrieve subtotal price include tax html formatted content
      *
      * @param \Magento\Framework\DataObject $order
      * @return string

@@ -93,7 +93,7 @@ class AssertUrlRewriteProductInGrid extends AbstractConstraint
                 ],
             ];
             foreach ($filters as $filter) {
-                \PHPUnit_Framework_Assert::assertTrue(
+                \PHPUnit\Framework\Assert::assertTrue(
                     $urlRewriteIndex->getUrlRedirectGrid()->isRowVisible($filter, true, false),
                     'URL Rewrite with request path \'' . $filter['request_path'] . '\' is absent in grid.'
                 );

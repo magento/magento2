@@ -91,7 +91,7 @@ class EnvironmentConfigSourceTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testGetWithoutEnvCongigurationVariables()
+    public function testGetWithoutEnvConfigurationVariables()
     {
         $expectedArray = [];
 

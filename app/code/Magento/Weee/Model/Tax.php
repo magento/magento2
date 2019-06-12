@@ -248,10 +248,20 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         $round = true
     ) {
         $result = [];
-
-        $websiteId = $this->_storeManager->getWebsite($website)->getId();
+        $websiteId = null;
         /** @var \Magento\Store\Model\Store $store */
-        $store = $this->_storeManager->getWebsite($website)->getDefaultGroup()->getDefaultStore();
+        $store = null;
+        if (!$website) {
+            $store = $product->getStore();
+            if ($store) {
+                $websiteId = $store->getWebsiteId();
+            }
+        }
+        if (!$websiteId) {
+            $websiteObject = $this->_storeManager->getWebsite($website);
+            $websiteId = $websiteObject->getId();
+            $store = $websiteObject->getDefaultGroup()->getDefaultStore();
+        }
 
         $allWeee = $this->getWeeeTaxAttributeCodes($store);
         if (!$allWeee) {
@@ -326,7 +336,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                         $amountExclTax = $amountInclTax - $taxAmount;
                     } else {
                         $appliedRates = $this->_calculationFactory->create()->getAppliedRates($rateRequest);
-                        if (count($appliedRates) > 1) {
+                        if (is_array($appliedRates) && count($appliedRates) > 1) {
                             $taxAmount = 0;
                             foreach ($appliedRates as $appliedRate) {
                                 $taxRate = $appliedRate['percent'];

@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Backend\Block;
 
 /**
@@ -17,9 +20,11 @@ namespace Magento\Backend\Block;
  * Example:
  * <block name="my.block" class="Magento\Backend\Block\Template" template="My_Module::template.phtml" >
  *      <arguments>
- *          <argument name="viewModel" xsi:type="object">My\Module\ViewModel\Custom</argument>
+ *          <argument name="view_model" xsi:type="object">My\Module\ViewModel\Custom</argument>
  *      </arguments>
  * </block>
+ *
+ * Your class object can then be accessed by doing $block->getViewModel()
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)

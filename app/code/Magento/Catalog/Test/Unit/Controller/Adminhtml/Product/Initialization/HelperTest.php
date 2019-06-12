@@ -95,6 +95,14 @@ class HelperTest extends \PHPUnit\Framework\TestCase
      */
     protected $attributeFilterMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dateTimeFilterMock;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
@@ -167,6 +175,11 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $resolverProperty = $helperReflection->getProperty('linkResolver');
         $resolverProperty->setAccessible(true);
         $resolverProperty->setValue($this->helper, $this->linkResolverMock);
+
+        $this->dateTimeFilterMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
+        $dateTimeFilterProperty = $helperReflection->getProperty('dateTimeFilter');
+        $dateTimeFilterProperty->setAccessible(true);
+        $dateTimeFilterProperty->setValue($this->helper, $this->dateTimeFilterMock);
     }
 
     /**
@@ -198,14 +211,22 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             'option2' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '13'],
             'option3' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '14']
         ];
+        $specialFromDate = '2018-03-03 19:30:00';
         $productData = [
             'stock_data' => ['stock_data'],
             'options' => $optionsData,
-            'website_ids' => $websiteIds
+            'website_ids' => $websiteIds,
+            'special_from_date' => $specialFromDate,
         ];
         if (!empty($tierPrice)) {
             $productData = array_merge($productData, ['tier_price' => $tierPrice]);
         }
+
+        $this->dateTimeFilterMock->expects($this->once())
+            ->method('filter')
+            ->with($specialFromDate)
+            ->willReturn($specialFromDate);
+
         $attributeNonDate = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -306,6 +327,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->assertEquals($expectedLinks, $resultLinks);
+        $this->assertEquals($specialFromDate, $productData['special_from_date']);
     }
 
     /**

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Block\Widget;
 use Magento\Ui\Block\Wrapper;
 
 /**
- * Dynamicly creates recently compared widget ui component, using information
+ * Dynamically creates recently compared widget ui component, using information
  * from widget instance and Catalog/widget.xml
  */
 class RecentlyCompared extends Wrapper implements \Magento\Widget\Block\BlockInterface

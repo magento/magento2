@@ -6,34 +6,41 @@
 
 namespace Magento\Reports\Test\Unit\Helper;
 
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Data\Collection;
 use Magento\Reports\Helper\Data;
+use Magento\Reports\Model\Item;
+use Magento\Reports\Model\ItemFactory;
 
+/**
+ * Unit tests for \Magento\Reports\Helper\Data class.
+ */
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Reports\Helper\Data
+     * @var Data
      */
     protected $data;
 
     /**
-     * @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Reports\Model\ItemFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ItemFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $itemFactoryMock;
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->itemFactoryMock = $this->getMockBuilder(\Magento\Reports\Model\ItemFactory::class)
+        $this->itemFactoryMock = $this->getMockBuilder(ItemFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -67,12 +74,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareIntervalsCollection($from, $to, $period, $results)
     {
-        $collection = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
+        $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['addItem'])
             ->getMock();
 
-        $item = $this->getMockBuilder(\Magento\Reports\Model\Item::class)
+        $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['setPeriod', 'setIsEmpty'])
             ->getMock();
@@ -103,44 +110,50 @@ class DataTest extends \PHPUnit\Framework\TestCase
             [
                 'from' => '2000-01-15 10:00:00',
                 'to' => '2000-01-15 11:00:00',
-                'period' => \Magento\Reports\Helper\Data::REPORT_PERIOD_TYPE_DAY,
-                'results' => ['2000-01-15']
+                'period' => Data::REPORT_PERIOD_TYPE_DAY,
+                'results' => ['2000-01-15'],
             ],
             [
                 'from' => '2000-01-15 10:00:00',
                 'to' => '2000-01-17 10:00:00',
-                'period' => \Magento\Reports\Helper\Data::REPORT_PERIOD_TYPE_MONTH,
-                'results' => ['2000-01']
+                'period' => Data::REPORT_PERIOD_TYPE_MONTH,
+                'results' => ['2000-01'],
             ],
             [
                 'from' => '2000-01-15 10:00:00',
                 'to' => '2000-02-15 10:00:00',
-                'period' => \Magento\Reports\Helper\Data::REPORT_PERIOD_TYPE_YEAR,
+                'period' => Data::REPORT_PERIOD_TYPE_YEAR,
                 'results' => ['2000']
             ],
             [
                 'from' => '2000-01-15 10:00:00',
                 'to' => '2000-01-16 11:00:00',
-                'period' => \Magento\Reports\Helper\Data::REPORT_PERIOD_TYPE_DAY,
-                'results' => ['2000-01-15', '2000-01-16']
+                'period' => Data::REPORT_PERIOD_TYPE_DAY,
+                'results' => ['2000-01-15', '2000-01-16'],
             ],
             [
                 'from' => '2000-01-15 10:00:00',
                 'to' => '2000-02-17 10:00:00',
-                'period' => \Magento\Reports\Helper\Data::REPORT_PERIOD_TYPE_MONTH,
-                'results' => ['2000-01', '2000-02']
+                'period' => Data::REPORT_PERIOD_TYPE_MONTH,
+                'results' => ['2000-01', '2000-02'],
             ],
             [
                 'from' => '2000-01-15 10:00:00',
                 'to' => '2003-02-15 10:00:00',
-                'period' => \Magento\Reports\Helper\Data::REPORT_PERIOD_TYPE_YEAR,
-                'results' => ['2000', '2001', '2002', '2003']
+                'period' => Data::REPORT_PERIOD_TYPE_YEAR,
+                'results' => ['2000', '2001', '2002', '2003'],
+            ],
+            [
+                'from' => '2000-12-31 10:00:00',
+                'to' => '2001-01-01 10:00:00',
+                'period' => Data::REPORT_PERIOD_TYPE_YEAR,
+                'results' => ['2000', '2001'],
             ],
             [
                 'from' => '',
                 'to' => '',
-                'period' => \Magento\Reports\Helper\Data::REPORT_PERIOD_TYPE_YEAR,
-                'results' => []
+                'period' => Data::REPORT_PERIOD_TYPE_YEAR,
+                'results' => [],
             ]
         ];
     }

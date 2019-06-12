@@ -11,6 +11,8 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
+ * Date format column
+ *
  * @api
  * @since 100.0.2
  */
@@ -45,6 +47,27 @@ class Date extends Column
         $this->timezone = $timezone;
         $this->booleanUtils = $booleanUtils;
         parent::__construct($context, $uiComponentFactory, $components, $data);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function prepare()
+    {
+        $config = $this->getData('config');
+        $config['filter'] = [
+            'filterType' => 'dateRange',
+            'templates' => [
+                'date' => [
+                    'options' => [
+                        'dateFormat' => $this->timezone->getDateFormatWithLongYear()
+                    ]
+                ]
+            ]
+        ];
+        $this->setData('config', $config);
+
+        parent::prepare();
     }
 
     /**

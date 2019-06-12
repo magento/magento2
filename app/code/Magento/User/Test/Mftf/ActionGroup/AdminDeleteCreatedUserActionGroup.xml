@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteCreatedUserActionGroup">
+        <arguments>
+            <argument name="user"/>
+        </arguments>
+        <amOnPage stepKey="amOnAdminUsersPage" url="{{AdminUsersPage.url}}"/>
+        <click stepKey="openTheUser" selector="{{AdminDeleteUserSection.role(user.username)}}"/>
+        <waitForPageLoad stepKey="waitForSingleUserPageToLoad" />
+        <fillField stepKey="TypeCurrentPassword" selector="{{AdminDeleteUserSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click stepKey="clickToDeleteUser" selector="{{AdminDeleteUserSection.delete}}"/>
+        <waitForPageLoad stepKey="waitForConfirmationPopup"/>
+        <click stepKey="clickToConfirm" selector="{{AdminDeleteUserSection.confirm}}"/>
+        <see stepKey="seeDeleteMessageForUser" userInput="You deleted the user."/>
+    </actionGroup>
+</actionGroups>

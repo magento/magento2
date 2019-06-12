@@ -326,7 +326,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
                 $optionArray[] = ['value' => '{{' . $value . '}}', 'label' => __('%1', $label)];
             }
             if ($withGroup) {
-                $optionArray = ['label' => __('Template Variables'), 'value' => $optionArray];
+                $optionArray = [['label' => __('Template Variables'), 'value' => $optionArray]];
             }
         }
         return $optionArray;
@@ -418,6 +418,8 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
     }
 
     /**
+     *  Return filter factory.
+     *
      * @return \Magento\Email\Model\Template\FilterFactory
      */
     protected function getFilterFactory()

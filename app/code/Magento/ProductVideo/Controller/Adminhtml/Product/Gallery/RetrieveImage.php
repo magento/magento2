@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ProductVideo\Controller\Adminhtml\Product\Gallery;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\Uploader;
@@ -12,7 +14,7 @@ use Magento\Framework\File\Uploader;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RetrieveImage extends \Magento\Backend\App\Action
+class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -110,7 +112,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
             $remoteFileUrl = $this->getRequest()->getParam('remote_image');
             $this->validateRemoteFile($remoteFileUrl);
             $localFileName = Uploader::getCorrectFileName(basename($remoteFileUrl));
-            $localTmpFileName = Uploader::getDispretionPath($localFileName) . DIRECTORY_SEPARATOR . $localFileName;
+            $localTmpFileName = Uploader::getDispersionPath($localFileName) . DIRECTORY_SEPARATOR . $localFileName;
             $localFilePath = $baseTmpMediaPath . ($localTmpFileName);
             $localUniqFilePath = $this->appendNewFileName($localFilePath);
             $this->validateRemoteFileExtensions($localUniqFilePath);
@@ -174,7 +176,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
     protected function appendResultSaveRemoteImage($fileName)
     {
         $fileInfo = pathinfo($fileName);
-        $tmpFileName = Uploader::getDispretionPath($fileInfo['basename']) . DIRECTORY_SEPARATOR . $fileInfo['basename'];
+        $tmpFileName = Uploader::getDispersionPath($fileInfo['basename']) . DIRECTORY_SEPARATOR . $fileInfo['basename'];
         $result['name'] = $fileInfo['basename'];
         $result['type'] = $this->imageAdapter->getMimeType();
         $result['error'] = 0;
@@ -199,7 +201,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
         $image = $this->curl->read();
         if (empty($image)) {
             throw new LocalizedException(
-                __('Could not get preview image information. Please check your connection and try again.')
+                __('The preview image information is unavailable. Check your connection and try again.')
             );
         }
         $this->fileUtility->saveFile($localFilePath, $image);

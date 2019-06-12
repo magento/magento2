@@ -27,7 +27,7 @@
                                id="discount-code"
                                name="discount_code"
                                data-validate="{'required-entry':true}"
-                               data-bind="value: couponCode, attr:{placeholder: $t('Enter discount code')} " />
+                               data-bind="value: couponCode, attr:{disabled:isApplied() , placeholder: $t('Enter discount code')} " />
                     </div>
                 </div>
             </div>

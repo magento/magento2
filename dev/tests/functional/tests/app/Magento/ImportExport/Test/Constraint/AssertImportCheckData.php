@@ -36,7 +36,7 @@ class AssertImportCheckData extends AbstractConstraint
             : count($file->getEntities());
 
         $message = $adminImportIndex->getMessagesBlock()->getNoticeMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             sprintf(self::RESULT_MESSAGE, $rowsCount, $entitiesCount),
             $message,
             'Wrong validation result message is displayed.'

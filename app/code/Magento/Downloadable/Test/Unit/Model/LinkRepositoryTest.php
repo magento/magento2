@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Downloadable\Test\Unit\Model;
 
 use Magento\Downloadable\Model\LinkRepository;
@@ -259,7 +260,7 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Link title cannot be empty.
+     * @expectedExceptionMessage The link title is empty. Enter the link title and try again.
      */
     public function testCreateThrowsExceptionIfTitleIsEmpty()
     {
@@ -421,7 +422,7 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Link title cannot be empty.
+     * @expectedExceptionMessage The link title is empty. Enter the link title and try again.
      */
     public function testUpdateThrowsExceptionIfTitleIsEmptyAndScopeIsGlobal()
     {
@@ -469,7 +470,7 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage There is no downloadable link with provided ID.
+     * @expectedExceptionMessage No downloadable link with the provided ID was found. Verify the ID and try again.
      */
     public function testDeleteThrowsExceptionIfLinkIdIsNotValid()
     {
@@ -539,6 +540,10 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$linkInterfaceMock], $this->service->getList($productSku));
     }
 
+    /**
+     * @param $resource
+     * @param $inputData
+     */
     protected function setLinkAssertions($resource, $inputData)
     {
         $resource->expects($this->any())->method('getId')->will($this->returnValue($inputData['id']));

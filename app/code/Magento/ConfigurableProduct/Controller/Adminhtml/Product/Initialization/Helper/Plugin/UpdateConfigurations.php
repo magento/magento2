@@ -1,6 +1,6 @@
 <?php
 /**
- * Product initialzation helper
+ * Product initialization helper
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.

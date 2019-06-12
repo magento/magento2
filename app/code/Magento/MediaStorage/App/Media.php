@@ -7,6 +7,8 @@
  */
 namespace Magento\MediaStorage\App;
 
+use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
+use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
 use Magento\MediaStorage\Model\File\Storage\ConfigFactory;
 use Magento\MediaStorage\Model\File\Storage\Response;
@@ -14,6 +16,9 @@ use Magento\Framework\App;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\AppInterface;
 use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
+use Magento\Framework\App\Area;
+use Magento\MediaStorage\Model\File\Storage\Config;
+use Magento\MediaStorage\Service\ImageResize;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -69,6 +74,21 @@ class Media implements AppInterface
     private $syncFactory;
 
     /**
+     * @var PlaceholderFactory
+     */
+    private $placeholderFactory;
+
+    /**
+     * @var State
+     */
+    private $appState;
+
+    /**
+     * @var ImageResize
+     */
+    private $imageResize;
+
+    /**
      * @param ConfigFactory $configFactory
      * @param SynchronizationFactory $syncFactory
      * @param Response $response
@@ -77,6 +97,10 @@ class Media implements AppInterface
      * @param string $configCacheFile
      * @param string $relativeFileName
      * @param Filesystem $filesystem
+     * @param PlaceholderFactory $placeholderFactory
+     * @param State $state
+     * @param ImageResize $imageResize
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ConfigFactory $configFactory,
@@ -86,11 +110,14 @@ class Media implements AppInterface
         $mediaDirectory,
         $configCacheFile,
         $relativeFileName,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        PlaceholderFactory $placeholderFactory,
+        State $state,
+        ImageResize $imageResize
     ) {
         $this->response = $response;
         $this->isAllowed = $isAllowed;
-        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
         $mediaDirectory = trim($mediaDirectory);
         if (!empty($mediaDirectory)) {
             $this->mediaDirectoryPath = str_replace('\\', '/', realpath($mediaDirectory));
@@ -99,6 +126,9 @@ class Media implements AppInterface
         $this->relativeFileName = $relativeFileName;
         $this->configFactory = $configFactory;
         $this->syncFactory = $syncFactory;
+        $this->placeholderFactory = $placeholderFactory;
+        $this->appState = $state;
+        $this->imageResize = $imageResize;
     }
 
     /**
@@ -109,9 +139,11 @@ class Media implements AppInterface
      */
     public function launch()
     {
+        $this->appState->setAreaCode(Area::AREA_GLOBAL);
+
         if ($this->mediaDirectoryPath !== $this->directory->getAbsolutePath()) {
             // Path to media directory changed or absent - update the config
-            /** @var \Magento\MediaStorage\Model\File\Storage\Config $config */
+            /** @var Config $config */
             $config = $this->configFactory->create(['cacheFile' => $this->configCacheFile]);
             $config->save();
             $this->mediaDirectoryPath = $config->getMediaDirectory();
@@ -122,16 +154,38 @@ class Media implements AppInterface
             }
         }
 
-        /** @var \Magento\MediaStorage\Model\File\Storage\Synchronization $sync */
-        $sync = $this->syncFactory->create(['directory' => $this->directory]);
-        $sync->synchronize($this->relativeFileName);
-
-        if ($this->directory->isReadable($this->relativeFileName)) {
-            $this->response->setFilePath($this->directory->getAbsolutePath($this->relativeFileName));
-        } else {
-            $this->response->setHttpResponseCode(404);
+        try {
+            /** @var \Magento\MediaStorage\Model\File\Storage\Synchronization $sync */
+            $sync = $this->syncFactory->create(['directory' => $this->directory]);
+            $sync->synchronize($this->relativeFileName);
+            $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
+            if ($this->directory->isReadable($this->relativeFileName)) {
+                $this->response->setFilePath($this->directory->getAbsolutePath($this->relativeFileName));
+            } else {
+                $this->setPlaceholderImage();
+            }
+        } catch (\Exception $e) {
+            $this->setPlaceholderImage();
         }
+
         return $this->response;
+    }
+
+    private function setPlaceholderImage()
+    {
+        $placeholder = $this->placeholderFactory->create(['type' => 'image']);
+        $this->response->setFilePath($placeholder->getPath());
+    }
+
+    /**
+     * Find the path to the original image of the cache path
+     *
+     * @param string $resizedImagePath
+     * @return string
+     */
+    private function getOriginalImage(string $resizedImagePath): string
+    {
+        return preg_replace('|^.*((?:/[^/]+){3})$|', '$1', $resizedImagePath);
     }
 
     /**

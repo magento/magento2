@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -126,7 +127,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->validatorInfo = $validatorInfo;
         $this->validatorFile = $validatorFile;
-        $this->serializer = $serializer ? $serializer : ObjectManager::getInstance()->get(Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($checkoutSession, $scopeConfig, $data);
     }
 
@@ -255,7 +256,12 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         } catch (ProductException $e) {
             switch ($this->getProcessMode()) {
                 case \Magento\Catalog\Model\Product\Type\AbstractType::PROCESS_MODE_FULL:
-                    throw new LocalizedException(__('Please specify product\'s required option(s).'));
+                    throw new LocalizedException(
+                        __(
+                            "The product's required option(s) weren't entered. "
+                            . "Make sure the options are entered and try again."
+                        )
+                    );
                     break;
                 default:
                     $this->setUserValue(null);
@@ -367,7 +373,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 $sizes
             );
         } catch (\Exception $e) {
-            throw new LocalizedException(__('The file options format is not valid.'));
+            throw new LocalizedException(__('The file options format is invalid. Use a correct format and try again.'));
         }
     }
 

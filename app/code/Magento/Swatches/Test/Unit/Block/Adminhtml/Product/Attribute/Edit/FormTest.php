@@ -21,6 +21,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($block, $result);
     }
 
+    /**
+     * @return array
+     */
     public function dataForAddValues()
     {
         $additionalData = [

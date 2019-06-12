@@ -24,7 +24,7 @@ class AssertCustomerDefaultAddresses extends AbstractConstraint
      */
     public function processAssert(CustomerAccountIndex $customerAccountIndex, Address $address)
     {
-        $customerAccountIndex->getAccountMenuBlock()->openMenuItem('Account Dashboard');
+        $customerAccountIndex->getAccountMenuBlock()->openMenuItem('My Account');
         sleep(6);
         $defaultBillingAddress = explode(
             "\n",
@@ -39,7 +39,7 @@ class AssertCustomerDefaultAddresses extends AbstractConstraint
         $shippingDataDiff = $this->verifyForm($pattern, $defaultShippingAddress);
         $dataDiff = array_merge($billingDataDiff, $shippingDataDiff);
 
-        \PHPUnit_Framework_Assert::assertEmpty(
+        \PHPUnit\Framework\Assert::assertEmpty(
             $dataDiff,
             'Billing or shipping form was filled incorrectly.'
             . "\nLog:\n" . implode(";\n", $dataDiff)

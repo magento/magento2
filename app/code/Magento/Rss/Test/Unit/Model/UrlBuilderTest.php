@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Rss\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -64,6 +62,7 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('http://magento.com/rss/feed/index/type/rss_feed'));
         $this->assertEquals(
             'http://magento.com/rss/feed/index/type/rss_feed',
-            $this->urlBuilder->getUrl(['type' => 'rss_feed']));
+            $this->urlBuilder->getUrl(['type' => 'rss_feed'])
+        );
     }
 }

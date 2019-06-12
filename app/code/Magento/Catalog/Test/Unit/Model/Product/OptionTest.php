@@ -68,4 +68,38 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $this->model->setPriceType(null);
         $this->assertEquals(50, $this->model->getRegularPrice());
     }
+
+    /**
+     * Tests removing ineligible characters from file_extension.
+     *
+     * @param string $rawExtensions
+     * @param string $expectedExtensions
+     * @dataProvider cleanFileExtensionsDataProvider
+     */
+    public function testCleanFileExtensions(string $rawExtensions, string $expectedExtensions)
+    {
+        $this->model->setType(Option::OPTION_GROUP_FILE);
+        $this->model->setFileExtension($rawExtensions);
+        $this->model->beforeSave();
+        $actualExtensions = $this->model->getFileExtension();
+        $this->assertEquals($expectedExtensions, $actualExtensions);
+    }
+
+    /**
+     * Data provider for testCleanFileExtensions.
+     *
+     * @return array
+     */
+    public function cleanFileExtensionsDataProvider()
+    {
+        return [
+            ['JPG, PNG, GIF', 'jpg, png, gif'],
+            ['jpg, jpg, jpg', 'jpg'],
+            ['jpg, png, gif', 'jpg, png, gif'],
+            ['jpg png gif', 'jpg, png, gif'],
+            ['!jpg@png#gif%', 'jpg, png, gif'],
+            ['jpg, png, 123', 'jpg, png, 123'],
+            ['', ''],
+        ];
+    }
 }

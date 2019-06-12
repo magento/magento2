@@ -7,6 +7,8 @@ namespace Magento\Catalog\Api;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
@@ -23,7 +25,6 @@ class ProductRenderListInterfaceTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/product_special_price.php
      * @dataProvider productRenderInfoProvider
      * @param array $expectedRenderInfo
-     * @param string $ids
      * @return void
      */
     public function testGetList(array $expectedRenderInfo)
@@ -31,6 +32,12 @@ class ProductRenderListInterfaceTest extends WebapiAbstract
         $expectedIds = [21, 31];
         /** @var FilterBuilder $filterBuilder */
         $filterBuilder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
+        /** @var SortOrderBuilder $sortOrderBuilder */
+        $sortOrderBuilder = Bootstrap::getObjectManager()->create(SortOrderBuilder::class);
+        $sortOrder = $sortOrderBuilder
+            ->setField('entity_id')
+            ->setDirection(SortOrder::SORT_ASC)
+            ->create();
 
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = Bootstrap::getObjectManager()
@@ -42,7 +49,8 @@ class ProductRenderListInterfaceTest extends WebapiAbstract
             ->setConditionType('in')
             ->create();
 
-        $searchCriteriaBuilder->addFilters([$filter1]);
+        $searchCriteriaBuilder->addFilters([$filter1])
+            ->addSortOrder($sortOrder);
 
         $searchData['search_criteria'] = $searchCriteriaBuilder->create()->__toArray();
         $searchData['store_id'] = 1;

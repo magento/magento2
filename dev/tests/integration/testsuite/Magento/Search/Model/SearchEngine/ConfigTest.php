@@ -17,7 +17,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $xmlPath = __DIR__ . '/../../_files/search_engine.xml';
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        // Clear out the clache
+        // Clear out the cache
         $cacheManager = $objectManager->create(\Magento\Framework\App\Cache\Manager::class);
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
         $cacheManager->clean($cacheManager->getAvailableTypes());

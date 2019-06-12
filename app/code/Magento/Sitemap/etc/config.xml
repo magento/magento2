@@ -42,5 +42,16 @@
                 </valid_paths>
             </file>
         </sitemap>
+        <crontab>
+            <default>
+                <jobs>
+                    <sitemap_generate>
+                        <schedule>
+                            <cron_expr>0 0 * * *</cron_expr>
+                        </schedule>
+                    </sitemap_generate>
+                </jobs>
+            </default>
+        </crontab>
     </default>
 </config>

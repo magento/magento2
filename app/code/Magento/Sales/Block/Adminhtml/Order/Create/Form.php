@@ -103,7 +103,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     }
 
     /**
-     * Retrieve url for form submiting
+     * Retrieve url for form submitting
      *
      * @return string
      */
@@ -164,6 +164,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     public function getOrderDataJson()
     {
         $data = [];
+        $this->_storeManager->setCurrentStore($this->getStoreId());
         if ($this->getCustomerId()) {
             $data['customer_id'] = $this->getCustomerId();
             $data['addresses'] = [];
@@ -189,6 +190,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
             $data['shipping_method_reseted'] = !(bool)$this->getQuote()->getShippingAddress()->getShippingMethod();
             $data['payment_method'] = $this->getQuote()->getPayment()->getMethod();
         }
+        $data['quote_id'] = $this->_sessionQuote->getQuoteId();
 
         return $this->_jsonEncoder->encode($data);
     }

@@ -82,6 +82,9 @@ class EditActionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedDataSource, $dataSource);
     }
 
+    /**
+     * @return array
+     */
     public function getPrepareDataSourceDataProvider()
     {
         return [

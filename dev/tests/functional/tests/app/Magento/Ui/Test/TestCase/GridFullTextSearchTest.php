@@ -19,7 +19,7 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
  * Steps:
  * 1. Navigate to backend.
  * 2. Go to grid page
- * 3. Perfrom full text search
+ * 3. Perform full text search
  * 5. Perform Asserts
  *
  * @group Ui

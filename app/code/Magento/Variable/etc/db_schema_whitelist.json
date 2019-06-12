@@ -1,0 +1,31 @@
+{
+    "variable": {
+        "column": {
+            "variable_id": true,
+            "code": true,
+            "name": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "VARIABLE_CODE": true
+        }
+    },
+    "variable_value": {
+        "column": {
+            "value_id": true,
+            "variable_id": true,
+            "store_id": true,
+            "plain_value": true,
+            "html_value": true
+        },
+        "index": {
+            "VARIABLE_VALUE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "VARIABLE_VALUE_VARIABLE_ID_STORE_ID": true,
+            "VARIABLE_VALUE_STORE_ID_STORE_STORE_ID": true,
+            "VARIABLE_VALUE_VARIABLE_ID_VARIABLE_VARIABLE_ID": true
+        }
+    }
+}

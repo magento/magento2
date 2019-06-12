@@ -50,6 +50,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testReindex()
     {

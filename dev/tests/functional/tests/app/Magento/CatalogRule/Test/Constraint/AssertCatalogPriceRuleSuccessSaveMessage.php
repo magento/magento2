@@ -25,7 +25,7 @@ class AssertCatalogPriceRuleSuccessSaveMessage extends AbstractConstraint
     public function processAssert(CatalogRuleIndex $pageCatalogRuleIndex)
     {
         $actualMessages = $pageCatalogRuleIndex->getMessagesBlock()->getSuccessMessages();
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             self::SUCCESS_MESSAGE,
             $actualMessages,
             'Wrong success message is displayed.'

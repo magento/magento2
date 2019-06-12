@@ -5,6 +5,8 @@
  */
 namespace Magento\Captcha\Model;
 
+use Magento\Captcha\Helper\Data;
+
 /**
  * Implementation of \Zend\Captcha\Image
  *
@@ -29,7 +31,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     const DEFAULT_WORD_LENGTH_TO = 5;
 
     /**
-     * @var \Magento\Captcha\Helper\Data
+     * @var Data
      * @since 100.2.0
      */
     protected $captchaData;
@@ -75,6 +77,11 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * @since 100.2.0
      */
     protected $session;
+
+    /**
+     * @var string
+     */
+    private $words;
 
     /**
      * @param \Magento\Framework\Session\SessionManagerInterface $session
@@ -125,8 +132,8 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     public function isRequired($login = null)
     {
-        if ($this->isUserAuth()
-            && !$this->isShownToLoggedInUser()
+        if (($this->isUserAuth()
+                && !$this->isShownToLoggedInUser())
             || !$this->isEnabled()
             || !in_array(
                 $this->formId,
@@ -309,18 +316,18 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     public function isCorrect($word)
     {
-        $storedWord = $this->getWord();
+        $storedWords = $this->getWords();
         $this->clearWord();
 
-        if (!$word || !$storedWord) {
+        if (!$word || !$storedWords) {
             return false;
         }
 
         if (!$this->isCaseSensitive()) {
-            $storedWord = strtolower($storedWord);
+            $storedWords = strtolower($storedWords);
             $word = strtolower($word);
         }
-        return $word === $storedWord;
+        return in_array($word, explode(',', $storedWords));
     }
 
     /**
@@ -431,12 +438,14 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     private function isShowAlways()
     {
-        if ((string)$this->captchaData->getConfig('mode') == \Magento\Captcha\Helper\Data::MODE_ALWAYS) {
+        $captchaMode = (string)$this->captchaData->getConfig('mode');
+
+        if ($captchaMode === Data::MODE_ALWAYS) {
             return true;
         }
 
-        if ((string)$this->captchaData->getConfig('mode') == \Magento\Captcha\Helper\Data::MODE_AFTER_FAIL
-            && $this->getAllowedAttemptsForSameLogin() == 0
+        if ($captchaMode === Data::MODE_AFTER_FAIL
+            && $this->getAllowedAttemptsForSameLogin() === 0
         ) {
             return true;
         }
@@ -477,12 +486,23 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     /**
      * Get captcha word
      *
-     * @return string
+     * @return string|null
      */
     public function getWord()
     {
         $sessionData = $this->session->getData($this->getFormIdKey(self::SESSION_WORD));
         return time() < $sessionData['expires'] ? $sessionData['data'] : null;
+    }
+
+    /**
+     * Get captcha words
+     *
+     * @return string|null
+     */
+    private function getWords()
+    {
+        $sessionData = $this->session->getData($this->getFormIdKey(self::SESSION_WORD));
+        return time() < $sessionData['expires'] ? $sessionData['words'] : null;
     }
 
     /**
@@ -494,9 +514,10 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     protected function setWord($word)
     {
+        $this->words = $this->words ? $this->words . ',' . $word : $word;
         $this->session->setData(
             $this->getFormIdKey(self::SESSION_WORD),
-            ['data' => $word, 'expires' => time() + $this->getTimeout()]
+            ['data' => $word, 'words' => $this->words, 'expires' => time() + $this->getTimeout()]
         );
         $this->word = $word;
         return $this;

@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category\Widget;
 
 /**
@@ -64,8 +62,9 @@ class ChooserTest extends \PHPUnit\Framework\TestCase
 
         $context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->setMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession'])
-            ->setConstructorArgs($helper->getConstructArguments(
-                \Magento\Backend\App\Action\Context::class,
+            ->setConstructorArgs(
+                $helper->getConstructArguments(
+                    \Magento\Backend\App\Action\Context::class,
                     [
                         'response' => $this->responseMock,
                         'request' => $this->requestMock,
@@ -99,7 +98,9 @@ class ChooserTest extends \PHPUnit\Framework\TestCase
         $context->expects($this->once())->method('getRequest')->will($this->returnValue($this->requestMock));
         $context->expects($this->once())->method('getResponse')->will($this->returnValue($this->responseMock));
         $this->controller = new \Magento\Catalog\Controller\Adminhtml\Category\Widget\Chooser(
-            $context, $layoutFactory, $resultRawFactory
+            $context,
+            $layoutFactory,
+            $resultRawFactory
         );
     }
 

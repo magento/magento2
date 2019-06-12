@@ -31,6 +31,7 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
      * @magentoDataFixture Magento/Downloadable/_files/order_with_downloadable_product.php
+     * @magentoDbIsolation disabled
      */
     public function testCheckStatusOnOrderCancel()
     {
