@@ -15,6 +15,5 @@
         <element name="changeStoreButton" type="button" selector="#store-change-button"/>
         <element name="selectStoreView" type="button" selector="//ul[@data-role='stores-list']/li/a[normalize-space(.)='{{var1}}']" timeout="10" parameterized="true"/>
         <element name="saveAndNew" type="button" selector="#save_and_new" timeout="30"/>
-        <element name="messageSuccessSavedProduct" type="button" selector="//div[@data-ui-id='messages-message-success']"/>
     </section>
 </sections>

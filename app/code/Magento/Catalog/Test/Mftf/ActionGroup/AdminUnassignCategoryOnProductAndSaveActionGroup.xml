@@ -17,6 +17,6 @@
         <waitForPageLoad stepKey="waitForDelete"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="waitForSavingProduct"/>
-        <see userInput="You saved the product." selector="{{AdminProductFormActionSection.messageSuccessSavedProduct}}" stepKey="seeSuccessMessage"/>
+        <see userInput="You saved the product." selector="{{AdminMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>
