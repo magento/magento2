@@ -17,6 +17,7 @@ class Head implements Layout\ReaderInterface
      * Supported types
      */
     const TYPE_HEAD = 'head';
+    const HEAD_FONT = 'font';
     /**#@-*/
 
     /**#@+
@@ -56,6 +57,9 @@ class Head implements Layout\ReaderInterface
             case self::HEAD_SCRIPT:
                 $node->addAttribute('content_type', 'js');
                 break;
+            case self::HEAD_FONT:
+                $node->addAttribute('content_type', 'font');
+                break;
         }
     }
 
@@ -85,6 +89,7 @@ class Head implements Layout\ReaderInterface
                 case self::HEAD_CSS:
                 case self::HEAD_SCRIPT:
                 case self::HEAD_LINK:
+                case self::HEAD_FONT:
                     $this->addContentTypeByNodeName($node);
                     $pageConfigStructure->addAssets($node->getAttribute('src'), $this->getAttributes($node));
                     break;
