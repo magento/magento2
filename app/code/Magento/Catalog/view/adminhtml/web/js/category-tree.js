@@ -85,7 +85,7 @@ define([
         _convertDataNodes: function (nodes) {
             var nodesData = [];
 
-            nodes.forEach(function(node) {
+            nodes.forEach(function (node) {
                 nodesData.push(this._convertData(node));
             }, this);
 
