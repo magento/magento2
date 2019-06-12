@@ -21,7 +21,6 @@
         </annotations>
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-        <closeAdminNotification stepKey="closeAdminNotification"/>
         <seeInCurrentUrl url="{{AdminLoginPage.url}}" stepKey="seeAdminLoginUrl"/>
         <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
     </test>
