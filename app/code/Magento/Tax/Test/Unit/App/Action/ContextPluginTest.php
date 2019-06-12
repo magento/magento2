@@ -5,6 +5,9 @@
  */
 namespace Magento\Tax\Test\Unit\App\Action;
 
+/**
+ * Context plugin test
+ */
 class ContextPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -35,7 +38,7 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
     /**
      * Module manager
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     private $moduleManagerMock;
 
@@ -78,13 +81,15 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
 
         $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->setMethods(
+                [
                 'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId',
                 'getWebsiteId', 'isLoggedIn'
-            ])
+                ]
+            )
             ->getMock();
 
-        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)
+        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
