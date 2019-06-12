@@ -238,13 +238,16 @@ class InlineEdit extends \Magento\Backend\App\Action
             $this->disableAddressValidation($customer);
             $this->customerRepository->save($customer);
         } catch (\Magento\Framework\Exception\InputException $e) {
-            $this->getMessageManager()->addError($this->getErrorWithCustomerId($this->escaper->escapeHtml($e->getMessage())));
+            $this->getMessageManager()
+                ->addError($this->getErrorWithCustomerId($this->escaper->escapeHtml($e->getMessage())));
             $this->logger->critical($e);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->getMessageManager()->addError($this->getErrorWithCustomerId($this->escaper->escapeHtml($e->getMessage())));
+            $this->getMessageManager()
+                ->addError($this->getErrorWithCustomerId($this->escaper->escapeHtml($e->getMessage())));
             $this->logger->critical($e);
         } catch (\Exception $e) {
-            $this->getMessageManager()->addError($this->getErrorWithCustomerId('We can\'t save the customer.'));
+            $this->getMessageManager()
+                ->addError($this->getErrorWithCustomerId('We can\'t save the customer.'));
             $this->logger->critical($e);
         }
     }
