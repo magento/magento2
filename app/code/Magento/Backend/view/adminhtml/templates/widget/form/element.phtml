@@ -13,7 +13,7 @@ $type = $element->getType();
             <?= /* @noEscape */ $formBlock->drawElement($_element) ?>
         <?php endforeach; ?>
     </fieldset>
-<?php elseif ($type === 'column' || $type === 'hidden') : ?>
+<?php elseif ($type === 'hidden') : ?>
     <input type="<?= $block->escapeHtmlAttr($element->getType()) ?>" name="<?= $block->escapeHtmlAttr($element->getName()) ?>" id="<?= $element->getHtmlId() ?>" value="<?= $block->escapeHtmlAttr($element->getValue()) ?>">
     <?php elseif ($type === 'select') : ?>
     <span class="form_row">
