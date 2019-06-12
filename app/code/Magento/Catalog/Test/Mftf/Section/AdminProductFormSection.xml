@@ -32,6 +32,7 @@
         <element name="productTaxClassDisabled" type="select" selector="select[name='product[tax_class_id]'][disabled=true]"/>
         <element name="productTaxClassUseDefault" type="checkbox" selector="input[name='use_default[tax_class_id]']"/>
         <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']" timeout="30"/>
+        <element name="currentCategory" type="text" selector=".admin__action-multiselect-crumb > span"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
         <element name="unselectCategories" type="button" selector="//span[@class='admin__action-multiselect-crumb']/span[contains(.,'{{category}}')]/../button[@data-action='remove-selected-item']" parameterized="true" timeout="30"/>
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
@@ -70,6 +71,7 @@
         <element name="selectMultipleCategories" type="input" selector="//*[@data-index='container_category_ids']//*[contains(@class, '_selected')]"/>
         <element name="countryOfManufacture" type="select" selector="select[name='product[country_of_manufacture]']"/>
         <element name="newAddedAttribute" type="text" selector="//fieldset[@class='admin__fieldset']//div[contains(@data-index,'{{attributeCode}}')]" parameterized="true"/>
+        <element name="footerBlock" type="block" selector="//footer"/>
     </section>
     <section name="ProductInWebsitesSection">
         <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
@@ -207,5 +209,7 @@
         <element name="textAttributeByName" type="text" selector="//div[@data-index='attributes']//fieldset[contains(@class, 'admin__field') and .//*[contains(.,'{{var}}')]]//input" parameterized="true"/>
         <element name="dropDownAttribute" type="select" selector="//select[@name='product[{{arg}}]']" parameterized="true" timeout="30"/>
         <element name="attributeSection" type="block" selector="//div[@data-index='attributes']/div[contains(@class, 'admin__collapsible-content _show')]" timeout="30"/>
+        <element name="attributeGroupByName" type="button" selector="//div[@class='fieldset-wrapper-title']//span[text()='{{group}}']" parameterized="true"/>
+        <element name="attributeByGroupAndName" type="text" selector="//div[@class='fieldset-wrapper-title']//span[text()='{{group}}']/../../following-sibling::div//span[contains(text(),'attribute')]" parameterized="true"/>
     </section>
 </sections>
