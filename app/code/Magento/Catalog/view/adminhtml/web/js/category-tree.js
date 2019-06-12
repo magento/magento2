@@ -78,7 +78,7 @@ define([
         },
 
         /**
-         * @param nodes {Array}
+         * @param {Array} nodes
          * @returns {Array}
          * @private
          */
