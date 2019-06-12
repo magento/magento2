@@ -15,7 +15,7 @@
         <element name="addValue" type="button" selector="//button[contains(@data-action,'add_new_row')]" timeout="30"/>
         <element name="defaultStoreView" type="input" selector="//input[contains(@name,'option[value][option_{{row}}][1]')]" parameterized="true"/>
         <element name="adminOption" type="input" selector="//input[contains(@name,'option[value][option_{{row}}][0]')]" parameterized="true"/>
-        <element name="defaultRadioButton" type="radio" selector="//tr[{{row}}]//input[contains(@name,'default[]')]/..//label" parameterized="true"/>
+        <element name="defaultRadioButton" type="radio" selector="//tr[{{row}}]//input[contains(@name,'default[]')]" parameterized="true"/>
         <element name="isRequired" type="checkbox" selector="//input[contains(@name,'is_required')]/..//label"/>
         <element name="advancedAttributeProperties" type="text" selector="//div[contains(@data-index,'advanced_fieldset')]"/>
         <element name="attributeCode" type="input" selector="//*[@class='admin__fieldset-wrapper-content admin__collapsible-content _show']//input[@name='attribute_code']"/>

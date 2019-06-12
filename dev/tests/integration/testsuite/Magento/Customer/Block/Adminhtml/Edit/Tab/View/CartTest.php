@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 
 use Magento\Customer\Controller\RegistryConstants;
@@ -99,16 +100,5 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('simple', $html);
         $this->assertContains('$10.00', $html);
         $this->assertContains('catalog/product/edit/id/1', $html);
-    }
-
-    /**
-     * Verify that the customer has a single item in his cart.
-     *
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/quote.php
-     */
-    public function testGetCollection()
-    {
-        $this->assertEquals(1, $this->block->getCollection()->getSize());
     }
 }

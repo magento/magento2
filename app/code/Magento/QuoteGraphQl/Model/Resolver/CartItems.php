@@ -38,7 +38,7 @@ class CartItems implements ResolverInterface
 
             $itemsData[] = [
                 'id' => $cartItem->getItemId(),
-                'qty' => $cartItem->getQty(),
+                'quantity' => $cartItem->getQty(),
                 'product' => $productData,
                 'model' => $cartItem,
             ];

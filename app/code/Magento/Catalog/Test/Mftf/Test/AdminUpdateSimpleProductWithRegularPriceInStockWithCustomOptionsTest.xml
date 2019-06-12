@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-17181"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -135,7 +138,7 @@
         </assertEquals>
 
         <!--Verify customer see customizable options are Required -->
-        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(simpleProductCustomizableOption.title)}}" stepKey="verifyFistCustomOptionIsRequired"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(simpleProductCustomizableOption.title)}}" stepKey="verifyFirstCustomOptionIsRequired"/>
 
         <!--Verify customer see customizable option titles and prices -->
         <grabAttributeFrom userInput="for" selector="{{StorefrontProductInfoMainSection.customOptionLabel(simpleProductCustomizableOption.title)}}" stepKey="simpleOptionId"/>
@@ -150,6 +153,7 @@
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="1" stepKey="fillProductQuantity"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickOnAddToCartButton"/>
         <waitForPageLoad stepKey="waitForProductToAddInCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <seeElement selector="{{StorefrontProductPageSection.successMsg}}" stepKey="seeYouAddedSimpleprod4ToYourShoppingCartSuccessSaveMessage"/>
         <seeElement selector="{{StorefrontMinicartSection.quantity(1)}}" stepKey="seeAddedProductQuantityInCart"/>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>

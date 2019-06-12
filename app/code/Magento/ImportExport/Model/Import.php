@@ -127,6 +127,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_importExportData = null;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $_coreConfig;
+
+    /**
      * @var \Magento\ImportExport\Model\Import\ConfigInterface
      */
     protected $_importConfig;
