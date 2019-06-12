@@ -7,11 +7,11 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\Store\Model\Store;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Model\Store;
 
 /**
  * Flat item eraser. Used to clear items from the catalog flat table.
@@ -34,23 +34,27 @@ class Eraser
     protected $storeManager;
 
     /**
-     * @var MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
-    protected $metadataPool;
+    private $metadataPool;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool = null
     ) {
         $this->productIndexerHelper = $productHelper;
         $this->connection = $resource->getConnection();
         $this->storeManager = $storeManager;
+        $this->metadataPool = $metadataPool ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**
@@ -88,21 +92,21 @@ class Eraser
         /* @var $statusAttribute \Magento\Eav\Model\Entity\Attribute */
         $statusAttribute = $this->productIndexerHelper->getAttribute('status');
         $productEntityAlias = $this->getProductEntityTableAlias();
-        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         $linkField = $metadata->getLinkField();
 
         $select = $this->getSelectForProducts($ids);
         $select->joinLeft(
             ['status_global_attr' => $statusAttribute->getBackendTable()],
             ' status_global_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
-            . ' AND status_global_attr.'. $linkField .' = '. $productEntityAlias . '.' . $linkField
+            . ' AND status_global_attr.'. $linkField .' = '. $productEntityAlias .'.'. $linkField
             . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID,
             []
         );
         $select->joinLeft(
             ['status_attr' => $statusAttribute->getBackendTable()],
             ' status_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
-            . ' AND status_attr.'. $linkField .' = '. $productEntityAlias . '.' . $linkField
+            . ' AND status_attr.'. $linkField .' = '. $productEntityAlias .'.'. $linkField
             . ' AND status_attr.store_id = ' . $storeId,
             []
         );
@@ -173,19 +177,5 @@ class Eraser
                 ['entity_id IN(?)' => $productId]
             );
         }
-    }
-
-    /**
-     * Get MetadataPool instance
-     *
-     * @return \Magento\Framework\EntityManager\MetadataPool
-     */
-    private function getMetadataPool()
-    {
-        if (null === $this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
-        }
-        return $this->metadataPool;
     }
 }
