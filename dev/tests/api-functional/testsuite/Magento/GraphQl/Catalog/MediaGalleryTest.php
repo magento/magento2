@@ -46,6 +46,33 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
+     */
+    public function testProductMediaGalleryEntries()
+    {
+        $productSku = 'simple';
+        $query = <<<QUERY
+{
+  products(filter: {sku: {eq: "{$productSku}"}}) {
+    items {
+      name
+      sku
+      media_gallery_entries {
+        id
+        file
+        types
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+
+        self::assertArrayHasKey('file', $response['products']['items'][0]['media_gallery_entries'][0]);
+        self::assertContains('magento_image.jpg', $response['products']['items'][0]['media_gallery_entries'][0]['url']);
+    }
+
+    /**
      * @param string $url
      * @return bool
      */
