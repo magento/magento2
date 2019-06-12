@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Add Product to Compare from the category page and check message -->
     <actionGroup name="StorefrontAddCategoryProductToCompareActionGroup">
         <arguments>
@@ -59,12 +59,12 @@
 
     <!-- Clear the compare list -->
     <actionGroup name="StorefrontClearCompareActionGroup">
-        <waitForElementVisible selector="{{StorefrontComparisonSidebarSection.ClearAll}}" time="30" stepKey="waitForClearAll"/>
-        <click selector="{{StorefrontComparisonSidebarSection.ClearAll}}" stepKey="clickClearAll"/>
-        <waitForElementVisible selector="{{ModalConfirmationSection.OkButton}}" time="30" stepKey="waitForClearOk"/>
-        <scrollTo selector="{{ModalConfirmationSection.OkButton}}" stepKey="scrollToClearOk"/>
-        <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="clickClearOk"/>
-        <waitForElement selector="{{StorefrontMessagesSection.message('You cleared the comparison list.')}}" time="30" stepKey="AssertMessageCleared"/>
-        <waitForElement selector="{{StorefrontComparisonSidebarSection.NoItemsMessage}}" time="30" stepKey="assertNoItems"/>
+        <waitForElementVisible selector="{{StorefrontComparisonSidebarSection.clearAll}}" time="30" stepKey="waitForClearAll"/>
+        <click selector="{{StorefrontComparisonSidebarSection.clearAll}}" stepKey="clickClearAll"/>
+        <waitForElementVisible selector="{{StorefrontModalConfirmationSection.okButton}}" stepKey="waitForClearOk"/>
+        <click selector="{{StorefrontModalConfirmationSection.okButton}}" stepKey="clickClearOk"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.successMessage}}"  stepKey="waitAssertMessageCleared"/>
+        <see selector="{{StorefrontMessagesSection.successMessage}}" userInput="You cleared the comparison list." stepKey="assertMessageCleared"/>
+        <waitForElementVisible selector="{{StorefrontComparisonSidebarSection.noItemsMessage}}" stepKey="assertNoItems"/>
     </actionGroup>
 </actionGroups>

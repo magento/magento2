@@ -183,6 +183,12 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
             curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'GET');
         }
 
+        if ($http_ver === \Zend_Http_Client::HTTP_1) {
+            curl_setopt($this->_getResource(), CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        } elseif ($http_ver === \Zend_Http_Client::HTTP_0) {
+            curl_setopt($this->_getResource(), CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
+        }
+
         if (is_array($headers)) {
             curl_setopt($this->_getResource(), CURLOPT_HTTPHEADER, $headers);
         }
