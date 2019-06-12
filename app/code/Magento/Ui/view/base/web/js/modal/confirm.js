@@ -80,6 +80,8 @@ define([
          * Open modal window.
          */
         openModal: function () {
+            this.options.actions.always();
+
             return this._super();
         },
 
