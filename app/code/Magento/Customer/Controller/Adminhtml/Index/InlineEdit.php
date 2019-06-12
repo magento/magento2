@@ -77,12 +77,12 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
 
     /**
      * @param Action\Context $context
-     * @param \Magento\Framework\Escaper $escaper
      * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Escaper $escaper
      * @param AddressRegistry|null $addressRegistry
      */
     public function __construct(
@@ -136,10 +136,14 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
 
         $postItems = $this->getRequest()->getParam('items', []);
         if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
-            return $resultJson->setData([
-                'messages' => [__('Please correct the data sent.')],
-                'error' => true,
-            ]);
+            return $resultJson->setData(
+                [
+                    'messages' => [
+                        __('Please correct the data sent.')
+                    ],
+                    'error' => true,
+                ]
+            );
         }
 
         foreach (array_keys($postItems) as $customerId) {
@@ -155,10 +159,12 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
             $this->getEmailNotification()->credentialsChanged($this->getCustomer(), $currentCustomer->getEmail());
         }
 
-        return $resultJson->setData([
-            'messages' => $this->getErrorMessages(),
-            'error' => $this->isErrorExists()
-        ]);
+        return $resultJson->setData(
+            [
+                'messages' => $this->getErrorMessages(),
+                'error' => $this->isErrorExists()
+            ]
+        );
     }
 
     /**
@@ -242,13 +248,16 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
             $this->disableAddressValidation($customer);
             $this->customerRepository->save($customer);
         } catch (\Magento\Framework\Exception\InputException $e) {
-            $this->getMessageManager()->addError($this->getErrorWithCustomerId($this->escaper->escapeHtml($e->getMessage())));
+            $this->getMessageManager()
+                ->addError($this->getErrorWithCustomerId($this->escaper->escapeHtml($e->getMessage())));
             $this->logger->critical($e);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->getMessageManager()->addError($this->getErrorWithCustomerId($this->escaper->escapeHtml($e->getMessage())));
+            $this->getMessageManager()
+                ->addError($this->getErrorWithCustomerId($this->escaper->escapeHtml($e->getMessage())));
             $this->logger->critical($e);
         } catch (\Exception $e) {
-            $this->getMessageManager()->addError($this->getErrorWithCustomerId('We can\'t save the customer.'));
+            $this->getMessageManager()
+                ->addError($this->getErrorWithCustomerId('We can\'t save the customer.'));
             $this->logger->critical($e);
         }
     }

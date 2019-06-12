@@ -296,10 +296,14 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->willReturn('Error text');
         $this->resultJson->expects($this->once())
             ->method('setData')
-            ->with([
-                'messages' => ['Error text'],
-                'error' => true,
-            ])
+            ->with(
+                [
+                    'messages' => [
+                        'Error text',
+                    ],
+                    'error' => true,
+                ]
+            )
             ->willReturnSelf();
     }
 
@@ -345,10 +349,14 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
         $this->resultJson
             ->expects($this->once())
             ->method('setData')
-            ->with([
-                'messages' => [__('Please correct the data sent.')],
-                'error' => true,
-            ])
+            ->with(
+                [
+                    'messages' => [
+                        __('Please correct the data sent.'),
+                    ],
+                    'error' => true,
+                ]
+            )
             ->willReturnSelf();
         $this->assertSame($this->resultJson, $this->controller->execute());
     }
