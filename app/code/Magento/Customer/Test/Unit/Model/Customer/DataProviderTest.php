@@ -249,7 +249,25 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                         ],
                                     ],
                                 ],
-                            ]
+                            ],
+                            'street' => [
+                                'arguments' => [
+                                    'data' => [
+                                        'config' => [
+                                            'dataType' => 'multiline',
+                                            'formElement' => 'multiline',
+                                            'visible' => true,
+                                            'required' => '1',
+                                            'label' => __('Multiline address'),
+                                            'sortOrder' => '70',
+                                            'notice' => 'note',
+                                            'default' => 'Default',
+                                            'size' => '2',
+                                            'componentType' => Field::NAME,
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ]
@@ -477,6 +495,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->injectVisibilityProps($attributeMock, $attributeBooleanMock, $options);
         if ($type == "address") {
             $mocks[] = $this->getCountryAttrMock();
+            $mocks[] = $this->getStreetAttrMock();
         }
         return $mocks;
     }
@@ -542,6 +561,54 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(null);
 
         return $countryAttrMock;
+    }
+
+    /**
+     * @return AbstractAttribute|\PHPUnit_Framework_MockObject_MockObjec
+     */
+    private function getStreetAttrMock()
+    {
+        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
+            ->setMethods(
+                [
+                    'getAttributeCode',
+                    'getDataUsingMethod',
+                    'usesSource',
+                    'getFrontendInput',
+                    'getIsVisible',
+                    'getSource',
+                    'getIsUserDefined',
+                    'getUsedInForms',
+                    'getEntityType',
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $map = [
+            ['frontend_input', null, 'multiline'],
+            ['is_required', null, '1'],
+            ['frontend_label', null, __('Multiline address')],
+            ['note', null, 'note'],
+            ['sort_order', null, '70'],
+            ['note', null, null],
+            ['default_value', null, 'Default'],
+            ['multiline_count', null, 2],
+        ];
+
+        $attributeMock->method('getDataUsingMethod')
+            ->will($this->returnValueMap($map));
+
+        $attributeMock->method('getAttributeCode')
+            ->willReturn('street');
+
+        $attributeMock->method('usesSource')
+            ->willReturn(false);
+
+        $attributeMock->method('getIsVisible')
+            ->willReturn(true);
+
+        return $attributeMock;
     }
 
     /**
@@ -1470,7 +1537,25 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                 ],
                             ],
                         ],
-                    ]
+                    ],
+                    'street' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'dataType' => 'multiline',
+                                    'formElement' => 'multiline',
+                                    'visible' => true,
+                                    'required' => '1',
+                                    'label' => __('Multiline address'),
+                                    'sortOrder' => '70',
+                                    'notice' => 'note',
+                                    'default' => 'Default',
+                                    'size' => '2',
+                                    'componentType' => Field::NAME,
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ];
