@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSaveTwiceDuringCreatingConfigurableProductTest">
+        <annotations>
+            <stories value="Zero qty for children products when save configurable product twice"/>
+            <title value="Zero qty for children products when save configurable product twice"/>
+            <description
+                    value="Configurable children products have qty which was set during creating the configurable product"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457025/scenarios/3041961"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="customStock"/>
+            <createData entity="FullSource1" stepKey="customSource"/>
+            <createData entity="_defaultSource" stepKey="defaultSource"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="customStock"/>
+                <requiredEntity createDataKey="customSource"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <waitForPageLoad stepKey="waitForDashboardLoad"/>
+        </before>
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+        </after>
+        <comment userInput="Create Configurable product with two options 'In Stock' on 'Default' stock"
+                 stepKey="CreateConfigurableProductComment"/>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToAdminProductGrid"/>
+        <waitForPageLoad time="30" stepKey="waitForProductGridLoad"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
+        <click selector="{{AdminProductGridActionSection.addTypeProduct('configurable')}}"
+               stepKey="addConfigurableProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForConfigurableProductNewPageLoad"/>
+
+        <fillField userInput="{{ConfigurableMsiProduct.name}}" selector="{{AdminProductFormSection.productName}}"
+                   stepKey="fillProductName"/>
+        <fillField userInput="{{ConfigurableMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}"
+                   stepKey="fillProductPrice"/>
+        <fillField userInput="{{ConfigurableMsiProduct.sku}}" selector="{{AdminProductFormSection.productSku}}"
+                   stepKey="fillProductSku"/>
+        <fillField userInput="{{ConfigurableMsiProduct.quantity}}"
+                   selector="{{AdminConfigurableProductFormSection.productQuantity}}" stepKey="fillProductQuantity"/>
+        <fillField userInput="{{ConfigurableMsiProduct.weight}}"
+                   selector="{{AdminConfigurableProductFormSection.productWeight}}" stepKey="fillProductWeight"/>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
+                                    parameterArray="[$$category.name$$]" stepKey="searchAndSelectCategory"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}"
+               stepKey="clickOnTheCreateConfigurationsButton"/>
+        <waitForElementVisible selector="{{AdminConfigurableProductSelectAttributesSlideOut.grid}}" time="30"
+                               stepKey="waitForGridPresents"/>
+
+        <click selector="{{AdminGridRow.checkboxByValue('color')}}" stepKey="selectColorAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToSecondStep"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="addNewColorWhite"/>
+        <fillField userInput="{{colorProductAttribute1.name}}"
+                   selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="setNameWhite"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="saveWhiteColor"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="addNewColorRed"/>
+        <fillField userInput="{{colorProductAttribute2.name}}"
+                   selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="setNameRed"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="saveRedColor"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToThirdStep"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}"
+               stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}"
+               stepKey="openSelectSourcesModalWindow"/>
+
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}"
+                          dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true"
+                          stepKey="clearSourcesFilter"/>
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomSourceByNameForAssignment">
+            <argument name="keyword" value="$$defaultSource.source[name]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.checkboxByValue($$defaultSource.source[name]$$)}}"
+               stepKey="selectDefaultSource"/>
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="doneAssignSources"/>
+
+        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSourceForMultiMode}}"
+                   userInput="100" stepKey="fillQuantityForCustomSource"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToFourthStep"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}"
+               stepKey="doneGeneratingConfigurableVariations"/>
+
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableProduct"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}"
+                          dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true"
+                          stepKey="confirmDefaultAttributeSetForConfigurableProduct"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkProductSavedMessage"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateBackToAdminProductGrid"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySku">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="{{ConfigurableMsiProduct.sku}}"/>
+        </actionGroup>
+        <see selector="{{AdminGridRow.rowByIndex('0')}}" userInput="100" stepKey="seeQuantityFirstColor"/>
+        <see selector="{{AdminGridRow.rowByIndex('1')}}" userInput="100" stepKey="seeQuantitySecondColor"/>
+        <click selector="{{AdminGridRow.rowByIndex('2')}}" stepKey="editProduct"/>
+
+        <waitForPageLoad time="30" stepKey="waitForCustomSourceEditPageLoad1"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableProduct1"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateBackToAdminProductGrid1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySku1">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="{{ConfigurableMsiProduct.sku}}"/>
+        </actionGroup>
+        <see selector="{{AdminGridRow.rowByIndex('0')}}" userInput="100" stepKey="seeQuantityFirstColor1"/>
+        <see selector="{{AdminGridRow.rowByIndex('1')}}" userInput="100" stepKey="seeQuantitySecondColor1"/>
+    </test>
+</tests>
