@@ -92,7 +92,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * @param Data $backendHelper
      * @param array $data
      * @param DecoderInterface|null $urlDecoder
-     * @param Parameters $parameters
+     * @param Parameters|null $parameters
      */
     public function __construct(
         Context $context,
