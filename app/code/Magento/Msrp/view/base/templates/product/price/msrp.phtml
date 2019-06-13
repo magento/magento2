@@ -98,9 +98,7 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
     <a href="javascript:void(0);"
        id="<?= /* @noEscape */ ($popupId) ?>"
        class="action map-show-info"
-        <?php // phpcs:disable ?>
        data-mage-init='<?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($data) ?>'>
-        <?php //phpcs:enable ?>
         <?= $block->escapeHtml(__('Click for price')) ?>
     </a>
 <?php else : ?>
