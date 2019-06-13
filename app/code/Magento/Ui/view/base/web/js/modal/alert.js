@@ -40,6 +40,14 @@ define([
         },
 
         /**
+         * Create widget.
+         */
+        _create: function () {
+            this.options.actions.always();
+            this._super();
+        },
+
+        /**
          * Close modal window.
          */
         closeModal: function () {
