@@ -98,20 +98,20 @@ define([
         },
 
         /**
-         * @param {Object} option
+         * @param {Object} newOption
          * @return boolean
          */
-        isValidOption: function (option) {
+        isValidOption: function (newOption) {
             var duplicatedOptions = [],
                 errorOption,
                 allOptions = [];
 
-            if (_.isEmpty(option.label)) {
+            if (_.isEmpty(newOption.label)) {
                 return false;
             }
 
             _.each(this.options(), function (option) {
-                if (!_.isUndefined(allOptions[option.label])) {
+                if (!_.isUndefined(allOptions[option.label]) && (newOption.label === option.label)) {
                     duplicatedOptions.push(option);
                 }
 
@@ -119,8 +119,10 @@ define([
             });
 
             if (duplicatedOptions.length) {
-                errorOption = $("[data-role=\"" + option.id + "\"");
-                errorOption.addClass("_error");
+                _.each(duplicatedOptions, function (duplicatedOption) {
+                    errorOption = $("[data-role=\"" + duplicatedOption.id + "\"");
+                    errorOption.addClass("_error");
+                });
                 return false;
             }
             return true;
@@ -224,8 +226,9 @@ define([
 
                     if (option['is_new'] === true) {
                         if (!attribute.isValidOption(option)) {
-                            throw new Error($.mage.__(
-                                'The value of attribute ""%1"" must be unique').replace("\"%1\"", attribute.label)
+                            throw new Error(
+                                $.mage.__('The value of attribute ""%1"" must be unique')
+                                    .replace("\"%1\"", attribute.label)
                             );
                         }
 
