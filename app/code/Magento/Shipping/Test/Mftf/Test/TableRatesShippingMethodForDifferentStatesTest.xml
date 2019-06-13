@@ -35,6 +35,16 @@
             <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
+            <!-- Rollback config -->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodSystemConfigPage"/>
+            <actionGroup ref="AdminSwitchWebsiteByNameActionGroup" stepKey="AdminSwitchStoreViewToMainWebsite">
+                <argument name="website" value="_defaultWebsite"/>
+            </actionGroup>
+            <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="disableTableRatesShippingMethod">
+                <argument name="status" value="0"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveSystemConfig"/>
+
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
@@ -100,15 +110,5 @@
             <argument name="methodName" value="{{TableRatesWeightVSDestination.methodName}}"/>
             <argument name="price" value="{{TableRatesWeightVSDestination.price}}"/>
         </actionGroup>
-
-        <!-- Rollback config -->
-        <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodSystemConfigPage"/>
-        <actionGroup ref="AdminSwitchWebsiteByNameActionGroup" stepKey="AdminSwitchStoreViewToMainWebsite">
-            <argument name="website" value="_defaultWebsite"/>
-        </actionGroup>
-        <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="disableTableRatesShippingMethod">
-            <argument name="status" value="0"/>
-        </actionGroup>
-        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveSystemConfig"/>
     </test>
 </tests>

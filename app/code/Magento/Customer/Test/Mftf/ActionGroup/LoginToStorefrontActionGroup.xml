@@ -12,7 +12,7 @@
             <argument name="Customer"/>
         </arguments>
         <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
-        <waitForPageLoad time="30" stepKey="waitPageFullyLoaded"/>
+        <waitForPageLoad stepKey="waitPageFullyLoaded"/>
         <waitForElementVisible selector="{{StorefrontCustomerSignInFormSection.emailField}}" stepKey="waitFormAppears"/>
         <fillField userInput="{{Customer.email}}" selector="{{StorefrontCustomerSignInFormSection.emailField}}" stepKey="fillEmail"/>
         <fillField userInput="{{Customer.password}}" selector="{{StorefrontCustomerSignInFormSection.passwordField}}" stepKey="fillPassword"/>
