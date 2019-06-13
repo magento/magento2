@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Add Downloadable Product"/>
             <title value="Downloadable Product created on Single stock mode by Admin user"/>
-            <description value="Downloadable Product created on Single stock mode by Admin user"/>
-            <testCaseId value="MSI-1748"/>
+            <description value="Downloadable Product created on Single stock mode by Admin user."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/912246/scenarios/1698360"/>
             <severity value="MAJOR"/>
             <group value="msi"/>
             <group value="single_mode"/>

@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Assign source to products"/>
             <title value="Mass action 'Assign product sources' for simple products"/>
-            <description value="You should be able to assign sources to simple products via mass action"/>
-            <testCaseId value="MSI-1492"/>
+            <description value="You should be able to assign sources to simple products via mass action."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/611878/scenarios/2079936"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

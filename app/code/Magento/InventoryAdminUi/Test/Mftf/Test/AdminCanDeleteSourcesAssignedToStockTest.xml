@@ -13,7 +13,7 @@
             <stories value="Delete Sources from Stocks"/>
             <title value="Delete Sources Assigned to Stock"/>
             <description value="You should be able to Delete Sources that are assigned to a Stock."/>
-            <testCaseId value="MSI-951"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/910527/scenarios/1499556"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

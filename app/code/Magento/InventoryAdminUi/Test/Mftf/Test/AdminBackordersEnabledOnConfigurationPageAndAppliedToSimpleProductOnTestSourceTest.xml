@@ -12,8 +12,8 @@
         <annotations>
             <stories value="CatalogInventory stock option"/>
             <title value="Backorders enabled on Configuration page and applied from Homepage to Simple product on Test source"/>
-            <description value="In test source you should be able to create order with simple product and enabled backorders config"/>
-            <testCaseId value="MSI-1557"/>
+            <description value="In test source you should be able to create order with simple product and enabled backorders config."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735256/scenarios/1631796"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

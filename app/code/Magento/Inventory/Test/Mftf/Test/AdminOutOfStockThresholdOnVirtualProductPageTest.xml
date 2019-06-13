@@ -13,7 +13,7 @@
             <stories value="Admin user apply 'Only X left Treshhold' for Virtual product on Single stock mode"/>
             <title value="Admin user apply 'Only X left Treshhold' for Virtual product on Single stock mode"/>
             <description value="Admin user apply 'Only X left Treshhold' for Virtual product on Single stock mode."/>
-            <testCaseId value="MSI-1578"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/911781/scenarios/2075925"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>

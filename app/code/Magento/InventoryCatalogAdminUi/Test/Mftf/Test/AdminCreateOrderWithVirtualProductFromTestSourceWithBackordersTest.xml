@@ -13,7 +13,7 @@
             <stories value="Sales-Backorder"/>
             <title value="Admin user set negative 'Out-of-Stock Threshold' in combination with backorders for virtual product on Test source"/>
             <description value="You should be able to create order from Test Source with backorders in combination with negative out of stock threshold."/>
-            <testCaseId value="MSI-1476"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/607680/scenarios/2043869"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

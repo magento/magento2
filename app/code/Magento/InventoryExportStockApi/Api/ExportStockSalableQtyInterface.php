@@ -14,14 +14,16 @@ namespace Magento\InventoryExportStockApi\Api;
 interface ExportStockSalableQtyInterface
 {
     /**
-     * Provides stock export data
+     * Export product stock data filtered by search criteria.
      *
+     * @param string $salesChannelType
+     * @param string $salesChannelCode
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @param string $websiteCode
      * @return \Magento\InventoryExportStockApi\Api\Data\ExportStockSalableQtySearchResultInterface
      */
     public function execute(
-        \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria,
-        string $websiteCode
+        string $salesChannelType,
+        string $salesChannelCode,
+        \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
     ): \Magento\InventoryExportStockApi\Api\Data\ExportStockSalableQtySearchResultInterface;
 }

@@ -12,7 +12,7 @@
             <stories value="Cache Validation"/>
             <title value="Cache validation when Virtual product on Test Stock totally sold."/>
             <description value="Cache validation when Virtual product on Test Stock totally sold."/>
-            <testCaseId value="MSI-1746"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457015/scenarios/2197288"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

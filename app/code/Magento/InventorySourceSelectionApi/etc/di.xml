@@ -11,7 +11,8 @@
                 type="Magento\InventorySourceSelectionApi\Model\GetSourceSelectionAlgorithmList"/>
     <preference for="Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface"
                 type="Magento\InventorySourceSelectionApi\Model\SourceSelectionService"/>
-
+    <preference for="Magento\InventorySourceSelectionApi\Model\GetSourceItemQtyAvailableInterface"
+                type="Magento\InventorySourceSelectionApi\Model\GetSourceItemQtyAvailableService"/>
     <type name="Magento\InventorySourceSelectionApi\Model\GetSourceSelectionAlgorithmList">
         <arguments>
             <argument name="availableAlgorithms" xsi:type="array">

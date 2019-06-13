@@ -5,9 +5,13 @@
  */
 -->
 <button class="action-delete"
-        attr="{'data-action': 'remove_row', title: $t($parent.deleteButtonLabel)}"
-        click="$data.deleteRecord.bind($data, $record().index, $record().recordId)"
-        disable="disabled">
+        attr="{'data-action': 'remove_row', title: $t($parent.deleteButtonLabel), 'disabled': $data.disabled}"
+        data-bind="
+            click: $data.deleteRecord.bind($data, $record().index, $record().recordId),
+            attr: {
+                title: $parent.deleteButtonLabel
+            }
+        ">
     <span translate="$parent.deleteButtonLabel"></span>
     <small if="$data.notice" html="notice" />
 </button>

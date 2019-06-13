@@ -10,8 +10,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Suite/etc/suiteSchema.xsd">
     <suite name="MSI_Single_Mode">
         <before>
-            <magentoCLI stepKey="enableBackup" command = "config:set system/backup/functionality_enabled 1" />
-            <magentoCLI stepKey="dbBackup" command="setup:backup" arguments="--db" />
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
             <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
             <magentoCLI stepKey="enableStockManagement" command="config:set cataloginventory/item_options/manage_stock 1"/>
@@ -25,13 +23,10 @@
         </exclude>
         <after>
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
-            <magentoCLI stepKey="disableBackup" command = "config:set system/backup/functionality_enabled 0" />
         </after>
     </suite>
     <suite name="MSI_Multi_Mode">
         <before>
-            <magentoCLI stepKey="enableBackup" command = "config:set system/backup/functionality_enabled 1" />
-            <magentoCLI stepKey="dbBackup" command="setup:backup" arguments="--db" />
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
             <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
             <magentoCLI stepKey="enableStockManagement" command="config:set cataloginventory/item_options/manage_stock 1"/>
@@ -45,15 +40,13 @@
         </exclude>
         <after>
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
-            <magentoCLI stepKey="disableBackup" command = "config:set system/backup/functionality_enabled 0" />
         </after>
     </suite>
     <suite name="MSI_Sort_Order_Tests">
         <before>
-            <magentoCLI stepKey="enableBackup" command = "config:set system/backup/functionality_enabled 1" />
-            <magentoCLI stepKey="dbBackup" command="setup:backup" arguments="--db" />
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
             <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
+            <magentoCLI stepKey="enableStockManagement" command="config:set cataloginventory/item_options/manage_stock 1"/>
         </before>
         <include>
             <group name="sort_order_test"/>
@@ -65,7 +58,6 @@
         </exclude>
         <after>
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
-            <magentoCLI stepKey="disableBackup" command = "config:set system/backup/functionality_enabled 0" />
         </after>
     </suite>
 </suites>

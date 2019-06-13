@@ -13,7 +13,7 @@
             <stories value="Configuration Settings"/>
             <title value="Out-of-Stock Threshold on the Configuration page functions correctly"/>
             <description value="You should be able to set the Out-of-Stock Threshold on the Configuration page."/>
-            <testCaseId value="MSI-1244"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/409121/scenarios/1500622"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

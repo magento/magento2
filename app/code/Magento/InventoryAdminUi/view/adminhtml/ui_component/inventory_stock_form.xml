@@ -160,11 +160,15 @@
                         <visible>false</visible>
                     </settings>
                 </field>
-                <field name="actionDelete" formElement="actionDelete" sortOrder="40">
+                <actionDelete name="actionDelete" template="Magento_InventoryCatalogAdminUi/stock/assign-sources/action-delete">
+                    <argument name="data" xsi:type="array" />
                     <settings>
                         <label translate="true">Unassign</label>
+                        <elementTmpl>Magento_InventoryCatalogAdminUi/stock/assign-sources/action-delete</elementTmpl>
+                        <dataType>text</dataType>
+                        <componentType>actionDelete</componentType>
                     </settings>
-                </field>
+                </actionDelete>
             </container>
         </dynamicRows>
         <modal name="assign_sources_modal">

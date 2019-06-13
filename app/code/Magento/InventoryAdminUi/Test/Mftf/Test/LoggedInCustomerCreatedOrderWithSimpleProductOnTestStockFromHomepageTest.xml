@@ -5,9 +5,9 @@
     <test name="LoggedInCustomerCreatedOrderWithSimpleProductOnTestStockFromHomepage">
         <annotations>
             <stories value="Logged In Customer created Order with Simple product on Test stock from Homepage"/>
-            <title value="Logged In Customer created Order with Simple product on Test stock from Homepage"/>
+            <title value="Logged In Customer created Order with Simple product on Test stock from Homepage."/>
             <description value="/scenarios/1408755"/>
-            <testCaseId value="MSI-2055"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419534/scenarios/1408755"/>
             <severity value="BLOCKER"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -110,6 +110,10 @@
         </actionGroup>
         <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$createSource.source[name]$$)}}" userInput="100" stepKey="checkProductSourceQtyAfterPlaceOrder"/>
         <see selector="{{AdminProductGridSection.productSalableQty('1',$$createStock.stock[name]$$)}}" userInput="95" stepKey="checkSalableQtyAfterPlaceOrder"/>
+
+        <!--Admin area Reorder-->
+        <comment userInput="Admin - Reorder" stepKey="ReorderFromAdmin"/>
+
 
     </test>
 </tests>

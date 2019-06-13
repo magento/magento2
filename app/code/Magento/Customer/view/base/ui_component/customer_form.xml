@@ -74,6 +74,17 @@
                 <visible>false</visible>
             </settings>
         </field>
+        <field name="confirmation" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">customer</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+            </settings>
+        </field>
         <field name="created_in" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

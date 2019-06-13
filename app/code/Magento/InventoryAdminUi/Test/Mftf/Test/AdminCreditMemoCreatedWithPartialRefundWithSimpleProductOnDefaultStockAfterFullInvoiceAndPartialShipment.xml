@@ -12,8 +12,8 @@
         <annotations>
             <stories value="MSI Credit Memo"/>
             <title value="Credit Memo created with partial refund with Simple product on Default stock after full invoice and partial shipment"/>
-            <description value="Credit Memo created with partial refund with Simple product on Default stock after full invoice and partial shipment"/>
-            <testCaseId value="MSI-1976"/>
+            <description value="Credit Memo created with partial refund with Simple product on Default stock after full invoice and partial shipment."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735125/scenarios/2482675"/>
             <severity value="BLOCKER"/>
             <group value="msi"/>
             <group value="multi_mode"/>

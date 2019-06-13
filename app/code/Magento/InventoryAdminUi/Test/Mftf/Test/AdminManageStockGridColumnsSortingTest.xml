@@ -13,7 +13,7 @@
             <stories value="Columns sorting order changed by Admin user"/>
             <title value="Columns sorting order changed in Manage Stocks grid by Admin user"/>
             <description value="You should be able to Change Columns Sorting Order in Manage Stock grid."/>
-            <testCaseId value="MSI-935"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/910527/scenarios/1408740"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="sort_order_test"/>
