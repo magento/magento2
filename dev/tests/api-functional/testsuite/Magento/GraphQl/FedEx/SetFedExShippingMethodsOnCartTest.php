@@ -15,7 +15,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test for setting "FedEx" shipping method on cart
- * 
+ *
  * | Code                   | Label
  * --------------------------------------
  * | FEDEX_GROUND           | Ground
