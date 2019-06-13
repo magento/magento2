@@ -713,7 +713,8 @@ define([
                 $wrapper = $this.parents('.' + $widget.options.classes.attributeOptionsWrapper),
                 $label = $parent.find('.' + $widget.options.classes.attributeSelectedOptionLabelClass),
                 attributeId = $parent.attr('attribute-id'),
-                $input = $parent.find('.' + $widget.options.classes.attributeInput);
+                $input = $parent.find('.' + $widget.options.classes.attributeInput),
+                checkAdditionalData = JSON.parse(this.options.jsonSwatchConfig[attributeId]['additional_data']);
 
             if ($widget.inProductList) {
                 $input = $widget.productForm.find(
@@ -753,7 +754,10 @@ define([
                     $widget.options.jsonConfig.optionPrices
                 ]);
 
-            $widget._loadMedia();
+            if (checkAdditionalData['update_product_preview_image'] === '1') {
+                $widget._loadMedia();
+            }
+
             $input.trigger('change');
         },
 
