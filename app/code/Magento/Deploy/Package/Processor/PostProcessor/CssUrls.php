@@ -124,8 +124,21 @@ class CssUrls implements ProcessorInterface
                         . str_repeat('../', count(explode('/', $cssFileBasePath)))
                         . $this->minification->addMinifiedSign($matchedFile->getDeployedFilePath())
                 ];
+            } else {
+                $filePathInBase = $package->getArea() .
+                    '/' . Package::BASE_THEME .
+                    '/' . $package->getLocale() .
+                    '/' . $lookupFileId;
+                if ($this->staticDir->isReadable($this->minification->addMinifiedSign($filePathInBase))) {
+                    $urlMap[$url][] = [
+                        'filePath' => $this->minification->addMinifiedSign($packagePath . '/' . $cssFilePath),
+                        'replace' => str_repeat('../', count(explode('/', $cssFileBasePath)) + 4)
+                            . $this->minification->addMinifiedSign($filePathInBase),
+                    ];
+                }
             }
         }
+
         return $urlMap;
     }
 

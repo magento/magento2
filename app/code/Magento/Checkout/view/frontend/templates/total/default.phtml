@@ -32,7 +32,8 @@
         <?php endif; ?>
             <span>
                 <?= $block->escapeHtml(
-                    $this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($block->getTotal()->getValue())
+                    $this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($block->getTotal()->getValue()),
+                    ['span']
                 ) ?>
             </span>
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()) :?>
