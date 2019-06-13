@@ -50,7 +50,7 @@ $numColumns = count($block->getColumns());
         <?php foreach ($block->getCollection() as $_index => $_item) : ?>
             <?php if ($block->hasMultipleRows($_item)) :?>
                 <?php $block->updateItemByFirstMultiRow($_item); ?>
-                <tr title="<?= $block->escapeHtmlAttr($block->getRowUrl($_item)) ?>" data-role="row"
+                <tr title="<?= $block->escapeUrl($block->getRowUrl($_item)) ?>" data-role="row"
                     <?php if ($_class = $block->getRowClass($_item)) :?> class="<?= $block->escapeHtmlAttr($_class) ?>"<?php endif;?>
                 ><?php $i = 0; foreach ($block->getColumns() as $_column) :
                     if ($block->shouldRenderCell($_item, $_column)) :
@@ -101,7 +101,7 @@ $numColumns = count($block->getColumns());
                     </tr>
                 <?php endif; ?>
             <?php else : ?>
-                <tr data-role="row" title="<?= $block->escapeHtmlAttr($block->getRowUrl($_item)) ?>"<?php if ($_class = $block->getRowClass($_item)) : ?>
+                <tr data-role="row" title="<?= $block->escapeUrl($block->getRowUrl($_item)) ?>"<?php if ($_class = $block->getRowClass($_item)) : ?>
                     class="<?= $block->escapeHtmlAttr($_class) ?>"<?php endif;?>
                 >
                     <?php $i = 0; foreach ($block->getColumns() as $_column) : ?>
