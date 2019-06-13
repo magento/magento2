@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyThatMessageOnlyZeroLeftNotAppearedOnSimpleProductPageOnFrontendTest">
+        <annotations>
+            <stories value="Simple Product created on Test source with Qty = 0 and status 'Out of stock"/>
+            <title value="Sets Only X left Threshold = 0 in Configuration, not provide message 'Only 0 left"/>
+            <description value="Verify that message 'Only 0 left' not appeared on Simple product page on frontend"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/908790/scenarios/3041042"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <comment userInput="Turn on 'out of stock' config" stepKey="onOutOfStockConfig"/>
+            <magentoCLI command="config:set {{TurnOnOutOfStockConfig.path}} {{TurnOnOutOfStockConfig.value}}"
+                        stepKey="displayOutOfStockYes"/>
+            <comment userInput="Fill config 'Only X left Threshold'." stepKey="fillConfigComment"/>
+            <magentoCLI command="config:set {{SetOnlyXLeftThreshold.path}} {{SetOnlyXLeftThreshold.value}}"
+                        stepKey="fillConfigValue"/>
+            <createData entity="SimpleMsiProduct" stepKey="createSimpleProduct">
+                <field key="quantity">1</field>
+            </createData>
+            <createData entity="_minimalSource" stepKey="createSource"/>
+            <createData entity="BasicMsiStock1" stepKey="createStock"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminGoToStockGridFilterResultsByInputEditStock"
+                         stepKey="goToStockGridFilterResultsByInputEditStock1">
+                <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+                <argument name="filter_value" value="$$createStock.stock[name]$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock1">
+                <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+                <argument name="filter_value" value="$$createSource.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinue"/>
+            <seeElement selector=".success" stepKey="seeSuccessMessage"/>
+            <magentoCLI command="indexer:reindex" stepKey="doReindex"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createStock" stepKey="deleteStock"/>
+            <comment userInput="Disable created source." stepKey="disableCreatedSourceComment"/>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$createSource.source[source_code]$$"/>
+            </actionGroup>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <magentoCLI command="config:set {{TurnOffOutOfStockConfig.path}} {{TurnOnOutOfStockConfig.value}}"
+                        stepKey="displayOutOfStockNo"/>
+        </after>
+
+        <actionGroup ref="goToProductPageViaID" stepKey="goToProduct1">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock"
+                      stepKey="setSimpleProductOutOfStockStatus"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="0.0" stepKey="fillSourceQtyField"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseFourthProductForm"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStorefront">
+            <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <dontSee selector=".availability.only" stepKey="assertTextNotDisplayed"/>
+    </test>
+</tests>
+
