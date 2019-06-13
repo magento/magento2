@@ -6,7 +6,7 @@
 namespace Magento\Sales\Block\Adminhtml;
 
 use Magento\Backend\Block\Template\Context;
-use Magento\Customer\Controller\RegistryConstants;
+use Magento\Customer\Model\CustomerIdProvider;
 use Magento\Framework\Registry;
 use Magento\Ui\Component\Layout\Tabs\TabWrapper;
 
@@ -18,28 +18,24 @@ use Magento\Ui\Component\Layout\Tabs\TabWrapper;
 class ShoppingCartsTab extends TabWrapper
 {
     /**
-     * Core registry
-     *
-     * @var Registry
-     */
-    private $coreRegistry;
-
-    /**
      * @var bool
      */
     protected $isAjaxLoaded = true;
 
     /**
-     * Constructor
-     *
+     * @var CustomerIdProvider
+     */
+    private $customerIdProvider;
+
+    /**
      * @param Context $context
-     * @param Registry $registry
+     * @param CustomerIdProvider $customerIdProvider
      * @param array $data
      */
-    public function __construct(Context $context, Registry $registry, array $data = [])
+    public function __construct(Context $context, CustomerIdProvider $customerIdProvider, array $data = [])
     {
-        $this->coreRegistry = $registry;
         parent::__construct($context, $data);
+        $this->customerIdProvider = $customerIdProvider;
     }
 
     /**
@@ -47,7 +43,7 @@ class ShoppingCartsTab extends TabWrapper
      */
     public function canShowTab()
     {
-        return $this->coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
+        return $this->customerIdProvider->getCustomerId();
     }
 
     /**
