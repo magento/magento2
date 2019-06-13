@@ -55,7 +55,11 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
                 'file.jpg'
             ],
             [
-                'a.' . str_repeat('b', 100),
+                'a.' . str_repeat('b', 88),
+                'a.' . str_repeat('b', 88)
+            ],
+            [
+                'a.' . str_repeat('b', 89),
                 true
             ]
         ];
