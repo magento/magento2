@@ -39,8 +39,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  * | INT_15    | First-Class Package International Service
  * | INT_16    | Priority Mail International Small Flat Rate Box
  * | INT_20    | Priority Mail International Small Flat Rate Envelope
- *
- * This class does not cover another USPS shipping methods (they depends on address and sandbox settings)
  */
 class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
 {
