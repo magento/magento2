@@ -5,9 +5,8 @@
  */
 namespace Magento\Framework\Session;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Session\Config\ConfigInterface;
+use \Magento\Framework\Exception\SessionException;
 
 /**
  * Magento session save handler
@@ -20,13 +19,6 @@ class SaveHandler implements SaveHandlerInterface
      * @var \SessionHandler
      */
     protected $saveHandlerAdapter;
-
-    /**
-     * Config
-     *
-     * @var ConfigInterface
-     */
-    private $config;
 
     /**
      * Constructor
@@ -47,15 +39,12 @@ class SaveHandler implements SaveHandlerInterface
          * Otherwise, try to read PHP settings for session.save_handler value. Otherwise, use 'files' as default.
          */
         $saveMethod = $sessionConfig->getOption('session.save_handler') ?: $default;
-        $this->setSaveHandler($saveMethod);
 
         try {
-            $connection = $saveHandlerFactory->create($saveMethod);
+            $this->saveHandlerAdapter = $saveHandlerFactory->create($saveMethod);
         } catch (SessionException $e) {
-            $connection = $saveHandlerFactory->create($default);
-            $this->setSaveHandler($default);
+            $this->saveHandlerAdapter = $saveHandlerFactory->create($default);
         }
-        $this->saveHandlerAdapter = $connection;
     }
 
     /**
@@ -125,34 +114,5 @@ class SaveHandler implements SaveHandlerInterface
     public function gc($maxLifetime)
     {
         return $this->saveHandlerAdapter->gc($maxLifetime);
-    }
-
-    /**
-     * Get config
-     *
-     * @return ConfigInterface
-     * @deprecated 100.0.8
-     */
-    private function getConfig()
-    {
-        if ($this->config === null) {
-            $this->config = ObjectManager::getInstance()->get(ConfigInterface::class);
-        }
-        return $this->config;
-    }
-
-    /**
-     * Set session.save_handler option
-     *
-     * @param string $saveHandler
-     * @return $this
-     */
-    private function setSaveHandler($saveHandler)
-    {
-        if ($saveHandler === 'db' || $saveHandler === 'redis') {
-            $saveHandler = 'user';
-        }
-        $this->getConfig()->setOption('session.save_handler', $saveHandler);
-        return $this;
     }
 }
