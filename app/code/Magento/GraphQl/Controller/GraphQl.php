@@ -13,7 +13,6 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\Response;
@@ -21,6 +20,7 @@ use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\GraphQl\Query\Fields as QueryFields;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 
 /**
  * Front controller for web API GraphQL area.
@@ -57,9 +57,9 @@ class GraphQl implements FrontControllerInterface
     private $graphQlError;
 
     /**
-     * @var ContextInterface
+     * @var ContextFactoryInterface
      */
-    private $resolverContext;
+    private $contextFactory;
 
     /**
      * @var HttpRequestProcessor
@@ -87,7 +87,7 @@ class GraphQl implements FrontControllerInterface
      * @param SerializerInterface $jsonSerializer
      * @param QueryProcessor $queryProcessor
      * @param ExceptionFormatter $graphQlError
-     * @param ContextInterface $resolverContext
+     * @param ContextFactoryInterface $contextFactory
      * @param HttpRequestProcessor $requestProcessor
      * @param QueryFields $queryFields
      * @param JsonFactory|null $jsonFactory
@@ -100,7 +100,7 @@ class GraphQl implements FrontControllerInterface
         SerializerInterface $jsonSerializer,
         QueryProcessor $queryProcessor,
         ExceptionFormatter $graphQlError,
-        ContextInterface $resolverContext,
+        ContextFactoryInterface $contextFactory,
         HttpRequestProcessor $requestProcessor,
         QueryFields $queryFields,
         JsonFactory $jsonFactory = null,
@@ -111,7 +111,7 @@ class GraphQl implements FrontControllerInterface
         $this->jsonSerializer = $jsonSerializer;
         $this->queryProcessor = $queryProcessor;
         $this->graphQlError = $graphQlError;
-        $this->resolverContext = $resolverContext;
+        $this->contextFactory = $contextFactory;
         $this->requestProcessor = $requestProcessor;
         $this->queryFields = $queryFields;
         $this->jsonFactory = $jsonFactory ?: ObjectManager::getInstance()->get(JsonFactory::class);
@@ -144,7 +144,7 @@ class GraphQl implements FrontControllerInterface
             $result = $this->queryProcessor->process(
                 $schema,
                 $query,
-                $this->resolverContext,
+                $this->contextFactory->create(),
                 $data['variables'] ?? []
             );
         } catch (\Exception $error) {
