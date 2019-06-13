@@ -52,13 +52,28 @@
 
         <!--Go to Product edit page-->
         <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToProductEditPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <!--Click on attribute dropdown-->
-        <click selector="{{AdminProductFormSection.customAttributeDropdownField($$createDropdownProductAttribute.attribute[attribute_code]$$)}}" stepKey="clickOnAttributeDropdown"/>
+        <scrollToTopOfPage stepKey="scrollToShowAttribute"/>
+
+        <!-- Grab attribute dropdown options -->
+        <grabMultiple selector="{{AdminProductFormSection.customAttributeSelectOptions($$createDropdownProductAttribute.attribute[attribute_code]$$)}}" stepKey="clickOnAttributeDropdown" />
+
         <!--Check attribute dropdown options-->
-        <see selector="{{AdminProductFormSection.customAttributeDropdownField($$createDropdownProductAttribute.attribute[attribute_code]$$)}}" userInput="admin_option_1" stepKey="seeFirstAdminOption"/>
-        <see selector="{{AdminProductFormSection.customAttributeDropdownField($$createDropdownProductAttribute.attribute[attribute_code]$$)}}" userInput="admin_option_2" stepKey="seeSecondAdminOption"/>
-        <dontSee selector="{{AdminProductFormSection.customAttributeDropdownField($$createDropdownProductAttribute.attribute[attribute_code]$$)}}" userInput="option1" stepKey="dontSeeFirstStoreOption"/>
-        <dontSee selector="{{AdminProductFormSection.customAttributeDropdownField($$createDropdownProductAttribute.attribute[attribute_code]$$)}}" userInput="option2" stepKey="dontSeeSecondStoreOption"/>
+        <assertContains stepKey="seeFirstAdminOption">
+            <actualResult type="variable">clickOnAttributeDropdown</actualResult>
+            <expectedResult type="string">admin_option_1</expectedResult>
+        </assertContains>
+        <assertContains stepKey="seeSecondAdminOption">
+            <actualResult type="variable">clickOnAttributeDropdown</actualResult>
+            <expectedResult type="string">admin_option_2</expectedResult>
+        </assertContains>
+
+        <assertNotContains stepKey="dontSeeFirstStoreOption">
+            <actualResult type="variable">clickOnAttributeDropdown</actualResult>
+            <expectedResult type="string">option1</expectedResult>
+        </assertNotContains>
+        <assertNotContains stepKey="dontSeeSecondStoreOption">
+            <actualResult type="variable">clickOnAttributeDropdown</actualResult>
+            <expectedResult type="string">option2</expectedResult>
+        </assertNotContains>
     </test>
 </tests>

@@ -11,6 +11,9 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes;
 
+/**
+ * Admin product attribute search block
+ */
 class Search extends \Magento\Backend\Block\Widget
 {
     /**
@@ -62,13 +65,15 @@ class Search extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get selector options
+     *
      * @return array
      */
     public function getSelectorOptions()
     {
         $templateId = $this->_coreRegistry->registry('product')->getAttributeSetId();
         return [
-            'source' => $this->getUrl('catalog/product/suggestAttributes'),
+            'source' => $this->escapeUrl($this->getUrl('catalog/product/suggestAttributes')),
             'minLength' => 0,
             'ajaxOptions' => ['data' => ['template_id' => $templateId]],
             'template' => '[data-template-for="product-attribute-search-' . $this->getGroupId() . '"]',
@@ -82,6 +87,7 @@ class Search extends \Magento\Backend\Block\Widget
      * @param string $labelPart
      * @param int $templateId
      * @return array
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getSuggestedAttributes($labelPart, $templateId = null)
     {
@@ -95,7 +101,9 @@ class Search extends \Magento\Backend\Block\Widget
             ['like' => $escapedLabelPart]
         );
 
-        $collection->setExcludeSetFilter($templateId ?: $this->getRequest()->getParam('template_id'))->setPageSize(20);
+        $paramTemplateId = $this->getRequest()->getParam('template_id');
+        $paramTemplateId = is_int($paramTemplateId) ? $paramTemplateId : null;
+        $collection->setExcludeSetFilter($templateId ?: $paramTemplateId)->setPageSize(20);
 
         $result = [];
         foreach ($collection->getItems() as $attribute) {
@@ -110,6 +118,8 @@ class Search extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get add attribute url
+     *
      * @return string
      */
     public function getAddAttributeUrl()

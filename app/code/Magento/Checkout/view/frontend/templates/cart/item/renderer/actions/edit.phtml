@@ -4,16 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit */
 ?>
-<?php if ($block->isProductVisibleInSiteVisibility()): ?>
+<?php if ($block->isProductVisibleInSiteVisibility()) :?>
     <a class="action action-edit"
-       href="<?= /* @escapeNotVerified */ $block->getConfigureUrl() ?>"
-       title="<?= $block->escapeHtml(__('Edit item parameters')) ?>">
-        <span>
-            <?= /* @escapeNotVerified */ __('Edit') ?>
-        </span>
-   </a>
+       href="<?= $block->escapeUrl($block->getConfigureUrl()) ?>"
+       title="<?= $block->escapeHtmlAttr(__('Edit item parameters')) ?>">
+        <span><?= $block->escapeHtml(__('Edit')) ?></span>
+    </a>
 <?php endif ?>
