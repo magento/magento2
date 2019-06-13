@@ -13,7 +13,7 @@ namespace Magento\Checkout\Block\Cart;
 class Link extends \Magento\Framework\View\Element\Html\Link
 {
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $_moduleManager;
 
@@ -24,14 +24,14 @@ class Link extends \Magento\Framework\View\Element\Html\Link
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param array $data
      * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Checkout\Helper\Cart $cartHelper,
         array $data = []
     ) {
@@ -41,6 +41,8 @@ class Link extends \Magento\Framework\View\Element\Html\Link
     }
 
     /**
+     * Get label.
+     *
      * @return string
      * @codeCoverageIgnore
      */
@@ -50,6 +52,8 @@ class Link extends \Magento\Framework\View\Element\Html\Link
     }
 
     /**
+     * Get href.
+     *
      * @return string
      * @codeCoverageIgnore
      */

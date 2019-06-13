@@ -8,15 +8,19 @@ declare(strict_types=1);
 namespace Magento\MediaStorage\Console\Command;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\MediaStorage\Service\ImageResize;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Helper\ProgressBarFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Class for catalog image resizing via CLI
+ * Resizes product images according to theme view definitions.
+ *
+ * @package Magento\MediaStorage\Console\Command
  */
 class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
 {
@@ -31,24 +35,28 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     private $appState;
 
     /**
-     * @var ObjectManagerInterface
+     * @var ProgressBarFactory
      */
-    private $objectManager;
+    private $progressBarFactory;
 
     /**
      * @param State $appState
      * @param ImageResize $resize
      * @param ObjectManagerInterface $objectManager
+     * @param ProgressBarFactory $progressBarFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         State $appState,
         ImageResize $resize,
-        ObjectManagerInterface $objectManager
+        ObjectManagerInterface $objectManager,
+        ProgressBarFactory $progressBarFactory = null
     ) {
         parent::__construct();
         $this->resize = $resize;
         $this->appState = $appState;
-        $this->objectManager = $objectManager;
+        $this->progressBarFactory = $progressBarFactory
+            ?: ObjectManager::getInstance()->get(ProgressBarFactory::class);
     }
 
     /**
@@ -62,6 +70,8 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
 
     /**
      * @inheritdoc
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -71,8 +81,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
             $generator = $this->resize->resizeFromThemes();
 
             /** @var ProgressBar $progress */
-            $progress = $this->objectManager->create(
-                ProgressBar::class,
+            $progress = $this->progressBarFactory->create(
                 [
                     'output' => $output,
                     'max' => $generator->current()
@@ -86,8 +95,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
                 $progress->setOverwrite(false);
             }
 
-            // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
-            for (; $generator->valid(); $generator->next()) {
+            while ($generator->valid()) {
                 $resizeInfo = $generator->key();
                 $error = $resizeInfo['error'];
                 $filename = $resizeInfo['filename'];
@@ -98,6 +106,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
 
                 $progress->setMessage($filename);
                 $progress->advance();
+                $generator->next();
             }
         } catch (\Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
@@ -114,5 +123,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
         } else {
             $output->writeln("<info>Product images resized successfully</info>");
         }
+
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }
