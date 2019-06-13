@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ConfigurableProductCreatedOnSingleStockModeWithEmptyQtyFieldTest">
+        <annotations>
+            <stories value="Admin user create configurable product on Single stock mode with empty Qty field"/>
+            <title value="Empty quantity for configurable product cause fatal error."/>
+            <description value="Check, configurable product can be created with empty quantity field in single stock mode"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/909090/scenarios/3041494"/>
+            <severity value="MAJOR"/>
+            <group value="msi"/>
+            <group value="single_mode"/>
+        </annotations>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <comment userInput="Create Configurable product with qty 0" stepKey="CreateConfigurableProductComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToAdminProductGrid"/>
+        <waitForPageLoad time="30" stepKey="waitForProductGridLoad"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
+        <click selector="{{AdminProductGridActionSection.addTypeProduct('configurable')}}" stepKey="addConfigurableProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForConfigurableProductNewPageLoad"/>
+        <fillField userInput="{{ConfigurableMsiProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName"/>
+        <fillField userInput="{{ConfigurableMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillProductPrice"/>
+        <fillField userInput="{{ConfigurableMsiProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSku"/>
+        <fillField userInput="{{ConfigurableMsiProduct.weight}}" selector="{{AdminConfigurableProductFormSection.productWeight}}" stepKey="fillProductWeight"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableProduct"/>
+
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkProductSavedMessage"/>
+    </test>
+</tests>

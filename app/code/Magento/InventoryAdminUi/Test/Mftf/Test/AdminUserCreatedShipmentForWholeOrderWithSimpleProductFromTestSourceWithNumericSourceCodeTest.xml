@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUserCreatedShipmentForWholeOrderWithSimpleProductFromTestSourceWithNumericSourceCodeTest">
+        <annotations>
+            <title value="Admin user created shipment for whole order with Simple product from Test source with numeric source code"/>
+            <description value="Check sources with numeric source code can be used for shipment creation."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735286/scenarios/3041438"/>
+            <severity value="MAJOR"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="customStock"/>
+            <createData entity="FullSource1" stepKey="customSource">
+                <field key="source_code">12345</field>
+            </createData>
+            <createData entity="FullSource2" stepKey="customSource2"/>
+            <createData entity="SimpleMsiProduct" stepKey="createSimpleProduct"/>
+            <createData entity="Msi_US_Customer" stepKey="customer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminGoToStockGridFilterResultsByInputEditStock"
+                         stepKey="goToStockGridFilterResultsByInputEditStock1">
+                <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+                <argument name="filter_value" value="$$customStock.stock[name]$$"/>
+            </actionGroup>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website"
+                          stepKey="selectWebsiteAsSalesChannelForCustomStock"/>
+            <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock1">
+                <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+                <argument name="filter_value" value="$$customSource.source[name]$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock2">
+                <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+                <argument name="filter_value" value="$$customSource2.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinue"/>
+            <seeElement selector=".success" stepKey="seeSuccessMessage"/>
+            <magentoCLI command="indexer:reindex" stepKey="doReindex"/>
+        </before>
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+        <actionGroup ref="goToProductPageViaID" stepKey="goToProduct1">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
+                                    parameterArray="[$$category.name$$]" requiredAction="true"
+                                    stepKey="searchAndSelectCategoryForSimpleProduct"/>
+        <click selector="{{AdminProductSourcesGrid.rowDelete('0')}}" stepKey="deleteDefaultSourceFromCreatedProduct"/>
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct"
+                     stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$customSource.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="2" stepKey="fillSourceQtyField0"/>
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct"
+                     stepKey="AdminOnProductEditPageAssignSourceToProduct2">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$customSource2.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="2" stepKey="fillSourceQtyField1"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseProductForm"/>
+        <!--Login as a Customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!-- Open the Product Page and add the product to shopping cart-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPage"
+                  after="loginToStorefrontAccount"/>
+        <waitForPageLoad stepKey="waitForStoreFrontCategoryPageLoad"/>
+
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($$createSimpleProduct.name$$)}}"
+                       stepKey="moveMouseOverProduct" after="navigateToCategoryPage"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName($$createSimpleProduct.name$$)}}"
+               stepKey="clickAddToCart" after="moveMouseOverProduct"/>
+        <waitForElement selector="{{StorefrontMessagesSection.messageProductAddedToCart($$createSimpleProduct.name$$)}}"
+                        time="30" stepKey="assertMessage" after="clickAddToCart"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}"
+                          dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true"
+                          stepKey="exposeMiniCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="checkMoneyOrderPayment"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <!-- Source Selection -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateShipment"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMask"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}"
+                   stepKey="searchOrderNum"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMask"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShip"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForShipLoadingMask"/>
+
+        <see selector="{{AdminItemsOrderedSection.sku('0')}}" userInput="{{SimpleMsiProduct.sku}}"
+             stepKey="sourceSelectionCheckSku"/>
+        <see selector="{{AdminItemsOrderedSection.qtyToShip('0')}}" userInput="1" stepKey="sourceSelectionCheckQty"/>
+
+        <selectOption selector="{{AdminSelectSourceSection.sourceSelection}}" userInput="$$customSource2.source[name]$$"
+                      stepKey="sourceSelectionSelectSecondSource"/>
+
+        <see selector="{{AdminItemsOrderedSection.availableSourcesSource('0', '1')}}"
+             userInput="$$customSource2.source[name]$$" stepKey="sourceSelectionCheckSourceName"/>
+        <see selector="{{AdminItemsOrderedSection.availableSourcesQtyAvailable('0', '1')}}"
+             userInput="2" stepKey="sourceSelectionCheckSourceQtyAvailable"/>
+        <fillField selector="{{AdminItemsOrderedSection.availableSourcesQtyToDeduct('0', '1')}}" userInput="1"
+                   stepKey="sourceSelectionCheckQtyToDeduct"/>
+
+        <click selector="{{AdminSourceSelectionControlsSection.proceedToShipmentButton}}" stepKey="proceedToShipment"/>
+        <waitForPageLoad stepKey="waitShipmentPage"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="submitShipment"/>
+        <!--Verify message "The shipment has been created." -->
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created."
+             stepKey="seeShipmentCreateSuccess"/>
+
+        <!-- Verify that your Order got status "Processing" -->
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing"
+             stepKey="seeOrderStatus"/>
+
+        <!-- Verify Shipment is present in "Shipments" tab of Order -->
+        <click selector="{{AdminOrderDetailsOrderViewSection.shipments}}" stepKey="clickOrderShipmentsTab"/>
+        <waitForLoadingMaskToDisappear stepKey="waitToSeeShipmentCreated"/>
+        <seeElement selector="{{AdminOrderShipmentsTabSection.gridRow('1')}}" stepKey="seeShipmentInGrid"/>
+    </test>
+</tests>
