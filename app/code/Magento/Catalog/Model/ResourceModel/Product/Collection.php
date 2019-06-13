@@ -23,7 +23,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 
 /**
  * Product collection
@@ -305,9 +305,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $urlFinder;
 
     /**
-     * @var CategoryRepositoryInterface
+     * @var CollectionFactory
      */
-    private $categoryRepository;
+    private $categoryCollectionFactory;
 
     /**
      * Collection constructor
@@ -337,7 +337,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param TableMaintainer|null $tableMaintainer
      * @param PriceTableResolver|null $priceTableResolver
      * @param DimensionFactory|null $dimensionFactory
-     * @param CategoryRepositoryInterface|null $categoryRepository
+     * @param CollectionFactory|null $categoryCollectionFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -367,7 +367,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         TableMaintainer $tableMaintainer = null,
         PriceTableResolver $priceTableResolver = null,
         DimensionFactory $dimensionFactory = null,
-        CategoryRepositoryInterface $categoryRepository = null
+        CollectionFactory $categoryCollectionFactory = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -401,8 +401,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(PriceTableResolver::class);
         $this->dimensionFactory = $dimensionFactory
             ?: ObjectManager::getInstance()->get(DimensionFactory::class);
-        $this->categoryRepository = $categoryRepository ?: ObjectManager::getInstance()
-            ->get(CategoryRepositoryInterface::class);
+        $this->categoryCollectionFactory = $categoryCollectionFactory ?: ObjectManager::getInstance()
+            ->get(CollectionFactory::class);
     }
 
     /**
@@ -2105,7 +2105,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     private function getChildrenCategories(int $categoryId, array $categories): array
     {
-        $category = $this->categoryRepository->get($categoryId);
+        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection */
+        $categoryCollection = $this->categoryCollectionFactory->create();
+        $category = $categoryCollection
+            ->addAttributeToSelect('is_anchor')->addIdFilter([$categoryId])
+            ->load()->getFirstItem();
         $categories[] = $category->getId();
         if ($category->getIsAnchor()) {
             $categoryChildren = $category->getChildren();
