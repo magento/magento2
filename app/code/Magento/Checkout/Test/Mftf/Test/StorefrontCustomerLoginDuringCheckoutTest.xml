@@ -64,6 +64,9 @@
             <argument name="customer" value="CustomerEntityOne"/>
         </actionGroup>
 
+        <!-- Block with email is disappeared -->
+        <dontSeeElement selector="{{CheckoutShippingSection.email}}" stepKey="dontSeeEmailBlock"/>
+
         <!-- Shipping form is pre-filed with first name and last name -->
         <seeInField selector="{{CheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="seeCustomerFirstNameInField"/>
         <seeInField selector="{{CheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="seeCustomerLastNameInField"/>
