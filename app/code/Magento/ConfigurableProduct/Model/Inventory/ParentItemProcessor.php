@@ -40,7 +40,6 @@ class ParentItemProcessor
     private $stockConfiguration;
 
     /**
-     * ParentItemProcessor constructor.
      * @param Configurable $configurableType
      * @param StockItemCriteriaInterfaceFactory $criteriaInterfaceFactory
      * @param StockItemRepositoryInterface $stockItemRepository
