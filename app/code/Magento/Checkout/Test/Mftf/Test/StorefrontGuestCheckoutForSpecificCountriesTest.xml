@@ -42,6 +42,11 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
 
+        <!-- Go to Storefront as Guest. Check that "Log out" button absent on page -->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePage"/>
+        <waitForPageLoad stepKey="waitForPage"/>
+        <dontSeeElement selector="{{StorefrontPanelHeaderSection.customerLogoutLink}}" stepKey="dontSeeLogOutButton"/>
+
         <!-- Add product to cart -->
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
             <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
