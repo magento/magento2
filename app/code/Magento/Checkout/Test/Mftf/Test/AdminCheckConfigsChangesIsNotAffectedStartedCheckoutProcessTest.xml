@@ -41,7 +41,7 @@
         </after>
 
         <!-- Add product to cart -->
-        <actionGroup ref="OpenStorefrontProductPageActionGroup" stepKey="openProductPage">
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
             <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
