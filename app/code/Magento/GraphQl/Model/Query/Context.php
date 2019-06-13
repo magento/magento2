@@ -45,7 +45,6 @@ class Context implements ContextInterface
         $this->extensionAttributes = $extensionAttributes;
     }
 
-
     /**
      * @inheritdoc
      */
