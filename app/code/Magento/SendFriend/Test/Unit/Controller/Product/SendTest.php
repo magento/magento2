@@ -104,7 +104,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Catalog\Api\Data\ProductInterface|\PHPUnit_Framework_MockObject_MockObject $productMock */
         $productMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->setMethods(['isVisibleInCatalog'])
+            ->setMethods(['isVisibleInCatalog', 'isVisibleInSiteVisibility'])
             ->getMockForAbstractClass();
 
         $this->productRepositoryMock->expects($this->once())
@@ -114,6 +114,10 @@ class SendTest extends \PHPUnit\Framework\TestCase
 
         $productMock->expects($this->once())
             ->method('isVisibleInCatalog')
+            ->willReturn(true);
+
+        $productMock->expects($this->once())
+            ->method('isVisibleInSiteVisibility')
             ->willReturn(true);
 
         $this->registryMock->expects($this->once())
@@ -193,7 +197,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Catalog\Api\Data\ProductInterface|\PHPUnit_Framework_MockObject_MockObject $productMock */
         $productMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->setMethods(['isVisibleInCatalog'])
+            ->setMethods(['isVisibleInCatalog', 'isVisibleInSiteVisibility'])
             ->getMockForAbstractClass();
 
         $this->productRepositoryMock->expects($this->once())
@@ -203,6 +207,10 @@ class SendTest extends \PHPUnit\Framework\TestCase
 
         $productMock->expects($this->once())
             ->method('isVisibleInCatalog')
+            ->willReturn(true);
+
+        $productMock->expects($this->once())
+            ->method('isVisibleInSiteVisibility')
             ->willReturn(true);
 
         $this->registryMock->expects($this->once())
@@ -269,7 +277,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Catalog\Api\Data\ProductInterface|\PHPUnit_Framework_MockObject_MockObject $productMock */
         $productMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->setMethods(['isVisibleInCatalog'])
+            ->setMethods(['isVisibleInCatalog', 'isVisibleInSiteVisibility'])
             ->getMockForAbstractClass();
 
         $this->productRepositoryMock->expects($this->once())
@@ -279,6 +287,10 @@ class SendTest extends \PHPUnit\Framework\TestCase
 
         $productMock->expects($this->once())
             ->method('isVisibleInCatalog')
+            ->willReturn(true);
+
+        $productMock->expects($this->once())
+            ->method('isVisibleInSiteVisibility')
             ->willReturn(true);
 
         $this->registryMock->expects($this->once())
@@ -391,7 +403,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Catalog\Api\Data\ProductInterface|\PHPUnit_Framework_MockObject_MockObject $productMock */
         $productMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->setMethods(['isVisibleInCatalog'])
+            ->setMethods(['isVisibleInCatalog', 'isVisibleInSiteVisibility'])
             ->getMockForAbstractClass();
 
         $this->productRepositoryMock->expects($this->once())
@@ -402,6 +414,10 @@ class SendTest extends \PHPUnit\Framework\TestCase
         $productMock->expects($this->once())
             ->method('isVisibleInCatalog')
             ->willReturn(false);
+
+        $productMock->expects($this->once())
+            ->method('isVisibleInSiteVisibility')
+            ->willReturn(true);
 
         /** @var \Magento\Framework\Controller\Result\Forward|\PHPUnit_Framework_MockObject_MockObject $forwardMock */
         $forwardMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Forward::class)
