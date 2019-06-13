@@ -7,7 +7,6 @@ namespace Magento\Sales\Block\Adminhtml;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Customer\Model\CustomerIdProvider;
-use Magento\Framework\Registry;
 use Magento\Ui\Component\Layout\Tabs\TabWrapper;
 
 /**
