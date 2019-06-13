@@ -4,10 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-?>
-<?php
 /**
  * @methods
  *  getTitle() - string
@@ -16,7 +12,7 @@
  *  getForm() - html
  */
 ?>
-<form action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
+<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="accordion">
         <?= $block->getChildHtml('form') ?>
