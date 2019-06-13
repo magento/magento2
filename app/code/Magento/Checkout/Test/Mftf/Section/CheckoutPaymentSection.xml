@@ -51,5 +51,6 @@
         <element name="addressAction" type="button" selector="//div[@class='actions-toolbar']//span[text()='{{action}}']" parameterized="true"/>
         <element name="discount" type="block" selector="tr.totals.discount"/>
         <element name="discountPrice" type="text" selector=".discount .price"/>
+        <element name="shippingMethodInformation" type="text" selector=".ship-via .shipping-information-content"/>
     </section>
 </sections>
