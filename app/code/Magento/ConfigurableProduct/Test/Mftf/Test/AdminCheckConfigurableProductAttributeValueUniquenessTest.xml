@@ -14,7 +14,7 @@
             <title value="Attribute value validation (check for uniqueness) in configurable products"/>
             <description value="Attribute value validation (check for uniqueness) in configurable products"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-99519"/>
+            <testCaseId value="MC-17450"/>
             <useCaseId value="MAGETWO-99443"/>
             <group value="ConfigurableProduct"/>
         </annotations>
