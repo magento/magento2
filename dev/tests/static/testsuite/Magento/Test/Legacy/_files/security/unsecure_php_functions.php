@@ -68,4 +68,8 @@ return [
         'replacement' => '',
         'exclude' => []
     ],
+    'htmlspecialchars' => [
+        'replacement' => '\Magento\Framework\Escaper::escapeHtml',
+        'exclude' => []
+    ],
 ];
