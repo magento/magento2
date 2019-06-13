@@ -197,7 +197,7 @@ class ToolbarMemorizerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test method isMemorizingAllowed.
      *
-     * @aram bool|null $variableValue
+     * @param bool|null $variableValue
      * @param bool $flag
      * @param bool $expected
      * @return void

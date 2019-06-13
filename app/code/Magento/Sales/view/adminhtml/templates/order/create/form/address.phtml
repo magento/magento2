@@ -32,7 +32,7 @@ if ($block->getIsShipping()):
     require(["Magento_Sales/order/create/form"], function(){
 
         order.shippingAddressContainer = '<?= /* @escapeNotVerified */ $_fieldsContainerId ?>';
-        order.setAddresses(<?= /* @escapeNotVerified */ $customerAddressFormatter->getAddressesJson($addressArray) ?>);
+        order.setAddresses(<?= /* @noEscape */ $block->getAddressCollectionJson() ?>);
 
     });
     </script>

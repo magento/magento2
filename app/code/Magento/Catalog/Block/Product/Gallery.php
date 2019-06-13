@@ -16,6 +16,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Data\Collection;
 
 /**
+ * Product gallery block
+ *
  * @api
  * @since 100.0.2
  */
@@ -43,6 +45,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Prepare layout
+     *
      * @return $this
      */
     protected function _prepareLayout()
@@ -52,6 +56,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get product
+     *
      * @return Product
      */
     public function getProduct()
@@ -60,6 +66,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get gallery collection
+     *
      * @return Collection
      */
     public function getGalleryCollection()
@@ -68,13 +76,16 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get current image
+     *
      * @return Image|null
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getCurrentImage()
     {
         $imageId = $this->getRequest()->getParam('image');
         $image = null;
-        if ($imageId) {
+        if (is_int($imageId)) {
             $image = $this->getGalleryCollection()->getItemById($imageId);
         }
 
@@ -85,6 +96,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get image url
+     *
      * @return string
      */
     public function getImageUrl()
@@ -93,6 +106,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get image file
+     *
      * @return mixed
      */
     public function getImageFile()
@@ -115,7 +130,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
                 if ($size[0] > 600) {
                     return 600;
                 } else {
-                    return $size[0];
+                    return (int) $size[0];
                 }
             }
         }
@@ -124,6 +139,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get previous image
+     *
      * @return Image|false
      */
     public function getPreviousImage()
@@ -143,6 +160,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get next image
+     *
      * @return Image|false
      */
     public function getNextImage()
@@ -166,6 +185,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get previous image url
+     *
      * @return false|string
      */
     public function getPreviousImageUrl()
@@ -178,6 +199,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get next image url
+     *
      * @return false|string
      */
     public function getNextImageUrl()

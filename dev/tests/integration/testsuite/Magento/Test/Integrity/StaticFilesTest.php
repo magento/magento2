@@ -51,7 +51,7 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * Scan references to files from other static files and assert they are correct
      *
-     * The CSS or LESS files may refer to other resources using @import or url() notation
+     * The CSS or LESS files may refer to other resources using `import` or url() notation
      * We want to check integrity of all these references
      * Note that the references may have syntax specific to the Magento preprocessing subsystem
      *
