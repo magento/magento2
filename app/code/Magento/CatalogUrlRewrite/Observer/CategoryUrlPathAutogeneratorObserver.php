@@ -49,21 +49,30 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     private $categoryRepository;
 
     /**
+     * @var \Magento\Backend\App\Area\FrontNameResolver
+     */
+    private $frontNameResolver;
+
+    /**
      * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param ChildrenCategoriesProvider $childrenCategoriesProvider
      * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param \Magento\Backend\App\Area\FrontNameResolver $frontNameResolver
      */
     public function __construct(
         CategoryUrlPathGenerator $categoryUrlPathGenerator,
         ChildrenCategoriesProvider $childrenCategoriesProvider,
         StoreViewService $storeViewService,
-        CategoryRepositoryInterface $categoryRepository
+        CategoryRepositoryInterface $categoryRepository,
+        \Magento\Backend\App\Area\FrontNameResolver $frontNameResolver = null
     ) {
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->storeViewService = $storeViewService;
         $this->categoryRepository = $categoryRepository;
+        $this->frontNameResolver = $frontNameResolver ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Backend\App\Area\FrontNameResolver::class);
     }
 
     /**
@@ -102,12 +111,12 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
             throw new \Magento\Framework\Exception\LocalizedException(__('Invalid URL key'));
         }
 
-        if (in_array($urlKey, $this->invalidValues)) {
+        if (in_array($urlKey, $this->getInvalidValues())) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'URL key "%1" conflicts with reserved endpoint names: %2. Try another url key.',
                     $urlKey,
-                    implode(', ', $this->invalidValues)
+                    implode(', ', $this->getInvalidValues())
                 )
             );
         }
@@ -120,6 +129,16 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                 $this->updateUrlPathForChildren($category);
             }
         }
+    }
+
+    /**
+     * Get reserved endpoint names.
+     *
+     * @return array
+     */
+    private function getInvalidValues()
+    {
+        return array_unique(array_merge($this->invalidValues, [$this->frontNameResolver->getFrontName()]));
     }
 
     /**
