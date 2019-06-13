@@ -9,7 +9,7 @@
             <description
                     value="Configurable children products have qty which was set during creating the configurable product"/>
             <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457025/scenarios/3041961"/>
-            <severity value="CRITICAL"/>
+            <severity value="MAJOR"/>
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>

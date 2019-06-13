@@ -13,7 +13,7 @@
             <title value="Admin user created shipment for whole order with Simple product from Test source with numeric source code"/>
             <description value="Check sources with numeric source code can be used for shipment creation."/>
             <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735286/scenarios/3041438"/>
-            <severity value="CRITICAL"/>
+            <severity value="MAJOR"/>
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
