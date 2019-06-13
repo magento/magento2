@@ -9,7 +9,7 @@
 /** @var \Magento\Sales\Block\Order\Items $block */
 ?>
 <div class="table-wrapper order-items">
-    <table class="data table table-order-items" id="my-orders-table" summary="<?= $block->escapeHtml(__('Items Ordered')) ?>">
+    <table class="data table table-order-items" id="my-orders-table" summary="<?= $block->escapeHtmlAttr(__('Items Ordered')) ?>">
         <caption class="table-caption"><?= $block->escapeHtml(__('Items Ordered')) ?></caption>
         <thead>
             <?php if ($block->isPagerDisplayed()) : ?>
