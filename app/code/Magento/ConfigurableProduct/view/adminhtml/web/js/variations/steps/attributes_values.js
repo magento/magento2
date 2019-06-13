@@ -111,7 +111,7 @@ define([
             }
 
             _.each(this.options(), function (option) {
-                if (!_.isUndefined(allOptions[option.label]) && (newOption.label === option.label)) {
+                if (!_.isUndefined(allOptions[option.label]) && newOption.label === option.label) {
                     duplicatedOptions.push(option);
                 }
 
@@ -120,11 +120,13 @@ define([
 
             if (duplicatedOptions.length) {
                 _.each(duplicatedOptions, function (duplicatedOption) {
-                    errorOption = $("[data-role=\"" + duplicatedOption.id + "\"");
-                    errorOption.addClass("_error");
+                    errorOption = $('[data-role="' + duplicatedOption.id + '"]');
+                    errorOption.addClass('_error');
                 });
+
                 return false;
             }
+
             return true;
         },
 
@@ -228,7 +230,7 @@ define([
                         if (!attribute.isValidOption(option)) {
                             throw new Error(
                                 $.mage.__('The value of attribute ""%1"" must be unique')
-                                    .replace("\"%1\"", attribute.label)
+                                    .replace('"%1"', attribute.label)
                             );
                         }
 
