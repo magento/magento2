@@ -134,7 +134,8 @@
         <arguments>
             <argument name="shippingMethod"/>
         </arguments>
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
+        <seeElement selector="{{CheckoutPaymentSection.isPaymentSection}}" stepKey="assertPaymentSection"/>
         <see userInput="{{shippingMethod}}" selector="{{CheckoutPaymentSection.shippingMethodInformation}}" stepKey="assertshippingMethodInformation"/>
     </actionGroup>
 </actionGroups>
