@@ -41,35 +41,45 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <!-- Add simple product to cart -->
+        <!-- Go to Storefront as Guest and add simple product to cart -->
         <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
-        <!-- Navigate to checkout -->
+        <!-- Go to Checkout -->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
 
-        <!-- Fill shipping address -->
+        <!-- Fill all required fields with valid data and select Flat Rate, price = 5, shipping -->
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
             <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>
 
-         <!-- Apply discount to order  -->
+         <!-- Click Apply Discount Code: section is expanded. Input promo code, apply and see success message -->
         <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyCoupon">
             <argument name="discountCode" value="$$createCouponForCartPriceRule.code$$"/>
         </actionGroup>
 
+        <!-- Apply button is disappeared -->
+        <dontSeeElement selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="dontSeeApplyButton"/>
+
+        <!-- Cancel coupon button is appeared -->
+        <seeElement selector="{{DiscountSection.cancelCouponBtn}}" stepKey="seeCancelCouponButton"/>
+
+        <!-- Order summary contains information about applied code -->
+        <seeElement selector="{{CheckoutPaymentSection.discount}}" stepKey="seeDiscountCouponInSummaryBlock"/>
+        <see selector="{{CheckoutPaymentSection.discountPrice}}" userInput="-$5.00" stepKey="seeDiscountPrice"/>
+
         <!-- Select payment solution -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="clickCheckMoneyOrderPayment"/>
 
-        <!-- Place Order -->
+        <!-- Place Order: order is successfully placed -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
         <!-- Login as admin -->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
-        <!-- Check total in created order -->
+        <!-- Verify total on order page -->
         <actionGroup ref="filterOrderGridById" stepKey="filterOrderById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
