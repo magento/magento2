@@ -51,7 +51,7 @@ require([
         }
     });
 
-    enUS = <?= $block->escapeJs($enUS) ?>; // en_US locale reference
+    enUS = <?= /* @noEscape */ $enUS ?>; // en_US locale reference
 //]]>
 
 });
