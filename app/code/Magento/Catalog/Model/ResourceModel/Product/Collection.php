@@ -191,7 +191,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Catalog data
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager = null;
 
@@ -315,7 +315,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
@@ -344,7 +344,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
@@ -1578,26 +1578,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_allIdsCache = null;
 
         if (is_string($attribute) && $attribute == 'is_saleable') {
-            $columns = $this->getSelect()->getPart(\Magento\Framework\DB\Select::COLUMNS);
-            foreach ($columns as $columnEntry) {
-                list($correlationName, $column, $alias) = $columnEntry;
-                if ($alias == 'is_saleable') {
-                    if ($column instanceof \Zend_Db_Expr) {
-                        $field = $column;
-                    } else {
-                        $connection = $this->getSelect()->getConnection();
-                        if (empty($correlationName)) {
-                            $field = $connection->quoteColumnAs($column, $alias, true);
-                        } else {
-                            $field = $connection->quoteColumnAs([$correlationName, $column], $alias, true);
-                        }
-                    }
-                    $this->getSelect()->where("{$field} = ?", $condition);
-                    break;
-                }
-            }
-
-            return $this;
+            $this->addIsSaleableAttributeToFilter($condition);
+        } elseif (is_string($attribute) && $attribute == 'tier_price') {
+            $this->addTierPriceAttributeToFilter($attribute, $condition);
         } else {
             return parent::addAttributeToFilter($attribute, $condition, $joinType);
         }
@@ -2480,5 +2463,72 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         return $this->_pricesCount;
+    }
+
+    /**
+     * Add is_saleable attribute to filter
+     *
+     * @param array|null $condition
+     * @return $this
+     */
+    private function addIsSaleableAttributeToFilter(?array $condition): self
+    {
+        $columns = $this->getSelect()->getPart(Select::COLUMNS);
+        foreach ($columns as $columnEntry) {
+            list($correlationName, $column, $alias) = $columnEntry;
+            if ($alias == 'is_saleable') {
+                if ($column instanceof \Zend_Db_Expr) {
+                    $field = $column;
+                } else {
+                    $connection = $this->getSelect()->getConnection();
+                    if (empty($correlationName)) {
+                        $field = $connection->quoteColumnAs($column, $alias, true);
+                    } else {
+                        $field = $connection->quoteColumnAs([$correlationName, $column], $alias, true);
+                    }
+                }
+                $this->getSelect()->where("{$field} = ?", $condition);
+                break;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add tier price attribute to filter
+     *
+     * @param string $attribute
+     * @param array|null $condition
+     * @return $this
+     */
+    private function addTierPriceAttributeToFilter(string $attribute, ?array $condition): self
+    {
+        $attrCode = $attribute;
+        $connection = $this->getConnection();
+        $attrTable = $this->_getAttributeTableAlias($attrCode);
+        $entity = $this->getEntity();
+        $fKey = 'e.' . $this->getEntityPkName($entity);
+        $pKey = $attrTable . '.' . $this->getEntityPkName($entity);
+        $attribute = $entity->getAttribute($attrCode);
+        $attrFieldName = $attrTable . '.value';
+        $fKey = $connection->quoteColumnAs($fKey, null);
+        $pKey = $connection->quoteColumnAs($pKey, null);
+
+        $condArr = ["{$pKey} = {$fKey}"];
+        $this->getSelect()->join(
+            [$attrTable => $this->getTable('catalog_product_entity_tier_price')],
+            '(' . implode(') AND (', $condArr) . ')',
+            [$attrCode => $attrFieldName]
+        );
+        $this->removeAttributeToSelect($attrCode);
+        $this->_filterAttributes[$attrCode] = $attribute->getId();
+        $this->_joinFields[$attrCode] = ['table' => '', 'field' => $attrFieldName];
+        $field = $this->_getAttributeTableAlias($attrCode) . '.value';
+        $conditionSql = $this->_getConditionSql($field, $condition);
+        $this->getSelect()->where($conditionSql, null, Select::TYPE_CONDITION);
+        $this->_totalRecords = null;
+
+        return $this;
     }
 }

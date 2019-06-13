@@ -3,34 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
-<?php if ($block->getResultCount()): ?>
-<?= $block->getChildHtml('tagged_product_list_rss_link') ?>
+<?php if ($block->getResultCount()) : ?>
+    <?= /* @noEscape */ $block->getChildHtml('tagged_product_list_rss_link') ?>
 <div class="search results">
-    <?php if ($messages = $block->getNoteMessages()):?>
+    <?php if ($messages = $block->getNoteMessages()) : ?>
     <div class="message notice">
         <div>
-            <?php foreach ($messages as $message):?>
-                <?= /* @escapeNotVerified */ $message ?><br />
-            <?php endforeach;?>
+            <?php foreach ($messages as $message) : ?>
+                <?= /* @noEscape */ $message ?><br />
+            <?php endforeach; ?>
         </div>
     </div>
     <?php endif; ?>
     <?= $block->getProductListHtml() ?>
 </div>
-<?php else: ?>
+<?php else : ?>
 
 <div class="message notice">
     <div>
-        <?= /* @escapeNotVerified */ ($block->getNoResultText()) ? $block->getNoResultText() : __('Your search returned no results.') ?>
-        <?= $block->getAdditionalHtml() ?>
-        <?php if ($messages = $block->getNoteMessages()):?>
-            <?php foreach ($messages as $message):?>
-                <br /><?= /* @escapeNotVerified */ $message ?>
-            <?php endforeach;?>
+        <?= $block->escapeHtml($block->getNoResultText() ? $block->getNoResultText() : __('Your search returned no results.')) ?>
+        <?= /* @noEscape */ $block->getAdditionalHtml() ?>
+        <?php if ($messages = $block->getNoteMessages()) : ?>
+            <?php foreach ($messages as $message) : ?>
+                <br /><?= /* @noEscape */ $message ?>
+            <?php endforeach; ?>
         <?php endif; ?>
     </div>
 </div>

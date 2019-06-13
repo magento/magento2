@@ -55,10 +55,6 @@
                 <div class="box-content">
                     <address>
                         <?= /* @noEscape */ $block->getCheckoutData()->getAddressHtml($block->getAddress()); ?>
-                        <input type="hidden"
-                               id="multishipping_billing_country_id"
-                               value="<?= /* @noEscape */ $block->getAddress()->getCountryId(); ?>"
-                               name="multishipping_billing_country_id"/>
                     </address>
                 </div>
             </div>
@@ -132,7 +128,7 @@
         </div>
     </div>
     <div class="actions-toolbar">
-        <div class="primary">
+        <div class="primary" id="parent-payment-continue">
             <button id="payment-continue"
                     type="button"
                     class="action primary continue">
@@ -164,4 +160,32 @@
             }
         });
     });
+</script>
+
+<script>
+    //<![CDATA[
+    require(
+        [
+            'Magento_Checkout/js/model/quote',
+            'jquery',
+            'domReady!'
+        ], function(quote, $) {
+            quote.billingAddress({
+                    city: '<?= /* @noEscape */ $block->getAddress()->getCity() ?>',
+                    company: '<?= /* @noEscape */ $block->getAddress()->getCompany(); ?>',
+                    countryId: '<?= /* @noEscape */ $block->getAddress()->getCountryId(); ?>',
+                    customerAddressId: '<?= /* @noEscape */ $block->getAddress()->getCustomerAddressId(); ?>',
+                    customerId: '<?= /* @noEscape */ $block->getAddress()->getCustomerId(); ?>',
+                    fax: '<?= /* @noEscape */ $block->getAddress()->getFax(); ?>',
+                    firstname: '<?= /* @noEscape */ $block->getAddress()->getFirstname(); ?>',
+                    lastname: '<?= /* @noEscape */ $block->getAddress()->getLastname(); ?>',
+                    postcode: '<?= /* @noEscape */ $block->getAddress()->getPostcode(); ?>',
+                    regionId: '<?= /* @noEscape */ $block->getAddress()->getRegionId(); ?>',
+                    regionCode: '<?= /* @noEscape */ $block->getAddress()->getRegionCode() ?>',
+                    region: '<?= /* @noEscape */ $block->getAddress()->getRegion(); ?>',
+                    street: <?= /* @noEscape */ json_encode($block->getAddress()->getStreet()); ?>,
+                    telephone: '<?= /* @noEscape */ $block->getAddress()->getTelephone(); ?>'
+            });
+        });
+    //]]>
 </script>
