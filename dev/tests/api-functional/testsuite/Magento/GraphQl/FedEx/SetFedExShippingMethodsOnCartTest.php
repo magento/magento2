@@ -61,6 +61,10 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
      */
     protected function setUp()
     {
+        $this->markTestSkipped(
+            'Need to implement mock instead of real carrier service call ' .
+            'https://github.com/magento/graphql-ce/issues/740'
+        );
         $objectManager = Bootstrap::getObjectManager();
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
