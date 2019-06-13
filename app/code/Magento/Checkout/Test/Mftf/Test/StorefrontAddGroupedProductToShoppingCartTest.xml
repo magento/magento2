@@ -21,6 +21,7 @@
         </annotations>
 
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!--Create Grouped product with three simple product -->
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2">
                 <field key="price">100.00</field>

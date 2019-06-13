@@ -23,5 +23,9 @@
         <element name="fieldPurchaseOrderNumber" type="input" selector="#po_number"/>
         <element name="paymentBlock" type="text" selector="#order-billing_method" />
         <element name="paymentError" type="text" selector="#payment[method]-error"/>
+        <element name="bankTransferOption" type="radio" selector="#p_method_banktransfer" timeout="30"/>
+        <element name="cashOnDeliveryOption" type="radio" selector="#p_method_cashondelivery" timeout="30"/>
+        <element name="purchaseOrderOption" type="radio" selector="#p_method_purchaseorder" timeout="30"/>
+        <element name="purchaseOrderNumber" type="input" selector="#po_number"/>
     </section>
 </sections>

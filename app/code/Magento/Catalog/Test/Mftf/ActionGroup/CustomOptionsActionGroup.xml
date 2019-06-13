@@ -55,7 +55,7 @@
     <actionGroup name="AddProductCustomOptionField">
         <arguments>
             <argument name="option" defaultValue="ProductOptionField"/>
-            <argiment name="optionIndex" type="string"/>
+            <argument name="optionIndex" type="string"/>
         </arguments>
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
@@ -90,7 +90,7 @@
     <actionGroup name="checkCustomizableOptionImport">
         <arguments>
             <argument name="option" defaultValue="ProductOptionField"/>
-            <argiment name="optionIndex" type="string"/>
+            <argument name="optionIndex" type="string"/>
         </arguments>
         <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionTitleInput(optionIndex)}}" stepKey="grabOptionTitle"/>
         <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionPrice(optionIndex)}}" stepKey="grabOptionPrice"/>
