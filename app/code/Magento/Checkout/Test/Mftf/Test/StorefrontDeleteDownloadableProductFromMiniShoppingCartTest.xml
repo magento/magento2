@@ -20,7 +20,7 @@
 
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
-            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct"/>
             <createData entity="downloadableLink1" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="createDownloadableProduct"/>
