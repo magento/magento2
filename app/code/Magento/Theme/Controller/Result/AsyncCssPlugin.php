@@ -37,7 +37,7 @@ class AsyncCssPlugin
      * @param Http $subject
      * @return void
      */
-    public function beforeSendResponse(Http $subject): void
+    public function beforeSendResponse(Http $subject)
     {
         $content = $subject->getContent();
 
