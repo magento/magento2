@@ -248,6 +248,10 @@
         <waitForPageLoad time="60" stepKey="WaitForProductSave1"/>
         <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
+    <actionGroup name="ProductSetAdvancedTierFixedPricing" extends="ProductSetAdvancedPricing">
+        <remove keyForRemoval="selectProductTierPricePriceInput"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceFixedPriceInput('0')}}" userInput="{{amount}}" stepKey="selectProductTierPricePriceInput" after="selectProductTierPriceValueType"/>
+    </actionGroup>
 
     <!--Assert text in Related, Up-Sell or Cross-Sell section in Admin Product page-->
     <actionGroup name="AssertTextInAdminProductRelatedUpSellCrossSellSection">
