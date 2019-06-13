@@ -62,6 +62,13 @@
         <seeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="AssertAddToCart" />
     </actionGroup>
 
+    <actionGroup name="StorefrontCheckAddToCartButtonAbsence">
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+        </arguments>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
+        <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="checkAddToCartButtonAbsence"/>
+    </actionGroup>
     <actionGroup name="StorefrontSwitchCategoryViewToListMode">
         <click selector="{{StorefrontCategoryMainSection.modeListButton}}" stepKey="switchCategoryViewToListMode"/>
         <waitForElement selector="{{StorefrontCategoryMainSection.CategoryTitle}}" time="30" stepKey="waitForCategoryReload"/>
