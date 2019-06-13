@@ -91,8 +91,10 @@ class DefaultProcessor implements ConfigSetProcessorInterface
 
         try {
             $config = $this->configFactory->create([
-                'scope' => $scope,
-                'scope_code' => $scopeCode,
+                'data' => [
+                    'scope' => $scope,
+                    'scope_code' => $scopeCode,
+                ],
             ]);
             $config->setDataByPath($path, $value);
             $config->save();

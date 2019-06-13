@@ -4,7 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+// phpcs:disable PSR2.Files.ClosingTag
 
 /**
  * Product description template
@@ -12,4 +13,8 @@
  * @var $block \Magento\Catalog\Block\Product\View\Description
  */
 ?>
-<?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Output')->productAttribute($block->getProduct(), $block->getProduct()->getDescription(), 'description') ?>
+<?= /* @noEscape */ $this->helper(Magento\Catalog\Helper\Output::class)->productAttribute(
+    $block->getProduct(),
+    $block->getProduct()->getDescription(),
+    'description'
+) ?>

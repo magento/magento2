@@ -52,7 +52,7 @@
 
         <!--Go to Product edit page-->
         <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToProductEditPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <scrollToTopOfPage stepKey="scrollToShowAttribute"/>
 
         <!-- Grab attribute dropdown options -->
         <grabMultiple selector="{{AdminProductFormSection.customAttributeSelectOptions($$createDropdownProductAttribute.attribute[attribute_code]$$)}}" stepKey="clickOnAttributeDropdown" />
