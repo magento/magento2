@@ -7,9 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -19,19 +17,9 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class GetAvailablePaymentMethodsTest extends GraphQlAbstract
 {
     /**
-     * @var QuoteResource
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $quoteResource;
-
-    /**
-     * @var QuoteFactory
-     */
-    private $quoteFactory;
-
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
      * @inheritdoc
@@ -39,19 +27,83 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      */
-    public function testGetCartWithPaymentMethods()
+    public function testGetAvailablePaymentMethods()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query);
 
-        $query = <<<QUERY
+        self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('available_payment_methods', $response['cart']);
+
+        self::assertEquals('checkmo', $response['cart']['available_payment_methods'][0]['code']);
+        self::assertEquals('Check / Money order', $response['cart']['available_payment_methods'][0]['title']);
+    }
+
+    /**
+     * _security
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     */
+    public function testGetAvailablePaymentMethodsFromCustomerCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+
+        $this->expectExceptionMessage(
+            "The current user cannot perform operations on cart \"$maskedQuoteId\""
+        );
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/disable_all_active_payment_methods.php
+     */
+    public function testGetAvailablePaymentMethodsIfPaymentsAreNotPresent()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query);
+
+        self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('available_payment_methods', $response['cart']);
+        self::assertEmpty($response['cart']['available_payment_methods']);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
+     */
+    public function testGetAvailablePaymentMethodsOfNonExistentCart()
+    {
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = $this->getQuery($maskedQuoteId);
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getQuery(string $maskedQuoteId): string
+    {
+        return <<<QUERY
 {
   cart(cart_id: "$maskedQuoteId") {
     available_payment_methods {
@@ -61,29 +113,5 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
-
-        self::assertArrayHasKey('cart', $response);
-
-        self::assertEquals('checkmo', $response['cart']['available_payment_methods'][0]['code']);
-        self::assertEquals('Check / Money order', $response['cart']['available_payment_methods'][0]['title']);
-
-        self::assertEquals('free', $response['cart']['available_payment_methods'][1]['code']);
-        self::assertEquals(
-            'No Payment Information Required',
-            $response['cart']['available_payment_methods'][1]['title']
-        );
-    }
-
-    /**
-     * @param string $reversedQuoteId
-     * @return string
-     */
-    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
-
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 }

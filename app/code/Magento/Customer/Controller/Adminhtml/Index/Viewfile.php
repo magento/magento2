@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -17,7 +19,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\DataObjectFactory;
 
 /**
+ * Class Viewfile serves to show file or image by file/image name provided in request parameters.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
 {
@@ -127,8 +132,6 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @return \Magento\Framework\Controller\ResultInterface|void
      * @throws NotFoundException
-     *
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {
@@ -146,6 +149,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         }
 
         if ($plain) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $extension = pathinfo($path, PATHINFO_EXTENSION);
             switch (strtolower($extension)) {
                 case 'gif':
@@ -175,6 +179,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $resultRaw->setContents($directory->readFile($fileName));
             return $resultRaw;
         } else {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $name = pathinfo($path, PATHINFO_BASENAME);
             $this->_fileFactory->create(
                 $name,
