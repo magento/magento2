@@ -13,7 +13,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for setting "USPS" shipping method on cart. Current class covers the next USPS shipping methods:
+ * Test for setting USPS shipping method on cart.
+ * Current class covers following base USPS shipping methods:
  *
  * | Code      | Label
  * --------------------------------------
