@@ -63,7 +63,7 @@
         <dontSeeElement selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="dontSeeApplyButton"/>
 
         <!-- Cancel coupon button is appeared -->
-        <seeElement selector="{{DiscountSection.cancelCouponBtn}}" stepKey="seeCancelCouponButton"/>
+        <seeElement selector="{{DiscountSection.CancelCouponBtn}}" stepKey="seeCancelCouponButton"/>
 
         <!-- Order summary contains information about applied code -->
         <seeElement selector="{{CheckoutPaymentSection.discount}}" stepKey="seeDiscountCouponInSummaryBlock"/>
