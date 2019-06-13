@@ -27,8 +27,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  * | FIRST_OVERNIGHT        | First Overnight
  * | INTERNATIONAL_ECONOMY  |International Economy
  * | INTERNATIONAL_PRIORITY | International Priority
- *
- * This class does not cover another FedEx shipping methods (they depends on address and sandbox settings)
  */
 class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
 {
