@@ -6,7 +6,6 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Tax\Model\Calculation\Rate\Converter;
@@ -17,7 +16,7 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Tax Rate AjaxSave Controller
  */
-class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate implements HttpPostActionInterface
+class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate
 {
     /**
      * @var Escaper

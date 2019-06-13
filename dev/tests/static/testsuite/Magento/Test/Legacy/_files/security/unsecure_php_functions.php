@@ -70,6 +70,8 @@ return [
     ],
     'htmlspecialchars' => [
         'replacement' => '\Magento\Framework\Escaper::escapeHtml',
-        'exclude' => []
+        'exclude' => [
+            ['type' => 'library', 'name' => 'magento/framework', 'path' => 'Escaper.php'],
+        ]
     ],
 ];

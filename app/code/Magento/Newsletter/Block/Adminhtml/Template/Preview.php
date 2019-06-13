@@ -10,6 +10,7 @@ namespace Magento\Newsletter\Block\Adminhtml\Template;
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
  */
 class Preview extends \Magento\Backend\Block\Widget
 {

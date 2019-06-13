@@ -3,17 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Catalog\Block\Adminhtml\Product;
 
 /**
  * Customer edit block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
-namespace Magento\Catalog\Block\Adminhtml\Product;
-
-/**
- * Class Edit
+ * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
  */
 class Edit extends \Magento\Backend\Block\Widget
 {
