@@ -40,6 +40,12 @@ class ParentItemProcessor implements ParentItemProcessorInterface
      */
     private $stockConfiguration;
 
+    /**
+     * @param Configurable $configurableType
+     * @param StockItemCriteriaInterfaceFactory $criteriaInterfaceFactory
+     * @param StockItemRepositoryInterface $stockItemRepository
+     * @param StockConfigurationInterface $stockConfiguration
+     */
     public function __construct(
         Configurable $configurableType,
         StockItemCriteriaInterfaceFactory $criteriaInterfaceFactory,

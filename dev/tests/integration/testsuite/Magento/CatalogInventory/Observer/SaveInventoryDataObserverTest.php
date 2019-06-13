@@ -51,6 +51,7 @@ class SaveInventoryDataObserverTest extends TestCase
      *
      * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoDataFixture Magento/CatalogInventory/_files/configurable_options_with_low_stock.php
      * @throws NoSuchEntityException
      * @throws InputException

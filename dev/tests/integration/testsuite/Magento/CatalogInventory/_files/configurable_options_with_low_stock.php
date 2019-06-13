@@ -9,10 +9,12 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-
-require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/product_configurable.php';
+use Magento\Catalog\Api\ProductRepositoryInterface;
 
 $objectManager = Bootstrap::getObjectManager();
+
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
 
 /** @var StockItemRepositoryInterface $stockItemRepository */
 $stockItemRepository = $objectManager->get(StockItemRepositoryInterface::class);
@@ -34,4 +36,3 @@ $stockItem = $product->getExtensionAttributes()->getStockItem();
 $stockItem->setIsInStock(false)
     ->setQty(0);
 $stockItemRepository->save($stockItem);
-
