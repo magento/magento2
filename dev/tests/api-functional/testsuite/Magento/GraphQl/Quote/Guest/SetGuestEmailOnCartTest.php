@@ -122,7 +122,7 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
      * @magentoConfigFixture default_store checkout/options/guest_checkout 0
      *
      * @expectedException \Exception
-     * @expectedExceptionMessage Guest checkout is not allowed.
+     * @expectedExceptionMessage Guest checkout is not allowed. Register a customer account or login with existing one.
      */
     public function testSetGuestEmailOnCartWithGuestCheckoutDisabled()
     {

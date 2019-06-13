@@ -20,7 +20,6 @@ use Magento\Quote\Api\Data\PaymentInterfaceFactory;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\QuoteGraphQl\Model\Cart\CheckCartCheckoutAllowance;
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Mutation resolver for setting payment method for shopping cart
@@ -70,8 +69,7 @@ class SetPaymentMethodOnCart implements ResolverInterface
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentFactory = $paymentFactory;
         $this->checkCartCheckoutAllowance = $checkCartCheckoutAllowance;
-        $this->additionalDataProviderPool = $additionalDataProviderPool
-            ?: ObjectManager::getInstance()->get(AdditionalDataProviderPool::class);
+        $this->additionalDataProviderPool = $additionalDataProviderPool;
     }
 
     /**
