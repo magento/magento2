@@ -11,6 +11,6 @@
     <section name="StorefrontCheckoutCheckoutCustomerLoginSection">
         <element name="email" type="input" selector="form[data-role='email-with-possible-login'] input[name='username']"/>
         <element name="emailErrorMessage" type="text" selector="#customer-email-error"/>
-        <element name="emailTooltipButton" type="button" selector="//form[@data-role='email-with-possible-login']//div[input[@name='username']]//*[contains(@class, 'action-help')]"/>
+        <element name="emailTooltipButton" type="button" selector="#customer-email-fieldset .field-tooltip-action"/>
     </section>
 </sections>
