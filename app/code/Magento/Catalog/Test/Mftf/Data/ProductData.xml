@@ -311,4 +311,17 @@
         <requiredEntity type="product_option">ProductOptionField</requiredEntity>
         <requiredEntity type="product_option">ProductOptionField2</requiredEntity>
     </entity>
+    <entity name="defaultSimpleProduct" type="product">
+        <data key="name" unique="suffix">Testp</data>
+        <data key="sku" unique="suffix">testsku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="price">560.00</data>
+        <data key="urlKey" unique="suffix">testurl-</data>
+        <data key="status">1</data>
+        <data key="quantity">25</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
+    </entity>
 </entities>
