@@ -67,11 +67,14 @@ class ContextFactory implements ContextFactoryInterface
             $contextParameters->getExtensionAttributes()
         );
 
-        $context = $this->objectManager->create(ContextInterface::class, [
-            'userType' => $contextParameters->getUserType(),
-            'userId' => $contextParameters->getUserId(),
-            'extensionAttributes' => $extensionAttributes,
-        ]);
+        $context = $this->objectManager->create(
+            ContextInterface::class,
+            [
+                'userType' => $contextParameters->getUserType(),
+                'userId' => $contextParameters->getUserId(),
+                'extensionAttributes' => $extensionAttributes,
+            ]
+        );
         return $context;
     }
 }
