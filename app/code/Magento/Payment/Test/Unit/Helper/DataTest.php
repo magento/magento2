@@ -6,9 +6,9 @@
 
 namespace Magento\Payment\Test\Unit\Helper;
 
-use \Magento\Payment\Helper\Data;
-
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
+use Magento\Payment\Helper\Data;
+use Magento\Store\Model\ScopeInterface;
 
 class DataTest extends \PHPUnit\Framework\TestCase
 {
@@ -37,6 +37,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     private $appEmulation;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -57,6 +60,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->helper = $objectManagerHelper->getObject($className, $arguments);
     }
 
+    /**
+     * @return void
+     */
     public function testGetMethodInstance()
     {
         list($code, $class, $methodInstance) = ['method_code', 'method_class', 'method_instance'];
@@ -170,6 +176,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetMethodFormBlock()
     {
         list($blockType, $methodCode) = ['method_block_type', 'method_code'];
@@ -195,6 +204,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($blockMock, $this->helper->getMethodFormBlock($methodMock, $layoutMock));
     }
 
+    /**
+     * @return void`
+     */
     public function testGetInfoBlock()
     {
         $blockType = 'method_block_type';
@@ -220,6 +232,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($blockMock, $this->helper->getInfoBlock($infoMock));
     }
 
+    /**
+     * @return void
+     */
     public function testGetInfoBlockHtml()
     {
         list($storeId, $blockHtml, $secureMode, $blockType) = [1, 'HTML MARKUP', true, 'method_block_type'];
@@ -258,6 +273,23 @@ class DataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return array
+     */
+    public function getSortMethodsDataProvider()
+    {
+        return [
+            [
+                ['code' => 'methodA', 'data' => ['sort_order' => 0]],
+                ['code' => 'methodB', 'data' => ['sort_order' => 1]]
+            ],
+            [
+                ['code' => 'methodA', 'data' => ['sort_order' => 2]],
+                ['code' => 'methodB', 'data' => ['sort_order' => 1]],
+            ]
+        ];
+    }
+
+    /**
      * @param bool $sorted
      * @param bool $asLabelValue
      * @param bool $withGroups
@@ -288,40 +320,16 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
+        $titlePath = sprintf('%s/%s/title', Data::XML_PATH_PAYMENT_METHODS, $paymentMethod['code']);
         $this->scopeConfig->method('getValue')
-            ->with(sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, $paymentMethod['code']))
-            ->willReturn(\Magento\Payment\Model\Method\AbstractMethod::class);
-
-        $methodInstanceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
-            ->getMockForAbstractClass();
-        $methodInstanceMock->method('getConfigData')
-            ->with('title', null)
+            ->with($titlePath, ScopeInterface::SCOPE_STORE, null)
             ->willReturn($configTitle);
-        $this->methodFactory->method('create')
-            ->willReturn($methodInstanceMock);
 
         $this->paymentConfig->method('getGroups')
             ->willReturn($groups);
 
         $paymentMethodList = $this->helper->getPaymentMethodList($sorted, $asLabelValue, $withGroups);
         $this->assertEquals($expectedPaymentMethodList, $paymentMethodList);
-    }
-
-    /**
-     * @return array
-     */
-    public function getSortMethodsDataProvider()
-    {
-        return [
-            [
-                ['code' => 'methodA', 'data' => ['sort_order' => 0]],
-                ['code' => 'methodB', 'data' => ['sort_order' => 1]]
-            ],
-            [
-                ['code' => 'methodA', 'data' => ['sort_order' => 2]],
-                ['code' => 'methodB', 'data' => ['sort_order' => 1]],
-            ]
-        ];
     }
 
     /**
@@ -345,27 +353,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
                     ],
                     ['payment_method' => 'Config Payment Title'],
                 ],
-            'Payment method with default title' =>
-                [
-                    true,
-                    false,
-                    false,
-                    null,
-                    [
-                        'code' => 'payment_method',
-                        'data' => [
-                            'active' => 1,
-                            'title' => 'Payment Title',
-                        ],
-                    ],
-                    ['payment_method' => 'Payment Title'],
-                ],
             'Payment method as value => label' =>
                 [
                     true,
                     true,
                     false,
-                    null,
+                    'Payment Title',
                     [
                         'code' => 'payment_method',
                         'data' => [
@@ -385,7 +378,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                     true,
                     true,
                     true,
-                    null,
+                    'Payment Title',
                     [
                         'code' => 'payment_method',
                         'data' => [
