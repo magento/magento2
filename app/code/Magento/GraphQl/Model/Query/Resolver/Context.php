@@ -138,17 +138,6 @@ class Context extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     public function getStoreId(): int
     {
-        if (null === $this->getData(self::STORE_ID)) {
-            $this->setStoreId((int)$this->storeManager->getStore()->getId());
-        }
-        return $this->getData(self::STORE_ID);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setStoreId(int $storeId) : ContextInterface
-    {
-        return $this->setData(self::STORE_ID, $storeId);
+        return $this->getExtensionAttributes()->getStoreId();
     }
 }

@@ -60,14 +60,6 @@ interface ContextInterface extends ExtensibleDataInterface
     public function getStoreId() : int;
 
     /**
-     * Set current store id
-     *
-     * @param int $storeId
-     * @return ContextInterface
-     */
-    public function setStoreId(int $storeId) : ContextInterface;
-
-    /**
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Framework\GraphQl\Query\Resolver\ContextExtensionInterface
