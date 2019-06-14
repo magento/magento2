@@ -18,7 +18,9 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
- *  Save/Delete UrlRewrites by Product ID's and visibility
+ * Save/Delete UrlRewrites by Product ID's and visibility
+ *
+ * @deprecated
  */
 class AdaptUrlRewritesToVisibilityAttribute
 {
