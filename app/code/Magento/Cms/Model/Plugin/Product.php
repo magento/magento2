@@ -11,7 +11,7 @@ use Magento\Catalog\Model\Product as CatalogProduct;
 use Magento\Cms\Model\Page;
 
 /**
- * Plugin for catalog product
+ * Cleaning no-route page cache for the product details page after enabling product that is not assigned to a category
  */
 class Product
 {
