@@ -8,7 +8,12 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Model\Query;
 
 /**
- * Extension point for adding custom parameters to context object
+ * Adding custom parameters to context object:
+ *
+ * - Add new contextParametersProcessors item to ContextFactory in the di.xml.
+ * - Class must extend ContextParametersProcessorInterface.
+ * - Implement execute method which adds additional data to the context though extension attributes.
+ * - This data will be present in each resolver.
  */
 interface ContextParametersProcessorInterface
 {
