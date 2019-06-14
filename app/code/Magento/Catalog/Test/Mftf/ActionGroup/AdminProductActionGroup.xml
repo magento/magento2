@@ -304,9 +304,11 @@
         </arguments>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
+        <waitForPageLoad stepKey="waitForAdvancedPricingModal"/>
         <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="waitSpecialPrice"/>
         <fillField userInput="{{price}}" selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="fillSpecialPrice"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDone"/>
+        <waitForPageLoad stepKey="waitForAdvancedPricingModalGone"/>
         <waitForElementNotVisible selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="waitForCloseModalWindow"/>
       </actionGroup>
 
@@ -495,5 +497,9 @@
         <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceValueTypeSelect(customerGroup)}}" userInput="{{priceType}}" stepKey="selectProductTierPriceValueType1"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput(customerGroup)}}" userInput="{{discount}}" stepKey="selectProductTierPricePriceInput"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton1"/>
+    </actionGroup>
+    <actionGroup name="AdminSetProductDisabled">
+        <conditionalClick selector="{{AdminProductFormSection.enableProductLabel}}" dependentSelector="{{AdminProductFormSection.productStatusValue('1')}}" visible="true" stepKey="disableProduct"/>
+        <seeElement selector="{{AdminProductFormSection.productStatusValue('2')}}" stepKey="assertThatProductSetToDisabled"/>
     </actionGroup>
 </actionGroups>
