@@ -7,6 +7,7 @@ namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Action;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -76,7 +77,8 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
         }
 
         $wishlist = $this->wishlistProvider->getWishlist();
-        if (!$wishlist) {
+        $method = $this->getRequest()->getMethod();
+        if (!$wishlist && $method !== 'POST') {
             throw new NotFoundException(__('Page not found.'));
         }
 
@@ -89,6 +91,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
             $session->unsBeforeWishlistRequest();
         }
 
+        unset($requestParams['login']);
         $productId = isset($requestParams['product']) ? (int)$requestParams['product'] : null;
         if (!$productId) {
             $resultRedirect->setPath('*/');
