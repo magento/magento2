@@ -200,7 +200,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
                     \SomeDataPatch::class,
                     \OtherDataPatch::class
                 ],
-                'moduleVersionInDb' => '2.0.0',
+                'moduleVersionInDb' => null,
             ],
         ];
     }
@@ -269,7 +269,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
                     \SomeDataPatch::class,
                     \OtherDataPatch::class
                 ],
-                'moduleVersionInDb' => '2.0.0',
+                'moduleVersionInDb' => '2.0.1',
             ]
         ];
     }
@@ -500,7 +500,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
                     \SomeSchemaPatch::class,
                     \OtherSchemaPatch::class
                 ],
-                'moduleVersionInDb' => '2.0.0',
+                'moduleVersionInDb' => '2.0.1',
             ]
         ];
     }
