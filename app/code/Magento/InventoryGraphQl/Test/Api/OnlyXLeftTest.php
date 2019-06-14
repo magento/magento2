@@ -8,6 +8,9 @@ declare(strict_types=1);
 namespace Magento\InventoryGraphQl\Test\Api;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Config\Model\PreparedValueFactory;
+use Magento\Config\Model\ResourceModel\Config\Data;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
@@ -32,19 +35,33 @@ class OnlyXLeftTest extends GraphQlAbstract
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $preparedValueFactory = $this->objectManager->get(PreparedValueFactory::class);
+        $resource = $this->objectManager->get(Data::class);
+        $value = $preparedValueFactory->create(
+            'cataloginventory/options/stock_threshold_qty',
+            101,
+            'default',
+            0
+        );
+        $resource->save($value);
+        $reinitableConfig = $this->objectManager->create(
+            ReinitableConfigInterface::class
+        );
+        $reinitableConfig->reinit();
     }
 
     /**
-     * Verify "Only x left" after order placement on default stock, main website.
+     * Verify "Only x left" default stock, main website.
      *
-     * @magentoConfigFixture default_store cataloginventory/options/stock_threshold_qty 99
-     * @magentoApiDataFixture Magento/Checkout/_files/simple_product.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_simple_on_default_source.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/create_quote_on_default_website.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/order_simple_product.php
+     * @magentoApiDataFixture Magento/Catalog/_files/products_new.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/909213/scenarios/3056515
+     *
+     * @return void
      */
-    public function testOnlyXLeftDefaultStockMainWebsite()
+    public function testOnlyXLeftDefaultStockMainWebsite(): void
     {
         $productSku = 'simple';
         $query = <<<QUERY
@@ -61,21 +78,22 @@ QUERY;
         $response = $this->graphQlQuery($query);
 
         $this->assertArrayHasKey(0, $response['products']['items']);
-        $this->assertEquals('33', $response['products']['items'][0]['only_x_left_in_stock']);
+        $this->assertEquals('100', $response['products']['items'][0]['only_x_left_in_stock']);
     }
 
     /**
      * Verify "Only x left" after order placement on default stock, additional website.
      *
-     * @magentoConfigFixture store_for_eu_website_store cataloginventory/options/stock_threshold_qty 99
-     * @magentoApiDataFixture Magento/Checkout/_files/simple_product.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_simple_on_default_source.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/create_quote_on_default_website.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/order_simple_product.php
+     * @magentoApiDataFixture Magento/Catalog/_files/products_new.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/909213/scenarios/3127318
+     *
+     * @return void
      */
-    public function testOnlyXLeftDefaultStockAdditionalWebsite()
+    public function testOnlyXLeftDefaultStockAdditionalWebsite(): void
     {
         $this->assignProductToAdditionalWebsite('simple', 'eu_website');
         $this->assignWebsiteToStock(1, 'eu_website');
@@ -94,23 +112,24 @@ QUERY;
         $headerMap = ['Store' => 'store_for_eu_website'];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
         $this->assertArrayHasKey(0, $response['products']['items']);
-        $this->assertEquals('33', $response['products']['items'][0]['only_x_left_in_stock']);
+        $this->assertEquals('100', $response['products']['items'][0]['only_x_left_in_stock']);
     }
 
     /**
      * Verify "Only x left" after order placement on additional stock, main website.
      *
-     * @magentoConfigFixture default_store cataloginventory/options/stock_threshold_qty 99
-     * @magentoApiDataFixture Magento/Checkout/_files/simple_product.php
+     * @magentoApiDataFixture Magento/Catalog/_files/products_new.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_simple_on_multi_source.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/create_quote_on_default_website.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/order_simple_product.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/909213/scenarios/3127130
+     *
+     * @return void
      */
-    public function testOnlyXLeftAdditionalStockMainWebsite()
+    public function testOnlyXLeftAdditionalStockMainWebsite(): void
     {
         $this->assignWebsiteToStock(10, 'base');
         $productSku = 'simple';
@@ -134,18 +153,19 @@ QUERY;
     /**
      * Verify "Only x left" after order placement on additional stock, additional website.
      *
-     * @magentoConfigFixture default_store cataloginventory/options/stock_threshold_qty 99
      * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
-     * @magentoApiDataFixture Magento/Checkout/_files/simple_product.php
+     * @magentoApiDataFixture Magento/Catalog/_files/products_new.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_simple_on_multi_source.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/create_quote_on_default_website.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/order_simple_product.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/909213/scenarios/3127227
+     *
+     * @return void
      */
-    public function testOnlyXLeftAdditionalStockAdditionalWebsite()
+    public function testOnlyXLeftAdditionalStockAdditionalWebsite(): void
     {
         $this->assignWebsiteToStock(10, 'eu_website');
         $this->assignProductToAdditionalWebsite('simple', 'eu_website');
@@ -207,5 +227,14 @@ QUERY;
 
         $extensionAttributes->setSalesChannels($salesChannels);
         $stockRepository->save($stock);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        $resource = $this->objectManager->get(Data::class);
+        $resource->clearScopeData('default', 0);
     }
 }
