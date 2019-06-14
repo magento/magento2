@@ -86,15 +86,16 @@ class GetDtoSourceCode
             return $this->generateInterfaceSource($className, $config);
         }
 
-        return $this->generateDtoSource($className, $config);
+        return $this->generateDtoSource($config['interface'], $className, $config);
     }
 
     /**
+     * @param string $interfaceName
      * @param string $className
      * @param array $config
      * @return string
      */
-    private function generateDtoSource(string $className, array $config): string
+    private function generateDtoSource(string $interfaceName, string $className, array $config): string
     {
         $constructor = $this->getConstructor($config);
 
@@ -103,7 +104,7 @@ class GetDtoSourceCode
             $methods[] = $constructor;
         }
 
-        $methods = array_merge($methods, $this->getClassMethods($config));
+        $methods = array_merge($methods, $this->getClassMethods($interfaceName, $config));
 
         $this->classGenerator
             ->setImplementedInterfaces([$config['interface']])
@@ -125,7 +126,7 @@ class GetDtoSourceCode
             return null;
         }
 
-        $methods = $this->getClassMethods($config);
+        $methods = $this->getClassMethods($interfaceName, $config);
         foreach ($methods as &$method) {
             unset($method['body']);
         }
@@ -319,14 +320,66 @@ class GetDtoSourceCode
     }
 
     /**
+     * @param string $interfaceName
      * @param array $config
      * @return array
      */
-    private function getClassMethods(array $config): array
+    private function getWithMethods(string $interfaceName, array $config): array
+    {
+        $methods = [];
+
+        foreach ($config['properties'] as $propertyName => $propertyMetadata) {
+            $attributeRealType = $this->getRealType($propertyMetadata['type']);
+            $attributeDescriptiveType = $this->getDescriptiveType($propertyMetadata['type']);
+
+            $withName = 'with' . ucfirst($propertyName);
+
+            $parameters = [
+                [
+                    'name' => 'value',
+                    'type' => ($propertyMetadata['nullable'] ? '?' : '') . $attributeRealType
+                ]
+            ];
+
+            $methods[] = [
+                'name' => $withName,
+                'parameters' => $parameters,
+                'body' => '$dtoProcessor = \Magento\Framework\App\ObjectManager::getInstance()'
+                    . '->get(\Magento\Framework\Dto\DtoProcessor::class);' . "\n"
+                    . "return \$dtoProcessor->createUpdatedObjectFromArray(\$this, ['$propertyName' => \$value]);"
+                    ,
+                'docblock' => [
+                    'tags' => [
+                        [
+                            'name' => 'param',
+                            'description' =>
+                                $attributeDescriptiveType . ($propertyMetadata['nullable'] ? '|null ' : ' ') . '$value',
+                        ],
+                        [
+                            'name' => 'return',
+                            'description' => $interfaceName
+                        ]
+                    ]
+                ],
+                'returnType' => $interfaceName
+            ];
+        }
+
+        return $methods;
+    }
+
+    /**
+     * @param string $interfaceName
+     * @param array $config
+     * @return array
+     */
+    private function getClassMethods(string $interfaceName, array $config): array
     {
         $methods = $this->getGetterMethods($config);
         if ($config['mutable']) {
             $methods = array_merge($methods, $this->getSetterMethods($config));
+        } else {
+            $methods = array_merge($methods, $this->getWithMethods($interfaceName, $config));
         }
 
         return $methods;

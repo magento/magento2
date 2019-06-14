@@ -28,4 +28,34 @@ interface TestDtoInterface extends \Magento\Framework\Api\ImmutableExtensibleDat
      * @return \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoExtensionInterface|null
      */
     public function getExtensionAttributes() : ?\Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoExtensionInterface;
+
+    /**
+     * @param string $value
+     * @return Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface
+     */
+    public function withProp1(string $value) : \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface;
+
+    /**
+     * @param string $value
+     * @return Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface
+     */
+    public function withProp2(string $value) : \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface;
+
+    /**
+     * @param string|null $value
+     * @return Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface
+     */
+    public function withProp3(?string $value) : \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface;
+
+    /**
+     * @param string|null $value
+     * @return Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface
+     */
+    public function withProp4(?string $value) : \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface;
+
+    /**
+     * @param \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoExtensionInterface|null $value
+     * @return Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface
+     */
+    public function withExtensionAttributes(?\Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoExtensionInterface $value) : \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface;
 }

@@ -84,4 +84,54 @@ class TestDto implements TestDtoInterface
     {
         return $this->extensionAttributes;
     }
+
+    /**
+     * @param string $value
+     * @return Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface
+     */
+    public function withProp1(string $value) : \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface
+    {
+        $dtoProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Dto\DtoProcessor::class);
+        return $dtoProcessor->createUpdatedObjectFromArray($this, ['prop1' => $value]);
+    }
+
+    /**
+     * @param string $value
+     * @return Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface
+     */
+    public function withProp2(string $value) : \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface
+    {
+        $dtoProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Dto\DtoProcessor::class);
+        return $dtoProcessor->createUpdatedObjectFromArray($this, ['prop2' => $value]);
+    }
+
+    /**
+     * @param string|null $value
+     * @return Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface
+     */
+    public function withProp3(?string $value) : \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface
+    {
+        $dtoProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Dto\DtoProcessor::class);
+        return $dtoProcessor->createUpdatedObjectFromArray($this, ['prop3' => $value]);
+    }
+
+    /**
+     * @param string|null $value
+     * @return Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface
+     */
+    public function withProp4(?string $value) : \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface
+    {
+        $dtoProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Dto\DtoProcessor::class);
+        return $dtoProcessor->createUpdatedObjectFromArray($this, ['prop4' => $value]);
+    }
+
+    /**
+     * @param \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoExtensionInterface|null $value
+     * @return Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface
+     */
+    public function withExtensionAttributes(?\Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoExtensionInterface $value) : \Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface
+    {
+        $dtoProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Dto\DtoProcessor::class);
+        return $dtoProcessor->createUpdatedObjectFromArray($this, ['extensionAttributes' => $value]);
+    }
 }
