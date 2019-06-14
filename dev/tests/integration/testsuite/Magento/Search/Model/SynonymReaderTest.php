@@ -64,6 +64,15 @@ class SynonymReaderTest extends \PHPUnit\Framework\TestCase
             [
                 'query_value+@', []
             ],
+            [
+                '<', []
+            ],
+            [
+                '>', []
+            ],
+            [
+                '<english>', [['synonyms' => 'british,english', 'store_id' => 1, 'website_id' => 0]]
+            ],
         ];
     }
 
