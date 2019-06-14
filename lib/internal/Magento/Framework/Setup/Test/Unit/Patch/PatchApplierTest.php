@@ -534,33 +534,43 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
 
         $someIterator->expects($this->any())
             ->method('rewind')
-            ->willReturnCallback(function () use ($iterator) {
-                $iterator->rewind();
-            });
+            ->willReturnCallback(
+                function () use ($iterator) {
+                    $iterator->rewind();
+                }
+            );
 
         $someIterator->expects($this->any())
             ->method('current')
-            ->willReturnCallback(function () use ($iterator) {
-                return $iterator->current();
-            });
+            ->willReturnCallback(
+                function () use ($iterator) {
+                    return $iterator->current();
+                }
+            );
 
         $someIterator->expects($this->any())
             ->method('key')
-            ->willReturnCallback(function () use ($iterator) {
-                return $iterator->key();
-            });
+            ->willReturnCallback(
+                function () use ($iterator) {
+                    return $iterator->key();
+                }
+            );
 
         $someIterator->expects($this->any())
             ->method('next')
-            ->willReturnCallback(function () use ($iterator) {
-                $iterator->next();
-            });
+            ->willReturnCallback(
+                function () use ($iterator) {
+                    $iterator->next();
+                }
+            );
 
         $someIterator->expects($this->any())
             ->method('valid')
-            ->willReturnCallback(function () use ($iterator) {
-                return $iterator->valid();
-            });
+            ->willReturnCallback(
+                function () use ($iterator) {
+                    return $iterator->valid();
+                }
+            );
 
         return $mockIteratorAggregate;
     }
