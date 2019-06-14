@@ -99,72 +99,44 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
         return [
             'url changed' => [
                 'isChangedUrlKey'       => true,
-                'isChangedVisibility'   => false,
                 'isChangedWebsites'     => false,
                 'isChangedCategories'   => false,
-                'visibilityResult'      => true,
                 'expectedReplaceCount'  => 1,
 
             ],
-            'no chnages' => [
+            'no changes' => [
                 'isChangedUrlKey'       => false,
-                'isChangedVisibility'   => false,
                 'isChangedWebsites'     => false,
                 'isChangedCategories'   => false,
-                'visibilityResult'      => true,
                 'expectedReplaceCount'  => 0
-            ],
-            'visibility changed' => [
-                'isChangedUrlKey'       => false,
-                'isChangedVisibility'   => true,
-                'isChangedWebsites'     => false,
-                'isChangedCategories'   => false,
-                'visibilityResult'      => true,
-                'expectedReplaceCount'  => 1
             ],
             'websites changed' => [
                 'isChangedUrlKey'       => false,
-                'isChangedVisibility'   => false,
                 'isChangedWebsites'     => true,
                 'isChangedCategories'   => false,
-                'visibilityResult'      => true,
                 'expectedReplaceCount'  => 1
             ],
             'categories changed' => [
                 'isChangedUrlKey'       => false,
-                'isChangedVisibility'   => false,
                 'isChangedWebsites'     => false,
                 'isChangedCategories'   => true,
-                'visibilityResult'      => true,
                 'expectedReplaceCount'  => 1
-            ],
-            'url changed invisible' => [
-                'isChangedUrlKey'       => true,
-                'isChangedVisibility'   => false,
-                'isChangedWebsites'     => false,
-                'isChangedCategories'   => false,
-                'visibilityResult'      => false,
-                'expectedReplaceCount'  => 0
-            ],
+            ]
         ];
     }
 
     /**
      * @param bool $isChangedUrlKey
-     * @param bool $isChangedVisibility
      * @param bool $isChangedWebsites
      * @param bool $isChangedCategories
-     * @param bool $visibilityResult
      * @param int $expectedReplaceCount
      *
      * @dataProvider urlKeyDataProvider
      */
     public function testExecuteUrlKey(
         $isChangedUrlKey,
-        $isChangedVisibility,
         $isChangedWebsites,
         $isChangedCategories,
-        $visibilityResult,
         $expectedReplaceCount
     ) {
         $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue(12));
@@ -173,7 +145,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
             ->method('dataHasChangedFor')
             ->will($this->returnValueMap(
                 [
-                    ['visibility', $isChangedVisibility],
                     ['url_key', $isChangedUrlKey]
                 ]
             ));
@@ -185,10 +156,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
         $this->product->expects($this->any())
             ->method('getIsChangedCategories')
             ->will($this->returnValue($isChangedCategories));
-
-        $this->product->expects($this->any())
-            ->method('isVisibleInSiteVisibility')
-            ->will($this->returnValue($visibilityResult));
 
         $this->urlPersist->expects($this->exactly($expectedReplaceCount))
             ->method('replace')
