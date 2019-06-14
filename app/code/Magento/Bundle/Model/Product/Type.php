@@ -796,9 +796,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 return $result;
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $product->setOptionsValidationFail(true);
             return $e->getMessage();
         }
-
+        $product->setOptionsValidationFail(true);
         return $this->getSpecifyOptionMessage();
     }
 
