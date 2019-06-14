@@ -11,6 +11,9 @@ use Magento\Checkout\Helper\Data as CheckoutHelper;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Quote\Model\Quote;
 
+/**
+ * Checks if guest checkout is allowed.
+ */
 class CheckCartCheckoutAllowance
 {
     /**

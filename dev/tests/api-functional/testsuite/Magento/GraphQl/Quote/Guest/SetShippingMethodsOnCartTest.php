@@ -379,7 +379,6 @@ QUERY;
         $this->graphQlMutation($query);
     }
 
-
     /**
      * @param string $maskedQuoteId
      * @param string $shippingMethodCode

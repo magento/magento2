@@ -466,7 +466,6 @@ QUERY;
         $this->graphQlMutation($query);
     }
 
-
     /**
      * Verify the all the whitelisted fields for a New Address Object
      *
