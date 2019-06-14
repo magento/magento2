@@ -3060,7 +3060,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         switch ($column['DATA_TYPE']) {
             case 'smallint':
             case 'int':
-                $value = (int)$value;
+                if ($column['NULLABLE'] && $value == '') {
+                    $value = null;
+                } else {
+                    $value = (int)$value;
+                }
                 break;
             case 'bigint':
                 if (!is_integer($value)) {
