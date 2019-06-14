@@ -200,7 +200,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
                     \SomeDataPatch::class,
                     \OtherDataPatch::class
                 ],
-                'moduleVersionInDb' => null,
+                'moduleVersionInDb' => '2.0.0',
             ],
         ];
     }
