@@ -45,8 +45,12 @@ class CheckCartCheckoutAllowance
 
         $isAllowedGuestCheckout = $this->checkoutHelper->isAllowedGuestCheckout($quote);
         if (false === $isAllowedGuestCheckout) {
-            throw new GraphQlAuthorizationException(__('Guest checkout is not allowed. ' .
-                'Register a customer account or login with existing one.'));
+            throw new GraphQlAuthorizationException(
+                __(
+                    'Guest checkout is not allowed. ' .
+                    'Register a customer account or login with existing one.'
+                )
+            );
         }
     }
 }
