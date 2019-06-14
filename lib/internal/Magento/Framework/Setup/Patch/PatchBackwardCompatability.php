@@ -41,7 +41,7 @@ class PatchBackwardCompatability
     {
         $dbVersion = (string) $this->moduleResource->getDataVersion($moduleName);
         return in_array(PatchVersionInterface::class, class_implements($patchClassName)) &&
-            version_compare(call_user_func([$patchClassName, 'getVersion']), $dbVersion) <= 0;
+            version_compare(call_user_func([$patchClassName, 'getVersion']), $dbVersion) < 0;
     }
 
     /**
@@ -55,6 +55,6 @@ class PatchBackwardCompatability
     {
         $dbVersion = (string) $this->moduleResource->getDbVersion($moduleName);
         return in_array(PatchVersionInterface::class, class_implements($patchClassName)) &&
-            version_compare(call_user_func([$patchClassName, 'getVersion']), $dbVersion) <= 0;
+            version_compare(call_user_func([$patchClassName, 'getVersion']), $dbVersion) < 0;
     }
 }
