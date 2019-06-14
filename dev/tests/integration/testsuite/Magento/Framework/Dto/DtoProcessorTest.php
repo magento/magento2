@@ -15,7 +15,6 @@ use Magento\Framework\Dto\Mock\MutableDto;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use ReflectionException;
 
 class DtoProcessorTest extends TestCase
 {
