@@ -485,4 +485,8 @@
         <click selector="{{AdminAddUpSellProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
     </actionGroup>
+    <actionGroup name="AdminSetProductDisabled">
+        <conditionalClick selector="{{AdminProductFormSection.enableProductLabel}}" dependentSelector="{{AdminProductFormSection.productStatusValue('1')}}" visible="true" stepKey="disableProduct"/>
+        <seeElement selector="{{AdminProductFormSection.productStatusValue('2')}}" stepKey="assertThatProductSetToDisabled"/>
+    </actionGroup>
 </actionGroups>
