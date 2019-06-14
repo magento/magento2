@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 /**
  * Tests for \Magento\Framework\Data\Form\Element\AbstractElement
  */
@@ -26,9 +28,9 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
     protected $_collectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper
      */
-    protected $_escaperMock;
+    protected $_escaper;
 
     protected function setUp()
     {
@@ -36,15 +38,15 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
             $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $this->_collectionFactoryMock =
             $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
-        $this->_escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
-        $this->_escaperMock->method('escapeHtml')->willReturnArgument(0);
+        $objectManager = new ObjectManager($this);
+        $this->_escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
 
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,
             [
                 $this->_factoryMock,
                 $this->_collectionFactoryMock,
-                $this->_escaperMock
+                $this->_escaper
             ]
         );
     }
@@ -302,7 +304,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $initialData
      * @param string $expectedValue
-     * @dataProvider testGetDefaultHtmlDataProvider
+     * @dataProvider defaultHtmlDataProvider
      * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getDefaultHtml()
      */
     public function testGetDefaultHtml(array $initialData, $expectedValue)
@@ -519,7 +521,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function testGetDefaultHtmlDataProvider()
+    public function defaultHtmlDataProvider()
     {
         return [
             [
