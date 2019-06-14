@@ -274,7 +274,8 @@ define([
             filter = utils.extend({}, filters.base, filter);
             //Accepting labels as is.
             filter.__disableTmpl = {
-                label: 1
+                label: 1,
+                options: 1
             };
 
             filter = utils.template(filter, {
