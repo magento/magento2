@@ -63,7 +63,7 @@ class SetPaymentMethodOnCart implements ResolverInterface
         PaymentMethodManagementInterface $paymentMethodManagement,
         PaymentInterfaceFactory $paymentFactory,
         CheckCartCheckoutAllowance $checkCartCheckoutAllowance,
-        AdditionalDataProviderPool $additionalDataProviderPool = null
+        AdditionalDataProviderPool $additionalDataProviderPool
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->paymentMethodManagement = $paymentMethodManagement;
