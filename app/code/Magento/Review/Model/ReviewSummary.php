@@ -36,7 +36,7 @@ class ReviewSummary
      * @param int $storeId
      * @param int $entityType
      */
-    public function appendSummaryDataToObject(AbstractModel $object, int $storeId, int $entityType = 1): void
+    public function appendSummaryDataToObject(AbstractModel $object, int $storeId, int $entityType = 1)
     {
         $summary = $this->summaryCollectionFactory->create()
             ->addEntityFilter($object->getId(), $entityType)
