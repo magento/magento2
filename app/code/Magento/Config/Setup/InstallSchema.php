@@ -59,6 +59,12 @@ class InstallSchema implements InstallSchemaInterface
             '64k',
             [],
             'Config Value'
+        )->addColumn(
+            'updated_at',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+            null,
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            'Updated At'
         )->addIndex(
             $setup->getIdxName(
                 'core_config_data',
