@@ -20,6 +20,7 @@
         <click selector="{{AdminCustomerGridMainActionsSection.delete}}" stepKey="deleteCustomer"/>
         <waitForPageLoad stepKey="waitForConfirmationAlert"/>
         <click selector="{{AdminCustomerGridMainActionsSection.ok}}" stepKey="acceptDeletion"/>
+        <waitForPageLoad stepKey="waitForDelete"/>
         <see userInput="were deleted." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>
