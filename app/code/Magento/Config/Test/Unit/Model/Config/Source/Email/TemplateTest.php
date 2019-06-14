@@ -6,6 +6,9 @@
 
 namespace Magento\Config\Test\Unit\Model\Config\Source\Email;
 
+/**
+ * Test class for Template.
+ */
 class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
