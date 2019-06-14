@@ -154,6 +154,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                             'default' => 'default_value',
                                             'size' => 'multiline_count',
                                             'componentType' => Field::NAME,
+                                            '__disableTmpl' => ['label' => true],
                                         ],
                                     ],
                                 ],
@@ -177,6 +178,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                                 'true' => 1,
                                                 'false' => 0,
                                             ],
+                                            '__disableTmpl' => ['label' => true],
                                         ],
                                     ],
                                 ],
@@ -200,6 +202,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                             'default' => 'default_value',
                                             'size' => 'multiline_count',
                                             'componentType' => Field::NAME,
+                                            '__disableTmpl' => ['label' => true],
                                         ],
                                     ],
                                 ],
@@ -223,6 +226,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                                 'true' => 1,
                                                 'false' => 0,
                                             ],
+                                            '__disableTmpl' => ['label' => true],
                                         ],
                                     ],
                                 ],
@@ -245,7 +249,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                             'filterBy' => [
                                                 'target' => '${ $.provider }:data.customer.website_id',
                                                 'field' => 'website_ids'
-                                            ]
+                                            ],
+                                            '__disableTmpl' => ['label' => true],
                                         ],
                                     ],
                                 ],
@@ -1160,6 +1165,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'default' => 'default_value',
                 'size' => 'multiline_count',
                 'label' => __('frontend_label'),
+                '__disableTmpl' => ['label' => true],
             ])
             ->willReturn([
                 'max_file_size' => $maxFileSize,
@@ -1207,7 +1213,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                     ],
                                     'sortOrder' => 'sort_order',
                                     'required' => 'is_required',
-                                    'visible' => null,
+                                    'visible' => false,
                                     'validation' => [
                                         'max_file_size' => $maxFileSize,
                                         'file_extensions' => 'ext1, eXt2 ',
@@ -1388,6 +1394,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                             'default' => 'default_value',
                             'size' => 'multiline_count',
                             'componentType' => Field::NAME,
+                            '__disableTmpl' => ['label' => true],
                         ],
                     ],
                 ],
@@ -1407,6 +1414,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                             'default' => 'default_value',
                             'size' => 'multiline_count',
                             'componentType' => Field::NAME,
+                            '__disableTmpl' => ['label' => true],
                         ],
                     ],
                 ],
@@ -1430,6 +1438,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                 'true' => 1,
                                 'false' => 0,
                             ],
+                            '__disableTmpl' => ['label' => true],
                         ],
                     ],
                 ],
@@ -1453,6 +1462,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                 'true' => 1,
                                 'false' => 0,
                             ],
+                            '__disableTmpl' => ['label' => true],
                         ],
                     ],
                 ],
@@ -1488,6 +1498,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                     'default' => 'default_value',
                                     'size' => 'multiline_count',
                                     'componentType' => Field::NAME,
+                                    '__disableTmpl' => ['label' => true],
                                 ],
                             ],
                         ],
@@ -1511,6 +1522,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                         'true' => 1,
                                         'false' => 0,
                                     ],
+                                    '__disableTmpl' => ['label' => true],
                                 ],
                             ],
                         ],
@@ -1533,7 +1545,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                     'filterBy' => [
                                         'target' => '${ $.provider }:data.customer.website_id',
                                         'field' => 'website_ids'
-                                    ]
+                                    ],
+                                    '__disableTmpl' => ['label' => true],
                                 ],
                             ],
                         ],
