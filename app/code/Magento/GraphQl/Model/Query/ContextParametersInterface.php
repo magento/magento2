@@ -56,5 +56,5 @@ interface ContextParametersInterface
      *
      * @return array
      */
-    public function getExtensionAttributes(): array;
+    public function getExtensionAttributesData(): array;
 }

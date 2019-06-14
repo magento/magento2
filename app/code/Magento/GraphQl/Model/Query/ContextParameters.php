@@ -70,7 +70,7 @@ class ContextParameters implements ContextParametersInterface
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes(): array
+    public function getExtensionAttributesData(): array
     {
         return $this->extensionAttributesData;
     }
