@@ -182,8 +182,8 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
             if (!empty($login['username']) && !empty($login['password'])) {
                 try {
                     $customer = $this->customerAccountManagement->authenticate($login['username'], $login['password']);
-                    $this->session->setCustomerDataAsLoggedIn($customer);
                     $this->session->regenerateId();
+                    $this->session->setCustomerDataAsLoggedIn($customer);
                     if ($this->getCookieManager()->getCookie('mage-cache-sessid')) {
                         $metadata = $this->getCookieMetadataFactory()->createCookieMetadata();
                         $metadata->setPath('/');

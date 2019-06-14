@@ -412,10 +412,10 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     public function setCustomerAsLoggedIn($customer)
     {
+        $this->regenerateId();
         $this->setCustomer($customer);
         $this->_eventManager->dispatch('customer_login', ['customer' => $customer]);
         $this->_eventManager->dispatch('customer_data_object_login', ['customer' => $this->getCustomerDataObject()]);
-        $this->regenerateId();
         return $this;
     }
 
