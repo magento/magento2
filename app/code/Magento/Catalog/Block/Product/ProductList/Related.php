@@ -46,7 +46,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
     protected $_checkoutCart;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
@@ -55,7 +55,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
      * @param \Magento\Checkout\Model\ResourceModel\Cart $checkoutCart
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param array $data
      */
     public function __construct(
@@ -63,7 +63,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
         \Magento\Checkout\Model\ResourceModel\Cart $checkoutCart,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         array $data = []
     ) {
         $this->_checkoutCart = $checkoutCart;

@@ -5,9 +5,9 @@
  */
 ?>
 <script>
-    var BASE_URL = '<?= /* @escapeNotVerified */ $block->getUrl('*') ?>';
-    var FORM_KEY = '<?= /* @escapeNotVerified */ $block->getFormKey() ?>';
+    var BASE_URL = '<?= /* @noEscape */ $block->getUrl('*') ?>';
+    var FORM_KEY = '<?= /* @noEscape */ $block->getFormKey() ?>';
     var require = {
-        "baseUrl": "<?= /* @escapeNotVerified */ $block->getViewFileUrl('/') ?>"
+        "baseUrl": "<?= /* @noEscape */ $block->getViewFileUrl('/') ?>"
     };
 </script>
