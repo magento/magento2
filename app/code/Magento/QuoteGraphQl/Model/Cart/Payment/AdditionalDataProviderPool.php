@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart\Payment;
 
+/**
+ * Pool model for AdditionalDataProvider
+ */
 class AdditionalDataProviderPool
 {
     /**
@@ -14,11 +17,21 @@ class AdditionalDataProviderPool
      */
     private $dataProviders;
 
+    /**
+     * @param array $dataProviders
+     */
     public function __construct(array $dataProviders = [])
     {
         $this->dataProviders = $dataProviders;
     }
 
+    /**
+     * Return additional data for the payment method
+     *
+     * @param string $methodCode
+     * @param array $args
+     * @return array
+     */
     public function getData(string $methodCode, array $args): array
     {
         $additionalData = [];

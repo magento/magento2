@@ -131,7 +131,7 @@ input SetPaymentMethodOnCartInput {
 input PaymentMethodInput {
     code: String! @doc(description:"Payment method code")
     purchase_order_number: String @doc(description:"Purchase order number")
-    additional_data: PaymentMethodAdditionalDataInput
+    additional_data: PaymentMethodAdditionalDataInput @doc(description: "Additional payment data")
 }
 
 input PaymentMethodAdditionalDataInput {

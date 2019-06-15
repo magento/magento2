@@ -8,11 +8,14 @@ namespace Magento\Weee\Observer;
 use Magento\Customer\Model\Address;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Module\Manager;
+use Magento\Framework\Module\ModuleManagerInterface;
 use Magento\PageCache\Model\Config;
 use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Weee\Helper\Data;
 
+/**
+ * @inheritDoc
+ */
 class AfterAddressSave implements ObserverInterface
 {
     /**
@@ -23,7 +26,7 @@ class AfterAddressSave implements ObserverInterface
     /**
      * Module manager
      *
-     * @var Manager
+     * @var ModuleManagerInterface
      */
     private $moduleManager;
 
@@ -43,13 +46,13 @@ class AfterAddressSave implements ObserverInterface
 
     /**
      * @param Data $weeeHelper
-     * @param Manager $moduleManager
+     * @param ModuleManagerInterface $moduleManager
      * @param Config $cacheConfig
      * @param TaxAddressManagerInterface $addressManager
      */
     public function __construct(
         Data $weeeHelper,
-        Manager $moduleManager,
+        ModuleManagerInterface $moduleManager,
         Config $cacheConfig,
         TaxAddressManagerInterface $addressManager
     ) {
@@ -60,6 +63,8 @@ class AfterAddressSave implements ObserverInterface
     }
 
     /**
+     * Execute.
+     *
      * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

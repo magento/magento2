@@ -12,5 +12,11 @@ namespace Magento\QuoteGraphQl\Model\Cart\Payment;
  */
 interface AdditionalDataProviderInterface
 {
+    /**
+     * Return Additional Data
+     *
+     * @param array $args
+     * @return array
+     */
     public function getData(array $args): array;
 }
