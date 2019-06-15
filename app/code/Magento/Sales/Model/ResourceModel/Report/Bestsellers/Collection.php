@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Model\ResourceModel\Report\Bestsellers;
 
@@ -57,6 +59,18 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
     }
 
     /**
+     * @param $ratingLimit
+     *
+     * @return $this
+     */
+    public function setRatingLimit($ratingLimit)
+    {
+        $this->_ratingLimit = $ratingLimit;
+
+        return $this;
+    }
+
+    /**
      * Return ordered filed
      *
      * @return string
@@ -70,6 +84,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Return table per period
      *
      * @param string $period
+     *
      * @return mixed
      */
     public function getTableByAggregationPeriod($period)
@@ -91,11 +106,11 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
                 $this->_selectedColumns = $this->getAggregatedColumns();
             } else {
                 $this->_selectedColumns = [
-                    'period' => sprintf('MAX(%s)', $connection->getDateFormatSql('period', '%Y-%m-%d')),
+                    'period'                 => sprintf('MAX(%s)', $connection->getDateFormatSql('period', '%Y-%m-%d')),
                     $this->getOrderedField() => 'SUM(' . $this->getOrderedField() . ')',
-                    'product_id' => 'product_id',
-                    'product_name' => 'MAX(product_name)',
-                    'product_price' => 'MAX(product_price)',
+                    'product_id'             => 'product_id',
+                    'product_name'           => 'MAX(product_name)',
+                    'product_price'          => 'MAX(product_price)',
                 ];
                 if ('year' == $this->_period) {
                     $this->_selectedColumns['period'] = $connection->getDateFormatSql('period', '%Y');
@@ -104,6 +119,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
                 }
             }
         }
+
         return $this->_selectedColumns;
     }
 
@@ -112,6 +128,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      *
      * @param string $from
      * @param string $to
+     *
      * @return \Magento\Framework\DB\Select
      */
     protected function _makeBoundarySelect($from, $to)
@@ -202,13 +219,15 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
         $this->_renderFilters();
         $select = clone $this->getSelect();
         $select->reset(\Magento\Framework\DB\Select::ORDER);
+
         return $this->getConnection()->select()->from($select, 'COUNT(*)');
     }
 
     /**
      * Set ids for store restrictions
      *
-     * @param  int|int[] $storeIds
+     * @param int|int[] $storeIds
+     *
      * @return $this
      */
     public function addStoreRestrictions($storeIds)
@@ -217,11 +236,12 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
             $storeIds = [$storeIds];
         }
         $currentStoreIds = $this->_storesIds;
-        if (isset(
-            $currentStoreIds
-        ) && $currentStoreIds != \Magento\Store\Model\Store::DEFAULT_STORE_ID && $currentStoreIds != [
-            \Magento\Store\Model\Store::DEFAULT_STORE_ID
-        ]
+        if (
+            isset(
+                $currentStoreIds
+            ) && $currentStoreIds != \Magento\Store\Model\Store::DEFAULT_STORE_ID && $currentStoreIds != [
+                \Magento\Store\Model\Store::DEFAULT_STORE_ID
+            ]
         ) {
             if (!is_array($currentStoreIds)) {
                 $currentStoreIds = [$currentStoreIds];
@@ -362,7 +382,8 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
 
                 if ($periodFrom && $periodTo) {
                     // the same month
-                    if ($periodTo->format('Y') == $periodFrom->format('Y') &&
+                    if (
+                        $periodTo->format('Y') == $periodFrom->format('Y') &&
                         $periodTo->format('m') == $periodFrom->format('m')
                     ) {
                         $dtFrom = clone $periodFrom;
