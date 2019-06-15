@@ -197,7 +197,9 @@ QUERY;
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
-        $setAddressesResult = $this->graphQlMutation($this->getSetShippingAddressWithLowerCaseCountryOnCartMutation($maskedQuoteId));
+        $setAddressesResult = $this->graphQlMutation(
+            $this->getSetShippingAddressWithLowerCaseCountryOnCartMutation($maskedQuoteId)
+        );
         $setAddresses = $setAddressesResult['setShippingAddressesOnCart']['cart']['shipping_addresses'];
 
         $this->expectException(\Exception::class);
