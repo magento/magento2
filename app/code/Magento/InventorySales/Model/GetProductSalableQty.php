@@ -14,6 +14,7 @@ use Magento\InventoryReservationsApi\Model\GetReservationsQuantityInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\InventorySalesApi\Model\GetStockItemDataInterface;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @inheritdoc
@@ -93,7 +94,15 @@ class GetProductSalableQty implements GetProductSalableQtyInterface
      */
     private function validateProductType(string $sku): void
     {
-        $productType = $this->getProductTypesBySkus->execute([$sku])[$sku];
+        $productTypesBySkus = $this->getProductTypesBySkus->execute([$sku]);
+        if (!array_key_exists($sku, $productTypesBySkus)) {
+            throw new NoSuchEntityException(
+                __('The product that was requested doesn\'t exist. Verify the product and try again.')
+            );
+        } 
+        
+        $productType = $productTypesBySkus[$sku];
+
         if (false === $this->isSourceItemManagementAllowedForProductType->execute($productType)) {
             throw new InputException(
                 __('Can\'t check requested quantity for products without Source Items support.')
