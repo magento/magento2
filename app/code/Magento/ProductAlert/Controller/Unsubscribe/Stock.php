@@ -6,41 +6,66 @@
 
 namespace Magento\ProductAlert\Controller\Unsubscribe;
 
-use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
+use Magento\ProductAlert\Model\StockFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Unsubscribing from 'back in stock alert'.
+ */
 class Stock extends UnsubscribeController
 {
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var StockFactory|null
+     */
+    private $stockFactory;
+
+    /**
+     * @param Context $context
+     * @param CustomerSession $customerSession
+     * @param ProductRepositoryInterface $productRepository
+     * @param StoreManagerInterface|null $storeManager
+     * @param StockFactory|null $stockFactory
      */
     public function __construct(
         Context $context,
         CustomerSession $customerSession,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        StoreManagerInterface $storeManager = null,
+        StockFactory $stockFactory = null
     ) {
         $this->productRepository = $productRepository;
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->stockFactory = $stockFactory ?? ObjectManager::getInstance()->get(StockFactory::class);
         parent::__construct($context, $customerSession);
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * Unsubscribing from 'back in stock alert'.
+     *
+     * @return Redirect
      */
     public function execute()
     {
         $productId = (int)$this->getRequest()->getParam('product');
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!$productId) {
             $resultRedirect->setPath('/');
@@ -53,13 +78,17 @@ class Stock extends UnsubscribeController
                 throw new NoSuchEntityException();
             }
 
-            $model = $this->_objectManager->create(\Magento\ProductAlert\Model\Stock::class)
+            $model = $this->stockFactory->create()
                 ->setCustomerId($this->customerSession->getCustomerId())
                 ->setProductId($product->getId())
                 ->setWebsiteId(
-                    $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
+                    $this->storeManager
                         ->getStore()
                         ->getWebsiteId()
+                )->setStoreId(
+                    $this->storeManager
+                         ->getStore()
+                         ->getId()
                 )
                 ->loadByParam();
             if ($model->getId()) {
