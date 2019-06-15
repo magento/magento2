@@ -186,6 +186,31 @@ QUERY;
     }
 
     /**
+     * Test region code returns as expected following a failure to set shipping methods
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @throws Exception
+     */
+    public function testShippingRegionOnMethodSetError()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $setAddressesResult = $this->graphQlMutation($this->getSetShippingAddressWithLowerCaseCountryOnCartMutation($maskedQuoteId));
+        $setAddresses = $setAddressesResult['setShippingAddressesOnCart']['cart']['shipping_addresses'];
+
+        $this->expectException(\Exception::class);
+        try {
+            $this->graphQlMutation($this->getInvalidSetShippingMethodMutation($maskedQuoteId));
+        } catch (\Exception $e) {
+            $currentShippingAddresses = $this->queryShippingAddresses($maskedQuoteId);
+            $this->assertEquals($setAddresses[0]['region']['code'], $currentShippingAddresses[0]['region']['code']);
+            throw $e;
+        }
+    }
+
+    /**
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -331,7 +356,7 @@ QUERY;
         );
         $this->graphQlMutation($query);
     }
-    
+
     /**
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
@@ -396,5 +421,124 @@ mutation {
   }
 }
 QUERY;
+    }
+
+    /**
+     * Get mutation setting shipping address on cart with lowercase country code
+     *
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getSetShippingAddressWithLowerCaseCountryOnCartMutation(string $maskedQuoteId): string
+    {
+        return <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "{$maskedQuoteId}"
+      shipping_addresses: [
+        {
+          address: {
+            firstname: "John"
+            lastname: "Doe"
+            street: ["6161 West Centinella Avenue"]
+            city: "Culver City"
+            region: "CA"
+            postcode: "90230"
+            country_code: "us"
+            telephone: "555-555-55-55"
+            save_in_address_book: false
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        firstname
+        lastname
+        city
+        postcode
+        region {
+          label
+          code
+        }
+        selected_shipping_method {
+          carrier_code
+          method_code
+        }
+        available_shipping_methods {
+          carrier_code
+          method_code
+          carrier_title
+          method_title
+        }
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * Get mutation setting invalid shipping method on cart
+     *
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getInvalidSetShippingMethodMutation(string $maskedQuoteId): string
+    {
+        return <<<QUERY
+mutation {
+  setShippingMethodsOnCart(input:  {
+    cart_id: "{$maskedQuoteId}",
+    shipping_methods: [{
+      carrier_code: "flatrate"
+      method_code: "wrong-carrier-code"
+    }]
+  }) {
+    cart {
+      shipping_addresses {
+        selected_shipping_method {
+          carrier_code
+        }
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * Get current shipping addresses for a given masked quote id
+     *
+     * @param string $maskedQuoteId
+     * @return array
+     * @throws Exception
+     */
+    private function queryShippingAddresses(string $maskedQuoteId): array
+    {
+        $query = <<<QUERY
+{
+  cart(cart_id:"{$maskedQuoteId}") {
+      shipping_addresses {
+        street
+        city
+        postcode
+        region {
+          label
+          code
+        }
+        country {
+          code
+          label
+        }
+      }
+    }
+}
+QUERY;
+
+        $result = $this->graphQlQuery($query);
+        return $result['cart']['shipping_addresses'] ?? [];
     }
 }
