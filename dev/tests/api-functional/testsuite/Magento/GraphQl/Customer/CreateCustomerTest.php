@@ -139,7 +139,7 @@ QUERY;
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage The customer email is missing. Enter and try again.
+     * @expectedExceptionMessage Required parameters are missing: Email
      */
     public function testCreateCustomerIfEmailMissed()
     {
@@ -243,7 +243,7 @@ QUERY;
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Required parameters are missing: firstname
+     * @expectedExceptionMessage Required parameters are missing: First Name
      */
     public function testCreateCustomerIfNameEmpty()
     {

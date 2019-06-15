@@ -253,6 +253,8 @@ QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
         $existedEmail = 'customer_two@example.com';
+        $firstname = 'Richard';
+        $lastname = 'Rowe';
 
         $query = <<<QUERY
 mutation {
@@ -260,6 +262,8 @@ mutation {
         input: {
             email: "{$existedEmail}"
             password: "{$currentPassword}"
+            firstname: "{$firstname}"
+            lastname: "{$lastname}"
         }
     ) {
         customer {
@@ -274,7 +278,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Required parameters are missing: firstname
+     * @expectedExceptionMessage Required parameters are missing: First Name
      */
     public function testEmptyCustomerName()
     {
