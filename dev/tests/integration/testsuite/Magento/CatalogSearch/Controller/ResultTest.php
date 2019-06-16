@@ -33,13 +33,15 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
 
     public function testIndexActionXSSQueryVerification()
     {
+        $escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Escaper::class);
         $this->getRequest()->setParam('q', '<script>alert(1)</script>');
         $this->dispatch('catalogsearch/result');
 
         $responseBody = $this->getResponse()->getBody();
         $data = '<script>alert(1)</script>';
         $this->assertNotContains($data, $responseBody);
-        $this->assertContains(htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false), $responseBody);
+        $this->assertContains($escaper->escapeHtml($data), $responseBody);
     }
 
     /**
