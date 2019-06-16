@@ -5,12 +5,12 @@
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
-use Magento\Catalog\Model\Product as ProductEntity;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
-use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
 use Magento\ImportExport\Model\Import;
-use Magento\Store\Model\Store;
+use \Magento\Store\Model\Store;
+use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\Catalog\Model\Product as ProductEntity;
 
 /**
  * Export entity product model
@@ -515,10 +515,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Prepare products media gallery
      *
-     * @param int[] $productIds
-     *
+     * @param  int[] $productIds
      * @return array
-     * @throws \Zend_Db_Statement_Exception
      */
     protected function getMediaGallery(array $productIds)
     {
@@ -550,17 +548,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 'mgv.disabled',
                 'mgv.store_id',
             ]
-        )->joinLeft(
-            ['mgvi' => $this->_resourceModel->getTableName('catalog_product_entity_media_gallery_value_video')],
-            "(mg.value_id = mgvi.value_id)",
-            [
-                'mgvi.title',
-                'mgvi.url',
-                'mgvi.description',
-                'mgvi.store_id',
-                'mgvi.provider',
-                'mgvi.metadata',
-            ]
         )->where(
             "mgvte.$productEntityJoinField IN (?)",
             $productIds
@@ -572,27 +559,21 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $rowMediaGallery[$mediaRow[$productEntityJoinField]][] = [
                 '_media_attribute_id' => $mediaRow['attribute_id'],
                 '_media_image' => $mediaRow['filename'],
-                '_media_label' => $mediaRow['label'] ?? $mediaRow['title'],
-                '_media_url' => $mediaRow['url'],
-                '_media_description' => $mediaRow['description'],
-                '_media_provider' => $mediaRow['provider'],
-                '_media_metadata' => $mediaRow['metadata'],
+                '_media_label' => $mediaRow['label'],
                 '_media_position' => $mediaRow['position'],
                 '_media_is_disabled' => $mediaRow['disabled'],
                 '_media_store_id' => $mediaRow['store_id'],
             ];
         }
+
         return $rowMediaGallery;
     }
 
     /**
      * Prepare catalog inventory
      *
-     * @param int[] $productIds
-     *
+     * @param  int[] $productIds
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Zend_Db_Statement_Exception
      */
     protected function prepareCatalogInventory(array $productIds)
     {
