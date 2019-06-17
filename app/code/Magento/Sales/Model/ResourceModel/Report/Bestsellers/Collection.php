@@ -8,10 +8,19 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Model\ResourceModel\Report\Bestsellers;
 
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Sales\Model\ResourceModel\Report;
+use Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection;
+use Psr\Log\LoggerInterface;
+
 /**
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Rating limit
@@ -39,27 +48,29 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
     ];
 
     /**
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\ResourceModel\Report $resource
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param EntityFactory $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param Report $resource
+     * @param AdapterInterface $connection
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\ResourceModel\Report $resource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        EntityFactory $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        Report $resource,
+        AdapterInterface $connection = null
     ) {
         $resource->init($this->getTableByAggregationPeriod('daily'));
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
     }
 
     /**
-     * @param $ratingLimit
+     * Set chosen limit for bestsellers
+     *
+     * @param int $ratingLimit
      *
      * @return $this
      */
@@ -124,12 +135,12 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
     }
 
     /**
-     * Make select object for date boundary
      *
-     * @param string $from
-     * @param string $to
+     * @param $from
+     * @param $to
      *
      * @return \Magento\Framework\DB\Select
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _makeBoundarySelect($from, $to)
     {
@@ -236,10 +247,8 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
             $storeIds = [$storeIds];
         }
         $currentStoreIds = $this->_storesIds;
-        if (
-            isset(
-                $currentStoreIds
-            ) && $currentStoreIds != \Magento\Store\Model\Store::DEFAULT_STORE_ID && $currentStoreIds != [
+        if (isset($currentStoreIds) &&
+            $currentStoreIds != \Magento\Store\Model\Store::DEFAULT_STORE_ID && $currentStoreIds != [
                 \Magento\Store\Model\Store::DEFAULT_STORE_ID
             ]
         ) {
@@ -255,13 +264,9 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
     }
 
     /**
-     * Redeclare parent method for applying filters after parent method
-     * but before adding unions and calculating totals
-     *
-     * @return $this|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return $this|AbstractCollection
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Zend_Db_Select_Exception
      */
     protected function _beforeLoad()
     {
@@ -282,7 +287,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
                         $dtFrom = clone $periodFrom;
                         // last day of the year
                         $dtTo = clone $periodFrom;
-                        $dtTo->setDate($dtTo->format('Y'), 12, 31);
+                        $dtTo->setDate((int)$dtTo->format('Y'), 12, 31);
                         if (!$periodTo || $dtTo < $periodTo) {
                             $selectUnions[] = $this->_makeBoundarySelect(
                                 $dtFrom->format('Y-m-d'),
@@ -292,7 +297,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
                             // first day of the next year
                             $this->_from = clone $periodFrom;
                             $this->_from->modify('+1 year');
-                            $this->_from->setDate($this->_from->format('Y'), 1, 1);
+                            $this->_from->setDate((int)$this->_from->format('Y'), 1, 1);
                             $this->_from = $this->_from->format('Y-m-d');
                         }
                     }
@@ -302,7 +307,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
                     // not the last day of the year
                     if ($periodTo->format('m') != 12 || $periodTo->format('d') != 31) {
                         $dtFrom = clone $periodTo;
-                        $dtFrom->setDate($dtFrom->format('Y'), 1, 1);
+                        $dtFrom->setDate((int)$dtFrom->format('Y'), 1, 1);
                         // first day of the year
                         $dtTo = clone $periodTo;
                         if (!$periodFrom || $dtFrom > $periodFrom) {
@@ -314,7 +319,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
                             // last day of the previous year
                             $this->_to = clone $periodTo;
                             $this->_to->modify('-1 year');
-                            $this->_to->setDate($this->_to->format('Y'), 12, 31);
+                            $this->_to->setDate((int)$this->_to->format('Y'), 12, 31);
                             $this->_to = $this->_to->format('Y-m-d');
                         }
                     }
@@ -341,7 +346,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
                         // last day of the month
                         $dtTo = clone $periodFrom;
                         $dtTo->modify('+1 month');
-                        $dtTo->setDate($dtTo->format('Y'), $dtTo->format('m'), 1);
+                        $dtTo->setDate((int)$dtTo->format('Y'), (int)$dtTo->format('m'), 1);
                         $dtTo->modify('-1 day');
                         if (!$periodTo || $dtTo < $periodTo) {
                             $selectUnions[] = $this->_makeBoundarySelect(
@@ -352,7 +357,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
                             // first day of the next month
                             $this->_from = clone $periodFrom;
                             $this->_from->modify('+1 month');
-                            $this->_from->setDate($this->_from->format('Y'), $this->_from->format('m'), 1);
+                            $this->_from->setDate((int)$this->_from->format('Y'), (int)$this->_from->format('m'), 1);
                             $this->_from = $this->_from->format('Y-m-d');
                         }
                     }
@@ -362,7 +367,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
                     // not the last day of the month
                     if ($periodTo->format('d') != $periodTo->format('t')) {
                         $dtFrom = clone $periodTo;
-                        $dtFrom->setDate($dtFrom->format('Y'), $dtFrom->format('m'), 1);
+                        $dtFrom->setDate((int)$dtFrom->format('Y'), (int)$dtFrom->format('m'), 1);
                         // first day of the month
                         $dtTo = clone $periodTo;
                         if (!$periodFrom || $dtFrom > $periodFrom) {
@@ -373,7 +378,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
 
                             // last day of the previous month
                             $this->_to = clone $periodTo;
-                            $this->_to->setDate($this->_to->format('Y'), $this->_to->format('m'), 1);
+                            $this->_to->setDate((int)$this->_to->format('Y'), (int)$this->_to->format('m'), 1);
                             $this->_to->modify('-1 day');
                             $this->_to = $this->_to->format('Y-m-d');
                         }
@@ -382,8 +387,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
 
                 if ($periodFrom && $periodTo) {
                     // the same month
-                    if (
-                        $periodTo->format('Y') == $periodFrom->format('Y') &&
+                    if ($periodTo->format('Y') == $periodFrom->format('Y') &&
                         $periodTo->format('m') == $periodFrom->format('m')
                     ) {
                         $dtFrom = clone $periodFrom;
