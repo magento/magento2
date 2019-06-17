@@ -151,8 +151,6 @@ class CouponCodesFixtureTest extends \PHPUnit\Framework\TestCase
      */
     public function testIntroduceParamLabels()
     {
-        $this->assertSame([
-            'coupon_codes' => 'Coupon Codes'
-        ], $this->model->introduceParamLabels());
+        $this->assertSame(['coupon_codes' => 'Coupon Codes'], $this->model->introduceParamLabels());
     }
 }
