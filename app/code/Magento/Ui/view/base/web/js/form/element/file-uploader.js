@@ -427,7 +427,7 @@ define([
                 _.each(this.aggregatedErrors, function (error) {
                     notification().add({
                         error: true,
-                        message: '%s' + error.message, // %s to be used as placeholder for html injection,
+                        message: '%s' + error.message, // %s to be used as placeholder for html injection
 
                         /**
                          * Adds constructed error notification to aggregatedErrorMessages
