@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Weee\Model\Attribute\Backend\Weee;
 
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 
@@ -70,9 +69,11 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
      * Get backend model name.
      *
      * @return string
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getBackendModelName()
     {
+        // phpcs:enable Magento2.Functions.StaticFunction
         return \Magento\Weee\Model\Attribute\Backend\Weee\Tax::class;
     }
 
@@ -201,17 +202,5 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     public function getEntityIdField()
     {
         return $this->_attributeTax->getIdFieldName();
-    }
-
-    /**
-     * Don't need to change scope for tax.
-     *
-     * @param Attribute $attribute
-     * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function setScope($attribute)
-    {
-        return $this;
     }
 }
