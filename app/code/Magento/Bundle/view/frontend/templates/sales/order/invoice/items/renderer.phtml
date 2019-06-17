@@ -56,7 +56,7 @@
     </td>
     <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty Invoiced')) ?>">
         <?php if ($block->canShowPriceInfo($_item)) : ?>
-            <?= $block->escapeHtml($_item->getQty()*1) ?>
+            <?= (int)$_item->getQty()*1 ?>
         <?php else : ?>
             &nbsp;
         <?php endif; ?>

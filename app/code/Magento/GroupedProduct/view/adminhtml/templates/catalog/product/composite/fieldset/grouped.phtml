@@ -54,7 +54,7 @@
                                name="super_group[<?= $block->escapeHtmlAttr($_item->getId()) ?>]"
                                id="super_group[<?= $block->escapeHtmlAttr($_item->getId()) ?>]"
                                maxlength="12"
-                               value="<?= $block->escapeHtmlAttr($_item->getQty()*1) ?>"
+                               value="<?= (int)$_item->getQty()*1 ?>"
                                title="<?= $block->escapeHtmlAttr(__('Qty')) ?>"
                                class="input-text admin__control-text qty" />
                         <input type="hidden" value="1" price="<?= $block->escapeHtmlAttr($block->getCurrencyPrice($_item->getPrice())) ?>" qtyId="super_group[<?= $block->escapeHtmlAttr($_item->getId()) ?>]" />
