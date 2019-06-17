@@ -8,6 +8,6 @@
 
 ?>
 
-<a class="link-report" href="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" id="footer_privacy" target="_blank">
+<a class="link-report" href="<?= $block->escapeUrl($block->getPrivacypolicyUrl()) ?>" id="footer_privacy" target="_blank">
     <?= /* @escapeNotVerified */ __('Privacy Policy | ') ?>
 </a>
