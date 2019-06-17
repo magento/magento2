@@ -167,10 +167,10 @@ class Processor
         }
 
         $fileName = \Magento\MediaStorage\Model\File\Uploader::getCorrectFileName($pathinfo['basename']);
-        $dispretionPath = \Magento\MediaStorage\Model\File\Uploader::getDispersionPath($fileName);
-        $fileName = $dispretionPath . '/' . $fileName;
+        $dispersionPath = \Magento\MediaStorage\Model\File\Uploader::getDispersionPath($fileName);
+        $fileName = $dispersionPath . '/' . $fileName;
 
-        $fileName = $this->getNotDuplicatedFilename($fileName, $dispretionPath);
+        $fileName = $this->getNotDuplicatedFilename($fileName, $dispersionPath);
 
         $destinationFile = $this->mediaConfig->getTmpMediaPath($fileName);
 
@@ -465,27 +465,27 @@ class Processor
      * Get filename which is not duplicated with other files in media temporary and media directories
      *
      * @param string $fileName
-     * @param string $dispretionPath
+     * @param string $dispersionPath
      * @return string
      * @since 101.0.0
      */
-    protected function getNotDuplicatedFilename($fileName, $dispretionPath)
+    protected function getNotDuplicatedFilename($fileName, $dispersionPath)
     {
-        $fileMediaName = $dispretionPath . '/'
+        $fileMediaName = $dispersionPath . '/'
             . \Magento\MediaStorage\Model\File\Uploader::getNewFileName($this->mediaConfig->getMediaPath($fileName));
-        $fileTmpMediaName = $dispretionPath . '/'
+        $fileTmpMediaName = $dispersionPath . '/'
             . \Magento\MediaStorage\Model\File\Uploader::getNewFileName($this->mediaConfig->getTmpMediaPath($fileName));
 
         if ($fileMediaName != $fileTmpMediaName) {
             if ($fileMediaName != $fileName) {
                 return $this->getNotDuplicatedFilename(
                     $fileMediaName,
-                    $dispretionPath
+                    $dispersionPath
                 );
             } elseif ($fileTmpMediaName != $fileName) {
                 return $this->getNotDuplicatedFilename(
                     $fileTmpMediaName,
-                    $dispretionPath
+                    $dispersionPath
                 );
             }
         }
