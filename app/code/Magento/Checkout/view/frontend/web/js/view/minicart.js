@@ -103,7 +103,7 @@ define([
             });
 
             if (cartData().website_id !== window.checkout.websiteId ||
-                cartData().store_id !== window.checkout.storeId
+                cartData().storeId !== window.checkout.storeId
             ) {
                 customerData.reload(['cart'], false);
             }
