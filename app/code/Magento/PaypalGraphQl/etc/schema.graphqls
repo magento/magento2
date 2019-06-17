@@ -1,6 +1,10 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
+type Query {
+    getPayflowLinkToken(input: PayflowLinkTokenInput!): PayflowLinkToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowLinkToken")
+}
+
 type Mutation {
     createPaypalExpressToken(input: PaypalExpressTokenInput): PaypalExpressToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PaypalExpressToken") @doc(description:"Initiates a PayPal checkout transaction and receives a token.")
 }
@@ -18,9 +22,17 @@ type PaypalExpressToken @doc(description: "Contains the token returned by PayPal
     paypal_urls: PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer to authorize payment and adjust checkout details")
 }
 
+type PayflowLinkToken {
+    secret_token: String
+    secret_token_id: String
+    mode: PayflowLinkMode
+    paypal_url: String
+}
+
 input PaymentMethodAdditionalDataInput {
     paypal_express: PaypalExpressInput @doc(description:"Required input for PayPal Express Checkout payments")
     payflow_express: PayflowExpressInput @doc(description:"Required input for PayPal Payflow Express Checkout payments")
+    payflow_link: PayflowLinkAdditionalDataInput @doc(description:"TODO")
 }
 
 input PaypalExpressInput @doc(description:"Required input for PayPal Express Checkout payments") {
@@ -43,4 +55,19 @@ input PaypalExpressUrlsInput @doc(description:"A set of URLs that PayPal uses to
 type PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer to authorize payment and adjust checkout details") {
     start: String @doc(description:"The URL to the PayPal login page")
     edit: String @doc(description:"The PayPal URL that allows the buyer to edit their checkout details")
+}
+
+
+input PayflowLinkAdditionalDataInput {
+    return_url: String!
+    cancel_url: String!
+}
+
+input PayflowLinkTokenInput {
+    cart_id: String!
+}
+
+enum PayflowLinkMode {
+    TEST
+    LIVE
 }
