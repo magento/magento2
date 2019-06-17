@@ -247,8 +247,11 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     /**
      * Perform persist operations for one entity
      *
-     * @param \Magento\Sales\Api\Data\OrderInterface $entity
-     * @return \Magento\Sales\Api\Data\OrderInterface
+     * @param OrderInterface $entity
+     * @return OrderInterface
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function save(\Magento\Sales\Api\Data\OrderInterface $entity)
     {
@@ -262,6 +265,18 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
                 $entity->setShippingMethod($shipping->getMethod());
             }
         }
+
+        $entityId = $entity->getEntityId();
+        if ($entityId && $entity->getIncrementId() == null) {
+            try {
+                $loadedEntity = $this->get($entityId);
+                $entity->setIncrementId($loadedEntity->getIncrementId());
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+            } catch (NoSuchEntityException $e) {
+                // non-existent entity
+            }
+        }
+
         $this->metadata->getMapper()->save($entity);
         $this->registry[$entity->getEntityId()] = $entity;
         return $this->registry[$entity->getEntityId()];
