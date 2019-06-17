@@ -32,6 +32,11 @@ use Magento\Customer\Model\Customer;
 class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpPostActionInterface
 {
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @var \Magento\Customer\Helper\View
      */
     protected $_customerHelperView;
@@ -105,6 +110,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
      * @param StoreManagerInterface $storeManager
      * @param CaptchaHelper|null $captchaHelper
      * @param CaptchaStringResolver|null $captchaStringResolver
+     * @param \Magento\Framework\Escaper|null $escaper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -120,7 +126,8 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
         ?CaptchaHelper $captchaHelper = null,
-        ?CaptchaStringResolver $captchaStringResolver = null
+        ?CaptchaStringResolver $captchaStringResolver = null,
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->_formKeyValidator = $formKeyValidator;
         $this->_customerSession = $customerSession;
@@ -135,7 +142,9 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
         $this->captchaHelper = $captchaHelper ?: ObjectManager::getInstance()->get(CaptchaHelper::class);
         $this->captchaStringResolver = $captchaStringResolver ?
             : ObjectManager::getInstance()->get(CaptchaStringResolver::class);
-
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Escaper::class
+        );
         parent::__construct($context);
     }
 
@@ -189,7 +198,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
         if (strlen($message) > $textLimit) {
             $error = __('Message length must not exceed %1 symbols', $textLimit);
         } else {
-            $message = nl2br(htmlspecialchars($message));
+            $message = nl2br($this->escaper->escapeHtml($message));
             if (empty($emails)) {
                 $error = __('Please enter an email address.');
             } else {
