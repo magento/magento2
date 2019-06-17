@@ -18,6 +18,8 @@ use Magento\Framework\Filesystem\File\WriteFactory;
  */
 class PhpStorm implements FormatInterface
 {
+    const PROJECT_PATH_IDENTIFIER = '$PROJECT_DIR$';
+    const IDEA_PATH = '.idea';
 
     /**
      * @var WriteFactory
@@ -54,6 +56,8 @@ class PhpStorm implements FormatInterface
         $componentNode = null;
         $projectNode = null;
 
+        $ideaDir = $this->resolveProjectPath($configFilePath);
+
         try {
             $file = $this->fileWriteFactory->create(
                 $configFilePath,
@@ -89,7 +93,7 @@ class PhpStorm implements FormatInterface
         foreach ($dictionary as $urn => $xsdPath) {
             $node = $dom->createElement('resource');
             $node->setAttribute('url', $urn);
-            $node->setAttribute('location', $xsdPath);
+            $node->setAttribute('location', $this->getFileLocationInProject($ideaDir, $xsdPath));
             $componentNode->appendChild($node);
         }
         $dom->formatOutput = true;
@@ -122,5 +126,28 @@ class PhpStorm implements FormatInterface
         $rootComponentNode->setAttribute('name', 'ProjectRootManager');
         $projectNode->appendChild($rootComponentNode);
         return $projectNode;
+    }
+
+    /**
+     * Resolve PhpStorm Project Path
+     *
+     * @param string $configFilePath
+     * @return string
+     */
+    public function resolveProjectPath($configFilePath): string
+    {
+        return \str_replace('/' . self::IDEA_PATH, '', realpath(dirname($configFilePath)));
+    }
+
+    /**
+     * Resolve xsdpath to xml project path
+     *
+     * @param string $ideaDir
+     * @param string $xsdPath
+     * @return string
+     */
+    public function getFileLocationInProject(string $ideaDir, string $xsdPath): string
+    {
+        return \str_replace($ideaDir, self::PROJECT_PATH_IDENTIFIER, $xsdPath);
     }
 }
