@@ -104,18 +104,36 @@ class DataObjectHelper
      * @param string $interfaceName
      * @return $this
      * @throws ReflectionException
+     * @deprecated (See createFromArray)
      */
     public function populateWithArray($dataObject, array $data, $interfaceName)
     {
-        if ($this->dtoConfig->isDto($dataObject) || $this->dtoConfig->isDto($interfaceName)) {
-            return $this->dtoProcessor->createFromArray($data, $interfaceName);
-        }
-
         if ($dataObject instanceof ExtensibleDataInterface) {
             $data = $this->joinProcessor->extractExtensionAttributes(get_class($dataObject), $data);
         }
         $this->_setDataValues($dataObject, $data, $interfaceName);
         return $this;
+    }
+
+    /**
+     * Create data object using data in array format.
+     *
+     * @param array $data
+     * @param string $type
+     * @return mixed
+     * @throws ReflectionException
+     */
+    public function createFromArray(array $data, string $type)
+    {
+        if ($this->dtoConfig->isDto($type)) {
+            return $this->dtoProcessor->createFromArray($data, $type);
+        }
+
+        // Compatibility mode
+        $dataObject = $this->objectFactory->create($type, []);
+        $this->populateWithArray($dataObject, $data, $type);
+
+        return $dataObject;
     }
 
     /**
@@ -126,6 +144,7 @@ class DataObjectHelper
      * @param string $interfaceName
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws ReflectionException
      */
     protected function _setDataValues($dataObject, array $data, $interfaceName)
     {
@@ -176,6 +195,7 @@ class DataObjectHelper
      * @param string $interfaceName
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws ReflectionException
      */
     protected function setComplexValue(
         $dataObject,
@@ -184,7 +204,7 @@ class DataObjectHelper
         array $value,
         $interfaceName
     ) {
-        if ($interfaceName == null) {
+        if ($interfaceName === null) {
             $interfaceName = get_class($dataObject);
         }
         $returnType = $this->methodsMapProcessor->getMethodReturnType($interfaceName, $getterMethodName);
@@ -197,17 +217,14 @@ class DataObjectHelper
             $type = $this->typeProcessor->getArrayItemType($returnType);
             $objects = [];
             foreach ($value as $arrayElementData) {
-                $object = $this->objectFactory->create($type, []);
-                $this->populateWithArray($object, $arrayElementData, $type);
-                $objects[] = $object;
+                $objects[] = $this->createFromArray($arrayElementData, $type);
             }
             $dataObject->$methodName($objects);
             return $this;
         }
 
         if (is_subclass_of($returnType, ExtensibleDataInterface::class)) {
-            $object = $this->objectFactory->create($returnType, []);
-            $this->populateWithArray($object, $value, $returnType);
+            $object = $this->createFromArray($value, $returnType);
         } elseif (is_subclass_of($returnType, ExtensionAttributesInterface::class)) {
             foreach ($value as $extensionAttributeKey => $extensionAttributeValue) {
                 $extensionAttributeGetterMethodName
@@ -223,23 +240,21 @@ class DataObjectHelper
                     : $methodReturnType;
                 if ($this->typeProcessor->isTypeSimple($extensionAttributeType)) {
                     $value[$extensionAttributeKey] = $extensionAttributeValue;
-                } else {
-                    if ($this->typeProcessor->isArrayType($methodReturnType)) {
-                        foreach ($extensionAttributeValue as $key => $extensionAttributeArrayValue) {
-                            $extensionAttribute = $this->objectFactory->create($extensionAttributeType, []);
-                            $this->populateWithArray(
-                                $extensionAttribute,
-                                $extensionAttributeArrayValue,
-                                $extensionAttributeType
-                            );
-                            $value[$extensionAttributeKey][$key] = $extensionAttribute;
-                        }
-                    } else {
-                        $value[$extensionAttributeKey] = $this->objectFactory->create(
-                            $extensionAttributeType,
-                            ['data' => $extensionAttributeValue]
+                } else if ($this->typeProcessor->isArrayType($methodReturnType)) {
+                    foreach ($extensionAttributeValue as $key => $extensionAttributeArrayValue) {
+                        $extensionAttribute = $this->objectFactory->create($extensionAttributeType, []);
+                        $this->populateWithArray(
+                            $extensionAttribute,
+                            $extensionAttributeArrayValue,
+                            $extensionAttributeType
                         );
+                        $value[$extensionAttributeKey][$key] = $extensionAttribute;
                     }
+                } else {
+                    $value[$extensionAttributeKey] = $this->objectFactory->create(
+                        $extensionAttributeType,
+                        ['data' => $extensionAttributeValue]
+                    );
                 }
             }
             $object = $this->extensionFactory->create(get_class($dataObject), ['data' => $value]);
