@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontFillRegistrationFormActionGroup">
+        <arguments>
+            <argument name="customer" defaultValue="CustomerEntityOne"/>
+        </arguments>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForNavigateToCustomersPageLoad"/>
+        <click stepKey="clickOnCreateAccountLink" selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}"/>
+        <fillField stepKey="fillFirstName" userInput="{{customer.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}"/>
+        <fillField stepKey="fillLastName" userInput="{{customer.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}"/>
+        <fillField stepKey="fillEmail" userInput="{{customer.email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}"/>
+        <fillField stepKey="fillPassword" userInput="{{customer.password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}"/>
+        <fillField stepKey="fillConfirmPassword" userInput="{{customer.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}"/>
+    </actionGroup>
+</actionGroups>
