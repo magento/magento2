@@ -17,6 +17,7 @@ use Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection;
 use Psr\Log\LoggerInterface;
 
 /**
+ * Collection for Bestsellers
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -48,12 +49,12 @@ class Collection extends AbstractCollection
     ];
 
     /**
-     * @param EntityFactory $entityFactory
-     * @param LoggerInterface $logger
+     * @param EntityFactory          $entityFactory
+     * @param LoggerInterface        $logger
      * @param FetchStrategyInterface $fetchStrategy
-     * @param ManagerInterface $eventManager
-     * @param Report $resource
-     * @param AdapterInterface $connection
+     * @param ManagerInterface       $eventManager
+     * @param Report                 $resource
+     * @param AdapterInterface       $connection
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -135,7 +136,6 @@ class Collection extends AbstractCollection
     }
 
     /**
-     *
      * @param $from
      * @param $to
      *
@@ -247,10 +247,8 @@ class Collection extends AbstractCollection
             $storeIds = [$storeIds];
         }
         $currentStoreIds = $this->_storesIds;
-        if (isset($currentStoreIds) &&
-            $currentStoreIds != \Magento\Store\Model\Store::DEFAULT_STORE_ID && $currentStoreIds != [
-                \Magento\Store\Model\Store::DEFAULT_STORE_ID
-            ]
+        if (isset($currentStoreIds)
+            && $currentStoreIds != \Magento\Store\Model\Store::DEFAULT_STORE_ID && $currentStoreIds != [\Magento\Store\Model\Store::DEFAULT_STORE_ID]
         ) {
             if (!is_array($currentStoreIds)) {
                 $currentStoreIds = [$currentStoreIds];
@@ -387,8 +385,8 @@ class Collection extends AbstractCollection
 
                 if ($periodFrom && $periodTo) {
                     // the same month
-                    if ($periodTo->format('Y') == $periodFrom->format('Y') &&
-                        $periodTo->format('m') == $periodFrom->format('m')
+                    if ($periodTo->format('Y') == $periodFrom->format('Y')
+                        && $periodTo->format('m') == $periodFrom->format('m')
                     ) {
                         $dtFrom = clone $periodFrom;
                         $dtTo = clone $periodTo;
