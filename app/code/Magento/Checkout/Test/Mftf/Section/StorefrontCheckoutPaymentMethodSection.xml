@@ -13,5 +13,8 @@
         <element name="checkPaymentMethodByName" type="radio" selector="//div[@id='checkout-payment-method-load']//div[@class='payment-method']//label//span[contains(., '{{methodName}}')]/../..//input" parameterized="true"/>
         <element name="billingAddressSameAsShipping" type="checkbox" selector=".payment-method._active [name='billing-address-same-as-shipping']"/>
         <element name="billingAddressSameAsShippingShared" type="checkbox" selector="#billing-address-same-as-shipping-shared"/>
+        <element name="paymentOnAccount" type="radio" selector="#companycredit"/>
+        <element name="paymentOnAccountLabel" type="text" selector="//span[text()='Payment on Account']"/>
+        <element name="purchaseOrderNumber" type="input" selector="#po_number"/>
     </section>
 </sections>

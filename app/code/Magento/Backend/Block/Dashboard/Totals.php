@@ -11,6 +11,9 @@
  */
 namespace Magento\Backend\Block\Dashboard;
 
+/**
+ * Totals block.
+ */
 class Totals extends \Magento\Backend\Block\Dashboard\Bar
 {
     /**
@@ -19,20 +22,20 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
     protected $_template = 'Magento_Backend::dashboard/totalbar.phtml';
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $_moduleManager;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         array $data = []
     ) {
         $this->_moduleManager = $moduleManager;
@@ -40,6 +43,7 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
     }
 
     /**
+     * @inheritDoc
      * @return $this|void
      */
     protected function _prepareLayout()
