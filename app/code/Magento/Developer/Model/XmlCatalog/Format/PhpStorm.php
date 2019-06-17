@@ -10,7 +10,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DomDocument\DomDocumentFactory;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\File\WriteFactory;
 
 /**
@@ -32,7 +31,6 @@ class PhpStorm implements FormatInterface
     private $domDocumentFactory;
 
     /**
-     * @param ReadFactory $readFactory
      * @param WriteFactory $fileWriteFactory
      * @param DomDocumentFactory $domDocumentFactory
      */
