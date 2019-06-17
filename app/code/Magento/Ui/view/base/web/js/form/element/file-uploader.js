@@ -427,8 +427,7 @@ define([
                 _.each(this.aggregatedErrors, function (error) {
                     notification().add({
                         error: true,
-                        // %s to be used as placeholders for html injection
-                        message: '%s' + error.filename + '%s ' + $t('was not uploaded.') + '%s' + error.message,
+                        message: error.message,
 
                         /**
                          * Adds constructed error notification to aggregatedErrorMessages
@@ -436,12 +435,6 @@ define([
                          * @param {String} constructedMessage
                          */
                         insertMethod: function (constructedMessage) {
-                            // html is escaped in message body for notification widget; prepend unescaped html here
-                            constructedMessage = constructedMessage
-                                .replace('%s', '<strong>')
-                                .replace('%s', '</strong>')
-                                .replace('%s', '<br>');
-
                             aggregatedErrorMessages.push(constructedMessage);
                         }
                     });

@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Image\Adapter;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
+ * Class AbstractAdapter
+ *
  * @file        Abstract.php
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -169,7 +173,8 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Save image to specific path.
-     * If some folders of path does not exist they will be created
+     *
+     * If some folders of the path do not exist they will be created.
      *
      * @param null|string $destination
      * @param null|string $newName
@@ -620,6 +625,7 @@ abstract class AbstractAdapter implements AdapterInterface
             $frameHeight !== null && $frameHeight <= 0 ||
             empty($frameWidth) && empty($frameHeight)
         ) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Invalid image dimensions.');
         }
     }
@@ -687,6 +693,7 @@ abstract class AbstractAdapter implements AdapterInterface
                 $this->directoryWrite->create($this->directoryWrite->getRelativePath($destination));
             } catch (\Magento\Framework\Exception\FileSystemException $e) {
                 $this->logger->critical($e);
+                //phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception('Unable to write file into directory ' . $destination . '. Access forbidden.');
             }
         }
@@ -714,11 +721,19 @@ abstract class AbstractAdapter implements AdapterInterface
     public function validateUploadFile($filePath)
     {
         if (!file_exists($filePath)) {
-            throw new \InvalidArgumentException("File '{$filePath}' does not exists.");
+            throw new \InvalidArgumentException('Upload file does not exist.');
         }
-        if (!getimagesize($filePath)) {
+
+        try {
+            $imageSize = getimagesize($filePath);
+        } catch (\Exception $e) {
+            $imageSize = false;
+        }
+
+        if (!$imageSize) {
             throw new \InvalidArgumentException('Disallowed file type.');
         }
+
         $this->checkDependencies();
         $this->open($filePath);
 
