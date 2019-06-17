@@ -22,6 +22,7 @@ use Magento\Ui\DataProvider\EavValidationRules;
  * Test for class \Magento\Customer\Model\Customer\DataProvider
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
