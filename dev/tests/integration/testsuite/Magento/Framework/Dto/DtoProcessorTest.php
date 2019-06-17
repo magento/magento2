@@ -12,6 +12,7 @@ use Magento\Framework\Dto\Mock\ImmutableDtoTwo;
 use Magento\Framework\Dto\Mock\ImmutableNestedDto;
 use Magento\Framework\Dto\Mock\MockDtoConfig;
 use Magento\Framework\Dto\Mock\MutableDto;
+use Magento\Framework\Dto\Mock\TestDtoWithCustomAttributes;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -142,6 +143,47 @@ class DtoProcessorTest extends TestCase
             ],
             $this->dataProcessor->getObjectData($nestedDto)
         );
+    }
+
+    public function testCreateDtoFromArrayWithCustomAttributesAsKeyValueFormat(): void
+    {
+        /** @var TestDtoWithCustomAttributes $dto */
+        $dto = $this->dataProcessor->createFromArray(
+            [
+                'param_one' => 1,
+                'param_two' => 2.0,
+                'custom_attributes' => [
+                    [
+                        'attribute_code' => 'my_custom_attribute',
+                        'value' => 'test3'
+                    ]
+                ]
+            ],
+            TestDtoWithCustomAttributes::class
+        );
+
+        $this->assertSame(1, $dto->getParamOne());
+        $this->assertSame(2.0, $dto->getParamTwo());
+        $this->assertSame('test3', $dto->getCustomAttribute('my_custom_attribute')->getValue());
+    }
+
+    public function testCreateDtoFromArrayWithCustomAttributes(): void
+    {
+        /** @var TestDtoWithCustomAttributes $dto */
+        $dto = $this->dataProcessor->createFromArray(
+            [
+                'param_one' => 1,
+                'param_two' => 2.0,
+                'custom_attributes' => [
+                    'my_custom_attribute' => 'test3'
+                ]
+            ],
+            TestDtoWithCustomAttributes::class
+        );
+
+        $this->assertSame(1, $dto->getParamOne());
+        $this->assertSame(2.0, $dto->getParamTwo());
+        $this->assertSame('test3', $dto->getCustomAttribute('my_custom_attribute')->getValue());
     }
 
     public function testCreateImmutableDtoFromArray(): void
