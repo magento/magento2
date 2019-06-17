@@ -5,15 +5,13 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Import entity abstract product type model
- *
- * @api
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -533,7 +531,8 @@ abstract class AbstractType
             }
             if (isset($rowData[$attrCode]) && strlen(trim($rowData[$attrCode]))) {
                 if (in_array($attrParams['type'], ['select', 'boolean'])) {
-                    $resultAttrs[$attrCode] = $attrParams['options'][strtolower($rowData[$attrCode])] ?? $rowData[$attrCode];
+                    $resultAttrs[$attrCode] = $attrParams['options'][strtolower($rowData[$attrCode])]
+                        ?? $rowData[$attrCode];
                 } elseif ('multiselect' == $attrParams['type']) {
                     $resultAttrs[$attrCode] = [];
                     foreach ($this->_entityModel->parseMultiselectValues($rowData[$attrCode]) as $value) {
