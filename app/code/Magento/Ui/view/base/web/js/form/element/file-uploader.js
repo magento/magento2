@@ -435,7 +435,10 @@ define([
                          * @param {String} constructedMessage
                          */
                         insertMethod: function (constructedMessage) {
-                            var errorMsgBodyHtml = '<strong>File was not uploaded.</strong><br>';
+                            var escapedFileName = $('<div>').text(error.filename).html(),
+                                errorMsgBodyHtml = '<strong>%s</strong> %s.<br>'
+                                    .replace('%s', escapedFileName)
+                                    .replace('%s', $t('was not uploaded'));
 
                             // html is escaped in message body for notification widget; prepend unescaped html here
                             constructedMessage = constructedMessage.replace('%s', errorMsgBodyHtml);
