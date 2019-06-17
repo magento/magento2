@@ -108,6 +108,7 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get expiration date
      *
      * @return string|null
+     * @deprecated Coupon expiration must follow sales rule expiration date.
      */
     public function getExpirationDate();
 
@@ -116,6 +117,7 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $expirationDate
      * @return $this
+     * @deprecated Coupon expiration must follow sales rule expiration date.
      */
     public function setExpirationDate($expirationDate);
 
