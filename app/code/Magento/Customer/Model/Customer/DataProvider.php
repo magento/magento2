@@ -362,7 +362,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                     $meta[$code]['arguments']['data']['config']['options'] = $this->getCountryWithWebsiteSource()
                         ->getAllOptions();
                 } else {
-                    $meta[$code]['arguments']['data']['config']['options'] = $attribute->getSource()->getAllOptions();
+                    $options = $attribute->getSource()->getAllOptions();
+                    array_walk(
+                        $options,
+                        function (&$item) {
+                            $item['__disableTmpl'] = ['label' => true];
+                        }
+                    );
+                    $meta[$code]['arguments']['data']['config']['options'] = $options;
                 }
             }
 
