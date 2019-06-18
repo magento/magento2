@@ -128,7 +128,7 @@ class UpgradeCommand extends AbstractSetupCommand
                 $arrayInput->setInteractive($input->isInteractive());
                 $result = $importConfigCommand->run($arrayInput, $output);
                 if ($result === \Magento\Framework\Console\Cli::RETURN_FAILURE) {
-                    throw new \Magento\Framework\Exception\RuntimeException(__(ConfigImportCommand::COMMAND_NAME . ' failed. See previous output.'));
+                    throw new \Magento\Framework\Exception\RuntimeException(__('%1 failed. See previous output.', ConfigImportCommand::COMMAND_NAME));
                 }
             }
 
