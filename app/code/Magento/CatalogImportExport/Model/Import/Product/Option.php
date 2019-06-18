@@ -676,21 +676,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $errorRows = [];
         foreach ($sourceProductData as $options) {
-            foreach ($options as $outerKey => $outerData) {
-                foreach ($options as $innerKey => $innerData) {
-                    if ($innerKey != $outerKey) {
-                        if (count($outerData['titles']) == count($innerData['titles'])) {
-                            $outerTitles = $outerData['titles'];
-                            $innerTitles = $innerData['titles'];
-                            ksort($outerTitles);
-                            ksort($innerTitles);
-                            if ($outerTitles === $innerTitles) {
-                                $errorRows = array_merge($errorRows, $innerData['rows'], $outerData['rows']);
-                            }
-                        }
-                    }
-                }
-            }
+             $errorRows = $this->getNewOptionErrorRows($options);
         }
         return $errorRows;
     }
@@ -704,25 +690,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $errorRows = [];
         foreach ($this->_newOptionsOldData as $productId => $options) {
-            foreach ($options as $outerData) {
-                if (isset($this->_oldCustomOptions[$productId])) {
-                    $optionsCount = 0;
-                    foreach ($this->_oldCustomOptions[$productId] as $innerData) {
-                        if (count($outerData['titles']) == count($innerData['titles'])) {
-                            $outerTitles = $outerData['titles'];
-                            $innerTitles = $innerData['titles'];
-                            ksort($outerTitles);
-                            ksort($innerTitles);
-                            if ($outerTitles === $innerTitles) {
-                                $optionsCount++;
-                            }
-                        }
-                    }
-                    if ($optionsCount > 1) {
-                        $errorRows = array_merge($errorRows, $outerData['rows']);
-                    }
-                }
-            }
+            $errorRows = $this->getOldOptionsErrorRows($options, (int)$productId);
         }
         sort($errorRows);
         return $errorRows;
@@ -737,21 +705,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $errorRows = [];
         foreach ($this->_newOptionsOldData as $productId => $options) {
-            foreach ($options as $outerData) {
-                if (isset($this->_oldCustomOptions[$productId])) {
-                    foreach ($this->_oldCustomOptions[$productId] as $innerData) {
-                        if (count($outerData['titles']) == count($innerData['titles'])) {
-                            $outerTitles = $outerData['titles'];
-                            $innerTitles = $innerData['titles'];
-                            ksort($outerTitles);
-                            ksort($innerTitles);
-                            if ($outerTitles === $innerTitles && $outerData['type'] != $innerData['type']) {
-                                $errorRows = array_merge($errorRows, $outerData['rows']);
-                            }
-                        }
-                    }
-                }
-            }
+            $errorRows = $this->getTypeMismatchErrorRows($options, (int)$productId);
         }
         sort($errorRows);
         return $errorRows;
@@ -1067,6 +1021,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Checks that complex options contain values
      *
+     * phpcs:disable
      * @param array &$options
      * @param array &$titles
      * @param array $typeValues
@@ -1088,6 +1043,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return false;
         }
     }
+    //phpcs:enable
 
     /**
      * Get multiRow format from one line data.
@@ -1416,6 +1372,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Collect custom option main data to import
      *
+     * phpcs:disable
      * @param array $rowData
      * @param int &$prevOptionId
      * @param int &$nextOptionId
@@ -1595,6 +1552,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
         }
     }
+    //phpcs:enable
 
     /**
      * Identify ID of the provided option type by its title in the specified store.
@@ -2161,5 +2119,92 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         array_push($optionValueParams, isset($match[0]) ? $match[0] : '');
 
         return $optionValueParams;
+    }
+
+    /**
+     * Extract error rows numbers for required product data
+     *
+     * @param array $options
+     * @return array
+     */
+    private function getNewOptionErrorRows(array $options): array
+    {
+        $errorRows = [];
+        foreach ($options as $outerKey => $outerData) {
+            foreach ($options as $innerKey => $innerData) {
+                if ($innerKey != $outerKey) {
+                    if (count($outerData['titles']) == count($innerData['titles'])) {
+                        $outerTitles = $outerData['titles'];
+                        $innerTitles = $innerData['titles'];
+                        ksort($outerTitles);
+                        ksort($innerTitles);
+                        if ($outerTitles === $innerTitles) {
+                            $errorRows = array_merge($errorRows, $innerData['rows'], $outerData['rows']);
+                        }
+                    }
+                }
+            }
+        }
+        return $errorRows;
+    }
+
+    /**
+     * Fill error rows for options with the same titles in DB
+     *
+     * @param array $options
+     * @param int $productId
+     * @return array
+     */
+    private function getOldOptionsErrorRows(array $options, $productId): array
+    {
+        $errorRows = [];
+        foreach ($options as $outerData) {
+            if (isset($this->_oldCustomOptions[$productId])) {
+                $optionsCount = 0;
+                foreach ($this->_oldCustomOptions[$productId] as $innerData) {
+                    if (count($outerData['titles']) == count($innerData['titles'])) {
+                        $outerTitles = $outerData['titles'];
+                        $innerTitles = $innerData['titles'];
+                        ksort($outerTitles);
+                        ksort($innerTitles);
+                        if ($outerTitles === $innerTitles) {
+                            $optionsCount++;
+                        }
+                    }
+                }
+                if ($optionsCount > 1) {
+                    $errorRows = array_merge($errorRows, $outerData['rows']);
+                }
+            }
+        }
+        return $errorRows;
+    }
+
+    /**
+     * Fill error rows for options, which have analogs in DB with the same name, but with different type
+     *
+     * @param array $options
+     * @param int $productId
+     * @return array
+     */
+    private function getTypeMismatchErrorRows(array $options, $productId): array
+    {
+        $errorRows = [];
+        foreach ($options as $outerData) {
+            if (isset($this->_oldCustomOptions[$productId])) {
+                foreach ($this->_oldCustomOptions[$productId] as $innerData) {
+                    if (count($outerData['titles']) == count($innerData['titles'])) {
+                        $outerTitles = $outerData['titles'];
+                        $innerTitles = $innerData['titles'];
+                        ksort($outerTitles);
+                        ksort($innerTitles);
+                        if ($outerTitles === $innerTitles && $outerData['type'] != $innerData['type']) {
+                            $errorRows = array_merge($errorRows, $outerData['rows']);
+                        }
+                    }
+                }
+            }
+        }
+        return  $errorRows;
     }
 }
