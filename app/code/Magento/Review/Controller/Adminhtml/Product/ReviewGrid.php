@@ -12,8 +12,13 @@ use Magento\Review\Model\ReviewFactory;
 use Magento\Review\Model\RatingFactory;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
-class ReviewGrid extends ProductController
+/**
+ * Review grid.
+ */
+class ReviewGrid extends ProductController implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory
@@ -39,6 +44,8 @@ class ReviewGrid extends ProductController
     }
 
     /**
+     * Execute action.
+     *
      * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
@@ -48,5 +55,25 @@ class ReviewGrid extends ProductController
         $resultRaw = $this->resultFactory->create(ResultFactory::TYPE_RAW);
         $resultRaw->setContents($layout->createBlock(\Magento\Review\Block\Adminhtml\Grid::class)->toHtml());
         return $resultRaw;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _isAllowed()
+    {
+        if ($this->_authorization->isAllowed('Magento_Review::reviews_all')) {
+            return true;
+        }
+
+        if (!$this->_authorization->isAllowed('Magento_Review::pending')) {
+            return false;
+        }
+
+        if ($this->getRequest() instanceof Http) {
+            return $this->getRequest()->getBeforeForwardInfo('action_name') == 'pending';
+        }
+
+        return false;
     }
 }

@@ -12,7 +12,7 @@ use Magento\Review\Model\ReviewFactory;
 use Magento\Review\Model\RatingFactory;
 
 /**
- * Reviews admin controller
+ * Reviews admin controller.
  */
 abstract class Product extends Action
 {
@@ -63,17 +63,10 @@ abstract class Product extends Action
     }
 
     /**
-     * @return bool
+     * @inheritdoc
      */
     protected function _isAllowed()
     {
-        switch ($this->getRequest()->getActionName()) {
-            case 'pending':
-                return $this->_authorization->isAllowed('Magento_Review::pending');
-                break;
-            default:
-                return $this->_authorization->isAllowed('Magento_Review::reviews_all');
-                break;
-        }
+        return $this->_authorization->isAllowed('Magento_Review::reviews_all');
     }
 }

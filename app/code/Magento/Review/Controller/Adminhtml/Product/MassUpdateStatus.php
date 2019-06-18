@@ -5,13 +5,54 @@
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Review\Model\RatingFactory;
+use Magento\Review\Model\Review;
+use Magento\Review\Model\ResourceModel\Review\Collection;
+use Magento\Review\Model\ResourceModel\Review\CollectionFactory;
+use Magento\Review\Model\ReviewFactory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
-class MassUpdateStatus extends ProductController
+/**
+ * Mass Update Status action.
+ */
+class MassUpdateStatus extends ProductController implements HttpPostActionInterface
 {
     /**
+     * @var Collection
+     */
+    private $collection;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param ReviewFactory $reviewFactory
+     * @param RatingFactory $ratingFactory
+     * @param CollectionFactory $collectionFactory
+     */
+    public function __construct(
+        Context $context,
+        Registry $coreRegistry,
+        ReviewFactory $reviewFactory,
+        RatingFactory $ratingFactory,
+        CollectionFactory $collectionFactory
+    ) {
+        parent::__construct($context, $coreRegistry, $reviewFactory, $ratingFactory);
+        $this->collectionFactory = $collectionFactory;
+    }
+
+    /**
+     * Execute action.
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
@@ -22,8 +63,7 @@ class MassUpdateStatus extends ProductController
         } else {
             try {
                 $status = $this->getRequest()->getParam('status');
-                foreach ($reviewsIds as $reviewId) {
-                    $model = $this->reviewFactory->create()->load($reviewId);
+                foreach ($this->getCollection() as $model) {
                     $model->setStatusId($status)->save()->aggregate();
                 }
                 $this->messageManager->addSuccess(
@@ -42,5 +82,56 @@ class MassUpdateStatus extends ProductController
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('review/*/' . $this->getRequest()->getParam('ret', 'index'));
         return $resultRedirect;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _isAllowed()
+    {
+        if (!$this->_authorization->isAllowed('Magento_Review::pending')) {
+            return false;
+        }
+
+        if ($this->_authorization->isAllowed('Magento_Review::reviews_all')) {
+            return true;
+        }
+
+        foreach ($this->getCollection() as $model) {
+            if ($model->getStatusId() != Review::STATUS_PENDING) {
+                $this->messageManager->addErrorMessage(
+                    __(
+                        'Sorry, You have not permission to do this.'
+                        . ' One or more of the reviews are not in Pending Status.'
+                    )
+                );
+
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns requested collection.
+     *
+     * @return Collection
+     */
+    private function getCollection(): Collection
+    {
+        if (!$this->collection) {
+            $collection = $this->collectionFactory->create();
+            $collection->addFieldToFilter(
+                'main_table.' . $collection->getResource()
+                    ->getIdFieldName(),
+                $this->getRequest()->getParam('reviews')
+            );
+
+            $this->collection = $collection;
+        }
+
+        return $this->collection;
     }
 }
