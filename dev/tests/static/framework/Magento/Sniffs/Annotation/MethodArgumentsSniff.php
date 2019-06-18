@@ -417,7 +417,7 @@ class MethodArgumentsSniff implements Sniff
                 );
                 break;
             case 1:
-                if (preg_match('/^\$.*/', $paramDefinitions[0])) {
+                if (preg_match('/^&?\$.*/', $paramDefinitions[0])) {
                     $phpcsFile->addError(
                         'Type is not specified',
                         $paramPointers[$ptr],
@@ -442,7 +442,7 @@ class MethodArgumentsSniff implements Sniff
                 );
                 break;
             default:
-                if (preg_match('/^\$.*/', $paramDefinitions[0])) {
+                if (preg_match('/^&?\$.*/', $paramDefinitions[0])) {
                     $phpcsFile->addError(
                         'Type is not specified',
                         $paramPointers[$ptr],
@@ -568,7 +568,7 @@ class MethodArgumentsSniff implements Sniff
                 $content = preg_replace('/\s+/', ' ', $tokens[$tempPtr + 2]['content'], 2);
                 $paramAnnotationParts = explode(' ', $content, 3);
                 if (count($paramAnnotationParts) === 1) {
-                    if ((preg_match('/^\$.*/', $paramAnnotationParts[0]))) {
+                    if ((preg_match('/^&?\$.*/', $paramAnnotationParts[0]))) {
                         $paramDefinitions[] = [
                             'type' => null,
                             'paramName' => rtrim(ltrim($tokens[$tempPtr + 2]['content'], '&'), ','),
@@ -626,7 +626,7 @@ class MethodArgumentsSniff implements Sniff
             if (isset($paramPointers[$ptr])) {
                 $paramContent = $tokens[$paramPointers[$ptr] + 2]['content'];
                 $paramDefinition = $paramDefinitions[$ptr];
-                $argumentPositions[] = strpos($paramContent, $paramDefinition['paramName']);
+                $argumentPositions[] = $this->getArgumentPosition($paramContent, $paramDefinition);
                 $commentPositions[] = $paramDefinition['comment']
                     ? strrpos($paramContent, $paramDefinition['comment']) : null;
             }
@@ -680,5 +680,18 @@ class MethodArgumentsSniff implements Sniff
         }
 
         return $flag;
+    }
+
+    /**
+     * Get argument name starting position in annotation string.
+     *
+     * @param string $paramContent
+     * @param array $paramDefinition
+     * @return int|bool
+     */
+    private function getArgumentPosition(string $paramContent, array $paramDefinition)
+    {
+        return strpos($paramContent, '&' . $paramDefinition['paramName']) ?:
+            strpos($paramContent, $paramDefinition['paramName']);
     }
 }
