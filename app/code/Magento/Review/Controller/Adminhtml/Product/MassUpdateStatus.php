@@ -89,20 +89,20 @@ class MassUpdateStatus extends ProductController implements HttpPostActionInterf
      */
     protected function _isAllowed()
     {
-        if (!$this->_authorization->isAllowed('Magento_Review::pending')) {
-            return false;
+        if (parent::_isAllowed()) {
+            return true;
         }
 
-        if ($this->_authorization->isAllowed('Magento_Review::reviews_all')) {
-            return true;
+        if (!$this->_authorization->isAllowed('Magento_Review::pending')) {
+            return false;
         }
 
         foreach ($this->getCollection() as $model) {
             if ($model->getStatusId() != Review::STATUS_PENDING) {
                 $this->messageManager->addErrorMessage(
                     __(
-                        'Sorry, You have not permission to do this.'
-                        . ' One or more of the reviews are not in Pending Status.'
+                        'Sorry, You have not permission to do this. '
+                        . 'One or more of the reviews are not in Pending Status.'
                     )
                 );
 
@@ -120,7 +120,7 @@ class MassUpdateStatus extends ProductController implements HttpPostActionInterf
      */
     private function getCollection(): Collection
     {
-        if (!$this->collection) {
+        if ($this->collection === null) {
             $collection = $this->collectionFactory->create();
             $collection->addFieldToFilter(
                 'main_table.' . $collection->getResource()

@@ -85,7 +85,7 @@ class MassDelete extends ProductController implements HttpPostActionInterface
      */
     protected function _isAllowed()
     {
-        if ($this->_authorization->isAllowed('Magento_Review::reviews_all')) {
+        if (parent::_isAllowed()) {
             return true;
         }
 
@@ -116,7 +116,7 @@ class MassDelete extends ProductController implements HttpPostActionInterface
      */
     private function getCollection(): Collection
     {
-        if (!$this->collection) {
+        if ($this->collection === null) {
             $collection = $this->collectionFactory->create();
             $collection->addFieldToFilter(
                 'main_table.' . $collection->getResource()

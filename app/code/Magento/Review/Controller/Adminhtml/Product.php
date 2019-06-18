@@ -17,6 +17,11 @@ use Magento\Review\Model\RatingFactory;
 abstract class Product extends Action
 {
     /**
+     * Authorization resource
+     */
+    public const ADMIN_RESOURCE = 'Magento_Review::reviews_all';
+
+    /**
      * Array of actions which can be processed without secret key validation
      *
      * @var array
@@ -60,13 +65,5 @@ abstract class Product extends Action
         $this->reviewFactory = $reviewFactory;
         $this->ratingFactory = $ratingFactory;
         parent::__construct($context);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Review::reviews_all');
     }
 }

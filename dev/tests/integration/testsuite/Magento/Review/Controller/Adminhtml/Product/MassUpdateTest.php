@@ -43,7 +43,7 @@ class MassUpdateTest extends AbstractBackendController
     private $collectionFactory;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp()
     {

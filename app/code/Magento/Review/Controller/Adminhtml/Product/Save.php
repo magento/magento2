@@ -105,12 +105,12 @@ class Save extends ProductController implements HttpPostActionInterface
      */
     protected function _isAllowed()
     {
-        if (!$this->_authorization->isAllowed('Magento_Review::pending')) {
-            return  false;
+        if (parent::_isAllowed()) {
+            return true;
         }
 
-        if ($this->_authorization->isAllowed('Magento_Review::reviews_all')) {
-            return true;
+        if (!$this->_authorization->isAllowed('Magento_Review::pending')) {
+            return  false;
         }
 
         if ($this->getModel()->getStatusId() != Review::STATUS_PENDING) {

@@ -42,7 +42,7 @@ class EditTest extends AbstractBackendController
     private $collectionFactory;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp()
     {
@@ -84,7 +84,7 @@ class EditTest extends AbstractBackendController
     {
         // Exclude resource from ACL.
         $this->resource = ['Magento_Review::reviews_all', 'Magento_Review::pending'];
-        $this->uri = 'backend/review/product/edit/id/' . 'doesnt matter';
+        $this->uri = 'backend/review/product/edit/id/' . 'doesn\'t matter';
 
         parent::testAclNoAccess();
     }

@@ -41,7 +41,7 @@ class Edit extends ProductController implements HttpGetActionInterface
      */
     protected function _isAllowed()
     {
-        if ($this->_authorization->isAllowed('Magento_Review::reviews_all')) {
+        if (parent::_isAllowed()) {
             return true;
         }
 
@@ -67,7 +67,7 @@ class Edit extends ProductController implements HttpGetActionInterface
      */
     private function getModel(): Review
     {
-        if (!$this->review) {
+        if ($this->review === null) {
             $this->review = $this->reviewFactory->create()
                 ->load($this->getRequest()->getParam('id', false));
         }

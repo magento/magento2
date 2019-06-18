@@ -14,11 +14,12 @@ use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Review grid.
  */
-class ReviewGrid extends ProductController implements HttpGetActionInterface
+class ReviewGrid extends ProductController implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory

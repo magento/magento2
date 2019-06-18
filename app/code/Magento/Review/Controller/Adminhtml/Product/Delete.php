@@ -9,12 +9,11 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Review\Model\Review;
-use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * Delete action.
  */
-class Delete extends ProductController implements HttpGetActionInterface, HttpPostActionInterface
+class Delete extends ProductController implements HttpPostActionInterface
 {
     /**
      * @var Review
@@ -55,7 +54,7 @@ class Delete extends ProductController implements HttpGetActionInterface, HttpPo
      */
     protected function _isAllowed()
     {
-        if ($this->_authorization->isAllowed('Magento_Review::reviews_all')) {
+        if (parent::_isAllowed()) {
             return true;
         }
 
@@ -81,7 +80,7 @@ class Delete extends ProductController implements HttpGetActionInterface, HttpPo
      */
     private function getModel(): Review
     {
-        if (!$this->model) {
+        if ($this->model === null) {
             $this->model = $this->reviewFactory->create()
                 ->load($this->getRequest()->getParam('id', false));
         }
