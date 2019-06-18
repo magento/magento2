@@ -47,12 +47,19 @@ type PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer t
 }
 
 input PayFlowProInput {
-    cc_details: CreditCardDetailsInput @doc(description: "Required input for credit card related information")
+    cc_details: CreditCardDetailsInput! @doc(description: "Required input for credit card related information")
     pnref: String! @doc(description: "The Payflow transaction ID value")
     avsaddr: VerificationCode @doc(description: "Address verification service address response")
     avszip: VerificationCode @doc(description: "Address verification service Zip response")
     iavs: VerificationCode @doc(deciprion: "International address verification service response")
     cvv2match: VerificationCode @doc(description: "Normalized Card security code results")
+}
+
+input CreditCardDetailsInput {
+    cc_type: String! @doc(description: "Credit card type")
+    cc_exp_year: Int! @doc(description: "Credit card expiration year")
+    cc_exp_month: Int! @doc(description: "Credit card expiration month")
+    cc_last_4: Int! @doc(description: "Credit card last 4 digits")
 }
 
 enum VerificationCode {
