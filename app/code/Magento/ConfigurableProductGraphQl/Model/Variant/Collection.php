@@ -51,7 +51,7 @@ class Collection
     /**
      * @var StockConfigurationInterface
      */
-    protected $stockConfig;
+    private $stockConfig;
 
     /**
      * @var MetadataPool
