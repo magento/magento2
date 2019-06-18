@@ -44,11 +44,12 @@ class MockResponseDataProvider
     /**
      * Create mock nonce response for testing
      *
+     * @param string $token
      * @return \Braintree\Instance
      */
-    public function generateMockNonceResponse(): \Braintree\Instance
+    public function generateMockNonceResponse(string $token): \Braintree\Instance
     {
-        $nonce = $this->createNonce();
+        $nonce = $this->createNonce($token);
 
         return new \Braintree\Result\Successful($nonce, 'paymentMethodNonce');
     }
@@ -63,21 +64,23 @@ class MockResponseDataProvider
     private function createTransaction(array $attributes): \Braintree\Transaction
     {
         $creditCardInfo = $this->generateCardDetails();
-        return \Braintree\Transaction::factory([
-            'amount' => $attributes['amount'],
-            'billing' => $attributes['billing'] ?? null,
-            'creditCard' => $creditCardInfo,
-            'cardDetails' => new \Braintree\Transaction\CreditCardDetails($creditCardInfo),
-            'currencyIsoCode' => 'USD',
-            'customer' => $attributes['customer'],
-            'cvvResponseCode' => 'M',
-            'id' => $this->random->getRandomString(8),
-            'options' => $attributes['options'] ?? null,
-            'shipping' => $attributes['shipping'] ?? null,
-            'paymentMethodNonce' => $attributes['paymentMethodNonce'],
-            'status' => 'authorized',
-            'type' => 'sale',
-        ]);
+        return \Braintree\Transaction::factory(
+            [
+                'amount' => $attributes['amount'],
+                'billing' => $attributes['billing'] ?? null,
+                'creditCard' => $creditCardInfo,
+                'cardDetails' => new \Braintree\Transaction\CreditCardDetails($creditCardInfo),
+                'currencyIsoCode' => 'USD',
+                'customer' => $attributes['customer'],
+                'cvvResponseCode' => 'M',
+                'id' => $this->random->getRandomString(8),
+                'options' => $attributes['options'] ?? null,
+                'shipping' => $attributes['shipping'] ?? null,
+                'paymentMethodNonce' => $attributes['paymentMethodNonce'],
+                'status' => 'authorized',
+                'type' => 'sale',
+            ]
+        );
     }
 
     /**
@@ -102,27 +105,31 @@ class MockResponseDataProvider
     /**
      * Create fake Braintree nonce
      *
+     * @param string $token
      * @return \Braintree\PaymentMethodNonce
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function createNonce(): \Braintree\PaymentMethodNonce
+    private function createNonce(string $token): \Braintree\PaymentMethodNonce
     {
         $lastFour = (string) random_int(1000, 9999);
         $lastTwo = substr($lastFour, -2);
-        return \Braintree\PaymentMethodNonce::factory([
-            'consumed' => false,
-            'default' => true,
-            'description' => 'ending in ' . $lastTwo,
-            'details' => [
-                'bin' => $this->random->getRandomString(6),
-                'cardType' => 'Visa',
-                'lastFour' => $lastFour,
-                'lastTwo' => $lastTwo,
-            ],
-            'hasSubscription' => false,
-            'isLocked' => false,
-            'nonce' => $this->random->getRandomString(36),
-            'type' => 'CreditCard'
-        ]);
+        return \Braintree\PaymentMethodNonce::factory(
+            [
+                'bin' => $token,
+                'consumed' => false,
+                'default' => true,
+                'description' => 'ending in ' . $lastTwo,
+                'details' => [
+                    'bin' => $this->random->getRandomString(6),
+                    'cardType' => 'Visa',
+                    'lastFour' => $lastFour,
+                    'lastTwo' => $lastTwo,
+                ],
+                'hasSubscription' => false,
+                'isLocked' => false,
+                'nonce' => $this->random->getRandomString(36),
+                'type' => 'CreditCard'
+            ]
+        );
     }
 }

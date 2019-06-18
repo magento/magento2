@@ -24,16 +24,18 @@ $objectManager = Bootstrap::getObjectManager();
 $adapterFactory = $objectManager->get(\Magento\Braintree\Model\Adapter\BraintreeAdapterFactory::class);
 $adapter = $adapterFactory->create();
 
-$result = $adapter->sale([
-    'amount' => '0.01',
-    'customer' => [
-        'email' => 'customer@example.com',
-        'firstName' => 'John',
-        'lastName' => 'Smith'
-    ],
-    'options' => ['storeInVaultOnSuccess' => true],
-    'paymentMethodNonce' => 'fake-valid-nonce',
-]);
+$result = $adapter->sale(
+    [
+        'amount' => '0.01',
+        'customer' => [
+            'email' => 'customer@example.com',
+            'firstName' => 'John',
+            'lastName' => 'Smith'
+        ],
+        'options' => ['storeInVaultOnSuccess' => true],
+        'paymentMethodNonce' => 'fake-valid-nonce',
+    ]
+);
 
 $braintreeToken = $result->transaction->creditCardDetails->token;
 

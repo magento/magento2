@@ -23,9 +23,9 @@ $processConfigData = function (Config $config, array $data) {
 
 // save payment configuration for the default scope
 $configData = [
-    'payment/braintree/merchant_id' => defined('TESTS_BRAINTREE_MERCHANT_ID') ? TESTS_BRAINTREE_MERCHANT_ID : 'def_merchant_id',
-    'payment/braintree/public_key' => $encryptor->encrypt(defined('TESTS_BRAINTREE_PUBLIC_KEY') ? TESTS_BRAINTREE_PUBLIC_KEY : 'def_public_key'),
-    'payment/braintree/private_key' => $encryptor->encrypt(defined('TESTS_BRAINTREE_PRIVATE_KEY') ? TESTS_BRAINTREE_PRIVATE_KEY : 'def_private_key'),
+    'payment/braintree/merchant_id' => 'def_merchant_id',
+    'payment/braintree/public_key' => $encryptor->encrypt('def_public_key'),
+    'payment/braintree/private_key' => $encryptor->encrypt('def_private_key'),
     'payment/' . ConfigProvider::CODE . '/active' => '1',
     'payment/' . ConfigProvider::CC_VAULT_CODE . '/active' => '1',
     'payment/' . ConfigProvider::CODE . '/environment' => 'sandbox',

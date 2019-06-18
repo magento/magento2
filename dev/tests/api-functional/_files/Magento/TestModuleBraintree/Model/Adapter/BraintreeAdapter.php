@@ -23,11 +23,6 @@ use Magento\TestModuleBraintree\Model\MockResponseDataProvider;
 class BraintreeAdapter extends \Magento\Braintree\Model\Adapter\BraintreeAdapter
 {
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @var MockResponseDataProvider
      */
     private $mockResponseDataProvider;
@@ -56,7 +51,7 @@ class BraintreeAdapter extends \Magento\Braintree\Model\Adapter\BraintreeAdapter
      */
     public function createNonce($token)
     {
-        return $this->mockResponseDataProvider->generateMockNonceResponse();
+        return $this->mockResponseDataProvider->generateMockNonceResponse($token);
     }
 
     /**

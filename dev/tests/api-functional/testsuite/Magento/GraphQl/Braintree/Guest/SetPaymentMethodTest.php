@@ -15,6 +15,9 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test setting payment method and placing order with Braintree
+ */
 class SetPaymentMethodTest extends GraphQlAbstract
 {
     private const REQUIRED_CONSTS = [

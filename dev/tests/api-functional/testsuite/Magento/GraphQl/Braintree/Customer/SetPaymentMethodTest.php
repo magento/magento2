@@ -18,14 +18,11 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Vault\Model\ResourceModel\PaymentToken;
 use Magento\Vault\Model\ResourceModel\PaymentToken\CollectionFactory as TokenCollectionFactory;
 
+/**
+ * Test setting payment method and placing order with Braintree
+ */
 class SetPaymentMethodTest extends GraphQlAbstract
 {
-    private const REQUIRED_CONSTS = [
-        'TESTS_BRAINTREE_MERCHANT_ID',
-        'TESTS_BRAINTREE_PUBLIC_KEY',
-        'TESTS_BRAINTREE_PRIVATE_KEY',
-    ];
-
     /**
      * @var CustomerTokenServiceInterface
      */
@@ -71,12 +68,6 @@ class SetPaymentMethodTest extends GraphQlAbstract
      */
     protected function setUp()
     {
-        foreach (static::REQUIRED_CONSTS as $const) {
-            if (!defined($const)) {
-                $this->markTestSkipped('Braintree sandbox credentials must be defined in phpunit_graphql.xml.dist');
-            }
-        }
-
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
@@ -178,13 +169,20 @@ class SetPaymentMethodTest extends GraphQlAbstract
         $reservedOrderId = 'test_quote';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
 
-        $nonceResult = $this->getNonceCommand->execute([
-            'customer_id' => 1,
-            'public_hash' => 'braintree_public_hash',
-        ]);
+        $nonceResult = $this->getNonceCommand->execute(
+            [
+                'customer_id' => 1,
+                'public_hash' => 'braintree_public_hash',
+            ]
+        );
         $nonce = $nonceResult->get()['paymentMethodNonce'];
 
-        $setPaymentQuery = $this->getSetPaymentBraintreeVaultQuery($maskedQuoteId, 'braintree_public_hash', $nonce, true);
+        $setPaymentQuery = $this->getSetPaymentBraintreeVaultQuery(
+            $maskedQuoteId,
+            'braintree_public_hash',
+            $nonce,
+            true
+        );
         $setPaymentResponse = $this->graphQlMutation($setPaymentQuery, [], '', $this->getHeaderMap());
 
         $this->assertSetPaymentMethodResponse($setPaymentResponse, 'braintree_cc_vault');
@@ -251,8 +249,12 @@ QUERY;
      * @param bool $saveInVault
      * @return string
      */
-    private function getSetPaymentBraintreeVaultQuery(string $maskedQuoteId, string $publicHash, string $nonce, bool $saveInVault = false): string
-    {
+    private function getSetPaymentBraintreeVaultQuery(
+        string $maskedQuoteId,
+        string $publicHash,
+        string $nonce,
+        bool $saveInVault = false
+    ): string {
         $saveInVault = json_encode($saveInVault);
         return <<<QUERY
 mutation {
