@@ -26,5 +26,7 @@
         <element name="tableTotals" type="text" selector="#cart-totals .data.table.totals"/>
         <element name="shippingMethodLabel" type="text" selector="#co-shipping-method-form dl dt span"/>
         <element name="shippingMethodElementId" type="radio" selector="#s_method_{{carrierCode}}_{{methodCode}}" parameterized="true"/>
+        <element name="methodName" type="text" selector="#co-shipping-method-form label"/>
+        <element name="shippingPrice" type="text" selector="#co-shipping-method-form span .price"/>
     </section>
 </sections>
