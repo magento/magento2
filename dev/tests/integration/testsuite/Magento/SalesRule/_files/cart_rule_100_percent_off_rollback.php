@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\SalesRule\Api\RuleRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -19,5 +20,12 @@ $ruleRepository = $objectManager->get(RuleRepositoryInterface::class);
 $ruleId = $registry->registry('Magento/SalesRule/_files/cart_rule_100_percent_off');
 
 if ($ruleId) {
-    $ruleRepository->deleteById($ruleId);
+    try {
+        $ruleRepository->deleteById($ruleId);
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+    } catch (NoSuchEntityException $e) {
+        /**
+         * Tests which are wrapped with MySQL transaction clear all data by transaction rollback.
+         */
+    }
 }
