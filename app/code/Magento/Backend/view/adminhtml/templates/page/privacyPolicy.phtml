@@ -9,5 +9,5 @@
 ?>
 
 <a class="link-report" href="<?= $block->escapeUrl($block->getPrivacypolicyUrl()) ?>" id="footer_privacy" target="_blank">
-    <?= /* @escapeNotVerified */ __('Privacy Policy | ') ?>
+    <?= $block->escapeHtml(__('Privacy Policy')) ?>
 </a>
