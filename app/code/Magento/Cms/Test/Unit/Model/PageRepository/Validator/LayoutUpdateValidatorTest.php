@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Cms\Test\Unit\Model\PageRepository\Validator;
 
 use Magento\Cms\Api\Data\PageInterface;
+use Magento\Cms\Model\PageRepository\Validator\LayoutUpdateValidator;
 use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Config\Dom\ValidationSchemaException;
 use Magento\Framework\Config\ValidationStateInterface;
