@@ -43,6 +43,13 @@
         <element name="customAttributeDropdownField" type="select" selector="select[name='product[{{attributeCode}}]']" parameterized="true"/>
         <element name="customAttributeInputField" type="select" selector="input[name='product[{{attributeCode}}]']" parameterized="true"/>
         <element name="customAttributeSelectOptions" type="select" selector="select[name='product[{{attributeCode}}]'] option" parameterized="true"/>
+        <element name="currentCategory" type="text" selector=".admin__action-multiselect-crumb > span"/>
+        <element name="searchCategory" type="input" selector=".action-menu._active input.admin__action-multiselect-search"/>
+        <element name="selectCategory" type="input" selector="//label[contains(., '{{categoryName}}')]" parameterized="true"/>
+        <element name="done" type="button" selector=".admin__action-multiselect-actions-wrap button" timeout="30"/>
+        <element name="save" type="button" selector="#save-button"/>
+        <element name="unselectCategories" type="button" selector="//span[@class='admin__action-multiselect-crumb']/span[contains(.,'{{category}}')]/../button" parameterized="true" timeout="30"/>
+        <element name="enableProductLabel" type="checkbox" selector=".admin__actions-switch > input[name='product[status]']+label"/>
     </section>
     <section name="ProductInWebsitesSection">
         <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
