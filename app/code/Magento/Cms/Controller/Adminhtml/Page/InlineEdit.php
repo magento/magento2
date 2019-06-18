@@ -84,6 +84,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
             $page = $this->pageRepository->getById($pageId);
             try {
                 $pageData = $this->filterPost($postItems[$pageId]);
+                $this->validatePost($pageData, $page, $error, $messages);
                 $extendedPageData = $page->getData();
                 $this->setCmsPageData($page, $extendedPageData, $pageData);
                 $this->pageRepository->save($page);
@@ -134,11 +135,10 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
      * @param bool $error
      * @param array $messages
      * @return void
-     * @deprecated
      */
     protected function validatePost(array $pageData, \Magento\Cms\Model\Page $page, &$error, array &$messages)
     {
-        if (!($this->dataProcessor->validate($pageData) && $this->dataProcessor->validateRequireEntry($pageData))) {
+        if (!$this->dataProcessor->validateRequireEntry($pageData)) {
             $error = true;
             foreach ($this->messageManager->getMessages(true)->getItems() as $error) {
                 $messages[] = $this->getErrorWithPageId($page, $error->getText());

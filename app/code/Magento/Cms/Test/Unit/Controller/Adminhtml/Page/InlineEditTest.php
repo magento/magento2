@@ -102,10 +102,6 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->method('filter')
             ->with($postData[1])
             ->willReturnArgument(0);
-        $this->dataProcessor->expects($this->once())
-            ->method('validate')
-            ->with($postData[1])
-            ->willReturn(false);
         $this->messageManager->expects($this->once())
             ->method('getMessages')
             ->with(true)
