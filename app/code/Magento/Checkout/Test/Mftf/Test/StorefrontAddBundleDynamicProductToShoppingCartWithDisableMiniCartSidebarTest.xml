@@ -22,7 +22,7 @@
 
         <before>
             <magentoCLI stepKey="disableShoppingCartSidebar" command="config:set checkout/sidebar/display 0"/>
-            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
 
             <!--Create  simple products-->

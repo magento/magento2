@@ -21,7 +21,7 @@
         </annotations>
 
         <before>
-            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
             <!--Create  simple product-->
             <createData entity="SimpleProduct2" stepKey="simpleProduct1">
