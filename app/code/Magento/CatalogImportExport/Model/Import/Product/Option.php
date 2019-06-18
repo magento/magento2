@@ -52,7 +52,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     const COLUMN_ROW_SORT = '_custom_option_row_sort';
 
-    const OPTION_TITLE_PATTERN = '/option_title\=[+-]?([0-9]*.)?[0-9]+/';
+    private const OPTION_TITLE_PATTERN = '/option_title\=[+-]?([0-9]*.)?[0-9]+/';
 
     /**#@-*/
 
@@ -2102,7 +2102,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
     }
 
-
     /**
      * Preparing custom options value.
      *
@@ -2110,8 +2109,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $rowData
      *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getOptionValueOptions($optionValues, $rowData)
     {
@@ -2148,7 +2145,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Parse option value data
      *
-     * @param $optionValue
+     * @param string $optionValue
      * @return array $optionValueParams
      */
     private function parseOptionValueOption($optionValue)
