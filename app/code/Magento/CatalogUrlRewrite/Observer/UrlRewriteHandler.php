@@ -139,7 +139,7 @@ class UrlRewriteHandler
         $this->isSkippedProduct[$category->getEntityId()] = [];
         $saveRewriteHistory = (bool)$category->getData('save_rewrites_history');
 
-        foreach ($category->getStoreIds() as $storeId) {
+        foreach ($this->getCategoryStoreIds($category) as $storeId) {
             if ($category->getChangedProductIds()) {
                 $this->generateChangedProductUrls($mergeDataProvider, $category, (int)$storeId, $saveRewriteHistory);
             } else {
