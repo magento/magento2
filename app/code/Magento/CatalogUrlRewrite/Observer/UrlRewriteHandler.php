@@ -246,7 +246,7 @@ class UrlRewriteHandler
         $productCollection = $this->productCollectionFactory->create();
 
         $productCollection->addCategoriesFilter(['eq' => [$category->getEntityId()]])
-            ->setStoreId($storeId)
+            ->addStoreFilter($storeId)
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('visibility')
             ->addAttributeToSelect('url_key')
