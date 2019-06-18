@@ -2525,6 +2525,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function isNeedToValidateUrlKey($rowData)
     {
+        if (!empty($rowData[self::COL_SKU]) && empty($rowData[self::URL_KEY])
+            && $this->getBehavior() === Import::BEHAVIOR_APPEND
+            && $this->isSkuExist($rowData[self::COL_SKU])) {
+            return false;
+        }
+
         return (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME]))
             && (empty($rowData[self::COL_VISIBILITY])
                 || $rowData[self::COL_VISIBILITY]
@@ -2869,15 +2875,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function isNeedToChangeUrlKey(array $rowData): bool
     {
-        $urlKey = $this->getUrlKey($rowData);
         $productExists = $this->isSkuExist($rowData[self::COL_SKU]);
-        $markedToEraseUrlKey = isset($rowData[self::URL_KEY]);
         // The product isn't new and the url key index wasn't marked for change.
-        if (!$urlKey && $productExists && !$markedToEraseUrlKey) {
+        if ($productExists && empty($rowData[self::URL_KEY]) && $this->getBehavior() === Import::BEHAVIOR_APPEND) {
             // Seems there is no need to change the url key
             return false;
         }
-
         return true;
     }
 
