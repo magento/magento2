@@ -48,7 +48,7 @@ class Collection
      */
     private $stockHelper;
 
-    /** 
+    /**
      * @var StockConfigurationInterface
      */
     protected $stockConfig;
@@ -79,6 +79,8 @@ class Collection
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DataProvider $productDataProvider
      * @param MetadataPool $metadataPool
+     * @param Stock $stockHelper
+     * @param StockConfigurationInterface $stockConfig
      */
     public function __construct(
         CollectionFactory $childCollectionFactory,
@@ -168,7 +170,7 @@ class Collection
             $childCollection->setProductFilter($product);
             $childCollection->addAttributeToSelect($attributeData);
 
-            if(!$showOutOfStock) {
+            if (!$showOutOfStock) {
                 $this->stockHelper->addInStockFilterToCollection($childCollection);
             }
 
