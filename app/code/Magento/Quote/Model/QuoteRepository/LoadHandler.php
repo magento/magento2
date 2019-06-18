@@ -39,9 +39,6 @@ class LoadHandler
      */
     public function load(CartInterface $quote)
     {
-        if (!$quote->getIsActive()) {
-            return $quote;
-        }
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote->setItems($quote->getAllVisibleItems());
         $shippingAssignments = [];
