@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteCustomerActionGroup">
+        <arguments>
+            <argument name="customerEmail"/>
+        </arguments>
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomersPage"/>
+        <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
+        <conditionalClick selector="{{AdminCustomerFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerFiltersSection.clearAll}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(customerEmail)}}" stepKey="chooseCustomer"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.actions}}" stepKey="openActions"/>
+        <waitForPageLoad stepKey="waitActions"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.delete}}" stepKey="deleteCustomer"/>
+        <waitForPageLoad stepKey="waitForConfirmationAlert"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.ok}}" stepKey="acceptDeletion"/>
+        <waitForPageLoad stepKey="waitForDelete"/>
+        <see userInput="were deleted." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

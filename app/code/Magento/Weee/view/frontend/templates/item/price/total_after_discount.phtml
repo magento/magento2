@@ -3,11 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
+// phpcs:disable PSR2.Files.ClosingTag
 /** @var \Magento\Weee\Block\Item\Price\Renderer $block */
 $_item = $block->getItem();
 ?>
 <?php $_order = $block->getItem()->getOrderItem()->getOrder() ?>
-<?= /* @escapeNotVerified */ $_order->formatPrice($block->getTotalAmount($_item)) ?>
+<?= /* @noEscape */ $_order->formatPrice($block->getTotalAmount($_item)) ?>
