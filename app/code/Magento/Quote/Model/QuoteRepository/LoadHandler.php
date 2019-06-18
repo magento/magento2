@@ -3,12 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Quote\Model\QuoteRepository;
 
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor;
 use Magento\Quote\Api\Data\CartExtensionFactory;
 
+/**
+ * Class LoadHandler
+ *
+ * Loads the quote
+ *
+ * @package Magento\Quote\Model\QuoteRepository
+ */
 class LoadHandler
 {
     /**
@@ -34,6 +44,8 @@ class LoadHandler
     }
 
     /**
+     * Adds items, extension attributes to quote
+     *
      * @param CartInterface $quote
      * @return CartInterface
      */
