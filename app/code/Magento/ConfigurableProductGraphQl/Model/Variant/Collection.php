@@ -15,6 +15,8 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Pr
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product as DataProvider;
+use Magento\CatalogInventory\Helper\Stock;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 
 /**
  * Collection for fetching configurable child product data.
@@ -40,6 +42,16 @@ class Collection
      * @var DataProvider
      */
     private $productDataProvider;
+
+    /**
+     * @var Stock
+     */
+    private $stockHelper;
+
+    /** 
+     * @var StockConfigurationInterface
+     */
+    protected $stockConfig;
 
     /**
      * @var MetadataPool
@@ -73,13 +85,17 @@ class Collection
         ProductFactory $productFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         DataProvider $productDataProvider,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        Stock $stockHelper,
+        StockConfigurationInterface $stockConfig
     ) {
         $this->childCollectionFactory = $childCollectionFactory;
         $this->productFactory = $productFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->productDataProvider = $productDataProvider;
         $this->metadataPool = $metadataPool;
+        $this->stockHelper = $stockHelper;
+        $this->stockConfig = $stockConfig;
     }
 
     /**
@@ -143,12 +159,18 @@ class Collection
             return $this->childrenMap;
         }
 
+        $showOutOfStock = $this->stockConfig->isShowOutOfStock();
+
         foreach ($this->parentProducts as $product) {
             $attributeData = $this->getAttributesCodes($product);
             /** @var ChildCollection $childCollection */
             $childCollection = $this->childCollectionFactory->create();
             $childCollection->setProductFilter($product);
             $childCollection->addAttributeToSelect($attributeData);
+
+            if(!$showOutOfStock) {
+                $this->stockHelper->addInStockFilterToCollection($childCollection);
+            }
 
             /** @var Product $childProduct */
             foreach ($childCollection->getItems() as $childProduct) {
