@@ -122,8 +122,8 @@ class Grouped extends AbstractModifier
      * @param AttributeSetRepositoryInterface $attributeSetRepository
      * @param CurrencyInterface $localeCurrency
      * @param array $uiComponentsConfig
-     * @param GroupedProducts $groupedProducts
-     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory|null $productLinkFactory
+     * @param GroupedProducts|null $groupedProducts
+     * @param ProductLinkInterfaceFactory|null $productLinkFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -148,11 +148,9 @@ class Grouped extends AbstractModifier
         $this->status = $status;
         $this->localeCurrency = $localeCurrency;
         $this->uiComponentsConfig = array_replace_recursive($this->uiComponentsConfig, $uiComponentsConfig);
-        $this->groupedProducts = $groupedProducts ?: ObjectManager::getInstance()->get(
-            \Magento\GroupedProduct\Model\Product\Link\CollectionProvider\Grouped::class
-        );
+        $this->groupedProducts = $groupedProducts ?: ObjectManager::getInstance()->get(GroupedProducts::class);
         $this->productLinkFactory = $productLinkFactory ?: ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory::class);
+            ->get(ProductLinkInterfaceFactory::class);
     }
 
     /**
