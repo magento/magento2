@@ -51,7 +51,6 @@ define([
          * Close modal window.
          */
         closeModal: function () {
-            this.options.actions.always();
             this.element.bind('alertclosed', _.bind(this._remove, this));
 
             return this._super();
