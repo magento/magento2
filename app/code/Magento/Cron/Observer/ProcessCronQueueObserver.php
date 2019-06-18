@@ -332,16 +332,21 @@ class ProcessCronQueueObserver implements ObserverInterface
             $this->stopProfiling();
         }
 
-        $schedule->setStatus(Schedule::STATUS_SUCCESS)->setFinishedAt(strftime(
-            '%Y-%m-%d %H:%M:%S',
-            $this->dateTime->gmtTimestamp()
-        ));
+        $schedule->setStatus(
+        Schedule::STATUS_SUCCESS)->setFinishedAt(
+            strftime(
+                '%Y-%m-%d %H:%M:%S',
+                $this->dateTime->gmtTimestamp()
+            )
+        );
 
-        $this->logger->info(sprintf(
-            'Cron Job %s is successfully finished. Statistics: %s',
-            $jobCode,
-            $this->getProfilingStat()
-        ));
+        $this->logger->info(
+            sprintf(
+                'Cron Job %s is successfully finished. Statistics: %s',
+                $jobCode,
+                $this->getProfilingStat()
+            )
+        );
     }
 
     /**
@@ -392,6 +397,28 @@ class ProcessCronQueueObserver implements ObserverInterface
     }
 
     /**
+     * Return job collection from database with status 'pending', 'running' or 'success'
+     *
+     * @param string $groupId
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     */
+    private function getNonExitedSchedules($groupId)
+    {
+        $jobs = $this->_config->getJobs();
+        $pendingJobs = $this->_scheduleFactory->create()->getCollection();
+        $pendingJobs->addFieldToFilter(
+        'status',
+            [
+                'in' => [
+                    Schedule::STATUS_PENDING, Schedule::STATUS_RUNNING, Schedule::STATUS_SUCCESS
+                ]
+            ]
+        );
+        $pendingJobs->addFieldToFilter('job_code', ['in' => array_keys($jobs[$groupId])]);
+        return $pendingJobs;
+    }
+
+    /**
      * Generate cron schedule
      *
      * @param string $groupId
@@ -422,7 +449,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             null
         );
 
-        $schedules = $this->getPendingSchedules($groupId);
+        $schedules = $this->getNonExitedSchedules($groupId);
         $exists = [];
         /** @var Schedule $schedule */
         foreach ($schedules as $schedule) {
@@ -653,11 +680,14 @@ class ProcessCronQueueObserver implements ObserverInterface
         /** @var \Magento\Cron\Model\ResourceModel\Schedule $scheduleResource */
         $scheduleResource = $this->_scheduleFactory->create()->getResource();
         foreach ($this->invalid as $jobCode => $scheduledAtList) {
-            $scheduleResource->getConnection()->delete($scheduleResource->getMainTable(), [
-                'status = ?' => Schedule::STATUS_PENDING,
-                'job_code = ?' => $jobCode,
-                'scheduled_at in (?)' => $scheduledAtList,
-            ]);
+            $scheduleResource->getConnection()->delete(
+                $scheduleResource->getMainTable(),
+                [
+                    'status = ?' => Schedule::STATUS_PENDING,
+                    'job_code = ?' => $jobCode,
+                    'scheduled_at in (?)' => $scheduledAtList,
+                ]
+            );
         }
         return $this;
     }
