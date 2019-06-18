@@ -14,6 +14,7 @@
         <element name="emailInput" type="input" selector="input[name=email]"/>
         <element name="apply" type="button" selector="button[data-action=grid-filter-apply]" timeout="30"/>
         <element name="clearFilters" type="button" selector=".admin__data-grid-header button[data-action='grid-filter-reset']" timeout="30"/>
+        <element name="clearAll" type="button" selector=".admin__data-grid-header .action-tertiary.action-clear" timeout="30"/>
         <element name="viewDropdown" type="button" selector=".admin__data-grid-action-bookmarks button.admin__action-dropdown"/>
         <element name="countryOptions" type="button" selector=".admin__data-grid-filters select[name=billing_country_id] option"/>
         <element name="countryOptionsWithoutEmptyOption" type="button" selector=".admin__data-grid-filters select[name=billing_country_id] option:not([value=''])"/>
