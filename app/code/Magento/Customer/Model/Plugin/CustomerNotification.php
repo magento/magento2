@@ -15,6 +15,11 @@ use Magento\Framework\App\State;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Plugin before \Magento\Framework\App\Action\AbstractAction::dispatch.
+ *
+ * Plugin to remove notifications from cache.
+ */
 class CustomerNotification
 {
     /**
@@ -66,6 +71,8 @@ class CustomerNotification
     }
 
     /**
+     * Removes notifications from cache.
+     *
      * @param AbstractAction $subject
      * @param RequestInterface $request
      * @return void

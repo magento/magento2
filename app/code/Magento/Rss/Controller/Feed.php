@@ -76,6 +76,8 @@ abstract class Feed extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Authenticate not logged in customer.
+     *
      * @return bool
      */
     protected function auth()
