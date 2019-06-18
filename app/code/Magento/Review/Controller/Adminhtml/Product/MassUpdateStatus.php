@@ -106,7 +106,6 @@ class MassUpdateStatus extends ProductController implements HttpPostActionInterf
                     )
                 );
 
-
                 return false;
             }
         }
