@@ -480,7 +480,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 $moduleName = str_replace('_', '\\', $moduleName);
             }
         );
-        $declaredDependencies =  array_intersect($conditionalDependencies, $declared);
+        $declaredDependencies = array_intersect($conditionalDependencies, $declared);
 
         foreach ($declaredDependencies as $moduleName) {
             if ($this->_isFake($moduleName)) {
