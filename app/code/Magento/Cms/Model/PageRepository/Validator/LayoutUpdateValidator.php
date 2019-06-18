@@ -66,7 +66,7 @@ class LayoutUpdateValidator implements ValidatorInterface
     private function validateRequiredFields(PageInterface $page): void
     {
         if (empty($page->getTitle())) {
-            throw new LocalizedException(__(sprintf('Required field "%s" is empty.', 'title')));
+            throw new LocalizedException(__('Required field "%1" is empty.', 'title'));
         }
     }
 
