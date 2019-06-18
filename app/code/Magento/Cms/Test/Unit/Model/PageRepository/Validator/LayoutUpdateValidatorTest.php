@@ -6,11 +6,11 @@
 
 declare(strict_types=1);
 
-namespace Magento\Cms\Model\PageRepository\Validator;
+namespace Magento\Cms\Test\Unit\Model\PageRepository\Validator;
 
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Framework\Config\Dom\ValidationException;
-use Magento\Framework\Config\Dom\ValidationSchemaException as SchemaException;
+use Magento\Framework\Config\Dom\ValidationSchemaException;
 use Magento\Framework\Config\ValidationStateInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
@@ -88,6 +88,8 @@ class LayoutUpdateValidatorTest extends TestCase
     {
         $layoutError = 'Layout update is invalid';
         $customLayoutError = 'Custom layout update is invalid';
+        $validationException = new ValidationException('Invalid format');
+        $schemaException = new ValidationSchemaException(__('Invalid format'));
 
         return [
             [['getTitle' => ''], 'Required field "title" is empty.', null],
@@ -103,8 +105,8 @@ class LayoutUpdateValidatorTest extends TestCase
             [['getTitle' => 'foo', 'getLayoutUpdateXml' => '0'], null, null],
             [['getTitle' => 'foo', 'getLayoutUpdateXml' => []], null, null],
             [['getTitle' => 'foo', 'getLayoutUpdateXml' => 'foo'], $layoutError, null],
-            [['getTitle' => 'foo', 'getLayoutUpdateXml' => 'foo'], $layoutError, new ValidationException],
-            [['getTitle' => 'foo', 'getLayoutUpdateXml' => 'foo'], $layoutError, new SchemaException(__(''))],
+            [['getTitle' => 'foo', 'getLayoutUpdateXml' => 'foo'], $layoutError, $validationException],
+            [['getTitle' => 'foo', 'getLayoutUpdateXml' => 'foo'], $layoutError, $schemaException],
             [['getTitle' => 'foo', 'getLayoutUpdateXml' => 'foo'], null, null, true],
             [['getTitle' => 'foo', 'getCustomLayoutUpdateXml' => ''], null, null],
             [['getTitle' => 'foo', 'getCustomLayoutUpdateXml' => null], null, null],
@@ -113,8 +115,8 @@ class LayoutUpdateValidatorTest extends TestCase
             [['getTitle' => 'foo', 'getCustomLayoutUpdateXml' => '0'], null, null],
             [['getTitle' => 'foo', 'getCustomLayoutUpdateXml' => []], null, null],
             [['getTitle' => 'foo', 'getCustomLayoutUpdateXml' => 'foo'], $customLayoutError, null],
-            [['getTitle' => 'foo', 'getCustomLayoutUpdateXml' => 'foo'], $customLayoutError, new ValidationException],
-            [['getTitle' => 'foo', 'getCustomLayoutUpdateXml' => 'foo'], $customLayoutError, new SchemaException(__(''))],
+            [['getTitle' => 'foo', 'getCustomLayoutUpdateXml' => 'foo'], $customLayoutError, $validationException],
+            [['getTitle' => 'foo', 'getCustomLayoutUpdateXml' => 'foo'], $customLayoutError, $schemaException],
             [['getTitle' => 'foo', 'getCustomLayoutUpdateXml' => 'foo'], null, null, true],
         ];
     }

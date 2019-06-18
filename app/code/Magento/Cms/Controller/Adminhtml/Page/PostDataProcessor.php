@@ -12,8 +12,7 @@ use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Config\Dom\ValidationSchemaException;
 
 /**
- * Class PostDataProcessor
- * @package Magento\Cms\Controller\Adminhtml\Page
+ * Processes form data
  */
 class PostDataProcessor
 {
