@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CancelOrdersInOrderSalesReportTest">
+        <annotations>
+            <features value="Reports"/>
+            <stories value="Order Sales Report includes canceled orders"/>
+            <group value="reports"/>
+            <title value="Canceled orders in order sales report"/>
+            <description value="Verify canceling of orders in order sales report"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-95960"/>
+            <useCaseId value="MAGETWO-95823"/>
+            <skip>
+                <issueId value="MC-17274"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <!-- log in as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- create new product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- create new customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+
+        <!-- Create completed order -->
+        <actionGroup ref="CreateOrderActionGroup" stepKey="createOrderd">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seePageNameNewInvoicePage"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
+        <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeOrderShipmentUrl"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
+
+        <!-- Create Order -->
+        <actionGroup ref="CreateOrderActionGroup" stepKey="createOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Cancel order -->
+        <actionGroup ref="cancelPendingOrder" stepKey="cancelOrder"/>
+
+        <!-- Generate Order report for statuses  -->
+        <amOnPage url="{{OrdersReportPage.url}}" stepKey="goToOrdersReportPage1"/>
+        <!-- Get date -->
+        <generateDate stepKey="generateEndDate" date="+0 day" format="m/d/Y"/>
+        <generateDate stepKey="generateStartDate" date="-1 day" format="m/d/Y"/>
+        <actionGroup ref="GenerateOrderReportForNotCancelActionGroup" stepKey="generateReportAfterCancelOrderBefore">
+            <argument name="orderFromDate" value="$generateStartDate"/>
+            <argument name="orderToDate" value="$generateEndDate"/>
+            <argument name="statuses" value="['closed', 'complete', 'fraud', 'holded', 'payment_review', 'paypal_canceled_reversal', 'paypal_reversed', 'processing']"/>
+        </actionGroup>
+        <waitForElement selector="{{GeneratedReportSection.ordersCount}}" stepKey="waitForOrdersCountBefore"/>
+        <grabTextFrom selector="{{GeneratedReportSection.ordersCount}}" stepKey="grabCanceledOrdersSpecified"/>
+        <!-- Generate Order report -->
+        <amOnPage url="{{OrdersReportPage.url}}" stepKey="goToOrdersReportPage2"/>
+        <!-- Get date -->
+        <actionGroup ref="GenerateOrderReportActionGroup" stepKey="generateReportAfterCancelOrder">
+            <argument name="orderFromDate" value="$generateStartDate"/>
+            <argument name="orderToDate" value="$generateEndDate"/>
+        </actionGroup>
+        <waitForElement selector="{{GeneratedReportSection.ordersCount}}" stepKey="waitForOrdersCount"/>
+        <grabTextFrom selector="{{GeneratedReportSection.ordersCount}}" stepKey="grabCanceledOrdersAny"/>
+
+        <!-- Compare canceled orders price -->
+        <assertEquals expected="{$grabCanceledOrdersSpecified}" expectedType="string" actual="{$grabCanceledOrdersAny}" actualType="string"  stepKey="assertEquals"/>
+    </test>
+</tests>

@@ -433,7 +433,10 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_TYPE,
-            __('Value for \'type\' sub attribute in \'custom_options\' attribute contains incorrect value, acceptable values are: \'dropdown\', \'checkbox\'')
+            __(
+                'Value for \'type\' sub attribute in \'custom_options\' attribute contains incorrect value, acceptable values are: %1',
+                '\''.implode('\', \'', array_keys($this->_specificTypes)).'\''
+            )
         );
         $this->_productEntity->addMessageTemplate(self::ERROR_EMPTY_TITLE, __('Please enter a value for title.'));
         $this->_productEntity->addMessageTemplate(
@@ -631,7 +634,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_addRowsErrors(self::ERROR_AMBIGUOUS_NEW_NAMES, $errorRows);
             return false;
         }
-        if ($this->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
+        if ($this->getBehavior() == Import::BEHAVIOR_APPEND) {
             $errorRows = $this->_findOldOptionsWithTheSameTitles();
             if ($errorRows) {
                 $this->_addRowsErrors(self::ERROR_AMBIGUOUS_OLD_NAMES, $errorRows);
@@ -969,11 +972,10 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         return false;
                     }
                 }
-                return true;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -1383,7 +1385,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function removeExistingOptions(array $products, array $optionsToRemove): void
     {
-        if ($this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
+        if ($this->getBehavior() != Import::BEHAVIOR_APPEND) {
             $this->_deleteEntities(array_keys($products));
         } elseif (!empty($optionsToRemove)) {
             // Remove options for products with empty "custom_options" row
@@ -2087,7 +2089,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         array $types
     ): void {
         if ($this->_isReadyForSaving($options, $titles, $types['values'])) {
-            if ($this->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
+            if ($this->getBehavior() == Import::BEHAVIOR_APPEND) {
                 $this->_compareOptionsWithExisting($options, $titles, $prices, $types['values']);
                 $this->restoreOriginalOptionTypeIds($types['values'], $types['prices'], $types['titles']);
             }

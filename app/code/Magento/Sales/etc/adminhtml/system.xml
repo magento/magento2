@@ -27,18 +27,23 @@
                 <label>Checkout Totals Sort Order</label>
                 <field id="discount" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Discount</label>
+                    <validate>required-number validate-number</validate>
                 </field>
                 <field id="grand_total" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Grand Total</label>
+                    <validate>required-number validate-number</validate>
                 </field>
                 <field id="shipping" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Shipping</label>
+                    <validate>required-number validate-number</validate>
                 </field>
                 <field id="subtotal" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Subtotal</label>
+                    <validate>required-number validate-number</validate>
                 </field>
                 <field id="tax" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Tax</label>
+                    <validate>required-number validate-number</validate>
                 </field>
             </group>
             <group id="reorder" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -88,6 +93,11 @@
                 <field id="amount" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Minimum Amount</label>
                     <comment>Subtotal after discount</comment>
+                </field>
+                <field id="include_discount_amount" translate="label" sortOrder="12" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Include Discount Amount</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Choosing yes will be used subtotal after discount, otherwise only subtotal will be used</comment>
                 </field>
                 <field id="tax_including" translate="label" sortOrder="15" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Include Tax to Amount</label>

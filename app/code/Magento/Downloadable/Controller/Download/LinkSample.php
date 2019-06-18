@@ -1,21 +1,26 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Controller\Download;
 
 use Magento\Downloadable\Helper\Download as DownloadHelper;
 use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class LinkSample executes download sample link action.
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class LinkSample extends \Magento\Downloadable\Controller\Download
 {
     /**
      * Download link's sample action
      *
      * @return ResponseInterface
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {
@@ -39,6 +44,7 @@ class LinkSample extends \Magento\Downloadable\Controller\Download
             }
             try {
                 $this->_processDownload($resource, $resourceType);
+                // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
                 exit(0);
             } catch (\Exception $e) {
                 $this->messageManager->addError(

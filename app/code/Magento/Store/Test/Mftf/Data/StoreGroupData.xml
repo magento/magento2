@@ -43,6 +43,19 @@
         <data key="root_category_id">2</data>
         <data key="website_id">1</data>
     </entity>
+    <entity name="finnishStoreGroup" type="group">
+        <data key="name">Finnish</data>
+        <data key="code">fin</data>
+        <data key="root_category_id">2</data>
+        <data key="website_id">1</data>
+    </entity>
+    <entity name="swedishStoreGroup" type="group">
+        <data key="name">Swedish</data>
+        <data key="code">swd</data>
+        <data key="root_category_id">2</data>
+        <data key="website_id">1</data>
+    </entity>
+
     <entity name="staticFirstStoreGroup" extends="staticStoreGroup">
         <data key="name">NewStore</data>
         <data key="code">Base1</data>

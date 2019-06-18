@@ -5,6 +5,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Router;
 
 /**
@@ -346,7 +348,6 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param string $path
      * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     protected function _checkShouldBeSecure(\Magento\Framework\App\RequestInterface $request, $path = '')
     {
@@ -361,6 +362,7 @@ class Base implements \Magento\Framework\App\RouterInterface
             }
 
             $this->_responseFactory->create()->setRedirect($url)->sendResponse();
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit;
         }
     }

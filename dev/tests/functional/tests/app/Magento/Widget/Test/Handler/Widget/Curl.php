@@ -172,7 +172,7 @@ class Curl extends AbstractCurl
         $widgetInstances = [];
         foreach ($data['widget_instance'] as $key => $widgetInstance) {
             $pageGroup = $widgetInstance['page_group'];
-            $method = 'prepare' . str_replace(' ', '', ucwords(str_replace('_', ' ', $pageGroup))) . 'Group';
+            $method = 'prepare' . str_replace('_', '', ucwords($pageGroup, '_')) . 'Group';
             if (!method_exists(__CLASS__, $method)) {
                 throw new \Exception('Method for prepare page group "' . $method . '" is not exist.');
             }

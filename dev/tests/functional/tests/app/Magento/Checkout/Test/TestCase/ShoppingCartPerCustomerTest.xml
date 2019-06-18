@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\ShoppingCartPerCustomerTest" summary="Shopping Cart and Mini Shopping Cart per Customer with enabled cached" ticketId="MAGETWO-37214">
         <variation name="ShoppingCartPerCustomerTestVariation1" summary="Shopping Cart and Mini Shopping Cart per Customer with enabled cached" ticketId="MAGETWO-37214">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/1" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
             <data name="customerDataset" xsi:type="string">johndoe_unique_firstname</data>
