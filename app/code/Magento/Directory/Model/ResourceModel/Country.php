@@ -5,6 +5,10 @@
  */
 namespace Magento\Directory\Model\ResourceModel;
 
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Country Resource Model
  *
@@ -14,22 +18,22 @@ namespace Magento\Directory\Model\ResourceModel;
 class Country extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     private $escaper;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param Context $context
      * @param null|string $connectionName
-     * @param \Magento\Framework\Escaper|null $escaper
+     * @param Escaper|null $escaper
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        Context $context,
         ?string $connectionName = null,
-        \Magento\Framework\Escaper $escaper = null
+        Escaper $escaper = null
     ) {
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Escaper::class
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
         );
         parent::__construct($context, $connectionName);
     }
