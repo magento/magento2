@@ -90,7 +90,7 @@ class DateTime
         if ($format === null) {
             $format = 'Y-m-d H:i:s';
         }
-        $result = date($format, $this->timestamp($input));
+        $result = date($format, $this->timestamp($input, $format));
         return $result;
     }
 
@@ -126,9 +126,11 @@ class DateTime
      * Input date must be in GMT timezone
      *
      * @param  int|string $input date in GMT timezone
+     * @param  null|string $format
+     *
      * @return int
      */
-    public function timestamp($input = null)
+    public function timestamp($input = null, $format = null)
     {
         switch (true) {
             case ($input === null):
@@ -141,7 +143,11 @@ class DateTime
                 $result = $input->getTimestamp();
                 break;
             default:
-                $result = strtotime($input);
+                {
+                    $result = $format ?
+                        \DateTime::createFromFormat($format, $input)
+                        : strtotime($input);
+                }
         }
 
         $date = $this->_localeDate->date($result);
