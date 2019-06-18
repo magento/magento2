@@ -63,18 +63,7 @@ class ReviewGrid extends ProductController implements HttpGetActionInterface, Ht
      */
     protected function _isAllowed()
     {
-        if ($this->_authorization->isAllowed('Magento_Review::reviews_all')) {
-            return true;
-        }
-
-        if (!$this->_authorization->isAllowed('Magento_Review::pending')) {
-            return false;
-        }
-
-        if ($this->getRequest() instanceof Http) {
-            return $this->getRequest()->getBeforeForwardInfo('action_name') == 'pending';
-        }
-
-        return false;
+        return $this->_authorization->isAllowed('Magento_Review::reviews_all')
+            || $this->_authorization->isAllowed('Magento_Review::pending');
     }
 }
