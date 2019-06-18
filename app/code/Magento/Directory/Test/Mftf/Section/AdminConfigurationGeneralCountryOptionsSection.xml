@@ -17,6 +17,6 @@
         <element name="countryOptions" type="button" selector="#general_country-head"/>
         <element name="countryOptionsOpen" type="button" selector="#general_country-head.open"/>
         <element name="topDestinations" type="select" selector="#general_country_destinations"/>
-        <element name="allowedCountriesOptions" selector="#general_country_allow option"/>
+        <element name="allowedCountriesOptions" type="select" selector="#general_country_allow option"/>
     </section>
 </sections>
