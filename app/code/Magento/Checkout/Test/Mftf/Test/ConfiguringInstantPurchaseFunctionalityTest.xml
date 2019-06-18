@@ -31,14 +31,6 @@
 
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-
-            <!-- Create store views -->
-            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createFirstStoreView">
-                <argument name="customStore" value="storeViewData1"/>
-            </actionGroup>
-            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
-                <argument name="customStore" value="storeViewData2"/>
-            </actionGroup>
         </before>
         <after>
             <!-- Set configs to default -->
@@ -51,17 +43,17 @@
             <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
-            <!-- Delete store views -->
-            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteFirstStoreView">
-                <argument name="customStore" value="storeViewData1"/>
-            </actionGroup>
-            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteSecondStoreView">
-                <argument name="customStore" value="storeViewData2"/>
-            </actionGroup>
-
             <!-- Admin logout -->
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
+
+        <!-- Create store views -->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createFirstStoreView">
+            <argument name="customStore" value="storeViewData1"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+            <argument name="customStore" value="storeViewData2"/>
+        </actionGroup>
 
         <!-- Login to Frontend -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
@@ -247,6 +239,14 @@
         <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeInstantPurchaseBtn">
             <argument name="selector" value="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}"/>
             <argument name="userInput" value="Instant Purchase"/>
+        </actionGroup>
+
+        <!-- Delete store views -->
+        <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteFirstStoreView">
+            <argument name="customStore" value="storeViewData1"/>
+        </actionGroup>
+        <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteSecondStoreView">
+            <argument name="customStore" value="storeViewData2"/>
         </actionGroup>
     </test>
 </tests>
