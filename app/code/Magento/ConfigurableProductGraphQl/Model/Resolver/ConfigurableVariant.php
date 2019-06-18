@@ -95,9 +95,7 @@ class ConfigurableVariant implements ResolverInterface
             $variants = [];
             /** @var Product $child */
             foreach ($children as $key => $child) {
-                if($child != null) {
-                    $variants[$key] = ['sku' => $child['sku'], 'product' => $child, 'options' => $options];
-                }
+                $variants[$key] = ['sku' => $child['sku'], 'product' => $child, 'options' => $options];
             }
 
             return $variants;
