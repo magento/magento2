@@ -137,7 +137,7 @@ class Grouped extends AbstractModifier
         CurrencyInterface $localeCurrency,
         array $uiComponentsConfig = [],
         GroupedProducts $groupedProducts = null,
-        \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null
+        ProductLinkInterfaceFactory $productLinkFactory = null
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
