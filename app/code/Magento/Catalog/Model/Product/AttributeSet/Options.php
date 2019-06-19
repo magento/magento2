@@ -11,7 +11,7 @@ namespace Magento\Catalog\Model\Product\AttributeSet;
 class Options implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
-     * @var null|array
+     * @var array
      */
     protected $options;
 
@@ -28,7 +28,7 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
     }
 
     /**
-     * @return array|null
+     * @inheritDoc
      */
     public function toOptionArray()
     {
@@ -37,10 +37,14 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
                 ->setEntityTypeFilter($this->product->getTypeId())
                 ->toOptionArray();
 
-            array_walk($this->options, function (&$option) {
-                $option['__disableTmpl'] = true;
-            });
+            array_walk(
+                $this->options,
+                function (&$option) {
+                    $option['__disableTmpl'] = true;
+                }
+            );
         }
+
         return $this->options;
     }
 }
