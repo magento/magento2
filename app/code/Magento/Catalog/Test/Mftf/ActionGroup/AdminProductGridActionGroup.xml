@@ -120,4 +120,21 @@
         <waitForPageLoad stepKey="waitForProductToLoad"/>
         <waitForElementVisible selector="{{AdminHeaderSection.pageTitle}}" stepKey="waitForProductTitle"/>
     </actionGroup>
+
+    <actionGroup name="DeleteAllProducts">
+        <conditionalClick selector="{{AdminProductGridSection.multicheckDropdown}}" dependentSelector="{{AdminDataGridTableSection.firstRow}}" visible="true" stepKey="openMulticheckDropdown"/>
+        <conditionalClick selector="{{AdminProductGridSection.multicheckOption('Select All')}}" dependentSelector="{{AdminDataGridTableSection.firstRow}}" visible="true" stepKey="selectAllProductInFilteredGrid"/>
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModalPopUp"/>
+        <grabTextFrom selector="{{AdminConfirmationModalSection.message}}" stepKey="grabConfirmationMessage"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmProductDelete"/>
+        <executeInSelenium function="function () use ($I, $grabConfirmationMessage) {
+            if ($grabConfirmationMessage !== 'You haven\'t selected any items!') {
+                $I->waitForElementVisible('#messages div.message-success');
+                $I->see('record(s) have been deleted.', '#messages div.message-success');
+            }
+            }" stepKey="waitSuccessMessage"/>
+    </actionGroup>
+
 </actionGroups>
