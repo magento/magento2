@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php $_source  = $block->getSource() ?>
 <?php $block->setPriceDataObject($_source) ?>
@@ -13,12 +10,12 @@
 <tr>
     <td class="label">
         <strong><big>
-        <?php if ($block->getGrandTotalTitle()): ?>
-            <?= /* @escapeNotVerified */ $block->getGrandTotalTitle() ?>
-        <?php else: ?>
-            <?= /* @escapeNotVerified */ __('Grand Total') ?>
+        <?php if ($block->getGrandTotalTitle()) : ?>
+            <?= $block->escapeHtml($block->getGrandTotalTitle()) ?>
+        <?php else : ?>
+            <?= $block->escapeHtml(__('Grand Total')) ?>
         <?php endif; ?>
         </big></strong>
     </td>
-    <td class="emph"><big><?= /* @escapeNotVerified */ $block->displayPriceAttribute('grand_total', true) ?></big></td>
+    <td class="emph"><big><?= /* @noEscape */ $block->displayPriceAttribute('grand_total', true) ?></big></td>
 </tr>
