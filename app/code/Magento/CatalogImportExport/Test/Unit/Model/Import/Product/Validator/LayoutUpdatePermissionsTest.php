@@ -48,7 +48,7 @@ class LayoutUpdatePermissionsTest extends TestCase
         $this->context
             ->method('retrieveMessageTemplate')
             ->with('insufficientPermissions')
-            ->willReturn('oh no "%s"');
+            ->willReturn('oh no');
         $this->validator = new LayoutUpdatePermissions(
             $this->userContext,
             $this->authorization
@@ -82,7 +82,7 @@ class LayoutUpdatePermissionsTest extends TestCase
         if ($isValid) {
             self::assertSame([], $messages);
         } else {
-            self::assertSame(['oh no "custom_layout_update"'], $messages);
+            self::assertSame(['oh no'], $messages);
         }
     }
 

@@ -68,10 +68,7 @@ class LayoutUpdatePermissions extends AbstractImportValidator
         if (!$isValid) {
             $this->_addMessages(
                 [
-                    sprintf(
-                        $this->context->retrieveMessageTemplate(self::ERROR_INSUFFICIENT_PERMISSIONS),
-                        'custom_layout_update'
-                    )
+                    $this->context->retrieveMessageTemplate(self::ERROR_INSUFFICIENT_PERMISSIONS),
                 ]
             );
         }
