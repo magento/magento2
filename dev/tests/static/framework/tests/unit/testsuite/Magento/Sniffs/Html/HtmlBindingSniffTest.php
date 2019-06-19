@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Sniffs\Less;
+namespace Magento\Sniffs\Html;
 
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\HtmlWrapper;
 use PHPUnit\Framework\TestCase;

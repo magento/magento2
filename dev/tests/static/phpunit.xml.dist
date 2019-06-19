@@ -18,6 +18,9 @@
         <testsuite name="Less Static Code Analysis">
             <file>testsuite/Magento/Test/Less/LiveCodeTest.php</file>
         </testsuite>
+        <testsuite name="HTML Static Code Analysis">
+            <file>testsuite/Magento/Test/Html/LiveCodeTest.php</file>
+        </testsuite>
         <testsuite name="PHP Coding Standard Verification">
             <file>testsuite/Magento/Test/Php/LiveCodeTest.php</file>
         </testsuite>
