@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontResolveWindowsCount">
+        <executeJS function="return 0;" stepKey="windowsCount"/>
+        <executeInSelenium function="function ($webdriver) use (&amp;$windowsCount) {
+		    $windowsCount = count($webdriver->getWindowHandles());
+		}" stepKey="calculateWindowsCount"/>
+    </actionGroup>
+    <actionGroup name="StorefrontWaitForPaypalWindowAppearsAndSwitchTo">
+        <arguments>
+            <argument name="windowsCount" type="string"/>
+        </arguments>
+        <executeInSelenium function="function ($webdriver) use ({{windowsCount}}, $I) {
+		    $webdriver->wait()->until(\Facebook\WebDriver\WebDriverExpectedCondition::numberOfWindowsToBe({{windowsCount}} + 1));
+		    $handles = $webdriver->getWindowHandles();
+		    $lastWindow = end($handles);
+		    $I->switchToWindow($lastWindow);
+		}" stepKey="switchToPaypalSandboxTab"/>
+    </actionGroup>
+    <actionGroup name="StorefrontWaitForPaypalWindowCloseAndSwitchToMain">
+        <arguments>
+            <argument name="windowsCount" type="string"/>
+        </arguments>
+        <executeInSelenium function="function ($webdriver) use ({{windowsCount}}, $I) {
+            $webdriver->wait()->until(\Facebook\WebDriver\WebDriverExpectedCondition::numberOfWindowsToBe({{windowsCount}}));
+            $handles = $webdriver->getWindowHandles();
+            $lastWindow = end($handles);
+            $I->switchToWindow($lastWindow);
+		}" stepKey="switchBackToMainWindow"/>
+    </actionGroup>
+    <!-- PayPal account login -->
+    <actionGroup name="StorefrontPaypalLoginWithBuyerAccount">
+        <arguments>
+            <argument name="buyerAccount" defaultValue="DefaultPaypalBuyerAccount"/>
+        </arguments>
+        <waitForElementVisible selector="{{PayPalPopupLoginSection.email}}" stepKey="waitForEmailFieldVisible"/>
+        <fillField userInput="{{buyerAccount.email}}" selector="{{PayPalPopupLoginSection.email}}" stepKey="fillBuyerEmail"/>
+        <conditionalClick selector="{{PayPalPopupLoginSection.nextButton}}" dependentSelector="{{PayPalPopupLoginSection.password}}" visible="false" stepKey="proceedToPassword"/>
+        <waitForElementNotVisible time="30" selector="{{PayPalPopupLoginSection.busySpinner}}" stepKey="waitForBusySpinner"/>
+        <waitForElementNotVisible time="30" selector="{{PayPalPopupLoginSection.preloadSpinner}}" stepKey="waitForPreloadSpinner"/>
+        <waitForElementVisible selector="{{PayPalPopupLoginSection.password}}" stepKey="waitForPasswordFieldVisible"/>
+        <fillField userInput="{{buyerAccount.password}}" selector="{{PayPalPopupLoginSection.password}}" stepKey="fillBuyerPassword"/>
+        <click selector="{{PayPalPopupLoginSection.loginButton}}" stepKey="clickLogin"/>
+        <waitForElementNotVisible time="30" selector="{{PayPalPopupLoginSection.busySpinner}}" stepKey="waitForBusySpinnerAfterLogin"/>
+        <waitForElementNotVisible time="30" selector="{{PayPalPopupLoginSection.preloadSpinner}}" stepKey="waitForPreloadSpinnerAfterLogin"/>
+    </actionGroup>
+    <!-- Assumes we are logged in to PayPal account -->
+    <!-- PayPal account submit review -->
+    <actionGroup name="StorefrontPaypalWindowSubmitReview">
+        <waitForElementVisible time="30" selector="{{PayPalPopupReviewSection.continueButton}}" stepKey="waitForContinuaButtonVisible"/>
+        <click selector="{{PayPalPopupReviewSection.continueButton}}" stepKey="clickContinueButton"/>
+        <waitForElementNotVisible time="30" selector="{{PayPalPopupLoginSection.busySpinner}}" stepKey="waitForBusySpinner"/>
+        <waitForElementNotVisible time="30" selector="{{PayPalPopupLoginSection.preloadSpinner}}" stepKey="waitForPreloadSpinner"/>
+    </actionGroup>
+</actionGroups>
