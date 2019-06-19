@@ -51,10 +51,13 @@ class HtmlBindingSniffTest extends TestCase
             [__DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . $fileUnderTest]
         );
         // Remove the absolute path to the file from the output
+        //phpcs:ignore
         $actual = preg_replace('/^.+\n/', '', ltrim(file_get_contents($reportFile)));
+        //phpcs:ignore
         $expected = file_get_contents(
             __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . $expectedReportFile
         );
+        //phpcs:ignore
         unlink($reportFile);
         $this->assertEquals(1, $result);
         $this->assertEquals($expected, $actual);
