@@ -276,6 +276,7 @@
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <click selector="{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectProduct"/>
         <click selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected"/>
+        <waitForElementNotVisible selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="waitForElementNotVisible"/>
     </actionGroup>
 
     <!--Click AddCrossSellProducts and adds product by SKU-->

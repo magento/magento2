@@ -66,10 +66,12 @@
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad2"/>
         <actionGroup ref="AdminFormSaveAndDuplicate" stepKey="saveAndDuplicateProductFormSecondTime"/>
         <conditionalClick selector="{{AdminProductSEOSection.sectionHeader}}" dependentSelector="{{AdminProductSEOSection.urlKeyInput}}" visible="false" stepKey="openProductSEOSection"/>
+        <waitForElementVisible selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="waitForUrlKeyField"/>
         <grabValueFrom selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="grabSecondDuplicatedProductUrlKey"/>
         <assertContains expected="$$createSimpleProduct.custom_attributes[url_key]$$" actual="$grabSecondDuplicatedProductUrlKey" stepKey="assertSecondDuplicatedProductUrlKey"/>
         <assertContains expectedType="string" expected="-2" actual="$grabSecondDuplicatedProductUrlKey" stepKey="assertSecondDuplicatedProductUrlKey1"/>
         <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.sectionHeader}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" visible="false" stepKey="openProductRUSSection1"/>
+        <waitForElementVisible selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedProductSku('related')}}" stepKey="waitForSelectedProductSku"/>
         <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedProductSku('related')}}" userInput="$$createSimpleProduct.sku$$-1" stepKey="seeRelatedProductForDuplicated"/>
         <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedProductSku('upsell')}}" userInput="$$createSimpleProduct.sku$$-1" stepKey="seeUpSellProductForDuplicated"/>
         <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedProductSku('crosssell')}}" userInput="$$createSimpleProduct.sku$$-1" stepKey="seeCrossSellProductForDuplicated"/>
