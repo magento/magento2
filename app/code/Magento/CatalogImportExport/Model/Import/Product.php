@@ -2848,7 +2848,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return trim(strtolower($urlKey));
         }
 
-        if (!empty($rowData[self::COL_NAME]) && array_key_exists(self::URL_KEY, $rowData)) {
+        if (!empty($rowData[self::COL_NAME])
+            && (array_key_exists(self::URL_KEY, $rowData) || !$this->isSkuExist($rowData[self::COL_SKU]))) {
             return $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
         }
 
