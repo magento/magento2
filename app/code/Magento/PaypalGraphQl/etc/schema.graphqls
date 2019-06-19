@@ -6,7 +6,7 @@ type Query {
 }
 
 type Mutation {
-    createPaypalExpressToken(input: PaypalExpressTokenInput): PaypalExpressToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PaypalExpressToken") @doc(description:"Initiates a PayPal checkout transaction and receives a token.")
+    createPaypalExpressToken(input: PaypalExpressTokenInput!): PaypalExpressToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PaypalExpressToken") @doc(description:"Initiates a PayPal checkout transaction and receives a token.")
 }
 
 input PaypalExpressTokenInput @doc(description:"Defines the attributes required to receive a payment token from PayPal") {
