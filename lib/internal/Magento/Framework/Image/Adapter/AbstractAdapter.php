@@ -291,7 +291,7 @@ abstract class AbstractAdapter implements AdapterInterface
         if ($this->_fileMimeType) {
             return $this->_fileMimeType;
         } else {
-            $this->_fileMimeType = image_type_to_mime_type($this->getImageType());
+            $this->_fileMimeType = image_type_to_mime_type((int) $this->getImageType());
             return $this->_fileMimeType;
         }
     }
@@ -523,7 +523,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function _getFileAttributes()
     {
-        $pathinfo = pathinfo($this->_fileName);
+        $pathinfo = pathinfo((string) $this->_fileName);
 
         $this->_fileSrcPath = $pathinfo['dirname'];
         $this->_fileSrcName = $pathinfo['basename'];
@@ -675,7 +675,7 @@ abstract class AbstractAdapter implements AdapterInterface
             $destination = $this->_fileSrcPath;
         } else {
             if (empty($newName)) {
-                $info = pathinfo($destination);
+                $info = pathinfo((string) $destination);
                 $newName = $info['basename'];
                 $destination = $info['dirname'];
             }
