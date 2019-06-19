@@ -10,18 +10,21 @@ declare(strict_types=1);
 namespace Magento\Framework\Webapi;
 
 use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Dto\DtoProcessor;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Webapi\ServiceInputProcessor\AssociativeArray;
-use Magento\Framework\Webapi\ServiceInputProcessor\DataArray;
-use Magento\Framework\Webapi\ServiceInputProcessor\Nested;
-use Magento\Framework\Webapi\ServiceInputProcessor\ObjectWithCustomAttributes;
-use Magento\Framework\Webapi\ServiceInputProcessor\Simple;
-use Magento\Framework\Webapi\ServiceInputProcessor\SimpleArray;
-use Magento\Framework\Webapi\ServiceInputProcessor\SimpleImmutable;
-use Magento\Framework\Webapi\ServiceInputProcessor\TestService;
+use Magento\Framework\Webapi\ServiceInputProcessorMock\AssociativeArray;
+use Magento\Framework\Webapi\ServiceInputProcessorMock\DataArray;
+use Magento\Framework\Webapi\ServiceInputProcessorMock\Nested;
+use Magento\Framework\Webapi\ServiceInputProcessorMock\ObjectWithCustomAttributes;
+use Magento\Framework\Webapi\ServiceInputProcessorMock\Simple;
+use Magento\Framework\Webapi\ServiceInputProcessorMock\SimpleArray;
+use Magento\Framework\Webapi\ServiceInputProcessorMock\SimpleConstructor;
+use Magento\Framework\Webapi\ServiceInputProcessorMock\SimpleImmutable;
+use Magento\Framework\Webapi\ServiceInputProcessorMock\TestService;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ServiceInputProcessorTest extends TestCase
@@ -37,12 +40,39 @@ class ServiceInputProcessorTest extends TestCase
     private $serviceInputProcessor;
 
     /**
+     * @var MockObject|CustomAttributeTypeLocatorInterface
+     */
+    private $customAttributeTypeLocator;
+
+    /**
+     * @var MockObject|ServiceTypeToEntityTypeMap
+     */
+    private $serviceTypeToEntityTypeMap;
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->serviceInputProcessor = $this->objectManager->get(ServiceInputProcessor::class);
+
+        $this->customAttributeTypeLocator = $this->createMock(CustomAttributeTypeLocatorInterface::class);
+        $this->serviceTypeToEntityTypeMap = $this->createMock(ServiceTypeToEntityTypeMap::class);
+
+        $dtoProcessor = $this->objectManager->create(
+            DtoProcessor::class,
+            [
+                'customAttributeTypeLocator' => $this->customAttributeTypeLocator,
+                'serviceTypeToEntityTypeMap' => $this->serviceTypeToEntityTypeMap
+            ]
+        );
+
+        $this->serviceInputProcessor = $this->objectManager->create(
+            ServiceInputProcessor::class,
+            [
+                'dtoProcessor' => $dtoProcessor
+            ]
+        );
     }
 
     public function testSimpleProperties(): void
@@ -123,6 +153,22 @@ class ServiceInputProcessorTest extends TestCase
         $this->assertInstanceOf(Simple::class, $details);
         $this->assertEquals(15, $details->getEntityId());
         $this->assertEquals('Test', $details->getName());
+    }
+
+    public function testSimpleConstructorProperties(): void
+    {
+        $data = ['simpleConstructor' => ['entityId' => 15, 'name' => 'Test']];
+        $result = $this->serviceInputProcessor->process(
+            TestService::class,
+            'simpleConstructor',
+            $data
+        );
+        $this->assertNotNull($result);
+        $arg = $result[0];
+
+        $this->assertInstanceOf(SimpleConstructor::class, $arg);
+        $this->assertEquals(15, $arg->getEntityId());
+        $this->assertEquals('Test', $arg->getName());
     }
 
     public function testSimpleArrayProperties(): void
@@ -328,11 +374,22 @@ class ServiceInputProcessorTest extends TestCase
      * @param $inputData
      * @param $expectedObject
      * @throws Exception
-     * @throws InputException
      * @throws LocalizedException
      */
     public function testCustomAttributesProperties($customAttributeType, $inputData, $expectedObject): void
     {
+        $this->serviceTypeToEntityTypeMap
+            ->expects($this->once())
+            ->method('getEntityType')
+            ->with(ObjectWithCustomAttributes::class)
+            ->willReturn('some_type');
+
+        $this->customAttributeTypeLocator
+            ->expects($this->once())
+            ->method('getType')
+            ->with('customAttr', 'some_type')
+            ->willReturn($customAttributeType);
+
         $result = $this->serviceInputProcessor->process(
             TestService::class,
             'ObjectWithCustomAttributesMethod',
@@ -391,7 +448,7 @@ class ServiceInputProcessorTest extends TestCase
                 'expectedObject'=>  $this->getObjectWithCustomAttributes('SimpleArray', ['ids' => [1, 2, 3, 4]]),
             ],
             'customAttributeArrayOfObjects' => [
-                'customAttributeType' => 'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple[]',
+                'customAttributeType' => Simple::class . '[]',
                 'inputData' => [
                     'param' => [
                         'customAttributes' => [

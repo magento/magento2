@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor;
+namespace Magento\Framework\Webapi\ServiceInputProcessorMock;
 
 class SimpleImmutable
 {
@@ -32,17 +32,17 @@ class SimpleImmutable
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getEntityId(): int
+    public function getEntityId()
     {
         return $this->entityId;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }

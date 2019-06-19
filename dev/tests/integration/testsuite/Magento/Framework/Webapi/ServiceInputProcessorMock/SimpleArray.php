@@ -3,7 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor;
+declare(strict_types=1);
+
+namespace Magento\Framework\Webapi\ServiceInputProcessorMock;
 
 use Magento\Framework\Api\AbstractExtensibleObject;
 

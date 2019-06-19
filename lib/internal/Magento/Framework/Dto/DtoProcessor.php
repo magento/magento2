@@ -11,6 +11,8 @@ namespace Magento\Framework\Dto;
 use Exception;
 use LogicException;
 use Magento\Framework\Api\AbstractSimpleObject;
+use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ExtensionAttribute\InjectorProcessor;
@@ -19,11 +21,15 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Api\ObjectFactory;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\ObjectManager\ConfigInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\NameFinder;
 use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
+use Magento\Framework\Webapi\ServiceTypeToEntityTypeMap;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -97,12 +103,21 @@ class DtoProcessor
     private $injectorProcessor;
 
     /**
-     * @var DtoConfig
+     * @var ServiceTypeToEntityTypeMap
      */
-    private $dtoConfig;
+    private $serviceTypeToEntityTypeMap;
 
     /**
-     * @param DtoConfig $dtoConfig
+     * @var CustomAttributeTypeLocatorInterface
+     */
+    private $customAttributeTypeLocator;
+
+    /**
+     * @var AttributeValueFactory
+     */
+    private $attributeValueFactory;
+
+    /**
      * @param ObjectFactory $objectFactory
      * @param TypeProcessor $typeProcessor
      * @param ConfigInterface $config
@@ -111,9 +126,11 @@ class DtoProcessor
      * @param InjectorProcessor $injectorProcessor
      * @param ExtensionAttributesFactory $extensionAttributesFactory
      * @param MethodsMap $methodsMap
+     * @param ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap
+     * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
+     * @param AttributeValueFactory $attributeValueFactory
      */
     public function __construct(
-        DtoConfig $dtoConfig,
         ObjectFactory $objectFactory,
         TypeProcessor $typeProcessor,
         ConfigInterface $config,
@@ -121,7 +138,10 @@ class DtoProcessor
         JoinProcessor $joinProcessor,
         InjectorProcessor $injectorProcessor,
         ExtensionAttributesFactory $extensionAttributesFactory,
-        MethodsMap $methodsMap
+        MethodsMap $methodsMap,
+        ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap,
+        CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
+        AttributeValueFactory $attributeValueFactory
     ) {
         $this->config = $config;
         $this->typeProcessor = $typeProcessor;
@@ -131,7 +151,9 @@ class DtoProcessor
         $this->joinProcessor = $joinProcessor;
         $this->methodsMap = $methodsMap;
         $this->injectorProcessor = $injectorProcessor;
-        $this->dtoConfig = $dtoConfig;
+        $this->serviceTypeToEntityTypeMap = $serviceTypeToEntityTypeMap;
+        $this->customAttributeTypeLocator = $customAttributeTypeLocator;
+        $this->attributeValueFactory = $attributeValueFactory;
     }
 
     /**
@@ -255,6 +277,7 @@ class DtoProcessor
      * @param string $type
      * @return array|object
      * @throws ReflectionException
+     * @throws SerializationException
      */
     private function createObjectByType($value, string $type)
     {
@@ -405,39 +428,95 @@ class DtoProcessor
     }
 
     /**
-     * Return true if the array is associative
+     * Derive the custom attribute code and value.
      *
-     * @param array $arr
-     * @return bool
+     * @param string[] $customAttribute
+     * @return string[]
+     * @throws SerializationException
      */
-    private function isAssociativeArray(array $arr): bool
+    private function processCustomAttribute($customAttribute): array
     {
-        if ([] === $arr) {
-            return false;
+        $camelCaseAttributeCodeKey = lcfirst(
+            SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
+        );
+        // attribute code key could be snake or camel case, depending on whether SOAP or REST is used.
+        if (isset($customAttribute[AttributeValue::ATTRIBUTE_CODE])) {
+            $customAttributeCode = $customAttribute[AttributeValue::ATTRIBUTE_CODE];
+        } elseif (isset($customAttribute[$camelCaseAttributeCodeKey])) {
+            $customAttributeCode = $customAttribute[$camelCaseAttributeCodeKey];
+        } else {
+            $customAttributeCode = null;
         }
 
-        return array_keys($arr) !== range(0, count($arr) - 1);
+        if (!$customAttributeCode && !isset($customAttribute[AttributeValue::VALUE])) {
+            throw new SerializationException(
+                new Phrase('An empty custom attribute is specified. Enter the attribute and try again.')
+            );
+        }
+
+        if (!$customAttributeCode) {
+            throw new SerializationException(
+                new Phrase(
+                    'A custom attribute is specified with a missing attribute code. Verify the code and try again.'
+                )
+            );
+        }
+
+        if (!array_key_exists(AttributeValue::VALUE, $customAttribute)) {
+            throw new SerializationException(
+                new Phrase(
+                    'The "' . $customAttributeCode .
+                    '" attribute code doesn\'t have a value set. Enter the value and try again.'
+                )
+            );
+        }
+
+        return [$customAttributeCode, $customAttribute[AttributeValue::VALUE]];
     }
 
     /**
-     * @param array $customAttributes
-     * @return array
+     * Convert custom attribute data array to array of AttributeValue Data Object
+     *
+     * @param string $dataObjectClassName
+     * @param array $customAttributesValueArray
+     * @return AttributeValue[]
+     * @throws SerializationException
+     * @throws ReflectionException
      */
-    private function extractCustomAttributes(array $customAttributes): array
+    private function convertCustomAttributeValue(string $dataObjectClassName, array $customAttributesValueArray): array
     {
-        if (!$this->isAssociativeArray($customAttributes)) {
-            return $customAttributes;
+        $result = [];
+        $dataObjectClassName = ltrim($dataObjectClassName, '\\');
+
+        foreach ($customAttributesValueArray as $key => $customAttribute) {
+            if (!is_array($customAttribute)) {
+                $customAttribute = [
+                    AttributeValue::ATTRIBUTE_CODE => $key,
+                    AttributeValue::VALUE => $customAttribute
+                ];
+            }
+
+            [$customAttributeCode, $customAttributeValue] = $this->processCustomAttribute($customAttribute);
+
+            $entityType = $this->serviceTypeToEntityTypeMap->getEntityType($dataObjectClassName);
+            if ($entityType) {
+                $type = $this->customAttributeTypeLocator->getType(
+                    $customAttributeCode,
+                    $entityType
+                );
+            } else {
+                $type = TypeProcessor::ANY_TYPE;
+            }
+
+            $attributeValue = $this->createObjectByType($customAttributeValue, $type);
+
+            //Populate the attribute value data object once the value for custom attribute is derived based on type
+            $result[$customAttributeCode] = $this->attributeValueFactory->create()
+                ->setAttributeCode($customAttributeCode)
+                ->setValue($attributeValue);
         }
 
-        $out = [];
-        foreach ($customAttributes as $attributeCode => $attributeValue) {
-            $out[] = [
-                'attribute_code' => $attributeCode,
-                'value' => $attributeValue
-            ];
-        }
-
-        return $out;
+        return $result;
     }
 
     /**
@@ -447,6 +526,7 @@ class DtoProcessor
      * @param array $data
      * @return array
      * @throws ReflectionException
+     * @throws SerializationException
      */
     private function injectExtensionAttributesByArray(string $type, array $data): array
     {
@@ -499,6 +579,7 @@ class DtoProcessor
      * @param string $type
      * @return object
      * @throws ReflectionException
+     * @throws SerializationException
      */
     public function createFromArray(array $data, string $type)
     {
@@ -524,7 +605,8 @@ class DtoProcessor
         if (isset($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]) &&
             $this->isCustomAttributesObject($type)
         ) {
-            $data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES] = $this->extractCustomAttributes(
+            $data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES] = $this->convertCustomAttributeValue(
+                $type,
                 $data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]
             );
         }
@@ -575,6 +657,7 @@ class DtoProcessor
      * @param array $data
      * @return object
      * @throws ReflectionException
+     * @throws SerializationException
      */
     public function createUpdatedObjectFromArray(
         $sourceObject,

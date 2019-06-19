@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\Webapi\ServiceInputProcessor;
+namespace Magento\Framework\Webapi\ServiceInputProcessorMock;
 
 use Magento\Framework\Api\AbstractExtensibleObject;
 
 class DataArray extends AbstractExtensibleObject
 {
     /**
-     * @return \Magento\Framework\Webapi\ServiceInputProcessor\Simple[]|null
+     * @return \Magento\Framework\Webapi\ServiceInputProcessorMock\Simple[]|null
      */
     public function getItems()
     {
