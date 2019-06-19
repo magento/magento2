@@ -3,7 +3,7 @@
 
 type Mutation {
     createPaypalExpressToken(input: PaypalExpressTokenInput): PaypalExpressToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PaypalExpressToken") @doc(description:"Initiates a PayPal checkout transaction and receives a token.")
-    createPayFlowProToken(input: PayFlowProTokenInput): PayFlowProToken @doc(description: "Initiates a PayFlowPro transaction and receives a token")
+    createPayflowProToken(input: PayflowProTokenInput): PayFlowProToken @doc(description: "Initiates a PayFlowPro transaction and receives a token")
 }
 
 input PaypalExpressTokenInput @doc(description:"Defines the attributes required to receive a payment token from PayPal") {
@@ -22,7 +22,7 @@ type PaypalExpressToken @doc(description: "Contains the token returned by PayPal
 input PaymentMethodAdditionalDataInput {
     paypal_express: PaypalExpressInput @doc(description:"Required input for PayPal Express Checkout payments")
     payflow_express: PayflowExpressInput @doc(description:"Required input for PayPal Payflow Express Checkout payments")
-    payflow_pro: PayFlowProInput @doc(description: "Required input type for Paypal payflow pro payments")
+    payflowpro: PayflowProInput @doc(description: "Required input type for Paypal payflow pro payments")
 }
 
 input PaypalExpressInput @doc(description:"Required input for PayPal Express Checkout payments") {
@@ -47,13 +47,12 @@ type PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer t
     edit: String @doc(description:"The PayPal URL that allows the buyer to edit their checkout details")
 }
 
-input PayFlowProTokenInput {
+input PayflowProTokenInput {
      cart_id: String! @doc(description:"The unique ID that identifies the customer's cart")
-     code: String! @doc(description:"Payment method code")
-     url: PayFlowProUrlInput! @doc(description:"URL that PayPal uses for callback.")
+     urls: PayFlowProUrlInput! @doc(description:"URL that PayPal uses for callback.")
 }
 
-input PayFlowProInput {
+input PayflowProInput {
     cc_details: CreditCardDetailsInput! @doc(description: "Required input for credit card related information")
     paypalPayload: String! @doc(description: "Payload of the response from Paypal")
 }
@@ -62,11 +61,13 @@ input CreditCardDetailsInput {
     cc_type: String! @doc(description: "Credit card type")
     cc_exp_year: Int! @doc(description: "Credit card expiration year")
     cc_exp_month: Int! @doc(description: "Credit card expiration month")
-    cc_last_4: Int! @doc(description: "Credit card last 4 digits")
+    cc_last_4: Int! @doc(description: "Last 4 digits of the credit card")
 }
 
 input PayFlowProUrlInput {
-    success_url: String @doc(description:"The URL to redirect upon success. Not applicable to most PayPal solutions")
+    return_url: String! @doc(description:"The URL of the final review page on your website where the buyer confirms the order and payment")
+    cancel_url: String! @doc(description:"The URL of the original page on your website where the buyer initially chose PayPal as a payment type")
+    error_url: String! @doc(description:"The URL of the page on your website where any error in the transaction is handled")
 }
 
 type PayFlowProToken {
