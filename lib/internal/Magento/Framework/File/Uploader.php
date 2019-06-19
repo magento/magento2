@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\File;
 
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Validation\ValidationException;
+
 /**
  * File upload class
  *
@@ -75,7 +78,7 @@ class Uploader
     protected $_allowRenameFiles = false;
 
     /**
-     * If this variable is set to TRUE, files dispertion will be supported.
+     * If this variable is set to TRUE, files dispersion will be supported.
      *
      * @var bool
      * @access protected
@@ -162,7 +165,7 @@ class Uploader
      *
      * @param string|array $fileId
      * @param \Magento\Framework\File\Mime|null $fileMime
-     * @throws \Exception
+     * @throws \DomainException
      */
     public function __construct(
         $fileId,
@@ -171,7 +174,7 @@ class Uploader
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
             $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
-            throw new \Exception('The file was not uploaded.', $code);
+            throw new \DomainException('The file was not uploaded.', $code);
         } else {
             $this->_fileExists = true;
         }
@@ -256,7 +259,7 @@ class Uploader
      *
      * @param string $destinationFolder
      * @return void
-     * @throws \Exception
+     * @throws FileSystemException
      */
     private function validateDestination($destinationFolder)
     {
@@ -265,7 +268,7 @@ class Uploader
         }
 
         if (!is_writable($destinationFolder)) {
-            throw new \Exception('Destination folder is not writable or does not exists.');
+            throw new FileSystemException(__('Destination folder is not writable or does not exists.'));
         }
     }
 
@@ -302,7 +305,7 @@ class Uploader
      * Validate file before save
      *
      * @return void
-     * @throws \Exception
+     * @throws ValidationException
      */
     protected function _validateFile()
     {
@@ -312,7 +315,7 @@ class Uploader
 
         //is file extension allowed
         if (!$this->checkAllowedExtension($this->getFileExtension())) {
-            throw new \Exception('Disallowed file type.');
+            throw new ValidationException(__('Disallowed file type.'));
         }
         //run validate callbacks
         foreach ($this->_validateCallbacks as $params) {
@@ -366,19 +369,27 @@ class Uploader
     }
 
     /**
-     * Correct filename with special chars and spaces
+     * Correct filename with special chars and spaces; also trim excessively long filenames
      *
      * @param string $fileName
      * @return string
+     * @throws \InvalidArgumentException
      */
     public static function getCorrectFileName($fileName)
     {
         $fileName = preg_replace('/[^a-z0-9_\\-\\.]+/i', '_', $fileName);
         $fileInfo = pathinfo($fileName);
+        $fileInfo['extension'] = $fileInfo['extension'] ?? '';
+
+        // account for excessively long filenames that cannot be stored completely in database
+        if (strlen($fileInfo['basename']) > 90) {
+            throw new \InvalidArgumentException('Filename is too long; must be 90 characters or less');
+        }
 
         if (preg_match('/^_+$/', $fileInfo['filename'])) {
             $fileName = 'file.' . $fileInfo['extension'];
         }
+
         return $fileName;
     }
 
@@ -533,7 +544,8 @@ class Uploader
      *
      * @param string|array $fileId
      * @return void
-     * @throws \Exception
+     * @throws \DomainException
+     * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function _setUploadFileId($fileId)
@@ -543,7 +555,7 @@ class Uploader
             $this->_file = $fileId;
         } else {
             if (empty($_FILES)) {
-                throw new \Exception('$_FILES array is empty');
+                throw new \DomainException('$_FILES array is empty');
             }
 
             preg_match("/^(.*?)\[(.*?)\]$/", $fileId, $file);
@@ -565,7 +577,9 @@ class Uploader
                 $this->_uploadType = self::SINGLE_STYLE;
                 $this->_file = $_FILES[$fileId];
             } elseif ($fileId == '') {
-                throw new \Exception('Invalid parameter given. A valid $_FILES[] identifier is expected.');
+                throw new \InvalidArgumentException(
+                    'Invalid parameter given. A valid $_FILES[] identifier is expected.'
+                );
             }
         }
     }
@@ -575,7 +589,7 @@ class Uploader
      *
      * @param string $destinationFolder
      * @return \Magento\Framework\File\Uploader
-     * @throws \Exception
+     * @throws FileSystemException
      */
     private function _createDestinationFolder($destinationFolder)
     {
@@ -590,7 +604,7 @@ class Uploader
         if (!(@is_dir($destinationFolder)
             || @mkdir($destinationFolder, 0777, true)
         )) {
-            throw new \Exception("Unable to create directory '{$destinationFolder}'.");
+            throw new FileSystemException(__('Unable to create directory %1.', $destinationFolder));
         }
         return $this;
     }
@@ -620,7 +634,7 @@ class Uploader
     }
 
     /**
-     * Get dispertion path
+     * Get dispersion path
      *
      * @param string $fileName
      * @return string
@@ -632,7 +646,7 @@ class Uploader
     }
 
     /**
-     * Get dispertion path
+     * Get dispersion path
      *
      * @param string $fileName
      * @return string
@@ -640,17 +654,17 @@ class Uploader
     public static function getDispersionPath($fileName)
     {
         $char = 0;
-        $dispertionPath = '';
+        $dispersionPath = '';
         while ($char < 2 && $char < strlen($fileName)) {
-            if (empty($dispertionPath)) {
-                $dispertionPath = '/' . ('.' == $fileName[$char] ? '_' : $fileName[$char]);
+            if (empty($dispersionPath)) {
+                $dispersionPath = '/' . ('.' == $fileName[$char] ? '_' : $fileName[$char]);
             } else {
-                $dispertionPath = self::_addDirSeparator(
-                    $dispertionPath
+                $dispersionPath = self::_addDirSeparator(
+                    $dispersionPath
                 ) . ('.' == $fileName[$char] ? '_' : $fileName[$char]);
             }
             $char++;
         }
-        return $dispertionPath;
+        return $dispersionPath;
     }
 }
