@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -20,24 +19,16 @@ use Magento\Newsletter\Model\SubscriberFactory;
 class IsSubscribed implements ResolverInterface
 {
     /**
-     * @var GetCustomer
-     */
-    private $getCustomer;
-
-    /**
      * @var SubscriberFactory
      */
     private $subscriberFactory;
 
     /**
-     * @param GetCustomer $getCustomer
      * @param SubscriberFactory $subscriberFactory
      */
     public function __construct(
-        GetCustomer $getCustomer,
         SubscriberFactory $subscriberFactory
     ) {
-        $this->getCustomer = $getCustomer;
         $this->subscriberFactory = $subscriberFactory;
     }
 

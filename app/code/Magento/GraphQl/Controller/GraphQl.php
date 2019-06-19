@@ -13,6 +13,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\Response;
@@ -57,9 +58,10 @@ class GraphQl implements FrontControllerInterface
     private $graphQlError;
 
     /**
-     * @var ContextFactoryInterface
+     * @var ContextInterface
+     * @deprecated $contextFactory is used for creating Context object
      */
-    private $contextFactory;
+    private $resolverContext;
 
     /**
      * @var HttpRequestProcessor
@@ -82,16 +84,22 @@ class GraphQl implements FrontControllerInterface
     private $httpResponse;
 
     /**
+     * @var ContextFactoryInterface
+     */
+    private $contextFactory;
+
+    /**
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
      * @param QueryProcessor $queryProcessor
      * @param ExceptionFormatter $graphQlError
-     * @param ContextFactoryInterface $contextFactory
+     * @param ContextInterface $resolverContext Deprecated. $contextFactory is used for creating Context object.
      * @param HttpRequestProcessor $requestProcessor
      * @param QueryFields $queryFields
      * @param JsonFactory|null $jsonFactory
      * @param HttpResponse|null $httpResponse
+     * @param ContextFactoryInterface $contextFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -100,22 +108,24 @@ class GraphQl implements FrontControllerInterface
         SerializerInterface $jsonSerializer,
         QueryProcessor $queryProcessor,
         ExceptionFormatter $graphQlError,
-        ContextFactoryInterface $contextFactory,
+        ContextInterface $resolverContext,
         HttpRequestProcessor $requestProcessor,
         QueryFields $queryFields,
         JsonFactory $jsonFactory = null,
-        HttpResponse $httpResponse = null
+        HttpResponse $httpResponse = null,
+        ContextFactoryInterface $contextFactory = null
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
         $this->jsonSerializer = $jsonSerializer;
         $this->queryProcessor = $queryProcessor;
         $this->graphQlError = $graphQlError;
-        $this->contextFactory = $contextFactory;
+        $this->resolverContext = $resolverContext;
         $this->requestProcessor = $requestProcessor;
         $this->queryFields = $queryFields;
         $this->jsonFactory = $jsonFactory ?: ObjectManager::getInstance()->get(JsonFactory::class);
         $this->httpResponse = $httpResponse ?: ObjectManager::getInstance()->get(HttpResponse::class);
+        $this->contextFactory = $contextFactory ?: ObjectManager::getInstance()->get(ContextFactoryInterface::class);
     }
 
     /**

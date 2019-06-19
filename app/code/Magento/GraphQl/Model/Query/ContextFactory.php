@@ -19,7 +19,7 @@ class ContextFactory implements ContextFactoryInterface
     /**
      * @var ExtensionAttributesFactory
      */
-    protected $extensionAttributesFactory;
+    private $extensionAttributesFactory;
 
     /**
      * @var ObjectManagerInterface
@@ -64,7 +64,9 @@ class ContextFactory implements ContextFactoryInterface
 
         $extensionAttributes = $this->extensionAttributesFactory->create(
             ContextInterface::class,
-            $contextParameters->getExtensionAttributesData()
+            [
+                'data' => $contextParameters->getExtensionAttributesData(),
+            ]
         );
 
         $context = $this->objectManager->create(

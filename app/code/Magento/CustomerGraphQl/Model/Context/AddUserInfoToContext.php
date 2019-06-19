@@ -22,20 +22,12 @@ class AddUserInfoToContext implements ContextParametersProcessorInterface
     private $userContext;
 
     /**
-     * @var GetCustomer
-     */
-    private $getCustomer;
-
-    /**
      * @param UserContextInterface $userContext
-     * @param GetCustomer $getCustomer
      */
     public function __construct(
-        UserContextInterface $userContext,
-        GetCustomer $getCustomer
+        UserContextInterface $userContext
     ) {
         $this->userContext = $userContext;
-        $this->getCustomer = $getCustomer;
     }
 
     /**
@@ -53,28 +45,8 @@ class AddUserInfoToContext implements ContextParametersProcessorInterface
             $currentUserType = (int)$currentUserType;
         }
 
-        if (false === $this->isUserGuest($currentUserId, $currentUserType)) {
-            $customer = $this->getCustomer->execute($currentUserId);
-            $contextParameters->addExtensionAttribute('customer', $customer);
-        }
-
         $contextParameters->setUserId($currentUserId);
         $contextParameters->setUserType($currentUserType);
         return $contextParameters;
-    }
-
-    /**
-     * Checking if current customer is guest
-     *
-     * @param int|null $customerId
-     * @param int|null $customerType
-     * @return bool
-     */
-    private function isUserGuest(?int $customerId, ?int $customerType): bool
-    {
-        if (null === $customerId || null === $customerType) {
-            return true;
-        }
-        return 0 === (int)$customerId || (int)$customerType === UserContextInterface::USER_TYPE_GUEST;
     }
 }
