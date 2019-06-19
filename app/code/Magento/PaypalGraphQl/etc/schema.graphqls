@@ -3,7 +3,7 @@
 
 type Mutation {
     createPaypalExpressToken(input: PaypalExpressTokenInput): PaypalExpressToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PaypalExpressToken") @doc(description:"Initiates a PayPal checkout transaction and receives a token.")
-    createPayflowProToken(input: PayflowProTokenInput): PayFlowProToken @doc(description: "Initiates a PayFlowPro transaction and receives a token")
+    createPayflowProToken(input: PayflowProTokenInput): PayflowProToken @doc(description: "Initiates a PayFlowPro transaction and receives a token")
 }
 
 input PaypalExpressTokenInput @doc(description:"Defines the attributes required to receive a payment token from PayPal") {
@@ -64,13 +64,13 @@ input CreditCardDetailsInput {
     cc_last_4: Int! @doc(description: "Last 4 digits of the credit card")
 }
 
-input PayFlowProUrlInput {
+input PayflowProUrlInput {
     return_url: String! @doc(description:"The URL of the final review page on your website where the buyer confirms the order and payment")
     cancel_url: String! @doc(description:"The URL of the original page on your website where the buyer initially chose PayPal as a payment type")
     error_url: String! @doc(description:"The URL of the page on your website where any error in the transaction is handled")
 }
 
-type PayFlowProToken {
+type PayflowProToken {
     secure_token: String!
     secure_token_id: String!
     response_message: String!
