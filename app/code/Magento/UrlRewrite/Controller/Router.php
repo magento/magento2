@@ -5,7 +5,6 @@
  */
 namespace Magento\UrlRewrite\Controller;
 
-use function GuzzleHttp\Psr7\str;
 use Magento\Framework\App\RequestInterface;
 use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
