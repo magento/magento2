@@ -6,8 +6,11 @@
 
 use \Magento\Framework\App\Filesystem\DirectoryList;
 
+//phpcs:ignore Magento2.Functions.DiscouragedFunction
 $baseDir = realpath(__DIR__ . '/../../../../');
+// phpcs:ignore Magento2.Security.IncludeFile.FoundIncludeFile
 require $baseDir . '/app/autoload.php';
+// phpcs:ignore Magento2.Security.IncludeFile.FoundIncludeFile
 require $baseDir . '/vendor/squizlabs/php_codesniffer/autoload.php';
 $testsBaseDir = $baseDir . '/dev/tests/static';
 $autoloadWrapper = \Magento\Framework\Autoload\AutoloaderRegistry::getAutoloader();
