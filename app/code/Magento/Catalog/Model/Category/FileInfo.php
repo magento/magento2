@@ -41,7 +41,7 @@ class FileInfo
     /**
      * @var ReadInterface
      */
-    private $pubDirectory;
+    private $baseDirectory;
 
     /**
      * @param Filesystem $filesystem
@@ -69,17 +69,17 @@ class FileInfo
     }
 
     /**
-     * Get Pub Directory read instance
+     * Get Base Directory read instance
      *
      * @return ReadInterface
      */
-    private function getPubDirectory()
+    private function getBaseDirectory()
     {
-        if (!isset($this->pubDirectory)) {
-            $this->pubDirectory = $this->filesystem->getDirectoryRead(DirectoryList::PUB);
+        if (!isset($this->baseDirectory)) {
+            $this->baseDirectory = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
         }
 
-        return $this->pubDirectory;
+        return $this->baseDirectory;
     }
 
     /**
@@ -135,7 +135,7 @@ class FileInfo
     {
         $filePath = ltrim($fileName, '/');
 
-        $mediaDirectoryRelativeSubpath = $this->getMediaDirectoryPathRelativeToPubDirectoryPath();
+        $mediaDirectoryRelativeSubpath = $this->getMediaDirectoryPathRelativeToBaseDirectoryPath();
         $isFileNameBeginsWithMediaDirectoryPath = $this->isBeginsWithMediaDirectoryPath($fileName);
 
         // if the file is not using a relative path, it resides in the catalog/category media directory
@@ -160,23 +160,23 @@ class FileInfo
     {
         $filePath = ltrim($fileName, '/');
 
-        $mediaDirectoryRelativeSubpath = $this->getMediaDirectoryPathRelativeToPubDirectoryPath();
+        $mediaDirectoryRelativeSubpath = $this->getMediaDirectoryPathRelativeToBaseDirectoryPath();
         $isFileNameBeginsWithMediaDirectoryPath = strpos($filePath, $mediaDirectoryRelativeSubpath) === 0;
 
         return $isFileNameBeginsWithMediaDirectoryPath;
     }
 
     /**
-     * Get media directory subpath relative to pub directory path
+     * Get media directory subpath relative to base directory path
      *
      * @return string
      */
-    private function getMediaDirectoryPathRelativeToPubDirectoryPath()
+    private function getMediaDirectoryPathRelativeToBaseDirectoryPath()
     {
-        $pubDirectoryPath = $this->getPubDirectory()->getAbsolutePath();
+        $baseDirectoryPath = $this->getBaseDirectory()->getAbsolutePath();
         $mediaDirectoryPath = $this->getMediaDirectory()->getAbsolutePath();
 
-        $mediaDirectoryRelativeSubpath = substr($mediaDirectoryPath, strlen($pubDirectoryPath));
+        $mediaDirectoryRelativeSubpath = substr($mediaDirectoryPath, strlen($baseDirectoryPath));
 
         return $mediaDirectoryRelativeSubpath;
     }

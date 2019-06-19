@@ -32,7 +32,7 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
     /**
      * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $pubDirectory;
+    private $baseDirectory;
 
     /**
      * @var FileInfo
@@ -44,7 +44,7 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
             ->getMockForAbstractClass();
 
-        $this->pubDirectory = $this->getMockBuilder(ReadInterface::class)
+        $this->baseDirectory = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
 
         $this->filesystem = $this->getMockBuilder(Filesystem::class)
@@ -57,14 +57,14 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
 
         $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
-            ->with(DirectoryList::PUB)
-            ->willReturn($this->pubDirectory);
+            ->with(DirectoryList::ROOT)
+            ->willReturn($this->baseDirectory);
 
         $this->mime = $this->getMockBuilder(Mime::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->pubDirectory->expects($this->any())
+        $this->baseDirectory->expects($this->any())
             ->method('getAbsolutePath')
             ->with(null)
             ->willReturn('/a/b/c');
