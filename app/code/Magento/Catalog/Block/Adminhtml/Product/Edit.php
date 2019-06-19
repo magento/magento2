@@ -12,13 +12,15 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
+use Magento\Framework\Escaper;
+
 /**
  * Class Edit
  */
 class Edit extends \Magento\Backend\Block\Widget
 {
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     private $escaper;
 
@@ -55,7 +57,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Product $productHelper
-     * @param \Magento\Framework\Escaper $escaper
+     * @param Escaper $escaper
      * @param array $data
      */
     public function __construct(
@@ -64,7 +66,7 @@ class Edit extends \Magento\Backend\Block\Widget
         \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Product $productHelper,
-        \Magento\Framework\Escaper $escaper,
+        Escaper $escaper,
         array $data = []
     ) {
         $this->_productHelper = $productHelper;
