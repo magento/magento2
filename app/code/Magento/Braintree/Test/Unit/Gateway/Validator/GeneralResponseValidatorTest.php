@@ -64,11 +64,13 @@ class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
         $result = new Result($isValid, $messages);
 
         $this->resultInterfaceFactory->method('create')
-            ->with([
-                'isValid' => $isValid,
-                'failsDescription' => $messages,
-                'errorCodes' => $errorCodes
-            ])
+            ->with(
+                [
+                    'isValid' => $isValid,
+                    'failsDescription' => $messages,
+                    'errorCodes' => $errorCodes
+                ]
+            )
             ->willReturn($result);
 
         $actual = $this->responseValidator->validate($validationSubject);
