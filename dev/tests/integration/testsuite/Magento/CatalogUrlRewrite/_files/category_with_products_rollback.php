@@ -18,6 +18,7 @@ foreach ($productSkuList as $sku) {
         $productRepository->delete($product);
     } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
         //Product already removed
+        continue;
     }
 }
 

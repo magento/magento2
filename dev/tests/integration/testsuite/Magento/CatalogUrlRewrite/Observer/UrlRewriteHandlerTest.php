@@ -99,9 +99,14 @@ class UrlRewriteHandlerTest extends TestCase
         $category->setAffectedProductIds([$product1->getId(), $product2->getId()]);
         $category->setAnchorsAbove(false);
         $generatedUrls = $this->handler->generateProductUrlRewrites($category);
-        $actual = array_values(array_map(function (UrlRewrite $urlRewrite) {
-            return $urlRewrite->getRequestPath();
-        }, $generatedUrls));
+        $actual = array_values(
+            array_map(
+                function (UrlRewrite $urlRewrite) {
+                    return $urlRewrite->getRequestPath();
+                },
+                $generatedUrls
+            )
+        );
 
         $expected = [
             'simple-product.html',
