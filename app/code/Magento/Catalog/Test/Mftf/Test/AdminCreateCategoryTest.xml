@@ -96,7 +96,7 @@
     <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
     <see selector="{{AdminCategoryBasicFieldSection.FieldError('uid')}}" userInput="This is a required field." stepKey="seeErrorMessage"/>
     <!-- Verify that the Layered navigation price step field has the required indicator -->
-    <comment userInput="Check if Layered navigation price field has required indictor icon" stepKey="comment" />
+    <comment userInput="Check if Layered navigation price field has required indicator icon" stepKey="comment" />
     <executeJS function="{{CategoryDisplaySettingsSection.RequiredFieldIndicator('filter_price_range')}}" stepKey="getRequiredFieldIndicator"/>
     <assertEquals expected='"*"' expectedType="string" actualType="variable" actual="getRequiredFieldIndicator" message="pass" stepKey="assertRequiredFieldIndicator1"/>
     </test>

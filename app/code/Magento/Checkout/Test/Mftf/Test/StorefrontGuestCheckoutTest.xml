@@ -12,10 +12,10 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Checkout via Guest Checkout"/>
-            <title value="Guest Checkout"/>
-            <description value="Should be able to place an order as a Guest."/>
+            <title value="Guest Checkout - guest should be able to place an order"/>
+            <description value="Should be able to place an order as a Guest"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-72094"/>
+            <testCaseId value="MC-12825"/>
             <group value="checkout"/>
         </annotations>
         <before>
@@ -78,6 +78,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-97001"/>
             <group value="checkout"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
         <before>
             <magentoCLI stepKey="disableSidebar" command="config:set checkout/sidebar/display 0" />
