@@ -47,6 +47,9 @@
                 <argument name="StoreGroup" value="NewStoreData"/>
                 <argument name="customStore" value="storeViewData"/>
             </actionGroup>
+            <magentoCLI command="config:set catalog/price/scope 0" stepKey="setPriceScopeGlobal"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Delete created data and log out -->
@@ -76,5 +79,11 @@
         <!-- Check if created tax attribute is saved -->
         <comment userInput="Check if created tax attribute is saved" stepKey="checkThatTaxAttributeIsSaved"/>
         <seeElement selector="{{AdminProductAddFPTValueSection.setTaxValueForFPT($$createProductFPTAttribute.attribute_code$$)}}" stepKey="checkIfTaxAttributeSaved"/>
+        <selectOption selector="{{AdminProductAddFPTValueSection.setWebSiteForFPT($$createProductFPTAttribute.attribute_code$$)}}" userInput="All Websites USD" stepKey="selectAllWebsites"/>
+        <grabTextFrom selector="{{AdminProductAddFPTValueSection.setWebSiteForFPT($$createProductFPTAttribute.attribute_code$$)}}" stepKey="grabAllWebsites"/>
+        <assertContains expectedType="string" expected="All Websites USD" actualType="variable" actual="$grabAllWebsites" stepKey="assertContainsAllWebsites"/>
+        <selectOption selector="{{AdminProductAddFPTValueSection.setWebSiteForFPT($$createProductFPTAttribute.attribute_code$$)}}" userInput="{{NewWebSiteData.name}} USD" stepKey="selectSecondWebsite"/>
+        <grabTextFrom selector="{{AdminProductAddFPTValueSection.setWebSiteForFPT($$createProductFPTAttribute.attribute_code$$)}}" stepKey="grabSecondWebsite"/>
+        <assertContains expectedType="string" expected="{{NewWebSiteData.name}}" actualType="variable" actual="$grabSecondWebsite" stepKey="assertContainsSecondWebsite"/>
     </test>
 </tests>
