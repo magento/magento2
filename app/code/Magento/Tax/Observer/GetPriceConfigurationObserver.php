@@ -24,6 +24,11 @@ class GetPriceConfigurationObserver implements ObserverInterface
     protected $registry;
 
     /**
+     * @var array Cache of the current bundle selection items
+     */
+    private $selectionCache = [];
+
+    /**
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
      */
@@ -44,6 +49,7 @@ class GetPriceConfigurationObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
+        $this->selectionCache = [];
         if ($this->taxData->displayPriceIncludingTax()) {
             /** @var \Magento\Catalog\Model\Product $product */
             $product = $this->registry->registry('current_product');
@@ -107,15 +113,19 @@ class GetPriceConfigurationObserver implements ObserverInterface
                 /** @var \Magento\Catalog\Model\Product $product */
                 $product = $this->registry->registry('current_product');
                 if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-                    $typeInstance = $product->getTypeInstance();
-                    $typeInstance->setStoreFilter($product->getStoreId(), $product);
+                    if (!isset($this->selectionCache[$product->getId()])) {
+                        $typeInstance = $product->getTypeInstance();
+                        $typeInstance->setStoreFilter($product->getStoreId(), $product);
 
-                    $selectionCollection = $typeInstance->getSelectionsCollection(
-                        $typeInstance->getOptionsIds($product),
-                        $product
-                    );
+                        $selectionCollection = $typeInstance->getSelectionsCollection(
+                            $typeInstance->getOptionsIds($product),
+                            $product
+                        );
+                        $this->selectionCache[$product->getId()] = $selectionCollection->getItems();
+                    }
+                    $arrSelections = $this->selectionCache[$product->getId()];
 
-                    foreach ($selectionCollection->getItems() as $selectionItem) {
+                    foreach ($arrSelections as $selectionItem) {
                         if ($holder['optionId'] == $selectionItem->getId()) {
                             /** @var \Magento\Framework\Pricing\Amount\Base $baseAmount */
                             $baseAmount = $selectionItem->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getAmount();

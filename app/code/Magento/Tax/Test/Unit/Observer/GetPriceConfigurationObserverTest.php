@@ -118,7 +118,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
 
         $product = $this->createPartialMock(
             \Magento\Bundle\Model\Product\Type::class,
-            ['getTypeInstance', 'getTypeId', 'getStoreId', 'getSelectionsCollection']
+            ['getTypeInstance', 'getTypeId', 'getStoreId', 'getSelectionsCollection', 'getId']
         );
         $product->expects($this->any())
             ->method('getTypeInstance')
