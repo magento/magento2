@@ -2167,7 +2167,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Catalog/_files/attribute_set_with_renamed_group.php
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
-     *
      */
     public function testImportDataChangeAttributeSet()
     {
@@ -2184,7 +2183,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         );
         $errors = $this->_model->setParameters(
             [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
                 'entity' => \Magento\Catalog\Model\Product::ENTITY
             ]
         )->setSource(
