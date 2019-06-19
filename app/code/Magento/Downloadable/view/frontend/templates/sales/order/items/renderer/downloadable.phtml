@@ -55,30 +55,30 @@
     <td class="col price" data-th="<?= $block->escapeHtmlAttr(__('Price')) ?>">
         <?= $block->getItemPriceHtml() ?>
     </td>
-    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>">
+    <td class="col qty" data-th="<?= $block->escapeHtmlAttr(__('Qty')) ?>">
         <ul class="items-qty">
             <?php if ($block->getItem()->getQtyOrdered() > 0) : ?>
                 <li class="item">
                     <span class="title"><?= $block->escapeHtml(__('Ordered')) ?></span>
-                    <span class="content"><?= (int)$block->getItem()->getQtyOrdered()*1 ?></span>
+                    <span class="content"><?= (float)$block->getItem()->getQtyOrdered() * 1 ?></span>
                 </li>
             <?php endif; ?>
             <?php if ($block->getItem()->getQtyShipped() > 0) : ?>
                 <li class="item">
                     <span class="title"><?= $block->escapeHtml(__('Shipped')) ?></span>
-                    <span class="content"><?= (int)$block->getItem()->getQtyShipped()*1 ?></span>
+                    <span class="content"><?= (float)$block->getItem()->getQtyShipped() * 1 ?></span>
                 </li>
             <?php endif; ?>
             <?php if ($block->getItem()->getQtyCanceled() > 0) : ?>
                 <li class="item">
                     <span class="title"><?= $block->escapeHtml(__('Canceled')) ?></span>
-                    <span class="content"><?= (int)$block->getItem()->getQtyCanceled()*1 ?></span>
+                    <span class="content"><?= (float)$block->getItem()->getQtyCanceled() * 1 ?></span>
                 </li>
             <?php endif; ?>
             <?php if ($block->getItem()->getQtyRefunded() > 0) : ?>
                 <li class="item">
                     <span class="title"><?= $block->escapeHtml(__('Refunded')) ?></span>
-                    <span class="content"><?= (int)$block->getItem()->getQtyRefunded()*1 ?></span>
+                    <span class="content"><?= (float)$block->getItem()->getQtyRefunded() * 1 ?></span>
                 </li>
             <?php endif; ?>
         </ul>
