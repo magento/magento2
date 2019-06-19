@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AllowedCountriesRestrictionApplyOnBackendTest">
+        <annotations>
+            <title value="Country filter on Customers page when allowed countries restriction for a default website is applied"/>
+            <description value="Country filter on Customers page when allowed countries restriction for a default website is applied"/>
+            <features value="Customer"/>
+            <stories value="Admin Customer Grid"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-17282"/>
+            <useCaseId value="MAGETWO-86624"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <createData entity="CustomerAccountSharingDefault" stepKey="setCustomerAccountSharingToDefault"/>
+            <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
+            <actionGroup ref="LoginActionGroup" stepKey="loginToAdmin"/>
+
+            <!--Create new website,store and store view-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="adminCreateNewWebsite">
+                <argument name="newWebsiteName" value="{{CustomWebSite.name}}"/>
+                <argument name="websiteCode" value="{{CustomWebSite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="adminCreateNewStore">
+                <argument name="website" value="{{CustomWebSite.name}}"/>
+                <argument name="storeGroupName" value="{{customStore.name}}"/>
+                <argument name="storeGroupCode" value="{{customStore.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="adminCreateNewStoreView">
+                <argument name="storeGroup" value="customStore"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete all created data and set main website country options to default-->
+            <comment userInput="Delete all created data and set main website country options to default" stepKey="resetConfigToDefault"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <createData entity="CustomerAccountSharingSystemValue" stepKey="setAccountSharingToSystemValue"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{CustomWebSite.name}}"/>
+            </actionGroup>
+            <amOnPage url="{{AdminConfigurationGeneralSectionPage.url('#general_country-link')}}" stepKey="goToConfigurationSectionPage"/>
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="adminSwitchWebsiteActionGroup">
+                <argument name="scopeName" value="_defaultWebsite.name"/>
+            </actionGroup>
+            <actionGroup ref="SetWebsiteCountryOptionsToDefaultActionGroup" stepKey="setCountryOptionsToDefault"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!--Check that all countries are allowed initially and get amount-->
+        <amOnPage url="{{AdminConfigurationGeneralSectionPage.url('#general_country-link')}}" stepKey="goToCountryConfigurationSectionPage"/>
+        <executeJS function="return document.querySelectorAll('{{AdminConfigurationGeneralCountryOptionsSection.allowedCountriesOptions}}').length" stepKey="countriesAmount"/>
+
+        <!-- Switch to first website, allow only Canada and set Canada as default country -->
+        <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="adminSwitchWebsite">
+            <argument name="scopeName" value="_defaultWebsite.name"/>
+        </actionGroup>
+        <actionGroup ref="AllowOnlyOneCountryActionGroup" stepKey="allowCanadaCountry">
+            <argument name="country" value="Canada"/>
+        </actionGroup>
+
+        <!--Switch to second website and allow all countries except Canada-->
+        <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="adminSwitchToSecondWebsite">
+            <argument name="scopeName" value="CustomWebSite.name"/>
+        </actionGroup>
+        <actionGroup ref="AllowAllCountriesExceptOneActionGroup" stepKey="allowAllCountriesExceptCanada">
+            <argument name="country" value="Canada"/>
+        </actionGroup>
+
+        <!--Open created customer details page and add Canada address-->
+        <amOnPage url="{{AdminEditCustomerPage.url($$createCustomer.id$$)}}" stepKey="goToCustomerEditPage"/>
+        <actionGroup ref="AdminAddCustomerAddressWithRegionTypeSelectActionGroup" stepKey="addAddressForCustomer">
+            <argument name="customerAddress" value="Canada_Address"/>
+        </actionGroup>
+
+        <!--Go to Customers grid and check that filter countries amount is the same as initial allowed countries amount-->
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomersGrid"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomersGrid"/>
+        <seeNumberOfElements userInput="$countriesAmount" selector="{{AdminCustomerFiltersSection.countryOptionsWithoutEmptyOption}}" stepKey="assertCountryAmounts"/>
+    </test>
+</tests>

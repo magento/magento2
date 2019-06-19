@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminGridPageNumberAfterSaveAndCloseActionTest">
+        <annotations>
+            <features value="Catalog"/>
+            <title value="Checking Catalog grid page number after Save and Close action"/>
+            <description value="Checking Catalog grid page number after Save and Close action"/>
+            <stories value="Verify Catalog Grid"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-17278"/>
+            <useCaseId value="MAGETWO-93755"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Clear product grid-->
+            <comment userInput="Clear product grid" stepKey="commentClearProductsGrid"/>
+            <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToProductsGridPage"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsFilters"/>
+            <actionGroup ref="DeleteAllProducts" stepKey="deleteProductsIfTheyExist"/>
+            <!--Create products-->
+            <createData entity="SimpleProduct3" stepKey="createProduct1"/>
+            <createData entity="SimpleProduct3" stepKey="createProduct2"/>
+            <!--Update product count per page-->
+            <actionGroup ref="AdminDataGridSelectCustomPageSize" stepKey="selectCustomPageSize">
+                <argument name="pageSize" value="{{ProductGridPagerData.pageSize}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <deleteData stepKey="deleteProduct1" createDataKey="createProduct1"/>
+            <deleteData stepKey="deleteProduct2" createDataKey="createProduct2"/>
+            <!--Revert products count per page            -->
+            <conditionalClick selector="{{AdminDataGridPaginationSection.previousPage}}" dependentSelector="{{AdminDataGridPaginationSection.previousPage}}" visible="true" stepKey="clickPrevPageOrderGrid"/>
+            <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToProductsGridPage"/>
+            <actionGroup ref="AdminDataGridDeleteCustomPageSize" stepKey="deleteCustomAddedPageSize">
+                <argument name="pageSize" value="{{ProductGridPagerData.pageSize}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToProductsGridPage"/>
+        <!--Go to the next page and edit the product-->
+        <comment userInput="Go to the next page and edit the product" stepKey="commentEdiProduct"/>
+        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPageOrderGrid"/>
+        <waitForElementVisible selector="{{AdminDataGridPaginationSection.currentPage}}" stepKey="waitCurrentPageNumberAppeares"/>
+        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="2" stepKey="seeOnSecondPageOrderGrid"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct2">
+            <argument name="product" value="$$createProduct2$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseProduct"/>
+        <waitForElementVisible selector="{{AdminDataGridPaginationSection.currentPage}}" stepKey="waitCurrentPageNumberAppearesAfterProductEdit"/>
+        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="2" stepKey="seeOnSecondPageOrderGridAfterProductSaved"/>
+    </test>
+</tests>
