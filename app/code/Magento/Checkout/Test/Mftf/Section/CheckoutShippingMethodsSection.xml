@@ -15,6 +15,8 @@
         <element name="checkShippingMethodByName" type="radio" selector="//div[@id='checkout-shipping-method-load']//td[contains(., '{{var1}}')]/..//input" parameterized="true"/>
         <element name="shippingMethodRowByName" type="text" selector="//div[@id='checkout-shipping-method-load']//td[contains(., '{{var1}}')]/.." parameterized="true"/>
         <element name="flatRate" type="radio" selector="#label_carrier_flatrate_flatrate"/>
+        <element name="noQuotesMsg" type="text" selector="#checkout-step-shipping_method div"/>
         <element name="freeShippingShippingMethod" type="input" selector="#s_method_freeshipping_freeshipping" timeout="30"/>
+        <element name="shippingMethodFreeShipping" type="radio" selector="#checkout-shipping-method-load input[value='freeshipping_freeshipping']"/>
     </section>
 </sections>
