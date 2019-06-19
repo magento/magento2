@@ -49,7 +49,7 @@ type PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer t
 
 input PayflowProTokenInput {
      cart_id: String! @doc(description:"The unique ID that identifies the customer's cart")
-     urls: PayFlowProUrlInput! @doc(description:"URL that PayPal uses for callback.")
+     urls: PayflowProUrlInput! @doc(description:"URL that PayPal uses for callback.")
 }
 
 input PayflowProInput {
