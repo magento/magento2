@@ -40,7 +40,7 @@
                 <p class="sku"><?= $block->escapeHtml(__('SKU')) ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
             </td>
             <td class="item-qty">
-                <?= (int)$_item->getQtyOrdered() * 1 ?>
+                <?= (float)$_item->getQtyOrdered() * 1 ?>
             </td>
             <td class="item-price">
                 <?= /* @noEscape */ $block->getItemPrice($_item) ?>

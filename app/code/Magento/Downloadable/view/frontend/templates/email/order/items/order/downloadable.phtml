@@ -46,7 +46,7 @@
             </table>
         <?php endif; ?>
     </td>
-    <td class="item-qty"><?= (int)$_item->getQtyOrdered() * 1 ?></td>
+    <td class="item-qty"><?= (float)$_item->getQtyOrdered() * 1 ?></td>
     <td class="item-price">
         <?= /* @noEscape */ $block->getItemPrice($_item) ?>
     </td>

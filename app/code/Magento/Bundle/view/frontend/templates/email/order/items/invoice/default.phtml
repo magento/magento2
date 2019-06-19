@@ -54,7 +54,7 @@
     <?php endif; ?>
             <td class="item-qty">
                 <?php if ($block->canShowPriceInfo($_item)) : ?>
-                    <?= (int)$_item->getQty() * 1 ?>
+                    <?= (float)$_item->getQty() * 1 ?>
                 <?php else : ?>
                     &nbsp;
                 <?php endif; ?>
