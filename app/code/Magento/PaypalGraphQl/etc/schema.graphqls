@@ -3,6 +3,7 @@
 
 type Mutation {
     createPaypalExpressToken(input: PaypalExpressTokenInput): PaypalExpressToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PaypalExpressToken") @doc(description:"Initiates a PayPal checkout transaction and receives a token.")
+    createPayFlowProToken(input: PayFlowProTokenInput): PayFlowProToken @doc(description: "Initiates a PayFlowPro transaction and receives a token")
 }
 
 input PaypalExpressTokenInput @doc(description:"Defines the attributes required to receive a payment token from PayPal") {
@@ -46,13 +47,15 @@ type PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer t
     edit: String @doc(description:"The PayPal URL that allows the buyer to edit their checkout details")
 }
 
+input PayFlowProTokenInput {
+     cart_id: String! @doc(description:"The unique ID that identifies the customer's cart")
+     code: String! @doc(description:"Payment method code")
+     url: PayFlowProUrlInput! @doc(description:"URL that PayPal uses for callback.")
+}
+
 input PayFlowProInput {
     cc_details: CreditCardDetailsInput! @doc(description: "Required input for credit card related information")
-    pnref: String! @doc(description: "The Payflow transaction ID value")
-    avsaddr: VerificationCode @doc(description: "Address verification service address response")
-    avszip: VerificationCode @doc(description: "Address verification service Zip response")
-    iavs: VerificationCode @doc(deciprion: "International address verification service response")
-    cvv2match: VerificationCode @doc(description: "Normalized Card security code results")
+    paypalPayload: String! @doc(description: "Payload of the response from Paypal")
 }
 
 input CreditCardDetailsInput {
@@ -62,8 +65,14 @@ input CreditCardDetailsInput {
     cc_last_4: Int! @doc(description: "Credit card last 4 digits")
 }
 
-enum VerificationCode {
-    Y
-    N
-    X
+input PayFlowProUrlInput {
+    success_url: String @doc(description:"The URL to redirect upon success. Not applicable to most PayPal solutions")
+}
+
+type PayFlowProToken {
+    secure_token: String!
+    secure_token_id: String!
+    response_message: String!
+    result: Int!
+    result_code: Int!
 }
