@@ -39,6 +39,7 @@ class PreventDefaultSourceDisablingTest extends WebapiAbstract
      */
     public function testPreventDefaultSourceDisabling(): void
     {
+        $this->_markTestAsRestOnly('https://github.com/magento-engcom/msi/issues/2326');
         $defaultSourceCode = $this->defaultSourceProvider->getCode();
         $data = [
             SourceInterface::SOURCE_CODE => $defaultSourceCode, // needed for SOAP mode
