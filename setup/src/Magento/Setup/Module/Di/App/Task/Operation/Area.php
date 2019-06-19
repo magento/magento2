@@ -85,6 +85,8 @@ class Area implements OperationInterface
             }
         }
 
+        $this->sortDefinitions($definitionsCollection);
+
         $areaCodes = array_merge([App\Area::AREA_GLOBAL], $this->areaList->getCodes());
         foreach ($areaCodes as $areaCode) {
             $config = $this->configReader->generateCachePerScope($definitionsCollection, $areaCode);
@@ -120,5 +122,19 @@ class Area implements OperationInterface
     public function getName()
     {
         return 'Area configuration aggregation';
+    }
+
+    /**
+     * Sort definitions to make reproducible result
+     *
+     * @param DefinitionsCollection $definitionsCollection
+     */
+    private function sortDefinitions(DefinitionsCollection $definitionsCollection): void
+    {
+        $definitions = $definitionsCollection->getCollection();
+
+        ksort($definitions);
+
+        $definitionsCollection->initialize($definitions);
     }
 }
