@@ -52,8 +52,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     const COLUMN_ROW_SORT = '_custom_option_row_sort';
 
-    private const OPTION_TITLE_PATTERN = '/option_title\=[+-]?([0-9]*.)?[0-9]+/';
-
     /**#@-*/
 
     /**
@@ -2110,7 +2108,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function parseOptionValueOption($optionValue)
     {
-        $pattern = self::OPTION_TITLE_PATTERN;
+        $pattern = '/option_title\=[+-]?([0-9]*.)?[0-9]+/';
         $optionParamsStr = preg_replace($pattern, '', $optionValue);
 
         preg_match($pattern, $optionValue, $match);
