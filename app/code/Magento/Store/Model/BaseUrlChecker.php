@@ -40,7 +40,7 @@ class BaseUrlChecker
         $requestUri = $request->getRequestUri() ? $request->getRequestUri() : '/';
         $isValidSchema = !isset($uri['scheme']) || $uri['scheme'] === $request->getScheme();
         $isValidHost = !isset($uri['host']) || $uri['host'] === $request->getHttpHost();
-        $isValidPath = !isset($uri['path']) || strpos($requestUri, $uri['path']) !== false;
+        $isValidPath = !isset($uri['path']) || strpos($requestUri, (string) $uri['path']) !== false;
         return $isValidSchema && $isValidHost && $isValidPath;
     }
 

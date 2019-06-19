@@ -72,7 +72,7 @@ class LocaleResolver implements ResolverInterface
         $locale = $this->resolver->getLocale();
         $allowedLocales = $this->config->getValue('supported_locales');
 
-        return strpos($allowedLocales, $locale) !== false ? $locale : 'en_US';
+        return strpos($allowedLocales, (string) $locale) !== false ? $locale : 'en_US';
     }
 
     /**

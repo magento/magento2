@@ -334,7 +334,7 @@ class Generator extends AbstractSchemaGenerator
             $description = isset($parameterInfo['documentation']) ? $parameterInfo['documentation'] : null;
 
             /** Get location of parameter */
-            if (strpos($httpMethodData['uri'], '{' . $parameterName . '}') !== false) {
+            if (strpos($httpMethodData['uri'], (string) ('{' . $parameterName . '}')) !== false) {
                 $parameters[] = $this->generateMethodPathParameter($parameterName, $parameterInfo, $description);
             } elseif (strtoupper($httpMethodData['httpOperation']) === 'GET') {
                 $parameters = $this->generateMethodQueryParameters(

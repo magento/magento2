@@ -63,7 +63,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
         }
 
         $needle = 'block_id="' . $this->getId() . '"';
-        if (false == strstr($this->getContent(), $needle)) {
+        if (false == strstr($this->getContent(), (string) $needle)) {
             return parent::beforeSave();
         }
         throw new \Magento\Framework\Exception\LocalizedException(

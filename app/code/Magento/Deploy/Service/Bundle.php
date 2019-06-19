@@ -201,7 +201,7 @@ class Bundle
         $excludedDirs = $this->bundleConfig->getExcludedDirectories($area, $theme);
         foreach ($excludedDirs as $directoryId) {
             $directoryPath = $this->prepareExcludePath($directoryId);
-            if (strpos($filePath, $directoryPath) === 0) {
+            if (strpos($filePath, (string) $directoryPath) === 0) {
                 return true;
             }
         }

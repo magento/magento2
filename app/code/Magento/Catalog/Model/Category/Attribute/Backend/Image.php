@@ -153,7 +153,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $fileUrl = ltrim($value[0]['url'], '/');
         $baseMediaDir = $this->_filesystem->getUri(DirectoryList::MEDIA);
 
-        $usingPathRelativeToBase = strpos($fileUrl, $baseMediaDir) === 0;
+        $usingPathRelativeToBase = strpos($fileUrl, (string) $baseMediaDir) === 0;
 
         return $usingPathRelativeToBase;
     }

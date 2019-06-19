@@ -129,7 +129,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     public function convertIdToPath($value)
     {
         $path = $this->urlDecoder->decode($value);
-        if (!strstr($path, $this->getStorageRoot())) {
+        if (!strstr($path, (string) $this->getStorageRoot())) {
             $path = $this->getStorageRoot() . $path;
         }
         return $path;
@@ -229,7 +229,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
             if ($path && $path !== self::NODE_ROOT) {
                 $path = $this->convertIdToPath($path);
 
-                if ($this->mediaDirectoryWrite->isDirectory($path) && 0 === strpos($path, $currentPath)) {
+                if ($this->mediaDirectoryWrite->isDirectory($path) && 0 === strpos($path, (string) $currentPath)) {
                     $currentPath = $this->mediaDirectoryWrite->getRelativePath($path);
                 }
             }
@@ -259,7 +259,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     public function getThumbnailPath($imageName)
     {
         $imagePath = $this->getCurrentPath() . '/' . $imageName;
-        if (!$this->mediaDirectoryWrite->isExist($imagePath) || 0 !== strpos($imagePath, $this->getStorageRoot())) {
+        if (!$this->mediaDirectoryWrite->isExist($imagePath) || 0 !== strpos($imagePath, (string) $this->getStorageRoot())) {
             throw new \InvalidArgumentException('The image not found.');
         }
         return $this->getThumbnailDirectory($imagePath) . '/' . pathinfo($imageName, PATHINFO_BASENAME);

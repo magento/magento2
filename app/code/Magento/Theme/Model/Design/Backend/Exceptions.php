@@ -133,7 +133,7 @@ class Exceptions extends ArraySerialized
         // Limit delimiters to reduce possibility, that we miss string with regexp.
 
         // Starts with a delimiter
-        if (strpos($possibleDelimiters, $search[0]) !== false) {
+        if (strpos($possibleDelimiters, (string) $search[0]) !== false) {
             return true;
         }
 

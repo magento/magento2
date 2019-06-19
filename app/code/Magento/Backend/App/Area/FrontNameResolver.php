@@ -105,7 +105,7 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
             $backendUrl = $this->scopeConfig->getValue(Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE);
         }
         $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
-        return stripos($this->getHostWithPort($backendUrl), $host) !== false;
+        return stripos($this->getHostWithPort($backendUrl), (string) $host) !== false;
     }
 
     /**

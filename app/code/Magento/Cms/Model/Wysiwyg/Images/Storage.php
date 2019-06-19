@@ -523,7 +523,7 @@ class Storage extends \Magento\Framework\DataObject
     {
         $mediaRootDir = $this->_cmsWysiwygImages->getStorageRoot();
 
-        if (strpos($filePath, $mediaRootDir) === 0) {
+        if (strpos($filePath, (string) $mediaRootDir) === 0) {
             $thumbPath = $this->getThumbnailRoot() . substr($filePath, strlen($mediaRootDir));
 
             if (!$checkFile || $this->_directory->isExist($this->_directory->getRelativePath($thumbPath))) {
@@ -545,7 +545,7 @@ class Storage extends \Magento\Framework\DataObject
     {
         $mediaRootDir = $this->_cmsWysiwygImages->getStorageRoot();
 
-        if (strpos($filePath, $mediaRootDir) === 0) {
+        if (strpos($filePath, (string) $mediaRootDir) === 0) {
             $thumbSuffix = self::THUMBS_DIRECTORY_NAME . substr($filePath, strlen($mediaRootDir));
             if (!$checkFile || $this->_directory->isExist(
                 $this->_directory->getRelativePath($mediaRootDir . '/' . $thumbSuffix)
@@ -623,7 +623,7 @@ class Storage extends \Magento\Framework\DataObject
         $mediaRootDir = $this->_cmsWysiwygImages->getStorageRoot();
         $thumbnailDir = $this->getThumbnailRoot();
 
-        if ($filePath && strpos($filePath, $mediaRootDir) === 0) {
+        if ($filePath && strpos($filePath, (string) $mediaRootDir) === 0) {
             $thumbnailDir .= dirname(substr($filePath, strlen($mediaRootDir)));
         }
 
@@ -723,7 +723,7 @@ class Storage extends \Magento\Framework\DataObject
                 __('We can\'t delete root directory %1 right now.', $path)
             );
         }
-        if (strpos($path, $root) !== 0) {
+        if (strpos($path, (string) $root) !== 0) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Directory %1 is not under storage root path.', $path)
             );

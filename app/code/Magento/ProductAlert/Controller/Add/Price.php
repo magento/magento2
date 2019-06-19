@@ -61,8 +61,8 @@ class Price extends AddController implements HttpGetActionInterface
             return false;
         }
         $currentStore = $this->storeManager->getStore();
-        return strpos($url, $currentStore->getBaseUrl()) === 0
-            || strpos($url, $currentStore->getBaseUrl(UrlInterface::URL_TYPE_LINK, true)) === 0;
+        return strpos($url, (string) $currentStore->getBaseUrl()) === 0
+            || strpos($url, (string) $currentStore->getBaseUrl(UrlInterface::URL_TYPE_LINK, true)) === 0;
     }
 
     /**

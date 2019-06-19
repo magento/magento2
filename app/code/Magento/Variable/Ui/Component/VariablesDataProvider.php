@@ -121,7 +121,7 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
                 $value = str_replace('%', '', $filter->getValue());
                 $filterField = $filter->getField();
                 $items = array_values(array_filter($items, function ($item) use ($value, $filterField) {
-                    return strpos(strtolower($item[$filterField]), strtolower($value)) !== false;
+                    return strpos(strtolower($item[$filterField]), (string) strtolower($value)) !== false;
                 }));
             }
         }

@@ -101,7 +101,7 @@ class ConfigProvider implements ConfigProviderInterface
     {
         $baseUrl = $this->storeManager->getStore()->getBaseUrl();
 
-        if (strpos($this->getLoginUrl(), $baseUrl) !== false) {
+        if (strpos($this->getLoginUrl(), (string) $baseUrl) !== false) {
             return false;
         }
 

@@ -129,7 +129,7 @@ class Registration
             return $this;
         }
         $imagePath = $themeDirectory . '/' . $theme->getPreviewImage();
-        if (0 === strpos($imagePath, $themeDirectory)) {
+        if (0 === strpos($imagePath, (string) $themeDirectory)) {
             $theme->getThemeImage()->createPreviewImage($imagePath);
         }
         return $this;

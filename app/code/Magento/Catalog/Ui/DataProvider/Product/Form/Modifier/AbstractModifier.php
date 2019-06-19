@@ -132,7 +132,7 @@ abstract class AbstractModifier implements ModifierInterface
      */
     protected function startsWith($haystack, $needle)
     {
-        return $needle === '' || strrpos($haystack, $needle, -strlen($haystack)) !== false;
+        return $needle === '' || strrpos($haystack, (string) $needle, -strlen($haystack)) !== false;
     }
 
     /**
