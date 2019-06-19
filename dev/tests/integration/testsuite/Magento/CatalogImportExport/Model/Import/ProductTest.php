@@ -1597,7 +1597,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $source = $this->objectManager->create(
             Csv::class,
             [
-                'file' => __DIR__ . '/_files/products_to_import_without_url_keys_column.csv',
+                'file' => __DIR__ . '/_files/products_to_import_without_url_key_column.csv',
                 'directory' => $directory
             ]
         );
