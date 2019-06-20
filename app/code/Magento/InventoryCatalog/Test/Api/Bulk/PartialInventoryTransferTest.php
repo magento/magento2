@@ -22,6 +22,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class PartialInventoryTransferTest extends WebapiAbstract
 {
+    const SERVICE_NAME = 'inventoryCatalogApiBulkPartialInventoryTransferV1';
     const RESOURCE_PATH = '/V1/inventory/bulk-partial-source-transfer';
     const VALIDATION_FAIL_MESSAGE = 'Transfer validation failed';
 
@@ -48,6 +49,10 @@ class PartialInventoryTransferTest extends WebapiAbstract
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
                 'httpMethod' => Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'operation' => self::SERVICE_NAME . 'Execute'
             ]
         ];
 
@@ -71,6 +76,7 @@ class PartialInventoryTransferTest extends WebapiAbstract
      */
     public function testInvalidTransferOrigin()
     {
+        $this->_markTestAsRestOnly("https://github.com/magento-engcom/msi/issues/2313");
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
@@ -105,6 +111,7 @@ class PartialInventoryTransferTest extends WebapiAbstract
      */
     public function testInvalidTransferDestination()
     {
+        $this->_markTestAsRestOnly("https://github.com/magento-engcom/msi/issues/2313");
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
@@ -139,6 +146,7 @@ class PartialInventoryTransferTest extends WebapiAbstract
      */
     public function testInvalidTransferOriginAndDestinationAreTheSame()
     {
+        $this->_markTestAsRestOnly("https://github.com/magento-engcom/msi/issues/2313");
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
@@ -165,6 +173,7 @@ class PartialInventoryTransferTest extends WebapiAbstract
      */
     public function testInvalidTransferQuantityGreaterThanAvailable()
     {
+        $this->_markTestAsRestOnly("https://github.com/magento-engcom/msi/issues/2313");
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,

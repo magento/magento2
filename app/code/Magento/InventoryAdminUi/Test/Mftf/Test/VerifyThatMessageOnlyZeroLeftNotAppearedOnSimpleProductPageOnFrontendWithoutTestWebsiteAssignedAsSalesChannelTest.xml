@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyThatMessageOnlyZeroLeftNotAppearedOnSimpleProductPageOnFrontendWithoutTestWebsiteAssignedAsSalesChannelTest"
+          extends="VerifyThatMessageOnlyZeroLeftNotAppearedOnSimpleProductPageOnFrontendTest">
+        <annotations>
+            <description
+                    value="Verify that message 'Only 0 left' not appeared on Simple product page on frontend without Test Website assigned as Sales Channel"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/908790/scenarios/3041088"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <!--Create new website,store and store view-->
+            <comment userInput="Create new website,store and store view" stepKey="createWebsite"/>
+            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="goToAdminSystemStorePage" after="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="adminCreateNewWebsite"
+                         after="goToAdminSystemStorePage">
+                <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
+                <argument name="websiteCode" value="{{NewWebSiteData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="adminCreateNewStore"
+                         after="adminCreateNewWebsite">
+                <argument name="website" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeGroupName" value="{{NewStoreData.name}}"/>
+                <argument name="storeGroupCode" value="{{NewStoreData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="adminCreateNewStoreView"
+                         after="adminCreateNewStore">
+                <argument name="StoreGroup" value="NewStoreData"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <magentoCLI
+                    command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}"
+                    stepKey="setAddStoreCodeToUrl" after="fillConfigValue"/>
+        </before>
+        <after>
+            <!--Delete website created in the before block -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite" after="deleteProduct">
+                <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+            </actionGroup>
+            <magentoCLI
+                    command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}"
+                    stepKey="setOffAddStoreCodeToUrl" after="deleteStock"/>
+        </after>
+        <!-- Add this product to second website -->
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProductInWebsitesSection1"
+               after="goToProduct1"/>
+        <click selector="{{ProductInWebsitesSection.website(NewWebSiteData.name)}}" stepKey="selectSecondWebsite"
+               after="openProductInWebsitesSection1"/>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock"
+                      stepKey="setSimpleProductOutOfStockStatusToDefaultStock"
+                      after="goToProduct1"/>
+        <remove keyForRemoval="openProductStorefront"/>
+        <amOnPage url="{{StorefrontStoreHomePage.url(customStore.code)}}$$createSimpleProduct.custom_attributes[url_key]$$.html"
+                  stepKey="openProductPage"/>
+        <seeInCurrentUrl url="{{StorefrontStoreHomePage.url(customStore.code)}}$$createSimpleProduct.custom_attributes[url_key]$$.html"
+                         stepKey="seeInCurrentUrl"/>
+    </test>
+</tests>

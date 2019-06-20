@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyThatMessageOnlyZeroLeftNotAppearedOnSimpleProductPageOnFrontendWithWebsiteAndNewStoreAndNewStoreViewTest"
+          extends="VerifyThatMessageOnlyZeroLeftNotAppearedOnSimpleProductPageOnFrontendTest">
+        <annotations>
+            <description
+                    value="Verify that message 'Only 0 left' not appeared on Simple product page on frontend with Website and new Store and new Store View"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/908790/scenarios/3041079"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create new website,store and store view-->
+            <comment userInput="Create new website,store and store view" stepKey="createWebsite"/>
+            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="goToAdminSystemStorePage" after="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="adminCreateNewWebsite"
+                         after="goToAdminSystemStorePage">
+                <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
+                <argument name="websiteCode" value="{{NewWebSiteData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="adminCreateNewStore"
+                         after="adminCreateNewWebsite">
+                <argument name="website" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeGroupName" value="{{NewStoreData.name}}"/>
+                <argument name="storeGroupCode" value="{{NewStoreData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="adminCreateNewStoreView"
+                         after="adminCreateNewStore">
+                <argument name="StoreGroup" value="NewStoreData"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{NewWebSiteData.name}}"
+                          stepKey="selectWebsiteAsSalesChannelForCustomStock"
+                          after="goToStockGridFilterResultsByInputEditStock1"/>
+            <magentoCLI
+                    command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}"
+                    stepKey="setConfigAddStoreCodeToUrl" after="fillConfigValue"/>
+        </before>
+        <after>
+            <remove keyForRemoval="deleteStock"/>
+            <!--Delete website created in the before block -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite" after="deleteProduct">
+                <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+            </actionGroup>
+            <magentoCLI
+                    command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}"
+                    stepKey="DisableAddStoreCodeToUrl" after="disableCreatedSourceComment"/>
+        </after>
+        <!-- Add this product to second website -->
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProductInWebsitesSection1"
+               after="goToProduct1"/>
+        <click selector="{{ProductInWebsitesSection.website(NewWebSiteData.name)}}" stepKey="selectSecondWebsite"
+               after="openProductInWebsitesSection1"/>
+        <remove keyForRemoval="setSimpleProductOutOfStockStatus"/>
+        <click selector="{{AdminProductSourcesGrid.rowDelete('0')}}" stepKey="deleteDefaultSourceFromCreatedProduct"
+               after="goToProduct1"/>
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct"
+                     stepKey="AdminOnProductEditPageAssignSourceToProduct1"
+                     after="deleteDefaultSourceFromCreatedProduct">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource.source[source_code]$$"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock"
+                      stepKey="setSimpleProductOutOfStockStatusToCustomStock"
+                      after="AdminOnProductEditPageAssignSourceToProduct1"/>
+        <remove keyForRemoval="openProductStorefront"/>
+        <amOnPage url="{{StorefrontStoreHomePage.url(customStore.code)}}$$createSimpleProduct.custom_attributes[url_key]$$.html"
+                  stepKey="openProductPage"/>
+        <seeInCurrentUrl url="{{StorefrontStoreHomePage.url(customStore.code)}}$$createSimpleProduct.custom_attributes[url_key]$$.html"
+                         stepKey="seeInCurrentUrl"/>
+    </test>
+</tests>

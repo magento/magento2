@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyThatMessageOnlyZeroLeftNotAppearedOnSimpleProductPageOnFrontendWithMainWebsiteAssignedAsSalesChannelTest"
+          extends="VerifyThatMessageOnlyZeroLeftNotAppearedOnSimpleProductPageOnFrontendTest">
+        <annotations>
+            <description
+                    value="Verify that message 'Only 0 left' not appeared on Simple product page on frontend with Main Website assigned as Sales Channel"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/908790/scenarios/3041071"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website"
+                          stepKey="selectWebsiteAsSalesChannelForCustomStock"
+                          after="goToStockGridFilterResultsByInputEditStock1"/>
+        </before>
+        <after>
+            <remove keyForRemoval="deleteStock"/>
+        </after>
+        <remove keyForRemoval="setSimpleProductOutOfStockStatus"/>
+        <click selector="{{AdminProductSourcesGrid.rowDelete('0')}}" stepKey="deleteDefaultSourceFromCreatedProduct"
+               after="goToProduct1"/>
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct"
+                     stepKey="AdminOnProductEditPageAssignSourceToProduct1"
+                     after="deleteDefaultSourceFromCreatedProduct">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource.source[source_code]$$"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock"
+                      stepKey="setSimpleProductOutOfStockStatusToCustomStock"
+                      after="AdminOnProductEditPageAssignSourceToProduct1"/>
+    </test>
+</tests>

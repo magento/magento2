@@ -23,7 +23,7 @@ class ExportStockSalableQtyTest extends WebapiAbstract
     public function executeDataProvider(): array
     {
         return [
-            ['SKU-4', 'website', 'base', ['sku' => 'SKU-4','qty' => 0, 'is_salable'=>true]]
+            ['SKU-4', 'website', 'base', ['sku' => 'SKU-4', 'qty' => 0, 'is_salable' => true]]
         ];
     }
 
@@ -39,11 +39,12 @@ class ExportStockSalableQtyTest extends WebapiAbstract
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     * @dataProvider       executeDataProvider
+     * @dataProvider executeDataProvider
      * @magentoDbIsolation disabled
      */
     public function testExportStockSalableQty(string $sku, string $type, string $code, array $expected): void
     {
+        $this->_markTestAsRestOnly("https://github.com/magento-engcom/msi/issues/2314");
         $requestData = [
             'searchCriteria' => [
                 SearchCriteria::FILTER_GROUPS => [
@@ -67,7 +68,7 @@ class ExportStockSalableQtyTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'operation' => self::SERVICE_NAME . 'GetList'
+                'operation' => self::SERVICE_NAME . 'Execute'
             ]
         ];
 
