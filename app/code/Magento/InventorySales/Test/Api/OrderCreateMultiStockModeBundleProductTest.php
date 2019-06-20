@@ -34,7 +34,6 @@ class OrderCreateMultiStockModeBundleProductTest extends OrderPlacementBase
         $this->setShippingAndBillingInformation();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
-
     }
 
     /**

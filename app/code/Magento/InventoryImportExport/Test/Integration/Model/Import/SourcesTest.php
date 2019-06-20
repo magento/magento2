@@ -22,6 +22,10 @@ use Magento\InventoryImportExport\Model\Import\Sources;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @inheritDoc
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SourcesTest extends TestCase
 {
     /**
