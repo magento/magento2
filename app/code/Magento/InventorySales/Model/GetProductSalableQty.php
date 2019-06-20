@@ -89,6 +89,8 @@ class GetProductSalableQty implements GetProductSalableQtyInterface
     }
 
     /**
+     * Check if source can be managed for a product of specific type.
+     *
      * @param string $sku
      * @throws InputException
      */
@@ -99,7 +101,7 @@ class GetProductSalableQty implements GetProductSalableQtyInterface
             throw new NoSuchEntityException(
                 __('The product that was requested doesn\'t exist. Verify the product and try again.')
             );
-        } 
+        }
         
         $productType = $productTypesBySkus[$sku];
 
