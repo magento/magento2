@@ -60,7 +60,7 @@ class DeleteCustomerAddress implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($args['id']) || empty($args['id'])) {
+        if (empty($args['id'])) {
             throw new GraphQlInputException(__('Address "id" value should be specified'));
         }
 

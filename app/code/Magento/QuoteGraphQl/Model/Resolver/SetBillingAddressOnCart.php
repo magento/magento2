@@ -46,12 +46,12 @@ class SetBillingAddressOnCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
+        if (empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
         $maskedCartId = $args['input']['cart_id'];
 
-        if (!isset($args['input']['billing_address']) || empty($args['input']['billing_address'])) {
+        if (empty($args['input']['billing_address'])) {
             throw new GraphQlInputException(__('Required parameter "billing_address" is missing'));
         }
         $billingAddress = $args['input']['billing_address'];

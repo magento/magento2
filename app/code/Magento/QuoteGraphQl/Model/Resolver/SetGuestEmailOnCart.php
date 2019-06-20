@@ -57,12 +57,12 @@ class SetGuestEmailOnCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
+        if (empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
         $maskedCartId = $args['input']['cart_id'];
 
-        if (!isset($args['input']['email']) || empty($args['input']['email'])) {
+        if (empty($args['input']['email'])) {
             throw new GraphQlInputException(__('Required parameter "email" is missing'));
         }
 
