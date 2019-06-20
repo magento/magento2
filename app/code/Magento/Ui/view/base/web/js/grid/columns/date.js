@@ -17,6 +17,7 @@ define([
         defaults: {
             dateFormat: 'MMM d, YYYY h:mm:ss A'
         },
+        dateData: [],
 
         /**
          * Overrides base method to normalize date format.
@@ -37,6 +38,7 @@ define([
          * @returns {String} Formatted date.
          */
         getLabel: function (value, format) {
+            moment.locale(this.storeLocale, {...this.dateData});
             var date = moment(this._super());
 
             date = date.isValid() && value[this.index] ?
