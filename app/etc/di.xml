@@ -751,7 +751,7 @@
                 <item name="extensionInterfaceFactory" xsi:type="string">\Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceFactoryGenerator</item>
                 <item name="factory" xsi:type="string">\Magento\Framework\ObjectManager\Code\Generator\Factory</item>
                 <item name="proxy" xsi:type="string">\Magento\Framework\ObjectManager\Code\Generator\Proxy</item>
-                <item name="interceptor" xsi:type="string">\Magento\Framework\Interception\Code\Generator\Interceptor</item>
+                <item name="interceptor" xsi:type="string">Magento\Framework\Interception\Code\Generator\InterceptorInterface</item>
                 <item name="logger" xsi:type="string">\Magento\Framework\ObjectManager\Profiler\Code\Generator\Logger</item>
                 <item name="mapper" xsi:type="string">\Magento\Framework\Api\Code\Generator\Mapper</item>
                 <item name="persistor" xsi:type="string">\Magento\Framework\ObjectManager\Code\Generator\Persistor</item>
@@ -764,6 +764,8 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Framework\Interception\Code\Generator\InterceptorInterface" type="Magento\Framework\Interception\Code\Generator\Interceptor"/>
+    <preference for="Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitutionInterface" type="Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitution"/>
     <type name="Magento\Framework\App\Cache\Frontend\Pool">
         <arguments>
             <argument name="frontendSettings" xsi:type="array">
