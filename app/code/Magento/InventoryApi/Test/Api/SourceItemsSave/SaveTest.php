@@ -26,6 +26,9 @@ class SaveTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     *
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/529092/scenarios/1824126
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/530616/scenarios/1824143
      */
     public function testExecute()
     {

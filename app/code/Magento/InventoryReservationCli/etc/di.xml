@@ -6,16 +6,23 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="inventory_complete_order_inconsistency" xsi:type="object">
-                    Magento\InventoryReservationCli\Command\ShowInconsistenciesInCompletedOrders
+                <item name="inventory_salable_quantity_inconsistency" xsi:type="object">
+                    Magento\InventoryReservationCli\Command\ShowInconsistencies
                 </item>
-                <item name="inventory_incomplete_order_inconsistency" xsi:type="object">
-                    Magento\InventoryReservationCli\Command\ShowInconsistenciesForIncompleteOrders
+                <item name="inventory_salable_quantity_compensations" xsi:type="object">
+                    Magento\InventoryReservationCli\Command\CreateCompensations
                 </item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryReservationCli\Command\ShowInconsistencies">
+        <arguments>
+            <argument name="getSalableQuantityInconsistencies" xsi:type="object">Magento\InventoryReservationCli\Model\GetSalableQuantityInconsistencies\Proxy</argument>
+            <argument name="filterCompleteOrders" xsi:type="object">Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\FilterCompleteOrders\Proxy</argument>
+            <argument name="filterIncompleteOrders" xsi:type="object">Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\FilterIncompleteOrders\Proxy</argument>
         </arguments>
     </type>
 </config>

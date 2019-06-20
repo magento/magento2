@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUserCreateOrderFromTestWebsiteWithSimpleProductWithInventoryOnDefaultAndTestStockTest">
+        <annotations>
+            <stories value="InventoryAdminUi stock option"/>
+            <title value="Admin user create order from Test website with Simple product with inventory on Default and Test stock"/>
+            <description
+                    value="Check, correct website code is passed to check stock quantity when order is created using backoffice"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735286/scenarios/3041899"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink1">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource1"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
+            <createData entity="SimpleMsiProduct" stepKey="createProduct1"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdmin1"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+            <!--Create new website,store and store view-->
+            <comment userInput="Create new website,store and store view" stepKey="createWebsite"/>
+            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="goToAdminSystemStorePage"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="adminCreateNewWebsite">
+                <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
+                <argument name="websiteCode" value="{{NewWebSiteData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="adminCreateNewStore">
+                <argument name="website" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeGroupName" value="{{NewStoreData.name}}"/>
+                <argument name="storeGroupCode" value="{{NewStoreData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="adminCreateNewStoreView"
+                         after="adminCreateNewStore">
+                <argument name="StoreGroup" value="NewStoreData"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateCustomerWithWebsiteAndStoreViewActionGroup"
+                         stepKey="adminCreateCustomerCustomWebsite">
+                <argument name="customerData" value="MsiCustomer1"/>
+                <argument name="address" value="US_Address_TX"/>
+                <argument name="website" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeView" value="{{customStore.name}}"/>
+            </actionGroup>
+            <!--Assign source to stock-->
+            <actionGroup ref="AdminGoToStockGridFilterResultsByInputEditStock"
+                         stepKey="goToStockGridFilterResultsByInputEditStock1">
+                <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+                <argument name="filter_value" value="$$createStock1.stock[name]$$"/>
+            </actionGroup>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{NewWebSiteData.name}}"
+                          stepKey="selectWebsiteAsSalesChannelForCustomStock"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinue"/>
+            <seeElement selector=".success" stepKey="seeSuccessMessage"/>
+            <magentoCLI command="indexer:reindex" stepKey="doReindex"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite" after="deleteProduct">
+                <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$createSource1.source[source_code]$$"/>
+            </actionGroup>
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory1" stepKey="deleteCategory"/>
+        </after>
+        <actionGroup ref="goToProductPageViaID" stepKey="goToProduct1">
+            <argument name="productId" value="$createProduct1.id$"/>
+        </actionGroup>
+        <!-- Add this product to second website -->
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProductInWebsitesSection1"/>
+        <click selector="{{ProductInWebsitesSection.website(NewWebSiteData.name)}}" stepKey="selectSecondWebsite"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct"
+                     stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="10" stepKey="fillSourceQuantityField"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseFourthProductForm"/>
+
+        <comment userInput="Create order with simple product from admin area."
+                 stepKey="createOrderWithGroupedProductComment"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad11"/>
+        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickOnCreateNewOrder1"/>
+        <waitForPageLoad stepKey="waitForCustomerGridLoad"/>
+        <fillField userInput="{{MsiCustomer1.email}}" selector="{{AdminOrderCustomersGridSection.emailInput}}"
+                   stepKey="filterEmail"/>
+        <click selector="{{AdminOrderCustomersGridSection.apply}}" stepKey="applyFilter"/>
+        <waitForPageLoad stepKey="waitForFilteredCustomerGridLoad"/>
+        <click selector="{{AdminOrderCustomersGridSection.firstRow}}" stepKey="clickOnCustomer"/>
+        <waitForPageLoad stepKey="waitForCreateOrderPageLoad"/>
+        <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(customStore.name)}}"
+                          dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(customStore.name)}}"
+                          visible="true" stepKey="selectStoreViewIfAppears"/>
+        <waitForPageLoad stepKey="waitForCreateOrderPageLoadAfterStoreSelect"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="#add_products" stepKey="clickOnAddProductsButton1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad15"/>
+
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{SimpleMsiProduct.sku}}"
+                   stepKey="fillProductSkuField1"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad16"/>
+        <click selector="#order-search button[title='Search']" stepKey="clickOnSearch2"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad17"/>
+
+        <click selector="#order-search tbody tr .col-sku" stepKey="clickOnSku1"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad18"/>
+
+        <fillField selector="#order-search tr .qty" userInput="5" stepKey="fillProductQuantity2"/>
+        <click selector="#order-search .action-add" stepKey="clickOnAddSelectedProductsToOrder1"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad19"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
+        <click selector="#order-shipping-method-summary a" stepKey="clickOnGetShippingMethodsAndRates1"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad21"/>
+        <click selector=".admin__order-shipment-methods-options-list li label" stepKey="clickOnFixedShippingRate1"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad22"/>
+        <click selector=".order-totals-actions .save" stepKey="clickOnSubmitOrder1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad23"/>
+
+        <seeElement selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="seeSuccessMessage1"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order."
+             stepKey="seeSuccessMessage2"/>
+        <grabTextFrom selector=".page-title" stepKey="grabTheOrderId1"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad26"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults3">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="{{SimpleMsiProduct.sku}}"/>
+        </actionGroup>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock1.stock[sku]$$" stepKey="seeUpdatedQuantity1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock1.stock[name]$$" stepKey="seeUpdatedQuantity2"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="5" stepKey="seeUpdatedQuantity3"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="10" stepKey="seeNotUpdatedQuantity4"/>
+    </test>
+</tests>

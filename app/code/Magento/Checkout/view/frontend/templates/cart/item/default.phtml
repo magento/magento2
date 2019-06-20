@@ -84,20 +84,20 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
         <?php endif; ?>
         <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>">
             <div class="field qty">
-                <label class="label" for="cart-<?= /* @escapeNotVerified */ $_item->getId() ?>-qty">
-                    <span><?= /* @escapeNotVerified */ __('Qty') ?></span>
-                </label>
                 <div class="control qty">
-                    <input id="cart-<?= /* @escapeNotVerified */ $_item->getId() ?>-qty"
-                           name="cart[<?= /* @escapeNotVerified */ $_item->getId() ?>][qty]"
-                           data-cart-item-id="<?= $block->escapeHtml($_item->getSku()) ?>"
-                           value="<?= /* @escapeNotVerified */ $block->getQty() ?>"
-                           type="number"
-                           size="4"
-                           title="<?= $block->escapeHtml(__('Qty')) ?>"
-                           class="input-text qty"
-                           data-validate="{required:true,'validate-greater-than-zero':true}"
-                           data-role="cart-item-qty"/>
+                    <label for="cart-<?= /* @escapeNotVerified */ $_item->getId() ?>-qty">
+                        <span class="label"><?= /* @escapeNotVerified */ __('Qty') ?></span>
+                        <input id="cart-<?= /* @escapeNotVerified */ $_item->getId() ?>-qty"
+                               name="cart[<?= /* @escapeNotVerified */ $_item->getId() ?>][qty]"
+                               data-cart-item-id="<?= $block->escapeHtml($_item->getSku()) ?>"
+                               value="<?= /* @escapeNotVerified */ $block->getQty() ?>"
+                               type="number"
+                               size="4"
+                               title="<?= $block->escapeHtml(__('Qty')) ?>"
+                               class="input-text qty"
+                               data-validate="{required:true,'validate-greater-than-zero':true}"
+                               data-role="cart-item-qty"/>
+                    </label>
                 </div>
             </div>
         </td>

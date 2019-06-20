@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="LoggedInCustomerOrderedGroupedProductWithChildProductsAssignedToDefaultStockFromHomepageTest"
+          extends="AdminCreateOrderWithGroupedProductDefaultStockTest">
+        <annotations>
+            <stories value="Orders with grouped products"/>
+            <title value="Logged in Customer ordered Grouped product with child products assigned to default Stock from Homepage"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/tests-plan/folders/419537/scenarios/1437519"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="navigateToStockListPage"/>
+            <remove keyForRemoval="waitForStockListPageLoad"/>
+            <remove keyForRemoval="searchDefaultStockByName"/>
+            <remove keyForRemoval="clickEditDefaultStock"/>
+            <remove keyForRemoval="waitFroDefaultStockEditPageLoad"/>
+            <remove keyForRemoval="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <remove keyForRemoval="saveDefaultStock"/>
+        </before>
+        <remove keyForRemoval="createNewOrderForCustomer"/>
+        <remove keyForRemoval="clickOnDefaultStoreViewIfPresent1"/>
+        <remove keyForRemoval="waitForPageLoad3"/>
+        <remove keyForRemoval="addGroupedProductSimpleOptionToOrder"/>
+        <remove keyForRemoval="scrollToTopOfPage3"/>
+        <remove keyForRemoval="addGroupedProductVirtualOptionToOrder"/>
+        <remove keyForRemoval="waitForPageLoad4"/>
+        <remove keyForRemoval="selectFlatRateShipping"/>
+        <remove keyForRemoval="seeOrderSubTotal"/>
+        <remove keyForRemoval="seeOrderShipping"/>
+        <remove keyForRemoval="seeCorrectGrandTotal"/>
+        <remove keyForRemoval="submitOrderComment"/>
+        <remove keyForRemoval="clickSubmitOrder"/>
+        <remove keyForRemoval="seeViewOrderPage"/>
+
+        <comment userInput="Create order with grouped product in frontend."
+                 stepKey="createOrderWithGroupedProductComment"/>
+        <!--Login as a Customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount"
+                     after="saveAndCloseCreatedGroupedProduct">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!-- Open the Product Page and add the product to shopping cart-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPage"
+                  after="loginToStorefrontAccount"/>
+        <waitForPageLoad stepKey="waitForStoreFrontCategoryPageLoad"/>
+
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($$groupedProduct.name$$)}}"
+                       stepKey="moveMouseOverProduct" after="navigateToCategoryPage"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName($$groupedProduct.name$$)}}"
+               stepKey="clickAddToCart" after="moveMouseOverProduct"/>
+        <waitForElement selector="{{StorefrontMessagesSection.messageProductAddedToCart($$groupedProduct.name$$)}}"
+                        time="30" stepKey="assertMessage" after="clickAddToCart"/>
+        <waitForText userInput="4" selector="{{StorefrontMinicartSection.productCount}}" time="30"
+                     stepKey="assertProductCount" after="assertMessage"/>
+
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}"
+                          dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false"
+                          stepKey="openMiniCart" after="assertProductCount"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}"
+                               stepKey="waitForViewAndEditCartVisible" after="openMiniCart"/>
+        <seeInField userInput="2" selector="{{StorefrontMinicartSection.itemQuantity($$simpleProduct.name$$)}}"
+                    stepKey="seeSimpleProductQty" after="waitForViewAndEditCartVisible"/>
+        <seeInField userInput="2" selector="{{StorefrontMinicartSection.itemQuantity($$virtualProduct.name$$)}}"
+                    stepKey="seeVirtualProductQty" after="seeSimpleProductQty"/>
+        <!--Proceed to checkout-->
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="GoToCheckoutFromMinicartActionGroup"
+               after="seeVirtualProductQty"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"
+                               stepKey="waitForShippingMethodsLoad" after="GoToCheckoutFromMinicartActionGroup"/>
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectShippingMethod"
+               after="waitForShippingMethodsLoad"/>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30"
+                        stepKey="waitForNextButtonVisible" after="selectShippingMethod"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="navigateToSecondCheckoutStep"
+               after="waitForNextButtonVisible"/>
+        <waitForPageLoad stepKey="waitFroPaymentSelectionPageLoad" after="navigateToSecondCheckoutStep"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"
+                     after="waitFroPaymentSelectionPageLoad"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30"
+                        stepKey="waitForPlaceOrderButtonVisible" after="selectCheckMoneyOrderPayment"/>
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}"
+             stepKey="chooseBillingAddress" after="waitForPlaceOrderButtonVisible"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder" after="chooseBillingAddress"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced" after="placeOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"
+                      after="placeOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:"
+             stepKey="checkOrderPlaceSuccessMessage" after="grabOrderNumber"/>
+    </test>
+</tests>

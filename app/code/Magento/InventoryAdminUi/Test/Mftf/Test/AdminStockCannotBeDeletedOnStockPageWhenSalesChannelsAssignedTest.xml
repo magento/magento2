@@ -13,7 +13,7 @@
             <stories value="Delete Stock"/>
             <title value="Cannot Delete Stock from Stock Edit Page when Sales Channel assigned"/>
             <description value="You should not be able to delete a Stock fro Stock Edit Page when a Sales Channel is assigned."/>
-            <testCaseId value="MSI-950"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/409123/scenarios/1413534"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

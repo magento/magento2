@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Unassign source to products"/>
             <title value="Admin user apply to different types of products mass action 'Unassign product sources' on Products grid to unassign all assigned sources"/>
-            <description value="You should be able to unassign sources from different types of products via mass action"/>
-            <testCaseId value="MSI-1497"/>
+            <description value="You should be able to unassign sources from different types of products via mass action."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/611878/scenarios/2085675"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

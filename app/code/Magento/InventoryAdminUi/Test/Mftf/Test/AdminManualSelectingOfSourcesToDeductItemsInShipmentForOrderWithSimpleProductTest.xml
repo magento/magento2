@@ -13,7 +13,7 @@
             <stories value="Source Selection"/>
             <title value="Manual selecting of sources to deduct items in Shipment for order with Simple product in Admin"/>
             <description value="You should be able to manually select the Sources to deduct when Shipment is created."/>
-            <testCaseId value="MSI-1127"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735286/scenarios/1624660"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

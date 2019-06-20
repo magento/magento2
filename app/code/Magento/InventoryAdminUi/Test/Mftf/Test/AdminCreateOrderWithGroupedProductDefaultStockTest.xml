@@ -13,7 +13,7 @@
             <stories value="Create order with grouped product on default stock from admin area."/>
             <title value="Create order with grouped product on default stock from admin area"/>
             <description value="Check, admin user able to create order with grouped product on default stock from admin area."/>
-            <testCaseId value="MSI-1319"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419537/scenarios/1444744"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Add Bundled Product"/>
             <title value="Bundle Product on Single stock mode created by Admin user"/>
-            <description value="Bundle Product on Single stock mode created by Admin user"/>
-            <testCaseId value="MSI-1774"/>
+            <description value="Bundle Product on Single stock mode created by Admin user."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/912249/scenarios/1428567"/>
             <severity value="MAJOR"/>
             <group value="msi"/>
             <group value="single_mode"/>

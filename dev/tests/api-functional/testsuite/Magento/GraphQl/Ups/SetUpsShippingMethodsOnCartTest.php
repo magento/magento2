@@ -7,32 +7,55 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Ups;
 
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for setting "UPS" shipping method on cart
+ * Test for setting "UPS" shipping method on cart. Current class covers the next UPS shipping methods:
+ *
+ * | Code      | Label
+ * --------------------------------------
+ * | 1DM       | Next Day Air Early AM
+ * | 1DA       | Next Day Air
+ * | 2DA       | 2nd Day Air
+ * | 3DS       | 3 Day Select
+ * | GND       | Ground
+ * | STD       | Canada Standard
+ * | XPR       | Worldwide Express
+ * | WXS       | Worldwide Express Saver
+ * | XDM       | Worldwide Express Plus
+ * | XPD       | Worldwide Expedited
+ *
+ * Current class does not cover these UPS shipping methods (depends on address and sandbox settings)
+ *
+ * | Code      | Label
+ * --------------------------------------
+ * | 1DML      | Next Day Air Early AM Letter
+ * | 1DAL      | Next Day Air Letter
+ * | 1DAPI     | Next Day Air Intra (Puerto Rico)
+ * | 1DP       | Next Day Air Saver
+ * | 1DPL      | Next Day Air Saver Letter
+ * | 2DM       | 2nd Day Air AM
+ * | 2DML      | 2nd Day Air AM Letter
+ * | 2DAL      | 2nd Day Air Letter
+ * | GNDCOM    | Ground Commercial
+ * | GNDRES    | Ground Residential
+ * | XPRL      | Worldwide Express Letter
+ * | XDML      | Worldwide Express Plus Letter
  */
 class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
 {
     /**
+     * Defines carrier label for "UPS" shipping method
+     */
+    const CARRIER_LABEL = 'United Parcel Service';
+
+    /**
      * Defines carrier code for "UPS" shipping method
      */
     const CARRIER_CODE = 'ups';
-
-    /**
-     * Defines method code for the "Ground" UPS shipping
-     */
-    const CARRIER_METHOD_CODE_GROUND = 'GND';
-
-    /**
-     * @var QuoteFactory
-     */
-    private $quoteFactory;
 
     /**
      * @var CustomerTokenServiceInterface
@@ -40,14 +63,9 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
-     * @var QuoteResource
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $quoteResource;
-
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
      * @inheritdoc
@@ -55,52 +73,130 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Ups/_files/enable_ups_shipping_method.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
+     *
+     * @dataProvider dataProviderShippingMethods
+     * @param string $methodCode
+     * @param string $methodLabel
      */
-    public function testSetUpsShippingMethod()
+    public function testSetUpsShippingMethod(string $methodCode, string $methodLabel)
     {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
-        $shippingAddressId = (int)$quote->getShippingAddress()->getId();
+        $quoteReservedId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
 
-        $query = $this->getAddUpsShippingMethodQuery(
-            $maskedQuoteId,
-            $shippingAddressId,
-            self::CARRIER_CODE,
-            self::CARRIER_METHOD_CODE_GROUND
-        );
-
+        $query = $this->getQuery($maskedQuoteId, self::CARRIER_CODE, $methodCode);
         $response = $this->sendRequestWithToken($query);
-        $addressesInformation = $response['setShippingMethodsOnCart']['cart']['shipping_addresses'];
-        $expectedResult = [
-            'carrier_code' => self::CARRIER_CODE,
-            'method_code' => self::CARRIER_METHOD_CODE_GROUND,
-            'label' => 'United Parcel Service - Ground',
+
+        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
+        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
+        self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+
+        $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
+
+        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(self::CARRIER_CODE, $shippingAddress['selected_shipping_method']['carrier_code']);
+
+        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
+
+        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(
+            self::CARRIER_LABEL . ' - ' . $methodLabel,
+            $shippingAddress['selected_shipping_method']['label']
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderShippingMethods(): array
+    {
+        return [
+            'Next Day Air Early AM' => ['1DM', 'Next Day Air Early AM'],
+            'Next Day Air' => ['1DA', 'Next Day Air'],
+            '2nd Day Air' => ['2DA', '2nd Day Air'],
+            '3 Day Select' => ['3DS', '3 Day Select'],
+            'Ground' => ['GND', 'Ground'],
         ];
-        self::assertEquals($addressesInformation[0]['selected_shipping_method'], $expectedResult);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
+     *
+     * @dataProvider dataProviderShippingMethodsBasedOnCanadaAddress
+     * @param string $methodCode
+     * @param string $methodLabel
+     */
+    public function testSetUpsShippingMethodBasedOnCanadaAddress(string $methodCode, string $methodLabel)
+    {
+        $quoteReservedId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
+
+        $query = $this->getQuery($maskedQuoteId, self::CARRIER_CODE, $methodCode);
+        $response = $this->sendRequestWithToken($query);
+
+        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
+        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
+        self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+
+        $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
+
+        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(self::CARRIER_CODE, $shippingAddress['selected_shipping_method']['carrier_code']);
+
+        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
+
+        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(
+            self::CARRIER_LABEL . ' - ' . $methodLabel,
+            $shippingAddress['selected_shipping_method']['label']
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderShippingMethodsBasedOnCanadaAddress(): array
+    {
+        return [
+            'Canada Standard' => ['STD', 'Canada Standard'],
+            'Worldwide Express' => ['XPR', 'Worldwide Express'],
+            'Worldwide Express Saver' => ['WXS', 'Worldwide Express Saver'],
+            'Worldwide Express Plus' => ['XDM', 'Worldwide Express Plus'],
+            'Worldwide Expedited' => ['XPD', 'Worldwide Expedited'],
+        ];
     }
 
     /**
      * Generates query for setting the specified shipping method on cart
      *
-     * @param int $shippingAddressId
      * @param string $maskedQuoteId
      * @param string $carrierCode
      * @param string $methodCode
      * @return string
      */
-    private function getAddUpsShippingMethodQuery(
+    private function getQuery(
         string $maskedQuoteId,
-        int $shippingAddressId,
         string $carrierCode,
         string $methodCode
     ): string {
@@ -110,7 +206,6 @@ mutation {
     cart_id: "$maskedQuoteId"
     shipping_methods: [
       {
-        cart_address_id: $shippingAddressId
         carrier_code: "$carrierCode"
         method_code: "$methodCode"
       }

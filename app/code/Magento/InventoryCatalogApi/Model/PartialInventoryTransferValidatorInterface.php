@@ -10,6 +10,11 @@ namespace Magento\InventoryCatalogApi\Model;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferItemInterface;
 
+/**
+ * Validator for Partial Inventory transfer API.
+ *
+ * @api
+ */
 interface PartialInventoryTransferValidatorInterface
 {
     /**

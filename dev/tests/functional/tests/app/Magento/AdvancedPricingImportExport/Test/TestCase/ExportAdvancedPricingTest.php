@@ -140,9 +140,9 @@ class ExportAdvancedPricingTest extends Injectable
         if ($website) {
             $website->persist();
             $this->setupCurrencyForCustomWebsite($website, $currencyCustomWebsite);
-            $this->cron->run();
-            $this->cron->run();
         }
+        $this->cron->run();
+        $this->cron->run();
         $products = $this->prepareProducts($products, $website);
         $this->cron->run();
         $this->cron->run();
@@ -165,7 +165,8 @@ class ExportAdvancedPricingTest extends Injectable
         if (!empty($advancedPricingAttributes)) {
             $products = [$products[0]];
         }
-
+        $this->cron->run();
+        $this->cron->run();
         return [
             'products' => $products
         ];

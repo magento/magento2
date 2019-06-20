@@ -73,6 +73,20 @@
         <data key="used_for_sort_by">false</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
+    <entity name="hiddenDropdownAttributeWithOptions" extends="productAttributeWithTwoOptions">
+        <data key="is_searchable">false</data>
+        <data key="is_visible_in_advanced_search">false</data>
+        <data key="is_visible_on_front">false</data>
+        <data key="is_filterable">false</data>
+        <data key="is_filterable_in_search">false</data>
+        <data key="used_in_product_listing">false</data>
+        <data key="is_used_for_promo_rules">false</data>
+        <data key="is_comparable">false</data>
+        <data key="is_used_in_grid">false</data>
+        <data key="is_visible_in_grid">false</data>
+        <data key="is_filterable_in_grid">false</data>
+        <data key="used_for_sort_by">false</data>
+    </entity>
     <entity name="productDropDownAttribute" type="ProductAttribute">
         <data key="attribute_code" unique="suffix">attribute</data>
         <data key="frontend_input">select</data>

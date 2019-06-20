@@ -13,7 +13,7 @@
             <stories value="Delete Stock"/>
             <title value="Delete all Stocks from Stock Grid"/>
             <description value="You should be able to Delete all Stocks from the Grid except Default if it does NOT have a Sales Channel assigned."/>
-            <testCaseId value="MSI-858"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/910527/scenarios/1408751"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

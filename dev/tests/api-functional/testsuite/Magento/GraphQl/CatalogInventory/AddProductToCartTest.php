@@ -7,31 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\CatalogInventory;
 
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 
 /**
- * Test for adding products to cart
+ * Add simple product to cart testcases related to inventory
  */
 class AddProductToCartTest extends GraphQlAbstract
 {
     /**
-     * @var QuoteResource
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $quoteResource;
-
-    /**
-     * @var QuoteFactory
-     */
-    private $quoteFactory;
-
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
      * @inheritdoc
@@ -39,9 +27,7 @@ class AddProductToCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
     }
 
     /**
@@ -54,11 +40,10 @@ class AddProductToCartTest extends GraphQlAbstract
     {
         $sku = 'simple';
         $qty = 200;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
-        $maskedQuoteId = $this->getMaskedQuoteId();
-        $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
+        $query = $this->getQuery($maskedQuoteId, $sku, $qty);
         $this->graphQlMutation($query);
-        self::fail('Should be "The requested qty is not available" error message.');
     }
 
     /**
@@ -74,31 +59,53 @@ class AddProductToCartTest extends GraphQlAbstract
 
         $sku = 'custom-design-simple-product';
         $qty = 7;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
-        $maskedQuoteId = $this->getMaskedQuoteId();
-        $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
+        $query = $this->getQuery($maskedQuoteId, $sku, $qty);
         $this->graphQlMutation($query);
-        self::fail('Should be "The most you may purchase is 5." error message.');
     }
 
     /**
-     * @return string
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Please enter a number greater than 0 in this field.
      */
-    public function getMaskedQuoteId() : string
+    public function testAddSimpleProductToCartWithNegativeQty()
     {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
+        $sku = 'simple';
+        $qty = -2;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
+        $query = $this->getQuery($maskedQuoteId, $sku, $qty);
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     */
+    public function testAddProductIfQuantityIsDecimal()
+    {
+        $sku = 'simple_product';
+        $qty = 0.2;
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $sku, $qty);
+
+        $this->expectExceptionMessage(
+            "Could not add the product with SKU {$sku} to the shopping cart: The fewest you may purchase is 1"
+        );
+        $this->graphQlMutation($query);
     }
 
     /**
      * @param string $maskedQuoteId
      * @param string $sku
-     * @param int $qty
+     * @param float $qty
      * @return string
      */
-    public function getAddSimpleProductQuery(string $maskedQuoteId, string $sku, int $qty) : string
+    private function getQuery(string $maskedQuoteId, string $sku, float $qty) : string
     {
         return <<<QUERY
 mutation {  

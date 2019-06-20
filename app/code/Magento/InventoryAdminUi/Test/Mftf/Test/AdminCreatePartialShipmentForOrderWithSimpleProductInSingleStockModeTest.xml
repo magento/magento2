@@ -13,7 +13,7 @@
             <stories value="Sales-Shipments"/>
             <title value="Admin user created partial shipment for order placed from Main website with Simple product in Single Stock mode"/>
             <description value="You should be able to create partial shipment in Single Stock mode."/>
-            <testCaseId value="MSI-1145"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/913950/scenarios/1841183"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>

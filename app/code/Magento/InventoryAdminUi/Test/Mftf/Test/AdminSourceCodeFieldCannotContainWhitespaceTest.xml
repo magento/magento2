@@ -13,7 +13,7 @@
             <stories value="Field Validation"/>
             <title value="Source Code cannot contain Whitespace"/>
             <description value="You should NOT be able to Save a Source with a Source Code that contains Whitespace."/>
-            <testCaseId value="MSI-939"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/409122/scenarios/1570706"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Add Downloadable Product"/>
             <title value="Downloadable Product created with Default Source assigned by Admin user"/>
-            <description value="Downloadable Product created with Default Source assigned by Admin user"/>
-            <testCaseId value="MSI-1749"/>
+            <description value="Downloadable Product created with Default Source assigned by Admin user."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457024/scenarios/1436947"/>
             <severity value="MAJOR"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -61,7 +61,8 @@
 
         <comment userInput="Assign category to product." stepKey="assignCategoryComment"/>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$simpleCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory"/>
-
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="In Stock" stepKey="selectStockStatus" />
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillDefaultSourceQtyField"/>
         <click selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="openDownloadableSection1"/>
         <checkOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkIsDownloadable1"/>
         <fillField userInput="{{downloadableData.link_title}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="fillDownloadableLinkTitle1"/>

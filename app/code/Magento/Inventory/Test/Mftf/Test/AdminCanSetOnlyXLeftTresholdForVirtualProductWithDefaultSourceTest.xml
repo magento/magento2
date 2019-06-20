@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Admin user apply 'Only X left Threshold' for Virtual product on Default source"/>
             <title value="Admin user apply 'Only X left Threshold' for Virtual product on Default source"/>
-            <description value="Admin user apply 'Only X left Threshold' for Virtual product on Default source"/>
-            <testCaseId value="MSI-1501"/>
+            <description value="Admin user apply 'Only X left Threshold' for Virtual product on Default source."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457015/scenarios/2075942"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -64,6 +64,7 @@
             <argument name="filter_value" value="$$virtualProduct1.product[sku]$$"/>
         </actionGroup>
 
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="In Stock" stepKey="selectStockStatus" />
         <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="10" stepKey="fillSourceQuantityField1"/>
 
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>

@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Transfer inventory to source"/>
             <title value="Admin user apply to different types of products mass action 'Transfer Inventory To Source' on Products grid"/>
-            <description value="You should be able to transfer inventory to source via mass action on products grid"/>
-            <testCaseId value="MSI-1516"/>
+            <description value="You should be able to transfer inventory to source via mass action on products grid."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/611878/scenarios/2089317"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -61,6 +61,7 @@
             <click selector="{{AdminGridRow.editByValue($$createDownloadableProduct.product[sku]$$)}}" stepKey="clickOnEditDownloadableProductForCheckInStock"/>
             <comment userInput="Assign category to product." stepKey="assignCategoryComment"/>
             <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" requiredAction="true" stepKey="searchAndSelectCategory"/>
+            <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="In Stock" stepKey="selectStockStatus" />
             <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="1000" stepKey="fillSourceQuantityField"/>
             <comment userInput="Add downloadable links to product." stepKey="addDownloadableLinks"/>
             <click selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="openDownloadableSection"/>

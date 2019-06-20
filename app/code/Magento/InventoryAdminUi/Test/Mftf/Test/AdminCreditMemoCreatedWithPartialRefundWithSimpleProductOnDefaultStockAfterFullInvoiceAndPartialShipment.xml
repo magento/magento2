@@ -12,11 +12,14 @@
         <annotations>
             <stories value="MSI Credit Memo"/>
             <title value="Credit Memo created with partial refund with Simple product on Default stock after full invoice and partial shipment"/>
-            <description value="Credit Memo created with partial refund with Simple product on Default stock after full invoice and partial shipment"/>
-            <testCaseId value="MSI-1976"/>
+            <description value="Credit Memo created with partial refund with Simple product on Default stock after full invoice and partial shipment."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735125/scenarios/2482675"/>
             <severity value="BLOCKER"/>
             <group value="msi"/>
             <group value="multi_mode"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
 
         <before>
@@ -27,13 +30,26 @@
                 <requiredEntity createDataKey="createStock"/>
                 <requiredEntity createDataKey="createSource"/>
             </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <waitForPageLoad stepKey="waitForDashboardLoad"/>
+
+            <comment userInput="Assign main website to default stock" stepKey="assignChannelToStockComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPageToAssignMainWebsiteToDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByNameForAssignMainWebsiteChannel">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForDefaultStockPageLoaded"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
             <createData entity="SimpleProduct" stepKey="simpleProduct">
                 <field key="qty">100.00</field>
                 <requiredEntity createDataKey="simpleCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <waitForPageLoad stepKey="waitForDashboardLoad"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>

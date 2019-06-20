@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Admin user set for Product stock status for each Source"/>
             <title value="Admin user set for Product stock status for each Source"/>
-            <description value="Admin user set for Product stock status for each Source"/>
-            <testCaseId value="MSI-860"/>
+            <description value="Admin user set for Product stock status for each Source."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/911726/scenarios/1408759"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -83,10 +83,15 @@
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$simpleCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory1"/>
 
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="In Stock" stepKey="selectStockStatusSource1" />
         <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillCustomSource1QtyField"/>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('1')}}" userInput="In Stock" stepKey="selectStockStatusSource2" />
         <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillCustomSource2QtyField"/>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('2')}}" userInput="In Stock" stepKey="selectStockStatusSource3" />
         <fillField selector="{{AdminProductSourcesGrid.rowQty('2')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillCustomSource3QtyField"/>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('3')}}" userInput="In Stock" stepKey="selectStockStatusSource4" />
         <fillField selector="{{AdminProductSourcesGrid.rowQty('3')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillCustomSource4QtyField"/>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('4')}}" userInput="In Stock" stepKey="selectStockStatusSource5" />
         <fillField selector="{{AdminProductSourcesGrid.rowQty('4')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillCustomSource5QtyField"/>
 
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseSimpleProduct"/>

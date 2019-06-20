@@ -149,6 +149,7 @@ class InvoiceService implements InvoiceManagementInterface
      */
     public function prepareInvoice(Order $order, array $qtys = [])
     {
+        $isQtysEmpty = empty($qtys);
         $invoice = $this->orderConverter->toInvoice($order);
         $totalQty = 0;
         $qtys = $this->prepareItemsQty($order, $qtys);
@@ -161,7 +162,7 @@ class InvoiceService implements InvoiceManagementInterface
                 $qty = (double) $qtys[$orderItem->getId()];
             } elseif ($orderItem->isDummy()) {
                 $qty = $orderItem->getQtyOrdered() ? $orderItem->getQtyOrdered() : 1;
-            } elseif (empty($qtys)) {
+            } elseif ($isQtysEmpty) {
                 $qty = $orderItem->getQtyToInvoice();
             } else {
                 $qty = 0;

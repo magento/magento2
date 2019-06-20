@@ -9,8 +9,12 @@ namespace Magento\InventoryImportExport\Test\Integration\Model\Import;
 
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\ImportExport\Model\ResourceModel\Import\Data as ImportData;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
@@ -18,6 +22,10 @@ use Magento\InventoryImportExport\Model\Import\Sources;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @inheritDoc
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SourcesTest extends TestCase
 {
     /**
@@ -45,6 +53,14 @@ class SourcesTest extends TestCase
      */
     private $importDataMock;
 
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         $this->importDataMock = $this->getMockBuilder(ImportData::class)
@@ -54,6 +70,9 @@ class SourcesTest extends TestCase
         $this->importer = Bootstrap::getObjectManager()->create(Sources::class, [
             'importData' => $this->importDataMock
         ]);
+        $this->filesystem = Bootstrap::getObjectManager()->get(
+            Filesystem::class
+        );
 
         $this->sourceItemRepository = Bootstrap::getObjectManager()->create(SourceItemRepositoryInterface::class);
         $this->sourceRepository = Bootstrap::getObjectManager()->create(SourceRepositoryInterface::class);
@@ -98,8 +117,9 @@ class SourcesTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      *
      * @magentoDbIsolation disabled
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/908874/scenarios/1408728
      */
-    public function testImportDataWithAppendBehavior()
+    public function testImportDataWithAppendBehavior(): void
     {
         $this->importer->setParameters([
             'behavior' => Import::BEHAVIOR_APPEND
@@ -128,10 +148,11 @@ class SourcesTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/908874/scenarios/1408729
      *
      * @magentoDbIsolation disabled
      */
-    public function testImportDataWithDelteBehavior()
+    public function testImportDataWithDeleteBehavior()
     {
         $this->importer->setParameters([
             'behavior' => Import::BEHAVIOR_DELETE
@@ -157,6 +178,7 @@ class SourcesTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/908874/scenarios/1465149
      *
      * @magentoDbIsolation disabled
      */
@@ -188,6 +210,7 @@ class SourcesTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      *
      * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
      */
     public function testImportDataWithReplaceBehaviorNoAffectOtherSources()
     {
@@ -212,6 +235,219 @@ class SourcesTest extends TestCase
 
         $this->assertArrayHasKey('eu-2-SKU-1', $afterImportData);
         $this->assertArrayHasKey('us-1-SKU-2', $afterImportData);
+    }
+
+    /**
+     * Verify sample file import with Add/Update behaviour.
+     *
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryImportExport/Test/_files/products_sample_file.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryImportExport/Test/_files/sources_sample_file.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryImportExport/Test/_files/source_items_sample_file.php
+     * @param array $expectedData
+     * @dataProvider getSampleFileExpectedData()
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/908874/scenarios/1418539
+     */
+    public function testAddUpdateWithSampleFile(array $expectedData): void
+    {
+        $importer = $this->getImporter(Import::BEHAVIOR_APPEND);
+        $errors = $importer->validateData();
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $importer->importData();
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter(
+            SourceItemInterface::SOURCE_CODE,
+            ['source-1', 'source-2', 'default'],
+            'in'
+        )->addFilter(
+            SourceItemInterface::SKU,
+            ['sku1', 'sku2', 'sku3', 'sku4'],
+            'in'
+        )->create();
+        $actualData = $this->getSourceItemList($searchCriteria);
+        $this->assertEquals($expectedData, $actualData);
+    }
+
+    /**
+     * Verify sample file import with Replace behaviour.
+     *
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryImportExport/Test/_files/products_sample_file.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryImportExport/Test/_files/sources_sample_file.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryImportExport/Test/_files/source_items_sample_file.php
+     * @param array $expectedData
+     * @dataProvider getSampleFileExpectedData()
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/908874/scenarios/1465136
+     */
+    public function testReplaceWithSampleFile(array $expectedData): void
+    {
+        $importer = $this->getImporter(Import::BEHAVIOR_REPLACE);
+        $errors = $importer->validateData();
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $importer->importData();
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter(
+            SourceItemInterface::SOURCE_CODE,
+            ['source-1', 'source-2', 'default'],
+            'in'
+        )->addFilter(
+            SourceItemInterface::SKU,
+            ['sku1', 'sku2', 'sku3', 'sku4'],
+            'in'
+        )->create();
+        $actualData = $this->getSourceItemList($searchCriteria);
+        $this->assertEquals($expectedData, $actualData);
+    }
+
+    /**
+     * Provides test data for Add/Update and Replace import test with sample file.
+     *
+     * @return array
+     */
+    public function getSampleFileExpectedData(): array
+    {
+        return [
+            [
+                [
+                    'default-sku1' => [
+                        'source_code' => 'default',
+                        'sku' => 'sku1',
+                        'quantity' => 10.1,
+                        'status' => 1,
+                    ],
+                    'default-sku2' => [
+                        'source_code' => 'default',
+                        'sku' => 'sku2',
+                        'quantity' => 10.55,
+                        'status' => 1,
+                    ],
+                    'default-sku3' => [
+                        'source_code' => 'default',
+                        'sku' => 'sku3',
+                        'quantity' => 100.0,
+                        'status' => 1,
+                    ],
+                    'default-sku4' => [
+                        'source_code' => 'default',
+                        'sku' => 'sku4',
+                        'quantity' => 100.0,
+                        'status' => 1,
+                    ],
+                    'source-1-sku1' => [
+                        'source_code' => 'source-1',
+                        'sku' => 'sku1',
+                        'quantity' => 100.0,
+                        'status' => 1,
+                    ],
+                    'source-1-sku2' => [
+                        'source_code' => 'source-1',
+                        'sku' => 'sku2',
+                        'quantity' => 100.0,
+                        'status' => 1,
+                    ],
+                    'source-2-sku1' => [
+                        'source_code' => 'source-2',
+                        'sku' => 'sku1',
+                        'quantity' => 100.0,
+                        'status' => 1,
+                    ],
+                    'source-2-sku2' => [
+                        'source_code' => 'source-2',
+                        'sku' => 'sku2',
+                        'quantity' => 100.0,
+                        'status' => 1,
+                    ],
+                    'source-1-sku3' => [
+                        'source_code' => 'source-1',
+                        'sku' => 'sku3',
+                        'quantity' => 10.0,
+                        'status' => 1,
+                    ],
+                    'source-2-sku4' => [
+                        'source_code' => 'source-2',
+                        'sku' => 'sku4',
+                        'quantity' => 15.0,
+                        'status' => 1,
+                    ],
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Verify sample file import with Delete behaviour.
+     *
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryImportExport/Test/_files/products_sample_file.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryImportExport/Test/_files/sources_sample_file.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryImportExport/Test/_files/source_items_sample_file.php
+     * @param array $expectedData
+     * @dataProvider getSampleFileExpectedDataDeleteBehavior()
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/908874/scenarios/1465136
+     */
+    public function testDeleteWithSampleFile(array $expectedData): void
+    {
+        $importer = $this->getImporter(Import::BEHAVIOR_DELETE);
+        $errors = $importer->validateData();
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $importer->importData();
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter(
+            SourceItemInterface::SOURCE_CODE,
+            ['source-1', 'source-2', 'default'],
+            'in'
+        )->addFilter(
+            SourceItemInterface::SKU,
+            ['sku1', 'sku2', 'sku3', 'sku4'],
+            'in'
+        )->create();
+        $actualData = $this->getSourceItemList($searchCriteria);
+        $this->assertEquals($expectedData, $actualData);
+    }
+
+    /**
+     * Provides test data for Delete import test with sample file.
+     *
+     * @return array
+     */
+    public function getSampleFileExpectedDataDeleteBehavior(): array
+    {
+        return [
+            [
+                [
+                    'default-sku3' => [
+                        'source_code' => 'default',
+                        'sku' => 'sku3',
+                        'quantity' => 100.0,
+                        'status' => 1,
+                    ],
+                    'default-sku4' => [
+                        'source_code' => 'default',
+                        'sku' => 'sku4',
+                        'quantity' => 100.0,
+                        'status' => 1,
+                    ],
+                    'source-1-sku1' => [
+                        'source_code' => 'source-1',
+                        'sku' => 'sku1',
+                        'quantity' => 100.0,
+                        'status' => 1,
+                    ],
+                    'source-1-sku2' => [
+                        'source_code' => 'source-1',
+                        'sku' => 'sku2',
+                        'quantity' => 100.0,
+                        'status' => 1,
+                    ],
+                    'source-2-sku1' => [
+                        'source_code' => 'source-2',
+                        'sku' => 'sku1',
+                        'quantity' => 100.0,
+                        'status' => 1,
+                    ],
+                    'source-2-sku2' => [
+                        'source_code' => 'source-2',
+                        'sku' => 'sku2',
+                        'quantity' => 100.0,
+                        'status' => 1,
+                    ],
+                ]
+            ]
+        ];
     }
 
     /**
@@ -290,5 +526,31 @@ class SourcesTest extends TestCase
             ->will($this->onConsecutiveCalls($bunch, false));
 
         $this->importer->importData();
+    }
+
+    /**
+     * Get source importer for sample file.
+     *
+     * @param string $behavior
+     * @return Sources
+     */
+    private function getImporter(string $behavior): Sources
+    {
+        $pathToFile = __DIR__ . '/_files/sample.csv';
+        $importer = Bootstrap::getObjectManager()->create(Sources::class);
+        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = Bootstrap::getObjectManager()->create(
+            Csv::class,
+            [
+                'file' => $pathToFile,
+                'directory' => $directory
+            ]
+        );
+        $importer->setParameters([
+            'behavior' => $behavior
+        ]);
+        $importer->setSource($source);
+
+        return $importer;
     }
 }

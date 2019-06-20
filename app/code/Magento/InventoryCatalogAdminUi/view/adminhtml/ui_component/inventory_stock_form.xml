@@ -15,9 +15,7 @@
                     template="Magento_InventoryCatalogAdminUi/stock/assign-sources/button.html"/>
         </container>
         <dynamicRows name="assigned_sources">
-            <container name="record" class="Magento\InventoryCatalogAdminUi\Ui\Component\AssignSources\Record">
-                <field name="actionDelete" template="Magento_InventoryCatalogAdminUi/stock/assign-sources/action-delete.html"/>
-            </container>
+            <container name="record" class="Magento\InventoryCatalogAdminUi\Ui\Component\AssignSources\Record" />
         </dynamicRows>
     </fieldset>
 </form>

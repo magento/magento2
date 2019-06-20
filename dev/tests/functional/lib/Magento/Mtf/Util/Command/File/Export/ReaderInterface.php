@@ -14,7 +14,7 @@ interface ReaderInterface
     /**
      * Url to export.php.
      */
-    const URL = '/dev/tests/functional/utils/export.php';
+    const URL = 'dev/tests/functional/utils/export.php';
 
     /**
      * Exporting files as Data object from Magento.

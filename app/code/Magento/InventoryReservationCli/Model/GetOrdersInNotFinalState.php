@@ -29,15 +29,23 @@ class GetOrdersInNotFinalState
     private $searchCriteriaBuilder;
 
     /**
+     * @var GetCompleteOrderStatusList
+     */
+    private $getCompleteOrderStatusList;
+
+    /**
      * @param OrderRepositoryInterface $orderRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param GetCompleteOrderStatusList $getCompleteOrderStatusList
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        GetCompleteOrderStatusList $getCompleteOrderStatusList
     ) {
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->getCompleteOrderStatusList = $getCompleteOrderStatusList;
     }
 
     /**
@@ -49,11 +57,7 @@ class GetOrdersInNotFinalState
     {
         /** @var SearchCriteriaInterface $filter */
         $filter = $this->searchCriteriaBuilder
-            ->addFilter('state', [
-                Order::STATE_COMPLETE,
-                Order::STATE_CLOSED,
-                Order::STATE_CANCELED
-            ], 'nin')
+            ->addFilter('state', $this->getCompleteOrderStatusList->execute(), 'nin')
             ->create();
 
         $orderSearchResult = $this->orderRepository->getList($filter);

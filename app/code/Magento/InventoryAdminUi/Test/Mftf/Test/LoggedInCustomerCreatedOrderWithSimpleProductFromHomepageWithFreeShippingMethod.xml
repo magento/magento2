@@ -1,0 +1,26 @@
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="LoggedInCustomerCreatedOrderWithSimpleProductFromHomepageWithFreeShippingMethod" extends="LoggedInCustomerCreatedOrderWithSimpleProductOnTestStockFromHomepage">
+        <annotations>
+            <stories value="Logged In Customer created Order with Simple product from Homepage with Free Shipping method"/>
+            <title value="Logged In Customer created Order with Simple product from Homepage with Free Shipping method"/>
+            <description value=""/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419534/scenarios/1408757"/>
+            <severity value="BLOCKER"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <magentoCLI stepKey="enableFreeShipping" command="config:set carriers/freeshipping/active 1" before="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="disableFreeShipping" command="config:set carriers/freeshipping/active 0" after="logoutOfAdmin"/>
+        </after>
+
+        <!--Free shipping-->
+        <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Free Shipping')}}" stepKey="selectFlatShippingMethod" after="waitForPaymentSelectionPageLoad" />
+        <!--End Free shipping-->
+
+    </test>
+</tests>
