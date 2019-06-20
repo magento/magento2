@@ -208,51 +208,6 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/disable_guest_checkout.php
-     * @magentoConfigFixture default_store checkout/options/guest_checkout 0
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Guest checkout is not allowed. Register a customer account or login with existing one.
-     */
-    public function testSetBillingAddressToGuestCustomerCart()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-
-        $query = <<<QUERY
-mutation {
-  setBillingAddressOnCart(
-    input: {
-      cart_id: "$maskedQuoteId"
-      billing_address: {
-        address: {
-          firstname: "test firstname"
-          lastname: "test lastname"
-          company: "test company"
-          street: ["test street 1", "test street 2"]
-          city: "test city"
-          region: "test region"
-          postcode: "887766"
-          country_code: "US"
-          telephone: "88776655"
-          save_in_address_book: false
-        }
-      }
-    }
-  ) {
-    cart {
-      billing_address {
-        city
-      }
-    }
-  }
-}
-QUERY;
-
-        $this->graphQlMutation($query);
-    }
-
-    /**
      * _security
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php

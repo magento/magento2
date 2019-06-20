@@ -43,7 +43,7 @@ class CheckCartCheckoutAllowance
             return;
         }
 
-        $isAllowedGuestCheckout = $this->checkoutHelper->isAllowedGuestCheckout($quote);
+        $isAllowedGuestCheckout = (bool)$this->checkoutHelper->isAllowedGuestCheckout($quote);
         if (false === $isAllowedGuestCheckout) {
             throw new GraphQlAuthorizationException(
                 __(

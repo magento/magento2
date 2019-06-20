@@ -73,6 +73,7 @@ class PlaceOrder implements ResolverInterface
         $maskedCartId = $args['input']['cart_id'];
 
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $this->checkCartCheckoutAllowance->execute($cart);
 
         if ($context->getUserId() === 0) {
             if (!$cart->getCustomerEmail()) {
@@ -83,7 +84,6 @@ class PlaceOrder implements ResolverInterface
 
         try {
             $orderId = $this->cartManagement->placeOrder($cart->getId());
-            $this->checkCartCheckoutAllowance->execute($cart);
             $order = $this->orderRepository->get($orderId);
 
             return [
