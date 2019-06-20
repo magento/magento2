@@ -91,7 +91,7 @@ class SiblingSkuListInStockProvider
         $sourceItemTable = $this->resourceConnection->getTableName($this->tableNameSourceItem);
 
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        $linkField = $metadata->getLinkField();
+        $linkField = $metadata->getIdentifierField();
 
         $select = $connection
             ->select()
