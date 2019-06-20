@@ -23,6 +23,11 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 
+/**
+ * {@inheritDoc}
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @see https://app.hiptest.com/projects/69435/test-plan/folders/908874/scenarios/3042517
+ */
 class ExportStockIndexDataOnCustomStockTest extends WebapiAbstract
 {
     const API_PATH = '/V1/inventory/dump-stock-index-data';
@@ -40,8 +45,9 @@ class ExportStockIndexDataOnCustomStockTest extends WebapiAbstract
      */
     public function setUp()
     {
-      $this->objectManager = Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
     }
+
     /**
      * @return array
      */
@@ -100,7 +106,6 @@ class ExportStockIndexDataOnCustomStockTest extends WebapiAbstract
         self::assertEquals($expectedResult, count($res));
     }
 
-
     /**
      * Assign test products to additional website.
      *
@@ -158,17 +163,17 @@ class ExportStockIndexDataOnCustomStockTest extends WebapiAbstract
         $sourceItemFactory = Bootstrap::getObjectManager()->get(SourceItemInterfaceFactory::class);
         $sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::class);
         foreach ($skus as $sku) {
-        $sourceItemData = [
-            SourceItemInterface::SOURCE_CODE => $source,
-            SourceItemInterface::SKU => $sku,
-            SourceItemInterface::QUANTITY => 30,
-            SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
-        ];
-        $sourceItems = [];
-        $sourceItem = $sourceItemFactory->create();
-        $dataObjectHelper->populateWithArray($sourceItem, $sourceItemData, SourceItemInterface::class);
-        $sourceItems[] = $sourceItem;
-        $sourceItemsSave->execute($sourceItems);
+            $sourceItemData = [
+                SourceItemInterface::SOURCE_CODE => $source,
+                SourceItemInterface::SKU => $sku,
+                SourceItemInterface::QUANTITY => 30,
+                SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
+            ];
+            $sourceItems = [];
+            $sourceItem = $sourceItemFactory->create();
+            $dataObjectHelper->populateWithArray($sourceItem, $sourceItemData, SourceItemInterface::class);
+            $sourceItems[] = $sourceItem;
+            $sourceItemsSave->execute($sourceItems);
         }
     }
 }

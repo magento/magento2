@@ -26,11 +26,15 @@ use Magento\Quote\Api\Data\AddressInterfaceFactory;
 use Magento\Store\Model\StoreRepository;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * {@inheritDoc}
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @see https://app.hiptest.com/projects/69435/test-plan/folders/908874/scenarios/3042336
+ */
 class ExportStockIndexDataTestStockTestWebsiteReservationsTest extends WebapiAbstract
 {
     const API_PATH = '/V1/inventory/dump-stock-index-data';
     const SERVICE_NAME = 'inventoryExportStockApiExportStockIndexDataV1';
-
     const EXPORT_PRODUCT_COUNT = 7;
 
     /**
@@ -51,6 +55,7 @@ class ExportStockIndexDataTestStockTestWebsiteReservationsTest extends WebapiAbs
         $this->objectManager = Bootstrap::getObjectManager();
         $this->parent = $this->objectManager->create(ExportStockIndexDataOnCustomStockTest::class);
     }
+
     /**
      * @return array
      */
@@ -130,7 +135,7 @@ class ExportStockIndexDataTestStockTestWebsiteReservationsTest extends WebapiAbs
             $cartItem = $this->getCartItem($product, $quoteItemQty, (int)$cart->getId());
             $cart->addItem($cartItem);
             Bootstrap::getObjectManager()->get(CartRepositoryInterface::class)->save($cart);
-          $orderIds[] = Bootstrap::getObjectManager()->get(CartManagementInterface::class)->placeOrder($cart->getId());
+            $orderIds[] = Bootstrap::getObjectManager()->get(CartManagementInterface::class)->placeOrder($cart->getId());
         }
         return $orderIds;
     }
@@ -144,14 +149,14 @@ class ExportStockIndexDataTestStockTestWebsiteReservationsTest extends WebapiAbs
     {
         $this->createQuote($key);
         $searchCriteria = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class)
-            ->addFilter('reserved_order_id', 'test_order_'.$key)
+            ->addFilter('reserved_order_id', 'test_order_' . $key)
             ->create();
         /** @var CartInterface $cart */
         $cart = current(Bootstrap::getObjectManager()->get(CartRepositoryInterface::class)
             ->getList($searchCriteria)
             ->getItems());
         $store = Bootstrap::getObjectManager()->get(StoreRepository::class)->get('store_for_us_website');
-        $cart->setReservedOrderId('test_order_'.$key);
+        $cart->setReservedOrderId('test_order_' . $key);
         Bootstrap::getObjectManager()->get(StoreManagerInterface::class)->setCurrentStore('store_for_us_website');
         $cart->setStoreId($store->getId());
 
