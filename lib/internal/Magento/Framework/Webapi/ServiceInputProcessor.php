@@ -160,6 +160,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 try {
                     $inputData[] = $this->convertValue($paramValue, $param[MethodsMap::METHOD_META_TYPE]);
                 } catch (SerializationException $e) {
+                } catch (SerializationException $e) {
                     throw new WebapiException(new Phrase($e->getMessage()));
                 }
             } else {

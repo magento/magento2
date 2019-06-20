@@ -281,11 +281,15 @@ class Generator
     }
 
     /**
-     * @param string $className
+     * @param string|null $className
      * @return bool
      */
-    private function isDto(string $className): bool
+    private function isDto(?string $className): bool
     {
+        if (empty($className)) {
+            return false;
+        }
+
         try {
             $dtoConfig = ObjectManager::getInstance()->get(DtoConfig::class);
         } catch (Exception $e) {
