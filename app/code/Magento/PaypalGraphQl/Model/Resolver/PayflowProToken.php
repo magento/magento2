@@ -14,7 +14,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Url\Validator as UrlValidator;
 use Magento\Checkout\Helper\Data as CheckoutHelper;
 use Magento\PaypalGraphQl\Model\Provider\Checkout as CheckoutProvider;
-use Magento\PaypalGraphQl\Model\Provider\Config as ConfigProvider;
+use Magento\Paypal\Model\Config as ConfigProvider;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\Paypal\Controller\Transparent\RequestSecureToken as RequestSecureTokenHelper;
 use Magento\Framework\Session\SessionManager;
@@ -25,7 +25,7 @@ use Magento\Paypal\Model\Payflow\Service\Request\SecureToken;
 /**
  * Resolver for generating Paypal token
  */
-class PayFlowProToken implements ResolverInterface
+class PayflowProToken implements ResolverInterface
 {
     /**
      * @var GetCartForUser
@@ -111,44 +111,21 @@ class PayFlowProToken implements ResolverInterface
         array $args = null
     ) {
         $cartId = $args['input']['cart_id'] ?? '';
-        $paymentCode = $args['input']['code'] ?? '';
         $customerId = $context->getUserId();
 
         $cart = $this->getCartForUser->execute($cartId, $customerId);
-        $config = $this->configProvider->getConfig($paymentCode);
-        $checkout = $this->checkoutProvider->getCheckout($config, $cart);
-
-        /** @var Quote $quote */
-        $quote = $this->sessionManager->getQuote();
-        $tokenDataObject = $this->secureTokenService->requestToken($quote);
-
-        if ($cart->getIsMultiShipping()) {
-            $cart->setIsMultiShipping(0);
-            $cart->removeAllAddresses();
-        }
-
-        if ($customerId) {
-            $checkout->setCustomerWithAddressChange(
-                $cart->getCustomer(),
-                $cart->getBillingAddress(),
-                $cart->getShippingAddress()
-            );
-        } else {
-            if (!$this->checkoutHelper->isAllowedGuestCheckout($cart)) {
-                throw new GraphQlInputException(__("Guest checkout is disabled."));
-            }
-        }
+        $tokenDataObject = $this->secureTokenService->requestToken($cart);
 
         if (!empty($args['input']['urls'])) {
             $this->validateUrls($args['input']['urls']);
         }
 
         return [
-            'secure_token' => $tokenDataObject->getData('secure_token'),
-            'secure_token_id' => $tokenDataObject->getData('secure_token_id'),
-            'response_message' => $tokenDataObject->getData('response_message'),
-            'result'=>$tokenDataObject->getData('result'),
-            'result_code' =>$tokenDataObject->getData('result_code')
+            'result'=> $tokenDataObject->getData("result"),
+            'secure_token' => $tokenDataObject->getData("securetoken"),
+            'secure_token_id' => $tokenDataObject->getData("securetokenid"),
+            'response_message' => $tokenDataObject->getData("respmsg"),
+            'result_code' =>$tokenDataObject->getData("result_code")
         ];
     }
 
