@@ -67,26 +67,6 @@ class GetAddressesTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/inactive_customer.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
-     * @expectedException Exception
-     * @expectedExceptionMessage The account sign-in was incorrect or your account is disabled temporarily.
-     */
-    public function testGetCustomerAddressIfAccountIsNotConfirmed()
-    {
-        $query = $this->getQuery();
-
-        $userName = 'customer@example.com';
-        $password = 'password';
-
-        $customerToken = $this->customerTokenService->createCustomerAccessToken($userName, $password);
-        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-
-        $this->graphQlQuery($query, [], '', $headerMap);
-    }
-
-    /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @expectedException Exception
