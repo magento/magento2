@@ -304,9 +304,11 @@
         </arguments>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
+        <waitForPageLoad stepKey="waitForAdvancedPricingModal"/>
         <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="waitSpecialPrice"/>
         <fillField userInput="{{price}}" selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="fillSpecialPrice"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDone"/>
+        <waitForPageLoad stepKey="waitForAdvancedPricingModalGone"/>
         <waitForElementNotVisible selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="waitForCloseModalWindow"/>
       </actionGroup>
 
