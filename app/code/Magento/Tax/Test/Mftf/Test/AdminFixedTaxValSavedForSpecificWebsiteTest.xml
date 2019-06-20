@@ -11,8 +11,8 @@
     <test name="AdminFixedTaxValSavedForSpecificWebsiteTest">
         <annotations>
             <features value="Tax"/>
-            <title value="Cannot Save FPT (Fixed Product Tax) On Catalog Product For Specific Website"/>
-            <description value="Cannot Save FPT (Fixed Product Tax) On Catalog Product For Specific Website"/>
+            <title value="Fixed Product Tax value is saved correctly for Specific Website"/>
+            <description value="Fixed Product Tax value is saved correctly for Specific Website"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-17182"/>
             <useCaseId value=" MC-17014"/>
@@ -47,8 +47,18 @@
                 <argument name="StoreGroup" value="NewStoreData"/>
                 <argument name="customStore" value="storeViewData"/>
             </actionGroup>
+            <!--Set catalog price scope to Global-->
+            <comment userInput="Set catalog price scope to Global" stepKey="commentSetPriceScope"/>
+            <magentoCLI command="config:set catalog/price/scope 0" stepKey="setPriceScopeGlobal"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
+            <!--Set catalog price scope to Global-->
+            <comment userInput="Set catalog price scope to Global" stepKey="commentSetPriceScope"/>
+            <magentoCLI command="config:set catalog/price/scope 0" stepKey="setPriceScopeGlobal"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <!-- Delete created data and log out -->
             <comment userInput="Delete created data and log out" stepKey="deleteDataAndLogOut"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
@@ -62,9 +72,11 @@
         <!-- Go to product edit page and assign it to created website -->
         <comment userInput="Go to product edit page and assign it to created website" stepKey="assignProductToCreatedWebsite"/>
         <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="navigateToProductPage"/>
-        <actionGroup ref="attachOneWebsiteToProductActionGroup" stepKey="updateSimpleProductAddingWebsiteCreated">
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectWebsiteInProduct">
             <argument name="website" value="{{NewWebSiteData.name}}"/>
         </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProductFirstTime"/>
         <!-- Add Fixed Product Tax attribute -->
         <comment userInput="Add Fixed Product Tax attribute" stepKey="addFixedProdTaxAttr"/>
         <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFixedProductTaxAttr">
@@ -72,9 +84,34 @@
             <argument name="stateForFPT" value="California"/>
             <argument name="valueForFPT" value="10"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProductSecondTime"/>
         <!-- Check if created tax attribute is saved -->
         <comment userInput="Check if created tax attribute is saved" stepKey="checkThatTaxAttributeIsSaved"/>
         <seeElement selector="{{AdminProductAddFPTValueSection.setTaxValueForFPT($$createProductFPTAttribute.attribute_code$$)}}" stepKey="checkIfTaxAttributeSaved"/>
+        <!--See available websites only 'All Websites'-->
+        <comment userInput="See available websites only 'All Websites'" stepKey="commentCheckWebsitesDropDown"/>
+        <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'All Websites')}}" stepKey="seeAllWebsites"/>
+        <dontSeeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, NewWebSiteData.name)}}" stepKey="dontSeeSecondWebsite"/>
+        <dontSeeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'Main Website')}}" stepKey="dontSeeMainWebsite"/>
+        <!--Set catalog price scope to Website-->
+        <comment userInput="Set catalog price scope to Website" stepKey="commentSetPriceScope"/>
+        <magentoCLI command="config:set catalog/price/scope 1" stepKey="setPriceScopeWebsite"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <!--See available websites only 'All Websites'-->
+        <comment userInput="See available websites 'All Websites', 'Main Website' and Second website" stepKey="commentCheckWebsitesInProductPage"/>
+        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToProductPageSecondTime"/>
+        <waitForPageLoad stepKey="waitForProductPageLoadSecondTime"/>
+        <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'All Websites')}}" stepKey="checkAllWebsitesInDropDown"/>
+        <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'Main Website')}}" stepKey="checkMainWebsiteInDropDown"/>
+        <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, NewWebSiteData.name)}}" stepKey="checkSecondWebsitesInDropDown"/>
+        <actionGroup ref="unassignWebsiteFromProductActionGroup" stepKey="unassignWebsiteInProduct">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProductThirdTime"/>
+        <waitForPageLoad stepKey="waitForSavedProductLoad"/>
+        <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'All Websites')}}" stepKey="checkAllWebsitesInDropDownSecondTime"/>
+        <dontSeeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'Main Website')}}" stepKey="checkNoMainWebsiteInDropDown"/>
+        <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, NewWebSiteData.name)}}" stepKey="checkSecondWebsitesInDropDownSecondTime"/>
     </test>
 </tests>
