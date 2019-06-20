@@ -39,14 +39,27 @@ class AddUserInfoToContext implements ContextParametersProcessorInterface
         if (null !== $currentUserId) {
             $currentUserId = (int)$currentUserId;
         }
+        $contextParameters->setUserId($currentUserId);
 
         $currentUserType = $this->userContext->getUserType();
         if (null !== $currentUserType) {
             $currentUserType = (int)$currentUserType;
         }
-
-        $contextParameters->setUserId($currentUserId);
         $contextParameters->setUserType($currentUserType);
+
+        $contextParameters->addExtensionAttribute('is_customer', $this->isCustomer($currentUserId, $currentUserType));
         return $contextParameters;
+    }
+
+    /**
+     * Checking if current user is logged
+     *
+     * @param int|null $customerId
+     * @param int|null $customerType
+     * @return bool
+     */
+    private function isCustomer(?int $customerId, ?int $customerType): bool
+    {
+        return !empty($customerId) && !empty($customerType) && $customerType !== UserContextInterface::USER_TYPE_GUEST;
     }
 }
