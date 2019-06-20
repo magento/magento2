@@ -15,12 +15,11 @@ use Magento\Review\Model\Review;
 use Magento\Review\Model\ResourceModel\Review\Collection;
 use Magento\Review\Model\ResourceModel\Review\CollectionFactory;
 use Magento\Review\Model\ReviewFactory;
-use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Mass Update Status action.
  */
-class MassUpdateStatus extends ProductController implements HttpPostActionInterface
+class MassUpdateStatus extends ProductController
 {
     /**
      * @var Collection

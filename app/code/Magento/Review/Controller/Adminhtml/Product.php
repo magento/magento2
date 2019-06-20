@@ -19,7 +19,7 @@ abstract class Product extends Action
     /**
      * Authorization resource
      */
-    public const ADMIN_RESOURCE = 'Magento_Review::reviews_all';
+    const ADMIN_RESOURCE = 'Magento_Review::reviews_all';
 
     /**
      * Array of actions which can be processed without secret key validation

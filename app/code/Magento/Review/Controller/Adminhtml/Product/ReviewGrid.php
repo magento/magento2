@@ -13,13 +13,11 @@ use Magento\Review\Model\RatingFactory;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Review grid.
  */
-class ReviewGrid extends ProductController implements HttpGetActionInterface, HttpPostActionInterface
+class ReviewGrid extends ProductController
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory

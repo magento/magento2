@@ -7,13 +7,11 @@ namespace Magento\Review\Controller\Adminhtml\Product;
 
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Pending reviews grid.
  */
-class Pending extends ProductController implements HttpGetActionInterface, HttpPostActionInterface
+class Pending extends ProductController
 {
     /**
      * Execute action.
