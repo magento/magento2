@@ -20,7 +20,4 @@
         <waitForPageLoad stepKey="waitForSimpleProductSaved"/>
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertProductSaveSuccessMessage"/>
     </actionGroup>
-    <actionGroup name="attachOneWebsiteToProductActionGroup" extends="AddWebsiteToProductActionGroup">
-        <uncheckOption selector="{{ProductInWebsitesSection.website(_defaultWebsite.name)}}" stepKey="uncheckMainWebsiteInProduct2" before="checkWebsite"/>
-    </actionGroup>
 </actionGroups>
