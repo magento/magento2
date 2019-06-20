@@ -190,7 +190,6 @@ class Login extends \Magento\Framework\App\Action\Action implements HttpPostActi
                 $credentials['username'],
                 $credentials['password']
             );
-            $this->customerSession->regenerateId();
             $this->customerSession->setCustomerDataAsLoggedIn($customer);
             $redirectRoute = $this->getAccountRedirect()->getRedirectCookie();
             if ($this->cookieManager->getCookie('mage-cache-sessid')) {
