@@ -6,6 +6,7 @@
 
 namespace Magento\Paypal\Model;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
@@ -463,7 +464,11 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         /** @var \Magento\Paypal\Model\Payflow\Request $request */
         $request = $this->_requestFactory->create();
         $cscEditable = $this->getConfigData('csc_editable');
-        $payment = $this->getInfoInstance();
+        try {
+            $payment = $this->getInfoInstance();
+        } catch (LocalizedException $e){
+            $this->logger->debug($e->getTraceAsString());
+        }
 
         $data = parent::buildBasicRequest();
 
@@ -610,9 +615,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      */
     private function getCancelCallbackUrl($payment): string
     {
-        $additionalData = $payment->getAdditionalInformation() ?? [];
-        $cancelUrl = $additionalData['cancel_url'] ?? $this->_getCallbackUrl('cancelPayment');
-
+        $cancelUrl = $payment->getAdditionalInformation('cancel_url') ?? $this->_getCallbackUrl('cancelPayment');
         return $cancelUrl;
     }
 
@@ -624,9 +627,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      */
     private function getReturnCallbackUrl($payment): string
     {
-        $additionalData = $payment->getAdditionalInformation() ?? [];
-        $returnUrl = $additionalData['return_url'] ?? $this->_getCallbackUrl('returnUrl');
-
+        $returnUrl = $payment->getAdditionalInformation('return_url') ?? $this->_getCallbackUrl('returnUrl');
         return $returnUrl;
     }
 
@@ -638,9 +639,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      */
     private function getErrorCallbackUrl($payment): string
     {
-        $additionalData = $payment->getAdditionalInformation() ?? [];
-        $errorUrl = $additionalData['error_url'] ?? $this->_getCallbackUrl('returnUrl');
-
+        $errorUrl = $payment->getAdditionalInformation('error_url') ?? $this->_getCallbackUrl('returnUrl');
         return $errorUrl;
     }
 }
