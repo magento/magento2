@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCreditMemoWithCashOnDeliveryTest">
+        <annotations>
+            <stories value="Credit memo entity"/>
+            <title value="Create Credit Memo with cash on delivery payment method"/>
+            <description value="Create Credit Memo with cash on delivery payment and assert 0 shipping refund"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-15863"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+
+            <!-- Create Data -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="defaultSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Enable payment method one of "Check/Money Order", "Cash On Delivery Payment" and  shipping method one of "Flat Rate" -->
+            <magentoCLI command="config:set {{enabledCheckMoneyOrder.label}} {{enabledCheckMoneyOrder.value}}" stepKey="enableCheckMoneyOrder"/>
+            <magentoCLI command="config:set {{enabledCashOnDeliveryPayment.label}} {{enabledCashOnDeliveryPayment.value}}" stepKey="enableBankTransfer"/>
+            <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{disabledCashOnDeliveryPayment.label}} {{disabledCashOnDeliveryPayment.value}}" stepKey="disableBankTransfer"/>
+            <!-- Delete data -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Create Order -->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderPage">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSecondProduct">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerInfo">
+            <argument name="customer" value="$createCustomer$"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRate"/>
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.linkPaymentOptions}}" dependentSelector="{{AdminOrderFormPaymentSection.linkPaymentOptions}}" visible="true" stepKey="openMoneyOption"/>
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
+        <checkOption selector="{{AdminOrderFormPaymentSection.checkCashOnDelivery}}" stepKey="checkCashOnDelivery"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForDisappear"/>
+        <click selector="{{OrdersGridSection.submitOrder}}" stepKey="submitOrder"/>
+        <waitForPageLoad stepKey="waitForSubmitOrderPage"/>
+        <see stepKey="seeSuccessMessageForOrder" userInput="You created the order."/>
+
+        <!-- Create Invoice -->
+        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startInvoice"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForMessageAppears"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
+
+        <!-- Go to Sales > Orders > find out placed order and open -->
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="grabOrderId" />
+        <assertNotEmpty actual="$grabOrderId" stepKey="assertOrderIdIsNotEmpty" after="grabOrderId"/>
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderId}"/>
+        </actionGroup>
+
+        <!-- Click 'Credit Memo' button and fill data from dataset: refund -->
+        <actionGroup ref="AdminOpenAndFillCreditMemoRefundActionGroup" stepKey="fillCreditMemoRefund">
+            <argument name="itemQtyToRefund" value="1"/>
+            <argument name="shippingRefund" value="0"/>
+            <argument name="adjustmentRefund" value="5"/>
+            <argument name="adjustmentFee" value="10"/>
+        </actionGroup>
+
+        <!-- On order's page click 'Refund offline' button -->
+        <scrollTo selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="scrollTOButton"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline"/>
+        <waitForPageLoad stepKey="waitForResultPage"/>
+
+        <!-- Perform all assertions: assert refund success create message -->
+        <see selector="{{AdminIndexManagementSection.successMessage}}" userInput="You created the credit memo." stepKey="assertRefundSuccessCreateMessage"/>
+
+        <!--Assert refund in Credit Memo Tab -->
+        <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemoTab"/>
+        <waitForPageLoad stepKey="waitForTabLoad"/>
+        <grabTextFrom selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="grabMemoId"/>
+        <assertNotEmpty actual="$grabMemoId" stepKey="assertMemoIdIsNotEmpty" after="grabMemoId"/>
+        <click selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="clickView"/>
+        <waitForPageLoad stepKey="waitForCreditMemo"/>
+        <scrollTo selector="{{AdminCreditMemoViewTotalSection.subtotal}}" stepKey="scrollToTotal"/>
+        <see selector="{{AdminCreditMemoViewTotalSection.subtotal}}" userInput="$560.00" stepKey="seeSubtotal"/>
+        <see selector="{{AdminCreditMemoViewTotalSection.adjustmentRefund}}" userInput="$5.00" stepKey="seeAdjustmentRefund"/>
+        <see selector="{{AdminCreditMemoViewTotalSection.adjustmentFee}}" userInput="$10.00" stepKey="seeAdjustmentFee"/>
+        <see selector="{{AdminCreditMemoViewTotalSection.grandTotal}}" userInput="$555.00" stepKey="assertRefundOnCreditMemoTab"/>
+
+        <!--Login to storefront as previously created customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Assert refunded Grand Total on frontend -->
+        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="onAccountPage"/>
+        <waitForPageLoad stepKey="waitForPage"/>
+        <scrollTo selector="{{StorefrontCustomerResentOrdersSection.blockResentOrders}}" stepKey="scrollToResent"/>
+        <click selector="{{StorefrontCustomerResentOrdersSection.viewOrder({$grabOrderId})}}" stepKey="clickOnOrder"/>
+        <waitForPageLoad stepKey="waitForViewOrder"/>
+        <click selector="{{StorefrontCustomerOrderSection.tabRefund}}" stepKey="clickRefund"/>
+        <waitForPageLoad stepKey="waitRefundsLoad"/>
+        <scrollTo selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" stepKey="scrollToGrandTotal"/>
+        <see selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" userInput="555.00" stepKey="seeGrandTotal"/>
+    </test>
+</tests>

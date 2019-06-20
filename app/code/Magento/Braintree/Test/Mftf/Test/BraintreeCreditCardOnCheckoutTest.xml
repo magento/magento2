@@ -49,6 +49,7 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <!--Proceed to checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup"/>
 
@@ -74,6 +75,7 @@
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart1"/>
         <waitForPageLoad stepKey="waitForPageLoad7"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage2"/>
         <!--Proceed to checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup1"/>
         <click selector="{{CheckoutPaymentSection.addressAction('New Address')}}" stepKey="clickOnNewAddress"/>
@@ -81,7 +83,7 @@
         <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="LoggedInCheckoutFillNewBillingAddressActionGroup1">
             <argument name="Address" value="US_Address_NY"/>
         </actionGroup>
-        <click selector="{{CheckoutPaymentSection.addressAction('Save Address')}}" stepKey="SaveAddress"/>
+        <click selector="{{CheckoutPaymentSection.addressAction('Ship here')}}" stepKey="SaveAddress"/>
         <waitForPageLoad stepKey="waitForPageLoad9"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext1"/>
         <waitForPageLoad stepKey="waitForPageLoad10"/>
