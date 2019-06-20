@@ -76,11 +76,7 @@ class Stock extends UnsubscribeController implements HttpPostActionInterface
         }
 
         try {
-            $product = $this->productRepository->getById($productId);
-            if (!$product->isVisibleInCatalog()) {
-                throw new NoSuchEntityException();
-            }
-
+            $product = $this->retrieveProduct($productId);
             $model = $this->stockFactory->create()
                 ->setCustomerId($this->customerSession->getCustomerId())
                 ->setProductId($product->getId())
@@ -110,5 +106,22 @@ class Stock extends UnsubscribeController implements HttpPostActionInterface
         }
         $resultRedirect->setUrl($product->getProductUrl());
         return $resultRedirect;
+    }
+
+    /**
+     * Retrieving product
+     *
+     * @param int $productId
+     *
+     * @return \Magento\Catalog\Api\Data\ProductInterface
+     * @throws NoSuchEntityException
+     */
+    protected function retrieveProduct(int $productId)
+    {
+        $product = $this->productRepository->getById($productId);
+        if (!$product->isVisibleInCatalog()) {
+            throw new NoSuchEntityException();
+        }
+        return $product;
     }
 }
