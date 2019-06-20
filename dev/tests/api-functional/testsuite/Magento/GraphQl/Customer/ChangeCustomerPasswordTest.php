@@ -194,19 +194,6 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
     }
 
     /**
-     * @param int $customerId
-     *
-     * @return void
-     * @throws LocalizedException
-     */
-    private function setCustomerConfirmation(int $customerId): void
-    {
-        $customer = $this->customerRepository->getById($customerId);
-        $customer->setConfirmation('d5a21f15bd4cc21bd1b21ef6d9989a38');
-        $this->customerRepository->save($customer);
-    }
-
-    /**
      * @param $currentPassword
      * @param $newPassword
      *

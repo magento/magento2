@@ -68,7 +68,7 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
         if (null === $customerAddressId) {
             $shippingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
         } else {
-            if (false === $context->getExtensionAttributes()->isCustomer()) {
+            if (false === $context->getExtensionAttributes()->getIsCustomer()) {
                 throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
             }
 

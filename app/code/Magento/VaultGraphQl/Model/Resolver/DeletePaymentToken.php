@@ -55,7 +55,7 @@ class DeletePaymentToken implements ResolverInterface
         array $args = null
     ) {
         /** @var ContextInterface $context */
-        if (false === $context->getExtensionAttributes()->isCustomer()) {
+        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
 
