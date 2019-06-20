@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php /** @var $block \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer */ ?>
 <?php $_item = $block->getItem() ?>
@@ -21,8 +18,8 @@
         <?php if ($block->canReturnItemToStock($_item)) : ?>
             <input type="checkbox"
                    class="admin__control-checkbox"
-                   name="creditmemo[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>][back_to_stock]"
-                   value="1"<?php if ($_item->getBackToStock()):?> checked<?php endif;?>/>
+                   name="creditmemo[items][<?= (int) $_item->getOrderItemId() ?>][back_to_stock]"
+                   value="1"<?php if ($_item->getBackToStock()) : ?> checked<?php endif; ?>/>
             <label class="admin__field-label"></label>
         <?php endif; ?>
         </td>
@@ -31,17 +28,17 @@
     <?php if ($block->canEditQty()) : ?>
         <input type="text"
                class="input-text admin__control-text qty-input"
-               name="creditmemo[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>][qty]"
-               value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>"/>
+               name="creditmemo[items][<?= (int) $_item->getOrderItemId() ?>][qty]"
+               value="<?= (int) $_item->getQty() ?>"/>
     <?php else : ?>
-        <?= /* @escapeNotVerified */ $_item->getQty()*1 ?>
+        <?= (int) $_item->getQty() ?>
     <?php endif; ?>
     </td>
     <td class="col-subtotal">
         <?= $block->getColumnHtml($_item, 'subtotal') ?>
     </td>
-    <td class="col-tax-amount"><?= /* @escapeNotVerified */ $block->displayPriceAttribute('tax_amount') ?></td>
-    <td class="col-discont"><?= /* @escapeNotVerified */ $block->displayPriceAttribute('discount_amount') ?></td>
+    <td class="col-tax-amount"><?= /* @noEscape */ $block->displayPriceAttribute('tax_amount') ?></td>
+    <td class="col-discont"><?= /* @noEscape */ $block->displayPriceAttribute('discount_amount') ?></td>
     <td class="col-total last">
         <?= $block->getColumnHtml($_item, 'total') ?>
     </td>

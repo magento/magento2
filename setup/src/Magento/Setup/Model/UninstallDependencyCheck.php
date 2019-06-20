@@ -10,6 +10,8 @@ use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\DependencyChecker;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Theme\Model\Theme\ThemeDependencyChecker;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class checks components dependencies for uninstall flow
@@ -17,7 +19,7 @@ use Magento\Theme\Model\Theme\ThemeDependencyChecker;
 class UninstallDependencyCheck
 {
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     private $escaper;
 
@@ -44,19 +46,19 @@ class UninstallDependencyCheck
      * @param ComposerInformation $composerInfo
      * @param DependencyChecker $dependencyChecker
      * @param ThemeDependencyCheckerFactory $themeDependencyCheckerFactory
-     * @param \Magento\Framework\Escaper|null $escaper
+     * @param Escaper|null $escaper
      */
     public function __construct(
         ComposerInformation $composerInfo,
         DependencyChecker $dependencyChecker,
         ThemeDependencyCheckerFactory $themeDependencyCheckerFactory,
-        \Magento\Framework\Escaper $escaper = null
+        Escaper $escaper = null
     ) {
         $this->composerInfo = $composerInfo;
         $this->packageDependencyChecker = $dependencyChecker;
         $this->themeDependencyChecker = $themeDependencyCheckerFactory->create();
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Escaper::class
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
         );
     }
 
