@@ -13,7 +13,7 @@
     <p><?= $block->escapeHtml($error) ?></p>
 <?php endif ?>
 <p><?= $block->escapeHtml(
-    _('Click <a href="%1">here</a> to continue shopping.', $block->escapeUrl($block->getContinueShoppingUrl())),
+    __('Click <a href="%1">here</a> to continue shopping.', $block->escapeUrl($block->getContinueShoppingUrl())),
     ['a']
 ) ?>
 </p>
