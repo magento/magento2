@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -288,9 +290,12 @@ class Customer extends AbstractCustomer
     {
         $firstCustomer = reset($entitiesToUpdate);
         $columnsToUpdate = array_keys($firstCustomer);
-        $customerFieldsToUpdate = array_filter($this->customerFields, function ($field) use ($columnsToUpdate) {
-            return in_array($field, $columnsToUpdate);
-        });
+        $customerFieldsToUpdate = array_filter(
+            $this->customerFields,
+            function ($field) use ($columnsToUpdate) {
+                return in_array($field, $columnsToUpdate);
+            }
+        );
         return $customerFieldsToUpdate;
     }
 
@@ -606,6 +611,10 @@ class Customer extends AbstractCustomer
                 }
 
                 if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
+                    if ($attributeParams['type'] == 'select' && empty($rowData[$attributeCode])) {
+                        continue;
+                    }
+
                     $this->isAttributeValid(
                         $attributeCode,
                         $attributeParams,
