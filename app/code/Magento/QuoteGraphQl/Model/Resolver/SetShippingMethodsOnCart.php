@@ -46,12 +46,12 @@ class SetShippingMethodsOnCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
+        if (empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
         $maskedCartId = $args['input']['cart_id'];
 
-        if (!isset($args['input']['shipping_methods']) || empty($args['input']['shipping_methods'])) {
+        if (empty($args['input']['shipping_methods'])) {
             throw new GraphQlInputException(__('Required parameter "shipping_methods" is missing'));
         }
         $shippingMethods = $args['input']['shipping_methods'];

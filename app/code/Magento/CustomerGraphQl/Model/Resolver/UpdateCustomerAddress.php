@@ -69,11 +69,11 @@ class UpdateCustomerAddress implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($args['id']) || empty($args['id'])) {
+        if (empty($args['id'])) {
             throw new GraphQlInputException(__('Address "id" value must be specified'));
         }
 
-        if (!isset($args['input']) || !is_array($args['input']) || empty($args['input'])) {
+        if (empty($args['input']) || !is_array($args['input'])) {
             throw new GraphQlInputException(__('"input" value must be specified'));
         }
 
