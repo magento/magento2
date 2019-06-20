@@ -233,6 +233,8 @@ MUTATION;
      */
     public function testDeleteCustomerAddressIfAccountIsLocked()
     {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/750');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $addressId = 2;

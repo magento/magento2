@@ -10,6 +10,7 @@ namespace Magento\CustomerGraphQl\Model\Resolver;
 use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 use Magento\CustomerGraphQl\Model\Customer\UpdateCustomerAccount;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\Framework\GraphQl\Config\Element\Field;

@@ -230,6 +230,8 @@ QUERY;
      */
     public function testGetCartForLockedCustomer()
     {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/750');
+
         /* lock customer */
         $customerSecure = $this->customerRegistry->retrieveSecureData(1);
         $customerSecure->setLockExpires('2030-12-31 00:00:00');
