@@ -16,12 +16,13 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
  * @inheritdoc
  */
-class PlaceOrder implements ResolverInterface
+class SetPaymentAndPlaceOrder implements ResolverInterface
 {
     /**
      * @var CartManagementInterface
@@ -39,18 +40,26 @@ class PlaceOrder implements ResolverInterface
     private $orderRepository;
 
     /**
+     * @var SetPaymentMethodOnCart
+     */
+    private $setPaymentMethodOnCart;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param CartManagementInterface $cartManagement
      * @param OrderRepositoryInterface $orderRepository
+     * @param SetPaymentMethodOnCart $setPaymentMethodOnCart
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         CartManagementInterface $cartManagement,
-        OrderRepositoryInterface $orderRepository
+        OrderRepositoryInterface $orderRepository,
+        SetPaymentMethodOnCart $setPaymentMethodOnCart
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartManagement = $cartManagement;
         $this->orderRepository = $orderRepository;
+        $this->setPaymentMethodOnCart = $setPaymentMethodOnCart;
     }
 
     /**
@@ -63,6 +72,11 @@ class PlaceOrder implements ResolverInterface
         }
         $maskedCartId = $args['input']['cart_id'];
 
+        if (!isset($args['input']['payment_method']['code']) || empty($args['input']['payment_method']['code'])) {
+            throw new GraphQlInputException(__('Required parameter "code" for "payment_method" is missing.'));
+        }
+        $paymentData = $args['input']['payment_method'];
+
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
 
         if ((int)$context->getUserId() === 0) {
@@ -71,6 +85,8 @@ class PlaceOrder implements ResolverInterface
             }
             $cart->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
         }
+
+        $this->setPaymentMethodOnCart->execute($cart, $paymentData);
 
         try {
             $orderId = $this->cartManagement->placeOrder($cart->getId());
