@@ -16,6 +16,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
@@ -39,7 +40,7 @@ class SetPaymentAndPlaceOrder implements ResolverInterface
     private $orderRepository;
 
     /**
-     * @var \Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart
+     * @var SetPaymentMethodOnCart
      */
     private $setPaymentMethodOnCart;
 
@@ -47,13 +48,13 @@ class SetPaymentAndPlaceOrder implements ResolverInterface
      * @param GetCartForUser $getCartForUser
      * @param CartManagementInterface $cartManagement
      * @param OrderRepositoryInterface $orderRepository
-     * @param \Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart $setPaymentMethodOnCart
+     * @param SetPaymentMethodOnCart $setPaymentMethodOnCart
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         CartManagementInterface $cartManagement,
         OrderRepositoryInterface $orderRepository,
-        \Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart $setPaymentMethodOnCart
+        SetPaymentMethodOnCart $setPaymentMethodOnCart
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartManagement = $cartManagement;
@@ -77,11 +78,11 @@ class SetPaymentAndPlaceOrder implements ResolverInterface
         $paymentData = $args['input']['payment_method'];
 
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
-        $cart = $this->setPaymentMethodOnCart->execute($paymentData, $cart);
+        $this->setPaymentMethodOnCart->execute($cart, $paymentData);
 
-        if ($context->getUserId() === 0) {
+        if ((int)$context->getUserId() === 0) {
             if (!$cart->getCustomerEmail()) {
-                throw new GraphQlInputException(__("Guest email for cart is missing. Please enter"));
+                throw new GraphQlInputException(__("Guest email for cart is missing."));
             }
             $cart->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
         }

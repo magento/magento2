@@ -15,6 +15,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Api\Data\PaymentInterfaceFactory;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\Quote\Model\Quote;
+use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool;
 
 class SetPaymentMethodOnCart
 {
@@ -29,18 +30,34 @@ class SetPaymentMethodOnCart
     private $paymentFactory;
 
     /**
+     * @var AdditionalDataProviderPool
+     */
+    private $additionalDataProviderPool;
+
+    /**
      * @param PaymentMethodManagementInterface $paymentMethodManagement
      * @param PaymentInterfaceFactory $paymentFactory
+     * @param AdditionalDataProviderPool $additionalDataProviderPool
      */
     public function __construct(
         PaymentMethodManagementInterface $paymentMethodManagement,
-        PaymentInterfaceFactory $paymentFactory
+        PaymentInterfaceFactory $paymentFactory,
+        AdditionalDataProviderPool $additionalDataProviderPool
     ) {
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentFactory = $paymentFactory;
+        $this->additionalDataProviderPool = $additionalDataProviderPool;
     }
 
-    public function execute(array $paymentData, Quote $cart): Quote
+    /**
+     * Set payment method on cart
+     *
+     * @param Quote $cart
+     * @param array $paymentData
+     * @throws GraphQlInputException
+     * @throws GraphQlNoSuchEntityException
+     */
+    public function execute(Quote $cart, array $paymentData): void
     {
         if (!isset($paymentData['code']) || empty($paymentData['code'])) {
             throw new GraphQlInputException(__('Required parameter "code" for "payment_method" is missing.'));
@@ -48,7 +65,9 @@ class SetPaymentMethodOnCart
         $paymentMethodCode = $paymentData['code'];
 
         $poNumber = $paymentData['purchase_order_number'] ?? null;
-        $additionalData = $paymentData['additional_data'] ?? [];
+        $additionalData = isset($paymentData['additional_data'])
+            ? $this->additionalDataProviderPool->getData($paymentMethodCode, $paymentData['additional_data'])
+            : [];
 
         $payment = $this->paymentFactory->create([
             'data' => [
@@ -65,7 +84,5 @@ class SetPaymentMethodOnCart
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()), $e);
         }
-
-        return $cart;
     }
 }
