@@ -33,7 +33,7 @@ class HtmlBindingSniff implements Sniff
             $html = $phpcsFile->getTokensAsString($stackPtr, count($phpcsFile->getTokens()));
             $dom = new \DOMDocument();
             try {
-                //phpcs: ignore
+                // phpcs:disable Generic.PHP.NoSilencedErrors
                 @$dom->loadHTML($html);
                 $loaded = true;
             } catch (\Throwable $exception) {
