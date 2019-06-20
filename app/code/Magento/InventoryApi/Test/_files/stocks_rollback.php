@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryIndexer\Test\Integration\Indexer\RemoveIndexData;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var StockRepositoryInterface $stockRepository */
 $stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
@@ -22,6 +22,7 @@ foreach ([10, 20, 30] as $stockId) {
         $extensionAttributes = $stock->getExtensionAttributes();
         $extensionAttributes->setSalesChannels([]);
         $stockRepository->save($stock);
+
         //Delete stock.
         $stockRepository->deleteById($stockId);
     } catch (NoSuchEntityException $e) {
