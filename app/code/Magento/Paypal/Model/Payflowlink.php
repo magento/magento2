@@ -440,8 +440,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     }
 
     /**
-     * Get store id from response if exists
-     * or default
+     * Get store id from response if exists or default
      *
      * @return int
      */
@@ -464,21 +463,22 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         /** @var \Magento\Paypal\Model\Payflow\Request $request */
         $request = $this->_requestFactory->create();
         $cscEditable = $this->getConfigData('csc_editable');
+        $payment = $this->getInfoInstance();
 
         $data = parent::buildBasicRequest();
 
         $request->setData($data->getData());
 
         $request->setCancelurl(
-            $this->_getCallbackUrl('cancelPayment')
+            $this->getCancelCallbackUrl($payment)
         )->setErrorurl(
-            $this->_getCallbackUrl('returnUrl')
+            $this->getErrorCallbackUrl($payment)
         )->setSilentpost(
             'TRUE'
         )->setSilentposturl(
             $this->_getCallbackUrl('silentPost')
         )->setReturnurl(
-            $this->_getCallbackUrl('returnUrl')
+            $this->getReturnCallbackUrl($payment)
         )->setTemplate(
             self::LAYOUT_TEMPLATE
         )->setDisablereceipt(
@@ -514,6 +514,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
 
     /**
      * If response is failed throw exception
+     *
      * Set token data in payment object
      *
      * @param \Magento\Framework\DataObject $response
@@ -599,5 +600,47 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         }
 
         return $websiteUrl . 'paypal/' . $this->_callbackController . '/' . $actionName;
+    }
+
+    /**
+     * Get payment cancel callback url
+     *
+     * @param OrderPaymentInterface $payment
+     * @return string
+     */
+    private function getCancelCallbackUrl($payment): string
+    {
+        $additionalData = $payment->getAdditionalInformation() ?? [];
+        $cancelUrl = $additionalData['cancel_url'] ?? $this->_getCallbackUrl('cancelPayment');
+
+        return $cancelUrl;
+    }
+
+    /**
+     * Get payment return callback url
+     *
+     * @param OrderPaymentInterface $payment
+     * @return string
+     */
+    private function getReturnCallbackUrl($payment): string
+    {
+        $additionalData = $payment->getAdditionalInformation() ?? [];
+        $returnUrl = $additionalData['return_url'] ?? $this->_getCallbackUrl('returnUrl');
+
+        return $returnUrl;
+    }
+
+    /**
+     * Get payment error callback url
+     *
+     * @param OrderPaymentInterface $payment
+     * @return string
+     */
+    private function getErrorCallbackUrl($payment): string
+    {
+        $additionalData = $payment->getAdditionalInformation() ?? [];
+        $errorUrl = $additionalData['error_url'] ?? $this->_getCallbackUrl('returnUrl');
+
+        return $errorUrl;
     }
 }
