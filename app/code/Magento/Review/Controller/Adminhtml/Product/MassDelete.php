@@ -97,8 +97,8 @@ class MassDelete extends ProductController implements HttpPostActionInterface
             if ($model->getStatusId() != Review::STATUS_PENDING) {
                 $this->messageManager->addErrorMessage(
                     __(
-                        'Sorry, You have not permission to do this.'
-                        . ' One or more of the reviews are not in Pending Status.'
+                        'You don’t have permission to perform this operation.'
+                        . ' Selected reviews must be in Pending Status only.'
                     )
                 );
 
