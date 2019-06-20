@@ -71,7 +71,7 @@ define([
                     this.isExpandable = true;
                 }.bind(this),
                 exit: function () {
-                    this.isExpandable = false;
+                    this.isExpandable = true;
                 }.bind(this)
             });
 
