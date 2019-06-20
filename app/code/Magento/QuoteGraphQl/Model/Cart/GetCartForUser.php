@@ -102,7 +102,7 @@ class GetCartForUser
         $cartCustomerId = (int)$cart->getCustomerId();
 
         /* Guest cart, allow operations */
-        if (!$cartCustomerId && null === $customerId) {
+        if (0 === $cartCustomerId && (null === $customerId || 0 === $customerId)) {
             return $cart;
         }
 
