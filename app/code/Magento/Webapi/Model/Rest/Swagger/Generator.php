@@ -44,7 +44,7 @@ class Generator extends AbstractSchemaGenerator
     /**
      * Wrapper node for XML requests
      */
-    private const XML_SCHEMA_PARAMWRAPPER = 'request';
+    private XML_SCHEMA_PARAMWRAPPER = 'request';
 
     /**
      * Swagger factory instance.
