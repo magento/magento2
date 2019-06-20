@@ -79,6 +79,7 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
      * @expectedException Exception
@@ -116,6 +117,7 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      *
@@ -191,6 +193,7 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @expectedException Exception
