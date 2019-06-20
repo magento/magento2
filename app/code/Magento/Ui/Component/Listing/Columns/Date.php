@@ -105,7 +105,7 @@ class Date extends Column
         );
 
         $config['storeLocale'] = $this->locale;
-        $config['dateData'] = [
+        $config['calendarConfig'] = [
             'months' => $months,
             'monthsShort' => $monthsShort,
         ];
