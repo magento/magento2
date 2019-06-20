@@ -17,6 +17,9 @@ use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool;
 
+/**
+ * Set payment method on cart
+ */
 class SetPaymentMethodOnCart
 {
     /**
@@ -69,13 +72,16 @@ class SetPaymentMethodOnCart
             ? $this->additionalDataProviderPool->getData($paymentMethodCode, $paymentData['additional_data'])
             : [];
 
-        $payment = $this->paymentFactory->create([
-            'data' => [
-                PaymentInterface::KEY_METHOD => $paymentMethodCode,
-                PaymentInterface::KEY_PO_NUMBER => $poNumber,
-                PaymentInterface::KEY_ADDITIONAL_DATA => $additionalData,
+        $payment = $this->paymentFactory->create(
+            [
+                'data' =>
+                    [
+                        PaymentInterface::KEY_METHOD => $paymentMethodCode,
+                        PaymentInterface::KEY_PO_NUMBER => $poNumber,
+                        PaymentInterface::KEY_ADDITIONAL_DATA => $additionalData,
+                    ],
             ]
-        ]);
+        );
 
         try {
             $this->paymentMethodManagement->set($cart->getId(), $payment);

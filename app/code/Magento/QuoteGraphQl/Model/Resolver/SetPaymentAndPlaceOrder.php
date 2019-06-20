@@ -78,7 +78,6 @@ class SetPaymentAndPlaceOrder implements ResolverInterface
         $paymentData = $args['input']['payment_method'];
 
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
-        $this->setPaymentMethodOnCart->execute($cart, $paymentData);
 
         if ((int)$context->getUserId() === 0) {
             if (!$cart->getCustomerEmail()) {
@@ -86,6 +85,8 @@ class SetPaymentAndPlaceOrder implements ResolverInterface
             }
             $cart->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
         }
+
+        $this->setPaymentMethodOnCart->execute($cart, $paymentData);
 
         try {
             $orderId = $this->cartManagement->placeOrder($cart->getId());
