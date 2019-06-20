@@ -50,7 +50,10 @@ class Edit extends ProductController
 
         if ($this->getModel()->getStatusId() != Review::STATUS_PENDING) {
             $this->messageManager->addErrorMessage(
-                __('Sorry, You have not permission to do this. The Review is not in Pending status.')
+                __(
+                    'You don’t have permission to perform this operation.'
+                    . ' The selected review must be in Pending Status.'
+                )
             );
 
             return false;

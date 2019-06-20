@@ -135,5 +135,5 @@ Inactive,Inactive
 "Please select one of each of the ratings above.","Please select one of each of the ratings above."
 star,star
 stars,stars
-"Sorry, You have not permission to do this. One or more of the reviews are not in Pending Status.","Sorry, You have not permission to do this. One or more of the reviews are not in Pending Status."
-"Sorry, You have not permission to do this. The Review is not in Pending status.","Sorry, You have not permission to do this. The Review is not in Pending status."
+"You don’t have permission to perform this operation. Selected reviews must be in Pending Status only.","You don’t have permission to perform this operation. Selected reviews must be in Pending Status only."
+"You don’t have permission to perform this operation. The selected review must be in Pending Status.","You don’t have permission to perform this operation. The selected review must be in Pending Status."
