@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\CustomerGraphQl\Model\Customer\CreateCustomerAccount;
 use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -57,9 +56,6 @@ class CreateCustomer implements ResolverInterface
         }
 
         $customer = $this->createCustomerAccount->execute($args['input']);
-
-        $context->setUserId((int)$customer->getId());
-        $context->setUserType(UserContextInterface::USER_TYPE_CUSTOMER);
 
         $data = $this->extractCustomerData->execute($customer);
         return ['customer' => $data];
