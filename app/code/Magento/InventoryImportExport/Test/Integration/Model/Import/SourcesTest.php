@@ -117,6 +117,7 @@ class SourcesTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      *
      * @magentoDbIsolation disabled
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/908874/scenarios/1408728
      */
     public function testImportDataWithAppendBehavior(): void
     {
