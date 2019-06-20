@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Block\Dashboard;
 
+use Magento\Store\Model\Store;
+
 /**
  * Adminhtml dashboard bar block
  *
@@ -90,7 +92,7 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                     $this->getRequest()->getParam('group')
                 )->getWebsite()->getBaseCurrency();
             } else {
-                $this->_currentCurrencyCode = $this->_storeManager->getStore()->getBaseCurrency();
+                $this->_currentCurrencyCode = $this->_storeManager->getStore(Store::DEFAULT_STORE_ID)->getBaseCurrency();
             }
         }
 
