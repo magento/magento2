@@ -11,6 +11,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\QuoteGraphQl\Model\Cart\CheckCartCheckoutAllowance;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart as SetPaymentMethodOnCartModel;
 
@@ -30,15 +31,23 @@ class SetPaymentMethodOnCart implements ResolverInterface
     private $setPaymentMethodOnCart;
 
     /**
+     * @var CheckCartCheckoutAllowance
+     */
+    private $checkCartCheckoutAllowance;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param SetPaymentMethodOnCartModel $setPaymentMethodOnCart
+     * @param CheckCartCheckoutAllowance $checkCartCheckoutAllowance
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        SetPaymentMethodOnCartModel $setPaymentMethodOnCart
+        SetPaymentMethodOnCartModel $setPaymentMethodOnCart,
+        CheckCartCheckoutAllowance $checkCartCheckoutAllowance
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->setPaymentMethodOnCart = $setPaymentMethodOnCart;
+        $this->checkCartCheckoutAllowance = $checkCartCheckoutAllowance;
     }
 
     /**
@@ -57,6 +66,7 @@ class SetPaymentMethodOnCart implements ResolverInterface
         $paymentData = $args['input']['payment_method'];
 
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $this->checkCartCheckoutAllowance->execute($cart);
         $this->setPaymentMethodOnCart->execute($cart, $paymentData);
 
         return [
