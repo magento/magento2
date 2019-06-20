@@ -12,7 +12,6 @@ use Magento\Review\Model\ReviewFactory;
 use Magento\Review\Model\RatingFactory;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\App\Request\Http;
 
 /**
  * Review grid.
