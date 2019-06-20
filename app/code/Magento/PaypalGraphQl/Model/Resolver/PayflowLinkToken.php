@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver;
 
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
@@ -17,7 +16,8 @@ use Magento\Payment\Helper\Data as PaymentDataHelper;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
 
 /**
  * Resolver to pull PayflowLink payment information from pending order
@@ -30,36 +30,36 @@ class PayflowLinkToken implements ResolverInterface
     private $maskedQuoteIdToQuoteId;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
-
-    /**
      * @var PaymentDataHelper
      */
     private $paymentDataHelper;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var CollectionFactoryInterface
+     */
+    private $orderCollectionFactory;
+
+    /**
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param OrderRepositoryInterface $orderRepository
      * @param PaymentDataHelper $paymentDataHelper
+     * @param StoreManagerInterface $storeManager
+     * @param CollectionFactoryInterface $orderCollectionFactory
      */
     public function __construct(
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        OrderRepositoryInterface $orderRepository,
-        PaymentDataHelper $paymentDataHelper
+        PaymentDataHelper $paymentDataHelper,
+        StoreManagerInterface $storeManager,
+        CollectionFactoryInterface $orderCollectionFactory
     ) {
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->orderRepository = $orderRepository;
         $this->paymentDataHelper = $paymentDataHelper;
+        $this->storeManager = $storeManager;
+        $this->orderCollectionFactory = $orderCollectionFactory;
     }
 
     /**
@@ -102,24 +102,18 @@ class PayflowLinkToken implements ResolverInterface
      */
     private function getOrderFromQuoteId(int $quoteId, int $customerId): Order
     {
-        $this->searchCriteriaBuilder
-            ->addFilter(Order::QUOTE_ID, $quoteId, 'eq')
-            ->addFilter(Order::STATUS, Order::STATE_PENDING_PAYMENT, 'eq');
+        $storeId = (int)$this->storeManager->getStore()->getId();
 
-        if ($customerId) {
-            $this->searchCriteriaBuilder->addFilter(Order::CUSTOMER_ID, $customerId, 'eq');
-        } else {
-            $this->searchCriteriaBuilder->addFilter(Order::CUSTOMER_ID, true, 'null');
-        }
+        $orderCollection = $this->orderCollectionFactory->create($customerId ?? null);
+        $orderCollection->addFilter(Order::QUOTE_ID, $quoteId);
+        $orderCollection->addFilter(Order::STATUS, Order::STATE_PENDING_PAYMENT);
+        $orderCollection->addFilter(Order::STORE_ID, $storeId);
 
-        $searchCriteria = $this->searchCriteriaBuilder->create();
-
-        $orderCollection = $this->orderRepository->getList($searchCriteria);
         if ($orderCollection->getTotalCount() !== 1) {
-            throw new GraphQlNoSuchEntityException(__('TODO'));
+            throw new GraphQlNoSuchEntityException(__('Could not find payment information for cart.'));
         }
-        $orders = $orderCollection->getItems();
-        $order = reset($orders);
+        /** @var Order $order */
+        $order = $orderCollection->getFirstItem();
 
         return $order;
     }
