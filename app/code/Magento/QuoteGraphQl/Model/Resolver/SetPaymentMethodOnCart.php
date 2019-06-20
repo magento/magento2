@@ -82,13 +82,13 @@ class SetPaymentMethodOnCart implements ResolverInterface
         }
         $maskedCartId = $args['input']['cart_id'];
 
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
-        $this->checkCartCheckoutAllowance->execute($cart);
-
         if (!isset($args['input']['payment_method']['code']) || empty($args['input']['payment_method']['code'])) {
             throw new GraphQlInputException(__('Required parameter "code" for "payment_method" is missing.'));
         }
         $paymentMethodCode = $args['input']['payment_method']['code'];
+
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $this->checkCartCheckoutAllowance->execute($cart);
 
         $poNumber = $args['input']['payment_method']['purchase_order_number'] ?? null;
         $additionalData = $this->additionalDataProviderPool->getData($paymentMethodCode, $args) ?? [];
