@@ -103,6 +103,7 @@ class InvoiceSender extends Sender
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $invoice->getOrder();
+            $this->identityContainer->setStore($order->getStore());
 
             $transport = [
                 'order' => $order,
