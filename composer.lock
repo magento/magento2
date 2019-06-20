@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "33e7703ac47e1c27235b830825e14800",
+    "content-hash": "ddcaab80336d44c861e6763148e5f071",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -6699,16 +6699,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.4.0",
+            "version": "2.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "ef534dbcb3aeea68f9254dfd018165c546ad2edb"
+                "reference": "9b5de03fe069d4a36c911112c30b824ff4e80c3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/ef534dbcb3aeea68f9254dfd018165c546ad2edb",
-                "reference": "ef534dbcb3aeea68f9254dfd018165c546ad2edb",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/9b5de03fe069d4a36c911112c30b824ff4e80c3a",
+                "reference": "9b5de03fe069d4a36c911112c30b824ff4e80c3a",
                 "shasum": ""
             },
             "require": {
@@ -6768,10 +6768,10 @@
                 "magento",
                 "testing"
             ],
-            "time": "2019-04-29T20:56:26+00:00"
+            "time": "2019-06-10T17:57:40+00:00"
         },
         {
-            "name": "mikey179/vfsStream",
+            "name": "mikey179/vfsstream",
             "version": "v1.6.5",
             "source": {
                 "type": "git",

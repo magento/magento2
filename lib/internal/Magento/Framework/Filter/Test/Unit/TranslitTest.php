@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Filter\Test\Unit;
 
+/**
+ * Translit test.
+ */
 class TranslitTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -45,8 +48,8 @@ class TranslitTest extends \PHPUnit\Framework\TestCase
             ['привет мир', 'privet mir', 'privet mir', $isIconv],
             [
                 'Weiß, Goldmann, Göbel, Weiss, Göthe, Goethe und Götz',
-                'Weiss, Goldmann, Gobel, Weiss, Gothe, Goethe und Gotz',
-                'Weiss, Goldmann, Gobel, Weiss, Gothe, Goethe und Gotz',
+                'Weiss, Goldmann, Goebel, Weiss, Goethe, Goethe und Goetz',
+                'Weiss, Goldmann, Goebel, Weiss, Goethe, Goethe und Goetz',
                 $isIconv
             ],
             [

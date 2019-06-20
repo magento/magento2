@@ -18,6 +18,8 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\Quote\Api\Data\PaymentInterfaceFactory;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
+use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Mutation resolver for setting payment method for shopping cart
@@ -30,20 +32,37 @@ class SetPaymentMethodOnCart implements ResolverInterface
     private $getCartForUser;
 
     /**
-     * @var \Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart
+     * @var PaymentMethodManagementInterface
      */
-    private $setPaymentMethodOnCart;
+    private $paymentMethodManagement;
+
+    /**
+     * @var PaymentInterfaceFactory
+     */
+    private $paymentFactory;
+
+    /**
+     * @var AdditionalDataProviderPool
+     */
+    private $additionalDataProviderPool;
 
     /**
      * @param GetCartForUser $getCartForUser
-     * @param \Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart $setPaymentMethodOnCart
+     * @param PaymentMethodManagementInterface $paymentMethodManagement
+     * @param PaymentInterfaceFactory $paymentFactory
+     * @param AdditionalDataProviderPool $additionalDataProviderPool
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        \Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart $setPaymentMethodOnCart
+        PaymentMethodManagementInterface $paymentMethodManagement,
+        PaymentInterfaceFactory $paymentFactory,
+        AdditionalDataProviderPool $additionalDataProviderPool = null
     ) {
         $this->getCartForUser = $getCartForUser;
-        $this->setPaymentMethodOnCart = $setPaymentMethodOnCart;
+        $this->paymentMethodManagement = $paymentMethodManagement;
+        $this->paymentFactory = $paymentFactory;
+        $this->additionalDataProviderPool = $additionalDataProviderPool
+            ?: ObjectManager::getInstance()->get(AdditionalDataProviderPool::class);
     }
 
     /**
@@ -59,10 +78,28 @@ class SetPaymentMethodOnCart implements ResolverInterface
         if (!isset($args['input']['payment_method']['code']) || empty($args['input']['payment_method']['code'])) {
             throw new GraphQlInputException(__('Required parameter "code" for "payment_method" is missing.'));
         }
-        $paymentData = $args['input']['payment_method'];
+        $paymentMethodCode = $args['input']['payment_method']['code'];
+
+        $poNumber = $args['input']['payment_method']['purchase_order_number'] ?? null;
+        $additionalData = $this->additionalDataProviderPool->getData($paymentMethodCode, $args) ?? [];
 
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
-        $cart = $this->setPaymentMethodOnCart->execute($paymentData, $cart);
+        $payment = $this->paymentFactory->create(
+            [
+                'data' => [
+                    PaymentInterface::KEY_METHOD => $paymentMethodCode,
+                    PaymentInterface::KEY_PO_NUMBER => $poNumber,
+                    PaymentInterface::KEY_ADDITIONAL_DATA => $additionalData,
+                ]]
+        );
+
+        try {
+            $this->paymentMethodManagement->set($cart->getId(), $payment);
+        } catch (NoSuchEntityException $e) {
+            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()), $e);
+        }
 
         return [
             'cart' => [
