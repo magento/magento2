@@ -31,7 +31,6 @@ interface SetShippingAddressesOnCartInterface
      * @return void
      * @throws GraphQlInputException
      * @throws GraphQlAuthorizationException
-     * @throws GraphQlAuthenticationException
      * @throws GraphQlNoSuchEntityException
      */
     public function execute(ContextInterface $context, CartInterface $cart, array $shippingAddressesInput): void;
