@@ -62,10 +62,10 @@ class Date extends Column
         UiComponentFactory $uiComponentFactory,
         TimezoneInterface $timezone,
         BooleanUtils $booleanUtils,
-        ResolverInterface $localeResolver = null,
-        DataBundle $dataBundle = null,
         array $components = [],
-        array $data = []
+        array $data = [],
+        ResolverInterface $localeResolver = null,
+        DataBundle $dataBundle = null
     ) {
         $this->timezone = $timezone;
         $this->booleanUtils = $booleanUtils;
