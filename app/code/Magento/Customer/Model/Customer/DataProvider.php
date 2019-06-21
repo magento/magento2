@@ -27,6 +27,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
+use Magento\Ui\Component\Form\Element\Multiline;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -343,7 +344,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
             foreach ($this->metaProperties as $metaName => $origName) {
                 $value = $attribute->getDataUsingMethod($origName);
-                $meta[$code]['arguments']['data']['config'][$metaName] = ($metaName === 'label') ? __($value) : $value;
+                if ($metaName === 'label') {
+                    $meta[$code]['arguments']['data']['config'][$metaName] = __($value);
+                    $meta[$code]['arguments']['data']['config']['__disableTmpl'] = [$metaName => true];
+                } else {
+                    $meta[$code]['arguments']['data']['config'][$metaName] = $value;
+                }
                 if ('frontend_input' === $origName) {
                     $meta[$code]['arguments']['data']['config']['formElement'] = isset($this->formElement[$value])
                         ? $this->formElement[$value]
@@ -370,7 +376,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             $this->overrideFileUploaderMetadata($entityType, $attribute, $meta[$code]['arguments']['data']['config']);
         }
-
         $this->processWebsiteMeta($meta);
         return $meta;
     }
@@ -568,8 +573,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         ) {
             $addresses[$addressId]['default_shipping'] = $customer['default_shipping'];
         }
-        if (isset($addresses[$addressId]['street']) && !is_array($addresses[$addressId]['street'])) {
-            $addresses[$addressId]['street'] = explode("\n", $addresses[$addressId]['street']);
+
+        foreach ($this->meta['address']['children'] as $attributeName => $attributeMeta) {
+            if ($attributeMeta['arguments']['data']['config']['dataType'] === Multiline::NAME
+                && isset($addresses[$addressId][$attributeName])
+                && !\is_array($addresses[$addressId][$attributeName])
+            ) {
+                $addresses[$addressId][$attributeName] = explode("\n", $addresses[$addressId][$attributeName]);
+            }
         }
     }
 

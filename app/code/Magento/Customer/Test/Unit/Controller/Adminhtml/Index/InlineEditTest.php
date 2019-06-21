@@ -9,6 +9,7 @@ use Magento\Customer\Model\AddressRegistry;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Escaper;
 
 /**
  * Unit tests for Inline customer edit.
@@ -78,6 +79,9 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
     /** @var array */
     private $items;
 
+    /** @var \Magento\Framework\Escaper */
+    private $escaper;
+
     /**
      * @inheritdoc
      *
@@ -86,7 +90,7 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
+        $this->escaper = new Escaper();
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->setMethods(['isPost'])
             ->getMockForAbstractClass();
@@ -171,6 +175,7 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
                 'addressRepository' => $this->addressRepository,
                 'logger' => $this->logger,
                 'addressRegistry' => $this->addressRegistry,
+                'escaper' => $this->escaper,
             ]
         );
         $reflection = new \ReflectionClass(get_class($this->controller));

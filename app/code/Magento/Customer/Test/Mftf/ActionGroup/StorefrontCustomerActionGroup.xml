@@ -15,4 +15,10 @@
                           stepKey="clickHeaderCustomerMenuButton" />
         <click selector="{{StorefrontPanelHeaderSection.customerLogoutLink}}" stepKey="clickSignOutButton" />
     </actionGroup>
+
+    <actionGroup name="StorefrontWaitCustomerLoggedOut">
+        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" stepKey="seeLogoutSuccessPageUrlAfterLogOutJohnSmithCustomer"/>
+        <waitForPageLoad stepKey="waitForRedirectToHomePage"/>
+        <waitForText selector="{{StorefrontCmsPageSection.mainContent}}" userInput="CMS homepage content goes here." stepKey="waitForLoadContentMessage"/>
+    </actionGroup>
 </actionGroups>

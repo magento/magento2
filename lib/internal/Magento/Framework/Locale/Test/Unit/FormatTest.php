@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Locale\Test\Unit;
 
+/**
+ * Tests class for Number locale format
+ */
 class FormatTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -84,25 +87,31 @@ class FormatTest extends \PHPUnit\Framework\TestCase
      */
     public function getPriceFormatDataProvider()
     {
+        $swissGroupSymbol = INTL_ICU_VERSION >= 59.1 ? '’' : '\'';
         return [
             ['en_US', ['decimalSymbol' => '.', 'groupSymbol' => ',']],
             ['de_DE', ['decimalSymbol' => ',', 'groupSymbol' => '.']],
-            ['de_CH', ['decimalSymbol' => '.', 'groupSymbol' => '\'']],
+            ['de_CH', ['decimalSymbol' => '.', 'groupSymbol' => $swissGroupSymbol]],
             ['uk_UA', ['decimalSymbol' => ',', 'groupSymbol' => ' ']]
         ];
     }
 
     /**
-     * @param float | null $expected
      * @param string|float|int $value
+     * @param float | null $expected
+     * @param string $locale
      * @dataProvider provideNumbers
      */
-    public function testGetNumber($value, $expected)
+    public function testGetNumber(string $value, float $expected, string $locale = null)
     {
+        if ($locale !== null) {
+            $this->localeResolver->method('getLocale')->willReturn($locale);
+        }
         $this->assertEquals($expected, $this->formatModel->getNumber($value));
     }
 
     /**
+     *
      * @return array
      */
     public function provideNumbers(): array
@@ -118,6 +127,8 @@ class FormatTest extends \PHPUnit\Framework\TestCase
             ['2 054.52', 2054.52],
             ['2,46 GB', 2.46],
             ['2,054.00', 2054],
+            ['4,000', 4000.0, 'ja_JP'],
+            ['4,000', 4.0, 'en_US'],
         ];
     }
 }

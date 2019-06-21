@@ -19,72 +19,72 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Customer\Model\CustomerFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerFactory;
+    private $customerFactory;
 
     /**
      * @var \Magento\Customer\Model\Data\CustomerSecureFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerSecureFactory;
+    private $customerSecureFactory;
 
     /**
      * @var \Magento\Customer\Model\CustomerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerRegistry;
+    private $customerRegistry;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\AddressRepository|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $addressRepository;
+    private $addressRepository;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerResourceModel;
+    private $customerResourceModel;
 
     /**
      * @var \Magento\Customer\Api\CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerMetadata;
+    private $customerMetadata;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $searchResultsFactory;
+    private $searchResultsFactory;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $eventManager;
+    private $eventManager;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $extensibleDataObjectConverter;
+    private $extensibleDataObjectConverter;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $dataObjectHelper;
+    private $dataObjectHelper;
 
     /**
      * @var \Magento\Framework\Api\ImageProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $imageProcessor;
+    private $imageProcessor;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $extensionAttributesJoinProcessor;
+    private $extensionAttributesJoinProcessor;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customer;
+    private $customer;
 
     /**
      * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -92,14 +92,14 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     private $collectionProcessorMock;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\CustomerRepository
-     */
-    protected $model;
-
-    /**
-     * @var NotificationStorage
+     * @var NotificationStorage|\PHPUnit_Framework_MockObject_MockObject
      */
     private $notificationStorage;
+
+    /**
+     * @var \Magento\Customer\Model\ResourceModel\CustomerRepository
+     */
+    private $model;
 
     protected function setUp()
     {
@@ -107,7 +107,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->createMock(\Magento\Customer\Model\ResourceModel\Customer::class);
         $this->customerRegistry = $this->createMock(\Magento\Customer\Model\CustomerRegistry::class);
         $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
-        $this->customerFactory  =
+        $this->customerFactory =
             $this->createPartialMock(\Magento\Customer\Model\CustomerFactory::class, ['create']);
         $this->customerSecureFactory = $this->createPartialMock(
             \Magento\Customer\Model\Data\CustomerSecureFactory::class,
@@ -193,38 +193,10 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testSave()
     {
         $customerId = 1;
-        $storeId = 2;
 
-        $region = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\RegionInterface::class, [], '', false);
-        $address = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\AddressInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
+        $customerModel = $this->createPartialMock(
+            \Magento\Customer\Model\Customer::class,
             [
-                'setCustomerId',
-                'setRegion',
-                'getRegion',
-                'getId'
-            ]
-        );
-        $address2 = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\AddressInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            [
-                'setCustomerId',
-                'setRegion',
-                'getRegion',
-                'getId'
-            ]
-        );
-        $customerModel = $this->createPartialMock(\Magento\Customer\Model\Customer::class, [
                 'getId',
                 'setId',
                 'setStoreId',
@@ -239,13 +211,10 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
                 'setFirstFailure',
                 'setLockExpires',
                 'save',
-            ]);
+            ]
+        );
 
         $origCustomer = $this->customer;
-
-        $this->customer->expects($this->atLeastOnce())
-            ->method('__toArray')
-            ->willReturn(['default_billing', 'default_shipping']);
 
         $customerAttributesMetaData = $this->getMockForAbstractClass(
             \Magento\Framework\Api\CustomAttributesDataInterface::class,
@@ -262,17 +231,23 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
                 'setAddresses'
             ]
         );
-        $customerSecureData = $this->createPartialMock(\Magento\Customer\Model\Data\CustomerSecure::class, [
+        $customerSecureData = $this->createPartialMock(
+            \Magento\Customer\Model\Data\CustomerSecure::class,
+            [
                 'getRpToken',
                 'getRpTokenCreatedAt',
                 'getPasswordHash',
                 'getFailuresNum',
                 'getFirstFailure',
                 'getLockExpires',
-            ]);
+            ]
+        );
         $this->customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
+        $this->customer->expects($this->atLeastOnce())
+            ->method('__toArray')
+            ->willReturn([]);
         $this->customerRegistry->expects($this->atLeastOnce())
             ->method('retrieve')
             ->with($customerId)
@@ -287,28 +262,6 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->customerRegistry->expects($this->atLeastOnce())
             ->method("remove")
             ->with($customerId);
-        $address->expects($this->once())
-            ->method('setCustomerId')
-            ->with($customerId)
-            ->willReturnSelf();
-        $address->expects($this->once())
-            ->method('getRegion')
-            ->willReturn($region);
-        $address->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn(7);
-        $address->expects($this->once())
-            ->method('setRegion')
-            ->with($region);
-        $customerAttributesMetaData->expects($this->atLeastOnce())
-            ->method('getAddresses')
-            ->willReturn([$address]);
-        $customerAttributesMetaData->expects($this->at(1))
-            ->method('setAddresses')
-            ->with([]);
-        $customerAttributesMetaData->expects($this->at(2))
-            ->method('setAddresses')
-            ->with([$address]);
         $this->extensibleDataObjectConverter->expects($this->once())
             ->method('toNestedArray')
             ->with($customerAttributesMetaData, [], \Magento\Customer\Api\Data\CustomerInterface::class)
@@ -320,17 +273,6 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $customerModel->expects($this->once())
             ->method('getStoreId')
             ->willReturn(null);
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $store->expects($this->once())
-            ->method('getId')
-            ->willReturn($storeId);
-        $this->storeManager
-            ->expects($this->once())
-            ->method('getStore')
-            ->willReturn($store);
-        $customerModel->expects($this->once())
-            ->method('setStoreId')
-            ->with($storeId);
         $customerModel->expects($this->once())
             ->method('setId')
             ->with($customerId);
@@ -362,16 +304,20 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $customerModel->expects($this->once())
             ->method('setRpToken')
-            ->willReturnMap([
-                ['rpToken', $customerModel],
-                [null, $customerModel],
-            ]);
+            ->willReturnMap(
+                [
+                    ['rpToken', $customerModel],
+                    [null, $customerModel],
+                ]
+            );
         $customerModel->expects($this->once())
             ->method('setRpTokenCreatedAt')
-            ->willReturnMap([
-                ['rpTokenCreatedAt', $customerModel],
-                [null, $customerModel],
-            ]);
+            ->willReturnMap(
+                [
+                    ['rpTokenCreatedAt', $customerModel],
+                    [null, $customerModel],
+                ]
+            );
 
         $customerModel->expects($this->once())
             ->method('setPasswordHash')
@@ -393,12 +339,6 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->customerRegistry->expects($this->once())
             ->method('push')
             ->with($customerModel);
-        $this->customer->expects($this->once())
-            ->method('getAddresses')
-            ->willReturn([$address, $address2]);
-        $this->addressRepository->expects($this->once())
-            ->method('save')
-            ->with($address);
         $customerAttributesMetaData->expects($this->once())
             ->method('getEmail')
             ->willReturn('example@example.com');
@@ -429,59 +369,24 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testSaveWithPasswordHash()
     {
         $customerId = 1;
-        $storeId = 2;
         $passwordHash = 'ukfa4sdfa56s5df02asdf4rt';
 
-        $customerSecureData = $this->createPartialMock(\Magento\Customer\Model\Data\CustomerSecure::class, [
+        $customerSecureData = $this->createPartialMock(
+            \Magento\Customer\Model\Data\CustomerSecure::class,
+            [
                 'getRpToken',
                 'getRpTokenCreatedAt',
                 'getPasswordHash',
                 'getFailuresNum',
                 'getFirstFailure',
                 'getLockExpires',
-            ]);
-        $region = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\RegionInterface::class,
-            [],
-            '',
-            false
-        );
-        $address = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\AddressInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            [
-                'setCustomerId',
-                'setRegion',
-                'getRegion',
-                'getId'
             ]
         );
-        $address2 = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\AddressInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            [
-                'setCustomerId',
-                'setRegion',
-                'getRegion',
-                'getId'
-            ]
-        );
-
         $origCustomer = $this->customer;
 
-        $this->customer->expects($this->atLeastOnce())
-            ->method('__toArray')
-            ->willReturn(['default_billing', 'default_shipping']);
-
-        $customerModel = $this->createPartialMock(\Magento\Customer\Model\Customer::class, [
+        $customerModel = $this->createPartialMock(
+            \Magento\Customer\Model\Customer::class,
+            [
                 'getId',
                 'setId',
                 'setStoreId',
@@ -493,7 +398,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getDataModel',
                 'setPasswordHash',
                 'save',
-            ]);
+            ]
+        );
         $customerAttributesMetaData = $this->getMockForAbstractClass(
             \Magento\Framework\Api\CustomAttributesDataInterface::class,
             [],
@@ -544,10 +450,12 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $customerSecureData->expects($this->once())
             ->method('getLockExpires')
             ->willReturn('lockExpires');
-
         $this->customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
+        $this->customer->expects($this->atLeastOnce())
+            ->method('__toArray')
+            ->willReturn([]);
         $this->customerRegistry->expects($this->atLeastOnce())
             ->method('retrieve')
             ->with($customerId)
@@ -559,28 +467,6 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($this->customer, CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $this->customer)
             ->willReturn($customerAttributesMetaData);
-        $address->expects($this->once())
-            ->method('setCustomerId')
-            ->with($customerId)
-            ->willReturnSelf();
-        $address->expects($this->once())
-            ->method('getRegion')
-            ->willReturn($region);
-        $address->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn(7);
-        $address->expects($this->once())
-            ->method('setRegion')
-            ->with($region);
-        $customerAttributesMetaData->expects($this->any())
-            ->method('getAddresses')
-            ->willReturn([$address]);
-        $customerAttributesMetaData->expects($this->at(1))
-            ->method('setAddresses')
-            ->with([]);
-        $customerAttributesMetaData->expects($this->at(2))
-            ->method('setAddresses')
-            ->with([$address]);
         $customerAttributesMetaData
             ->expects($this->atLeastOnce())
             ->method('getId')
@@ -594,20 +480,6 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with(['data' => ['customerData']])
             ->willReturn($customerModel);
         $customerModel->expects($this->once())
-            ->method('getStoreId')
-            ->willReturn(null);
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $store->expects($this->once())
-            ->method('getId')
-            ->willReturn($storeId);
-        $this->storeManager
-            ->expects($this->once())
-            ->method('getStore')
-            ->willReturn($store);
-        $customerModel->expects($this->once())
-            ->method('setStoreId')
-            ->with($storeId);
-        $customerModel->expects($this->once())
             ->method('setId')
             ->with($customerId);
         $customerModel->expects($this->atLeastOnce())
@@ -618,12 +490,6 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->customerRegistry->expects($this->once())
             ->method('push')
             ->with($customerModel);
-        $this->customer->expects($this->any())
-            ->method('getAddresses')
-            ->willReturn([$address, $address2]);
-        $this->addressRepository->expects($this->once())
-            ->method('save')
-            ->with($address);
         $customerAttributesMetaData->expects($this->once())
             ->method('getEmail')
             ->willReturn('example@example.com');

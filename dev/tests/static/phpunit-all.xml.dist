@@ -22,4 +22,12 @@
         <!-- TESTCODESTYLE_IS_FULL_SCAN - specify if full scan should be performed for test code style test -->
         <const name="TESTCODESTYLE_IS_FULL_SCAN" value="1"/>
     </php>
+    <listeners>
+        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+            <arguments>
+                <string>var/allure-results</string> <!-- XML files output directory -->
+                <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
+            </arguments>
+        </listener>
+    </listeners>
 </phpunit>
