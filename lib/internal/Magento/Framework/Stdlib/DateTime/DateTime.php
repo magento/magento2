@@ -90,7 +90,7 @@ class DateTime
         if ($format === null) {
             $format = 'Y-m-d H:i:s';
         }
-        $result = date($format, $this->timestamp($input, $format));
+        $result = date($format, $this->convertToTimestamp($input, $format));
         return $result;
     }
 
@@ -130,7 +130,12 @@ class DateTime
      *
      * @return int
      */
-    public function timestamp($input = null, $format = null)
+    public function timestamp($input = null)
+    {
+        $this->convertToTimestamp($input);
+    }
+
+    private function convertToTimestamp($input = null, $format = null)
     {
         switch (true) {
             case ($input === null):
