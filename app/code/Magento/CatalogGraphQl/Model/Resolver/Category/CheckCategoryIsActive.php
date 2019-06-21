@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Category;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Catalog\Model\Category;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
@@ -43,13 +42,13 @@ class CheckCategoryIsActive
     /**
      * Check if category is active.
      *
-     * @param int $rootCategoryId
+     * @param int $categoryId
      * @throws GraphQlNoSuchEntityException
      */
-    public function execute(int $rootCategoryId): void
+    public function execute(int $categoryId): void
     {
         $collection = $this->collectionFactory->create();
-        $collection->addAttributeToFilter(Category::KEY_IS_ACTIVE, ['eq' => 1])
+        $collection->addAttributeToFilter(CategoryInterface::KEY_IS_ACTIVE, ['eq' => 1])
             ->getSelect()
             ->where(
                 $collection->getSelect()
@@ -58,7 +57,7 @@ class CheckCategoryIsActive
                         'e.' .
                         $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField()
                     ) . ' = ?',
-                $rootCategoryId
+                $categoryId
             );
 
         if ($collection->count() === 0) {
