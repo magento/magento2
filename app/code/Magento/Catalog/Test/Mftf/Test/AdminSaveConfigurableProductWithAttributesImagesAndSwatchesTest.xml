@@ -96,9 +96,13 @@
             <argument name="attributeCode" value="{{productVisualSwatchAttribute.attribute_code}}"/>
         </actionGroup>
 
+        <!-- Using this action to concatenate 2 strings to have unique identifier for grid -->
+        <executeJS function="return '{{productVisualSwatchAttribute.attribute_code}}: red'" stepKey="attributeCodeRed"/>
+        <executeJS function="return '{{productVisualSwatchAttribute.attribute_code}}: blue'" stepKey="attributeCodeBlue"/>
+
         <!-- Add images for the products -->
-        <attachFile selector="{{AdminProductFormConfigurationsSection.addImageByAttributeOption('red')}}" userInput="{{MagentoLogo.file}}" stepKey="uploadImageForFirstProduct"/>
-        <attachFile selector="{{AdminProductFormConfigurationsSection.addImageByAttributeOption('blue')}}" userInput="{{ProductImage.file}}" stepKey="uploadImageForSecondProduct"/>
+        <attachFile selector="{{AdminDataGridTableSection.rowTemplate({$attributeCodeRed})}}{{AdminProductFormConfigurationsSection.fileUploaderInput}}" userInput="{{MagentoLogo.file}}" stepKey="uploadImageForFirstProduct"/>
+        <attachFile selector="{{AdminDataGridTableSection.rowTemplate({$attributeCodeBlue})}}{{AdminProductFormConfigurationsSection.fileUploaderInput}}" userInput="{{ProductImage.file}}" stepKey="uploadImageForSecondProduct"/>
 
         <!-- Click "Save" button -->
         <actionGroup ref="saveProductForm" stepKey="clickSaveButton"/>
