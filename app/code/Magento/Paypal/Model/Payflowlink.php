@@ -6,7 +6,6 @@
 
 namespace Magento\Paypal\Model;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
@@ -464,10 +463,12 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         /** @var \Magento\Paypal\Model\Payflow\Request $request */
         $request = $this->_requestFactory->create();
         $cscEditable = $this->getConfigData('csc_editable');
-        try {
+
+        if (empty($this->getResponse()->getInvnum())) {
             $payment = $this->getInfoInstance();
-        } catch (LocalizedException $e){
-            $this->logger->debug($e->getTraceAsString());
+        } else {
+            $order = $this->_getOrderFromResponse();
+            $payment = $order->getPayment();
         }
 
         $data = parent::buildBasicRequest();
@@ -610,7 +611,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     /**
      * Get payment cancel callback url
      *
-     * @param OrderPaymentInterface $payment
+     * @param \Magento\Sales\Model\Order\Payment $payment
      * @return string
      */
     private function getCancelCallbackUrl($payment): string
@@ -622,7 +623,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     /**
      * Get payment return callback url
      *
-     * @param OrderPaymentInterface $payment
+     * @param \Magento\Sales\Model\Order\Payment $payment
      * @return string
      */
     private function getReturnCallbackUrl($payment): string
@@ -634,7 +635,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     /**
      * Get payment error callback url
      *
-     * @param OrderPaymentInterface $payment
+     * @param \Magento\Sales\Model\Order\Payment $payment
      * @return string
      */
     private function getErrorCallbackUrl($payment): string
