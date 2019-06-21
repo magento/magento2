@@ -62,6 +62,7 @@ class CreateCustomerAddress implements ResolverInterface
             throw new GraphQlInputException(__('"input" value should be specified'));
         }
 
-        $address = $this->createCustomerAddress->execute($context->ge
+        $address = $this->createCustomerAddress->execute($context->getUserId(), $args['input']);
+        return $this->extractCustomerAddressData->execute($address);
     }
 }
