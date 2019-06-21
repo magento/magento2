@@ -19,8 +19,7 @@
          <Rate>24.85</Rate>
       </Postage>
       <Postage CLASSID="2">
-         <MailService>Priority Mail Express 1-Day&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt;
-         Hold For Pickup</MailService>
+         <MailService>Priority Mail Express 1-Day&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt;Hold For Pickup</MailService>
          <Rate>24.85</Rate>
       </Postage>
       <Postage CLASSID="23">
@@ -128,8 +127,7 @@
          <Rate>5.60</Rate>
       </Postage>
       <Postage CLASSID="42">
-         <MailService>Priority Mail 1-Day&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt;
-         Small Flat Rate Envelope</MailService>
+         <MailService>Priority Mail 1-Day&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt;&#10;Small Flat Rate Envelope</MailService>
          <Rate>5.60</Rate>
       </Postage>
       <Postage CLASSID="40">
