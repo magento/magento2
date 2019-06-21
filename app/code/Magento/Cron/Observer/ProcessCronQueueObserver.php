@@ -3,16 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 /**
  * Handling cron jobs
  */
 namespace Magento\Cron\Observer;
 
+use Magento\Cron\Model\Schedule;
 use Magento\Framework\App\State;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Cron\Model\Schedule;
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 use Magento\Framework\Profiler\Driver\Standard\StatFactory;
 
@@ -204,7 +203,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-
         $currentTime = $this->dateTime->gmtTimestamp();
         $jobGroupsRoot = $this->_config->getJobs();
         // sort jobs groups to start from used in separated process
@@ -258,7 +256,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     private function lockGroup($groupId, callable $callback)
     {
-
         if (!$this->lockManager->lock(self::LOCK_PREFIX . $groupId, self::LOCK_TIMEOUT)) {
             $this->logger->warning(
                 sprintf(
@@ -293,17 +290,20 @@ class ProcessCronQueueObserver implements ObserverInterface
         $scheduleLifetime = $scheduleLifetime * self::SECONDS_IN_MINUTE;
         if ($scheduledTime < $currentTime - $scheduleLifetime) {
             $schedule->setStatus(Schedule::STATUS_MISSED);
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(sprintf('Cron Job %s is missed at %s', $jobCode, $schedule->getScheduledAt()));
         }
 
         if (!isset($jobConfig['instance'], $jobConfig['method'])) {
             $schedule->setStatus(Schedule::STATUS_ERROR);
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(sprintf('No callbacks found for cron job %s', $jobCode));
         }
         $model = $this->_objectManager->create($jobConfig['instance']);
         $callback = [$model, $jobConfig['method']];
         if (!is_callable($callback)) {
             $schedule->setStatus(Schedule::STATUS_ERROR);
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(
                 sprintf('Invalid callback: %s::%s can\'t be called', $jobConfig['instance'], $jobConfig['method'])
             );
@@ -314,15 +314,18 @@ class ProcessCronQueueObserver implements ObserverInterface
         $this->startProfiling();
         try {
             $this->logger->info(sprintf('Cron Job %s is run', $jobCode));
+            //phpcs:ignore Magento2.Functions.DiscouragedFunction
             call_user_func_array($callback, [$schedule]);
         } catch (\Throwable $e) {
             $schedule->setStatus(Schedule::STATUS_ERROR);
-            $this->logger->error(sprintf(
-                'Cron Job %s has an error: %s. Statistics: %s',
-                $jobCode,
-                $e->getMessage(),
-                $this->getProfilingStat()
-            ));
+            $this->logger->error(
+                sprintf(
+                    'Cron Job %s has an error: %s. Statistics: %s',
+                    $jobCode,
+                    $e->getMessage(),
+                    $this->getProfilingStat()
+                )
+            );
             if (!$e instanceof \Exception) {
                 $e = new \RuntimeException(
                     'Error when running a cron job',
@@ -336,7 +339,8 @@ class ProcessCronQueueObserver implements ObserverInterface
         }
 
         $schedule->setStatus(
-        Schedule::STATUS_SUCCESS)->setFinishedAt(
+            Schedule::STATUS_SUCCESS
+        )->setFinishedAt(
             strftime(
                 '%Y-%m-%d %H:%M:%S',
                 $this->dateTime->gmtTimestamp()
@@ -411,7 +415,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         $jobs = $this->_config->getJobs();
         $pendingJobs = $this->_scheduleFactory->create()->getCollection();
         $pendingJobs->addFieldToFilter(
-        'status',
+            'status',
             [
                 'in' => [
                     Schedule::STATUS_PENDING, Schedule::STATUS_RUNNING, Schedule::STATUS_SUCCESS
