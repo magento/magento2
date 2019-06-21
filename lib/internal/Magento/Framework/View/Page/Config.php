@@ -9,6 +9,8 @@ namespace Magento\Framework\View\Page;
 use Magento\Framework\App;
 use Magento\Framework\App\Area;
 use Magento\Framework\View;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * An API for page configuration
@@ -55,7 +57,7 @@ class Config
     const HTML_ATTRIBUTE_LANG = 'lang';
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     private $escaper;
 
@@ -155,7 +157,7 @@ class Config
     private function getAreaResolver()
     {
         if ($this->areaResolver === null) {
-            $this->areaResolver = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->areaResolver = ObjectManager::getInstance()
                 ->get(\Magento\Framework\App\State::class);
         }
         return $this->areaResolver;
@@ -169,7 +171,7 @@ class Config
      * @param Title $title
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param bool $isIncludesAvailable
-     * @param \Magento\Framework\Escaper|null $escaper
+     * @param Escaper|null $escaper
      */
     public function __construct(
         View\Asset\Repository $assetRepo,
@@ -179,7 +181,7 @@ class Config
         Title $title,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         $isIncludesAvailable = true,
-        \Magento\Framework\Escaper $escaper = null
+        Escaper $escaper = null
     ) {
         $this->assetRepo = $assetRepo;
         $this->pageAssets = $pageAssets;
@@ -193,8 +195,8 @@ class Config
             self::HTML_ATTRIBUTE_LANG,
             strstr($this->localeResolver->getLocale(), '_', true)
         );
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Escaper::class
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
         );
     }
 

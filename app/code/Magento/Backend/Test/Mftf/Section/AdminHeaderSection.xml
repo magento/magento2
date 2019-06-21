@@ -13,5 +13,7 @@
         <element name="adminUserAccountText" type="text" selector=".page-header .admin-user-account-text" />
         <!-- Legacy heading section. Mostly used for admin 404 and 403 pages -->
         <element name="pageHeading" type="text" selector=".page-content .page-heading"/>
+        <!-- Used for page not found error -->
+        <element name="pageNotFoundTitle" type="text" selector=".page-title span"/>
     </section>
 </sections>
