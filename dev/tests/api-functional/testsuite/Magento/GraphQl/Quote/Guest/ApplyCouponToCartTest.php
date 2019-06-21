@@ -203,7 +203,7 @@ QUERY;
                 'Required parameter "cart_id" is missing'
             ],
             'missed_coupon_code' => [
-                'cart_id: "test"',
+                'cart_id: "test_quote"',
                 'Required parameter "coupon_code" is missing'
             ],
         ];
