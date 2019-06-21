@@ -29,6 +29,8 @@
         <element name="estimateShippingAndTax" type="text" selector="#block-shipping-heading" timeout="5"/>
         <element name="flatRateShippingMethod" type="input" selector="#s_method_flatrate_flatrate" timeout="30"/>
         <element name="shippingMethodLabel" type="text" selector="#co-shipping-method-form dl dt span"/>
+        <element name="methodName" type="text" selector="#co-shipping-method-form label"/>
+        <element name="shippingPrice" type="text" selector="#co-shipping-method-form span .price"/>
         <element name="shippingMethodElementId" type="radio" selector="#s_method_{{carrierCode}}_{{methodCode}}" parameterized="true"/>
     </section>
 </sections>
