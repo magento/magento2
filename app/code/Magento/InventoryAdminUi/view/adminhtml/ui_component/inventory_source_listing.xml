@@ -272,7 +272,7 @@
                 <visible>false</visible>
             </settings>
         </column>
-        <actionsColumn name="actions" class="Magento\Backend\Ui\Component\Listing\Column\EditAction" sortOrder="200">
+        <actionsColumn name="actions" class="Magento\InventoryAdminUi\Ui\Component\Listing\Column\SourceEditAction" sortOrder="200">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="editUrlPath" xsi:type="string">inventory/source/edit</item>
