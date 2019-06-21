@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Add Downloadable Product"/>
             <title value="Downloadable Product created with Default Source assigned by Admin user"/>
-            <description value="Downloadable Product created with Default Source assigned by Admin user"/>
-            <testCaseId value="MSI-1749"/>
+            <description value="Downloadable Product created with Default Source assigned by Admin user."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457024/scenarios/1436947"/>
             <severity value="MAJOR"/>
             <group value="msi"/>
             <group value="multi_mode"/>

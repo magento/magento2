@@ -13,6 +13,9 @@ use Magento\TestFramework\Assert\AssertArrayContains;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
 
+/**
+ * @see https://app.hiptest.com/projects/69435/test-plan/folders/530616/scenarios/1824147
+ */
 class SourceSelectionServiceTest extends WebapiAbstract
 {
     /**#@+

@@ -13,7 +13,7 @@
             <stories value="Add Order"/>
             <title value="Create an Order with a Virtual Product via the Storefront"/>
             <description value="You should be able to create an Order with a Virtual Product from the Storefront."/>
-            <testCaseId value="MSI-1043"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419536/scenarios/1680101"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -71,6 +71,7 @@
 
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickOnAddToCart1"/>
         <waitForPageLoad stepKey="waitForPageLoad9"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
 
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnTheShoppingCart1"/>
         <waitForPageLoad stepKey="waitForPageLoad10"/>

@@ -13,10 +13,13 @@
             <stories value="Add Order"/>
             <title value="Create an Order with a Downloadable Product assigned to the Default Stock via the Storefront as Guest"/>
             <description value="You should be able to create an Order with a Downloadable Product from the Storefront as Guest."/>
-            <testCaseId value="MSI-1299"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419539/scenarios/1437474"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
 
         <before>

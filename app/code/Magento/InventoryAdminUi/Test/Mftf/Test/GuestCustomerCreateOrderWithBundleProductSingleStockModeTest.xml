@@ -13,7 +13,7 @@
             <stories value="Create order with bundle product in single stock mode from storefront as guest customer."/>
             <title value="Create order with bundle product in single stock from storefront as guest customer."/>
             <description value="Check, guest customer able to create order with bundle product in single stock mode from storefront."/>
-            <testCaseId value="MSI-1329"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/914066/scenarios/1434476"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>

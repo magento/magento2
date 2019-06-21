@@ -13,7 +13,7 @@
             <stories value="Add Grouped Product"/>
             <title value="Guest customer ordered grouped product on single stock mode from homepage"/>
             <description value="Guest customer should be able to place order with grouped product on single stock."/>
-            <testCaseId value="MSI-1317"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/914072/scenarios/1437505"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>

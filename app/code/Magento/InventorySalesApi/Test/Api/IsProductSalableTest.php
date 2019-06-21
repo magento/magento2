@@ -10,6 +10,9 @@ namespace Magento\InventorySalesApi\Test\Api;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Rest\Request;
 
+/**
+ * @see https://app.hiptest.com/projects/69435/test-plan/folders/530616/scenarios/1824145
+ */
 class IsProductSalableTest extends WebapiAbstract
 {
     const API_PATH = '/V1/inventory/is-product-salable';

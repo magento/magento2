@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Admin user applied 'Use decimals' to Simple product in Advanced inventory on  product page"/>
             <title value="Admin user applied 'Use decimals' to Simple product in Advanced inventory on  product page"/>
-            <description value="Admin user applied 'Use decimals' to Simple product in Advanced inventory on  product page"/>
-            <testCaseId value="MSI-1472"/>
+            <description value="Admin user applied 'Use decimals' to Simple product in Advanced inventory on  product page."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457014/scenarios/1840408"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -79,6 +79,7 @@
 
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickOnAddToCart1"/>
         <waitForPageLoad stepKey="waitForPageLoad9"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
 
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnTheShoppingCart1"/>
         <waitForPageLoad stepKey="waitForPageLoad10"/>

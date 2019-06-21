@@ -2,3 +2,4 @@
 
 app/code/Magento/Inventory*
 dev/tests/static/testsuite/Magento/Test/Integrity/Xml/SchemaTest.php
+dev/tests/static/framework/autoload.php

@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Catalog Quick Search"/>
             <title value="Quick Catalog Search for Bundle Product on Single stock mode"/>
-            <description value="Quick Catalog Search for Bundle Product on Single stock mode"/>
-            <testCaseId value="MSI-1812"/>
+            <description value="Quick Catalog Search for Bundle Product on Single stock mode."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/915133/scenarios/1624126"/>
             <severity value="AVERAGE"/>
             <group value="msi"/>
             <group value="single_mode"/>

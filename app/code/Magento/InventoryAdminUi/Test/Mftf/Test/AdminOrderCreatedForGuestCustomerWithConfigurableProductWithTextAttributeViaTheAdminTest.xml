@@ -13,7 +13,7 @@
             <stories value="Add Order"/>
             <title value="Create an Order for a Guest Customer with a Configurable Product with Text Swatch Attributes via the Admin."/>
             <description value="You should be able to place an Order for a Guest Customer using a Configurable Product with Text Swatch Attributes that is assigned to a Source with a Stock."/>
-            <testCaseId value="MSI-1324"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419535/scenarios/1432482"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

@@ -12,11 +12,14 @@
         <annotations>
             <stories value="MSI Credit Memo"/>
             <title value="Credit memo created with partial Refund for order with Simple product on Default stock after full invoice in Admin"/>
-            <description value="Credit memo created with partial Refund for order with Simple product on Default stock after full invoice in Admin"/>
-            <testCaseId value="MSI-1973"/>
+            <description value="Credit memo created with partial Refund for order with Simple product on Default stock after full invoice in Admin."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735125/scenarios/1474997"/>
             <severity value="BLOCKER"/>
             <group value="msi"/>
             <group value="multi_mode"/>
+            <skip>
+                <issueId value="MC-16684"/>
+            </skip>
         </annotations>
 
         <before>

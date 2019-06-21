@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryExportStockApi\Api;
 
 /**
- * Interface for ExportStockIndexData which provides stock index export
+ * Class ExportStockIndexData provides stock index export based on raw data contained in the stock index.
  * @api
  */
 interface ExportStockIndexDataInterface
@@ -16,8 +16,9 @@ interface ExportStockIndexDataInterface
     /**
      * Provides stock index export from inventory_stock_% table
      *
-     * @param string $websiteCode
+     * @param string $salesChannelType
+     * @param string $salesChannelCode
      * @return \Magento\InventoryExportStockApi\Api\Data\ProductStockIndexDataInterface[]
      */
-    public function execute(string $websiteCode): array;
+    public function execute(string $salesChannelType, string $salesChannelCode): array;
 }

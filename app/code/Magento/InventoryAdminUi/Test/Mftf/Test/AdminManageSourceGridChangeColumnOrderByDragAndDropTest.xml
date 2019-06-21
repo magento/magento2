@@ -13,7 +13,7 @@
             <stories value="Column drag and drop changed column order."/>
             <title value="Column drag and drop changed column order in Manage Sources grid by Admin user."/>
             <description value="Column drag and drop changed column order in Manage Sources grid by Admin user."/>
-            <testCaseId value="MSI-932"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/910317/scenarios/1408744"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

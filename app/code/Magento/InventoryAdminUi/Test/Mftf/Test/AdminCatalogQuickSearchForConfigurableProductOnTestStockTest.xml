@@ -12,8 +12,8 @@
         <annotations>
             <stories value="Catalog Quick Search"/>
             <title value="Quick Catalog Search for Configurable Product on Test stock"/>
-            <description value="Quick Catalog Search for Configurable Product on Test stock"/>
-            <testCaseId value="MSI-1788"/>
+            <description value="Quick Catalog Search for Configurable Product on Test stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/441590/scenarios/1517925"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

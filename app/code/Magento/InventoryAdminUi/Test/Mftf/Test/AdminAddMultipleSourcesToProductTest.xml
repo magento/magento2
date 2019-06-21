@@ -13,7 +13,7 @@
             <stories value="Add Sources to Products"/>
             <title value="Add Multiple Sources to a Product"/>
             <description value="You should be able to add Multiple Sources to a Product."/>
-            <testCaseId value="MSI-630"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/911726/scenarios/1408758"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

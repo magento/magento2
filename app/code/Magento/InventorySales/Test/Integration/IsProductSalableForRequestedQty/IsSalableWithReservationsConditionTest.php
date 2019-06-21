@@ -232,6 +232,8 @@ class IsSalableWithReservationsConditionTest extends TestCase
     }
 
     /**
+     * @see https://app.hiptest.com/projects/69435/test-plan/folders/909051/scenarios/3041232
+     *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php

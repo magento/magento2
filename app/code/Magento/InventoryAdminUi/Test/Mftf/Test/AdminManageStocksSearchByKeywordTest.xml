@@ -13,7 +13,7 @@
             <stories value="Search By Keyword in a Grid"/>
             <title value="Search by Keyword on the Manage Stock grid"/>
             <description value="You should be able to Search by Keyword from the Manage Stock grid."/>
-            <testCaseId value="MSI-515"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/910527/scenarios/1408747"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

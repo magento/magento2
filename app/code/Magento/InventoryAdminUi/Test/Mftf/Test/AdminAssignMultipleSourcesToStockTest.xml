@@ -13,7 +13,7 @@
             <stories value="Assign Sources to Stocks"/>
             <title value="Multiple Sources assigned to a Stock"/>
             <description value="You should be able to assign multiple Sources to a Stock, via the Admin."/>
-            <testCaseId value="MSI-521"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/910527/scenarios/1408734"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
