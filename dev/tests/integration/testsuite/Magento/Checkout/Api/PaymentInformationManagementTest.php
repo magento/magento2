@@ -94,7 +94,7 @@ class PaymentInformationManagementTest extends TestCase
                 ]
             ]
         ];
-        $response = new Error(['errors' => $errors]);
+        $response = new Error(['errors' => $errors, 'transaction' => ['status' => 'declined']]);
 
         $this->client->method('placeRequest')
             ->willReturn(['object' => $response]);

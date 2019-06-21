@@ -27,7 +27,15 @@ class ErrorCodeValidator
             return [true, [__('Transaction is successful.')]];
         }
 
-        return [false, $this->getErrorCodes($response->errors)];
+        $errorCodes = $this->getErrorCodes($response->errors);
+        if (isset($response->transaction->status) && $response->transaction->status === 'gateway_rejected') {
+            $errorCodes[] = $response->transaction->gatewayRejectionReason;
+        }
+        if (isset($response->transaction->status) && $response->transaction->status === 'processor_declined') {
+            $errorCodes[] = $response->transaction->processorResponseCode;
+        }
+
+        return [false, $errorCodes];
     }
 
     /**
