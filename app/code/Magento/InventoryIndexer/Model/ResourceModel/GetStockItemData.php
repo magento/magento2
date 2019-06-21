@@ -43,6 +43,8 @@ class GetStockItemData implements GetStockItemDataInterface
     /**
      * @param ResourceConnection $resource
      * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
+     * @param DefaultStockProviderInterface $defaultStockProvider
+     * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      */
     public function __construct(
         ResourceConnection $resource,
