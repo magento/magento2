@@ -169,7 +169,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
         }
-
+        // TODO: use store time and convert to GMT
         $baseFieldset->addField(
             'expires_at',
             'date',

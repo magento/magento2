@@ -13,7 +13,6 @@ namespace Magento\User\Model\ResourceModel\User;
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
-
     /**
      * Define resource model
      *
@@ -28,6 +27,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Collection Init Select
      *
      * @return $this
+     * @since 101.1.0
      */
     protected function _initSelect()
     {
@@ -41,23 +41,5 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'user_role.parent_id = detail_role.role_id',
             ['role_name']
         );
-    }
-
-    /**
-     * Filter for expired, active users.
-     *
-     * @param string $now
-     * @return $this
-     */
-    public function addActiveExpiredUsersFilter($now = null)
-    {
-        if ($now === null) {
-            $now = new \DateTime();
-            $now->format('Y-m-d H:i:s');
-        }
-        $this->addFieldToFilter('expires_at', ['lt' => $now])
-            ->addFieldToFilter('is_active', 1);
-
-        return $this;
     }
 }

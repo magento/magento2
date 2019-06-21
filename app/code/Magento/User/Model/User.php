@@ -115,12 +115,12 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     protected $_encryptor;
 
     /**
-     * @deprecated
+     * @deprecated 101.1.0
      */
     protected $_transportBuilder;
 
     /**
-     * @deprecated
+     * @deprecated 101.1.0
      */
     protected $_storeManager;
 
@@ -140,7 +140,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     private $notificator;
 
     /**
-     * @deprecated
+     * @deprecated 101.1.0
      */
     private $deploymentConfig;
 
@@ -212,14 +212,9 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Removing dependencies and leaving only entity's properties.
      *
      * @return string[]
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $properties = parent::__sleep();
         return array_diff(
             $properties,
@@ -245,14 +240,9 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Restoring required objects after serialization.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->serializer = $objectManager->get(Json::class);
@@ -321,10 +311,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
             if ($this->hasPasswordConfirmation()) {
                 $this->validationRules->addPasswordConfirmationRule($validator, $this->getPasswordConfirmation());
             }
-        }
-
-        if (!empty($this->getExpiresAt())) {
-            $this->validationRules->addExpiresAtRule($validator);
         }
         return $validator;
     }
@@ -420,10 +406,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function getRole()
     {
-        if ($this->getData('extracted_role')) {
-            $this->_role = $this->getData('extracted_role');
-            $this->unsetData('extracted_role');
-        }
         if (null === $this->_role) {
             $this->_role = $this->_roleFactory->create();
             $roles = $this->getRoles();
@@ -459,7 +441,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * Send email with reset password confirmation link.
      *
-     * @deprecated
+     * @deprecated 101.1.0
      * @see NotificatorInterface::sendForgotPassword()
      *
      * @return $this
@@ -539,7 +521,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @throws NotificationExceptionInterface
      * @return $this
      * @since 100.1.0
-     * @deprecated
+     * @deprecated 101.1.0
      * @see NotificatorInterface::sendUpdated()
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -919,22 +901,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     public function setInterfaceLocale($interfaceLocale)
     {
         return $this->setData('interface_locale', $interfaceLocale);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getExpiresAt()
-    {
-        return $this->_getData('expires_at');
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setExpiresAt($expiresAt)
-    {
-        return $this->setData('expires_at', $expiresAt);
     }
 
     /**

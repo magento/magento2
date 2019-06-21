@@ -6,12 +6,10 @@
 
 namespace Magento\User\Model;
 
-use Magento\User\Model\Validator\ExpiresAt;
 use Magento\Framework\Validator\EmailAddress;
 use Magento\Framework\Validator\NotEmpty;
 use Magento\Framework\Validator\Regex;
 use Magento\Framework\Validator\StringLength;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class for adding validation rules to an Admin user
@@ -25,20 +23,6 @@ class UserValidationRules
      * Minimum length of admin password
      */
     const MIN_PASSWORD_LENGTH = 7;
-    /**
-     * @var Validator\ExpiresAt|null
-     */
-    private $expiresValiator;
-
-    /**
-     * UserValidationRules constructor.
-     * @param Validator\ExpiresAt|null $expiresValiator
-     */
-    public function __construct(?ExpiresAt $expiresValiator = null)
-    {
-        $this->expiresValiator = $expiresValiator
-            ?: ObjectManager::getInstance()->get(ExpiresAt::class);
-    }
 
     /**
      * Adds validation rule for user first name, last name, username and email
@@ -139,38 +123,6 @@ class UserValidationRules
             \Zend_Validate_Identical::NOT_SAME
         );
         $validator->addRule($passwordConfirmation, 'password');
-        return $validator;
-    }
-
-    /**
-     * Adds validation rule for expiration date.
-     *
-     * @param \Magento\Framework\Validator\DataObject $validator
-     * @return \Magento\Framework\Validator\DataObject
-     * @throws \Zend_Validate_Exception
-     */
-    public function addExpiresAtRule(\Magento\Framework\Validator\DataObject $validator)
-    {
-        $dateValidator = new \Zend_Validate_Date(
-            [
-                'format' => \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT,
-            ]
-        );
-        $dateValidator->setMessage(
-            __('"Expiration date" invalid type entered.'),
-            \Zend_Validate_Date::INVALID
-        );
-        $dateValidator->setMessage(
-            __('"Expiration date" is not a valid date.'),
-            \Zend_Validate_Date::INVALID_DATE
-        );
-        $dateValidator->setMessage(
-            __('"Expiration date" does not fit the required date format.'),
-            \Zend_Validate_Date::FALSEFORMAT
-        );
-        $validator->addRule($dateValidator, 'expires_at');
-        $validator->addRule($this->expiresValiator, 'expires_at');
-
         return $validator;
     }
 }

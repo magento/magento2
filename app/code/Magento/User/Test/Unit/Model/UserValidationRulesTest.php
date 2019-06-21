@@ -7,11 +7,6 @@ namespace Magento\User\Test\Unit\Model;
 
 use Magento\User\Model\UserValidationRules;
 
-/**
- * Class UserValidationRulesTest
- *
- * @package Magento\User\Test\Unit\Model
- */
 class UserValidationRulesTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -46,11 +41,5 @@ class UserValidationRulesTest extends \PHPUnit\Framework\TestCase
     {
         $this->validator->expects($this->once())->method('addRule')->willReturn($this->validator);
         $this->assertSame($this->validator, $this->rules->addPasswordConfirmationRule($this->validator, ''));
-    }
-
-    public function testAddExpiresAtRule()
-    {
-        $this->validator->expects($this->atMost(2))->method('addRule')->willReturn($this->validator);
-        $this->assertSame($this->validator, $this->rules->addExpiresAtRule($this->validator));
     }
 }

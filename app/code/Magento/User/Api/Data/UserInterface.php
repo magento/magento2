@@ -162,19 +162,4 @@ interface UserInterface
      * @return $this
      */
     public function setInterfaceLocale($interfaceLocale);
-
-    /**
-     * Get user expiration date.
-     *
-     * @return string
-     */
-    public function getExpiresAt();
-
-    /**
-     * Set user expiration date.
-     *
-     * @param string $expiresAt
-     * @return $this
-     */
-    public function setExpiresAt($expiresAt);
 }
