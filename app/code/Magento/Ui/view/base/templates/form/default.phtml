@@ -4,17 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * @var \Magento\Ui\Component\Form $block
  */
-/* @escapeNotVerified */ echo $block->renderChildComponent('before_form');
 ?>
-<div data-role="spinner" data-component="<?= /* @escapeNotVerified */ $block->getName() ?>.areas" class="admin__data-grid-loading-mask">
+<?=/* @noEscape */ $block->renderChildComponent('before_form') ?>
+<div data-role="spinner"
+     data-component="<?= $block->escapeHtmlAttr($block->getName()) ?>.areas"
+     class="admin__data-grid-loading-mask">
     <div class="grid-loader"></div>
 </div>
-<div data-bind="scope: '<?= /* @escapeNotVerified */ $block->getName() ?>.areas'" class="entry-edit form-inline">
+<div data-bind="scope: '<?= $block->escapeHtmlAttr($block->getName()) ?>.areas'"
+     class="entry-edit form-inline">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>
-<?php
-echo $block->renderChildComponent('after_form');
+<?= /* @noEscape */ $block->renderChildComponent('after_form') ?>
