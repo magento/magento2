@@ -230,15 +230,17 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             ->method('getTransport')
             ->will($this->returnValue($transportMock));
 
-        $this->_model->setData([
-            'website_id' => 1,
-            'store_id' => 1,
-            'email' => 'email@example.com',
-            'firstname' => 'FirstName',
-            'lastname' => 'LastName',
-            'middlename' => 'MiddleName',
-            'prefix' => 'Name Prefix',
-        ]);
+        $this->_model->setData(
+            [
+                'website_id' => 1,
+                'store_id' => 1,
+                'email' => 'email@example.com',
+                'firstname' => 'FirstName',
+                'lastname' => 'LastName',
+                'middlename' => 'MiddleName',
+                'prefix' => 'Name Prefix',
+            ]
+        );
         $this->_model->sendNewAccountEmail('registered');
     }
 
