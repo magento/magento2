@@ -15,31 +15,40 @@
             <stories value="Magento_LayeredNavigation"/>
             <title value="Admin should be able to uncheck Default Value checkbox for dependent field"/>
             <description value="Admin should be able to uncheck Default Value checkbox for dependent field"/>
-            <severity value="AVERAGE"/>
-            <testCaseId value="MAGETWO-94872"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-12604"/>
         </annotations>
+
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
         </before>
-        <amOnPage url="{{CatalogConfigPage.url}}" stepKey="navigateToConfigurationPage" />
-        <waitForPageLoad stepKey="wait1"/>
-        <conditionalClick stepKey="expandLayeredNavigationTab" selector="{{LayeredNavigationSection.layeredNavigation}}" dependentSelector="{{LayeredNavigationSection.CheckIfTabExpand}}" visible="true" />
-        <waitForElementVisible  selector="{{LayeredNavigationSection.NavigationStepCalculationSystemValue}}" stepKey="waitForUseSystemValueVisible"/>
-        <uncheckOption selector="{{LayeredNavigationSection.NavigationStepCalculationSystemValue}}" stepKey="uncheckUseSystemValue"/>
-        <selectOption selector="{{LayeredNavigationSection.NavigationStepCalculation}}" userInput="Manual" stepKey="selectOption1"/>
-        <uncheckOption selector="{{LayeredNavigationSection.PriceNavigationStepSystemValue}}" stepKey="uncheckUseSystemValue2"/>
-        <fillField selector="{{LayeredNavigationSection.PriceNavigationStep}}" userInput="102" stepKey="fillAdmin1"/>
-        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
-        <waitForPageLoad stepKey="waitForSavingSystemConfiguration"/>
-        <waitForElementVisible selector="#catalog_layered_navigation" stepKey="waitForLayeredNav" />
-        <scrollTo selector="#catalog_layered_navigation" x="0" y="-80" stepKey="scrollToLayeredNavigation" />
-        <seeInField stepKey="seeThatValueWasSaved" selector="{{LayeredNavigationSection.PriceNavigationStep}}" userInput="102"/>
-        <checkOption selector="{{LayeredNavigationSection.NavigationStepCalculationSystemValue}}" stepKey="setToDefaultValue1"/>
-        <checkOption selector="{{LayeredNavigationSection.PriceNavigationStepSystemValue}}" stepKey="setToDefaultValue2"/>
-        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig2" />
-        <waitForPageLoad stepKey="waitForSavingSystemConfiguration2"/>
+
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+
+        <!-- Configure Layered Navigation in Stores -> Configuration -> Catalog -> Layered Navigation -->
+        <amOnPage url="{{CatalogConfigPage.url}}" stepKey="navigateToConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{LayeredNavigationSection.layeredNavigation}}" dependentSelector="{{LayeredNavigationSection.CheckIfTabExpand}}" visible="true" stepKey="expandLayeredNavigationTab"/>
+        <waitForElementVisible selector="{{LayeredNavigationSection.NavigationStepCalculationSystemValue}}" stepKey="waitForUseSystemValueVisible"/>
+
+        <!-- Display Product Count = yes; Price Navigation Step Calculation = Manual; Default Price Navigation Step = 102 -->
+        <uncheckOption selector="{{LayeredNavigationSection.NavigationStepCalculationSystemValue}}" stepKey="uncheckUseSystemValue"/>
+        <selectOption selector="{{LayeredNavigationSection.NavigationStepCalculation}}" userInput="Manual" stepKey="selectOption"/>
+        <uncheckOption selector="{{LayeredNavigationSection.PriceNavigationStepSystemValue}}" stepKey="uncheckUseStepSystemValue"/>
+        <fillField selector="{{LayeredNavigationSection.PriceNavigationStep}}" userInput="102" stepKey="fillPriceNavStep"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
+        <waitForPageLoad stepKey="waitForSavingSystemConfiguration"/>
+
+        <waitForElementVisible selector="{{LayeredNavigationSection.layeredNavigationBlock}}" stepKey="waitForLayeredNav"/>
+        <scrollTo selector="{{LayeredNavigationSection.layeredNavigationBlock}}" x="0" y="-80" stepKey="scrollToLayeredNavigation"/>
+        <seeInField userInput="102" selector="{{LayeredNavigationSection.PriceNavigationStep}}" stepKey="seeThatValueWasSaved"/>
+
+        <!-- It is possible uncheck Use Default checkbox -->
+        <checkOption selector="{{LayeredNavigationSection.NavigationStepCalculationSystemValue}}" stepKey="setStepCalculationToDefaultValue"/>
+        <checkOption selector="{{LayeredNavigationSection.PriceNavigationStepSystemValue}}" stepKey="setPriceNavToDefaultValue"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfiguration" />
+        <waitForPageLoad stepKey="waitForSaveSystemConfiguration"/>
     </test>
 </tests>
