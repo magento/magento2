@@ -16,8 +16,18 @@ $registry->register('isSecureArea', true);
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
-$product = $productRepository->get('simple', false, null, true);
-$productRepository->delete($product);
+try {
+    $product = $productRepository->get('simple', false, null, true);
+    $productRepository->delete($product);
+} catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
+    //Product already removed
+}
+
+$productCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
+foreach ($productCollection as $product) {
+    $product->delete();
+}
 
 //Remove categories
 /** @var Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
