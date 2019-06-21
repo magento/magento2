@@ -11,6 +11,7 @@ use GraphQL\Language\AST\FieldNode;
 use Magento\CatalogGraphQl\Model\Category\DepthCalculator;
 use Magento\CatalogGraphQl\Model\Category\LevelCalculator;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
@@ -84,6 +85,10 @@ class CategoryTree
     public function getTree(ResolveInfo $resolveInfo, int $rootCategoryId): \Iterator
     {
         $categoryQuery = $resolveInfo->fieldNodes[0];
+        if ($this->isCategoryActive($rootCategoryId) === false) {
+            throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
+        }
+
         $collection = $this->collectionFactory->create();
         $this->joinAttributesRecursively($collection, $categoryQuery);
         $depth = $this->depthCalculator->calculate($categoryQuery);
@@ -143,5 +148,31 @@ class CategoryTree
 
             $this->joinAttributesRecursively($collection, $node);
         }
+    }
+
+    /**
+     * Check if provided category active
+     *
+     * @param int $rootCategoryId
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function isCategoryActive(int $rootCategoryId) : bool
+    {
+        if ($rootCategoryId == Category::TREE_ROOT_ID) {
+            return true;
+        }
+        $collection = $this->collectionFactory->create();
+        $collection->addAttributeToFilter(Category::KEY_IS_ACTIVE, ['eq' => 1])
+            ->getSelect()
+            ->where(
+                $collection->getSelect()
+                    ->getConnection()
+                    ->quoteIdentifier(
+                        'e.' . $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField()
+                    ) . ' = ?',
+                $rootCategoryId
+            );
+        return (bool)$collection->count();
     }
 }
