@@ -19,8 +19,8 @@ use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\Paypal\Controller\Transparent\RequestSecureToken as RequestSecureTokenHelper;
 use Magento\Framework\Session\SessionManager;
 use Magento\Framework\Session\SessionManagerInterface;
-use Magento\Quote\Model\Quote;
 use Magento\Paypal\Model\Payflow\Service\Request\SecureToken;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Resolver for generating Paypal token
@@ -114,7 +114,12 @@ class PayflowProToken implements ResolverInterface
         $customerId = $context->getUserId();
 
         $cart = $this->getCartForUser->execute($cartId, $customerId);
-        $tokenDataObject = $this->secureTokenService->requestToken($cart);
+
+        try {
+            $tokenDataObject = $this->secureTokenService->requestToken($cart);
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()));
+        }
 
         if (!empty($args['input']['urls'])) {
             $this->validateUrls($args['input']['urls']);
