@@ -239,6 +239,13 @@ class AfterImportDataObserver implements ObserverInterface
             && empty($rowData[self::URL_KEY_ATTRIBUTE_CODE])) {
             return null;
         }
+        $oldSku = $this->import->getOldSku();
+        if (array_key_exists($rowData[ImportProduct::COL_SKU], $oldSku)
+            && !isset($rowData[self::URL_KEY_ATTRIBUTE_CODE])
+            && $this->import->getBehavior() === ImportExport::BEHAVIOR_APPEND
+        ) {
+            return null;
+        }
         $rowData['entity_id'] = $newSku['entity_id'];
 
         $product = $this->catalogProductFactory->create();
