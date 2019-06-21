@@ -62,12 +62,15 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $sharedEvents = $events->getSharedManager();
-        $this->listeners[] = $sharedEvents->attach(
+        $sharedEvents->attach(
             Application::class,
             MvcEvent::EVENT_BOOTSTRAP,
             [$this, 'onBootstrap'],
             $priority
         );
+
+        $this->listeners = $sharedEvents->getListeners([Application::class],
+            MvcEvent::EVENT_BOOTSTRAP);
     }
 
     /**
