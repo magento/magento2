@@ -112,7 +112,9 @@ define([
          * @param {Boolean} status
          */
         setDisabled: function (status) {
-            this.$wysiwygEditorButton.attr('disabled', status);
+            if (this.$wysiwygEditorButton) {
+                this.$wysiwygEditorButton.attr('disabled', status);
+            }
 
             /* eslint-disable no-undef */
             if (tinyMCE && tinyMCE.activeEditor) {

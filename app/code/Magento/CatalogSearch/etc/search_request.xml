@@ -19,7 +19,6 @@
                 <queryReference clause="must" ref="visibility"/>
             </query>
             <query xsi:type="matchQuery" value="$search_term$" name="search">
-                <match field="sku"/>
                 <match field="*"/>
             </query>
             <query xsi:type="filteredQuery" name="category">

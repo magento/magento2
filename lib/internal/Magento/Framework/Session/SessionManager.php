@@ -137,7 +137,7 @@ class SessionManager implements SessionManagerInterface
         $this->sessionStartChecker = $sessionStartChecker ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
             SessionStartChecker::class
         );
-        
+
         $this->start();
     }
 
@@ -620,7 +620,7 @@ class SessionManager implements SessionManagerInterface
         }
 
         foreach ($this->sessionConfig->getOptions() as $option => $value) {
-            if ($option=='session.save_handler') {
+            if ($option === 'session.save_handler') {
                 continue;
             } else {
                 $result = ini_set($option, $value);
