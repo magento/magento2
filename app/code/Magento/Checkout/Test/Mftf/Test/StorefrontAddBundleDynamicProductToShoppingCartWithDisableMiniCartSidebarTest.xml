@@ -15,11 +15,15 @@
             <testCaseId value="MC-14719"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-16684"/>
+            </skip>
         </annotations>
 
         <before>
             <magentoCLI stepKey="disableShoppingCartSidebar" command="config:set checkout/sidebar/display 0"/>
-            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRatePrice"/>
             <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
 
             <!--Create  simple products-->
@@ -104,8 +108,8 @@
         <!--Assert Shopping Cart Summary-->
         <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary" >
             <argument name="subtotal" value="$100.00"/>
-            <argument name="shipping" value="$10.00"/>
-            <argument name="total" value="$110.00"/>
+            <argument name="shipping" value="10.00"/>
+            <argument name="total" value="110.00"/>
         </actionGroup>
 
         <!--Enabled Shopping Cart Sidebar -->

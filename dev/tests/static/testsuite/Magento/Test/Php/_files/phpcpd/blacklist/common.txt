@@ -215,3 +215,4 @@ Magento/Elasticsearch/Model/Adapter/FieldMapper/Product/FieldProvider/FieldName/
 Magento/Elasticsearch6/Model/Client
 Magento/Config/App/Config/Type
 Magento/InventoryReservationCli/Test/Integration
+Magento/InventoryAdminUi/Controller/Adminhtml
