@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutCartSummarySection">
+        <element name="expandShoppingCartSummary" type="button" selector="//*[contains(@class, 'items-in-cart')][not(contains(@class, 'active'))]"/>
         <element name="elementPosition" type="text" selector=".data.table.totals > tbody tr:nth-of-type({{value}}) > th" parameterized="true"/>
         <element name="subtotal" type="text" selector="//*[@id='cart-totals']//tr[@class='totals sub']//td//span[@class='price']"/>
         <element name="shippingMethodForm" type="text" selector="#co-shipping-method-form"/>
@@ -28,6 +29,8 @@
         <element name="estimateShippingAndTax" type="text" selector="#block-shipping-heading" timeout="5"/>
         <element name="flatRateShippingMethod" type="input" selector="#s_method_flatrate_flatrate" timeout="30"/>
         <element name="shippingMethodLabel" type="text" selector="#co-shipping-method-form dl dt span"/>
+        <element name="methodName" type="text" selector="#co-shipping-method-form label"/>
+        <element name="shippingPrice" type="text" selector="#co-shipping-method-form span .price"/>
         <element name="shippingMethodElementId" type="radio" selector="#s_method_{{carrierCode}}_{{methodCode}}" parameterized="true"/>
     </section>
 </sections>

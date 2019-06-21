@@ -13,6 +13,7 @@ use Magento\Framework\Escaper;
 /**
  * Data form abstract class
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -291,7 +292,7 @@ abstract class AbstractElement extends AbstractForm
      */
     protected function _escape($string)
     {
-        return htmlspecialchars($string, ENT_COMPAT);
+        return $this->_escaper->escapeHtml($string);
     }
 
     /**

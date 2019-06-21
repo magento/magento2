@@ -12,6 +12,7 @@
             <argument name="product" defaultValue="product"/>
         </arguments>
         <amOnPage url="{{StorefrontProductPage.url(product.custom_attributes[url_key])}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
         <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdding}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdding"/>
         <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdded"/>
@@ -19,5 +20,11 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" time="30" stepKey="waitForProductAddedMessage"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{product.name}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
+    </actionGroup>
+    <actionGroup name="StorefrontAddSimpleProductWithQtyActionGroup" extends="AddSimpleProductToCart">
+        <arguments>
+            <argument name="quantity" type="string" defaultValue="1"/>
+        </arguments>
+        <fillField userInput="{{quantity}}" selector="{{StorefrontProductPageSection.qtyInput}}" stepKey="fillProductQty" after="goToProductPage"/>
     </actionGroup>
 </actionGroups>
