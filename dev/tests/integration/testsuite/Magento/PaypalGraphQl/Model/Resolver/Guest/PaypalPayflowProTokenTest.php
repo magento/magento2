@@ -12,7 +12,6 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\PaypalGraphQl\PaypalPayflowProAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
-
 use Magento\Framework\DataObject;
 
 /**
