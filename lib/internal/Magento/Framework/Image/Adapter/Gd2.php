@@ -325,8 +325,8 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param resource $imageResource
      * @param int $fileType
-     * @param bool &$isAlpha
-     * @param bool &$isTrueColor
+     * @param bool $isAlpha
+     * @param bool $isTrueColor
      *
      * @return boolean
      *
