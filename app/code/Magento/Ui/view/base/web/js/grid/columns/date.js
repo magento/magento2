@@ -38,10 +38,11 @@ define([
          * @returns {String} Formatted date.
          */
         getLabel: function (value, format) {
+            var date;
             if (this.storeLocale !== undefined) {
                 moment.locale(this.storeLocale, utils.extend({}, this.calendarConfig));
             }
-            var date = moment(this._super());
+            date = moment(this._super());
 
             date = date.isValid() && value[this.index] ?
                 date.format(format || this.dateFormat) :
