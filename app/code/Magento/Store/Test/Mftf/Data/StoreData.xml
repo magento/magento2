@@ -107,4 +107,31 @@
         <data key="code">allstoreviews</data>
         <data key="is_active">1</data>
     </entity>
+    <entity name="storeViewData" type="store">
+        <data key="group_id">1</data>
+        <data key="name" unique="suffix">storeView</data>
+        <data key="code" unique="suffix">storeView</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_type">store</data>
+        <data key="store_action">add</data>
+    </entity>
+    <entity name="storeViewData1" type="store">
+        <data key="group_id">1</data>
+        <data key="name" unique="suffix">storeView</data>
+        <data key="code" unique="suffix">storeView</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_type">store</data>
+        <data key="store_action">add</data>
+    </entity>
+    <entity name="storeViewData2" type="store">
+        <data key="group_id">1</data>
+        <data key="name" unique="suffix">storeView</data>
+        <data key="code" unique="suffix">storeView</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_type">store</data>
+        <data key="store_action">add</data>
+    </entity>
 </entities>

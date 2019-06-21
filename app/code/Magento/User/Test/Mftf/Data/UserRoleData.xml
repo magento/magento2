@@ -47,4 +47,16 @@
             <item>Magento_SalesRule::quote</item>
         </array>
     </entity>
+
+    <entity name="limitedRole" type="role">
+        <data key="name" unique="suffix">Limited</data>
+        <data key="roleScopes">Custom</data>
+        <data key="resourceAccess">All</data>
+    </entity>
+
+    <entity name="restrictedRole" type="role">
+        <data key="name" unique="suffix">Restricted</data>
+        <data key="roleScopes">Custom</data>
+        <data key="resourceAccess">All</data>
+    </entity>
 </entities>
