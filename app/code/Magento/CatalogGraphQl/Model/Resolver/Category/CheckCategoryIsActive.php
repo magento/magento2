@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogGraphQl\Model\Resolver\Category;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
@@ -33,8 +35,7 @@ class CheckCategoryIsActive
     public function __construct(
         CollectionFactory $collectionFactory,
         MetadataPool $metadata
-    )
-    {
+    ) {
         $this->collectionFactory = $collectionFactory;
         $this->metadata = $metadata;
     }

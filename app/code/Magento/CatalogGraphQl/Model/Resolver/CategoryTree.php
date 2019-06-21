@@ -50,8 +50,7 @@ class CategoryTree implements ResolverInterface
         \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree $categoryTree,
         ExtractDataFromCategoryTree $extractDataFromCategoryTree,
         CheckCategoryIsActive $checkCategoryIsActive
-    )
-    {
+    ) {
         $this->categoryTree = $categoryTree;
         $this->extractDataFromCategoryTree = $extractDataFromCategoryTree;
         $this->checkCategoryIsActive = $checkCategoryIsActive;
