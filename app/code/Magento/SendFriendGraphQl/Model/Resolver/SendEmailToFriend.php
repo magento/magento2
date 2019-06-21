@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\SendFriendGraphQl\Model\Resolver;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\SendFriend\Helper\Data as SendFriendHelper;
 use Magento\SendFriendGraphQl\Model\SendFriend\SendEmail;
 
@@ -48,10 +48,10 @@ class SendEmailToFriend implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $userId = $context->getUserId();
-        $userType = $context->getUserType();
-
-        if (!$this->sendFriendHelper->isAllowForGuest() && $this->isUserGuest($userId, $userType)) {
+        /** @var ContextInterface $context */
+        if (!$this->sendFriendHelper->isAllowForGuest()
+            && false === $context->getExtensionAttributes()->getIsCustomer()
+        ) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
 
@@ -63,7 +63,6 @@ class SendEmailToFriend implements ResolverInterface
             $senderData,
             $recipientsData
         );
-
         return array_merge($senderData, $recipientsData);
     }
 
@@ -122,20 +121,5 @@ class SendEmailToFriend implements ResolverInterface
                 'message' => $args['input']['sender']['message'],
             ],
         ];
-    }
-
-    /**
-     * Checking if current customer is guest
-     *
-     * @param int|null $customerId
-     * @param int|null $customerType
-     * @return bool
-     */
-    private function isUserGuest(?int $customerId, ?int $customerType): bool
-    {
-        if (null === $customerId || null === $customerType) {
-            return true;
-        }
-        return 0 === (int)$customerId || (int)$customerType === UserContextInterface::USER_TYPE_GUEST;
     }
 }

@@ -7,9 +7,6 @@
         "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/module-send-friend": "*",
-        "magento/module-authorization": "*"
-    },
-    "suggest": {
         "magento/module-graph-ql": "*"
     },
     "license": [
