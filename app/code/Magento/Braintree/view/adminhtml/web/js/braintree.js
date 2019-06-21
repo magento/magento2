@@ -299,6 +299,7 @@ define([
             // validate parent form
             if (self.$selector.validate().errorList.length) {
                 $('body').trigger('processStop');
+
                 return false;
             }
 
