@@ -27,7 +27,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Collection Init Select
      *
      * @return $this
-     * @since 101.1.0
      */
     protected function _initSelect()
     {
