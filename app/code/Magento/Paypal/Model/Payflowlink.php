@@ -425,6 +425,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         $request->setCreatesecuretoken('Y')
             ->setSecuretokenid($this->mathRandom->getUniqueHash())
             ->setTrxtype($this->_getTrxTokenType());
+        $request = $this->updateRequestReturnUrls($request, $payment);
 
         $order = $payment->getOrder();
         $request->setAmt(sprintf('%.2F', $order->getBaseTotalDue()))
@@ -463,28 +464,20 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         /** @var \Magento\Paypal\Model\Payflow\Request $request */
         $request = $this->_requestFactory->create();
         $cscEditable = $this->getConfigData('csc_editable');
-
-        if (empty($this->getResponse()->getInvnum())) {
-            $payment = $this->getInfoInstance();
-        } else {
-            $order = $this->_getOrderFromResponse();
-            $payment = $order->getPayment();
-        }
-
         $data = parent::buildBasicRequest();
 
         $request->setData($data->getData());
 
         $request->setCancelurl(
-            $this->getCancelCallbackUrl($payment)
+            $this->_getCallbackUrl('cancelPayment')
         )->setErrorurl(
-            $this->getErrorCallbackUrl($payment)
+            $this->_getCallbackUrl('returnUrl')
         )->setSilentpost(
             'TRUE'
         )->setSilentposturl(
             $this->_getCallbackUrl('silentPost')
         )->setReturnurl(
-            $this->getReturnCallbackUrl($payment)
+            $this->_getCallbackUrl('returnUrl')
         )->setTemplate(
             self::LAYOUT_TEMPLATE
         )->setDisablereceipt(
@@ -609,38 +602,28 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     }
 
     /**
-     * Get payment cancel callback url
+     * Update the redirect urls on the request if they are set on the payment
      *
+     * @param \Magento\Paypal\Model\Payflow\Request $request
      * @param \Magento\Sales\Model\Order\Payment $payment
-     * @return string
+     * @return \Magento\Paypal\Model\Payflow\Request
      */
-    private function getCancelCallbackUrl($payment): string
-    {
-        $cancelUrl = $payment->getAdditionalInformation('cancel_url') ?? $this->_getCallbackUrl('cancelPayment');
-        return $cancelUrl;
-    }
+    private function updateRequestReturnUrls(
+        \Magento\Paypal\Model\Payflow\Request $request,
+        \Magento\Sales\Model\Order\Payment $payment
+    ): \Magento\Paypal\Model\Payflow\Request {
+        $paymentData = $payment->getAdditionalInformation();
 
-    /**
-     * Get payment return callback url
-     *
-     * @param \Magento\Sales\Model\Order\Payment $payment
-     * @return string
-     */
-    private function getReturnCallbackUrl($payment): string
-    {
-        $returnUrl = $payment->getAdditionalInformation('return_url') ?? $this->_getCallbackUrl('returnUrl');
-        return $returnUrl;
-    }
+        if (!empty($paymentData['cancel_url'])) {
+            $request->setCancelurl($paymentData['cancel_url']);
+        }
+        if (!empty($paymentData['return_url'])) {
+            $request->setReturnurl($paymentData['return_url']);
+        }
+        if (!empty($paymentData['error_url'])) {
+            $request->setErrorurl($paymentData['error_url']);
+        }
 
-    /**
-     * Get payment error callback url
-     *
-     * @param \Magento\Sales\Model\Order\Payment $payment
-     * @return string
-     */
-    private function getErrorCallbackUrl($payment): string
-    {
-        $errorUrl = $payment->getAdditionalInformation('error_url') ?? $this->_getCallbackUrl('returnUrl');
-        return $errorUrl;
+        return $request;
     }
 }
