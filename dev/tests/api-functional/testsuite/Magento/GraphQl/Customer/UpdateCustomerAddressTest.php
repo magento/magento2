@@ -346,24 +346,6 @@ MUTATION;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/inactive_customer.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
-     * @expectedException Exception
-     * @expectedExceptionMessage The account sign-in was incorrect or your account is disabled temporarily.
-     */
-    public function testUpdateCustomerAddressIfAccountIsNotConfirmed()
-    {
-        $userName = 'customer@needAconfirmation.com';
-        $password = 'password';
-        $addressId = 1;
-
-        $mutation = $this->getMutation($addressId);
-
-        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
-    }
-
-    /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @expectedException Exception
@@ -371,6 +353,8 @@ MUTATION;
      */
     public function testUpdateCustomerAddressIfAccountIsLocked()
     {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/750');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $addressId = 1;

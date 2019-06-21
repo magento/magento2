@@ -8,18 +8,20 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Customer;
 
 use Exception;
+use Magento\Framework\Registry;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\OfflinePayments\Model\Cashondelivery;
 use Magento\OfflinePayments\Model\Checkmo;
 use Magento\OfflinePayments\Model\Purchaseorder;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for setting payment methods on cart by customer
+ * Test for setting payment method and placing order by customer
  */
-class SetPaymentMethodOnCartTest extends GraphQlAbstract
+class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
 {
     /**
      * @var GetMaskedQuoteIdByReservedOrderId
@@ -32,6 +34,21 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
+     * @var CollectionFactory
+     */
+    private $orderCollectionFactory;
+
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var Registry
+     */
+    private $registry;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -39,6 +56,9 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->orderCollectionFactory = $objectManager->get(CollectionFactory::class);
+        $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
+        $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
     }
 
     /**
@@ -46,7 +66,9 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      */
     public function testSetPaymentOnCartWithSimpleProduct()
     {
@@ -56,10 +78,9 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId, $methodCode);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
-        self::assertArrayHasKey('setPaymentMethodOnCart', $response);
-        self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
-        self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
-        self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
+        self::assertArrayHasKey('setPaymentMethodAndPlaceOrder', $response);
+        self::assertArrayHasKey('order', $response['setPaymentMethodAndPlaceOrder']);
+        self::assertArrayHasKey('order_id', $response['setPaymentMethodAndPlaceOrder']['order']);
     }
 
     /**
@@ -85,6 +106,7 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_virtual_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      */
     public function testSetPaymentOnCartWithVirtualProduct()
     {
@@ -94,10 +116,9 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId, $methodCode);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
-        self::assertArrayHasKey('setPaymentMethodOnCart', $response);
-        self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
-        self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
-        self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
+        self::assertArrayHasKey('setPaymentMethodAndPlaceOrder', $response);
+        self::assertArrayHasKey('order', $response['setPaymentMethodAndPlaceOrder']);
+        self::assertArrayHasKey('order_id', $response['setPaymentMethodAndPlaceOrder']['order']);
     }
 
     /**
@@ -177,41 +198,6 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     *
-     * @param string $input
-     * @param string $message
-     * @throws Exception
-     * @dataProvider dataProviderSetPaymentMethodWithoutRequiredParameters
-     */
-    public function testSetPaymentMethodWithoutRequiredParameters(string $input, string $message)
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $input = str_replace('cart_id_value', $maskedQuoteId, $input);
-
-        $query = <<<QUERY
-mutation {
-  setPaymentMethodOnCart(
-    input: {
-      {$input}
-    }
-  ) {
-    cart {
-      items {
-        quantity
-      }
-    }
-  }
-}
-QUERY;
-        $this->expectExceptionMessage($message);
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
@@ -228,51 +214,6 @@ QUERY;
     }
 
     /**
-     * @return array
-     */
-    public function dataProviderSetPaymentMethodWithoutRequiredParameters(): array
-    {
-        return [
-            'missed_cart_id' => [
-                'payment_method: {code: "' . Checkmo::PAYMENT_METHOD_CHECKMO_CODE . '"}',
-                'Required parameter "cart_id" is missing.'
-            ],
-            'missed_payment_method' => [
-                'cart_id: "cart_id_value"',
-                'Required parameter "code" for "payment_method" is missing.'
-            ],
-            'missed_payment_method_code' => [
-                'cart_id: "cart_id_value", payment_method: {code: ""}',
-                'Required parameter "code" for "payment_method" is missing.'
-            ],
-        ];
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_checkmo_payment_method.php
-     */
-    public function testReSetPayment()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-
-        $methodCode = Cashondelivery::PAYMENT_METHOD_CASHONDELIVERY_CODE;
-        $query = $this->getQuery($maskedQuoteId, $methodCode);
-        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-
-        self::assertArrayHasKey('setPaymentMethodOnCart', $response);
-        self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
-        self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
-        self::assertArrayHasKey('code', $response['setPaymentMethodOnCart']['cart']['selected_payment_method']);
-        self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
-    }
-
-    /**
      * @param string $maskedQuoteId
      * @param string $methodCode
      * @return string
@@ -283,16 +224,14 @@ QUERY;
     ) : string {
         return <<<QUERY
 mutation {
-  setPaymentMethodOnCart(input: {
+  setPaymentMethodAndPlaceOrder(input: {
       cart_id: "$maskedQuoteId"
       payment_method: {
           code: "$methodCode"
       }
   }) {    
-    cart {
-      selected_payment_method {
-        code
-      }
+    order {
+      order_id
     }
   }
 }
@@ -309,5 +248,23 @@ QUERY;
         $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         return $headerMap;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function tearDown()
+    {
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
+
+        $orderCollection = $this->orderCollectionFactory->create();
+        foreach ($orderCollection as $order) {
+            $this->orderRepository->delete($order);
+        }
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', false);
+
+        parent::tearDown();
     }
 }
