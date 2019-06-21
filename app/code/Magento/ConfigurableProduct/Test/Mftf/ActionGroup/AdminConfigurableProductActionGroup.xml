@@ -291,7 +291,7 @@
             <argument name="label" type="string" defaultValue="option1"/>
             <argument name="quantity" type="string" defaultValue="10"/>
         </arguments>
-        <click selector="{{AdminCreateProductConfigurationsPanel.applyUniqueQuantityToEachSkus}}" dependentSelector="{{AdminCreateProductConfigurationsPanel.selectQuantity}}" visible="false" stepKey="clickOnApplyUniqueQuantitiesToEachSku"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyUniqueQuantityToEachSkus}}" stepKey="clickOnApplyUniqueQuantitiesToEachSku"/>
         <selectOption selector="{{AdminCreateProductConfigurationsPanel.selectQuantity}}" userInput="{{frontend_label}}" stepKey="selectOption"/>
         <fillField selector="{{AdminCreateProductConfigurationsPanel.applyUniqueQuantity(label)}}" userInput="{{quantity}}" stepKey="enterAttributeQuantity"/>
     </actionGroup>
