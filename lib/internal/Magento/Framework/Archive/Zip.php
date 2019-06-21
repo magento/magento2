@@ -53,11 +53,10 @@ class Zip extends AbstractArchive implements ArchiveInterface
     {
         $zip = new \ZipArchive();
         if ($zip->open($source) === true) {
-            $filename = $this->filterRelativePaths($zip->getNameIndex(0) ?: '');
-            $filename = $this->filterExcludedFiles($filename);
+            $zip->renameIndex(0, basename($destination));
+            $filename = $zip->getNameIndex(0) ?: '';
             if ($filename) {
                 $zip->extractTo(dirname($destination), $filename);
-                rename(dirname($destination).'/'.$filename, $destination);
             } else {
                 $destination = '';
             }
@@ -67,35 +66,5 @@ class Zip extends AbstractArchive implements ArchiveInterface
         }
 
         return $destination;
-    }
-
-    /**
-     * Filter file names with relative paths.
-     *
-     * @param string $path
-     * @return string
-     */
-    private function filterRelativePaths(string $path): string
-    {
-        if ($path && preg_match('#^\s*(../)|(/../)#i', $path)) {
-            $path = '';
-        }
-
-        return $path;
-    }
-
-    /**
-     * Filter excluded files.
-     *
-     * @param string $file
-     * @return string
-     */
-    private function filterExcludedFiles(string $file): string
-    {
-        if ($file && preg_match('/^\.htaccess$/', $file)) {
-            $file = '';
-        }
-
-        return $file;
     }
 }
