@@ -225,29 +225,6 @@ MUTATION;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/inactive_customer.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
-     *
-     * @expectedException Exception
-     * @expectedExceptionMessage The account sign-in was incorrect or your account is disabled temporarily.
-     */
-    public function testDeleteInactiveCustomerAddress()
-    {
-        $userName = 'customer@needAconfirmation.com';
-        $password = 'password';
-        $addressId = 2;
-
-        $mutation
-            = <<<MUTATION
-mutation {
-  deleteCustomerAddress(id: {$addressId})
-}
-MUTATION;
-        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
-    }
-
-    /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      *
@@ -256,6 +233,8 @@ MUTATION;
      */
     public function testDeleteCustomerAddressIfAccountIsLocked()
     {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/750');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $addressId = 2;
