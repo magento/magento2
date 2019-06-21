@@ -2068,8 +2068,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _applyZeroStoreProductLimitations()
     {
         $filters = $this->_productLimitationFilters;
-        $categories = [];
-        $categories = $this->getChildrenCategories((int)$filters['category_id'], $categories);
+        $categories = $this->getChildrenCategories((int)$filters['category_id'], []);
 
         $conditions = [
             'cat_pro.product_id=e.entity_id',
@@ -2105,13 +2104,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     private function getChildrenCategories(int $categoryId, array $categories): array
     {
+        $categories[] = $categoryId;
+
         /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection */
         $categoryCollection = $this->categoryCollectionFactory->create();
         $category = $categoryCollection
-            ->addAttributeToSelect('is_anchor')->addIdFilter([$categoryId])
-            ->load()->getFirstItem();
-        $categories[] = $category->getId();
-        if ($category->getIsAnchor()) {
+            ->addAttributeToSelect('is_anchor')
+            ->addAttributeToFilter('is_anchor', 1)
+            ->addIdFilter([$categoryId])
+            ->getFirstItem();
+        if ($category) {
             $categoryChildren = $category->getChildren();
             $categoryChildrenIds = explode(',', $categoryChildren);
             foreach ($categoryChildrenIds as $categoryChildrenId) {
