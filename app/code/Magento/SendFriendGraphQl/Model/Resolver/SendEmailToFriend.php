@@ -15,8 +15,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\SendFriend\Model\SendFriend;
 use Magento\SendFriend\Model\SendFriendFactory;
-use Magento\SendFriendGraphQl\Model\Resolver\ProductService;
-
+use Magento\SendFriendGraphQl\Model\Provider\GetProduct;
 /**
  * @inheritdoc
  */
@@ -38,26 +37,26 @@ class SendEmailToFriend implements ResolverInterface
     private $eventManager;
 
     /**
-     * @var ProductService
+     * @var GetProduct
      */
-    private $productService;
+    private $getProductProvider;
 
     /**
      * @param SendFriendFactory $sendFriendFactory
      * @param DataObjectFactory $dataObjectFactory
      * @param ManagerInterface $eventManager
-     * @param ProductService $productService
+     * @param GetProduct $getProductProvider
      */
     public function __construct(
         SendFriendFactory $sendFriendFactory,
         DataObjectFactory $dataObjectFactory,
         ManagerInterface $eventManager,
-        ProductService $productService
+        GetProduct $getProductProvider
     ) {
         $this->sendFriendFactory = $sendFriendFactory;
         $this->dataObjectFactory = $dataObjectFactory;
         $this->eventManager = $eventManager;
-        $this->productService = $productService;
+        $this->getProductProvider = $getProductProvider;
     }
 
     /**
@@ -74,7 +73,7 @@ class SendEmailToFriend implements ResolverInterface
             );
         }
 
-        $product = $this->productService->getProduct($args['input']['product_id']);
+        $product = $this->getProductProvider->execute($args['input']['product_id']);
         $this->eventManager->dispatch('sendfriend_product', ['product' => $product]);
         $sendFriend->setProduct($product);
 

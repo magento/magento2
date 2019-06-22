@@ -6,7 +6,7 @@
 declare(strict_types=1);
 
 
-namespace Magento\SendFriendGraphQl\Model\Resolver;
+namespace Magento\SendFriendGraphQl\Model\Provider;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Visibility;
@@ -15,9 +15,9 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Class ProductService
+ * Class GetProduct
  */
-class ProductService
+class GetProduct
 {
     /** @var ProductRepositoryInterface */
     private $productRepository;
@@ -44,7 +44,7 @@ class ProductService
      * @return ProductInterface
      * @throws GraphQlNoSuchEntityException
      */
-    public function getProduct(int $productId): ProductInterface
+    public function execute(int $productId): ProductInterface
     {
         try {
             $product = $this->productRepository->getById($productId);
