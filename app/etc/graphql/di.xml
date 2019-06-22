@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\GraphQl\Query\ErrorHandlerInterface" type="Magento\Framework\GraphQl\Query\ErrorHandler"/>
+    <type name="Magento\Framework\GraphQl\Query\Resolver\ResolveLogger">
+        <arguments>
+            <argument name="clientLogger" xsi:type="object">GraphQLClientLogger</argument>
+            <argument name="serverLogger" xsi:type="object">GraphQLServerLogger</argument>
+        </arguments>
+    </type>
+    <virtualType name="GraphQLClientLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="error" xsi:type="object">GraphQLClientErrorHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="GraphQLClientErrorHandler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="const">Magento\Framework\GraphQl\Query\ErrorHandler::CLIENT_LOG_FILE</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="GraphQLServerLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="error" xsi:type="object">GraphQLServerErrorHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="GraphQLServerErrorHandler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="const">Magento\Framework\GraphQl\Query\ErrorHandler::SERVER_LOG_FILE</argument>
+        </arguments>
+    </virtualType>
+    <preference for="Magento\Framework\GraphQl\Query\Resolver\ResolveLoggerInterface" type="Magento\Framework\GraphQl\Query\Resolver\ResolveLogger"/>
+</config>

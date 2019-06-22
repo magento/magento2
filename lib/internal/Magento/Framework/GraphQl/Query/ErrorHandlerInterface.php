@@ -12,20 +12,21 @@ use GraphQL\Error\Error;
 /**
  * Interface ErrorHandlerInterface
  *
- * @package Magento\Framework\GraphQl\Query
+ * GraphQL error handler
+ *
+ * @see \Magento\Framework\GraphQl\Query\QueryProcessor
+ *
+ * @api
  */
 interface ErrorHandlerInterface
 {
-    const SERVER_LOG_FILE = 'var/log/graphql/server/exception.log';
-    const CLIENT_LOG_FILE = 'var/log/graphql/client/exception.log';
-    const GENERAL_LOG_FILE = 'var/log/graphql/exception.log';
     /**
      * Handle errors
      *
      * @param Error[] $errors
-     * @param callable               $formatter
+     * @param callable $formatter
      *
      * @return array
      */
-    public function handle(array $errors, callable $formatter):array;
+    public function handle(array $errors, callable $formatter): array;
 }

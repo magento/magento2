@@ -8,99 +8,44 @@ declare(strict_types=1);
 namespace Magento\Framework\GraphQl\Query;
 
 use GraphQL\Error\ClientAware;
-use GraphQL\Error\Error;
-use Magento\Framework\Logger\Monolog;
+use Magento\Framework\GraphQl\Query\Resolver\ResolveLoggerInterface;
 
 /**
- * Class ErrorHandler
+ * @inheritDoc
  *
  * @package Magento\Framework\GraphQl\Query
  */
 class ErrorHandler implements ErrorHandlerInterface
 {
-    /**
-     * @var Monolog
-     */
-    private $clientLogger;
+    const SERVER_LOG_FILE = 'var/log/graphql/server/exception.log';
+    const CLIENT_LOG_FILE = 'var/log/graphql/client/exception.log';
 
     /**
-     * @var Monolog
+     * @var ResolveLoggerInterface
      */
-    private $serverLogger;
+    private $resolveLogger;
 
     /**
-     * @var array
-     */
-    private $clientErrorCategories;
-
-    /**
-     * @var array
-     */
-    private $serverErrorCategories;
-
-    /**
-     * @var Monolog
-     */
-    private $generalLogger;
-
-    /**
-     * ErrorHandler constructor.
-     *
-     * @param Monolog $clientLogger
-     * @param Monolog $serverLogger
-     * @param Monolog $generalLogger
-     * @param array $clientErrorCategories
-     * @param array $serverErrorCategories
-     *
-     * @SuppressWarnings(PHPMD.LongVariable)
+     * @param ResolveLoggerInterface $resolveLogger
      */
     public function __construct(
-        Monolog $clientLogger,
-        Monolog $serverLogger,
-        Monolog $generalLogger,
-        array $clientErrorCategories = [],
-        array $serverErrorCategories = []
+        ResolveLoggerInterface $resolveLogger
     ) {
-        $this->clientLogger = $clientLogger;
-        $this->serverLogger = $serverLogger;
-        $this->generalLogger = $generalLogger;
-        $this->clientErrorCategories = $clientErrorCategories;
-        $this->serverErrorCategories = $serverErrorCategories;
+        $this->resolveLogger = $resolveLogger;
     }
 
     /**
-     * Handle errors
-     *
-     * @param Error[] $errors
-     * @param callable $formatter
-     *
-     * @return array
+     * @inheritDoc
      */
     public function handle(array $errors, callable $formatter): array
     {
         return array_map(
             function (ClientAware $error) use ($formatter) {
-                $this->logError($error);
+                $this->resolveLogger->execute($error)->error($error);
 
                 return $formatter($error);
             },
             $errors
         );
-    }
-
-    /**
-     * @param ClientAware $error
-     *
-     * @return boolean
-     */
-    private function logError(ClientAware $error): bool
-    {
-        if (in_array($error->getCategory(), $this->clientErrorCategories)) {
-            return $this->clientLogger->error($error);
-        } elseif (in_array($error->getCategory(), $this->serverErrorCategories)) {
-            return $this->serverLogger->error($error);
-        }
-
-        return $this->generalLogger->error($error);
     }
 }
