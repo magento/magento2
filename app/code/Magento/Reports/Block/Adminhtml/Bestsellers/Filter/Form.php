@@ -14,6 +14,7 @@ use \Magento\Reports\Block\Adminhtml\Filter\Form as ReportsBlockFilterForm;
  * Sales Adminhtml report bestseller filter form
  *
  * @package Magento\Reports\Block\Adminhtml\Bestsellers\Filter
+ * @api
  */
 class Form extends ReportsBlockFilterForm
 {
