@@ -82,8 +82,6 @@ class CategoryListTest extends \PHPUnit\Framework\TestCase
     public function testGetList()
     {
         $totalCount = 2;
-        $categoryIdFirst = 1;
-        $categoryIdSecond = 2;
 
         $categoryFirst = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
         $categorySecond = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
