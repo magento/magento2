@@ -106,7 +106,7 @@ class CreateCustomerAccount
      */
     private function createAccount(array $data): CustomerInterface
     {
-        $this->validateCustomerData->execute($data);
+        $this->validateCustomerData->execute($data, true);
         $customerDataObject = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $customerDataObject,
