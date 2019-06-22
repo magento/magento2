@@ -7,6 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
+use GraphQL\Error\ClientAware;
+use GraphQL\Error\Error;
+use Magento\Framework\Logger\Monolog;
+
 /**
  * Class ErrorHandler
  *
@@ -15,12 +19,12 @@ namespace Magento\Framework\GraphQl\Query;
 class ErrorHandler implements ErrorHandlerInterface
 {
     /**
-     * @var \Magento\Framework\Logger\Monolog
+     * @var Monolog
      */
     private $clientLogger;
 
     /**
-     * @var \Magento\Framework\Logger\Monolog
+     * @var Monolog
      */
     private $serverLogger;
 
@@ -35,25 +39,25 @@ class ErrorHandler implements ErrorHandlerInterface
     private $serverErrorCategories;
 
     /**
-     * @var \Magento\Framework\Logger\Monolog
+     * @var Monolog
      */
     private $generalLogger;
 
     /**
      * ErrorHandler constructor.
      *
-     * @param \Magento\Framework\Logger\Monolog $clientLogger
-     * @param \Magento\Framework\Logger\Monolog $serverLogger
-     * @param \Magento\Framework\Logger\Monolog $generalLogger
-     * @param array                             $clientErrorCategories
-     * @param array                             $serverErrorCategories
+     * @param Monolog $clientLogger
+     * @param Monolog $serverLogger
+     * @param Monolog $generalLogger
+     * @param array $clientErrorCategories
+     * @param array $serverErrorCategories
      *
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
-        \Magento\Framework\Logger\Monolog $clientLogger,
-        \Magento\Framework\Logger\Monolog $serverLogger,
-        \Magento\Framework\Logger\Monolog $generalLogger,
+        Monolog $clientLogger,
+        Monolog $serverLogger,
+        Monolog $generalLogger,
         array $clientErrorCategories = [],
         array $serverErrorCategories = []
     ) {
@@ -67,15 +71,15 @@ class ErrorHandler implements ErrorHandlerInterface
     /**
      * Handle errors
      *
-     * @param \GraphQL\Error\Error[] $errors
-     * @param callable               $formatter
+     * @param Error[] $errors
+     * @param callable $formatter
      *
      * @return array
      */
-    public function handle(array $errors, callable $formatter):array
+    public function handle(array $errors, callable $formatter): array
     {
         return array_map(
-            function (\GraphQL\Error\ClientAware $error) use ($formatter) {
+            function (ClientAware $error) use ($formatter) {
                 $this->logError($error);
 
                 return $formatter($error);
@@ -85,11 +89,11 @@ class ErrorHandler implements ErrorHandlerInterface
     }
 
     /**
-     * @param \GraphQL\Error\ClientAware $error
+     * @param ClientAware $error
      *
      * @return boolean
      */
-    private function logError(\GraphQL\Error\ClientAware $error):bool
+    private function logError(ClientAware $error): bool
     {
         if (in_array($error->getCategory(), $this->clientErrorCategories)) {
             return $this->clientLogger->error($error);

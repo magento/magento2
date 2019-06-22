@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
+use GraphQL\Error\Error;
+
 /**
  * Interface ErrorHandlerInterface
  *
@@ -20,7 +22,7 @@ interface ErrorHandlerInterface
     /**
      * Handle errors
      *
-     * @param \GraphQL\Error\Error[] $errors
+     * @param Error[] $errors
      * @param callable               $formatter
      *
      * @return array
