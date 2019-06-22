@@ -110,9 +110,8 @@ class ModifySelectInProductPriceIndexFilter
                 $select->joinLeft(
                     ['stock_status' => $legacyStockTableName],
                     sprintf(
-                        'stock_status.product_id = price_index.%s and stock_status.website_id = %d',
-                        $priceEntityField,
-                        $websiteId
+                        'stock_status.product_id = price_index.%s',
+                        $priceEntityField
                     ),
                     []
                 );
