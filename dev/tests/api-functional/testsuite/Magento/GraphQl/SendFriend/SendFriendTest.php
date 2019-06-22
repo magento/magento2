@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\SendFriend\Model\SendFriend;
 use Magento\SendFriend\Model\SendFriendFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -219,15 +220,8 @@ QUERY;
                   email:"recipient2@mail.com"
               }';
         $query = $this->getQuery($productId, $recipients);
-
-        $response = $this->graphQlMutation($query);
-        self::assertEquals('Name', $response['sendEmailToFriend']['sender']['name']);
-        self::assertEquals('e@mail.com', $response['sendEmailToFriend']['sender']['email']);
-        self::assertEquals('Lorem Ipsum', $response['sendEmailToFriend']['sender']['message']);
-        self::assertEquals('Recipient Name 1', $response['sendEmailToFriend']['recipients'][0]['name']);
-        self::assertEquals('recipient1@mail.com', $response['sendEmailToFriend']['recipients'][0]['email']);
-        self::assertEquals('Recipient Name 2', $response['sendEmailToFriend']['recipients'][1]['name']);
-        self::assertEquals('recipient2@mail.com', $response['sendEmailToFriend']['recipients'][1]['email']);
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->graphQlMutation($query);
     }
 
     /**
