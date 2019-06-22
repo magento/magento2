@@ -29,7 +29,7 @@
     </Billing>
     <Consignee xmlns="">
         <CompanyName/>
-        <AddressLine/>
+        <AddressLine>15099 Some Blvd</AddressLine>
         <City/>
         <PostalCode/>
         <CountryCode/>
@@ -79,7 +79,7 @@
         <ShipperID>1234567890</ShipperID>
         <CompanyName/>
         <RegisteredAccount>1234567890</RegisteredAccount>
-        <AddressLine/>
+        <AddressLine>4956 Some Way</AddressLine>
         <City/>
         <PostalCode/>
         <CountryCode/>
