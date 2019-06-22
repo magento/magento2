@@ -84,9 +84,9 @@ class GetAllowedCustomerAttributes
                 $customerDataDummy,
                 CustomerInterface::class
             );
+            $attributeKeys = array_merge($attributeKeys, array_keys($requiredDataAttributes));
         }
-
-        $attributeKeys = array_merge($attributeKeys, array_keys($requiredDataAttributes));
+        
         $this->searchCriteriaBuilder->addFilter('attribute_code', $attributeKeys, 'in');
         $searchCriteria = $this->searchCriteriaBuilder->create();
         try {
