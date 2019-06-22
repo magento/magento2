@@ -183,7 +183,9 @@
                 </select>
             </formElements>
         </field>
-        <field name="region_id" formElement="select" sortOrder="20">
+        <field name="region_id"
+               component="Magento_InventoryAdminUi/js/form/element/region"
+               formElement="select" sortOrder="20">
             <settings>
                 <dataType>text</dataType>
                 <label translate="true">State/Province</label>
@@ -191,12 +193,12 @@
             <formElements>
                 <select>
                     <settings>
-                        <options class="Magento\InventoryAdminUi\Model\OptionSource\RegionSource"/>
                         <filterBy>
                             <field>country_id</field>
                             <target>${ $.provider }:${ $.parentScope }.country_id</target>
                         </filterBy>
                         <customEntry>region</customEntry>
+                        <options class="Magento\Directory\Model\ResourceModel\Region\Collection"/>
                     </settings>
                 </select>
             </formElements>

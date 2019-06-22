@@ -22,7 +22,7 @@ class SourceRegionDataProcessor
             $data['region_id'] = null;
         }
 
-        if (null !== $data['region_id'] || !isset($data['region']) || '' === trim($data['region'])) {
+        if (null === $data['region_id'] || !isset($data['region']) || '' === trim($data['region'])) {
             $data['region'] = null;
         }
 
