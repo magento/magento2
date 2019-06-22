@@ -6,7 +6,6 @@
 namespace Magento\PageCache\Test\Unit\App;
 
 use Magento\PageCache\Model\Config;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 
 /**
@@ -96,10 +95,18 @@ class CacheIdentifierPluginTest extends \PHPUnit\Framework\TestCase
             'Varnish + PageCache enabled' => [Config::VARNISH, true, null, false, false],
             'Built-in + PageCache disabled' => [Config::BUILT_IN, false, null, false, false],
             'Built-in + PageCache enabled' => [Config::BUILT_IN, true, null, false, false],
-            'Built-in, PageCache enabled, no user-agent exceptions' =>
-                [Config::BUILT_IN, true, 'aa123aa', false, 'aa123aa'],
-            'Built-in, PageCache enabled, with design exception' =>
-                [Config::BUILT_IN, true, 'aa123aa', '7', 'DESIGN=7|aa123aa']
+            'Built-in, PageCache enabled, no user-agent exceptions' => [Config::BUILT_IN,
+                true,
+                'aa123aa',
+                false,
+                'aa123aa'
+            ],
+            'Built-in, PageCache enabled, with design exception' => [Config::BUILT_IN,
+                true,
+                'aa123aa',
+                '7',
+                'DESIGN=7|aa123aa'
+            ]
         ];
     }
 
@@ -121,14 +128,16 @@ class CacheIdentifierPluginTest extends \PHPUnit\Framework\TestCase
         $defaultRequestMock = clone $this->requestMock;
         $defaultRequestMock->expects($this->any())
             ->method('getServerValue')
-            ->willReturnCallback(function ($param) {
-                if ($param == StoreManager::PARAM_RUN_TYPE) {
-                    return 'store';
+            ->willReturnCallback(
+                function ($param) {
+                    if ($param == StoreManager::PARAM_RUN_TYPE) {
+                        return 'store';
+                    }
+                    if ($param == StoreManager::PARAM_RUN_CODE) {
+                        return 'default';
+                    }
                 }
-                if ($param == StoreManager::PARAM_RUN_CODE) {
-                    return 'default';
-                }
-            });
+            );
 
         $nullSha1 = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
 
@@ -143,14 +152,16 @@ class CacheIdentifierPluginTest extends \PHPUnit\Framework\TestCase
         $otherRequestMock = clone $this->requestMock;
         $otherRequestMock->expects($this->any())
             ->method('getServerValue')
-            ->willReturnCallback(function ($param) {
-                if ($param == StoreManager::PARAM_RUN_TYPE) {
-                    return 'store';
+            ->willReturnCallback(
+                function ($param) {
+                    if ($param == StoreManager::PARAM_RUN_TYPE) {
+                        return 'store';
+                    }
+                    if ($param == StoreManager::PARAM_RUN_CODE) {
+                        return 'klingon';
+                    }
                 }
-                if ($param == StoreManager::PARAM_RUN_CODE) {
-                    return 'klingon';
-                }
-            });
+            );
 
         $otherPlugin = new \Magento\PageCache\Model\App\CacheIdentifierPlugin(
             $this->designExceptionsMock,
