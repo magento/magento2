@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUpdateUserRoleActionGroup">
+        <arguments>
+            <argument name="roleName" type="string" defaultValue="Sales"/>
+        </arguments>
+          <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterThePassword" />
+          <scrollToTopOfPage stepKey="scrollToTop"/>
+          <waitForPageLoad stepKey="waitForPageScrollToTop" time="15"/>
+          <click selector="{{AdminEditUserSection.userRoleTab}}" stepKey="openUserRoleTab"/>
+          <waitForPageLoad stepKey="waitForUserRoleTabOpened" time="15"/>
+          <click stepKey="clickOnRole" selector="{{AdminDeleteRoleSection.userRole(roleName)}}"/>
+    </actionGroup>
+</actionGroups>

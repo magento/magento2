@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateUserRoleTest">
+        <annotations>
+            <features value="User"/>
+            <title value="Admin user role update"/>
+            <description value="Admin user with full access role should be able to change the role to custom one with restricted permission"/>
+            <group value="user"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logOut"/>
+        </after>
+
+        <!--Create New Role-->
+        <actionGroup ref="AdminNavigateToUserRolesActionGroup" stepKey="openUserRolesGrig"/>
+        <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="goToNewRolePage"/>
+        <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillNewRoleForm">
+            <argument name="role" value="salesRole"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveRole"/>
+
+        <!--Assign the new role-->
+        <actionGroup ref="AdminOpenUserEditPageActionGroup" stepKey="openAdminUserEditPage"/>
+        <actionGroup ref="AdminUpdateUserRoleActionGroup" stepKey="assignNewUserRole"/>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveUser"/>
+        <actionGroup ref="AssertUserSuccessSaveMessageActionGroup" stepKey="seeSuccessSaveUserMessage"/>
+        <actionGroup ref="AssertAdminUserIsInGridActionGroup" stepKey="seeUserInGrid"/>
+
+        <actionGroup ref="logout" stepKey="logOutFromAdminPanel"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="logInToAdminPanel"/>
+        <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="seeSuccessloginMessage"/>
+        <actionGroup ref="AssertUserRoleRestrictedAccessActionGroup" stepKey="seeErrorMessage"/>
+
+
+          <!--Unassign the new role
+        <actionGroup ref="AdminOpenUserEditPageActionGroup" stepKey="goBackToUserEditPage"/>
+        <actionGroup ref="AdminUpdateUserRoleActionGroup" stepKey="backToDefaultUserRole">
+            <argument name="roleName" value="Admin"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveUserWithOldRole"/>-->
+
+       <!--Delete Role
+        <actionGroup ref="AdminNavigateToUserRolesActionGroup" stepKey="goBackToUserRolesGrig"/>
+        <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteRole"/>-->
+
+     </test>
+ </tests>
