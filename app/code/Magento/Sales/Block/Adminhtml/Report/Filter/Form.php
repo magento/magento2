@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Block\Adminhtml\Report\Filter;
 
 /**
@@ -11,9 +12,9 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter;
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 100.0.2
+ * @since      100.0.2
  * @deprecated
- * @see \Magento\Reports\Block\Adminhtml\Bestsellers\Filter\Form
+ * @see        \Magento\Reports\Block\Adminhtml\Bestsellers\Filter\Form
  */
 class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
 {

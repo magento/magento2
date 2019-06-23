@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Sales\Model\ResourceModel\Report\Bestsellers;
@@ -11,9 +12,11 @@ namespace Magento\Sales\Model\ResourceModel\Report\Bestsellers;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Sales\Model\ResourceModel\Report;
 use Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection;
+use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -43,18 +46,18 @@ class Collection extends AbstractCollection
      * @var array
      */
     protected $tableForPeriod = [
-        'daily'   => 'sales_bestsellers_aggregated_daily',
+        'daily' => 'sales_bestsellers_aggregated_daily',
         'monthly' => 'sales_bestsellers_aggregated_monthly',
-        'yearly'  => 'sales_bestsellers_aggregated_yearly',
+        'yearly' => 'sales_bestsellers_aggregated_yearly',
     ];
 
     /**
-     * @param EntityFactory          $entityFactory
-     * @param LoggerInterface        $logger
+     * @param EntityFactory $entityFactory
+     * @param LoggerInterface $logger
      * @param FetchStrategyInterface $fetchStrategy
-     * @param ManagerInterface       $eventManager
-     * @param Report                 $resource
-     * @param AdapterInterface       $connection
+     * @param ManagerInterface $eventManager
+     * @param Report $resource
+     * @param AdapterInterface $connection
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -118,11 +121,11 @@ class Collection extends AbstractCollection
                 $this->_selectedColumns = $this->getAggregatedColumns();
             } else {
                 $this->_selectedColumns = [
-                    'period'                 => sprintf('MAX(%s)', $connection->getDateFormatSql('period', '%Y-%m-%d')),
+                    'period' => sprintf('MAX(%s)', $connection->getDateFormatSql('period', '%Y-%m-%d')),
                     $this->getOrderedField() => 'SUM(' . $this->getOrderedField() . ')',
-                    'product_id'             => 'product_id',
-                    'product_name'           => 'MAX(product_name)',
-                    'product_price'          => 'MAX(product_price)',
+                    'product_id' => 'product_id',
+                    'product_name' => 'MAX(product_name)',
+                    'product_price' => 'MAX(product_price)',
                 ];
                 if ('year' == $this->_period) {
                     $this->_selectedColumns['period'] = $connection->getDateFormatSql('period', '%Y');
@@ -139,7 +142,7 @@ class Collection extends AbstractCollection
      * @param $from
      * @param $to
      *
-     * @return \Magento\Framework\DB\Select
+     * @return Select
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _makeBoundarySelect($from, $to)
@@ -194,7 +197,7 @@ class Collection extends AbstractCollection
             $select->where(new \Zend_Db_Expr($mainTable . '.product_id IS NOT NULL'))->group(
                 'product_id'
             )->order(
-                $this->getOrderedField() . ' ' . \Magento\Framework\DB\Select::SQL_DESC
+                $this->getOrderedField() . ' ' . Select::SQL_DESC
             )->limit(
                 $this->_ratingLimit
             );
@@ -223,13 +226,13 @@ class Collection extends AbstractCollection
     /**
      * Get SQL for get record count
      *
-     * @return \Magento\Framework\DB\Select
+     * @return Select
      */
     public function getSelectCountSql()
     {
         $this->_renderFilters();
         $select = clone $this->getSelect();
-        $select->reset(\Magento\Framework\DB\Select::ORDER);
+        $select->reset(Select::ORDER);
 
         return $this->getConnection()->select()->from($select, 'COUNT(*)');
     }
@@ -248,7 +251,7 @@ class Collection extends AbstractCollection
         }
         $currentStoreIds = $this->_storesIds;
         if (isset($currentStoreIds)
-            && $currentStoreIds != \Magento\Store\Model\Store::DEFAULT_STORE_ID && $currentStoreIds != [\Magento\Store\Model\Store::DEFAULT_STORE_ID]
+            && $currentStoreIds != Store::DEFAULT_STORE_ID && $currentStoreIds != [Store::DEFAULT_STORE_ID]
         ) {
             if (!is_array($currentStoreIds)) {
                 $currentStoreIds = [$currentStoreIds];
@@ -262,8 +265,11 @@ class Collection extends AbstractCollection
     }
 
     /**
+     *
      * @return $this|AbstractCollection
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
+     *
      * @throws \Zend_Db_Select_Exception
      */
     protected function _beforeLoad()
@@ -410,7 +416,7 @@ class Collection extends AbstractCollection
                 foreach ($selectUnions as $union) {
                     $unionParts[] = '(' . $union . ')';
                 }
-                $this->getSelect()->reset()->union($unionParts, \Magento\Framework\DB\Select::SQL_UNION_ALL);
+                $this->getSelect()->reset()->union($unionParts, Select::SQL_UNION_ALL);
             }
 
             if ($this->isTotals()) {

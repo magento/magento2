@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Reports\Block\Adminhtml\Bestsellers\Filter;
 
+use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\Form\Element\Fieldset;
-use \Magento\Reports\Block\Adminhtml\Filter\Form as ReportsBlockFilterForm;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Registry;
+use Magento\Reports\Block\Adminhtml\Filter\Form as ReportsBlockFilterForm;
 
 /**
  * Sales Adminhtml report bestseller filter form
@@ -19,6 +22,33 @@ use \Magento\Reports\Block\Adminhtml\Filter\Form as ReportsBlockFilterForm;
 class Form extends ReportsBlockFilterForm
 {
     /**
+     * Sorting limits for items displayed
+     *
+     * @var []
+     */
+    private $itemSortLimit;
+
+    /**
+     * Form constructor.
+     *
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param array $itemSortLimit
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        array $itemSortLimit,
+        array $data = []
+    ) {
+        $this->itemSortLimit = $itemSortLimit;
+        parent::__construct($context, $registry, $formFactory, $data);
+    }
+
+    /**
      * @inheritdoc
      */
     protected function _prepareForm()
@@ -26,14 +56,14 @@ class Form extends ReportsBlockFilterForm
         parent::_prepareForm();
         /** @var Fieldset $fieldset */
         $fieldset = $this->getForm()->getElement('base_fieldset');
-        if (is_object($fieldset) && $fieldset instanceof Fieldset) {
+        if ($fieldset instanceof Fieldset) {
             $fieldset->addField(
                 'rating_limit',
                 'select',
                 [
-                    'name'    => 'rating_limit',
-                    'label'   => __('Display items'),
-                    'options' => array_combine($i = [5, 10, 20, 50, 100], $i),
+                    'name' => 'rating_limit',
+                    'label' => __('Display items'),
+                    'options' => $this->itemSortLimit
                 ],
                 'to'
             );

@@ -9,7 +9,7 @@ namespace Magento\Reports\Block\Adminhtml\Sales\Bestsellers;
 /**
  * Adminhtml bestsellers report grid block
  *
- * @author                                     Magento Core Team <core@magentocommerce.com>
+ * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
@@ -23,6 +23,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 
     /**
      * @inheritdoc
+     *
      * @codeCoverageIgnore
      */
     protected function _construct()
@@ -33,6 +34,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 
     /**
      * @inheritdoc
+     *
      * @codeCoverageIgnore
      */
     public function getResourceCollectionName()
@@ -58,13 +60,13 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
         $this->addColumn(
             'period',
             [
-                'header'           => __('Interval'),
-                'index'            => 'period',
-                'sortable'         => false,
-                'period_type'      => $this->getPeriodType(),
-                'renderer'         => \Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date::class,
-                'totals_label'     => __('Total'),
-                'html_decorators'  => ['nobr'],
+                'header' => __('Interval'),
+                'index' => 'period',
+                'sortable' => false,
+                'period_type' => $this->getPeriodType(),
+                'renderer' => \Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date::class,
+                'totals_label' => __('Total'),
+                'html_decorators' => ['nobr'],
                 'header_css_class' => 'col-period',
                 'column_css_class' => 'col-period'
             ]
@@ -73,10 +75,10 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
         $this->addColumn(
             'product_name',
             [
-                'header'           => __('Product'),
-                'index'            => 'product_name',
-                'type'             => 'string',
-                'sortable'         => false,
+                'header' => __('Product'),
+                'index' => 'product_name',
+                'type' => 'string',
+                'sortable' => false,
                 'header_css_class' => 'col-product',
                 'column_css_class' => 'col-product'
             ]
@@ -90,12 +92,12 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
         $this->addColumn(
             'product_price',
             [
-                'header'           => __('Price'),
-                'type'             => 'currency',
-                'currency_code'    => $currencyCode,
-                'index'            => 'product_price',
-                'sortable'         => false,
-                'rate'             => $this->getRate($currencyCode),
+                'header' => __('Price'),
+                'type' => 'currency',
+                'currency_code' => $currencyCode,
+                'index' => 'product_price',
+                'sortable' => false,
+                'rate' => $this->getRate($currencyCode),
                 'header_css_class' => 'col-price',
                 'column_css_class' => 'col-price'
             ]
@@ -104,11 +106,11 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
         $this->addColumn(
             'qty_ordered',
             [
-                'header'           => __('Order Quantity'),
-                'index'            => 'qty_ordered',
-                'type'             => 'number',
-                'total'            => 'sum',
-                'sortable'         => false,
+                'header' => __('Order Quantity'),
+                'index' => 'qty_ordered',
+                'type' => 'number',
+                'total' => 'sum',
+                'sortable' => false,
                 'header_css_class' => 'col-qty',
                 'column_css_class' => 'col-qty'
             ]
