@@ -6,30 +6,35 @@
 
 declare(strict_types=1);
 
-namespace Magento\AuthorizenetAcceptjs\Test\Unit\Observer;
+namespace Magento\AuthorizenetCardinal\Test\Unit\Observer;
 
+use Magento\AuthorizenetCardinal\Model\Config;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
-use Magento\AuthorizenetAcceptjs\Observer\DataAssignObserver;
+use Magento\AuthorizenetCardinal\Observer\DataAssignObserver;
 use Magento\Quote\Api\Data\PaymentInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests DataAssignObserver
+ * Class DataAssignObserverTest
  */
 class DataAssignObserverTest extends TestCase
 {
+    /**
+     * Tests setting JWT in payment additional information.
+     */
     public function testExecuteSetsProperData()
     {
         $additionalInfo = [
-            'opaqueDataDescriptor' => 'foo',
-            'opaqueDataValue' => 'bar',
-            'ccLast4' => '1234'
+            'cardinalJWT' => 'foo'
         ];
 
+        $config = $this->createMock(Config::class);
+        $config->method('isActive')
+            ->willReturn(true);
         $observerContainer = $this->createMock(Observer::class);
         $event = $this->createMock(Event::class);
         $paymentInfoModel = $this->createMock(InfoInterface::class);
@@ -43,22 +48,22 @@ class DataAssignObserverTest extends TestCase
                     [AbstractDataAssignObserver::DATA_CODE, $dataObject]
                 ]
             );
-        $paymentInfoModel->expects($this->at(0))
+        $paymentInfoModel->expects($this->once())
             ->method('setAdditionalInformation')
-            ->with('opaqueDataDescriptor', 'foo');
-        $paymentInfoModel->expects($this->at(1))
-            ->method('setAdditionalInformation')
-            ->with('opaqueDataValue', 'bar');
-        $paymentInfoModel->expects($this->at(2))
-            ->method('setAdditionalInformation')
-            ->with('ccLast4', '1234');
+            ->with('cardinalJWT', 'foo');
 
-        $observer = new DataAssignObserver();
+        $observer = new DataAssignObserver($config);
         $observer->execute($observerContainer);
     }
 
-    public function testDoestSetDataWhenEmpty()
+    /**
+     * Tests case when Cardinal JWT is absent.
+     */
+    public function testDoesntSetDataWhenEmpty()
     {
+        $config = $this->createMock(Config::class);
+        $config->method('isActive')
+            ->willReturn(true);
         $observerContainer = $this->createMock(Observer::class);
         $event = $this->createMock(Event::class);
         $paymentInfoModel = $this->createMock(InfoInterface::class);
@@ -74,7 +79,22 @@ class DataAssignObserverTest extends TestCase
         $paymentInfoModel->expects($this->never())
             ->method('setAdditionalInformation');
 
-        $observer = new DataAssignObserver();
+        $observer = new DataAssignObserver($config);
+        $observer->execute($observerContainer);
+    }
+
+    /**
+     * Tests case when CardinalCommerce is disabled.
+     */
+    public function testDoesntSetDataWhenDisabled()
+    {
+        $config = $this->createMock(Config::class);
+        $config->method('isActive')
+            ->willReturn(false);
+        $observerContainer = $this->createMock(Observer::class);
+        $observerContainer->expects($this->never())
+            ->method('getEvent');
+        $observer = new DataAssignObserver($config);
         $observer->execute($observerContainer);
     }
 }
