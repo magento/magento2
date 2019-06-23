@@ -19,6 +19,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
 use Magento\ProductAlert\Model\StockFactory;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Unsubscribing from 'back in stock alert'.
@@ -113,10 +114,10 @@ class Stock extends UnsubscribeController implements HttpPostActionInterface
      *
      * @param int $productId
      *
-     * @return \Magento\Catalog\Api\Data\ProductInterface
+     * @return ProductInterface
      * @throws NoSuchEntityException
      */
-    protected function retrieveProduct(int $productId)
+    private function retrieveProduct(int $productId): ProductInterface
     {
         $product = $this->productRepository->getById($productId);
         if (!$product->isVisibleInCatalog()) {
