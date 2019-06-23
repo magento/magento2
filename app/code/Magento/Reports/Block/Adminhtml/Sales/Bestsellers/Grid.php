@@ -21,7 +21,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     protected $_columnGroupBy = 'period';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @codeCoverageIgnore
      */
     protected function _construct()
@@ -31,16 +32,26 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @codeCoverageIgnore
      */
     public function getResourceCollectionName()
     {
         return \Magento\Sales\Model\ResourceModel\Report\Bestsellers\Collection::class;
     }
+    
+    /**
+     * @inheritdoc
+     */
+    protected function _addCustomFilter($collection, $filterData)
+    {
+        $collection->setRatingLimit($filterData->getRatingLimit());
+        return $this;
+    }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareColumns()
     {

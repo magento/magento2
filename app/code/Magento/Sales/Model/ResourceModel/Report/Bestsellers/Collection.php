@@ -7,7 +7,9 @@
 namespace Magento\Sales\Model\ResourceModel\Report\Bestsellers;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Report bestsellers collection
+ *
+ * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
 {
@@ -54,6 +56,18 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
     ) {
         $resource->init($this->getTableByAggregationPeriod('daily'));
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
+    }
+    
+    /**
+     * Set rating limit
+     *
+     * @param int $ratingLimit
+     * @return $this
+     */
+    public function setRatingLimit($ratingLimit)
+    {
+        $this->_ratingLimit = $ratingLimit;
+        return $this;
     }
 
     /**
@@ -235,8 +249,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
     }
 
     /**
-     * Redeclare parent method for applying filters after parent method
-     * but before adding unions and calculating totals
+     * Redeclare parent method for applying filters after parent method but before adding unions and calculating totals
      *
      * @return $this|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
