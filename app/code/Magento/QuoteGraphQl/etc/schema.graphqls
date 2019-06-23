@@ -18,6 +18,7 @@ type Mutation {
     setShippingMethodsOnCart(input: SetShippingMethodsOnCartInput): SetShippingMethodsOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetShippingMethodsOnCart")
     setPaymentMethodOnCart(input: SetPaymentMethodOnCartInput): SetPaymentMethodOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentMethodOnCart")
     setGuestEmailOnCart(input: SetGuestEmailOnCartInput): SetGuestEmailOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetGuestEmailOnCart")
+    setPaymentMethodAndPlaceOrder(input: SetPaymentMethodAndPlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentAndPlaceOrder")
     placeOrder(input: PlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder")
 }
 
@@ -119,6 +120,11 @@ input ShippingMethodInput {
     method_code: String!
 }
 
+input SetPaymentMethodAndPlaceOrderInput {
+    cart_id: String!
+    payment_method: PaymentMethodInput!
+}
+
 input PlaceOrderInput {
     cart_id: String!
 }
@@ -131,6 +137,10 @@ input SetPaymentMethodOnCartInput {
 input PaymentMethodInput {
     code: String! @doc(description:"Payment method code")
     purchase_order_number: String @doc(description:"Purchase order number")
+    additional_data: PaymentMethodAdditionalDataInput @doc(description: "Additional payment data")
+}
+
+input PaymentMethodAdditionalDataInput {
 }
 
 input SetGuestEmailOnCartInput {
@@ -142,6 +152,7 @@ type CartPrices {
     grand_total: Money
     subtotal_including_tax: Money
     subtotal_excluding_tax: Money
+    discount: CartDiscount
     subtotal_with_discount_excluding_tax: Money
     applied_taxes: [CartTaxItem]
 }
@@ -149,6 +160,11 @@ type CartPrices {
 type CartTaxItem {
     amount: Money!
     label: String!
+}
+
+type CartDiscount {
+    amount: Money!
+    label: [String!]!
 }
 
 type SetPaymentMethodOnCartOutput {
