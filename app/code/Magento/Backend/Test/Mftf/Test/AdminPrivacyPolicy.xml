@@ -1,0 +1,490 @@
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminPrivacyPolicy">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Checks to see if privacy policy url is in the admin page and every sub page"/>
+            <title value="There should be a privacy policy url in the admin page and every sub page"/>
+            <description value="There should be a privacy policy url in the admin page and every sub page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-71572"/>
+            <group value="example"/>
+            <group value="login"/>
+        </annotations>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <closeAdminNotification stepKey="closeAdminNotification"/>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkDashboard"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSalesOrder">
+            <argument name="menuUiId" value="magento-sales-sales"/>
+            <argument name="submenuUiId" value="magento-sales-sales-order"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSalesOrder"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSalesInvoice">
+            <argument name="menuUiId" value="magento-sales-sales"/>
+            <argument name="submenuUiId" value="magento-sales-sales-invoice"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSalesInvoice"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSalesShipment">
+            <argument name="menuUiId" value="magento-sales-sales"/>
+            <argument name="submenuUiId" value="magento-sales-sales-shipment"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSalesShipment"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSalesCreditMemo">
+            <argument name="menuUiId" value="magento-sales-sales"/>
+            <argument name="submenuUiId" value="magento-sales-sales-creditmemo"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkCreditMemo"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSalesBillingAgreement">
+            <argument name="menuUiId" value="magento-sales-sales"/>
+            <argument name="submenuUiId" value="magento-paypal-paypal-billing-agreement"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSalesBillingAgreement"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSalesTransactions">
+            <argument name="menuUiId" value="magento-sales-sales"/>
+            <argument name="submenuUiId" value="magento-sales-sales-transactions"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSalesTransactions"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToCatalogProducts">
+            <argument name="menuUiId" value="magento-catalog-catalog"/>
+            <argument name="submenuUiId" value="magento-catalog-catalog-products"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkCatalogProducts"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToCatalogCategories">
+            <argument name="menuUiId" value="magento-catalog-catalog"/>
+            <argument name="submenuUiId" value="magento-catalog-catalog-categories"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkCatalogCategories"/>
+        
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToCustomersAllCustomers">
+            <argument name="menuUiId" value="magento-customer-customer"/>
+            <argument name="submenuUiId" value="magento-customer-customer-manage"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkCustomersAllCustomers"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToCustomersNowOnline">
+            <argument name="menuUiId" value="magento-customer-customer"/>
+            <argument name="submenuUiId" value="magento-customer-customer-online"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkNowOnline"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToCustomersGroups">
+            <argument name="menuUiId" value="magento-customer-customer"/>
+            <argument name="submenuUiId" value="magento-customer-customer-group"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkCustomersGroups"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingCatalogPriceRule">
+            <argument name="menuUiId" value="magento-backend-marketing"/>
+            <argument name="submenuUiId" value="magento-catalogrule-promo-catalog"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkMarketingCatalogPriceRule"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingCartPriceRule">
+            <argument name="menuUiId" value="magento-backend-marketing"/>
+            <argument name="submenuUiId" value="magento-salesrule-promo-quote"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkCartPriceRule"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingEmailTemplate">
+            <argument name="menuUiId" value="magento-backend-marketing"/>
+            <argument name="submenuUiId" value="magento-email-template"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkMarketingEmailTemplate"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingNewsletterTemplate">
+            <argument name="menuUiId" value="magento-backend-marketing"/>
+            <argument name="submenuUiId" value="magento-newsletter-newsletter-template"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkMarketingNewsletterTemplate"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingNewsletterQueue">
+            <argument name="menuUiId" value="magento-backend-marketing"/>
+            <argument name="submenuUiId" value="magento-newsletter-newsletter-queue"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkMarketingNewsletterQueue"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingNewsletterSubscribers">
+            <argument name="menuUiId" value="magento-backend-marketing"/>
+            <argument name="submenuUiId" value="magento-newsletter-newsletter-subscriber"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkMarketingNewsletterSubscribers"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingURLRewrites">
+            <argument name="menuUiId" value="magento-backend-marketing"/>
+            <argument name="submenuUiId" value="magento-urlrewrite-urlrewrite"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkMarketingURLRewrites"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingSearchTerms">
+            <argument name="menuUiId" value="magento-backend-marketing"/>
+            <argument name="submenuUiId" value="magento-search-search-terms"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkMarketingSearchTerms"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingSearchSynonyms">
+            <argument name="menuUiId" value="magento-backend-marketing"/>
+            <argument name="submenuUiId" value="magento-search-search-synonyms"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkMarketingSearchSynonyms"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingSiteMap">
+            <argument name="menuUiId" value="magento-backend-marketing"/>
+            <argument name="submenuUiId" value="magento-sitemap-catalog-sitemap"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkMarketingSiteMap"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingAllReviews">
+            <argument name="menuUiId" value="magento-backend-marketing"/>
+            <argument name="submenuUiId" value="magento-review-catalog-reviews-ratings-reviews-all"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkMarketingAllReviews"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingPendingReviews">
+            <argument name="menuUiId" value="magento-backend-marketing"/>
+            <argument name="submenuUiId" value="magento-review-catalog-reviews-ratings-pending"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkMarketingPendingReviews"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentPages">
+            <argument name="menuUiId" value="magento-backend-content"/>
+            <argument name="submenuUiId" value="magento-cms-cms-page"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkContentPages"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentBlocks">
+            <argument name="menuUiId" value="magento-backend-content"/>
+            <argument name="submenuUiId" value="magento-cms-cms-block"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkContentBlocks"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentWidgets">
+            <argument name="menuUiId" value="magento-backend-content"/>
+            <argument name="submenuUiId" value="magento-widget-cms-widget-instance"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkContentWidgets"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentConfiguration">
+            <argument name="menuUiId" value="magento-backend-content"/>
+            <argument name="submenuUiId" value="magento-theme-design-config"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkContentConfiguration"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentThemes">
+            <argument name="menuUiId" value="magento-backend-content"/>
+            <argument name="submenuUiId" value="magento-theme-system-design-theme"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkContentThemes"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentSchedule">
+            <argument name="menuUiId" value="magento-backend-content"/>
+            <argument name="submenuUiId" value="magento-backend-system-design-schedule"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkContentSchedule"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsProductsInCart">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-reports-report-shopcart-product"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsProductsInCart"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsSearchTerms">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-search-report-search-term"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsSearchTerms"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsAbandonedCarts">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-reports-report-shopcart-abandoned"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsAbandonedCarts"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsNewsletterProblemReports">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-newsletter-newsletter-problem"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsNewsletterProblemReports"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsByCustomers">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-review-report-review-customer"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsByCustomers"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsByProducts">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-review-report-review-product"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsByProducts"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsOrders">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-reports-report-salesroot-sales"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsOrders"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsTax">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-reports-report-salesroot-tax"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsTax"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsInvoiced">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-reports-report-salesroot-invoiced"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsInvoiced"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsShipping">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-reports-report-salesroot-shipping"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsShipping"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsRefunds">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-reports-report-salesroot-refunded"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsRefunds"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsCoupons">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-reports-report-salesroot-coupons"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsCoupons"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsPayPalSettlement">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-paypal-report-salesroot-paypal-settlement-reports"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsPayPalSettlement"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsBraintreeSettlement">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-braintree-settlement-report"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsBraintreeSettlement"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsOrderTotal">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-reports-report-customers-totals"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsOrderTotal"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsOrderCount">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-reports-report-customers-orders"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsOrderCount"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsNew">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-reports-report-customers-accounts"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsNew"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsViews">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-reports-report-products-viewed"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsViews"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsBestsellers">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-reports-report-products-bestsellers"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsBestsellers"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsLowStock">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-reports-report-products-lowstock"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsLowStock"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsOrdered">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-reports-report-products-sold"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsOrdered"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsDownloads">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-downloadable-report-products-downloads"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsDownloads"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsRefreshStatistics">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-reports-report-statistics-refresh"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsRefreshStatistics"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresAllStores">
+            <argument name="menuUiId" value="magento-backend-stores"/>
+            <argument name="submenuUiId" value="magento-backend-system-store"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkStoresAllStores"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresConfiguration">
+            <argument name="menuUiId" value="magento-backend-stores"/>
+            <argument name="submenuUiId" value="magento-config-system-config"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkStoresConfiguration"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresTermsAndConditions">
+            <argument name="menuUiId" value="magento-backend-stores"/>
+            <argument name="submenuUiId" value="magento-checkoutagreements-sales-checkoutagreement"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkStoresTermsAndConditions"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresOrderStatus">
+            <argument name="menuUiId" value="magento-backend-stores"/>
+            <argument name="submenuUiId" value="magento-sales-system-order-statuses"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkStoresOrderStatus"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresTaxRules">
+            <argument name="menuUiId" value="magento-backend-stores"/>
+            <argument name="submenuUiId" value="magento-tax-sales-tax-rules"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkStoresTaxRules"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresTaxRates">
+            <argument name="menuUiId" value="magento-backend-stores"/>
+            <argument name="submenuUiId" value="magento-tax-sales-tax-rates"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkStoresTaxRates"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresCurrencyRates">
+            <argument name="menuUiId" value="magento-backend-stores"/>
+            <argument name="submenuUiId" value="magento-currencysymbol-system-currency-rates"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkStoresCurrencyRates"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresCurrencySymbols">
+            <argument name="menuUiId" value="magento-backend-stores"/>
+            <argument name="submenuUiId" value="magento-currencysymbol-system-currency-symbols"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkStoresCurrencySymbols"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresProduct">
+            <argument name="menuUiId" value="magento-backend-stores"/>
+            <argument name="submenuUiId" value="magento-catalog-catalog-attributes-attributes"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkStoresProduct"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresAttributeSet">
+            <argument name="menuUiId" value="magento-backend-stores"/>
+            <argument name="submenuUiId" value="magento-catalog-catalog-attributes-sets"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkStoresAttributeSet"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresRating">
+            <argument name="menuUiId" value="magento-backend-stores"/>
+            <argument name="submenuUiId" value="magento-review-catalog-reviews-ratings-ratings"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkStoresRating"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemImport">
+            <argument name="menuUiId" value="magento-backend-system"/>
+            <argument name="submenuUiId" value="magento-importexport-system-convert-import"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSystemImport"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemExport">
+            <argument name="menuUiId" value="magento-backend-system"/>
+            <argument name="submenuUiId" value="magento-importexport-system-convert-export"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSystemExport"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemImportExportTaxRates">
+            <argument name="menuUiId" value="magento-backend-system"/>
+            <argument name="submenuUiId" value="magento-taximportexport-system-convert-tax"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSystemImportExportTaxRates"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemImportHistory">
+            <argument name="menuUiId" value="magento-backend-system"/>
+            <argument name="submenuUiId" value="magento-importexport-system-convert-history"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSystemImportHistory"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemIntegrations">
+            <argument name="menuUiId" value="magento-backend-system"/>
+            <argument name="submenuUiId" value="magento-integration-system-integrations"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSystemIntegrations"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemCacheManagement">
+            <argument name="menuUiId" value="magento-backend-system"/>
+            <argument name="submenuUiId" value="magento-backend-system-cache"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSystemCacheManagement"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemBackups">
+            <argument name="menuUiId" value="magento-backend-system"/>
+            <argument name="submenuUiId" value="magento-backup-system-tools-backup"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSystemBackups"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemIndexManagement">
+            <argument name="menuUiId" value="magento-backend-system"/>
+            <argument name="submenuUiId" value="magento-indexer-system-index"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSystemIndexManagement"/>
+
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemAllUsers">
+            <argument name="menuUiId" value="magento-backend-system"/>
+            <argument name="submenuUiId" value="magento-user-system-acl-users"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSystemAllUsers"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemLockedUsers">
+            <argument name="menuUiId" value="magento-backend-system"/>
+            <argument name="submenuUiId" value="magento-user-system-acl-locks"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSystemLockedUsers"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemUserRoles">
+            <argument name="menuUiId" value="magento-backend-system"/>
+            <argument name="submenuUiId" value="magento-user-system-acl-roles"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSystemUserRoles"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemBulkActions">
+            <argument name="menuUiId" value="magento-backend-system"/>
+            <argument name="submenuUiId" value="magento-asynchronousoperations-system-magento-logging-bulk-operations"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSystemBulkActions"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemNotifications">
+            <argument name="menuUiId" value="magento-backend-system"/>
+            <argument name="submenuUiId" value="magento-adminnotification-system-adminnotification"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSystemNotifications"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemCustomVariables">
+            <argument name="menuUiId" value="magento-backend-system"/>
+            <argument name="submenuUiId" value="magento-variable-system-variable"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSystemCustomVariables"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemManageEncryptionKey">
+            <argument name="menuUiId" value="magento-backend-system"/>
+            <argument name="submenuUiId" value="magento-encryptionkey-system-crypt-key"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSystemManageEncryptionKey"/>
+    </test>
+</tests>
+
+
