@@ -4,18 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+/** @var \Magento\Sales\Block\Adminhtml\Order\Create\Comment $block */
+?>
 
- ?>
-
-<?php /* <h4 class="icon-head fieldset-legend <?= $block->getHeaderCssClass() ?>"><?= $block->getHeaderText() ?></h4> */ ?>
 <div class="admin__field field-comment">
-    <label for="order-comment" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Order Comments') ?></span></label>
+    <label for="order-comment" class="admin__field-label"><span><?= $block->escapeHtml(__('Order Comments')) ?></span></label>
     <div class="admin__field-control">
         <textarea
             id="order-comment"
             name="order[comment][customer_note]"
-            class="admin__control-textarea"><?= /* @escapeNotVerified */ $block->getCommentNote() ?></textarea>
+            class="admin__control-textarea"><?= $block->escapeHtml($block->getCommentNote()) ?></textarea>
     </div>
 </div>
 <script>

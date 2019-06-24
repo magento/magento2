@@ -63,6 +63,7 @@ class AssertBIEssentialsLink extends AbstractConstraint
             } catch (\Throwable $e) {
                 $dashboard->open();
                 $dashboard->getMenuBlock()->navigate($menuItem, $waitMenuItemNotVisible);
+                sleep(10);
                 $count++;
             }
         } while ($count < self::MAX_TRY_COUNT);
