@@ -9,4 +9,7 @@
     <engine name="elasticsearch">
         <feature name="synonyms" support="true" />
     </engine>
+    <engine name="elasticsearch5">
+        <feature name="synonyms" support="true" />
+    </engine>
 </engines>

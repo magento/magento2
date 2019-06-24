@@ -17,9 +17,10 @@
         <click selector="{{AdminGridTableSection.backupRowCheckbox(backup.name)}}" stepKey="selectBackupRow"/>
         <selectOption selector="{{AdminGridActionSection.actionSelect}}" userInput="Delete" stepKey="selectDeleteAction"/>
         <click selector="{{AdminGridActionSection.submitButton}}" stepKey="clickSubmit"/>
+        <waitForPageLoad stepKey="waitForConfirmWindowToAppear"/>
         <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to delete the selected backup(s)?" stepKey="seeConfirmationModal"/>
+        <waitForPageLoad stepKey="waitForSubmitAction"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickOkConfirmDelete"/>
         <dontSee selector="{{AdminGridTableSection.backupNameColumn}}" userInput="{{backup.name}}" stepKey="dontSeeBackupInGrid"/>
     </actionGroup>
-
 </actionGroups>

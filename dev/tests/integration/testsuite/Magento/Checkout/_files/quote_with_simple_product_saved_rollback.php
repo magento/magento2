@@ -14,3 +14,5 @@ $quote->load('test_order_with_simple_product_without_address', 'reserved_order_i
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
 $quoteIdMask = $objectManager->create(\Magento\Quote\Model\QuoteIdMask::class);
 $quoteIdMask->delete($quote->getId());
+
+require 'simple_product_rollback.php';

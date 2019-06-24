@@ -59,8 +59,8 @@ class Copy
      *
      * @param string $fieldset
      * @param string $aspect
-     * @param array|DataObject $source
-     * @param array|DataObject $target
+     * @param array|DataObject|ExtensibleDataInterface|AbstractSimpleObject $source
+     * @param array|DataObject|ExtensibleDataInterface|AbstractSimpleObject $target
      * @param string $root
      *
      * @return array|DataObject|null the value of $target
@@ -102,8 +102,8 @@ class Copy
      *
      * @param string $fieldset
      * @param string $aspect
-     * @param array|DataObject $source
-     * @param array|DataObject $target
+     * @param array|DataObject|ExtensibleDataInterface|AbstractSimpleObject $source
+     * @param array|DataObject|ExtensibleDataInterface|AbstractSimpleObject $target
      * @param string $root
      * @param bool $targetIsArray
      *
@@ -130,7 +130,7 @@ class Copy
      *
      * @param string $fieldset
      * @param string $aspect a field name
-     * @param array|DataObject $source
+     * @param array|DataObject|ExtensibleDataInterface|AbstractSimpleObject $source
      * @param string $root
      *
      * @return array
@@ -167,8 +167,8 @@ class Copy
     /**
      * Check if source and target are valid input for converting using fieldset
      *
-     * @param array|DataObject $source
-     * @param array|DataObject $target
+     * @param array|DataObject|ExtensibleDataInterface|AbstractSimpleObject $source
+     * @param array|DataObject|ExtensibleDataInterface|AbstractSimpleObject $target
      *
      * @return bool
      */
@@ -180,7 +180,7 @@ class Copy
     /**
      * Verify that we can access data from input object.
      *
-     * @param $object
+     * @param array|DataObject|ExtensibleDataInterface|AbstractSimpleObject $object
      *
      * @return bool
      */
@@ -194,7 +194,7 @@ class Copy
     /**
      * Get value of source by code
      *
-     * @param mixed $source
+     * @param array|DataObject|ExtensibleDataInterface|AbstractSimpleObject $source
      * @param string $code
      *
      * @return mixed
@@ -202,7 +202,6 @@ class Copy
      */
     protected function _getFieldsetFieldValue($source, $code)
     {
-
         switch (true) {
             case is_array($source):
                 $value = isset($source[$code]) ? $source[$code] : null;
@@ -229,11 +228,11 @@ class Copy
     /**
      * Set value of target by code
      *
-     * @param mixed $target
+     * @param array|DataObject|ExtensibleDataInterface|AbstractSimpleObject $target
      * @param string $targetCode
      * @param mixed $value
      *
-     * @return mixed
+     * @return array|DataObject|ExtensibleDataInterface|AbstractSimpleObject
      * @throws \InvalidArgumentException
      */
     protected function _setFieldsetFieldValue($target, $targetCode, $value)
@@ -287,7 +286,7 @@ class Copy
      */
     private function getAttributeValueFromExtensibleObject(ExtensibleDataInterface $source, string $code)
     {
-        $method = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
+        $method = 'get' . str_replace('_', '', ucwords($code, '_'));
 
         $methodExists = method_exists($source, $method);
 
@@ -339,14 +338,14 @@ class Copy
      *
      * @param ExtensibleDataInterface $target
      * @param string $code
-     * @param $value
+     * @param mixed $value
      *
      * @return void
      * @throws \InvalidArgumentException
      */
     private function setAttributeValueFromExtensibleObject(ExtensibleDataInterface $target, string $code, $value): void
     {
-        $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
+        $method = 'set' . str_replace('_', '', ucwords($code, '_'));
 
         $methodExists = method_exists($target, $method);
         if ($methodExists) {
@@ -364,7 +363,6 @@ class Copy
             $target->setExtensionAttributes($extensionAttributes);
             return;
         }
-
 
         if ($target instanceof DataObject) {
             $target->setDataUsingMethod($code, $value);

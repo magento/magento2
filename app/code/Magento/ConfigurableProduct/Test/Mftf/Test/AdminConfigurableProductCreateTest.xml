@@ -36,6 +36,7 @@
         </actionGroup>
 
         <!-- assert color configurations on the admin create product page -->
+        <dontSee selector="{{AdminProductFormConfigurationsSection.variationLabel}}" stepKey="seeLabelNotVisible"/>
         <seeNumberOfElements selector="{{AdminProductFormConfigurationsSection.currentVariationsRows}}" userInput="3" stepKey="seeNumberOfRows"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{colorProductAttribute1.name}}" stepKey="seeAttributeName1InField"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeAttributeName2InField"/>

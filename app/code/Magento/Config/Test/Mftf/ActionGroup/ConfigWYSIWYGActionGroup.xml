@@ -38,4 +38,15 @@
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
         <waitForPageLoad stepKey="waitForPageLoad2" />
     </actionGroup>
+    <actionGroup name="EnabledWYSIWYGEditor">
+        <amOnPage url="{{AdminContentManagementPage.url}}" stepKey="navigateToConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.EnableWYSIWYG}}" visible="false" stepKey="expandWYSIWYGOptionsTab"/>
+        <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" stepKey="waitTabToExpand"/>
+        <uncheckOption selector="{{ContentManagementSection.EnableSystemValue}}" stepKey="enableEnableSystemValue"/>
+        <selectOption selector="{{ContentManagementSection.EnableWYSIWYG}}" userInput="Enabled by Default" stepKey="enableWYSIWYG"/>
+        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptionsTab"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
+        <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the configuration."/>
+    </actionGroup>
 </actionGroups>
