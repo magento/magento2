@@ -33,6 +33,7 @@ class OrderCreateMultiStockModeDownloadableProductTest extends OrderPlacementBas
         $this->estimateShippingCosts();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
@@ -59,6 +60,7 @@ class OrderCreateMultiStockModeDownloadableProductTest extends OrderPlacementBas
         $this->estimateShippingCosts();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**

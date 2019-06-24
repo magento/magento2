@@ -32,6 +32,7 @@ class OrderCreateSingleStockModeSimpleProductTest extends OrderPlacementBase
         $this->setShippingAndBillingInformation();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
@@ -59,6 +60,7 @@ class OrderCreateSingleStockModeSimpleProductTest extends OrderPlacementBase
         $this->setShippingAndBillingInformation();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
@@ -79,6 +81,7 @@ class OrderCreateSingleStockModeSimpleProductTest extends OrderPlacementBase
         $this->setShippingAndBillingInformation();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
@@ -103,6 +106,7 @@ class OrderCreateSingleStockModeSimpleProductTest extends OrderPlacementBase
         $this->setShippingAndBillingInformation();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
