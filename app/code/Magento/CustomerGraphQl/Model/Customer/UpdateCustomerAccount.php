@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Customer;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlAlreadyExistsException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Api\DataObjectHelper;
@@ -89,8 +91,7 @@ class UpdateCustomerAccount
      * @throws GraphQlAlreadyExistsException
      * @throws GraphQlAuthenticationException
      * @throws GraphQlInputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException
+     * @throws GraphQlNoSuchEntityException
      */
     public function execute(CustomerInterface $customer, array $data): void
     {
@@ -106,7 +107,12 @@ class UpdateCustomerAccount
         $filteredData = array_diff_key($data, array_flip($this->restrictedKeys));
         $this->dataObjectHelper->populateWithArray($customer, $filteredData, CustomerInterface::class);
 
-        $customer->setStoreId($this->storeManager->getStore()->getId());
+        try {
+            $customer->setStoreId($this->storeManager->getStore()->getId());
+        } catch (NoSuchEntityException $exception) {
+            throw new GraphQlNoSuchEntityException(__($exception->getMessage()), $exception);
+        }
+
 
         $this->saveCustomer->execute($customer);
 
