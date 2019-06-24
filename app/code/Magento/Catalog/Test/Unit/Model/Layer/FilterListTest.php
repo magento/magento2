@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Layer;
 
 use \Magento\Catalog\Model\Layer\FilterList;
+use Magento\Catalog\Model\Product\Attribute\Backend\Price;
 
 class FilterListTest extends \PHPUnit\Framework\TestCase
 {
@@ -95,8 +97,8 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'method' => 'getAttributeCode',
-                'value' => FilterList::PRICE_FILTER,
+                'method' => 'getBackendModel',
+                'value' => Price::class,
                 'expectedClass' => 'PriceFilterClass',
             ],
             [
@@ -105,7 +107,7 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
                 'expectedClass' => 'DecimalFilterClass',
             ],
             [
-                'method' => 'getAttributeCode',
+                'method' => 'getBackendModel',
                 'value' => null,
                 'expectedClass' => 'AttributeFilterClass',
             ]
