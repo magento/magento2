@@ -5,6 +5,9 @@
  */
 namespace Magento\Sales\Cron;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory as QuoteCollectionFactory;
+use Magento\Sales\Model\ExpireQuotesFilterFieldsProvider;
 use Magento\Store\Model\StoresConfig;
 
 /**
@@ -17,28 +20,37 @@ class CleanExpiredQuotes
     /**
      * @var StoresConfig
      */
-    protected $storesConfig;
+    private $storesConfig;
 
     /**
-     * @var \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory
+     * @var QuoteCollectionFactory
      */
-    protected $quoteCollectionFactory;
+    private $quoteCollectionFactory;
 
     /**
      * @var array
      */
-    protected $expireQuotesFilterFields = [];
+    private $expireQuotesFilterFields = [];
+
+    /**
+     * @var ExpireQuotesFilterFieldsProvider
+     */
+    private $expireQuotesFilterFieldsProvider;
 
     /**
      * @param StoresConfig $storesConfig
-     * @param \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $collectionFactory
+     * @param QuoteCollectionFactory $collectionFactory
+     * @param ExpireQuotesFilterFieldsProvider $expireQuotesFilterFieldsProvider
      */
     public function __construct(
         StoresConfig $storesConfig,
-        \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $collectionFactory
+        QuoteCollectionFactory $collectionFactory,
+        ExpireQuotesFilterFieldsProvider $expireQuotesFilterFieldsProvider = null
     ) {
         $this->storesConfig = $storesConfig;
         $this->quoteCollectionFactory = $collectionFactory;
+        $this->expireQuotesFilterFieldsProvider = $expireQuotesFilterFieldsProvider
+            ?? ObjectManager::getInstance()->get(ExpireQuotesFilterFieldsProvider::class);
     }
 
     /**
@@ -59,7 +71,7 @@ class CleanExpiredQuotes
             $quotes->addFieldToFilter('updated_at', ['to' => date("Y-m-d", time() - $lifetime)]);
             $quotes->addFieldToFilter('is_active', 0);
 
-            foreach ($this->getExpireQuotesAdditionalFilterFields() as $field => $condition) {
+            foreach ($this->expireQuotesFilterFieldsProvider->getFields() as $field => $condition) {
                 $quotes->addFieldToFilter($field, $condition);
             }
 
@@ -71,6 +83,7 @@ class CleanExpiredQuotes
      * Retrieve expire quotes additional fields to filter
      *
      * @return array
+     * @deprecated use expireQuotesFilterFieldsProvider::getFields.
      */
     protected function getExpireQuotesAdditionalFilterFields()
     {
@@ -82,6 +95,7 @@ class CleanExpiredQuotes
      *
      * @param array $fields
      * @return void
+     * @deprecated inject values to expireQuotesFilterFieldsProvider constructor through di.xml argument node.
      */
     public function setExpireQuotesAdditionalFilterFields(array $fields)
     {

@@ -6,6 +6,7 @@
 namespace Magento\Sales\Test\Unit\Cron;
 
 use \Magento\Sales\Cron\CleanExpiredQuotes;
+use Magento\Sales\Model\ExpireQuotesFilterFieldsProvider;
 
 /**
  * Tests Magento\Sales\Cron\CleanExpiredQuotes
@@ -23,6 +24,11 @@ class CleanExpiredQuotesTest extends \PHPUnit\Framework\TestCase
     protected $quoteFactoryMock;
 
     /**
+     * @var ExpireQuotesFilterFieldsProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $expireQuotesFilterFieldsProviderMock;
+
+    /**
      * @var \Magento\Sales\Cron\CleanExpiredQuotes
      */
     protected $observer;
@@ -38,7 +44,13 @@ class CleanExpiredQuotesTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->observer = new CleanExpiredQuotes($this->storesConfigMock, $this->quoteFactoryMock);
+        $this->expireQuotesFilterFieldsProviderMock = $this->createMock(ExpireQuotesFilterFieldsProvider::class);
+
+        $this->observer = new CleanExpiredQuotes(
+            $this->storesConfigMock,
+            $this->quoteFactoryMock,
+            $this->expireQuotesFilterFieldsProviderMock
+        );
     }
 
     /**
@@ -66,6 +78,10 @@ class CleanExpiredQuotesTest extends \PHPUnit\Framework\TestCase
                 ->method('walk')
                 ->with('delete');
         }
+        $this->expireQuotesFilterFieldsProviderMock->expects($this->any())
+            ->method('getFields')
+            ->willReturn($additionalFilterFields);
+
         $this->observer->setExpireQuotesAdditionalFilterFields($additionalFilterFields);
         $this->observer->execute();
     }
