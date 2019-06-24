@@ -27,6 +27,9 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
      */
     private $callbackHandler;
 
+    /** callable[][] */
+    private $callbacks = [];
+
     protected function setUp()
     {
         $this->listener = new InitParamListener();
@@ -42,7 +45,7 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
     {
         $events = $this->prepareEventManager();
         $this->listener->attach($events);
-        $events->expects($this->once())->method('detach')->with($this->callbackHandler)->willReturn(true);
+        $events->expects($this->once())->method('detach')->with([$this->listener, 'onBootstrap'])->willReturn(true);
         $this->listener->detach($events);
     }
 
@@ -230,9 +233,7 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
      */
     private function prepareEventManager()
     {
-        $this->callbackHandler = $this->getMockBuilder(\Zend\Stdlib\CallbackHandler::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->callbacks[] =  [$this->listener, 'onBootstrap'];
 
         /** @var \Zend\EventManager\EventManagerInterface|\PHPUnit_Framework_MockObject_MockObject $events */
         $eventManager = $this->createMock(\Zend\EventManager\EventManagerInterface::class);
@@ -242,7 +243,9 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
             \Zend\Mvc\Application::class,
             MvcEvent::EVENT_BOOTSTRAP,
             [$this->listener, 'onBootstrap']
-        )->willReturn($this->callbackHandler);
+        );
+
+        $sharedManager->expects($this->once())->method('getListeners')->willReturn($this->callbacks);
         $eventManager->expects($this->once())->method('getSharedManager')->willReturn($sharedManager);
 
         return $eventManager;

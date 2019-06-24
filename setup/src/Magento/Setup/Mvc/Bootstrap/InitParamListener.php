@@ -69,8 +69,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
             $priority
         );
 
-        $this->listeners = $sharedEvents->getListeners([Application::class],
-            MvcEvent::EVENT_BOOTSTRAP);
+        $this->listeners = $sharedEvents->getListeners([Application::class], MvcEvent::EVENT_BOOTSTRAP);
     }
 
     /**
@@ -79,9 +78,8 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     public function detach(EventManagerInterface $events)
     {
         foreach ($this->listeners as $index => $listener) {
-            if ($events->detach($listener)) {
+                $events->detach($listener);
                 unset($this->listeners[$index]);
-            }
         }
     }
 
