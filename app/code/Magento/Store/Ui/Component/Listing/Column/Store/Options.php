@@ -71,6 +71,8 @@ class Options implements OptionSourceInterface
     /**
      * Sanitize website/store option name
      *
+     * @param string $name
+     *
      * @return string
      */
     protected function sanitizeName($name)
