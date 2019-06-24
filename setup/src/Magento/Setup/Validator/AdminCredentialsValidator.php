@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Validator;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\ConfigOptionsListConstants as ConfigOption;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\Installer;
@@ -47,12 +48,12 @@ class AdminCredentialsValidator
         \Magento\Setup\Model\AdminAccountFactory $adminAccountFactory,
         \Magento\Setup\Module\ConnectionFactory $connectionFactory,
         \Magento\Setup\Module\SetupFactory $setupFactory,
-        DriverOptions $driverOptions
+        DriverOptions $driverOptions = null
     ) {
         $this->connectionFactory = $connectionFactory;
         $this->adminAccountFactory = $adminAccountFactory;
         $this->setupFactory = $setupFactory;
-        $this->driverOptions = $driverOptions;
+        $this->driverOptions = $driverOptions ?? ObjectManager::getInstance()->get(DriverOptions::class);
     }
 
     /**
