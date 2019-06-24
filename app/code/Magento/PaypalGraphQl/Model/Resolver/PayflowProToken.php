@@ -62,19 +62,19 @@ class PayflowProToken implements ResolverInterface
         array $args = null
     ) {
         $cartId = $args['input']['cart_id'] ?? '';
+        $urls = $args['input']['urls'] ?? '';
 
         $customerId = $context->getUserId();
-
         $cart = $this->getCartForUser->execute($cartId, $customerId);
-
-        try {
-            $tokenDataObject = $this->secureTokenService->requestToken($cart);
-        } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()));
-        }
 
         if (!empty($args['input']['urls'])) {
             $this->validateUrls($args['input']['urls']);
+        }
+
+        try {
+            $tokenDataObject = $this->secureTokenService->requestToken($cart, $urls);
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()));
         }
 
         return [
