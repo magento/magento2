@@ -3,10 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\CompiledInterception\Generator;
+namespace Magento\Setup\Module\Di\Compiler\Config\Chain;
 
-use Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitution;
-use Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitutionInterface;
+use Magento\Framework\CompiledInterception\Generator\CompiledInterceptor;
 use Magento\Setup\Module\Di\Compiler\Config\ModificationInterface;
 
 /**

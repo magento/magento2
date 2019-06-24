@@ -7,6 +7,7 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager\ConfigWriterInterface;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Console\Cli;
@@ -227,9 +228,13 @@ class DiCompileCommand extends Command
     {
         $modulesByBasePath = [];
         foreach ($modulePaths as $modulePath) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $moduleDir = basename($modulePath);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $vendorPath = dirname($modulePath);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $vendorDir = basename($vendorPath);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $basePath = dirname($vendorPath);
             $modulesByBasePath[$basePath][$vendorDir][] = $moduleDir;
         }
@@ -260,9 +265,12 @@ class DiCompileCommand extends Command
      */
     private function getExcludedLibraryPaths(array $libraryPaths)
     {
-        $libraryPaths = array_map(function ($libraryPath) {
-            return preg_quote($libraryPath, '#');
-        }, $libraryPaths);
+        $libraryPaths = array_map(
+            function ($libraryPath) {
+                return preg_quote($libraryPath, '#');
+            },
+            $libraryPaths
+        );
 
         $excludedLibraryPaths = [
             '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?Test#',
@@ -307,42 +315,44 @@ class DiCompileCommand extends Command
     {
         $this->objectManager->configure(
             [
-                'preferences' => [\Magento\Framework\App\ObjectManager\ConfigWriterInterface::class =>
-                    \Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem::class,
-                ], \Magento\Setup\Module\Di\Compiler\Config\ModificationChain::class => [
-                'arguments' => [
-                    'modificationsList' => [
-                        'BackslashTrim' => [
-                            'instance' =>
-                                \Magento\Setup\Module\Di\Compiler\Config\Chain\BackslashTrim::class
-                        ],
-                        'PreferencesResolving' => [
-                            'instance' =>
-                                \Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving::class
-                        ],
-                        'InterceptorSubstitution' => [
-                            'instance' => InterceptorSubstitutionInterface::class
-                        ],
-                        'InterceptionPreferencesResolving' => [
-                            'instance' => \Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving::class
-                        ],
+                'preferences' => [
+                    ConfigWriterInterface::class => \Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem::class,
+                ],
+                \Magento\Setup\Module\Di\Compiler\Config\ModificationChain::class => [
+                    'arguments' => [
+                        'modificationsList' => [
+                            'BackslashTrim' => [
+                                'instance' => \Magento\Setup\Module\Di\Compiler\Config\Chain\BackslashTrim::class
+                            ],
+                            'PreferencesResolving' => [
+                                'instance' => \Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving::class
+                            ],
+                            'InterceptorSubstitution' => [
+                                'instance' => InterceptorSubstitutionInterface::class
+                            ],
+                            'InterceptionPreferencesResolving' => [
+                                'instance' => \Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving::class
+                            ],
+                        ]
                     ]
-                ]
-            ], \Magento\Setup\Module\Di\Code\Generator\PluginList::class => [
-                'arguments' => [
-                    'cache' => [
-                        'instance' => \Magento\Framework\App\Interception\Cache\CompiledConfig::class
+                ],
+                \Magento\Setup\Module\Di\Code\Generator\PluginList::class => [
+                    'arguments' => [
+                        'cache' => [
+                            'instance' => \Magento\Framework\App\Interception\Cache\CompiledConfig::class
+                        ]
                     ]
-                ]
-            ], \Magento\Setup\Module\Di\Code\Reader\ClassesScanner::class => [
-                'arguments' => [
-                    'excludePatterns' => $this->excludedPathsList
-                ]
-            ], \Magento\Setup\Module\Di\Compiler\Log\Writer\Console::class => [
-                'arguments' => [
-                    'output' => $output,
-                ]
-            ],
+                ],
+                \Magento\Setup\Module\Di\Code\Reader\ClassesScanner::class => [
+                    'arguments' => [
+                        'excludePatterns' => $this->excludedPathsList
+                    ]
+                ],
+                \Magento\Setup\Module\Di\Compiler\Log\Writer\Console::class => [
+                    'arguments' => [
+                        'output' => $output,
+                    ]
+                ],
             ]
         );
     }
