@@ -27,6 +27,7 @@ use PHPUnit\Framework\TestCase;
  * End to end place order test using payflow_link via graphql endpoint for guest
  *
  * @magentoAppArea graphql
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PlaceOrderWithPayflowLinkTest extends TestCase
 {
