@@ -468,7 +468,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      *
      * @param AbstractAttribute $attribute
      * @param mixed $value New value of the attribute.
-     * @param array &$origData
+     * @param array $origData
      * @return bool
      */
     protected function _canUpdateAttribute(AbstractAttribute $attribute, $value, array &$origData)
