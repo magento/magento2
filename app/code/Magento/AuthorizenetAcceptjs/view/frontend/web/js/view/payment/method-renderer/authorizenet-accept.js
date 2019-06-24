@@ -91,7 +91,8 @@ define([
                 return;
             }
 
-            authData.clientKey = window.checkoutConfig.payment[this.getCode()].clientKey;
+            authData.clientKey = window.checkoutConfig.payment[this.getCode()].clientKey ?
+                window.checkoutConfig.payment[this.getCode()].clientKey : 0;
             authData.apiLoginID = window.checkoutConfig.payment[this.getCode()].apiLoginID;
 
             cardData.cardNumber = this.creditCardNumber();
