@@ -5,10 +5,11 @@
  */
 namespace Magento\Setup\Module\Di\App\Task\Operation;
 
+use Magento\Framework\App;
+use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Magento\Setup\Module\Di\Code\Generator\InterceptionConfigurationBuilder;
-use Magento\Framework\Interception\Code\Generator\Interceptor;
-use Magento\Framework\App;
+use Magento\Setup\Module\Di\Code\Generator\Interceptor as InterceptorGenerator;
 use Magento\Setup\Module\Di\Code\GeneratorFactory;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 
@@ -40,10 +41,16 @@ class Interception implements OperationInterface
     private $generatorFactory;
 
     /**
+     * @var string
+     */
+    private $interceptorGeneratorClass;
+
+    /**
      * @param InterceptionConfigurationBuilder $interceptionConfigurationBuilder
      * @param App\AreaList $areaList
      * @param ClassesScanner $classesScanner
      * @param GeneratorFactory $generatorFactory
+     * @param string $interceptorGeneratorClass
      * @param array $data
      */
     public function __construct(
@@ -51,6 +58,7 @@ class Interception implements OperationInterface
         App\AreaList $areaList,
         ClassesScanner $classesScanner,
         GeneratorFactory $generatorFactory,
+        string $interceptorGeneratorClass = InterceptorGenerator::class,
         $data = []
     ) {
         $this->interceptionConfigurationBuilder = $interceptionConfigurationBuilder;
@@ -58,6 +66,7 @@ class Interception implements OperationInterface
         $this->data = $data;
         $this->classesScanner = $classesScanner;
         $this->generatorFactory = $generatorFactory;
+        $this->interceptorGeneratorClass = $interceptorGeneratorClass;
     }
 
     /**
@@ -92,7 +101,7 @@ class Interception implements OperationInterface
             [
                 'ioObject' => $generatorIo,
                 'generatedEntities' => [
-                    Interceptor::ENTITY_TYPE => \Magento\Setup\Module\Di\Code\Generator\Interceptor::class,
+                    Interceptor::ENTITY_TYPE => $this->interceptorGeneratorClass,
                 ]
             ]
         );

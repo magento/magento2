@@ -7,7 +7,7 @@ namespace Magento\Setup\Module\Di\Compiler\Config\Chain;
 
 use Magento\Setup\Module\Di\Compiler\Config\ModificationInterface;
 
-class InterceptorSubstitution implements ModificationInterface
+class InterceptorSubstitution implements ModificationInterface, InterceptorSubstitutionInterface
 {
     /**
      * Modifies input config
