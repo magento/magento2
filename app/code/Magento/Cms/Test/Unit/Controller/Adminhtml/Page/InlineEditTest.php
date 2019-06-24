@@ -201,7 +201,7 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
                         '[Page ID: 1] Error message',
                         '[Page ID: 1] Something went wrong while saving the page.'
                     ],
-
+                    'error' => true
                 ]
             )
             ->willReturnSelf();
