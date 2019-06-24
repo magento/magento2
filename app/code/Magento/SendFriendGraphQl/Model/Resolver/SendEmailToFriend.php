@@ -7,18 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\SendFriendGraphQl\Model\Resolver;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\SendFriend\Model\SendFriend;
 use Magento\SendFriend\Model\SendFriendFactory;
+use Magento\SendFriendGraphQl\Model\Provider\GetProduct;
 
 /**
  * @inheritdoc
@@ -31,11 +28,6 @@ class SendEmailToFriend implements ResolverInterface
     private $sendFriendFactory;
 
     /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * @var DataObjectFactory
      */
     private $dataObjectFactory;
@@ -46,21 +38,26 @@ class SendEmailToFriend implements ResolverInterface
     private $eventManager;
 
     /**
+     * @var GetProduct
+     */
+    private $getProductProvider;
+
+    /**
      * @param SendFriendFactory $sendFriendFactory
-     * @param ProductRepositoryInterface $productRepository
      * @param DataObjectFactory $dataObjectFactory
      * @param ManagerInterface $eventManager
+     * @param GetProduct $getProductProvider
      */
     public function __construct(
         SendFriendFactory $sendFriendFactory,
-        ProductRepositoryInterface $productRepository,
         DataObjectFactory $dataObjectFactory,
-        ManagerInterface $eventManager
+        ManagerInterface $eventManager,
+        GetProduct $getProductProvider
     ) {
         $this->sendFriendFactory = $sendFriendFactory;
-        $this->productRepository = $productRepository;
         $this->dataObjectFactory = $dataObjectFactory;
         $this->eventManager = $eventManager;
+        $this->getProductProvider = $getProductProvider;
     }
 
     /**
@@ -77,7 +74,7 @@ class SendEmailToFriend implements ResolverInterface
             );
         }
 
-        $product = $this->getProduct($args['input']['product_id']);
+        $product = $this->getProductProvider->execute($args['input']['product_id']);
         $this->eventManager->dispatch('sendfriend_product', ['product' => $product]);
         $sendFriend->setProduct($product);
 
@@ -115,28 +112,6 @@ class SendEmailToFriend implements ResolverInterface
         if ($validationResult !== true) {
             throw new GraphQlInputException(__(implode($validationResult)));
         }
-    }
-
-    /**
-     * Get product
-     *
-     * @param int $productId
-     * @return ProductInterface
-     * @throws GraphQlNoSuchEntityException
-     */
-    private function getProduct(int $productId): ProductInterface
-    {
-        try {
-            $product = $this->productRepository->getById($productId);
-            if (!$product->isVisibleInCatalog()) {
-                throw new GraphQlNoSuchEntityException(
-                    __("The product that was requested doesn't exist. Verify the product and try again.")
-                );
-            }
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
-        }
-        return $product;
     }
 
     /**
