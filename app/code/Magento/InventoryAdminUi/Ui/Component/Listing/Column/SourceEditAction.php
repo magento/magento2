@@ -14,8 +14,6 @@ use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Represents Edit link in grid for entity by its identifier field
- *
- *
  */
 class SourceEditAction extends Column
 {
