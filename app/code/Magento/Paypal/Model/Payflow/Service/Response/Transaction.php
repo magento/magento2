@@ -114,9 +114,9 @@ class Transaction
      * @return void
      * @throws \InvalidArgumentException
      */
-    public function savePaymentInQuote($response)
+    public function savePaymentInQuote($response, $cartId = null)
     {
-        $quote = $this->quoteRepository->get($this->sessionTransparent->getQuoteId());
+        $quote = $this->quoteRepository->get($cartId ?? $this->sessionTransparent->getQuoteId());
 
         $payment = $this->paymentManagement->get($quote->getId());
         if (!$payment instanceof Payment) {

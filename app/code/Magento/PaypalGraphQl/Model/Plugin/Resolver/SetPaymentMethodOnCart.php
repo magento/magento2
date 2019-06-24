@@ -14,7 +14,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Paypal\Model\Express\Checkout\Factory as CheckoutFactory;
-use Magento\PaypalGraphQl\Model\PaypalExpressAdditionalDataProvider;
+use Magento\PaypalGraphQl\Model\PaypalAdditionalDataProvider;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\PaypalGraphQl\Model\Provider\Checkout as CheckoutProvider;
 use Magento\PaypalGraphQl\Model\Provider\Config as ConfigProvider;
@@ -34,9 +34,9 @@ class SetPaymentMethodOnCart
     private $checkoutFactory;
 
     /**
-     * @var PaypalExpressAdditionalDataProvider
+     * @var PaypalAdditionalDataProvider
      */
-    private $paypalExpressAdditionalDataProvider;
+    private $paypalAdditionalDataProvider;
 
     /**
      * @var ArrayManager
@@ -55,7 +55,7 @@ class SetPaymentMethodOnCart
 
     /**
      * @param CheckoutFactory $checkoutFactory
-     * @param PaypalExpressAdditionalDataProvider $paypalExpressAdditionalDataProvider
+     * @param PaypalAdditionalDataProvider $paypalAdditionalDataProvider
      * @param ArrayManager $arrayManager
      * @param CheckoutProvider $checkoutProvider
      * @param ConfigProvider $configProvider
@@ -63,14 +63,14 @@ class SetPaymentMethodOnCart
      */
     public function __construct(
         CheckoutFactory $checkoutFactory,
-        PaypalExpressAdditionalDataProvider $paypalExpressAdditionalDataProvider,
+        PaypalAdditionalDataProvider $paypalAdditionalDataProvider,
         ArrayManager $arrayManager,
         CheckoutProvider $checkoutProvider,
         ConfigProvider $configProvider,
         array $allowedPaymentMethodCodes = []
     ) {
         $this->checkoutFactory = $checkoutFactory;
-        $this->paypalExpressAdditionalDataProvider = $paypalExpressAdditionalDataProvider;
+        $this->paypalAdditionalDataProvider = $paypalAdditionalDataProvider;
         $this->arrayManager = $arrayManager;
         $this->checkoutProvider = $checkoutProvider;
         $this->configProvider = $configProvider;
@@ -105,7 +105,7 @@ class SetPaymentMethodOnCart
             return $resolvedValue;
         }
 
-        $paypalAdditionalData = $this->paypalExpressAdditionalDataProvider->getData($args);
+        $paypalAdditionalData = $this->paypalAdditionalDataProvider->getData($args);
         $payerId = $paypalAdditionalData[$paymentCode]['payer_id'] ?? null;
         $token = $paypalAdditionalData[$paymentCode]['token'] ?? null;
         $cart = $resolvedValue['cart']['model'];

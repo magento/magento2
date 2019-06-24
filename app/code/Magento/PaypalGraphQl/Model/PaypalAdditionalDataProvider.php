@@ -11,9 +11,9 @@ use Magento\Framework\Stdlib\ArrayManager;
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
 
 /**
- * Get payment additional data for Payflow Pro payment method
+ * Get payment additional data for Paypal Express payment
  */
-class PayflowProAdditionalDataProvider implements AdditionalDataProviderInterface
+class PaypalAdditionalDataProvider implements AdditionalDataProviderInterface
 {
 
     private const PATH_ADDITIONAL_DATA = 'input/payment_method/additional_data';
