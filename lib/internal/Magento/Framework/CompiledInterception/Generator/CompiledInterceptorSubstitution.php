@@ -6,12 +6,27 @@
 namespace Magento\Framework\CompiledInterception\Generator;
 
 use Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitution;
+use Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitutionInterface;
+use Magento\Setup\Module\Di\Compiler\Config\ModificationInterface;
 
 /**
  * Class CompiledInterceptorSubstitution adds required parameters to interceptor constructor
  */
-class CompiledInterceptorSubstitution extends InterceptorSubstitution
+class CompiledInterceptorSubstitution implements InterceptorSubstitutionInterface, ModificationInterface
 {
+    /**
+     * @var InterceptorSubstitution
+     */
+    private $interceptorSubstitution;
+
+    /**
+     * @param InterceptorSubstitution $interceptorSubstitution
+     */
+    public function __construct(InterceptorSubstitution $interceptorSubstitution)
+    {
+        $this->interceptorSubstitution = $interceptorSubstitution;
+    }
+
     /**
      * Modifies input config
      *
@@ -20,7 +35,7 @@ class CompiledInterceptorSubstitution extends InterceptorSubstitution
      */
     public function modify(array $config)
     {
-        $config = parent::modify($config);
+        $config = $this->interceptorSubstitution->modify($config);
 
         foreach ($config['arguments'] as $instanceName => &$arguments) {
             if (substr($instanceName, -12) === '\Interceptor') {
@@ -36,6 +51,7 @@ class CompiledInterceptorSubstitution extends InterceptorSubstitution
 
             }
         }
+
         return $config;
     }
 }
