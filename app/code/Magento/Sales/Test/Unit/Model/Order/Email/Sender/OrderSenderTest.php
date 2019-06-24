@@ -79,7 +79,7 @@ class OrderSenderTest extends AbstractSenderTest
             if ($emailSendingResult) {
                 $this->identityContainerMock->expects($this->once())
                     ->method('getCopyMethod')
-                    ->willReturn($this->sender::COPY_METHOD_COPY);
+                    ->willReturn('copy');
 
                 $addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
 
@@ -220,7 +220,7 @@ class OrderSenderTest extends AbstractSenderTest
 
         $this->identityContainerMock->expects($this->once())
             ->method('getCopyMethod')
-            ->willReturn($this->sender::COPY_METHOD_COPY);
+            ->willReturn('copy');
 
         $addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
 

@@ -19,12 +19,6 @@ use Magento\Sales\Model\Order\Address\Renderer;
 abstract class Sender
 {
     /**
-     * Copy methods
-     */
-    const COPY_METHOD_BCC = 'bcc';
-    const COPY_METHOD_COPY = 'copy';
-
-    /**
      * @var \Magento\Sales\Model\Order\Email\SenderBuilderFactory
      */
     protected $senderBuilderFactory;
@@ -93,7 +87,7 @@ abstract class Sender
             $this->logger->error($e->getMessage());
             return false;
         }
-        if ($this->identityContainer->getCopyMethod() == self::COPY_METHOD_COPY) {
+        if ($this->identityContainer->getCopyMethod() == 'copy') {
             try {
                 $sender->sendCopyTo();
             } catch (\Exception $e) {

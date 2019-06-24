@@ -140,7 +140,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
             if ($emailSendingResult) {
                 $this->identityContainerMock->expects($this->once())
                     ->method('getCopyMethod')
-                    ->willReturn($this->sender::COPY_METHOD_COPY);
+                    ->willReturn('copy');
 
                 $this->senderBuilderFactoryMock->expects($this->once())
                     ->method('create')

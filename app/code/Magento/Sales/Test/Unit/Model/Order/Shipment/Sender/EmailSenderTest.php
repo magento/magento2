@@ -286,7 +286,7 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
             if ($emailSendingResult) {
                 $this->identityContainerMock->expects($this->once())
                     ->method('getCopyMethod')
-                    ->willReturn($this->subject::COPY_METHOD_COPY);
+                    ->willReturn('copy');
 
                 $this->senderBuilderFactoryMock->expects($this->once())
                     ->method('create')
