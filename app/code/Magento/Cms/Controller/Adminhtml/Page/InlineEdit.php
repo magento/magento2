@@ -7,7 +7,6 @@ namespace Magento\Cms\Controller\Adminhtml\Page;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Cms\Api\PageRepositoryInterface as PageRepository;
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Cms\Api\Data\PageInterface;
 
@@ -16,7 +15,7 @@ use Magento\Cms\Api\Data\PageInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionInterface
+class InlineEdit extends \Magento\Backend\App\Action
 {
     /**
      * Authorization level of a basic admin session
