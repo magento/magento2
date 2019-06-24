@@ -50,12 +50,12 @@ class ApplyCouponToCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
+        if (empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
         $maskedCartId = $args['input']['cart_id'];
 
-        if (!isset($args['input']['coupon_code']) || empty($args['input']['coupon_code'])) {
+        if (empty($args['input']['coupon_code'])) {
             throw new GraphQlInputException(__('Required parameter "coupon_code" is missing'));
         }
         $couponCode = $args['input']['coupon_code'];

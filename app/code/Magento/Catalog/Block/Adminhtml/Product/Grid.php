@@ -8,13 +8,15 @@ namespace Magento\Catalog\Block\Adminhtml\Product;
 use Magento\Store\Model\Store;
 
 /**
+ * Grid.
+ *
  * @api
  * @since 100.0.2
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
@@ -57,7 +59,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Catalog\Model\Product\Type $type
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $status
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -71,7 +73,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Catalog\Model\Product\Type $type,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $status,
         \Magento\Catalog\Model\Product\Visibility $visibility,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         array $data = []
     ) {
         $this->_websiteFactory = $websiteFactory;
@@ -85,6 +87,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Construct.
+     *
      * @return void
      */
     protected function _construct()
@@ -99,6 +103,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get store.
+     *
      * @return Store
      */
     protected function _getStore()
@@ -108,6 +114,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * @inheritDoc
+     *
      * @return $this
      */
     protected function _prepareCollection()
@@ -136,7 +144,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             );
         }
         if ($store->getId()) {
-            //$collection->setStoreId($store->getId());
             $collection->addStoreFilter($store);
             $collection->joinAttribute(
                 'name',
@@ -187,6 +194,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * @inheritDoc
+     *
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return $this
      */
@@ -208,6 +217,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * @inheritDoc
+     *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -373,6 +384,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * @inheritDoc
+     *
      * @return $this
      */
     protected function _prepareMassaction()
@@ -425,6 +438,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get grid Url.
+     *
      * @return string
      */
     public function getGridUrl()
@@ -433,6 +448,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get row url.
+     *
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $row
      * @return string
      */
