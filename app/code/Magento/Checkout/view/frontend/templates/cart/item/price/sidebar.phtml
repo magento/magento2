@@ -4,12 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Templates.ThisInTemplate
 
 /** @var $block \Magento\Checkout\Block\Item\Price\Renderer */
 ?>
 <?php $_item = $block->getItem() ?>
 <div class="price-container">
-    <span class="price-label"><?= /* @escapeNotVerified */ __('Price') ?></span>
-    <span class="price-wrapper"><?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getCalculationPrice()) ?></span>
+    <span class="price-label"><?= $block->escapeHtml(__('Price')) ?></span>
+    <span class="price-wrapper">
+        <?= $block->escapeHtml(
+            $this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($_item->getCalculationPrice()),
+            ['span']
+        ) ?>
+    </span>
 </div>
