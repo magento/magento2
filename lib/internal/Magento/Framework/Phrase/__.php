@@ -10,10 +10,8 @@ declare(strict_types=1);
  * @SuppressWarnings(PHPMD.ShortMethodName)
  * @return \Magento\Framework\Phrase
  */
-function __()
+function __(...$argc)
 {
-    $argc = func_get_args();
-
     $text = array_shift($argc);
     if (!empty($argc) && is_array($argc[0])) {
         $argc = $argc[0];
