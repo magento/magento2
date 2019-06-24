@@ -17,7 +17,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Class GetProduct
  */
-class GetProduct
+class GetVisibleProduct
 {
     /** @var ProductRepositoryInterface */
     private $productRepository;
