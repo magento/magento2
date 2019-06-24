@@ -13,9 +13,11 @@ namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\AccountConfirmation;
+use Magento\Framework\Math\Random;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
@@ -68,6 +70,14 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      */
     private $accountConfirmation;
 
+    /**
+     * @var Random|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mathRandom;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->_website = $this->createMock(\Magento\Store\Model\Website::class);
@@ -100,6 +110,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_encryptor = $this->createMock(\Magento\Framework\Encryption\EncryptorInterface::class);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->accountConfirmation = $this->createMock(AccountConfirmation::class);
+        $this->mathRandom = $this->createMock(Random::class);
         $this->_model = $helper->getObject(
             \Magento\Customer\Model\Customer::class,
             [
@@ -112,7 +123,8 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
                 'registry' => $this->registryMock,
                 'resource' => $this->resourceMock,
                 'dataObjectProcessor' => $this->dataObjectProcessor,
-                'accountConfirmation' => $this->accountConfirmation
+                'accountConfirmation' => $this->accountConfirmation,
+                'mathRandom' => $this->mathRandom,
             ]
         );
     }
@@ -309,5 +321,21 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $expectedResult[$attribute->getAttributeCode()] = $attribute->getValue();
 
         $this->assertEquals($this->_model->getData(), $expectedResult);
+    }
+
+    /**
+     * Check getRandomConfirmationKey use cryptographically secure function
+     *
+     * @return void
+     */
+    public function testGetRandomConfirmationKey()
+    {
+        $this->mathRandom
+            ->expects($this->once())
+            ->method('getRandomString')
+            ->with(32)
+            ->willReturn('random_string');
+
+        $this->_model->getRandomConfirmationKey();
     }
 }
