@@ -24,11 +24,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test PayflowLinkGetSecretToken graphql endpoint for guest
+ * End to end place order test using payflow_link via graphql endpoint for guest
  *
  * @magentoAppArea graphql
  */
-class PayflowLinkTokenTest extends TestCase
+class PlaceOrderWithPayflowLinkTest extends TestCase
 {
     /**
      * @var Http
@@ -74,7 +74,6 @@ class PayflowLinkTokenTest extends TestCase
         $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteId::class);
 
         $this->graphqlController = $this->objectManager->get(GraphQl::class);
-        $this->request = $this->objectManager->create(Http::class);
 
         $this->mathRandom = $this->getMockBuilder(Random::class)
             ->getMock();
@@ -112,7 +111,7 @@ class PayflowLinkTokenTest extends TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testResolveGetPayflowLinkToken(): void
+    public function testResolvePlaceOrderWithPayflowLink(): void
     {
         $paymentMethod = 'payflow_link';
         $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
