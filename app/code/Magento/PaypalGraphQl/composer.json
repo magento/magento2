@@ -12,7 +12,8 @@
         "magento/module-paypal": "*",
         "magento/module-quote-graph-ql": "*",
         "magento/module-sales": "*",
-        "magento/module-payment": "*"
+        "magento/module-payment": "*",
+        "magento/module-store": "*"
     },
     "suggest": {
         "magento/module-graph-ql": "*"
