@@ -466,9 +466,9 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * Checks also attribute's store scope:
      * We should insert on duplicate key update values if we unchecked 'STORE VIEW' checkbox in store view.
      *
-     * @param  AbstractAttribute $attribute
-     * @param  mixed $value New value of the attribute.
-     * @param  array &$origData
+     * @param AbstractAttribute $attribute
+     * @param mixed $value New value of the attribute.
+     * @param array &$origData
      * @return bool
      */
     protected function _canUpdateAttribute(AbstractAttribute $attribute, $value, array &$origData)
