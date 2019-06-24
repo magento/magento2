@@ -16,6 +16,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\SendFriend\Model\SendFriend;
 use Magento\SendFriend\Model\SendFriendFactory;
 use Magento\SendFriendGraphQl\Model\Provider\GetProduct;
+
 /**
  * @inheritdoc
  */
