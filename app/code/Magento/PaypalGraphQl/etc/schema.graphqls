@@ -54,7 +54,6 @@ input PayflowProTokenInput {
 
 input PayflowProInput {
     cc_details: CreditCardDetailsInput! @doc(description: "Required input for credit card related information")
-    paypalPayload: String! @doc(description: "Payload of the response from Paypal")
 }
 
 input CreditCardDetailsInput {
