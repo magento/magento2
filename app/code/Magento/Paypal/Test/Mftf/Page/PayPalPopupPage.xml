@@ -6,7 +6,8 @@
   */
 -->
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="AdminConfigPaymentMethodsPage" url="admin/system_config/edit/section/payment/" area="admin" module="Magento_Payment">
-        <section name="OtherPaymentsConfigSection"/>
+    <page name="AdminConfigPaymentMethodsPage" url="https://www.sandbox.paypal.com/checkoutnow" area="external" module="Magento_Paypal">
+        <section name="PayPalPopupLoginSection"/>
+        <section name="PayPalPopupReviewSection"/>
     </page>
 </pages>
