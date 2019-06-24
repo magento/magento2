@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\CompiledInterception\Generator;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\CacheInterface;
 
 /**
@@ -22,7 +23,7 @@ class FileCache implements CacheInterface
     public function __construct($cachePath = null)
     {
         if ($cachePath === null) {
-            $this->cachePath = BP . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'cache';
+            $this->cachePath = BP . DIRECTORY_SEPARATOR . DirectoryList::GENERATED . DIRECTORY_SEPARATOR . 'staticcache';
         } else {
             $this->cachePath = $cachePath;
         }
@@ -79,7 +80,7 @@ class FileCache implements CacheInterface
         if ($this->cachePath) {
             $path = $this->getCachePath($identifier);
             if (!is_dir(dirname($path))) {
-                mkdir(dirname($path));
+                mkdir(dirname($path), 0777, true);
             }
             file_put_contents(
                 $path,
@@ -111,6 +112,14 @@ class FileCache implements CacheInterface
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {
+        if ($this->cachePath) {
+            foreach (glob($this->cachePath . '/*') as $file) {
+                if (is_file($file)) {
+                    unlink($file);
+                }
+            }
+            return true;
+        }
         return false;
     }
 

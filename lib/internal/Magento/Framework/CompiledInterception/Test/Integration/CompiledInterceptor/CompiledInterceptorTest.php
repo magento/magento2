@@ -6,7 +6,9 @@
 
 namespace Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\CompiledInterception\Generator\AreasPluginList;
+use Magento\Framework\CompiledInterception\Generator\FileCache;
 use Magento\Framework\CompiledInterception\Generator\StaticScope;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\Code\Generator\Io;
@@ -68,6 +70,8 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
         $omConfigMock->expects($this->any())->method('getOriginalInstanceType')->will($this->returnArgument(0));
         $ret = [];
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        //clear static cache
+        (new FileCache())->clean();
         foreach ($readerMap as $readerLine) {
             $ret[$readerLine[0]] = $objectManagerHelper->getObject(
                 CompiledPluginList::class,
@@ -75,8 +79,7 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
                     'objectManager' => $omMock,
                     'scope' => new StaticScope($readerLine[0]),
                     'reader' => $readerMock,
-                    'omConfig' => $omConfigMock,
-                    'cachePath' => false
+                    'omConfig' => $omConfigMock
                 ]
             );
         }

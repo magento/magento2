@@ -31,7 +31,7 @@ To use compiled interceptors in production or default mode please add following 
 
 Clear generated files and cache:
 
-`rm -rf generated/* && rm -rf var/cache/* && bin/magento cache:clean`
+`rm -rf generated/* && bin/magento cache:clean`
 
 ### DISABLING
 
