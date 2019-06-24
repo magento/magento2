@@ -4,14 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// phpcs:disable PSR2.Files.ClosingTag
 ?>
 <?php
 /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid $block */
-
 $_item = $block->getItem();
 ?>
-
 <?php $_rowTotalWithoutDiscount = $_item->getRowTotal() - $_item->getTotalDiscountAmount(); ?>
-<?= /* @escapeNotVerified */ $block->formatPrice(max(0, $_rowTotalWithoutDiscount)) ?>
+<?= /* @noEscape */ $block->formatPrice(max(0, $_rowTotalWithoutDiscount)) ?>
