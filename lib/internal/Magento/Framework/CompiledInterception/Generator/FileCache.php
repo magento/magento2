@@ -23,7 +23,9 @@ class FileCache implements CacheInterface
     public function __construct($cachePath = null)
     {
         if ($cachePath === null) {
-            $this->cachePath = BP . DIRECTORY_SEPARATOR . DirectoryList::GENERATED . DIRECTORY_SEPARATOR . 'staticcache';
+            $this->cachePath = BP . DIRECTORY_SEPARATOR .
+                DirectoryList::GENERATED . DIRECTORY_SEPARATOR .
+                'staticcache';
         } else {
             $this->cachePath = $cachePath;
         }
@@ -62,7 +64,8 @@ class FileCache implements CacheInterface
      */
     public function load($identifier)
     {
-        return $this->cachePath ? @include($this->getCachePath($identifier)) : false;
+        // @codingStandardsIgnoreLine
+        return $this->cachePath ? @include $this->getCachePath($identifier) : false;
     }
 
     /**

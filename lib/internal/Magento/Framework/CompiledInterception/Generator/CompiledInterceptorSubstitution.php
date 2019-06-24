@@ -39,7 +39,7 @@ class CompiledInterceptorSubstitution implements InterceptorSubstitutionInterfac
 
         foreach ($config['arguments'] as $instanceName => &$arguments) {
             if (substr($instanceName, -12) === '\Interceptor') {
-                foreach (CompiledInterceptor::propertiesToInjectToConstructor() as  $type => $name) {
+                foreach (CompiledInterceptor::propertiesToInjectToConstructor() as $type => $name) {
                     $preference = isset($config['preferences'][$type]) ? $config['preferences'][$type] : $type;
                     foreach ($arguments as $argument) {
                         if (isset($argument['_i_']) && $argument['_i_'] == $preference) {

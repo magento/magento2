@@ -80,6 +80,8 @@ class CompiledPluginList extends PluginList
     }
 
     /**
+     * Set current scope
+     *
      * @param ScopeInterface $scope
      */
     public function setScope(ScopeInterface $scope)

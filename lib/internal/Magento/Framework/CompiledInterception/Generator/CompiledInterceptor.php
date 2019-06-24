@@ -71,11 +71,11 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
      * Unused function required by production mode interface
      *
      * @param mixed $interceptedMethods
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setInterceptedMethods($interceptedMethods)
     {
-        //NOOP
+        //this is not used as methods are read from reflaction
+        $this->interceptedMethods = $interceptedMethods;
     }
 
     /**
@@ -257,10 +257,13 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
         }
         $parameters = array_map([$this, '_getMethodParameterInfo'], $parameters);
         foreach ($extraParams as $type => $name) {
-            array_unshift($parameters, [
-                'name' => $name,
-                'type' => $type
-            ]);
+            array_unshift(
+                $parameters,
+                [
+                    'name' => $name,
+                    'type' => $type
+                ]
+            );
         }
         foreach ($extraSetters as $name => $paramName) {
             array_unshift($body, "\$this->$name = \$$paramName;");

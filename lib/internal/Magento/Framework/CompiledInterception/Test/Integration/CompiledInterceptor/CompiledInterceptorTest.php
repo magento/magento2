@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\CompiledInterception\Generator\AreasPluginList;
 use Magento\Framework\CompiledInterception\Generator\FileCache;
 use Magento\Framework\CompiledInterception\Generator\StaticScope;
@@ -24,6 +23,7 @@ use Psr\Log\NullLogger;
 
 /**
  * Class CompiledInterceptorTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
 {
@@ -105,7 +105,6 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
                 'plugins' => $this->createScopeReaders()
             ]
         );
-
 
         /** @var CompiledInterceptor|MockObject $interceptor */
         $interceptor = $this->getMockBuilder(CompiledInterceptor::class)

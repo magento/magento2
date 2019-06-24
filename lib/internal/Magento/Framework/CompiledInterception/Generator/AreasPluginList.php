@@ -8,18 +8,21 @@ namespace Magento\Framework\CompiledInterception\Generator;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\Scope;
 
+/**
+ * Class AreasPluginList
+ */
 class AreasPluginList
 {
     /** @var Scope */
     private $scope;
 
-    /** @var null */
+    /** @var array */
     private $plugins;
 
     /**
      * AreasPluginList constructor.
      * @param Scope $scope
-     * @param null $plugins
+     * @param array|null $plugins
      */
     public function __construct(
         Scope $scope,
@@ -30,6 +33,8 @@ class AreasPluginList
     }
 
     /**
+     * Get array of plugns config indexed by scope code
+     *
      * @return array
      */
     public function getPluginsConfigForAllAreas()
@@ -41,7 +46,10 @@ class AreasPluginList
             $defaultScopePluginList = $defaultScope = null;
             foreach ($this->scope->getAllScopes() as $scope) {
                 if ($defaultScopePluginList === null) {
-                    $defaultScopePluginList = new CompiledPluginList(ObjectManager::getInstance(), new StaticScope($scope));
+                    $defaultScopePluginList = new CompiledPluginList(
+                        ObjectManager::getInstance(),
+                        new StaticScope($scope)
+                    );
                     $defaultScopePluginList->getNext('dummy', 'dummy');
                     $defaultScope = $scope;
                 } else {
@@ -54,5 +62,4 @@ class AreasPluginList
         }
         return $this->plugins;
     }
-
 }
