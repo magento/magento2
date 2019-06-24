@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,6 +9,9 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class Upload
+ */
 class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
@@ -47,6 +49,8 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
     }
 
     /**
+     * Upload image(s) to the product gallery.
+     *
      * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
