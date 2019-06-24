@@ -109,6 +109,9 @@ class Date extends Column
             'months' => $months,
             'monthsShort' => $monthsShort,
         ];
+        if (!isset($config['dateFormat'])) {
+            $config['dateFormat'] = $this->timezone->getDateTimeFormat(\IntlDateFormatter::MEDIUM);
+        }
         $this->setData('config', $config);
 
         parent::prepare();
