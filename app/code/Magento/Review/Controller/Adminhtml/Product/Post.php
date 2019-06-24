@@ -12,9 +12,14 @@ use Magento\Store\Model\Store;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Review\Model\Review;
 
+/**
+ * Review admin controller for POST request.
+ */
 class Post extends ProductController implements HttpPostActionInterface
 {
     /**
+     * Create a product review.
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
