@@ -9,6 +9,14 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertAdminUserIsInGridActionGroup">
-        <seeElement selector="{{AdminUserGridSection.theUser}}" stepKey="seeAdminUserInGrid"/>
+        <arguments>
+            <argument name="user" type="entity"/>
+        </arguments>
+        <click selector="{{AdminUserGridSection.resetButton}}" stepKey="resetGridFilter" />
+        <waitForPageLoad stepKey="waitForFiltersReset" time="15"/>
+        <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{user.username}}" stepKey="enterUserName" />
+        <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearch" />
+        <waitForPageLoad stepKey="waitForGridToLoad" time="15"/>
+        <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{user.username}}" stepKey="seeUser" />
     </actionGroup>
 </actionGroups>

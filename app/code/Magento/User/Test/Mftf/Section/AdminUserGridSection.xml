@@ -13,7 +13,6 @@
         <element name="usernameInFirstRow" type="text" selector=".col-username"/>
         <element name="searchResultFirstRow" type="text" selector=".data-grid>tbody>tr"/>
         <element name="successMessage" type="text" selector=".message-success"/>
-        <element name="theUser" selector="//td[contains(text(), '{{_ENV.MAGENTO_ADMIN_USERNAME}}')]" type="button"/>
     </section>
 
     <section name="AdminDeleteUserSection">
