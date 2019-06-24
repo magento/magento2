@@ -18,7 +18,6 @@ use Magento\Quote\Model\Quote\Item;
 
 /**
  * Update cart item
- *
  */
 class UpdateCartItem
 {
@@ -86,18 +85,13 @@ class UpdateCartItem
             );
         }
 
-        if (is_string($result)) {
-            throw new GraphQlInputException(__(
-                'Could not update cart item: %message',
-                ['message' => $result]
-            ));
-        }
-
         if ($result->getHasError()) {
-            throw new GraphQlInputException(__(
-                'Could not update cart item: %message',
-                ['message' => $result->getMessage(true)]
-            ));
+            throw new GraphQlInputException(
+                __(
+                    'Could not update cart item: %message',
+                    ['message' => $result->getMessage()]
+                )
+            );
         }
 
         $this->quoteRepository->save($cart);

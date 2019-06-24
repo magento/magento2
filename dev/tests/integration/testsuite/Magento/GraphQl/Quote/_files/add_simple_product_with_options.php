@@ -38,12 +38,14 @@ foreach ($productOptions as $productOption) {
     $cartItemCustomOptions[$productOption->getId()] = 'initial value';
 }
 
-$request = $dataObjectFactory->create([
-    'data' => [
-        'qty' => 1.0,
-        'options' => $cartItemCustomOptions,
-    ],
-]);
+$request = $dataObjectFactory->create(
+    [
+        'data' => [
+            'qty' => 1.0,
+            'options' => $cartItemCustomOptions,
+        ],
+    ]
+);
 
 $quote = $quoteFactory->create();
 $quoteResource->load($quote, 'test_quote', 'reserved_order_id');

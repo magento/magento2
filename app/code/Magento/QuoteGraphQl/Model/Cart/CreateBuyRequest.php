@@ -47,12 +47,14 @@ class CreateBuyRequest
             }
         }
 
-        return $this->dataObjectFactory->create([
-            'data' => [
-                'qty' => $qty,
-                'options' => $customizableOptions,
-            ],
-        ]);
+        return $this->dataObjectFactory->create(
+            [
+                'data' => [
+                    'qty' => $qty,
+                    'options' => $customizableOptions,
+                ],
+            ]
+        );
     }
 
     /**

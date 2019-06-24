@@ -114,27 +114,4 @@ class AddSimpleProductToCart
         }
         return $quantity;
     }
-
-    /**
-     * Extract Customizable Options from cart item data
-     *
-     * @param array $cartItemData
-     * @return array
-     */
-    private function extractCustomizableOptions(array $cartItemData): array
-    {
-        if (!isset($cartItemData['customizable_options']) || empty($cartItemData['customizable_options'])) {
-            return [];
-        }
-
-        $customizableOptionsData = [];
-        foreach ($cartItemData['customizable_options'] as $customizableOption) {
-            if (isset($customizableOption['value_string'])) {
-                $customizableOptionsData[$customizableOption['id']] = $this->convertCustomOptionValue(
-                    $customizableOption['value_string']
-                );
-            }
-        }
-        return $customizableOptionsData;
-    }
 }

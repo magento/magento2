@@ -240,7 +240,6 @@ QUERY;
         return (int)$quoteItem->getId();
     }
 
-
     /**
      * Generate an array with test values for customizable options
      * based on the option type
