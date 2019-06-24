@@ -16,6 +16,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\SendFriend\Model\SendFriend;
 use Magento\SendFriend\Model\SendFriendFactory;
+use Magento\SendFriendGraphQl\Model\Provider\GetVisibleProduct;
 
 /**
  * Send Product Email to Friend(s)
@@ -43,21 +44,30 @@ class SendEmail
     private $eventManager;
 
     /**
+     * @var GetVisibleProduct
+     */
+    private $visibleProductProvider;
+
+    /**
+     * SendEmail constructor.
      * @param DataObjectFactory $dataObjectFactory
      * @param ProductRepositoryInterface $productRepository
      * @param SendFriendFactory $sendFriendFactory
      * @param ManagerInterface $eventManager
+     * @param GetVisibleProduct $visibleProductProvider
      */
     public function __construct(
         DataObjectFactory $dataObjectFactory,
         ProductRepositoryInterface $productRepository,
         SendFriendFactory $sendFriendFactory,
-        ManagerInterface $eventManager
+        ManagerInterface $eventManager,
+        GetVisibleProduct $visibleProductProvider
     ) {
         $this->dataObjectFactory = $dataObjectFactory;
         $this->productRepository = $productRepository;
         $this->sendFriendFactory = $sendFriendFactory;
         $this->eventManager = $eventManager;
+        $this->visibleProductProvider = $visibleProductProvider;
     }
 
     /**
@@ -81,7 +91,7 @@ class SendEmail
             );
         }
 
-        $product = $this->getProduct($productId);
+        $product = $this->visibleProductProvider->execute($productId);
 
         $this->eventManager->dispatch('sendfriend_product', ['product' => $product]);
 
@@ -116,27 +126,5 @@ class SendEmail
         if ($validationResult !== true) {
             throw new GraphQlInputException(__(implode($validationResult)));
         }
-    }
-
-    /**
-     * Get product
-     *
-     * @param int $productId
-     * @return ProductInterface
-     * @throws GraphQlNoSuchEntityException
-     */
-    private function getProduct(int $productId): ProductInterface
-    {
-        try {
-            $product = $this->productRepository->getById($productId);
-            if (!$product->isVisibleInCatalog()) {
-                throw new GraphQlNoSuchEntityException(
-                    __("The product that was requested doesn't exist. Verify the product and try again.")
-                );
-            }
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
-        }
-        return $product;
     }
 }

@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\SendFriendGraphQl\Model\Provider;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -15,7 +14,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Class GetProduct
+ * Returns product if it is visible in catalog.
  */
 class GetVisibleProduct
 {

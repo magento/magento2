@@ -125,7 +125,6 @@ class SendFriendTest extends GraphQlAbstract
               }';
         $query = $this->getQuery($productId, $recipients);
 
-        $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
             'The product that was requested doesn\'t exist. Verify the product and try again.'
         );
@@ -276,9 +275,10 @@ QUERY;
                   email:"recipient2@mail.com"
               }';
         $query = $this->getQuery($productId, $recipients);
-
-        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-        $this->assertResponse($response);
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
