@@ -19,7 +19,7 @@ class UrlBuilder
     /**
      * @var \Magento\Framework\UrlInterface
      */
-    protected $frontendUrlBuilder;
+    private $frontendUrlBuilder;
 
     /**
      * @var EncoderInterface
