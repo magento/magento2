@@ -184,4 +184,14 @@
         <data key="store_type">store</data>
         <data key="store_action">add</data>
     </entity>
+
+    <!-- Store views from file "prepared-for-sample-data.csv"-->
+    <entity name="secondStoreView" type="store">
+        <data key="name">second_storeview</data>
+        <data key="code">second_storeview</data>
+    </entity>
+    <entity name="thirdStoreView" type="store">
+        <data key="name">third_store_view</data>
+        <data key="code">third_store_view</data>
+    </entity>
 </entities>
