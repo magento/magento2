@@ -26,5 +26,6 @@
         <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickOnSignIn"/>
         <closeAdminNotification stepKey="closeAdminNotification"/>
         <seeInCurrentUrl url="{{AdminLoginPage.url}}" stepKey="seeAdminLoginUrl"/>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLink"/>
     </test>
 </tests>
