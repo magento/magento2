@@ -19,7 +19,7 @@ class PayflowLinkSetAdditionalData extends AbstractDataAssignObserver
     /**
      * @inheritdoc
      */
-    public function execute(Observer $observer)
+    public function execute(Observer $observer): void
     {
         $dataObject = $this->readDataArgument($observer);
 
