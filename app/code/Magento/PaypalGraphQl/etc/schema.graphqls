@@ -4,7 +4,7 @@
 type Mutation {
     createPaypalExpressToken(input: PaypalExpressTokenInput): PaypalExpressToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PaypalExpressToken") @doc(description:"Initiates a PayPal checkout transaction and receives a token.")
     createPayflowProToken(input: PayflowProTokenInput): PayflowProToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowProToken") @doc(description: "Initiates a PayFlowPro transaction and receives a token")
-    handlePayflowProResponse(input: PayflowProResponseInput): PayflowProResponseOutput @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowProResponse")
+    handlePayflowProResponse(input: PayflowProResponseInput): PayflowProResponseOutput @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowProResponse") @doc(description: "Handles PayFlowPro response and saves payment in Quote")
 }
 
 input PaypalExpressTokenInput @doc(description:"Defines the attributes required to receive a payment token from PayPal") {
