@@ -8,7 +8,7 @@ namespace Magento\Framework\Bulk;
 /**
  * Interface OperationInterface
  * @api
- * @since 102.0.1
+ * @since 102.0.2
  */
 interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -39,7 +39,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Operation id
      *
      * @return int
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function getId();
 
@@ -48,7 +48,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param int $id
      * @return $this
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function setId($id);
 
@@ -56,7 +56,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Get bulk uuid
      *
      * @return string
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function getBulkUuid();
 
@@ -65,7 +65,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param string $bulkId
      * @return $this
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function setBulkUuid($bulkId);
 
@@ -73,7 +73,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Message Queue Topic
      *
      * @return string
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function getTopicName();
 
@@ -82,7 +82,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param string $topic
      * @return $this
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function setTopicName($topic);
 
@@ -90,7 +90,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Serialized Data
      *
      * @return string
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function getSerializedData();
 
@@ -99,7 +99,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param string $serializedData
      * @return $this
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function setSerializedData($serializedData);
 
@@ -107,7 +107,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Result serialized Data
      *
      * @return string
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function getResultSerializedData();
 
@@ -116,7 +116,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param string $resultSerializedData
      * @return $this
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function setResultSerializedData($resultSerializedData);
 
@@ -126,7 +126,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * OPEN | COMPLETE | RETRIABLY_FAILED | NOT_RETRIABLY_FAILED
      *
      * @return int
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function getStatus();
 
@@ -135,7 +135,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param int $status
      * @return $this
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function setStatus($status);
 
@@ -143,7 +143,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Get result message
      *
      * @return string
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function getResultMessage();
 
@@ -152,7 +152,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param string $resultMessage
      * @return $this
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function setResultMessage($resultMessage);
 
@@ -160,7 +160,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Get error code
      *
      * @return int
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function getErrorCode();
 
@@ -169,7 +169,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param int $errorCode
      * @return $this
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function setErrorCode($errorCode);
 }

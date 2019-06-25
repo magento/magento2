@@ -85,10 +85,10 @@ class FullTest extends \PHPUnit\Framework\TestCase
         return [
             'configurable' => [
                 $skuId => 'configurable',
-                $configurableId => 'Option 1 | Option 2',
-                $nameId => 'Configurable Product | Configurable OptionOption 1 | Configurable OptionOption 2',
-                $taxClassId => 'Taxable Goods | Taxable Goods | Taxable Goods',
-                $statusId => 'Enabled | Enabled | Enabled'
+                $configurableId => 'Option 2',
+                $nameId => 'Configurable Product | Configurable OptionOption 2',
+                $taxClassId => 'Taxable Goods | Taxable Goods',
+                $statusId => 'Enabled | Enabled'
             ],
             'index_enabled' => [
                 $skuId => 'index_enabled',

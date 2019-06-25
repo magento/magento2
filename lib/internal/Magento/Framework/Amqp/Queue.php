@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
  * Class Queue
  *
  * @api
- * @since 102.0.1
+ * @since 102.0.2
  */
 class Queue implements QueueInterface
 {
@@ -63,7 +63,7 @@ class Queue implements QueueInterface
 
     /**
      * @inheritdoc
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function dequeue()
     {
@@ -98,7 +98,7 @@ class Queue implements QueueInterface
 
     /**
      * @inheritdoc
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function acknowledge(EnvelopeInterface $envelope)
     {
@@ -119,7 +119,7 @@ class Queue implements QueueInterface
 
     /**
      * @inheritdoc
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function subscribe($callback)
     {
@@ -153,7 +153,7 @@ class Queue implements QueueInterface
 
     /**
      * @inheritdoc
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function reject(EnvelopeInterface $envelope, $requeue = true, $rejectionMessage = null)
     {
@@ -172,7 +172,7 @@ class Queue implements QueueInterface
 
     /**
      * @inheritdoc
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function push(EnvelopeInterface $envelope)
     {

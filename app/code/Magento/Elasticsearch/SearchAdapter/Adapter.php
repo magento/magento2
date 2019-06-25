@@ -68,8 +68,7 @@ class Adapter implements AdapterInterface
     }
 
     /**
-     * @param RequestInterface $request
-     * @return QueryResponse
+     * @inheritdoc
      */
     public function query(RequestInterface $request)
     {
@@ -86,6 +85,7 @@ class Adapter implements AdapterInterface
             [
                 'documents' => $rawDocuments,
                 'aggregations' => $aggregationBuilder->build($request, $rawResponse),
+                'total' => isset($rawResponse['hits']['total']) ? $rawResponse['hits']['total'] : 0
             ]
         );
         return $queryResponse;

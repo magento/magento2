@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
-use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
+use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 
 /**
  * Orders data reslover
@@ -24,20 +24,20 @@ class Orders implements ResolverInterface
     private $collectionFactory;
 
     /**
-     * @var CheckCustomerAccount
+     * @var GetCustomer
      */
-    private $checkCustomerAccount;
+    private $getCustomer;
 
     /**
      * @param CollectionFactoryInterface $collectionFactory
-     * @param CheckCustomerAccount $checkCustomerAccount
+     * @param GetCustomer $getCustomer
      */
     public function __construct(
         CollectionFactoryInterface $collectionFactory,
-        CheckCustomerAccount $checkCustomerAccount
+        GetCustomer $getCustomer
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->checkCustomerAccount = $checkCustomerAccount;
+        $this->getCustomer = $getCustomer;
     }
 
     /**
@@ -50,11 +50,10 @@ class Orders implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $customerId = $context->getUserId();
-        $this->checkCustomerAccount->execute($customerId, $context->getUserType());
+        $customer = $this->getCustomer->execute($context);
 
         $items = [];
-        $orders = $this->collectionFactory->create($customerId);
+        $orders = $this->collectionFactory->create($customer->getId());
 
         /** @var \Magento\Sales\Model\Order $order */
         foreach ($orders as $order) {

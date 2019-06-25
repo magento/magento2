@@ -50,6 +50,8 @@
         <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="Product Link Block Template" stepKey="selectTemplate" />
         <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
         <waitForLoadingMaskToDisappear stepKey="wait4"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandRootCategory}}" stepKey="expandRootCategory" />
+        <waitForElementVisible selector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" stepKey="expandWait" />
         <click selector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" stepKey="selectPreCategory" />
         <waitForLoadingMaskToDisappear stepKey="waitLoadingMask" />
         <click selector="{{WidgetSection.PreCreateProduct('$$createPreReqProduct.name$$')}}" stepKey="selectPreProduct" />

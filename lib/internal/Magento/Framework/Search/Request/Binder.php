@@ -6,6 +6,8 @@
 namespace Magento\Framework\Search\Request;
 
 /**
+ * Data binder for search request.
+ *
  * @api
  * @since 100.0.2
  */
@@ -25,6 +27,9 @@ class Binder
         $data['queries'] = $this->processData($requestData['queries'], $bindData['placeholder']);
         $data['filters'] = $this->processData($requestData['filters'], $bindData['placeholder']);
         $data['aggregations'] = $this->processData($requestData['aggregations'], $bindData['placeholder']);
+        if (isset($bindData['sort']) && isset($requestData['sort'])) {
+            $data['sort'] = $this->processData($requestData['sort'], $bindData['sort']);
+        }
 
         return $data;
     }
@@ -49,6 +54,8 @@ class Binder
     }
 
     /**
+     * Dimensions process.
+     *
      * @param array $data
      * @param array $bindData
      * @return array

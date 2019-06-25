@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Robots\Model\Config;
 
 use Magento\Framework\App\Cache\TypeListInterface;
@@ -32,12 +33,11 @@ class Value extends ConfigValue implements IdentityInterface
     const CACHE_TAG = 'robots';
 
     /**
-     * Model cache tag for clear cache in after save and after delete
+     * @inheritdoc
      *
-     * @var string
      * @since 100.1.0
      */
-    protected $_cacheTag = true;
+    protected $_cacheTag = [self::CACHE_TAG];
 
     /**
      * @var StoreManagerInterface

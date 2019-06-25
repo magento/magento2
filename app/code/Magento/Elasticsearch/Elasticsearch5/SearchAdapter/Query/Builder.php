@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query;
 
+use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
@@ -12,6 +15,8 @@ use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation as Aggregation
 use Magento\Framework\App\ScopeResolverInterface;
 
 /**
+ * Query builder for search adapter.
+ *
  * @api
  * @since 100.2.2
  */
@@ -42,6 +47,11 @@ class Builder
     protected $scopeResolver;
 
     /**
+     * @var Sort
+     */
+    private $sortBuilder;
+
+    /**
      * @param Config $clientConfig
      * @param SearchIndexNameResolver $searchIndexNameResolver
      * @param AggregationBuilder $aggregationBuilder
@@ -70,6 +80,7 @@ class Builder
     {
         $dimension = current($request->getDimensions());
         $storeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
+
         $searchQuery = [
             'index' => $this->searchIndexNameResolver->getIndexName($storeId, $request->getIndex()),
             'type' => $this->clientConfig->getEntityType(),
@@ -77,6 +88,7 @@ class Builder
                 'from' => $request->getFrom(),
                 'size' => $request->getSize(),
                 'stored_fields' => ['_id', '_score'],
+                'sort' => $this->getSortBuilder()->getSort($request),
                 'query' => [],
             ],
         ];
@@ -96,5 +108,18 @@ class Builder
         array $searchQuery
     ) {
         return $this->aggregationBuilder->build($request, $searchQuery);
+    }
+
+    /**
+     * Get sort builder instance.
+     *
+     * @return Sort
+     */
+    private function getSortBuilder()
+    {
+        if (null === $this->sortBuilder) {
+            $this->sortBuilder = ObjectManager::getInstance()->get(Sort::class);
+        }
+        return $this->sortBuilder;
     }
 }

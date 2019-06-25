@@ -12,7 +12,7 @@ use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
  * Consumer config interface provides access data declared in etc/queue_consumer.xml
  *
  * @api
- * @since 102.0.1
+ * @since 102.0.2
  */
 interface ConfigInterface
 {
@@ -23,7 +23,7 @@ interface ConfigInterface
      * @return ConsumerConfigItemInterface
      * @throws LocalizedException
      * @throws \LogicException
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function getConsumer($name);
 
@@ -32,7 +32,7 @@ interface ConfigInterface
      *
      * @return ConsumerConfigItemInterface[]
      * @throws \LogicException
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function getConsumers();
 }

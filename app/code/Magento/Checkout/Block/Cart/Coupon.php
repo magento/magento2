@@ -5,7 +5,11 @@
  */
 namespace Magento\Checkout\Block\Cart;
 
+use Magento\Captcha\Block\Captcha;
+
 /**
+ * Block with apply-coupon form.
+ *
  * @api
  * @since 100.0.2
  */
@@ -29,11 +33,36 @@ class Coupon extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Applied code.
+     *
      * @return string
      * @codeCoverageIgnore
      */
     public function getCouponCode()
     {
         return $this->getQuote()->getCouponCode();
+    }
+
+    /**
+     * @inheritDoc
+     * @since 100.3.2
+     */
+    protected function _prepareLayout()
+    {
+        if (!$this->getChildBlock('captcha')) {
+            $this->addChild(
+                'captcha',
+                Captcha::class,
+                [
+                    'cacheable' => false,
+                    'after' => '-',
+                    'form_id' => 'sales_rule_coupon_request',
+                    'image_width' => 230,
+                    'image_height' => 230
+                ]
+            );
+        }
+
+        return parent::_prepareLayout();
     }
 }

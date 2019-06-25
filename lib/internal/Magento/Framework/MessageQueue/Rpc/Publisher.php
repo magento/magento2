@@ -107,7 +107,7 @@ class Publisher implements PublisherInterface
      *
      * @return ResponseQueueNameBuilder
      *
-     * @deprecated 102.0.1
+     * @deprecated 102.0.2
      */
     private function getResponseQueueNameBuilder()
     {
@@ -123,7 +123,7 @@ class Publisher implements PublisherInterface
      *
      * @return PublisherConfig
      *
-     * @deprecated 102.0.1
+     * @deprecated 102.0.2
      */
     private function getPublisherConfig()
     {

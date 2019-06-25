@@ -39,7 +39,7 @@ class Message implements MailMessageInterface
     /**
      * @inheritdoc
      *
-     * @deprecated 102.0.0
+     * @deprecated 101.0.8
      * @see \Magento\Framework\Mail\Message::setBodyText
      * @see \Magento\Framework\Mail\Message::setBodyHtml
      */
@@ -52,7 +52,7 @@ class Message implements MailMessageInterface
     /**
      * @inheritdoc
      *
-     * @deprecated 102.0.0
+     * @deprecated 101.0.8
      * @see \Magento\Framework\Mail\Message::setBodyText
      * @see \Magento\Framework\Mail\Message::setBodyHtml
      */

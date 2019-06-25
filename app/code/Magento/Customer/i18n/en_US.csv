@@ -500,6 +500,7 @@ Strong,Strong
 "Address Templates","Address Templates"
 "Online Customers Options","Online Customers Options"
 "Online Minutes Interval","Online Minutes Interval"
+"Only 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'sub', 'sup', 'ul' tags are allowed","Only 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'sub', 'sup', 'ul' tags are allowed"
 "Leave empty for default (15 minutes).","Leave empty for default (15 minutes)."
 "Customer Notification","Customer Notification"
 "Customer Grid","Customer Grid"

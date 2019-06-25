@@ -8,6 +8,8 @@ namespace Magento\Downloadable\Test\Unit\Controller\Download;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
+ * Unit tests for \Magento\Downloadable\Controller\Download\LinkSample.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LinkSampleTest extends \PHPUnit\Framework\TestCase
@@ -64,6 +66,11 @@ class LinkSampleTest extends \PHPUnit\Framework\TestCase
     protected $urlInterface;
 
     /**
+     * @var \Magento\Catalog\Model\Product\SalabilityChecker|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $salabilityCheckerMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -104,6 +111,7 @@ class LinkSampleTest extends \PHPUnit\Framework\TestCase
         $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
         $this->redirect = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
         $this->urlInterface = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->salabilityCheckerMock = $this->createMock(\Magento\Catalog\Model\Product\SalabilityChecker::class);
         $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, [
                 'create',
                 'get'
@@ -115,11 +123,17 @@ class LinkSampleTest extends \PHPUnit\Framework\TestCase
                 'request' => $this->request,
                 'response' => $this->response,
                 'messageManager' => $this->messageManager,
-                'redirect' => $this->redirect
+                'redirect' => $this->redirect,
+                'salabilityChecker' => $this->salabilityCheckerMock,
             ]
         );
     }
 
+    /**
+     * Execute Download link's sample action with Url link.
+     *
+     * @return void
+     */
     public function testExecuteLinkTypeUrl()
     {
         $linkMock = $this->getMockBuilder(\Magento\Downloadable\Model\Link::class)
@@ -134,6 +148,7 @@ class LinkSampleTest extends \PHPUnit\Framework\TestCase
             ->willReturn($linkMock);
         $linkMock->expects($this->once())->method('load')->with('some_link_id')->willReturnSelf();
         $linkMock->expects($this->once())->method('getId')->willReturn('some_link_id');
+        $this->salabilityCheckerMock->expects($this->once())->method('isSalable')->willReturn(true);
         $linkMock->expects($this->once())->method('getSampleType')->willReturn(
             \Magento\Downloadable\Helper\Download::LINK_TYPE_URL
         );
@@ -155,6 +170,11 @@ class LinkSampleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->response, $this->linkSample->execute());
     }
 
+    /**
+     * Execute Download link's sample action with File link.
+     *
+     * @return void
+     */
     public function testExecuteLinkTypeFile()
     {
         $linkMock = $this->getMockBuilder(\Magento\Downloadable\Model\Link::class)
@@ -173,6 +193,7 @@ class LinkSampleTest extends \PHPUnit\Framework\TestCase
             ->willReturn($linkMock);
         $linkMock->expects($this->once())->method('load')->with('some_link_id')->willReturnSelf();
         $linkMock->expects($this->once())->method('getId')->willReturn('some_link_id');
+        $this->salabilityCheckerMock->expects($this->once())->method('isSalable')->willReturn(true);
         $linkMock->expects($this->any())->method('getSampleType')->willReturn(
             \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE
         );

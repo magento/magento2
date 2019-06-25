@@ -147,11 +147,21 @@ class AttributeAdapter
     }
 
     /**
+     * Check if attribute is sortable.
+     *
+     * @return bool
+     */
+    public function isSortable(): bool
+    {
+        return (int)$this->getAttribute()->getUsedForSortBy() === 1;
+    }
+
+    /**
      * Check if attribute is defined by user.
      *
-     * @return string
+     * @return bool|null
      */
-    public function isUserDefined(): string
+    public function isUserDefined()
     {
         return $this->getAttribute()->getIsUserDefined();
     }

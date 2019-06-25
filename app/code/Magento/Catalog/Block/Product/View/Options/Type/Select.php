@@ -58,7 +58,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      *
      * @return string
      */
-    public function getValuesHtml()
+    public function getValuesHtml(): string
     {
         $option = $this->getOption();
         $optionType = $option->getType();

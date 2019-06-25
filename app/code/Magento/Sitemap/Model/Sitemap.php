@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sitemap\Model;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
@@ -15,6 +16,8 @@ use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
 use Magento\Sitemap\Model\ResourceModel\Sitemap as SitemapResource;
 
 /**
+ * Sitemap model.
+ *
  * @method string getSitemapType()
  * @method \Magento\Sitemap\Model\Sitemap setSitemapType(string $value)
  * @method string getSitemapFilename()
@@ -154,12 +157,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected $dateTime;
 
     /**
-     * Model cache tag for clear cache in after save and after delete
+     * @inheritdoc
      *
-     * @var string
      * @since 100.1.5
      */
-    protected $_cacheTag = true;
+    protected $_cacheTag = [Value::CACHE_TAG];
 
     /**
      * Item resolver
@@ -544,10 +546,10 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             $row .= '<lastmod>' . $this->_getFormattedLastmodDate($lastmod) . '</lastmod>';
         }
         if ($changefreq) {
-            $row .= '<changefreq>' . $changefreq . '</changefreq>';
+            $row .= '<changefreq>' . $this->_escaper->escapeHtml($changefreq) . '</changefreq>';
         }
         if ($priority) {
-            $row .= sprintf('<priority>%.1f</priority>', $priority);
+            $row .= sprintf('<priority>%.1f</priority>', $this->_escaper->escapeHtml($priority));
         }
         if ($images) {
             // Add Images to sitemap
@@ -722,7 +724,9 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getDocumentRoot()
     {
+        // @codingStandardsIgnoreStart
         return realpath($this->_request->getServer('DOCUMENT_ROOT'));
+        // @codingStandardsIgnoreEnd
     }
 
     /**
@@ -732,7 +736,9 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getStoreBaseDomain()
     {
+        // @codingStandardsIgnoreStart
         $storeParsedUrl = parse_url($this->_getStoreBaseUrl());
+        // @codingStandardsIgnoreEnd
         $url = $storeParsedUrl['scheme'] . '://' . $storeParsedUrl['host'];
 
         $documentRoot = trim(str_replace('\\', '/', $this->_getDocumentRoot()), '/');

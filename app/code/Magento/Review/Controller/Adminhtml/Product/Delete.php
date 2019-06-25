@@ -7,10 +7,16 @@ namespace Magento\Review\Controller\Adminhtml\Product;
 
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
-class Delete extends ProductController
+/**
+ * Delete review action.
+ */
+class Delete extends ProductController implements HttpPostActionInterface
 {
     /**
+     * Execute action.
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()

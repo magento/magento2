@@ -14,6 +14,7 @@
     },
     "suggest": {
         "magento/module-graph-ql": "100.3.*",
+        "magento/module-graph-ql-cache": "100.3.*",
         "magento/module-store-graph-ql": "100.3.*"
     },
     "license": [
@@ -28,5 +29,5 @@
             "Magento\\CatalogGraphQl\\": ""
         }
     },
-    "version": "100.3.1"
+    "version": "100.3.2"
 }

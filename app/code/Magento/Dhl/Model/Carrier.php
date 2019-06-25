@@ -715,6 +715,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
      */
     protected function _getAllItems()
     {
@@ -985,7 +986,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     protected function _getQuotesFromServer($request)
     {
         $client = $this->_httpClientFactory->create();
-        $client->setUri((string)$this->getConfigData('gateway_url'));
+        $client->setUri($this->getGatewayURL());
         $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
         $client->setRawData(utf8_encode($request));
 
@@ -1307,7 +1308,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     public function processAdditionalValidation(\Magento\Framework\DataObject $request)
     {
         //Skip by item validation if there is no items in request
-        if (!count($this->getAllItems($request))) {
+        if (empty($this->getAllItems($request))) {
             $this->_errors[] = __('There is no items in this order');
         }
 
@@ -1578,7 +1579,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             try {
                 /** @var \Magento\Framework\HTTP\ZendClient $client */
                 $client = $this->_httpClientFactory->create();
-                $client->setUri((string)$this->getConfigData('gateway_url'));
+                $client->setUri($this->getGatewayURL());
                 $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
                 $client->setRawData($request);
                 $responseBody = $client->request(\Magento\Framework\HTTP\ZendClient::POST)->getBody();
@@ -1745,7 +1746,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             try {
                 /** @var \Magento\Framework\HTTP\ZendClient $client */
                 $client = $this->_httpClientFactory->create();
-                $client->setUri((string)$this->getConfigData('gateway_url'));
+                $client->setUri($this->getGatewayURL());
                 $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
                 $client->setRawData($request);
                 $responseBody = $client->request(\Magento\Framework\HTTP\ZendClient::POST)->getBody();
@@ -1775,7 +1776,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $errorTitle = __('Unable to retrieve tracking');
         $resultArr = [];
 
-        if (strlen(trim($response)) > 0) {
+        if (!empty(trim($response))) {
             $xml = $this->parseXml($response, \Magento\Shipping\Model\Simplexml\Element::class);
             if (!is_object($xml)) {
                 $errorTitle = __('Response is in the wrong format');
@@ -1944,6 +1945,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             }
             $result->setTrackingNumber((string)$xml->AirwayBillNumber);
             $labelContent = (string)$xml->LabelImage->OutputImage;
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $result->setShippingLabelContent(base64_decode($labelContent));
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
@@ -1964,9 +1966,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     {
         $this->_checkDomesticStatus($origCountryId, $destCountryId);
 
-        return
-            self::DHL_CONTENT_TYPE_NON_DOC == $this->getConfigData('content_type')
-            || !$this->_isDomestic;
+        return !$this->_isDomestic;
     }
 
     /**
@@ -2022,5 +2022,19 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     private function buildSoftwareVersion(): string
     {
         return substr($this->productMetadata->getVersion(), 0, 10);
+    }
+
+    /**
+     * Get the gateway URL
+     *
+     * @return string
+     */
+    private function getGatewayURL(): string
+    {
+        if ($this->getConfigData('sandbox_mode')) {
+            return (string)$this->getConfigData('sandbox_url');
+        } else {
+            return (string)$this->getConfigData('gateway_url');
+        }
     }
 }

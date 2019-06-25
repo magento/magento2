@@ -21,6 +21,119 @@
             </argument>
         </arguments>
     </type>
+
+    <virtualType name="Magento\Elasticsearch\Model\Layer\Search\Context" type="Magento\Catalog\Model\Layer\Search\Context">
+        <arguments>
+            <argument name="collectionProvider" xsi:type="object">elasticsearchLayerSearchItemCollectionProvider</argument>
+            <argument name="stateKey" xsi:type="object">Magento\CatalogSearch\Model\Layer\Search\StateKey</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Model\Layer\Search">
+        <arguments>
+            <argument name="context" xsi:type="object">Magento\Elasticsearch\Model\Layer\Search\Context</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Elasticsearch\Model\Layer\Category\Context" type="Magento\Catalog\Model\Layer\Category\Context">
+        <arguments>
+            <argument name="collectionProvider" xsi:type="object">elasticsearchLayerCategoryItemCollectionProvider</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Model\Layer\Category">
+        <arguments>
+            <argument name="context" xsi:type="object">Magento\Elasticsearch\Model\Layer\Category\Context</argument>
+        </arguments>
+    </type>
+    <virtualType name="elasticsearchFulltextSearchCollection" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection">
+        <arguments>
+            <argument name="searchRequestName" xsi:type="string">quick_search_container</argument>
+            <argument name="searchCriteriaResolverFactory" xsi:type="object">elasticsearchSearchCriteriaResolverFactory</argument>
+            <argument name="searchResultApplierFactory" xsi:type="object">elasticsearchSearchResultApplier\Factory</argument>
+            <argument name="totalRecordsResolverFactory" xsi:type="object">elasticsearchTotalRecordsResolver\Factory</argument>
+            <argument name="defaultFilterStrategyApplyChecker" xsi:type="object">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyChecker</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchFulltextSearchCollectionFactory" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\SearchCollectionFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">elasticsearchFulltextSearchCollection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchLayerSearchItemCollectionProvider" type="Magento\Elasticsearch\Model\Layer\Search\ItemCollectionProvider">
+        <arguments>
+            <argument name="factories" xsi:type="array">
+                <item name="mysql" xsi:type="object">Magento\CatalogSearch\Model\ResourceModel\Fulltext\SearchCollectionFactory</item>
+                <item name="elasticsearch" xsi:type="object">elasticsearchFulltextSearchCollectionFactory</item>
+                <item name="elasticsearch5" xsi:type="object">elasticsearchFulltextSearchCollectionFactory</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchCategoryCollection" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection">
+        <arguments>
+            <argument name="searchRequestName" xsi:type="string">catalog_view_container</argument>
+            <argument name="searchCriteriaResolverFactory" xsi:type="object">elasticsearchSearchCriteriaResolverFactory</argument>
+            <argument name="searchResultApplierFactory" xsi:type="object">elasticsearchSearchResultApplier\Factory</argument>
+            <argument name="totalRecordsResolverFactory" xsi:type="object">elasticsearchTotalRecordsResolver\Factory</argument>
+            <argument name="defaultFilterStrategyApplyChecker" xsi:type="object">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyChecker</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchCategoryCollectionFactory" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\SearchCollectionFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">elasticsearchCategoryCollection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchLayerCategoryItemCollectionProvider" type="Magento\Elasticsearch\Model\Layer\Category\ItemCollectionProvider">
+        <arguments>
+            <argument name="factories" xsi:type="array">
+                <item name="mysql" xsi:type="object">Magento\CatalogSearch\Model\ResourceModel\Fulltext\CollectionFactory</item>
+                <item name="elasticsearch" xsi:type="object">elasticsearchCategoryCollectionFactory</item>
+                <item name="elasticsearch5" xsi:type="object">elasticsearchCategoryCollectionFactory</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchAdvancedCollection" type="Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection">
+        <arguments>
+            <argument name="searchRequestName" xsi:type="string">advanced_search_container</argument>
+            <argument name="searchCriteriaResolverFactory" xsi:type="object">elasticsearchSearchCriteriaResolverFactory</argument>
+            <argument name="searchResultApplierFactory" xsi:type="object">elasticsearchSearchResultApplier\Factory</argument>
+            <argument name="totalRecordsResolverFactory" xsi:type="object">elasticsearchTotalRecordsResolver\Factory</argument>
+            <argument name="defaultFilterStrategyApplyChecker" xsi:type="object">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyChecker</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchAdvancedCollectionFactory" type="Magento\CatalogSearch\Model\ResourceModel\Advanced\CollectionFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">elasticsearchAdvancedCollection</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogSearch\Model\Search\ItemCollectionProvider">
+        <arguments>
+            <argument name="factories" xsi:type="array">
+                <item name="elasticsearch" xsi:type="object">elasticsearchAdvancedCollectionFactory</item>
+                <item name="elasticsearch5" xsi:type="object">elasticsearchAdvancedCollectionFactory</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategyProvider">
+        <arguments>
+            <argument name="strategies" xsi:type="array">
+                <item name="elasticsearch" xsi:type="object">Magento\Elasticsearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
+                <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="elasticsearchSearchCriteriaResolverFactory" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolver</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchSearchResultApplier\Factory" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplier</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchTotalRecordsResolver\Factory" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolver</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldMapperResolver">
         <arguments>
             <argument name="fieldMappers" xsi:type="array">
@@ -29,7 +142,7 @@
         </arguments>
     </type>
     <preference for="Magento\Elasticsearch\Model\Adapter\DataMapperInterface" type="Magento\Elasticsearch\Model\Adapter\DataMapper\DataMapperResolver" />
-    <virtualType name="AdditionalFieldsForElasticsearchDataMapper" type="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProvider">
+    <virtualType name="additionalFieldsProviderForElasticsearch" type="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProvider">
         <arguments>
             <argument name="fieldsProviders" xsi:type="array">
                 <item name="categories" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProviderProxy</item>
@@ -39,7 +152,7 @@
     </virtualType>
     <type name="Magento\Elasticsearch\Model\Adapter\BatchDataMapper\ProductDataMapper">
         <arguments>
-            <argument name="additionalFieldsProvider" xsi:type="object">AdditionalFieldsForElasticsearchDataMapper</argument>
+            <argument name="additionalFieldsProvider" xsi:type="object">additionalFieldsProviderForElasticsearch</argument>
         </arguments>
     </type>
     <preference for="Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface" type="Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperResolver" />
@@ -203,9 +316,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider">
-        <plugin name="stockedProductsFilterPlugin" type="Magento\Elasticsearch\Model\Indexer\Plugin\StockedProductsFilterPlugin"/>
-    </type>
     <type name="Magento\Framework\Indexer\Config\DependencyInfoProvider">
         <plugin name="indexerDependencyUpdaterPlugin" type="Magento\Elasticsearch\Model\Indexer\Plugin\DependencyUpdaterPlugin"/>
     </type>
@@ -368,6 +478,7 @@
             <argument name="indexTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\Converter</argument>
             <argument name="fieldIndexResolver" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\IndexResolver</argument>
             <argument name="fieldTypeResolver" xsi:type="object">\Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\CompositeResolver</argument>
+            <argument name="fieldNameResolver" xsi:type="object">elasticsearch5FieldNameResolver</argument>
         </arguments>
     </virtualType>
     <virtualType name="elasticsearch5DynamicFieldProvider" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\DynamicField">
@@ -425,7 +536,25 @@
         <arguments>
             <argument name="pageSizeBySearchEngine" xsi:type="array">
                 <item name="elasticsearch" xsi:type="number">10000</item>
-                <item name="elasticsearch5" xsi:type="number">2147483647</item>
+                <item name="elasticsearch5" xsi:type="number">10000</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool">
+        <arguments>
+            <argument name="valueTransformers" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\TextTransformer</item>
+                <item name="date" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\DateTransformer</item>
+                <item name="float" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\FloatTransformer</item>
+                <item name="integer" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\IntegerTransformer</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\TextTransformer">
+        <arguments>
+            <argument name="preprocessors" xsi:type="array">
+                <item name="stopwordsPreprocessor" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\Stopwords</item>
+                <item name="synonymsPreprocessor" xsi:type="object">Magento\Search\Adapter\Query\Preprocessor\Synonyms</item>
             </argument>
         </arguments>
     </type>

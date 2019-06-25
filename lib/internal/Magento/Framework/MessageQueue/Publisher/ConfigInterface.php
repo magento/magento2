@@ -12,7 +12,7 @@ use Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItemInterface
  * Publisher config interface provides access data declared in etc/queue_publisher.xml
  *
  * @api
- * @since 102.0.1
+ * @since 102.0.2
  */
 interface ConfigInterface
 {
@@ -23,7 +23,7 @@ interface ConfigInterface
      * @return PublisherConfigItemInterface
      * @throws LocalizedException
      * @throws \LogicException
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function getPublisher($topic);
 
@@ -32,7 +32,7 @@ interface ConfigInterface
      *
      * @return PublisherConfigItemInterface[]
      * @throws \LogicException
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function getPublishers();
 }

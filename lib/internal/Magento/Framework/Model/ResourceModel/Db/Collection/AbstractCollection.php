@@ -12,6 +12,7 @@ use \Magento\Framework\Data\Collection\AbstractDb;
 /**
  * Abstract Resource Collection
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2
@@ -138,7 +139,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @return void
      */
-    protected function _construct()
+    protected function _construct() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
 

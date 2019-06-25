@@ -1313,12 +1313,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Retrieve shipping method
      *
      * @param bool $asObject return carrier code and shipping method data as object
-     * @return string|\Magento\Framework\DataObject
+     * @return string|null|\Magento\Framework\DataObject
      */
     public function getShippingMethod($asObject = false)
     {
         $shippingMethod = parent::getShippingMethod();
-        if (!$asObject) {
+        if (!$asObject || !$shippingMethod) {
             return $shippingMethod;
         } else {
             list($carrierCode, $method) = explode('_', $shippingMethod, 2);

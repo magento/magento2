@@ -11,5 +11,10 @@
     <section name="AdminCustomerGridSection">
         <element name="customerGrid" type="text" selector="table[data-role='grid']"/>
         <element name="firstRowEditLink" type="text" selector="tr[data-repeat-index='0'] .action-menu-item" timeout="30"/>
+        <element name="gridRow" type="text" selector="//*[@data-role='sticky-el-root']/parent::div/parent::div/following-sibling::div//tbody//*[@class='data-row'][{{row}}]" parameterized="true"/>
+        <element name="selectFirstRow" type="checkbox" selector="//td[@class='data-grid-checkbox-cell']"/>
+        <element name="customerCheckboxByEmail" type="checkbox" selector="//tr[@class='data-row' and //div[text()='{{customerEmail}}']]//input[@type='checkbox']" parameterized="true" timeout="30"/>
+        <element name="customerEditLinkByEmail" type="text" selector="//tr[@class='data-row' and //div[text()='{{customerEmail}}']]//a[@class='action-menu-item']" parameterized="true" timeout="30"/>
+        <element name="customerGroupByEmail" type="text" selector="//tr[@class='data-row' and //div[text()='{{customerEmail}}']]//div[text()='{{customerGroup}}']" parameterized="true"/>
     </section>
 </sections>

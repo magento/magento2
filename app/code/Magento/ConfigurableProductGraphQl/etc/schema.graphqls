@@ -1,5 +1,8 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
+type Mutation {
+    addConfigurableProductsToCart(input: AddConfigurableProductsToCartInput): AddConfigurableProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
+}
 
 type ConfigurableProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "ConfigurableProduct defines basic features of a configurable product and its simple product variants") {
     variants: [ConfigurableVariant] @doc(description: "An array of variants of products") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ConfigurableVariant")
@@ -7,7 +10,7 @@ type ConfigurableProduct implements ProductInterface, PhysicalProductInterface, 
 }
 
 type ConfigurableVariant @doc(description: "An array containing all the simple product variants of a configurable product") {
-    attributes: [ConfigurableAttributeOption] @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Attributes")  @doc(description: "")
+    attributes: [ConfigurableAttributeOption] @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Attributes") @doc(description: "")
     product: SimpleProduct @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product")
 }
 
@@ -34,4 +37,31 @@ type ConfigurableProductOptionsValues @doc(description: "ConfigurableProductOpti
     default_label: String @doc(description: "The label of the product on the default store")
     store_label: String @doc(description: "The label of the product on the current store")
     use_default_value: Boolean @doc(description: "Indicates whether to use the default_label")
+}
+
+input AddConfigurableProductsToCartInput {
+    cart_id: String!
+    cart_items: [ConfigurableProductCartItemInput!]!
+}
+
+type AddConfigurableProductsToCartOutput {
+    cart: Cart!
+}
+
+input ConfigurableProductCartItemInput {
+    data: CartItemInput!
+    variant_sku: String!
+    customizable_options:[CustomizableOptionInput!]
+}
+
+type ConfigurableCartItem implements CartItemInterface {
+    customizable_options: [SelectedCustomizableOption]!
+    configurable_options: [SelectedConfigurableOption!]!
+}
+
+type SelectedConfigurableOption {
+    id: Int!
+    option_label: String!
+    value_id: Int!
+    value_label: String!
 }

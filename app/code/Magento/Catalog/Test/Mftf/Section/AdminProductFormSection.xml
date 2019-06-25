@@ -33,6 +33,7 @@
         <element name="productTaxClassUseDefault" type="checkbox" selector="input[name='use_default[tax_class_id]']"/>
         <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']" timeout="30"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
+        <element name="unselectCategories" type="button" selector="//span[@class='admin__action-multiselect-crumb']/span[contains(.,'{{category}}')]/../button[@data-action='remove-selected-item']" parameterized="true" timeout="30"/>
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
         <element name="advancedInventoryLink" type="button" selector="//button[contains(@data-index, 'advanced_inventory_button')]" timeout="30"/>
         <element name="productStockStatus" type="select" selector="select[name='product[quantity_and_stock_status][is_in_stock]']"/>
@@ -60,12 +61,15 @@
         <element name="setProductAsNewFrom" type="input" selector="input[name='product[news_from_date]']"/>
         <element name="setProductAsNewTo" type="input" selector="input[name='product[news_to_date]']"/>
         <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//span[text()='{{attributeLabel}}']" parameterized="true"/>
+        <element name="attributeRequiredInput" type="input" selector="//input[contains(@name, 'product[{{attributeCode}}]')]" parameterized="true"/>
+        <element name="attributeFieldError" type="text" selector="//*[@class='admin__field _required _error']/..//label[contains(.,'This is a required field.')]"/>
         <element name="customSelectField" type="select" selector="//select[@name='product[{{var}}]']" parameterized="true"/>
         <element name="searchCategory" type="input" selector="//*[@data-index='category_ids']//input[contains(@class, 'multiselect-search')]"/>
         <element name="selectCategory" type="input" selector="//*[@data-index='category_ids']//label[contains(., '{{categoryName}}')]" parameterized="true"/>
         <element name="done" type="button" selector="//*[@data-index='category_ids']//button[@data-action='close-advanced-select']" timeout="30"/>
         <element name="selectMultipleCategories" type="input" selector="//*[@data-index='container_category_ids']//*[contains(@class, '_selected')]"/>
         <element name="countryOfManufacture" type="select" selector="select[name='product[country_of_manufacture]']"/>
+        <element name="newAddedAttribute" type="text" selector="//fieldset[@class='admin__fieldset']//div[contains(@data-index,'{{attributeCode}}')]" parameterized="true"/>
     </section>
     <section name="ProductInWebsitesSection">
         <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
@@ -199,7 +203,9 @@
     </section>
     <section name="AdminProductAttributeSection">
         <element name="attributeSectionHeader" type="button" selector="//div[@data-index='attributes']" timeout="30"/>
+        <element name="textAttributeByCode" type="text" selector="//input[@name='product[{{arg}}]']" parameterized="true"/>
+        <element name="textAttributeByName" type="text" selector="//div[@data-index='attributes']//fieldset[contains(@class, 'admin__field') and .//*[contains(.,'{{var}}')]]//input" parameterized="true"/>
         <element name="dropDownAttribute" type="select" selector="//select[@name='product[{{arg}}]']" parameterized="true" timeout="30"/>
-        <element name="attributeSection" type="div" selector="//div[@data-index='attributes']/div[contains(@class, 'admin__collapsible-content _show')]" timeout="30"/>
+        <element name="attributeSection" type="block" selector="//div[@data-index='attributes']/div[contains(@class, 'admin__collapsible-content _show')]" timeout="30"/>
     </section>
 </sections>

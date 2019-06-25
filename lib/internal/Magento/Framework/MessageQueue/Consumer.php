@@ -38,7 +38,7 @@ class Consumer implements ConsumerInterface
     private $messageEncoder;
 
     /**
-     * @var CallbackInvoker
+     * @var CallbackInvokerInterface
      */
     private $invoker;
 
@@ -80,7 +80,7 @@ class Consumer implements ConsumerInterface
     /**
      * Initialize dependencies.
      *
-     * @param CallbackInvoker $invoker
+     * @param CallbackInvokerInterface $invoker
      * @param MessageEncoder $messageEncoder
      * @param ResourceConnection $resource
      * @param ConsumerConfigurationInterface $configuration
@@ -89,7 +89,7 @@ class Consumer implements ConsumerInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        CallbackInvoker $invoker,
+        CallbackInvokerInterface $invoker,
         MessageEncoder $messageEncoder,
         ResourceConnection $resource,
         ConsumerConfigurationInterface $configuration,
@@ -103,7 +103,7 @@ class Consumer implements ConsumerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process($maxNumberOfMessages = null)
     {
@@ -240,7 +240,7 @@ class Consumer implements ConsumerInterface
      *
      * @return ConsumerConfig
      *
-     * @deprecated 102.0.1
+     * @deprecated 102.0.2
      */
     private function getConsumerConfig()
     {
@@ -255,7 +255,7 @@ class Consumer implements ConsumerInterface
      *
      * @return CommunicationConfig
      *
-     * @deprecated 102.0.1
+     * @deprecated 102.0.2
      */
     private function getCommunicationConfig()
     {
@@ -271,7 +271,7 @@ class Consumer implements ConsumerInterface
      *
      * @return QueueRepository
      *
-     * @deprecated 102.0.1
+     * @deprecated 102.0.2
      */
     private function getQueueRepository()
     {
@@ -286,7 +286,7 @@ class Consumer implements ConsumerInterface
      *
      * @return MessageController
      *
-     * @deprecated 102.0.1
+     * @deprecated 102.0.2
      */
     private function getMessageController()
     {
@@ -302,7 +302,7 @@ class Consumer implements ConsumerInterface
      *
      * @return MessageValidator
      *
-     * @deprecated 102.0.1
+     * @deprecated 102.0.2
      */
     private function getMessageValidator()
     {
@@ -318,7 +318,7 @@ class Consumer implements ConsumerInterface
      *
      * @return EnvelopeFactory
      *
-     * @deprecated 102.0.1
+     * @deprecated 102.0.2
      */
     private function getEnvelopeFactory()
     {

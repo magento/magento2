@@ -7,6 +7,8 @@
     "require": {
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "102.0.*",
+        "magento/module-authorization": "100.3.*",
+        "magento/module-asynchronous-operations": "100.3.*",
         "magento/module-backend": "101.0.*",
         "magento/module-catalog-inventory": "100.3.*",
         "magento/module-catalog-rule": "101.1.*",
@@ -49,5 +51,5 @@
             "Magento\\Catalog\\": ""
         }
     },
-    "version": "103.0.1"
+    "version": "103.0.2"
 }

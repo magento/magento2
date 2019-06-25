@@ -27,6 +27,7 @@
         <element name="country" type="select" selector="select[name=country_id]"/>
         <element name="telephone" type="input" selector="input[name=telephone]"/>
         <element name="saveAddress" type="button" selector=".action-save-address"/>
+        <element name="cancelChangeAddress" type="button" selector=".action-hide-popup"/>
         <element name="updateAddress" type="button" selector=".action-update"/>
         <element name="next" type="button" selector="button.button.action.continue.primary" timeout="30"/>
         <element name="firstShippingMethod" type="radio" selector="//*[@id='checkout-shipping-method-load']//input[@class='radio']"/>

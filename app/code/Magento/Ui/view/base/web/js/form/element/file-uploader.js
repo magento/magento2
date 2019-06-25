@@ -349,6 +349,12 @@ define([
                 allowed  = this.isFileAllowed(file),
                 target   = $(e.target);
 
+            if (this.disabled()) {
+                this.notifyError($t('The file upload field is disabled.'));
+
+                return;
+            }
+
             if (allowed.passed) {
                 target.on('fileuploadsend', function (event, postData) {
                     postData.data.append('param_name', this.paramName);

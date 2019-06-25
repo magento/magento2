@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Data;
 
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
@@ -392,7 +393,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Adding item to item array
      *
-     * @param   \Magento\Framework\DataObject $item
+     * @param \Magento\Framework\DataObject $item
      * @return $this
      * @throws \Exception
      */
@@ -402,6 +403,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
 
         if ($itemId !== null) {
             if (isset($this->_items[$itemId])) {
+                //phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception(
                     'Item (' . get_class($item) . ') with the same ID "' . $item->getId() . '" already exists.'
                 );
@@ -453,7 +455,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Remove item from collection by item key
      *
-     * @param   mixed $key
+     * @param mixed $key
      * @return $this
      */
     public function removeItemByKey($key)
@@ -484,6 +486,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     {
         $this->_setIsLoaded(false);
         $this->_items = [];
+        $this->_totalRecords = null;
         return $this;
     }
 
@@ -540,8 +543,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Setting data for all collection items
      *
-     * @param   mixed $key
-     * @param   mixed $value
+     * @param mixed $key
+     * @param mixed $value
      * @return $this
      */
     public function setDataToAll($key, $value = null)
@@ -561,7 +564,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Set current page
      *
-     * @param   int $page
+     * @param int $page
      * @return $this
      */
     public function setCurPage($page)
@@ -573,7 +576,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Set collection page size
      *
-     * @param   int $size
+     * @param int $size
      * @return $this
      */
     public function setPageSize($size)
@@ -585,8 +588,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Set select order
      *
-     * @param   string $field
-     * @param   string $direction
+     * @param string $field
+     * @param string $direction
      * @return $this
      */
     public function setOrder($field, $direction = self::SORT_ORDER_DESC)
@@ -598,7 +601,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Set collection item class name
      *
-     * @param  string $className
+     * @param string $className
      * @return $this
      * @throws \InvalidArgumentException
      */

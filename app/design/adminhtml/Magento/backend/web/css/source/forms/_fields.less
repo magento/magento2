@@ -81,7 +81,7 @@
     min-width: 0;
     padding: 0;
 
-    //  Filedset section
+    //  Fieldset section
     .fieldset-wrapper {
         &.admin__fieldset-section {
             > .fieldset-wrapper-title {
@@ -122,7 +122,7 @@
         > .admin__field-control {
             #mix-grid .column(@field-control-grid__column, @field-grid__columns);
             input[type="checkbox"] {
-                margin-top: 1.2rem;
+                margin-top: @indent__s;
             }
         }
 
@@ -542,7 +542,6 @@
     & > .admin__field {
         &:first-child {
             position: static;
-
             & > .admin__field-label {
                 #mix-grid .column(@field-label-grid__column, @field-grid__columns);
                 cursor: pointer;
@@ -698,6 +697,7 @@
                 margin: 0;
                 opacity: 1;
                 position: static;
+                width: 100%;
             }
         }
         & > .admin__field-label { 

@@ -5,16 +5,17 @@
  */
 namespace Magento\Review\Model\ResourceModel\Review\Product;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
  * Review Product Collection
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
@@ -552,7 +553,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Not add store ids to items
      *
      * @return $this
-     * @since 100.3.0
+     * @since 100.2.8
      */
     protected function prepareStoreId()
     {

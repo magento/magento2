@@ -25,7 +25,8 @@
         "magento/module-sales-rule": "101.1.*",
         "magento/module-product-video": "100.3.*",
         "magento/module-configurable-sample-data": "Sample Data version: 100.3.*",
-        "magento/module-product-links-sample-data": "Sample Data version: 100.3.*"
+        "magento/module-product-links-sample-data": "Sample Data version: 100.3.*",
+        "magento/module-tax": "100.3.*"
     },
     "type": "magento2-module",
     "license": [
@@ -40,5 +41,5 @@
             "Magento\\ConfigurableProduct\\": ""
         }
     },
-    "version": "100.3.1"
+    "version": "100.3.2"
 }

@@ -21,7 +21,8 @@
         "magento/module-quote": "101.1.*",
         "magento/module-sales": "102.0.*",
         "magento/module-ui": "101.1.*",
-        "magento/module-vault": "101.1.*"
+        "magento/module-vault": "101.1.*",
+        "magento/module-multishipping": "100.3.*"
     },
     "suggest": {
         "magento/module-checkout-agreements": "100.3.*",
@@ -40,5 +41,5 @@
             "Magento\\Braintree\\": ""
         }
     },
-    "version": "100.3.1"
+    "version": "100.3.2"
 }

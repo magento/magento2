@@ -7,5 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\QuoteGraphQl\Model\Cart\SetShippingAddressesOnCartInterface"
-                type="Magento\QuoteGraphQl\Model\Cart\SetShippingAddressOnCart" />
+                type="Magento\QuoteGraphQl\Model\Cart\SetShippingAddressesOnCart"/>
+    <preference for="Magento\QuoteGraphQl\Model\Cart\SetShippingMethodsOnCartInterface"
+                type="Magento\QuoteGraphQl\Model\Cart\SetShippingMethodsOnCart"/>
 </config>

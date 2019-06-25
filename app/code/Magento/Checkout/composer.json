@@ -23,7 +23,8 @@
         "magento/module-store": "101.0.*",
         "magento/module-tax": "100.3.*",
         "magento/module-theme": "101.0.*",
-        "magento/module-ui": "101.1.*"
+        "magento/module-ui": "101.1.*",
+        "magento/module-captcha": "100.3.*"
     },
     "suggest": {
         "magento/module-cookie": "100.3.*"
@@ -41,5 +42,5 @@
             "Magento\\Checkout\\": ""
         }
     },
-    "version": "100.3.1"
+    "version": "100.3.2"
 }

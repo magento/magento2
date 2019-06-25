@@ -22,7 +22,10 @@
         "magento/module-shipping": "100.3.*",
         "magento/module-store": "101.0.*",
         "magento/module-ui": "101.1.*",
-        "magento/module-widget": "101.1.*"
+        "magento/module-widget": "101.1.*",
+        "magento/module-captcha": "100.3.*",
+        "magento/module-checkout": "100.3.*",
+        "magento/module-authorization": "100.3.*"
     },
     "suggest": {
         "magento/module-sales-rule-sample-data": "Sample Data version: 100.3.*"
@@ -40,5 +43,5 @@
             "Magento\\SalesRule\\": ""
         }
     },
-    "version": "101.1.1"
+    "version": "101.1.2"
 }

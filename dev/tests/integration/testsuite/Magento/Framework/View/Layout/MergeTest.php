@@ -42,6 +42,11 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     protected $_cache;
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_serializer;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_theme;
@@ -74,7 +79,8 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $files = [];
-        foreach (glob(__DIR__ . '/_mergeFiles/layout/*.xml') as $filename) {
+        $fileDriver = new \Magento\Framework\Filesystem\Driver\File();
+        foreach ($fileDriver->readDirectory(__DIR__ . '/_mergeFiles/layout/') as $filename) {
             $files[] = new \Magento\Framework\View\File($filename, 'Magento_Widget');
         }
         $fileSource = $this->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
@@ -99,6 +105,8 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->_layoutValidator = $this->createMock(\Magento\Framework\View\Model\Layout\Update\Validator::class);
 
         $this->_cache = $this->getMockForAbstractClass(\Magento\Framework\Cache\FrontendInterface::class);
+
+        $this->_serializer = $this->getMockForAbstractClass(\Magento\Framework\Serialize\SerializerInterface::class);
 
         $this->_theme = $this->createMock(\Magento\Theme\Model\Theme::class);
         $this->_theme->expects($this->any())->method('isPhysical')->will($this->returnValue(true));
@@ -140,6 +148,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
                 'resource' => $this->_resource,
                 'appState' => $this->_appState,
                 'cache' => $this->_cache,
+                'serializer' => $this->_serializer,
                 'theme' => $this->_theme,
                 'validator' => $this->_layoutValidator,
                 'logger' => $this->_logger,
@@ -276,9 +285,16 @@ class MergeTest extends \PHPUnit\Framework\TestCase
 
     public function testLoadCache()
     {
+        $cacheValue = [
+            "pageLayout" => "1column",
+            "layout"     => self::FIXTURE_LAYOUT_XML
+        ];
+
         $this->_cache->expects($this->at(0))->method('load')
-            ->with('LAYOUT_area_STORE20_100c6a4ccd050e33acef0553f24ef399961')
-            ->will($this->returnValue(self::FIXTURE_LAYOUT_XML));
+            ->with('LAYOUT_area_STORE20_100c6a4ccd050e33acef0553f24ef399961_page_layout_merged')
+            ->will($this->returnValue(json_encode($cacheValue)));
+
+        $this->_serializer->expects($this->once())->method('unserialize')->willReturn($cacheValue);
 
         $this->assertEmpty($this->_model->getHandles());
         $this->assertEmpty($this->_model->asString());
@@ -424,8 +440,10 @@ class MergeTest extends \PHPUnit\Framework\TestCase
             ->method('isValid')
             ->willThrowException(new \Exception('Layout is invalid.'));
 
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $suffix = md5(implode('|', $this->_model->getHandles()));
-        $cacheId = "LAYOUT_{$this->_theme->getArea()}_STORE{$this->scope->getId()}_{$this->_theme->getId()}{$suffix}";
+        $cacheId = "LAYOUT_{$this->_theme->getArea()}_STORE{$this->scope->getId()}"
+            . "_{$this->_theme->getId()}{$suffix}_page_layout_merged";
         $messages = $this->_layoutValidator->getMessages();
 
         // Testing error message is logged with logger

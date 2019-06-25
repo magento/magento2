@@ -18,6 +18,7 @@ use Magento\Framework\Phrase;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -221,6 +222,7 @@ abstract class AbstractDb extends AbstractResource
 
     /**
      * Set main entity table name and primary key field name
+     *
      * If field name is omitted {table_name}_id will be used
      *
      * @param string $mainTable
@@ -254,8 +256,7 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
-     * Returns main table name - extracted from "module/table" style and
-     * validated by db adapter
+     * Returns main table name - extracted from "module/table" style and validated by db adapter
      *
      * @throws LocalizedException
      * @return string
@@ -536,6 +537,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return array
+     * @throws LocalizedException
      */
     protected function _prepareDataForSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -543,11 +545,11 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
-     * Check that model data fields that can be saved
-     * has really changed comparing with origData
+     * Check that model data fields that can be saved has really changed comparing with origData
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return bool
+     * @throws LocalizedException
      */
     public function hasDataChanged($object)
     {
@@ -729,6 +731,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return array
+     * @throws LocalizedException
      */
     protected function prepareDataForUpdate($object)
     {

@@ -218,7 +218,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
      *
      * @return ReflectionGenerator
      *
-     * @deprecated 102.0.1
+     * @deprecated 102.0.2
      */
     private function getReflectionGenerator()
     {

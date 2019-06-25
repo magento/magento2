@@ -129,16 +129,6 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         return [
             ['data 1' => [
                 ['type', null, ''],
-                ['text', null, sprintf('<javascript>%s</javascript>', self::MALICIOUS_TEXT)],
-                ['styles', null, ''],
-            ]],
-            ['data 2' => [
-                ['type', null, ''],
-                ['text', null, sprintf('<iframe>%s</iframe>', self::MALICIOUS_TEXT)],
-                ['styles', null, ''],
-            ]],
-            ['data 3' => [
-                ['type', null, ''],
                 ['text', null, self::MALICIOUS_TEXT],
                 ['styles', null, ''],
             ]],

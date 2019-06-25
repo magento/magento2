@@ -2155,7 +2155,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function createTemporaryTable(\Magento\Framework\DB\Ddl\Table $table)
     {
-        $columns = $table->getColumns();
         $sqlFragment    = array_merge(
             $this->_getColumnsDefinition($table),
             $this->_getIndexesDefinition($table),
