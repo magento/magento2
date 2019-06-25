@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model;
 
-use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Paypal\Model\Config;
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
 
 /**
@@ -15,33 +15,14 @@ use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
  */
 class PayflowLinkAdditionalDataProvider implements AdditionalDataProviderInterface
 {
-
-    private const PATH_ADDITIONAL_DATA = 'input/payment_method/additional_data/payflow_link';
-
-    /**
-     * @var ArrayManager
-     */
-    private $arrayManager;
-
-    /**
-     * @param ArrayManager $arrayManager
-     */
-    public function __construct(
-        ArrayManager $arrayManager
-    ) {
-        $this->arrayManager = $arrayManager;
-    }
-
     /**
      * Returns additional data
      *
-     * @param array $args
+     * @param array $data
      * @return array
      */
-    public function getData(array $args): array
+    public function getData(array $data): array
     {
-        $additionalData = $this->arrayManager->get(self::PATH_ADDITIONAL_DATA, $args) ?? [];
-
-        return $additionalData;
+        return $data[Config::METHOD_PAYFLOWLINK] ?? [];
     }
 }
