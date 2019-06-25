@@ -76,7 +76,7 @@ class Time extends AbstractElement
         }
         $html .= '</select>' . "\n";
 
-        $html .= ':&nbsp;<select name="' . $this->getName() . '" style="width:80px" '
+        $html .= '<span class="time-separator">:&nbsp;</span><select name="' . $this->getName() . '" style="width:80px" '
             . $this->serialize($this->getHtmlAttributes())
             . $this->_getUiId('minute') . '>' . "\n";
         for ($i = 0; $i < 60; $i++) {
@@ -86,7 +86,7 @@ class Time extends AbstractElement
         }
         $html .= '</select>' . "\n";
 
-        $html .= ':&nbsp;<select name="' . $this->getName() . '" style="width:80px" '
+        $html .= '<span class="time-separator">:&nbsp;</span><select name="' . $this->getName() . '" style="width:80px" '
             . $this->serialize($this->getHtmlAttributes())
             . $this->_getUiId('second') . '>' . "\n";
         for ($i = 0; $i < 60; $i++) {
