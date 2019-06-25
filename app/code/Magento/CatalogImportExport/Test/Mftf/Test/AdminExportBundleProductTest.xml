@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminExportBundleProductTest">
+        <annotations>
+            <features value="CatalogImportExport"/>
+            <stories value="Export products"/>
+            <title value="Export Bundle Product"/>
+            <description value="Admin should be able to export Bundle Product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14008"/>
+            <group value="catalog_import_export"/>
+            <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-15934"/>
+            </skip>
+        </annotations>
+        <before>
+            <!--Create bundle product with dynamic price with two simple products -->
+            <createData entity="SimpleProduct2" stepKey="firstSimpleProductForDynamic"/>
+            <createData entity="SimpleProduct2" stepKey="secondSimpleProductForDynamic"/>
+            <createData entity="ApiBundleProduct" stepKey="createDynamicBundleProduct"/>
+            <createData entity="DropDownBundleOption" stepKey="createFirstBundleOption">
+                <requiredEntity createDataKey="createDynamicBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="firstLinkOptionToDynamicProduct">
+                <requiredEntity createDataKey="createDynamicBundleProduct"/>
+                <requiredEntity createDataKey="createFirstBundleOption"/>
+                <requiredEntity createDataKey="firstSimpleProductForDynamic"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="secondLinkOptionToDynamicProduct">
+                <requiredEntity createDataKey="createDynamicBundleProduct"/>
+                <requiredEntity createDataKey="createFirstBundleOption"/>
+                <requiredEntity createDataKey="secondSimpleProductForDynamic"/>
+            </createData>
+
+            <!-- Create bundle product with fixed price with two simple products -->
+            <createData entity="SimpleProduct2" stepKey="firstSimpleProductForFixed"/>
+            <createData entity="SimpleProduct2" stepKey="secondSimpleProductForFixed"/>
+            <createData entity="ApiFixedBundleProduct" stepKey="createFixedBundleProduct"/>
+            <createData entity="DropDownBundleOption" stepKey="createSecondBundleOption">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="firstLinkOptionToFixedProduct">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createSecondBundleOption"/>
+                <requiredEntity createDataKey="firstSimpleProductForFixed"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="secondLinkOptionToFixedProduct">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createSecondBundleOption"/>
+                <requiredEntity createDataKey="secondSimpleProductForFixed"/>
+            </createData>
+
+            <!-- Create bundle product with custom textarea attribute with two simple products -->
+            <createData entity="productAttributeWysiwyg" stepKey="createProductAttribute"/>
+            <createData entity="AddToDefaultSet" stepKey="addToDefaultAttributeSet">
+                <requiredEntity createDataKey="createProductAttribute"/>
+            </createData>
+            <createData entity="ApiFixedBundleProduct" stepKey="createFixedBundleProductWithAttribute">
+                <requiredEntity createDataKey="addToDefaultAttributeSet"/>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="firstSimpleProductForFixedWithAttribute"/>
+            <createData entity="SimpleProduct2" stepKey="secondSimpleProductForFixedWithAttribute"/>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOptionWithAttribute">
+                <requiredEntity createDataKey="createFixedBundleProductWithAttribute"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="firstLinkOptionToFixedProductWithAttribute">
+                <requiredEntity createDataKey="createFixedBundleProductWithAttribute"/>
+                <requiredEntity createDataKey="createBundleOptionWithAttribute"/>
+                <requiredEntity createDataKey="firstSimpleProductForFixedWithAttribute"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="secondLinkOptionToFixedProductWithAttribute">
+                <requiredEntity createDataKey="createFixedBundleProductWithAttribute"/>
+                <requiredEntity createDataKey="createBundleOptionWithAttribute"/>
+                <requiredEntity createDataKey="secondSimpleProductForFixedWithAttribute"/>
+            </createData>
+
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Run cron twice -->
+            <magentoCLI command="cron:run" stepKey="runCron1"/>
+            <magentoCLI command="cron:run" stepKey="runCron2"/>
+        </before>
+        <after>
+            <!-- Delete exported file -->
+            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile">
+                <argument name="rowIndex" value="0"/>
+            </actionGroup>
+
+            <!-- Delete products creations -->
+            <deleteData createDataKey="createDynamicBundleProduct" stepKey="deleteDynamicBundleProduct"/>
+            <deleteData createDataKey="firstSimpleProductForDynamic" stepKey="deleteFirstSimpleProductForDynamic"/>
+            <deleteData createDataKey="secondSimpleProductForDynamic" stepKey="deleteSecondSimpleProductForDynamic"/>
+            <deleteData createDataKey="createFixedBundleProduct" stepKey="deleteFixedBundleProduct"/>
+            <deleteData createDataKey="firstSimpleProductForFixed" stepKey="deleteFirstSimpleProductForFixed"/>
+            <deleteData createDataKey="secondSimpleProductForFixed" stepKey="deleteSecondSimpleProductForFixed"/>
+            <deleteData createDataKey="createFixedBundleProductWithAttribute" stepKey="deleteFixedBundleProductWithAttribute"/>
+            <deleteData createDataKey="firstSimpleProductForFixedWithAttribute" stepKey="deleteFirstSimpleProductForFixedWithAttribute"/>
+            <deleteData createDataKey="secondSimpleProductForFixedWithAttribute" stepKey="deleteSecondSimpleProductForFixedWithAttribute"/>
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
+
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Go to export page -->
+        <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
+
+        <!-- Export created below products -->
+        <actionGroup ref="exportAllProducts" stepKey="exportCreatedProducts"/>
+
+        <!-- Run cron -->
+        <magentoCLI command="cron:run" stepKey="runCron3"/>
+
+        <!-- Download product -->
+        <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
+    </test>
+</tests>

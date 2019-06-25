@@ -66,6 +66,11 @@ Disallow: /*SID=
             <static>
                 <sign>1</sign>
             </static>
+            <dev>
+                <js>
+                    <move_script_to_bottom>0</move_script_to_bottom>
+                </js>
+            </dev>
         </dev>
     </default>
 </config>

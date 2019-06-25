@@ -9,7 +9,7 @@ namespace Magento\Framework\MessageQueue;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * @deprecated 102.0.1
+ * @deprecated 102.0.2
  */
 interface ConfigInterface
 {

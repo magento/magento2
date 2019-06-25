@@ -9,7 +9,7 @@ namespace Magento\Framework\MessageQueue\Bulk;
  * Factory class for @see \Magento\Framework\MessageQueue\Bulk\ExchangeInterface
  *
  * @api
- * @since 102.0.1
+ * @since 102.0.2
  */
 interface ExchangeFactoryInterface
 {
@@ -21,7 +21,7 @@ interface ExchangeFactoryInterface
      * @return ExchangeInterface
      * @throws \LogicException If exchange is not defined for the specified connection type
      *                          or it doesn't implement ExchangeInterface
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function create($connectionName, array $data = []);
 }

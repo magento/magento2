@@ -17,4 +17,9 @@
         <click selector="{{StorefrontHeaderSection.storeViewOption(storeView.code)}}" stepKey="clickSelectStoreView"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
+
+    <actionGroup name="StorefrontSwitchDefaultStoreViewActionGroup" extends="StorefrontSwitchStoreViewActionGroup">
+        <remove keyForRemoval="clickSelectStoreView"/>
+        <click selector="{{StorefrontHeaderSection.storeViewOption('default')}}" stepKey="clickSelectDefaultStoreView" after="waitForStoreViewDropdown"/>
+    </actionGroup>
 </actionGroups>

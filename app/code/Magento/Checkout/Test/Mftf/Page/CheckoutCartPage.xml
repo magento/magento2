@@ -11,5 +11,6 @@
     <page name="CheckoutCartPage" url="/checkout/cart" module="Magento_Checkout" area="storefront">
         <section name="CheckoutCartProductSection"/>
         <section name="CheckoutCartSummarySection"/>
+        <section name="CheckoutCartCrossSellSection"/>
     </page>
 </pages>

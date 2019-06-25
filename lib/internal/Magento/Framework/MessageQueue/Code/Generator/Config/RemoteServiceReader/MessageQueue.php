@@ -11,7 +11,7 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 /**
  * Remote service configuration reader.
  *
- * @deprecated 102.0.1
+ * @deprecated 102.0.2
  */
 class MessageQueue implements \Magento\Framework\Config\ReaderInterface
 {

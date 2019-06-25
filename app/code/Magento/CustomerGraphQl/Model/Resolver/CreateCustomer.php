@@ -7,16 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\CustomerGraphQl\Model\Customer\ChangeSubscriptionStatus;
-use Magento\CustomerGraphQl\Model\Customer\CreateAccount;
-use Magento\CustomerGraphQl\Model\Customer\CustomerDataProvider;
-use Magento\CustomerGraphQl\Model\Customer\SetUpUserContext;
-use Magento\Framework\Exception\State\InputMismatchException;
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\CustomerGraphQl\Model\Customer\CreateCustomerAccount;
+use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Validator\Exception as ValidatorException;
 
 /**
  * Create customer account resolver
@@ -24,41 +21,25 @@ use Magento\Framework\Validator\Exception as ValidatorException;
 class CreateCustomer implements ResolverInterface
 {
     /**
-     * @var CustomerDataProvider
+     * @var ExtractCustomerData
      */
-    private $customerDataProvider;
+    private $extractCustomerData;
 
     /**
-     * @var ChangeSubscriptionStatus
+     * @var CreateCustomerAccount
      */
-    private $changeSubscriptionStatus;
+    private $createCustomerAccount;
 
     /**
-     * @var CreateAccount
-     */
-    private $createAccount;
-
-    /**
-     * @var SetUpUserContext
-     */
-    private $setUpUserContext;
-
-    /**
-     * @param CustomerDataProvider $customerDataProvider
-     * @param ChangeSubscriptionStatus $changeSubscriptionStatus
-     * @param SetUpUserContext $setUpUserContext
-     * @param CreateAccount $createAccount
+     * @param ExtractCustomerData $extractCustomerData
+     * @param CreateCustomerAccount $createCustomerAccount
      */
     public function __construct(
-        CustomerDataProvider $customerDataProvider,
-        ChangeSubscriptionStatus $changeSubscriptionStatus,
-        SetUpUserContext $setUpUserContext,
-        CreateAccount $createAccount
+        ExtractCustomerData $extractCustomerData,
+        CreateCustomerAccount $createCustomerAccount
     ) {
-        $this->customerDataProvider = $customerDataProvider;
-        $this->changeSubscriptionStatus = $changeSubscriptionStatus;
-        $this->createAccount = $createAccount;
-        $this->setUpUserContext = $setUpUserContext;
+        $this->extractCustomerData = $extractCustomerData;
+        $this->createCustomerAccount = $createCustomerAccount;
     }
 
     /**
@@ -74,22 +55,13 @@ class CreateCustomer implements ResolverInterface
         if (!isset($args['input']) || !is_array($args['input']) || empty($args['input'])) {
             throw new GraphQlInputException(__('"input" value should be specified'));
         }
-        try {
-            $customer = $this->createAccount->execute($args);
-            $customerId = (int)$customer->getId();
-            $this->setUpUserContext->execute($context, $customer);
-            if (array_key_exists('is_subscribed', $args['input'])) {
-                if ($args['input']['is_subscribed']) {
-                    $this->changeSubscriptionStatus->execute($customerId, true);
-                }
-            }
-            $data = $this->customerDataProvider->getCustomerById($customerId);
-        } catch (ValidatorException $e) {
-            throw new GraphQlInputException(__($e->getMessage()));
-        } catch (InputMismatchException $e) {
-            throw new GraphQlInputException(__($e->getMessage()));
-        }
 
+        $customer = $this->createCustomerAccount->execute($args['input']);
+
+        $context->setUserId((int)$customer->getId());
+        $context->setUserType(UserContextInterface::USER_TYPE_CUSTOMER);
+
+        $data = $this->extractCustomerData->execute($customer);
         return ['customer' => $data];
     }
 }

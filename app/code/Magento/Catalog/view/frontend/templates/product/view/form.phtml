@@ -22,7 +22,7 @@
         <input type="hidden" name="product" value="<?= /* @escapeNotVerified */ $_product->getId() ?>" />
         <input type="hidden" name="selected_configurable_option" value="" />
         <input type="hidden" name="related_product" id="related-products-field" value="" />
-        <input type="hidden" name="item"  value="<?= /* @noEscape */ $block->getRequest()->getParam('id') ?>" />
+        <input type="hidden" name="item"  value="<?= $block->escapeHtmlAttr($block->getRequest()->getParam('id')) ?>" />
         <?= $block->getBlockHtml('formkey') ?>
         <?= $block->getChildHtml('form_top') ?>
         <?php if (!$block->hasOptions()):?>

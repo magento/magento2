@@ -10,5 +10,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminHeaderSection">
         <element name="pageTitle" type="text" selector=".page-header h1.page-title"/>
+        <element name="adminUserAccountText" type="text" selector=".page-header .admin-user-account-text" />
     </section>
 </sections>

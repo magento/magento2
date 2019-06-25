@@ -8,185 +8,12 @@ type Query {
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
         sort: ProductSortInput @doc(description: "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.")
-     ): Products
-     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes")
+    ): Products
+    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Identity")
     category (
         id: Int @doc(description: "Id of the category")
     ): CategoryTree
-    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree")
-}
-
-enum CurrencyEnum @doc(description: "The list of available currency codes") {
-    AFN
-    ALL
-    AZN
-    DZD
-    AOA
-    ARS
-    AMD
-    AWG
-    AUD
-    BSD
-    BHD
-    BDT
-    BBD
-    BYR
-    BZD
-    BMD
-    BTN
-    BOB
-    BAM
-    BWP
-    BRL
-    GBP
-    BND
-    BGN
-    BUK
-    BIF
-    KHR
-    CAD
-    CVE
-    CZK
-    KYD
-    GQE
-    CLP
-    CNY
-    COP
-    KMF
-    CDF
-    CRC
-    HRK
-    CUP
-    DKK
-    DJF
-    DOP
-    XCD
-    EGP
-    SVC
-    ERN
-    EEK
-    ETB
-    EUR
-    FKP
-    FJD
-    GMD
-    GEK
-    GEL
-    GHS
-    GIP
-    GTQ
-    GNF
-    GYD
-    HTG
-    HNL
-    HKD
-    HUF
-    ISK
-    INR
-    IDR
-    IRR
-    IQD
-    ILS
-    JMD
-    JPY
-    JOD
-    KZT
-    KES
-    KWD
-    KGS
-    LAK
-    LVL
-    LBP
-    LSL
-    LRD
-    LYD
-    LTL
-    MOP
-    MKD
-    MGA
-    MWK
-    MYR
-    MVR
-    LSM
-    MRO
-    MUR
-    MXN
-    MDL
-    MNT
-    MAD
-    MZN
-    MMK
-    NAD
-    NPR
-    ANG
-    YTL
-    NZD
-    NIC
-    NGN
-    KPW
-    NOK
-    OMR
-    PKR
-    PAB
-    PGK
-    PYG
-    PEN
-    PHP
-    PLN
-    QAR
-    RHD
-    RON
-    RUB
-    RWF
-    SHP
-    STD
-    SAR
-    RSD
-    SCR
-    SLL
-    SGD
-    SKK
-    SBD
-    SOS
-    ZAR
-    KRW
-    LKR
-    SDG
-    SRD
-    SZL
-    SEK
-    CHF
-    SYP
-    TWD
-    TJS
-    TZS
-    THB
-    TOP
-    TTD
-    TND
-    TMM
-    USD
-    UGX
-    UAH
-    AED
-    UYU
-    UZS
-    VUV
-    VEB
-    VEF
-    VND
-    CHE
-    CHW
-    XOF
-    WST
-    YER
-    ZMK
-    ZWD
-    TRY
-    AZM
-    ROL
-    TRL
-    XPF
+    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "The category query searches for categories that match the criteria specified in the search and filter attributes") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
 }
 
 type Price @doc(description: "The Price object defines the price of a product as well as any tax-related adjustments.") {
@@ -212,11 +39,6 @@ enum PriceTypeEnum @doc(description: "This enumeration the price type.") {
     FIXED
     PERCENT
     DYNAMIC
-}
-
-type Money @doc(description: "A Money object defines a monetary value, including a numeric value and a currency code.") {
-    value: Float @doc(description: "A number expressing a monetary value")
-    currency: CurrencyEnum @doc(description: "A three-letter currency code, such as USD or EUR")
 }
 
 type ProductPrices @doc(description: "The ProductPrices object contains the regular price of an item, as well as its minimum and maximum prices. Only composite products, which include bundle, configurable, and grouped products, can contain a minimum and maximum price.") {
@@ -275,7 +97,7 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     price: ProductPrices @doc(description: "A ProductPrices object, indicating the price of an item") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
     gift_message_available: String @doc(description: "Indicates whether a gift message is available")
     manufacturer: Int @doc(description: "A number representing the product's manufacturer")
-    categories: [CategoryInterface] @doc(description: "The categories assigned to a product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories")
+    categories: [CategoryInterface] @doc(description: "The categories assigned to a product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
     canonical_url: String @doc(description: "Canonical URL") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CanonicalUrl")
 }
 
@@ -315,6 +137,19 @@ type CustomizableDropDownOption implements CustomizableOptionInterface @doc(desc
 }
 
 type CustomizableDropDownValue @doc(description: "CustomizableDropDownValue defines the price and sku of a product whose page contains a customized drop down menu") {
+    option_type_id: Int @doc(description: "The ID assigned to the value")
+    price: Float @doc(description: "The price assigned to this option")
+    price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC")
+    sku: String @doc(description: "The Stock Keeping Unit for this option")
+    title: String @doc(description: "The display name for this option")
+    sort_order: Int @doc(description: "The order in which the option is displayed")
+}
+
+type CustomizableMultipleOption implements CustomizableOptionInterface @doc(description: "CustomizableMultipleOption contains information about a multiselect that is defined as part of a customizable option") {
+    value: [CustomizableMultipleValue] @doc(description: "An array that defines the set of options for a multiselect")
+}
+
+type CustomizableMultipleValue @doc(description: "CustomizableMultipleValue defines the price and sku of a product whose page contains a customized multiselect") {
     option_type_id: Int @doc(description: "The ID assigned to the value")
     price: Float @doc(description: "The price assigned to this option")
     price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC")
@@ -383,7 +218,7 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
         sort: ProductSortInput @doc(description: "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.")
-    ): CategoryProducts @doc(description: "The list of products assigned to the category") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Products")
+    ): CategoryProducts @doc(description: "The list of products assigned to the category") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Identity") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Products")
     breadcrumbs: [Breadcrumb] @doc(description: "Breadcrumbs, parent categories info") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Breadcrumbs")
 }
 
@@ -398,13 +233,26 @@ type CustomizableRadioOption implements CustomizableOptionInterface @doc(descrip
     value: [CustomizableRadioValue] @doc(description: "An array that defines a set of radio buttons")
 }
 
-type CustomizableRadioValue  @doc(description: "CustomizableRadioValue defines the price and sku of a product whose page contains a customized set of radio buttons") {
+type CustomizableRadioValue @doc(description: "CustomizableRadioValue defines the price and sku of a product whose page contains a customized set of radio buttons") {
     option_type_id: Int @doc(description: "The ID assigned to the value")
     price: Float @doc(description: "The price assigned to this option")
     price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC")
     sku: String @doc(description: "The Stock Keeping Unit for this option")
     title: String @doc(description: "The display name for this option")
     sort_order: Int @doc(description: "The order in which the radio button is displayed")
+}
+
+type CustomizableCheckboxOption implements CustomizableOptionInterface @doc(description: "CustomizableCheckbbixOption contains information about a set of checkbox values that are defined as part of a customizable option") {
+    value: [CustomizableCheckboxValue] @doc(description: "An array that defines a set of checkbox values")
+}
+
+type CustomizableCheckboxValue @doc(description: "CustomizableCheckboxValue defines the price and sku of a product whose page contains a customized set of checkbox values") {
+    option_type_id: Int @doc(description: "The ID assigned to the value")
+    price: Float @doc(description: "The price assigned to this option")
+    price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC")
+    sku: String @doc(description: "The Stock Keeping Unit for this option")
+    title: String @doc(description: "The display name for this option")
+    sort_order: Int @doc(description: "The order in which the checkbox value is displayed")
 }
 
 type VirtualProduct implements ProductInterface, CustomizableProductInterface @doc(description: "A virtual product is non-tangible product that does not require shipping and is not kept in inventory") {
@@ -434,7 +282,7 @@ input ProductFilterInput @doc(description: "ProductFilterInput defines the filte
     description: FilterTypeInput @doc(description: "Detailed information about the product. The value can include simple HTML tags.")
     short_description: FilterTypeInput @doc(description: "A short description of the product. Its use depends on the theme.")
     price: FilterTypeInput @doc(description: "The price of an item")
-    special_price: FilterTypeInput @doc(description: "The discounted price of the product")
+    special_price: FilterTypeInput @doc(description: "The discounted price of the product. Do not include the currency code.")
     special_from_date: FilterTypeInput @doc(description: "The beginning date that a product has a special price")
     special_to_date: FilterTypeInput @doc(description: "The end date that a product has a special price")
     weight: FilterTypeInput @doc(description: "The weight of the item, in units defined by the store")
@@ -451,7 +299,6 @@ input ProductFilterInput @doc(description: "ProductFilterInput defines the filte
     custom_layout_update: FilterTypeInput @doc(description: "XML code that is applied as a layout update to the product page")
     min_price: FilterTypeInput @doc(description:"The numeric minimal price of the product. Do not include the currency code.")
     max_price: FilterTypeInput @doc(description:"The numeric maximal price of the product. Do not include the currency code.")
-    special_price: FilterTypeInput @doc(description:"The numeric special price of the product. Do not include the currency code.")
     category_id: FilterTypeInput @doc(description: "Category ID the product belongs to")
     options_container: FilterTypeInput @doc(description: "If the product has multiple options, determines where they appear on the product page")
     required_options: FilterTypeInput @doc(description: "Indicates whether the product has required options")
@@ -482,7 +329,7 @@ type ProductMediaGalleryEntriesVideoContent @doc(description: "ProductMediaGalle
     video_metadata: String @doc(description: "Optional data about the video")
 }
 
-input ProductSortInput  @doc(description: "ProductSortInput specifies the attribute to use for sorting search results and indicates whether the results are sorted in ascending or descending order") {
+input ProductSortInput @doc(description: "ProductSortInput specifies the attribute to use for sorting search results and indicates whether the results are sorted in ascending or descending order") {
     name: SortEnum @doc(description: "The product name. Customers use this name to identify the product.")
     sku: SortEnum @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer")
     description: SortEnum @doc(description: "Detailed information about the product. The value can include simple HTML tags.")
@@ -516,7 +363,7 @@ input ProductSortInput  @doc(description: "ProductSortInput specifies the attrib
     gift_message_available: SortEnum @doc(description: "Indicates whether a gift message is available")
 }
 
-type MediaGalleryEntry  @doc(description: "MediaGalleryEntry defines characteristics about images and videos associated with a specific product") {
+type MediaGalleryEntry @doc(description: "MediaGalleryEntry defines characteristics about images and videos associated with a specific product") {
     id: Int @doc(description: "The identifier assigned to the object")
     media_type: String @doc(description: "image or video")
     label: String @doc(description: "The alt text displayed on the UI when the user points to the image")

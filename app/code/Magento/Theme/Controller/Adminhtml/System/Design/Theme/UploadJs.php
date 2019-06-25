@@ -4,19 +4,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
+
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * Class UploadJs
  * @deprecated 101.0.0
  */
-class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
+class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme implements HttpGetActionInterface
 {
     /**
      * Upload js file
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
@@ -50,6 +52,7 @@ class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
                 \Magento\Framework\View\Design\Theme\Customization\File\Js::TYPE
             );
             $result = ['error' => false, 'files' => $customization->generateFileInfo($customJsFiles)];
+            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {

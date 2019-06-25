@@ -96,7 +96,7 @@ class Communication implements \Magento\Framework\Config\ReaderInterface
      * @param string $methodName
      * @return string
      *
-     * @deprecated 102.0.1
+     * @deprecated 102.0.2
      * @see \Magento\Framework\Communication\Config\ReflectionGenerator::generateTopicName
      */
     public function generateTopicName($typeName, $methodName)

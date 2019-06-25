@@ -191,4 +191,84 @@
         <data key="default_billing">true</data>
         <data key="default_shipping">false</data>
     </entity>
+    <entity name="addressNoZipNoState" type="address">
+        <data key="country_id">United Kingdom</data>
+        <array key="street">
+            <item>3962 Horner Street</item>
+        </array>
+        <data key="company">Magento</data>
+        <data key="telephone">334-200-4061</data>
+        <data key="city">London</data>
+        <data key="firstname">Fn</data>
+        <data key="lastname">Ln</data>
+        <data key="middlename">Mn</data>
+        <data key="prefix">Mr</data>
+        <data key="suffix">Sr</data>
+        <data key="vat_id">U1234567891</data>
+        <data key="default_shipping">true</data>
+        <data key="default_billing">true</data>
+    </entity>
+    <entity name="updateCustomerUKAddress" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <data key="telephone">0123456789-02134567</data>
+        <array key="street">
+            <item>172, Westminster Bridge Rd</item>
+            <item>7700 xyz street</item>
+        </array>
+        <data key="country_id">GB</data>
+        <data key="country">United Kingdom</data>
+        <data key="city">London</data>
+        <!-- State not required for UK address on frontend-->
+        <data key="state"> </data>
+        <data key="postcode">12345</data>
+    </entity>
+    <entity name="updateCustomerFranceAddress" type="address">
+        <data key="firstname">Jaen</data>
+        <data key="lastname">Reno</data>
+        <data key="company">Magento</data>
+        <data key="telephone">555-888-111-999</data>
+        <array key="street">
+            <item>18-20 Rue Maréchal Lecler</item>
+            <item>18-20 Rue Maréchal Lecler</item>
+        </array>
+        <data key="country_id">FR</data>
+        <data key="country">France</data>
+        <data key="city">Quintin</data>
+        <data key="state">Côtes-d'Armor</data>
+        <data key="postcode">12345</data>
+    </entity>
+    <entity name="updateCustomerNoXSSInjection" type="address">
+        <data key="firstname">Jany</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <data key="telephone">555-888-111-999</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+            <item>7700 West Parmer Lane</item>
+        </array>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="city">Denver</data>
+        <data key="state">Colorado</data>
+        <data key="postcode">12345</data>
+    </entity>
+    <entity name="PolandAddress" type="address">
+        <data key="firstname">Mag</data>
+        <data key="lastname">Ento</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>Piwowarska 6</item>
+        </array>
+        <data key="city">Bielsko-Biała</data>
+        <data key="state"> Bielsko</data>
+        <data key="country_id">PL</data>
+        <data key="country">Poland</data>
+        <data key="postcode">43-310</data>
+        <data key="telephone">799885616</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionUT</requiredEntity>
+    </entity>
 </entities>

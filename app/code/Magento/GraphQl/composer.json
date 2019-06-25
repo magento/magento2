@@ -5,12 +5,12 @@
     "require": {
         "php": "~7.1.3||~7.2.0",
         "magento/module-authorization": "100.3.*",
-        "magento/module-store": "101.0.*",
         "magento/module-eav": "102.0.*",
         "magento/framework": "102.0.*"
     },
     "suggest": {
-        "magento/module-webapi": "100.3.*"
+        "magento/module-webapi": "100.3.*",
+        "magento/module-graph-ql-cache": "100.3.*"
     },
     "license": [
         "OSL-3.0",
@@ -24,5 +24,5 @@
             "Magento\\GraphQl\\": ""
         }
     },
-    "version": "100.3.1"
+    "version": "100.3.2"
 }

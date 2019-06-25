@@ -14,7 +14,7 @@ use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
  * Publishers pool.
  *
  * @api
- * @since 102.0.1
+ * @since 102.0.2
  */
 class PublisherPool implements PublisherInterface, BulkPublisherInterface
 {
@@ -35,7 +35,7 @@ class PublisherPool implements PublisherInterface, BulkPublisherInterface
      * Publisher objects pool.
      *
      * @var \Magento\Framework\MessageQueue\PublisherInterface[]
-     * @since 102.0.1
+     * @since 102.0.2
      */
     protected $publishers = [];
 
@@ -43,7 +43,7 @@ class PublisherPool implements PublisherInterface, BulkPublisherInterface
      * Communication config.
      *
      * @var CommunicationConfig
-     * @since 102.0.1
+     * @since 102.0.2
      */
     protected $communicationConfig;
 
@@ -77,7 +77,7 @@ class PublisherPool implements PublisherInterface, BulkPublisherInterface
 
     /**
      * {@inheritdoc}
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function publish($topicName, $data)
     {
@@ -162,7 +162,7 @@ class PublisherPool implements PublisherInterface, BulkPublisherInterface
      *
      * @return PublisherConfig
      *
-     * @deprecated 102.0.1
+     * @deprecated 102.0.2
      */
     private function getPublisherConfig()
     {
@@ -177,7 +177,7 @@ class PublisherPool implements PublisherInterface, BulkPublisherInterface
      *
      * @return ConnectionTypeResolver
      *
-     * @deprecated 102.0.1
+     * @deprecated 102.0.2
      */
     private function getConnectionTypeResolver()
     {

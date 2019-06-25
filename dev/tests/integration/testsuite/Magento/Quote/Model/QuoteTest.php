@@ -98,6 +98,9 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $customer = $quote->getCustomer();
         $this->assertEquals($expected, $this->convertToArray($customer));
         $this->assertEquals('qa@example.com', $quote->getCustomerEmail());
+        $this->assertEquals('Joe', $quote->getCustomerFirstname());
+        $this->assertEquals('Dou', $quote->getCustomerLastname());
+        $this->assertEquals('Ivan', $quote->getCustomerMiddlename());
     }
 
     /**

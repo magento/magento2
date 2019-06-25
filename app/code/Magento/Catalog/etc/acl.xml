@@ -11,8 +11,12 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Catalog::catalog" title="Catalog" translate="title" sortOrder="30">
                     <resource id="Magento_Catalog::catalog_inventory" title="Inventory" translate="title" sortOrder="10">
-                        <resource id="Magento_Catalog::products" title="Products" translate="title" sortOrder="10" />
-                        <resource id="Magento_Catalog::categories" title="Categories" translate="title" sortOrder="20" />
+                        <resource id="Magento_Catalog::products" title="Products" translate="title" sortOrder="10">
+                            <resource id="Magento_Catalog::edit_product_design" title="Edit Product Design" translate="title" />
+                        </resource>
+                        <resource id="Magento_Catalog::categories" title="Categories" translate="title" sortOrder="20">
+                            <resource id="Magento_Catalog::edit_category_design" title="Edit Category Design" translate="title" />
+                        </resource>
                     </resource>
                 </resource>
                 <resource id="Magento_Backend::stores">

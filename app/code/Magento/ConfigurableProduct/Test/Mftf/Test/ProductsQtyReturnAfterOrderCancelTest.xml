@@ -76,7 +76,6 @@
         <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQunatity"/>
         <waitForPageLoad stepKey="waitPageToBeLoaded"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForPageLoad stepKey="waitForSuccessMessageLoad"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <waitForPageLoad stepKey="waitOrderDetailToLoad"/>
         <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="1" stepKey="changeItemQtyToShip"/>

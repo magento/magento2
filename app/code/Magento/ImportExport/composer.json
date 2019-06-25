@@ -12,7 +12,8 @@
         "magento/module-catalog": "103.0.*",
         "magento/module-eav": "102.0.*",
         "magento/module-media-storage": "100.3.*",
-        "magento/module-store": "101.0.*"
+        "magento/module-store": "101.0.*",
+        "magento/module-ui": "101.1.*"
     },
     "type": "magento2-module",
     "license": [
@@ -27,5 +28,5 @@
             "Magento\\ImportExport\\": ""
         }
     },
-    "version": "100.3.1"
+    "version": "100.3.2"
 }

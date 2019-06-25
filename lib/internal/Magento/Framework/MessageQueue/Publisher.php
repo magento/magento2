@@ -109,7 +109,7 @@ class Publisher implements PublisherInterface
      *
      * @return PublisherConfig
      *
-     * @deprecated 102.0.1
+     * @deprecated 102.0.2
      */
     private function getPublisherConfig()
     {
@@ -124,7 +124,7 @@ class Publisher implements PublisherInterface
      *
      * @return AmqpConfig
      *
-     * @deprecated 100.2.0 102.0.1
+     * @deprecated 100.2.0 102.0.2
      */
     private function getAmqpConfig()
     {

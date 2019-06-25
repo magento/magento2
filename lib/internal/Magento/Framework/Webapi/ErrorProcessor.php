@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Webapi;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -173,7 +175,6 @@ class ErrorProcessor
      * @param \Exception $exception
      * @param int $httpCode
      * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function renderException(\Exception $exception, $httpCode = self::DEFAULT_ERROR_HTTP_CODE)
     {
@@ -189,6 +190,7 @@ class ErrorProcessor
                 $httpCode
             );
         }
+        // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
         exit;
     }
 
@@ -233,6 +235,7 @@ class ErrorProcessor
             header('HTTP/1.1 ' . ($httpCode ? $httpCode : self::DEFAULT_ERROR_HTTP_CODE));
             header('Content-Type: ' . $mimeType . '; charset=' . self::DEFAULT_RESPONSE_CHARSET);
         }
+        // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
         echo $output;
     }
 

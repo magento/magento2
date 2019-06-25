@@ -26,7 +26,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         
-        <actionGroup ref="navigateToNewOrderPageNewCustomerSingleStore" stepKey="openNewOrder"/>
+        <actionGroup ref="navigateToNewOrderPageNewCustomer" stepKey="openNewOrder"/>
         <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="Retailer" stepKey="selectCustomerGroup"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <grabValueFrom selector="{{AdminOrderFormAccountSection.group}}" stepKey="grabGroupValue"/>

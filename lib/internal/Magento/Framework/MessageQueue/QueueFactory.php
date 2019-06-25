@@ -9,7 +9,7 @@ namespace Magento\Framework\MessageQueue;
  * Factory class for @see \Magento\Framework\MessageQueue\Queuenterface
  *
  * @api
- * @since 102.0.1
+ * @since 102.0.2
  */
 class QueueFactory implements QueueFactoryInterface
 {
@@ -27,7 +27,7 @@ class QueueFactory implements QueueFactoryInterface
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 102.0.1
+     * @since 102.0.2
      */
     protected $objectManager = null;
 
@@ -50,7 +50,7 @@ class QueueFactory implements QueueFactoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function create($queueName, $connectionName)
     {

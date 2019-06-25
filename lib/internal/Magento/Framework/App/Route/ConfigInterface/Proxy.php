@@ -60,6 +60,8 @@ class Proxy implements
     }
 
     /**
+     * Sleep magic method.
+     *
      * @return array
      */
     public function __sleep()

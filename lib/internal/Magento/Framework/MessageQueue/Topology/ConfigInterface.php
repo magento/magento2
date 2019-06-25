@@ -13,7 +13,7 @@ use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItemInterface;
  * Topology config interface provides access data declared in etc/queue_topology.xml
  *
  * @api
- * @since 102.0.1
+ * @since 102.0.2
  */
 interface ConfigInterface
 {
@@ -25,7 +25,7 @@ interface ConfigInterface
      * @return ExchangeConfigItemInterface
      * @throws LocalizedException
      * @throws \LogicException
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function getExchange($name, $connection);
 
@@ -34,7 +34,7 @@ interface ConfigInterface
      *
      * @return ExchangeConfigItemInterface[]
      * @throws \LogicException
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function getExchanges();
 
@@ -43,7 +43,7 @@ interface ConfigInterface
      *
      * @return QueueConfigItemInterface[]
      * @throws \LogicException
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function getQueues();
 }

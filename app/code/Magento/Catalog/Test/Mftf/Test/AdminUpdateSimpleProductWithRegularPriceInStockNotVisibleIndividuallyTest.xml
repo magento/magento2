@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateSimpleProductWithRegularPriceInStockNotVisibleIndividuallyTest">
+        <annotations>
+            <stories value="Update Simple Product"/>
+            <title value="Update Simple Product with Regular Price (In Stock) Not Visible Individually"/>
+            <description value="Test log in to Update Simple Product and Update Simple Product with Regular Price (In Stock) Not Visible Individually"/>
+            <testCaseId value="MC-10803"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleSubCategory" stepKey="initialCategoryEntity"/>
+            <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct">
+                <requiredEntity createDataKey="initialCategoryEntity"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
+            <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedProduct">
+                <argument name="sku" value="{{simpleProductNotVisibleIndividually.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Search default simple product in the grid page -->
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
+        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <actionGroup ref="filterProductGridBySku2" stepKey="filterProductGrid">
+            <argument name="sku" value="$$initialSimpleProduct.sku$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
+        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
+
+        <!-- Update simple product with regular price(in stock) -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductNotVisibleIndividually.name}}" stepKey="fillSimpleProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{simpleProductNotVisibleIndividually.sku}}" stepKey="fillSimpleProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{simpleProductNotVisibleIndividually.price}}" stepKey="fillSimpleProductPrice"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductNotVisibleIndividually.quantity}}" stepKey="fillSimpleProductQuantity"/>
+        <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{simpleProductNotVisibleIndividually.status}}" stepKey="selectStockStatusInStock"/>
+        <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductNotVisibleIndividually.weight}}" stepKey="fillSimpleProductWeight"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory" />
+        <click selector="{{AdminProductFormSection.selectCategory($$initialCategoryEntity.name$$)}}" stepKey="unselectInitialCategory"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory"/>
+        <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{simpleProductNotVisibleIndividually.visibility}}" stepKey="selectVisibility"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
+        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductNotVisibleIndividually.urlKey}}" stepKey="fillSimpleProductUrlKey"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForSimpleProductSave"/>
+
+        <!-- Verify customer see success message -->
+        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
+
+        <!-- Search updated simple product(from above step) in the grid page -->
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPageToSearchUpdatedSimpleProduct"/>
+        <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{simpleProductNotVisibleIndividually.name}}" stepKey="fillSimpleProductNameInNameFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{simpleProductNotVisibleIndividually.sku}}" stepKey="fillProductSku"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyUpdatedSimpleProductVisibleInGrid"/>
+        <waitForPageLoad stepKey="waitUntilSimpleProductPageIsOpened"/>
+
+        <!-- Verify customer see updated simple product in the product form page -->
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductNotVisibleIndividually.name}}" stepKey="seeSimpleProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{simpleProductNotVisibleIndividually.sku}}" stepKey="seeSimpleProductSku"/>
+        <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="{{simpleProductNotVisibleIndividually.price}}" stepKey="seeSimpleProductPrice"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductNotVisibleIndividually.quantity}}" stepKey="seeSimpleProductQuantity"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{simpleProductNotVisibleIndividually.status}}" stepKey="seeSimpleProductStockStatus"/>
+        <seeInField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductNotVisibleIndividually.weight}}" stepKey="seeSimpleProductWeight"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDownToVerify"/>
+        <see selector="{{AdminProductFormSection.selectMultipleCategories}}" userInput="$$categoryEntity.name$$" stepKey="seeSelectedCategories" />
+        <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{simpleProductNotVisibleIndividually.visibility}}" stepKey="seeSimpleProductVisibility"/>
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSectionHeader"/>
+        <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductNotVisibleIndividually.urlKey}}" stepKey="seeSimpleProductUrlKey"/>
+
+        <!--Verify customer don't see updated simple product link on magento storefront page -->
+        <amOnPage url="{{StorefrontProductPage.url(simpleProductNotVisibleIndividually.urlKey)}}" stepKey="goToMagentoStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
+        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{simpleProductNotVisibleIndividually.sku}}" stepKey="fillSimpleProductSkuInSearchTextBox"/>
+        <waitForPageLoad stepKey="waitForSearchTextBox"/>
+        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
+        <waitForPageLoad stepKey="waitForSearch"/>
+        <dontSee selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{simpleProductNotVisibleIndividually.name}}" stepKey="dontSeeSimpleProductNameOnMagentoStorefrontPage"/>
+    </test>
+</tests>

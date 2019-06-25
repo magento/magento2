@@ -19,9 +19,14 @@
         <element name="doneButton" type="button" selector="//aside[contains(@class,'product_form_product_form_advanced_inventory_modal')]//button[contains(@data-role,'action')]" timeout="5"/>
         <element name="useConfigSettings" type="checkbox" selector="//input[@name='product[stock_data][use_config_manage_stock]']"/>
         <element name="manageStock" type="select" selector="//*[@name='product[stock_data][manage_stock]']"/>
+        <element name="advancedInventoryCloseButton" type="button" selector=".product_form_product_form_advanced_inventory_modal button.action-close" timeout="30"/>
+        <element name="miniQtyConfigSetting" type="checkbox" selector="//*[@name='product[stock_data][use_config_min_sale_qty]']"/>
+        <element name="miniQtyAllowedInCart" type="input" selector="//*[@name='product[stock_data][min_sale_qty]']"/>
+        <element name="maxiQtyConfigSetting" type="checkbox" selector="//*[@name='product[stock_data][use_config_max_sale_qty]']"/>
+        <element name="maxiQtyAllowedInCart" type="input" selector="//*[@name='product[stock_data][max_sale_qty]']"/>
+        <element name="notifyBelowQtyConfigSetting" type="checkbox" selector="//*[@name='product[stock_data][use_config_notify_stock_qty]']"/>
+        <element name="notifyBelowQty" type="input" selector="//*[@name='product[stock_data][notify_stock_qty]']"/>
+        <element name="advancedInventoryQty" type="input" selector="//div[@class='modal-inner-wrap']//input[@name='product[quantity_and_stock_status][qty]']"/>
+        <element name="advancedInventoryStockStatus" type="select" selector="//div[@class='modal-inner-wrap']//select[@name='product[quantity_and_stock_status][is_in_stock]']"/>
     </section>
 </sections>
-
-
-
-

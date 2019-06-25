@@ -8,7 +8,7 @@ namespace Magento\Framework\App;
 /**
  * Application front controller responsible for dispatching application requests.
  * Front controller contains logic common for all actions.
- * Evary application area has own front controller
+ * Every application area has own front controller.
  *
  * @api
  * @since 100.0.2

@@ -104,7 +104,9 @@ class Elasticsearch implements ClientInterface
     private function buildConfig($options = [])
     {
         $host = preg_replace('/http[s]?:\/\//i', '', $options['hostname']);
+        // @codingStandardsIgnoreStart
         $protocol = parse_url($options['hostname'], PHP_URL_SCHEME);
+        // @codingStandardsIgnoreEnd
         if (!$protocol) {
             $protocol = 'http';
         }
@@ -262,6 +264,16 @@ class Elasticsearch implements ClientInterface
                             ],
                         ],
                         [
+                            'position_mapping' => [
+                                'match' => 'position_*',
+                                'match_mapping_type' => 'string',
+                                'mapping' => [
+                                    'type' => 'integer',
+                                    'index' => false,
+                                ],
+                            ],
+                        ],
+                        [
                             'string_mapping' => [
                                 'match' => '*',
                                 'match_mapping_type' => 'string',
@@ -269,15 +281,6 @@ class Elasticsearch implements ClientInterface
                                     'type' => 'text',
                                     'index' => false,
                                     'copy_to' => '_search'
-                                ],
-                            ],
-                        ],
-                        [
-                            'position_mapping' => [
-                                'match' => 'position_*',
-                                'match_mapping_type' => 'string',
-                                'mapping' => [
-                                    'type' => 'int',
                                 ],
                             ],
                         ],

@@ -21,7 +21,7 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         /** @var \Magento\Sales\Block\Adminhtml\Order\View\Info $infoBlock */
         $infoBlock = $layout->createBlock(
             \Magento\Sales\Block\Adminhtml\Order\View\Info::class,
-            'info_block' . mt_rand(),
+            'info_block' . random_int(0, PHP_INT_MAX),
             []
         );
 
@@ -38,7 +38,7 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         /** @var \Magento\Sales\Block\Adminhtml\Order\View\Info $customerGroupBlock */
         $customerGroupBlock = $layout->createBlock(
             \Magento\Sales\Block\Adminhtml\Order\View\Info::class,
-            'info_block' . mt_rand(),
+            'info_block' . random_int(0, PHP_INT_MAX),
             ['registry' => $this->_putOrderIntoRegistry()]
         );
 
@@ -60,7 +60,7 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         /** @var \Magento\Sales\Block\Adminhtml\Order\View\Info $customerGroupBlock */
         $customerGroupBlock = $layout->createBlock(
             \Magento\Sales\Block\Adminhtml\Order\View\Info::class,
-            'info_block' . mt_rand(),
+            'info_block' . random_int(0, PHP_INT_MAX),
             ['registry' => $this->_putOrderIntoRegistry($orderData)]
         );
 

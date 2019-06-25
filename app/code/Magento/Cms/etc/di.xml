@@ -47,7 +47,6 @@
                 </item>
                 <item name="media_allowed" xsi:type="array">
                     <item name="flv" xsi:type="string">video/x-flv</item>
-                    <item name="swf" xsi:type="string">application/x-shockwave-flash</item>
                     <item name="avi" xsi:type="string">video/x-msvideo</item>
                     <item name="mov" xsi:type="string">video/x-sgi-movie</item>
                     <item name="rm" xsi:type="string">application/vnd.rn-realmedia</item>

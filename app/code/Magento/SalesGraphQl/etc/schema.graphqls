@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
-    customerOrders: CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Orders") @doc(description: "List of customer orders")
+    customerOrders: CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Orders") @doc(description: "List of customer orders") @cache(cacheable: false)
 }
 
 type CustomerOrder @doc(description: "Order mapping fields") {

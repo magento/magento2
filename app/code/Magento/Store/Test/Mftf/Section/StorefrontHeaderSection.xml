@@ -13,5 +13,6 @@
         <element name="storeViewOption" type="button" selector="li.view-{{var1}}>a" parameterized="true"/>
         <element name="storeView" type="button" selector="//div[@class='actions dropdown options switcher-options active']//ul//li//a[contains(text(),'{{var}}')]" parameterized="true"/>
         <element name="storeViewList" type="button" selector="//li[contains(.,'{{storeViewName}}')]//a" parameterized="true"/>
+        <element name="storeViewName" type="text" selector="//*[@id='switcher-language-trigger']//span"/>
     </section>
 </sections>

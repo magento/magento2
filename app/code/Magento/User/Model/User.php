@@ -321,6 +321,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Existing user password confirmation will be validated only when password is set
      *
      * @return bool|string[]
+     * @throws \Exception
      */
     public function validate()
     {
@@ -341,6 +342,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * New password is compared to at least 4 previous passwords to prevent setting them again
      *
      * @return bool|string[]
+     * @throws \Exception
      * @since 100.0.3
      */
     protected function validatePasswordChange()
@@ -393,6 +395,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Retrieve user roles
      *
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getRoles()
     {
@@ -441,10 +444,10 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * Send email with reset password confirmation link.
      *
+     * @return $this
+     * @throws NotificationExceptionInterface
      * @deprecated 101.1.0
      * @see NotificatorInterface::sendForgotPassword()
-     *
-     * @return $this
      */
     public function sendPasswordResetConfirmationEmail()
     {
@@ -622,9 +625,10 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * Login user
      *
-     * @param   string $username
-     * @param   string $password
-     * @return  $this
+     * @param string $username
+     * @param string $password
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function login($username, $password)
     {
@@ -711,6 +715,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Check if current reset password link token is expired
      *
      * @return bool
+     * @throws \Exception
      */
     public function isResetPasswordLinkTokenExpired()
     {
@@ -916,6 +921,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     {
         try {
             $isCheckSuccessful = $this->verifyIdentity($passwordString);
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Exception\AuthenticationException $e) {
             $isCheckSuccessful = false;
         }

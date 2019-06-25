@@ -76,7 +76,13 @@ class Template implements \Zend_Filter_Interface
         'load',
         'save',
         'getcollection',
-        'getresource'
+        'getresource',
+        'getconfig',
+        'setvariables',
+        'settemplateprocessor',
+        'gettemplateprocessor',
+        'vardirective',
+        'delete'
     ];
 
     /**

@@ -77,6 +77,7 @@ class BackendDecorator implements CurlInterface
         $this->transport->write($url, $data, CurlInterface::POST);
         $response = $this->read();
         if (strpos($response, 'login-form') !== false) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(
                 'Admin user cannot be logged in by curl handler!'
             );
@@ -111,6 +112,7 @@ class BackendDecorator implements CurlInterface
         if ($this->formKey) {
             $params['form_key'] = $this->formKey;
         } else {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(sprintf('Form key is absent! Url: "%s" Response: "%s"', $url, $this->response));
         }
         $this->transport->write($url, http_build_query($params), $method, $headers);

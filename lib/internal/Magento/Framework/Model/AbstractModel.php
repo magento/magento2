@@ -10,6 +10,7 @@ use Magento\Framework\Phrase;
 /**
  * Abstract model class
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -200,7 +201,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @return void
      */
-    protected function _construct()
+    protected function _construct() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
 

@@ -239,7 +239,7 @@ class Copy
      */
     protected function getAttributeValueFromExtensibleDataObject($source, $code)
     {
-        $method = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
+        $method = 'get' . str_replace('_', '', ucwords($code, '_'));
 
         $methodExists = method_exists($source, $method);
         if ($methodExists == true) {
@@ -273,7 +273,7 @@ class Copy
      */
     protected function setAttributeValueFromExtensibleDataObject($target, $code, $value)
     {
-        $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
+        $method = 'set' . str_replace('_', '', ucwords($code, '_'));
 
         $methodExists = method_exists($target, $method);
         if ($methodExists == true) {

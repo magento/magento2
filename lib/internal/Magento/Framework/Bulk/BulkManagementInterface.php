@@ -8,7 +8,7 @@ namespace Magento\Framework\Bulk;
 /**
  * Interface BulkManagementInterface
  * @api
- * @since 102.0.1
+ * @since 102.0.2
  */
 interface BulkManagementInterface
 {
@@ -20,7 +20,7 @@ interface BulkManagementInterface
      * @param string $description
      * @param int $userId
      * @return boolean
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function scheduleBulk($bulkUuid, array $operations, $description, $userId = null);
 
@@ -29,7 +29,7 @@ interface BulkManagementInterface
      *
      * @param string $bulkId
      * @return boolean
-     * @since 102.0.1
+     * @since 102.0.2
      */
     public function deleteBulk($bulkId);
 }

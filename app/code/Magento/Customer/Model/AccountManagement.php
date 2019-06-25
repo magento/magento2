@@ -554,6 +554,7 @@ class AccountManagement implements AccountManagementInterface
         }
         try {
             $this->getAuthentication()->authenticate($customerId, $password);
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (InvalidEmailOrPasswordException $e) {
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
@@ -624,7 +625,6 @@ class AccountManagement implements AccountManagementInterface
      * @param string $rpToken
      * @throws ExpiredException
      * @throws NoSuchEntityException
-     *
      * @return CustomerInterface
      * @throws LocalizedException
      */
@@ -703,7 +703,12 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setRpTokenCreatedAt(null);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
         $this->destroyCustomerSessions($customer->getId());
-        $this->sessionManager->destroy();
+        if ($this->sessionManager->isSessionExists()) {
+            //delete old session and move data to the new session
+            //use this instead of $this->sessionManager->regenerateId because last one doesn't delete old session
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            session_regenerate_id(true);
+        }
         $this->customerRepository->save($customer);
 
         return true;
@@ -890,6 +895,7 @@ class AccountManagement implements AccountManagementInterface
             throw new InputMismatchException(
                 __('A customer with the same email address already exists in an associated website.')
             );
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (LocalizedException $e) {
             throw $e;
         }
@@ -906,6 +912,7 @@ class AccountManagement implements AccountManagementInterface
                 }
             }
             $this->customerRegistry->remove($customer->getId());
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (InputException $e) {
             $this->customerRepository->delete($customer);
             throw $e;
@@ -1008,6 +1015,7 @@ class AccountManagement implements AccountManagementInterface
     {
         try {
             $this->getAuthentication()->authenticate($customer->getId(), $currentPassword);
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (InvalidEmailOrPasswordException $e) {
             throw new InvalidEmailOrPasswordException(
                 __("The password doesn't match this account. Verify the password and try again.")
@@ -1067,6 +1075,7 @@ class AccountManagement implements AccountManagementInterface
         $result = $this->getEavValidator()->isValid($customerModel);
         if ($result === false && is_array($this->getEavValidator()->getMessages())) {
             return $validationResults->setIsValid(false)->setMessages(
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 call_user_func_array(
                     'array_merge',
                     $this->getEavValidator()->getMessages()
@@ -1528,7 +1537,7 @@ class AccountManagement implements AccountManagementInterface
      */
     public function getPasswordHash($password)
     {
-        return $this->encryptor->getHash($password);
+        return $this->encryptor->getHash($password, true);
     }
 
     /**
@@ -1564,6 +1573,7 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * Destroy all active customer sessions by customer id (current session will not be destroyed).
+     *
      * Customer sessions which should be deleted are collecting from the "customer_visitor" table considering
      * configured session lifetime.
      *

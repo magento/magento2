@@ -45,7 +45,7 @@ class Log
         $curl->write($this->prepareUrl($name), [], CurlTransport::GET);
         $data = $curl->read();
         $curl->close();
-
+        // phpcs:ignore Magento2.Security.InsecureFunction
         return unserialize($data);
     }
 

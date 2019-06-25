@@ -29,8 +29,6 @@
         <element name="applySingleSetOfImages" type="radio" selector=".admin__field-label[for='apply-single-set-radio']" timeout="30"/>
         <element name="imageFileUpload" type="input" selector=".steps-wizard-section input[type='file'][name='image']"/>
         <element name="imageUploadButton" type="button" selector=".steps-wizard-section div.gallery"/>
-        <element name="imageFile" type="text" selector="//*[@data-role='gallery']//img[contains(@src, '{{url}}')]" parameterized="true"/>
-        <element name="uploadProgressBar" type="text" selector=".uploader .file-row"/>
 
         <element name="applyUniquePricesByAttributeToEachSku" type="radio" selector=".admin__field-label[for='apply-unique-prices-radio']"/>
         <element name="applySinglePriceToAllSkus" type="radio" selector=".admin__field-label[for='apply-single-price-radio']"/>
@@ -41,9 +39,18 @@
         <element name="attribute3" type="input" selector="#apply-single-price-input-2"/>
 
         <element name="applySingleQuantityToEachSkus" type="radio" selector=".admin__field-label[for='apply-single-inventory-radio']" timeout="30"/>
+        <element name="applyUniqueImagesToEachSkus" type="radio" selector=".admin__field-label[for='apply-unique-images-radio']" timeout="30"/>
+        <element name="applyUniquePricesToEachSkus" type="radio" selector=".admin__field-label[for='apply-unique-prices-radio']" timeout="30"/>
+        <element name="selectImagesButton" type="select" selector="#apply-images-attributes" timeout="30"/>
+        <element name="uploadImagesButton" type="file" selector="//*[text()='{{option}}']/../../div[@data-role='gallery']//input[@type='file']" timeout="30" parameterized="true"/>
+        <element name="uploadProgressBar" type="text" selector=".uploader .file-row"/>
+        <element name="imageFile" type="text" selector="//*[@data-role='gallery']//img[contains(@src, '{{url}}')]" parameterized="true"/>
+        <element name="selectPriceButton" type="select" selector="#select-each-price" timeout="30"/>
+        <element name="price" type="input" selector="//*[text()='{{option}}']/../..//input[contains(@id, 'apply-single-price-input')]" parameterized="true"/>
         <element name="quantity" type="input" selector="#apply-single-inventory-input"/>
         <element name="gridLoadingMask" type="text" selector="[data-role='spinner'][data-component*='product_attributes_listing']"/>
         <element name="attributeCheckboxByName" type="input" selector="//*[contains(@data-attribute-option-title,'{{arg}}')]//input[@type='checkbox']" parameterized="true"/>
         <element name="attributeColorCheckbox" type="select" selector="//div[contains(text(),'color') and @class='data-grid-cell-content']/../preceding-sibling::td/label/input"/>
+        <element name="attributeRowByAttributeCode" type="block" selector="//td[count(../../..//th[./*[.='Attribute Code']]/preceding-sibling::th) + 1][./*[.='{{attribute_code}}']]/../td//input[@data-action='select-row']" parameterized="true"/>
     </section>
 </sections>

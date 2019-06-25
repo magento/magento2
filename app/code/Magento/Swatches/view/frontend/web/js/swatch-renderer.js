@@ -511,7 +511,7 @@ define([
 
                 // Add more button
                 if (moreLimit === countAttributes++) {
-                    html += '<a href="#" class="' + moreClass + '">' + moreText + '</a>';
+                    html += '<a href="#" class="' + moreClass + '"><span>' + moreText + '</span></a>';
                 }
 
                 id = this.id;
@@ -925,7 +925,8 @@ define([
                 $productPrice = $product.find(this.options.selectorProductPrice),
                 options = _.object(_.keys($widget.optionsMap), {}),
                 result,
-                tierPriceHtml;
+                tierPriceHtml,
+                isShow;
 
             $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
                 var attributeId = $(this).attr('attribute-id');
@@ -942,11 +943,9 @@ define([
                 }
             );
 
-            if (typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount) {
-                $(this.options.slyOldPriceSelector).show();
-            } else {
-                $(this.options.slyOldPriceSelector).hide();
-            }
+            isShow = typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount;
+
+            $product.find(this.options.slyOldPriceSelector)[isShow ? 'show' : 'hide']();
 
             if (typeof result != 'undefined' && result.tierPrices.length) {
                 if (this.options.tierPriceTemplate) {
@@ -1240,6 +1239,11 @@ define([
 
                 if (!_.isUndefined(gallery)) {
                     gallery.updateData(imagesToUpdate);
+                } else {
+                    context.find(this.options.mediaGallerySelector).on('gallery:loaded', function (loadedGallery) {
+                        loadedGallery = context.find(this.options.mediaGallerySelector).data('gallery');
+                        loadedGallery.updateData(imagesToUpdate);
+                    }.bind(this));
                 }
 
                 if (isInitial) {
@@ -1250,6 +1254,7 @@ define([
                         dataMergeStrategy: this.options.gallerySwitchStrategy
                     });
                 }
+
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }

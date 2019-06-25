@@ -18,6 +18,8 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldI
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
     as FieldNameResolver;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Provide dynamic fields for product.
@@ -27,9 +29,17 @@ class DynamicField implements FieldProviderInterface
     /**
      * Category list.
      *
+     * @deprecated 100.3.2
      * @var CategoryListInterface
      */
     private $categoryList;
+
+    /**
+     * Category collection.
+     *
+     * @var Collection
+     */
+    private $categoryCollection;
 
     /**
      * Customer group repository.
@@ -73,6 +83,7 @@ class DynamicField implements FieldProviderInterface
      * @param CategoryListInterface $categoryList
      * @param FieldNameResolver $fieldNameResolver
      * @param AttributeProvider $attributeAdapterProvider
+     * @param Collection|null $categoryCollection
      */
     public function __construct(
         FieldTypeConverterInterface $fieldTypeConverter,
@@ -81,7 +92,8 @@ class DynamicField implements FieldProviderInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         CategoryListInterface $categoryList,
         FieldNameResolver $fieldNameResolver,
-        AttributeProvider $attributeAdapterProvider
+        AttributeProvider $attributeAdapterProvider,
+        Collection $categoryCollection = null
     ) {
         $this->groupRepository = $groupRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -90,6 +102,8 @@ class DynamicField implements FieldProviderInterface
         $this->categoryList = $categoryList;
         $this->fieldNameResolver = $fieldNameResolver;
         $this->attributeAdapterProvider = $attributeAdapterProvider;
+        $this->categoryCollection = $categoryCollection ?:
+            ObjectManager::getInstance()->get(Collection::class);
     }
 
     /**
@@ -98,21 +112,20 @@ class DynamicField implements FieldProviderInterface
     public function getFields(array $context = []): array
     {
         $allAttributes = [];
-        $searchCriteria = $this->searchCriteriaBuilder->create();
-        $categories = $this->categoryList->getList($searchCriteria)->getItems();
+        $categoryIds = $this->categoryCollection->getAllIds();
         $positionAttribute = $this->attributeAdapterProvider->getByAttributeCode('position');
         $categoryNameAttribute = $this->attributeAdapterProvider->getByAttributeCode('category_name');
-        foreach ($categories as $category) {
+        foreach ($categoryIds as $categoryId) {
             $categoryPositionKey = $this->fieldNameResolver->getFieldName(
                 $positionAttribute,
-                ['categoryId' => $category->getId()]
+                ['categoryId' => $categoryId]
             );
             $categoryNameKey = $this->fieldNameResolver->getFieldName(
                 $categoryNameAttribute,
-                ['categoryId' => $category->getId()]
+                ['categoryId' => $categoryId]
             );
             $allAttributes[$categoryPositionKey] = [
-                'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_STRING),
+                'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_INT),
                 'index' => $this->indexTypeConverter->convert(IndexTypeConverterInterface::INTERNAL_NO_INDEX_VALUE)
             ];
             $allAttributes[$categoryNameKey] = [
@@ -121,6 +134,7 @@ class DynamicField implements FieldProviderInterface
             ];
         }
 
+        $searchCriteria = $this->searchCriteriaBuilder->create();
         $groups = $this->groupRepository->getList($searchCriteria)->getItems();
         $priceAttribute = $this->attributeAdapterProvider->getByAttributeCode('price');
         $ctx = isset($context['websiteId']) ? ['websiteId' => $context['websiteId']] : [];

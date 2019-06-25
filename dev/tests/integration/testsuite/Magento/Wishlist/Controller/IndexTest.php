@@ -128,6 +128,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testAllcartAction()
     {
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class)->getFormKey();
+        $this->getRequest()->setMethod('POST');
         $this->getRequest()->setParam('form_key', $formKey);
         $this->dispatch('wishlist/index/allcart');
 

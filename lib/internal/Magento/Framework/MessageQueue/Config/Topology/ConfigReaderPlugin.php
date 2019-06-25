@@ -10,7 +10,7 @@ use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 /**
  * Plugin which provides access to topology declared in queue config using topology config interface.
  *
- * @deprecated 102.0.1
+ * @deprecated 102.0.2
  */
 class ConfigReaderPlugin
 {

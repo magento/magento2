@@ -20,8 +20,8 @@ use Magento\Store\Model\StoreManager;
 /**
  * Reports Viewed Products Counter
  *
- * The main responsilibity of this class is provide necessary data to track viewed products
- * by customer on frontend and data to synchornize this tracks with backend
+ * The main responsibility of this class is provide necessary data to track viewed products
+ * by customer on frontend and data to synchronize this tracks with backend
  *
  * @api
  * @since 102.0.0
@@ -109,6 +109,8 @@ class ProductViewCounter extends Template
      *
      * @return string {JSON encoded data}
      * @since 102.0.0
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getCurrentProductData()
     {

@@ -5,6 +5,11 @@
  */
 namespace Magento\User\Controller\Adminhtml\Locks;
 
+/**
+ * Testing users grid.
+ *
+ * @magentoAppArea adminhtml
+ */
 class GridTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
