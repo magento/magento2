@@ -27,4 +27,11 @@
         <waitForPageLoad stepKey="AdminMessagesSection"/>
         <see selector="{{AdminMessagesSection.notice}}" userInput="{{importMessage}}" stepKey="seeImportMessage"/>
         </actionGroup>
+    <actionGroup name="checkDataForImportProductActionGroup" extends="AdminImportProductsActionGroup">
+        <remove keyForRemoval="clickImportButton"/>
+        <remove keyForRemoval="AdminImportMainSectionLoad2"/>
+        <remove keyForRemoval="assertSuccessMessage"/>
+        <remove keyForRemoval="AdminMessagesSection"/>
+        <remove keyForRemoval="seeImportMessage"/>
+    </actionGroup>
     </actionGroups>
