@@ -1509,6 +1509,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @throws LocalizedException
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     protected function _saveProducts()
     {
@@ -1689,27 +1690,73 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                  * Note: to avoid problems with undefined sorting, the value of media gallery items positions
                  * must be unique in scope of one product.
                  */
-                list(
-                    $uploadedImages,
-                    $rowData,
-                    $mediaGallery,
-                    $existingImages,
-                    $labelsForUpdate,
-                    $imagesForChangeVisibility
-                    ) = $this->processImages(
-                        $rowImages,
-                        $uploadedImages,
-                        $rowData,
-                        $rowNum,
-                        $mediaGallery,
-                        $storeId,
-                        $rowSku,
-                        $existingImages,
-                        $rowLabels,
-                        $labelsForUpdate,
-                        $imageHiddenStates,
-                        $imagesForChangeVisibility
-                );
+                $position = 0;
+                foreach ($rowImages as $column => $columnImages) {
+                    foreach ($columnImages as $columnImageKey => $columnImage) {
+                        if (!isset($uploadedImages[$columnImage])) {
+                            $uploadedFile = $this->uploadMediaFiles($columnImage);
+                            $uploadedFile = $uploadedFile ?: $this->getSystemFile($columnImage);
+                            if ($uploadedFile) {
+                                $uploadedImages[$columnImage] = $uploadedFile;
+                            } else {
+                                unset($rowData[$column]);
+                                $this->addRowError(
+                                    ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
+                                    $rowNum,
+                                    null,
+                                    null,
+                                    ProcessingError::ERROR_LEVEL_NOT_CRITICAL
+                                );
+                            }
+                        } else {
+                            $uploadedFile = $uploadedImages[$columnImage];
+                        }
+
+                        if ($uploadedFile && $column !== self::COL_MEDIA_IMAGE) {
+                            $rowData[$column] = $uploadedFile;
+                        }
+
+                        if (!$uploadedFile || isset($mediaGallery[$storeId][$rowSku][$uploadedFile])) {
+                            continue;
+                        }
+
+                        if (isset($existingImages[$rowSku][$uploadedFile])) {
+                            $currentFileData = $existingImages[$rowSku][$uploadedFile];
+                            if (isset($rowLabels[$column][$columnImageKey])
+                                && $rowLabels[$column][$columnImageKey] !=
+                                $currentFileData['label']
+                            ) {
+                                $labelsForUpdate[] = [
+                                    'label' => $rowLabels[$column][$columnImageKey],
+                                    'imageData' => $currentFileData
+                                ];
+                            }
+
+                            if (array_key_exists($uploadedFile, $imageHiddenStates)
+                                && $currentFileData['disabled'] != $imageHiddenStates[$uploadedFile]
+                            ) {
+                                $imagesForChangeVisibility[] = [
+                                    'disabled' => $imageHiddenStates[$uploadedFile],
+                                    'imageData' => $currentFileData
+                                ];
+                            }
+                        } else {
+                            if ($column == self::COL_MEDIA_IMAGE) {
+                                $rowData[$column][] = $uploadedFile;
+                            }
+                            $mediaGallery[$storeId][$rowSku][$uploadedFile] = [
+                                'attribute_id' => $this->getMediaGalleryAttributeId(),
+                                'label' => isset($rowLabels[$column][$columnImageKey])
+                                    ? $rowLabels[$column][$columnImageKey]
+                                    : '',
+                                'position' => ++$position,
+                                'disabled' => isset($imageHiddenStates[$columnImage])
+                                    ? $imageHiddenStates[$columnImage] : '0',
+                                'value' => $uploadedFile,
+                            ];
+                        }
+                    }
+                }
 
                 // 6. Attributes phase
                 $rowStore = (self::SCOPE_STORE == $rowScope)
@@ -3158,113 +3205,5 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function composeLinkKey(int $productId, int $linkedId, int $linkTypeId) : string
     {
         return "{$productId}-{$linkedId}-{$linkTypeId}";
-    }
-
-    /**
-     * Process images
-     *
-     * @param array $rowImages
-     * @param array $uploadedImages
-     * @param array $rowData
-     * @param int $rowNum
-     * @param array $mediaGallery
-     * @param int $storeId
-     * @param string $rowSku
-     * @param array $existingImages
-     * @param array $rowLabels
-     * @param array $labelsForUpdate
-     * @param array $imageHiddenStates
-     * @param array $imagesForChangeVisibility
-     * @return array
-     */
-    private function processImages(
-        array $rowImages,
-        array $uploadedImages,
-        array $rowData,
-        $rowNum,
-        array $mediaGallery,
-        $storeId,
-        $rowSku,
-        array $existingImages,
-        array $rowLabels,
-        array $labelsForUpdate,
-        array $imageHiddenStates,
-        array $imagesForChangeVisibility
-    ): array {
-        $position = 0;
-        foreach ($rowImages as $column => $columnImages) {
-            foreach ($columnImages as $columnImageKey => $columnImage) {
-                if (!isset($uploadedImages[$columnImage])) {
-                    $uploadedFile = $this->uploadMediaFiles($columnImage);
-                    $uploadedFile = $uploadedFile ?: $this->getSystemFile($columnImage);
-                    if ($uploadedFile) {
-                        $uploadedImages[$columnImage] = $uploadedFile;
-                    } else {
-                        unset($rowData[$column]);
-                        $this->addRowError(
-                            ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
-                            $rowNum,
-                            null,
-                            null,
-                            ProcessingError::ERROR_LEVEL_NOT_CRITICAL
-                        );
-                    }
-                } else {
-                    $uploadedFile = $uploadedImages[$columnImage];
-                }
-
-                if ($uploadedFile && $column !== self::COL_MEDIA_IMAGE) {
-                    $rowData[$column] = $uploadedFile;
-                }
-
-                if (!$uploadedFile || isset($mediaGallery[$storeId][$rowSku][$uploadedFile])) {
-                    continue;
-                }
-
-                if (isset($existingImages[$rowSku][$uploadedFile])) {
-                    $currentFileData = $existingImages[$rowSku][$uploadedFile];
-                    if (isset($rowLabels[$column][$columnImageKey])
-                        && $rowLabels[$column][$columnImageKey] !=
-                        $currentFileData['label']
-                    ) {
-                        $labelsForUpdate[] = [
-                            'label' => $rowLabels[$column][$columnImageKey],
-                            'imageData' => $currentFileData
-                        ];
-                    }
-
-                    if (array_key_exists($uploadedFile, $imageHiddenStates)
-                        && $currentFileData['disabled'] != $imageHiddenStates[$uploadedFile]
-                    ) {
-                        $imagesForChangeVisibility[] = [
-                            'disabled' => $imageHiddenStates[$uploadedFile],
-                            'imageData' => $currentFileData
-                        ];
-                    }
-                } else {
-                    if ($column == self::COL_MEDIA_IMAGE) {
-                        $rowData[$column][] = $uploadedFile;
-                    }
-                    $mediaGallery[$storeId][$rowSku][$uploadedFile] = [
-                        'attribute_id' => $this->getMediaGalleryAttributeId(),
-                        'label' => isset($rowLabels[$column][$columnImageKey])
-                            ? $rowLabels[$column][$columnImageKey]
-                            : '',
-                        'position' => ++$position,
-                        'disabled' => isset($imageHiddenStates[$columnImage])
-                            ? $imageHiddenStates[$columnImage] : '0',
-                        'value' => $uploadedFile,
-                    ];
-                }
-            }
-        }
-        return [
-            $uploadedImages,
-            $rowData,
-            $mediaGallery,
-            $existingImages,
-            $labelsForUpdate,
-            $imagesForChangeVisibility
-        ];
     }
 }
