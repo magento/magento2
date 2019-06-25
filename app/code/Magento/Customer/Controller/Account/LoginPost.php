@@ -18,6 +18,8 @@ use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
+ * Post login customer action.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LoginPost extends \Magento\Customer\Controller\AbstractAccount
@@ -151,7 +153,6 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                 try {
                     $customer = $this->customerAccountManagement->authenticate($login['username'], $login['password']);
                     $this->session->setCustomerDataAsLoggedIn($customer);
-                    $this->session->regenerateId();
                     if ($this->getCookieManager()->getCookie('mage-cache-sessid')) {
                         $metadata = $this->getCookieMetadataFactory()->createCookieMetadata();
                         $metadata->setPath('/');
