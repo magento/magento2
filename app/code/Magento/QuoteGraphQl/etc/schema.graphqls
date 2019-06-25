@@ -68,7 +68,8 @@ input UpdateCartItemsInput {
 
 input CartItemUpdateInput {
     cart_item_id: Int!
-    quantity: Float!
+    quantity: Float
+    customizable_options: [CustomizableOptionInput!]
 }
 
 input RemoveItemFromCartInput {
