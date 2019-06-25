@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Paypal\Model\Payflow\Service\Request;
 
 use Magento\Framework\Math\Random;
@@ -13,7 +16,7 @@ use Magento\Paypal\Model\Payflowpro;
 use Magento\Quote\Model\Quote;
 
 /**
- * Class SecureToken
+ * Class SecureToken for setting, posting and returning a response DataObject for RequestSecureToken controller.
  */
 class SecureToken
 {
@@ -51,7 +54,7 @@ class SecureToken
      * Get the Secure Token from Paypal for TR
      *
      * @param Quote $quote
-     * @param array $urls
+     * @param string[] $urls
      *
      * @return DataObject
      * @throws \Exception
@@ -80,4 +83,3 @@ class SecureToken
         return $result;
     }
 }
-
