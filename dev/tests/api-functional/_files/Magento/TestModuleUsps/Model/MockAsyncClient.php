@@ -50,11 +50,13 @@ class MockAsyncClient implements AsyncClientInterface
     public function request(Request $request): HttpResponseDeferredInterface
     {
         return new MockDeferredResponse(
-            $this->responseFactory->create([
-                'statusCode' => 200,
-                'headers' => [],
-                'body' => $this->mockResponseBodyLoader->loadForRequest($request),
-            ])
+            $this->responseFactory->create(
+                [
+                    'statusCode' => 200,
+                    'headers' => [],
+                    'body' => $this->mockResponseBodyLoader->loadForRequest($request),
+                ]
+            )
         );
     }
 }

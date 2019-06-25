@@ -53,7 +53,7 @@ class MockResponseBodyLoader
         $moduleDir = $this->moduleDirectory->getDir('Magento_TestModuleUsps');
 
         $destination = 'us';
-        if (strpos($request->getUrl(), 'IntlRateV2Request')) {
+        if (strpos($request->getUrl(), 'IntlRateV2Request') !== false) {
             $destination = 'ca';
         }
 

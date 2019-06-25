@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
 <IntlRateV2Response>
     <Package ID="0">
         <Prohibitions>An issue of a publication in which more than 5 percent of its total advertising space is primarily
@@ -205,8 +211,7 @@
             </ExtraServices>
             <ValueOfContents>20.00</ValueOfContents>
             <SvcCommitments>Tue, Jul 02, 2019 Guaranteed</SvcCommitments>
-            <SvcDescription>Priority Mail Express International&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt;
-            </SvcDescription>
+            <SvcDescription>Priority Mail Express International&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt;</SvcDescription>
             <MaxDimensions>Max. length 42", max. length plus girth combined 79"</MaxDimensions>
             <MaxWeight>66</MaxWeight>
             <GuaranteeAvailability>07/02/2019</GuaranteeAvailability>
@@ -234,9 +239,7 @@
             </ExtraServices>
             <ValueOfContents>20.00</ValueOfContents>
             <SvcCommitments>Tue, Jul 02, 2019 Guaranteed</SvcCommitments>
-            <SvcDescription>Priority Mail Express International&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt; Flat
-                Rate Envelope
-            </SvcDescription>
+            <SvcDescription>Priority Mail Express International&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt; Flat Rate Envelope</SvcDescription>
             <MaxDimensions>USPS-Produced Envelope: 12-1/2" x 9-1/2"&lt;br>Maximum weight 4 pounds.</MaxDimensions>
             <MaxWeight>4</MaxWeight>
             <GuaranteeAvailability>07/02/2019</GuaranteeAvailability>
@@ -264,9 +267,7 @@
             </ExtraServices>
             <ValueOfContents>20.00</ValueOfContents>
             <SvcCommitments>Tue, Jul 02, 2019 Guaranteed</SvcCommitments>
-            <SvcDescription>Priority Mail Express International&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt; Legal
-                Flat Rate Envelope
-            </SvcDescription>
+            <SvcDescription>Priority Mail Express International&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt; Legal Flat Rate Envelope</SvcDescription>
             <MaxDimensions>USPS-Produced Envelope: 15" x 9-1/2"&lt;br>Maximum weight 4 pounds.</MaxDimensions>
             <MaxWeight>4</MaxWeight>
             <GuaranteeAvailability>07/02/2019</GuaranteeAvailability>
@@ -294,9 +295,7 @@
             </ExtraServices>
             <ValueOfContents>20.00</ValueOfContents>
             <SvcCommitments>Tue, Jul 02, 2019 Guaranteed</SvcCommitments>
-            <SvcDescription>Priority Mail Express International&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt; Padded
-                Flat Rate Envelope
-            </SvcDescription>
+            <SvcDescription>Priority Mail Express International&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt; Padded Flat Rate Envelope</SvcDescription>
             <MaxDimensions>USPS-Produced Envelope: 12-1/2" x 9-1/2"&lt;br>Maximum weight 4 pounds.</MaxDimensions>
             <MaxWeight>4</MaxWeight>
             <GuaranteeAvailability>07/02/2019</GuaranteeAvailability>
@@ -330,8 +329,7 @@
             </ExtraServices>
             <ValueOfContents>20.00</ValueOfContents>
             <SvcCommitments>6 - 10 business days to many major markets</SvcCommitments>
-            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt;
-            </SvcDescription>
+            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt;</SvcDescription>
             <MaxDimensions>Max. length 79", max. length plus girth 108"</MaxDimensions>
             <MaxWeight>66</MaxWeight>
         </Service>
@@ -364,9 +362,7 @@
             </ExtraServices>
             <ValueOfContents>20.00</ValueOfContents>
             <SvcCommitments>6 - 10 business days to many major markets</SvcCommitments>
-            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Large Flat Rate
-                Box
-            </SvcDescription>
+            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Large Flat Rate Box</SvcDescription>
             <MaxDimensions>USPS-Produced Box: 23-11/16" x 11-3/4" x 3" or 12" x 12" x 5-1/2"&lt;br>Maximum weight 20
                 pounds.
             </MaxDimensions>
@@ -401,9 +397,7 @@
             </ExtraServices>
             <ValueOfContents>20.00</ValueOfContents>
             <SvcCommitments>6 - 10 business days to many major markets</SvcCommitments>
-            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Medium Flat
-                Rate Box
-            </SvcDescription>
+            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Medium Flat Rate Box</SvcDescription>
             <MaxDimensions>USPS-Produced Box: 13-5/8" x 11-7/8" x 3-3/8" or 11" x 8-1/2" x 5-1/2"&lt;br>Maximum weight
                 20 pounds.
             </MaxDimensions>
@@ -438,9 +432,7 @@
             </ExtraServices>
             <ValueOfContents>20.00</ValueOfContents>
             <SvcCommitments>6 - 10 business days to many major markets</SvcCommitments>
-            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Small Flat Rate
-                Box
-            </SvcDescription>
+            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Small Flat Rate Box</SvcDescription>
             <MaxDimensions>USPS-Produced Box: 8-5/8" x 5-3/8" x 1-5/8"&lt;br>Maximum weight 4 pounds.</MaxDimensions>
             <MaxWeight>4</MaxWeight>
         </Service>
@@ -473,9 +465,7 @@
             </ExtraServices>
             <ValueOfContents>20.00</ValueOfContents>
             <SvcCommitments>6 - 10 business days to many major markets</SvcCommitments>
-            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; DVD Flat Rate
-                priced box
-            </SvcDescription>
+            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; DVD Flat Rate priced box</SvcDescription>
             <MaxDimensions>USPS-Produced Box: 7-9/16" x 5-7/16" x 5/8"&lt;br>Maximum weight 4 pounds.</MaxDimensions>
             <MaxWeight>4</MaxWeight>
         </Service>
@@ -508,9 +498,7 @@
             </ExtraServices>
             <ValueOfContents>20.00</ValueOfContents>
             <SvcCommitments>6 - 10 business days to many major markets</SvcCommitments>
-            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Large Video
-                Flat Rate priced box
-            </SvcDescription>
+            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Large Video Flat Rate priced box</SvcDescription>
             <MaxDimensions>USPS-Produced Box: 9-1/4" x 6-1/4" x 2"&lt;br>Maximum weight 4 pounds.</MaxDimensions>
             <MaxWeight>4</MaxWeight>
         </Service>
@@ -543,9 +531,7 @@
             </ExtraServices>
             <ValueOfContents>20.00</ValueOfContents>
             <SvcCommitments>6 - 10 business days to many major markets</SvcCommitments>
-            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Flat Rate
-                Envelope
-            </SvcDescription>
+            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Flat Rate Envelope</SvcDescription>
             <MaxDimensions>USPS-Produced Envelope: 12-1/2" x 9-1/2"&lt;br>Maximum weight 4 pounds.</MaxDimensions>
             <MaxWeight>4</MaxWeight>
         </Service>
@@ -578,9 +564,7 @@
             </ExtraServices>
             <ValueOfContents>20.00</ValueOfContents>
             <SvcCommitments>6 - 10 business days to many major markets</SvcCommitments>
-            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Legal Flat Rate
-                Envelope
-            </SvcDescription>
+            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Legal Flat Rate Envelope</SvcDescription>
             <MaxDimensions>USPS-Produced Envelope: 15" x 9-1/2"&lt;br>Maximum weight 4 pounds.</MaxDimensions>
             <MaxWeight>4</MaxWeight>
         </Service>
@@ -613,9 +597,7 @@
             </ExtraServices>
             <ValueOfContents>20.00</ValueOfContents>
             <SvcCommitments>6 - 10 business days to many major markets</SvcCommitments>
-            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Padded Flat
-                Rate Envelope
-            </SvcDescription>
+            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Padded Flat Rate Envelope</SvcDescription>
             <MaxDimensions>USPS-Produced Envelope: 12-1/2" x 9-1/2"&lt;br>Maximum weight 4 pounds.</MaxDimensions>
             <MaxWeight>4</MaxWeight>
         </Service>
@@ -648,9 +630,7 @@
             </ExtraServices>
             <ValueOfContents>20.00</ValueOfContents>
             <SvcCommitments>6 - 10 business days to many major markets</SvcCommitments>
-            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Gift Card Flat
-                Rate Envelope
-            </SvcDescription>
+            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Gift Card Flat Rate Envelope</SvcDescription>
             <MaxDimensions>USPS-Produced Envelope: 10" x 7"&lt;br>Maximum weight 4 pounds.</MaxDimensions>
             <MaxWeight>4</MaxWeight>
         </Service>
@@ -683,9 +663,7 @@
             </ExtraServices>
             <ValueOfContents>20.00</ValueOfContents>
             <SvcCommitments>6 - 10 business days to many major markets</SvcCommitments>
-            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Small Flat Rate
-                Envelope
-            </SvcDescription>
+            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Small Flat Rate Envelope</SvcDescription>
             <MaxDimensions>USPS-Produced Envelope: 10" x 6"&lt;br>Maximum weight 4 pounds.</MaxDimensions>
             <MaxWeight>4</MaxWeight>
         </Service>
@@ -718,9 +696,7 @@
             </ExtraServices>
             <ValueOfContents>20.00</ValueOfContents>
             <SvcCommitments>6 - 10 business days to many major markets</SvcCommitments>
-            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Window Flat
-                Rate Envelope
-            </SvcDescription>
+            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Window Flat Rate Envelope</SvcDescription>
             <MaxDimensions>USPS-Produced Envelope: 10" x 5" or 12-1/2" x 9-1/2"&lt;br>Maximum weight 4 pounds.
             </MaxDimensions>
             <MaxWeight>4</MaxWeight>
@@ -740,9 +716,7 @@
             <ExtraServices>
                 <ExtraService>
                     <ServiceID>109</ServiceID>
-                    <ServiceName>Electronic USPS Delivery Confirmation&#8482; International (E-USPS DELCON
-                        INTL&#8482;)
-                    </ServiceName>
+                    <ServiceName>Electronic USPS Delivery Confirmation&#8482; International (E-USPS DELCON INTL&#8482;)</ServiceName>
                     <Available>True</Available>
                     <Price>0.00</Price>
                 </ExtraService>
@@ -768,9 +742,7 @@
             <ValueOfContents>20.00</ValueOfContents>
             <InsComment>SERVICE</InsComment>
             <SvcCommitments>Varies by destination</SvcCommitments>
-            <SvcDescription>First-Class Package International
-                Service&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt;
-            </SvcDescription>
+            <SvcDescription>First-Class Package International Service&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt;</SvcDescription>
             <MaxDimensions>Other than rolls: Max. length 24", max length, height and depth (thickness) combined 36"&lt;br>Rolls:
                 Max. length 36". Max length and twice the diameter combined 42"
             </MaxDimensions>
