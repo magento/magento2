@@ -22,11 +22,21 @@ use Magento\Ui\DataProvider\EavValidationRules;
  * Test for class \Magento\Customer\Model\Customer\DataProvider
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     const ATTRIBUTE_CODE = 'test-code';
-    const OPTIONS_RESULT = 'test-options';
+    const OPTIONS_RESULT = [
+        [
+            'label' => 'label-1',
+            'value' => 'value-1'
+        ],
+        [
+            'label' => 'label-2',
+            'value' => 'value-2'
+        ],
+    ];
 
     /**
      * @var Config|\PHPUnit_Framework_MockObject_MockObject
@@ -145,8 +155,19 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                         'config' => [
                                             'dataType' => 'frontend_input',
                                             'formElement' => 'frontend_input',
-                                            'options' => 'test-options',
-                                            'visible' => null,
+                                            'options' => [
+                                                [
+                                                    'label' => 'label-1',
+                                                    'value' => 'value-1',
+                                                    '__disableTmpl' => ['label' => true],
+                                                ],
+                                                [
+                                                    'label' => 'label-2',
+                                                    'value' => 'value-2',
+                                                    '__disableTmpl' => ['label' => true],
+                                                ],
+                                            ],
+                                            'visible' => false,
                                             'required' => 'is_required',
                                             'label' => __('frontend_label'),
                                             'sortOrder' => 'sort_order',
@@ -165,7 +186,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                         'config' => [
                                             'dataType' => 'frontend_input',
                                             'formElement' => 'frontend_input',
-                                            'visible' => null,
+                                            'visible' => false,
                                             'required' => 'is_required',
                                             'label' => __('frontend_label'),
                                             'sortOrder' => 'sort_order',
@@ -193,8 +214,19 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                         'config' => [
                                             'dataType' => 'frontend_input',
                                             'formElement' => 'frontend_input',
-                                            'options' => 'test-options',
-                                            'visible' => null,
+                                            'options' => [
+                                                [
+                                                    'label' => 'label-1',
+                                                    'value' => 'value-1',
+                                                    '__disableTmpl' => ['label' => true],
+                                                ],
+                                                [
+                                                    'label' => 'label-2',
+                                                    'value' => 'value-2',
+                                                    '__disableTmpl' => ['label' => true],
+                                                ],
+                                            ],
+                                            'visible' => false,
                                             'required' => 'is_required',
                                             'label' => __('frontend_label'),
                                             'sortOrder' => 'sort_order',
@@ -213,7 +245,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                         'config' => [
                                             'dataType' => 'frontend_input',
                                             'formElement' => 'frontend_input',
-                                            'visible' => null,
+                                            'visible' => false,
                                             'required' => 'is_required',
                                             'label' => 'frontend_label',
                                             'sortOrder' => 'sort_order',
@@ -237,8 +269,17 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                         'config' => [
                                             'dataType' => 'frontend_input',
                                             'formElement' => 'frontend_input',
-                                            'options' => 'test-options',
-                                            'visible' => null,
+                                            'options' => [
+                                                [
+                                                    'label' => 'label-1',
+                                                    'value' => 'value-1',
+                                                ],
+                                                [
+                                                    'label' => 'label-2',
+                                                    'value' => 'value-2',
+                                                ],
+                                            ],
+                                            'visible' => false,
                                             'required' => 'is_required',
                                             'label' => __('frontend_label'),
                                             'sortOrder' => 'sort_order',
@@ -528,7 +569,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $countryByWebsiteMock->expects($this->any())
             ->method('getAllOptions')
-            ->willReturn('test-options');
+            ->willReturn(self::OPTIONS_RESULT);
         $shareMock = $this->getMockBuilder(Share::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -1386,7 +1427,18 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                         'config' => [
                             'dataType' => 'frontend_input',
                             'formElement' => 'frontend_input',
-                            'options' => 'test-options',
+                            'options' => [
+                                [
+                                    'label' => 'label-1',
+                                    'value' => 'value-1',
+                                    '__disableTmpl' => ['label' => true],
+                                ],
+                                [
+                                    'label' => 'label-2',
+                                    'value' => 'value-2',
+                                    '__disableTmpl' => ['label' => true],
+                                ],
+                            ],
                             'visible' => true,
                             'required' => 'is_required',
                             'label' => __('frontend_label'),
@@ -1406,7 +1458,18 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                         'config' => [
                             'dataType' => 'frontend_input',
                             'formElement' => 'frontend_input',
-                            'options' => 'test-options',
+                            'options' => [
+                                [
+                                    'label' => 'label-1',
+                                    'value' => 'value-1',
+                                    '__disableTmpl' => ['label' => true],
+                                ],
+                                [
+                                    'label' => 'label-2',
+                                    'value' => 'value-2',
+                                    '__disableTmpl' => ['label' => true],
+                                ],
+                            ],
                             'visible' => true,
                             'required' => 'is_required',
                             'label' => __('frontend_label'),
@@ -1490,8 +1553,19 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                 'config' => [
                                     'dataType' => 'frontend_input',
                                     'formElement' => 'frontend_input',
-                                    'options' => 'test-options',
-                                    'visible' => null,
+                                    'options' => [
+                                        [
+                                            'label' => 'label-1',
+                                            'value' => 'value-1',
+                                            '__disableTmpl' => ['label' => true],
+                                        ],
+                                        [
+                                            'label' => 'label-2',
+                                            'value' => 'value-2',
+                                            '__disableTmpl' => ['label' => true],
+                                        ],
+                                    ],
+                                    'visible' => false,
                                     'required' => 'is_required',
                                     'label' => __('frontend_label'),
                                     'sortOrder' => 'sort_order',
@@ -1510,7 +1584,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                 'config' => [
                                     'dataType' => 'frontend_input',
                                     'formElement' => 'frontend_input',
-                                    'visible' => null,
+                                    'visible' => false,
                                     'required' => 'is_required',
                                     'label' => 'frontend_label',
                                     'sortOrder' => 'sort_order',
@@ -1534,8 +1608,17 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                 'config' => [
                                     'dataType' => 'frontend_input',
                                     'formElement' => 'frontend_input',
-                                    'options' => 'test-options',
-                                    'visible' => null,
+                                    'options' => [
+                                        [
+                                            'label' => 'label-1',
+                                            'value' => 'value-1',
+                                        ],
+                                        [
+                                            'label' => 'label-2',
+                                            'value' => 'value-2',
+                                        ],
+                                    ],
+                                    'visible' => false,
                                     'required' => 'is_required',
                                     'label' => __('frontend_label'),
                                     'sortOrder' => 'sort_order',
