@@ -57,7 +57,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
     public function beforeSave()
     {
         $value = $this->getValue();
-        $value = $value{strlen($value) - 1} === '/' ?: $value . '/';
+        $value = $value{strlen($value) - 1} === '/' ? $value : $value . '/';
         try {
             if (!$this->_validateUnsecure($value) && !$this->_validateSecure($value)) {
                 $this->_validateFullyQualifiedUrl($value);
