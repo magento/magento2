@@ -118,7 +118,7 @@ type CustomizableAreaValue @doc(description: "CustomizableAreaValue defines the 
 }
 
 type CategoryTree implements CategoryInterface @doc(description: "Category Tree implementation.") {
-    children: [CategoryTree] @doc(description: "Child categories tree.") @resolve(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree")
+    children: [CategoryTree] @doc(description: "Child categories tree.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree")
 }
 
 type CustomizableDateOption implements CustomizableOptionInterface @doc(description: "CustomizableDateOption contains information about a date picker that is defined as part of a customizable option.") {
