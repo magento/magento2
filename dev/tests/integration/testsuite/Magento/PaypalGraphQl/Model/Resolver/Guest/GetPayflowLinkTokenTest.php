@@ -19,9 +19,10 @@ use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test PayflowLinkGetSecretToken graphql endpoint for non-registered customer
+ * Test getPayflowLinkToken graphql endpoint for non-registered customer
  *
  * @magentoAppArea graphql
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GetPayflowLinkTokenTest extends TestCase
 {
@@ -35,17 +36,11 @@ class GetPayflowLinkTokenTest extends TestCase
      */
     private $json;
 
-    /**
-     * @var QuoteIdToMaskedQuoteId
-     */
-    private $quoteIdToMaskedId;
-
-
     /** @var  ObjectManager */
     protected $objectManager;
 
     /** @var  GraphQl */
-    protected $graphqlController;
+    private $graphqlController;
 
     /** @var  GetMaskedQuoteIdByReservedOrderId */
     protected $getMaskedQuoteIdByReservedOrderId;
@@ -65,7 +60,7 @@ class GetPayflowLinkTokenTest extends TestCase
      *
      * @magentoConfigFixture default_store payment/payflow_link/active 1
      * @magentoConfigFixture default_store payment/payflow_link/sandbox_flag 1
-     * @magentoDataFixture Magento/Paypal/_files/order_payflow_link.php
+     * @magentoDataFixture Magento/Paypal/_files/order_payflow_link_with_payment.php
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -101,8 +96,8 @@ QUERY;
 
         $payflowLinkTokenResponse = $responseData['data']['getPayflowLinkToken'];
 
-        $this->assertArrayHasKey('secret_token', $payflowLinkTokenResponse );
-        $this->assertArrayHasKey('secret_token_id', $payflowLinkTokenResponse );
+        $this->assertArrayHasKey('secret_token', $payflowLinkTokenResponse);
+        $this->assertArrayHasKey('secret_token_id', $payflowLinkTokenResponse);
 
         $this->assertEquals('TEST', $payflowLinkTokenResponse['mode']);
         $this->assertEquals('https://pilot-payflowlink.paypal.com', $payflowLinkTokenResponse['paypal_url']);

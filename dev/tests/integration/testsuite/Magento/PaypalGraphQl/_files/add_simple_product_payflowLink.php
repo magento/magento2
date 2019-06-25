@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-include __DIR__ . '/../../../GraphQl/Catalog/_files/simple_product.php';
+include __DIR__ . '/../../GraphQl/Catalog/_files/simple_product.php';
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Quote\Api\CartRepositoryInterface;

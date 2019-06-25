@@ -4,75 +4,51 @@
  * See COPYING.txt for license details.
  */
 
-include __DIR__ . '/../../GraphQl/Quote/_files/guest/create_empty_cart.php';
-include __DIR__ . '/../../PaypalGraphQl/_files/add_simple_product_payflowLink.php';
-include __DIR__ . '/../../GraphQl/Quote/_files/guest/set_guest_email.php';
-include __DIR__ . '/../../GraphQl/Quote/_files/set_new_shipping_address.php';
-include __DIR__ . '/../../GraphQl/Quote/_files/set_new_billing_address.php';
-include __DIR__ . '/../../GraphQl/Quote/_files/set_flatrate_shipping_method.php';
-
-
 use Magento\Paypal\Model\Config;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objManager = Bootstrap::getObjectManager();
-
-/** @var \Magento\Framework\UrlInterface $url */
-$url = $objManager->get(\Magento\Framework\UrlInterface::class);
-$baseUrl = $url->getBaseUrl();
 
 /** @var StoreInterface $store */
 $store = $objManager->get(StoreManagerInterface::class)
     ->getStore();
 
-/** @var \Magento\Quote\Model\QuoteFactory $quoteFactory */
-$quoteFactory = Bootstrap::getObjectManager()->get(\Magento\Quote\Model\QuoteFactory::class);
-/** @var CartRepositoryInterface  $cartRepository */
-$cartRepository = Bootstrap::getObjectManager()->get(CartRepositoryInterface::class);
-/** @var QuoteResource $quoteResource */
-$quoteResource = Bootstrap::getObjectManager()->get(QuoteResource::class);
+/** @var CartInterface $quote */
+$quote = $objManager->create(CartInterface::class);
+$quote->setReservedOrderId('000000045')
+    ->setStoreId($store->getId());
 
-$quote = $quoteFactory->create();
-$quoteResource->load($quote, 'test_quote', 'reserved_order_id');
-$quote->setStoreId($store->getId());
-$cartRepository->save($quote);
+/** @var CartRepositoryInterface $quoteRepository */
+$quoteRepository = $objManager->get(CartRepositoryInterface::class);
+$quoteRepository->save($quote);
 
 /** @var Payment $payment */
 $payment = $objManager->create(Payment::class);
 $payment->setMethod(Config::METHOD_PAYFLOWLINK)
-    ->setBaseAmountAuthorized(30)
-    ->setAdditionalInformation([
-
-        'cancel_url'=> $baseUrl .'paypal/payflow/cancelPayment',
-        'return_url'=> $baseUrl .'paypal/payflow/returnUrl',
-        'secure_token_id' => '31f2a7c8d257c70b1c9eb9051b90e0',
-        'secure_token' => '80IgSbabyj0CtBDWHZZeQN3'
-    ]);
+    ->setBaseAmountAuthorized(100)
+    ->setAdditionalInformation(
+        [
+        'secure_silent_post_hash' => 'cf7i85d01ed7c92223031afb4rdl2f1f'
+        ]
+    );
 
 /** @var OrderInterface $order */
 $order = $objManager->create(OrderInterface::class);
-$order->setIncrementId('test_quote')
-    ->setBaseGrandTotal(30)
+$order->setIncrementId('000000045')
+    ->setBaseGrandTotal(100)
     ->setQuoteId($quote->getId())
     ->setStoreId($store->getId())
     ->setState(Order::STATE_PENDING_PAYMENT)
-    ->setStatus(Order::STATE_PENDING_PAYMENT)
     ->setPayment($payment);
 
 /** @var OrderRepositoryInterface $orderRepository */
 $orderRepository = $objManager->get(OrderRepositoryInterface::class);
 $orderRepository->save($order);
-
-//$orderCollection = $objectManager->create(\Magento\Sales\Model\Order::class)->getCollection();
-/** @var \Magento\Sales\Model\Order $order */
-//$order = $orderCollection->getFirstItem();
-
-
