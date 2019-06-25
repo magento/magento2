@@ -99,6 +99,8 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getTimesUsed();
 
     /**
+     * Set time used.
+     *
      * @param int $timesUsed
      * @return $this
      */
@@ -160,6 +162,8 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getType();
 
     /**
+     * Set type of coupon.
+     *
      * @param int $type
      * @return $this
      */

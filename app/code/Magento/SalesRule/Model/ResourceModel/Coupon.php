@@ -43,10 +43,10 @@ class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
     /**
      * Load primary coupon (is_primary = 1) for specified rule
      *
-     *
      * @param \Magento\SalesRule\Model\Coupon $object
      * @param \Magento\SalesRule\Model\Rule|int $rule
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function loadPrimaryByRule(\Magento\SalesRule\Model\Coupon $object, $rule)
     {
