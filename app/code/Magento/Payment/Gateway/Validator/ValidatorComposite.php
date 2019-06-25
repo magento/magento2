@@ -10,10 +10,9 @@ use Magento\Framework\ObjectManager\TMapFactory;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
 /**
- * Class ValidatorComposite
- * @package Magento\Payment\Gateway\Validator
+ * Compiles a result using the results of multiple validators
+ *
  * @api
- * @since 100.0.2
  */
 class ValidatorComposite extends AbstractValidator
 {
@@ -23,14 +22,21 @@ class ValidatorComposite extends AbstractValidator
     private $validators;
 
     /**
+     * @var array
+     */
+    private $chainBreakingValidators;
+
+    /**
      * @param ResultInterfaceFactory $resultFactory
      * @param TMapFactory $tmapFactory
      * @param array $validators
+     * @param array $chainBreakingValidators
      */
     public function __construct(
         ResultInterfaceFactory $resultFactory,
         TMapFactory $tmapFactory,
-        array $validators = []
+        array $validators = [],
+        array $chainBreakingValidators = []
     ) {
         $this->validators = $tmapFactory->create(
             [
@@ -38,6 +44,7 @@ class ValidatorComposite extends AbstractValidator
                 'type' => ValidatorInterface::class
             ]
         );
+        $this->chainBreakingValidators = $chainBreakingValidators;
         parent::__construct($resultFactory);
     }
 
@@ -51,7 +58,7 @@ class ValidatorComposite extends AbstractValidator
     {
         $isValid = true;
         $failsDescriptionAggregate = [];
-        foreach ($this->validators as $validator) {
+        foreach ($this->validators as $key => $validator) {
             $result = $validator->validate($validationSubject);
             if (!$result->isValid()) {
                 $isValid = false;
@@ -59,6 +66,9 @@ class ValidatorComposite extends AbstractValidator
                     $failsDescriptionAggregate,
                     $result->getFailsDescription()
                 );
+                if (!empty($this->chainBreakingValidators[$key])) {
+                    break;
+                }
             }
         }
 

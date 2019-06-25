@@ -6,6 +6,7 @@
 namespace Magento\Checkout\Test\Unit\Controller\Cart;
 
 use Magento\Checkout\Controller\Cart\Index;
+use Magento\Framework\Data\Form\FormKey\Validator;
 
 /**
  * Class IndexTest
@@ -80,6 +81,11 @@ class CouponPostTest extends \PHPUnit\Framework\TestCase
     private $redirectFactory;
 
     /**
+     * @var Validator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $formKeyValidatorMock;
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -149,6 +155,8 @@ class CouponPostTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->quoteRepository = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->formKeyValidatorMock = $this->createMock(Validator::class);
+        $this->formKeyValidatorMock->expects($this->once())->method('validate')->willReturn(true);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -159,7 +167,8 @@ class CouponPostTest extends \PHPUnit\Framework\TestCase
                 'checkoutSession' => $this->checkoutSession,
                 'cart' => $this->cart,
                 'couponFactory' => $this->couponFactory,
-                'quoteRepository' => $this->quoteRepository
+                'quoteRepository' => $this->quoteRepository,
+                'formKeyValidator' => $this->formKeyValidatorMock,
             ]
         );
     }

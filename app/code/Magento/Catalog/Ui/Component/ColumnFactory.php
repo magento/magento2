@@ -71,6 +71,9 @@ class ColumnFactory
 
         if ($attribute->usesSource()) {
             $config['options'] = $attribute->getSource()->getAllOptions();
+            foreach ($config['options'] as &$optionData) {
+                $optionData['__disableTmpl'] = true;
+            }
         }
         
         $config['component'] = $this->getJsComponent($config['dataType']);

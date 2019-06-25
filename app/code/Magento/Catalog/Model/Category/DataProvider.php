@@ -24,6 +24,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
+use Magento\Framework\AuthorizationInterface;
 
 /**
  * Class DataProvider
@@ -31,6 +32,7 @@ use Magento\Ui\DataProvider\EavValidationRules;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 101.0.0
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
@@ -146,6 +148,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $fileInfo;
 
     /**
+     * @var AuthorizationInterface
+     */
+    private $authorization;
+
+    /**
      * DataProvider constructor
      *
      * @param string $name
@@ -160,6 +167,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param CategoryFactory $categoryFactory
      * @param array $meta
      * @param array $data
+     * @param AuthorizationInterface|null $authorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -174,7 +182,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         \Magento\Framework\App\RequestInterface $request,
         CategoryFactory $categoryFactory,
         array $meta = [],
-        array $data = []
+        array $data = [],
+        AuthorizationInterface $authorization = null
     ) {
         $this->eavValidationRules = $eavValidationRules;
         $this->collection = $categoryCollectionFactory->create();
@@ -184,6 +193,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->storeManager = $storeManager;
         $this->request = $request;
         $this->categoryFactory = $categoryFactory;
+        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
 
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
@@ -207,6 +217,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
+     * Disable fields if they are using default values.
+     *
      * @param Category $category
      * @param array $meta
      * @return array
@@ -274,11 +286,20 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     private function prepareFieldsMeta($fieldsMap, $fieldsMeta)
     {
+        $canEditDesign = $this->authorization->isAllowed('Magento_Catalog::edit_category_design');
+
         $result = [];
         foreach ($fieldsMap as $fieldSet => $fields) {
             foreach ($fields as $field) {
                 if (isset($fieldsMeta[$field])) {
-                    $result[$fieldSet]['children'][$field]['arguments']['data']['config'] = $fieldsMeta[$field];
+                    $config = $fieldsMeta[$field];
+                    if (($fieldSet === 'design' || $fieldSet === 'schedule_design_update') && !$canEditDesign) {
+                        $config['required'] = 1;
+                        $config['disabled'] = 1;
+                        $config['serviceDisabled'] = true;
+                    }
+
+                    $result[$fieldSet]['children'][$field]['arguments']['data']['config'] = $config;
                 }
             }
         }
@@ -521,6 +542,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
+     * List of fields groups and fields.
+     *
      * @return array
      * @since 101.0.0
      */

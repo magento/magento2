@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,6 +9,9 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Module\Dir\Reader as ModuleReader;
 
+/**
+ * Class to retrieve action class.
+ */
 class ActionList
 {
     /**
@@ -91,6 +93,7 @@ class ActionList
         if ($area) {
             $area = '\\' . $area;
         }
+        $namespace = strtolower($namespace);
         if (strpos($namespace, self::NOT_ALLOWED_IN_NAMESPACE_PATH) !== false) {
             return null;
         }

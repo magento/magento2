@@ -408,7 +408,10 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     {
         foreach (array_keys(self::$mapDependencies) as $module) {
             $declared = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
-            $found = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_FOUND);
+            $found = array_merge(
+                $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_FOUND),
+                $this->_getDependencies($module, self::TYPE_SOFT, self::MAP_TYPE_FOUND)
+            );
             $found['Magento\Framework'] = 'Magento\Framework';
             $this->_setDependencies($module, self::TYPE_HARD, self::MAP_TYPE_REDUNDANT, array_diff($declared, $found));
         }

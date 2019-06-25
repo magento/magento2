@@ -12,6 +12,8 @@
 namespace Magento\Email\Block\Adminhtml\Template;
 
 /**
+ * Email template preview block.
+ *
  * @api
  * @since 100.0.2
  */
@@ -53,6 +55,7 @@ class Preview extends \Magento\Backend\Block\Widget
      * Prepare html output
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     protected function _toHtml()
     {
@@ -68,8 +71,6 @@ class Preview extends \Magento\Backend\Block\Widget
             $template->setTemplateStyles($this->getRequest()->getParam('styles'));
         }
 
-        $template->setTemplateText($this->_maliciousCode->filter($template->getTemplateText()));
-
         \Magento\Framework\Profiler::start($this->profilerName);
 
         $template->emulateDesign($storeId);
@@ -78,6 +79,7 @@ class Preview extends \Magento\Backend\Block\Widget
             [$template, 'getProcessedTemplate']
         );
         $template->revertDesign();
+        $templateProcessed = $this->_maliciousCode->filter($templateProcessed);
 
         if ($template->isPlain()) {
             $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";

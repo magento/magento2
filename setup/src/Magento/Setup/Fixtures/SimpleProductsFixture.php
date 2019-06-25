@@ -132,7 +132,7 @@ class SimpleProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -140,7 +140,7 @@ class SimpleProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {
@@ -150,7 +150,8 @@ class SimpleProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD)
      */
     public function execute()

@@ -11,6 +11,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
  * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
+ * @magentoAppArea adminhtml
  */
 class FulltextGridSearchTest extends AbstractBackendController
 {

@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Authorizenet\Model\Directpost;
 
 use Magento\Framework\Session\SessionManager;
 
 /**
  * Authorize.net DirectPost session model
+ * @deprecated 2.2.9 Authorize.net is removing all support for this payment method
  */
 class Session extends SessionManager
 {

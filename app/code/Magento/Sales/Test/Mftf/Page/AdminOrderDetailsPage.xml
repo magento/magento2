@@ -19,5 +19,7 @@
         <section name="AdminOrderInvoicesTabSection"/>
         <section name="AdminOrderShipmentsTabSection"/>
         <section name="AdminOrderCreditMemosTabSection"/>
+        <section name="AdminOrderTransactionsTabSection"/>
+        <section name="AdminOrderCommentsHistoryTabSection"/>
     </page>
 </pages>

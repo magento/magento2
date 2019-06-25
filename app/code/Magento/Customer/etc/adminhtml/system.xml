@@ -280,6 +280,7 @@
                 </field>
                 <field id="html" translate="label" type="textarea" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>HTML</label>
+                    <comment>Only 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'sub', 'sup', 'ul' tags are allowed</comment>
                 </field>
                 <field id="pdf" translate="label" type="textarea" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>PDF</label>

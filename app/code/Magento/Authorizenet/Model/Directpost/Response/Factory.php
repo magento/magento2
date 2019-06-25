@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Authorizenet\Model\Directpost\Response;
 
 use Magento\Authorizenet\Model\Response\Factory as AuthorizenetResponseFactory;
 
 /**
  * Factory class for @see \Magento\Authorizenet\Model\Directpost\Response
+ * @deprecated 2.2.9 Authorize.net is removing all support for this payment method
  */
 class Factory extends AuthorizenetResponseFactory
 {

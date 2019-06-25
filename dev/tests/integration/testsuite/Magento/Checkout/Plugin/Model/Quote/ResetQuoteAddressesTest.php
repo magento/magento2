@@ -22,11 +22,13 @@ class ResetQuoteAddressesTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
      * @magentoAppArea frontend
+     * @magentoAppIsolation enabled
      *
      * @return void
      */
     public function testAfterRemoveItem()
     {
+        $this->login(1);
         /** @var Quote $quote */
         $quote = Bootstrap::getObjectManager()->create(Quote::class);
         $quote->load('test_order_with_virtual_product', 'reserved_order_id');
@@ -53,6 +55,10 @@ class ResetQuoteAddressesTest extends \PHPUnit\Framework\TestCase
         $cart = Bootstrap::getObjectManager()->create(Cart::class);
 
         $activeQuote = $cart->getQuote();
+        $activeQuote->getExtensionAttributes()->setShippingAssignments([]);
+        if ($activeQuote->getShippingAddress()) {
+            $activeQuote->removeAddress($activeQuote->getShippingAddress()->getEntityId());
+        }
         $cart->removeItem($activeQuote->getAllVisibleItems()[0]->getId());
         $cart->save();
 
@@ -68,5 +74,13 @@ class ResetQuoteAddressesTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($quoteBillingAddressUpdated->getRegion());
         $this->assertEmpty($quoteBillingAddressUpdated->getPostcode());
         $this->assertEmpty($quoteBillingAddressUpdated->getCity());
+    }
+
+    private function login(int $customerId)
+    {
+        /** @var \Magento\Customer\Model\Session $session */
+        $session = Bootstrap::getObjectManager()
+            ->get(\Magento\Customer\Model\Session::class);
+        $session->loginById($customerId);
     }
 }

@@ -6,6 +6,7 @@
 namespace Magento\Setup\Test\Block\SelectVersion\OtherComponentsGrid;
 
 use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\Client\Locator;
 
 /**
@@ -19,6 +20,13 @@ class Item extends Block
      * @var string
      */
     private $version = '[ng-change*="setComponentVersion"]';
+
+    /**
+     * CSS selector for available version options.
+     *
+     * @var string
+     */
+    private $versionOptions = '[ng-change*="setComponentVersion"] option';
 
     /**
      * CSS selector for package name element.
@@ -45,5 +53,21 @@ class Item extends Block
     public function getPackageName()
     {
         return $this->_rootElement->find($this->packageName)->getText();
+    }
+
+    /**
+     * Return list of available versions.
+     *
+     * @return string[]
+     */
+    public function getAvailableVersions()
+    {
+        $options = $this->_rootElement->getElements($this->versionOptions, Locator::SELECTOR_CSS);
+        return array_map(
+            function (ElementInterface $item) {
+                return $item->getText();
+            },
+            $options
+        );
     }
 }
