@@ -128,8 +128,8 @@ mutation {
           secure_token
           secure_token_id
         }
-      handleTransparentResponse(input: {
-          paypalPayload: "$payload",
+      handlePayflowProResponse(input: {
+          paypal_payload: "$payload",
           cart_id: "{$cartId}"
         })
       {
@@ -215,6 +215,15 @@ QUERY;
             $paymentMethod,
             $responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']
         );
+
+        $this->assertTrue(
+            isset($responseData['data']['handlePayflowProResponse']['cart']['selected_payment_method']['code'])
+        );
+        $this->assertEquals(
+            $paymentMethod,
+            $responseData['data']['handlePayflowProResponse']['cart']['selected_payment_method']['code']
+        );
+
 
         $this->assertTrue(
             isset($responseData['data']['placeOrder']['order']['order_id'])
