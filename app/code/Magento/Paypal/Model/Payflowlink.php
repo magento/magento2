@@ -558,6 +558,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      */
     protected function _generateSecureSilentPostHash($payment)
     {
+        //phpcs:ignore Magento2.Security.InsecureFunction
         $secureHash = md5($this->mathRandom->getRandomString(10));
         $payment->setAdditionalInformation($this->_secureSilentPostHashKey, $secureHash);
         return $secureHash;
