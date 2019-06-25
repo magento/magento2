@@ -47,7 +47,10 @@ class ValidateCustomerData
         $errorInput = [];
 
         foreach ($attributes as $attributeInfo) {
-            if ($attributeInfo->getIsRequired() && $customerData[$attributeInfo->getAttributeCode()] == '') {
+            if ($attributeInfo->getIsRequired()
+                && (!isset($customerData[$attributeInfo->getAttributeCode()])
+                    || $customerData[$attributeInfo->getAttributeCode()] == '')
+            ) {
                 $errorInput[] = $attributeInfo->getDefaultFrontendLabel();
             }
         }
