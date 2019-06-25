@@ -32,7 +32,7 @@ class Stock extends UnsubscribeController implements HttpPostActionInterface
     protected $productRepository;
 
     /**
-     * @var StoreManagerInterface
+     * @var StoreManagerInterface|null
      */
     private $storeManager;
 
