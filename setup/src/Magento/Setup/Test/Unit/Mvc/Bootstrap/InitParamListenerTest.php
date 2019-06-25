@@ -22,11 +22,6 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
      */
     private $listener;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $callbackHandler;
-
     /** callable[][] */
     private $callbacks = [];
 

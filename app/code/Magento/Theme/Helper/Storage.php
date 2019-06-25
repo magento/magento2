@@ -14,6 +14,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Storage extends \Magento\Framework\App\Helper\AbstractHelper
 {

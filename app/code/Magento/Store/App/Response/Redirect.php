@@ -9,6 +9,7 @@ namespace Magento\Store\App\Response;
 
 /**
  * Class Redirect computes redirect urls responses.
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Redirect implements \Magento\Framework\App\Response\RedirectInterface
 {
