@@ -77,7 +77,7 @@ class Router implements \Magento\Framework\App\RouterInterface
     public function match(RequestInterface $request)
     {
         $rewrite = $this->getRewrite(
-            $request->getPathInfo(),
+            $this->getNormalizedPathInfo($request),
             $this->storeManager->getStore()->getId()
         );
 
@@ -152,5 +152,31 @@ class Router implements \Magento\Framework\App\RouterInterface
                 UrlRewrite::STORE_ID => $storeId,
             ]
         );
+    }
+
+    /**
+     * Get normalized request path
+     *
+     * @param RequestInterface|HttpRequest $request
+     * @return string
+     */
+    private function getNormalizedPathInfo(RequestInterface $request): string
+    {
+        $path = $request->getPathInfo();
+        /**
+         * If request contains query params then we need to trim a slash in end of the path.
+         * For example:
+         * the original request is: http://my-host.com/category-url-key.html/?color=black
+         * where the original path is: category-url-key.html/
+         * and the result path will be: category-url-key.html
+         *
+         * It need to except a redirect like this:
+         * http://my-host.com/category-url-key.html/?color=black => http://my-host.com/category-url-key.html
+         */
+        if (!empty($path) && $request->getQuery()->count()) {
+            $path = rtrim($path, '/');
+        }
+
+        return (string)$path;
     }
 }
