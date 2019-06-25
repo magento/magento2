@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\DownloadableGraphQl\Model\Resolver;
+namespace Magento\CustomerDownloadableGraphQl\Model\Resolver;
 
 use Magento\DownloadableGraphQl\Model\ResourceModel\GetPurchasedDownloadableProducts;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
