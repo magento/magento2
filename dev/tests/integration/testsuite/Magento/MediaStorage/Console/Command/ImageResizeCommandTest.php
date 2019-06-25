@@ -130,13 +130,6 @@ class ImageResizeCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->tester->execute([]);
         $this->assertContains('Wrong file', $this->tester->getDisplay());
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function tearDown()
-    {
         $this->mediaDirectory->getDriver()->deleteFile($this->mediaDirectory->getAbsolutePath($this->fileName));
     }
 }
