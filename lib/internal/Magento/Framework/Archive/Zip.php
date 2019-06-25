@@ -54,7 +54,8 @@ class Zip extends AbstractArchive implements ArchiveInterface
         $zip = new \ZipArchive();
         if ($zip->open($source) === true) {
             $filename = $this->filterRelativePaths($zip->getNameIndex(0) ?: '');
-            if ($filename) {
+            if ($filename && !preg_match('#[:"*?|<>%]#', $filename)) {
+                // extract first entry in zip file to destination directory
                 $zip->extractTo(dirname($destination), $filename);
                 rename(dirname($destination).'/'.$filename, $destination);
             } else {
