@@ -18,7 +18,7 @@
             <opened>true</opened>
             <dataScope>data.sources</dataScope>
         </settings>
-        <container name="assign_sources_container" component="Magento_Ui/js/form/components/group" sortOrder="10">
+        <container name="assign_sources_container" component="Magento_Ui/js/form/components/group" template="ui/form/components/complex" sortOrder="10">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="formElement" xsi:type="string">container</item>
@@ -27,24 +27,7 @@
                     <item name="breakLine" xsi:type="boolean">false</item>
                 </item>
             </argument>
-            <container name="assign_sources_button" component="Magento_Ui/js/form/components/button" template="ui/form/components/button/container">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="formElement" xsi:type="string">container</item>
-                        <item name="actions" xsi:type="array">
-                            <item name="0" xsi:type="array">
-                                <item name="targetName" xsi:type="string">product_form.product_form.sources.assign_sources_modal</item>
-                                <item name="actionName" xsi:type="string">toggleModal</item>
-                            </item>
-                        </item>
-                        <item name="title" xsi:type="string" translate="true">Assign Sources</item>
-                        <item name="additionalForGroup" xsi:type="boolean">true</item>
-                        <item name="additionalClasses" xsi:type="string">admin__field-medium</item>
-                        <item name="dataScope" xsi:type="string"/>
-                    </item>
-                </argument>
-            </container>
-            <container name="advanced_inventory_button" component="Magento_Ui/js/form/components/button" template="ui/form/components/button/container">
+            <container name="advanced_inventory_button" component="Magento_Ui/js/form/components/button">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
@@ -61,10 +44,29 @@
                     </item>
                 </argument>
             </container>
+            <container name="assign_sources_button" component="Magento_Ui/js/form/components/button">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">container</item>
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="targetName" xsi:type="string">product_form.product_form.sources.assign_sources_modal</item>
+                                <item name="actionName" xsi:type="string">toggleModal</item>
+                            </item>
+                        </item>
+                        <item name="title" xsi:type="string" translate="true">Assign Sources</item>
+                        <item name="additionalForGroup" xsi:type="boolean">true</item>
+                        <item name="additionalClasses" xsi:type="string">admin__field-medium</item>
+                        <item name="dataScope" xsi:type="string"/>
+                    </item>
+                </argument>
+            </container>
         </container>
-        <dynamicRows name="assigned_sources" component="Magento_Ui/js/dynamic-rows/dynamic-rows-grid" sortOrder="20">
+        <dynamicRows name="assigned_sources" component="Magento_Ui/js/dynamic-rows/dynamic-rows-grid" template="ui/dynamic-rows/templates/grid" sortOrder="20">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="columnsHeaderAfterRender" xsi:type="boolean">true</item>
+                    <item name="renderDefaultRecord" xsi:type="boolean">false</item>
                     <item name="deleteButtonLabel" xsi:type="string">Unassign</item>
                     <item name="dataProvider" xsi:type="string">data.sources.assign_sources_grid</item>
                     <item name="map" xsi:type="array">
@@ -77,7 +79,9 @@
                 </item>
             </argument>
             <settings>
-                <label translate="true">Assigned Sources</label>
+                <additionalClasses>
+                    <class name="admin__field-wide">true</class>
+                </additionalClasses>
                 <defaultRecord>false</defaultRecord>
                 <addButton>false</addButton>
                 <deleteProperty>true</deleteProperty>
@@ -89,7 +93,7 @@
                 <dndConfig>
                     <param name="enabled" xsi:type="boolean">false</param>
                 </dndConfig>
-                <columnsHeader>true</columnsHeader>
+                <columnsHeader>false</columnsHeader>
             </settings>
             <container name="record" component="Magento_Ui/js/dynamic-rows/record">
                 <argument name="data" xsi:type="array">
@@ -115,6 +119,11 @@
                     </settings>
                 </field>
                 <field name="status" formElement="select" sortOrder="40">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">true</item>
+                        </item>
+                    </argument>
                     <settings>
                         <dataType>text</dataType>
                         <dataScope>status</dataScope>
@@ -154,8 +163,13 @@
                     </settings>
                 </field>
                 <field name="actionDelete" formElement="actionDelete" sortOrder="90" template="Magento_InventoryCatalogAdminUi/product/form/stock/assign-sources/action-delete">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">true</item>
+                        </item>
+                    </argument>
                     <settings>
-                        <label translate="true"></label>
+                        <label translate="true">Actions</label>
                     </settings>
                 </field>
             </container>
