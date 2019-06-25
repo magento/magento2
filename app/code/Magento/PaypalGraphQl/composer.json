@@ -10,7 +10,8 @@
         "magento/module-quote": "*",
         "magento/module-checkout": "*",
         "magento/module-paypal": "*",
-        "magento/module-quote-graph-ql": "*"
+        "magento/module-quote-graph-ql": "*",
+        "magento/module-sales": "*"
     },
     "suggest": {
         "magento/module-graph-ql": "*"
