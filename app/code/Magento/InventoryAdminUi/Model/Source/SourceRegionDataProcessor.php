@@ -13,6 +13,8 @@ namespace Magento\InventoryAdminUi\Model\Source;
 class SourceRegionDataProcessor
 {
     /**
+     * Processes source region data
+     *
      * @param array $data
      * @return array
      */
