@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "457d0a686c8ece954ab4055da896aad2",
+    "content-hash": "ad16b0301a9bb01887ee4504b5f6a842",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -2395,7 +2395,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
+                    "email": "backendtea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
