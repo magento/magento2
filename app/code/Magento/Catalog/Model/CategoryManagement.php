@@ -30,7 +30,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
      */
     private $categoriesFactory;
-    
+
     /**
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param Category\Tree $categoryTree
@@ -112,8 +112,9 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
             $lastId = array_pop($categoryIds);
             $afterId = ($afterId === null || $afterId > $lastId) ? $lastId : $afterId;
         }
-
-        if (strpos($parentCategory->getPath(), (string) $model->getPath()) === 0) {
+        $parentPath = $parentCategory->getPath();
+        $path = $model->getPath();
+        if ($path && strpos($parentPath, $path) === 0) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Operation do not allow to move a parent category to any of children category')
             );

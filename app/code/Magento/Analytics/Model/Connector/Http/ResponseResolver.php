@@ -41,7 +41,8 @@ class ResponseResolver
         $converterMediaType = $this->converter->getContentMediaType();
 
         /** Content-Type header may not only contain media-type declaration */
-        if ($response->getBody() && is_int(strripos($response->getHeader('Content-Type'), (string) $converterMediaType))) {
+        if ($response->getBody()
+            && is_int(strripos($response->getHeader('Content-Type'), (string) $converterMediaType))) {
             $responseBody = $this->converter->fromBody($response->getBody());
         } else {
             $responseBody = [];
