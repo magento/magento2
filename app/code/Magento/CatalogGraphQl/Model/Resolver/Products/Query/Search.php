@@ -144,7 +144,7 @@ class Search
         $offset = $length * ($searchCriteria->getCurrentPage() - 1);
 
         if ($searchCriteria->getPageSize()) {
-            $maxPages = ceil($searchResult->getTotalCount() / $searchCriteria->getPageSize()) - 1;
+            $maxPages = ceil($searchResult->getTotalCount() / $searchCriteria->getPageSize());
         } else {
             $maxPages = 0;
         }

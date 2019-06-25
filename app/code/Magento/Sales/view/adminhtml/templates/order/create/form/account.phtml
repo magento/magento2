@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Form\Account */
 ?>
 
-<div class="admin__page-section-title <?= /* @noEscape */ $block->getHeaderCssClass() ?>">
-    <span class="title"><?= /* @noEscape */ $block->getHeaderText() ?></span>
+<div class="admin__page-section-title <?= $block->escapeHtmlAttr($block->getHeaderCssClass()) ?>">
+    <span class="title"><?= $block->escapeHtml($block->getHeaderText()) ?></span>
     <div class="actions"></div>
 </div>
 <div id="customer_account_fields" class="admin__page-section-content">
