@@ -205,7 +205,23 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnThirdNextButton"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnFourthNextButton"/>
     </actionGroup>
-
+    <actionGroup name="selectCreatedAttributeAndCreateTwoOptions" extends="addNewProductConfigurationAttribute">
+        <remove keyForRemoval="clickOnNewAttribute"/>
+        <remove keyForRemoval="waitForIFrame"/>
+        <remove keyForRemoval="switchToNewAttributeIFrame"/>
+        <remove keyForRemoval="fillDefaultLabel"/>
+        <remove keyForRemoval="clickOnNewAttributePanel"/>
+        <remove keyForRemoval="waitForSaveAttribute"/>
+        <remove keyForRemoval="switchOutOfIFrame"/>
+        <remove keyForRemoval="waitForFilters"/>
+        <fillField userInput="{{attribute.attribute_code}}" selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" stepKey="fillFilterAttributeCodeField"/>
+        <fillField userInput="{{firstOption.label}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewFirstOption"/>
+        <fillField userInput="{{secondOption.label}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewSecondOption"/>
+        <remove keyForRemoval="clickOnSelectAll"/>
+        <remove keyForRemoval="clickOnSecondNextButton"/>
+        <remove keyForRemoval="clickOnThirdNextButton"/>
+        <remove keyForRemoval="clickOnFourthNextButton"/>
+    </actionGroup>
     <actionGroup name="changeProductConfigurationsInGrid">
         <arguments>
             <argument name="firstOption" type="entity"/>
