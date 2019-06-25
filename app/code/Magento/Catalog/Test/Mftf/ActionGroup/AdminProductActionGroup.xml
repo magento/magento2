@@ -441,6 +441,15 @@
         </arguments>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{categoryName}}]" stepKey="searchAndSelectCategory"/>
     </actionGroup>
+    <!--Remove category from product in ProductFrom Page-->
+    <actionGroup name="removeCategoryFromProduct">
+        <arguments>
+            <argument name="categoryName" type="string" defaultValue="{{_defaultCategory.name}}"/>
+        </arguments>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
+        <click selector="{{AdminProductFormSection.unselectCategories(categoryName)}}" stepKey="unselectCategories"/>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategory"/>
+    </actionGroup>
 
     <actionGroup name="expandAdminProductSection">
         <arguments>
@@ -484,5 +493,9 @@
         <click selector="{{AdminAddUpSellProductsModalSection.Modal}}{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectProduct"/>
         <click selector="{{AdminAddUpSellProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
+    </actionGroup>
+    <actionGroup name="AdminSetProductDisabled">
+        <conditionalClick selector="{{AdminProductFormSection.enableProductLabel}}" dependentSelector="{{AdminProductFormSection.productStatusValue('1')}}" visible="true" stepKey="disableProduct"/>
+        <seeElement selector="{{AdminProductFormSection.productStatusValue('2')}}" stepKey="assertThatProductSetToDisabled"/>
     </actionGroup>
 </actionGroups>
