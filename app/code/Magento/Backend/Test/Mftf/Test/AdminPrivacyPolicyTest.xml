@@ -7,7 +7,7 @@
             <title value="There should be a privacy policy url in the admin page and every sub page"/>
             <description value="There should be a privacy policy url in the admin page and every sub page"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-46552"/>
+            <testCaseId value="MC-17787"/>
             <group value="backend"/>
             <group value="login"/>
         </annotations>
