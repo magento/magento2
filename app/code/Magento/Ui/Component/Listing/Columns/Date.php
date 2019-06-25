@@ -52,10 +52,10 @@ class Date extends Column
      * @param UiComponentFactory $uiComponentFactory
      * @param TimezoneInterface $timezone
      * @param BooleanUtils $booleanUtils
-     * @param ResolverInterface $localeResolver
-     * @param DataBundle $dataBundle
      * @param array $components
      * @param array $data
+     * @param ResolverInterface $localeResolver
+     * @param DataBundle $dataBundle
      */
     public function __construct(
         ContextInterface $context,

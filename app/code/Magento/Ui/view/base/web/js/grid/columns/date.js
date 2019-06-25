@@ -39,6 +39,7 @@ define([
          */
         getLabel: function (value, format) {
             var date;
+
             if (this.storeLocale !== undefined) {
                 moment.locale(this.storeLocale, utils.extend({}, this.calendarConfig));
             }
