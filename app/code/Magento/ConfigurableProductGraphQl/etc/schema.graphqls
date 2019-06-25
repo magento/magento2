@@ -10,7 +10,7 @@ type ConfigurableProduct implements ProductInterface, PhysicalProductInterface, 
 }
 
 type ConfigurableVariant @doc(description: "An array containing all the simple product variants of a configurable product") {
-    attributes: [ConfigurableAttributeOption] @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Attributes")  @doc(description: "")
+    attributes: [ConfigurableAttributeOption] @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Attributes") @doc(description: "")
     product: SimpleProduct @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product")
 }
 

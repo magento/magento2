@@ -158,7 +158,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setCustomAttributes(array $attributes)
     {
@@ -166,7 +166,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
@@ -182,9 +182,11 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc} Added custom attributes support.
      *
-     * Added custom attributes support.
+     * @param string|array $key
+     * @param mixed $value
+     * @return $this
      */
     public function setData($key, $value = null)
     {
@@ -200,9 +202,10 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc} Unset customAttributesChanged flag
      *
-     * Unset customAttributesChanged flag
+     * @param null|string|array $key
+     * @return $this
      */
     public function unsetData($key = null)
     {
@@ -359,27 +362,17 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * @inheritdoc
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         return array_diff(parent::__sleep(), ['extensionAttributesFactory', 'customAttributeFactory']);
     }
 
     /**
      * @inheritdoc
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->extensionAttributesFactory = $objectManager->get(ExtensionAttributesFactory::class);

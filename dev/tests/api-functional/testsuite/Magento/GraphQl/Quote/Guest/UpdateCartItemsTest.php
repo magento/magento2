@@ -236,7 +236,7 @@ QUERY;
             ],
             'missed_cart_item_qty' => [
                 'cart_items: [{ cart_item_id: 1 }]',
-                'Required parameter "quantity" for "cart_items" is missing.'
+                'Field CartItemUpdateInput.quantity of required type Float! was not provided.'
             ],
         ];
     }

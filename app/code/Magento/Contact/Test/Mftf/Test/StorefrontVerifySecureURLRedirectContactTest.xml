@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifySecureURLRedirectContact">
+        <annotations>
+            <features value="Contact"/>
+            <stories value="Storefront Secure URLs"/>
+            <title value="Verify Secure URLs For Storefront Contact Pages"/>
+            <description value="Verify that the Secure URL configuration applies to the Contact pages on the Storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-15539"/>
+            <group value="contact"/>
+            <group value="configuration"/>
+            <group value="secure_storefront_url"/>
+        </annotations>
+        <before>
+            <amOnPage url="/" stepKey="goToHomePage"/>
+            <executeJS function="return window.location.host" stepKey="hostname"/>
+            <magentoCLI command="config:set web/secure/base_url https://{$hostname}/" stepKey="setSecureBaseURL"/>
+            <magentoCLI command="config:set web/secure/use_in_frontend 1" stepKey="useSecureURLsOnStorefront"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="dontUseSecureURLsOnStorefront"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+        <executeJS function="return window.location.host" stepKey="hostname"/>
+        <amOnUrl url="http://{$hostname}/contact" stepKey="goToUnsecureContactURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/contact" stepKey="seeSecureContactURL"/>
+        <amOnUrl url="http://{$hostname}/contact/index/post" stepKey="goToUnsecureContactFormURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/contact/index/post" stepKey="seeSecureContactFormURL"/>
+    </test>
+</tests>

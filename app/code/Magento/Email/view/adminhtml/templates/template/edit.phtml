@@ -50,7 +50,7 @@ use Magento\Framework\App\TemplateTypesInterface;
     <?= /* @noEscape */ $block->getFormHtml() ?>
 </form>
 
-<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="email_template_preview_form" target="_blank">
+<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="get" id="email_template_preview_form" target="_blank">
     <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
     <div class="no-display">
         <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->isTextType() ? 1 : 2 ?>" />

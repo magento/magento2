@@ -18,7 +18,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * Directory paths samples
      */
-    const STORAGE_ROOT_DIR = '/storage/root/dir';
+    const STORAGE_ROOT_DIR = '/storage/root/dir/';
 
     const INVALID_DIRECTORY_OVER_ROOT = '/storage/some/another/dir';
 
@@ -437,10 +437,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     public function testUploadFile()
     {
-        $targetPath = '/target/path';
+        $path = 'target/path';
+        $targetPath = self::STORAGE_ROOT_DIR . $path;
         $fileName = 'image.gif';
         $realPath = $targetPath . '/' . $fileName;
-        $thumbnailTargetPath = self::STORAGE_ROOT_DIR . '/.thumbs';
+        $thumbnailTargetPath = self::STORAGE_ROOT_DIR . '/.thumbs' . $path;
         $thumbnailDestination = $thumbnailTargetPath . '/' . $fileName;
         $type = 'image';
         $result = [

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminEmailTemplateEditSection">
+        <element name="templateCode" type="input" selector="#template_code"/>
+        <element name="templateSubject" type="input" selector="#template_subject"/>
+        <element name="templateText" type="input" selector="#template_text"/>
+        <element name="templateDropDown" type="select" selector="#template_select"/>
+        <element name="loadTemplateButton" type="button" selector="#load" timeout="30"/>
+        <element name="deleteTemplateButton" type="button" selector="#delete"/>
+        <element name="previewTemplateButton" type="button" selector="#preview" timeout="30"/>
+    </section>
+</sections>

@@ -27,16 +27,34 @@ abstract class AbstractGraphqlCacheTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->usePageCachePlugin();
     }
 
     /**
-     * Enable full page cache plugin
+     * Prepare a query and return a request to be used in the same test end to end
+     *
+     * @param string $query
+     * @return \Magento\Framework\App\Request\Http
      */
-    protected function usePageCachePlugin(): void
+    protected function prepareRequest(string $query) : \Magento\Framework\App\Request\Http
     {
-        /** @var  $registry \Magento\Framework\Registry */
-        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
-        $registry->register('use_page_cache_plugin', true, true);
+        $cacheableQuery = $this->objectManager->get(\Magento\GraphQlCache\Model\CacheableQuery::class);
+        $cacheableQueryReflection = new \ReflectionProperty(
+            $cacheableQuery,
+            'cacheTags'
+        );
+        $cacheableQueryReflection->setAccessible(true);
+        $cacheableQueryReflection->setValue($cacheableQuery, []);
+
+        /** @var \Magento\Framework\UrlInterface $urlInterface */
+        $urlInterface = $this->objectManager->create(\Magento\Framework\UrlInterface::class);
+        //set unique URL
+        $urlInterface->setQueryParam('query', $query);
+
+        $request = $this->objectManager->get(\Magento\Framework\App\Request\Http::class);
+        $request->setUri($urlInterface->getUrl('graphql'));
+        $request->setMethod('GET');
+        //set the actual GET query
+        $request->setQueryValue('query', $query);
+        return $request;
     }
 }

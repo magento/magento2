@@ -14,7 +14,7 @@
       method="post">
     <fieldset id="customer-email-fieldset" class="fieldset" data-bind="blockLoader: isLoading">
         <div class="field required">
-            <label class="label" for="checkout-customer-email">
+            <label class="label" for="customer-email">
                 <span data-bind="i18n: 'Email Address'"></span>
             </label>
             <div class="control _with-tooltip">
@@ -26,7 +26,7 @@
                             mageInit: {'mage/trim-input':{}}"
                        name="username"
                        data-validate="{required:true, 'validate-email':true}"
-                       id="checkout-customer-email" />
+                       id="customer-email" />
                 <!-- ko template: 'ui/form/element/helper/tooltip' --><!-- /ko -->
                 <span class="note" data-bind="fadeVisible: isPasswordVisible() == false"><!-- ko i18n: 'You can create an account after checkout.'--><!-- /ko --></span>
             </div>

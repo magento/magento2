@@ -193,6 +193,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
             if ($this->_data[self::KEY_IS_GLOBAL] != $this->_origData[self::KEY_IS_GLOBAL]) {
                 try {
                     $this->attrLockValidator->validate($this);
+                    // phpcs:ignore Magento2.Exceptions.ThrowCatch
                 } catch (\Magento\Framework\Exception\LocalizedException $exception) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __('Do not change the scope. %1', $exception->getMessage())
@@ -845,14 +846,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     /**
      * @inheritdoc
      * @since 100.0.9
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $this->unsetData('entity_type');
         return array_diff(
             parent::__sleep(),
@@ -863,14 +859,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     /**
      * @inheritdoc
      * @since 100.0.9
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_indexerEavProcessor = $objectManager->get(\Magento\Catalog\Model\Indexer\Product\Flat\Processor::class);
