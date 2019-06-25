@@ -70,9 +70,17 @@ class PaypalPayflowProSetPaymentMethodTest extends PaypalPayflowProAbstractTest
         $this->enablePaymentMethod($paymentMethod);
 
         $reservedQuoteId = 'test_quote';
-        $payerId = 'PAYER123456';
-        $token = 'EC-TOKEN1234';
-        $correlationId = 'c123456789';
+
+        $payload = 'BILLTOCITY=CityM&AMT=0.00&BILLTOSTREET=Green+str,+67&VISACARDLEVEL=12&SHIPTOCITY=CityM'
+            . '&NAMETOSHIP=John+Smith&ZIP=75477&BILLTOLASTNAME=Smith&BILLTOFIRSTNAME=John'
+            . '&RESPMSG=Verified&PROCCVV2=M&STATETOSHIP=AL&NAME=John+Smith&BILLTOZIP=75477&CVV2MATCH=Y'
+            . '&PNREF=B70CCC236815&ZIPTOSHIP=75477&SHIPTOCOUNTRY=US&SHIPTOSTREET=Green+str,+67&CITY=CityM'
+            . '&HOSTCODE=A&LASTNAME=Smith&STATE=AL&SECURETOKEN=MYSECURETOKEN&CITYTOSHIP=CityM&COUNTRYTOSHIP=US'
+            . '&AVSDATA=YNY&ACCT=1111&AUTHCODE=111PNI&FIRSTNAME=John&RESULT=0&IAVS=N&POSTFPSMSG=No+Rules+Triggered&'
+            . 'BILLTOSTATE=AL&BILLTOCOUNTRY=US&EXPDATE=0222&CARDTYPE=0&PREFPSMSG=No+Rules+Triggered&SHIPTOZIP=75477&'
+            . 'PROCAVS=A&COUNTRY=US&AVSZIP=N&ADDRESS=Green+str,+67&BILLTONAME=John+Smith&'
+            . 'ADDRESSTOSHIP=Green+str,+67&'
+            . 'AVSADDR=Y&SECURETOKENID=MYSECURETOKENID&SHIPTOSTATE=AL&TRANSTIME=2019-06-24+07%3A53%3A10';
 
         $cart = $this->getQuoteByReservedOrderId($reservedQuoteId);
         $cartId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
@@ -88,9 +96,9 @@ mutation {
           additional_data: {
             payflowpro: {
               cc_details: {
-                 cc_exp_month: "12",
-                 cc_exp_year: "2030",
-                 cc_last_4: "1111",
+                 cc_exp_month: 12,
+                 cc_exp_year: 2030,
+                 cc_last_4: 1111,
                  cc_type: "IV",
               }
             }
@@ -120,17 +128,10 @@ mutation {
           secure_token
           secure_token_id
         }
-      }
-      setPaymentMethodOnCart(input: {
-        payment_method: {
-          code: "{$paymentMethod}",
-          additional_data: {
-            payflowpro: {
-              paypalPayload: "$token"
-            }
-          }
-        },
-        cart_id: "{$cartId}"})
+      handlePayflowProResponse(input: {
+          paypal_payload: "$payload",
+          cart_id: "{$cartId}"
+        })
       {
         cart {
           selected_payment_method {
@@ -169,26 +170,32 @@ QUERY;
             ->method('postRequest')
             ->willReturn($paypalResponse);
 
-        $paypalRequestPlaceOrder = include __DIR__ . '/../../../_files/paypal_place_order_request.php';
-
         $this->gatewayMock
             ->expects($this->at(1))
-            ->method('call')
-            ->with(Nvp::DO_EXPRESS_CHECKOUT_PAYMENT, $paypalRequestPlaceOrder)
+            ->method('postRequest')
             ->willReturn(
-                [
-                    'RESULT' => '0',
-                    'PNREF' => 'B7PPAC033FF2',
-                    'RESPMSG' => 'Approved',
-                    'AVSADDR' => 'Y',
-                    'AVSZIP' => 'Y',
-                    'TOKEN' => $token,
-                    'PAYERID' => $payerId,
-                    'PPREF' => '7RK43642T8939154L',
-                    'CORRELATIONID' => $correlationId,
-                    'PAYMENTTYPE' => 'instant',
-                    'PENDINGREASON' => 'authorization',
-                ]
+                new DataObject(
+                    [
+                        'result' => '0',
+                        'pnref' => 'A70AAC2378BA',
+                        'respmsg' => 'Approved',
+                        'authcode' => '647PNI',
+                        'avsaddr' => 'Y',
+                        'avszip' => 'N',
+                        'hostcode' => 'A',
+                        'procavs' => 'A',
+                        'visacardlevel' => '12',
+                        'transtime' => '2019-06-24 10:12:03',
+                        'firstname' => 'Cristian',
+                        'lastname' => 'Partica',
+                        'amt' => '14.99',
+                        'acct' => '1111',
+                        'expdate' => '0221',
+                        'cardtype' => '0',
+                        'iavs' => 'N',
+                        'result_code' => '0',
+                    ]
+                )
             );
 
         $response = $this->graphqlController->dispatch($this->request);
@@ -208,6 +215,15 @@ QUERY;
             $paymentMethod,
             $responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']
         );
+
+        $this->assertTrue(
+            isset($responseData['data']['handlePayflowProResponse']['cart']['selected_payment_method']['code'])
+        );
+        $this->assertEquals(
+            $paymentMethod,
+            $responseData['data']['handlePayflowProResponse']['cart']['selected_payment_method']['code']
+        );
+
 
         $this->assertTrue(
             isset($responseData['data']['placeOrder']['order']['order_id'])
