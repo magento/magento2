@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
+namespace Magento\PaypalGraphQl\Model\Resolver\Customer;
 
 use Magento\Framework\App\Request\Http;
 use Magento\PaypalGraphQl\PaypalPayflowProAbstractTest;
@@ -14,13 +14,14 @@ use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Webapi\Request;
 
 /**
- * Test ExpressSetPaymentMethodTest graphql endpoint for guest
+ * End to end place order test using payflowpro via graphql endpoint for customer
  *
  * @magentoAppArea graphql
  */
-class PaypalPayflowProSetPaymentMethodTest extends PaypalPayflowProAbstractTest
+class PlaceOrderWithPayflowProTest extends PaypalPayflowProAbstractTest
 {
     /**
      * @var Http
@@ -54,20 +55,19 @@ class PaypalPayflowProSetPaymentMethodTest extends PaypalPayflowProAbstractTest
      * Test end to end test to process a paypal payflow pro order
      *
      * @return void
+     * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testResolveGuest(): void
+    public function testResolveCustomer(): void
     {
         $paymentMethod = 'payflowpro';
         $this->enablePaymentMethod($paymentMethod);
-
         $reservedQuoteId = 'test_quote';
 
         $payload = 'BILLTOCITY=CityM&AMT=0.00&BILLTOSTREET=Green+str,+67&VISACARDLEVEL=12&SHIPTOCITY=CityM'
@@ -150,9 +150,17 @@ QUERY;
         $this->request->setPathInfo('/graphql');
         $this->request->setMethod('POST');
         $this->request->setContent($postData);
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']);
-        $this->request->setHeaders($headers);
+
+        /** @var \Magento\Integration\Model\Oauth\Token $tokenModel */
+        $tokenModel = $this->objectManager->create(\Magento\Integration\Model\Oauth\Token::class);
+        $customerToken = $tokenModel->createCustomerToken(1)->getToken();
+
+        $webApiRequest = $this->objectManager->get(Request::class);
+        $webApiRequest->getHeaders()
+            ->addHeaderLine('Content-Type', 'application/json')
+            ->addHeaderLine('Accept', 'application/json')
+            ->addHeaderLine('Authorization', 'Bearer ' . $customerToken);
+        $this->request->setHeaders($webApiRequest->getHeaders());
 
         $paypalResponse = new DataObject(
             [
