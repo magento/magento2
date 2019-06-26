@@ -19,12 +19,13 @@ use Magento\Catalog\Model\Category;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
-use PHPUnit\Framework\Error\Warning;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class ProductTest
@@ -65,11 +66,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\TestFramework\App\Filestsyem
-     */
-    protected $filesystem;
-
-    /**
      * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $logger;
@@ -99,6 +95,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             try {
                 $product = $productRepository->get($productSku, false, null, true);
                 $productRepository->delete($product);
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (NoSuchEntityException $e) {
                 // nothing to delete
             }
@@ -311,6 +308,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoAppIsolation enabled
+
+     *
+     * @return void
      */
     public function testSaveCustomOptions(string $importFile, string $sku, int $expectedOptionsQty): void
     {
@@ -1126,6 +1126,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test url keys properly generated in multistores environment.
      *
+     * @magentoConfigFixture current_store catalog/seo/product_use_categories 1
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_two_stores.php
      * @magentoDbIsolation enabled
@@ -1993,6 +1994,13 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 'directory' => $directory
             ]
         );
+        $this->_model->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'entity' => 'catalog_product',
+                'import_images_file_dir' => 'pub/media/import'
+            ]
+        );
         $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->getBootstrap()
             ->getApplication()
@@ -2011,13 +2019,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         )->validateData();
         $this->assertTrue($errors->getErrorsCount() == 0);
 
-        $this->_model->setParameters(
-            [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-                'entity' => 'catalog_product',
-                'import_images_file_dir' => $mediaPath . '/import'
-            ]
-        );
         $this->_model->importData();
         $this->assertTrue($this->_model->getErrorAggregator()->getErrorsCount() == $expectedErrors);
     }
