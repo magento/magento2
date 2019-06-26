@@ -16,17 +16,6 @@ use Magento\Framework\Event\ObserverInterface;
 class InvalidateCacheOnCategoryDesignChange implements ObserverInterface
 {
     /**
-     * @var array
-     */
-    private $designAttributes = [
-        'custom_design',
-        'page_layout',
-        'custom_layout_update',
-        'custom_apply_to_products',
-        'custom_use_parent_settings'
-    ];
-
-    /**
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      */
     public function __construct(\Magento\Framework\App\Cache\TypeListInterface $cacheTypeList)
@@ -43,8 +32,8 @@ class InvalidateCacheOnCategoryDesignChange implements ObserverInterface
     {
         $category = $observer->getEvent()->getEntity();
         if (!$category->isObjectNew()) {
-            foreach ($this->designAttributes as $designAttribute) {
-                if ($category->dataHasChangedFor($designAttribute)) {
+            foreach ($category->getDesignAttributes() as $designAttribute) {
+                if ($category->dataHasChangedFor($designAttribute->getAttributeCode())) {
                     $this->cacheTypeList->invalidate(
                         [
                             \Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER,

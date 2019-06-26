@@ -128,6 +128,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         'page_layout',
         'custom_layout_update',
         'custom_apply_to_products',
+        'custom_use_parent_settings',
     ];
 
     /**
@@ -317,9 +318,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Category
      * @deprecated because resource models should be used directly
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     protected function _getResource()
     {
+        //phpcs:enable Generic.CodeAnalysis.UselessOverridingMethod
         return parent::_getResource();
     }
 
@@ -606,11 +609,13 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 return $this->getData('url');
             }
 
-            $rewrite = $this->urlFinder->findOneByData([
-                UrlRewrite::ENTITY_ID => $this->getId(),
-                UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
-                UrlRewrite::STORE_ID => $this->getStoreId(),
-            ]);
+            $rewrite = $this->urlFinder->findOneByData(
+                [
+                    UrlRewrite::ENTITY_ID => $this->getId(),
+                    UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
+                    UrlRewrite::STORE_ID => $this->getStoreId(),
+                ]
+            );
             if ($rewrite) {
                 $this->setData('url', $this->getUrlInstance()->getDirectUrl($rewrite->getRequestPath()));
                 Profiler::stop('REWRITE: ' . __METHOD__);
