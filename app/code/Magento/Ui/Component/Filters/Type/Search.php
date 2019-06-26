@@ -34,7 +34,7 @@ class Search extends \Magento\Ui\Component\Filters\Type\AbstractFilter
     {
         $value = $this->getContext()->getRequestParam('search');
 
-        if (0 !== strlen($value)) {
+        if ((string)$value !== '') {
             $filter = $this->filterBuilder->setConditionType('fulltext')
                 ->setField($this->getName())
                 ->setValue($value)
