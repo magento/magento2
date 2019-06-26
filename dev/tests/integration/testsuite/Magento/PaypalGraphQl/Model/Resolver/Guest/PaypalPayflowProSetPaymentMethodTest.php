@@ -224,7 +224,6 @@ QUERY;
             $responseData['data']['handlePayflowProResponse']['cart']['selected_payment_method']['code']
         );
 
-
         $this->assertTrue(
             isset($responseData['data']['placeOrder']['order']['order_id'])
         );
