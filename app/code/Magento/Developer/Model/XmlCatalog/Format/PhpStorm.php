@@ -22,6 +22,11 @@ class PhpStorm implements FormatInterface
     const IDEA_PATH = '.idea';
 
     /**
+     * @var ReadInterface
+     */
+    private $currentDirRead;
+
+    /**
      * @var WriteFactory
      */
     private $fileWriteFactory;
@@ -37,9 +42,11 @@ class PhpStorm implements FormatInterface
      * @param DomDocumentFactory $domDocumentFactory
      */
     public function __construct(
+        ReadFactory $readFactory,
         WriteFactory $fileWriteFactory,
         DomDocumentFactory $domDocumentFactory = null
     ) {
+        $this->currentDirRead = $readFactory->create(getcwd());
         $this->fileWriteFactory = $fileWriteFactory;
         $this->domDocumentFactory = $domDocumentFactory ?: ObjectManager::getInstance()->get(DomDocumentFactory::class);
     }
