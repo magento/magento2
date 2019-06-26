@@ -41,7 +41,7 @@ type ConfigurableProductOptionsValues @doc(description: "ConfigurableProductOpti
 
 input AddConfigurableProductsToCartInput {
     cart_id: String!
-    cartItems: [ConfigurableProductCartItemInput!]!
+    cart_items: [ConfigurableProductCartItemInput!]!
 }
 
 type AddConfigurableProductsToCartOutput {
