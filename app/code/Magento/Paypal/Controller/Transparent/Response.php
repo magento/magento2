@@ -114,7 +114,7 @@ class Response extends \Magento\Framework\App\Action\Action implements CsrfAware
     }
 
     /**
-     * Exceute svaes the payment in quote and sends the resultInterface
+     * Saves the payment in quote
      *
      * @return ResultInterface
      */
