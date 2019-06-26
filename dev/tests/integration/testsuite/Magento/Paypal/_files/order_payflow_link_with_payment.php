@@ -11,7 +11,6 @@ include __DIR__ . '/../../GraphQl/Quote/_files/set_new_shipping_address.php';
 include __DIR__ . '/../../GraphQl/Quote/_files/set_new_billing_address.php';
 include __DIR__ . '/../../GraphQl/Quote/_files/set_flatrate_shipping_method.php';
 
-
 use Magento\Paypal\Model\Config;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -51,7 +50,6 @@ $payment->setMethod(Config::METHOD_PAYFLOWLINK)
     ->setBaseAmountAuthorized(30)
     ->setAdditionalInformation(
         [
-
         'cancel_url'=> $baseUrl .'paypal/payflow/cancelPayment',
         'return_url'=> $baseUrl .'paypal/payflow/returnUrl',
         'secure_token_id' => 'mysecuretokenId',

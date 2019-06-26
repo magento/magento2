@@ -16,19 +16,5 @@ $orderCollection = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Re
 foreach ($orderCollection as $order) {
     $order->delete();
 }
-
-/** @var $product \Magento\Catalog\Model\Product */
-$productCollection = Bootstrap::getObjectManager()->create(
-    \Magento\Catalog\Model\ResourceModel\Product\Collection::class
-);
-foreach ($productCollection as $product) {
-    $product->delete();
-}
-
-/** @var \Magento\CatalogInventory\Model\StockRegistryStorage $stockRegistryStorage */
-$stockRegistryStorage = Bootstrap::getObjectManager()
-    ->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
-$stockRegistryStorage->clean();
-
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

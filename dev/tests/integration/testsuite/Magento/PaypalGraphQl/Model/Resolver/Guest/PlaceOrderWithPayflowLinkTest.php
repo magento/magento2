@@ -57,7 +57,6 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
     /** @var  Request|MockObject */
     private $payflowRequest;
 
-
     protected function setUp()
     {
         parent::setUp();
@@ -284,16 +283,23 @@ QUERY;
             );
         $this->gateway->method('postRequest')
             /** @var DataObject $linkRequest */
-            ->with(self::callback(function ($linkRequest)  {
-                self::assertEquals('test_quote', $linkRequest['invnum']);
-                return true;
-            }))->willThrowException($exception);
+            ->with(
+                self::callback(
+                    function ($linkRequest) {
+                        self::assertEquals('test_quote', $linkRequest['invnum']);
+                        return true;
+                    }
+                )
+            )->willThrowException($exception);
 
         $response = $this->graphqlController->dispatch($this->request);
         $responseData = $this->json->unserialize($response->getContent());
         $this->assertArrayHasKey('errors', $responseData);
         $actualError = $responseData['errors'][0];
-        $this->assertEquals('Unable to place order: Declined response message from PayPal gateway', $actualError['message']);
+        $this->assertEquals(
+            'Unable to place order: Declined response message from PayPal gateway',
+            $actualError['message']
+        );
         $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
     }
 
