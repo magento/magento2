@@ -104,6 +104,7 @@ class CreditmemoSender extends Sender
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $creditmemo->getOrder();
+            $this->identityContainer->setStore($order->getStore());
 
             $transport = [
                 'order' => $order,

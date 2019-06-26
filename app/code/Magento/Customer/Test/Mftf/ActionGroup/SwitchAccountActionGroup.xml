@@ -16,12 +16,4 @@
         <see userInput="You have logged out." stepKey="seeSuccessMessage" />
         <waitForElementVisible selector="//*[@data-ui-id='messages-message-success']" stepKey="waitForSuccessMessageLoggedOut" time="5"/>
     </actionGroup>
-
-    <!--Login New User-->
-    <actionGroup name="LoginNewUser">
-        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}" stepKey="navigateToAdmin"/>
-        <fillField userInput="{{NewAdmin.username}}" selector="{{LoginFormSection.username}}" stepKey="fillUsername"/>
-        <fillField userInput="{{NewAdmin.password}}" selector="{{LoginFormSection.password}}" stepKey="fillPassword"/>
-        <click selector="{{LoginFormSection.signIn}}" stepKey="clickLogin"/>
-    </actionGroup>
 </actionGroups>
