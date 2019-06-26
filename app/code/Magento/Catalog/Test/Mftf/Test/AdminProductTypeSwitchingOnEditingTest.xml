@@ -94,7 +94,7 @@
         <comment userInput="Delete product configuration" stepKey="commentDeleteConfigs"/>
         <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="gotToConfigProductPage"/>
         <waitForPageLoad stepKey="waitForConfigurableProductPageLoad"/>
-        <conditionalClick selector="{{ AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection" />
+        <conditionalClick selector="{{ AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandOption1Actions"/>
         <click selector="{{AdminProductFormConfigurationsSection.removeProductBtn}}" stepKey="clickRemoveOption1"/>
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandOption2Actions"/>
@@ -221,7 +221,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Change product type to Downloadable-->
-        <comment userInput="-Change product type to Downloadable" stepKey="commentCreateDownloadable"/>
+        <comment userInput="Change product type to Downloadable" stepKey="commentCreateDownloadable"/>
         <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="gotToDownloadableProductPage"/>
         <waitForPageLoad stepKey="waitForDownloadableProductPageLoad"/>
         <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>

@@ -36,7 +36,6 @@ use Magento\Mtf\TestCase\Injectable;
 class ProductTypeSwitchingOnUpdateTest extends Injectable
 {
     /* tags */
-    const TEST_TYPE = 'acceptance_test';
     const MVP = 'yes';
     /* end tags */
 
