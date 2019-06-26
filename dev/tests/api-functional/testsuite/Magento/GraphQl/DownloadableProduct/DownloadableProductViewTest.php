@@ -15,6 +15,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test for downloadable product.
+ */
 class DownloadableProductViewTest extends GraphQlAbstract
 {
     /**
