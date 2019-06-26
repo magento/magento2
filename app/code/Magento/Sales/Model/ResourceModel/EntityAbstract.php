@@ -14,6 +14,7 @@ use Magento\Sales\Model\EntityInterface;
 /**
  * Abstract sales entity provides to its children knowledge about eventPrefix and eventObject
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2
@@ -96,6 +97,7 @@ abstract class EntityAbstract extends AbstractDb
 
     /**
      * Prepares data for saving and removes update time (if exists).
+     *
      * This prevents saving same update time on each entity update.
      *
      * @param \Magento\Framework\Model\AbstractModel $object
@@ -114,6 +116,7 @@ abstract class EntityAbstract extends AbstractDb
 
     /**
      * Perform actions before object save
+     *
      * Perform actions before object save, calculate next sequence value for increment Id
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
@@ -122,7 +125,7 @@ abstract class EntityAbstract extends AbstractDb
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\AbstractModel $object */
-        if ($object instanceof EntityInterface && $object->getIncrementId() == null) {
+        if ($object instanceof EntityInterface && $object->getEntityId() == null) {
             $store = $object->getStore();
             $storeId = $store->getId();
             if ($storeId === null) {

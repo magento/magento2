@@ -176,7 +176,6 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
         $shippingMock->expects($this->once())->method('getAddress');
         $shippingMock->expects($this->once())->method('getMethod');
         $this->metadata->expects($this->once())->method('getMapper')->willReturn($mapperMock);
-        $orderEntity->expects($this->once())->method('getIncrementId')->willReturn('0000000001');
         $mapperMock->expects($this->once())->method('save');
         $orderEntity->expects($this->any())->method('getEntityId')->willReturn(1);
         $this->orderRepository->save($orderEntity);

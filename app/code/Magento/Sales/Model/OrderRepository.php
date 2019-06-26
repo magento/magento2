@@ -266,17 +266,6 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             }
         }
 
-        $entityId = $entity->getEntityId();
-        if ($entityId && $entity->getIncrementId() == null) {
-            try {
-                $loadedEntity = $this->get($entityId);
-                $entity->setIncrementId($loadedEntity->getIncrementId());
-                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
-            } catch (NoSuchEntityException $e) {
-                // non-existent entity
-            }
-        }
-
         $this->metadata->getMapper()->save($entity);
         $this->registry[$entity->getEntityId()] = $entity;
         return $this->registry[$entity->getEntityId()];

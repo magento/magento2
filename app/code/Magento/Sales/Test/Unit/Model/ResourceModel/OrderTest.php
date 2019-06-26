@@ -198,7 +198,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             ->with('10000001')
             ->willReturnSelf();
         $this->orderMock->expects($this->once())
-            ->method('getIncrementId')
+            ->method('getEntityId')
             ->willReturn(null);
         $this->orderMock->expects($this->once())
             ->method('getData')

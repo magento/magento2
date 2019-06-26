@@ -45,11 +45,8 @@ class OrderUpdateTest extends WebapiAbstract
         $order = $this->objectManager->get(\Magento\Sales\Model\Order::class)
             ->loadByIncrementId(self::ORDER_INCREMENT_ID);
 
-        $entityData = [
-            OrderInterface::ENTITY_ID => $order->getId(),
-            OrderInterface::STATE => 'processing',
-            OrderInterface::STATUS => 'processing'
-        ];
+        $entityData = $this->getOrderData($order);
+
         $requestData = ['entity' => $entityData];
 
         $serviceInfo = [
@@ -72,5 +69,51 @@ class OrderUpdateTest extends WebapiAbstract
             $order->getData(OrderInterface::INCREMENT_ID),
             $actualOrder->getData(OrderInterface::INCREMENT_ID)
         );
+    }
+
+    /**
+     * Prepare order data for request
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @return array
+     */
+    private function getOrderData(\Magento\Sales\Model\Order $order)
+    {
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            $entityData = $order->getData();
+            unset($entityData[OrderInterface::INCREMENT_ID]);
+            $entityData[OrderInterface::STATE] = 'processing';
+            $entityData[OrderInterface::STATUS] = 'processing';
+
+            $orderData = $order->getData();
+            $orderData['billing_address'] = $order->getBillingAddress()->getData();
+            $orderData['billing_address']['street'] = ['Street'];
+
+            $orderItems = [];
+            foreach ($order->getItems() as $item) {
+                $orderItems[] = $item->getData();
+            }
+            $orderData['items'] = $orderItems;
+
+            $shippingAddress = $order->getShippingAddress()->getData();
+            $orderData['extension_attributes']['shipping_assignments'] =
+                [
+                    [
+                        'shipping' => [
+                            'address' => $shippingAddress,
+                            'method' => 'flatrate_flatrate'
+                        ],
+                        'items' => $order->getItems(),
+                        'stock_id' => null,
+                    ]
+                ];
+        } else {
+            $orderData = [
+                OrderInterface::ENTITY_ID => $order->getId(),
+                OrderInterface::STATE => 'processing',
+                OrderInterface::STATUS => 'processing'
+            ];
+        }
+        return $orderData;
     }
 }
