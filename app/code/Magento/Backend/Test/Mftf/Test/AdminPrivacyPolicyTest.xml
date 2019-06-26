@@ -186,13 +186,6 @@
         </actionGroup>
         <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkMarketingPendingReviews"/>
 
-        <!-- Checking for Privacy policy footer in contentPage -->
-        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentPages">
-            <argument name="menuUiId" value="magento-backend-content"/>
-            <argument name="submenuUiId" value="magento-cms-cms-page"/>
-        </actionGroup>
-        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkContentPages"/>
-
         <!-- Checking for Privacy policy footer in contentBlocksPage -->
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentBlocks">
             <argument name="menuUiId" value="magento-backend-content"/>
@@ -577,7 +570,6 @@
             <argument name="submenuUiId" value="magento-marketplace-partners"/>
         </actionGroup>
         <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkFindPartnersAndExtensions"/>
-
     </test>
 </tests>
 
