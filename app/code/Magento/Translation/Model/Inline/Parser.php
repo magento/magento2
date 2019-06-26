@@ -6,6 +6,9 @@
 
 namespace Magento\Translation\Model\Inline;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
+
 /**
  * This class is responsible for parsing content and applying necessary html element
  * wrapping and client scripts for inline translation.
@@ -196,6 +199,9 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         /** @var $validStoreId int */
         $validStoreId = $this->_storeManager->getStore()->getId();
 
+        /** @var $escaper Escaper */
+        $escaper = ObjectManager::getInstance()->get(Escaper::class);
+
         /** @var $resource \Magento\Translation\Model\ResourceModel\StringUtils */
         $resource = $this->_resourceFactory->create();
         foreach ($translateParams as $param) {
@@ -209,7 +215,12 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
                     $storeId = $validStoreId;
                 }
             }
-            $resource->saveTranslate($param['original'], $param['custom'], null, $storeId);
+            $resource->saveTranslate(
+                $param['original'],
+                $escaper->escapeHtml($param['custom']),
+                null,
+                $storeId
+            );
         }
 
         return $this->getCacheManger()->updateAndGetTranslations();

@@ -59,6 +59,13 @@ abstract class AbstractOptionsField extends AbstractElement
             if (empty($config['rawOptions'])) {
                 $options = $this->convertOptionsValueToString($options);
             }
+            array_walk(
+                $options,
+                function (&$item) {
+                    $item['__disableTmpl'] = true;
+                }
+            );
+
             $config['options'] = array_values(array_merge_recursive($config['options'], $options));
         }
         $this->setData('config', (array)$config);
