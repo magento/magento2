@@ -20,12 +20,12 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class ProductTest
@@ -95,6 +95,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             try {
                 $product = $productRepository->get($productSku, false, null, true);
                 $productRepository->delete($product);
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (NoSuchEntityException $e) {
                 // nothing to delete
             }
@@ -1097,6 +1098,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test url keys properly generated in multistores environment.
      *
+     * @magentoConfigFixture current_store catalog/seo/product_use_categories 1
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_two_stores.php
      * @magentoDbIsolation enabled
