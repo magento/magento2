@@ -14,7 +14,7 @@ define([
         },
 
         /**
-         * Set region to customer address form
+         * Set region to source form
          *
          * @param {String} value - region
          */
