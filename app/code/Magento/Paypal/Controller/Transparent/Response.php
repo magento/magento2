@@ -19,11 +19,12 @@ use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Framework\Session\Generic as Session;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
-class Response extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
+*/
+class Response extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface, HttpPostActionInterface
 {
     /**
      * Core registry
