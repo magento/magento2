@@ -18,8 +18,8 @@ use Magento\Framework\Filesystem\File\WriteFactory;
  */
 class PhpStorm implements FormatInterface
 {
-    const PROJECT_PATH_IDENTIFIER = '$PROJECT_DIR$';
-    const IDEA_PATH = '.idea';
+    private const PROJECT_PATH_IDENTIFIER = '$PROJECT_DIR$';
+    private const IDEA_PATH = '.idea';
 
     /**
      * @var ReadInterface
@@ -141,7 +141,7 @@ class PhpStorm implements FormatInterface
      * @param string $configFilePath
      * @return string
      */
-    public function resolveProjectPath($configFilePath): string
+    private function resolveProjectPath($configFilePath): string
     {
         return \str_replace('/' . self::IDEA_PATH, '', realpath(dirname($configFilePath)));
     }
@@ -153,7 +153,7 @@ class PhpStorm implements FormatInterface
      * @param string $xsdPath
      * @return string
      */
-    public function getFileLocationInProject(string $ideaDir, string $xsdPath): string
+    private function getFileLocationInProject(string $ideaDir, string $xsdPath): string
     {
         return \str_replace($ideaDir, self::PROJECT_PATH_IDENTIFIER, $xsdPath);
     }
