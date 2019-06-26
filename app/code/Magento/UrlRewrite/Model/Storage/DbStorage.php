@@ -266,6 +266,8 @@ class DbStorage extends AbstractStorage
      */
     protected function doReplace(array $urls)
     {
+        $this->connection->beginTransaction();
+
         $this->deleteOldUrls($urls);
 
         $data = [];
@@ -274,7 +276,11 @@ class DbStorage extends AbstractStorage
         }
         try {
             $this->insertMultiple($data);
+
+            $this->connection->commit();
         } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+            $this->connection->rollBack();
+
             /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urlConflicted */
             $urlConflicted = [];
             foreach ($urls as $url) {
