@@ -262,14 +262,15 @@ class StoreTest extends \PHPUnit\Framework\TestCase
                 'storeGroupId' => $groupId,
                 'groupWebsiteId' => $websiteId,
                 'expectedResult' => [
-                    ['label' => '', 'value' => ''],
-                    ['label' => __('All Store Views'), 'value' => 0],
-                    ['label' => $websiteName, 'value' => []],
+                    ['label' => '', 'value' => '','__disableTmpl' => true],
+                    ['label' => __('All Store Views'), 'value' => 0,'__disableTmpl' => true],
+                    ['label' => $websiteName, 'value' => [],'__disableTmpl' => true],
                     [
                         'label' => str_repeat($nonEscapableNbspChar, 4) . $groupName,
                         'value' => [
                             ['label' => str_repeat($nonEscapableNbspChar, 4) . $storeName, 'value' => $storeId]
-                        ]
+                        ],
+                        '__disableTmpl' => true
                     ],
                 ]
             ],
