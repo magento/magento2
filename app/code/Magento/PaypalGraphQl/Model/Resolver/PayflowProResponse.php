@@ -12,7 +12,6 @@ use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
 use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Paypal\Model\Payflow\Transparent;
-use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -53,11 +52,6 @@ class PayflowProResponse implements ResolverInterface
     private $transparent;
 
     /**
-     * @var ArrayManager
-     */
-    private $arrayManager;
-
-    /**
      * @var GetCartForUser
      */
     private $getCartForUser;
@@ -73,7 +67,6 @@ class PayflowProResponse implements ResolverInterface
      * @param PaymentFailuresInterface $paymentFailures
      * @param Json $json
      * @param Transparent $transparent
-     * @param ArrayManager $arrayManager
      * @param GetCartForUser $getCartForUser
      * @param Parameters $parameters
      */
@@ -83,7 +76,6 @@ class PayflowProResponse implements ResolverInterface
         PaymentFailuresInterface $paymentFailures,
         Json $json,
         Transparent $transparent,
-        ArrayManager $arrayManager,
         GetCartForUser $getCartForUser,
         Parameters $parameters
     ) {
@@ -92,7 +84,6 @@ class PayflowProResponse implements ResolverInterface
         $this->paymentFailures = $paymentFailures;
         $this->json = $json;
         $this->transparent = $transparent;
-        $this->arrayManager = $arrayManager;
         $this->getCartForUser = $getCartForUser;
         $this->parameters = $parameters;
     }

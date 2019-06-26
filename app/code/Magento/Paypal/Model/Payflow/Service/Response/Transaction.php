@@ -111,13 +111,13 @@ class Transaction
      * Saves payment information in quote.
      *
      * @param DataObject $response
+     * @param int $cartId
      * @return void
      * @throws \InvalidArgumentException
      */
-    public function savePaymentInQuote($response, $cartId = null)
+    public function savePaymentInQuote($response, $cartId)
     {
-        $quote = $this->quoteRepository->get($cartId ?? $this->sessionTransparent->getQuoteId());
-
+        $quote = $this->quoteRepository->get($cartId);
         $payment = $this->paymentManagement->get($quote->getId());
         if (!$payment instanceof Payment) {
             throw new \InvalidArgumentException("Variable must contain instance of \\Quote\\Payment.");

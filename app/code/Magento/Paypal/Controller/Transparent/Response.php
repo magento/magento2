@@ -120,7 +120,7 @@ class Response extends \Magento\Framework\App\Action\Action implements CsrfAware
         try {
             $response = $this->transaction->getResponseObject($this->getRequest()->getPostValue());
             $this->responseValidator->validate($response, $this->transparent);
-            $this->transaction->savePaymentInQuote($response);
+            $this->transaction->savePaymentInQuote($response, (int)$this->sessionTransparent->getQuoteId());
         } catch (LocalizedException $exception) {
             $parameters['error'] = true;
             $parameters['error_msg'] = $exception->getMessage();
