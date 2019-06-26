@@ -23,7 +23,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
-*/
+ */
 class Response extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface, HttpPostActionInterface
 {
     /**
