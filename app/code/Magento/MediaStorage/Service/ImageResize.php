@@ -141,7 +141,7 @@ class ImageResize
      */
     public function getCountForResize()
     {
-        $count = $this->productImage->getCountAllProductImages();
+        $count = $this->productImage->getCountUsedProductImages();
         if (!$count) {
             throw new NotFoundException(__('Cannot resize images - product images not found'));
         }
@@ -159,7 +159,7 @@ class ImageResize
      */
     public function resizeFromThemes(array $themes = null): \Generator
     {
-        $productImages = $this->productImage->getAllProductImages();
+        $productImages = $this->productImage->getUsedProductImages();
         $viewImages = $this->getViewImages($themes ?? $this->getThemesInUse());
 
         foreach ($productImages as $image) {
@@ -237,7 +237,7 @@ class ImageResize
     {
         ksort($imageData);
         unset($imageData['type']);
-        // phpcs:ignore Magento2.Security.InsecureFunction.DiscouragedWithAlternative -- irrelevant for security
+        // phpcs:ignore Magento2.Security.InsecureFunction -- irrelevant for security
         return md5(json_encode($imageData));
     }
 
