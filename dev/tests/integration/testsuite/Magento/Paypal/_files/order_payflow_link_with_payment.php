@@ -54,8 +54,8 @@ $payment->setMethod(Config::METHOD_PAYFLOWLINK)
 
         'cancel_url'=> $baseUrl .'paypal/payflow/cancelPayment',
         'return_url'=> $baseUrl .'paypal/payflow/returnUrl',
-        'secure_token_id' => '31f2a7c8d257c70b1c9eb9051b90e0',
-        'secure_token' => '80IgSbabyj0CtBDWHZZeQN3'
+        'secure_token_id' => 'mysecuretokenId',
+        'secure_token' => 'mysecuretoken'
         ]
     );
 
