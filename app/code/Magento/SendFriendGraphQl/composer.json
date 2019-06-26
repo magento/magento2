@@ -6,9 +6,7 @@
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
         "magento/module-catalog": "*",
-        "magento/module-send-friend": "*"
-    },
-    "suggest": {
+        "magento/module-send-friend": "*",
         "magento/module-graph-ql": "*"
     },
     "license": [
