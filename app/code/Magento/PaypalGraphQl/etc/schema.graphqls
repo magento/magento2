@@ -73,6 +73,7 @@ input PayflowLinkTokenInput {
 enum PayflowLinkMode @doc(description:"Mode for Payflow Link payment: TEST or LIVE") {
     TEST
     LIVE
+}
 
 input PayflowProTokenInput {
      cart_id: String! @doc(description:"The unique ID that identifies the customer's cart")
