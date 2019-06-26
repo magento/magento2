@@ -12,17 +12,14 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
-use Magento\Paypal\Model\Payflow\Request;
-use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Quote\Model\Quote;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\UrlInterface;
 use Magento\TestFramework\ObjectManager;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * End to end place order test using payflow_link via graphql endpoint for guest
+ * Test SetPayment method for payflow_link and validate the additional information
  *
  * @magentoAppArea graphql
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -48,12 +45,6 @@ class SetPaymentMethodAsPayflowLinkTest extends TestCase
     /** @var  GraphQl */
     protected $graphqlController;
 
-    /** @var  Gateway|MockObject */
-    private $gateway;
-
-    /** @var  Request|MockObject */
-    private $payflowRequest;
-
     protected function setUp()
     {
         parent::setUp();
@@ -63,21 +54,6 @@ class SetPaymentMethodAsPayflowLinkTest extends TestCase
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->graphqlController = $this->objectManager->get(GraphQl::class);
-        $this->gateway = $this->getMockBuilder(Gateway::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['postRequest'])
-            ->getMock();
-
-        $requestFactory = $this->getMockBuilder(\Magento\Paypal\Model\Payflow\RequestFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->payflowRequest = $this->getMockBuilder(\Magento\Paypal\Model\Payflow\Request::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $requestFactory->expects($this->any())->method('create')->will($this->returnValue($this->payflowRequest));
-        $this->objectManager->addSharedInstance($this->gateway, Gateway::class);
     }
 
     /**
@@ -114,9 +90,9 @@ class SetPaymentMethodAsPayflowLinkTest extends TestCase
           additional_data: {
             payflow_link: 
             {           
-           return_url:"{$baseUrl}paypal/payflow/returnUrl"
-           cancel_url:"{$baseUrl}paypal/payflow/cancelPayment"
-           error_url:"{$baseUrl}paypal/payflow/errorUrl"
+           return_url:"http://magento.com/paypal/payflow/link/success"
+           cancel_url:"http://magento.com/paypal/payflow/link/cancel"
+           error_url:"http://magento.com/paypal/payflow/link/error"
           }
         }
       }
@@ -153,10 +129,18 @@ QUERY;
 
         $quote->load('test_quote', 'reserved_order_id');
         $payment = $quote->getPayment();
-        $actualPaymentAdditionalInformation = $payment->getAdditionalInformation('payflow_link');
-        $this->assertEquals("{$baseUrl}paypal/payflow/cancelPayment", $payment->getAdditionalInformation('cancel_url'));
-        $this->assertEquals("{$baseUrl}paypal/payflow/returnUrl", $payment->getAdditionalInformation('return_url'));
-        $this->assertEquals("{$baseUrl}paypal/payflow/errorUrl", $payment->getAdditionalInformation('error_url'));
+        $this->assertEquals(
+            "http://magento.com/paypal/payflow/link/cancel",
+            $payment->getAdditionalInformation('cancel_url')
+        );
+        $this->assertEquals(
+            "http://magento.com/paypal/payflow/link/success",
+            $payment->getAdditionalInformation('return_url')
+        );
+        $this->assertEquals(
+            "http://magento.com/paypal/payflow/link/error",
+            $payment->getAdditionalInformation('error_url')
+        );
     }
 
     /**
@@ -180,9 +164,6 @@ QUERY;
         $paymentMethod = 'payflow_link';
         $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
-        $url = $this->objectManager->get(UrlInterface::class);
-        $baseUrl = $url->getBaseUrl();
-
         $query
             = <<<QUERY
  mutation {
@@ -193,8 +174,8 @@ QUERY;
           additional_data: {
             payflow_link: 
             {           
-           return_url:"{$baseUrl}paypal/payflow/returnUrl"
-           cancel_url:"{$baseUrl}paypal/payflow/cancelPayment"
+           return_url:"http://magento.com/paypal/payflow/link/sucess"
+           cancel_url:"http://magento.com/paypal/payflow/link/cancel"
            error_url:"/not/a/validUrl"
           }
         }
