@@ -41,6 +41,7 @@
         <arguments>
             <argument name="dataProviders" xsi:type="array">
                 <item name="payflow_link" xsi:type="object">Magento\PaypalGraphQl\Model\PayflowLinkAdditionalDataProvider</item>
+                <item name="payflowpro" xsi:type="object">\Magento\PaypalGraphQl\Model\PaypalAdditionalDataProvider</item>
             </argument>
         </arguments>
     </type>

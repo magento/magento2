@@ -7,6 +7,8 @@ type Query {
 
 type Mutation {
     createPaypalExpressToken(input: PaypalExpressTokenInput!): PaypalExpressToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PaypalExpressToken") @doc(description:"Initiates a PayPal checkout transaction and receives a token.")
+    createPayflowProToken(input: PayflowProTokenInput!): PayflowProToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowProToken") @doc(description: "Initiates a PayFlowPro transaction and receives a token")
+    handlePayflowProResponse(input: PayflowProResponseInput!): PayflowProResponseOutput @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowProResponse") @doc(description: "Handles PayFlowPro response and saves payment in Quote")
 }
 
 input PaypalExpressTokenInput @doc(description:"Defines the attributes required to receive a payment token from PayPal") {
@@ -33,6 +35,7 @@ input PaymentMethodAdditionalDataInput {
     paypal_express: PaypalExpressInput @doc(description:"Required input for PayPal Express Checkout payments")
     payflow_express: PayflowExpressInput @doc(description:"Required input for PayPal Payflow Express Checkout payments")
     payflow_link: PayflowLinkAdditionalDataInput @doc(description:"Required input for PayPal Payflow Link payments")
+    payflowpro: PayflowProInput @doc(description: "Required input type for Paypal payflow pro payments")
 }
 
 input PaypalExpressInput @doc(description:"Required input for PayPal Express Checkout payments") {
@@ -57,7 +60,6 @@ type PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer t
     edit: String @doc(description:"The PayPal URL that allows the buyer to edit their checkout details")
 }
 
-
 input PayflowLinkAdditionalDataInput {
     return_url: String! @doc(description:"The URL PayPal will redirect back to upon payment success")
     cancel_url: String! @doc(description:"The URL PayPal will redirect back to upon payment cancellation")
@@ -71,4 +73,42 @@ input PayflowLinkTokenInput {
 enum PayflowLinkMode @doc(description:"Mode for Payflow Link payment: TEST or LIVE") {
     TEST
     LIVE
+
+input PayflowProTokenInput {
+     cart_id: String! @doc(description:"The unique ID that identifies the customer's cart")
+     urls: PayflowProUrlInput! @doc(description:"URL that PayPal uses for callback.")
+}
+
+input PayflowProInput {
+    cc_details: CreditCardDetailsInput! @doc(description: "Required input for credit card related information")
+}
+
+input CreditCardDetailsInput {
+    cc_type: String! @doc(description: "Credit card type")
+    cc_exp_year: Int! @doc(description: "Credit card expiration year")
+    cc_exp_month: Int! @doc(description: "Credit card expiration month")
+    cc_last_4: Int! @doc(description: "Last 4 digits of the credit card")
+}
+
+input PayflowProUrlInput {
+    return_url: String! @doc(description:"The URL of the final review page on your website where the buyer confirms the order and payment")
+    cancel_url: String! @doc(description:"The URL of the original page on your website where the buyer initially chose PayPal as a payment type")
+    error_url: String! @doc(description:"The URL of the page on your website where any error in the transaction is handled")
+}
+
+type PayflowProToken {
+    secure_token: String!
+    secure_token_id: String!
+    response_message: String!
+    result: Int!
+    result_code: Int!
+}
+
+input PayflowProResponseInput {
+    cart_id: String!
+    paypal_payload: String!
+}
+
+type PayflowProResponseOutput {
+    cart: Cart!
 }

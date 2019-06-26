@@ -13,7 +13,7 @@ use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
 /**
  * Get payment additional data for Paypal Express payment
  */
-class PaypalExpressAdditionalDataProvider implements AdditionalDataProviderInterface
+class PaypalAdditionalDataProvider implements AdditionalDataProviderInterface
 {
 
     private const PATH_ADDITIONAL_DATA = 'input/payment_method/additional_data';
