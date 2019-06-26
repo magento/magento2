@@ -111,6 +111,7 @@ class Transaction
      * Saves payment information in quote.
      *
      * @param DataObject $response
+     * @param string $cartId
      * @return void
      * @throws \InvalidArgumentException
      */
