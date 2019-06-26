@@ -20,5 +20,9 @@
         <element name="paymentActionCheckbox" type="input" selector="#payment_us_authorizenet_acceptjs_required_payment_action_inherit"/>
         <element name="paymentActionSelect" type="select" selector="#payment_us_authorizenet_acceptjs_required_payment_action"/>
         <element name="paymentActionSelectDisabled" type="select" selector="#payment_us_authorizenet_acceptjs_required_payment_action[disabled='disabled']"/>
+        <element name="apiLoginIdFieldRequiredMessage" type="text" selector="//input[@name='groups[authorizenet_acceptjs][groups][required][fields][login][value]']/../label[contains(.,'This is a required field.')]"/>
+        <element name="publicClientKeyFieldRequiredMessage" type="text" selector="//input[@name='groups[authorizenet_acceptjs][groups][required][fields][public_client_key][value]']/../label[contains(.,'This is a required field.')]"/>
+        <element name="transactionKeyFieldRequiredMessage" type="text" selector="//input[@name='groups[authorizenet_acceptjs][groups][required][fields][trans_key][value]']/../label[contains(.,'This is a required field.')]"/>
+        <element name="signatureKeyFieldRequiredMessage" type="text" selector="//input[@name='groups[authorizenet_acceptjs][groups][required][fields][trans_signature_key][value]']/../label[contains(.,'This is a required field.')]"/>
     </section>
 </sections>
