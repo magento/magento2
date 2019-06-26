@@ -19,6 +19,8 @@
             <group value="ui"/>
         </annotations>
         <before>
+            <!--Deploy static content with French locale-->
+            <magentoCLI command="setup:static-content:deploy fr_FR" stepKey="deployStaticContentWithFrenchLocale"/>
             <!--Create entities-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
