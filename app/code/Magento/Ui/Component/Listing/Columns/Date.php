@@ -55,17 +55,19 @@ class Date extends Column
     public function prepare()
     {
         $config = $this->getData('config');
-        $config['filter'] = [
-            'filterType' => 'dateRange',
-            'templates' => [
-                'date' => [
-                    'options' => [
-                        'dateFormat' => $this->timezone->getDateFormatWithLongYear()
+        if (isset($config['filter'])) {
+            $config['filter'] = [
+                'filterType' => 'dateRange',
+                'templates' => [
+                    'date' => [
+                        'options' => [
+                            'dateFormat' => $config['dateFormat'] ?? $this->timezone->getDateFormatWithLongYear()
+                        ]
                     ]
                 ]
-            ]
-        ];
-        $this->setData('config', $config);
+            ];
+            $this->setData('config', $config);
+        }
 
         parent::prepare();
     }
