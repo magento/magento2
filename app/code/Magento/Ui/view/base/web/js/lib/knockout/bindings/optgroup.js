@@ -222,7 +222,7 @@ define([
                     ko.utils.setTextContent(option, allBindings.get('optionsCaption'));
                     ko.selectExtensions.writeValue(option, undefined);
                 } else if (typeof arrayEntry[optionsValue] === 'undefined') { // empty value === optgroup
-                    if (arrayEntry['__disableTmpl']) {
+                    if (arrayEntry.__disableTmpl) {
                         option = '<optgroup label="' + arrayEntry[optionsText] + '"></optgroup>';
                     } else {
                         option = utils.template(optgroupTmpl, {
