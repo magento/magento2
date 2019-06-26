@@ -162,7 +162,7 @@ class Encryptor implements EncryptorInterface
      */
     public function getLatestHashVersion(): int
     {
-        if (extension_loaded('sodium')) {
+        if (extension_loaded('sodium') && defined('SODIUM_CRYPTO_PWHASH_ALG_ARGON2ID13')) {
             return self::HASH_VERSION_ARGON2ID13;
         }
 
