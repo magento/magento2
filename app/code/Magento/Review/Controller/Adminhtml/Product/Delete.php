@@ -7,10 +7,21 @@ namespace Magento\Review\Controller\Adminhtml\Product;
 
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Review\Model\Review;
 
+/**
+ * Delete action.
+ */
 class Delete extends ProductController
 {
     /**
+     * @var Review
+     */
+    private $model;
+
+    /**
+     * Execute action.
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
@@ -20,7 +31,7 @@ class Delete extends ProductController
         $reviewId = $this->getRequest()->getParam('id', false);
         if ($this->getRequest()->isPost()) {
             try {
-                $this->reviewFactory->create()->setId($reviewId)->aggregate()->delete();
+                $this->getModel()->aggregate()->delete();
 
                 $this->messageManager->addSuccess(__('The review has been deleted.'));
                 if ($this->getRequest()->getParam('ret') == 'pending') {
@@ -38,5 +49,47 @@ class Delete extends ProductController
         }
 
         return $resultRedirect->setPath('review/*/edit/', ['id' => $reviewId]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _isAllowed()
+    {
+        if (parent::_isAllowed()) {
+            return true;
+        }
+
+        if (!$this->_authorization->isAllowed('Magento_Review::pending')) {
+            return  false;
+        }
+
+        if ($this->getModel()->getStatusId() != Review::STATUS_PENDING) {
+            $this->messageManager->addErrorMessage(
+                __(
+                    'You don’t have permission to perform this operation.'
+                    . ' The selected review must be in Pending Status.'
+                )
+            );
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns requested model.
+     *
+     * @return Review
+     */
+    private function getModel(): Review
+    {
+        if ($this->model === null) {
+            $this->model = $this->reviewFactory->create()
+                ->load($this->getRequest()->getParam('id', false));
+        }
+
+        return $this->model;
     }
 }
