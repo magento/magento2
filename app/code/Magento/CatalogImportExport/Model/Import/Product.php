@@ -1723,27 +1723,31 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         if (filter_var($columnImage, FILTER_VALIDATE_URL) === false) {
                             $filename = $importDir . DIRECTORY_SEPARATOR . $columnImage;
                             if (file_exists($filename)) {
-                                $hash = md5_file($importDir . DIRECTORY_SEPARATOR . $columnImage);
+                                $hash = hash_file("sha256", $importDir . DIRECTORY_SEPARATOR . $columnImage);
                             } else {
-                                $hash = md5($filename);
+                                $hash = hash_file("sha256", $filename);
                             }
                         } else {
-                            $hash = md5_file($columnImage);
+                            $hash = hash_file("sha256", $columnImage);
                         }
 
                         // Add new images
                         if (!isset($existingImages[$rowSku])) {
                             $imageAlreadyExists = false;
                         } else {
-                            $imageAlreadyExists = array_reduce($existingImages[$rowSku], function ($exists, $file) use ($hash) {
-                                if ($exists) {
+                            $imageAlreadyExists = array_reduce(
+                                $existingImages[$rowSku],
+                                function ($exists, $file) use ($hash) {
+                                    if ($exists) {
+                                        return $exists;
+                                    }
+                                    if ($file['hash'] === $hash) {
+                                        return $file['value'];
+                                    }
                                     return $exists;
-                                }
-                                if ($file['hash'] === $hash) {
-                                    return $file['value'];
-                                }
-                                return $exists;
-                            }, '');
+                                },
+                                ''
+                            );
                         }
 
                         if ($imageAlreadyExists) {
@@ -1954,17 +1958,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Generate md5 hashes for existing images for comparison with newly uploaded images.
+     * Generate hashes for existing images for comparison with newly uploaded images.
      *
      * @param array $images
      */
     public function addImageHashes(&$images)
     {
-        $productMediaPath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath('/catalog/product');
+        $productMediaPath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)
+            ->getAbsolutePath('/catalog/product');
 
         foreach ($images as $sku => $files) {
             foreach ($files as $path => $file) {
-                $images[$sku][$path]['hash'] = md5_file($productMediaPath . $file['value']);
+                $images[$sku][$path]['hash'] = hash_file("sha256",$productMediaPath . $file['value']);
             }
         }
     }

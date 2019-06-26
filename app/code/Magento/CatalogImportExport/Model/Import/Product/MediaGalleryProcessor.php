@@ -360,7 +360,8 @@ class MediaGalleryProcessor
      * @param array $oldMediaValues
      * @return void
      */
-    public function removeOldMediaItems(array $oldMediaValues) {
+    public function removeOldMediaItems(array $oldMediaValues)
+    {
         $this->connection->delete(
             $this->mediaGalleryTableName,
             $this->connection->quoteInto('value IN (?)', $oldMediaValues)

@@ -233,11 +233,13 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      * @param bool $rollback
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function executeFixtures(array $fixtures, bool $rollback = false)
     {
         foreach ($fixtures as $fixture) {
             $fixturePath = $this->resolveFixturePath($fixture, $rollback);
+            // phpcs:ignore
             include $fixturePath;
         }
     }
@@ -320,10 +322,13 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $exportProduct = $this->objectManager->create(\Magento\CatalogImportExport\Model\Export\Product::class);
         if ($usePagination) {
             /** @var \ReflectionProperty $itemsPerPageProperty */
-            $itemsPerPageProperty = $this->objectManager->create(\ReflectionProperty::class, [
-                'class' => \Magento\CatalogImportExport\Model\Export\Product::class,
-                'name' => '_itemsPerPage'
-            ]);
+            $itemsPerPageProperty = $this->objectManager->create(
+                \ReflectionProperty::class,
+                [
+                    'class' => \Magento\CatalogImportExport\Model\Export\Product::class,
+                    'name' => '_itemsPerPage'
+                ]
+            );
             $itemsPerPageProperty->setAccessible(true);
             $itemsPerPageProperty->setValue($exportProduct, 1);
         }
