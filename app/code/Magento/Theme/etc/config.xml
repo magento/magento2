@@ -67,7 +67,7 @@ Disallow: /*SID=
                 <sign>1</sign>
             </static>
             <js>
-                <move_inline_to_bottom>0</move_inline_to_bottom>
+                <move_script_to_bottom>0</move_script_to_bottom>
             </js>
             <css>
                 <use_css_critical_path>0</use_css_critical_path>

@@ -87,7 +87,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
     private $configReaderMock;
 
     /**
-     * Set helper mocks, create resource model mock
+     * @inheritdoc
      */
     protected function setUp()
     {
@@ -604,9 +604,8 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
-        $escaper = $objectManager->getObject(
-            \Magento\Framework\Escaper::class
-        );
+        $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
+
         $constructArguments = $objectManager->getConstructArguments(
             Sitemap::class,
             [

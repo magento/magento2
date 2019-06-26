@@ -550,10 +550,10 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             $row .= '<lastmod>' . $this->_getFormattedLastmodDate($lastmod) . '</lastmod>';
         }
         if ($changefreq) {
-            $row .= '<changefreq>' . $changefreq . '</changefreq>';
+            $row .= '<changefreq>' . $this->_escaper->escapeHtml($changefreq) . '</changefreq>';
         }
         if ($priority) {
-            $row .= sprintf('<priority>%.1f</priority>', $priority);
+            $row .= sprintf('<priority>%.1f</priority>', $this->_escaper->escapeHtml($priority));
         }
         if ($images) {
             // Add Images to sitemap
