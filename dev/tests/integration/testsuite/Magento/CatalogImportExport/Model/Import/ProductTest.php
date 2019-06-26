@@ -839,19 +839,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $additionalImageTwoItem);
         $this->assertEquals('/m/a/magento_additional_image_two.jpg', $additionalImageTwoItem->getFile());
         $this->assertEquals('Additional Image Label Two', $additionalImageTwoItem->getLabel());
-    }
 
-    /**
-     * Test that import for an existing product will correctly update images
-     * New unique images as per MD5 should be added, images not mentioned in the import should be removed
-     *
-     * @magentoDataFixture mediaImportImageFixture
-     * @magentoAppIsolation enabled
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testUpdateExistingProductMedia()
-    {
-        $this->importDataForMediaTest('import_media.csv');
+        // Will check that existing product update works
+        // New unique images as per MD5 should be added, images not mentioned in the import should be removed
         $this->importDataForMediaTest('import_media_update_images.csv');
 
         $product = $this->getProductBySku('simple_new');
