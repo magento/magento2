@@ -17,7 +17,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Webapi\Request;
 
 /**
- * Test ExpressSetPaymentMethodTest graphql endpoint for customer
+ * End to end place order test using payflowpro via graphql endpoint for customer
  *
  * @magentoAppArea graphql
  */

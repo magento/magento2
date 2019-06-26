@@ -62,7 +62,7 @@ class PayflowProToken implements ResolverInterface
         array $args = null
     ) {
         $cartId = $args['input']['cart_id'] ?? '';
-        $urls = $args['input']['urls'] ?? '';
+        $urls = $args['input']['urls'] ?? null ;
 
         $customerId = $context->getUserId();
         $cart = $this->getCartForUser->execute($cartId, $customerId);

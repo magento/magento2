@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
 use Magento\Framework\App\Request\Http;
-use Magento\Paypal\Model\Api\Nvp;
 use Magento\PaypalGraphQl\PaypalPayflowProAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;

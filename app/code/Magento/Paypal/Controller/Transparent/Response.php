@@ -21,6 +21,7 @@ use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Framework\Session\Generic as Session;
 
 /**
+ * Class for requesting the response result form the paypal controller.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Response extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
@@ -112,6 +113,8 @@ class Response extends \Magento\Framework\App\Action\Action implements CsrfAware
     }
 
     /**
+     * Exceute svaes the payment in quote and sends the resultInterface
+     *
      * @return ResultInterface
      */
     public function execute()

@@ -16,7 +16,7 @@ use Magento\Paypal\Model\Payflowpro;
 use Magento\Quote\Model\Quote;
 
 /**
- * Class SecureToken for setting, posting and returning a response DataObject for RequestSecureToken controller.
+ * Class for requesting a secure Payflow Pro token from Paypal
  */
 class SecureToken
 {
@@ -59,7 +59,7 @@ class SecureToken
      * @return DataObject
      * @throws \Exception
      */
-    public function requestToken(Quote $quote, $urls = [])
+    public function requestToken(Quote $quote, array $urls = [])
     {
         $this->transparent->setStore($quote->getStoreId());
         $request = $this->transparent->buildBasicRequest();
