@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRestrictedUserAddCategoryFromProductPageTest">
+        <annotations>
+            <features value="Catalog"/>
+            <title value="Adding new category from product page by restricted user"/>
+            <description value="Adding new category from product page by restricted user"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-17229"/>
+            <useCaseId value="MAGETWO-69893"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create category-->
+            <comment userInput="Create category" stepKey="commentCreateCategory"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+        </before>
+        <after>
+            <!--Delete created product-->
+            <comment userInput="Delete created product" stepKey="commentDeleteProduct"/>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetFiltersIfExist"/>
+            <actionGroup ref="logout" stepKey="logoutOfUser"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Delete created data-->
+            <comment userInput="Delete created data" stepKey="commentDeleteCreatedData"/>
+            <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid" />
+            <waitForPageLoad stepKey="waitForRolesGridLoad" />
+            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
+                <argument name="role" value="adminRole"/>
+            </actionGroup>
+            <amOnPage url="{{AdminUsersPage.url}}" stepKey="goToAllUsersPage"/>
+            <waitForPageLoad stepKey="waitForUsersGridLoad" />
+            <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="deleteUser">
+                <argument name="userName" value="{{admin2.username}}"/>
+            </actionGroup>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+        <!--Create user role-->
+        <comment userInput="Create user role" stepKey="commentCreateUserRole"/>
+        <actionGroup ref="AdminFillUserRoleRequiredData" stepKey="fillUserRoleRequiredData">
+            <argument name="User" value="adminRole"/>
+            <argument name="restrictedRole" value="Stores"/>
+        </actionGroup>
+        <click selector="{{AdminEditRoleInfoSection.roleResourcesTab}}" stepKey="clickRoleResourcesTab" />
+        <actionGroup ref="AdminAddRestrictedRole" stepKey="addRestrictedRoleStores">
+            <argument name="User" value="adminRole"/>
+            <argument name="restrictedRole" value="Stores"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddRestrictedRole" stepKey="addRestrictedRoleProducts">
+            <argument name="User" value="adminRole"/>
+            <argument name="restrictedRole" value="Products"/>
+        </actionGroup>
+        <click selector="{{AdminEditRoleInfoSection.saveButton}}" stepKey="clickSaveRoleButton" />
+        <see userInput="You saved the role." stepKey="seeUserRoleSavedMessage"/>
+        <!--Create user and assign role to it-->
+        <comment userInput="Create user and assign role to it" stepKey="commentCreateUser"/>
+        <actionGroup ref="AdminCreateUserActionGroup" stepKey="createAdminUser">
+            <argument name="role" value="adminRole"/>
+            <argument name="User" value="admin2"/>
+        </actionGroup>
+        <!--Log out of admin and login with newly created user-->
+        <comment userInput="Log out of admin and login with newly created user" stepKey="commentLoginWithNewUser"/>
+        <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUser">
+            <argument name="adminUser" value="admin2"/>
+        </actionGroup>
+        <!--Go to create product page-->
+        <comment userInput="Go to create product page" stepKey="commentGoCreateProductPage"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage"/>
+        <dontSeeElement selector="{{AdminProductFormSection.newCategoryButton}}" stepKey="dontSeeNewCategoryButton"/>
+        <!--Fill product data and assign to category-->
+        <comment userInput="Fill product data and assign to category" stepKey="commentFillProductData"/>
+        <actionGroup ref="fillMainProductForm" stepKey="fillMainProductForm"/>
+        <actionGroup ref="SetCategoryByName" stepKey="addCategoryToProduct">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <!--Assert that category exist in field-->
+        <comment userInput="Assert that category exist in field" stepKey="commentAssertion"/>
+        <grabTextFrom selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="grabCategoryName"/>
+        <assertContains stepKey="assertThatCategory">
+            <expectedResult type="variable">$$createCategory.name$$</expectedResult>
+            <actualResult type="variable">$grabCategoryName</actualResult>
+        </assertContains>
+        <!--Remove the category from the product and assert that it removed-->
+        <comment userInput="Remove the category from the product and assert that it removed" stepKey="assertCategoryRemoved"/>
+        <actionGroup ref="removeCategoryFromProduct" stepKey="removeCategoryFromProduct">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProductAfterRemovingCategory"/>
+        <grabTextFrom selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="grabCategoryFieldContent"/>
+        <assertNotContains stepKey="assertThatCategoryRemoved">
+            <expectedResult type="variable">$$createCategory.name$$</expectedResult>
+            <actualResult type="variable">$grabCategoryFieldContent</actualResult>
+        </assertNotContains>
+    </test>
+</tests>
