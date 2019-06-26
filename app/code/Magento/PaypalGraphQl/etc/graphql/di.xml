@@ -39,7 +39,7 @@
     <type name="Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool">
         <arguments>
             <argument name="dataProviders" xsi:type="array">
-                <item name="payflowpro" xsi:type="object">\Magento\PaypalGraphQl\Model\PaypalAdditionalDataProvider</item>
+                <item name="payflowpro" xsi:type="object">\Magento\PaypalGraphQl\Model\PayflowProAdditionalDataProvider</item>
             </argument>
         </arguments>
     </type>
