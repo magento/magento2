@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
-    cart(cart_id: String!): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Returns information about shopping cart")
+    cart(cart_id: String!): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Returns information about shopping cart") @cache(cacheable: false)
 }
 
 type Mutation {
@@ -18,6 +18,7 @@ type Mutation {
     setShippingMethodsOnCart(input: SetShippingMethodsOnCartInput): SetShippingMethodsOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetShippingMethodsOnCart")
     setPaymentMethodOnCart(input: SetPaymentMethodOnCartInput): SetPaymentMethodOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentMethodOnCart")
     setGuestEmailOnCart(input: SetGuestEmailOnCartInput): SetGuestEmailOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetGuestEmailOnCart")
+    setPaymentMethodAndPlaceOrder(input: SetPaymentMethodAndPlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentAndPlaceOrder")
     placeOrder(input: PlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder")
 }
 
@@ -27,7 +28,7 @@ input createEmptyCartInput {
 
 input AddSimpleProductsToCartInput {
     cart_id: String!
-    cartItems: [SimpleProductCartItemInput!]!
+    cart_items: [SimpleProductCartItemInput!]!
 }
 
 input SimpleProductCartItemInput {
@@ -37,7 +38,7 @@ input SimpleProductCartItemInput {
 
 input AddVirtualProductsToCartInput {
     cart_id: String!
-    cartItems: [VirtualProductCartItemInput!]!
+    cart_items: [VirtualProductCartItemInput!]!
 }
 
 input VirtualProductCartItemInput {
@@ -47,12 +48,12 @@ input VirtualProductCartItemInput {
 
 input CartItemInput {
     sku: String!
-    qty: Float!
+    quantity: Float!
 }
 
 input CustomizableOptionInput {
     id: Int!
-    value: String!
+    value_string: String!
 }
 
 input ApplyCouponToCartInput {
@@ -62,12 +63,13 @@ input ApplyCouponToCartInput {
 
 input UpdateCartItemsInput {
     cart_id: String!
-    cart_items: [CartItemQuantityInput!]!
+    cart_items: [CartItemUpdateInput!]!
 }
 
-input CartItemQuantityInput {
+input CartItemUpdateInput {
     cart_item_id: Int!
-    quantity: Float!
+    quantity: Float
+    customizable_options: [CustomizableOptionInput!]
 }
 
 input RemoveItemFromCartInput {
@@ -115,9 +117,13 @@ input SetShippingMethodsOnCartInput {
 }
 
 input ShippingMethodInput {
-    cart_address_id: Int!
     carrier_code: String!
     method_code: String!
+}
+
+input SetPaymentMethodAndPlaceOrderInput {
+    cart_id: String!
+    payment_method: PaymentMethodInput!
 }
 
 input PlaceOrderInput {
@@ -132,6 +138,10 @@ input SetPaymentMethodOnCartInput {
 input PaymentMethodInput {
     code: String! @doc(description:"Payment method code")
     purchase_order_number: String @doc(description:"Purchase order number")
+    additional_data: PaymentMethodAdditionalDataInput @doc(description: "Additional payment data")
+}
+
+input PaymentMethodAdditionalDataInput {
 }
 
 input SetGuestEmailOnCartInput {
@@ -143,6 +153,7 @@ type CartPrices {
     grand_total: Money
     subtotal_including_tax: Money
     subtotal_excluding_tax: Money
+    discount: CartDiscount
     subtotal_with_discount_excluding_tax: Money
     applied_taxes: [CartTaxItem]
 }
@@ -150,6 +161,11 @@ type CartPrices {
 type CartTaxItem {
     amount: Money!
     label: String!
+}
+
+type CartDiscount {
+    amount: Money!
+    label: [String!]!
 }
 
 type SetPaymentMethodOnCartOutput {
@@ -180,15 +196,14 @@ type Cart {
     items: [CartItemInterface] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItems")
     applied_coupon: AppliedCoupon @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupon")
     email: String @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartEmail")
-    shipping_addresses: [CartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
-    billing_address: CartAddress! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
+    shipping_addresses: [ShippingCartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
+    billing_address: BillingCartAddress! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
     available_payment_methods: [AvailablePaymentMethod]  @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
     selected_payment_method: SelectedPaymentMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SelectedPaymentMethod")
     prices: CartPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartPrices")
 }
 
-type CartAddress {
-    address_id: Int
+interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddressTypeResolver") {
     firstname: String
     lastname: String
     company: String
@@ -198,12 +213,17 @@ type CartAddress {
     postcode: String
     country: CartAddressCountry
     telephone: String
-    address_type: AdressTypeEnum
+    customer_notes: String
+}
+
+type ShippingCartAddress implements CartAddressInterface {
     available_shipping_methods: [AvailableShippingMethod] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddress\\AvailableShippingMethods")
     selected_shipping_method: SelectedShippingMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddress\\SelectedShippingMethod")
     items_weight: Float
-    customer_notes: String
     cart_items: [CartItemQuantity]
+}
+
+type BillingCartAddress implements CartAddressInterface {
 }
 
 type CartItemQuantity {
@@ -224,35 +244,34 @@ type CartAddressCountry {
 type SelectedShippingMethod {
     carrier_code: String
     method_code: String
-    label: String
-    amount: Float
+    carrier_title: String
+    method_title: String
+    amount: Money
+    base_amount: Money
 }
 
 type AvailableShippingMethod {
     carrier_code: String!
     carrier_title: String!
-    method_code: String!
-    method_title: String!
+    method_code: String @doc(description: "Could be null if method is not available")
+    method_title: String @doc(description: "Could be null if method is not available")
     error_message: String
-    amount: Float!
-    base_amount: Float!
-    price_excl_tax: Float!
-    price_incl_tax: Float!
+    amount: Money!
+    base_amount: Money @doc(description: "Could be null if method is not available")
+    price_excl_tax: Money!
+    price_incl_tax: Money!
+    available: Boolean!
 }
 
 type AvailablePaymentMethod {
-    code: String @doc(description: "The payment method code")
-    title: String @doc(description: "The payment method title.")
+    code: String! @doc(description: "The payment method code")
+    title: String! @doc(description: "The payment method title.")
 }
 
 type SelectedPaymentMethod {
-    code: String @doc(description: "The payment method code")
+    code: String! @doc(description: "The payment method code")
+    title: String! @doc(description: "The payment method title.")
     purchase_order_number: String @doc(description: "The purchase order number.")
-}
-
-enum AdressTypeEnum {
-    SHIPPING
-    BILLING
 }
 
 type AppliedCoupon {
@@ -297,15 +316,14 @@ type VirtualCartItem implements CartItemInterface @doc(description: "Virtual Car
 
 interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemTypeResolver") {
     id: String!
-    qty: Float!
+    quantity: Float!
     product: ProductInterface!
 }
 
 type SelectedCustomizableOption {
     id: Int!
     label: String!
-    type: String!
-    is_required: Int!
+    is_required: Boolean!
     values: [SelectedCustomizableOptionValue!]!
     sort_order: Int!
 }
@@ -313,9 +331,8 @@ type SelectedCustomizableOption {
 type SelectedCustomizableOptionValue {
     id: Int!
     label: String!
-    value: String!
+    value: String
     price: CartItemSelectedOptionValuePrice!
-    sort_order: Int!
 }
 
 type CartItemSelectedOptionValuePrice {

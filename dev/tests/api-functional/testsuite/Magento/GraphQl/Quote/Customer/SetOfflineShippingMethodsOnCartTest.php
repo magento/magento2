@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Customer;
 
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
-use Magento\GraphQl\Quote\GetQuoteShippingAddressIdByReservedQuoteId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -24,11 +23,6 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
     private $getMaskedQuoteIdByReservedOrderId;
 
     /**
-     * @var GetQuoteShippingAddressIdByReservedQuoteId
-     */
-    private $getQuoteShippingAddressIdByReservedQuoteId;
-
-    /**
      * @var CustomerTokenServiceInterface
      */
     private $customerTokenService;
@@ -40,9 +34,6 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->getQuoteShippingAddressIdByReservedQuoteId = $objectManager->get(
-            GetQuoteShippingAddressIdByReservedQuoteId::class
-        );
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
@@ -57,20 +48,27 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
      *
      * @param string $carrierCode
      * @param string $methodCode
-     * @param float $amount
-     * @param string $label
+     * @param string $carrierTitle
+     * @param string $methodTitle
+     * @param array $amount
+     * @param array $baseAmount
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @dataProvider offlineShippingMethodDataProvider
      */
-    public function testSetOfflineShippingMethod(string $carrierCode, string $methodCode, float $amount, string $label)
-    {
+    public function testSetOfflineShippingMethod(
+        string $carrierCode,
+        string $methodCode,
+        string $carrierTitle,
+        string $methodTitle,
+        array $amount,
+        array $baseAmount
+    ) {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $quoteAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute('test_quote');
 
         $query = $this->getQuery(
             $maskedQuoteId,
             $methodCode,
-            $carrierCode,
-            $quoteAddressId
+            $carrierCode
         );
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
@@ -88,11 +86,17 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
         self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
 
+        self::assertArrayHasKey('carrier_title', $shippingAddress['selected_shipping_method']);
+        self::assertEquals($carrierTitle, $shippingAddress['selected_shipping_method']['carrier_title']);
+
+        self::assertArrayHasKey('method_title', $shippingAddress['selected_shipping_method']);
+        self::assertEquals($methodTitle, $shippingAddress['selected_shipping_method']['method_title']);
+
         self::assertArrayHasKey('amount', $shippingAddress['selected_shipping_method']);
         self::assertEquals($amount, $shippingAddress['selected_shipping_method']['amount']);
 
-        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
-        self::assertEquals($label, $shippingAddress['selected_shipping_method']['label']);
+        self::assertArrayHasKey('base_amount', $shippingAddress['selected_shipping_method']);
+        self::assertEquals($baseAmount, $shippingAddress['selected_shipping_method']['base_amount']);
     }
 
     /**
@@ -101,9 +105,30 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
     public function offlineShippingMethodDataProvider(): array
     {
         return [
-            'flatrate_flatrate' => ['flatrate', 'flatrate', 10, 'Flat Rate - Fixed'],
-            'tablerate_bestway' => ['tablerate', 'bestway', 10, 'Best Way - Table Rate'],
-            'freeshipping_freeshipping' => ['freeshipping', 'freeshipping', 0, 'Free Shipping - Free'],
+            'flatrate_flatrate' => [
+                'flatrate',
+                'flatrate',
+                'Flat Rate',
+                'Fixed',
+                ['value' => 10, 'currency' => 'USD'],
+                ['value' => 10, 'currency' => 'USD'],
+            ],
+            'tablerate_bestway' => [
+                'tablerate',
+                'bestway',
+                'Best Way',
+                'Table Rate',
+                ['value' => 10, 'currency' => 'USD'],
+                ['value' => 10, 'currency' => 'USD'],
+            ],
+            'freeshipping_freeshipping' => [
+                'freeshipping',
+                'freeshipping',
+                'Free Shipping',
+                'Free',
+                ['value' => 0, 'currency' => 'USD'],
+                ['value' => 0, 'currency' => 'USD'],
+            ],
         ];
     }
 
@@ -111,14 +136,12 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
      * @param string $maskedQuoteId
      * @param string $shippingMethodCode
      * @param string $shippingCarrierCode
-     * @param int $shippingAddressId
      * @return string
      */
     private function getQuery(
         string $maskedQuoteId,
         string $shippingMethodCode,
-        string $shippingCarrierCode,
-        int $shippingAddressId
+        string $shippingCarrierCode
     ): string {
         return <<<QUERY
 mutation {
@@ -126,7 +149,6 @@ mutation {
     {
       cart_id: "$maskedQuoteId", 
       shipping_methods: [{
-        cart_address_id: $shippingAddressId
         carrier_code: "$shippingCarrierCode"
         method_code: "$shippingMethodCode"
       }]
@@ -136,8 +158,16 @@ mutation {
         selected_shipping_method {
           carrier_code
           method_code
-          amount
-          label
+          carrier_title
+          method_title
+          amount {
+            value
+            currency
+          }
+          base_amount {
+            value
+            currency
+          }
         }
       }
     }

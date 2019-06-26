@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -15,35 +12,35 @@
  */
 ?>
 <?php $_filters = $block->getActiveFilters() ?>
-<?php if (!empty($_filters)): ?>
+<?php if (!empty($_filters)) : ?>
 <div class="filter-current">
     <strong class="block-subtitle filter-current-subtitle"
             role="heading"
             aria-level="2"
-            data-count="<?= count($_filters) ?>"><?= /* @escapeNotVerified */ __('Now Shopping by') ?></strong>
+            data-count="<?= /* @noEscape */ count($_filters) ?>"><?= $block->escapeHtml(__('Now Shopping by')) ?></strong>
     <ol class="items">
-        <?php foreach ($_filters as $_filter): ?>
+        <?php foreach ($_filters as $_filter) : ?>
             <li class="item">
                 <span class="filter-label"><?= $block->escapeHtml(__($_filter->getName())) ?></span>
-                <span class="filter-value"><?= /* @escapeNotVerified */ $block->stripTags($_filter->getLabel()) ?></span>
+                <span class="filter-value"><?= $block->escapeHtml($block->stripTags($_filter->getLabel())) ?></span>
                 <?php
                 $clearLinkUrl = $_filter->getClearLinkUrl();
-                $currentFilterName = $block->escapeHtml(__($_filter->getName())) . " " . $block->stripTags($_filter->getLabel());
-                if ($clearLinkUrl):
+                $currentFilterName = $block->escapeHtmlAttr(__($_filter->getName()) . " " . $block->stripTags($_filter->getLabel()));
+                if ($clearLinkUrl) :
                     ?>
-                    <a class="action previous" href="<?= /* @escapeNotVerified */ $_filter->getRemoveUrl() ?>"
-                       title="<?= /* @escapeNotVerified */ __('Previous') ?>">
-                        <span><?= /* @escapeNotVerified */ __('Previous') ?></span>
+                    <a class="action previous" href="<?= $block->escapeUrl($_filter->getRemoveUrl()) ?>"
+                       title="<?= $block->escapeHtmlAttr(__('Previous')) ?>">
+                        <span><?= $block->escapeHtml(__('Previous')) ?></span>
                     </a>
                     <a class="action remove"
-                       title="<?= $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>"
-                       href="<?= /* @escapeNotVerified */ $clearLinkUrl ?>">
+                       title="<?= $block->escapeHtmlAttr($_filter->getFilter()->getClearLinkText()) ?>"
+                       href="<?= $block->escapeUrl($clearLinkUrl) ?>">
                         <span><?= $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></span>
                     </a>
-                <?php else: ?>
-                    <a class="action remove" href="<?= /* @escapeNotVerified */ $_filter->getRemoveUrl() ?>"
-                       title="<?= /* @escapeNotVerified */ $block->escapeHtml(__('Remove')) . " " . $currentFilterName ?>">
-                        <span><?= /* @escapeNotVerified */ __('Remove This Item') ?></span>
+                <?php else : ?>
+                    <a class="action remove" href="<?= $block->escapeUrl($_filter->getRemoveUrl()) ?>"
+                       title="<?= /* @noEscape */ $block->escapeHtmlAttr(__('Remove')) . " " . $currentFilterName ?>">
+                        <span><?= $block->escapeHtml(__('Remove This Item')) ?></span>
                     </a>
                 <?php endif; ?>
             </li>
