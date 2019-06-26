@@ -19,7 +19,6 @@ use Magento\Framework\Data\Collection;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\UrlInterface;
 
 /**
@@ -66,13 +65,13 @@ class DownloadableOptions implements ResolverInterface
         DownloadableHelper $downloadableHelper,
         SampleCollection $sampleCollection,
         LinkCollection $linkCollection,
-        UrlInterface $urlBuilder = null
+        UrlInterface $urlBuilder
     ) {
         $this->enumLookup = $enumLookup;
         $this->downloadableHelper = $downloadableHelper;
         $this->sampleCollection = $sampleCollection;
         $this->linkCollection = $linkCollection;
-        $this->urlBuilder = $urlBuilder ?: ObjectManager::getInstance()->get(UrlInterface::class);
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -154,7 +153,10 @@ class DownloadableOptions implements ResolverInterface
             }
 
             $resultData[$linkKey]['sample_file'] = $link->getSampleFile();
-            $resultData[$linkKey]['sample_url'] = $link->getSampleUrl();
+            $resultData[$linkKey]['sample_url'] = $this->urlBuilder->getUrl(
+                'downloadable/download/linkSample',
+                ['link_id' => $link->getId()]
+            );
         }
         return $resultData;
     }
@@ -165,7 +167,7 @@ class DownloadableOptions implements ResolverInterface
      * @param Collection $samples
      * @return array
      */
-    private function formatSamples(Collection $samples) : array
+    private function formatSamples(Collection $samples): array
     {
         $resultData = [];
         foreach ($samples as $sampleKey => $sample) {
@@ -175,8 +177,11 @@ class DownloadableOptions implements ResolverInterface
             $resultData[$sampleKey]['sort_order'] = $sample->getSortOrder();
             $resultData[$sampleKey]['sample_type']
                 = $this->enumLookup->getEnumValueFromField('DownloadableFileTypeEnum', $sample->getSampleType());
-            $resultData[$sampleKey]['sample_file'] = $this->urlBuilder->getUrl('downloadable/download/sample', ['sample_id' => $sample->getId()]);
-            $resultData[$sampleKey]['sample_url'] = $sample->getSampleUrl();
+            $resultData[$sampleKey]['sample_file'] = $sample->getSampleFile();
+            $resultData[$sampleKey]['sample_url'] = $this->urlBuilder->getUrl(
+                'downloadable/download/sample',
+                ['sample_id' => $sample->getId()]
+            );
         }
         return $resultData;
     }
