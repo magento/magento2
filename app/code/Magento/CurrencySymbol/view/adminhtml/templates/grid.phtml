@@ -38,25 +38,10 @@
         <?php endforeach; ?>
     </fieldset>
 </form>
-<script>
-require(['jquery', "mage/mage", 'prototype'], function(jQuery){
-
-    jQuery('#currency-symbols-form').mage('form').mage('validation');
-
-    function toggleUseDefault(code, value)
+<script type="text/x-magento-init">
     {
-        checkbox = jQuery('#custom_currency_symbol_inherit'+code);
-        input = jQuery('#custom_currency_symbol'+code);
-
-        if (checkbox.is(':checked')) {
-            input.addClass('disabled');
-            input.val(value);
-            input.prop('readonly', true);
-        } else {
-            input.removeClass('disabled');
-            input.prop('readonly', false);
+        "#currency-symbols-form": {
+            "Magento_CurrencySymbol/js/symbols-form": {}
         }
     }
-    window.toggleUseDefault = toggleUseDefault;
-});
 </script>
