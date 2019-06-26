@@ -97,4 +97,10 @@
         <click selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistButton}}" stepKey="sendWishlist"/>
         <see selector="{{StorefrontCustomerWishlistProductSection.productSuccessShareMessage}}" userInput="Your wish list has been shared." stepKey="successMessage"/>
     </actionGroup>
+
+    <!-- Check that wishlist is empty -->
+    <actionGroup name="StorefrontAssertCustomerWishlistIsEmpty">
+        <dontSeeElement selector="{{StorefrontCustomerWishlistProductSection.pager}}" stepKey="checkThatPagerIsAbsent"/>
+        <see selector="{{StorefrontCustomerWishlistProductSection.wishlistEmpty}}" userInput="You have no items in your wish list." stepKey="checkNoItemsMessage"/>
+    </actionGroup>
 </actionGroups>

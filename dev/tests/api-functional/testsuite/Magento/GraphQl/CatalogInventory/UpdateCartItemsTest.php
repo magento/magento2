@@ -41,26 +41,26 @@ class UpdateCartItemsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
-    public function testUpdateCartItemDecimalQty()
+    public function testUpdateCartItemDecimalQuantity()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $itemId = $this->getQuoteItemIdByReservedQuoteIdAndSku->execute('test_quote', 'simple_product');
 
-        $qty = 0.5;
+        $quantity = 0.5;
         $this->expectExceptionMessage(
             "Could not update the product with SKU simple_product: The fewest you may purchase is 1"
         );
-        $query = $this->getQuery($maskedQuoteId, $itemId, $qty);
+        $query = $this->getQuery($maskedQuoteId, $itemId, $quantity);
         $this->graphQlMutation($query);
     }
 
     /**
      * @param string $maskedQuoteId
      * @param int $itemId
-     * @param float $qty
+     * @param float $quantity
      * @return string
      */
-    private function getQuery(string $maskedQuoteId, int $itemId, float $qty): string
+    private function getQuery(string $maskedQuoteId, int $itemId, float $quantity): string
     {
         return <<<QUERY
 mutation {
@@ -69,14 +69,14 @@ mutation {
     cart_items:[
       {
         cart_item_id: {$itemId}
-        quantity: {$qty}
+        quantity: {$quantity}
       }
     ]
   }) {
     cart {
       items {
         id
-        qty
+        quantity
       }
     }
   }

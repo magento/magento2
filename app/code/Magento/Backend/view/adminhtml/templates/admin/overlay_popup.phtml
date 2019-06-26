@@ -3,15 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <div class="wrapper-popup">
     <div class="middle" id="anchor-content">
         <div id="page:main-container">
-        <?php if ($block->getChildHtml('left')): ?>
-            <div class="columns <?= /* @escapeNotVerified */ $block->getContainerCssClass() ?>" id="page:container">
+        <?php if ($block->getChildHtml('left')) : ?>
+            <div class="columns <?= $block->escapeHtmlAttr($block->getContainerCssClass()) ?>" id="page:container">
                 <div id="page:left" class="side-col">
                     <?= $block->getChildHtml('left') ?>
                 </div>
@@ -24,13 +21,13 @@
                     </div>
                 </div>
             </div>
-      <?php else: ?>
+        <?php else : ?>
           <div id="messages" data-container-for="messages"><?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?></div>
           <?= $block->getChildHtml('content') ?>
-      <?php endif; ?>
+        <?php endif; ?>
          </div>
     </div>
-    <?php if ($block->getChildHtml('footer')): ?>
+    <?php if ($block->getChildHtml('footer')) : ?>
     <div class="footer">
         <?= $block->getChildHtml('footer') ?>
     </div>

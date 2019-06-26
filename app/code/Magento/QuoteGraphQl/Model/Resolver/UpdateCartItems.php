@@ -16,14 +16,19 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CartItemRepositoryInterface;
 use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\Quote\Item;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\QuoteGraphQl\Model\Cart\UpdateCartItem;
 
 /**
  * @inheritdoc
  */
 class UpdateCartItems implements ResolverInterface
 {
+    /**
+     * @var UpdateCartItem
+     */
+    private $updateCartItem;
+
     /**
      * @var GetCartForUser
      */
@@ -37,13 +42,16 @@ class UpdateCartItems implements ResolverInterface
     /**
      * @param GetCartForUser $getCartForUser
      * @param CartItemRepositoryInterface $cartItemRepository
+     * @param UpdateCartItem $updateCartItem
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        CartItemRepositoryInterface $cartItemRepository
+        CartItemRepositoryInterface $cartItemRepository,
+        UpdateCartItem $updateCartItem
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartItemRepository = $cartItemRepository;
+        $this->updateCartItem = $updateCartItem;
     }
 
     /**
@@ -51,12 +59,12 @@ class UpdateCartItems implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
+        if (empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing.'));
         }
         $maskedCartId = $args['input']['cart_id'];
 
-        if (!isset($args['input']['cart_items']) || empty($args['input']['cart_items'])
+        if (empty($args['input']['cart_items'])
             || !is_array($args['input']['cart_items'])
         ) {
             throw new GraphQlInputException(__('Required parameter "cart_items" is missing.'));
@@ -91,55 +99,21 @@ class UpdateCartItems implements ResolverInterface
     private function processCartItems(Quote $cart, array $items): void
     {
         foreach ($items as $item) {
-            if (!isset($item['cart_item_id']) || empty($item['cart_item_id'])) {
+            if (empty($item['cart_item_id'])) {
                 throw new GraphQlInputException(__('Required parameter "cart_item_id" for "cart_items" is missing.'));
             }
-            $itemId = $item['cart_item_id'];
+            $itemId = (int)$item['cart_item_id'];
+            $customizableOptions = $item['customizable_options'] ?? [];
 
-            if (!isset($item['quantity'])) {
+            if (count($customizableOptions) === 0 && !isset($item['quantity'])) {
                 throw new GraphQlInputException(__('Required parameter "quantity" for "cart_items" is missing.'));
             }
-            $qty = (float)$item['quantity'];
+            $quantity = (float)$item['quantity'];
 
-            $cartItem = $cart->getItemById($itemId);
-            if ($cartItem === false) {
-                throw new GraphQlNoSuchEntityException(
-                    __('Could not find cart item with id: %1.', $item['cart_item_id'])
-                );
-            }
-
-            if ($qty <= 0.0) {
+            if ($quantity <= 0.0) {
                 $this->cartItemRepository->deleteById((int)$cart->getId(), $itemId);
             } else {
-                $cartItem->setQty($qty);
-                $this->validateCartItem($cartItem);
-                $this->cartItemRepository->save($cartItem);
-            }
-        }
-    }
-
-    /**
-     * Validate cart item
-     *
-     * @param Item $cartItem
-     * @return void
-     * @throws GraphQlInputException
-     */
-    private function validateCartItem(Item $cartItem): void
-    {
-        if ($cartItem->getHasError()) {
-            $errors = [];
-            foreach ($cartItem->getMessage(false) as $message) {
-                $errors[] = $message;
-            }
-
-            if (!empty($errors)) {
-                throw new GraphQlInputException(
-                    __(
-                        'Could not update the product with SKU %sku: %message',
-                        ['sku' => $cartItem->getSku(), 'message' => __(implode("\n", $errors))]
-                    )
-                );
+                $this->updateCartItem->execute($cart, $itemId, $quantity, $customizableOptions);
             }
         }
     }

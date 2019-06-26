@@ -14,4 +14,12 @@
         <data key="redirect" unique="suffix">http://example.com/</data>
         <data key="display_in_terms">0</data>
     </entity>
+    <entity name="UpdatedSearchTermData1" type="searchTerm">
+        <data key="query_text" unique="suffix">UpdatedSearchTerm</data>
+        <data key="store_id">Default Store View</data>
+        <data key="number_of_results">1</data>
+        <data key="number_of_uses">20</data>
+        <data key="redirect_url">http://example.com</data>
+        <data key="display_in_suggested_term">No</data>
+    </entity>
 </entities>
