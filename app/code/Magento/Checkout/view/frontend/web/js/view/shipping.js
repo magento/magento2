@@ -246,9 +246,14 @@ define([
          * Set shipping information handler
          */
         setShippingInformation: function () {
+            var checkoutProvider = registry.get('checkoutProvider');
             if (this.validateShippingInformation()) {
                 quote.billingAddress(null);
                 checkoutDataResolver.resolveBillingAddress();
+                checkoutProvider.set(
+                    'shippingAddress',
+                    $.extend(true, {}, checkoutProvider.get('shippingAddress'), quote.shippingAddress())
+                );
                 setShippingInformationAction().done(
                     function () {
                         stepNavigator.next();
