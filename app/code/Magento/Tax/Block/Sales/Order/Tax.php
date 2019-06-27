@@ -272,6 +272,7 @@ class Tax extends \Magento\Framework\View\Element\Template
     /**
      * Init discount.
      *
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      * @return void
      */
     protected function _initDiscount()
