@@ -189,7 +189,9 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                     function ($attribute) use ($categoryId) {
                         static $callCount = [];
                         $attributeCode = $attribute->getAttributeCode();
-                        $callCount[$attributeCode] = !isset($callCount[$attributeCode]) ? 1 : ++$callCount[$attributeCode];
+                        $callCount[$attributeCode] = !isset($callCount[$attributeCode])
+                            ? 1
+                            : ++$callCount[$attributeCode];
 
                         if ($attributeCode === 'category') {
                             return 'category_name_' . $categoryId;

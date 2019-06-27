@@ -74,7 +74,9 @@ class ColumnFactory
                 'dataType' => $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT]),
                 'align' => 'left',
                 'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID],
-                'component' => $this->getJsComponent($this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT])),
+                'component' => $this->getJsComponent(
+                    $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT])
+                ),
                 '__disableTmpl' => 'true'
             ],
             $config
