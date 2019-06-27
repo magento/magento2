@@ -507,7 +507,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     /**
      * Set captcha word
      *
-     * @param  string $word
+     * @param string $word
      * @return $this
      * @since 100.2.0
      */

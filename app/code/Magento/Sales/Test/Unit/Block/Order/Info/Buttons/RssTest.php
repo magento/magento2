@@ -91,11 +91,14 @@ class RssTest extends \PHPUnit\Framework\TestCase
         $this->signature->expects($this->once())->method('signData')->willReturn($signature);
         $link = 'http://magento.com/rss/feed/index/type/order_status?data=' . $data .'&signature='.$signature;
         $this->urlBuilderInterface->expects($this->once())->method('getUrl')
-            ->with([
-                'type' => 'order_status',
-                '_secure' => true,
-                '_query' => ['data' => $data, 'signature' => $signature],
-            ])->willReturn($link);
+            ->with(
+                [
+                    'type' => 'order_status',
+                    '_secure' => true,
+                    '_query' => ['data' => $data, 'signature' => $signature],
+                ]
+            )
+            ->willReturn($link);
 
         $this->assertEquals($link, $this->rss->getLink());
     }

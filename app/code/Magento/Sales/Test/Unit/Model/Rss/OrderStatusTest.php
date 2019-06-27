@@ -111,17 +111,21 @@ class OrderStatusTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterface = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
-            ->setMethods([
-                '__sleep',
-                '__wakeup',
-                'getIncrementId',
-                'getId',
-                'getCustomerId',
-                'load',
-                'getStatusLabel',
-                'formatPrice',
-                'getGrandTotal',
-            ])->disableOriginalConstructor()->getMock();
+            ->setMethods(
+                [
+                    '__sleep',
+                    '__wakeup',
+                    'getIncrementId',
+                    'getId',
+                    'getCustomerId',
+                    'load',
+                    'getStatusLabel',
+                    'formatPrice',
+                    'getGrandTotal',
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->order->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->order->expects($this->any())->method('getIncrementId')->will($this->returnValue('100000001'));
         $this->order->expects($this->any())->method('getCustomerId')->will($this->returnValue(1));
@@ -264,10 +268,12 @@ class OrderStatusTest extends \PHPUnit\Framework\TestCase
     public function testGetCacheKey($requestData, $result)
     {
         $this->requestInterface->expects($this->any())->method('getParam')
-            ->willReturnMap([
-                ['data', null, $requestData],
-                ['signature', null, 'signature'],
-            ]);
+            ->willReturnMap(
+                [
+                    ['data', null, $requestData],
+                    ['signature', null, 'signature'],
+                ]
+            );
         $this->signature->expects($this->never())->method('signData');
         $this->signature->expects($this->any())
             ->method('isValid')

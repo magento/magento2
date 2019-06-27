@@ -43,9 +43,12 @@ class Options implements OptionSourceInterface
         if ($this->options === null) {
             $options = $this->collectionFactory->create()->toOptionArray();
 
-            array_walk($options, function (&$option) {
-                $option['__disableTmpl'] = true;
-            });
+            array_walk(
+                $options,
+                function (&$option) {
+                    $option['__disableTmpl'] = true;
+                }
+            );
 
             $this->options = $options;
         }

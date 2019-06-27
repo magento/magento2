@@ -322,10 +322,12 @@ class RenderTest extends \PHPUnit\Framework\TestCase
 
             $jsonResultMock->expects($this->at(1))
                 ->method('setData')
-                ->with([
-                    'error' => 'Forbidden',
-                    'errorcode' => 403
-                ])
+                ->with(
+                    [
+                        'error' => 'Forbidden',
+                        'errorcode' => 403
+                    ]
+                )
                 ->willReturnSelf();
 
             $this->resultJsonFactoryMock->expects($this->any())

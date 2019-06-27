@@ -705,9 +705,12 @@ class DataProvider
             $stockStatusCriteria->setProductsFilter($productIds);
             $stockStatusCollection = $this->getStockStatusRepository()->getList($stockStatusCriteria);
             $stockStatuses = $stockStatusCollection->getItems();
-            $stockStatuses = array_filter($stockStatuses, function (StockStatusInterface $stockStatus) {
-                return StockStatusInterface::STATUS_IN_STOCK == $stockStatus->getStockStatus();
-            });
+            $stockStatuses = array_filter(
+                $stockStatuses,
+                function (StockStatusInterface $stockStatus) {
+                    return StockStatusInterface::STATUS_IN_STOCK == $stockStatus->getStockStatus();
+                }
+            );
             $indexData = array_intersect_key($indexData, $stockStatuses);
         }
         return $indexData;

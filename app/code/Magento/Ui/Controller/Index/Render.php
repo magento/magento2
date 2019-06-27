@@ -113,10 +113,12 @@ class Render extends \Magento\Framework\App\Action\Action
                     \Zend\Http\AbstractMessage::VERSION_11,
                     'Forbidden'
                 );
-                return $resultJson->setData([
-                    'error' => $this->escaper->escapeHtml('Forbidden'),
-                    'errorcode' => 403
-                ]);
+                return $resultJson->setData(
+                    [
+                        'error' => $this->escaper->escapeHtml('Forbidden'),
+                        'errorcode' => 403
+                    ]
+                );
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->logger->critical($e);

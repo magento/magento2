@@ -56,10 +56,10 @@ class BlockActionsTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['escapeHtmlAttr'])
             ->getMock();
 
-        $this->blockActions = $objectManager->getObject(BlockActions::class, [
-            'context' => $context,
-            'urlBuilder' => $this->urlBuilder
-        ]);
+        $this->blockActions = $objectManager->getObject(
+            BlockActions::class,
+            ['context' => $context, 'urlBuilder' => $this->urlBuilder]
+        );
 
         $objectManager->setBackwardCompatibleProperty($this->blockActions, 'escaper', $this->escaper);
     }

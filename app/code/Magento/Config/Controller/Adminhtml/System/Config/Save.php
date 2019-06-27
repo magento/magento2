@@ -224,10 +224,10 @@ class Save extends AbstractConfig implements HttpPostActionInterface
             /** @var \Magento\Config\Model\Config $configModel */
             $configModel = $this->_configFactory->create(['data' => $configData]);
             $configModel->save();
-            $this->_eventManager->dispatch('admin_system_config_save', [
-                'configData' => $configData,
-                'request' => $this->getRequest()
-            ]);
+            $this->_eventManager->dispatch(
+                'admin_system_config_save',
+                ['configData' => $configData, 'request' => $this->getRequest()]
+            );
             $this->messageManager->addSuccess(__('You saved the configuration.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());

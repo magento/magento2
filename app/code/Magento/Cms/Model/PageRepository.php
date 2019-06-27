@@ -246,10 +246,9 @@ class PageRepository implements PageRepositoryInterface
         try {
             $this->resource->delete($page);
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__(
-                'Could not delete the page: %1',
-                $exception->getMessage()
-            ));
+            throw new CouldNotDeleteException(
+                __('Could not delete the page: %1', $exception->getMessage())
+            );
         }
         return true;
     }
