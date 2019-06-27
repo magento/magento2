@@ -80,7 +80,7 @@ class AddBundleProductToCartTest extends GraphQlAbstract
 mutation {  
   addBundleProductsToCart(input:{
     cart_id:"{$maskedQuoteId}"
-    cartItems:[
+    cart_items:[
       {
         data:{
           sku:"{$sku}"
@@ -163,7 +163,7 @@ QUERY;
 mutation {  
   addBundleProductsToCart(input:{
     cart_id:"{$maskedQuoteId}"
-    cartItems:[
+    cart_items:[
       {
         data:{
           sku:"bundle-product"
