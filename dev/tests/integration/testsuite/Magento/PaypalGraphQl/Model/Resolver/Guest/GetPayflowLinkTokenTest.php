@@ -79,12 +79,4 @@ QUERY;
         $this->assertEquals('TEST', $payflowLinkTokenResponse['mode']);
         $this->assertEquals('https://pilot-payflowlink.paypal.com', $payflowLinkTokenResponse['paypal_url']);
     }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tearDown()
-    {
-        $this->objectManager->removeSharedInstance(Gateway::class);
-    }
 }
