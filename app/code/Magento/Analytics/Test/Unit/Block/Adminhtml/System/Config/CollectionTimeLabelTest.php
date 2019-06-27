@@ -43,10 +43,11 @@ class CollectionTimeLabelTest extends \PHPUnit\Framework\TestCase
 
         $objectManager = new ObjectManager($this);
         $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
-        $reflection = new \ReflectionClass($this->abstractElementMock);
-        $reflection_property = $reflection->getProperty('_escaper');
-        $reflection_property->setAccessible(true);
-        $reflection_property->setValue($this->abstractElementMock, $escaper);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->abstractElementMock,
+            '_escaper',
+            $escaper
+        );
 
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->setMethods(['getLocaleDate'])

@@ -107,13 +107,11 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
 
     public function testToHtmlWithId()
     {
-        $this->request->expects($this->any())->method('getParam')->will(
-            $this->returnValueMap(
-                [
-                    ['id', null, 1],
-                    ['store_id', null, 0]
-                ]
-            )
+        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                ['id', null, 1],
+                ['store_id', null, 0]
+            ]
         );
         $this->queue->expects($this->once())->method('load')->will($this->returnSelf());
         $this->template->expects($this->any())->method('isPlain')->will($this->returnValue(true));

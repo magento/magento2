@@ -60,9 +60,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $escaper = $this->objectManagerHelper->getObject(
-            \Magento\Framework\Escaper::class
-        );
+        $escaper = $this->createMock(\Magento\Framework\Escaper::class);
         $this->preview = $this->objectManagerHelper->getObject(
             \Magento\Newsletter\Block\Adminhtml\Template\Preview::class,
             [
