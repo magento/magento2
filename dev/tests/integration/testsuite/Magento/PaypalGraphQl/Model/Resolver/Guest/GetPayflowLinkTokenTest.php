@@ -17,6 +17,7 @@ use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Headers;
 
 /**
  * Test getPayflowLinkToken graphql endpoint for non-registered customer
@@ -47,7 +48,6 @@ class GetPayflowLinkTokenTest extends TestCase
 
     protected function setUp()
     {
-        parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->graphqlController = $this->objectManager->get(GraphQl::class);
@@ -74,8 +74,8 @@ class GetPayflowLinkTokenTest extends TestCase
  {
    getPayflowLinkToken(input: {cart_id:"$cartId"})
    {
-       secret_token
-       secret_token_id
+       secure_token
+       secure_token_id
        mode
        paypal_url
   }
@@ -86,7 +86,7 @@ QUERY;
         $this->request->setPathInfo('/graphql');
         $this->request->setMethod('POST');
         $this->request->setContent($postData);
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
+        $headers = $this->objectManager->create(Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);
         $this->request->setHeaders($headers);
         $response = $this->graphqlController->dispatch($this->request);
@@ -96,8 +96,8 @@ QUERY;
 
         $payflowLinkTokenResponse = $responseData['data']['getPayflowLinkToken'];
 
-        $this->assertArrayHasKey('secret_token', $payflowLinkTokenResponse);
-        $this->assertArrayHasKey('secret_token_id', $payflowLinkTokenResponse);
+        $this->assertArrayHasKey('secure_token', $payflowLinkTokenResponse);
+        $this->assertArrayHasKey('secure_token_id', $payflowLinkTokenResponse);
 
         $this->assertEquals('TEST', $payflowLinkTokenResponse['mode']);
         $this->assertEquals('https://pilot-payflowlink.paypal.com', $payflowLinkTokenResponse['paypal_url']);

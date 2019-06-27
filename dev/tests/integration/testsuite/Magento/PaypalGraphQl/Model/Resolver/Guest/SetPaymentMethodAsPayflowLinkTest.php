@@ -43,7 +43,7 @@ class SetPaymentMethodAsPayflowLinkTest extends TestCase
     protected $objectManager;
 
     /** @var  GraphQl */
-    protected $graphqlController;
+    private $graphqlController;
 
     protected function setUp()
     {
@@ -76,9 +76,6 @@ class SetPaymentMethodAsPayflowLinkTest extends TestCase
     {
         $paymentMethod = 'payflow_link';
         $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-
-        $url = $this->objectManager->get(UrlInterface::class);
-        $baseUrl = $url->getBaseUrl();
 
         $query
             = <<<QUERY

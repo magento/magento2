@@ -5,14 +5,18 @@
  */
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Sales\Model\ResourceModel\Order\Collection;
+use Magento\Framework\Registry;
+
+$objectManager = Bootstrap::getObjectManager();
 
 /** @var \Magento\Framework\Registry $registry */
-$registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+$registry = Bootstrap::getObjectManager()->get(Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var $order \Magento\Sales\Model\Order */
-$orderCollection = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
+$orderCollection = $objectManager->create(Collection::class);
 foreach ($orderCollection as $order) {
     $order->delete();
 }

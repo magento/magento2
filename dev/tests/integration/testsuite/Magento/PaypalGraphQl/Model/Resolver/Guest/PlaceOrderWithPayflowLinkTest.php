@@ -23,6 +23,7 @@ use Magento\Framework\UrlInterface;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Headers;
 
 /**
  * End to end place order test using payflow_link via graphql endpoint for guest
@@ -78,7 +79,21 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
 
         $this->payflowRequest = $this->getMockBuilder(\Magento\Paypal\Model\Payflow\Request::class)
             ->disableOriginalConstructor()
+            ->setMethods(['__call','setData'])
             ->getMock();
+        $this->payflowRequest->expects($this->any())
+            ->method('__call')
+            ->will(
+                $this->returnCallback(
+                    function ($method) {
+                        if (strpos($method, 'set') === 0) {
+                            return $this->payflowRequest;
+                        }
+                        return null;
+                    }
+                )
+            );
+
         $requestFactory->expects($this->any())->method('create')->will($this->returnValue($this->payflowRequest));
         $this->objectManager->addSharedInstance($this->gateway, Gateway::class);
     }
@@ -161,7 +176,7 @@ QUERY;
             ->method('postRequest')
             ->willReturn($payflowLinkResponse);
 
-        $this->payflowRequest->expects($this->any())
+        $this->payflowRequest
             ->method('setData')
             ->willReturnMap(
                 [
@@ -177,7 +192,7 @@ QUERY;
                     $this->returnSelf()
                 ],
                 ['USER1', 1, $this->returnSelf()],
-                ['USER2', '4b102efb018ad34bacea669f401fc8cb', $this->returnSelf()]
+                ['USER2', 'USER2SilentPostHash', $this->returnSelf()]
             );
 
         $response = $this->graphqlController->dispatch($this->request);
@@ -260,13 +275,13 @@ QUERY;
         $this->request->setPathInfo('/graphql');
         $this->request->setMethod('POST');
         $this->request->setContent($postData);
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
+        $headers = $this->objectManager->create(Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);
         $this->request->setHeaders($headers);
 
         $resultCode = Payflowlink::RESPONSE_CODE_DECLINED_BY_FILTER;
         $exception = new LocalizedException(__('Declined response message from PayPal gateway'));
-         $this->payflowRequest->expects($this->any())
+         $this->payflowRequest
             ->method('setData')
             ->with(
                 [
@@ -280,7 +295,7 @@ QUERY;
 
                     ]
                 ]
-            );
+            )->willReturnSelf();
         $this->gateway->method('postRequest')
             /** @var DataObject $linkRequest */
             ->with(
