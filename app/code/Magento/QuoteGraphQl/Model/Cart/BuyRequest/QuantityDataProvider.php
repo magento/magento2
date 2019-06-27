@@ -13,7 +13,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 /**
  * Provides QTY buy request data for adding products to cart
  */
-class DefaultDataProvider implements BuyRequestDataProviderInterface
+class QuantityDataProvider implements BuyRequestDataProviderInterface
 {
     /**
      * @var ArrayManager
