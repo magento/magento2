@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\PaypalGraphQl\Model\Resolver\Customer;
 
 use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\DataObject;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use Magento\GraphQl\Service\GraphQlRequest;
+use Magento\Integration\Model\Oauth\Token;
 use Magento\Paypal\Model\Payflow\Request;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
@@ -22,6 +22,7 @@ use Magento\Framework\UrlInterface;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Paypal\Model\Payflow\RequestFactory;
 
 /**
  * End to end place order test using payflow_link via graphql endpoint for registered customer
@@ -31,37 +32,28 @@ use PHPUnit\Framework\TestCase;
  */
 class PlaceOrderWithPayflowLinkTest extends TestCase
 {
-    /**
-     * @var Http
-     */
-    private $request;
+    /** @var GraphQlRequest */
+    private $graphQlRequest;
 
-    /**
-     * @var SerializerInterface
-     */
+    /** @var SerializerInterface */
     private $json;
 
-    /**
-     * @var QuoteIdToMaskedQuoteId
-     */
+    /** @var QuoteIdToMaskedQuoteId */
     private $quoteIdToMaskedId;
 
-    /** @var  GetMaskedQuoteIdByReservedOrderId */
+    /** @var GetMaskedQuoteIdByReservedOrderId */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    /** @var  ObjectManager */
-    protected $objectManager;
+    /** @var ObjectManager */
+    private $objectManager;
 
-    /** @var  GraphQl */
-    protected $graphqlController;
-
-    /** @var  Gateway|MockObject */
+    /** @var Gateway|MockObject */
     private $gateway;
 
-    /** @var  Random|MockObject */
+    /** @var Random|MockObject */
     private $mathRandom;
 
-    /** @var  Request|MockObject */
+    /** @var Request|MockObject */
     private $payflowRequest;
 
     protected function setUp()
@@ -69,12 +61,10 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->request = $this->objectManager->create(Http::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteId::class);
-
-        $this->graphqlController = $this->objectManager->get(GraphQl::class);
+        $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
 
         $this->mathRandom = $this->getMockBuilder(Random::class)
             ->getMock();
@@ -83,12 +73,12 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
             ->setMethods(['postRequest'])
             ->getMock();
 
-        $requestFactory = $this->getMockBuilder(\Magento\Paypal\Model\Payflow\RequestFactory::class)
+        $requestFactory = $this->getMockBuilder(RequestFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->payflowRequest = $this->getMockBuilder(\Magento\Paypal\Model\Payflow\Request::class)
+        $this->payflowRequest = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->getMock();
         $requestFactory->expects($this->any())->method('create')->will($this->returnValue($this->payflowRequest));
@@ -110,7 +100,6 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @return void
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testResolvePlaceOrderWithPayflowLinkForCustomer(): void
     {
@@ -150,22 +139,6 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
 }
 QUERY;
 
-        $postData = $this->json->serialize(['query' => $query]);
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent($postData);
-
-        /** @var \Magento\Integration\Model\Oauth\Token $tokenModel */
-        $tokenModel = $this->objectManager->create(\Magento\Integration\Model\Oauth\Token::class);
-        $customerToken = $tokenModel->createCustomerToken(1)->getToken();
-        /** @var \Magento\Framework\Webapi\Request $webApiRequest */
-        $webApiRequest = $this->objectManager->get(\Magento\Framework\Webapi\Request::class);
-        $webApiRequest->getHeaders()
-            ->addHeaderLine('Content-Type', 'application/json')
-            ->addHeaderLine('Accept', 'application/json')
-            ->addHeaderLine('Authorization', 'Bearer ' . $customerToken);
-        $this->request->setHeaders($webApiRequest->getHeaders());
-
         $productMetadata = ObjectManager::getInstance()->get(ProductMetadataInterface::class);
         $button = 'Magento_Cart_' . $productMetadata->getEdition();
 
@@ -197,24 +170,29 @@ QUERY;
                     $this->returnSelf()
                 ],
                 ['USER1', 1, $this->returnSelf()],
-                ['USER2', '4b102efb018ad34bacea669f401fc8cb', $this->returnSelf()]
+                ['USER2', 'USER2SilentPostHash', $this->returnSelf()]
             );
 
-        $response = $this->graphqlController->dispatch($this->request);
-        $responseData = $this->json->unserialize($response->getContent());
+        /** @var Token $tokenModel */
+        $tokenModel = $this->objectManager->create(Token::class);
+        $customerToken = $tokenModel->createCustomerToken(1)->getToken();
 
+        $requestHeaders = [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $customerToken
+        ];
+        $response = $this->graphQlRequest->send($query, [], '', $requestHeaders);
+        $responseData = $this->json->unserialize($response->getContent());
         $this->assertArrayNotHasKey('errors', $responseData);
         $this->assertArrayHasKey('data', $responseData);
-
         $this->assertEquals(
             $paymentMethod,
             $responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']
         );
-
         $this->assertTrue(
             isset($responseData['data']['placeOrder']['order']['order_id'])
         );
-
         $this->assertEquals(
             'test_quote',
             $responseData['data']['placeOrder']['order']['order_id']

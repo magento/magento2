@@ -7,14 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
-use Magento\Quote\Model\Quote;
+use Magento\GraphQl\Service\GraphQlRequest;
+use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
+use Magento\Quote\Model\QuoteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\UrlInterface;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
@@ -22,38 +21,27 @@ use PHPUnit\Framework\TestCase;
  * Test SetPayment method for payflow_link and validate the additional information
  *
  * @magentoAppArea graphql
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SetPaymentMethodAsPayflowLinkTest extends TestCase
 {
-    /**
-     * @var Http
-     */
-    private $request;
+    /** @var GraphQlRequest */
+    private $graphQlRequest;
 
-    /**
-     * @var SerializerInterface
-     */
+    /** @var SerializerInterface */
     private $json;
 
-    /** @var  GetMaskedQuoteIdByReservedOrderId */
+    /** @var GetMaskedQuoteIdByReservedOrderId */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    /** @var  ObjectManager */
-    protected $objectManager;
-
-    /** @var  GraphQl */
-    private $graphqlController;
+    /** @var ObjectManager */
+    private $objectManager;
 
     protected function setUp()
     {
-        parent::setUp();
-
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->request = $this->objectManager->create(Http::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->graphqlController = $this->objectManager->get(GraphQl::class);
+        $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
     }
 
     /**
@@ -70,28 +58,26 @@ class SetPaymentMethodAsPayflowLinkTest extends TestCase
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @return void
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSetPayflowLinkAsPaymentMethod(): void
     {
         $paymentMethod = 'payflow_link';
-        $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $maskedCartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query
             = <<<QUERY
  mutation {
   setPaymentMethodOnCart(input: {
-      cart_id: "$cartId"
+      cart_id: "$maskedCartId"
       payment_method: {
           code: "$paymentMethod"
           additional_data: {
-            payflow_link: 
-            {           
-           return_url:"http://magento.com/paypal/payflow/link/success"
-           cancel_url:"http://magento.com/paypal/payflow/link/cancel"
-           error_url:"http://magento.com/paypal/payflow/link/error"
+            payflow_link: {           
+               return_url:"http://magento.com/paypal/payflow/link/success"
+               cancel_url:"http://magento.com/paypal/payflow/link/cancel"
+               error_url:"http://magento.com/paypal/payflow/link/error"
+            }
           }
-        }
       }
   }) {    
        cart {
@@ -103,28 +89,22 @@ class SetPaymentMethodAsPayflowLinkTest extends TestCase
 }
 QUERY;
 
-        $postData = $this->json->serialize(['query' => $query]);
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent($postData);
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']);
-        $this->request->setHeaders($headers);
-
-        $response = $this->graphqlController->dispatch($this->request);
+        $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
 
         $this->assertArrayNotHasKey('errors', $responseData);
         $this->assertArrayHasKey('data', $responseData);
-
         $this->assertEquals(
             $paymentMethod,
             $responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']
         );
-        /** @var Quote $quote */
-        $quote = $this->objectManager->get(Quote::class);
 
-        $quote->load('test_quote', 'reserved_order_id');
+        $maskedQuoteIdToQuoteId = $this->objectManager->get(MaskedQuoteIdToQuoteIdInterface::class);
+        $quoteId = $maskedQuoteIdToQuoteId->execute($maskedCartId);
+        /** @var QuoteRepository $quoteRepository */
+        $quoteRepository = $this->objectManager->get(QuoteRepository::class);
+        $quote = $quoteRepository->get($quoteId);
+
         $payment = $quote->getPayment();
         $this->assertEquals(
             "http://magento.com/paypal/payflow/link/cancel",
@@ -154,7 +134,6 @@ QUERY;
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @return void
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testInvalidUrl(): void
     {
@@ -169,12 +148,11 @@ QUERY;
       payment_method: {
           code: "$paymentMethod"
           additional_data: {
-            payflow_link: 
-            {           
-           return_url:"http://magento.com/paypal/payflow/link/sucess"
-           cancel_url:"http://magento.com/paypal/payflow/link/cancel"
-           error_url:"/not/a/validUrl"
-          }
+            payflow_link: {           
+               return_url:"http://magento.com/paypal/payflow/link/sucess"
+               cancel_url:"http://magento.com/paypal/payflow/link/cancel"
+               error_url:"/not/a/validUrl"
+            }
         }
       }
   }) {    
@@ -187,19 +165,11 @@ QUERY;
 }
 QUERY;
 
-        $postData = $this->json->serialize(['query' => $query]);
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent($postData);
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']);
-        $this->request->setHeaders($headers);
-
-        $expectedExceptionMessage = "Invalid URL '/not/a/validUrl'.";
-
-        $response = $this->graphqlController->dispatch($this->request);
+        $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
+
         $this->assertArrayHasKey('errors', $responseData);
+        $expectedExceptionMessage = "Invalid URL '/not/a/validUrl'.";
         $actualError = $responseData['errors'][0];
         $this->assertEquals($expectedExceptionMessage, $actualError['message']);
         $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);

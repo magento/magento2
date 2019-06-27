@@ -8,22 +8,19 @@ declare(strict_types=1);
 namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
 use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\Paypal\Model\Payflow\Request;
+use Magento\Paypal\Model\Payflow\RequestFactory;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Paypal\Model\Payflowlink;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\UrlInterface;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Zend\Http\Headers;
 
 /**
  * End to end place order test using payflow_link via graphql endpoint for guest
@@ -33,51 +30,42 @@ use Zend\Http\Headers;
  */
 class PlaceOrderWithPayflowLinkTest extends TestCase
 {
-    /**
-     * @var Http
-     */
-    private $request;
+    /** @var GraphQlRequest */
+    private $graphQlRequest;
 
-    /**
-     * @var SerializerInterface
-     */
+    /** @var SerializerInterface */
     private $json;
 
-    /** @var  GetMaskedQuoteIdByReservedOrderId */
+    /** @var GetMaskedQuoteIdByReservedOrderId */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    /** @var  ObjectManager */
-    protected $objectManager;
+    /** @var ObjectManager */
+    private $objectManager;
 
-    /** @var  GraphQl */
-    protected $graphqlController;
-
-    /** @var  Gateway|MockObject */
+    /** @var Gateway|MockObject */
     private $gateway;
 
-    /** @var  Request|MockObject */
+    /** @var Request|MockObject */
     private $payflowRequest;
 
     protected function setUp()
     {
-        parent::setUp();
-
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->request = $this->objectManager->create(Http::class);
+        $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
+
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->graphqlController = $this->objectManager->get(GraphQl::class);
         $this->gateway = $this->getMockBuilder(Gateway::class)
             ->disableOriginalConstructor()
             ->setMethods(['postRequest'])
             ->getMock();
 
-        $requestFactory = $this->getMockBuilder(\Magento\Paypal\Model\Payflow\RequestFactory::class)
+        $requestFactory = $this->getMockBuilder(RequestFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->payflowRequest = $this->getMockBuilder(\Magento\Paypal\Model\Payflow\Request::class)
+        $this->payflowRequest = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->setMethods(['__call','setData'])
             ->getMock();
@@ -112,15 +100,11 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @return void
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testResolvePlaceOrderWithPayflowLink(): void
     {
         $paymentMethod = 'payflow_link';
         $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-
-        $url = $this->objectManager->get(UrlInterface::class);
-        $baseUrl = $url->getBaseUrl();
 
         $query
             = <<<QUERY
@@ -132,9 +116,9 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
           additional_data: {
             payflow_link: 
             {
-           cancel_url:"{$baseUrl}paypal/payflow/cancelPayment"
-           return_url:"{$baseUrl}paypal/payflow/returnUrl"
-           error_url:"{$baseUrl}paypal/payflow/errorUrl"
+           cancel_url:"http://mage.test/paypal/payflow/cancel"
+           return_url:"http://mage.test/paypal/payflow/return"
+           error_url:"http://mage.test/paypal/payflow/error"
           }
         }
       }
@@ -152,14 +136,6 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
     }
 }
 QUERY;
-
-        $postData = $this->json->serialize(['query' => $query]);
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent($postData);
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']);
-        $this->request->setHeaders($headers);
 
         $productMetadata = ObjectManager::getInstance()->get(ProductMetadataInterface::class);
         $button = 'Magento_Cart_' . $productMetadata->getEdition();
@@ -195,21 +171,18 @@ QUERY;
                 ['USER2', 'USER2SilentPostHash', $this->returnSelf()]
             );
 
-        $response = $this->graphqlController->dispatch($this->request);
+        $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
 
         $this->assertArrayNotHasKey('errors', $responseData);
         $this->assertArrayHasKey('data', $responseData);
-
         $this->assertEquals(
             $paymentMethod,
             $responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']
         );
-
         $this->assertTrue(
             isset($responseData['data']['placeOrder']['order']['order_id'])
         );
-
         $this->assertEquals(
             'test_quote',
             $responseData['data']['placeOrder']['order']['order_id']
@@ -237,9 +210,6 @@ QUERY;
         $paymentMethod = 'payflow_link';
         $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
-        $url = $this->objectManager->get(UrlInterface::class);
-        $baseUrl = $url->getBaseUrl();
-
         $query
             = <<<QUERY
  mutation {
@@ -250,9 +220,9 @@ QUERY;
           additional_data: {
             payflow_link: 
             {
-           cancel_url:"{$baseUrl}paypal/payflow/cancelPayment"
-           return_url:"{$baseUrl}paypal/payflow/returnUrl"
-           error_url:"{$baseUrl}paypal/payflow/returnUrl"
+           cancel_url:"http://mage.test/paypal/payflow/cancelPayment"
+           return_url:"http://mage.test/paypal/payflow/returnUrl"
+           error_url:"http://mage.test/paypal/payflow/returnUrl"
           }
         }
       }
@@ -271,18 +241,13 @@ QUERY;
 }
 QUERY;
 
-        $postData = $this->json->serialize(['query' => $query]);
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent($postData);
-        $headers = $this->objectManager->create(Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']);
-        $this->request->setHeaders($headers);
-
         $resultCode = Payflowlink::RESPONSE_CODE_DECLINED_BY_FILTER;
-        $exception = new LocalizedException(__('Declined response message from PayPal gateway'));
-         $this->payflowRequest
-            ->method('setData')
+        $exception = new \Zend_Http_Client_Exception(__('Declined response message from PayPal gateway'));
+        //Exception message is transformed into more controlled message
+        $expectedExceptionMessage =
+            "Unable to place order: Payment Gateway is unreachable at the moment. Please use another payment option.";
+
+        $this->payflowRequest->method('setData')
             ->with(
                 [
                     [
@@ -296,23 +261,15 @@ QUERY;
                     ]
                 ]
             )->willReturnSelf();
-        $this->gateway->method('postRequest')
-            /** @var DataObject $linkRequest */
-            ->with(
-                self::callback(
-                    function ($linkRequest) {
-                        self::assertEquals('test_quote', $linkRequest['invnum']);
-                        return true;
-                    }
-                )
-            )->willThrowException($exception);
 
-        $response = $this->graphqlController->dispatch($this->request);
+        $this->gateway->method('postRequest')->willThrowException($exception);
+
+        $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
         $this->assertArrayHasKey('errors', $responseData);
         $actualError = $responseData['errors'][0];
         $this->assertEquals(
-            'Unable to place order: Declined response message from PayPal gateway',
+            $expectedExceptionMessage,
             $actualError['message']
         );
         $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
