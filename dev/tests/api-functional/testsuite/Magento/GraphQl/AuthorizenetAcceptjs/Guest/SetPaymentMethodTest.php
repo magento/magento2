@@ -70,7 +70,7 @@ class SetPaymentMethodTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @magentoApiDataFixture Magento/Graphql/AuthorizenetAcceptjs/_files/enable_authorizenetacceptjs.php
+     * @magentoApiDataFixture Magento/GraphQl/AuthorizenetAcceptjs/_files/enable_authorizenetacceptjs.php
      * @param string $nonce
      * @param string $descriptor
      * @param bool $expectSuccess
