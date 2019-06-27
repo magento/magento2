@@ -105,11 +105,16 @@
 //
 
 .admin__collapsible-block-wrapper {
+    .admin__collapsible-title[aria-expanded='true'] {
+        &:before {
+            content: @icon-expand-close__content;
+        }
+    } 
+    
     .__collapsible-block-wrapper-pattern();
     .admin__collapsible-title {
         .__collapsible-title-pattern();
     }
-
     &.opened,
     &._show {
         > .fieldset-wrapper-title {
