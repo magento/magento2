@@ -9,14 +9,11 @@ namespace Magento\ConfigurableProductGraphQl\Model\Variant;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ProductFactory;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection as ChildCollection;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product as DataProvider;
-use Magento\CatalogInventory\Helper\Stock;
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 
 /**
  * Collection for fetching configurable child product data.
@@ -29,29 +26,9 @@ class Collection
     private $childCollectionFactory;
 
     /**
-     * @var ProductFactory
-     */
-    private $productFactory;
-
-    /**
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
-
-    /**
-     * @var DataProvider
-     */
-    private $productDataProvider;
-
-    /**
-     * @var Stock
-     */
-    private $stockHelper;
-
-    /**
-     * @var StockConfigurationInterface
-     */
-    private $stockConfig;
 
     /**
      * @var MetadataPool
@@ -74,30 +51,26 @@ class Collection
     private $attributeCodes = [];
 
     /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
      * @param CollectionFactory $childCollectionFactory
-     * @param ProductFactory $productFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param DataProvider $productDataProvider
      * @param MetadataPool $metadataPool
-     * @param Stock $stockHelper
-     * @param StockConfigurationInterface $stockConfig
+     * @param CollectionProcessorInterface $collectionProcessor
      */
     public function __construct(
         CollectionFactory $childCollectionFactory,
-        ProductFactory $productFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        DataProvider $productDataProvider,
         MetadataPool $metadataPool,
-        Stock $stockHelper,
-        StockConfigurationInterface $stockConfig
+        CollectionProcessorInterface $collectionProcessor
     ) {
         $this->childCollectionFactory = $childCollectionFactory;
-        $this->productFactory = $productFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->productDataProvider = $productDataProvider;
         $this->metadataPool = $metadataPool;
-        $this->stockHelper = $stockHelper;
-        $this->stockConfig = $stockConfig;
+        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**
@@ -161,18 +134,16 @@ class Collection
             return $this->childrenMap;
         }
 
-        $showOutOfStock = $this->stockConfig->isShowOutOfStock();
-
         foreach ($this->parentProducts as $product) {
             $attributeData = $this->getAttributesCodes($product);
             /** @var ChildCollection $childCollection */
             $childCollection = $this->childCollectionFactory->create();
             $childCollection->setProductFilter($product);
-            $childCollection->addAttributeToSelect($attributeData);
-
-            if (!$showOutOfStock) {
-                $this->stockHelper->addInStockFilterToCollection($childCollection);
-            }
+            $this->collectionProcessor->process(
+                $childCollection,
+                $this->searchCriteriaBuilder->create(),
+                $attributeData
+            );
 
             /** @var Product $childProduct */
             foreach ($childCollection->getItems() as $childProduct) {
