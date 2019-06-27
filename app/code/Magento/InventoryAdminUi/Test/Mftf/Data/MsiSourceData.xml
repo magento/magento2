@@ -19,6 +19,8 @@
         <data key="priority">0</data>
         <data key="country">United States</data>
         <data key="country_id">US</data>
+        <data key="region_id">12</data>
+        <data key="stateProvince">California</data>
         <data key="postcode">00000</data>
         <data key="use_default_carrier_config">1</data>
     </entity>
@@ -28,6 +30,8 @@
         <data key="source_code" unique="suffix">minimal_source_</data>
         <data key="enabled">1</data>
         <data key="country_id">US</data>
+        <data key="region_id">12</data>
+        <data key="stateProvince">California</data>
         <data key="postcode">90230</data>
         <data key="use_default_carrier_config">1</data>
     </entity>
@@ -127,6 +131,8 @@
         <data key="source_code" unique="suffix">source_for_columns_sorting_test_only_</data>
         <data key="enabled">1</data>
         <data key="country_id">US</data>
+        <data key="region_id">12</data>
+        <data key="stateProvince">California</data>
         <data key="postcode">90230</data>
         <data key="use_default_carrier_config">1</data>
     </entity>
@@ -137,6 +143,8 @@
         <data key="source_code" unique="suffix">special_source_</data>
         <data key="enabled">1</data>
         <data key="country_id">US</data>
+        <data key="region_id">12</data>
+        <data key="stateProvince">California</data>
         <data key="postcode">90230</data>
         <data key="use_default_carrier_config">1</data>
     </entity>
