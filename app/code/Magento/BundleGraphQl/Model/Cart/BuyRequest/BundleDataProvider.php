@@ -10,6 +10,9 @@ namespace Magento\BundleGraphQl\Model\Cart\BuyRequest;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestDataProviderInterface;
 
+/**
+ * Data provider for bundle product buy requests
+ */
 class BundleDataProvider implements BuyRequestDataProviderInterface
 {
     /**

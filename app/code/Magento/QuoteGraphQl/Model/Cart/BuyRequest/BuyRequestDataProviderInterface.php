@@ -7,7 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart\BuyRequest;
 
+/**
+ * Provide buy request data from add to cart item request
+ */
 interface BuyRequestDataProviderInterface
 {
+    /**
+     * Provide buy request data from add to cart item request
+     *
+     * @param array $cartItemData
+     * @return array
+     */
     public function execute(array $cartItemData): array;
 }

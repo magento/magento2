@@ -13,6 +13,9 @@ use Magento\Quote\Model\Quote\Item;
 use Magento\Framework\Pricing\Helper\Data;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Data provider for bundled product options
+ */
 class BundleOptionDataProvider
 {
     /**
@@ -46,6 +49,8 @@ class BundleOptionDataProvider
     }
 
     /**
+     * Extract data for a bundled cart item
+     *
      * @param Item $item
      * @return array
      */
@@ -82,6 +87,8 @@ class BundleOptionDataProvider
     }
 
     /**
+     * Build bundle product options based on current selection
+     *
      * @param \Magento\Bundle\Model\Option[] $bundleOptions
      * @param Item $item
      * @return array
@@ -106,6 +113,8 @@ class BundleOptionDataProvider
     }
 
     /**
+     * Build bundle product option values based on current selection
+     *
      * @param Product[] $selections
      * @param Item $item
      * @return array

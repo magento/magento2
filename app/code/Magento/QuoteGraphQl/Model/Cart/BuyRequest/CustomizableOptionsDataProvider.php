@@ -9,6 +9,9 @@ namespace Magento\QuoteGraphQl\Model\Cart\BuyRequest;
 
 use Magento\Framework\Stdlib\ArrayManager;
 
+/**
+ * Extract buy request elements require for custom options
+ */
 class CustomizableOptionsDataProvider implements BuyRequestDataProviderInterface
 {
     /**

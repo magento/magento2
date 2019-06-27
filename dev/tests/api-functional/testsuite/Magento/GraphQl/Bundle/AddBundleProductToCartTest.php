@@ -14,6 +14,9 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 
+/**
+ * Test adding bundled products to cart
+ */
 class AddBundleProductToCartTest extends GraphQlAbstract
 {
     /**
