@@ -38,12 +38,12 @@
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
         <scrollTo selector="{{AuthorizenetAcceptjsConfigurationSection.apiLoginIdField}}" stepKey="scrollToApiLoginIdField"/>
-        <seeElement selector="{{AuthorizenetAcceptjsConfigurationSection.apiLoginIdFieldRequiredMessage}}" stepKey="seeApiLoginIdRequiredErrorMessage"/>
+        <see selector="{{AuthorizenetAcceptjsConfigurationSection.apiLoginIdField}} + {{AdminConfigSection.fieldError}}" userInput="This is a required field." stepKey="seeApiLoginIdRequiredMessage"/>
         <scrollTo selector="{{AuthorizenetAcceptjsConfigurationSection.publicClientKeyField}}" stepKey="scrollToPublicClientKeyField"/>
-        <seeElement selector="{{AuthorizenetAcceptjsConfigurationSection.publicClientKeyFieldRequiredMessage}}" stepKey="seePublicClientKeyRequiredErrorMessage"/>
+        <see selector="{{AuthorizenetAcceptjsConfigurationSection.publicClientKeyField}} + {{AdminConfigSection.fieldError}}" userInput="This is a required field." stepKey="seePublicClientKeyRequiredErrorMessage"/>
         <scrollTo selector="{{AuthorizenetAcceptjsConfigurationSection.transactionKeyField}}" stepKey="scrollTransactionKeyField"/>
-        <seeElement selector="{{AuthorizenetAcceptjsConfigurationSection.transactionKeyFieldRequiredMessage}}" stepKey="seeTransactionKeyRequiredErrorMessage"/>
+        <see selector="{{AuthorizenetAcceptjsConfigurationSection.transactionKeyField}} + {{AdminConfigSection.fieldError}}" userInput="This is a required field." stepKey="seeTransactionKeyRequiredErrorMessage"/>
         <scrollTo selector="{{AuthorizenetAcceptjsConfigurationSection.signatureKeyField}}" stepKey="scrollToSignatureKeyField"/>
-        <seeElement selector="{{AuthorizenetAcceptjsConfigurationSection.signatureKeyFieldRequiredMessage}}" stepKey="seeSignatureKeyRequiredErrorMessage"/>
+        <see selector="{{AuthorizenetAcceptjsConfigurationSection.signatureKeyField}} + {{AdminConfigSection.fieldError}}" userInput="This is a required field." stepKey="seeSignatureKeyRequiredErrorMessage"/>
     </actionGroup>
 </actionGroups>
