@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Checkout\Model;
 
+use Magento\Checkout\Model\ResourceModel\GenericCheckoutResource as CheckoutResource;
+use Magento\Checkout\Model\ResourceModel\GenericSalesResource as SalesResource;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -62,6 +64,16 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     private $connectionPool;
 
     /**
+     * @var GenericSalesResource
+     */
+    private $salesResource;
+
+    /**
+     * @var GenericCheckoutResource
+     */
+    private $checkoutResource;
+
+    /**
      * @param \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\GuestCartManagementInterface $cartManagement
@@ -78,7 +90,9 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
         CartRepositoryInterface $cartRepository,
-        ResourceConnection $connectionPool = null
+        ResourceConnection $connectionPool = null,
+        GenericSalesResource $salesResource = null,
+        GenericCheckoutResource $checkoutResource = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
@@ -87,6 +101,8 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->cartRepository = $cartRepository;
         $this->connectionPool = $connectionPool ?: ObjectManager::getInstance()->get(ResourceConnection::class);
+        $this->salesResource = $salesResource ?: ObjectManager::getInstance()->get(SalesResource::class);
+        $this->checkoutResource = $checkoutResource ?: ObjectManager::getInstance()->get(CheckoutResource::class);
     }
 
     /**
@@ -98,10 +114,8 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
-        $salesConnection = $this->connectionPool->getConnection('sales');
-        $checkoutConnection = $this->connectionPool->getConnection('checkout');
-        $salesConnection->beginTransaction();
-        $checkoutConnection->beginTransaction();
+        $this->salesResource->beginTransaction();
+        $this->checkoutResource->beginTransaction();
 
         try {
             $this->savePaymentInformation($cartId, $email, $paymentMethod, $billingAddress);
@@ -119,11 +133,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
                     $e
                 );
             }
-            $salesConnection->commit();
-            $checkoutConnection->commit();
+            $this->salesResource->commit();
+            $this->checkoutResource->commit();
         } catch (\Exception $e) {
-            $salesConnection->rollBack();
-            $checkoutConnection->rollBack();
+            $this->salesResource->rollBack();
+            $this->checkoutResource->rollBack();
             throw $e;
         }
 
