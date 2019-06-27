@@ -8,10 +8,11 @@ declare(strict_types=1);
 namespace Magento\VaultGraphQl\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Vault\Model\PaymentTokenManagement;
-use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 
 /**
  * Customers Payment Tokens resolver, used for GraphQL request processing.
@@ -24,20 +25,12 @@ class PaymentTokens implements ResolverInterface
     private $paymentTokenManagement;
 
     /**
-     * @var CheckCustomerAccount
-     */
-    private $checkCustomerAccount;
-
-    /**
      * @param PaymentTokenManagement $paymentTokenManagement
-     * @param CheckCustomerAccount $checkCustomerAccount
      */
     public function __construct(
-        PaymentTokenManagement $paymentTokenManagement,
-        CheckCustomerAccount $checkCustomerAccount
+        PaymentTokenManagement $paymentTokenManagement
     ) {
         $this->paymentTokenManagement = $paymentTokenManagement;
-        $this->checkCustomerAccount = $checkCustomerAccount;
     }
 
     /**
@@ -50,12 +43,12 @@ class PaymentTokens implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $currentUserId = $context->getUserId();
-        $currentUserType = $context->getUserType();
+        /** @var ContextInterface $context */
+        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
+            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
+        }
 
-        $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
-
-        $tokens = $this->paymentTokenManagement->getVisibleAvailableTokens($currentUserId);
+        $tokens = $this->paymentTokenManagement->getVisibleAvailableTokens($context->getUserId());
         $result = [];
 
         foreach ($tokens as $token) {
@@ -66,7 +59,6 @@ class PaymentTokens implements ResolverInterface
                 'details' => $token->getTokenDetails(),
             ];
         }
-
         return ['items' => $result];
     }
 }

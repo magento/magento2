@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
-    customer: Customer @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Customer") @doc(description: "The customer query returns information about a customer account")
+    customer: Customer @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Customer") @doc(description: "The customer query returns information about a customer account") @cache(cacheable: false)
     isEmailAvailable (
         email: String! @doc(description: "The new customer email")
     ): IsEmailAvailableOutput @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\IsEmailAvailable")
@@ -91,7 +91,8 @@ type Customer @doc(description: "Customer defines the customer name and address 
     taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
     id: Int @doc(description: "The ID assigned to the customer")
     is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\IsSubscribed")
-    addresses: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses")
+    addresses: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddresses")
+    gender: Int @doc(description: "The customer's gender(Male - 1, Female - 2)")
 }
 
 type CustomerAddress @doc(description: "CustomerAddress contains detailed information about a customer's billing and shipping addresses"){

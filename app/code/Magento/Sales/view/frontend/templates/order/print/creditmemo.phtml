@@ -3,39 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php $_order = $block->getOrder() ?>
 <?php $_creditmemo = $block->getCreditmemo() ?>
-<?php if ($_creditmemo): ?>
+<?php if ($_creditmemo) : ?>
     <?php $_creditmemos = [$_creditmemo]; ?>
-<?php else: ?>
+<?php else : ?>
     <?php $_creditmemos = $_order->getCreditmemosCollection() ?>
 <?php endif; ?>
-<?php foreach ($_creditmemos as $_creditmemo): ?>
+<?php foreach ($_creditmemos as $_creditmemo) : ?>
 <div class="order-details-items creditmemo">
     <div class="order-title">
-        <strong><?= /* @escapeNotVerified */ __('Refund #%1', $_creditmemo->getIncrementId()) ?></strong>
+        <strong><?= $block->escapeHtml(__('Refund #%1', $_creditmemo->getIncrementId())) ?></strong>
     </div>
     <div class="table-wrapper order-items-creditmemo">
-        <table class="data table table-order-items creditmemo" id="my-refund-table-<?= /* @escapeNotVerified */ $_creditmemo->getId() ?>">
-            <caption class="table-caption"><?= /* @escapeNotVerified */ __('Items Refunded') ?></caption>
+        <table class="data table table-order-items creditmemo" id="my-refund-table-<?= (int) $_creditmemo->getId() ?>">
+            <caption class="table-caption"><?= $block->escapeHtml(__('Items Refunded')) ?></caption>
             <thead>
                 <tr>
-                    <th class="col name"><?= /* @escapeNotVerified */ __('Product Name') ?></th>
-                    <th class="col sku"><?= /* @escapeNotVerified */ __('SKU') ?></th>
-                    <th class="col price"><?= /* @escapeNotVerified */ __('Price') ?></th>
-                    <th class="col qty"><?= /* @escapeNotVerified */ __('Qty') ?></th>
-                    <th class="col subtotal"><?= /* @escapeNotVerified */ __('Subtotal') ?></th>
-                    <th class="col discount"><?= /* @escapeNotVerified */ __('Discount Amount') ?></th>
-                    <th class="col rowtotal"><?= /* @escapeNotVerified */ __('Row Total') ?></th>
+                    <th class="col name"><?= $block->escapeHtml(__('Product Name')) ?></th>
+                    <th class="col sku"><?= $block->escapeHtml(__('SKU')) ?></th>
+                    <th class="col price"><?= $block->escapeHtml(__('Price')) ?></th>
+                    <th class="col qty"><?= $block->escapeHtml(__('Qty')) ?></th>
+                    <th class="col subtotal"><?= $block->escapeHtml(__('Subtotal')) ?></th>
+                    <th class="col discount"><?= $block->escapeHtml(__('Discount Amount')) ?></th>
+                    <th class="col rowtotal"><?= $block->escapeHtml(__('Row Total')) ?></th>
                 </tr>
             </thead>
             <?php $_items = $_creditmemo->getAllItems(); ?>
-            <?php foreach ($_items as $_item): ?>
-                <?php if (!$_item->getOrderItem()->getParentItem()): ?>
+            <?php foreach ($_items as $_item) : ?>
+                <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
                     <tbody>
                         <?= $block->getItemHtml($_item) ?>
                     </tbody>
@@ -48,22 +45,22 @@
     </div>
     <div class="block block-order-details-view">
         <div class="block-title">
-            <strong><?= /* @escapeNotVerified */ __('Order Information') ?></strong>
+            <strong><?= $block->escapeHtml(__('Order Information')) ?></strong>
         </div>
         <div class="block-content">
-        <?php if (!$_order->getIsVirtual()): ?>
+        <?php if (!$_order->getIsVirtual()) : ?>
             <div class="box box-order-shipping-address">
                 <div class="box-title">
-                    <strong><?= /* @escapeNotVerified */ __('Shipping Address') ?></strong>
+                    <strong><?= $block->escapeHtml(__('Shipping Address')) ?></strong>
                 </div>
                 <div class="box-content">
                     <?php $_shipping = $_creditmemo->getShippingAddress() ?>
-                    <address><?= /* @escapeNotVerified */ $block->formatAddress($_shipping, 'html') ?></address>
+                    <address><?= /* @noEscape */ $block->formatAddress($_shipping, 'html') ?></address>
                 </div>
             </div>
             <div class="box box-order-shipping-method">
                 <div class="box-title">
-                    <strong><?= /* @escapeNotVerified */ __('Shipping Method') ?></strong>
+                    <strong><?= $block->escapeHtml(__('Shipping Method')) ?></strong>
                 </div>
                 <div class="box-content">
                     <?= $block->escapeHtml($_order->getShippingDescription()) ?>
@@ -72,16 +69,16 @@
         <?php endif; ?>
             <div class="box box-order-billing-address">
                 <div class="box-title">
-                    <strong><?= /* @escapeNotVerified */ __('Billing Address') ?></strong>
+                    <strong><?= $block->escapeHtml(__('Billing Address')) ?></strong>
                 </div>
                 <div class="box-content">
                     <?php $_billing = $_creditmemo->getbillingAddress() ?>
-                    <address><?= /* @escapeNotVerified */ $block->formatAddress($_order->getBillingAddress(), 'html') ?></address>
+                    <address><?= /* @noEscape */ $block->formatAddress($_order->getBillingAddress(), 'html') ?></address>
                 </div>
             </div>
             <div class="box box-order-billing-method">
                 <div class="box-title">
-                    <strong><?= /* @escapeNotVerified */ __('Payment Method') ?></strong>
+                    <strong><?= $block->escapeHtml(__('Payment Method')) ?></strong>
                 </div>
                 <div class="box-content">
                     <?= $block->getPaymentInfoHtml() ?>

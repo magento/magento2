@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCustomerAccountInformationSection">
-        <element name="accountInformationTab" type="button" selector="#tab_customer"/>
+        <element name="accountInformationTab" type="button" selector="#tab_customer" timeout="30"/>
         <element name="statusInactive" type="button" selector=".admin__actions-switch-label"/>
         <element name="accountInformationTitle" type="text" selector=".admin__page-nav-title"/>
         <element name="accountInformationButton" type="text" selector="//a/span[text()='Account Information']"/>
@@ -18,10 +18,21 @@
         <element name="lastName" type="input" selector="input[name='customer[lastname]']"/>
         <element name="email" type="input" selector="input[name='customer[email]']"/>
         <element name="group" type="select" selector="[name='customer[group_id]']"/>
+        <element name="groupIdValue" type="text" selector="//*[@name='customer[group_id]']/option"/>
         <element name="groupValue" type="button" selector="//span[text()='{{groupValue}}']" parameterized="true"/>
         <element name="associateToWebsite" type="select" selector="//select[@name='customer[website_id]']"/>
         <element name="saveCustomer" type="button" selector="//button[@title='Save Customer']"/>
         <element name="saveCustomerAndContinueEdit" type="button" selector="//button[@title='Save and Continue Edit']"/>
         <element name="storeView" type="select" selector="//select[@name='customer[sendemail_store_id]']"/>
+        <element name="namePrefix" type="input" selector="//input[contains(@name, 'customer[prefix]')]"/>
+        <element name="nameSuffix" type="input" selector="//input[contains(@name, 'customer[suffix]')]"/>
+        <element name="dateOfBirth" type="input" selector="//input[contains(@name, 'customer[dob]')]"/>
+        <element name="gender" type="select" selector="//select[contains(@name, 'customer[gender]')]"/>
+        <element name="firstNameRequiredMessage" type="text" selector="//input[@name='customer[firstname]']/../label[contains(.,'This is a required field.')]"/>
+        <element name="lastNameRequiredMessage" type="text" selector="//input[@name='customer[lastname]']/../label[contains(.,'This is a required field.')]"/>
+        <element name="emailRequiredMessage" type="text" selector="//input[@name='customer[email]']/../label[contains(.,'This is a required field.')]"/>
+        <element name="customAttribute" type="select" selector="//select[contains(@name, 'customer[{{attribute_code}}]')]" parameterized="true"/>
+        <element name="disabledGroup" type="text" selector="//div[@class='admin__action-group-wrap admin__action-multiselect-wrap action-select-wrap _disabled']"/>
+        <element name="attributeImage" type="block" selector="//div[contains(concat(' ',normalize-space(@class),' '),' file-uploader-preview ')]//img"/>
     </section>
 </sections>

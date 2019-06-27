@@ -13,6 +13,7 @@
         <element name="DefaultLabel" type="input" selector="#attribute_label"/>
         <element name="InputType" type="select" selector="#frontend_input"/>
         <element name="ValueRequired" type="select" selector="#is_required"/>
+        <element name="UpdateProductPreviewImage" type="select" selector="[name='update_product_preview_image']"/>
         <element name="AdvancedProperties" type="button" selector="#advanced_fieldset-wrapper"/>
         <element name="DefaultValue" type="input" selector="#default_value_text"/>
         <element name="Scope" type="select" selector="#is_global"/>
@@ -46,6 +47,8 @@
         <element name="StoreFrontPropertiesTab" selector="#product_attribute_tabs_front" type="button"/>
         <element name="EnableWYSIWYG" type="select" selector="#enabled"/>
         <element name="useForPromoRuleConditions" type="select" selector="#is_used_for_promo_rules"/>
+        <element name="StorefrontPropertiesSectionToggle" type="button" selector="#front_fieldset-wrapper"/>
+        <element name="visibleOnCatalogPagesOnStorefront" type="select" selector="#is_visible_on_front"/>
     </section>
     <section name="WYSIWYGProductAttributeSection">
         <element name="ShowHideBtn" type="button" selector="#toggledefault_value_texteditor"/>

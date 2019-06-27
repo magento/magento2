@@ -20,7 +20,29 @@ class Renderer implements RendererInterface
     /**
      * @var array
      */
-    protected $assetTypeOrder = ['css', 'ico', 'js'];
+    protected $assetTypeOrder = [
+        'css',
+        'ico',
+        'js',
+        'eot',
+        'svg',
+        'ttf',
+        'woff',
+        'woff2',
+    ];
+
+    /**
+     * Possible fonts type
+     *
+     * @var array
+     */
+    private const FONTS_TYPE = [
+        'eot',
+        'svg',
+        'ttf',
+        'woff',
+        'woff2',
+    ];
 
     /**
      * @var Config
@@ -321,6 +343,10 @@ class Renderer implements RendererInterface
             case 'css':
                 $attributes = ' rel="stylesheet" type="text/css" ' . ($attributes ?: ' media="all"');
                 break;
+
+            case $this->canTypeBeFont($contentType):
+                $attributes = 'rel="preload" as="font" crossorigin="anonymous"';
+                break;
         }
         return $attributes;
     }
@@ -389,6 +415,17 @@ class Renderer implements RendererInterface
             $result .= sprintf($template, $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']));
         }
         return $result;
+    }
+
+    /**
+     * Check if file type can be font
+     *
+     * @param string $type
+     * @return bool
+     */
+    private function canTypeBeFont(string $type): bool
+    {
+        return in_array($type, self::FONTS_TYPE, true);
     }
 
     /**

@@ -6,6 +6,12 @@
 
 namespace Magento\Reports\Block\Adminhtml;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Helper\Data;
+use Magento\Framework\Url\DecoderInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\Parameters;
+
 /**
  * Backend report grid block
  *
@@ -15,6 +21,16 @@ namespace Magento\Reports\Block\Adminhtml;
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
+    /**
+     * @var DecoderInterface
+     */
+    private $urlDecoder;
+
+    /**
+     * @var Parameters
+     */
+    private $parameters;
+
     /**
      * Should Store Switcher block be visible
      *
@@ -72,6 +88,31 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     protected $_filterValues;
 
     /**
+     * @param Context $context
+     * @param Data $backendHelper
+     * @param array $data
+     * @param DecoderInterface|null $urlDecoder
+     * @param Parameters|null $parameters
+     */
+    public function __construct(
+        Context $context,
+        Data $backendHelper,
+        array $data = [],
+        DecoderInterface $urlDecoder = null,
+        Parameters $parameters = null
+    ) {
+        $this->urlDecoder = $urlDecoder ?? ObjectManager::getInstance()->get(
+            DecoderInterface::class
+        );
+
+        $this->parameters = $parameters ?? ObjectManager::getInstance()->get(
+            Parameters::class
+        );
+
+        parent::__construct($context, $backendHelper, $data);
+    }
+
+    /**
      * Apply sorting and filtering to collection
      *
      * @return $this
@@ -86,9 +127,12 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         }
 
         if (is_string($filter)) {
-            $data = [];
-            $filter = base64_decode($filter);
-            parse_str(urldecode($filter), $data);
+            // this is a replacement for base64_decode()
+            $filter = $this->urlDecoder->decode($filter);
+
+            // this is a replacement for parse_str()
+            $this->parameters->fromString(urldecode($filter));
+            $data = $this->parameters->toArray();
 
             if (!isset($data['report_from'])) {
                 // getting all reports from 2001 year
@@ -113,7 +157,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             $this->_setFilterValues($data);
         } elseif ($filter && is_array($filter)) {
             $this->_setFilterValues($filter);
-        } elseif (0 !== sizeof($this->_defaultFilter)) {
+        } elseif (0 !== count($this->_defaultFilter)) {
             $this->_setFilterValues($this->_defaultFilter);
         }
 
@@ -328,7 +372,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         if (isset($this->_filters[$name])) {
             return $this->_filters[$name];
         } else {
-            return $this->getRequest()->getParam($name) ? htmlspecialchars($this->getRequest()->getParam($name)) : '';
+            return $this->getRequest()->getParam($name) ? $this->escapeHtml($this->getRequest()->getParam($name)) : '';
         }
     }
 

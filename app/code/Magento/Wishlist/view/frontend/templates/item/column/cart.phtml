@@ -11,6 +11,9 @@
 /** @var \Magento\Wishlist\Model\Item $item */
 $item = $block->getItem();
 $product = $item->getProduct();
+/** @var \Magento\Wishlist\ViewModel\AllowedQuantity $viewModel */
+$viewModel = $block->getData('allowedQuantityViewModel');
+$allowedQty = $viewModel->setItem($item)->getMinMaxQty();
 ?>
 <?php foreach ($block->getChildNames() as $childName): ?>
     <?= /* @noEscape */ $block->getLayout()->renderElement($childName, false) ?>
@@ -21,8 +24,8 @@ $product = $item->getProduct();
         <div class="field qty">
             <label class="label" for="qty[<?= $block->escapeHtmlAttr($item->getId()) ?>]"><span><?= $block->escapeHtml(__('Qty')) ?></span></label>
             <div class="control">
-                <input type="number" data-role="qty" id="qty[<?= $block->escapeHtmlAttr($item->getId()) ?>]" class="input-text qty" data-validate="{'required-number':true,'validate-greater-than-zero':true}"
-               name="qty[<?= $block->escapeHtmlAttr($item->getId()) ?>]" value="<?= /* @noEscape */ (int)($block->getAddToCartQty($item) * 1) ?>">
+                <input type="number" data-role="qty" id="qty[<?= $block->escapeHtmlAttr($item->getId()) ?>]" class="input-text qty" data-validate="{'required-number':true,'validate-greater-than-zero':true, 'validate-item-quantity':{'minAllowed':<?= /* @noEscape */ $allowedQty['minAllowed'] ?>,'maxAllowed':<?= /* @noEscape */ $allowedQty['maxAllowed'] ?>}}"
+               name="qty[<?= $block->escapeHtmlAttr($item->getId()) ?>]" value="<?= /* @noEscape */ (int)($block->getAddToCartQty($item) * 1) ?>" <?= $product->isSaleable() ? '' : 'disabled="disabled"' ?>>
             </div>
         </div>
     <?php endif; ?>
