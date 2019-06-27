@@ -20,6 +20,7 @@ class TransactionHashValidator extends AbstractValidator
      *
      * @param array $validationSubject
      * @return ResultInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function validate(array $validationSubject): ResultInterface
     {
