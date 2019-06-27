@@ -72,7 +72,7 @@ class SecureToken
         $request->setSecuretokenid($this->mathRandom->getUniqueHash());
         $request->setReturnurl($urls['return_url'] ?? $this->url->getUrl('paypal/transparent/response'));
         $request->setErrorurl($urls['error_url'] ?? $this->url->getUrl('paypal/transparent/response'));
-        $request->setCancelurl($urls['cancel_url'] ?? $this->url->getUrl('paypal/transparent/cancel'));
+        $request->setCancelurl($urls['cancel_url'] ?? $this->url->getUrl('paypal/transparent/response'));
         $request->setDisablereceipt('TRUE');
         $request->setSilenttran('TRUE');
 
