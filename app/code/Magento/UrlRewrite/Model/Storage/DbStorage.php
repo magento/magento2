@@ -139,21 +139,21 @@ class DbStorage extends AbstractStorage
         $prioritizedUrlRewrites = [];
         foreach ($urlRewrites as $urlRewrite) {
             switch (true) {
-            case $urlRewrite[UrlRewrite::REQUEST_PATH] === $requestPath:
-                $priority = 1;
-                break;
-            case $urlRewrite[UrlRewrite::REQUEST_PATH] === urldecode($requestPath):
-                $priority = 2;
-                break;
-            case rtrim($urlRewrite[UrlRewrite::REQUEST_PATH], '/') === rtrim($requestPath, '/'):
-                $priority = 3;
-                break;
-            case rtrim($urlRewrite[UrlRewrite::REQUEST_PATH], '/') === rtrim(urldecode($requestPath), '/'):
-                $priority = 4;
-                break;
-            default:
-                $priority = 5;
-                break;
+                case $urlRewrite[UrlRewrite::REQUEST_PATH] === $requestPath:
+                    $priority = 1;
+                    break;
+                case $urlRewrite[UrlRewrite::REQUEST_PATH] === urldecode($requestPath):
+                    $priority = 2;
+                    break;
+                case rtrim($urlRewrite[UrlRewrite::REQUEST_PATH], '/') === rtrim($requestPath, '/'):
+                    $priority = 3;
+                    break;
+                case rtrim($urlRewrite[UrlRewrite::REQUEST_PATH], '/') === rtrim(urldecode($requestPath), '/'):
+                    $priority = 4;
+                    break;
+                default:
+                    $priority = 5;
+                    break;
             }
             $prioritizedUrlRewrites[$priority] = $urlRewrite;
         }
@@ -271,13 +271,14 @@ class DbStorage extends AbstractStorage
     {
         $this->connection->beginTransaction();
 
-        $this->deleteOldUrls($urls);
-
-        $data = [];
-        foreach ($urls as $url) {
-            $data[] = $url->toArray();
-        }
         try {
+            $this->deleteOldUrls($urls);
+
+            $data = [];
+            foreach ($urls as $url) {
+                $data[] = $url->toArray();
+            }
+
             $this->insertMultiple($data);
 
             $this->connection->commit();
@@ -307,6 +308,9 @@ class DbStorage extends AbstractStorage
             } else {
                 throw $e->getPrevious() ?: $e;
             }
+        } catch (\Exception $e) {
+            $this->connection->rollBack();
+            throw $e;
         }
 
         return $urls;
