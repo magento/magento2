@@ -87,7 +87,7 @@ mutation {
       {
         data:{
           sku:"{$sku}"
-          qty:1
+          quantity:1
         }
         bundle_options:[
           {
@@ -102,10 +102,9 @@ mutation {
     ]
   }) {
     cart {
-      cart_id
       items {
         id
-        qty
+        quantity
         product {
           sku
         }
@@ -128,12 +127,11 @@ mutation {
 }
 QUERY;
 
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         $this->assertArrayHasKey('addBundleProductsToCart', $response);
         $this->assertArrayHasKey('cart', $response['addBundleProductsToCart']);
         $cart = $response['addBundleProductsToCart']['cart'];
-        $this->assertEquals($maskedQuoteId, $cart['cart_id']);
         $bundleItem = current($cart['items']);
         $this->assertEquals($sku, $bundleItem['product']['sku']);
         $bundleItemOption = current($bundleItem['bundle_options']);
@@ -170,7 +168,7 @@ mutation {
       {
         data:{
           sku:"bundle-product"
-          qty:1
+          quantity:1
         }
         bundle_options:[
           {
@@ -185,12 +183,31 @@ mutation {
     ]
   }) {
     cart {
-      cart_id
+      items {
+        id
+        quantity
+        product {
+          sku
+        }
+        ... on BundleCartItem {
+          bundle_options {
+            id
+            label
+            type
+            values {
+              id
+              label
+              price
+              quantity
+            }
+          }
+        }
+      }
     }
   }
 }
 QUERY;
 
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 }
