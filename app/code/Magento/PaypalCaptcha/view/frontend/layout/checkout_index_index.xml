@@ -25,6 +25,7 @@
                                                                     <item name="component" xsi:type="string">uiComponent</item>
                                                                     <item name="displayArea" xsi:type="string">paypal-captcha</item>
                                                                     <item name="dataScope" xsi:type="string">paypal-captcha</item>
+                                                                    <item name="dataScopePrefix" xsi:type="string"></item>
                                                                     <item name="provider" xsi:type="string">checkoutProvider</item>
                                                                     <item name="config" xsi:type="array">
                                                                         <item name="template" xsi:type="string">Magento_Checkout/payment/before-place-order</item>
