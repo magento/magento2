@@ -11,4 +11,24 @@
             <argument name="config" xsi:type="object">Magento\AuthorizenetAcceptjs\Model\Ui\ConfigProvider</argument>
         </arguments>
     </type>
+    <virtualType name="AuthorizenetAcceptjsAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="request_type" xsi:type="string">AuthorizenetAcceptjsTransactionRequestTypeBuilder</item>
+                <item name="store" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder</item>
+                <item name="merchant_account" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder</item>
+                <item name="transaction_type" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AuthorizeDataBuilder</item>
+                <item name="amount" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AmountDataBuilder</item>
+                <item name="payment" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\PaymentDataBuilder</item>
+                <item name="shipping" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\ShippingDataBuilder</item>
+                <item name="solution" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\SolutionDataBuilder</item>
+                <item name="order" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\OrderDataBuilder</item>
+                <item name="po" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\PoDataBuilder</item>
+                <item name="customer" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomerDataBuilder</item>
+                <item name="address" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AddressDataBuilder</item>
+                <item name="custom_settings" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomSettingsBuilder</item>
+                <item name="passthrough_data" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\PassthroughDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

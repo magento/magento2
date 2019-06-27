@@ -86,11 +86,37 @@ class SendmailTest extends AbstractController
     }
 
     /**
+     * Share the product invisible in catalog to friend as guest customer
+     *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture default_store sendfriend/email/enabled 1
+     * @magentoConfigFixture default_store sendfriend/email/allow_guest 1
+     * @magentoDataFixture Magento/Catalog/_files/simple_products_not_visible_individually.php
+     */
+    public function testSendInvisibleProduct()
+    {
+        $product = $this->getInvisibleProduct();
+        $this->prepareRequestData();
+
+        $this->dispatch('sendfriend/product/sendmail/id/' . $product->getId());
+        $this->assert404NotFound();
+    }
+
+    /**
      * @return ProductInterface
      */
     private function getProduct()
     {
         return $this->_objectManager->get(ProductRepositoryInterface::class)->get('custom-design-simple-product');
+    }
+
+    /**
+     * @return ProductInterface
+     */
+    private function getInvisibleProduct()
+    {
+        return $this->_objectManager->get(ProductRepositoryInterface::class)->get('simple_not_visible_1');
     }
 
     /**

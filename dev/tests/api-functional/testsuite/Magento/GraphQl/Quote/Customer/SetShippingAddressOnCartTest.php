@@ -101,7 +101,7 @@ mutation {
           label
           code
         }
-        address_type
+        __typename
       }
     }
   }
@@ -383,23 +383,19 @@ QUERY;
     public function testSetNewShippingAddressWithMissedRequiredParameters(string $input, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $input = str_replace('cart_id_value', $maskedQuoteId, $input);
 
         $query = <<<QUERY
 mutation {
   setShippingAddressesOnCart(
     input: {
-      cart_id: "{$maskedQuoteId}"
-      shipping_addresses: [
-        {
-          {$input}
-        }
-      ]
+      {$input}
     }
   ) {
     cart {
-      shipping_addresses {
-        city
-      }
+        shipping_addresses {
+            city
+          }
     }
   }
 }
@@ -414,13 +410,18 @@ QUERY;
     public function dataProviderUpdateWithMissedRequiredParameters(): array
     {
         return [
-            'shipping_addresses' => [
-                '',
-                'The shipping address must contain either "customer_address_id" or "address".',
+            'missed_shipping_addresses' => [
+                'cart_id: "cart_id_value"',
+                'Field SetShippingAddressesOnCartInput.shipping_addresses of required type [ShippingAddressInput]! ' .
+                'was not provided.',
             ],
             'missed_city' => [
-                'address: { save_in_address_book: false }',
+                'shipping_addresses: [ { address: { save_in_address_book: false } } ]',
                 'Field CartAddressInput.city of required type String! was not provided'
+            ],
+            'missed_cart_id' => [
+                'shipping_addresses: {}',
+                'Required parameter "cart_id" is missing'
             ]
         ];
     }
@@ -533,6 +534,128 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
+     */
+    public function testSetShippingAddressOnNonExistentCart()
+    {
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: [
+        {
+          customer_address_id: 1
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        city
+      }
+    }
+  }
+}
+QUERY;
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * _security
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetShippingAddressToGuestCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: {
+          customer_address_id: 1
+       }
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        city
+      }
+    }
+  }
+}
+QUERY;
+        $this->expectExceptionMessage(
+            "The current user cannot perform operations on cart \"{$maskedQuoteId}\""
+        );
+
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetShippingAddressWithLowerCaseCountry()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "{$maskedQuoteId}"
+      shipping_addresses: [
+        {
+          address: {
+            firstname: "John"
+            lastname: "Doe"
+            street: ["6161 West Centinella Avenue"]
+            city: "Culver City"
+            region: "CA"
+            postcode: "90230"
+            country_code: "us"
+            telephone: "555-555-55-55"
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        region {
+            code
+        }
+        country {
+            code
+        }
+      }
+    }
+  }
+}
+QUERY;
+        $result = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+
+        self::assertCount(1, $result['setShippingAddressesOnCart']['cart']['shipping_addresses']);
+        $address = reset($result['setShippingAddressesOnCart']['cart']['shipping_addresses']);
+
+        $this->assertEquals('US', $address['country']['code']);
+        $this->assertEquals('CA', $address['region']['code']);
+    }
+
+    /**
      * Verify the all the whitelisted fields for a New Address Object
      *
      * @param array $shippingAddressResponse
@@ -548,7 +671,7 @@ QUERY;
             ['response_field' => 'postcode', 'expected_value' => '887766'],
             ['response_field' => 'telephone', 'expected_value' => '88776655'],
             ['response_field' => 'country', 'expected_value' => ['code' => 'US', 'label' => 'US']],
-            ['response_field' => 'address_type', 'expected_value' => 'SHIPPING']
+            ['response_field' => '__typename', 'expected_value' => 'ShippingCartAddress']
         ];
 
         $this->assertResponseFields($shippingAddressResponse, $assertionMap);
