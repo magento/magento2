@@ -87,6 +87,14 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $this->objectManager->removeSharedInstance(Gateway::class);
+    }
+
+    /**
      * Test place order with payflow link
      *
      * @magentoConfigFixture default_store payment/payflow_link/active 1
@@ -154,8 +162,7 @@ QUERY;
             ->method('postRequest')
             ->willReturn($payflowLinkResponse);
 
-        $this->payflowRequest->expects($this->any())
-            ->method('setData')
+        $this->payflowRequest->method('setData')
             ->willReturnMap(
                 [
                     [
@@ -197,13 +204,5 @@ QUERY;
             'test_quote',
             $responseData['data']['placeOrder']['order']['order_id']
         );
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tearDown()
-    {
-        $this->objectManager->removeSharedInstance(Gateway::class);
     }
 }

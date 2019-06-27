@@ -69,21 +69,26 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['__call','setData'])
             ->getMock();
-        $this->payflowRequest->expects($this->any())
-            ->method('__call')
-            ->will(
-                $this->returnCallback(
-                    function ($method) {
-                        if (strpos($method, 'set') === 0) {
-                            return $this->payflowRequest;
-                        }
-                        return null;
+        $this->payflowRequest->method('__call')
+            ->willReturnCallback(
+                function ($method) {
+                    if (strpos($method, 'set') === 0) {
+                        return $this->payflowRequest;
                     }
-                )
+                    return null;
+                }
             );
 
-        $requestFactory->expects($this->any())->method('create')->will($this->returnValue($this->payflowRequest));
+        $requestFactory->expects($this->any())->method('create')->willReturn($this->payflowRequest);
         $this->objectManager->addSharedInstance($this->gateway, Gateway::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $this->objectManager->removeSharedInstance(Gateway::class);
     }
 
     /**
@@ -260,7 +265,8 @@ QUERY;
 
                     ]
                 ]
-            )->willReturnSelf();
+            )
+            ->willReturnSelf();
 
         $this->gateway->method('postRequest')->willThrowException($exception);
 
@@ -273,13 +279,5 @@ QUERY;
             $actualError['message']
         );
         $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tearDown()
-    {
-        $this->objectManager->removeSharedInstance(Gateway::class);
     }
 }
