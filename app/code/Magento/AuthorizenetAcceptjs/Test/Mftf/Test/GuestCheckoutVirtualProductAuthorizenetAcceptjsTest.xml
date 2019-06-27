@@ -37,7 +37,6 @@
 
             <!--Configure Auth.net-->
             <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
-            <actionGroup ref="EnableAuthorizenetAcceptjs" stepKey="enableAuthorizenetAcceptjs"/>
             <actionGroup ref="ConfigureAuthorizenetAcceptjs" stepKey="configureAuthorizenetAcceptjs">
                 <argument name="paymentAction" value="Authorize and Capture"/>
             </actionGroup>

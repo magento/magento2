@@ -34,7 +34,7 @@
         <selectOption selector="{{AuthorizenetAcceptjsConfigurationSection.enabledDefaultSelect}}" userInput="Yes" stepKey="enablePayment"/>
     </actionGroup>
     
-    <actionGroup name="AssertAuthorizenetAcceptjsRequiredFieldsValidationArePresentOnSave">
+    <actionGroup name="AssertAuthorizenetAcceptjsRequiredFieldsValidationIsPresentOnSave">
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
         <scrollTo selector="{{AuthorizenetAcceptjsConfigurationSection.apiLoginIdField}}" stepKey="scrollToApiLoginIdField"/>
