@@ -135,6 +135,17 @@ class Uploader extends \Magento\Backend\Block\Widget
     {
         return $this->imageUploadConfig->getMaxHeight();
     }
+    
+    /**
+     * Get Image Upload Config Data.
+     *
+     * @return int
+     * @since 100.2.7
+     */
+    public function getImageUploadConfigData()
+    {
+        return $this->imageUploadConfig;
+    }
 
     /**
      * Prepares layout and set element renderer
