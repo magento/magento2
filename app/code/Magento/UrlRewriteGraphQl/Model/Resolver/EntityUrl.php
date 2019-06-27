@@ -64,7 +64,7 @@ class EntityUrl implements ResolverInterface
         }
         $customUrl = $this->customUrlLocator->locateUrl($url);
         $url = $customUrl ?: $url;
-        $urlRewrite = $this->findCanonicalUrl($url, $context->getStoreId());
+        $urlRewrite = $this->findCanonicalUrl($url, (int)$context->getExtensionAttributes()->getStore()->getId());
         if ($urlRewrite) {
             if (!$urlRewrite->getEntityId()) {
                 throw new GraphQlNoSuchEntityException(

@@ -16,7 +16,11 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQl\Model\Query\Resolver\ContextFactory">
-        <plugin name="add_store_id_to_resolver_context" type="Magento\StoreGraphQl\Model\Plugin\Query\Resolver\ContextFactory"/>
+    <type name="Magento\GraphQl\Model\Query\ContextFactory">
+        <arguments>
+            <argument name="contextParametersProcessors" xsi:type="array">
+                <item name="add_store_info_to_context" xsi:type="object">Magento\StoreGraphQl\Model\Context\AddStoreInfoToContext</item>
+            </argument>
+        </arguments>
     </type>
 </config>

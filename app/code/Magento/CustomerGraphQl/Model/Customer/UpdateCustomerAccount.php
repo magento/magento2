@@ -12,6 +12,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Update customer account data
@@ -69,13 +70,14 @@ class UpdateCustomerAccount
      *
      * @param CustomerInterface $customer
      * @param array $data
-     * @param int $storeId
+     * @param StoreInterface $store
      * @return void
      * @throws GraphQlAlreadyExistsException
      * @throws GraphQlAuthenticationException
      * @throws GraphQlInputException
+     * @throws \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException
      */
-    public function execute(CustomerInterface $customer, array $data, int $storeId): void
+    public function execute(CustomerInterface $customer, array $data, StoreInterface $store): void
     {
         if (isset($data['email']) && $customer->getEmail() !== $data['email']) {
             if (!isset($data['password']) || empty($data['password'])) {
@@ -89,7 +91,7 @@ class UpdateCustomerAccount
         $filteredData = array_diff_key($data, array_flip($this->restrictedKeys));
         $this->dataObjectHelper->populateWithArray($customer, $filteredData, CustomerInterface::class);
 
-        $customer->setStoreId($storeId);
+        $customer->setStoreId($store->getId());
 
         $this->saveCustomer->execute($customer);
 

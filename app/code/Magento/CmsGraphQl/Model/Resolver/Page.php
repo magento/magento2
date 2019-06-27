@@ -55,7 +55,10 @@ class Page implements ResolverInterface
             if (isset($args['id'])) {
                 $pageData = $this->pageDataProvider->getDataByPageId((int)$args['id']);
             } elseif (isset($args['identifier'])) {
-                $pageData = $this->pageDataProvider->getDataByPageIdentifier((string)$args['identifier']);
+                $pageData = $this->pageDataProvider->getDataByPageIdentifier(
+                    (string)$args['identifier'],
+                    (int)$context->getExtensionAttributes()->getStore()->getId()
+                );
             }
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);

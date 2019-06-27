@@ -46,7 +46,7 @@ class SortFields implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $sortFieldsOptions = $this->sortbyAttributeSource->getAllOptions();
-        $storeId = $context->getStoreId();
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
 
         array_walk(
             $sortFieldsOptions,

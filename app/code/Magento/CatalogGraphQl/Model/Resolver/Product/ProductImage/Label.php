@@ -56,7 +56,7 @@ class Label implements ResolverInterface
         $imageType = $value['image_type'];
         $imagePath = $product->getData($imageType);
         $productId = (int)$product->getEntityId();
-        $storeId = $context->getStoreId();
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
 
         // null if image is not set
         if (null === $imagePath) {

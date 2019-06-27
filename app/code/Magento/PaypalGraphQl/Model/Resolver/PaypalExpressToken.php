@@ -85,7 +85,8 @@ class PaypalExpressToken implements ResolverInterface
         $usedExpressButton = isset($args['input']['express_button']) ? $args['input']['express_button'] : false;
         $customerId = $context->getUserId();
 
-        $cart = $this->getCartForUser->execute($cartId, $customerId);
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($cartId, $customerId, $storeId);
         $config = $this->configProvider->getConfig($paymentCode);
         $checkout = $this->checkoutProvider->getCheckout($config, $cart);
 

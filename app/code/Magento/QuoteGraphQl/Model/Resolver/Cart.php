@@ -43,7 +43,8 @@ class Cart implements ResolverInterface
         $maskedCartId = $args['cart_id'];
 
         $currentUserId = $context->getUserId();
-        $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId);
+        $storeId = $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId, $storeId);
 
         return [
             'model' => $cart,

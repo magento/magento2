@@ -16,7 +16,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\Quote\Model\Cart\ShippingMethodConverter;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * @inheritdoc
@@ -34,23 +34,15 @@ class AvailableShippingMethods implements ResolverInterface
     private $shippingMethodConverter;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param ExtensibleDataObjectConverter $dataObjectConverter
      * @param ShippingMethodConverter $shippingMethodConverter
-     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ExtensibleDataObjectConverter $dataObjectConverter,
-        ShippingMethodConverter $shippingMethodConverter,
-        StoreManagerInterface $storeManager
+        ShippingMethodConverter $shippingMethodConverter
     ) {
         $this->dataObjectConverter = $dataObjectConverter;
         $this->shippingMethodConverter = $shippingMethodConverter;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -81,7 +73,11 @@ class AvailableShippingMethods implements ResolverInterface
                     [],
                     ShippingMethodInterface::class
                 );
-                $methods[] = $this->processMoneyTypeData($methodData, $cart->getQuoteCurrencyCode());
+                $methods[] = $this->processMoneyTypeData(
+                    $methodData,
+                    $cart->getQuoteCurrencyCode(),
+                    $context->getExtensionAttributes()->getStore()
+                );
             }
         }
         return $methods;
@@ -92,10 +88,11 @@ class AvailableShippingMethods implements ResolverInterface
      *
      * @param array $data
      * @param string $quoteCurrencyCode
+     * @param StoreInterface $store
      * @return array
      * @throws NoSuchEntityException
      */
-    private function processMoneyTypeData(array $data, string $quoteCurrencyCode): array
+    private function processMoneyTypeData(array $data, string $quoteCurrencyCode, StoreInterface $store): array
     {
         if (isset($data['amount'])) {
             $data['amount'] = ['value' => $data['amount'], 'currency' => $quoteCurrencyCode];
@@ -103,7 +100,7 @@ class AvailableShippingMethods implements ResolverInterface
 
         if (isset($data['base_amount'])) {
             /** @var Currency $currency */
-            $currency = $this->storeManager->getStore()->getBaseCurrency();
+            $currency = $store->getBaseCurrency();
             $data['base_amount'] = ['value' => $data['base_amount'], 'currency' => $currency->getCode()];
         }
 

@@ -18,7 +18,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceInfo\Factory as PriceInfoFactory;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Format a product's price information to conform to GraphQL schema representation
@@ -26,24 +26,16 @@ use Magento\Store\Model\StoreManagerInterface;
 class Price implements ResolverInterface
 {
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var PriceInfoFactory
      */
     private $priceInfoFactory;
 
     /**
-     * @param StoreManagerInterface $storeManager
      * @param PriceInfoFactory $priceInfoFactory
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
         PriceInfoFactory $priceInfoFactory
     ) {
-        $this->storeManager = $storeManager;
         $this->priceInfoFactory = $priceInfoFactory;
     }
 
@@ -80,20 +72,20 @@ class Price implements ResolverInterface
         $minimalPriceAmount =  $finalPrice->getMinimalPrice();
         $maximalPriceAmount =  $finalPrice->getMaximalPrice();
         $regularPriceAmount =  $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount();
-        $storeId = $context->getStoreId();
+        $store = $context->getExtensionAttributes()->getStore();
 
         $prices = [
             'minimalPrice' => $this->createAdjustmentsArray(
                 $priceInfo->getAdjustments(),
                 $minimalPriceAmount,
-                $storeId
+                $store
             ),
             'regularPrice' => $this->createAdjustmentsArray(
                 $priceInfo->getAdjustments(),
                 $regularPriceAmount,
-                $storeId
+                $store
             ),
-            'maximalPrice' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $maximalPriceAmount, $storeId)
+            'maximalPrice' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $maximalPriceAmount, $store)
         ];
 
         return $prices;
@@ -104,15 +96,11 @@ class Price implements ResolverInterface
      *
      * @param AdjustmentInterface[] $adjustments
      * @param AmountInterface $amount
-     * @param int $storeId
+     * @param StoreInterface $store
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function createAdjustmentsArray(array $adjustments, AmountInterface $amount, int $storeId) : array
+    private function createAdjustmentsArray(array $adjustments, AmountInterface $amount, StoreInterface $store) : array
     {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = $this->storeManager->getStore($storeId);
-
         $priceArray = [
                 'amount' => [
                     'value' => $amount->getValue(),
