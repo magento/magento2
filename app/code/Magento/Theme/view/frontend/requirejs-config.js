@@ -33,7 +33,8 @@ var config = {
         }
     },
     paths: {
-        'jquery/ui': 'jquery/jquery-ui'
+        'jquery/ui': 'jquery/jquery-ui',
+        'jquery-ui-modules': 'jquery/ui-modules'
     },
     deps: [
         'jquery/jquery.mobile.custom',
