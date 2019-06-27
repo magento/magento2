@@ -19,6 +19,6 @@
         <fillField selector="{{AdminSystemAccountSection.currentPassword}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillPassword"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
         <waitForElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="waitSuccessMessage"/>
-        <see selector="{{AdminCustomerMessagesSection.successMessage}}" userInput="You saved the account." stepKey="seeSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the account." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>

@@ -54,8 +54,8 @@ class Date extends Column
      * @param BooleanUtils $booleanUtils
      * @param array $components
      * @param array $data
-     * @param ResolverInterface $localeResolver
-     * @param DataBundle $dataBundle
+     * @param ResolverInterface|null $localeResolver
+     * @param DataBundle|null $dataBundle
      */
     public function __construct(
         ContextInterface $context,
