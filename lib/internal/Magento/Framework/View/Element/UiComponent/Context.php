@@ -372,6 +372,7 @@ class Context implements ContextInterface
      * @param array $data
      * @param UiComponentInterface $component
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function prepareDataSource(array & $data, UiComponentInterface $component)
     {
@@ -382,11 +383,15 @@ class Context implements ContextInterface
             }
         }
         $data = $component->prepareDataSource($data);
-        foreach ($data['data']['items'] as & $item) {
-            $name = $component->getData('name');
-            if (array_key_exists($name, $item) && is_array($item[$name])) {
-                foreach ($item[$name] as $action => &$actionItem) {
-                    !is_array($actionItem) ?: $actionItem['__disableTmpl'] = true;
+        if (isset($data['data']['items'])) {
+            foreach ($data['data']['items'] as & $item) {
+                $name = $component->getData('name');
+                if (array_key_exists($name, $item) && is_array($item[$name])) {
+                    foreach ($item[$name] as $action => &$actionItem) {
+                        if (is_array($actionItem)) {
+                            $actionItem['__disableTmpl'] = true;
+                        }
+                    }
                 }
             }
         }
