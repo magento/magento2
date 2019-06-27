@@ -19,6 +19,7 @@ use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Stdlib\Parameters;
+use Magento\Framework\DataObjectFactory;
 
 /**
  * Resolver for handling PayflowPro response
@@ -62,6 +63,12 @@ class PayflowProResponse implements ResolverInterface
     private $parameters;
 
     /**
+     * @var DataObjectFactory
+     */
+    private $dataObjectFactory;
+
+    /**
+     * PayflowProResponse constructor.
      * @param Transaction $transaction
      * @param ResponseValidator $responseValidator
      * @param PaymentFailuresInterface $paymentFailures
@@ -69,6 +76,7 @@ class PayflowProResponse implements ResolverInterface
      * @param Transparent $transparent
      * @param GetCartForUser $getCartForUser
      * @param Parameters $parameters
+     * @param DataObjectFactory $dataObjectFactory
      */
     public function __construct(
         Transaction $transaction,
@@ -77,7 +85,8 @@ class PayflowProResponse implements ResolverInterface
         Json $json,
         Transparent $transparent,
         GetCartForUser $getCartForUser,
-        Parameters $parameters
+        Parameters $parameters,
+        DataObjectFactory $dataObjectFactory
     ) {
         $this->transaction = $transaction;
         $this->responseValidator = $responseValidator;
@@ -86,6 +95,7 @@ class PayflowProResponse implements ResolverInterface
         $this->transparent = $transparent;
         $this->getCartForUser = $getCartForUser;
         $this->parameters = $parameters;
+        $this->dataObjectFactory = $dataObjectFactory;
     }
 
     /**
@@ -115,7 +125,7 @@ class PayflowProResponse implements ResolverInterface
         $this->parameters->fromString(urldecode($paypalPayload));
         $data = $this->parameters->toArray();
         try {
-            $do = new \Magento\Framework\DataObject(array_change_key_case($data, CASE_LOWER));
+            $do = $this->dataObjectFactory->create(['data' => array_change_key_case($data, CASE_LOWER)]);
             $this->responseValidator->validate($do, $this->transparent);
             $this->transaction->savePaymentInQuote($do, $cart->getId());
         } catch (LocalizedException $exception) {
