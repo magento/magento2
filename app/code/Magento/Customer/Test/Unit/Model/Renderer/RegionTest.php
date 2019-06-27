@@ -63,10 +63,11 @@ class RegionTest extends \PHPUnit\Framework\TestCase
 
         $objectManager = new ObjectManager($this);
         $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
-        $reflection = new \ReflectionClass($elementMock);
-        $reflection_property = $reflection->getProperty('_escaper');
-        $reflection_property->setAccessible(true);
-        $reflection_property->setValue($elementMock, $escaper);
+        $objectManager->setBackwardCompatibleProperty(
+            $elementMock,
+            '_escaper',
+            $escaper
+        );
 
         $formMock->expects(
             $this->any()

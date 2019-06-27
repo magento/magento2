@@ -33,8 +33,6 @@ class AbstractEnableTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
         $this->elementMock = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\AbstractElement::class)
             ->setMethods(
                 [
@@ -48,10 +46,11 @@ class AbstractEnableTest extends \PHPUnit\Framework\TestCase
 
         $objectManager = new ObjectManager($this);
         $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
-        $reflection = new \ReflectionClass($this->elementMock);
-        $reflection_property = $reflection->getProperty('_escaper');
-        $reflection_property->setAccessible(true);
-        $reflection_property->setValue($this->elementMock, $escaper);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->elementMock,
+            '_escaper',
+            $escaper
+        );
 
         $this->abstractEnable = $objectManager->getObject(
             \Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable\Stub::class,
