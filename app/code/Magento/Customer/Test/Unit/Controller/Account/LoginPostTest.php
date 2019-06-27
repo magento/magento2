@@ -93,13 +93,14 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
 
         $this->session = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'isLoggedIn',
-                'setCustomerDataAsLoggedIn',
-                'regenerateId',
-                'setUsername',
-            ])
-            ->getMock();
+            ->setMethods(
+                [
+                    'isLoggedIn',
+                    'setCustomerDataAsLoggedIn',
+                    'regenerateId',
+                    'setUsername',
+                ]
+            )->getMock();
 
         $this->accountManagement = $this->getMockBuilder(\Magento\Customer\Api\AccountManagementInterface::class)
             ->getMockForAbstractClass();
@@ -253,10 +254,12 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getPost')
             ->with('login')
-            ->willReturn([
-                'username' => $username,
-                'password' => $password,
-            ]);
+            ->willReturn(
+                [
+                    'username' => $username,
+                    'password' => $password,
+                ]
+            );
 
         $customerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMockForAbstractClass();
@@ -292,9 +295,8 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
             ->method('setCustomerDataAsLoggedIn')
             ->with($customerMock)
             ->willReturnSelf();
-        $this->session->expects($this->once())
-            ->method('regenerateId')
-            ->willReturnSelf();
+        $this->session->expects($this->never())
+            ->method('regenerateId');
 
         $this->accountRedirect->expects($this->never())
             ->method('getRedirect')
@@ -335,10 +337,12 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getPost')
             ->with('login')
-            ->willReturn([
-                'username' => $username,
-                'password' => $password,
-            ]);
+            ->willReturn(
+                [
+                    'username' => $username,
+                    'password' => $password,
+                ]
+            );
 
         $customerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMockForAbstractClass();
@@ -357,9 +361,8 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
             ->method('setCustomerDataAsLoggedIn')
             ->with($customerMock)
             ->willReturnSelf();
-        $this->session->expects($this->once())
-            ->method('regenerateId')
-            ->willReturnSelf();
+        $this->session->expects($this->never())
+            ->method('regenerateId');
 
         $this->accountRedirect->expects($this->once())
             ->method('getRedirect')
@@ -426,10 +429,12 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getPost')
             ->with('login')
-            ->willReturn([
-                'username' => $username,
-                'password' => $password,
-            ]);
+            ->willReturn(
+                [
+                    'username' => $username,
+                    'password' => $password,
+                ]
+            );
 
         $exception = new $exceptionData['exception'](__($exceptionData['message']));
 
@@ -488,11 +493,12 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
 
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'isPost',
-                'getPost',
-            ])
-            ->getMock();
+            ->setMethods(
+                [
+                    'isPost',
+                    'getPost',
+                ]
+            )->getMock();
 
         $this->resultRedirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()

@@ -26,6 +26,8 @@ use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\Phrase;
 
 /**
+ * Post login customer action.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
@@ -183,7 +185,6 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
                 try {
                     $customer = $this->customerAccountManagement->authenticate($login['username'], $login['password']);
                     $this->session->setCustomerDataAsLoggedIn($customer);
-                    $this->session->regenerateId();
                     if ($this->getCookieManager()->getCookie('mage-cache-sessid')) {
                         $metadata = $this->getCookieMetadataFactory()->createCookieMetadata();
                         $metadata->setPath('/');
