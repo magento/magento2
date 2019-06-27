@@ -86,11 +86,7 @@ class Tax extends \Magento\Framework\View\Element\Template
         $allowTax = $this->_source->getTaxAmount() > 0 || $this->_config->displaySalesZeroTax($store);
         $grandTotal = (double)$this->_source->getGrandTotal();
         if (!$grandTotal || $allowTax && !$this->_config->displaySalesTaxWithGrandTotal($store)) {
-            $taxTotal = new \Magento\Framework\DataObject(['code' => 'tax', 'block_name' => $this->getNameInLayout()]);
-            $totals = $this->getParentBlock()->getTotals();
-            if ($totals['grand_total']) {
-                $this->getParentBlock()->addTotalBefore($taxTotal, 'grand_total');
-            }
+            $this->_addTax();
         }
 
         $this->_initSubtotal();
@@ -109,6 +105,10 @@ class Tax extends \Magento\Framework\View\Element\Template
     protected function _addTax($after = 'discount')
     {
         $taxTotal = new \Magento\Framework\DataObject(['code' => 'tax', 'block_name' => $this->getNameInLayout()]);
+        $totals = $this->getParentBlock()->getTotals();
+        if ($totals['grand_total']) {
+            $this->getParentBlock()->addTotalBefore($taxTotal, 'grand_total');
+        }
         $this->getParentBlock()->addTotal($taxTotal, $after);
         return $this;
     }
@@ -273,12 +273,13 @@ class Tax extends \Magento\Framework\View\Element\Template
      * Init discount.
      *
      * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
+     *
      * @return void
      */
     protected function _initDiscount()
     {
     }
-
+    //phpcs:enable
     /**
      * Init grand total.
      *
@@ -319,8 +320,8 @@ class Tax extends \Magento\Framework\View\Element\Template
                 ]
             );
             $parent->addTotal($totalExcl, 'grand_total');
-            $this->_addTax('grand_total');
             $parent->addTotal($totalIncl, 'tax');
+            $this->_addTax('grand_total');
         }
         return $this;
     }
