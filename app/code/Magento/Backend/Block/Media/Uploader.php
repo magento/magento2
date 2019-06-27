@@ -140,7 +140,6 @@ class Uploader extends \Magento\Backend\Block\Widget
      * Get Image Upload Config Data.
      *
      * @return int
-     * @since 100.2.7
      */
     public function getImageUploadConfigData()
     {
