@@ -6,6 +6,32 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\CardinalCommerce\Model\Response\JwtPayloadValidatorInterface" type="Magento\CardinalCommerce\Model\Response\JwtPayloadValidator" />
     <preference for="Magento\CardinalCommerce\Model\Response\JwtParserInterface" type="Magento\CardinalCommerce\Model\Response\JwtParser" />
+    <virtualType name="Magento\CardinalCommerce\Model\VirtualClaimCheckerManager" type="Magento\Framework\Jwt\ClaimCheckerManager">
+        <arguments>
+            <argument name="checkers" xsi:type="array">
+                <item name="errorNumber" xsi:type="string">Magento\CardinalCommerce\Model\Response\ClaimChecker\ErrorNumber</item>
+                <item name="actionCode" xsi:type="string">Magento\CardinalCommerce\Model\Response\ClaimChecker\ActionCode</item>
+                <item name="eciFlag" xsi:type="string">Magento\CardinalCommerce\Model\Response\ClaimChecker\EciFlag</item>
+                <item name="exp" xsi:type="string">Magento\Framework\Jwt\ClaimChecker\ExpirationTime</item>
+            </argument>
+            <argument name="mandatoryClaims" xsi:type="array">
+                <item name="error_number" xsi:type="string">ErrorNumber</item>
+                <item name="action_code" xsi:type="string">ActionCode</item>
+                <item name="eci_flag" xsi:type="string">ECIFlag</item>
+                <item name="exp" xsi:type="string">exp</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\CardinalCommerce\Model\VirtualJwsManagement" type="Magento\Framework\Jwt\Jws\Management">
+        <arguments>
+            <argument name="keyGenerator" xsi:type="object">Magento\CardinalCommerce\Model\ApiKeyGenerator</argument>
+            <argument name="claimCheckerManager" xsi:type="object">Magento\CardinalCommerce\Model\VirtualClaimCheckerManager</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CardinalCommerce\Model\JwtManagement">
+        <arguments>
+            <argument name="management" xsi:type="object">Magento\CardinalCommerce\Model\VirtualJwsManagement</argument>
+        </arguments>
+    </type>
 </config>

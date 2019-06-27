@@ -1782,4 +1782,12 @@
         <plugin name="execute_commit_callbacks" type="Magento\Framework\Model\ExecuteCommitCallbacks" />
     </type>
     <preference for="Magento\Framework\GraphQl\Query\ErrorHandlerInterface" type="Magento\Framework\GraphQl\Query\ErrorHandler"/>
+    <preference for="Magento\Framework\Jwt\ManagementInterface" type="Magento\Framework\Jwt\Jws\Management"/>
+    <preference for="Magento\Framework\Jwt\KeyGeneratorInterface" type="Magento\Framework\Jwt\KeyGenerator\CryptKey"/>
+    <preference for="Magento\Framework\Jwt\SerializerInterface" type="Magento\Framework\Jwt\Jws\Serializer"/>
+    <type name="Magento\Framework\Jwt\AlgorithmFactory">
+        <arguments>
+            <argument name="algorithm" xsi:type="object">Jose\Component\Signature\Algorithm\HS256</argument>
+        </arguments>
+    </type>
 </config>

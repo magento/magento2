@@ -24,7 +24,7 @@ class AuthorizeCommandTest extends AbstractTest
      *
      * @magentoConfigFixture default_store three_d_secure/cardinal/enabled_authorizenet 1
      * @magentoConfigFixture default_store three_d_secure/cardinal/environment sandbox
-     * @magentoConfigFixture default_store three_d_secure/cardinal/api_key some_api_key
+     * @magentoConfigFixture default_store three_d_secure/cardinal/api_key K7cMG5u4be3dcMF10b7F1djCfmAf471f
      * @magentoConfigFixture default_store three_d_secure/cardinal/api_identifier some_api_identifier
      * @magentoConfigFixture default_store three_d_secure/cardinal/org_unit_id some_org_unit_id
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/environment sandbox
@@ -88,7 +88,7 @@ class AuthorizeCommandTest extends AbstractTest
      *
      * @magentoConfigFixture default_store three_d_secure/cardinal/enabled_authorizenet 1
      * @magentoConfigFixture default_store three_d_secure/cardinal/environment sandbox
-     * @magentoConfigFixture default_store three_d_secure/cardinal/api_key some_api_key
+     * @magentoConfigFixture default_store three_d_secure/cardinal/api_key K7cMG5u4be3dcMF10b7F1djCfmAf471f
      * @magentoConfigFixture default_store three_d_secure/cardinal/api_identifier some_api_identifier
      * @magentoConfigFixture default_store three_d_secure/cardinal/org_unit_id some_org_unit_id
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/environment sandbox
@@ -125,7 +125,7 @@ class AuthorizeCommandTest extends AbstractTest
      *
      * @magentoConfigFixture default_store three_d_secure/cardinal/enabled_authorizenet 0
      * @magentoConfigFixture default_store three_d_secure/cardinal/environment sandbox
-     * @magentoConfigFixture default_store three_d_secure/cardinal/api_key some_api_key
+     * @magentoConfigFixture default_store three_d_secure/cardinal/api_key K7cMG5u4be3dcMF10b7F1djCfmAf471f
      * @magentoConfigFixture default_store three_d_secure/cardinal/api_identifier some_api_identifier
      * @magentoConfigFixture default_store three_d_secure/cardinal/org_unit_id some_org_unit_id
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/environment sandbox

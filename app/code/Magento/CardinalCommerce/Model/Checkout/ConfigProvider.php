@@ -43,6 +43,10 @@ class ConfigProvider implements ConfigProviderInterface
      */
     public function getConfig(): array
     {
+        if (!$this->config->getApiKey()) {
+            return [];
+        }
+
         $config['cardinal'] = [
             'environment' => $this->config->getEnvironment(),
             'requestJWT' => $this->requestJwtBuilder->build()

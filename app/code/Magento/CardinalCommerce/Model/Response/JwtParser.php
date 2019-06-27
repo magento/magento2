@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\CardinalCommerce\Model\Response;
 
-use Magento\CardinalCommerce\Model\JwtManagement;
 use Magento\CardinalCommerce\Model\Config;
+use Magento\CardinalCommerce\Model\JwtManagement;
 use Magento\Framework\Exception\LocalizedException;
-use Psr\Log\LoggerInterface;
 use Magento\Payment\Model\Method\Logger as PaymentLogger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Parses content of CardinalCommerce response JWT.
@@ -29,11 +29,6 @@ class JwtParser implements JwtParserInterface
     private $config;
 
     /**
-     * @var JwtPayloadValidatorInterface
-     */
-    private $tokenValidator;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -46,20 +41,17 @@ class JwtParser implements JwtParserInterface
     /**
      * @param JwtManagement $jwtManagement
      * @param Config $config
-     * @param JwtPayloadValidatorInterface $tokenValidator
      * @param PaymentLogger $paymentLogger
      * @param LoggerInterface $logger
      */
     public function __construct(
         JwtManagement $jwtManagement,
         Config $config,
-        JwtPayloadValidatorInterface $tokenValidator,
         PaymentLogger $paymentLogger,
         LoggerInterface $logger
     ) {
         $this->jwtManagement = $jwtManagement;
         $this->config = $config;
-        $this->tokenValidator = $tokenValidator;
         $this->paymentLogger = $paymentLogger;
         $this->logger = $logger;
     }
@@ -76,14 +68,12 @@ class JwtParser implements JwtParserInterface
         $jwtPayload = '';
         try {
             $this->debug(['Cardinal Response JWT:' => $jwt]);
-            $jwtPayload = $this->jwtManagement->decode($jwt, $this->config->getApiKey());
-            $this->debug(['Cardinal Response JWT payload:' => $jwtPayload]);
-            if (!$this->tokenValidator->validate($jwtPayload)) {
-                $this->throwException();
-            }
+            $jwtPayload = $this->jwtManagement->decode($jwt);
         } catch (\InvalidArgumentException $e) {
             $this->logger->critical($e, ['CardinalCommerce3DSecure']);
             $this->throwException();
+        } finally {
+            $this->debug(['Cardinal Response JWT payload:' => $jwtPayload]);
         }
 
         return $jwtPayload;
