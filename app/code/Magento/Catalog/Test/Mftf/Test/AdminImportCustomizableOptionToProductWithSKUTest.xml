@@ -11,12 +11,16 @@
     <test name="AdminImportCustomizableOptionToProductWithSKUTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Customizable options"/>
             <title value="Import customizable options to a product with existing SKU"/>
             <description value="Import customizable options to a product with existing SKU"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-98211"/>
             <useCaseId value="MAGETWO-70232"/>
             <group value="catalog"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -48,11 +52,9 @@
         <waitForPageLoad stepKey="waitForProductEditPageLoad"/>
         <actionGroup ref="AddProductCustomOptionField" stepKey="addCutomOption1">
             <argument name="option" value="ProductOptionField"/>
-            <argument name="optionIndex" value="0"/>
         </actionGroup>
         <actionGroup ref="AddProductCustomOptionField" stepKey="addCutomOption2">
             <argument name="option" value="ProductOptionField2"/>
-            <argument name="optionIndex" value="1"/>
         </actionGroup>
         <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
         <!--Change second product sku to first product sku-->

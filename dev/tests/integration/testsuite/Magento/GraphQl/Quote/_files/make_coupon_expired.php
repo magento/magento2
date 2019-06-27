@@ -16,7 +16,5 @@ $couponFactory = Bootstrap::getObjectManager()->get(CouponFactory::class);
 
 $coupon = $couponFactory->create();
 $coupon->loadByCode('2?ds5!2d');
-$yesterday = new \DateTime();
-$yesterday->add(\DateInterval::createFromDateString('-1 day'));
-$coupon->setExpirationDate($yesterday->format('Y-m-d'));
+$coupon->setExpirationDate('2016-08-06');
 $couponResource->save($coupon);

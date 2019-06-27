@@ -34,6 +34,7 @@ class OrderCreateMultiStockModeGroupedProductTest extends OrderPlacementBase
         $this->setShippingAndBillingInformation();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
@@ -61,6 +62,7 @@ class OrderCreateMultiStockModeGroupedProductTest extends OrderPlacementBase
         $this->setShippingAndBillingInformation();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**

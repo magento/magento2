@@ -139,7 +139,6 @@ class ApplyCouponToCartTest extends GraphQlAbstract
      */
     public function testApplyExpiredCoupon()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/574');
         $couponCode = '2?ds5!2d';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
@@ -204,7 +203,7 @@ QUERY;
                 'Required parameter "cart_id" is missing'
             ],
             'missed_coupon_code' => [
-                'cart_id: "test"',
+                'cart_id: "test_quote"',
                 'Required parameter "coupon_code" is missing'
             ],
         ];

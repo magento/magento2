@@ -31,6 +31,7 @@ class OrderCreateSingleStockModeDownloadableProductTest extends OrderPlacementBa
         $this->estimateShippingCosts();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
@@ -57,6 +58,7 @@ class OrderCreateSingleStockModeDownloadableProductTest extends OrderPlacementBa
         $this->estimateShippingCosts();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
@@ -73,6 +75,7 @@ class OrderCreateSingleStockModeDownloadableProductTest extends OrderPlacementBa
         $this->estimateShippingCosts();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
@@ -94,6 +97,7 @@ class OrderCreateSingleStockModeDownloadableProductTest extends OrderPlacementBa
         $this->estimateShippingCosts();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
