@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddDownloadableProductToShoppingCartTest">
+        <annotations>
+            <stories value="Shopping Cart"/>
+            <title value="Create Downloadable product with two links and add to the shopping cart"/>
+            <description value="Create Downloadable product with two links and add to the shopping cart"/>
+            <testCaseId value="MC-14717"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRateDefaultPrice"/>
+            <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct"/>
+            <createData entity="downloadableLink1" stepKey="addDownloadableLink1">
+                <requiredEntity createDataKey="createDownloadableProduct"/>
+            </createData>
+            <createData entity="downloadableLink2" stepKey="addDownloadableLink2">
+                <requiredEntity createDataKey="createDownloadableProduct"/>
+            </createData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createDownloadableProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Open Downloadable Product page -->
+        <amOnPage url="{{StorefrontProductPage.url($$createDownloadableProduct.custom_attributes[url_key]$$)}}" stepKey="OpenStoreFrontProductPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+
+        <!-- Add Downloadable product to the cart -->
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addToTheCart">
+            <argument name="productName" value="$$createDownloadableProduct.name$$" />
+        </actionGroup>
+
+        <!-- Select Mini Cart and select 'View And Edit Cart' -->
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="selectViewAndEditCart"/>
+
+        <!--Assert Shopping Cart Summary-->
+        <actionGroup ref="AssertStorefrontShoppingCartSummaryItemsActionGroup" stepKey="AssertCartSummary" >
+            <argument name="subtotal" value="$123.00"/>
+            <argument name="total" value="123.00"/>
+        </actionGroup>
+
+        <!--Assert Product Details In Checkout cart -->
+        <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertProductItemInCheckOutCart">
+            <argument name="productName" value="$$createDownloadableProduct.name$$"/>
+            <argument name="productSku" value="$$createDownloadableProduct.sku$$"/>
+            <argument name="productPrice" value="$123.00"/>
+            <argument name="subtotal" value="$123.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeLinksInCart">
+            <argument name="selector" value="{{CheckoutCartProductSection.productOptionLabel}}"/>
+            <argument name="userInput" value="Links"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeProductOptionLink1">
+            <argument name="selector" value="{{CheckoutCartProductSection.productOptionLabel}}"/>
+            <argument name="userInput" value="{{downloadableLink1.title}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeProductOptionLink2">
+            <argument name="selector" value="{{CheckoutCartProductSection.productOptionLabel}}"/>
+            <argument name="userInput" value="{{downloadableLink2.title}}"/>
+        </actionGroup>
+
+        <!-- Assert product details in Mini Cart -->
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertMiniCart">
+            <argument name="productName" value="$$createDownloadableProduct.name$$"/>
+            <argument name="productPrice" value="$123.00"/>
+            <argument name="cartSubtotal" value="123.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -31,6 +31,7 @@ class OrderCreateSingleStockModeVirtualProductTest extends OrderPlacementBase
         $this->estimateShippingCosts();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
@@ -55,6 +56,7 @@ class OrderCreateSingleStockModeVirtualProductTest extends OrderPlacementBase
         $this->estimateShippingCosts();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
@@ -72,6 +74,7 @@ class OrderCreateSingleStockModeVirtualProductTest extends OrderPlacementBase
         $this->estimateShippingCosts();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
@@ -93,6 +96,7 @@ class OrderCreateSingleStockModeVirtualProductTest extends OrderPlacementBase
         $this->estimateShippingCosts();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**

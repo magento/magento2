@@ -11,12 +11,16 @@
     <test name="AdminGridPageNumberAfterSaveAndCloseActionTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Catalog grid"/>
             <title value="Checking Catalog grid page number after Save and Close action"/>
             <description value="Checking Catalog grid page number after Save and Close action"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-96164"/>
             <useCaseId value="MAGETWO-96127"/>
             <group value="Catalog"/>
+            <skip>
+                <issueId value="MC-17332"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
