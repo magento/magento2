@@ -7,6 +7,7 @@ namespace Magento\Newsletter\Test\Unit\Block\Adminhtml\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Escaper;
 
 /**
  * Test for \Magento\Newsletter\Block\Adminhtml\Template\Preview
@@ -60,7 +61,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $escaper = $this->createMock(\Magento\Framework\Escaper::class);
+        $escaper = new Escaper();
         $this->preview = $this->objectManagerHelper->getObject(
             \Magento\Newsletter\Block\Adminhtml\Template\Preview::class,
             [
