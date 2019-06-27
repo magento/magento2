@@ -15,8 +15,8 @@ interface AdditionalDataProviderInterface
     /**
      * Return Additional Data
      *
-     * @param array $args
+     * @param array $data
      * @return array
      */
-    public function getData(array $args): array;
+    public function getData(array $data): array;
 }
