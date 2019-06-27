@@ -87,8 +87,8 @@ class PayflowLinkToken implements ResolverInterface
         return [
             'mode' => $this->getPaymentMode($payment),
             'paypal_url' => $this->getPayflowLinkUrl($payment),
-            'secret_token' => $paymentAdditionalInformation['secure_token'],
-            'secret_token_id' => $paymentAdditionalInformation['secure_token_id'],
+            'secure_token' => $paymentAdditionalInformation['secure_token'],
+            'secure_token_id' => $paymentAdditionalInformation['secure_token_id'],
         ];
     }
 
