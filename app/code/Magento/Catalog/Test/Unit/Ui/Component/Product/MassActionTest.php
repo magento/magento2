@@ -12,6 +12,9 @@ use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
+/**
+ * MassAction test
+ */
 class MassActionTest extends \PHPUnit\Framework\TestCase
 {
     /**

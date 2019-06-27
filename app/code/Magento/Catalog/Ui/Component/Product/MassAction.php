@@ -12,6 +12,9 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\AbstractComponent;
 
+/**
+ * Class MassAction
+ */
 class MassAction extends AbstractComponent
 {
     const NAME = 'massaction';
@@ -40,7 +43,7 @@ class MassAction extends AbstractComponent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function prepare() : void
     {
@@ -64,7 +67,7 @@ class MassAction extends AbstractComponent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getComponentName() : string
     {
