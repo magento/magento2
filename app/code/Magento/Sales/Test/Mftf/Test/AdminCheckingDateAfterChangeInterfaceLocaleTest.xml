@@ -16,7 +16,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-17761"/>
             <useCaseId value="MC-17269"/>
+            <group value="backend"/>
             <group value="ui"/>
+            <group value="sales"/>
         </annotations>
         <before>
             <!--Deploy static content with French locale-->
