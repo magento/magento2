@@ -53,6 +53,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset = $form->addFieldset(
             'base_fieldset',
             [
+                'before_element_html' => '<div data-role="messages"></div>',
                 'comment' => __('Inserting a widget does not create a widget instance.'),
             ]
         );
