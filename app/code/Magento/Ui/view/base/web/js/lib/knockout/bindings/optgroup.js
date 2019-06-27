@@ -310,7 +310,7 @@ define([
                         obj.disabled = disabled;
                     }
 
-                    if (option.hasOwnProperty("__disableTmpl")) {
+                    if (option.hasOwnProperty('__disableTmpl')) {
                         obj.__disableTmpl = option.__disableTmpl;
                     }
 

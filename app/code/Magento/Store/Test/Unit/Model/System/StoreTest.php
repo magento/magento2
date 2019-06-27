@@ -6,6 +6,9 @@
 
 namespace Magento\Store\Test\Unit\Model\System;
 
+/**
+ * Class StoreTest covers Magento\Store\Model\System\Store.
+ */
 class StoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
