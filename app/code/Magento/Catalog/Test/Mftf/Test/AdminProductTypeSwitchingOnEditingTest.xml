@@ -385,7 +385,7 @@
         <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="gotToSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
         <click selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="openDownloadableSection"/>
-        <unCheckOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkOptionIsDownloadable" after="openDownloadableSection"/>
+        <uncheckOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkOptionIsDownloadable" after="openDownloadableSection"/>
         <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has weight" stepKey="selectWeightForProduct"/>
         <actionGroup ref="saveProductForm" stepKey="saveDownloadssdableProductForm"/>
         <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="setupConfigurations">
