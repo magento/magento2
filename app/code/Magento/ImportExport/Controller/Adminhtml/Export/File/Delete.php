@@ -25,7 +25,7 @@ class Delete extends ExportController implements HttpGetActionInterface
     /**
      * url to this controller
      */
-    const URL = 'admin/export_file/delete';
+    const URL = 'adminhtml/export_file/delete';
 
     /**
      * @var Filesystem
