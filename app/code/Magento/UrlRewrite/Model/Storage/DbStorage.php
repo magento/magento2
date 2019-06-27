@@ -282,7 +282,9 @@ class DbStorage extends AbstractStorage
             $this->insertMultiple($data);
 
             $this->connection->commit();
+            // @codingStandardsIgnoreStart
         } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+            // @codingStandardsIgnoreEnd
             $this->connection->rollBack();
 
             /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urlConflicted */
