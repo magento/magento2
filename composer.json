@@ -334,8 +334,5 @@
             "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/"
         }
     },
-    "prefer-stable": true,
-    "scripts": {
-        "phpcs": "phpcs --standard=PSR2"
-    }
+    "prefer-stable": true
 }
