@@ -8,6 +8,9 @@ namespace Magento\Braintree\Model;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 
+/**
+ * Resolve stores locale.
+ */
 class LocaleResolver implements ResolverInterface
 {
     /**

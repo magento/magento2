@@ -31,8 +31,9 @@ class ResponseResolver
     }
 
     /**
-     * @param \Zend_Http_Response $response
+     * Get result from $response.
      *
+     * @param \Zend_Http_Response $response
      * @return bool|string
      */
     public function getResult(\Zend_Http_Response $response)

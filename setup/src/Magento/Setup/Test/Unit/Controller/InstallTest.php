@@ -215,7 +215,6 @@ class InstallTest extends \PHPUnit\Framework\TestCase
         $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
         $mvcEvent->expects($this->any())->method('getName')->willReturn('dispatch');
 
-
         $contentArray = '{"config": { "address": { "base_url": "http://123.45.678.12"}}}';
         $request->expects($this->any())->method('getContent')->willReturn($contentArray);
         $this->controller->setEvent($mvcEvent);

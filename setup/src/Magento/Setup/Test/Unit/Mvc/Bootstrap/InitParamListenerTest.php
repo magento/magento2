@@ -304,10 +304,20 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
 
         $routeMatchMock->expects($this->exactly(2))
             ->method('getParam')
-            ->willReturnMap([
-                ['controller', null, 'testController'],
-                ['action', null, 'testAction']
-            ]);
+            ->willReturnMap(
+                [
+                    [
+                        'controller',
+                        null,
+                        'testController'
+                    ],
+                    [
+                        'action',
+                        null,
+                        'testAction'
+                    ]
+                ]
+            );
         $eventMock->expects($this->once())
             ->method('getRouteMatch')
             ->willReturn($routeMatchMock);
@@ -437,10 +447,20 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
             ->method('isAvailable');
         $routeMatchMock->expects($this->exactly(2))
             ->method('getParam')
-            ->willReturnMap([
-                ['controller', null, \Magento\Setup\Controller\Session::class],
-                ['action', null, 'unlogin']
-            ]);
+            ->willReturnMap(
+                [
+                    [
+                        'controller',
+                        null,
+                        \Magento\Setup\Controller\Session::class
+                    ],
+                    [
+                        'action',
+                        null,
+                        'unlogin'
+                    ]
+                ]
+            );
         $eventMock->expects($this->once())
             ->method('getRouteMatch')
             ->willReturn($routeMatchMock);

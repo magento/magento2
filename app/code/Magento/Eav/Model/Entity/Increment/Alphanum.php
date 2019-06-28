@@ -15,6 +15,9 @@
  */
 namespace Magento\Eav\Model\Entity\Increment;
 
+/**
+ * Handle alphanumeric ids.
+ */
 class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
 {
     /**

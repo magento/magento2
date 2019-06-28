@@ -59,6 +59,19 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->_filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+
+        $file = $this->createPartialMock(\Magento\Framework\Filesystem\Io\File::class, ['getPathInfo']);
+
+        $file->expects($this->any())
+            ->method('getPathInfo')
+            ->will(
+                $this->returnCallback(
+                    function ($path) {
+                        return pathinfo($path);
+                    }
+                )
+            );
+
         $this->_helperStorage = $this->createPartialMock(
             \Magento\Theme\Helper\Storage::class,
             [
@@ -69,9 +82,15 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                 'getShortFilename',
                 'getSession',
                 'convertPathToId',
-                'getRequestParams'
+                'getRequestParams',
+                'getFile'
             ]
         );
+
+        $this->_helperStorage->expects($this->any())
+            ->method('getFile')
+            ->will($this->returnValue($file));
+
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_imageFactory = $this->createMock(\Magento\Framework\Image\AdapterFactory::class);
         $this->directoryWrite = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);

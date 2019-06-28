@@ -13,6 +13,9 @@ use Magento\Framework\Webapi\Rest\Response as RestResponse;
 use Magento\Framework\Webapi\Request;
 use Magento\Webapi\Controller\Rest\RequestProcessorInterface;
 
+/**
+ * Get schema from request to generate swagger body.
+ */
 class AsynchronousSchemaRequestProcessor implements RequestProcessorInterface
 {
     /**
@@ -25,10 +28,12 @@ class AsynchronousSchemaRequestProcessor implements RequestProcessorInterface
      * @var \Magento\Webapi\Model\Rest\Swagger\Generator
      */
     private $swaggerGenerator;
+
     /**
      * @var \Magento\Framework\Webapi\Rest\Response
      */
     private $response;
+
     /**
      * @var string
      */
@@ -52,7 +57,13 @@ class AsynchronousSchemaRequestProcessor implements RequestProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\AuthorizationException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Webapi\Exception
      */
     public function process(\Magento\Framework\Webapi\Rest\Request $request)
     {
@@ -70,7 +81,10 @@ class AsynchronousSchemaRequestProcessor implements RequestProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @param \Magento\Framework\Webapi\Rest\Request $request
+     * @return bool
      */
     public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
     {
@@ -81,6 +95,8 @@ class AsynchronousSchemaRequestProcessor implements RequestProcessorInterface
     }
 
     /**
+     * Check if a request is a bulk request.
+     *
      * @param \Magento\Framework\Webapi\Rest\Request $request
      * @return bool
      */

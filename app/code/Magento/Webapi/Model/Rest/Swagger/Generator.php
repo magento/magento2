@@ -751,12 +751,14 @@ class Generator extends AbstractSchemaGenerator
             if ($isArray) {
                 $subPrefix .= self::ARRAY_SIGNIFIER;
             }
-            $queryNames = array_merge(
-                $queryNames,
-                $this->getQueryParamNames($subParameterName, $subParameterType, $subParameterDescription, $subPrefix)
+            $queryNames[] = $this->getQueryParamNames(
+                $subParameterName,
+                $subParameterType,
+                $subParameterDescription,
+                $subPrefix
             );
         }
-        return $queryNames;
+        return array_merge(...$queryNames);
     }
 
     /**

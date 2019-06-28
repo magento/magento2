@@ -307,5 +307,5 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
         $mvcEvent->expects($this->any())->method('getName')->willReturn('dispatch');
 
         return $mvcEvent;
-}
+    }
 }
