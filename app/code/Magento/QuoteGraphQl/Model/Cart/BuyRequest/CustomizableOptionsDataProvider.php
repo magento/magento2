@@ -44,7 +44,7 @@ class CustomizableOptionsDataProvider implements BuyRequestDataProviderInterface
             }
         }
 
-        return ['options' => $customizableOptionsData];
+        return ['options' => $customizableOptions];
     }
 
     /**
